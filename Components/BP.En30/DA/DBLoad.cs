@@ -13,7 +13,10 @@ namespace BP.DA
 	/// </summary>
 	public class DBLoad
 	{
-		static  DBLoad()
+        /// <summary>
+        /// 装载
+        /// </summary>
+		public DBLoad()
 		{
 		}
 		public static int ImportTableInto(DataTable impTb ,string intoTb, string select ,int clear)

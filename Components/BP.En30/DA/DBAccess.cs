@@ -1674,22 +1674,24 @@ namespace BP.DA
                 return 1;
             Paras ps = new Paras();
             ps.SQL = sql;
+            return RunSQL(ps);
 
-            switch (dburl)
-            {
-                case DBUrlType.AppCenterDSN:
-                    return RunSQL(ps);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQL(sql);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQL(sql);
-                case DBUrlType.DBAccessOfOracle1:
-                    return DBAccessOfOracle1.RunSQL(sql);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.RunSQL(sql);
-                default:
-                    throw new Exception("@没有判断的类型" + dburl.ToString());
-            }
+
+            //switch (dburl)
+            //{
+            //    case DBUrlType.AppCenterDSN:
+            //        return RunSQL(ps);
+            //    //case DBUrlType.DBAccessOfMSSQL1:
+            //    //    return DBAccessOfMSSQL1.RunSQL(sql);
+            //    //case DBUrlType.DBAccessOfMSSQL2:
+            //    //    return DBAccessOfMSSQL2.RunSQL(sql);
+            //    //case DBUrlType.DBAccessOfOracle1:
+            //    //    return DBAccessOfOracle1.RunSQL(sql);
+            //    //case DBUrlType.DBAccessOfOracle2:
+            //    //    return DBAccessOfOracle2.RunSQL(sql);
+            //    default:
+            //        throw new Exception("@没有判断的类型" + dburl.ToString());
+            //}
         }
         public static int RunSQL(string sql, string paraKey, object val)
         {
@@ -3561,8 +3563,7 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsExitsObject(DBUrl dburl, string obj)
         {
-            if (dburl.DBUrlType == DBUrlType.AppCenterDSN)
-            {
+          
                 //有的同事写的表名包含dbo.导致创建失败.
                 obj = obj.Replace("dbo.", "");
 
@@ -3597,24 +3598,21 @@ namespace BP.DA
                     default:
                         throw new Exception("没有识别的数据库编号");
                 }
-            }
+             
 
-            if (dburl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
-                return DBAccessOfMSSQL1.IsExitsObject(obj);
+            //if (dburl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
+            //    return DBAccessOfMSSQL1.IsExitsObject(obj);
 
             //if (dburl.DBUrlType == DBUrlType.DBAccessOfODBC)
             //    return DBAccessOfODBC.IsExitsObject(obj);
 
             //if (dburl.DBUrlType == DBUrlType.DBAccessOfOLE)
             //    return DBAccessOfOLE.IsExitsObject(obj);
+          
+            //if (dburl.DBUrlType == DBUrlType.DBAccessOfOracle2)
+            //    return DBAccessOfOracle2.IsExitsObject(obj);
 
-            if (dburl.DBUrlType == DBUrlType.DBAccessOfOracle1)
-                return DBAccessOfOracle1.IsExitsObject(obj);
-
-            if (dburl.DBUrlType == DBUrlType.DBAccessOfOracle2)
-                return DBAccessOfOracle2.IsExitsObject(obj);
-
-            throw new Exception("@没有判断的数据库类型:" + dburl);
+            //throw new Exception("@没有判断的数据库类型:" + dburl);
         }
         /// <summary>
         /// 表中是否存在指定的列

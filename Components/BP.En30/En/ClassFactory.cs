@@ -536,8 +536,11 @@ namespace BP.En
                     }
                 }
             }
-            object tmp = Htable_En[className];
-            return (tmp as Entity);
+
+            Entity tmp = Htable_En[className] as Entity;
+            if (tmp != null)
+                tmp.Row=null;
+            return tmp;
         }
         #endregion
 

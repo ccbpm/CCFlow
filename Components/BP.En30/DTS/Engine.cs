@@ -10,119 +10,6 @@ using BP.Sys;
 
 namespace BP.Pub
 {
-    public class RepBill : BP.DTS.DataIOEn
-    {
-        public RepBill()
-        {
-            this.Title = "WFV3.0单据自动修复线。";
-        }
-        public override void Do()
-        {
-            string msg = "";
-            string sql = "  SELECT * FROM WF_BillTemplate";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow dr in dt.Rows)
-            {
-                string file = SystemConfig.PathOfCyclostyleFile + dr["URL"].ToString();
-                msg += RepBill.RepairBill(file);
-            }
-            PubClass.ResponseWriteBlueMsg(msg);
-        }
-        public static string RepairBill(string file)
-        {
-            string msg = "";
-            string docs;
-
-            file = file.Replace(".rtf.rtf", ".rtf");
-            // 读取文件。
-            try
-            {
-                StreamReader read = new StreamReader(file, System.Text.Encoding.ASCII); // 文件流.
-                docs = read.ReadToEnd();  // 读取完毕
-                read.Close(); // 关闭
-            }
-            catch (Exception ex)
-            {
-                return "@读取单据模板时出现错误。cfile=" + file + " @Ex=" + ex.Message;
-            }
-
-            // 修复。
-            docs = RepairLineV2(docs);
-
-            // 写入。
-            try
-            {
-                StreamWriter mywr = new StreamWriter(file, false);
-                mywr.Write(docs);
-                mywr.Close();
-            }
-            catch (Exception ex)
-            {
-                return "@写入单据模板时出现错误。cfile=" + file + " @Ex=" + ex.Message;
-            }
-            msg += "@单据:[" + file + "]成功修复。";
-            return msg;
-        }
-
-        public static string RepairLine(string line)//str
-        {
-            char[] chs = line.ToCharArray();
-            string str = "";
-            foreach (char ch in chs)
-            {
-                if (ch == '\\')
-                {
-                    line = line.Replace("\\" + str, "");
-                    str = "";
-                }
-                else if (ch == ' ')
-                {
-                    /* 如果等于空格， 直接替换原来的 str */
-                    line = line.Replace("\\" + str + ch, "");
-                    str = "sssssssssssssssssss";
-                }
-                else
-                    str += ch.ToString();
-            }
-
-            line = line.Replace("{", "");
-            line = line.Replace("}", "");
-            line = line.Replace("\r", "");
-            line = line.Replace("\n", "");
-            line = line.Replace(" ", "");
-            line = line.Replace("..", ".");
-            return line;
-        }
-        /// <summary>
-        /// RepairLineV2
-        /// </summary>
-        /// <param name="docs"></param>
-        /// <returns></returns>
-        public static string RepairLineV2(string docs)//str
-        {
-            char[] chars = docs.ToCharArray();
-            string strs = "";
-            foreach (char c in chars)
-            {
-                if (c == '<')
-                {
-                    strs = "<";
-                    continue;
-                }
-                if (c == '>')
-                {
-                    strs += c.ToString();
-                    string line = strs.Clone().ToString();
-                    line = RepairLine(line);
-                    docs = docs.Replace(strs, line);
-                    strs = "";
-                    continue;
-                }
-                strs += c.ToString();
-            }
-            return docs;
-        }
-    }
     /// <summary>
     /// WebRtfReport 的摘要说明。
     /// </summary>
@@ -1389,8 +1276,7 @@ namespace BP.Pub
                     {
                         this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + templateRtfFile;
                         str = Cash.GetBillStr(templateRtfFile, false);
-                        string s = RepBill.RepairBill(this.CyclostyleFilePath);
-                        msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题。@" + s;
+                        msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题";
                     }
                     catch (Exception ex1)
                     {

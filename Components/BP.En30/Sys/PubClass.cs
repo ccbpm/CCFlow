@@ -557,11 +557,7 @@ namespace BP.Sys
 
 
         }
-        public static void DBIOToAccess()
-        {
-            ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Entities");
-            PubClass.DBIO(DBType.Access, al, false);
-        }
+      
         /// <summary>
         /// 检查所有的物理表
         /// </summary>
@@ -586,133 +582,6 @@ namespace BP.Sys
 
             }
 
-        }
-
-        /// <summary>
-        /// 数据传输
-        /// </summary>
-        /// <param name="dbtype">对象</param>
-        /// <returns></returns>
-        public static void DBIO(DA.DBType dbtype, ArrayList als, bool creatTableOnly)
-        {
-            foreach (Entities ens in als)
-            {
-                Entity myen = ens.GetNewEntity;
-                if (myen.EnMap.EnType == EnType.View)
-                    continue;
-
-                #region create table
-                switch (dbtype)
-                {
-
-                    case DBType.Oracle:
-                        try
-                        {
-
-                            DBAccessOfOracle1.RunSQL("drop table " + myen.EnMap.PhysicsTable);
-                        }
-                        catch
-                        {
-                        }
-                        try
-                        {
-                            DBAccessOfOracle1.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(myen));
-                        }
-                        catch
-                        {
-
-                        }
-                        break;
-                    case DBType.MSSQL:
-                        try
-                        {
-                            if (myen.EnMap.PhysicsTable.Contains("."))
-                                continue;
-
-                            if (DBAccessOfMSSQL1.IsExitsObject(myen.EnMap.PhysicsTable))
-                                continue;
-
-                            DBAccessOfMSSQL1.RunSQL("drop table " + myen.EnMap.PhysicsTable);
-                        }
-                        catch
-                        {
-                        }
-                        DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(myen));
-                        break;
-                    case DBType.Informix:
-                        try
-                        {
-                            if (myen.EnMap.PhysicsTable.Contains("."))
-                                continue;
-
-                            if (DBAccessOfMSSQL1.IsExitsObject(myen.EnMap.PhysicsTable))
-                                continue;
-
-                            DBAccessOfMSSQL1.RunSQL("drop table " + myen.EnMap.PhysicsTable);
-                        }
-                        catch
-                        {
-                        }
-                        DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfInfoMix(myen));
-                        break;
-                    case DBType.Access:
-                        try
-                        {
-                            DBAccessOfOLE.RunSQL("drop table " + myen.EnMap.PhysicsTable);
-                        }
-                        catch
-                        {
-                        }
-                        DBAccessOfOLE.RunSQL(SqlBuilder.GenerCreateTableSQLOf_OLE(myen));
-                        break;
-                    default:
-                        throw new Exception("error :");
-
-                }
-                #endregion
-
-                if (creatTableOnly)
-                    return;
-
-                try
-                {
-                    QueryObject qo = new QueryObject(ens);
-                    qo.DoQuery();
-                    // ens.RetrieveAll(1000);
-                }
-                catch
-                {
-                    continue;
-                }
-
-                #region insert data
-                foreach (Entity en in ens)
-                {
-                    try
-                    {
-                        switch (dbtype)
-                        {
-                            case DBType.Oracle:
-                            case DBType.Informix:
-                                DBAccessOfOracle1.RunSQL(SqlBuilder.Insert(en));
-                                break;
-                            case DBType.MSSQL:
-                                DBAccessOfOracle1.RunSQL(SqlBuilder.Insert(en));
-                                break;
-                            case DBType.Access:
-                                DBAccessOfOLE.RunSQL(SqlBuilder.InsertOFOLE(en));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.DefaultLogWriteLineError(dbtype.ToString() + "bak出现错误：" + ex.Message);
-                    }
-                }
-                #endregion
-            }
         }
         /// <summary>
         /// 获取datatable.

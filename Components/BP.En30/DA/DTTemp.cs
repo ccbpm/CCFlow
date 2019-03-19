@@ -129,8 +129,6 @@ namespace BP.DA
         TotalMinutes:返回TimeSpan值表示的分钟数。 
         TotalSeconds:返回TimeSpan值表示的秒数。
         */
-
-        /**/
         /// <summary>
         /// 日期比较
         /// </summary>
@@ -145,8 +143,8 @@ namespace BP.DA
             WriteDate = WriteDate.AddDays(n);
             if (Today >= WriteDate)
                 return false;
-            else
-                return true;
+
+            return true;
         }
     }
 

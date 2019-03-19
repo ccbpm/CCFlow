@@ -136,6 +136,9 @@
     <Reference Include="Npgsql">
       <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\..\RefDLL\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -167,101 +170,14 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls30\CHART\CodeFile1.cs" />
-    <Compile Include="Controls30\Comm\UCBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls30\Comm\UCBase2.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls30\Comm\UCBase3.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls30\Comm\WebPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\BPHyperLink.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\BPImage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\BPRadioButtonList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\Btn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\CBL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\DatePicker.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\DDL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\ImageBtn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\ImgEn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\Lab.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\LB.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\LineChart.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\LinkBtn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\PubClass.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\RadioBtn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\TB.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\TBExt.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\CTL\TextArea.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls30\Glo.cs" />
-    <Compile Include="Controls30\NamesOfCheckBtn.cs" />
     <Compile Include="DA\AtPara.cs" />
-    <Compile Include="DA\DBAccessOfMSSQL1.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\DBAccessOfMSSQL2.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\DBAccessOfOracle1.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\DBAccessOfOracle2.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\EncodingBP.cs" />
     <Compile Include="DA\DTTemp.cs" />
-    <Compile Include="DA\JiaMi\ConfigInformation.cs" />
-    <Compile Include="DA\JiaMi\decode.cs" />
-    <Compile Include="DA\JiaMi\DecryptAndEncryptionHelper.cs" />
     <Compile Include="DA\Cash2019.cs" />
     <Compile Include="DTS\DataIOEn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DTS\DataToCash.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DTS\Engine.cs">
@@ -402,6 +318,9 @@
     <Compile Include="Tools\Entitis2Json.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\JiaMi\ConfigInformation.cs" />
+    <Compile Include="Tools\JiaMi\decode.cs" />
+    <Compile Include="Tools\JiaMi\DecryptAndEncryptionHelper.cs" />
     <Compile Include="Tools\JSON.cs" />
     <Compile Include="DA\Log.cs" />
     <Compile Include="DA\Para.cs">
@@ -514,9 +433,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Port\Emp.cs" />
-    <Compile Include="Web\PageBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Port\Dept.cs">
       <SubType>Code</SubType>
     </Compile>

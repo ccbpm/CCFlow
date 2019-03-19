@@ -50,7 +50,6 @@ namespace BP.DA
         }
 		#endregion
 
-
         public static void DefaultLogWriteLineError(Exception ex)
         {
             DefaultLogWriteLine(LogType.Error, ex.StackTrace);
@@ -92,12 +91,6 @@ namespace BP.DA
         }
 
 		#region 经常使用的静态方法
-//		private static Log _enlog = new Log(Log.GetLogFileName("EnLog"));
-//		public static void EnLogWriteLine(LogType type, string info)
-//		{
-//			_log.WriteLine(type, info);
-//		}
-
 		private static Log _log = new Log( Log.GetLogFileName() );
 		public static void DefaultLogWriteLine(LogType type, string info)
 		{

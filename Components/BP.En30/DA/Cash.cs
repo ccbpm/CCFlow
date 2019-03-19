@@ -35,10 +35,7 @@ namespace BP.DA
 
             if (_Bill_Cash != null)
                 _Bill_Cash.Clear();
-
         }
-	
-
         static Cash()
         {
             if (SystemConfig.IsBSsystem==false)

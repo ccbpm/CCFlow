@@ -10,7 +10,6 @@ using BP.Web;
 
 namespace BP.DTS
 {
-    
     /// <summary>
     /// 从webservice中获取数据.
     /// </summary>
@@ -242,196 +241,12 @@ namespace BP.DTS
 		/// 调度
 		/// </summary>
 		public  DataIOEn2(){}
-
-
-		/// <summary>
-		/// 直接道入
-		/// </summary>
-		/// <param name="fromSQL">sql</param>
-		/// <param name="toPTable">table</param>
-		/// <param name="pk">key,用于建立索引与pk</param>
-		public void Directly(string fromSQL, string toPTable, string pk)
-		{
-			this.Directly(fromSQL,toPTable);
-			this.ToDBUrlRunSQL("CREATE INDEX "+toPTable+"ID ON "+toPTable+" ("+pk+")");
-		}
-		/// <summary>
-		/// 直接道入
-		/// </summary>
-		/// <param name="fromSQL"></param>
-		/// <param name="toPTable"></param>
-		/// <param name="pk1"></param>
-		/// <param name="pk2"></param>
-		public void Directly(string fromSQL, string toPTable, string pk1,string pk2)
-		{
-			this.Directly(fromSQL,toPTable);
-			this.ToDBUrlRunSQL("CREATE INDEX "+toPTable+"ID ON "+toPTable+" ("+pk1+","+pk2+")");
-		}
-		/// <summary>
-		/// 直接道入
-		/// </summary>
-		/// <param name="fromSQL"></param>
-		/// <param name="toPTable"></param>
-		/// <param name="pk1"></param>
-		/// <param name="pk2"></param>
-		public void Directly(string fromSQL, string toPTable, string pk1,string pk2,string pk3)
-		{
-			this.Directly(fromSQL,toPTable);
-			this.ToDBUrlRunSQL("CREATE INDEX "+toPTable+"ID ON "+toPTable+" ("+pk1+","+pk2+","+pk3+")");
-		}
-		/// <summary>
-		/// 直接从另外一个数据库中，把数据导入到，目标数据库．
-		/// 对于复杂的导入可以用这种方式,进行特殊处理．
-		/// 数据源泉是 SELECTSQL ,指定的sql.
-		/// selectsql 只能识别如下数据类型．
-		/// char, int , float, decimal . 
-		/// 如果不能适合以上的数据类型．请转换为以上的数据类型．　
-		/// </summary>
-		public void Directly(string fromSQL, string toPTable)
-		{
-			// 得到数据源泉．
-			DataTable dt =this.FromDBUrlRunSQLReturnTable( fromSQL ); 
- 
-			#region 形成 insert into 的前一部分．
-			string sql=null;
-			sql="INSERT INTO "+toPTable+"(";
-			foreach(DataColumn dc in dt.Columns )
-			{
-				sql+=dc.ColumnName+",";
-			}
-			sql=sql.Substring(0,sql.Length-1);
-			sql+=") VALUES (";
-			#endregion
-
-
-			// 删除目的表数据．
-			try
-			{
-				this.ToDBUrlRunSQL(" drop table "+ toPTable  );
-			}
-			catch
-			{
-			}
-
-			// 建立一个新表。
-			string createTable="CREATE TABLE "+toPTable+" (";
-			foreach(DataColumn dc in dt.Columns)
-			{
-				switch(dc.DataType.ToString())
-				{
-					case "System.String":
-						// 取到最大的长度。
-//						int len=0;
-//						foreach(DataRow dr in dt.Rows)
-//						{
-//							if (len < dr[dc.ColumnName].ToString().Length )
-//								len=dr[dc.ColumnName].ToString().Length;
-//						}
-//						len+=10;
-						createTable+=dc.ColumnName+" varchar (700) NULL  ," ;
-						break;
-					case "System.Int16":
-					case "System.Int32":
-					case "System.Int64":
-						createTable+=dc.ColumnName+" int NULL," ;
-						break;
-					case "System.Decimal":
-						createTable+=dc.ColumnName+" decimal NULL,";
-						break;
-					default:
-						createTable+=dc.ColumnName+" float NULL,"; 
-						break;
-				}
-			}
-			createTable=createTable.Substring(0,createTable.Length-1);
-			createTable+=")";
-			this.ToDBUrlRunSQL(createTable);
-
-
-
-			string sql2=null; 
-			// 遍例数据源，inset 到目的表．　
-			string errormsg="";
-			foreach(DataRow dr in dt.Rows)
-			{
-				sql2=sql;
-				foreach(DataColumn dc in dt.Columns)
-				{
-					sql2+="'"+dr[dc.ColumnName]+"',";
-				}
-				sql2=sql2.Substring(0,sql2.Length-1)+")";
-				try
-				{
-					this.ToDBUrlRunSQL(sql2);
-				}
-				catch(Exception ex)
-				{
-					errormsg+=ex.Message;
-				}
-			}
-			if (errormsg!="")
-				throw new Exception(" data output error: "+errormsg );
-
-		}
 		#region 公共方法．
-		/// <summary>
-		/// 数据源 run sql ,返回table .
-		/// </summary>
-		/// <param name="selectSql"></param>
-		/// <returns></returns>
-		public DataTable FromDBUrlRunSQLReturnTable(string selectSql)
-		{
-			// 得到数据源．
-			DataTable dt = new DataTable();
-			switch(this.FromDBUrl)
-			{
-				case DBUrlType.AppCenterDSN:
-					dt=DBAccess.RunSQLReturnTable( selectSql);
-					break;
-				case DBUrlType.DBAccessOfMSSQL1:
-                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(selectSql);
-					break;
-                case DBUrlType.DBAccessOfMSSQL2:
-                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(selectSql);
-                    break;
-				case DBUrlType.DBAccessOfODBC:
-					dt=DBAccessOfODBC.RunSQLReturnTable( selectSql );
-					break;
-				case DBUrlType.DBAccessOfOLE:
-					dt=DBAccessOfOLE.RunSQLReturnTable( selectSql );
-					break;
-				case DBUrlType.DBAccessOfOracle1:
-					dt=DBAccessOfOracle1.RunSQLReturnTable( selectSql );
-					break;
-                case DBUrlType.DBAccessOfOracle2:
-                    dt = DBAccessOfOracle2.RunSQLReturnTable(selectSql);
-                    break;
-				default:
-					break;
-			}
-			return dt;
-		}
+		 
 		public int ToDBUrlRunSQL(string sql)
 		{
-			switch(this.ToDBUrl)
-			{
-				case DBUrlType.AppCenterDSN:
-					return DBAccess.RunSQL(sql);
-				case DBUrlType.DBAccessOfMSSQL1:
-					return DBAccessOfMSSQL1.RunSQL(sql);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQL(sql);
-				case DBUrlType.DBAccessOfODBC:
-					return DBAccessOfODBC.RunSQL(sql);
-				case DBUrlType.DBAccessOfOLE:
-					return DBAccessOfOLE.RunSQL(sql);
-				case DBUrlType.DBAccessOfOracle1:
-					return DBAccessOfOracle1.RunSQL(sql);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.RunSQL(sql);
-				default:
-					throw new Exception("@ error it");
-			}
+            return DBAccess.RunSQL(sql);
+             
 		}
 		public int ToDBUrlRunDropTable(string table)
 		{
@@ -439,18 +254,18 @@ namespace BP.DTS
 			{
 				case DBUrlType.AppCenterDSN:
 					return DBAccess.RunSQLDropTable(table);
-				case DBUrlType.DBAccessOfMSSQL1:
-					return DBAccessOfMSSQL1.RunSQL(table);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQL(table);
+                //case DBUrlType.DBAccessOfMSSQL1:
+                //    return DBAccessOfMSSQL1.RunSQL(table);
+                //case DBUrlType.DBAccessOfMSSQL2:
+                //    return DBAccessOfMSSQL2.RunSQL(table);
 				case DBUrlType.DBAccessOfODBC:
 					return DBAccessOfODBC.RunSQL(table);
 				case DBUrlType.DBAccessOfOLE:
 					return DBAccessOfOLE.RunSQL(table);
-				case DBUrlType.DBAccessOfOracle1:
-					return DBAccessOfOracle1.RunSQLTRUNCATETable(table);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.RunSQLTRUNCATETable(table);
+                //case DBUrlType.DBAccessOfOracle1:
+                //    return DBAccessOfOracle1.RunSQLTRUNCATETable(table);
+                //case DBUrlType.DBAccessOfOracle2:
+                //    return DBAccessOfOracle2.RunSQLTRUNCATETable(table);
 				default:
 					throw new Exception("@ error it");
 			}
@@ -462,25 +277,27 @@ namespace BP.DTS
 		/// <returns></returns>
 		public bool ToDBUrlIsExit(string sql)
 		{
-			switch(this.ToDBUrl)
-			{
-				case DBUrlType.AppCenterDSN:
-					return DBAccess.IsExits(sql);
-				case DBUrlType.DBAccessOfMSSQL1:
-					return DBAccessOfMSSQL1.IsExits(sql);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.IsExits(sql);
-				case DBUrlType.DBAccessOfODBC:
-					return DBAccessOfODBC.IsExits(sql);
-				case DBUrlType.DBAccessOfOLE:
-					return DBAccessOfOLE.IsExits(sql);
-				case DBUrlType.DBAccessOfOracle1:
-					return DBAccessOfOracle1.IsExits(sql);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.IsExits(sql);
-				default:
-					throw new Exception("@ error it");
-			}
+            return DBAccess.IsExits(sql);
+
+            //switch(this.ToDBUrl)
+            //{
+            //    case DBUrlType.AppCenterDSN:
+            //        return DBAccess.IsExits(sql);
+            //    case DBUrlType.DBAccessOfMSSQL1:
+            //        return DBAccessOfMSSQL1.IsExits(sql);
+            //    case DBUrlType.DBAccessOfMSSQL2:
+            //        return DBAccessOfMSSQL2.IsExits(sql);
+            //    case DBUrlType.DBAccessOfODBC:
+            //        return DBAccessOfODBC.IsExits(sql);
+            //    case DBUrlType.DBAccessOfOLE:
+            //        return DBAccessOfOLE.IsExits(sql);
+            //    case DBUrlType.DBAccessOfOracle1:
+            //        return DBAccessOfOracle1.IsExits(sql);
+            //    case DBUrlType.DBAccessOfOracle2:
+            //        return DBAccessOfOracle2.IsExits(sql);
+            //    default:
+            //        throw new Exception("@ error it");
+            //}
 		}
 		#endregion
 
@@ -568,32 +385,35 @@ namespace BP.DTS
 				}
 				InsertSQL=InsertSQL.Substring(0,InsertSQL.Length-1);
 				InsertSQL+=")";
-				switch(this.ToDBUrl)
-				{
-					case DA.DBUrlType.AppCenterDSN:
-						DBAccess.RunSQL(InsertSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfMSSQL1:
-                        DBAccessOfMSSQL1.RunSQL(InsertSQL);
-						break;
-                    case DA.DBUrlType.DBAccessOfMSSQL2:
-                        DBAccessOfMSSQL2.RunSQL(InsertSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfOLE:
-						DBAccessOfOLE.RunSQL(InsertSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfOracle1:
-						DBAccessOfOracle1.RunSQL(InsertSQL);
-						break;
-                    case DA.DBUrlType.DBAccessOfOracle2:
-                        DBAccessOfOracle2.RunSQL(InsertSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfODBC:
-						DBAccessOfODBC.RunSQL(InsertSQL);
-						break;
-					default:
-						break;
-				}
+                DBAccess.RunSQL(InsertSQL);
+
+
+                //switch(this.ToDBUrl)
+                //{
+                //    case DA.DBUrlType.AppCenterDSN:
+                //        DBAccess.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL1:
+                //        DBAccessOfMSSQL1.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL2:
+                //        DBAccessOfMSSQL2.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOLE:
+                //        DBAccessOfOLE.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle1:
+                //        DBAccessOfOracle1.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle2:
+                //        DBAccessOfOracle2.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfODBC:
+                //        DBAccessOfODBC.RunSQL(InsertSQL);
+                //        break;
+                //    default:
+                //        break;
+                //}
 				#endregion 执行插入操作
 
 			}
@@ -647,33 +467,35 @@ namespace BP.DTS
 				}
 				InsertSQL=InsertSQL.Substring(0,InsertSQL.Length-1);
 				InsertSQL+=")";
+                DBAccess.RunSQL(InsertSQL);
+
+
 				
-				switch(this.ToDBUrl)
-				{
-					case DA.DBUrlType.AppCenterDSN:
-						DBAccess.RunSQL(InsertSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfMSSQL1:
-						DBAccessOfMSSQL1.RunSQL(InsertSQL);
-						break;
-                    case DA.DBUrlType.DBAccessOfMSSQL2:
-                        DBAccessOfMSSQL2.RunSQL(InsertSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfOLE:
-						DBAccessOfOLE.RunSQL(InsertSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfOracle1:
-                        DBAccessOfOracle1.RunSQL(InsertSQL);
-						break;
-                    case DA.DBUrlType.DBAccessOfOracle2:
-                        DBAccessOfOracle2.RunSQL(InsertSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfODBC:
-						DBAccessOfODBC.RunSQL(InsertSQL);
-						break;
-					default:
-						break;
-				}
+                //switch(this.ToDBUrl)
+                //{
+                //    case DA.DBUrlType.AppCenterDSN:
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL1:
+                //        DBAccessOfMSSQL1.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL2:
+                //        DBAccessOfMSSQL2.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOLE:
+                //        DBAccessOfOLE.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle1:
+                //        DBAccessOfOracle1.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle2:
+                //        DBAccessOfOracle2.RunSQL(InsertSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfODBC:
+                //        DBAccessOfODBC.RunSQL(InsertSQL);
+                //        break;
+                //    default:
+                //        break;
+                //}
 				 
 			}
 			#endregion
@@ -691,24 +513,24 @@ namespace BP.DTS
 				case DA.DBUrlType.AppCenterDSN:
                     DBAccess.RunSQL("DELETE FROM  " + this.ToTable);
 					break;
-				case DA.DBUrlType.DBAccessOfMSSQL1:
-                    DBAccessOfMSSQL1.RunSQL("DELETE  FROM " + this.ToTable);						
-					break;
-                case DA.DBUrlType.DBAccessOfMSSQL2:
-                    DBAccessOfMSSQL2.RunSQL("DELETE  FROM " + this.ToTable);
-                    break;
-				case DA.DBUrlType.DBAccessOfOLE:
-                    DBAccessOfOLE.RunSQL("DELETE FROM  " + this.ToTable);
-					break;
-				case DA.DBUrlType.DBAccessOfOracle1:
-                    DBAccessOfOracle1.RunSQL("DELETE  FROM " + this.ToTable);
-					break;
-                case DA.DBUrlType.DBAccessOfOracle2:
-                    DBAccessOfOracle2.RunSQL("DELETE  FROM " + this.ToTable);
-                    break;
-				case DA.DBUrlType.DBAccessOfODBC:
-                    DBAccessOfODBC.RunSQL("DELETE FROM  " + this.ToTable);
-					break;
+                //case DA.DBUrlType.DBAccessOfMSSQL1:
+                //    DBAccessOfMSSQL1.RunSQL("DELETE  FROM " + this.ToTable);						
+                //    break;
+                //case DA.DBUrlType.DBAccessOfMSSQL2:
+                //    DBAccessOfMSSQL2.RunSQL("DELETE  FROM " + this.ToTable);
+                //    break;
+                //case DA.DBUrlType.DBAccessOfOLE:
+                //    DBAccessOfOLE.RunSQL("DELETE FROM  " + this.ToTable);
+                //    break;
+                //case DA.DBUrlType.DBAccessOfOracle1:
+                //    DBAccessOfOracle1.RunSQL("DELETE  FROM " + this.ToTable);
+                //    break;
+                //case DA.DBUrlType.DBAccessOfOracle2:
+                //    DBAccessOfOracle2.RunSQL("DELETE  FROM " + this.ToTable);
+                //    break;
+                //case DA.DBUrlType.DBAccessOfODBC:
+                //    DBAccessOfODBC.RunSQL("DELETE FROM  " + this.ToTable);
+                //    break;
 				default:
 					break;
 			}
@@ -726,32 +548,35 @@ namespace BP.DTS
 		{
 			string sql="SELECT * FROM "+this.ToTable;
 			DataTable FromDataTable = new DataTable();
-			switch(this.ToDBUrl)
-			{
-				case DA.DBUrlType.AppCenterDSN:
-					FromDataTable=DBAccess.RunSQLReturnTable(sql);
-					break;
-				case DA.DBUrlType.DBAccessOfMSSQL2:
-                    FromDataTable = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-					break;
-                case DA.DBUrlType.DBAccessOfMSSQL1:
-                    FromDataTable = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                    break;
-				case DA.DBUrlType.DBAccessOfOLE:
-					FromDataTable=DBAccessOfOLE.RunSQLReturnTable(sql);
-					break;
-				case DA.DBUrlType.DBAccessOfOracle1:
-                    FromDataTable = DBAccessOfOracle1.RunSQLReturnTable(sql);
-					break;
-                case DA.DBUrlType.DBAccessOfOracle2:
-                    FromDataTable = DBAccessOfOracle2.RunSQLReturnTable(sql);
-                    break;
-				case DA.DBUrlType.DBAccessOfODBC:
-					FromDataTable=DBAccessOfODBC.RunSQLReturnTable(sql);
-					break;
-				default:
-					throw new Exception("the to dburl error DBUrlType ");
-			}
+            FromDataTable = DBAccess.RunSQLReturnTable(sql);
+
+
+            //switch(this.ToDBUrl)
+            //{
+            //    case DA.DBUrlType.AppCenterDSN:
+            //        FromDataTable=DBAccess.RunSQLReturnTable(sql);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfMSSQL2:
+            //        FromDataTable = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfMSSQL1:
+            //        FromDataTable = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfOLE:
+            //        FromDataTable=DBAccessOfOLE.RunSQLReturnTable(sql);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfOracle1:
+            //        FromDataTable = DBAccessOfOracle1.RunSQLReturnTable(sql);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfOracle2:
+            //        FromDataTable = DBAccessOfOracle2.RunSQLReturnTable(sql);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfODBC:
+            //        FromDataTable=DBAccessOfODBC.RunSQLReturnTable(sql);
+            //        break;
+            //    default:
+            //        throw new Exception("the to dburl error DBUrlType ");
+            //}
 
 			return FromDataTable;
 
@@ -785,32 +610,7 @@ namespace BP.DTS
 			FromSQL+=" from "+ this.FromTable;
 			FromSQL+=this.FromWhere;
 			DataTable FromDataTable=new DataTable();
-			switch(this.FromDBUrl)
-			{
-				case DA.DBUrlType.AppCenterDSN:
-					FromDataTable=DBAccess.RunSQLReturnTable(FromSQL);
-					break;
-				case DA.DBUrlType.DBAccessOfMSSQL1:
-                    FromDataTable = DBAccessOfMSSQL1.RunSQLReturnTable(FromSQL);
-					break;
-                case DA.DBUrlType.DBAccessOfMSSQL2:
-                    FromDataTable = DBAccessOfMSSQL2.RunSQLReturnTable(FromSQL);
-                    break;
-				case DA.DBUrlType.DBAccessOfOLE:
-					FromDataTable=DBAccessOfOLE.RunSQLReturnTable(FromSQL);
-					break;
-				case DA.DBUrlType.DBAccessOfOracle1:
-                    FromDataTable = DBAccessOfOracle1.RunSQLReturnTable(FromSQL);
-					break;
-                case DA.DBUrlType.DBAccessOfOracle2:
-                    FromDataTable = DBAccessOfOracle2.RunSQLReturnTable(FromSQL);
-                    break;
-				case DA.DBUrlType.DBAccessOfODBC:
-					FromDataTable=DBAccessOfODBC.RunSQLReturnTable(FromSQL);
-					break;
-				default:
-					throw new Exception("the from dburl error DBUrlType ");
-			}
+            FromDataTable = DBAccess.RunSQLReturnTable(FromSQL);
 			return FromDataTable;
 		}
 		#endregion
@@ -848,32 +648,35 @@ namespace BP.DTS
 			FromSQL+=" from "+ this.FromTable;
 			FromSQL+=this.FromWhere;
 			DataTable FromDataTable=new DataTable();
-			switch(this.FromDBUrl)
-			{
-				case DA.DBUrlType.AppCenterDSN:
-					FromDataTable=DBAccess.RunSQLReturnTable(FromSQL);
-					break;
-				case DA.DBUrlType.DBAccessOfMSSQL1:
-                    FromDataTable = DBAccessOfMSSQL1.RunSQLReturnTable(FromSQL);
-					break;
-                case DA.DBUrlType.DBAccessOfMSSQL2:
-                    FromDataTable = DBAccessOfMSSQL2.RunSQLReturnTable(FromSQL);
-                    break;
-				case DA.DBUrlType.DBAccessOfOLE:
-					FromDataTable=DBAccessOfOLE.RunSQLReturnTable(FromSQL);
-					break;
-				case DA.DBUrlType.DBAccessOfOracle2:
-                    FromDataTable = DBAccessOfOracle2.RunSQLReturnTable(FromSQL);
-					break;
-                case DA.DBUrlType.DBAccessOfOracle1:
-                    FromDataTable = DBAccessOfOracle1.RunSQLReturnTable(FromSQL);
-                    break;
-				case DA.DBUrlType.DBAccessOfODBC:
-					FromDataTable=DBAccessOfODBC.RunSQLReturnTable(FromSQL);
-					break;
-				default:
-					break;
-			}
+            FromDataTable = DBAccess.RunSQLReturnTable(FromSQL);
+
+
+            //switch(this.FromDBUrl)
+            //{
+            //    case DA.DBUrlType.AppCenterDSN:
+            //        FromDataTable=DBAccess.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfMSSQL1:
+            //        FromDataTable = DBAccessOfMSSQL1.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfMSSQL2:
+            //        FromDataTable = DBAccessOfMSSQL2.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfOLE:
+            //        FromDataTable=DBAccessOfOLE.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfOracle2:
+            //        FromDataTable = DBAccessOfOracle2.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfOracle1:
+            //        FromDataTable = DBAccessOfOracle1.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    case DA.DBUrlType.DBAccessOfODBC:
+            //        FromDataTable=DBAccessOfODBC.RunSQLReturnTable(FromSQL);
+            //        break;
+            //    default:
+            //        break;
+            //}
 			#endregion
 
 			#region 得到目的表(字段只包含主键)
@@ -887,32 +690,7 @@ namespace BP.DTS
 			ToSQL=ToSQL.Substring(0,ToSQL.Length-1);
 			ToSQL+=" FROM "+ this.ToTable;
 			DataTable ToDataTable=new DataTable();
-			switch(this.ToDBUrl)
-			{
-				case DA.DBUrlType.AppCenterDSN:
-					ToDataTable=DBAccess.RunSQLReturnTable(ToSQL);
-					break;
-				case DA.DBUrlType.DBAccessOfMSSQL1:
-                    ToDataTable = DBAccessOfMSSQL1.RunSQLReturnTable(ToSQL);
-					break;
-                case DA.DBUrlType.DBAccessOfMSSQL2:
-                    ToDataTable = DBAccessOfMSSQL2.RunSQLReturnTable(ToSQL);
-                    break;
-				case DA.DBUrlType.DBAccessOfOLE:
-					ToDataTable=DBAccessOfOLE.RunSQLReturnTable(ToSQL);
-					break;
-				case DA.DBUrlType.DBAccessOfOracle1:
-                    ToDataTable = DBAccessOfOracle1.RunSQLReturnTable(ToSQL);
-					break;
-                case DA.DBUrlType.DBAccessOfOracle2:
-                    ToDataTable = DBAccessOfOracle2.RunSQLReturnTable(ToSQL);
-                    break;
-				case DA.DBUrlType.DBAccessOfODBC:
-					ToDataTable=DBAccessOfODBC.RunSQLReturnTable(ToSQL);
-					break;
-				default:
-					break;
-			}
+            ToDataTable = DBAccess.RunSQLReturnTable(ToSQL);
 			#endregion
 
 			string SELECTSQL="";
@@ -956,34 +734,37 @@ namespace BP.DTS
 				}
 
 				UpdateSQL=UpdateSQL.Substring(0,UpdateSQL.Length-5);
-				switch(this.ToDBUrl)
-				{
-					case DA.DBUrlType.AppCenterDSN:
-						result=DBAccess.RunSQL(UpdateSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfMSSQL1:
-						string a=UpdateSQL;
-                        result = DBAccessOfMSSQL1.RunSQL(UpdateSQL);						
-						break;
-                    case DA.DBUrlType.DBAccessOfMSSQL2:
-                        string b = UpdateSQL;
-                        result = DBAccessOfMSSQL2.RunSQL(UpdateSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfOLE:
-						result=DBAccessOfOLE.RunSQL(UpdateSQL);						
-						break;
-					case DA.DBUrlType.DBAccessOfOracle1:
-						result=DBAccessOfOracle1.RunSQL(UpdateSQL);	
-						break;
-                    case DA.DBUrlType.DBAccessOfOracle2:
-                        result = DBAccessOfOracle2.RunSQL(UpdateSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfODBC:
-						result=DBAccessOfODBC.RunSQL(UpdateSQL);		
-						break;
-					default:
-						break;
-				}
+                result = DBAccess.RunSQL(UpdateSQL);
+
+
+                //switch(this.ToDBUrl)
+                //{
+                //    case DA.DBUrlType.AppCenterDSN:
+                //        result=DBAccess.RunSQL(UpdateSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL1:
+                //        string a=UpdateSQL;
+                //        result = DBAccessOfMSSQL1.RunSQL(UpdateSQL);						
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL2:
+                //        string b = UpdateSQL;
+                //        result = DBAccessOfMSSQL2.RunSQL(UpdateSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOLE:
+                //        result=DBAccessOfOLE.RunSQL(UpdateSQL);						
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle1:
+                //        result=DBAccessOfOracle1.RunSQL(UpdateSQL);	
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle2:
+                //        result = DBAccessOfOracle2.RunSQL(UpdateSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfODBC:
+                //        result=DBAccessOfODBC.RunSQL(UpdateSQL);		
+                //        break;
+                //    default:
+                //        break;
+                //}
 				if(result==0)
 				{
 					//插入操作
@@ -1007,32 +788,35 @@ namespace BP.DTS
 					}
 					InsertSQL=InsertSQL.Substring(0,InsertSQL.Length-1);
 					InsertSQL+=")";
-					switch(this.ToDBUrl)
-					{
-						case DA.DBUrlType.AppCenterDSN:
-							DBAccess.RunSQL(InsertSQL);
-							break;
-						case DA.DBUrlType.DBAccessOfMSSQL1:
-                            DBAccessOfMSSQL1.RunSQL(InsertSQL);
-							break;
-                        case DA.DBUrlType.DBAccessOfMSSQL2:
-                            DBAccessOfMSSQL2.RunSQL(InsertSQL);
-                            break;
-						case DA.DBUrlType.DBAccessOfOLE:
-							DBAccessOfOLE.RunSQL(InsertSQL);
-							break;
-						case DA.DBUrlType.DBAccessOfOracle1:
-                            DBAccessOfOracle1.RunSQL(InsertSQL);
-							break;
-                        case DA.DBUrlType.DBAccessOfOracle2:
-                            DBAccessOfOracle2.RunSQL(InsertSQL);
-                            break;
-						case DA.DBUrlType.DBAccessOfODBC:
-							DBAccessOfODBC.RunSQL(InsertSQL);
-							break;
-						default:
-							break;
-					}
+                    DBAccess.RunSQL(InsertSQL);
+
+
+                    //switch(this.ToDBUrl)
+                    //{
+                    //    case DA.DBUrlType.AppCenterDSN:
+                    //        DBAccess.RunSQL(InsertSQL);
+                    //        break;
+                    //    case DA.DBUrlType.DBAccessOfMSSQL1:
+                    //        DBAccessOfMSSQL1.RunSQL(InsertSQL);
+                    //        break;
+                    //    case DA.DBUrlType.DBAccessOfMSSQL2:
+                    //        DBAccessOfMSSQL2.RunSQL(InsertSQL);
+                    //        break;
+                    //    case DA.DBUrlType.DBAccessOfOLE:
+                    //        DBAccessOfOLE.RunSQL(InsertSQL);
+                    //        break;
+                    //    case DA.DBUrlType.DBAccessOfOracle1:
+                    //        DBAccessOfOracle1.RunSQL(InsertSQL);
+                    //        break;
+                    //    case DA.DBUrlType.DBAccessOfOracle2:
+                    //        DBAccessOfOracle2.RunSQL(InsertSQL);
+                    //        break;
+                    //    case DA.DBUrlType.DBAccessOfODBC:
+                    //        DBAccessOfODBC.RunSQL(InsertSQL);
+                    //        break;
+                    //    default:
+                    //        break;
+                    //}
 				}
 				
 			}
@@ -1074,32 +858,35 @@ namespace BP.DTS
 				SELECTSQL=SELECTSQL.Substring(0,SELECTSQL.Length-5);
 				//SELECTSQL+=this.FromWhere;
 				result=0;
-				switch(this.FromDBUrl)
-				{
-					case DA.DBUrlType.AppCenterDSN:
-						result=DBAccess.RunSQLReturnCOUNT(SELECTSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfMSSQL1:
-                        result = DBAccessOfMSSQL1.RunSQLReturnCOUNT(SELECTSQL);
-						break;
-                    case DA.DBUrlType.DBAccessOfMSSQL2:
-                        result = DBAccessOfMSSQL2.RunSQLReturnCOUNT(SELECTSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfOLE:
-						result=DBAccessOfOLE.RunSQLReturnCOUNT(SELECTSQL);
-						break;
-					case DA.DBUrlType.DBAccessOfOracle1:
-                        result = DBAccessOfOracle1.RunSQL(SELECTSQL);
-						break;
-                    case DA.DBUrlType.DBAccessOfOracle2:
-                        result = DBAccessOfOracle2.RunSQL(SELECTSQL);
-                        break;
-					case DA.DBUrlType.DBAccessOfODBC:
-						result=DBAccessOfODBC.RunSQLReturnCOUNT(SELECTSQL);
-						break;
-					default:
-						break;
-				}
+                result = DBAccess.RunSQLReturnCOUNT(SELECTSQL);
+
+
+                //switch(this.FromDBUrl)
+                //{
+                //    case DA.DBUrlType.AppCenterDSN:
+                //        result=DBAccess.RunSQLReturnCOUNT(SELECTSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL1:
+                //        result = DBAccessOfMSSQL1.RunSQLReturnCOUNT(SELECTSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfMSSQL2:
+                //        result = DBAccessOfMSSQL2.RunSQLReturnCOUNT(SELECTSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOLE:
+                //        result=DBAccessOfOLE.RunSQLReturnCOUNT(SELECTSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle1:
+                //        result = DBAccessOfOracle1.RunSQL(SELECTSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfOracle2:
+                //        result = DBAccessOfOracle2.RunSQL(SELECTSQL);
+                //        break;
+                //    case DA.DBUrlType.DBAccessOfODBC:
+                //        result=DBAccessOfODBC.RunSQLReturnCOUNT(SELECTSQL);
+                //        break;
+                //    default:
+                //        break;
+                //}
 
 				if(result!=1)
 				{
@@ -1115,32 +902,7 @@ namespace BP.DTS
 							DeleteSQL+=ff.ToField+"="+ToDR[ff.ToField].ToString()+" AND ";
 					}
 					DeleteSQL=DeleteSQL.Substring(0,DeleteSQL.Length-5);
-					switch(this.ToDBUrl)
-					{
-						case DA.DBUrlType.AppCenterDSN:
-							DBAccess.RunSQL(DeleteSQL);
-							break;
-						case DA.DBUrlType.DBAccessOfMSSQL1:
-                            DBAccessOfMSSQL1.RunSQL(DeleteSQL);						
-							break;
-                        case DA.DBUrlType.DBAccessOfMSSQL2:
-                            DBAccessOfMSSQL2.RunSQL(DeleteSQL);
-                            break;
-						case DA.DBUrlType.DBAccessOfOLE:
-							DBAccessOfOLE.RunSQL(DeleteSQL);
-							break;
-						case DA.DBUrlType.DBAccessOfOracle1:
-                            DBAccessOfOracle1.RunSQL(DeleteSQL);
-							break;
-                        case DA.DBUrlType.DBAccessOfOracle2:
-                            DBAccessOfOracle2.RunSQL(DeleteSQL);
-                            break;
-						case DA.DBUrlType.DBAccessOfODBC:
-							DBAccessOfODBC.RunSQL(DeleteSQL);
-							break;
-						default:
-							break;
-					}
+                    DBAccess.RunSQL(DeleteSQL);
 					continue;
 				}
 				else if(result>1)

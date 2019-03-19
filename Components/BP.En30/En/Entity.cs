@@ -319,14 +319,14 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQL(ps);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQL(ps.SQL);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQL(ps.SQL);
-                case DBUrlType.DBAccessOfOracle1:
-                    return DBAccessOfOracle1.RunSQL(ps.SQL);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.RunSQL(ps.SQL);
+                //case DBUrlType.DBAccessOfMSSQL1:
+                //    return DBAccessOfMSSQL1.RunSQL(ps.SQL);
+                //case DBUrlType.DBAccessOfMSSQL2:
+                //    return DBAccessOfMSSQL2.RunSQL(ps.SQL);
+                //case DBUrlType.DBAccessOfOracle1:
+                //    return DBAccessOfOracle1.RunSQL(ps.SQL);
+                //case DBUrlType.DBAccessOfOracle2:
+                //    return DBAccessOfOracle2.RunSQL(ps.SQL);
                 case DBUrlType.DBSrc:
                     return this.EnMap.EnDBUrl.HisDBSrc.RunSQL(ps.SQL, ps);
                 default:
@@ -339,14 +339,14 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQL(sql, paras);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQL(sql);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQL(sql);
-                case DBUrlType.DBAccessOfOracle1:
-                    return DBAccessOfOracle1.RunSQL(sql);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.RunSQL(sql);
+                //case DBUrlType.DBAccessOfMSSQL1:
+                //    return DBAccessOfMSSQL1.RunSQL(sql);
+                //case DBUrlType.DBAccessOfMSSQL2:
+                //    return DBAccessOfMSSQL2.RunSQL(sql);
+                //case DBUrlType.DBAccessOfOracle1:
+                //    return DBAccessOfOracle1.RunSQL(sql);
+                //case DBUrlType.DBAccessOfOracle2:
+                //    return DBAccessOfOracle2.RunSQL(sql);
                 case DBUrlType.DBSrc:
                     return this.EnMap.EnDBUrl.HisDBSrc.RunSQL(sql, paras);
                 default:
@@ -365,14 +365,14 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQLReturnTable(sql);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                case DBUrlType.DBAccessOfOracle1:
-                    return DBAccessOfOracle1.RunSQLReturnTable(sql);
-                case DBUrlType.DBAccessOfOracle2:
-                    return DBAccessOfOracle2.RunSQLReturnTable(sql);
+                //case DBUrlType.DBAccessOfMSSQL1:
+                //    return DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                //case DBUrlType.DBAccessOfMSSQL2:
+                //    return DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+                //case DBUrlType.DBAccessOfOracle1:
+                //    return DBAccessOfOracle1.RunSQLReturnTable(sql);
+                //case DBUrlType.DBAccessOfOracle2:
+                //    return DBAccessOfOracle2.RunSQLReturnTable(sql);
                 case DBUrlType.DBSrc:
                     return this.EnMap.EnDBUrl.HisDBSrc.RunSQLReturnTable(sql);
                 default:
@@ -1103,7 +1103,7 @@ namespace BP.En
             /*如果是没有放入缓存的实体.*/
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
             {
-                var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal);
+                var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal.ToString());
                 if (row != null)
                 {
                     this.Row = row;
@@ -1256,16 +1256,16 @@ namespace BP.En
                     {
                         case DBUrlType.AppCenterDSN:
                             return DBAccess.IsExits(selectSQL, SqlBuilder.GenerParasPK(this));
-                        case DBUrlType.DBAccessOfMSSQL1:
-                            return DBAccessOfMSSQL1.IsExits(selectSQL);
-                        case DBUrlType.DBAccessOfMSSQL2:
-                            return DBAccessOfMSSQL2.IsExits(selectSQL);
+                        //case DBUrlType.DBAccessOfMSSQL1:
+                        //    return DBAccessOfMSSQL1.IsExits(selectSQL);
+                        //case DBUrlType.DBAccessOfMSSQL2:
+                        //    return DBAccessOfMSSQL2.IsExits(selectSQL);
                         case DBUrlType.DBAccessOfOLE:
                             return DBAccessOfOLE.IsExits(selectSQL);
-                        case DBUrlType.DBAccessOfOracle1:
-                            return DBAccessOfOracle1.IsExits(selectSQL);
-                        case DBUrlType.DBAccessOfOracle2:
-                            return DBAccessOfOracle2.IsExits(selectSQL);
+                        //case DBUrlType.DBAccessOfOracle1:
+                        //    return DBAccessOfOracle1.IsExits(selectSQL);
+                        //case DBUrlType.DBAccessOfOracle2:
+                        //    return DBAccessOfOracle2.IsExits(selectSQL);
                         default:
                             throw new Exception("@没有设计到的DBUrl。" + this.EnMap.EnDBUrl.DBUrlType);
                     }
@@ -1443,17 +1443,9 @@ namespace BP.En
                 throw ex;
             }
 
-            // 开始更新内存数据。
-            switch (this.EnMap.DepositaryOfEntity)
-            {
-                case Depositary.Application:
-
-                    // 如果执行了这个，在调用insert就会异常。
-                    //  this.DeleteFromCash(); //
-                    break;
-                case Depositary.None:
-                    break;
-            }
+            //更新缓存.
+            if (this.EnMap.DepositaryOfEntity == Depositary.Application)
+                Cash2019.PutRow(this.ToString(), this.PKVal, null);
 
             this.afterDelete();
             return i;
@@ -2145,6 +2137,13 @@ namespace BP.En
                     case Depositary.None:
                         break;
                 }
+
+                //更新缓存.
+                if (this.EnMap.DepositaryOfEntity == Depositary.Application)
+                {
+                    Cash2019.PutRow(this.ToString(), this.PKVal, this.Row);
+                }
+
                 this.afterUpdate();
                 str = "@更新插入之后出现错误";
                 this.afterInsertUpdateAction();
@@ -2508,32 +2507,32 @@ namespace BP.En
                 return;
             }
 
-            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
-            {
-                DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
-                this.CreateIndexAndPK();
-                return;
-            }
+            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
+            //{
+            //    DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
+            //    this.CreateIndexAndPK();
+            //    return;
+            //}
 
-            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL2)
-            {
-                DBAccessOfMSSQL2.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
-                this.CreateIndexAndPK();
-                return;
-            }
+            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL2)
+            //{
+            //    DBAccessOfMSSQL2.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
+            //    this.CreateIndexAndPK();
+            //    return;
+            //}
 
-            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle1)
-            {
-                DBAccessOfOracle1.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
-                this.CreateIndexAndPK();
-                return;
-            }
-            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle2)
-            {
-                DBAccessOfOracle2.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
-                this.CreateIndexAndPK();
-                return;
-            }
+            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle1)
+            //{
+            //    DBAccessOfOracle1.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
+            //    this.CreateIndexAndPK();
+            //    return;
+            //}
+            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle2)
+            //{
+            //    DBAccessOfOracle2.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
+            //    this.CreateIndexAndPK();
+            //    return;
+            //}
 
         }
         private void CreateIndexAndPK()

@@ -10,6 +10,19 @@ namespace BP.DA
 {
     public class Cash2019
     {
+        #region hastable
+        private static Hashtable _hts;
+        public static Hashtable hts
+        {
+            get
+            {
+                if (_hts == null)
+                    _hts = new Hashtable();
+                return _hts;
+            }
+        }
+        #endregion
+
         #region 对实体的操作.
         /// <summary>
         /// 把实体放入缓存里面
@@ -19,16 +32,35 @@ namespace BP.DA
         /// <param name="enPK"></param>
         public static void PutRow(string enName, object pkVal, Row row)
         {
+            lock (lockObj)
+            {
+                Hashtable ht = hts[enName] as Hashtable;
+                if (ht == null)
+                {
+                    ht = new Hashtable();
+                    hts.Add(enName, ht);
+                }
+                ht.Add(pkVal.ToString(), row);
+            }
         }
+        private static object lockObj = new object();
         /// <summary>
         /// 获得实体类
         /// </summary>
-        /// <param name="enName"></param>
-        /// <param name="pkVal"></param>
-        /// <returns></returns>
-        public static Row GetRow(string enName, object pkVal)
+        /// <param name="enName">实体名字</param>
+        /// <param name="pkVal">键</param>
+        /// <returns>row</returns>
+        public static Row GetRow(string enName, string pkVal)
         {
-            return null;
+            lock (lockObj)
+            {
+                Hashtable ht = hts[enName] as Hashtable;
+                if (ht == null)
+                    return null;
+                if (ht.ContainsKey(pkVal) == true)
+                    return ht[pkVal] as Row;
+                return null;
+            }
         }
         #endregion 对实体的操作.
 
@@ -41,6 +73,7 @@ namespace BP.DA
         /// <param name="ens">实体集合</param>
         public static void PutEns(string ensName, Entities ens)
         {
+            //StackExchange.Redis
         }
         /// <summary>
         /// 获取实体集合类

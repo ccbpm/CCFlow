@@ -606,9 +606,9 @@
                         realFileExts = "*.*";
 
                     if (athDesc.IsExpCol == 1)
-                        html += "<input type='file' name='file' id='file' style='display:inline' accept='" + realFileExts + "' >";
+                        html += " <label id='realBtn' class='btn btn-info' style='background-color:#c0c0c0;border:none'><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' accept='" + realFileExts + "' ><span>文件上传</span></label>";
                     else
-                        html += "<input type='file' name='file' id='file' style='display:inline'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'>";
+                        html += " <label id='realBtn' class='btn btn-info' style='background-color:#c0c0c0;border:none'><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'><span>文件上传</span> </label>";
 
                     if (athDesc.IsNote)
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";

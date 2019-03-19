@@ -188,4 +188,13 @@ SELECT FK_Emp,WeekNum,FK_NY, (SELECT count(MyPK) AS Num FROM WF_CH A WHERE A.FK_
 ROUND( (SELECT   cast(count(MyPK) AS float) AS Num FROM WF_CH A WHERE CHSta <=1 AND A.FK_Emp=WF_CH.FK_Emp AND A.WeekNum=WF_CH.WeekNum )/(SELECT count(MyPK) AS Num FROM WF_CH A WHERE  A.FK_Emp=WF_CH.FK_Emp AND A.WeekNum=WF_CH.WeekNum)*100,2) 
 AS WCRate
 FROM WF_CH GROUP BY FK_Emp,WeekNum,FK_NY;
- 
+
+/****** 考核:  V_WF_Delay 逾期流程 脚本日期:  2019-03-19 ******/;
+/*  V_WF_Delay */;
+CREATE VIEW V_WF_Delay
+AS
+SELECT  WorkID||'_'||FK_Emp||'_'||FK_Node AS MyPK, PRI, WorkID, IsRead, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, 
+                      FlowName, PWorkID, PFlowNo, FK_Node, NodeName, WorkerDept, Title, RDT, ADT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, GuestNo, GuestName, BillNo, FlowNote, 
+                      TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, MyNum
+FROM   WF_EmpWorks
+GO 

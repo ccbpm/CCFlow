@@ -1101,11 +1101,28 @@ namespace BP.En
         public virtual int Retrieve()
         {
             /*如果是没有放入缓存的实体.*/
+            if (this.EnMap.DepositaryOfEntity == Depositary.Application)
+            {
+                var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal);
+                if (row != null)
+                {
+                    this.Row = row;
+                    return 1;
+                }
+            }
+
+            
             try
             {
                 int num = EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this));
                 if (num >= 1)
+                {
+                    if (this.EnMap.DepositaryOfEntity == Depositary.Application)
+                    {
+                        BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal ,this.Row);
+                    }
                     return num;
+                }
 
                 string msg = "";
                 switch (this.PK)

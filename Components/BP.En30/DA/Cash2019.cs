@@ -19,7 +19,6 @@ namespace BP.DA
         /// <param name="enPK"></param>
         public static void PutRow(string enName, object pkVal, Row row)
         {
-           
         }
         /// <summary>
         /// 获得实体类

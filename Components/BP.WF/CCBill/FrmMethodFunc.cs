@@ -9,9 +9,9 @@ using BP.Sys;
 
 namespace BP.WF.CCBill
 {
-	/// <summary>
-	/// 功能执行
-	/// </summary>
+    /// <summary>
+    /// 功能执行
+    /// </summary>
     public class FrmMethodFunc : EntityMyPK
     {
         #region 基本属性
@@ -79,8 +79,8 @@ namespace BP.WF.CCBill
                 this.SetValByKey(FrmMethodAttr.MsgSuccess, value);
             }
         }
-       
-        
+
+
         public string MethodDoc_Url
         {
             get
@@ -150,12 +150,12 @@ namespace BP.WF.CCBill
             MapAttrs attrs = new MapAttrs(this.MyPK);
             foreach (MapAttr item in attrs)
             {
-                paras+=item.KeyOfEn+",";
+                paras += item.KeyOfEn + ",";
             }
             if (attrs.Count > 1)
                 paras = paras.Substring(0, paras.Length-1);
 
-            string strs = " function " + this.MethodID + "(" + paras + "){";
+            string strs = " function " + this.MethodID + "(" + paras + ") {";
             strs += this.MethodDoc_JavaScript;
             strs += "}";
             return strs;
@@ -196,7 +196,7 @@ namespace BP.WF.CCBill
                 //DataType.WriteFile(file, value);
             }
         }
-       
+
         /// <summary>
         /// 方法类型：@0=SQL@1=URL@2=JavaScript@3=业务单元
         /// </summary>
@@ -275,7 +275,7 @@ namespace BP.WF.CCBill
                 map.AddDDLSysEnum(FrmMethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, FrmMethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
 
-                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10,true);
+                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10, true);
                 map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
                   "@0=按钮@1=超链接");
 
@@ -287,7 +287,7 @@ namespace BP.WF.CCBill
                 map.AddTBString(FrmMethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
 
                 #region 显示位置控制.
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true,true);
+                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
                 map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
                 map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
@@ -334,9 +334,9 @@ namespace BP.WF.CCBill
             return "../../CCBill/Admin/MethodDoc.htm?MyPK=" + this.MyPK;
         }
     }
-	/// <summary>
-	/// 功能执行
-	/// </summary>
+    /// <summary>
+    /// 功能执行
+    /// </summary>
     public class FrmMethodFuncs : EntitiesMyPK
     {
         /// <summary>

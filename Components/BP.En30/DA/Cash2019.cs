@@ -30,7 +30,7 @@ namespace BP.DA
         /// <param name="enName"></param>
         /// <param name="ens"></param>
         /// <param name="enPK"></param>
-        public static void PutRow(string enName, object pkVal, Row row)
+        public static void PutRow(string enName, string pkVal, Row row)
         {
             lock (lockObj)
             {
@@ -41,6 +41,32 @@ namespace BP.DA
                     hts.Add(enName, ht);
                 }
                 ht.Add(pkVal.ToString(), row);
+            }
+        }
+        public static void UpdateRow(string enName, string pkVal, Row row)
+        {
+            lock (lockObj)
+            {
+                Hashtable ht = hts[enName] as Hashtable;
+                if (ht == null)
+                {
+                    ht = new Hashtable();
+                    hts.Add(enName, ht);
+                }
+                ht[pkVal]=row; 
+            }
+        }
+        public static void DeleteRow(string enName, string pkVal)
+        {
+            lock (lockObj)
+            {
+                Hashtable ht = hts[enName] as Hashtable;
+                if (ht == null)
+                {
+                    ht = new Hashtable();
+                    hts.Add(enName, ht);
+                }
+                ht.Remove(pkVal.ToString());
             }
         }
         private static object lockObj = new object();

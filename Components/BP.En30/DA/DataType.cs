@@ -11,7 +11,6 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Xml;
 
-
 namespace BP.DA
 {
     /// <summary>

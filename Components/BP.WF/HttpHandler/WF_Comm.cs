@@ -561,7 +561,6 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
-
                 en = en.CreateInstance();
                 en.PKVal = this.PKVal;
                 en.Retrieve();

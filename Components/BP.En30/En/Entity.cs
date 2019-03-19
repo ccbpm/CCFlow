@@ -1119,7 +1119,7 @@ namespace BP.En
                 {
                     if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                     {
-                        BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal ,this.Row);
+                        BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal.ToString() ,this.Row);
                     }
                     return num;
                 }
@@ -1445,7 +1445,7 @@ namespace BP.En
 
             //更新缓存.
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
-                Cash2019.PutRow(this.ToString(), this.PKVal, null);
+                Cash2019.DeleteRow(this.ToString(), this.PKVal.ToString());
 
             this.afterDelete();
             return i;
@@ -2141,7 +2141,7 @@ namespace BP.En
                 //更新缓存.
                 if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                 {
-                    Cash2019.PutRow(this.ToString(), this.PKVal, this.Row);
+                    Cash2019.UpdateRow(this.ToString(), this.PKVal.ToString(), this.Row);
                 }
 
                 this.afterUpdate();

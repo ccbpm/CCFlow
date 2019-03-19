@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Data;
-using System.Drawing;
 using System.Web;
 using BP.Web;
 using BP.Sys;

@@ -170,6 +170,7 @@
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />
+    <Compile Include="Data\Delay.cs" />
     <Compile Include="Data\GenerWorkFlowViewNY.cs" />
     <Compile Include="Data\Eval.cs" />
     <Compile Include="Data\GenerWorkFlowView.cs" />
@@ -380,9 +381,6 @@
     <Compile Include="DTS\LoadNDxxRpt2GernerWorkFlow.cs" />
     <Compile Include="DTS\UpdateCCFlow.cs" />
     <Compile Include="DTS\GenerCH.cs" />
-    <Compile Include="CCFlowPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Service References\CloudWS\Reference.cs" />
     <Compile Include="Service References\CloudWS\Reference1.cs">
       <AutoGen>True</AutoGen>

@@ -803,15 +803,33 @@ function ReqCBObj(cbID) {
     }
     return v;
 }
-// 设置值.
-function SetCtrlVal(ctrlID, val) {
-    if ($("#TB_" + ctrlID).length != 1)
-        $("#TB_" + ctrlID).val(val);
-    if ($("#DDL_" + ctrlID).length != 1)
-        $("#DDL_" + ctrlID).val(val);
-    if ($("#CB_" + ctrlID).length != 1)
-        $("#CB_" + ctrlID).val(val);
 
+//设置值?
+function SetCtrlVal(key, value) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val(value);
+        ctrl.attr('checked', true);
+    }
+
+    ctrl = $("#RB_" + key + "_" + value);
+    if (ctrl.length > 0) {
+        var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
+        document.getElementById("RB_" + key + "_" + checkVal).checked = false;
+        document.getElementById("RB_" + key + "_" + value).checked = true;
+        // ctrl.attr('checked', 'checked');
+    }
 }
 
 //显示大图

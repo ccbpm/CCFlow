@@ -1100,7 +1100,7 @@ namespace BP.En
         /// <returns>查询出来的个数</returns>
         public virtual int Retrieve()
         {
-            /*如果是没有放入缓存的实体.*/
+            /*如果是没有放入缓存的实体. @wangyanyan */
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
             {
                 var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal.ToString());
@@ -1111,15 +1111,16 @@ namespace BP.En
                 }
             }
 
-            
+
             try
             {
                 int num = EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this));
                 if (num >= 1)
                 {
+                    //@wangyanyan 放入缓存.
                     if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                     {
-                        BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal.ToString() ,this.Row);
+                        BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
                     }
                     return num;
                 }
@@ -1443,7 +1444,7 @@ namespace BP.En
                 throw ex;
             }
 
-            //更新缓存.
+            //更新缓存.  @wangyanyan
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                 Cash2019.DeleteRow(this.ToString(), this.PKVal.ToString());
 
@@ -1722,15 +1723,10 @@ namespace BP.En
                 throw ex;
             }
 
-            // 开始更新内存数据。
-            switch (this.EnMap.DepositaryOfEntity)
-            {
-                case Depositary.Application:
-                    CashEntity.Insert(this.ToString(), this.PKVal.ToString(), this);
-                    break;
-                case Depositary.None:
-                    break;
-            }
+            // 开始更新内存数据。 @wangyanyan
+            if (this.EnMap.DepositaryOfEntity == Depositary.Application)
+                Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
+
 
 
             this.afterInsert();
@@ -2138,7 +2134,7 @@ namespace BP.En
                         break;
                 }
 
-                //更新缓存.
+                //更新缓存. @wangyanyan
                 if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                 {
                     Cash2019.UpdateRow(this.ToString(), this.PKVal.ToString(), this.Row);

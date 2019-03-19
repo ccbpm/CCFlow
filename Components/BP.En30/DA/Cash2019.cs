@@ -112,6 +112,5 @@ namespace BP.DA
             return null;
         }
         #endregion 对实体的集合操作.
-
     }
 }

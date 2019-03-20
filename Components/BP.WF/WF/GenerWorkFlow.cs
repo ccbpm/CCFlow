@@ -1272,8 +1272,7 @@ namespace BP.WF
 		#region 执行诊断
         public string DoRpt()
         {
-            PubClass.WinOpen("WFRpt.htm?WorkID=" + this.WorkID + "&FID="+this.FID+"&FK_Flow="+this.FK_Flow);
-            return null;
+            return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
 		/// <summary>
 		/// 执行修复

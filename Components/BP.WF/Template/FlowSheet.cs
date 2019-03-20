@@ -669,8 +669,7 @@ namespace BP.WF.Template
     
         public string DoBindFlowSheet()
         {
-            PubClass.WinOpen("../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
-            return null;
+            return "../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 批量发起字段
@@ -678,8 +677,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            PubClass.WinOpen("../../Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
-            return null;
+            return "../../Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 执行流程数据表与业务表数据手工同步
@@ -997,8 +995,7 @@ namespace BP.WF.Template
         public string DoDataManger()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
-            PubClass.WinOpen("../../Comm/Search.htm?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
-            return null;
+            return "../../Comm/Search.htm?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
         }
         /// <summary>
         /// 绑定独立表单
@@ -1006,8 +1003,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowFormTree()
         {
-            PubClass.WinOpen("../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
-            return null;
+            return "../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 定义报表
@@ -1049,8 +1045,7 @@ namespace BP.WF.Template
         }
         public string DoCCNode()
         {
-            PubClass.WinOpen("../../Admin/CCNode.aspx?FK_Flow=" + this.No, 400, 500);
-            return null;
+            return "../../Admin/CCNode.aspx?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 执行运行

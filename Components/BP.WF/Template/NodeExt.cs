@@ -1038,34 +1038,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/NodeYGFlow.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
         }
-        /// <summary>
-        /// 集团部门树
-        /// </summary>
-        /// <returns></returns>
-        public string DoDepts()
-        {
-            PubClass.WinOpen("../../Comm/Port/DeptTree.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&RefNo=" + DataType.CurrentDataTime, 500, 550);
-            return null;
-        }
-
-        /// <summary>
-        /// 制度
-        /// </summary>
-        /// <returns></returns>
-        public string DoZhiDu()
-        {
-            PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "ZhiDu/NodeZhiDuDtl.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "制度", "Bill", 700, 400, 200, 300);
-            return null;
-        }
-        /// <summary>
-        /// 风险点
-        /// </summary>
-        /// <returns></returns>
-        public string DoFengXianDian()
-        {
-            PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "ZhiDu/NodeFengXianDian.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "制度", "Bill", 700, 400, 200, 300);
-            return null;
-        }
+         
 
         public string DoTurn()
         {
@@ -1161,11 +1134,11 @@ namespace BP.WF.Template
             switch (type)
             {
                 case NodeFormType.FreeForm:
-                    PubClass.WinOpen("../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "设计表单", "sheet", 1024, 768, 0, 0);
+                    return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
                     break;
                 default:
                 case NodeFormType.FoolForm:
-                    PubClass.WinOpen("../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID, "设计表单", "sheet", 800, 500, 210, 300);
+                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID;
                     break;
             }
             return null;

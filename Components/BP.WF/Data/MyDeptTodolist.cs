@@ -736,8 +736,7 @@ namespace BP.WF.Data
         #region 执行功能.
         public string DoTrack()
         {
-            PubClass.WinOpen("../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node=", 900, 800);
-            return null;
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=";
         }
         /// <summary>
         /// 执行移交
@@ -781,8 +780,7 @@ namespace BP.WF.Data
         }
         public string DoSkip()
         {
-            PubClass.WinOpen("../../Admin/FlowDB/FlowSkip.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node, 900, 800);
-            return null;
+            return "../../Admin/FlowDB/FlowSkip.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
         /// 回滚

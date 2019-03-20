@@ -768,8 +768,7 @@ namespace BP.WF.Data
 		#region 执行诊断
         public string DoTrack()
         {
-            PubClass.WinOpen("../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node, 900, 800);
-            return null;
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
 		#endregion
 	}

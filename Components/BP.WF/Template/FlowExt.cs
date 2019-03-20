@@ -1405,8 +1405,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowFormTree()
         {
-            PubClass.WinOpen("../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
-            return null;
+            return "../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 定义报表
@@ -1521,8 +1520,7 @@ namespace BP.WF.Template
         }
         public string DoCCNode()
         {
-            PubClass.WinOpen("../../Admin/CCNode.aspx?FK_Flow=" + this.No, 400, 500);
-            return null;
+            return "../../Admin/CCNode.aspx?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 执行运行

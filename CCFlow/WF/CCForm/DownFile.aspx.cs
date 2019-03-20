@@ -19,9 +19,46 @@ using System.Security.Cryptography;
 
 namespace CCFlow.WF.CCForm
 {
-    public partial class WF_CCForm_DownFile : BP.Web.WebPage
+    public partial class WF_CCForm_DownFile : System.Web.UI.Page
     {
         #region 属性.
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
+        protected void WinClose()
+        {
+            this.Response.Write("<script language='JavaScript'> window.close();</script>");
+        }
+        public string DoType
+        {
+            get
+            {
+                return this.Request.QueryString["DoType"];
+            }
+        }
+        
+        public string DoWhat
+        {
+            get
+            {
+                return this.Request.QueryString["DoWhat"];
+            }
+        }
+        public string EnsName
+        {
+            get
+            {
+                return this.Request.QueryString["EnsName"];
+            }
+        }
+        public string MyPK
+        {
+            get
+            {
+                return this.Request.QueryString["MyPK"];
+            }
+        }
+        
         /// <summary>
         /// ath.
         /// </summary>
@@ -375,7 +412,7 @@ namespace CCFlow.WF.CCForm
 
                 if (dbs.Count == 0)
                 {
-                    this.Alert("文件不存在，不需打包下载。");
+                    this.Response.Write("文件不存在，不需打包下载。");
                     return;
                 }
 

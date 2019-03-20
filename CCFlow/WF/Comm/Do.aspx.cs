@@ -18,10 +18,55 @@ namespace CCFlow.Web.Comm
 	/// <summary>
 	/// Do 的摘要说明。
 	/// </summary>
-	public partial class Do : BP.Web.WebPage
-	{
-	 
-		protected void Page_Load(object sender, System.EventArgs e)
+	public partial class Do : System.Web.UI.Page
+    {
+        #region 属性.
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
+        protected void WinClose()
+        {
+            this.Response.Write("<script language='JavaScript'> window.close();</script>");
+        }
+        public string DoType
+        {
+            get
+            {
+                return this.Request.QueryString["DoType"];
+            }
+        }
+        public string DoWhat
+        {
+            get
+            {
+                return this.Request.QueryString["DoWhat"];
+            }
+        }
+        public string MyPK
+        {
+            get
+            {
+                return this.Request.QueryString["MyPK"];
+            }
+        }
+        public string EnName
+        {
+            get
+            {
+                return this.Request.QueryString["EnName"];
+            }
+        }
+        public string EnsName
+        {
+            get
+            {
+                return this.Request.QueryString["EnsName"];
+            }
+        }
+        
+        #endregion 属性.
+
+        protected void Page_Load(object sender, System.EventArgs e)
 		{
 			switch (this.DoType)
 			{

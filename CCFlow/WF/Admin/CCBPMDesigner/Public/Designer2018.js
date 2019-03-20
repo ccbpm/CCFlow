@@ -106,6 +106,7 @@ function NodeAttrOld(nodeID) {
 function NodeFrmSln(nodeID) {
     //表单方案.
     var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
+
     window.parent.addTab(nodeID + "_JDFA", "表单方案" + nodeID, url);
     // OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
 }

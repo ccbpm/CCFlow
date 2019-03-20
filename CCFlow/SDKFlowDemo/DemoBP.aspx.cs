@@ -205,7 +205,6 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         #endregion 执行带有参数.
 
 
-
         #region 向数据库存储、读写文件.
         //写入实例.
         string tmpFile = "c:\\111.txt";
@@ -265,7 +264,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         qo.addAnd();
         qo.AddWhere(StudentAttr.XB, 0);
         qo.addAnd();
-        qo.AddWhere(StudentAttr.ZZMM, "0");
+        qo.AddWhere(StudentAttr.ZZMM, 0);
         int num = qo.DoQuery();
         strs = "一共查询到{" + num + "}条数据.";
         foreach (Student stu in stus3)
@@ -278,9 +277,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         //按照sql查询.
         string sql = "SELECT * FROM Demo_Student WHERE FK_BanJi='01' AND XB=0 AND ZZMM=0 ";
         DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-         
     }
-     
     public void EntityDemo()
     {
         Student stu = new Student();
@@ -288,6 +285,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         stu.Name = "周朋";
         stu.Addr = "shandong.jinan";
         stu.Tel = "186601434343";
+
 
         if (stu.IsExits == true)
             stu.Update();

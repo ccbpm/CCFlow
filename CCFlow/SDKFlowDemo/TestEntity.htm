@@ -5,16 +5,11 @@
     <script src="../WF/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
-
     <script type="text/javascript">
 
         window.onload =
 
 		function Test() {
-
-		    //var node = new Entity("BP.WF.Node", "1301");
-		    //alert(node.Name);
-		    //return;
 
 		    //创建一个实体,获取实体的属性.
 		    var emp = new Entity("BP.Port.Emp", "liyan");
@@ -38,7 +33,7 @@
 		    emp.Name = "冉尊";
 		    emp.FK_Dept = "1";
 		    //emp.Email = "sdfsdfsd";
-            //emp.Tel
+		    //emp.Tel
 		    var insert = emp.Insert(); //增加.
 		    alert("插入结果:" + insert);
 
@@ -73,27 +68,27 @@
 
 		    return;
 		}
-		function Test_FrmEntity() {
+        function Test_FrmEntity() {
 
-		    var frm = new Entity("ND101Dtl1");
-		    frm.RefPK = 100;
-		    frm.FYLX = 1;
-		    frm.XiaoJi = 100.01;
-		    frm.BeiZhu = 'sss';
-		    var i = frm.Insert();
+            var frm = new Entity("ND101Dtl1");
+            frm.RefPK = 100;
+            frm.FYLX = 1;
+            frm.XiaoJi = 100.01;
+            frm.BeiZhu = 'sss';
+            var i = frm.Insert();
 
-		    alert(JSON.stringify(frm));
-		}
-		function Test_EntityPara() {
+            alert(JSON.stringify(frm));
+        }
+        function Test_EntityPara() {
 
-		    //实体参数.
-		    var ur = new Entity("BP.Sys.UserRegedit");
-		    ur.MyPK = "admin_BP.WF.Template.SQLTemplates_SearchAttrs";
-            var i= ur.RetrieveFromDBSources();
-            if (i==0)
-               ur.Insert();
+            //实体参数.
+            var ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = "admin_BP.WF.Template.SQLTemplates_SearchAttrs";
+            var i = ur.RetrieveFromDBSources();
+            if (i == 0)
+                ur.Insert();
 
-            ur.SetPara("SQLType","all"); //给参数字段赋值.
+            ur.SetPara("SQLType", "all"); //给参数字段赋值.
             ur.Update(); //执行更新.
 
             // 重新查询出来.
@@ -104,32 +99,32 @@
                 alert('参数字段没有保存成功.');
                 return;
             }
-		}
+        }
 
-		function Test_Adv() {
+        function Test_Adv() {
 
-		    var emp = new Entity("BP.Port.Emp");
-		    emp.No = "zhoupeng";
-		    var i = emp.RetrieveFromDBSources(); //从数据库查询，查询不到不返回异常.
-		    if (i == 0)
-		        alert('实体不存在');
+            var emp = new Entity("BP.Port.Emp");
+            emp.No = "zhoupeng";
+            var i = emp.RetrieveFromDBSources(); //从数据库查询，查询不到不返回异常.
+            if (i == 0)
+                alert('实体不存在');
 
-		    emp.No = 'zhoupeng';
-		    emp.Retrieve(); //从数据库或者缓存查询，如果不存在就抛出异常.
+            emp.No = 'zhoupeng';
+            emp.Retrieve(); //从数据库或者缓存查询，如果不存在就抛出异常.
 
-		    emp.No = "zhoupeng";
-		    var bool = emp.IsExit(); //根据主键判断该实体是否存在.
-		    if (bool == false)
-		        alert('实体不存在');
+            emp.No = "zhoupeng";
+            var bool = emp.IsExit(); //根据主键判断该实体是否存在.
+            if (bool == false)
+                alert('实体不存在');
 
-		    //删除部门编号为 0012的员工.
-		    var delNum = emp.Delete("FK_Dept", "0012");
-		    alert('共有:' + delNum + "数据被删除.");
-		}
+            //删除部门编号为 0012的员工.
+            var delNum = emp.Delete("FK_Dept", "0012");
+            alert('共有:' + delNum + "数据被删除.");
+        }
 
         function TestEns() {
 
-            var emps = new  Entities("BP.Port.Emps", "FK_Dept", "1");
+            var emps = new Entities("BP.Port.Emps", "FK_Dept", "1");
             alert("BP.Port.Emps查询到:" + emps.length);
 
             //获得性别为女的学生.
@@ -155,7 +150,7 @@
 
 
             //获得性别为女的学生并且按年龄排序.
-            var students2 =new  Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
+            var students2 = new Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
             alert("Students XB=0 查询到:" + students2.length);
 
 
@@ -244,17 +239,15 @@
             alert("一共[" + dt.lenght + "] 条记录被查询到");
 
             var url = "http:xxxxx/sss";
-            var dt = DBAccess.RunUrlReturnJSON(sql);
-            var dt = DBAccess.RunUrlReturnString(sql);
+            var dt = DBAccess.RunUrlReturnJSON(url);
+            var dt = DBAccess.RunUrlReturnString(url);
+
             // var dt = DBAccess.RunUrlCrossReturnJSON(sql);
             //  var dt = DBAccess.RunUrlCrossReturnString(sql);
         }
+      
     </script>
-     
 </head>
 <body>
-
-
-
 </body>
 </html>

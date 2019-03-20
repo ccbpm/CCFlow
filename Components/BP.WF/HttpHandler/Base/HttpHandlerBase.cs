@@ -29,7 +29,7 @@ namespace BP.WF.HttpHandler
             ctrl.context = mycontext;
 
             //让其支持跨域访问.
-            ctrl.context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+            //ctrl.context.Response.Headers["Access-Control-Allow-Origin"] = "*";
 
             try
             {

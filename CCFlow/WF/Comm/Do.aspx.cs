@@ -92,7 +92,7 @@ namespace CCFlow.Web.Comm
                         }
 					}
 
-					BP.Sys.PubClass.DownloadFile(pPath,
+                    BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(pPath,
 						enF.GetValStringByKey("MyFileName"));
 					this.WinClose();
 					return;

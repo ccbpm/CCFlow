@@ -254,7 +254,7 @@ namespace CCFlow.WF.CCForm
                         EncHelper.DecryptDES(tempFile, tempDescFile);
                     else
                         tempDescFile = tempFile;
-                    PubClass.DownloadFile(tempDescFile, downDB.FileName);
+                    BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempDescFile, downDB.FileName);
                   
                 }
 
@@ -270,7 +270,7 @@ namespace CCFlow.WF.CCForm
                     }else
                         filepath = downpath;
 
-                    BP.Sys.PubClass.DownloadFile(filepath, downDB.FileName);
+                    BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(filepath, downDB.FileName);
 
                 }
                
@@ -330,7 +330,7 @@ namespace CCFlow.WF.CCForm
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
 
-                PubClass.DownloadFile(tempFile, fileName + "." + fileExt);
+                BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempFile, fileName + "." + fileExt);
                 //删除临时文件
                 System.IO.File.Delete(tempFile);
             }
@@ -383,7 +383,7 @@ namespace CCFlow.WF.CCForm
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
 
-                PubClass.DownloadFile(tempFile, fileName);
+                BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempFile, fileName);
                 //删除临时文件
                 System.IO.File.Delete(tempFile);
             }

@@ -481,17 +481,10 @@
     <Content Include="GPM\themes\icons\up.gif" />
     <Content Include="GPM\themes\icons\xitong.png" />
     <Content Include="GPM\themes\icons\xitongleibie.png" />
-    <Content Include="SDKFlowDemo\App\PrintJoin.aspx" />
     <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="SDKFlowDemo\DemoEmpSelecter.htm" />
     <Content Include="SDKFlowDemo\readme.txt" />
-    <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
-    <Content Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx" />
-    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.htm" />
-    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx" />
-    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F129\S12901.htm" />
     <Content Include="SDKFlowDemo\UnitTesting\Testing.aspx" />
     <Content Include="Service References\CloundWS\configuration.svcinfo" />
     <Content Include="Service References\CloundWS\configuration91.svcinfo" />
@@ -509,41 +502,17 @@
     <Content Include="DataUser\PortalInterface.asmx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Output\DemoTurnPage.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx" />
     <Content Include="SDKFlowDemo\ccflow.js" />
     <Content Include="SDKFlowDemo\CCFormTester.asmx" />
     <Content Include="SDKFlowDemo\DemoBatchUrl.aspx" />
     <Content Include="SDKFlowDemo\DemoBP.aspx" />
     <Content Include="SDKFlowDemo\DemoComm.htm" />
-    <Content Include="SDKFlowDemo\Do.aspx" />
-    <Content Include="SDKFlowDemo\DoUrl.aspx" />
-    <Content Include="SDKFlowDemo\FrmEventND8601.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Bottom.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Default.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Left.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Search.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Start.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Todolist.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Top.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Welcome.aspx" />
-    <Content Include="SDKFlowDemo\GuestFlow\Login.aspx" />
-    <Content Include="SDKFlowDemo\MyForm.aspx" />
-    <Content Include="SDKFlowDemo\Pub.ascx" />
     <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
     <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
     <Content Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx" />
     <Content Include="SDKFlowDemo\QingJia\S4_RenShi.aspx" />
     <Content Include="SDKFlowDemo\SDK\Info.aspx" />
     <Content Include="SDKFlowDemo\SDK\Readme.txt" />
-    <Content Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx" />
-    <Content Include="SDKFlowDemo\TestCase\iframePage.aspx" />
-    <Content Include="SDKFlowDemo\TestCond.aspx" />
-    <Content Include="SDKFlowDemo\TestCondOfFlowOver.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
     <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
@@ -674,11 +643,86 @@
     <Content Include="WF\Admin\AttrNode\Selector\NodeStationGroup.htm" />
     <Content Include="WF\Admin\AttrNode\Selector\StationGroup.htm" />
     <Content Include="WF\Admin\AttrNode\SelectStation.htm" />
+    <Content Include="WF\Admin\AttrNode\SelfParas.htm" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
     <Content Include="WF\Admin\AttrNode\TodolistModel.htm" />
     <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\AdminerChang.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\AdminerForOneOrg.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Default.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Designer.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Flows.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Guide.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Img\ajax-loader.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Img\loading_small.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\js\browserReady.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\js\CCBPMDesignerData.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\js\Default.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\js\FuncTrees.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Login.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\NewFlow.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\bootstrap-ie6.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\bootstrap-ie6.min%281%29.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\bootstrap-responsive.min.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\bootstrap.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\bootstrap.min.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\css\ie.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\js\bootstrap.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\bootstrap\js\bootstrap.min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\bootstrap-ie6.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\bootstrap-ie6.min%281%29.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\bootstrap-responsive.min.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\bootstrap.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\bootstrap.min.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\css\ie.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\js\bootstrap.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\bootstrap\js\bootstrap.min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\doc.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\images\ui-icons_444444_256x240.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\jquery-ui.min.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\css\site.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\Designer2019.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\flowdesign\attribute.html" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\flowdesign\attribute.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\flowdesign\flowdesign.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\flowdesign\leipi.flowdesign.v3.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery-1.7.2.min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery-ui\jquery-ui-1.9.2-min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.contextmenu.r2.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\css\jquery.multiselect2side.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\img\close.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\img\loading.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\img\search.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\jmultiselect2side.html" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\js\jquery.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\js\jquery.multiselect2side.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.pin.min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jscolor-1.4.3\arrow.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jscolor-1.4.3\cross.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jscolor-1.4.3\demo.html" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jscolor-1.4.3\hs.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jscolor-1.4.3\hv.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jscolor-1.4.3\jscolor.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jsPlumb\bak\jquery.jsPlumb-1.3.14-all-min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jsPlumb\bak\jquery.jsPlumb-1.4.0-all.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jsPlumb\bak\jquery.jsPlumb-1.6.2-min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jsPlumb\jquery.jsPlumb-1.3.16-all-min.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\jsPlumb\各版本下载.txt" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\select2-spinner.gif" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\select2.css" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\select2.js" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\select2.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\select2x2.png" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\SearchFlow.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner2019\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\AdminerChang.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\AdminerForOneOrg.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
@@ -1153,6 +1197,22 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide0.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\0.FoolForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\1.FreeForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\2.SelfForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\3.SDKForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\4.SLForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\5.SheetTree.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\7.WebOffice.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\8.ExcelForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\9.WordForm.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\DDLBar.js" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\Default.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\Img\FoolFrm.png" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\Img\FreeFrm.png" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\NewFrmGuide.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\SDKFrm.png" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\SelfFrm.png" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -1300,6 +1360,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\FastInput.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\FastInput.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Img\AutoFullDtlField.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\Img\DDLFullCtrl.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Img\DDLFullCtrl2019.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.htm" />
@@ -1418,10 +1479,28 @@
     <Content Include="WF\BatchList.htm" />
     <Content Include="WF\BatchStart.htm" />
     <Content Include="WF\CC.htm" />
+    <Content Include="WF\CCBill\Admin\ColsChose.htm" />
+    <Content Include="WF\CCBill\Admin\Method.htm" />
+    <Content Include="WF\CCBill\Admin\MethodDoc.htm" />
+    <Content Include="WF\CCBill\Admin\MethodDocDemoJS.htm" />
+    <Content Include="WF\CCBill\Admin\MethodDocDemoJS.txt" />
+    <Content Include="WF\CCBill\Admin\MethodDocDemoSQL.htm" />
+    <Content Include="WF\CCBill\Admin\MethodDocDemoSQL.txt" />
+    <Content Include="WF\CCBill\Admin\MethodParas.htm" />
+    <Content Include="WF\CCBill\Admin\SearchCond.htm" />
     <Content Include="WF\CCBill\Draft.htm" />
     <Content Include="WF\CCBill\Group.htm" />
+    <Content Include="WF\CCBill\Img\BillState\Complete.png" />
+    <Content Include="WF\CCBill\Img\BillState\Etc.png" />
+    <Content Include="WF\CCBill\Img\BillState\ReturnSta.png" />
+    <Content Include="WF\CCBill\Img\BillState\Runing.png" />
+    <Content Include="WF\CCBill\Img\BillState\Todo.png" />
     <Content Include="WF\CCBill\MyBill.htm" />
     <Content Include="WF\CCBill\MyBill.js" />
+    <Content Include="WF\CCBill\Opt\DoMethod.htm" />
+    <Content Include="WF\CCBill\Opt\DoMethodPara.htm" />
+    <Content Include="WF\CCBill\Opt\DoMethodPara.js" />
+    <Content Include="WF\CCBill\Opt\Imp.htm" />
     <Content Include="WF\CCBill\Opt\RefBill.htm" />
     <Content Include="WF\CCBill\Search.htm" />
     <Content Include="WF\CCBill\SearchData.htm" />
@@ -2185,6 +2264,7 @@
     <Content Include="WF\Img\WorkRpt.gif" />
     <Content Include="WF\Img\yaoshi.jpg" />
     <Content Include="WF\Img\zhuichiren.png" />
+    <Content Include="WF\List.htm" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\MyFlowDoc.htm" />
     <Content Include="WF\MyFlowFool2017.js" />
@@ -2859,6 +2939,7 @@
     <Content Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="WF\Scripts\bootstrap\fonts\loading.gif" />
     <Content Include="WF\Scripts\bootstrap\js\bootstrap-table-expandable.js" />
+    <Content Include="WF\Scripts\bootstrap\js\bootstrap-treeview.js" />
     <Content Include="WF\Scripts\bootstrap\js\bootstrap.js" />
     <Content Include="WF\Scripts\bootstrap\js\bootstrap.min.js" />
     <Content Include="WF\Scripts\bootstrap\js\commonYangYH.js" />
@@ -2868,6 +2949,145 @@
     <Content Include="WF\Scripts\bootstrap\js\jsTree.ddl.js" />
     <Content Include="WF\Scripts\bootstrap\js\jstree.js" />
     <Content Include="WF\Scripts\ccflow.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\comment\comment.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\comment\continuecomment.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\dialog\dialog.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\dialog\dialog.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\display\autorefresh.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\display\fullscreen.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\display\fullscreen.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\display\panel.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\display\placeholder.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\display\rulers.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\edit\closebrackets.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\edit\closetag.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\edit\continuelist.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\edit\matchbrackets.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\edit\matchtags.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\edit\trailingspace.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\brace-fold.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\comment-fold.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\foldcode.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\foldgutter.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\foldgutter.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\indent-fold.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\markdown-fold.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\fold\xml-fold.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\anyword-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\css-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\html-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\javascript-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\show-hint.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\show-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\sql-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\hint\xml-hint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\coffeescript-lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\css-lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\html-lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\javascript-lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\json-lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\lint.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\lint\yaml-lint.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\merge\merge.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\merge\merge.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\mode\loadmode.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\mode\multiplex.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\mode\multiplex_test.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\mode\overlay.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\mode\simple.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\runmode\colorize.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\runmode\runmode-standalone.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\runmode\runmode.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\runmode\runmode.node.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\scroll\annotatescrollbar.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\scroll\scrollpastend.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\scroll\simplescrollbars.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\scroll\simplescrollbars.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\search\jump-to-line.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\search\match-highlighter.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\search\matchesonscrollbar.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\search\matchesonscrollbar.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\search\search.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\search\searchcursor.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\selection\active-line.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\selection\mark-selection.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\selection\selection-pointer.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\tern\tern.css" />
+    <Content Include="WF\Scripts\CodeMirror\addon\tern\tern.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\tern\worker.js" />
+    <Content Include="WF\Scripts\CodeMirror\addon\wrap\hardwrap.js" />
+    <Content Include="WF\Scripts\CodeMirror\doc\activebookmark.js" />
+    <Content Include="WF\Scripts\CodeMirror\doc\docs.css" />
+    <Content Include="WF\Scripts\CodeMirror\doc\internals.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\logo.png" />
+    <Content Include="WF\Scripts\CodeMirror\doc\manual.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\realworld.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\releases.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\reporting.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\upgrade_v2.2.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\upgrade_v3.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\upgrade_v4.html" />
+    <Content Include="WF\Scripts\CodeMirror\doc\yinyang.png" />
+    <Content Include="WF\Scripts\CodeMirror\lib\codemirror.css" />
+    <Content Include="WF\Scripts\CodeMirror\lib\codemirror.js" />
+    <Content Include="WF\Scripts\CodeMirror\mode\javascript\javascript.js" />
+    <Content Include="WF\Scripts\CodeMirror\theme\3024-day.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\3024-night.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\abcdef.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\ambiance-mobile.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\ambiance.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\base16-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\base16-light.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\bespin.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\blackboard.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\cobalt.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\colorforth.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\darcula.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\dracula.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\duotone-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\duotone-light.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\eclipse.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\elegant.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\erlang-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\gruvbox-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\hopscotch.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\icecoder.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\idea.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\isotope.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\lesser-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\liquibyte.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\lucario.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\material.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\mbo.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\mdn-like.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\midnight.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\monokai.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\neat.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\neo.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\night.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\nord.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\oceanic-next.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\panda-syntax.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\paraiso-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\paraiso-light.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\pastel-on-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\railscasts.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\rubyblue.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\seti.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\shadowfox.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\solarized.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\ssms.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\the-matrix.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\tomorrow-night-bright.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\tomorrow-night-eighties.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\ttcn.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\twilight.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\vibrant-ink.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\xq-dark.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\xq-light.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\yeti.css" />
+    <Content Include="WF\Scripts\CodeMirror\theme\zenburn.css" />
     <Content Include="WF\Scripts\CommonUnite.js" />
     <Content Include="WF\Scripts\commonYangYH.js" />
     <Content Include="WF\Scripts\config.js" />
@@ -3318,6 +3538,8 @@
     <Content Include="WF\Scripts\Jquery-plug\fileupload\uploadify-cancel.png" />
     <Content Include="WF\Scripts\Jquery-plug\fileupload\uploadify.css" />
     <Content Include="WF\Scripts\Jquery-plug\fileupload\uploadify.swf" />
+    <Content Include="WF\Scripts\jquery.base64.js" />
+    <Content Include="WF\Scripts\jquery.base64.zhCN.js" />
     <Content Include="WF\Scripts\jquery.easyui.min.js" />
     <Content Include="WF\Scripts\jquery\changeEasyuiTheme.js" />
     <Content Include="WF\Scripts\jquery\common.js" />
@@ -6907,6 +7129,11 @@
     </Content>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
+    <None Include="WF\Admin\CCBPMDesigner2019\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
+    <None Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\component.json" />
+    <None Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\LICENSE" />
+    <None Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\README.md" />
+    <None Include="WF\Admin\CCBPMDesigner2019\Public\js\select2\release.sh" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
     <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
@@ -7109,6 +7336,7 @@
     <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="WF\Scripts\CodeMirror\doc\logo.svg" />
     <None Include="WF\Scripts\easyUI\themes\gray\images\Thumbs.db" />
     <None Include="WF\Scripts\jBox\LGPL-LICENSE" />
     <None Include="WF\Scripts\jBox\MIT-LICENSE" />
@@ -7174,48 +7402,6 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SDKFlowDemo\App\PrintJoin.aspx.cs">
-      <DependentUpon>PrintJoin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\App\PrintJoin.aspx.designer.cs">
-      <DependentUpon>PrintJoin.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\AuthorDemo.aspx.cs">
-      <DependentUpon>AuthorDemo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\AuthorDemo.aspx.designer.cs">
-      <DependentUpon>AuthorDemo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx.cs">
-      <DependentUpon>DemoEmps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx.designer.cs">
-      <DependentUpon>DemoEmps.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx.cs">
-      <DependentUpon>DemoJZOut.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx.designer.cs">
-      <DependentUpon>DemoJZOut.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Output\DemoTurnPage.aspx.cs">
-      <DependentUpon>DemoTurnPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Output\DemoTurnPage.aspx.designer.cs">
-      <DependentUpon>DemoTurnPage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx.cs">
-      <DependentUpon>DemoUserList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx.designer.cs">
-      <DependentUpon>DemoUserList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="SDKFlowDemo\CCFormTester.asmx.cs">
       <DependentUpon>CCFormTester.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -7233,132 +7419,6 @@
     </Compile>
     <Compile Include="SDKFlowDemo\DemoBP.aspx.designer.cs">
       <DependentUpon>DemoBP.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\DoUrl.aspx.cs">
-      <DependentUpon>DoUrl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\DoUrl.aspx.designer.cs">
-      <DependentUpon>DoUrl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\FrmEventND8601.aspx.cs">
-      <DependentUpon>FrmEventND8601.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\FrmEventND8601.aspx.designer.cs">
-      <DependentUpon>FrmEventND8601.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Bottom.aspx.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Bottom.aspx.designer.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Home.aspx.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Home.aspx.designer.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Runing.aspx.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Runing.aspx.designer.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Start.aspx.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Start.aspx.designer.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Todolist.aspx.cs">
-      <DependentUpon>Todolist.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Todolist.aspx.designer.cs">
-      <DependentUpon>Todolist.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestApp\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestFlow\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\GuestFlow\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\MyForm.aspx.cs">
-      <DependentUpon>MyForm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\MyForm.aspx.designer.cs">
-      <DependentUpon>MyForm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx.cs">
       <DependentUpon>S1_TianxieShenqingDan.aspx</DependentUpon>
@@ -7402,61 +7462,12 @@
     <Compile Include="SDKFlowDemo\SDK\Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx.cs">
-      <DependentUpon>S16001.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx.designer.cs">
-      <DependentUpon>S16001.aspx</DependentUpon>
-    </Compile>
     <Compile Include="SDKFlowDemo\SDK\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SDKFlowDemo\SDK\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx.cs">
-      <DependentUpon>BatchSelfFrm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx.designer.cs">
-      <DependentUpon>BatchSelfFrm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx.cs">
-      <DependentUpon>StartGuideSelfUrlEntity.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx.designer.cs">
-      <DependentUpon>StartGuideSelfUrlEntity.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\iframePage.aspx.cs">
-      <DependentUpon>iframePage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\iframePage.aspx.designer.cs">
-      <DependentUpon>iframePage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.aspx.cs">
-      <DependentUpon>StartGuideSelfUrl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.aspx.designer.cs">
-      <DependentUpon>StartGuideSelfUrl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCond.aspx.cs">
-      <DependentUpon>TestCond.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCond.aspx.designer.cs">
-      <DependentUpon>TestCond.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCondOfFlowOver.aspx.cs">
-      <DependentUpon>TestCondOfFlowOver.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\TestCondOfFlowOver.aspx.designer.cs">
-      <DependentUpon>TestCondOfFlowOver.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\UnitTesting\Testing.aspx.cs">
       <DependentUpon>Testing.aspx</DependentUpon>
@@ -7517,7 +7528,6 @@
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="DataUser\Temp\" />
-    <Folder Include="SDKFlowDemo\SDK\F129\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

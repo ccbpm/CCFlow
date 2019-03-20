@@ -165,16 +165,7 @@ namespace BP.WF
 
                 if (_AppType == null && BP.Sys.SystemConfig.IsBSsystem)
                 {
-                    if (BP.Web.WebUser.IsWap)
-                        _AppType = "WF/WAP";
-                    else
-                    {
-                        bool b = BP.Sys.Glo.Request.RawUrl.ToLower().Contains("oneflow");
-                        if (b)
-                            _AppType = "WF/OneFlow";
-                        else
                             _AppType = "WF";
-                    }
                 }
                 return _AppType;
             }
@@ -277,7 +268,7 @@ namespace BP.WF
             wk.OID = this.WorkID;
             wk.Retrieve();
             Glo.GenerWord(tempFile, wk);
-            PubClass.OpenWordDocV2(tempFile, this.HisNode.Name + ".doc");
+            //return tempFile;
         }
         string dbStr = SystemConfig.AppCenterDBVarStr;
         public Paras ps = new Paras();
@@ -2370,9 +2361,6 @@ namespace BP.WF
 
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
-                if (WebUser.IsWap)
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self ><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
-                else
                     this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 

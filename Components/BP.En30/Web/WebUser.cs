@@ -14,15 +14,6 @@ using BP.Sys;
 namespace BP.Web
 {
     /// <summary>
-    /// 用户工作设备
-    /// </summary>
-    public enum UserWorkDev
-    {
-        PC,
-        Mobile,
-        TablePC
-    }
-    /// <summary>
     /// User 的摘要说明。
     /// </summary>
     public class WebUser
@@ -121,11 +112,7 @@ namespace BP.Web
                 WebUser.Auth = null;
                 WebUser.AuthName = null;
             }
-
-
-            //登录模式？
-            BP.Web.WebUser.UserWorkDev = Web.UserWorkDev.PC;
-
+            
             #region 解决部门的问题.
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
@@ -191,12 +178,9 @@ namespace BP.Web
                 }
             }
 
-
             WebUser.SysLang = lang;
             if (BP.Sys.SystemConfig.IsBSsystem)
             {
-                //System.Web.HttpContext.Current.Response.Cookies.Clear();
-
                 HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
                 if (hc != null)
                     BP.Sys.Glo.Request.Cookies.Remove("CCS");
@@ -204,9 +188,6 @@ namespace BP.Web
                 HttpCookie cookie = new HttpCookie("CCS");
                 //设置Cookies有效期
                 DateTime time = DateTime.Now;
-
-                //TimeSpan span = new TimeSpan(0, 0, 60, 0, 0);//时间间隔
-                //  cookie.Expires = time.Add(span);
 
                 cookie.Values.Add("No", em.No);
                 cookie.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
@@ -265,17 +246,6 @@ namespace BP.Web
                     return (string)BP.Port.Current.Session[key];
             }
         }
-        public static object GetObjByKey(string key)
-        {
-            if (IsBSMode)
-            {
-                return System.Web.HttpContext.Current.Session[key];
-            }
-            else
-            {
-                return BP.Port.Current.Session[key];
-            }
-        }
         #endregion
 
         /// <summary>
@@ -291,31 +261,12 @@ namespace BP.Web
                     return true;
             }
         }
-        public static object GetSessionByKey(string key, Object defaultObjVal)
-        {
-            if (IsBSMode == true
-                && System.Web.HttpContext.Current != null
-                && System.Web.HttpContext.Current.Session != null)
-            {
-                if (System.Web.HttpContext.Current.Session[key] == null)
-                    return defaultObjVal;
-                else
-                    return System.Web.HttpContext.Current.Session[key];
-            }
-            else
-            {
-                if (BP.Port.Current.Session[key] == null)
-                    return defaultObjVal;
-                else
-                    return BP.Port.Current.Session[key];
-            }
-        }
         /// <summary>
         /// 设置session
         /// </summary>
         /// <param name="key">键</param>
         /// <param name="val">值</param>
-        public static void SetSessionByKey(string key, object val)
+        public static void SetSessionByKey(string key, string val)
         {
             if (val == null)
                 return;
@@ -358,35 +309,34 @@ namespace BP.Web
                 catch (Exception ex)
                 {
                 }
+                return;
             }
-            else
+
+            try
             {
-                try
-                {
-                    string token = WebUser.Token;
-                    //杨玉慧加
-                    BP.Port.Current.Session.Clear(); System.Web.HttpContext.Current.Response.Cookies.Clear();
-                    BP.Sys.Glo.Request.Cookies.Clear();
+                string token = WebUser.Token;
+                //杨玉慧加
+                BP.Port.Current.Session.Clear(); System.Web.HttpContext.Current.Response.Cookies.Clear();
+                BP.Sys.Glo.Request.Cookies.Clear();
 
 
-                    System.Web.HttpContext.Current.Session.Clear();
+                System.Web.HttpContext.Current.Session.Clear();
 
-                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                    cookie.Expires = DateTime.Now.AddDays(2);
-                    cookie.Values.Add("No", string.Empty);
-                    cookie.Values.Add("Name", string.Empty);
-                    // 2013.06.07 H
-                    cookie.Values.Add("Pass", string.Empty);
-                    cookie.Values.Add("IsRememberMe", "0");
-                    cookie.Values.Add("Auth", string.Empty); //授权人.
-                    //杨玉慧 加
-                    cookie.Values.Add("AuthName", string.Empty); //授权人.                    
-                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                    WebUser.Token = token;
-                }
-                catch
-                {
-                }
+                HttpCookie cookie = new HttpCookie("CCS", string.Empty);
+                cookie.Expires = DateTime.Now.AddDays(2);
+                cookie.Values.Add("No", string.Empty);
+                cookie.Values.Add("Name", string.Empty);
+                // 2013.06.07 H
+                cookie.Values.Add("Pass", string.Empty);
+                cookie.Values.Add("IsRememberMe", "0");
+                cookie.Values.Add("Auth", string.Empty); //授权人.
+                //杨玉慧 加
+                cookie.Values.Add("AuthName", string.Empty); //授权人.                    
+                System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                WebUser.Token = token;
+            }
+            catch
+            {
             }
         }
         /// <summary>
@@ -409,6 +359,9 @@ namespace BP.Web
                     SetSessionByKey("Auth", value);
             }
         }
+        /// <summary>
+        /// 部门名称
+        /// </summary>
         public static string FK_DeptName
         {
             get
@@ -458,6 +411,20 @@ namespace BP.Web
                 SetSessionByKey("FK_DeptNameOfFull", value);
             }
         }
+        /// <summary>
+        /// 令牌
+        /// </summary>
+        public static string Token
+        {
+            get
+            {
+                return GetSessionByKey("token", "null");
+            }
+            set
+            {
+                SetSessionByKey("token", value);
+            }
+        }
         public static string SysLang
         {
             get
@@ -487,19 +454,6 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("Lang", value);
-            }
-        }
-        /// <summary>
-        /// sessionID
-        /// </summary>
-        public static string NoOfSessionID
-        {
-            get
-            {
-                string s = GetSessionByKey("No", null);
-                if (s == null)
-                    return System.Web.HttpContext.Current.Session.SessionID;
-                return s;
             }
         }
         /// <summary>
@@ -631,6 +585,7 @@ namespace BP.Web
             HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
             if (hc == null)
                 return null;
+
             try
             {
                 string val = null;
@@ -686,7 +641,7 @@ namespace BP.Web
                     return true;
                 try
                 {
-                    string sql = "SELECT * FROM WF_Emp WHERE UserType=1 AND No='" + WebUser.No + "'";
+                    string sql = "SELECT No FROM WF_Emp WHERE UserType=1 AND No='" + WebUser.No + "'";
                     if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 1)
                         return true;
                     return false;
@@ -712,9 +667,6 @@ namespace BP.Web
                 {
                     if (IsBSMode == false)
                         return "admin";
-
-                    //return "admin";
-                    //string key = "CCS";
 
                     string key = "CCS";
                     HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
@@ -777,63 +729,16 @@ namespace BP.Web
                 SetSessionByKey("Domain", value);
             }
         }
-        /// <summary>
-        /// 令牌
-        /// </summary>
-        public static string Token
-        {
-            get
-            {
-
-                return GetSessionByKey("token", "null");
-            }
-            set
-            {
-                SetSessionByKey("token", value);
-            }
-        }
-        public static string Style
-        {
-            get
-            {
-                return GetSessionByKey("Style", "0");
-            }
-            set
-            {
-                SetSessionByKey("Style", value);
-            }
-        }
-        /// <summary>
-        /// 当前工作人员实体
-        /// </summary>
-        public static Emp HisEmp
-        {
-            get
-            {
-                return new Emp(WebUser.No);
-            }
-        }
         public static Stations HisStations
         {
             get
             {
-                object obj = null;
-                obj = GetSessionByKey("HisSts", obj);
-                if (obj == null)
-                {
                     Stations sts = new Stations();
                     QueryObject qo = new QueryObject(sts);
-
                     qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
                     qo.DoQuery();
-                    SetSessionByKey("HisSts", sts);
+
                     return sts;
-                }
-                return obj as Stations;
-            }
-            set
-            {
-                SetSessionByKey("HisSts", value);
             }
         }
         /// <summary>
@@ -902,64 +807,6 @@ namespace BP.Web
                     SetSessionByKey("AuthName", value);
             }
         }
-        /// <summary>
-        /// 用户工作方式.
-        /// </summary>
-        public static UserWorkDev UserWorkDev
-        {
-            get
-            {
-                if (BP.Sys.SystemConfig.IsBSsystem == false)
-                    return UserWorkDev.PC;
-
-                int s = (int)GetSessionByKey("UserWorkDev", 0);
-                BP.Web.UserWorkDev wd = (BP.Web.UserWorkDev)s;
-                return wd;
-            }
-            set
-            {
-                SetSessionByKey("UserWorkDev", (int)value);
-            }
-        }
-        /// <summary>
-        /// IsWap
-        /// </summary>
-        public static bool IsWap
-        {
-            get
-            {
-                if (BP.Sys.SystemConfig.IsBSsystem == false)
-                    return false;
-                int s = (int)GetSessionByKey("IsWap", 9);
-                if (s == 9)
-                {
-                    bool b = BP.Sys.Glo.Request.RawUrl.ToLower().Contains("wap");
-                    IsWap = b;
-                    if (b)
-                    {
-                        SetSessionByKey("IsWap", 1);
-                    }
-                    else
-                    {
-                        SetSessionByKey("IsWap", 0);
-                    }
-                    return b;
-                }
-                if (s == 1)
-                    return true;
-                else
-                    return false;
-            }
-            set
-            {
-                if (value)
-                    SetSessionByKey("IsWap", 1);
-                else
-                    SetSessionByKey("IsWap", 0);
-            }
-        }
-
-
 
         #region 当前人员操作方法.
         public static void DeleteTempFileOfMy()

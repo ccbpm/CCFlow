@@ -45,9 +45,7 @@ namespace BP.En
         /// <param name="en"></param>
         public static void FrmEvent_SaveAfter(string frmID, Entity en)
         {
-
         }
         #endregion 可以重写的表单事件.
-
     }
 }

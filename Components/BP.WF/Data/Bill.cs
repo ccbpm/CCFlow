@@ -485,8 +485,7 @@ namespace BP.WF
         public string DoOpen()
         {
             string path = BP.Sys.Glo.Request.MapPath(this.Url);
-            PubClass.OpenWordDocV2(path, this.FK_EmpT + "打印的" + this.FK_BillTypeT + ".doc");
-            return null;
+            return path; 
         }
         /// <summary>
         /// 打开pdf
@@ -495,8 +494,7 @@ namespace BP.WF
         public string DoOpenPDF()
         {
             string path = BP.Sys.Glo.Request.MapPath(this.Url);
-            PubClass.OpenWordDocV2(path, this.FK_EmpT + "打印的" + this.FK_BillTypeT + ".pdf");
-            return null;
+            return path;
         }
     }
 	/// <summary>

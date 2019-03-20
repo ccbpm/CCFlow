@@ -643,8 +643,8 @@ namespace BP.WF.HttpHandler
             {
                 BP.WF.Template.FrmNode fn = new FrmNode();
                 fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
-                
-                if (fn !=null && fn.WhoIsPK != WhoIsPK.OID)
+
+                if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                     {
@@ -1309,7 +1309,7 @@ namespace BP.WF.HttpHandler
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-               
+
                 if (this.FK_Node != 0 && this.FK_Node != 999999 && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
                 {
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
@@ -1381,10 +1381,10 @@ namespace BP.WF.HttpHandler
                             }
                         }
                     }
-                   
-               
 
-                     #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
+
+
+                    #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
                     if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                     {
                         //   Work wk1 = nd.HisWork;
@@ -1427,7 +1427,7 @@ namespace BP.WF.HttpHandler
                                     fwc.HisFrmWorkCheckSta = FrmWorkCheckSta.Enable;
                                 else
                                     fwc.HisFrmWorkCheckSta = FrmWorkCheckSta.Readonly;
-                          
+
                                 refFnc.Update();
 
                             }
@@ -1480,7 +1480,7 @@ namespace BP.WF.HttpHandler
                                 dr[MapAttrAttr.UIIsEnable] = ff.UIIsEnable;//是否只读?
                                 dr[MapAttrAttr.UIVisible] = ff.UIVisible; //是否可见?
                                 dr[MapAttrAttr.UIIsInput] = ff.IsNotNull; //是否必填?
-                               
+
 
                                 dr[MapAttrAttr.DefVal] = ff.DefVal; //默认值.
 
@@ -4301,17 +4301,10 @@ namespace BP.WF.HttpHandler
 
             BillTemplates templates = new BillTemplates();
             int iHave = templates.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.BillOpenModel, (int)BillOpenModel.WebOffice);
-            //在线WebOffice打开
-            if (iHave > 0)
-            {
+           
                 return "url@../WebOffice/PrintOffice.htm?MyPK=" + bill.MyPK;
-            }
-            else
-            {
-                BP.Sys.PubClass.OpenWordDocV2(billFile, tempNameChinese + ".doc");
-            }
+            
 
-            return "err@功能尚未完成..";
         }
         #endregion 打印.
 
@@ -4779,10 +4772,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Dev2Interface.Port_SigOut();
                 BP.WF.Dev2Interface.Port_Login(this.UserNo);
             }
-            if (this.GetValIntFromFrmByKey("IsMobile") == 1)
-                BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;
-            else
-                BP.Web.WebUser.UserWorkDev = UserWorkDev.PC;
+
             #endregion 安全性校验.
 
             #region 生成参数串.

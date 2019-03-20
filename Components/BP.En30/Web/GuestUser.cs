@@ -67,7 +67,6 @@ namespace BP.Web
             WebUser.Name = em.Name;
             WebUser.FK_Dept = em.FK_Dept;
             WebUser.FK_DeptName = em.FK_DeptText;
-            WebUser.HisStations = null;
             WebUser.SysLang = lang;
             if (BP.Sys.SystemConfig.IsBSsystem)
             {

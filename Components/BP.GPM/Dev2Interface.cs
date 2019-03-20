@@ -38,7 +38,6 @@ namespace BP.GPM
 
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             WebUser.SignInOfGener(emp);
-            WebUser.IsWap = false;
             return;
         }
         /// <summary>
@@ -49,7 +48,6 @@ namespace BP.GPM
         {
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             WebUser.SignInOfGener(emp);
-            WebUser.IsWap = false;
             return;
         }
         /// <summary>

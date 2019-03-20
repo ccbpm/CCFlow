@@ -1862,16 +1862,10 @@ namespace BP.WF
                     }
                     else
                     {
-                        if (BP.Web.WebUser.IsWap)
-                            _AppType = "WF/WAP";
-                        else
-                        {
-                            bool b = BP.Sys.Glo.Request.RawUrl.ToLower().Contains("oneflow");
-                            if (b)
-                                _AppType = "WF/OneFlow";
-                            else
+                        
+                          
                                 _AppType = "WF";
-                        }
+                         
                     }
                 }
                 return _AppType;

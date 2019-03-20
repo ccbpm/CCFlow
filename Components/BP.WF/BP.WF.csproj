@@ -214,6 +214,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HttpHandler\CCMobile_MyFlow.cs" />
+    <Compile Include="HttpHandler\HttpHandlerGlo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HttpHandler\WF_Admin_AttrFlow.cs" />
     <Compile Include="HttpHandler\WF.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode.cs" />

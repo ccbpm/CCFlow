@@ -33,16 +33,13 @@ namespace BP.WF
                     }
                     else
                     {
-                        if (BP.Web.WebUser.IsWap)
-                            _AppType = "WF/WAP";
-                        else
-                        {
+                       
                             bool b = BP.Sys.Glo.Request.RawUrl.ToLower().Contains("oneflow");
                             if (b)
                                 _AppType = "WF/OneFlow";
                             else
                                 _AppType = "WF";
-                        }
+                         
                     }
                 }
                 return _AppType;
@@ -811,15 +808,7 @@ namespace BP.WF
 
             if (wnOfCancelTo.HisNode.IsStartNode)
             {
-                if (BP.Web.WebUser.IsWap)
-                {
-                    if (wnOfCancelTo.HisNode.HisFormType != NodeFormType.SDKForm)
-                        return "@撤消发送执行成功." + msg;
-                    else
-                        return "@撤销成功." + msg;
-                }
-                else
-                {
+                
                     switch (wnOfCancelTo.HisNode.HisFormType)
                     {
                         case NodeFormType.FoolForm:
@@ -830,7 +819,7 @@ namespace BP.WF
                             return "@撤销成功." + msg;
                             break;
                     }
-                }
+                 
             }
             else
             {
@@ -1092,31 +1081,17 @@ namespace BP.WF
             wnPri.DeleteToNodesData(priFLNode.HisToNodes);
             if (wnPri.HisNode.IsStartNode)
             {
-                if (BP.Web.WebUser.IsWap)
-                {
+               
                     if (wnPri.HisNode.HisFormType != NodeFormType.SDKForm)
                         return "@撤消执行成功.";
                     else
                         return "@撤销成功.";
-                }
-                else
-                {
-                    if (wnPri.HisNode.HisFormType != NodeFormType.SDKForm)
-                        return "@撤消执行成功.";
-                    else
-                        return "@撤销成功.";
-                }
+                 
             }
             else
             {
-                if (BP.Web.WebUser.IsWap == false)
-                {
+                
                     return "@撤消执行成功.";
-                }
-                else
-                {
-                    return "@撤消执行成功.";
-                }
             }
         }
         public string DoUnSendSubFlow(GenerWorkFlow gwf)

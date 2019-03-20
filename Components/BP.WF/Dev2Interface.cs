@@ -3305,7 +3305,6 @@ namespace BP.WF
 
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             WebUser.SignInOfGener(emp);
-            WebUser.IsWap = false;
             return;
         }
 
@@ -3339,11 +3338,8 @@ namespace BP.WF
             }
 
             WebUser.SignInOfGener(emp);
-            WebUser.IsWap = false;
             WebUser.Auth = ""; //设置授权人为空.
-
             return emp.SID;
-
             //  return Port_GetSID(userNo);
         }
         /// <summary>

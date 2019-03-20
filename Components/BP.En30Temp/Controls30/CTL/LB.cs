@@ -35,12 +35,10 @@ namespace BP.Web.Controls
 			this.Style.Clear();
 			//this.Style.Add("width",attr.UIWidth.ToString()+"px") ;			
 			  
-			this.CssClass="DGLB"+WebUser.Style;
 			this.PreRender += new System.EventHandler(this.LBPreRender);
 		}
 		public LB()
 		{
-			this.CssClass="LB"+WebUser.Style;
 			//
 			// TODO: 在此处添加构造函数逻辑
 			//

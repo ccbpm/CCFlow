@@ -60,7 +60,6 @@ namespace  BP.Web.Controls
 		}
 		public ImageBtn()
 		{	
-			this.CssClass="ImageBtn"+WebUser.Style;
 			this.PreRender += new System.EventHandler(this.LinkBtnPreRender);
 		}
 		private void LinkBtnPreRender( object sender, System.EventArgs e )

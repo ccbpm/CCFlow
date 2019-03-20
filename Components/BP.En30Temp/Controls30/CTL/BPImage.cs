@@ -18,7 +18,6 @@ namespace BP.Web.Controls
 	{
 		public BPImage()
 		{
-			this.CssClass="BPImage"+WebUser.Style;		 
 		}	 	
 		 
 	}

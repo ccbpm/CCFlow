@@ -252,12 +252,7 @@ namespace BP.Web.Controls
 
         public void StyleScheme()
         {
-            //this.BorderStyle=BorderStyle="Ridge"
-            if (WebUser.Style == "1")
-                this.Style1();
-            else if (WebUser.Style == "2")
-                this.Style2();
-            else
+          
                 this.Style3();
 
         }

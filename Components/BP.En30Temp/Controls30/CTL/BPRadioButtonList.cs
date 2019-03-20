@@ -27,14 +27,12 @@ namespace BP.Web.Controls
 		}
 		public BPRadioButtonList()
 		{
-			this.CssClass="BPRadioButtonList"+WebUser.Style;
 			
 			 
 		}
 		protected override void Render(System.Web.UI.HtmlTextWriter writer)
 		{
 			base.Render (writer);
-			this.CssClass="BPRadioButtonList"+WebUser.Style;
 
 		}
 

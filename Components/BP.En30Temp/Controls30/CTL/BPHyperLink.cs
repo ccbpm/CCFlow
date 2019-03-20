@@ -13,7 +13,6 @@ namespace  BP.Web.Controls
 	{
 		public BPHyperLink()	   
 		{
-			this.CssClass = "HyperLink"+WebUser.Style;
 		}
 	}
 }

@@ -96,7 +96,7 @@ namespace BP.Web
             str += "<TR>";
             foreach (DataColumn dc in dt.Columns)
             {
-                str += "<TD class='DGCellOfHeader" + BP.Web.WebUser.Style + "' >" + dc.ColumnName + "</TD>";
+                str += "<TD  >" + dc.ColumnName + "</TD>";
             }
             str += "</TR>";
 
@@ -116,11 +116,13 @@ namespace BP.Web
         }
         public string GenerTablePage(DataTable dt, string title)
         {
-            return PubClass.GenerTablePage(dt, title);
+            return "";
+            //return PubClass.GenerTablePage(dt, title);
         }
         public string GenerLabelStr(string title)
         {
-            return PubClass.GenerLabelStr(title);
+            return "";
+            //return PubClass.GenerLabelStr(title);
             //return str;
         }
 
@@ -188,8 +190,6 @@ namespace BP.Web
         //}
         public string GenerCaption(string title)
         {
-            if (BP.Web.WebUser.Style == "2")
-                return "<div class=Table_Title ><span>" + title + "</span></div>";
 
             return "<b>" + title + "</b>";
         }

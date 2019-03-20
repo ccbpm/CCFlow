@@ -576,7 +576,6 @@ namespace BP.Web.Controls
             this.AppPath = appPath;
             this.ID = "DDL_" + attr.Key;
             this.BorderStyle = BorderStyle.None;
-            this.CssClass = "DDL" + WebUser.Style;
 
             this.SelfDefaultText = DefaultText;
             this.SelfDefaultVal = DefaultVal;
@@ -624,7 +623,6 @@ namespace BP.Web.Controls
             this.ID = "DDL_" + attr.Key;
             this.AppPath = this.Page.Request.ApplicationPath;
             this.BorderStyle = BorderStyle.None;
-            this.CssClass = "DDL" + WebUser.Style;
 
             this.SelfDefaultText = DefaultText;
             this.SelfDefaultVal = DefaultVal;

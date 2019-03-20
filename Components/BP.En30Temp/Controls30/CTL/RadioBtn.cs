@@ -16,7 +16,6 @@ namespace BP.Web.Controls
 	{
 		public RadioBtn()
 		{
-			this.CssClass="BPRadioButton"+WebUser.Style;
 		}
 //		public RadioBtn(Attr attr)
 //		{

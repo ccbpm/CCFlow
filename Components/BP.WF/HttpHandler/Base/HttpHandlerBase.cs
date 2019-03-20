@@ -28,6 +28,9 @@ namespace BP.WF.HttpHandler
             DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType, context) as DirectoryPageBase;
             ctrl.context = mycontext;
 
+            //让其支持跨域访问.
+            ctrl.context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+
             try
             {
                 //执行方法返回json.

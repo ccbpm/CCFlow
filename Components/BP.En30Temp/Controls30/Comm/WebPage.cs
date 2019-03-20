@@ -931,7 +931,7 @@ namespace BP.Web
             objFileStream.Close();
             #endregion
 
-            PubClass.WinOpen(this.Request.ApplicationPath + "/Temp/" + file);
+            this.WinOpen(this.Request.ApplicationPath + "/Temp/" + file);
             return file;
         }
         /// <summary>
@@ -982,7 +982,7 @@ namespace BP.Web
             objStreamWriter.Close();
             objFileStream.Close();
 
-            PubClass.WinOpen(this.Request.ApplicationPath + "/Temp/" + file);
+            //PubClass.WinOpen(this.Request.ApplicationPath + "/Temp/" + file);
             return file;
         }
         public void Page_Error(object sender, EventArgs e)

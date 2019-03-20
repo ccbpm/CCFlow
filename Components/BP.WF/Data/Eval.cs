@@ -341,6 +341,7 @@ namespace BP.WF.Data
                     return this._enMap;
                 Map map = new Map("WF_CHEval", "工作质量评价");
 
+
                 map.AddMyPK();
                 map.AddTBString(EvalAttr.Title, null, "标题", false, true, 0, 500, 10);
                 map.AddTBString(EvalAttr.FK_Flow, null, "流程编号", false, true, 0, 7, 10);
@@ -348,7 +349,7 @@ namespace BP.WF.Data
 
                 map.AddTBInt(EvalAttr.WorkID, 0, "工作ID", false, true);
                 map.AddTBInt(EvalAttr.FK_Node, 0, "评价节点", false, true);
-                map.AddTBString(EvalAttr.NodeName, null, "节点名称", false, true, 0, 100, 10);
+                map.AddTBString(EvalAttr.NodeName, null, "停留节点", false, true, 0, 100, 10);
 
                 map.AddTBString(EvalAttr.Rec, null, "评价人", false, true, 0, 50, 10);
                 map.AddTBString(EvalAttr.RecName, null, "评价人名称", false, true, 0, 50, 10);

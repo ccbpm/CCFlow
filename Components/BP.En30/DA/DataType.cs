@@ -519,24 +519,6 @@ namespace BP.DA
             return strs;
         }
         /// <summary>
-        /// 把内容里面的东西处理成超连接。
-        /// </summary>
-        /// <param name="strContent"></param>
-        /// <returns></returns>
-        public static string DealSuperLink(string doc)
-        {
-            if (doc == null)
-                return null;
-
-            return doc;
-
-            Regex urlregex = new Regex(@"(http:\/\/([\w.]+\/?)\S*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            doc = urlregex.Replace(doc, "<a href='' target='_blank'></a>");
-            Regex emailregex = new Regex(@"([a-zA-Z_0-9.-]+@[a-zA-Z_0-9.-]+\.\w+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            doc = emailregex.Replace(doc, "<a href=mailto:></a>");
-            return doc;
-        }
-        /// <summary>
         /// 将文件转化为二进制
         /// </summary>
         /// <param name="fileName"></param>
@@ -561,9 +543,6 @@ namespace BP.DA
                 fs.Close();
             }
         }
-
-
-
         /// <summary>
         /// 写文件
         /// </summary>

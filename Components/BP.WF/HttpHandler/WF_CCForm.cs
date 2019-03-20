@@ -4352,26 +4352,18 @@ namespace BP.WF.HttpHandler
 
             if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
             {
-                //PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
                 return "url@" + DataType.PraseStringToUrlFileName(downDB.FileFullName);
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
             {
                 string fileFullName = downDB.GenerTempFile(dbAtt.AthSaveWay);
-
-                // BP.Sys.PubClass.DownloadFileV2(fileFullName, downDB.FileName);
-                // return "";
-                // PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
-
                 return "url@" + DataType.PraseStringToUrlFileName(fileFullName);
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.DB)
             {
                 return "fromdb";
-
-                //PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
             }
             return "正在下载.";
         }

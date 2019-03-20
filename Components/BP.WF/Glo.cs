@@ -805,6 +805,9 @@ namespace BP.WF
                 if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
                     BP.DA.DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
 
+                if (DBAccess.IsExitsObject("V_WF_Delay") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
+
                 string sqlscript = "";
                 //执行必须的sql.
                 switch (BP.Sys.SystemConfig.AppCenterDBType)
@@ -828,6 +831,9 @@ namespace BP.WF
 
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
                 #endregion
+
+                 
+
 
                 #region 更新表单的边界.2014-10-18
                 MapDatas mds = new MapDatas();

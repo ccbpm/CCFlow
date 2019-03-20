@@ -728,11 +728,6 @@ namespace BP.En
         #region 关于属性的操作。
 
         #region 设置值方法
-        public void SetValByKeySuperLink(string attrKey, string val)
-        {
-            this.SetValByKey(attrKey, DataType.DealSuperLink(val));
-        }
-
         /// <summary>
         /// 设置object类型的值
         /// </summary>

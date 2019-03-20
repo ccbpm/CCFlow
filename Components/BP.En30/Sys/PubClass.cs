@@ -644,78 +644,7 @@ namespace BP.Sys
             dt.TableName = uiBindKey;
             return dt;
         }
-        /// <summary>
-        /// 获取数据源
-        /// </summary>
-        /// <param name="uiBindKey">绑定的外键或者枚举</param>
-        /// <returns></returns>
-        public static System.Data.DataTable GetDataTableByUIBineKeyForCCFormDesigner(string uiBindKey)
-        {
-            DataTable mydt = new DataTable();
-            mydt.Columns.Add("No");
-            mydt.Columns.Add("Name");
-
-            DataRow dr = mydt.NewRow();
-            dr[0] = "数据1";
-            dr[1] = "数据1";
-            mydt.Rows.Add(dr);
-
-            dr = mydt.NewRow();
-            dr[0] = "数据2";
-            dr[1] = "数据2";
-            mydt.Rows.Add(dr);
-
-            dr = mydt.NewRow();
-            dr[0] = "数据3";
-            dr[1] = "数据3";
-            mydt.Rows.Add(dr);
-            return mydt;
-
-
-
-            int topNum = 40;
-            DataTable dt = new DataTable();
-            if (uiBindKey.Contains("."))
-            {
-                Entities ens = BP.En.ClassFactory.GetEns(uiBindKey);
-                if (ens == null)
-                    ens = BP.En.ClassFactory.GetEns(uiBindKey);
-
-                if (ens == null)
-                    ens = BP.En.ClassFactory.GetEns(uiBindKey);
-                if (ens == null)
-                    throw new Exception("类名错误:" + uiBindKey + ",不能转化成ens.");
-
-                BP.En.QueryObject qo = new QueryObject(ens);
-                return qo.DoQueryToTable(topNum);
-            }
-            else
-            {
-                SFTable sf = new SFTable(uiBindKey);
-                if (sf.SrcType == SrcType.TableOrView)
-                {
-                    string sql = "";
-                    switch (BP.Sys.SystemConfig.AppCenterDBType)
-                    {
-                        case DBType.Oracle:
-                            sql = "SELECT No,Name FROM " + uiBindKey + " where rowNum <= " + topNum;
-                            break;
-                        case DBType.MSSQL:
-                            sql = "SELECT top " + topNum + " No,Name FROM " + uiBindKey;
-                            break;
-                        default:
-                            sql = "SELECT  No,Name FROM " + uiBindKey;
-                            break;
-                    }
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = uiBindKey;
-                    return dt;
-                }
-
-                //返回数据.
-                return sf.GenerHisDataTable;
-            }
-        }
+       
 
         #region 系统调度
         public static string GenerDBOfOreacle()
@@ -1287,53 +1216,7 @@ namespace BP.Sys
         #endregion
 
         #region 转化格式  chen
-        /// <summary>
-        /// 将某控件中的数据转化为Excel文件
-        /// </summary>
-        /// <param name="ctl"></param>
-        public static void ToExcel(System.Web.UI.Control ctl, string filename)
-        {
-            HttpContext.Current.Response.Charset = "GB2312";
-            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + filename + ".xls");
-            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
-            HttpContext.Current.Response.ContentType = "application/ms-excel";//"application/ms-excel";
-            //image/JPEG;text/HTML;image/GIF;application/ms-msword
-            ctl.Page.EnableViewState = false;
-            System.IO.StringWriter tw = new System.IO.StringWriter();
-            System.Web.UI.HtmlTextWriter hw = new System.Web.UI.HtmlTextWriter(tw);
-            ctl.RenderControl(hw);
-            HttpContext.Current.Response.Write(tw.ToString());
-            HttpContext.Current.Response.End();
-        }
-        /// <summary>
-        /// 将某控件中的数据转化为Word文件
-        /// </summary>
-        /// <param name="ctl"></param>
-        public static void ToWord(System.Web.UI.Control ctl, string filename)
-        {
-            filename = HttpUtility.UrlEncode(filename);
-            HttpContext.Current.Response.Charset = "GB2312";
-            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + filename + ".doc");
-            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
-            HttpContext.Current.Response.ContentType = "application/ms-msword";//image/JPEG;text/HTML;image/GIF;application/ms-excel
-            ctl.Page.EnableViewState = false;
-            System.IO.StringWriter tw = new System.IO.StringWriter();
-            System.Web.UI.HtmlTextWriter hw = new System.Web.UI.HtmlTextWriter(tw);
-            ctl.RenderControl(hw);
-            HttpContext.Current.Response.Write(tw.ToString());
-        }
-
-        public static void OpenExcel(string filepath, string tempName)
-        {
-            tempName = HttpUtility.UrlEncode(tempName);
-            HttpContext.Current.Response.Charset = "GB2312";
-            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
-            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
-            HttpContext.Current.Response.ContentType = "application/ms-excel";
-            HttpContext.Current.Response.WriteFile(filepath);
-            HttpContext.Current.Response.End();
-            HttpContext.Current.Response.Close();
-        }
+     
         public static void DownloadFile(string filepath, string tempName)
         {
             if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
@@ -1406,122 +1289,7 @@ namespace BP.Sys
                 HttpContext.Current.Response.BinaryWrite(byteList.ToArray());
                 HttpContext.Current.Response.End();
                 HttpContext.Current.Response.Close();
-
                 myStream.Close();
-            }
-        }
-        public static void DownloadFileV4(string filepath, string tempName)
-        {
-            //File exportFile = null;
-            //FileInputStream fis = null;
-            //try
-            //{
-            //    FileInfo oldFile = new FileInfo(filepath);
-            //   // exportFile = FileEncrypt.dencryptNoDenc(oldFile); // 生成临时文件
-
-            //    var httpServletResponse = HttpContext.Current.Response;
-
-            //    FileStream servletOutputStream = File.OpenRead(oldFile.FullName);
-
-            //    string fileName= oldFile.Name;
-
-
-            //    httpServletResponse.AddHeader("Content-Disposition","attachment;filename="+fileName);
-            //    httpServletResponse.ContentType="application/x-download"; 
-
-
-            //    // 此处只写文件名exportFile.getName()，不需绝对路径
-
-            //    httpServletResponse.setHeader(
-            //                    "Content-Disposition",
-            //                    );
-            //    httpServletResponse.setContentLength((int)exportFile.length());
-            //    httpServletResponse.setContentType("application/x-download");
-            //    byte[] b = new byte[4096];
-            //    int i = 0;
-            //    fis = new java.io.FileInputStream(exportFile);
-            //    while ((i = fis.read(b)) > 0)
-            //    {
-            //        servletOutputStream.write(b, 0, i);
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    logger.error(e);
-            //}
-            //finally
-            //{
-            //    try
-            //    {
-            //        if (fis != null)
-            //        {
-            //            fis.close();
-            //        }
-            //        if (exportFile != null && exportFile.exists())
-            //        {
-            //            exportFile.delete();
-            //        }
-            //    }
-            //    catch (Exception ce)
-            //    {
-            //        logger.error(ce);
-            //    }
-            //}
-            //FacesContext.getCurrentInstance().responseComplete();
-
-        }
-        public static void DownloadFileV1(string filepath, string tempName)
-        {
-            HttpContext.Current.Response.ContentType = "application/x-zip-compressed";
-            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename="+tempName);
-
-            //指定编码 防止中文文件名乱码
-            HttpContext.Current.Response.HeaderEncoding = System.Text.Encoding.GetEncoding("gb2312");
-            HttpContext.Current.Response.TransmitFile(filepath);            
-
-        }
-        public static void DownloadFileV3(string filepath, string tempName)
-        {
-            FileInfo fileInfo = new FileInfo(filepath);
-            HttpContext.Current.Response.Clear();
-            HttpContext.Current.Response.ClearContent();
-            HttpContext.Current.Response.ClearHeaders();
-            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=" + tempName);
-            HttpContext.Current.Response.AddHeader("Content-Length", fileInfo.Length.ToString());
-            HttpContext.Current.Response.AddHeader("Content-Transfer-Encoding", "binary");
-            HttpContext.Current.Response.ContentType = "application/octet-stream";
-            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("gb2312");
-            HttpContext.Current.Response.WriteFile(fileInfo.FullName);
-            HttpContext.Current.Response.Flush();
-            HttpContext.Current.Response.End();
-             
-        }
-        public static void DownloadFileV2(string filepath, string tempName)
-        {
-
-            FileInfo fileInfo = new FileInfo(filepath);
-            if (fileInfo.Exists == false)
-                return;
-            byte[] buffer = new byte[102400];
-            HttpContext.Current.Response.Clear();
-            using (FileStream iStream = File.OpenRead(fileInfo.FullName))
-            {
-                long dataLengthToRead = iStream.Length; //获取下载的文件总大小
-                //HttpContext.Current.Response.ContentType = "application/octet-stream"; //此方法不可以.
-                HttpContext.Current.Response.ContentType = "application/x-download";
-
-                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;  filename=" +
-                                   HttpUtility.UrlEncode(tempName, System.Text.Encoding.UTF8));
-                while (dataLengthToRead > 0 && HttpContext.Current.Response.IsClientConnected)
-                {
-                    int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(102400));//'读取的大小
-
-                    HttpContext.Current.Response.OutputStream.Write(buffer, 0, lengthRead);
-                    HttpContext.Current.Response.Flush();
-                    dataLengthToRead = dataLengthToRead - lengthRead;
-                }
-                HttpContext.Current.Response.Close();
-                HttpContext.Current.Response.End();
             }
         }
         public static void OpenWordDoc(string filepath, string tempName)
@@ -1577,6 +1345,7 @@ namespace BP.Sys
             dt.Rows.Add(dr);
             return dt;
         }
+
         #region
 
         #region

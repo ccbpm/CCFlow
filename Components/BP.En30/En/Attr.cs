@@ -93,7 +93,11 @@ namespace BP.En
         /// <summary>
         /// 手写签名版
         /// </summary>
-        HandWriting = 8
+        HandWriting = 8,
+        /// <summary>
+        /// 超链接
+        /// </summary>
+        HyperLink = 9
     }
     /// <summary>
     /// 逻辑类型

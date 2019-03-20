@@ -17,10 +17,6 @@ function GenerFoolFrm(mapData, frmData) {
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
 
-    //html += "<tr>";
-    //html += "<td colspan=4 ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
-    //html += "</tr>";
-
     //遍历循环生成 listview
     for (var i = 0; i < Sys_GroupFields.length; i++) {
 
@@ -94,7 +90,7 @@ function GenerFoolFrm(mapData, frmData) {
 
         //审核组件,有节点信息,并且当前节点状态不是禁用的,就可以显示.
         if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
-            if (node.FormType != 5 ||( node.FormType == 5 && frmNode && frmNode.IsEnableFWC == 1)) {
+            if (node.FormType != 5 || (node.FormType == 5 && frmNode && frmNode.IsEnableFWC == 1)) {
                 html += "<tr>";
                 html += "  <th colspan=4>" + gf.Lab + "</th>";
                 html += "</tr>";
@@ -126,10 +122,12 @@ function GenerFoolFrm(mapData, frmData) {
     html += "</table>";
 
     //加入隐藏控件.
-    for (var attr in frmData.Sys_MapAttr) {
-        if (attr.UIVisable == 0) {
-            var defval = ConvertDefVal(frmData, attr.DefVal, attr.KeyOfEn);
-            html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
+    var mapAttrs = frmData.Sys_MapAttr;
+    for (var i = 0; i < mapAttrs.length; i++) {
+        var attr = mapAttrs[i];
+        if (attr["UIVisible"] == 0) {
+            var defval = ConvertDefVal(frmData, attr["DefVal"], attr["KeyOfEn"]);
+            html += "<input type='hidden' id='TB_" + attr["KeyOfEn"] + "' name='TB_" + attr["KeyOfEn"] + "' value='" + defval + "' />";
         }
     }
 
@@ -204,13 +202,13 @@ function Ele_FrmCheck(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
-  
+
 
     src += "&r=q" + paras;
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
     return eleHtml;
 }
- 
+
 
 
 //解析表单字段 MapAttr.
@@ -230,7 +228,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
 
         var lab = "";
         if (attr.UIContralType == 0 || attr.UIContralType == 8)
-            lab = "<label id=Lab_"+attr.KeyOfEn + "'  for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+            lab = "<label id=Lab_" + attr.KeyOfEn + "'  for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
         if (attr.UIContralType == 1)
             lab = "<label id=Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
@@ -287,7 +285,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
     }
     if (isDropTR == false) {
         html += "<td class='FDesc' ColSpan='2'></td>";
-     
+
         html += "</tr>";
     }
 
@@ -331,7 +329,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             var sfTable = new Entity("BP.Sys.SFTable");
             sfTable.SetPKVal(uiBindKey);
             var count = sfTable.RetrieveFromDBSources();
-            if (count!=0 && sfTable.CodeStruct == "1") {
+            if (count != 0 && sfTable.CodeStruct == "1") {
                 return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
             }
         }
@@ -547,7 +545,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         var bit;
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
-        else 
+        else
             bit = 2;
 
         return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
@@ -724,7 +722,7 @@ function SetCtrlShow(key) {
     if (ctrl.length > 0) {
         ctrl.parent('tr').show();
     }
-   
+
 
 }
 
@@ -869,7 +867,7 @@ function Ele_Attachment(workNode, gf) {
     var noOfObj = athPK.replace(gf.FrmID + "_", "");
 
     var src = "";
-    
+
     //这里的连接要取 FK_MapData的值.
     src = "Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
@@ -941,7 +939,7 @@ function Ele_Dtl(frmDtl) {
     if (local.indexOf('CCBill') != -1) {
         dtlUrl = '../CCForm/' + dtlUrl;
     }
-     
+
 
     if (frmDtl.ListShowModel == "0") {
         src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&FK_MapData=" + frmDtl.FK_MapData + "&" + urlParam + "&Version=1";

@@ -498,8 +498,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
-    <None Include="References\LitJSON\AssemblyInfo.cs.in" />
-    <None Include="References\LitJSON\COPYING" />
     <None Include="Service References\ccportal\PortalInterface.wsdl" />
   </ItemGroup>
   <ItemGroup>

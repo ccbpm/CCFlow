@@ -8702,9 +8702,7 @@ namespace BP.WF
         public static void Node_SetWorkRead(int nodeID, Int64 workid, string empNo)
         {
             Node nd = new Node(nodeID);
-            if (nd.IsStartNode)
-                return;
-
+            
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=1 WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node AND FK_Emp=" + dbstr + "FK_Emp";

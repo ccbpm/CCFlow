@@ -455,11 +455,10 @@ namespace BP.WF
                 #endregion 增加 groupfields
 
                 #region 流程设置信息.
+                BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
+
                 if (nd.IsStartNode == false)
                 {
-                    BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
-
-                    // @杜.
                     if (gwf.TodoEmps.Contains(BP.Web.WebUser.Name + ";") == false)
                     {
                         gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name;

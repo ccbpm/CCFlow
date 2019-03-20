@@ -11,7 +11,5 @@ public partial class SDKFlows_WinOpen : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        this.Page.RegisterClientScriptBlock("s",
-           "<link href='/WF/Comm/Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
     }
 }

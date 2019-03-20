@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function Save() {
+
+            try {
+
+                //alert(location.href);
+                alert('保存成功, 当前的url: ' + location.href);
+
+                return "@JinE=1000@QingJiaTianShu=9";  //需要传入参数到ccbpm工作流程引擎, 如果值里面有@符号，请用 \@ 符号标识.
+
+                //return true; //表是保存成功，而不需要向ccbpm传入参数。
+
+            } catch (e) {
+
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h3>
+        我的自定义页面</h3>
+    电话：
+    <input type="text" id="TB_Tel" input type="1" />
+    邮件：
+    <input type="text" id="Text1" />
+    金额：
+    <input type="text" id="TB_JinE" input type="1" />
+    <br />
+    <input type="button" value="Save" />
+</body>
+</html>

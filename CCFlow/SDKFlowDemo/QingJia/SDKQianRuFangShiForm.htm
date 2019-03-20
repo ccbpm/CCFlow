@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../../WF/Toolbar.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function Save() {
+            alert('保存成功' + location.href);
+            return true;
+        }
+    </script>
+    <script src="../ccflow.js" type="text/javascript"></script>
+</head>
+<body>
+
+<!-- 工具栏 -->
+<!--<div id="Toolbar">[发送][保存][退回]</div>
+-->
+<table> 
+<caption> 出库单</caption>
+<tr>
+<td> 
+电话：
+<input type=text id="TB_Tel" InputType="1"  /> 
+邮件：
+<input type=text id="Text1" /> 
+金额：
+<input type=text id="TB_JinE" InputType="1"  /> 
+</td>
+</tr>
+</table> 
+
+<!-- 审核组件 -->
+<div id="FWC">  </div>
+
+</body>
+</html>

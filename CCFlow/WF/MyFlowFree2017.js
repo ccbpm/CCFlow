@@ -589,7 +589,7 @@ function figure_Template_HyperLink(frmLin) {
             url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
         }
     });
-
+    
     var OID = GetQueryString("OID");
     if (OID == undefined || OID == "");
     OID = GetQueryString("WorkID");
@@ -602,7 +602,10 @@ function figure_Template_HyperLink(frmLin) {
         SID = "";
     if (url.indexOf("?") == -1)
         url = url + "?1=1";
-    url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+    if (url.indexOf("SearchBS.htm") != -1)
+        url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+    else
+        url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
 
     var eleHtml = '<span></span>';
     eleHtml = $(eleHtml);

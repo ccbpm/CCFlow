@@ -179,9 +179,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             isDropTR = true;
             html += "<tr>";
-            if (attr.MyDataType != 4)
+            if (attr.MyDataType != 4 && attr.UIContralType !="9")
                 html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-            if (attr.MyDataType != 4)
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
             else
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4 >";
@@ -205,8 +205,12 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         if (isDropTR == true) {
             html += "<tr>";
-            html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+            if (attr.UIContralType != "9") {
+                html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+            } else {
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext' ColSpan=2 >";
+            }
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             isDropTR = !isDropTR;
@@ -214,8 +218,12 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         }
 
         if (isDropTR == false) {
-            html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-            html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'>";
+            if (attr.UIContralType != "9") {
+                html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+            } else {
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext' ColSpan=2 >";
+            }
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -301,7 +309,41 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
             return eleHtml;
         }
+        //超链接
+        if (mapAttr.UIContralType == "9") {
+            //URL @ 变量替换
+            var url = GetPara(mapAttr.AtPara, "Url");
+            $.each(flowData.Sys_MapAttr, function (i, obj) {
+                if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
+                    //替换
+                    //url=  url.replace(new RegExp(/(：)/g), ':');
+                    //先这样吧
+                    url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
+                }
+            });
 
+            var OID = GetQueryString("OID");
+            if (OID == undefined || OID == "");
+            OID = GetQueryString("WorkID");
+            var FK_Node = GetQueryString("FK_Node");
+            var FK_Flow = GetQueryString("FK_Flow");
+            var webUser = new WebUser();
+            var userNo = webUser.No;
+            var SID = webUser.SID;
+            if (SID == undefined)
+                SID = "";
+            if (url.indexOf("?") == -1)
+                url = url + "?1=1";
+
+            if (url.indexOf("SearchBS.htm") != -1)
+                url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+            else
+                url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+
+            eleHtml = '<span ><a href="' + url + '" target="_blank">' + mapAttr.Name + '</a></span>';
+           
+            return eleHtml;
+        }
         if (mapAttr.UIHeight <= 40) //普通的文本框.
         {
             if (mapAttr.IsSigan == "1") {
@@ -493,8 +535,9 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
         var strs = setVal.split('@');
 
         for (var i = 0; i < strs.length; i++) {
-
             var str = strs[i];
+            if (str == "")
+                continue;
             var kv = str.split('=');
 
             var key = kv[0];
@@ -632,8 +675,6 @@ function SetCtrlVal(key, value) {
     ctrl = $("#DDL_" + key);
     if (ctrl.length > 0) {
         ctrl.val(value);
-        // ctrl.attr("value",value);
-        //$("#DDL_"+key+" option[value='"+value+"']").attr("selected", "selected");
     }
 
     ctrl = $("#CB_" + key);

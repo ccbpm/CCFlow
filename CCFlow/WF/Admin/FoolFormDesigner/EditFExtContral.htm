@@ -21,9 +21,6 @@
             // 绑定附件列表.
             GenerBindSQL("DDL_Ath", "EditFExtContral_AthList", "@FK_MapData=" + fk_mapData);
 
-            //var mypk= "";
-            //var en = new Entity("BP.Sys.MapAttr",EditFExtContral_Init);
-
             var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
 
             //设置选择的模式.
@@ -43,6 +40,10 @@
                 case "6": //附件扩展组件..
                     $("#DDL_Ath").val(mapAttr.AthRefObj); //设置选择的值.
                     $("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
+                    break;
+                case "9": //超链接
+                    $("#DTB_Url").val(mapAttr.Url); //设置URL.
+                    //$("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
                     break;
                 default:
                     alert('没有判断的元素.' + mapAttr.UIContralType);
@@ -69,7 +70,7 @@
             // var model = $("#Model").val();
             var model = $('input:radio:checked').val();
 
-            if (model != 6) {
+            if (model != 6 && model !=9) {
                 var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
                 mapAttr.UIContralType = model;
                 mapAttr.Update();
@@ -98,6 +99,17 @@
                 alert('保存成功');
                 return;
             }
+
+            //保存超链接
+            if (model == 9) {
+                var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
+                mapAttr.UIContralType = model;
+                mapAttr.SetPara("Url", $("#TB_Url").val());
+                mapAttr.Update();
+
+                return;
+            }
+
         }
 
         function SaveAndClose() {
@@ -127,6 +139,32 @@
         <ul>
             <li>不做任何设置. </li>
         </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_9" type="radio" name="Model" value="9" /><label for="RB_CtrlType_9">超链接</label>
+        </legend>
+       
+           
+        <a href="javascript:ShowHidden('help')">自定义URL:</a>
+                
+            <div id="help" style="color:Gray; display:none">
+            <ul>
+            <li>您选择了使用外部的URL. </li>
+            <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+            <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.htm </li>
+            <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
+            </ul>
+            </div>
+
+            <input type="text" id="TB_Url" name="TB_Url" value=""  style="display:block;width:99%" />
+            <br />
+
+            宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
+            高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
+            
+          
     </fieldset>
 
      <fieldset>
@@ -201,8 +239,7 @@
 
    
     <input type="button" value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
-    <!--<input type="button" value="保存&关闭"  onclick="SaveAndClose()" id="Btn_SaveAndClose" name="Btn_SaveAndClose" />-->
-    <!--<input type="button" value="取消"  onclick="Cancel()" id="Btn_Cancel" name="Btn_Cancel" />-->
+   
     </form>
 </body>
 </html>

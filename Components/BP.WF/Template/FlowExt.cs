@@ -1514,9 +1514,10 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSetStartFlowDataSources()
         {
+            if (DataType.IsNullOrEmpty(this.No) == true)
+                throw new Exception("传入的流程编号为空，请检查流程");
             string flowID = int.Parse(this.No).ToString() + "01";
             return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
-            //return "../../WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
         }
         public string DoCCNode()
         {
@@ -1620,6 +1621,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoOpenRpt()
         {
+            if (DataType.IsNullOrEmpty(this.No) == true)
+                throw new Exception("传入的流程编号为空，请检查流程");
             return "../../Admin/RptDfine/Default.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" + int.Parse(this.No) + "Rpt";
         }
         /// <summary>

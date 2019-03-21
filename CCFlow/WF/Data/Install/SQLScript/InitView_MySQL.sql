@@ -137,5 +137,5 @@ SELECT  CONCAT(WorkID,'_',FK_Emp,'_',FK_Node) AS MyPK, PRI, WorkID, IsRead, Star
                       FlowName, PWorkID, PFlowNo, FK_Node, NodeName, WorkerDept, Title, RDT, ADT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, GuestNo, GuestName, BillNo, FlowNote, 
                       TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, MyNum
 FROM   WF_EmpWorks
-WHERE SDT>NOW() 
-GO 
+WHERE SDT>NOW() ;
+  

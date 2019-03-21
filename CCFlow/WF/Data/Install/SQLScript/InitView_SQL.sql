@@ -206,5 +206,5 @@ AS
 SELECT     CONVERT(varchar, WorkID) + '_' + CONVERT(varchar, FK_Emp) + '_' + CONVERT(varchar, FK_Node) AS MyPK, PRI, WorkID, IsRead, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, 
                       FlowName, PWorkID, PFlowNo, FK_Node, NodeName, WorkerDept, Title, RDT, ADT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, GuestNo, GuestName, BillNo, FlowNote, 
                       TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, MyNum
-FROM         dbo.WF_EmpWorks where CONVERT(datetime,SDT, 20) > GETDATE() AND SDT<>'无'
-GO
+FROM         dbo.WF_EmpWorks where CONVERT(datetime,SDT, 20) > GETDATE() AND SDT<>'无';
+ 

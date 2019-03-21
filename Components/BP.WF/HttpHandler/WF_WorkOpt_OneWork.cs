@@ -546,10 +546,11 @@ namespace BP.WF.HttpHandler
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
                     sql = "SELECT FID \"FID\",NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
                           " WHERE WorkID=" +
-                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
+                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT DESC,NDTo DESC";
 
                     dt = DBAccess.RunSQLReturnTable(sql);
-
+                    DataTable newdt = new DataTable();
+                    newdt = dt.Clone();
                     //判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
                     if (dt.Rows.Count > 0)
                     {
@@ -564,11 +565,44 @@ namespace BP.WF.HttpHandler
                             {
                                 dt.Rows.RemoveAt(0);
                             }
+
+                            newdt = dt;
                         }
+                        else if (Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend))
+                        {
+                            //删除已发送的节点，
+                            if (dt.Rows.Count > 2)
+                            {
+                                dt.Rows.RemoveAt(1);
+                                dt.Rows.RemoveAt(2);
+                            }
+                            else
+                            {
+                                dt.Rows.RemoveAt(1);
+                            }
+
+                            string fk_node = "";
+                            if (dt.Rows[0]["NDFrom"].Equals(dt.Rows[0]["NDTo"]))
+                                fk_node = dt.Rows[0]["NDFrom"].ToString();
+                            if (DataType.IsNullOrEmpty(fk_node) == false)
+                            {
+                                //如果是跳转页面，则需要删除中间跳转的节点
+                                foreach (DataRow dr in dt.Rows)
+                                {
+                                    if (Equals(dr["ACTIONTYPE"], (int)ActionType.Skip) && dr["NDFrom"].ToString().Equals(fk_node))
+                                        continue;
+                                    DataRow newdr = newdt.NewRow();
+                                    newdr.ItemArray = dr.ItemArray;
+                                    newdt.Rows.Add(newdr);
+                                }
+                            }
+                        }
+
+                       
                     }
 
-                    dt.TableName = "Track";
-                    ds.Tables.Add(dt);
+                    newdt.TableName = "Track";
+                    ds.Tables.Add(newdt);
 
                     //获取预先计算的节点处理人，以及处理时间,added by liuxc,2016-4-15
                     sql = "SELECT wsa.FK_Node as \"FK_Node\",wsa.FK_Emp as \"FK_Emp\",wsa.EmpName as \"EmpName\",wsa.TimeLimit as \"TimeLimit\",wsa.TSpanHour as \"TSpanHour\",wsa.ADT as \"ADT\",wsa.SDT as \"SDT\" FROM WF_SelectAccper wsa WHERE wsa.WorkID = " + workid;

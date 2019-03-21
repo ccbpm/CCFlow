@@ -546,7 +546,7 @@ namespace BP.WF.HttpHandler
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
                     sql = "SELECT FID \"FID\",NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
                           " WHERE WorkID=" +
-                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT DESC,NDTo DESC";
+                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT DESC";
 
                     dt = DBAccess.RunSQLReturnTable(sql);
                     DataTable newdt = new DataTable();
@@ -574,7 +574,7 @@ namespace BP.WF.HttpHandler
                             if (dt.Rows.Count > 2)
                             {
                                 dt.Rows.RemoveAt(1);
-                                dt.Rows.RemoveAt(2);
+                                dt.Rows.RemoveAt(1);
                             }
                             else
                             {

@@ -806,7 +806,7 @@ namespace BP.WF
                     BP.DA.DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
 
                 if (DBAccess.IsExitsObject("V_WF_Delay") == true)
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_WF_Delay");
 
                 string sqlscript = "";
                 //执行必须的sql.

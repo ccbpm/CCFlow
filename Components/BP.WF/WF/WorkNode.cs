@@ -724,6 +724,7 @@ namespace BP.WF
 
                     wl.FK_EmpText = emp.Name;
                     wl.FK_Dept = emp.FK_Dept;
+                    wl.Sender = WebUser.No + "," + WebUser.Name;
                     //wl.WarningHour = town.HisNode.WarningHour;
                     if (town.HisNode.HisCHWay == CHWay.None)
                         wl.SDT = "无";

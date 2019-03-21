@@ -312,12 +312,9 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         //超链接
         if (mapAttr.UIContralType == "9") {
             //URL @ 变量替换
-            var url = GetPara(mapAttr.AtPara, "Url");
+            var url = GetPara(mapAttr.AtPara, "Url").replace(/[$]/g,'@');
             $.each(flowData.Sys_MapAttr, function (i, obj) {
                 if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
-                    //替换
-                    //url=  url.replace(new RegExp(/(：)/g), ':');
-                    //先这样吧
                     url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
                 }
             });

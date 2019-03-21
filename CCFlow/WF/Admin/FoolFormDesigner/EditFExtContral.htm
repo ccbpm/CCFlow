@@ -42,7 +42,9 @@
                     $("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
                     break;
                 case "9": //超链接
-                    $("#TB_Url").val(mapAttr.GetPara("Url")); //设置URL.
+                    var url = mapAttr.GetPara("Url");
+                    url = url.replace(/[$]/g, '@');
+                    $("#TB_Url").val(url); //设置URL.
                     //$("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
                     break;
                 default:
@@ -104,7 +106,7 @@
             if (model == 9) {
                 var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
                 mapAttr.UIContralType = model;
-                mapAttr.SetPara("Url", $("#TB_Url").val());
+                mapAttr.SetPara("Url", $("#TB_Url").val().replace(/@/g,'$'));
                 mapAttr.Update();
 
                 return;

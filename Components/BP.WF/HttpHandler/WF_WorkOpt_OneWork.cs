@@ -567,8 +567,7 @@ namespace BP.WF.HttpHandler
                             }
 
                             newdt = dt;
-                        }
-                        else if (Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend))
+                        }else if (dt.Rows.Count > 1 &&( Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend)))
                         {
                             //删除已发送的节点，
                             if (dt.Rows.Count > 2)
@@ -597,6 +596,8 @@ namespace BP.WF.HttpHandler
                                 }
                             }
                         }
+                        else
+                            newdt = dt.Copy();
 
                        
                     }

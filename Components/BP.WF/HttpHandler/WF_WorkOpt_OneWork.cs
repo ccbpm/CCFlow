@@ -570,7 +570,7 @@ namespace BP.WF.HttpHandler
                         }else if (dt.Rows.Count > 1 &&( Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend)))
                         {
                             //删除已发送的节点，
-                            if (dt.Rows.Count > 2)
+                            if (dt.Rows.Count > 3)
                             {
                                 dt.Rows.RemoveAt(1);
                                 dt.Rows.RemoveAt(1);
@@ -594,6 +594,10 @@ namespace BP.WF.HttpHandler
                                     newdr.ItemArray = dr.ItemArray;
                                     newdt.Rows.Add(newdr);
                                 }
+                            }
+                            else
+                            {
+                                newdt = dt.Copy();
                             }
                         }
                         else

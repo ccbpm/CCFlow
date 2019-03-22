@@ -590,7 +590,7 @@ namespace BP.WF
 
                 GenerWorkerList wl = new GenerWorkerList();
                 int num = wl.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
-                    GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID);
+                    GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID, GenerWorkerListAttr.WorkID,this.WorkID);
                 if (num == 0)
                     throw new Exception("err@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
                 cancelToNodeID = wnPri.HisNode.NodeID;
@@ -600,15 +600,17 @@ namespace BP.WF
                 throw new Exception("err@没有求出要撤销到的节点.");
             #endregion 求的撤销的节点.
 
-            if (this.UnSendToNode != 0 && gwf.FK_Node != this.UnSendToNode)
+            if (this.UnSendToNode != 0 && gwf.FK_Node != this.UnSendToNode )
             {
+                Node toNode = new Node(this.UnSendToNode);
                 /* 要撤销的节点是分流节点，并且当前节点不在分流节点而是在合流节点的情况， for:华夏银行.
-                 * 1, 分流节点发送给n个人.
-                 * 2, 其中一个人发送到合流节点，另外一个人退回给分流节点。
-                 * 3，现在分流节点的人接收到一个待办，并且需要撤销整个分流节点的发送.
-                 * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
-                 */
-                return DoUnSendInFeiLiuHeiliu(gwf);
+                * 1, 分流节点发送给n个人.
+                * 2, 其中一个人发送到合流节点，另外一个人退回给分流节点。
+                * 3，现在分流节点的人接收到一个待办，并且需要撤销整个分流节点的发送.
+                * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
+                */
+                if(toNode.HisNodeWorkType == NodeWorkType.WorkFL && nd.HisNodeWorkType == NodeWorkType.WorkHL)
+                    return DoUnSendInFeiLiuHeiliu(gwf);
             }
 
             #region 判断当前节点的模式.
@@ -743,6 +745,10 @@ namespace BP.WF
             if (wn.HisNode.IsStartNode)
             {
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
+            }
+            else
+            {
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
             }
 

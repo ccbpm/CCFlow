@@ -292,15 +292,15 @@
 
                                 var rdt = gwl.RDT;
                                 if (rdt != "" && rdt != "无")
-                                    rdt = new Date(gwl.RDT).format('yyyy-MM-dd hh:mm');
+                                    rdt = new Date(gwl.RDT).format('yyyy-MM-dd hh:mm:ss');
 
                                 var sdt = gwl.SDT;
                                 if (sdt != "" && sdt != "无")
-                                    sdt = new Date(gwl.SDT).format('yyyy-MM-dd hh:mm');
+                                    sdt = new Date(gwl.SDT).format('yyyy-MM-dd hh:mm:ss');
 
                                 var cdt = gwl.CDT;
                                 if (cdt != "" && cdt != "无")
-                                    cdt = new Date(gwl.CDT).format('yyyy-MM-dd hh:mm')
+                                    cdt = new Date(gwl.CDT).format('yyyy-MM-dd hh:mm:ss')
 
                                 tablehtml += "<table style='width:300px;'>";
                                 tablehtml += "<caption>" + gwl.FK_EmpText + "</capiton>";

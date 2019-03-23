@@ -216,13 +216,14 @@
                 var TextColor = STYLE_NODE_COLOR_FORE;
                 //根据当前节点获取上一节点信息
                 var beforTrack = null;
-
+                var lastTwoBit = currNode.toString().substring(currNode.toString().length - 2);
                 if (rNode.currTrack != null) {
                     beforTrack = getBeforeNodeTrack(datas.Track, this.ID, rNode.currTrack.track);
                     //流程处于当前节点的情况 1.干流程、子线程到子线程 2.分流/分合流运行到子线程，但是当前节点位置仍为干流程的节点
                     //1.主干到主干
                     var currTrack = rNode.currTrack.track;
-                    if (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode) {
+                    //node的最后两位判断是否为开始节点
+                    if ((this.ID == currNode && lastTwoBit == "01") || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode)) {
                         borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                         TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                     } else if (this.ID != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
@@ -231,6 +232,11 @@
                     } else {
                         TextColor = STYLE_NODE_COLOR_FORE_TRACK;
                         borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                    }
+                } else {
+                    if (lastTwoBit == "01" && this.ID == currNode) {
+                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                     }
                 }
                 //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间
@@ -317,14 +323,18 @@
 
                                 rdt = rdt.replace(/\-/g, "/");
                                 rdt = new Date(rdt);
-
-                                sdt = sdt.replace(/\-/g, "/");
-                                sdt = new Date(sdt);
+                                if (sdt != "无") {
+                                    sdt = sdt.replace(/\-/g, "/");
+                                    sdt = new Date(sdt);
+                                }
 
                                 tablehtml += "<tr style='background-color:InfoBackground' >";
                                 if (gwl.IsPass == 0) {
                                     tablehtml += "<td>还剩余</td>";
-                                    tablehtml += "<td> " + GetSpanTime(rdt, sdt) + "</td>";
+                                    if (sdt == "无")
+                                        tablehtml += "<td> ------</td>";
+                                    else
+                                        tablehtml += "<td> " + GetOverSpanTime(rdt, sdt) + "</td>";
                                 } else {
                                     tablehtml += "<td>实际完成</td>";
                                     tablehtml += "<td> " + cdt + "</td>";
@@ -355,7 +365,11 @@
 
                                 tablehtml += "<tr style='background-color:InfoBackground' >";
                                 tablehtml += "<td>发送人</td>";
-                                tablehtml += "<td>" + gwl.Sender + "</td>";
+                                var sender = gwl.Sender;
+                                if (sender == "" || sender == undefined)
+                                    sender = "无";
+
+                                tablehtml += "<td>" + sender + "</td>";
                                 tablehtml += "</tr>";
                             }
 
@@ -619,12 +633,14 @@
                     }
                 }, function () {
                     var node = rFlow.getNodeByRIconId(this.id);
+                    var lastTwoBit = currNode.toString().substring(currNode.toString().length - 2);
+
                     if (node != null) {
                         var borderColor = nodeBorderColor;
                         var TextColor = STYLE_NODE_COLOR_FORE;
                         if (node.currTrack != null) {
                             var currTrack = node.currTrack.track;
-                            if (node.id == currNode  && currTrack.ActionType != 8 && currTrack.NDTo == currNode) {
+                            if ((node.id == currNode && lastTwoBit == "01") || (node.id == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode)) {
                                 borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                                 TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                             } else if (node.id != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
@@ -633,6 +649,11 @@
                             } else {
                                 TextColor = STYLE_NODE_COLOR_FORE_TRACK;
                                 borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                            }
+                        } else {
+                            if (node.id == currNode && lastTwoBit == "01") {
+                                borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                             }
                         }
 
@@ -1214,6 +1235,15 @@
             return isSuccess;
         }
 
+        //剩余多少天
+        function GetOverSpanTime(date1, date2) {
+            //获取当前日期
+            var currDate = new Date();
+            if (currDate > date2)
+                return "0天";
+            return GetSpanTime(date1, date2);
+
+        }
         function GetSpanTime(date1, date2) {
             ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
             var date3 = date2.getTime() - date1.getTime();  //时间差秒

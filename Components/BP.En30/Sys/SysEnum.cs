@@ -209,55 +209,52 @@ namespace BP.Sys
         {
             //获取引用枚举的表单
             string sql =" select  distinct(FK_MapData)from Sys_FrmRB where EnumKey='"+this.EnumKey+"'";
-            string returnVals = DBAccess.RunSQLReturnString(sql);
-            if (DataType.IsNullOrEmpty(returnVals))
+            System.Data.DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
             {
                 base.afterInsert();
                 return;
             }
 
-            string[] fk_mapDatas = returnVals.Split(',');
 
-            if (fk_mapDatas.Length >0)
-             {
-                 foreach (string fk_mapdata in fk_mapDatas)
-                 {
-                     if (DataType.IsNullOrEmpty(fk_mapdata))
-                         continue;
-
-                     string mypk = fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey;
-                     FrmRB frmrb = new FrmRB();
-                     if (frmrb.IsExit("MyPK", mypk) == true)
-                     {
-                         frmrb.Lab = this.Lab;
-                         frmrb.Update();
-                         continue;
-                     }
-                     //获取mapAttr 
-                     MapAttr mapAttr = new MapAttr(fk_mapdata + "_" + this.EnumKey);
-                     int RBShowModel = mapAttr.GetParaInt("RBShowModel");
-                     FrmRB frmrb1 = new FrmRB(fk_mapdata + "_" + this.EnumKey + "_0");
+            foreach (System.Data.DataRow dr in dt.Rows)
+            {
+                if (DataType.IsNullOrEmpty(dr[0].ToString()))
+                    continue;
+                string fk_mapdata = dr[0].ToString();
+                string mypk = fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey;
+                FrmRB frmrb = new FrmRB();
+                if (frmrb.IsExit("MyPK", mypk) == true)
+                {
+                    frmrb.Lab = this.Lab;
+                    frmrb.Update();
+                    continue;
+                }
+                //获取mapAttr 
+                MapAttr mapAttr = new MapAttr(fk_mapdata + "_" + this.EnumKey);
+                int RBShowModel = mapAttr.GetParaInt("RBShowModel");
+                FrmRB frmrb1 = new FrmRB(fk_mapdata + "_" + this.EnumKey + "_0");
 
 
-                     frmrb.FK_MapData = fk_mapdata;
-                     frmrb.KeyOfEn = this.EnumKey;
-                     frmrb.EnumKey = this.EnumKey;
-                     frmrb.Lab = this.Lab;
-                     frmrb.IntKey = this.IntKey;
-                     if (RBShowModel == 0)
-                     {
-                         frmrb.X = frmrb1.X;
-                         frmrb.Y = frmrb1.Y+40;
-                     }
-                     if (RBShowModel == 3)
-                     {
-                         frmrb.X = frmrb1.X+100;
-                         frmrb.Y = frmrb1.Y ;
-                     }
-                     frmrb.Insert();
+                frmrb.FK_MapData = fk_mapdata;
+                frmrb.KeyOfEn = this.EnumKey;
+                frmrb.EnumKey = this.EnumKey;
+                frmrb.Lab = this.Lab;
+                frmrb.IntKey = this.IntKey;
+                if (RBShowModel == 0)
+                {
+                    frmrb.X = frmrb1.X;
+                    frmrb.Y = frmrb1.Y+40;
+                }
+                if (RBShowModel == 3)
+                {
+                    frmrb.X = frmrb1.X+100;
+                    frmrb.Y = frmrb1.Y ;
+                }
+                frmrb.Insert();
 
-                 }
-             }
+            }
+            
              base.afterInsert();
         }
 	}

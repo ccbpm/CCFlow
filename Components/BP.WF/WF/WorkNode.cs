@@ -6958,7 +6958,7 @@ namespace BP.WF
             }
 
             this.HisWork.SetValByKey("Title", gwf.Title);
-            gwf.RDT = DataType.CurrentDataTime;  // this.HisWork.RDT;
+            gwf.RDT = DataType.CurrentDataTimess;  // this.HisWork.RDT;
             gwf.Starter = this.Execer;
             gwf.StarterName = this.ExecerName;
             gwf.FK_Flow = this.HisNode.FK_Flow;
@@ -7387,7 +7387,7 @@ namespace BP.WF
             {
                 this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
             }
-            this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
+            this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTimess;
             this.HisGenerWorkFlow.Update();
 
             GenerWorkerList gwl = new GenerWorkerList();
@@ -7395,7 +7395,7 @@ namespace BP.WF
                 GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.FK_Emp,WebUser.No);
             if (i != 0)
             {
-                gwl.CDT = DataType.CurrentDataTime;
+                gwl.CDT = DataType.CurrentDataTimess;
                 gwl.Update();
             }
      
@@ -8250,11 +8250,6 @@ namespace BP.WF
                 {
                     case RunModel.HL:
                     case RunModel.FHL:
-                        //@袁丽娜
-                        //sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
-                        //                                                               + " AND NDFrom!=" + this.HisNode.NodeID + " "
-                        //                                                               + " AND ActionType !=" + (int)ActionType.Return + " AND ActionType !=" + (int)ActionType.ReturnAndBackWay
-                         //                                                              + " ORDER BY RDT DESC";
 						sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
                                                                                        + " ORDER BY RDT DESC";
                         break;

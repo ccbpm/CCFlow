@@ -938,6 +938,7 @@ namespace BP.WF
                 item.IsRead = false;
                 item.SDT = sdt;
                 item.RDT = DataType.CurrentDataTime;
+                item.Sender = WebUser.Name + "," + WebUser.No;
                 item.Update();
             }
 

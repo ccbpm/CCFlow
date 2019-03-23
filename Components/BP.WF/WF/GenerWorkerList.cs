@@ -692,7 +692,7 @@ namespace BP.WF
             //this.Sender = BP.Web.WebUser.No;
 
             //增加记录日期.
-            this.SetValByKey(GenerWorkerListAttr.RDT,  DataType.CurrentDataTime);
+            this.SetValByKey(GenerWorkerListAttr.RDT,  DataType.CurrentDataTimess);
 
             return base.beforeInsert();
         }

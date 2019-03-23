@@ -429,7 +429,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
                 //初始化页面时方法加载
 
-                DDLAnsc($("#DDL_" + mapExt.AttrOfOper).val(), "DDL_" + mapExt.AttrsOfActive, mapExt.MyPK, dbSrc, mapExt.DBType);
+                DDLAnsc($("#DDL_" + mapExt.AttrOfOper).val(), "DDL_" + mapExt.AttrsOfActive, mapExt.MyPK);
                 break;
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。

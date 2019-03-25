@@ -203,7 +203,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
     for (var i = 0; i < json.length; i++) {
 
         if (filterKey1 != undefined) {
-            if (json[i][filterKey1] != filterVal1)
+            if (json[i][filterKey1] != filterVal1 )
                 continue;
         }
 
@@ -825,6 +825,8 @@ var Entity = (function () {
                         alert(data);
                         return;
                     }
+                    if (data == "")
+                        return;
                     try {
                         jsonString = JSON.parse(data);
                         setData(self);
@@ -1150,7 +1152,8 @@ var Entity = (function () {
                         //alert('查询:' + str);
                         return;
                     }
-
+                    if (data == "")
+                        return 0;
                     try {
                         jsonString = JSON.parse(data);
                         setData(self);

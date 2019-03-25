@@ -331,59 +331,108 @@ namespace BP.WF
                     qo.addOrderBy(MapAttrAttr.Idx);
                     qo.DoQuery();
 
-                    //计算累加的字段集合.
+                    //获取走过节点的表单方案
                     MapAttrs attrsLeiJia = new MapAttrs();
-                    qo = new QueryObject(attrsLeiJia);
-                    qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
-                    qo.addOrderBy(MapAttrAttr.Idx);
-                    qo.DoQuery();
 
-                    ////把两个集合接起来.
-                    //foreach (MapAttr item in attrsLeiJia)
-                    //{
-                    //    if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
-                    //        continue;
-                    //    item.UIIsEnable = false; //设置为只读的.
-                    //    attrs.AddEntity(item);
-                    //}
+                    //存在表单方案只读
+                    string sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In("+wk.HisPassedFrmIDs+") And FrmSln="+(int)FrmSln.Readonly +" And FK_Node="+nd.NodeID;
+                    DataTable dt1 = DBAccess.RunSQLReturnTable(sql1);
+                    if(dt1.Rows.Count > 0){
+                        //获取节点
+                        string nodes ="";
+                        foreach(DataRow dr in dt1.Rows)
+                            nodes+="'"+dr[0].ToString()+"',";
 
-                    //获取累加表单的权限
-                    FrmFields fls = new FrmFields();
-                    qo = new QueryObject(fls);
-                    qo.AddWhere(FrmFieldAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
-                    qo.addAnd();
-                    qo.AddWhere(FrmFieldAttr.EleType, FrmEleType.Field);
-                    qo.DoQuery();
+                        nodes = nodes.Substring(0,nodes.Length-1);
+                        qo = new QueryObject(attrsLeiJia);
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" +nodes + ")");
+                        qo.addOrderBy(MapAttrAttr.Idx);
+                        qo.DoQuery();
 
-                    foreach (MapAttr attr in attrsLeiJia)
-                    {
-                        if (attr.KeyOfEn.Equals("RDT") || attr.KeyOfEn.Equals("Rec"))
-                            continue;
+                        foreach(MapAttr item in attrsLeiJia){
+                            if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
+                                continue;
+                            item.UIIsEnable = false; //设置为只读的.
+                            attrs.AddEntity(item);
+                        }
 
-                        FrmField frmField = null;
-                        foreach (FrmField item in fls)
+                    }
+
+                    //存在表单方案默认
+                    sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In(" + wk.HisPassedFrmIDs + ") And FrmSln=" + (int)FrmSln.Default + " And FK_Node=" + nd.NodeID;
+                    dt1 = DBAccess.RunSQLReturnTable(sql1);
+                     if(dt1.Rows.Count > 0){
+                         //获取节点
+                        string nodes ="";
+                        foreach(DataRow dr in dt1.Rows)
+                            nodes+="'"+dr[0].ToString()+"',";
+
+                        nodes = nodes.Substring(0,nodes.Length-1);
+                        qo = new QueryObject(attrsLeiJia);
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" +nodes + ")");
+                        qo.addOrderBy(MapAttrAttr.Idx);
+                        qo.DoQuery();
+
+                        foreach (MapAttr item in attrsLeiJia)
                         {
-                            if (attr.KeyOfEn == item.KeyOfEn)
+                            if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
+                                continue;
+                            attrs.AddEntity(item);
+                        }
+
+                    }
+
+                    //存在表单方案自定义
+                     sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In(" + wk.HisPassedFrmIDs + ") And FrmSln=" + (int)FrmSln.Self + " And FK_Node=" + nd.NodeID;
+                    dt1 = DBAccess.RunSQLReturnTable(sql1);
+
+                     if(dt1.Rows.Count > 0){
+                         //获取节点
+                        string nodes ="";
+                        foreach(DataRow dr in dt1.Rows)
+                            nodes+="'"+dr[0].ToString()+"',";
+
+                        nodes = nodes.Substring(0,nodes.Length-1);
+                        qo = new QueryObject(attrsLeiJia);
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" +nodes + ")");
+                        qo.addOrderBy(MapAttrAttr.Idx);
+                        qo.DoQuery();
+
+                         //获取累加表单的权限
+                        FrmFields fls = new FrmFields();
+                        qo = new QueryObject(fls);
+                        qo.AddWhere(FrmFieldAttr.FK_MapData, " IN ", "(" + wk.HisPassedFrmIDs + ")");
+                        qo.addAnd();
+                        qo.AddWhere(FrmFieldAttr.EleType, FrmEleType.Field);
+                        qo.DoQuery();
+
+                        foreach (MapAttr attr in attrsLeiJia)
+                        {
+                            if (attr.KeyOfEn.Equals("RDT") || attr.KeyOfEn.Equals("Rec"))
+                                continue;
+
+                            FrmField frmField = null;
+                            foreach (FrmField item in fls)
                             {
-                                frmField = item;
-                                break;
+                                if (attr.KeyOfEn == item.KeyOfEn)
+                                {
+                                    frmField = item;
+                                    break;
+                                }
                             }
-                        }
-                        if (frmField != null)
-                        {
-                            if (frmField.IsSigan)
-                                attr.UIIsEnable = false;
+                            if (frmField != null)
+                            {
+                                if (frmField.IsSigan)
+                                    attr.UIIsEnable = false;
 
-                            attr.UIIsEnable = frmField.UIIsEnable;
-                            attr.UIVisible = frmField.UIVisible;
-                            attr.IsSigan = frmField.IsSigan;
-                            attr.DefValReal = frmField.DefVal;
+                                attr.UIIsEnable = frmField.UIIsEnable;
+                                attr.UIVisible = frmField.UIVisible;
+                                attr.IsSigan = frmField.IsSigan;
+                                attr.DefValReal = frmField.DefVal;
+                            }
+                            attrs.AddEntity(attr);
                         }
-                        else
-                        {
-                            attr.UIIsEnable = false; //设置为只读的.
-                        }
-                        attrs.AddEntity(attr);
+
                     }
 
                     //替换掉现有的.

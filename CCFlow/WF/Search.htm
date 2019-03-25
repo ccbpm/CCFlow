@@ -238,7 +238,7 @@
                 return "<a href=\"javascript:UnSend('"+flowNo+"','"+nodeID+"','"+workID+"','"+fid+"');\" >撤销</a>";
 
 
-            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo+"&FK_Node="+nodeID;
 
             return "<a href=\"javascript:WinOpen('"+url+"');\" >轨迹</a>";
         }

@@ -2,7 +2,7 @@
  //this.addMsg(SendReturnMsgFlag.WorkStartNode, Glo.Multilingual("WorkNode","WorkStartNode",toND.Name), "WorkStartNode1");
 -->
 <table>
-  <item Key="WorkStartNode"  
+  <item Key="WorkStartNode"
         En="WorkStartNode=@下一步{0}工作成功启动." 
         JP="xxxxx"  
         RU="xxxxxx" />

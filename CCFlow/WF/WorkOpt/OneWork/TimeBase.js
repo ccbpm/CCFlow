@@ -263,7 +263,7 @@ function InitPage() {
 }
 
 function OpenFrm(nodeID) {
-  
+
 }
 
 //生成左边的icon.
@@ -285,6 +285,9 @@ function GenerLeftIcon(track) {
 function GetSpanTime(date1, date2) {
     ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
     var date3 = date2.getTime() - date1.getTime();  //时间差秒
+    if (date1.getTime() > date2.getTime())
+        date3 = date1.getTime() - date2.getTime();
+
     var str = '';
     //计算出相差天数
     var days = Math.floor(date3 / (24 * 3600 * 1000));
@@ -306,16 +309,19 @@ function GetSpanTime(date1, date2) {
         str += minutes + '分';
     }
 
-    if (str.length == 0) {
-        var leave3 = leave2 % (60 * 1000);
-        var seconds = Math.floor(leave3 / 1000);
 
+    var leave3 = leave2 % (60 * 1000);
+    var seconds = Math.floor(leave3 / 1000);
+    if (seconds > 0)
         str += seconds + '秒';
+    if (date1.getTime() > date2.getTime())
+        return "-" + str;
+    return str;
 
-        if (seconds == NaN)
-            return date1 + ","+date2;
-        return str;
-    }
+    if (seconds == NaN)
+        return date1 + "," + date2;
+    return str;
+
 
     return str;
 }

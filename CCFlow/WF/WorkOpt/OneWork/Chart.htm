@@ -107,7 +107,7 @@
         });
 
 
-     
+
 
         ///开始绘制.
         function DrawStart(datas) {
@@ -1022,11 +1022,11 @@
 
 
         //已知节点获取发送给他的节点
-        function getBeforeNodeTrack(tracks,nodeId,currentTrack) {
+        function getBeforeNodeTrack(tracks, nodeId, currentTrack) {
             var ts = null;
             for (var k = 0; k < tracks.length; k++) {
                 var track = tracks[k];
-                if (track.NDTo == nodeId&& track.RDT <= currentTrack.RDT) {
+                if (track.NDTo == nodeId && track.RDT <= currentTrack.RDT) {
                     ts = track;
                     break;
                 }
@@ -1241,7 +1241,7 @@
             var currDate = new Date();
             if (currDate > date2)
                 return "0天";
-            return GetSpanTime(date1, date2);
+            return GetSpanTime(currDate, date2);
 
         }
         function GetSpanTime(date1, date2) {

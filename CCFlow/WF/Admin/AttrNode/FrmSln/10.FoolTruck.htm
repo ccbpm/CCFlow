@@ -1,11 +1,12 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
+    <title></title>
     <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -13,11 +14,11 @@
     <script src="../../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
-    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
-    <script  type="text/javascript">
+    <script type="text/javascript">
 
         var nodeID = 0;
         var fk_flow = "";
@@ -36,6 +37,8 @@
             var node = new Entity("BP.WF.Node", nodeID);
             if (node.FormType != FormType.FoolTruck)
                 return;
+
+            $("#sln").html("正在加载表单方案,请稍后...");
 
             var html = "<ul>";
             var nodes = new Entities("BP.WF.Nodes");
@@ -57,19 +60,19 @@
                     sln.FK_Frm = "ND" + json.NodeID;
                     sln.FK_Node = currentNode; //节点ID.
                     sln.FrmSln = 1; //只读方案.
-                    sln.Insert();                     
+                    sln.Insert();
                 } else {
                     sln.Retrieve();
                 }
 
                 if (sln.FrmSln == 1 || sln.FrmSln == 0) {
-                    html += "<li>[只读]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" +json.NodeID+" - " + json.Name + "</a></li>";
+                    html += "<li>[只读]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.NodeID + " - " + json.Name + "</a></li>";
                     continue;
                 }
 
                 var def = "";
 
-                def = " - <a href=\"javascript:DefField('" + json.NodeID + "','"+json.FK_Flow+"')\" >定义字段权限</a>";
+                def = " - <a href=\"javascript:DefField('" + json.NodeID + "','" + json.FK_Flow + "')\" >定义字段权限</a>";
                 def += " - <a href=\"javascript:DefAth('" + json.NodeID + "')\" >附件权限</a>";
                 def += " - <a href=\"javascript:DefDtl('" + json.NodeID + "')\" >从表权限</a>";
 
@@ -81,8 +84,8 @@
 
             $("#sln").html(html);
         }
-        function DefField(nodeID,FK_Flow) {
-            var url = " ../../Sln/Fields.htm?FK_MapData=ND" + nodeID + "&FK_Node=" +GetQueryString("FK_Node") + "&FK_Flow=" + FK_Flow + "&DoType=Field";
+        function DefField(nodeID, FK_Flow) {
+            var url = " ../../Sln/Fields.htm?FK_MapData=ND" + nodeID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + FK_Flow + "&DoType=Field";
             window.open(url);
         }
         function DefDtl(nodeID) {
@@ -111,13 +114,13 @@
                 mapDtlSln.No = mypk;
                 mapDtlSln.FK_Node = currNodeID;
                 mapDtlSln.FK_MapData = "ND" + nodeID;
-                mapDtlSln.DirectInsert();//直接插入，不生成新的分组
+                mapDtlSln.DirectInsert(); //直接插入，不生成新的分组
                 mapDtlSln.DoMethodReturnString("InitAttrsOfSelf");
 
-                }
-            var url = "../../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + mapDtlSln.FK_MapData  + "&FK_MapDtl=" + mypk + "&FK_Node=" + currNodeID;
-                WinOpen(url);
-           
+            }
+            var url = "../../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + mapDtlSln.FK_MapData + "&FK_MapDtl=" + mypk + "&FK_Node=" + currNodeID;
+            WinOpen(url);
+
         }
         function DefAth(nodeID) {
             var currNodeID = GetQueryString("FK_Node");
@@ -148,13 +151,13 @@
                 athSln.CtrlWay = 4;
                 athSln.SetPKVal = athSln.MyPK;
                 athSln.DirectInsert();
-                
+
                 //athSln.Insert(); //插入新的.
             }
 
             var url = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + athSln.MyPK;
             OpenEasyUiDialog(url, "eudlgframe", '附件权限', 600, 500, "icon-property", true, null, null, null, function () {
-               // window.location.href = window.location.href;
+                // window.location.href = window.location.href;
             });
 
         }
@@ -162,8 +165,8 @@
 
             var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FoolTruckNodeFrm&MyPK=" + mypk;
 
-            OpenEasyUiDialog(url, "eudlgframe", '表单方案', 600,300, "icon-property", true, null, null, null, function () {
-                    window.location.href = window.location.href;
+            OpenEasyUiDialog(url, "eudlgframe", '表单方案', 600, 300, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
             });
         }
 
@@ -180,14 +183,14 @@
             var mapData = new Entity("BP.Sys.MapData", frmID);
             mapData.FrmType = FormType.FoolTruck;
             mapData.Update();
-            
+
             //执行流程检查.
             var flow = new Entity("BP.WF.Flow", node.FK_Flow);
-            flow.DoMethodReturnString("DoCheck"); 
+            flow.DoMethodReturnString("DoCheck");
 
             alert("保存成功.");
-        }       
-        
+        }
+
 
         ///设置该流程的所有节点都是用该方案。
         function SetAllNodeFrmUseThisSln() {
@@ -211,7 +214,7 @@
                 node.FormType = FormType.FoolTruck;
                 node.NodeFrmID = "ND" + node.NodeID;
                 node.Update();
-                
+
 
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
@@ -229,40 +232,35 @@
         }
     </script>
 </head>
-<body >
-
-<div id="bar"> </div>
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-        <li>该表单是傻瓜表单的一种变形展现方式.</li>
-        <li>也叫轨迹表单模式,为软通动力定制的一种表单展示类型.</li>
-        <li>适合一个节点一个表单模式,简洁流畅，容易追踪历史运动过程.</li>
-         <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a> - <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
-     </ul>
-</fieldset>
-
-<fieldset>
-    <legend>当前表单权限控制方案</legend>
-
-    <div id="sln"></div>
-    
-</fieldset>
-
-
-
-<fieldset>
-<legend>说明</legend>
-<ul>
-  <li>该表单是以傻瓜表单展示，也叫累加表单，也叫轨迹表单。</li>
-  <li>每个节点上都有自己的一个字段集合, 当前节点的表单是以前表单按照走过的顺序累加（默认字段只读）加上当前节点表单拼接而成的。</li>
-  <li>该表单设计简单，思路清晰，适用于在审核组件模式下不能解决的审核节点特殊字段数据的采集。</li>
-  <li>该表单是审核组件模式表单的有益补充。</li>
-
-
-  <li><img src='../Img/Col4Frm.JPG' style="width:70%;"  /> </li>
-</ul>
-</fieldset>
-
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>说明</legend>
+        <ul>
+            <li>该表单是傻瓜表单的一种变形展现方式.</li>
+            <li>也叫轨迹表单模式,为软通动力定制的一种表单展示类型.</li>
+            <li>适合一个节点一个表单模式,简洁流畅，容易追踪历史运动过程.</li>
+            <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a> - <a href="javascript:SetAllNodeFrmUseThisSln()">
+                设置该流程所有的节点都采用此表单方案</a></li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>当前表单权限控制方案</legend>
+        <div id="sln">
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>说明</legend>
+        <ul>
+            <li>该表单是以傻瓜表单展示，也叫累加表单，也叫轨迹表单。</li>
+            <li>每个节点上都有自己的一个字段集合, 当前节点的表单是以前表单按照走过的顺序累加（默认字段只读）加上当前节点表单拼接而成的。</li>
+            <li>该表单设计简单，思路清晰，适用于在审核组件模式下不能解决的审核节点特殊字段数据的采集。</li>
+            <li>该表单是审核组件模式表单的有益补充。</li>
+            <li>
+                <img src='../Img/Col4Frm.JPG' style="width: 70%;" />
+            </li>
+        </ul>
+    </fieldset>
 </body>
 </html>

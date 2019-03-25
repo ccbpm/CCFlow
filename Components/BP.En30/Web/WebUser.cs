@@ -10,7 +10,6 @@ using System.Configuration;
 using BP.Port;
 using BP.Sys;
 
-
 namespace BP.Web
 {
     /// <summary>
@@ -659,33 +658,7 @@ namespace BP.Web
         {
             get
             {
-                string val = GetValFromCookie("No", null, true);
-                return val;
-
-                string no = null; // GetSessionByKey("No", null);
-                if (no == null || no == "")
-                {
-                    if (IsBSMode == false)
-                        return "admin";
-
-                    string key = "CCS";
-                    HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
-                    if (hc == null)
-                        return null;
-
-                    if (hc.Values["No"] != null)
-                    {
-                        WebUser.No = hc["No"];
-                        WebUser.FK_Dept = hc["FK_Dept"];
-                        WebUser.Auth = hc["Auth"];
-                        WebUser.AuthName = hc["AuthName"];
-                        WebUser.FK_DeptName = HttpUtility.UrlDecode(hc["FK_DeptName"]);
-                        WebUser.Name = HttpUtility.UrlDecode(hc["Name"]);
-                        return hc.Values["No"];
-                    }
-                    throw new Exception("@err-001 No 登陆信息丢失。");
-                }
-                return no;
+                return  GetValFromCookie("No", null, true);
             }
             set
             {

@@ -1876,6 +1876,7 @@ namespace BP.WF
                 foreach (Node nd in nds)
                 {
                     //设置它的位置类型.
+                    nd.RetrieveFromDBSources();
                     nd.SetValByKey(NodeAttr.NodePosType, (int)nd.GetHisNodePosType());
 
                     msg += "@信息: -------- 开始检查节点ID:(" + nd.NodeID + ")名称:(" + nd.Name + ")信息 -------------";

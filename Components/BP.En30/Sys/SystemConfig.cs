@@ -341,7 +341,7 @@ namespace BP.Sys
         /// 封装了AppSettings
         /// </summary>		
         private static NameValueCollection _CS_AppSettings;
-        public static NameValueCollection CS_AppSettings
+        internal static NameValueCollection CS_AppSettings
         {
             get
             {
@@ -353,6 +353,10 @@ namespace BP.Sys
             {
                 _CS_AppSettings = value;
             }
+        }
+
+        public static void InitOptons(NameValueCollection appSetting,NameValueCollection connections) { 
+        
         }
         /// <summary>
         /// 封装了AppSettings
@@ -869,7 +873,6 @@ namespace BP.Sys
             }
         }
         #endregion
-
 
 
         #region 处理临时缓存

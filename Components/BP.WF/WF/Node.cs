@@ -1209,7 +1209,6 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.WhoExeIt, value);
             }
         }
-
         /// <summary>
         /// 位置
         /// </summary>

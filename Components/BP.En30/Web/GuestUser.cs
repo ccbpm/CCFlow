@@ -12,7 +12,6 @@ using BP.Port;
 using BP.Pub;
 using BP.Sys;
 
-
 namespace BP.Web
 {
     /// <summary>
@@ -53,7 +52,6 @@ namespace BP.Web
             GuestUser.Name = guestName;
             GuestUser.DeptNo = deptNo;
             GuestUser.DeptName = deptName;
-
 
             //记录内部客户信息.
             BP.Port.Emp em = new Emp();
@@ -110,7 +108,7 @@ namespace BP.Web
                 System.Web.HttpContext.Current.Response.AppendCookie(cookie2);
             }
         }
-      
+
         #region 静态方法
         /// <summary>
         /// 通过key,取出session.

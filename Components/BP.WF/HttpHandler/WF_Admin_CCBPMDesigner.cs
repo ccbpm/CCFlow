@@ -123,9 +123,9 @@ namespace BP.WF.HttpHandler
                     if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
-                    String sql1 = "delete from WF_Direction where MyPK='" + strs[0] + "'";
+                    String sql1 = "DELETE FROM WF_Direction where MyPK='" + strs[0] + "'";
                     DBAccess.RunSQL(sql1);
-                    sql = "insert into WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0)";
+                    sql = "INSERT INTO WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0)";
                     DBAccess.RunSQL(sql);
                 }
 

@@ -231,6 +231,31 @@ function GenerFrm() {
             $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
             $('#CCForm').html('');
 
+            // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+            var enName = frmData.Sys_MapData[0].No;
+            try {
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
+                var tmp = document.getElementsByTagName('script')[0];
+                tmp.parentNode.insertBefore(s, tmp);
+            }
+            catch (err) {
+
+            }
+
+            try {
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "../../DataUser/JSLibData/" + enName + ".js";
+                var tmp = document.getElementsByTagName('script')[0];
+                tmp.parentNode.insertBefore(s, tmp);
+            }
+            catch (err) {
+
+            }
+
+
             //根据表单类型不同生成表单.
 
             var isTest = GetQueryString("IsTest");
@@ -269,30 +294,7 @@ function GenerFrm() {
                 }
             })
 
-            // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
-            var enName = frmData.Sys_MapData[0].No;
-            try {
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
-                var tmp = document.getElementsByTagName('script')[0];
-                tmp.parentNode.insertBefore(s, tmp);
-            }
-            catch (err) {
-
-            }
-
-            try {
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = "../../DataUser/JSLibData/" + enName + ".js";
-                var tmp = document.getElementsByTagName('script')[0];
-                tmp.parentNode.insertBefore(s, tmp);
-            }
-            catch (err) {
-
-            }
-
+          
 
             //设置默认值
             for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
@@ -716,7 +718,8 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
 
         });
-        operations += "<option value=''>- 请选择 -</option>";
+        if (mapAttr.UIIsInput == 0)
+            operations = "<option value=''>- 请选择 -</option>" + operations;
         return operations;
 
         if (mapAttr.UIIsEnable == 0) {

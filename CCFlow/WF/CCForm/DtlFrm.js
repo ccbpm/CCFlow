@@ -819,7 +819,8 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
 
         });
-        operations += "<option value=''>- 请选择 -</option>";
+        if (mapAttr.UIIsInput == 0)
+            operations = "<option value=''>- 请选择 -</option>" + operations;
         return operations;
 
         if (mapAttr.UIIsEnable == 0) {

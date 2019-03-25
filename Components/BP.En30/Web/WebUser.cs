@@ -424,11 +424,15 @@ namespace BP.Web
                 SetSessionByKey("token", value);
             }
         }
+        /// <summary>
+        /// 语言
+        /// </summary>
         public static string SysLang
         {
             get
             {
                 return "CH";
+
                 string no = GetSessionByKey("Lang", null);
                 if (no == null || no == "")
                 {

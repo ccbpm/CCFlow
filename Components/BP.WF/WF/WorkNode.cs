@@ -5658,7 +5658,10 @@ namespace BP.WF
             if (this.HisNode.IsGuestNode)
             {
                 if (this.Execer != "Guest")
+                {
+                 //   string msg = "";
                     throw new Exception("@当前节点（" + this.HisNode.Name + "）是客户执行节点，所以当前登录人员应当是Guest,现在是:" + this.Execer);
+                }
             }
 
             #region 安全性检查.

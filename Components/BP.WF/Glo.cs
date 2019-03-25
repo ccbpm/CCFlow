@@ -28,6 +28,7 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        #region 多语言处理.
         /// <summary>
         /// 处理多语言
         /// </summary>
@@ -56,6 +57,20 @@ namespace BP.WF
             return null;
         }
 
+        public static string Multilingual_Public(string msg,string key, string p1 = null, string p2 = null, string p3 = null, string p4 = null)
+        {
+            if (BP.Web.WebUser.SysLang == "CN")
+                return msg;
+
+            return Multilingual("Public", key, p1, p2, p3, p4);
+        }
+        public static string Multilingual_WorkNode(string msg, string key, string p1 = null, string p2 = null, string p3 = null, string p4 = null)
+        {
+            if (BP.Web.WebUser.SysLang == "CN")
+                return msg;
+
+            return Multilingual("WorkNode", key, p1, p2, p3, p4);
+        }
         /// <summary>
         /// 获取多语言
         /// </summary>
@@ -78,6 +93,37 @@ namespace BP.WF
             }
             return String.Format(val, paramList);
         }
+        public static void Multilingual_Demo()
+        {
+            //普通的多语言处理.
+            string msg = "您确定要删除吗？";
+            msg = BP.WF.Glo.Multilingual_Public(msg, "confirm");
+
+
+            //带有参数的语言处理..
+            msg = "您确定要删除吗？删除{0}后，就不能恢复。";
+            msg = BP.WF.Glo.Multilingual_Public(msg, "confirmDel", "zhangsan");
+
+            //   BP.WF.Glo.Multilingual_Public("confirm",
+        }
+
+        private static Hashtable _Multilingual_Cash = null;
+        public static DataTable Multilingual_Cash(string clsName)
+        {
+            if (_Multilingual_Cash == null)
+                _Multilingual_Cash = new Hashtable();
+
+            if (_Multilingual_Cash.ContainsKey(clsName) == false)
+            {
+                DataSet ds = BP.DA.DataType.CXmlFileToDataSet(BP.Sys.SystemConfig.PathOfData + "\\lang\\" + BP.Sys.SystemConfig.SysLanguage + ".xml");
+
+                _Multilingual_Cash.Add(clsName, ds.Tables[0]);
+            }
+
+            return _Multilingual_Cash[clsName] as DataTable;
+        }
+        #endregion 多语言处理.
+
 
         #region 公共属性.
         /// <summary>
@@ -832,7 +878,7 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
                 #endregion
 
-                 
+
 
 
                 #region 更新表单的边界.2014-10-18
@@ -2979,7 +3025,7 @@ namespace BP.WF
 
             //@yuanlina. 
             if (DataType.IsNumStr(valPara) == false)
-                throw new Exception("err@表达式错误:["+exp+"]没有找到参数["+valPara+"]的值，导致无法计算。");
+                throw new Exception("err@表达式错误:[" + exp + "]没有找到参数[" + valPara + "]的值，导致无法计算。");
 
             if (oper == ">")
             {

@@ -151,10 +151,6 @@ function SetBottomTooBar() {
     var pageHeight = Math.max(windowHeight, document.getElementsByTagName("body")[0].scrollHeight);
     form = document.getElementById('divCCForm');
 
-    //        if (form) {
-    //            if (pageHeight > 20) pageHeight = pageHeight - 20;
-    //            form.style.height = pageHeight + "px";
-    //        }
     //设置toolbar
     var toolBar = document.getElementById("bottomToolBar");
     if (toolBar) {
@@ -645,7 +641,8 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
             operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
 
         });
-        operations += "<option value=''>- 请选择 -</option>";
+        if(mapAttr.UIIsInput == 0)
+            operations = "<option value=''>- 请选择 -</option>" + operations;
         return operations;
 
         if (mapAttr.UIIsEnable == 0) {

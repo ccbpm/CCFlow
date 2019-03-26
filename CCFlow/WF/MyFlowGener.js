@@ -1564,9 +1564,18 @@ function GenerWorkNode() {
     var enName = flowData.Sys_MapData[0].No;
     try {
         ////加载JS文件
-        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
-        //$('body').append($('<div>' + jsSrc + '</div>'));
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
 
+    }
+
+    try {
+        ////加载JS文件
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
@@ -1579,8 +1588,7 @@ function GenerWorkNode() {
 
     var jsSrc = '';
     try {
-        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
-        //$('body').append($('<div>' + jsSrc + '</div>'));
+       
 
         var s = document.createElement('script');
         s.type = 'text/javascript';

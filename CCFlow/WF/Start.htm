@@ -21,6 +21,7 @@
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
+    
     function GroupBarClick(groupName) {
 
 				var alt = document.getElementById('Img' + groupName).alert;
@@ -145,6 +146,7 @@
 
         //页面启动函数.
         $(function () {
+            document.title = window.lang.fqxlc;
             InitPage();
             jQuery(document).ready(function($) {
 				$(".c").mpmansory({
@@ -171,7 +173,7 @@
         function InitPage() {
 
 
-             $('#lists').html("正在加载发起流程列表，请稍后。。。");
+             $('#lists').html(window.lang.loading);
 
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");

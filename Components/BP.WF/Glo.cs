@@ -29,48 +29,23 @@ namespace BP.WF
     public class Glo
     {
         #region 多语言处理.
-        /// <summary>
-        /// 处理多语言
-        /// </summary>
-        /// <param name="clsName"></param>
-        /// <param name="mark"></param>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="p3"></param>
-        /// <param name="p4"></param>
-        /// <returns></returns>
-        public static string Multilingual(string clsName, string mark, string p1 = null, string p2 = null, string p3 = null, string p4 = null)
+        private static Hashtable _Multilingual_Cache = null;
+        public static DataTable getMultilingual_DT(string className)
         {
-            string docs = BP.DA.DataType.ReadTextFile(BP.Sys.SystemConfig.PathOfData + "\\Multilingual\\" + clsName + "." + BP.Web.WebUser.SysLang + ".txt");
+            if (_Multilingual_Cache == null)
+                _Multilingual_Cache = new Hashtable();
 
-            string[] strs = docs.Split('#');
-
-            foreach (string str in strs)
+            if (_Multilingual_Cache.ContainsKey(className) == false)
             {
-                string[] kvs = str.Split('=');
-                if (kvs[0] == mark)
-                {
-                    string val = kvs[1];
-                    return string.Format(val, p1, p2, p3, p4);
-                }
+                DataSet ds = BP.DA.DataType.CXmlFileToDataSet(BP.Sys.SystemConfig.PathOfData + "\\lang\\xml\\" + className + ".xml");
+                DataTable dt = ds.Tables[0];
+
+                _Multilingual_Cache.Add(className, dt);
             }
-            return null;
+
+            return _Multilingual_Cache[className] as DataTable;
         }
 
-        public static string Multilingual_Public(string msg,string key, string p1 = null, string p2 = null, string p3 = null, string p4 = null)
-        {
-            if (BP.Web.WebUser.SysLang == "CN")
-                return msg;
-
-            return Multilingual("Public", key, p1, p2, p3, p4);
-        }
-        public static string Multilingual_WorkNode(string msg, string key, string p1 = null, string p2 = null, string p3 = null, string p4 = null)
-        {
-            if (BP.Web.WebUser.SysLang == "CN")
-                return msg;
-
-            return Multilingual("WorkNode", key, p1, p2, p3, p4);
-        }
         /// <summary>
         /// 获取多语言
         /// </summary>
@@ -78,50 +53,64 @@ namespace BP.WF
         /// <param name="key"></param>
         /// <param name="paramList"></param>
         /// <returns></returns>
-        public static string lang(string key, string[] paramList)
+        public static string Multilingual(string defaultMsg, string className, string key, string[] paramList)
         {
-            DataSet ds = BP.DA.DataType.CXmlFileToDataSet(BP.Sys.SystemConfig.PathOfData + "\\lang\\" + BP.Sys.SystemConfig.SysLanguage + ".xml");
-            DataTable dt = ds.Tables[0];
+            if (BP.Web.WebUser.SysLang == "zh-cn")
+            {
+                return String.Format(defaultMsg, paramList);
+            }
+            DataTable dt = getMultilingual_DT(className);
+
             string val = "";
             foreach (DataRow dr in dt.Rows)
             {
                 if ((string)dr.ItemArray[0] == key)
                 {
-                    val = (string)dr.ItemArray[1];
-                    break;
+                    switch (BP.Web.WebUser.SysLang)
+                    {
+                        case "zh-cn":
+                            val = (string)dr.ItemArray[1];
+                            break;
+                        case "zh-tw":
+                            val = (string)dr.ItemArray[2];
+                            break;
+                        case "zh-hk":
+                            val = (string)dr.ItemArray[3];
+                            break;
+                        case "en-us":
+                            val = (string)dr.ItemArray[4];
+                            break;
+                        case "ja-jp":
+                            val = (string)dr.ItemArray[5];
+                            break;
+                        case "ko-kr":
+                            val = (string)dr.ItemArray[6];
+                            break;
+                        default:
+                            val = (string)dr.ItemArray[7];
+                            break;
+                    }
                 }
             }
             return String.Format(val, paramList);
         }
-        public static void Multilingual_Demo()
-        {
-            //普通的多语言处理.
-            string msg = "您确定要删除吗？";
-            msg = BP.WF.Glo.Multilingual_Public(msg, "confirm");
 
 
-            //带有参数的语言处理..
-            msg = "您确定要删除吗？删除{0}后，就不能恢复。";
-            msg = BP.WF.Glo.Multilingual_Public(msg, "confirmDel", "zhangsan");
+        //public static void Multilingual_Demo()
+        //{
+        //    //普通的多语言处理.
+        //    string msg = "您确定要删除吗？";
+        //    msg = BP.WF.Glo.Multilingual_Public(msg, "confirm");
 
-            //   BP.WF.Glo.Multilingual_Public("confirm",
-        }
 
-        private static Hashtable _Multilingual_Cash = null;
-        public static DataTable Multilingual_Cash(string clsName)
-        {
-            if (_Multilingual_Cash == null)
-                _Multilingual_Cash = new Hashtable();
+        //    //带有参数的语言处理..
+        //    msg = "您确定要删除吗？删除{0}后，就不能恢复。";
+        //    msg = BP.WF.Glo.Multilingual_Public(msg, "confirmDel", "zhangsan");
 
-            if (_Multilingual_Cash.ContainsKey(clsName) == false)
-            {
-                DataSet ds = BP.DA.DataType.CXmlFileToDataSet(BP.Sys.SystemConfig.PathOfData + "\\lang\\" + BP.Sys.SystemConfig.SysLanguage + ".xml");
+        //    //   BP.WF.Glo.Multilingual_Public("confirm",
+        //}
 
-                _Multilingual_Cash.Add(clsName, ds.Tables[0]);
-            }
 
-            return _Multilingual_Cash[clsName] as DataTable;
-        }
         #endregion 多语言处理.
 
 

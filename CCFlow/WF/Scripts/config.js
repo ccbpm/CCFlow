@@ -1,4 +1,10 @@
 ﻿
+//定义语言.
+//zh-cn   zh-tw  zh-hk  en-us ja-jp ko-kr
+var currentLang = "zh-cn";
+//var currentLang = "en-us";
+document.write("<script language=javascript src='/WF/Data/lang/js/" + currentLang + ".js'></script>");
+
 //  For .net 后台的调用的url ,  java的与.net的不同.
 var plant = 'CCFlow'; //运行平台.
 var basePath = "";

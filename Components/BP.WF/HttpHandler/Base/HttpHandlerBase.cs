@@ -29,7 +29,26 @@ namespace BP.WF.HttpHandler
             ctrl.context = mycontext;
 
             //让其支持跨域访问.
-            //ctrl.context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+            if (!string.IsNullOrEmpty(ctrl.context.Request.Headers["Origin"]))
+            {
+                var allAccess_Control_Allow_Origin = System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"];
+
+
+                if (!string.IsNullOrEmpty(allAccess_Control_Allow_Origin))
+                {
+                    var origin = ctrl.context.Request.Headers["Origin"];
+                    if (System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"].Contains(origin))
+                    {
+                        ctrl.context.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                        ctrl.context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                        ctrl.context.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
+                    }
+
+
+                }
+
+            }
+
 
             try
             {

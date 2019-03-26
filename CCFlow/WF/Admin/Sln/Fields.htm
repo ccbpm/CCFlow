@@ -32,8 +32,10 @@
             fieldsData = mapAttrs;
 
             var groups = new Entities("BP.Sys.GroupFields", "FrmID", frmID);
-            for (var i = 0; i < groups.length; i++) {
-                var group = groups[i];
+            for (var k = 0; k < groups.length; k++) {
+                var group = groups[k];
+                if (group.CtrlType == "Ath" || group.CtrlType == "Dtl")
+                    continue;
 
                 html = "";
                 html += "<tr>";

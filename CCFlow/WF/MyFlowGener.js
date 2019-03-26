@@ -981,7 +981,17 @@ function execSend(toNodeID) {
     var dataStrs = getFormData(true, true) + "&ToNode=" + toNodeID;
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    handler.AddUrlData(dataStrs);
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    $.each(dataStrs.split("&"), function (i, o) {
+        var param = o.split("=");
+        if (param.length == 2 && validate(param[1])) {
+            handler.AddPara(param[0], decodeURIComponent(param[1], true));
+        } else {
+            handler.AddPara(param[0], "");
+        }
+    });
+    //handler.AddUrlData(dataStrs);
+
     var data = handler.DoMethodReturnString("Send"); //执行保存方法.
 
     if (data.indexOf('err@') == 0) { //发送时发生错误

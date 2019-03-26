@@ -981,11 +981,10 @@ function execSend(toNodeID) {
     var dataStrs = getFormData(true, true) + "&ToNode=" + toNodeID;
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     $.each(dataStrs.split("&"), function (i, o) {
         var param = o.split("=");
         if (param.length == 2 && validate(param[1])) {
-            handler.AddPara(param[0], decodeURIComponent(param[1], true));
+            handler.AddPara(param[0], param[1]);
         } else {
             handler.AddPara(param[0], "");
         }

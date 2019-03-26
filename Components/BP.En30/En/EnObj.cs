@@ -633,41 +633,7 @@ namespace BP.En
                 Map mp = (Map)value;
                 if (SystemConfig.IsDebug)
                 {
-                    //#region 检查map 是否合理。
-                    //if (mp != null)
-                    //{
-                    //    int i = 0;
-                    //    foreach (Attr attr in this.EnMap.Attrs)
-                    //    {
-                    //        if (attr.MyFieldType == FieldType.PK || attr.MyFieldType == FieldType.PKEnum || attr.MyFieldType == FieldType.PKFK)
-                    //            i++;
-                    //    }
-                    //    if (i == 0)
-                    //        throw new Exception("@没有给【" + this.EnDesc + "】定义主键。");
-
-                    //    if (this.IsNoEntity)
-                    //    {
-                    //        if (mp.Attrs.Contains("No") == false)
-                    //            throw new Exception("@EntityNo 类map中没有 No 属性。@类" + mp.EnDesc + " , " + this.ToString());
-
-                    //        if (i != 1)
-                    //            throw new Exception("@多个主键在 EntityNo 类中是不允许的。 @类" + mp.EnDesc + " , " + this.ToString());
-                    //    }
-                    //    else if (this.IsOIDEntity)
-                    //    {
-                    //        if (mp.Attrs.Contains("OID") == false)
-                    //            throw new Exception("@EntityOID 类map中没有 OID 属性。@类" + mp.EnDesc + " , " + this.ToString());
-                    //        if (i != 1)
-                    //            throw new Exception("@多个主键在 EntityOID 类中是不允许的。 @类" + mp.EnDesc + " , " + this.ToString());
-                    //    }
-                    //    else
-                    //    {
-                    //        if (mp.Attrs.Contains("MyPK"))
-                    //            if (i != 1)
-                    //                throw new Exception("@多个主键在 EntityMyPK 类中是不允许的。 @类" + mp.EnDesc + " , " + this.ToString());
-                    //    }
-                    //}
-                    //#endregion 检查map 是否合理。
+                    
                 }
 
                 if (mp == null || mp.DepositaryOfMap == Depositary.None)

@@ -1104,7 +1104,7 @@ namespace BP.En
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
             {
                 var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal.ToString());
-                if (row != null)
+                if (row != null && row.Count >2 )
                 {
                     this.Row = row;
                     return 1;

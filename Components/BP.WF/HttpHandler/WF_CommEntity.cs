@@ -795,6 +795,8 @@ namespace BP.WF.HttpHandler
                 RefMethods rms = map.HisRefMethods;
                 foreach (RefMethod item in rms)
                 {
+                    item.HisEn = en;
+
                     string myurl = "";
                     if (item.RefMethodType == RefMethodType.LinkeWinOpen
                          || item.RefMethodType == RefMethodType.RightFrameOpen

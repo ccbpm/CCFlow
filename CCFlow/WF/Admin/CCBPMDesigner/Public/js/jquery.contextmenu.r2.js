@@ -17,8 +17,7 @@
  */
 
 (function($) {
-
- 	var menu, shadow, trigger, content, hash, currentTarget;
+  var menu, shadow, trigger, content, hash, currentTarget;
   var defaults = {
     menuStyle: {
       listStyle: 'none',
@@ -60,7 +59,7 @@
     }
     if (!shadow) {
       shadow = $('<div></div>')
-                 .css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499})
+                 .css({backgroundColor:'RED',position:'absolute',opacity:0.2,zIndex:499})
                  .appendTo('body')
                  .hide();
     }

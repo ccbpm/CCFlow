@@ -21,15 +21,15 @@ namespace BP.WF.Data
         /// </summary>
         public const string WorkID = "WorkID";
         /// <summary>
-        /// 
+        /// 发起人
         /// </summary>
         public const string Starter = "Starter";
         /// <summary>
-        /// 
+        /// 发起人名称
         /// </summary>
         public const string StarterName = "StarterName";
         /// <summary>
-        /// 
+        /// 状态
         /// </summary>
         public const string WFState = "WFState";
         /// <summary>
@@ -41,23 +41,23 @@ namespace BP.WF.Data
         /// </summary>
         public const string DeptName = "DeptName";
         /// <summary>
-        /// 
+        /// 流程编号
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
-        /// 
+        /// 流程名称
         /// </summary>
         public const string FlowName = "FlowName";
         /// <summary>
-        /// 
+        /// 停留节点
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 
+        /// 节点名称
         /// </summary>
         public const string NodeName = "NodeName";
         /// <summary>
-        /// 
+        /// 发起人工作部门
         /// </summary>
         public const string WorkerDept = "WorkerDept";
         /// <summary>
@@ -65,7 +65,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string Title = "Title";
         /// <summary>
-        /// 
+        /// 记录日期
         /// </summary>
         public const string RDT = "RDT";
         /// <summary>
@@ -73,7 +73,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string SDT = "SDT";
         /// <summary>
-        /// 
+        /// 当事人
         /// </summary>
         public const string FK_Emp = "FK_Emp";
         /// <summary>
@@ -81,67 +81,53 @@ namespace BP.WF.Data
         /// </summary>
         public const string FID = "FID";
         /// <summary>
-        /// 
+        /// 流程类别
         /// </summary>
         public const string FK_FlowSort = "FK_FlowSort";
         /// <summary>
-        /// 
+        /// 系统类型
         /// </summary>
         public const string SysType = "SysType";
         /// <summary>
-        /// 
+        /// 应完成日期
         /// </summary>
         public const string SDTOfNode = "SDTOfNode";
         /// <summary>
-        ///
+        ///催办次数
         /// </summary>
         public const string PressTimes = "PressTimes";
         /// <summary>
-        /// 
+        /// 单据编号
         /// </summary>
         public const string BillNo = "BillNo";
         /// <summary>
-        /// 
+        /// 流程备注
         /// </summary>
         public const string FlowNote = "FlowNote";
         /// <summary>
-        /// 
+        /// 当前办理人
         /// </summary>
         public const string TodoEmps = "TodoEmps";
         /// <summary>
-        /// 
+        /// 发送人
         /// </summary>
         public const string Sender = "Sender";
         #endregion
     }
     /// <summary>
-    /// 时效考核
+    /// 逾期流程
     /// </summary> 
     public class Delay : EntityMyPK
     {
         #region 基本属性
         /// <summary>
-        /// 
+        /// workid
         /// </summary>
-        public string MyPK
+        public Int64 WorkID
         {
             get
             {
-                return this.GetValStringByKey(DelayAttr.MyPK);
-            }
-            set
-            {
-                this.SetValByKey(DelayAttr.MyPK, value);
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string WorkID
-        {
-            get
-            {
-                return this.GetValStringByKey(DelayAttr.WorkID);
+                return this.GetValInt64ByKey(DelayAttr.WorkID);
             }
             set
             {
@@ -149,7 +135,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 发起人
         /// </summary>
         public string Starter
         {
@@ -163,7 +149,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 发起人名称
         /// </summary>
         public string StarterName
         {
@@ -177,13 +163,13 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 流程状态
         /// </summary>
-        public string WFState
+        public int WFStateInt
         {
             get
             {
-                return this.GetValStringByKey(DelayAttr.WFState);
+                return this.GetValIntByKey(DelayAttr.WFState);
             }
             set
             {
@@ -191,7 +177,21 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 流程状态
+        /// </summary>
+        public WFState WFState
+        {
+            get
+            {
+                return (WFState)this.GetValIntByKey(DelayAttr.WFState);
+            }
+            set
+            {
+                this.SetValByKey(DelayAttr.WFState, (int)value);
+            }
+        }
+        /// <summary>
+        /// 部门编号
         /// </summary>
         public string FK_Dept
         {
@@ -205,7 +205,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 部门名称
         /// </summary>
         public string DeptName
         {
@@ -219,7 +219,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 流程编号
         /// </summary>
         public string FK_Flow
         {
@@ -233,7 +233,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 流程名称
         /// </summary>
         public string FlowName
         {
@@ -247,13 +247,13 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 当前节点
         /// </summary>
-        public string FK_Node
+        public int FK_Node
         {
             get
             {
-                return this.GetValStringByKey(DelayAttr.FK_Node);
+                return this.GetValIntByKey(DelayAttr.FK_Node);
             }
             set
             {
@@ -261,7 +261,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 节点名称
         /// </summary>
         public string NodeName
         {
@@ -275,7 +275,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 工作人部门
         /// </summary>
         public string WorkerDept
         {
@@ -289,7 +289,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 标题
         /// </summary>
         public string Title
         {
@@ -303,7 +303,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 记录日期
         /// </summary>
         public string RDT
         {
@@ -317,7 +317,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 应完成日期
         /// </summary>
         public string SDT
         {
@@ -331,7 +331,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 人员编号
         /// </summary>
         public string FK_Emp
         {
@@ -345,13 +345,13 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// fid
         /// </summary>
-        public string FID
+        public Int64 FID
         {
             get
             {
-                return this.GetValStringByKey(DelayAttr.FID);
+                return this.GetValInt64ByKey(DelayAttr.FID);
             }
             set
             {
@@ -359,7 +359,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 流程类别
         /// </summary>
         public string FK_FlowSort
         {
@@ -373,7 +373,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 系统类型
         /// </summary>
         public string SysType
         {
@@ -387,7 +387,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 应完成日期
         /// </summary>
         public string SDTOfNode
         {
@@ -401,13 +401,13 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 
+        /// 催办次数
         /// </summary>
-        public string PressTimes
+        public int PressTimes
         {
             get
             {
-                return this.GetValStringByKey(DelayAttr.PressTimes);
+                return this.GetValIntByKey(DelayAttr.PressTimes);
             }
             set
             {
@@ -489,7 +489,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 时效考核
+        /// 逾期流程
         /// </summary>
         public Delay() { }
         /// <summary>
@@ -530,7 +530,6 @@ namespace BP.WF.Data
 
                 map.AddTBInt(DelayAttr.FK_Dept, 0, "隶属部门", false, true);
                 map.AddTBString(DelayAttr.DeptName, null, "隶属部门", true, true, 0, 50, 40);
-
                 map.AddDDLEntities(DelayAttr.FK_Flow, null, "流程", new Flows(), false);
               //  map.AddTBString(DelayAttr.FlowName, null, "流程名称", true, true, 0, 50, 40);
                 map.AddTBString(DelayAttr.NodeName, null, "节点名称", true, true, 0, 50, 40);
@@ -553,28 +552,39 @@ namespace BP.WF.Data
                 map.AddSearchAttr(DelayAttr.FK_Flow);
 
 
+                RefMethod rm = new En.RefMethod();
+                rm.Title = "打开轨迹";
+                rm.ClassMethodName = this.ToString() + ".DoOpenTrack";
+                rm.RefMethodType = En.RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
+        public string DoOpenTrack()
+        {
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
+        }
+
     }
     /// <summary>
-    /// 时效考核s
+    /// 逾期流程s
     /// </summary>
     public class Delays : EntitiesMyPK
     {
         #region 构造方法属性
         /// <summary>
-        /// 时效考核s
+        /// 逾期流程s
         /// </summary>
         public Delays() { }
         #endregion
 
         #region 属性
         /// <summary>
-        /// 时效考核
+        /// 逾期流程
         /// </summary>
         public override Entity GetNewEntity
         {

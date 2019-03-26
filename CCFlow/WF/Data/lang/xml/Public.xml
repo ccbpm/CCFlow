@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<language>
+  <item
+    key="test"
+    zh-cn="你好{0}, 欢迎来到{1}."
+    zh-tw="妳好{0}, 歡迎來到{1}."
+    zh-hk="妳好{0}, 歡迎來到{1}."
+    en-us="Hi {0}, welcome to {1}."
+    ja-jp="こんにちは{0}, ようこそ{1}."
+    ko-kr="안녕하세요 {0}, 오신 것을 환영합니다{1}."
+    />
+  <item
+      key="invalid_username_or_pwd"
+      zh-cn="@用户名或密码错误."
+      zh-tw="@用戶名或密碼錯誤."
+      zh-hk="@用戶名或密碼錯誤."
+      en-us="@Invalid user name or password."
+      ja-jp="@ユーザ名またはパスワードのエラー"
+      ko-kr="@사용자 이름이나 비밀번호 오류."
+    />
+  <item
+      key="no_permission_login_1"
+      zh-cn="@您非管理员用户，不能登录."
+      zh-tw="@您非管理员用户，不能登录."
+      zh-hk="@您非管理员用户，不能登录."
+      en-us="@You are not an administrator."
+      ja-jp="@"
+      ko-kr="@"
+    />
+  <item
+      key="no_permission_login_2"
+      zh-cn="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
+      zh-tw="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
+      zh-hk="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
+      en-us="@You are not an administrator or your account is disabled."
+      ja-jp="@"
+      ko-kr="@"
+    />
+</language>

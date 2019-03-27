@@ -298,15 +298,16 @@
 
                                 var rdt = gwl.RDT;
                                 if (rdt != "" && rdt != "无")
-                                    rdt = new Date(gwl.RDT).format('yyyy-MM-dd hh:mm:ss');
+                                   
+                                    rdt =  new Date(Date.parse(gwl.RDT.replace(/-/g, "/"))).format('yyyy-MM-dd hh:mm:ss');
 
                                 var sdt = gwl.SDT;
                                 if (sdt != "" && sdt != "无")
-                                    sdt = new Date(gwl.SDT).format('yyyy-MM-dd hh:mm:ss');
+                                    sdt = new Date(Date.parse(gwl.SDT.replace(/-/g, "/"))).format('yyyy-MM-dd hh:mm:ss');
 
                                 var cdt = gwl.CDT;
                                 if (cdt != "" && cdt != "无")
-                                    cdt = new Date(gwl.CDT).format('yyyy-MM-dd hh:mm:ss')
+                                    cdt = new Date(Date.parse(gwl.CDT.replace(/-/g, "/"))).format('yyyy-MM-dd hh:mm:ss')
 
                                 tablehtml += "<table style='width:300px;'>";
                                 tablehtml += "<caption>" + gwl.FK_EmpText + "</capiton>";
@@ -322,10 +323,10 @@
 
 
                                 rdt = rdt.replace(/\-/g, "/");
-                                rdt = new Date(rdt);
+                                rdt = new Date(Date.parse(rdt.replace(/-/g, "/")));
                                 if (sdt != "无") {
                                     sdt = sdt.replace(/\-/g, "/");
-                                    sdt = new Date(sdt);
+                                    sdt = new Date(Date.parse(sdt.replace(/-/g, "/")));
                                 }
 
                                 tablehtml += "<tr style='background-color:InfoBackground' >";
@@ -343,7 +344,7 @@
 
 
                                 var cdt = cdt.replace(/\-/g, "/");
-                                cdt = new Date(cdt);
+                                cdt = new Date(Date.parse(cdt.replace(/-/g, "/")));
 
                                 tablehtml += "<tr style='background-color:InfoBackground' >";
                                 if (gwl.IsPass == 1) {
@@ -445,7 +446,7 @@
                                 trackhtml += "</tr>";
 
                                 dtto = dtto.replace(/\-/g, "/");
-                                dtto = new Date(dtto);
+                                dtto = new Date(Date.parse(dtto.replace(/-/g, "/")));
 
                                 //判断是否有考核时间
                                 var mypk = node.id + "_" + uh["WorkID"] + "_" + track.FID + "_" + track.EmpFrom;
@@ -463,7 +464,7 @@
 
 
                                 var rdt = track.RDT.replace(/\-/g, "/");
-                                rdt = new Date(rdt);
+                                rdt = new Date(Date.parse(rdt.replace(/-/g, "/")));
 
 
 
@@ -1224,6 +1225,10 @@
                 async: false,   //同步
                 url: url,
                 data: '',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 success: function () {
                     isSuccess = true;
                 },

@@ -206,7 +206,7 @@ function InitPage() {
                 //到达时间.
                 var toTime = gwl.RDT;
                 var toTimeDot = toTime.replace(/\-/g, "/");
-                toTimeDot = new Date(toTimeDot);
+                toTimeDot = new Date(Date.parse(toTimeDot.replace(/-/g, "/")));
 
                 //当前发生日期.
                 timeDot = new Date();
@@ -224,7 +224,7 @@ function InitPage() {
                 //应该完成日期.
                 toTime = gwl.SDT;
                 toTimeDot = toTime.replace(/\-/g, "/");
-                toTimeDot = new Date(toTimeDot);
+                toTimeDot = new Date(Date.parse(toTimeDot.replace(/-/g, "/")));
 
                 //当前发生日期.
                 timeDot = new Date();

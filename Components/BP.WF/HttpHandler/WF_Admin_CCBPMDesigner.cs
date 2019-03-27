@@ -22,6 +22,95 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
 
+        public string GetFlowTreeTable2019()
+        {
+            string sql = @"SELECT * FROM (SELECT 'F'+No as No,'F'+ParentNo ParentNo, Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                           union 
+                           SELECT NO, 'F'+FK_FlowSort as ParentNo,(NO + '.' + NAME) as Name,IDX,0 IsParent,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = @"SELECT * FROM (SELECT 'F'||No as No,'F'||ParentNo as ParentNo,Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                        union 
+                        SELECT NO, 'F'||FK_FlowSort as ParentNo,NO||'.'||NAME as Name,IDX,0 IsParent,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+            }
+
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = @"SELECT * FROM (SELECT CONCAT('F', No) No, CONCAT('F', ParentNo) ParentNo, Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                           union 
+                           SELECT NO, CONCAT('F', FK_FlowSort) ParentNo, CONCAT(NO, '.', NAME) Name,IDX,0 IsParent,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+            }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["parentno"].ColumnName = "ParentNo";
+                dt.Columns["idx"].ColumnName = "IDX";
+
+                dt.Columns["ttype"].ColumnName = "TTYPE";
+                dt.Columns["dtype"].ColumnName = "DTYPE";
+            }
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                dt.Columns["IDX"].ColumnName = "IDX";
+
+                dt.Columns["TTYPE"].ColumnName = "TTYPE";
+                dt.Columns["DTYPE"].ColumnName = "DTYPE";
+            }
+
+            //判断是否为空，如果为空，则创建一个流程根结点，added by liuxc,2016-01-24
+            if (dt.Rows.Count == 0)
+            {
+                FlowSort fs = new FlowSort();
+                fs.No = "99";
+                fs.ParentNo = "0";
+                fs.Name = "流程树";
+                fs.Insert();
+
+                dt.Rows.Add("F99", "F0", "流程树", 0, 1, "FLOWTYPE", -1);
+            }
+            else
+            {
+                DataRow[] drs = dt.Select("NAME='流程树'");
+                if (drs.Length > 0 && !Equals(drs[0]["PARENTNO"], "F0"))
+                    drs[0]["ParentNo"] = "F0";
+            }
+
+
+            if (WebUser.No != "admin")
+            {
+                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
+                aemp.No = WebUser.No;
+                if (aemp.RetrieveFromDBSources() == 0)
+                    return "err@登录帐号错误.";
+
+                if (aemp.IsAdmin == false)
+                    return "err@非管理员用户.";
+
+                DataRow rootRow = dt.Select("ParentNo='F0'")[0];
+                DataRow newRootRow = dt.Select("No='F" + aemp.RootOfFlow + "'")[0];
+
+                newRootRow["ParentNo"] = "F0";
+                DataTable newDt = dt.Clone();
+                newDt.Rows.Add(newRootRow.ItemArray);
+                GenerChildRows(dt, newDt, newRootRow);
+                dt = newDt;
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+
         /// <summary>
         /// 按照管理员登录.
         /// </summary>
@@ -567,8 +656,8 @@ namespace BP.WF.HttpHandler
                 //return BP.WF.Glo.lang("no_permission_login_1", para);
 
                 if (adminEmp.IsAdmin == false)
-                    //return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
-                    return BP.WF.Glo.lang("no_permission_login_2", para);
+                    return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
+                    //return BP.WF.Glo.lang("no_permission_login_2", para);
 
                 if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
                     return "err@二级管理员用户没有设置流程树的权限..";

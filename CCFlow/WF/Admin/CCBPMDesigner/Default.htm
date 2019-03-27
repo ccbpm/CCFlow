@@ -490,34 +490,16 @@
 
         //登录,判断为天业BPM，转向到天业新版界面
         function Login2App() {
-
-
             if (initData.RunOnPlant == "jeesite") {
                 window.location.href = "/js/a/logout";
                 return;
             }
 
             window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
-
-            //            if (initData.RunOnPlant == "BP") {
-            //                window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
-            //                return;
-            //            }
-            //   alert("没有判断的集成平台:" + initData.RunOnPlant);
-
             return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnString("Login_Redirect");
-
-
-            //            $.ajax({
-            //                type: 'post',
-            //                async: true,
-            //                url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
-            //                dataType: 'html',
-            //                success: function (data) {
-
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -525,8 +507,6 @@
 
             var url = data.replace('url@', '');
             window.open(url);
-            //                }
-            //            });
         }
         //退出
         function LoginOut() {

@@ -21,36 +21,9 @@
             
             var data = handler.DoMethodReturnString("ResetFrm_Init");
 
-//            var url = Handler + "?DoType=ResetFrm_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random();
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: url,
-//                dataType: 'html',
-//                success: function (data) {
-
-                    // $("#Msg").html("<h1><img src='../../Img/loading.gif' /> 正在重置. </h1>");
-
-                    //alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
-                    alert(data);
-                    window.parent.location.href = window.parent.location.href;
-                    return;
-
-                    if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
-
-                    if (data.indexOf('url@') == 0) {
-                        window.location.href = data.replace('url@', '');
-                        return;
-                    }
-
-                    $("#Msg").html("<font color=blue>" + data + "</font>");
-                    return;
-//                }
-//            });
-
+            alert(data);
+            window.parent.location.href = window.parent.location.href;
+            
         });
     </script>
 </head>

@@ -141,7 +141,7 @@ etpl.config({
 
     if (plant == "CCFlow") {
         // CCFlow
-        var handlerUrl = "/WF/Comm/Handler.ashx";
+        var handlerUrl = basePath+"/WF/Comm/Handler.ashx";
         richurl = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&Directory=' + directory;
     } else {
         // JFlow

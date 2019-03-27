@@ -52,43 +52,7 @@
             InitPage();
         });
 
-        //公共方法
-//        function AjaxServiceGener(param, callback, scope) {
-//            $.ajax({
-//                type: "GET", //使用GET或POST方法访问后台
-//                dataType: "text", //返回json格式的数据
-//                contentType: "application/json; charset=utf-8",
-//                url: Handler, //要访问的后台地址
-//                data: param, //要发送的数据
-//                async: true,
-//                cache: false,
-//                complete: function () { }, //AJAX请求完成时隐藏loading提示
-//                error: function (XMLHttpRequest, errorThrown) {
-//                    alert(errorThrown)
-//                    callback(XMLHttpRequest);
-//                    alert('保存数据出错');
-//                    $('#Msg').hide();
-//                    $('#ContentDtlDiv').show();
-//                },
-//                success: function (msg) {//msg为返回的数据，在这里做数据绑定
-//                    if (saveAll) {
-//                        alerdaySaveCount++;
-//                    } else {
-//                        var data = msg;
-//                        callback(data, scope);
-//                    }
-//                    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
-//                        $('#Msg').hide();
-//                        $('#ContentDtlDiv').show();
-//                        alerdaySaveCount = 0;
-//                        needSaveCount = 0;
-//                        saveAll = false;
-
-//                        InitPage();
-//                    }
-//                }
-//            });
-//        }
+ 
          
         //初始化数据.
         function InitPage() {
@@ -114,244 +78,220 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Dtl_Init"); 
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                //url: Handler + "?DoType=Dtl_Init&FK_Node=" + fk_node + "&EnsName=" + ensName + "&RefPKVal=" + refPKVal + "&FID=" + fid + "&m=" + Math.random(),
-//                url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
 
-                    // 检查是否有错误.
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
+            // 检查是否有错误.
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //解析.
+            data = JSON.parse(data);
+
+            //主表数据，用于变量替换.
+            var mainTable = data["MainTable"]; //主表数据.
+
+            //从表信息.
+            var sys_MapDtl = data["Sys_MapDtl"]; //从表描述.
+            var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
+            var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
+            mapExt = sys_mapExtDtl;
+            var dbDtl = data["DBDtl"]; //从表数据.
+
+            $('#dtlDiv div table tbody').html('');//清空表格数据
+            var sys_mapAttr = data["Sys_MapAttr"];
+            if ($('#dtlDiv div table thead tr').length == 0) {
+                var threadTr = $('<tr data-data="true"></tr>');
+                //制造表头
+                //添加序号列
+                workNodeData = data;
+                var snTh = $('<th data-coltype="SN" style="width;60px;"><img src="../Img/Btn/Add.gif" id="insertBtn"  style="    cursor: pointer;" name="insertBtn" onclick="insertRow()" /></th>');
+
+                threadTr.append(snTh);
+                $.each(sys_mapAttr, function (i, mapAttrObj) {
+                    var th = $('<th></th>');
+                    th.text(mapAttrObj.Name);
+                    th.data(mapAttrObj);
+                    th.css('width', mapAttrObj.UIWidth);
+                    th.data().colname = mapAttrObj.KeyOfEn;
+                    if (mapAttrObj.UIVisible == 1) {
+                        threadTr.append(th);
                     }
+                });
 
-                    //解析.
-                    data = JSON.parse(data);
+                //添加删除,保存列
+                //var delTh = $('<th style="width:20px;"><img title="全部保存" style="width: 20px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/SaveAll.png" onclick="SaveAll();" /></th>');
+                var delTh = $('<th style="width:20px;"></th>');
 
-                    //主表数据，用于变量替换.
-                    var mainTable = data["MainTable"]; //主表数据.
+                var delThData;
 
-                    //从表信息.
-                    var sys_MapDtl = data["Sys_MapDtl"]; //从表描述.
-                    var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
-                    var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
-                    mapExt = sys_mapExtDtl;
-                    var dbDtl = data["DBDtl"]; //从表数据.
+                        
+                if ( 1==2 ) {//有新增或者有删除，就有删除权限
+                    delThData = {
+                        custom: true,
+                        customcontent: 1,
+                        customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
+                        coltype: 'Operation1'
+                    };
+                } 
 
-                    $('#dtlDiv div table tbody').html('');//清空表格数据
-                    var sys_mapAttr = data["Sys_MapAttr"];
-                    if ($('#dtlDiv div table thead tr').length == 0) {
-                        var threadTr = $('<tr data-data="true"></tr>');
-                        //制造表头
-                        //添加序号列
-                        workNodeData = data;
-                        var snTh = $('<th data-coltype="SN" style="width;60px;"><img src="../Img/Btn/Add.gif" id="insertBtn"  style="    cursor: pointer;" name="insertBtn" onclick="insertRow()" /></th>');
+                //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
+                //如果能删除，就有删除按钮
+                if (sys_MapDtl[0].IsReadonly=="0") {
+                    delTh.data(delThData);
+                }
+                //可删除或者可新增时，有操作列
+                if ((sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1" || sys_MapDtl[0].IsUpdate=="1") && sys_MapDtl[0].IsReadonly == "0") {
+                    threadTr.append(delTh);
+                }
 
-                        threadTr.append(snTh);
-                        $.each(sys_mapAttr, function (i, mapAttrObj) {
-                            var th = $('<th></th>');
-                            th.text(mapAttrObj.Name);
-                            th.data(mapAttrObj);
-                            th.css('width', mapAttrObj.UIWidth);
-                            th.data().colname = mapAttrObj.KeyOfEn;
-                            if (mapAttrObj.UIVisible == 1) {
-                                threadTr.append(th);
-                            }
-                        });
+                //添加删除列
+                //var delTh = $('<th></th>');
+                //添加保存列
+                delTh = $('<th style=""></th>');
+                delTh.text("操作");
+                var delThData = {
+                    custom: true,
+                    customcontent: 1,
+                    customcontent1:  'img@src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                    coltype: 'Operation1'
+                };
+                delTh.attr('title', "title");
+                delTh.data(delThData);
+                //threadTr.append(delTh);
 
-                        //添加删除,保存列
-                        //var delTh = $('<th style="width:20px;"><img title="全部保存" style="width: 20px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/SaveAll.png" onclick="SaveAll();" /></th>');
-                        var delTh = $('<th style="width:20px;"></th>');
+                $('#dtlDiv div table thead').append(threadTr);
+            }
 
-                        var delThData;
+            //如果不能新增，就把新增按钮去掉.
+            //alert(sys_MapDtl[0].IsInsert );
 
-                        //if (sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1") {//有新增或者有删除，就有删除权限
-                        //    delThData = {
-                        //        custom: true,
-                        //        customcontent: 2,
-                        //        customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
-                        //        customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
-                        //        coltype: 'Operation1'
-                        //    };
-                        //} else if (sys_MapDtl[0].IsUpdate == "1") {//只有保存，没有删除
-                        //    delThData = {
-                        //        custom: true,
-                        //        customcontent: 1,
-                        //        customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
-                        //        coltype: 'Operation1'
-                        //    };
-                        //}
+            if (sys_MapDtl[0].IsInsert == "0" || sys_MapDtl[0].IsReadonly == "1" ) {
+                document.getElementById('insertBtn').style.display = 'none';
+            }
 
-                        if ( 1==2 ) {//有新增或者有删除，就有删除权限
-                            delThData = {
-                                custom: true,
-                                customcontent: 1,
-                                customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
-                                coltype: 'Operation1'
-                            };
-                        } 
+            //初始化表数据
+            var dbDtlTmp = { DTObjs: dbDtl };
 
-                        //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
-                        //如果能删除，就有删除按钮
-                        if (sys_MapDtl[0].IsReadonly=="0") {
-                            delTh.data(delThData);
-                        }
-                        //可删除或者可新增时，有操作列
-                        if ((sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1" || sys_MapDtl[0].IsUpdate=="1") && sys_MapDtl[0].IsReadonly == "0") {
-                            threadTr.append(delTh);
-                        }
+            //为PageData.DBDtl 赋值
+            $.each(dbDtl, function (i, objRow) {
+                pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
+            })
 
-                        //添加删除列
-                        //var delTh = $('<th></th>');
-                        //添加保存列
-                        delTh = $('<th style=""></th>');
-                        delTh.text("操作");
-                        var delThData = {
-                            custom: true,
-                            customcontent: 1,
-                            customcontent1:  'img@src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
-                            coltype: 'Operation1'
-                        };
-                        delTh.attr('title', "title");
-                        delTh.data(delThData);
-                        //threadTr.append(delTh);
+            var dtlDataOption = {
+                IsShowAll: true,
+                PageSize: 10,
+                PageIndex: 1,
+                DivId: 'dtlDiv',
+                IsUseLocalData: true,
+                LocalData: JSON.stringify(dbDtlTmp),
+                RenderOverFun: function () {
+                    //循环TBODY
+                    var tbodyTrs = $('#dtlDiv div table tbody tr');
+                    $.each(tbodyTrs, function (m, tbodyTrObj) {
+                        var threadTh = $('#dtlDiv div table thead tr th');
+                        $.each(threadTh, function (k, threadThObj) {
+                            if ($(threadThObj).data().colname != undefined) {
+                                var o = $(threadThObj);
+                                var tmplate = figure_MapAttr_Template(o.data());
+                                tmplate.data({ KeyOfEn: o.data().KeyOfEn });
 
-                        $('#dtlDiv div table thead').append(threadTr);
-                    }
-
-                    //如果不能新增，就把新增按钮去掉.
-                    //alert(sys_MapDtl[0].IsInsert );
-
-                    if (sys_MapDtl[0].IsInsert == "0" || sys_MapDtl[0].IsReadonly == "1" ) {
-                        document.getElementById('insertBtn').style.display = 'none';
-                    }
-
-                    //初始化表数据
-                    var dbDtlTmp = { DTObjs: dbDtl };
-
-                    //为PageData.DBDtl 赋值
-                    $.each(dbDtl, function (i, objRow) {
-                        pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
-                    })
-
-                    var dtlDataOption = {
-                        IsShowAll: true,
-                        PageSize: 10,
-                        PageIndex: 1,
-                        DivId: 'dtlDiv',
-                        IsUseLocalData: true,
-                        LocalData: JSON.stringify(dbDtlTmp),
-                        RenderOverFun: function () {
-                            //循环TBODY
-                            var tbodyTrs = $('#dtlDiv div table tbody tr');
-                            $.each(tbodyTrs, function (m, tbodyTrObj) {
-                                var threadTh = $('#dtlDiv div table thead tr th');
-                                $.each(threadTh, function (k, threadThObj) {
-                                    if ($(threadThObj).data().colname != undefined) {
-                                        var o = $(threadThObj);
-                                        var tmplate = figure_MapAttr_Template(o.data());
-                                        tmplate.data({ KeyOfEn: o.data().KeyOfEn });
-
-                                        //ID 设置为  id+'_1'
-                                        var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
-                                        //先写出 NAME   单选扭会出问题
-                                        tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
+                                //ID 设置为  id+'_1'
+                                var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
+                                //先写出 NAME   单选扭会出问题
+                                tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
                                         
-                                        //处理复选框  设置表格中数据的值
-                                        var textVal = $($(tbodyTrObj).children('td')[k]).text();
+                                //处理复选框  设置表格中数据的值
+                                var textVal = $($(tbodyTrObj).children('td')[k]).text();
 
-                                         var ckEle=tmplate.find('[name=CB_'+o.data().KeyOfEn+']');
-                                         if (ckEle.length == 1) {
-                                             var ckId = 'CB_' + o.data().KeyOfEn + '_' + rowIndex;
-                                             ckEle.attr('id', ckId);
-                                             tmplate.find('label').attr('for', ckId);
-                                             if (textVal == "1") {
-                                                 ckEle[0].checked = true;
-                                             } else {
-                                                 ckEle[0].checked = false;
-                                             }
-                                         }
-                                         else {
-                                             tmplate.val(textVal);
-                                         }
-                                        //处理单选按钮。。。 还没做
-                                        $($(tbodyTrObj).children('td')[k]).text('');
-                                        $($(tbodyTrObj).children('td')[k]).append(tmplate);
-
-                                        if (tmplate.attr('name') !=undefined &&tmplate.attr('name').indexOf('TB_') == 0) {
-                                            $(tmplate).bind('blur', function (obj) {
-                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                    $(obj.target).val();
-                                            });
-                                        } else if (tmplate.attr('name') !=undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
-                                            //对于只读的下拉框做如下处理  为只读的下拉框赋值
-                                            if (o.data().UIIsEnable == "0") {
-                                                var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
-                                                var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
-                                                var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
-                                                $(tmplate).children().remove();
-                                                $(tmplate).append(option);
-                                            } else {
-                                                $(tmplate).bind('change', function (obj) {
-                                                    $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                        $(obj.target).val();
-                                                });
-                                            }
-                                        }else if (tmplate.attr('name') ==undefined &&tmplate.find('[name^=CB_]').length == 1) {
-                                            $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
-                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] =
-                                                    $(tmplate).find('[name^=CB_]')[0].checked==true ? 1 : 0;
-                                            });
+                                    var ckEle=tmplate.find('[name=CB_'+o.data().KeyOfEn+']');
+                                    if (ckEle.length == 1) {
+                                        var ckId = 'CB_' + o.data().KeyOfEn + '_' + rowIndex;
+                                        ckEle.attr('id', ckId);
+                                        tmplate.find('label').attr('for', ckId);
+                                        if (textVal == "1") {
+                                            ckEle[0].checked = true;
+                                        } else {
+                                            ckEle[0].checked = false;
                                         }
                                     }
-                                });
-                            })
+                                    else {
+                                        tmplate.val(textVal);
+                                    }
+                                //处理单选按钮。。。 还没做
+                                $($(tbodyTrObj).children('td')[k]).text('');
+                                $($(tbodyTrObj).children('td')[k]).append(tmplate);
 
-                            //如果是只读的，全部设置成只读
-                            if (workNodeData.Sys_MapDtl[0].IsReadonly == "1") {
-                                $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
-                                $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
-                                $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
-                                $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
+                                if (tmplate.attr('name') !=undefined &&tmplate.attr('name').indexOf('TB_') == 0) {
+                                    $(tmplate).bind('blur', function (obj) {
+                                        $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
+                                            $(obj.target).val();
+                                    });
+                                } else if (tmplate.attr('name') !=undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
+                                    //对于只读的下拉框做如下处理  为只读的下拉框赋值
+                                    if (o.data().UIIsEnable == "0") {
+                                        var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
+                                        var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
+                                        var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
+                                        $(tmplate).children().remove();
+                                        $(tmplate).append(option);
+                                    } else {
+                                        $(tmplate).bind('change', function (obj) {
+                                            $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
+                                                $(obj.target).val();
+                                        });
+                                    }
+                                }else if (tmplate.attr('name') ==undefined &&tmplate.find('[name^=CB_]').length == 1) {
+                                    $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
+                                        $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] =
+                                            $(tmplate).find('[name^=CB_]')[0].checked==true ? 1 : 0;
+                                    });
+                                }
                             }
+                        });
+                    })
 
-                            //循环TBODY 初始化 SYS_MAPEXT
-                            var tbodyTrs1 = $('#dtlDiv div table tbody tr');
-                            $.each(tbodyTrs1, function (m, tbodyTrObj) {
-                                AfterBindEn_DealMapExt(tbodyTrObj);
-                            });
+                    //如果是只读的，全部设置成只读
+                    if (workNodeData.Sys_MapDtl[0].IsReadonly == "1") {
+                        $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
+                        $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
+                    }
 
-                            //mouseleave  鼠标离开行
-                            regMouseLeaveTr();
-                        }
-                    };
-                    $('#dtlDiv div table tbody tr').remove();
-                    Common.CustomPagePlug(dtlDataOption);//绑定表格
+                    //循环TBODY 初始化 SYS_MAPEXT
+                    var tbodyTrs1 = $('#dtlDiv div table tbody tr');
+                    $.each(tbodyTrs1, function (m, tbodyTrObj) {
+                        AfterBindEn_DealMapExt(tbodyTrObj);
+                    });
 
-                    $('#Msg').hide();
-                    return;
+                    //mouseleave  鼠标离开行
+                    regMouseLeaveTr();
+                }
+            };
+            $('#dtlDiv div table tbody tr').remove();
+            Common.CustomPagePlug(dtlDataOption);//绑定表格
+
+            $('#Msg').hide();
+            return;
 
 
-                    /********解析数据组装datagrid表*****/
-                    /*0 否 1 是*/
-                    var IsShowSum = sys_MapDtl[0].IsShowSum == 1 ? true : false; //是否显示合计
-                    var IsShowIdx = sys_MapDtl[0].IsShowIdx == 1 ? true : false; //是否显示idx
-                    var IsReadonly = sys_MapDtl[0].IsReadonly == 1 ? true : false; //是否只读
-                    var IsDelete = sys_MapDtl[0].IsDelete == 1 ? true : false; //是否可以删除
-                    var IsInsert = sys_MapDtl[0].IsInsert == 1 ? true : false; //是否可以插入
-                    var IsUpdate = sys_MapDtl[0].IsUpdate == 1 ? true : false; //是否可以更新
-                    var IsEnablePass = sys_MapDtl[0].IsEnablePass == 1 ? true : false; //是否启用通过
-                    var IsHLDtl = sys_MapDtl[0].IsHLDtl == 1 ? true : false; //是否是合流汇总数据
-                    var IsFLDtl = sys_MapDtl[0].IsFLDtl == 1 ? true : false; //是否是分流
-                    var IsShowTitle = sys_MapDtl[0].IsShowTitle == 1 ? true : false; //是否显示标题
-                    var IsView = sys_MapDtl[0].IsView == 1 ? true : false; //是否可见
-                    var titles = IsShowTitle ? sys_MapDtl[0].Name : '';
+            /********解析数据组装datagrid表*****/
+            /*0 否 1 是*/
+            var IsShowSum = sys_MapDtl[0].IsShowSum == 1 ? true : false; //是否显示合计
+            var IsShowIdx = sys_MapDtl[0].IsShowIdx == 1 ? true : false; //是否显示idx
+            var IsReadonly = sys_MapDtl[0].IsReadonly == 1 ? true : false; //是否只读
+            var IsDelete = sys_MapDtl[0].IsDelete == 1 ? true : false; //是否可以删除
+            var IsInsert = sys_MapDtl[0].IsInsert == 1 ? true : false; //是否可以插入
+            var IsUpdate = sys_MapDtl[0].IsUpdate == 1 ? true : false; //是否可以更新
+            var IsEnablePass = sys_MapDtl[0].IsEnablePass == 1 ? true : false; //是否启用通过
+            var IsHLDtl = sys_MapDtl[0].IsHLDtl == 1 ? true : false; //是否是合流汇总数据
+            var IsFLDtl = sys_MapDtl[0].IsFLDtl == 1 ? true : false; //是否是分流
+            var IsShowTitle = sys_MapDtl[0].IsShowTitle == 1 ? true : false; //是否显示标题
+            var IsView = sys_MapDtl[0].IsView == 1 ? true : false; //是否可见
+            var titles = IsShowTitle ? sys_MapDtl[0].Name : '';
 
-//                }
-//            });
+
         }
 
         //根据表格中编辑过的值，设置表格TR 的 data

@@ -26,7 +26,7 @@
 
             //设定枚举值下拉框.
             GenerBindEnumKey("DDL_BillFileType", "BillFileType", 0);
-          //  GenerBindEnumKey("DDL_BillOpenModel", "BillOpenModel", 0);
+
 
             var nodeID = GetQueryString("FK_Node");
             var ens = new Entities("BP.WF.Template.BillTemplates");
@@ -94,9 +94,14 @@
 
             var doMethod = "Bill_Save";
             var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            
             $.ajax({
                 url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName +"&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
                 type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 data: formData,
                 async: false,
                 cache: false,

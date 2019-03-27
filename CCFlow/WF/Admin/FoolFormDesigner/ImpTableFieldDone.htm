@@ -125,59 +125,53 @@
             handler.AddPara("FK_SFDBSrc", FK_SFDBSrc);
             handler.AddPara("STable", (STable || ""));
             var json = handler.DoMethodReturnString("ImpTableField_Step2");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=ImpTableField_Step2&FK_MapData=" + FK_MapData + "&FK_SFDBSrc=" + FK_SFDBSrc + "&STable=" + (STable || "") + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (json) {
-                    if (json.indexOf('err@') == 0) {
-                        alert(json);
-                        return;
+
+            if (json.indexOf('err@') == 0) {
+                alert(json);
+                return;
+            }
+            json = JSON.parse(json);
+            var html = "";
+            html += "<ul>";
+            $.each(json.tables, function (i, o) {
+                if ((STable || json.STable || "").toLowerCase() === (o.No || "").toLowerCase()) {
+                    html += "<li><font color=red><b>" + o.Name + "</font></b></li>";
+                } else {
+                    html += "<li><a href='javascript: step2(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + o.No + "\");' >" + o.Name + "</a></li>";
+                }
+            });
+            html += "</ul>";
+            $("#tree").html(html);
+            $("#chooseTableOrView").text(GetQueryString("DBName") || "");
+
+            html = "";
+            $.each(json.columns, function (i, o) {
+                var checkboxAttributes = "";
+                $.each(json.attrs, function (attrIndex, attr) {
+                    if (attr.KeyOfEn == o.No) {
+                        checkboxAttributes = " disabled='disabled' onclick='return false' ";
+                        return false;
                     }
-                    json = JSON.parse(json);
-                    var html = "";
-                    html += "<ul>";
-                    $.each(json.tables, function (i, o) {
-                        if ((STable || json.STable || "").toLowerCase() === (o.No || "").toLowerCase()) {
-                            html += "<li><font color=red><b>" + o.Name + "</font></b></li>";
-                        } else {
-                            html += "<li><a href='javascript: step2(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + o.No + "\");' >" + o.Name + "</a></li>";
-                        }
-                    });
-                    html += "</ul>";
-                    $("#tree").html(html);
-                    $("#chooseTableOrView").text(GetQueryString("DBName") || "");
-                    //
-                    html = "";
-                    $.each(json.columns, function (i, o) {
-                        var checkboxAttributes = "";
-                        $.each(json.attrs, function (attrIndex, attr) {
-                            if (attr.KeyOfEn == o.No) {
-                                checkboxAttributes = " disabled='disabled' onclick='return false' ";
-                                return false;
-                            }
-                        });
-                        html += "<tr>";
-                        html += "	<td nowrap>" + o.colid + "</td>";
-                        html += "	<td nowrap>";
-                        html += "		<input type='checkbox' id='CB_Col_" + o.No + "' name='CB_Col_" + o.No + "' no='" + o.No + "' " + checkboxAttributes + ">";
-                        html += "		<label for='CB_Col_" + o.No + "'>" + o.No + "</label>";
-                        html += "	</td>";
-                        html += "	<td nowrap>" + o.Name + "</td>";
-                        html += "	<td nowrap>" + o.DBType + "</td>";
-                        html += "	<td nowrap>" + o.DBLength + "</td>";
-                        html += "</tr>";
-                    });
-                    $("#all_columns").html(html);
-                    $("#chooseColumn").text(STable || json.STable || "");
+                });
+                html += "<tr>";
+                html += "	<td nowrap>" + o.colid + "</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='checkbox' id='CB_Col_" + o.No + "' name='CB_Col_" + o.No + "' no='" + o.No + "' " + checkboxAttributes + ">";
+                html += "		<label for='CB_Col_" + o.No + "'>" + o.No + "</label>";
+                html += "	</td>";
+                html += "	<td nowrap>" + o.Name + "</td>";
+                html += "	<td nowrap>" + o.DBType + "</td>";
+                html += "	<td nowrap>" + o.DBLength + "</td>";
+                html += "</tr>";
+            });
+            $("#all_columns").html(html);
+            $("#chooseColumn").text(STable || json.STable || "");
 
-                    $("#step2ToStep3").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step3(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + (STable || json.STable) + "\")'>下一步</a>");
-                    $.parser.parse("#step2ToStep3");
+            $("#step2ToStep3").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step3(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + (STable || json.STable) + "\")'>下一步</a>");
+            $.parser.parse("#step2ToStep3");
 
-                    doShow("step2");
-//                }
-//            });
+            doShow("step2");
+
         }
         function step3(FK_MapData, FK_SFDBSrc, STable) {
             $("#step3BackToStep2").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step2(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + STable + "\")'>上一步</a>");
@@ -199,94 +193,72 @@
             handler.AddPara("STable", (STable || ""));
             handler.AddPara("SColumns", no.join(","));
             var json = handler.DoMethodReturnString("ImpTableField_Step3");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=ImpTableField_Step3&FK_MapData=" + FK_MapData + "&FK_SFDBSrc=" + FK_SFDBSrc + "&STable=" + (STable || "") + "&SColumns=" + no.join(",") + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (json) {
-                    if (json.indexOf('err@') == 0) {
-                        alert(json);
-                        return;
-                    }
-                    json = JSON.parse(json);
-                    var html = "";
-                    $.each(json.selectedColumns, function (i, o) {
-                        var typeString = o.DBType.toLowerCase();
-                        var dataType = "1";
-                        if (typeString.indexOf("int") != -1) {
-                            dataType = "2";
-                        } else if (typeString.indexOf("float") != -1) {
-                            dataType = "3";
-                        } else if (typeString.indexOf("double") != -1) {
-                            dataType = "5";
-                        }
-                        html += "<tr>";
-                        html += "	<td nowrap class='Idx'>" + (i + 1) + "</td>";
-                        html += "	<td nowrap>" + o.No + "</td>";
-                        html += "	<td nowrap>";
-                        html += "		<input type='text' id='TB_Desc_" + o.No + "' name='TB_Desc_" + o.No + "' value='" + o.Name + "' size='20'>";
-                        html += "	</td>";
-                        html += "	<td nowrap>";
-                        html += "		<select id='DDL_DBType_" + o.No + "' name='DDL_DBType_" + o.No + "' style='min-width:90px;'>";
-                        $.each(json.MyDataType, function (enumIndex, enum_) {
-                            html += "		<option value='" + enum_.IntKey + "' " + ((enum_.IntKey == dataType) ? "selected='selected'" : "") + ">" + enum_.Lab + "</option>";
-                        });
-                        html += "		</select>";
-                        html += "	</td>";
-                        html += "	<td nowrap>";
-                        html += "		<select id='DDL_LogicType_" + o.No + "' name='DDL_LogicType_" + o.No + "' style='min-width:90px;'>";
-                        $.each(json.LGType, function (enumIndex, enum_) {
-                            html += "		<option value='" + enum_.IntKey + "'>" + enum_.Lab + "</option>";
-                        });
-                        html += "		</select>";
-                        html += "	</td>";
-                        html += "	<td nowrap>";
-                        html += "		<input type='text' id='TB_BindKey_" + o.No + "' name='TB_BindKey_" + o.No + "' ondblclick='OpenSelectBindKey(this)' size='30'>";
-                        html += "	</td>";
-                        html += "	<td nowrap>";
-                        html += "		<input type='text' id='TB_Len_" + o.No + "' name='TB_Len_" + o.No + "' value='" + o.DBLength + "' size='5'>";
-                        html += "	</td>";
-                        html += "	<td nowrap style='style=\"text-align:center\"'>";
-                        html += "		<input type='hidden' id='HID_Idx_" + o.No + "' name='HID_Idx_" + o.No + "' value='" + (i + 1) + "'>";
-                        html += "		<a href='javascript:void(0);' onclick='up(this, 7)' class='easyui-linkbutton' data-options=\"iconCls:'icon-up'\"></a>";
-                        html += "		&nbsp;";
-                        html += "		<a href='javascript:void(0)' onclick='down(this, 7)' class='easyui-linkbutton' data-options=\"iconCls:'icon-down'\"></a>";
-                        html += "	</td>";
-                        html += "</tr>";
-                    });
-                    $("#selected_columns").html(html);
-                    $.parser.parse($(".easyui-linkbutton").parent());
-                    doShow("step3");
-//                }
-//            });
+            if (json.indexOf('err@') == 0) {
+                alert(json);
+                return;
+            }
+            json = JSON.parse(json);
+            var html = "";
+            $.each(json.selectedColumns, function (i, o) {
+                var typeString = o.DBType.toLowerCase();
+                var dataType = "1";
+                if (typeString.indexOf("int") != -1) {
+                    dataType = "2";
+                } else if (typeString.indexOf("float") != -1) {
+                    dataType = "3";
+                } else if (typeString.indexOf("double") != -1) {
+                    dataType = "5";
+                }
+                html += "<tr>";
+                html += "	<td nowrap class='Idx'>" + (i + 1) + "</td>";
+                html += "	<td nowrap>" + o.No + "</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='text' id='TB_Desc_" + o.No + "' name='TB_Desc_" + o.No + "' value='" + o.Name + "' size='20'>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<select id='DDL_DBType_" + o.No + "' name='DDL_DBType_" + o.No + "' style='min-width:90px;'>";
+                $.each(json.MyDataType, function (enumIndex, enum_) {
+                    html += "		<option value='" + enum_.IntKey + "' " + ((enum_.IntKey == dataType) ? "selected='selected'" : "") + ">" + enum_.Lab + "</option>";
+                });
+                html += "		</select>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<select id='DDL_LogicType_" + o.No + "' name='DDL_LogicType_" + o.No + "' style='min-width:90px;'>";
+                $.each(json.LGType, function (enumIndex, enum_) {
+                    html += "		<option value='" + enum_.IntKey + "'>" + enum_.Lab + "</option>";
+                });
+                html += "		</select>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='text' id='TB_BindKey_" + o.No + "' name='TB_BindKey_" + o.No + "' ondblclick='OpenSelectBindKey(this)' size='30'>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='text' id='TB_Len_" + o.No + "' name='TB_Len_" + o.No + "' value='" + o.DBLength + "' size='5'>";
+                html += "	</td>";
+                html += "	<td nowrap style='style=\"text-align:center\"'>";
+                html += "		<input type='hidden' id='HID_Idx_" + o.No + "' name='HID_Idx_" + o.No + "' value='" + (i + 1) + "'>";
+                html += "		<a href='javascript:void(0);' onclick='up(this, 7)' class='easyui-linkbutton' data-options=\"iconCls:'icon-up'\"></a>";
+                html += "		&nbsp;";
+                html += "		<a href='javascript:void(0)' onclick='down(this, 7)' class='easyui-linkbutton' data-options=\"iconCls:'icon-down'\"></a>";
+                html += "	</td>";
+                html += "</tr>";
+            });
+            $("#selected_columns").html(html);
+            $.parser.parse($(".easyui-linkbutton").parent());
+            doShow("step3");
+
         }
         $(step1);
         function btn_Save_Click() {
-//            var frmData = $("#frm").serialize();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddFormData();
             var json = handler.DoMethodReturnString("ImpTableField_Save");
-//            $.ajax({
-//                data: frmData,
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=ImpTableField_Save",
-//                dataType: 'html',
-//                success: function (json) {
-                    /* json = JSON.parse(json);
-                    alert(json.msg);
-                    return; */
-                    alert(json);
-                    if (GetQueryString("reset") == "true") {
-                        findFn(window, "ResetFrm", "请手动重置表单");
-                    }
-                    window.close();
-//                },
-//                error: function (data) {
-//                    alert(data);
-//                }
-//            });
+            alert(json);
+            if (GetQueryString("reset") == "true") {
+                findFn(window, "ResetFrm", "请手动重置表单");
+            }
+            window.close();
+
         }
         function findFn(window_, fn, failMsg, index) {
             if (isNaN(parseInt(index)) || parseInt(index) < 1) {

@@ -172,7 +172,7 @@ function MultiUploadFile() {
     queryString += "&FileNo=" + fileNo + "&FileName=" + encodeURI(fileName);
 
     //URL 路径
-    var URL = "/WF/Comm/Handler.ashx?DoType=EntityMultiAth_Upload";
+    var URL = basePath+"/WF/Comm/Handler.ashx?DoType=EntityMultiAth_Upload";
     if (plant != "CCFlow") {
         var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
@@ -189,6 +189,10 @@ function MultiUploadFile() {
         type: 'POST',
         data: formData,
         async: false,
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
         // 告诉jQuery不要去处理发送的数据
         processData: false,
         // 告诉jQuery不要去设置Content-Type请求头

@@ -20,35 +20,27 @@
             handler.AddPara("WorkID", GetQueryString("WorkID"));
             handler.AddPara("FID", GetQueryString("FID"));
             var data = handler.DoMethodReturnString("StartGuideFrms_Init");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                data: null,
-//                url: Handler + "?DoType=StartGuideFrms_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        document.getElementById("Msg").innerHTML = data;
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                document.getElementById("Msg").innerHTML = data;
+                return;
+            }
 
-                    var flowNo = GetQueryString("FK_Flow");
+            var flowNo = GetQueryString("FK_Flow");
 
-                    var frms = JSON.parse(data);
-                    var html = "<ul>";
-                    for (var i = 0; i < frms.length; i++) {
+            var frms = JSON.parse(data);
+            var html = "<ul>";
+            for (var i = 0; i < frms.length; i++) {
 
-                        var frm = frms[i];
+                var frm = frms[i];
 
-                        html += "<li>";
-                        html += "<a href='../MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + flowNo + "01&IsCheckGuide=1&Frms=" + frm.FK_Frm + "' >" + frm.GuanJianZiDuan + "</a>";
-                        html += "</li>";
-                    }
-                    html += "<ul>";
-                    document.getElementById("Msg").innerHTML = html;
-//                }
-//            });
+                html += "<li>";
+                html += "<a href='../MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + flowNo + "01&IsCheckGuide=1&Frms=" + frm.FK_Frm + "' >" + frm.GuanJianZiDuan + "</a>";
+                html += "</li>";
+            }
+            html += "<ul>";
+            document.getElementById("Msg").innerHTML = html;
+
         });
 
     </script>

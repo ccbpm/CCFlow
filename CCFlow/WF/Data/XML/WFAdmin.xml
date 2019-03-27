@@ -4,8 +4,8 @@
    
   
   <!--此处的Truck、Track的No不要改了，改的话，要搜索整个解决方案中CurrTab=Truck与CurrTab=Track的地方，全部改掉-->
-  <OneWork No="Frm" CH="查看表单"  UrlCCFlow="FrmGuide.htm" UrlJFlow="FrmGuide.htm" IsDefault="1" />
-  <OneWork No="Truck" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm" IsDefault="0" />
+  <OneWork No="Frm" CH="查看表单"  UrlCCFlow="FrmGuide.htm" UrlJFlow="FrmGuide.htm" IsDefault="0" />
+  <OneWork No="Truck" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm" IsDefault="1" />
   <OneWork No="TimeBase" CH="时间轴"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  IsDefault="0"/>
   <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm" IsDefault="0"/>
   

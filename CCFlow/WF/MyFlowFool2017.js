@@ -29,7 +29,7 @@ function GenerFoolFrm(wn) {
         var gf = Sys_GroupFields[i];
 
         //从表..
-        if (gf.CtrlType == 'Dtl' ) {
+        if (gf.CtrlType == 'Dtl') {
 
             html += "<tr>";
             html += "  <th colspan=4>" + gf.Lab + "</th>";
@@ -65,7 +65,7 @@ function GenerFoolFrm(wn) {
             html += "<tr>";
             html += "  <td colspan='4' >";
 
-            html += Ele_Attachment(flowData, gf,node);
+            html += Ele_Attachment(flowData, gf, node);
 
             html += "  </td>";
             html += "</tr>";
@@ -76,7 +76,7 @@ function GenerFoolFrm(wn) {
 
         //框架类的控件.
         if (gf.CtrlType == 'Frame') {
-           
+
             html += "<tr>";
             html += "  <th colspan=4>" + gf.Lab + "</th>";
             html += "</tr>";
@@ -179,7 +179,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             isDropTR = true;
             html += "<tr>";
-            if (attr.MyDataType != 4 && attr.UIContralType !="9")
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
                 html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
@@ -284,7 +284,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             var sfTable = new Entity("BP.Sys.SFTable");
             sfTable.SetPKVal(uiBindKey);
             var count = sfTable.RetrieveFromDBSources();
-            if (count!=0 && sfTable.CodeStruct == "1") {
+            if (count != 0 && sfTable.CodeStruct == "1") {
                 return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
             }
         }
@@ -312,7 +312,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         //超链接
         if (mapAttr.UIContralType == "9") {
             //URL @ 变量替换
-            var url = GetPara(mapAttr.AtPara, "Url").replace(/[$]/g,'@');
+            var url = GetPara(mapAttr.AtPara, "Url").replace(/[$]/g, '@');
             $.each(flowData.Sys_MapAttr, function (i, obj) {
                 if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
                     url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
@@ -338,7 +338,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
                 url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
 
             eleHtml = '<span ><a href="' + url + '" target="_blank">' + mapAttr.Name + '</a></span>';
-           
+
             return eleHtml;
         }
         if (mapAttr.UIHeight <= 40) //普通的文本框.
@@ -423,12 +423,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
 
-        var tip= "";
+        var tip = "";
         if (mapAttr.Tip != "" && mapAttr.Tip != null)
             tip = "<span style='color: #C0C0C0;'>(" + mapAttr.Tip + ")</span>";
 
 
-        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name +tip+"</label>";
+        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + tip + "</label>";
     }
 
     //枚举类型.
@@ -493,29 +493,39 @@ var mapAttrs = [];
 function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
     if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
         var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
-        cleanAll();
+        cleanAll(FK_MapData);
         setEnable(FK_MapData, KeyOfEn, selecedval);
     }
 }
 function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
     if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
         var selectVal = $(obj).val();
-        cleanAll();
+        cleanAll(FK_MapData);
         setEnable(FK_MapData, KeyOfEn, selectVal);
     }
 }
 
 //清空所有的设置
-function cleanAll() {
-    for (var i = 0; i < mapAttrs.length; i++) {
-        SetCtrlShow(mapAttrs[i]);
-        SetCtrlEnable(mapAttrs[i]);
-        CleanCtrlVal(mapAttrs[i]);
+function cleanAll(FK_MapData) {
+    //获取他的值
+    var FKMapAttrs = [];
+    var newMapAttrs = mapAttrs;
+    for (var i = 0; i < newMapAttrs.length; i++) {
+        if (FK_MapData == newMapAttrs[i][FK_MapData]) {
+            FKMapAttrs.push(newMapAttrs[i]["Data"]);
+            mapAttrs.pop(newMapAttrs[i]);
+        }
+    }
+    for (var i = 0; i < FKMapAttrs.length; i++) {
+        SetCtrlShow(FKMapAttrs[i]);
+        SetCtrlEnable(FKMapAttrs[i]);
+        CleanCtrlVal(FKMapAttrs[i]);
     }
 
 }
 //启用了显示与隐藏.
 function setEnable(FK_MapData, KeyOfEn, selectVal) {
+    var NDMapAttrs = [];
     var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
     var frmRB = new Entity("BP.Sys.FrmRB", pkval);
 
@@ -540,7 +550,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
             var key = kv[0];
             var value = kv[1];
             SetCtrlVal(key, value);
-            mapAttrs.push(key);
+            NDMapAttrs.push(key);
 
         }
     }
@@ -569,19 +579,19 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
             if (sta == 2) { //要设置为不可编辑.
                 SetCtrlShow(key);
                 SetCtrlUnEnable(key);
-                mapAttrs.push(key);
+                NDMapAttrs.push(key);
             }
 
             if (sta == 3) { //不可见.
                 SetCtrlHidden(key);
-                mapAttrs.push(key);
+                NDMapAttrs.push(key);
             }
 
         }
-
-
     }
 
+    if (NDMapAttrs.length > 0)
+        mapAttrs.push({ FK_MapData: FK_MapData, Data: NDMapAttrs });
 
 }
 
@@ -645,7 +655,7 @@ function SetCtrlHidden(key) {
     if (ctrl.length > 0) {
         ctrl.parent('tr').hide();
     }
-   
+
 
 }
 //设置显示?
@@ -685,7 +695,7 @@ function SetCtrlVal(key, value) {
         var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
         document.getElementById("RB_" + key + "_" + checkVal).checked = false;
         document.getElementById("RB_" + key + "_" + value).checked = true;
-       // ctrl.attr('checked', 'checked');
+        // ctrl.attr('checked', 'checked');
     }
 }
 
@@ -792,7 +802,7 @@ function Ele_FrmCheck(wf_node) {
 function Ele_SubFlow(wf_node) {
     //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
-    var h = wf_node.SF_H+1300;
+    var h = wf_node.SF_H + 1300;
 
     if (sta == 0)
         return $('');
@@ -813,7 +823,7 @@ function Ele_SubFlow(wf_node) {
     src += "&r=q" + paras;
     if (h == 0)
         h = 400;
-    var eleHtml =  "<iframe id=FSF" + wf_node.NodeID + " style='width:100%;height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+    var eleHtml = "<iframe id=FSF" + wf_node.NodeID + " style='width:100%;height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
 
     return eleHtml;
 }
@@ -892,14 +902,14 @@ function Ele_Attachment(flowData, gf, node) {
     url += "&FormType=" + node.FormType; //表单类型，累加表单，傻瓜表单，自由表单.
     var no = node.NodeID.toString().substring(node.NodeID.toString().length - 2);
     var IsStartNode = 0;
-    if(no=="01") 
-     url += "&IsStartNode=" + 1; //是否是开始节点
+    if (no == "01")
+        url += "&IsStartNode=" + 1; //是否是开始节点
 
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)
         isReadonly = true;
 
-        //创建附件描述信息.
+    //创建附件描述信息.
     var ath = new Entity("BP.Sys.FrmAttachment", gf.CtrlID);
 
     var athPK = gf.CtrlID;
@@ -908,7 +918,7 @@ function Ele_Attachment(flowData, gf, node) {
     var src = "";
 
     //这里的连接要取 FK_MapData的值.
-    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=ND" + node.NodeID + "&FromFrm="+ gf.FrmID + "&FK_FrmAttachment=" + athPK + url+"&M="+Math.random();
+    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=ND" + node.NodeID + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
@@ -972,7 +982,7 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
         }
         if (RBShowModel == 3)
         //<input  " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
-            rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' "+onclickEvent+" />&nbsp;" + obj.Lab + "</label>";
+            rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + " />&nbsp;" + obj.Lab + "</label>";
         else
             rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + "/>&nbsp;" + obj.Lab + "</label><br/>";
     });

@@ -733,7 +733,7 @@
                 case "Ath":
 
                     var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
-                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK;
+                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK + "&IsReadonly=1";
 
                     var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                     return "<tr><td colspan=4 id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
@@ -903,26 +903,7 @@
 
         var pageParam = {};
         pageParam.fk_mapdata = GetQueryString("FK_MapData")
-        //        //公共方法
-        //        function AjaxServiceGener(param, extUrl, callbackFunc, scope) {
-        //            $.ajax({
-        //                type: "GET", //使用GET或POST方法访问后台
-        //                dataType: "text", //返回json格式的数据
-        //                contentType: "application/json; charset=utf-8",
-        //                url: Handler + extUrl, //要访问的后台地址
-        //                data: param, //要发送的数据
-        //                async: true,
-        //                cache: false,
-        //                complete: function () { }, //AJAX请求完成时隐藏loading提示
-        //                error: function (XMLHttpRequest, errorThrown) {
-        //                    callback(XMLHttpRequest);
-        //                },
-        //                success: function (msg) { //msg为返回的数据，在这里做数据绑定
-        //                    var data = msg;
-        //                    callbackFunc(data, scope);
-        //                }
-        //            });
-        //        }
+       
         function ReLoad(data) {
             window.location.href = window.location.href;
         }
@@ -1181,9 +1162,6 @@
 
 
         function GFDoUp(refoid) {
-            //var url = '?DoType=GFDoUp&RefOID=' + refoid;
-            //AjaxServiceGener(null, url, ReLoad, this);
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("RefOID", refoid);
             var data = handler.DoMethodReturnString("Designer_GFDoUp");
@@ -1191,9 +1169,6 @@
 
         }
         function GFDoDown(refoid) {
-            //var url = '?DoType=GFDoDown&RefOID=' + refoid;
-            // AjaxServiceGener(null, url, ReLoad, this);
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("RefOID", refoid);
             var data = handler.DoMethodReturnString("Designer_GFDoDown");

@@ -22,6 +22,10 @@
             $.ajax({
                 type: 'post',
                 async: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 url: myurl,
                 dataType: 'html',
                 success: function (data) {

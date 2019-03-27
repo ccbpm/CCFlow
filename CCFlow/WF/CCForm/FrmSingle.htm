@@ -43,44 +43,42 @@
             handler.AddPara("FK_MapData", mapdata);
             handler.AddPara("OID", oid);
             var data = handler.DoMethodReturnString("FrmSingle_Init");
-//            Handler_AjaxQueryData(param, function (data) {
-                if (data.indexOf("err@") != -1) {
-                    $.messager.alert("错误", data, "error");
-                    return;
+            if (data.indexOf("err@") != -1) {
+                $.messager.alert("错误", data, "error");
+                return;
+            }
+
+            mdinfo = eval('(' + data + ')');
+
+            if (mdinfo.IsExist == "0") {
+                isEdit = "1";
+            }
+
+            if (isEdit != "1") {
+                $(document.body).layout("remove", "north");
+            }
+
+            oid = mdinfo.OID;
+
+            var url = "./Frm.aspx?FK_MapData=" + mapdata + "&IsEdit=" + isEdit + "&IsPrint=" + isPrint + "&OID=" + oid + "&UserNo=" + mdinfo.UserNo + "&SID=" + mdinfo.SID + "&IsLoadData=" + isLoadData;
+            var se = location.search.substr(1).split('&');
+            var passed = "fk_mapdata=isedit=isprint=oid=userno=sid=isloaddata=m=";
+            var si;
+
+            for (var i = 0; i < se.length; i++) {
+                si = se[i].split('=');
+                if (si.length < 2) {
+                    continue;
                 }
 
-                mdinfo = eval('(' + data + ')');
-
-                if (mdinfo.IsExist == "0") {
-                    isEdit = "1";
+                if (passed.indexOf(si[0].toLowerCase() + '=') == -1) {
+                    url += '&' + se[i];
                 }
+            }
 
-                if (isEdit != "1") {
-                    $(document.body).layout("remove", "north");
-                }
+            url += "&m=" + Math.random();
 
-                oid = mdinfo.OID;
-
-                var url = "./Frm.aspx?FK_MapData=" + mapdata + "&IsEdit=" + isEdit + "&IsPrint=" + isPrint + "&OID=" + oid + "&UserNo=" + mdinfo.UserNo + "&SID=" + mdinfo.SID + "&IsLoadData=" + isLoadData;
-                var se = location.search.substr(1).split('&');
-                var passed = "fk_mapdata=isedit=isprint=oid=userno=sid=isloaddata=m=";
-                var si;
-
-                for (var i = 0; i < se.length; i++) {
-                    si = se[i].split('=');
-                    if (si.length < 2) {
-                        continue;
-                    }
-
-                    if (passed.indexOf(si[0].toLowerCase() + '=') == -1) {
-                        url += '&' + se[i];
-                    }
-                }
-
-                url += "&m=" + Math.random();
-
-                document.getElementById("frmMain").src = url;
-//            }, this);
+            document.getElementById("frmMain").src = url;
         });
 
         function SaveFrm() {

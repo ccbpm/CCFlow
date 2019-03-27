@@ -339,6 +339,10 @@
             $.ajax({ 
                 url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
                 processData: false,
@@ -432,58 +436,46 @@
             handler.AddPara("FK_SFDBSrc", FK_SFDBSrc);
             var data = handler.DoMethodReturnString("Imp_Src_Step2_Init");
 
-//            $.ajax({
-//                type: 'GET',
-//                async: true,
-//                url: Handler + "?DoType=Imp_Src_Step2_Init&FK_SFDBSrc=" + FK_SFDBSrc,
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    //转化成json.
-                    data = JSON.parse(data);
-                    $('#srclayout').html("");
-                    if (data) {
-                        $('#srclayout').layout({
-                            height:700,
-                            fit: true
+            //转化成json.
+            data = JSON.parse(data);
+            $('#srclayout').html("");
+            if (data) {
+                $('#srclayout').layout({
+                    height:700,
+                    fit: true
+                });
+                //1、左侧列表
+                $('#srclayout').layout('add',{
+                                        region: 'west',
+                                        width:200,
+                                        title: '选择 ' + FK_SFDBSrc + ' 数据表/视图',
+                                        split: true,                                           
+                                    });
+                var table = data,
+                    ul = '<ul class=\'ulcols\'>';
+                table.forEach(function(item){
+                                ul += "<li><a id='" + item["NO"] + "' href='#' onclick=\"GetColumns('" + item["NO"] + "')\" >" + item["NAME"] + "</a></li>";
                         });
-                        //1、左侧列表
-                        $('#srclayout').layout('add',{
-                                                region: 'west',
-                                                width:200,
-                                                title: '选择 ' + FK_SFDBSrc + ' 数据表/视图',
-                                                split: true,                                           
-                                            });
-                        var table = data,
-                            ul = '<ul class=\'ulcols\'>';
-                        table.forEach(function(item){
-                                    //var url = "?FK_MapData=" + frmID + "&FK_SFDBSrc=" + srcName + "&STable=" + item["No"];
-                                    /*if (item["No"] == GetQueryString("STable"))
-                                        ul += "<li><font color=red><b>" + item["Name"] + "</font></b></li>";
-                                    else*/
-                                        ul += "<li><a id='" + item["NO"] + "' href='#' onclick=\"GetColumns('" + item["NO"] + "')\" >" + item["NAME"] + "</a></li>";
-                                });
                                 
-                        ul += '</ul>';
-                        $('#srclayout').layout('panel','west').append(ul);
+                ul += '</ul>';
+                $('#srclayout').layout('panel','west').append(ul);
 
-                        //2、右侧
-                        $('#srclayout').layout('add',{
-                                                region: 'center',
-                                                title: '第2步：请选择要导入的数据列（ ' + frmID + ' ）',
-                                                style:'padding:5px;'                                              
-                                            });
-                        //填数据(只有个表头)
-                        Table_Cols(data);
+                //2、右侧
+                $('#srclayout').layout('add',{
+                                        region: 'center',
+                                        title: '第2步：请选择要导入的数据列（ ' + frmID + ' ）',
+                                        style:'padding:5px;'                                              
+                                    });
+                //填数据(只有个表头)
+                Table_Cols(data);
 
-					}
-//                }
-//            });
+			}
+
         }
 
         //2.2 点击表名获取表下的所有的列
@@ -531,24 +523,24 @@
                 var attrs = data.MapAttrs;
                 tableColumns.forEach(function (item,index) {
 
-                            tr = "";
-                            tr += "<tr>";
-                            tr += "<td nowrap=''>" + item.colid + "</td>";
-                            var disabletag = "";
-                            if (attrs && attrs.length > 0) {
-                                if ($.grep(attrs,function(attr){
-                                        return attr.KeyOfEn == item.No;
-                                }).length > 0) {
-                                    disabletag = "disabled";
-                                }
-                            }
-                            tr += "<td><input " + disabletag + " id='CB_Col_" + item.No + "' type='checkbox' name='" + item.No + "' /><label for='CB_Col_" + item.No + "'>" + item.No + "</label></td>";
-                            tr += "<td nowrap=''>" + item.Name + "</td>";
-                            tr += "<td nowrap=''>" + item.DBType + "</td>";
-                            tr += "<td class='TDNum'>" + item.DBLength + "</td>";
-                            tr += "</tr>";
-                            tableHtml += tr;
-                        });
+                    tr = "";
+                    tr += "<tr>";
+                    tr += "<td nowrap=''>" + item.colid + "</td>";
+                    var disabletag = "";
+                    if (attrs && attrs.length > 0) {
+                        if ($.grep(attrs,function(attr){
+                                return attr.KeyOfEn == item.No;
+                        }).length > 0) {
+                            disabletag = "disabled";
+                        }
+                    }
+                    tr += "<td><input " + disabletag + " id='CB_Col_" + item.No + "' type='checkbox' name='" + item.No + "' /><label for='CB_Col_" + item.No + "'>" + item.No + "</label></td>";
+                    tr += "<td nowrap=''>" + item.Name + "</td>";
+                    tr += "<td nowrap=''>" + item.DBType + "</td>";
+                    tr += "<td class='TDNum'>" + item.DBLength + "</td>";
+                    tr += "</tr>";
+                    tableHtml += tr;
+                });
             }
             tableHtml += "</table>";
             var $center = $('#srclayout').layout('panel','center');
@@ -560,9 +552,7 @@
             }
         }
 
-        //
         function Step3(){
-            //&FK_MapData=ND18506&FK_SFDBSrc=NKApp&STable=LA_Node&SColumns=KZCS,ZDMS,
             var chk_value = [];
             //获取所有选中的checkbox 字段用，拼接
             $('#srclayout input:checked').each(function(){ 
@@ -578,73 +568,70 @@
             handler.AddPara("SColumns", SColumns);
             var data = handler.DoMethodReturnString("Imp_Src_Step3_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    //转化成json.
-                    data = JSON.parse(data);
+            //转化成json.
+            data = JSON.parse(data);
                     
-                    var tableHtml = "",
-                        impFields = "",
-                        Columns = data.COLUMNS,
-                        EnumsDataType = data.ENUMSDATATYPE,
-                        EnumsLGType = data.ENUMSLGTYPE,
-                        tr = "";
+            var tableHtml = "",
+                impFields = "",
+                Columns = data.COLUMNS,
+                EnumsDataType = data.ENUMSDATATYPE,
+                EnumsLGType = data.ENUMSLGTYPE,
+                tr = "";
 
-                    var optionsEnumsLGType = "",
-                        optionsEnumsDataType;
-                    /*EnumsDataType.forEach(function(item){
-                        optionsEnumsDataType += "<option value='" + item.INTKEY + "'>" + item.LAB + "</option>";
-                    });*/
-                    EnumsLGType.forEach(function(item){
-                        optionsEnumsLGType += "<option value='" + item.INTKEY + "'>" + item.LAB + "</option>";
+            var optionsEnumsLGType = "",
+                optionsEnumsDataType;
+            EnumsLGType.forEach(function(item){
+                optionsEnumsLGType += "<option value='" + item.INTKEY + "'>" + item.LAB + "</option>";
+            });
+
+            tableHtml += "<table class='Table' cellpadding='2' cellspacing='2'>";
+            tableHtml += "<tr><td class='GroupTitle' nowrap=''>序</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>字段名</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>中文描述</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>数据类型</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>逻辑类型</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>绑定值(双击选择)</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>最大长度</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>顺序</td>";
+            tableHtml += "</tr>";
+
+            var dic = {"nvarchar":1,"int":2,"smallint":2,"float":3,"bit":4,"double":5,"date":6,"datetime":7,"money":8};
+
+            if (Columns.length > 0) {
+                Columns.forEach(function(item,index){
+                    tr = "";
+                    tr += "<tr>";
+                    tr += "<td class='Idx' nowrap=''>" + index + "</td>";
+                    tr += "<td nowrap=''>" + item.NO + "</td>";
+                    tr += "<td><input name='TB_Desc_" + item.NO + "' type='text' value='" + (item.NAME||item.NO) + "' size='20' id='TB_Desc_" + item.NO + "' /></td>";
+                    tr += "<td><select name='DDL_DBType_" + item.NO + "' id='DDL_DBType_" + item.NO + "'>";
+	                tr += _GetOptionsEnumsDataType(EnumsDataType,dic[item.DBTYPE]);
+                    tr += "</select></td>";
+                    tr += "<td><select name='DDL_LogicType_" + item.NO + "' id='DDL_LogicType_" + item.NO + "'>";
+	                tr += optionsEnumsLGType;
+                    tr += "</select></td>";
+                    tr += "<td><input name='TB_BindKey_" + item.NO + "' type='text' size='30' id='TB_BindKey_" + item.NO + "' ondblclick='OpenSelectBindKey(this)' /></td>";
+                    tr += "<td><input name='TB_Len_" + item.NO + "' type='text' value='" + item.DBLENGTH + "' size='5' id='TB_Len_" + item.NO + "' /></td>";
+                    tr += "<td style='text-align:center' nowrap=''><a href='javascript:void(0)' onclick='up(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-up'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-down'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
+                    tr += "</td>";
+                    tr += "</tr>";
+                    tableHtml += tr;
+                    impFields += item.NO + ","
+
                     });
+            }
+            tableHtml += "</table>";
 
-                    tableHtml += "<table class='Table' cellpadding='2' cellspacing='2'>";
-                    tableHtml += "<tr><td class='GroupTitle' nowrap=''>序</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>字段名</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>中文描述</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>数据类型</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>逻辑类型</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>绑定值(双击选择)</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>最大长度</td>";
-                    tableHtml += "<td class='GroupTitle' nowrap=''>顺序</td>";
-                    tableHtml += "</tr>";
-
-                    var dic = {"nvarchar":1,"int":2,"smallint":2,"float":3,"bit":4,"double":5,"date":6,"datetime":7,"money":8};
-
-                    if (Columns.length > 0) {
-                        Columns.forEach(function(item,index){
-                                            tr = "";
-                                            tr += "<tr>";
-                                            tr += "<td class='Idx' nowrap=''>" + index + "</td>";
-                                            tr += "<td nowrap=''>" + item.NO + "</td>";
-                                            tr += "<td><input name='TB_Desc_" + item.NO + "' type='text' value='" + (item.NAME||item.NO) + "' size='20' id='TB_Desc_" + item.NO + "' /></td>";
-                                            tr += "<td><select name='DDL_DBType_" + item.NO + "' id='DDL_DBType_" + item.NO + "'>";
-	                                        tr += _GetOptionsEnumsDataType(EnumsDataType,dic[item.DBTYPE]);
-                                            tr += "</select></td>";
-                                            tr += "<td><select name='DDL_LogicType_" + item.NO + "' id='DDL_LogicType_" + item.NO + "'>";
-	                                        tr += optionsEnumsLGType;
-                                            tr += "</select></td>";
-                                            tr += "<td><input name='TB_BindKey_" + item.NO + "' type='text' size='30' id='TB_BindKey_" + item.NO + "' ondblclick='OpenSelectBindKey(this)' /></td>";
-                                            tr += "<td><input name='TB_Len_" + item.NO + "' type='text' value='" + item.DBLENGTH + "' size='5' id='TB_Len_" + item.NO + "' /></td>";
-                                            tr += "<td style='text-align:center' nowrap=''><a href='javascript:void(0)' onclick='up(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-up'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-down'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
-                                            tr += "</td>";
-                                            tr += "</tr>";
-                                            tableHtml += tr;
-                                            impFields += item.NO + ","
-
-                                            });
-                    }
-                    tableHtml += "</table>";
-
-                    $('#srclayout').html("").html(tableHtml);
-                    var hidImpFields = "<input type='hidden' id-'hidImpFields' name='hidImpFields' value='" + impFields +"' />";
-                    var btnNext = "<input type='button' name='btnNext' value='导入字段 生成表单 ' onclick='Save_Click();' />";
-                    var btnPrev = "<input type='button' id='btnPrev' value='上一步 ' />";
-                    $('#srclayout').append(hidImpFields).append(btnNext).append(btnPrev);
+            $('#srclayout').html("").html(tableHtml);
+            var hidImpFields = "<input type='hidden' id-'hidImpFields' name='hidImpFields' value='" + impFields +"' />";
+            var btnNext = "<input type='button' name='btnNext' value='导入字段 生成表单 ' onclick='Save_Click();' />";
+            var btnPrev = "<input type='button' id='btnPrev' value='上一步 ' />";
+            $('#srclayout').append(hidImpFields).append(btnNext).append(btnPrev);
         }
 
         //构建 Options
@@ -667,23 +654,15 @@
             handler.AddPara("FK_MapData", frmID);
             handler.AddFormData();
             var data = handler.DoMethodReturnString("Imp_Src_Step3_Save");
-//            $.ajax({
-//                type: 'GET',
-//                async: true,
-//                url: Handler + "?DoType=Imp_Src_Step3_Save&FK_MapData=" + frmID + "&" + $('#formCC').serialize() ,
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            //转化成json.
+            data = JSON.parse(data);
+            alert(data);
 
-                    //转化成json.
-                    data = JSON.parse(data);
-                    alert(data);
-//                }
-//            });
         }
 
         

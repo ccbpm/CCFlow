@@ -49,26 +49,6 @@
             $('#saveBtn').attr('disabled', true);
         }
 
-//        function saveSignatureBack() {
-//            var nodeid = GetQueryString("FK_Node");
-//            var fk_flow = GetQueryString("FK_Flow");
-//            var workid = GetQueryString("WorkID");
-//            $('#signature').empty();
-//            var Pic = $('.js-signature').eq(0).jqSignature('getDataURL');
-//            Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
-//            // Sending the image data to Server
-//            $.ajax({
-//                type: 'POST',
-//                url: 'Save_Picture.aspx/UploadPic',
-//                data: '{ "imageData" : "' + Pic + '","WorkID":"' + workid + '","FK_Node":"' + nodeid + '","FK_Flow":"' + fk_flow + '" }',
-//                contentType: 'application/json; charset=utf-8',
-//                dataType: 'json',
-//                success: function (msg) {
-//                    alert("图片上传成功。");
-//                   // window.close();
-//                }
-//            });
-//        }
 
         function saveSignature() {
 
@@ -83,7 +63,11 @@
             $.ajax({
                 type: 'POST',
                 url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName,
-                data:form,
+                data: form,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 processData: false,
                 contentType: false,
                 success: function (data) {

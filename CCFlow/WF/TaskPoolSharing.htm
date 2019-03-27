@@ -347,23 +347,13 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("WorkID", workid);
             var data = handler.DoMethodReturnString("TaskPoolSharing_Apply");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=TaskPoolSharing_Apply&WorkID=" + workid + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    var newWindow = window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-                    newWindow.focus();
-
-//                }
-//            });
+            var newWindow = window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
 
             var doUrl = '../WF/Do.aspx?ActionType=DoAppTask&WorkID=' + workid;
 

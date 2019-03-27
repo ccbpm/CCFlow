@@ -67,6 +67,10 @@ ChangeNodeManager.prototype = {
         $.ajax({
             type: 'POST',
             url: Handler,
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             data: { action: 'Node_ChangeRunModel', FK_Node: nodeID, RunModel: runModel },
             success: function (jsonData) {
 

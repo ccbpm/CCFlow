@@ -147,58 +147,26 @@
             $("#Msg").html("正在保存,请稍后......");
 
             var str = "";
-//            var frmData = $("#cc").serialize();
-//            var myurl = Handler + "?DoType=TBFullCtrlDtl_Save&MyPK=" + GetQueryString("MyPK") + "&FK_MapData=" + GetQueryString('FK_MapData') + "&Tag=" + str + "&m=" + Math.random();
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
             handler.AddPara("MyPK", GetQueryString("MyPK"));
             handler.AddPara("Tag", str);
             handler.AddFormData();
             var data = handler.DoMethodReturnString("TBFullCtrlDtl_Save");
-//            $.ajax({
-//                data: frmData,
-//                type: 'post',
-//                async: true,
-//                url: myurl,
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf('err@') != -1) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
 
-                    if (data.indexOf('err@') != -1) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        return;
-                    }
+            alert(data);
 
-                    alert(data);
+            var mypk = GetQueryString('MyPK');
+            var url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
+            window.location.href = url;
+            return;
 
-                    var mypk = GetQueryString('MyPK');
-                    var url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
-                    window.location.href = url;
-                    return;
-//                },
-//                error: function (data) {
-//                    alert(data);
-//                }
-//            });
         }
 
-//        function Delete() {
-
-//            if (window.confirm('您确定要删除吗？') == false)
-//                return false;
-
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=TBFullCtrl_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
-//                    alert(data);
-//                    window.location.href = window.location.href;
-//                    return;
-//                }
-//            });
-//        }
     </script>
     </form>
 </body>

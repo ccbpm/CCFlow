@@ -33,6 +33,9 @@
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
+                if (plant == 'CCFlow') {
+                    url += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                }
                 window.location.href = url;
                 $("#Msg").html("");
                 return;

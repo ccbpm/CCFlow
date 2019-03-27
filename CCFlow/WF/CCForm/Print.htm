@@ -100,6 +100,10 @@
                     url: "../WorkOpt/GridData.ashx",
                     data: json_data,
                     async: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     beforeSend: function (XMLHttpRequest, fk_mapExt) {
                         //ShowLoading();
                     },
@@ -127,6 +131,10 @@
                                 url: "../WorkOpt/GridData.ashx",
                                 data: json_data,
                                 async: true,
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                crossDomain: true,
                                 beforeSend: function (XMLHttpRequest, fk_mapExt) {
                                     //ShowLoading();
                                 },

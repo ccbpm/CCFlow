@@ -175,24 +175,16 @@
             handler.AddUrlData();
             handler.AddPara("PKs", vals);
             var data = handler.DoMethodReturnString("DtlOpt_Add");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: url,
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            alert(data);
+            if (isReturnToDtl == false)
+                return;
+            Back(); //返回。
 
-                    alert(data);
-                    if (isReturnToDtl == false)
-                        return;
-                    Back(); //返回。
-//                }
-//            });
         }
 
         function Back() {

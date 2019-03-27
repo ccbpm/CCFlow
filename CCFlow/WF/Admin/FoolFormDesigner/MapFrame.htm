@@ -42,30 +42,20 @@
 
         function Save() {
             var CheckBoxIDs = GenerCheckIDs(); //获得所有的checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-//            var frmData = $("#cc").serialize();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
             handler.AddPara("CheckBoxIDs", CheckBoxIDs);
             handler.AddFormData();
             var data = handler.DoMethodReturnString("MapFrame_Save");
-//            $.ajax({
-//                data: frmData,
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=MapFrame_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&CheckBoxIDs=" + CheckBoxIDs + "m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+ 
+            alert(data);
+            window.close();
 
-                    //window.location.href = 'MapFrame.htm?FK_MapData=' + GetQueryString("FK_MapData") + "&MyPK=" + data + "&M=" + Math.random();
-                    alert(data);
-                    window.close();
-//                }
-//            });
         }
         //保存并关闭
         function SaveAndClose() {

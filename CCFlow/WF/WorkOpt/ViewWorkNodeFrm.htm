@@ -1205,37 +1205,29 @@
         handler.AddJson(pageData);
         var data = handler.DoMethodReturnString("ViewWorkNodeFrm");
 
-//        $.ajax({
-//            type: 'post',
-//            async: true,
-//            data: pageData,
-//            url: Handler + "?DoType=ViewWorkNodeFrm&&m=" + Math.random(),
-//            dataType: 'html',
-//            success: function(data) {
-                jsonStr = data;
-                try {
-                    var datajson = JSON.parse(data);
-                }
-                catch(err){
-                    alert("ViewWorkNodeFrm转换JSON失败:" + datajson);
-                    return;
-                }
-                //解析表单
-                InitForm();
+        jsonStr = data;
+        try {
+            var datajson = JSON.parse(data);
+        }
+        catch(err){
+            alert("ViewWorkNodeFrm转换JSON失败:" + datajson);
+            return;
+        }
+        //解析表单
+        InitForm();
 
-                showNoticeInfo();
-                setFormEleDisabled();
+        showNoticeInfo();
+        setFormEleDisabled();
 
-                $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
-                $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4');
-                $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');
+        $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
+        $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4');
+        $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');
 
 
-                if (pageData.IframeId != undefined) {
-                    setParentIframeHeight(pageData.IframeId);
-                }
-//            }
-//        });
+        if (pageData.IframeId != undefined) {
+            setParentIframeHeight(pageData.IframeId);
+        }
+
     }
 
 

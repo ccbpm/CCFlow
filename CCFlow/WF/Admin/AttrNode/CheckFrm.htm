@@ -29,18 +29,16 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddPara("FK_MapData", frmID);
             var data = handler.DoMethodReturnString("CheckFrm_Check");
-//            Handler_AjaxQueryData(param, function (data) {
-                if (typeof data == "String") {
-                    if (data.indexOf("err@") != -1) {
-                        $.messager.alert("错误", data, "error");
-                        return;
-                    }
+            if (typeof data == "String") {
+                if (data.indexOf("err@") != -1) {
+                    $.messager.alert("错误", data, "error");
+                    return;
                 }
+            }
 
 
-                $("#result").show();
-                $("#result").after(data);
-//            }, this);
+            $("#result").show();
+            $("#result").after(data);
         }
     </script>
 </head>

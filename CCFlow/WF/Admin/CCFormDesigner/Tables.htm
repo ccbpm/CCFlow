@@ -72,24 +72,16 @@
             handler.AddPara("No", no);
             var data = handler.DoMethodReturnString("Tables_Delete");
 
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=Tables_Delete&No=" + no + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
+            $("#Msg").html(data);
 
-                    $("#Msg").html(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            alert(data);
+            window.location.href = window.location.href;
 
-                    alert(data);
-                    window.location.href = window.location.href;
-//                }
-//            });
         }
 
         function Edit(no) {

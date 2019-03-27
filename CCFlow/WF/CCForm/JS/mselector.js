@@ -87,6 +87,10 @@
                 async: false,
                 url: url + "&t=" + new Date().getTime(),
                 dataType: 'html',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 success: function (data) {
                     if (data.indexOf("err@") != -1) {
                         alert(data);

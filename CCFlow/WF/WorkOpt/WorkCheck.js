@@ -506,10 +506,7 @@ function GetNewUploadedAths(files) {
 
 //执行保存
 function SaveDtlData() {
-    //  if (isChange == true) {
     SaveWorkCheck();
-    //    isChange = false;
-    //}
 }
 
 //为判断是否增加电子签章所用.

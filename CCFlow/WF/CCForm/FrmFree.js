@@ -88,7 +88,7 @@ function GenerFreeFrm(mapData, frmData) {
                     detailExt[ext.DtlNo] = [];
                 }
                 detailExt[ext.DtlNo].push(ext);
-                $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
+                $(":input[name=TB_" + ext.AttrOfOper + "]").attr("readonly", true);
             }
         }
     });

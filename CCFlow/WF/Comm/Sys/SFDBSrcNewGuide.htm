@@ -15,11 +15,7 @@
         //页面启动函数.
         $(function () {
 
-            //$("#Msg").html("正在加载,请稍后......");
-
             InitPage();
-
-            //$("#Msg").html("");
             
         });
 
@@ -43,51 +39,45 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
             var data = handler.DoMethodReturnString("SFDBSrcNewGuide_GetList");
-//            $.ajax({
-//                type: 'GET',
-//                async: true,
-//                url: Handler + "?DoType=SFDBSrcNewGuide_GetList",
-//                dataType: 'html',
-//                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
 
-                    data = JSON.parse(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    $(".panel-title").html("数据源管理");
-                    var table = "<table id='Table1' class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>";
-                    table += "<tr>"
-                    table += "<td class='GroupTitle' style='text-align: center; width: 40px;'>序</td>";
-                    table += "<td class='GroupTitle' style='width: 120px'>编号</td>";
-                    table += "<td class='GroupTitle' style='width: 120px'>名称</td>";
-                    table += "<td class='GroupTitle' style='width: 100px'>类型</td>";
-                    table += "<td class='GroupTitle' nowrap>操作</td>";
-                    table += "</tr>";
-                    table += "</table>";
-                    $("#main").append(table);
+            data = JSON.parse(data);
 
-                    for (var i = 0, len = data.length; i < len; i++) {
+            $(".panel-title").html("数据源管理");
+            var table = "<table id='Table1' class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>";
+            table += "<tr>"
+            table += "<td class='GroupTitle' style='text-align: center; width: 40px;'>序</td>";
+            table += "<td class='GroupTitle' style='width: 120px'>编号</td>";
+            table += "<td class='GroupTitle' style='width: 120px'>名称</td>";
+            table += "<td class='GroupTitle' style='width: 100px'>类型</td>";
+            table += "<td class='GroupTitle' nowrap>操作</td>";
+            table += "</tr>";
+            table += "</table>";
+            $("#main").append(table);
 
-                        var newRow = "<tr>";
-                        newRow += "<td class='Idx' nowrap='nowrap'>" + (i + 1) + "</td>";
-                        newRow += "<td nowrap='nowrap'>" + data[i].No + "</td>";
-                        newRow += "<td nowrap='nowrap'>" + data[i].Name + "</td>";
-                        newRow += "<td nowrap='nowrap'>" + data[i].DBSrcType + "</td>";
-                        if (data[i].No != "local") {
-                            newRow += "<td valign='top' nowrap=''><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=Edit&amp;No=" + data[i].No + "&amp;t=20170823103107827251' data-options='plain:false,iconCls:'icon-edit',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-edit l-btn-icon-left'>修改</span></span></a>&nbsp;</td>";
-                        }
-                        newRow += "</tr>";
+            for (var i = 0, len = data.length; i < len; i++) {
 
-                        $("#Table1 tr:last").after(newRow);
-                    }
+                var newRow = "<tr>";
+                newRow += "<td class='Idx' nowrap='nowrap'>" + (i + 1) + "</td>";
+                newRow += "<td nowrap='nowrap'>" + data[i].No + "</td>";
+                newRow += "<td nowrap='nowrap'>" + data[i].Name + "</td>";
+                newRow += "<td nowrap='nowrap'>" + data[i].DBSrcType + "</td>";
+                if (data[i].No != "local") {
+                    newRow += "<td valign='top' nowrap=''><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=Edit&amp;No=" + data[i].No + "&amp;t=20170823103107827251' data-options='plain:false,iconCls:'icon-edit',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-edit l-btn-icon-left'>修改</span></span></a>&nbsp;</td>";
+                }
+                newRow += "</tr>";
 
-                    var btn = "<br/><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=New' data-options='plain:false,iconCls:'icon-new',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-new l-btn-icon-left'>新建数据源</span></span></a>";
-                    $("#main").append(btn);
-//                }
-//            });
+                $("#Table1 tr:last").after(newRow);
+            }
+
+            var btn = "<br/><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=New' data-options='plain:false,iconCls:'icon-new',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-new l-btn-icon-left'>新建数据源</span></span></a>";
+            $("#main").append(btn);
+
         }
 
         //TODO 1、下拉框
@@ -167,48 +157,41 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
             handler.AddPara("No", no);
             var data = handler.DoMethodReturnString("SFDBSrcNewGuide_LoadSrc");
-//            $.ajax({
-//                type: 'GET',
-//                async: true,
-//                url: hUrl,
-//                dataType: 'html',
-//                success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    data = JSON.parse(data);
+            data = JSON.parse(data);
 
-                    //01.设置枚举下拉框
-                    var DBSrcType = data.DBSrcType;
-                    for (var i = 0, len = DBSrcType.length; i < len; i++) {
+            //01.设置枚举下拉框
+            var DBSrcType = data.DBSrcType;
+            for (var i = 0, len = DBSrcType.length; i < len; i++) {
 
-                        var val = DBSrcType[i].IntKey;
-                        var text = DBSrcType[i].Lab;
-                        if (val == 0) {
-                            continue;
-                        }
-                        $("#DDL_DBSrcType").append("<option value='" + val + "'>" + text + "</option>");
-                    }
-                    //$("#DDL_DBSrcType").val(2);
+                var val = DBSrcType[i].IntKey;
+                var text = DBSrcType[i].Lab;
+                if (val == 0) {
+                    continue;
+                }
+                $("#DDL_DBSrcType").append("<option value='" + val + "'>" + text + "</option>");
+            }
+            //$("#DDL_DBSrcType").val(2);
 
-                    //02.装载数据
-                    var SFDBSrc = data.SFDBSrc[0];
-                    $("#TB_No").val(SFDBSrc.No);
-                    if (GetQueryString("DoType") == "Edit") {
-                        $("#TB_No").attr("readonly", "readonly");
-                    }
-                    $("#TB_Name").val(SFDBSrc.Name);
-                    $("#DDL_DBSrcType").val(SFDBSrc.DBSrcType);
-                    $("#TB_UserID").val(SFDBSrc.UserID);
-                    $("#TB_PWword").val(SFDBSrc.Password);
-                    $("#TB_IP").val(SFDBSrc.IP);
-                    $("#TB_DBName").val(SFDBSrc.DBName);
+            //02.装载数据
+            var SFDBSrc = data.SFDBSrc[0];
+            $("#TB_No").val(SFDBSrc.No);
+            if (GetQueryString("DoType") == "Edit") {
+                $("#TB_No").attr("readonly", "readonly");
+            }
+            $("#TB_Name").val(SFDBSrc.Name);
+            $("#DDL_DBSrcType").val(SFDBSrc.DBSrcType);
+            $("#TB_UserID").val(SFDBSrc.UserID);
+            $("#TB_PWword").val(SFDBSrc.Password);
+            $("#TB_IP").val(SFDBSrc.IP);
+            $("#TB_DBName").val(SFDBSrc.DBName);
 
-//                }
-//            });
+
 
             //3、表单提交绑定验证
 
@@ -238,24 +221,14 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
             handler.AddPara("No", no);
             var data = handler.DoMethodReturnString("SFDBSrcNewGuide_DelSrc");
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
 
-//            $.ajax({
-//                data: null,
-//                type: 'GET',
-//                async: true,
-//                url: Handler + "?DoType=SFDBSrcNewGuide_DelSrc&No=" + no + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
+            window.location.href = "SFDBSrcNewGuide.htm";
+            return;
 
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    window.location.href = "SFDBSrcNewGuide.htm";
-                    return;
-//                }
-//            });
         }
 
     </script>

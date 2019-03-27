@@ -32,6 +32,7 @@
     <script src="./Scripts/config.js" type="text/javascript"></script>  
     <script src="./Comm/Gener.js" type="text/javascript"></script>   
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="AppClassic/comm.js" type="text/javascript"></script>
     <script type="text/javascript">
         function GroupBarClick(groupName) {
 
@@ -73,14 +74,14 @@
             self.moveTo(0, 0);
             self.resizeTo(scrWidth, scrHeight);
             self.focus();
-            return;
-            layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: '会签', 
-				  area:['96%','90%'],
-				  content: url
-				});
+            var loop = setInterval(function () {
+                if (self.closed) {
+                    clearInterval(loop);
+                    InitPage();
+                    InitHomeCount();
+                }
+            }, 1);   
+           
         }
 
 

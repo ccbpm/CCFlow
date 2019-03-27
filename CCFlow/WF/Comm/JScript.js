@@ -637,6 +637,10 @@ function SigantureAct(ele, UserNo, FK_MapData, KeyOfEn, WorkID) {
             type: "get",
             url: localHref + "/WF/Comm/HelperOfSiganture.aspx",
             data: json_data,
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             beforeSend: function (XMLHttpRequest) {
                 //ShowLoading();
             },

@@ -16,22 +16,6 @@ function Demo_Depts() {
 
 }
 
-/**
- * callback - 实际调用GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");实现绑定下拉框, ajax返回的json格式要匹配[{ No : "", Name : "" }]
- */
-function CommonHandler(methodName, callback) {
-	$.ajax({
-		type: 'post',
-		async: true,
-		url: Handler + "?DoType=" + methodName + "&t=" + new Date().getTime(),
-		dataType: 'html',
-		success: function (data) {
-			if (typeof callback == "function") {
-				callback.call("", data);
-			}
-		}
-	});
-}
 
 function XingChengLeiXing() {
 	return [{

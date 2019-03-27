@@ -94,9 +94,10 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     if (projectName == "WF") {
         projectName = "";
     }
+    //@yuanlina
     if (plant == "JFlow")
         projectName = basePath;
-    var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
+    var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
 
     if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
         ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", false, function () { }, null, function () {
@@ -1512,10 +1513,7 @@ function GenerWorkNode() {
     var local = window.location.href;
 
     var frm = document.forms["divCCForm"];
-    if (plant == "CCFlow")
-        frm.action = "MyFlow.ashx?method=login";
-    else
-        frm.action = MyFlow + "?method=login";
+
 
     //单表单加载后执行.
     CCFormLoaded();

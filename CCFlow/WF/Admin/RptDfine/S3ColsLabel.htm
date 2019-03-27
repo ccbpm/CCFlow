@@ -134,22 +134,14 @@
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("Orders", str);
             var data = handler.DoMethodReturnString("S3ColsLabel_Save");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=S3ColsLabel_Save&FK_Flow=" + fk_flow + "&RptNo=" + rptNo + "&m=" + Math.random(),
-//                dataType: 'html',
-//                data: { 'Orders': str },
-//                success: function (data) {
-                    alert(data)
-                    if (window.opener != null) {
-                        //刷新父窗口
-                        window.opener.location.reload();
-                    }
+            alert(data)
+            if (window.opener != null) {
+                //刷新父窗口
+                window.opener.location.reload();
+            }
 
-                    window.close();
-//                }
-//            });
+            window.close();
+
         }
 
         //设置字段宽度

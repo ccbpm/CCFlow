@@ -36,14 +36,6 @@
             handler.AddPara("ToNodeID", toNodeID);
             var data = handler.DoMethodReturnString("CondBySQLTemplate_Init");
 
-            //初始化表格.
-            //            $.ajax({
-            //                type: 'post',
-            //                async: true,
-            //                url: Handler + "?DoType=CondBySQLTemplate_Init&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&m=" + Math.random(),
-            //                dataType: 'html',
-            //                success: function (data) {
-
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
                 return;
@@ -62,10 +54,8 @@
 
             //绑定查询.
             GenerBindEntities("DDL_Template", "BP.WF.Template.SQLTemplates", docs, "SQLType=0");
-            //document.getElementById("TB_Docs").value = docs;
             document.getElementById("TB_Note").value = data.Note;
-            //                }
-            //            });
+         
         });
 
         //执行保存..

@@ -176,245 +176,230 @@ function GenerFrm() {
     handler.AddUrlData(urlParam);
     handler.AddJson(pageData);
     var data = handler.DoMethodReturnString("FrmGener_Init");
-//    $.ajax({
-//        type: 'post',
-//        async: true,
-//        data: pageData,
-//        url: Handler + "?DoType=FrmGener_Init&m=" + Math.random() + "&" + urlParam,
-//        dataType: 'html',
-//        success: function (data) {
 
-            if (data.indexOf('err@') == 0) {
-                alert('装载表单出错,请查看控制台console,或者反馈给管理员.');
-                alert(data);
-                console.log(data);
-                return;
-            }
+    if (data.indexOf('err@') == 0) {
+        alert('装载表单出错,请查看控制台console,或者反馈给管理员.');
+        alert(data);
+        console.log(data);
+        return;
+    }
 
-            try {
-                frmData = JSON.parse(data);
-            }
-            catch (err) {
-                alert(" frmData数据转换JSON失败:" + data);
-                console.log(data);
-                return;
-            }
+    try {
+        frmData = JSON.parse(data);
+    }
+    catch (err) {
+        alert(" frmData数据转换JSON失败:" + data);
+        console.log(data);
+        return;
+    }
 
-            //获得sys_mapdata.
-            var mapData = frmData["Sys_MapData"][0];
+    //获得sys_mapdata.
+    var mapData = frmData["Sys_MapData"][0];
 
-            //初始化Sys_MapData
-            var h = mapData.FrmH;
-            var w = mapData.FrmW;
-            if (h <= 1200)
-                h = 1200;
+    //初始化Sys_MapData
+    var h = mapData.FrmH;
+    var w = mapData.FrmW;
+    if (h <= 1200)
+        h = 1200;
 
-            //表单名称.
-            document.title = mapData.Name;
+    //表单名称.
+    document.title = mapData.Name;
 
-            $('#divCCForm').height(h);
+    $('#divCCForm').height(h);
 
-            $('#topContentDiv').height(h);
-            $('#topContentDiv').width(w);
-            $('.Bar').width(w + 15);
+    $('#topContentDiv').height(h);
+    $('#topContentDiv').width(w);
+    $('.Bar').width(w + 15);
 
-            var marginLeft = $('#topContentDiv').css('margin-left');
-            if (undefined == marginLeft)
-                marginLeft = '0px';
+    var marginLeft = $('#topContentDiv').css('margin-left');
+    if (undefined == marginLeft)
+        marginLeft = '0px';
 
-            //if (marginLeft==un
-            marginLeft = marginLeft.replace('px', '');
+    //if (marginLeft==un
+    marginLeft = marginLeft.replace('px', '');
 
-            //alert(marginLeft);
+    //alert(marginLeft);
 
-            marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
-            $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
-            $('#CCForm').html('');
+    marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
+    $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
+    $('#CCForm').html('');
 
-            // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
-            var enName = frmData.Sys_MapData[0].No;
-            try {
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
-                var tmp = document.getElementsByTagName('script')[0];
-                tmp.parentNode.insertBefore(s, tmp);
-            }
-            catch (err) {
+    // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+    var enName = frmData.Sys_MapData[0].No;
+    try {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
 
-            }
+    }
 
-            try {
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = "../../DataUser/JSLibData/" + enName + ".js";
-                var tmp = document.getElementsByTagName('script')[0];
-                tmp.parentNode.insertBefore(s, tmp);
-            }
-            catch (err) {
+    try {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../../DataUser/JSLibData/" + enName + ".js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
 
-            }
+    }
 
 
-            //根据表单类型不同生成表单.
+    //根据表单类型不同生成表单.
 
-            var isTest = GetQueryString("IsTest");
+    var isTest = GetQueryString("IsTest");
 
-            if (isTest == "1") {
+    if (isTest == "1") {
 
-                var frmType = GetQueryString("FrmType");
-                if (frmType == 'FreeFrm')
-                    GenerFreeFrm(mapData, frmData); //自由表单.
-                else
-                    GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+        var frmType = GetQueryString("FrmType");
+        if (frmType == 'FreeFrm')
+            GenerFreeFrm(mapData, frmData); //自由表单.
+        else
+            GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
 
-            } else {
-                if (mapData.FrmType == 0)
-                    GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
-                else
-                    GenerFreeFrm(mapData, frmData); //自由表单.
-            }
+    } else {
+        if (mapData.FrmType == 0)
+            GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+        else
+            GenerFreeFrm(mapData, frmData); //自由表单.
+    }
 
-            $.parser.parse("#CCForm");
-            var isReadonly = GetQueryString("IsReadonly");
+    $.parser.parse("#CCForm");
+    var isReadonly = GetQueryString("IsReadonly");
 
-            //原有的。
-            //为 DISABLED 的 TEXTAREA 加TITLE 
-            var disabledTextAreas = $('#divCCForm textarea:disabled');
-            $.each(disabledTextAreas, function (i, obj) {
-                $(obj).attr('title', $(obj).val());
-            })
+    //原有的。
+    //为 DISABLED 的 TEXTAREA 加TITLE 
+    var disabledTextAreas = $('#divCCForm textarea:disabled');
+    $.each(disabledTextAreas, function (i, obj) {
+        $(obj).attr('title', $(obj).val());
+    })
 
 
-            //根据NAME 设置ID的值
-            var inputs = $('[name]');
-            $.each(inputs, function (i, obj) {
-                if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
-                    $(obj).attr("id", $(obj).attr("name"));
-                }
-            })
+    //根据NAME 设置ID的值
+    var inputs = $('[name]');
+    $.each(inputs, function (i, obj) {
+        if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
+            $(obj).attr("id", $(obj).attr("name"));
+        }
+    })
 
           
 
-            //设置默认值
-            for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
+    //设置默认值
+    for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
 
-                var mapAttr = frmData.Sys_MapAttr[j];
+        var mapAttr = frmData.Sys_MapAttr[j];
 
-                //添加 label
-                //如果是整行的需要添加  style='clear:both'.
-                var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+        //添加 label
+        //如果是整行的需要添加  style='clear:both'.
+        var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-                if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-                    var uiBindKey = mapAttr.UIBindKey;
-                    if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-                        var sfTable = new Entity("BP.Sys.SFTable");
-                        sfTable.SetPKVal(uiBindKey);
-                        var count = sfTable.RetrieveFromDBSources();
-                        if (count != 0 && sfTable.CodeStruct == "1") {
-                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-                            handler.AddPara("EnsName", uiBindKey);  //增加参数.
-                            //获得map基本信息.
-                            var pushData = handler.DoMethodReturnString("Tree_Init");
-                            if (pushData.indexOf("err@") != -1) {
-                                alert(pushData);
-                                continue;
-                            }
-                            pushData = ToJson(pushData);
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
-                            if (mapAttr.UIIsEnable == 0)
-                                $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
-
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-
-                            continue;
-                        }
+        if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+            var uiBindKey = mapAttr.UIBindKey;
+            if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
+                var sfTable = new Entity("BP.Sys.SFTable");
+                sfTable.SetPKVal(uiBindKey);
+                var count = sfTable.RetrieveFromDBSources();
+                if (count != 0 && sfTable.CodeStruct == "1") {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                    handler.AddPara("EnsName", uiBindKey);  //增加参数.
+                    //获得map基本信息.
+                    var pushData = handler.DoMethodReturnString("Tree_Init");
+                    if (pushData.indexOf("err@") != -1) {
+                        alert(pushData);
+                        continue;
                     }
-                }
+                    pushData = ToJson(pushData);
+                    $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
+                    if (mapAttr.UIIsEnable == 0)
+                        $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
-                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                    if (mapAttr.MyDataType == 8)
-                        if (!/\./.test(defValue))
-                            defValue += '.00';
-                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-                }
+                    $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
 
-                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-                    // 判断下拉框是否有对应option, 若没有则追加
-                    if (defValue!="" && $("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-                        var mainTable = frmData.MainTable[0];
-                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-                        if (selectText == null || selectText == undefined || selectText == "")
-                            selectText = mainTable[mapAttr.KeyOfEn + "T"];
-
-                        if (selectText != null && selectText != undefined && selectText != "")
-                        $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
-                    }
-                    if(defValue!="")
-                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
-                }
-
-                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
-                    if (defValue == "1")
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
-                    else
-                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
-                }
-
-                //只读或者属性为不可编辑时设置
-                if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
-
-                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    continue;
                 }
             }
+        }
 
-            //处理下拉框级联等扩展信息
-            AfterBindEn_DealMapExt(frmData);
+        if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+            if (mapAttr.MyDataType == 8)
+                if (!/\./.test(defValue))
+                    defValue += '.00';
+            $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+        }
 
-            ShowNoticeInfo();
+        if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+            // 判断下拉框是否有对应option, 若没有则追加
+            if (defValue!="" && $("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                var mainTable = frmData.MainTable[0];
+                var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                if (selectText == null || selectText == undefined || selectText == "")
+                    selectText = mainTable[mapAttr.KeyOfEn + "T"];
 
-            ShowTextBoxNoticeInfo();
-
-            //            //初始化复选下拉框 
-            //            var selectPicker = $('.selectpicker');
-            //            $.each(selectPicker, function (i, selectObj) {
-            //                var defVal = $(selectObj).attr('data-val');
-            //                var defValArr = defVal.split(',');
-            //                $(selectObj).selectpicker('val', defValArr);
-            //            });
-
-            //给富文本 创建编辑器
-            if (document.BindEditorMapAttr) {
-                var editor = document.activeEditor = UM.getEditor('editor', {
-                    'autoHeightEnabled': false, //是否自动长高
-                    'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-                    'initialFrameWidth': document.BindEditorMapAttr.UIWidth
-
-                });
-                var height = document.BindEditorMapAttr.UIHeight;
-                $(".edui-container").css("height", height);
-
-                if (document.BindEditorMapAttr) {
-                    editor.MaxLen = document.BindEditorMapAttr.MaxLen;
-                    editor.MinLen = document.BindEditorMapAttr.MinLen;
-                    editor.BindField = document.BindEditorMapAttr.KeyOfEn;
-                    editor.BindFieldName = document.BindEditorMapAttr.Name;
-                }
-                //调整样式,让必选的红色 * 随后垂直居中
-                editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
-
-                $(".pimg").on("dblclick", function () {
-                    var _this = $(this); //将当前的pimg元素作为_this传入函数  
-                    imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
-                });
-                if (typeof setContentHeight == "function") {
-                    setContentHeight();
-                }
+                if (selectText != null && selectText != undefined && selectText != "")
+                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
             }
-//        }
-//    })
+            if(defValue!="")
+                $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+        }
+
+        if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
+            if (defValue == "1")
+                $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
+            else
+                $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+        }
+
+        //只读或者属性为不可编辑时设置
+        if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
+
+            $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+        }
+    }
+
+    //处理下拉框级联等扩展信息
+    AfterBindEn_DealMapExt(frmData);
+
+    ShowNoticeInfo();
+
+    ShowTextBoxNoticeInfo();
+
+
+    //给富文本 创建编辑器
+    if (document.BindEditorMapAttr) {
+        var editor = document.activeEditor = UM.getEditor('editor', {
+            'autoHeightEnabled': false, //是否自动长高
+            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+            'initialFrameWidth': document.BindEditorMapAttr.UIWidth
+
+        });
+        var height = document.BindEditorMapAttr.UIHeight;
+        $(".edui-container").css("height", height);
+
+        if (document.BindEditorMapAttr) {
+            editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+            editor.MinLen = document.BindEditorMapAttr.MinLen;
+            editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+            editor.BindFieldName = document.BindEditorMapAttr.Name;
+        }
+        //调整样式,让必选的红色 * 随后垂直居中
+        editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+
+        $(".pimg").on("dblclick", function () {
+            var _this = $(this); //将当前的pimg元素作为_this传入函数  
+            imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+        });
+        if (typeof setContentHeight == "function") {
+            setContentHeight();
+        }
+    }
+
 }
 
 // V
@@ -514,7 +499,7 @@ function initPageParam() {
     pageData.DoType1 = GetQueryString("DoType")//View
     pageData.FK_MapData = GetQueryString("FK_MapData")//View
 
-    //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID);
+   
 }
 //将获取过来的URL参数转成URL中的参数形式  &
 function pageParamToUrl() {
@@ -704,9 +689,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
                 //JavaScript获取外部数据源
                 if (srcType == 6)
                     data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-                //JavaScript获取外部数据源
-                //if (srcType == 1)
-                //data = DBAccess.RunDBSrc(sfTable.No, 0);
+
             }
         }
         if (data == undefined) {
@@ -826,14 +809,6 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //对于复选下拉框获取值得方法     
-            //                if ($('[data-id=' + name + ']').length > 0) {    
-            //                    var val = $(disabledEle).val().join(',');    
-            //                    formArrResult.push(name + '=' + val);    
-            //                } else {    
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());    
-            //                }    
-            //                break;    
             //文本区域     
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
@@ -841,13 +816,6 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         }
     });
 
-    //    //获取表单中隐藏的表单元素的值
-    //    var hiddens = $('input[type=hidden]');
-    //    $.each(hiddens, function (i, hidden) {
-    //        if ($(hidden).attr("name").indexOf('TB_') == 0) {
-    //            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-    //        }
-    //    });
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {

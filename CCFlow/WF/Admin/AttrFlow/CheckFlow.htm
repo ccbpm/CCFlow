@@ -15,7 +15,7 @@
         $(function () {
 
             $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行流程检查,大约持续1-3分钟时间,请稍后......</blue><br><br><br><br></center>");
-
+           
             var en = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
             var data = en.DoMethodReturnString("DoCheck");
 

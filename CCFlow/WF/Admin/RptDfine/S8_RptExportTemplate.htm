@@ -34,61 +34,53 @@
             handler.AddPara("FK_Flow", flowNo);
             var data = handler.DoMethodReturnString("S5SearchCond_Init");
 
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: Handler + "?DoType=S5SearchCond_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
+            if (data.indexOf("@") == 0) {
+                alert(data);
+                return;
+            }
+            var jsData = JSON.parse(data);
 
-                    if (data.indexOf("@") == 0) {
-                        alert(data);
-                        return;
-                    }
-                    var jsData = JSON.parse(data);
+            var md = jsData["Main"][0]; //主表数据.
+            var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+            var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
+            //关键字查询.
+            document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
 
-                    var md = jsData["Main"][0]; //主表数据.
-                    var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
-                    var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
-                    //关键字查询.
-                    document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+            var js = md.AtPara.split("@");
+            var RptSearchKeys = null;
+            var RptDTSearchWay = null;
+            var RptDTSearchKey = null;
+            for (var i = 0; i < js.length; i++) {
+                if (js[i].indexOf("RptSearchKeys") != -1)
+                    RptSearchKeys = js[i].replace("RptSearchKeys=", "")
+                if (js[i].indexOf("RptDTSearchWay") != -1)
+                    RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
+                if (js[i].indexOf("RptDTSearchKey") != -1)
+                    RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
+            }
+            //绑定外键字段.
+            for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
+                var attr = Sys_MapAttr[i],
+                    flag = false;
 
-                    var js = md.AtPara.split("@");
-                    var RptSearchKeys = null;
-                    var RptDTSearchWay = null;
-                    var RptDTSearchKey = null;
-                    for (var i = 0; i < js.length; i++) {
-                        if (js[i].indexOf("RptSearchKeys") != -1)
-                            RptSearchKeys = js[i].replace("RptSearchKeys=", "")
-                        if (js[i].indexOf("RptDTSearchWay") != -1)
-                            RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
-                        if (js[i].indexOf("RptDTSearchKey") != -1)
-                            RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
-                    }
-                    //绑定外键字段.
-                    for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
-                        var attr = Sys_MapAttr[i],
-                            flag = false;
+                if (attr.UIContralType != 1) {
+                    continue;
+                }
+                if (RptSearchKeys) {
+                    flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
+                }
+                $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
+            }
 
-                        if (attr.UIContralType != 1) {
-                            continue;
-                        }
-                        if (RptSearchKeys) {
-                            flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
-                        }
-                        $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
-                    }
+            $("#DDL_DTSearchWay").val(RptDTSearchWay);
 
-                    $("#DDL_DTSearchWay").val(RptDTSearchWay);
+            //绑定日期下拉框.
+            if (Sys_MapAttrOfDate != null) {
+                GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", RptDTSearchKey);
+            }
 
-                    //绑定日期下拉框.
-                    if (Sys_MapAttrOfDate != null) {
-                        GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", RptDTSearchKey);
-                    }
+            return;
 
-                    return;
-//                }
-//            });
         }
 
         function Save() {
@@ -115,15 +107,8 @@
             handler.AddPara("DTSearchWay", DTSearchWay);
             handler.AddPara("DTSearchKey", DTSearchKey);
             var data = handler.DoMethodReturnString("S5SearchCond_Save");
-//            $.ajax({
-//                type: 'GET',
-//                async: true,
-//                url: Handler + "?DoType=S5SearchCond_Save&FK_Flow=" + FK_Flow + "&RptNo=" + RptNo + "&Fields=" + Fields + "&IsSearchKey=" + IsSearchKey + "&DTSearchWay=" + DTSearchWay + "&DTSearchKey=" + DTSearchKey + "&m=" + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
-                    alert(data)
-//                }
-//            });
+            alert(data);
+
         }
     </script>
     <base target="_self" /> 

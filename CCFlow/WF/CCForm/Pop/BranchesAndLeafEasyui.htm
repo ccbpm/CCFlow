@@ -45,33 +45,7 @@
 					}
 				});
 			}
-//			function loadSelectGrid(url, id, selectedRows) {
-//				url = url.replace("@Key", id);
-//				$.ajax({
-//					type: 'post',
-//					async: true,
-//					url: url + "&m=" + Math.random(),
-//					dataType: 'html',
-//					success: function (data) {
-//						if (data.indexOf("err@") != -1) {
-//							alert(data);
-//							return;
-//						}
-//						var json = JSON.parse(data);
-//						if ($.isArray(selectedRows)) {
-//							$.each(json, function (i, o) {
-//								var sel = $.grep(selectedRows, function (obj) {
-//									return o.No == obj.No;
-//								});
-//								if (sel.length > 0) {
-//									o.checked = true;
-//								}
-//							});
-//						}
-//						$("#selectGrid").datagrid("loadData", json);
-//					}
-//				});
-//			}
+
 			function findChildren(jsonArray, parentNo) {
 				var appendToTree = function (treeToAppend, child) {
 					$.each(treeToAppend, function (i, o) {
@@ -102,23 +76,7 @@
 				}
 				return jsonTree;
 			}
-//			function loadTree(treeUrl, global) {
-//				$.ajax({
-//					type: 'post',
-//					async: true,
-//					url: treeUrl + "&m=" + Math.random(),
-//					dataType: 'html',
-//					success: function (data) {
-//						if (data.indexOf("err@") != -1) {
-//							alert(data);
-//							return;
-//						}
-//						var rootNo = GetQueryString("rootNo");
-//						var jsonTree = findChildren(JSON.parse(data), rootNo);
-//						$("#tree").tree("loadData", jsonTree);
-//					}
-//				});
-//			}
+
 			$(function () {
 				var global = window;
 				global.selectedRows = [];	

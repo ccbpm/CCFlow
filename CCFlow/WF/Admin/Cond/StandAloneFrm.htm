@@ -120,15 +120,6 @@
             handler.AddPara("FrmID", $("#DDL_Frms").val());
             handler.AddFormData();
             var data = handler.DoMethodReturnString("StandAloneFrm_Save");
-
-            //初始化表格.
-            //            $.ajax({
-            //                type: 'post',
-            //                async: true,
-            //                url: Handler + "?DoType=StandAloneFrm_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random() + "&FrmID=" + $("#DDL_Frms").val(),
-            //                dataType: 'html',
-            //                success: function (data) {
-
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>" + data + "</font>");
                 return;
@@ -139,13 +130,9 @@
                 window.location.href = url;
                 return;
             }
-
-            // alert(data);
             window.location.href = window.location.href;
 
-            //$("#Msg").html("<font color=green>" + data + "</font>");
-            //                }
-            //            });
+  
         }
 
         //执行删除..

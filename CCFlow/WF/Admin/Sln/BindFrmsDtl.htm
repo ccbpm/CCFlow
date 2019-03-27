@@ -131,9 +131,8 @@
             handler.AddPara("FK_Flow", FK_Flow);
             handler.AddPara("FK_Node", FK_Node);
             var data = handler.DoMethodReturnString("BindForm_GetFlowNodeDropList");
-//            Handler_AjaxQueryData(param, function (data, scope) {
             $('#copyfrmdlg .panel-body').append(data);
-//            }, this);
+
         }
         //执行复制
         function DoCopy() {

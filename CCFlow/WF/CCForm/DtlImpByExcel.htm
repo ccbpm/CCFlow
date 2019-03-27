@@ -86,7 +86,7 @@
                 var url = basePath + "DataUser/DtlTemplete/" + GetQueryString("EnsName") + ".xls";
             }
             else {
-                var url = "/DataUser/DtlTemplete/" + GetQueryString("EnsName") + ".xls";
+                var url = basePath + "/DataUser/DtlTemplete/" + GetQueryString("EnsName") + ".xls";
             }
             WinOpen(url);
         }

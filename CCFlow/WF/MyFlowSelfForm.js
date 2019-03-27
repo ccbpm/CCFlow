@@ -1140,11 +1140,6 @@ $(function () {
 
     var frm = document.forms["divCCForm"];
 
-    if (plant == "CCFlow")
-        frm.action = "MyFlow.ashx?method=login";
-    else
-        frm.action = MyFlow + "?method=login";
-
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax

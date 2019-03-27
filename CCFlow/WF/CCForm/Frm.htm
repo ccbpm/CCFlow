@@ -20,34 +20,26 @@
             str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
             str = str.replace('DoType=Frm_Init', '');
 
-//            var str = Handler + "?DoType=Frm_Init&" + str + "&e1m=" + Math.random();
-
             str = str.replace('&DoType=MyFlow_Init', '');
             str = str.replace('&DoType=View', '');
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddUrlData(str);
             var data = handler.DoMethodReturnString("Frm_Init");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: url,
-//                dataType: 'html',
-//                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data); //如果是异常，就提提示.
-                        return;
-                    }
 
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', ''); //如果返回url，就直接转向.
-                        window.location.href = data;
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data); //如果是异常，就提提示.
+                return;
+            }
 
-                    $("#Msg").html(data);
-                    return;
-//                }
-//            });
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                window.location.href = data;
+                return;
+            }
+
+            $("#Msg").html(data);
+            return;
+
 
         });
     </script>

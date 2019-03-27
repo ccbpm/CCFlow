@@ -185,7 +185,11 @@
         var runOnPlant = "BP";
         var initData = null;
         $(function () {
-            Handler = basePath + "/WF/Admin/CCBPMDesigner/Handler.ashx";
+            if(plant=="CCFlow")
+                Handler = basePath + "/WF/Admin/CCBPMDesigner/Handler.ashx";
+            else
+                Handler = basePath+"/WF/Admin/CCBPMDesigner/ProcessRequest.do";
+
             //定义等待界面的位置
             $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
             $(".mymask").show();

@@ -457,17 +457,6 @@ function AfterBindEn_DealMapExt(frmData) {
                         detailExt[ext.DtlNo] = [];
                     }
                     detailExt[ext.DtlNo].push(ext);
-                    $.each(detailExt, function (idx, obj) {
-                        var iframeDtl = $("#F" + obj[0].DtlNo);
-                        iframeDtl.load(function () {
-                            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[obj[0].DtlNo]));
-                            if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
-                                this.contentWindow.parentStatistics(detailExt[obj[0].DtlNo]);
-                            }
-                        });
-                    });
-
-
                     $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
                 }
                 break;
@@ -494,6 +483,18 @@ function AfterBindEn_DealMapExt(frmData) {
 
         }
     }
+    $.each(detailExt, function (idx, obj) {
+        var iframeDtl = $("#F" + obj[0].DtlNo);
+        iframeDtl.load(function () {
+            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[obj[0].DtlNo]));
+            if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+                this.contentWindow.parentStatistics(detailExt[obj[0].DtlNo]);
+            }
+        });
+
+    });
+
+
 }
 
 /**Pop弹出框的处理**/

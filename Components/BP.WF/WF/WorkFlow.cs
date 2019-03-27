@@ -1295,6 +1295,13 @@ namespace BP.WF
             WorkNode wn = new WorkNode(WorkID, this.HisGenerWorkFlow.FK_Node);
             wn.AddToTrack(at, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, stopMsg);
 
+            //执行流程结束.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            gwf.Emps += emps;
+            gwf.WFState = WFState.Complete;
+            gwf.Update();
+
+
             //调用结束后事件.
             stopMsg += this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, currNode, rpt, null);
             #endregion 处理后续的业务.
@@ -1318,14 +1325,8 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL(ps);
             #endregion 处理审核问题.
 
-            //执行流程结束.
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            gwf.Emps += emps;
-            gwf.WFState = WFState.Complete;
-            gwf.Update();
-
-            //if (DataType.IsNullOrEmpty(msg) == true)
-            //    msg = "流程成功结束.";
+            
+     
             return stopMsg;
         }
         public string GenerFHStartWorkInfo()

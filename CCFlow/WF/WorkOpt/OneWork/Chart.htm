@@ -138,6 +138,7 @@
             var nodeTrack;
             var isExist;
             var currNode = uh["FK_Node"];
+            var flowInfo = datas.FlowInfo[0];
 
             $('#tracktable').hover(function () { }, function () {
                 $('#trackinfo').offset({ top: 0, left: 0 });
@@ -223,7 +224,8 @@
                     //1.主干到主干
                     var currTrack = rNode.currTrack.track;
                     //node的最后两位判断是否为开始节点
-                    if ((this.ID == currNode && lastTwoBit == "01") || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode)) {
+                    if ((this.ID == currNode && lastTwoBit == "01") 
+                        || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState!=3)) {
                         borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                         TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                     } else if (this.ID != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
@@ -641,7 +643,7 @@
                         var TextColor = STYLE_NODE_COLOR_FORE;
                         if (node.currTrack != null) {
                             var currTrack = node.currTrack.track;
-                            if ((node.id == currNode && lastTwoBit == "01") || (node.id == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode)) {
+                            if ((node.id == currNode && lastTwoBit == "01") || (node.id == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState != 3)) {
                                 borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                                 TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                             } else if (node.id != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {

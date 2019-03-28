@@ -93,7 +93,7 @@ function InitPage() {
             doc += "<p><span>退回意见如下</span>  </p>";
         }
 
-        if (at == ActionType.Forward) {
+        if (at == ActionType.Forward || at == ActionType.FlowOver) {
             doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
             //  doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDFrom + "')\">表单</a></span></p>";
 

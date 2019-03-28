@@ -43,12 +43,11 @@ function SelfUrl_Done(mapExt) {
 //***************************************树干叶子模式*****************************************************************
 function PopBranchesAndLeaf(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
-    target.hide();
-
     var width = target.outerWidth();
     var height = target.height();
+    target.hide();
     var container = $("<div></div>");
-    target.after(container);
+    target.after(container-100);
     container.width(width);
     container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
@@ -124,13 +123,13 @@ function PopBranchesAndLeaf(mapExt, val) {
 //***************************************树干模式.*****************************************************************
 function PopBranches(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
-    target.hide();
-
+  
     var width = target.outerWidth();
     var height = target.height();
+    target.hide();
     var container = $("<div></div>");
     target.after(container);
-    container.width(width);
+    container.width(width - 100);
     container.css("height", height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 
@@ -198,14 +197,15 @@ function PopBranches(mapExt, val) {
 /******************************************  表格查询 **********************************/
 function PopTableSearch(mapExt) {
     var target = $("#TB_" + mapExt.AttrOfOper);
-    target.hide();
-
+   
     var width = target.outerWidth();
     var height = target.height();
+    target.hide();
+
     var container = $("<div></div>");
     target.after(container);
-    container.width(width);
-    container.height(height);
+    container.width(width-100);
+    //container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 
     $("#" + mapExt.AttrOfOper + "_mtags").mtags({
@@ -281,14 +281,15 @@ function PopTableSearch(mapExt) {
 function PopGroupList(mapExt) {
 
     var target = $("#TB_" + mapExt.AttrOfOper);
-    target.hide();
+    
 
     var width = target.outerWidth();
     var height = target.height();
+    target.hide();
     var container = $("<div></div>");
     target.after(container);
-    container.width(width);
-    container.height(height);
+    container.width(width-100);
+    //container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 
     $("#" + mapExt.AttrOfOper + "_mtags").mtags({

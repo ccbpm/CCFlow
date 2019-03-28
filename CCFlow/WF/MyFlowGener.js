@@ -734,9 +734,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             formArrResult.push(ele);
         }
         if (ele.split('=')[0].indexOf('RB_') == 0) {
-            var index = isExistArray(formArrResult, ele.split('=')[0]);
-            if (index == -1)
-                formArrResult.push(ele);
+            formArrResult.push(ele);
         }
 
     });

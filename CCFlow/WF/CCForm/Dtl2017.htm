@@ -859,6 +859,9 @@
                     $(":input[name=" + columnsName + "]").each(function (i, e) {
                         $(e).bind("change", function (o) {
                             doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
+                            //是否使用合计计算其他值
+                            if (extObj.Tag == "1")
+                                DBAccess.RunFunctionReturnStr(extObj.Tag1);
                         });
                         if (i == 0) {
                             $(e).trigger("change");

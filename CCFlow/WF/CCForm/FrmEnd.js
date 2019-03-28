@@ -467,19 +467,21 @@ function AfterBindEn_DealMapExt(frmData) {
                         "DaXieAttrOfOper": DaXieAttrOfOper,
                         "Doc": mapExt.Doc,
                         "DtlColumn": docs[1],
-                        "exp": docs[2]
+                        "exp": docs[2],
+                        "Tag":mapExt.Tag,
+                        "Tag1":mapExt.Tag1
                     };
                     if (!$.isArray(detailExt[ext.DtlNo])) {
                         detailExt[ext.DtlNo] = [];
                     }
                     detailExt[ext.DtlNo].push(ext);
-                    var iframeDtl = $("#F" + ext.DtlNo);
-                    iframeDtl.load(function () {
-                        $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[ext.DtlNo]));
-                        if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
-                            this.contentWindow.parentStatistics(detailExt[ext.DtlNo]);
-                        }
-                    });
+//                    var iframeDtl = $("#F" + ext.DtlNo);
+//                    iframeDtl.load(function () {
+//                        $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[ext.DtlNo]));
+//                        if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+//                            this.contentWindow.parentStatistics(detailExt[ext.DtlNo]);
+//                        }
+//                    });
                     $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
                 }
                 break;
@@ -506,6 +508,17 @@ function AfterBindEn_DealMapExt(frmData) {
 
         }
     }
+
+    $.each(detailExt, function (idx, obj) {
+        var iframeDtl = $("#F" + obj[0].DtlNo);
+        iframeDtl.load(function () {
+            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[obj[0].DtlNo]));
+            if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+                this.contentWindow.parentStatistics(detailExt[obj[0].DtlNo]);
+            }
+        });
+
+    });
 }
 
 /**Pop弹出框的处理**/

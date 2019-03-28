@@ -1180,7 +1180,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //如果是多人处理，就让其显示已经审核过的意见.
-                    if (tk.NDFrom == this.FK_Node && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0)
+                    if (tk.NDFrom == this.FK_Node && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0 && gwf.WFState != WFState.Complete) 
                     {
                         continue;
                         //如果当前人，没有审核完成,就不显示.
@@ -1225,14 +1225,14 @@ namespace BP.WF.HttpHandler
                         {
                             if (tk1.HisActionType == tk.HisActionType
                                 && tk1.NDFrom == tk.NDFrom
-                                && tk1.RDT.CompareTo(tk.RDT) > 0)
+                                && tk1.RDT.CompareTo(tk.RDT) > 0 )
                             {
                                 isLast = false;
                                 break;
                             }
                         }
 
-                        if (isLast && isDoc == false)
+                        if (isLast && isDoc == false && gwf.WFState != WFState.Complete)
                         {
                             isExitTb_doc = false;
                             row["IsDoc"] = true;

@@ -38,14 +38,7 @@ namespace BP.WF.XML
             }
         }
 
-        public new string No
-        {
-            get
-            {
-                return this.GetValStringByKey("No");
-            }
-        }
-      
+ 
         #endregion 属性.
 
         #region 构造

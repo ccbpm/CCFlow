@@ -83,7 +83,7 @@ function PopBranchesAndLeaf(mapExt, val) {
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
-    container.on("dblclick", function () {
+    container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
@@ -151,7 +151,7 @@ function PopBranches(mapExt, val) {
     //这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
-    container.on("dblclick", function () {
+    container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
@@ -241,7 +241,7 @@ function PopTableSearch(mapExt) {
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-    container.on("dblclick", function () {
+    container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
@@ -325,7 +325,7 @@ function PopGroupList(mapExt) {
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/GroupList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-    container.on("dblclick", function () {
+    container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");

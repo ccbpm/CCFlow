@@ -422,7 +422,6 @@ namespace BP.WF.HttpHandler
                         en.SetValByKey(attr.Key, attr.DefaultVal);
                     //设置默认的数据.
                     en.ResetDefaultVal();
-
                 }
                 else
                 {

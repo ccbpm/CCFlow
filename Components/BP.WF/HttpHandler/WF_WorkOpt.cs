@@ -87,7 +87,7 @@ namespace BP.WF.HttpHandler
 
             //如果不是 BillTemplateExcel 打印
             if (func.TemplateFileModel == TemplateFileModel.VSTOForExcel)
-                return "url@httpccword://-fromccflow,App=BillTemplateExcel,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID ;
+                return "url@httpccword://-fromccflow,App=BillTemplateExcel,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID;
 
             //如果不是 BillTemplateWord 打印
             if (func.TemplateFileModel == TemplateFileModel.VSTOForWord)
@@ -234,7 +234,7 @@ namespace BP.WF.HttpHandler
                 bill.FullPath = path + file;
                 bill.FK_NY = DataType.CurrentYearMonth;
                 bill.FK_Flow = nd.FK_Flow;
-               // bill.FK_BillType = func.FK_BillType;
+                // bill.FK_BillType = func.FK_BillType;
                 bill.Emps = rtf.HisGEEntity.GetValStrByKey("Emps");
                 bill.FK_Starter = rtf.HisGEEntity.GetValStrByKey("Rec");
                 bill.StartDT = rtf.HisGEEntity.GetValStrByKey("RDT");
@@ -373,7 +373,7 @@ namespace BP.WF.HttpHandler
                 {
                     ps.SQL = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + SystemConfig.AppCenterDBVarStr + "NDTo AND (ActionType=0 OR ActionType=1) AND EmpFrom=" + SystemConfig.AppCenterDBVarStr + "EmpFrom ORDER BY WorkID desc  ";
                     ps.Add("NDTo", toNodeID);
-                    ps.Add("EmpFrom",WebUser.No);
+                    ps.Add("EmpFrom", WebUser.No);
                 }
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
@@ -416,7 +416,7 @@ namespace BP.WF.HttpHandler
                             }
                         }
                     }
-                        
+
 
                     if (emps.Contains(",") == true)
                     {
@@ -604,11 +604,11 @@ namespace BP.WF.HttpHandler
                         //启用搜索范围限定.
                         if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " +specEmpNos+ " " + endSql;
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " + specEmpNos + " " + endSql;
                         }
                         else
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   "+specEmpNos+" " + endSql;
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " + specEmpNos + " " + endSql;
                         }
                     }
                     else
@@ -762,13 +762,13 @@ namespace BP.WF.HttpHandler
                 return "err@没有查询到当前人员的工作列表数据.";
 
             string empStrs = this.GetRequestVal("AddEmps");
-            if (DataType.IsNullOrEmpty(empStrs)==true)
+            if (DataType.IsNullOrEmpty(empStrs) == true)
                 return "err@您没有选择人员.";
 
 
             string err = "";
 
-            string[] emps=empStrs.Split(',');
+            string[] emps = empStrs.Split(',');
             foreach (string empStr in emps)
             {
                 if (DataType.IsNullOrEmpty(empStr) == true)
@@ -840,10 +840,10 @@ namespace BP.WF.HttpHandler
             }
 
             gwf.Update();
-            if (err.Equals("")==true)
+            if (err.Equals("") == true)
                 return "增加成功.";
 
-            return "err@"+err;
+            return "err@" + err;
         }
         #endregion
 
@@ -872,8 +872,8 @@ namespace BP.WF.HttpHandler
             {
                 Paras ps = new Paras();
                 ps.SQL = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND (IsPass=0 OR IsPass=-1) AND FK_Emp!=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-                ps.Add("FK_Node",this.FK_Node);
-                ps.Add("WorkID",this.WorkID);
+                ps.Add("FK_Node", this.FK_Node);
+                ps.Add("WorkID", this.WorkID);
                 ps.AddFK_Emp();
                 if (DBAccess.RunSQLReturnValInt(ps, 0) == 0)
                     return "close@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
@@ -1180,7 +1180,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //如果是多人处理，就让其显示已经审核过的意见.
-                    if (tk.NDFrom == this.FK_Node && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0 && gwf.WFState != WFState.Complete) 
+                    if (tk.NDFrom == this.FK_Node && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0 && gwf.WFState != WFState.Complete)
                     {
                         continue;
                         //如果当前人，没有审核完成,就不显示.
@@ -1225,7 +1225,7 @@ namespace BP.WF.HttpHandler
                         {
                             if (tk1.HisActionType == tk.HisActionType
                                 && tk1.NDFrom == tk.NDFrom
-                                && tk1.RDT.CompareTo(tk.RDT) > 0 )
+                                && tk1.RDT.CompareTo(tk.RDT) > 0)
                             {
                                 isLast = false;
                                 break;
@@ -1697,7 +1697,7 @@ namespace BP.WF.HttpHandler
             return dt.Rows.Count > 0 ? dt.Rows[0]["RDT"].ToString() : "";
         }
         #endregion
-       
+
         #region 工作分配.
         /// <summary>
         /// 分配工作
@@ -1840,8 +1840,8 @@ namespace BP.WF.HttpHandler
             //计算出来曾经抄送过的人.
             Paras ps = new Paras();
             ps.SQL = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-            ps.Add("FK_Node",this.FK_Node);
-            ps.Add("WorkID",this.WorkID);
+            ps.Add("FK_Node", this.FK_Node);
+            ps.Add("WorkID", this.WorkID);
             DataTable mydt = DBAccess.RunSQLReturnTable(ps);
             string toAllEmps = "";
             foreach (DataRow dr in mydt.Rows)
@@ -2246,13 +2246,13 @@ namespace BP.WF.HttpHandler
                     specFlowNos = ",,";
 
                 string specEmpNos = "";
-                if (specFlowNos.Contains( ","+this.FK_Node.ToString() + ",") == false)
+                if (specFlowNos.Contains("," + this.FK_Node.ToString() + ",") == false)
                     specEmpNos = " AND No!='00000001' ";
 
                 // specEmpNos = "";
                 //sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx " + this.FK_Node + " " + specEmpNos + " " + specFlowNos;
 
-                 sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx "; 
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx ";
                 //return "err@xx" + sql + "  = " + specEmpNos + "  " + specFlowNos +" nodeID="+this.FK_Node.ToString();
 
             }
@@ -2297,13 +2297,11 @@ namespace BP.WF.HttpHandler
             //判断当前是否是协作模式.
             if (nd.TodolistModel == TodolistModel.Teamup && nd.IsStartNode == false)
             {
-                if (gwf.TodoEmps.Contains(WebUser.No + ","))
+                string mysql = "SELECT COUNT(WORKID) AS Num FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND IsPass=0";
+                int num = DBAccess.RunSQLReturnValInt(mysql);
+                if (num != 1)
                 {
-                    /*说明我是主持人之一, 我就可以选择接受人,发送到下一个节点上去.*/
-                }
-                else
-                {
-                    /* 不是主持人就执行发送，返回发送结果. */
+                    /* 如果不是最后一位，返回发送结果. */
                     SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
                     return "info@" + objs.ToMsgOfHtml();
                 }

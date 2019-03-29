@@ -442,10 +442,19 @@ namespace BP.WF.HttpHandler
                 nodeID = this.FK_Node;
             }
 
+            Node nd = new Node(nodeID);
+
             foreach (OneWorkXml item in xmls)
             {
                 string url = "";
                 url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}&FromWorkOpt=1", item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
+                if (item.No.Equals("Frm") && (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
+                {
+                    if (nd.FormUrl.Contains("?"))
+                        url = "@url=&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+
+                    url = "@url="+nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                }
                 re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\",\"IsDefault\":\"{3}\"", item.No, item.Name, url, item.IsDefault) + "},";
             }
 

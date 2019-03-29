@@ -95,6 +95,12 @@
             if (url.indexOf('FK_Flow') == -1)
                 url += "&FK_Flow=" + GetQueryString("FK_Flow");
 
+            if (url.indexOf("@url=") == 0) {
+                url = url.replace("@url=", "");
+                url = basePath + url;
+            }
+
+
                 var content = createFrame(url);
                 $('#mtabs').tabs('add', {
                     title: title,

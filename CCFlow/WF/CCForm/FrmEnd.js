@@ -117,6 +117,13 @@
                 if (mapAttr.UIContralType == 1) {
                     /*启用了显示与隐藏.*/
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                    //如果现在是隐藏状态就不可以设置
+                    var ctrl = $("#Td_" + mapAttr.KeyOfEn);
+                    if (ctrl.length > 0) {
+                        if (ctrl.parent('tr').css('display') == "none")
+                            continue;
+                    }
+
                     //初始化页面的值
                     var nowKey = ddl.val();
 

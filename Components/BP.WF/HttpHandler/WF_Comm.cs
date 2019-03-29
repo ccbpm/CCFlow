@@ -1161,7 +1161,8 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     dtSQl.TableName = item.Key;
-                    ds.Tables.Add(dtSQl);
+                    if (ds.Tables.Contains(item.Key) == false)
+                        ds.Tables.Add(dtSQl);
                 }
 
             }
@@ -2730,7 +2731,7 @@ namespace BP.WF.HttpHandler
 
             sql = sql.Replace("/#", "+"); //为什么？
             sql = sql.Replace("/$", "-"); //为什么？
-            // sql = sql.Replace('"', '\"'); //为什么？
+            
 
             if (null == sql || "" == sql)
             {

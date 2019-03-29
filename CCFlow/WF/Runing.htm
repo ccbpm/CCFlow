@@ -143,8 +143,35 @@
             return;
         }
 
-        function WinOpenIt(url) {
+        function WinOpenIt(workid, nodeID, flowNo, fid, currNodeId) {
+            //但前节点所处的位置
+            var nowNode = new Entity("BP.WF.Node", nodeID);
 
+            //如果是树形表单，则显示当前人所处节点的数据
+            if (nowNode.FormType == 5) {
+                //获取人员所处的流程节点
+
+                var currNode = new Entity("BP.WF.Node", currNodeId);
+                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    }
+                } else {
+                    //判断当前节点的运行模式
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    } else if (currNode.RunModel == RunModel.SubThread) {
+                        nodeID = currNodeId;
+                    }
+                }
+
+
+            }
+            var url = "WFRpt.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + nodeID + "&FID=" + fid + "&IsRead=0";
             layer.open({
                 skin: 'layer-class',
                 type: 2,
@@ -162,7 +189,34 @@
         }
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo, fid) {
+        function OpenFrm(workid, nodeID, flowNo, fid, currNodeId) {
+            //但前节点所处的位置
+            var nowNode = new Entity("BP.WF.Node", nodeID);
+
+            //如果是树形表单，则显示当前人所处节点的数据
+            if (nowNode.FormType == 5) {
+                //获取人员所处的流程节点
+
+                var currNode = new Entity("BP.WF.Node", currNodeId);
+                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    }
+                } else {
+                    //判断当前节点的运行模式
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    } else if (currNode.RunModel == RunModel.SubThread) {
+                        nodeID = currNodeId;
+                    }
+                }
+
+
+            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
             handler.AddUrlData();
@@ -178,15 +232,23 @@
                 return;
             }
 
+            //SDK表单或者是嵌入式表单
+            if (data.indexOf('urlForm@') == 0) {
+                data = data.replace('urlForm@', '');
+                data = basePath + data;
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+            //自由/傻瓜/树形表单
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@', '');
 
                 if (data.indexOf('FromWorkOpt') == -1)
                     data = data + "&FromWorkOpt=1";
 
-                //alert(data);
-
-                //window.location.href = data;
                 window.open(data);
                 return;
             }
@@ -199,6 +261,8 @@
         $(function () {
             InitPage();
         });
+
+        var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
 
         //初始化数据.
         function InitPage() {
@@ -233,7 +297,7 @@
             var num = 0;
             var is1 = false;
             var listbox = '';
-            var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
+           
             //循环数组.
             for (var idx = 0; idx < strs.length; idx++) {
 
@@ -264,41 +328,14 @@
 
                     listbox += "<td>" + num + "</td>";
 
-                    var workID = work.WorkID;
-                    var fid = work.FID;
-                    var nodeID = work.FK_Node;
 
-                    //但前节点所处的位置
-                    var nowNode = new Entity("BP.WF.Node", nodeID);
                     var currNodeId = work.CurrNode;
-                    //如果是树形表单，则显示当前人所处节点的数据
-                    if (nowNode.FormType == 5) {
-                        //获取人员所处的流程节点
-                       
-                        var currNode = new Entity("BP.WF.Node", currNodeId);
-                        if (currNode.HisToNDs.indexOf(nodeID) == -1) {
-                            if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
-                                workID = fid;
-                                fid = 0;
-                                nodeID = currNodeId;
-                            }
-                        } else {
-                            //判断当前节点的运行模式
-                            if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
-                                workID = fid;
-                                fid = 0;
-                                nodeID = currNodeId;
-                            } else if (currNode.RunModel == RunModel.SubThread) {
-                                nodeID = currNodeId;
-                            }
-                        }
+                    var currNodeName = work.CurrNodeName;
+                    if (currNodeName == "")
+                        currNodeName = work.NodeName
+                    
 
-
-                    }
-                   
-                   
-
-                    listbox += "<td><a href=\"javascript:OpenFrm('" + workID + "','" + nodeID + "','" + work.FK_Flow + "','" + fid + "')\" >" + work.Title + "</a></td>";
+                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "')\" >" + work.Title + "</a></td>";
                     //  newRow += "<td>" + work.FlowName + "</td>";
                     listbox += "<td>" + work.StarterName + "</td>";
                     listbox += "<td>" + work.DeptName + "</td>";
@@ -314,7 +351,8 @@
                     listbox += "<td>" + todoEmps + "</td>";
                     listbox += "<td>";
 
-                    listbox += "[<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + nodeID + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>][<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','"+currNodeId+"')\">撤销</a>]";
+                    //listbox += "[<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + nodeID + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>][<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','"+currNodeId+"')\">撤销</a>]";
+                    listbox += "<a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
 
                     // newRow += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
                     listbox += "</td>";

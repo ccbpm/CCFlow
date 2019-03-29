@@ -2920,7 +2920,7 @@ namespace BP.WF
                 sql = sql.Replace("@" + key, ht[key].ToString());
             }
 
-            //从工作流参数里面替换 @yuanlina
+            //从工作流参数里面替换
             if (sql.Contains("@") == true && myWorkID != 0)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(myWorkID);
@@ -3012,7 +3012,7 @@ namespace BP.WF
                     return false;
             }
 
-            //@yuanlina. 
+      
             if (DataType.IsNumStr(valPara) == false)
                 throw new Exception("err@表达式错误:[" + exp + "]没有找到参数[" + valPara + "]的值，导致无法计算。");
 

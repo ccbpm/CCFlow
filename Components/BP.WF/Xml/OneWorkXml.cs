@@ -37,6 +37,14 @@ namespace BP.WF.XML
                 return this.GetValStringByKey("IsDefault");
             }
         }
+
+        public new string No
+        {
+            get
+            {
+                return this.GetValStringByKey("No");
+            }
+        }
       
         #endregion 属性.
 

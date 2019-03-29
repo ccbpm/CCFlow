@@ -22,6 +22,20 @@ namespace BP.Sys.FrmUI
                 return this.GetValStrByKey("Tag1");
             }
         }
+        public string FK_MapData
+        {
+            get
+            {
+                return this.GetValStrByKey(MapFrameAttr.FK_MapData);
+            }
+        }
+        public string Name
+        {
+            get
+            {
+                return this.GetValStrByKey(MapFrameAttr.Name);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -123,6 +137,17 @@ namespace BP.Sys.FrmUI
                 string url = DBAccess.RunSQLReturnStringIsNull(sql, "");
                 this.SetValByKey(MapFrameAttr.URL, url);
             }
+
+
+            //更新group.
+            GroupField gf = new GroupField();
+            int i= gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+            if (i == 1)
+            {
+                gf.Lab = this.Name;
+                gf.Update();
+            }
+
 
             return base.beforeUpdateInsertAction();
         }

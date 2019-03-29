@@ -576,6 +576,16 @@ namespace BP.WF
             //更新运动到节点,但是仍然是退回状态.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
+            //增加参与的人员
+            string emps = gwf.Emps;
+            if (emps.Contains("@" + WebUser.No) == false)
+            {
+                if (DataType.IsNullOrEmpty(emps) == true)
+                    emps = "@" + WebUser.No + "@";
+                else
+                    emps += WebUser.No + "@";
+            }
+            gwf.Emps = emps;
             gwf.Update();
 
             //更新退回到的人员信息可见.
@@ -702,6 +712,16 @@ namespace BP.WF
             gwf.Starter = toEmp;
             gwf.StarterName = toEmpName;
             gwf.Sender = WebUser.No;
+            //增加参与的人员
+            string emps = gwf.Emps;
+            if (emps.Contains("@" + WebUser.No) == false)
+            {
+                if(DataType.IsNullOrEmpty(emps) == true)
+                    emps = "@"+WebUser.No + "@";
+                else
+                    emps += WebUser.No + "@";
+            }
+            gwf.Emps = emps;
             gwf.Update();
 
             //找到当前的工作数据.
@@ -775,6 +795,17 @@ namespace BP.WF
 
             gwf.WFState = WFState.ReturnSta;
             gwf.Sender = WebUser.No;
+            //增加参与的人员
+            string emps = gwf.Emps;
+            if (emps.Contains("@" + WebUser.No) == false)
+            {
+                if (DataType.IsNullOrEmpty(emps) == true)
+                    emps = "@" + WebUser.No + "@";
+                else
+                    emps += WebUser.No + "@";
+            }
+            gwf.Emps = emps;
+
             gwf.Update();
 
             // 返回退回信息.
@@ -892,20 +923,13 @@ namespace BP.WF
             gwf.HuiQianZhuChiRen = "";
             gwf.HuiQianZhuChiRenName = "";
 
-            //ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
-            //ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
-            //ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
-            //ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
-            //ps.Add(GenerWorkFlowAttr.Sender, WebUser.No);
-            //ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
-
-
             //如果已经计算出来要退回到的人了,就删除其他相关的人员.
             if (DataType.IsNullOrEmpty(this.ReturnToEmp) == false)
             {
                 string sql = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + this.ReturnToNode.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp!='" + this.ReturnToEmp + "'";
                 DBAccess.RunSQL(sql);
             }
+
 
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
@@ -916,21 +940,23 @@ namespace BP.WF
             {
                 toDoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
             }
+
+            //增加参与的人员
+            string emps = gwf.Emps;
+            if (emps.Contains("@" + WebUser.No) == false)
+            {
+                if (DataType.IsNullOrEmpty(emps) == true)
+                    emps = "@" + WebUser.No + "@";
+                else
+                    emps += WebUser.No + "@";
+            }
+
             gwf.TodoEmps = toDoEmps;
             gwf.TodoEmpsNum = gwls.Count;
+            gwf.Emps = emps;
             gwf.Update();
 
-            //Paras ps = new Paras();
-            //ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
-            //    + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE WorkID=" + dbStr + "WorkID";
-            //ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
-            //ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
-            //ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
-            //ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
-            //ps.Add(GenerWorkFlowAttr.Sender, WebUser.No);
-            //ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
-            //DBAccess.RunSQL(ps);
-
+            
             //更新待办状态.
             foreach (GenerWorkerList item in gwls)
             {

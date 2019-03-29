@@ -33,7 +33,7 @@
 .skin-blue .sidebar-menu > li > .treeview-menu{margin: 0 1px;}
 .skin-blue .sidebar a{color: #585858;background: #f8f8f8;}
 .skin-blue .sidebar a:hover{text-decoration: none;}
-.skin-blue .treeview-menu > li,.skin-blue .treeview-menu > li > a{background: #ffffff;}
+.skin-blue .treeview-menu > li,.skin-blue .treeview-menu > li > a{background: #ffffff;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 .skin-blue .treeview-menu .treeview-menu >li>a{ padding-left: 10px;}
 
 .skin-blue .treeview-menu:before{content: '';display: block;    position: absolute;    z-index: 1;    left: 18px;    top: 47px;    bottom: 0;    border: 1px dotted;    border-width: 0 0 0 1px;border-color: #9dbdd6;}
@@ -52,7 +52,7 @@
 .skin-blue.layout-top-nav .main-header > .logo:hover{background-color: #3b8ab8;}
 /* * Skin: Blue * ----------*/
 
-.skin-show .wrapper{background-color: #f5f5f5; margin-top:5px}
+.skin-show .wrapper{background-color: #f5f5f5;}
 
 .skin-show .sidebar-menu > .treeview a{ }
 .skin-show .sidebar-menu > li.header{color: #4b646f;background: #1a2226;}
@@ -256,7 +256,7 @@
 .bg-maroon-gradient{background: #d81b60 !important;background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #d81b60), color-stop(1, #e73f7c)) !important;background: -ms-linear-gradient(bottom, #d81b60, #e73f7c) !important;background: -moz-linear-gradient(center bottom, #d81b60 0%, #e73f7c 100%) !important;background: -o-linear-gradient(#e73f7c, #d81b60) !important;filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e73f7c', endColorstr='#d81b60', GradientType=0) !important;color: #fff;}
 
 .sidebar-shortcuts{ text-align: center; padding: 5px 0px; background:#e3e6ed}
-.sidebar-shortcuts-large>.btn{ padding:2px 12px;}
+.sidebar-shortcuts-large>.btn{ padding:2px 5px;font-size:12px;}
 .sidebar-shortcuts-large>.btn>.iconfont { font-size:18px}
 .btn{background: #fff;color: #3361ac;}
 .btn:hover{background: #fff;color: #1d488d;}

@@ -1,0 +1,287 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>ccform正在加载请稍候...</title>
+    <meta name="description" content="overview &amp; stats" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!--引入CSS样式-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/admin/skins/_all-skins.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/admin/designer.css" rel="stylesheet" type="text/css" />
+
+    <!--引入通用JS-->
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Gener.js"></script>
+
+    <!--引入bootstrap的JS-->
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script> 
+
+
+
+    <script type="text/javascript">
+
+        var frmData;
+
+        var dtM; //方法集合.
+        var url;
+        $(function () {
+
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            var enName = GetQueryString("EnName");
+            var type = GetQueryString("type");
+            var pkVal = GetPKVal();
+            var isTree = GetQueryString("isTree");
+            var isReadonly = GetQueryString("isReadonly");
+            httpHandler.AddPara("EnName", enName);
+
+            //获取URL的参数问题
+            var param = document.location.search.substr(1);
+
+
+            url = "../RefFunc/EnOnly.htm?" + param;
+            if (pkVal != null) {
+                httpHandler.AddPara("PKVal", pkVal);
+            }
+
+            var data = httpHandler.DoMethodReturnString("Entity_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#CCFormTabs").html(data);
+                return;
+            }
+
+            //解析json.
+            frmData = JSON.parse(data);
+            dtM = frmData["dtM"];
+            RefMethod(); //初始化菜单.
+
+            //生成傻瓜表单.
+            OpenUrlInRightFrame(this, url);
+            window.setInterval('reinitiframe()',200);
+
+        })
+
+        function RefMethod() {
+
+            if (dtM.length == 0) 
+                return;
+           
+            //求出所有的分组名称.
+            var groupName = "@基本信息";
+            for (var i = 0; i < dtM.length; i++) {
+                var en = dtM[i];
+                if (en.GroupName == null)
+                    continue;
+                if (groupName.indexOf('@' + en.GroupName) == -1)
+                    groupName += "@" + en.GroupName;
+            }
+
+            var gNames = groupName.split('@');
+       
+            var mainData = frmData.MainTable[0];
+            var title = "主页";
+            if (mainData.Name != null && mainData.Name != "undefined" && mainData.Name != "")
+                title = mainData.Name;
+
+            //生成菜单.
+            var html = "";
+            for (var i = 0; i < gNames.length; i++) {
+                var gName = gNames[i];
+                if (gName == "")
+                    continue;
+                if (gNames.length == 2 && gName.indexOf('基本信息') != -1)
+                    html += "<li class='treeview'>";
+                else{
+                     if(i ==1)
+                        html += "<li class='treeview active'>";
+                     else
+                       html += "<li class='treeview'>";
+                    html +=" <a href='#' ><i class='menu-icon iconfont icon-renwu'></i><span>"+gName+"</span><i class='fa fa-angle-left pull-right'></i></a>";
+                   
+                }
+
+                //填入菜单内容.
+                if(i==1)
+                    html += "<ul class='treeview-menu menu-open' style='display: block;'>";
+                else
+                    html += "<ul class='treeview-menu'>";
+
+                if (gName == "基本信息") {
+                    html += "<li class='active'><a href='javascript:OpenUrlInRightFrame(this,\"" + url + "\")'><img src='../../Img/Home.gif' border=0 style='width:16px;height:16px;' />"+title+"</a></li>";
+                }
+
+                for (var idx = 0; idx < dtM.length; idx++) {
+
+                    var en = dtM[idx];
+                    var myName = en.GroupName;
+                    if (myName == null || myName == "")
+                        myName = "基本信息";
+
+
+
+                    if (gName != myName)
+                        continue;
+
+
+                    if ((en.RefAttrKey != null && en.RefAttrKey != "") || en.IsCanBatch == "1" || en.Visable == "0")
+                        continue;
+
+
+
+                    html += "<li  class=''>" + GenerRM(en) + "</li>";
+                }
+                html += "</ul>";   //end填入菜单内容.
+                html += "</li>";
+            }
+          
+
+            $("#EnTree").append(html);
+        }
+
+        function GenerRM(rm) {
+
+            var icon = rm.Icon;
+            if (rm.Icon == "" || rm.Icon == null) {
+                icon = "../../Img/dot.png";
+            }
+
+            if (rm.Icon != null && rm.Icon != "" && rm.Icon.indexOf('http') != 0) {
+                icon = "../" + rm.Icon;
+            }
+
+            var html = "";
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
+                html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
+                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",\"" + rm.FunPara + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",540,450,true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+
+            if ( html=="" ||  parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
+                html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
+            return html;
+        }
+        function OPenFun(url, warning, title, w, h, FunPara) {
+            if (FunPara == true || FunPara == "true")
+                OpenEasyUiDialogExt(url, title, 540, 450, false);
+            else {
+                if (warning == "null" || warning == "")
+                    warning = "确定要执行吗？";
+                else {
+                    warning = warning.replace(/,\s+/g, ",");
+                    warning = warning.replace(/\s+/g, "\r\n");
+                }
+                if (confirm("\"" + warning + "\"")) {
+                    OpenEasyUiDialogExt(url, title, 540, 450, false);
+                }
+            }
+            
+        }
+
+        function OpenIt(url, title, w, h) {
+            window.open(url);
+
+        }
+        function reinitiframe() {
+            var enIframe = document.getElementById('enclass');
+            try {
+                var bHeight = enIframe.contentWindow.document.body.scrollHeight;
+                var dHeight = enIframe.contentWindow.document.documentElement.scrollHeight;
+                var height = Math.max(bHeight, dHeight);
+                enIframe.height = height;
+                console.log(height);
+            } catch (ex) { }
+        }
+
+        //在右侧框架中显示指定url的页面
+        function OpenUrlInRightFrame(ele, url) {
+            if (ele != null && ele != undefined) {
+
+                currShow = $(ele).parents('li').text(); //有回车符
+
+                $.each($(ele).parents('ul').children('li'), function (i, e) {
+                    $(e).children('div').css('font-weight', $(e).text() == currShow ? 'bold' : 'normal');
+                });
+
+                if (url.indexOf('?') == -1)
+                    url += '?1=1';
+
+                $('#rightFrame').empty();
+              
+                $('#rightFrame').append('<iframe scrolling="no" id="enclass" frameborder="0"  src="' + url + '&s=' + Math.random() + '" style="width:100%;" ></iframe>');
+             
+            }
+        }
+     
+     
+
+        function CloseIt() {
+            if (window.parent && window.parent.CloseBootstrapDialog) {
+                window.parent.CloseBootstrapDialog("取消");
+            } else {
+                window.close();
+            }
+        }
+
+        $(function () {
+            var Accordion = function (el, multiple) {
+                this.el = el || {};
+                this.multiple = multiple || false;
+
+                // Variables privadas
+                var links = this.el.find('.link');
+                // Evento
+                links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
+            }
+
+            Accordion.prototype.dropdown = function (e) {
+                var $el = e.data.el;
+                $this = $(this),
+			$next = $this.next();
+
+                $next.slideToggle();
+                $this.parent().toggleClass('open');
+
+                if (!e.data.multiple) {
+                    $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+                };
+            }
+
+            var accordion = new Accordion($('#accordion'), false);
+
+        });
+    </script>
+</head> 
+<body  class="skin-show">
+    <div class="wrapper" style=" padding: 0px 20px 0px">
+        <div class="row">
+            <!--En左侧列表结构-->
+            <div class="col-sm-2 ">
+                <div id="sidebar-menu" class="show-sideber">
+                    <ul class="sidebar-menu on" id="EnTree"></ul>
+                </div>
+            </div>
+            <!--En右侧列表结构/EnOnly页面-->
+            <div class="col-sm-10" id="rightFrame">
+            </div>
+        </div>
+    </div>
+     <script src="../../Scripts/bootstrap/js/bootstrap-treeview.js" type="text/javascript"></script> 
+</body>
+
+</html>

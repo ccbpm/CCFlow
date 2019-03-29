@@ -97,9 +97,11 @@ namespace CCFlow.DataUser
         /// <param name="toEmps">到达的人员IDs,比如:zhangsan,lisi,wangwu. 如果为Null就标识让系统自动计算.</param>
         /// <returns>发送的结果信息.</returns>
         [WebMethod]
-        public string SendWork(string flowNo, Int64 workid, Hashtable ht, int toNodeID, string toEmps)
+        public string SendWork(string flowNo, Int64 workid, string atParas, int toNodeID, string toEmps)
         {
-            BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ht, toNodeID, toEmps);
+            BP.DA.AtPara ap = new BP.DA.AtPara(atParas);
+
+            BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ap.HisHT, toNodeID, toEmps);
 
             string msg = objs.ToMsgOfText();
 

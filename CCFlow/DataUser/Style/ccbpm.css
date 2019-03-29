@@ -28,7 +28,7 @@ input[type="button"], input[type="submit"], input[type="file"]
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-    border:1px solid #1d7dd4;
+    border:1px solid #d2cdcd;
 }
 input:hover[type="button"]
 {
@@ -136,7 +136,7 @@ td
     color: #333333;
     font-size: 12px;
     border-width: 1px;
-    border-color: #C2D5E3;
+    border-color: #d2cdcd;
 }
 
 
@@ -453,7 +453,7 @@ display:none;
 }
 
 .modal-header {
-    background: #6975F4;
+    background: #f2f2f2;
     color: white;
     height:50px;
 }
@@ -463,12 +463,13 @@ display:none;
     border-radius: 20px;
     margin: 15px 10px;
     text-align:right;
+    
 }
 
 .btn {
-    background: #2884fa !important;
+    background: ##f2f2f2 !important;
     border-radius: 20px !important;
-    color:white !important;
+    color:#0000007a !important;
 }
 
 .errorBorder {
@@ -592,6 +593,7 @@ cursor:pointer;
 .modal-title {
     text-align: left;
     font-size: 16px;
+    color:#0000007a;
 }
 
 .input-group-addon {

@@ -4,36 +4,34 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>驰骋工作流程引擎设计器ccflow6</title>
-     <!--引入CSS样式-->
+    <!--引入CSS样式-->
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="../../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-    <link href="../../../DataUser/Style/admin/skins/_all-skins.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/admin/skins/_all-skins.css" rel="stylesheet"
+        type="text/css" />
     <link href="../../../DataUser/Style/admin/designer.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../../DataUser/Style/admin/skins/context.standalone.css" rel="stylesheet"
+        type="text/css" />
     <!--本页面CSS-->
     <link href="../CCFormDesigner/normalize/css/ns-default.css" rel="stylesheet" type="text/css" />
     <link href="../CCFormDesigner/normalize/css/ns-style-bar.css" rel="stylesheet" type="text/css" />
-
-     <!--引入通用JS-->
+    <!--引入通用JS-->
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript" ></script>
-    <script src="../../Scripts/config.js" type="text/javascript" ></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-
+    <script src="js/context.js" type="text/javascript"></script>
     <!--引入bootstrap的JS-->
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-    <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>  
+    <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../Comm/JS/layer/layer.js" type="text/javascript"></script>
-    
     <!--本页面JS-->
-   
     <script src="js/browserReady.js" type="text/javascript"></script>
     <script src="js/CCBPMDesignerData.js" type="text/javascript"></script>
     <script src="js/FuncTrees.js" type="text/javascript"></script>
-
     <script type="text/javascript">
         var osModel = 1;
         var runOnPlant = "BP";
@@ -72,8 +70,6 @@
             notification.show();
         }
     </script>
-    
-    
     <script type="text/javascript">
         var FLOW_TREE = "flowTree";
         var FORM_TREE = "formTree";
@@ -85,21 +81,16 @@
         }
 
         //----------------------------------------------流程树节点操作 Start------------------------------------------------------------------------------------------
-
         /// <summary>新建流程</summary>
-        function newFlow() {
-            var currSort = $('#flowTree').tree('getSelected');
-            var currSortId = "99";
-            if (currSort && currSort.attributes["IsParent"] != 0) { //edit by qin 2016/2/16
-                currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
-            }
+        function newFlow(event) {
+            var currSortId = event.data.No;
             var dgId = "iframDg";
             var url = "NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
 
-            var W = document.body.clientWidth - 80;
-            var H = document.body.clientHeight - 120;
+            var W = document.body.clientWidth - 880;
+            var H = document.body.clientHeight - 450;
 
-            OpenBootStrapModal(url, "eudlgframe", '导入数据', W, H, "icon-new", true, function () {
+            OpenBootStrapModal(url, dgId, '新建流程', W, H, "icon-new", true, function () {
                 var win = document.getElementById(dgId).contentWindow;
                 var newFlowInfo = win.getNewFlowInfo();
 
@@ -107,6 +98,8 @@
                     $.messager.alert('错误', '信息填写不完整', 'error');
                     return false;
                 }
+
+
                 var html = $("#ShowMsg").html();
                 $("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
                 $("#ShowMsg").css({ "width": "320px" });
@@ -120,53 +113,41 @@
                     return;
                 }
 
-
                 var flowNo = data;
                 var flowName = newFlowInfo.flowName;
 
                 //在左侧流程树上增加新建的流程,并选中
                 //获取新建流程所属的类别节点
-                //todo:此处还有问题，类别id与流程id可能重复，重复就会出问题，解决方案有待进一步确定
-                var parentNode = $('#flowTree').tree('find', "F" + newFlowInfo.flowSort);
-                var node = $('#flowTree').tree('append', {
-                    parent: parentNode.target,
-                    data: [{
-                        id: flowNo,
-                        text: flowNo + '.' + flowName,
-                        attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
-                        iconCls: 'icon-flow1',
-                        checked: false
-                    }]
-                });
-                var nodeData = {
-                    id: flowNo,
-                    text: flowNo + '.' + flowName,
-                    attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
-                    iconCls: 'icon-flow1',
-                    checked: false
-                };
-                //展开到指定节点
-                $('#flowTree').tree('expandTo', $('#flowTree').tree('find', flowNo).target);
-                $('#flowTree').tree('select', $('#flowTree').tree('find', flowNo).target);
+                //将新建同级插入到流程树中
+                var id = flowNo;
+                var F_Icon;
+                var url = "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID";
+                var html = "";
+                html += '<li class="treeview">';
+                html += '<a class="menuItem" tabindex="-1" data-id="' + id + '" data-name="' + id + "." + flowName + '" href="' + url + '"><i class="' + F_Icon + '"></i>' + id + "." + flowName + '</a>';
+                html += '</li>'
+                var parentNode = $("a[data-id='" + currSortId + "']").next();
+                if (parentNode.length == 0) {
+                    return;
+                }
+                parentNode.append(html);
+
 
                 //在右侧流程设计区域打开新建的流程
-                RefreshFlowJson();
+                addTab(id, flowName, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0");
 
-            }, null, null, null, 'black'); 
+            }, null, null, null, 'black');
 
-            
+
         }
+        /// <summary>新建流程类别同级</summary>
+        function newSameLevelFlowSort(event) {
+            var currSortId = event.data.No;
 
-        /// <summary>新建流程类别子级</summary>
-        /// <param name="isSub" type="Boolean">是否是新建子级流程类别</param>
-        function newFlowSort(isSub) {
-
-            var currSort = $('#flowTree').tree('getSelected');
-            if (currSort == null || undefined == currSort.attributes.ISPARENT ||
-                currSort.attributes.ISPARENT != '1' || (currSort.attributes.IsRoot == '1' && isSub == false))
+            if (currSortId == null || currSortId == "" || currSortId == undefined)
                 return;
 
-            var propName = (isSub ? '子级' : '同级') + '流程类别';
+            var propName = '同级流程类别';
             var val = window.prompt(propName, '');
             if (val == null || val.length == 0) {
                 alert('必须输入名称.');
@@ -174,81 +155,125 @@
             }
 
             //传入参数
-            var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
+            var doWhat = 'NewSameLevelFlowSort';
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("No", currSort.id);
+            handler.AddPara("No", currSortId);
             handler.AddPara("Name", val);
             var data = handler.DoMethodReturnString(doWhat);
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
-            var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
+            //将新建同级插入到流程树中
+            var html = "";
+            html += '<li class="treeview">';
+            html += '<a href="#" class="node" data-id="' + data + '" data-Name="' + val + '">'
+            html += '<i class="undefined" ></i><span>' + val + '</span><i class="fa fa-angle-left pull-right"></i>'
+            html += '</a></li>'
+            var parentNode = $("a[data-id='" + currSortId + "']").parent();
+            if (parentNode.length == 0) {
+                return;
+            }
+            parentNode.after(html);
 
-            $('#flowTree').tree('append', {
-                parent: parentNode.target,
-                data: [{
-                    id: data,
-                    text: val,
-                    attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
-                    checked: false,
-                    iconCls: 'icon-flowtree',
-                    state: 'open',
-                    children: []
-                }]
-            });
+        }
+        /// <summary>新建流程类别子级</summary>
+        function newFlowSort(event) {
+            var currSortId = event.data.No;
+            if (currSortId == null || currSortId == "" || currSortId == undefined)
+                return;
 
-            $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
+            var propName = '子级流程类别';
+            var val = window.prompt(propName, '');
+            if (val == null || val.length == 0) {
+                alert('必须输入名称.');
+                return false;
+            }
 
+            //传入参数
+            var doWhat = 'NewSubFlowSort';
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currSortId);
+            handler.AddPara("Name", val);
+            var data = handler.DoMethodReturnString(doWhat);
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            //将新建子级类别插入到流程树中
+            var html = "";
+            var nextNode = $("a[data-id='" + currSortId + "']").next();
+            if (nextNode.length == 0) {
+                html += '<ul class="treeview-menu">';
+                html += '<li class="treeview">';
+                html += '<a href="#" class="node" data-id="' + data + '" data-Name="' + val + '">'
+                html += '<i class="undefined" ></i><span>' + val + '</span><i class="fa fa-angle-left pull-right"></i>'
+                html += '</a></li></ul>'
+
+                $("a[data-id='" + currSortId + "']").after(html);
+            }
+
+
+            html += '<li class="treeview">';
+            html += '<a href="#" class="node" data-id="' + data + '" data-Name="' + val + '">'
+            html += '<i class="undefined" ></i><span>' + val + '</span><i class="fa fa-angle-left pull-right"></i>'
+            html += '</a></li>'
+
+            nextNode.append(html);
 
         }
 
         //导入流程模板
-        function ImpFlowBySort() {
-            var currFlow = $('#flowTree').tree('getSelected');
-            var fk_flowSort = currFlow.id;
+        function ImpFlowBySort(event) {
+            var fk_flowSort = event.data.No;
+            var Name = event.data.Name;
+            if (fk_flowSort == null || fk_flowSort == "" || fk_flowSort == undefined) {
+                alert('没有获得当前的流程编号.');
+            }
             fk_flowSort = fk_flowSort.replace("F", "");
-            url = "./../AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+            url = "./../AttrFlow/Imp.htm?FK_Flow=" + fk_flowSort + "&Lang=CH";
             addTab(fk_flowSort + "PO", "导入流程模版", url);
+
         }
 
 
         //修改流程类别
-        function editFlowSort() {
+        function editFlowSort(event) {
             /// <summary>编辑流程类别</summary>
-            var currSort = $('#flowTree').tree('getSelected');
-            if (currSort == null)
+
+            var currSortId = event.data.No;
+            var text = event.data.Name;
+
+            if (currSortId == null)
                 return;
 
-            var val = prompt("请输入类别名称", currSort.text);
+            var val = prompt("请输入类别名称", text);
             if (val == null || val == '')
                 return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("No", currSort.id);
+            handler.AddPara("No", currSortId);
             handler.AddPara("Name", val);
             var data = handler.DoMethodReturnString("EditFlowSort");
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
-
-            $('#flowTree').tree('update', {
-                target: currSort.target,
-                text: val
-            });
+            $("a[data-id='" + currSortId + "']").children().eq(1).text(val);
 
         }
 
-        function deleteFlowSort() {
-            /// <summary>删除流程类别</summary>
-            var currSort = $('#flowTree').tree('getSelected');
-            if (currSort == null || currSort.attributes.IsParent == undefined) return;
-            if (confirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？") == false)
+        /// <summary>删除流程类别</summary>
+        function deleteFlowSort(event) {
+
+            var currSortId = event.data.No;
+            var text = event.data.Name;
+            if (confirm("你确定要删除名称为“" + text + "”的流程类别吗？") == false)
                 return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_FlowSort", currSort.id);
+            handler.AddPara("FK_FlowSort", currSortId);
             var data = handler.DoMethodReturnString("DelFlowSort");
             if (data.indexOf("err@") != -1) {
                 alert(data);
@@ -256,77 +281,68 @@
             }
 
             alert(data);
-            //删除节点
-            $('#flowTree').tree('remove', currSort.target);
 
-            
+            //删除流程树中的节点
+            $("a[data-id='" + currSortId + "']").parent().remove();
+
+
         }
 
         /// <summary>流程树节点属性</summary>
-        function viewFlowSort() {
-
-            var currSort = $('#flowTree').tree('getSelected');
-            var currSortId = "99";
-            if (currSort && currSort.attributes["ISPARENT"] != 0) {
-                currSortId = $('#flowTree').tree('getSelected').id;
-            }
+        function viewFlowSort(event) {
+            var currSortId = event.data.No;
 
             currSortId = currSortId.replace(/'F'/, '');
             currSortId = currSortId.replace("F", "");
 
             var dgId = "iframDgView";
-          //  var url = "viewFlowShort.htm?sort=" + currSortId + "&s=" + Math.random();
             var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FlowSort&No=" + currSortId + "&s=" + Math.random();
-
-            OpenEasyUiDialog(url, dgId, '流程树节点属性', 420, 300, 'icon-flow', false, function () {
+            OpenBootStrapModal(url, dgId, '流程树节点属性', 500, 260, "icon-new", false, function () {
 
                 var win = document.getElementById(dgId).contentWindow;
-
-
-            }, null);
+            }, null, null, null, 'black');
         }
 
         //上移流程类别
-        function moveUpFlowSort() {
-            var currSort = $('#flowTree').tree('getSelected');
-            if (currSort == null) return;
+        function moveUpFlowSort(event) {
+            var currSortId = event.data.No;
+            if (currSortId == null) return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_FlowSort", currSort.id);
+            handler.AddPara("FK_FlowSort", currSortId);
             var data = handler.DoMethodReturnString("MoveUpFlowSort");
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
-
-            var before = $(currSort.target).parent().prev();
-            if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+            var before = $("a[data-id='" + currSortId + "']").parent().prev();
+            if (before.length == 0) {
                 return;
             }
 
-            $(currSort.target).parent().insertBefore(before);
+            $("a[data-id='" + currSortId + "']").parent().insertBefore(before);
 
-           
         }
 
         //下移流程类别
-        function moveDownFlowSort() {
-            var currSort = $('#flowTree').tree('getSelected');
-            if (currSort == null) return;
+        function moveDownFlowSort(event) {
+            var currSortId = event.data.No;
+            if (currSortId == null) return;
+
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_FlowSort", currSort.id);
+            handler.AddPara("FK_FlowSort", currSortId);
             var data = handler.DoMethodReturnString("MoveDownFlowSort");
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
-            var next = $(currSort.target).parent().next();
-            if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+            var next = $("a[data-id='" + currSortId + "']").parent().next();
+            if (next.length == 0) {
                 return;
             }
 
-            $(currSort.target).parent().insertAfter(next);
+            $("a[data-id='" + currSortId + "']").parent().insertAfter(next);
         }
 
 
@@ -334,20 +350,135 @@
 
 
         //----------------------------------------------流程属性操作 Start------------------------------------------------------------------------------------------
-        //导入流程
-        function ImpFlow() {
-            var currFlow = $('#flowTree').tree('getSelected');
-            if (currFlow == null || currFlow.attributes.ISPARENT != '0') {
+        //右键打开流程
+        function showFlow(event) {
+            var No = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (No == null || No == "" || No == undefined) {
                 alert('没有获得当前的流程编号.');
-                return;
             }
-            var fk_flow = currFlow.id;
+            OpenFlowToCanvas(DType, No, Name);
+        }
+        //导入流程
+        function ImpFlow(event) {
+            var fk_flow = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (fk_flow == null || fk_flow == "" || fk_flow == undefined) {
+                alert('没有获得当前的流程编号.');
+            }
             url = "./../AttrFlow/Imp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
             addTab(fk_flow + "PO", "导入流程模版", url);
         }
 
-       
-        //添加流程到流程树
+        //导出流程
+        function ExpFlow(event) {
+            var fk_flow = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (fk_flow == null || fk_flow == "" || fk_flow == undefined) {
+                alert('没有获得当前的流程编号.');
+            }
+            url = "./../AttrFlow/Exp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
+            addTab(fk_flow + "PO", "导出流程模版", url);
+        }
+
+        //删除流程
+        function DeleteFlow(event) {
+            var fk_flow = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (fk_flow == null || fk_flow == "" || fk_flow == undefined) {
+                alert('没有获得当前的流程编号.');
+            }
+
+            if (window.confirm("你确定要删除名称为“" + Name + "”的流程吗？") == false)
+                return;
+
+            //执行删除流程.
+            var en = new Entity("BP.WF.Flow", fk_flow);
+            var data = en.DoMethodReturnString("DoDelete");
+            alert(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            //关闭已打开的流程
+            closeTab(fk_flow);
+            //删除流程树中的节点
+            var my = $("a[data-id='" + fk_flow + "']").parent();
+            if (my != null)
+                my.remove();
+        }
+
+        //流程属性,树上的.
+        function FlowProperty(event) {
+            var fk_flow = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (fk_flow == null || fk_flow == "" || fk_flow == undefined) {
+                return; ;
+            }
+            var userNo = GetQueryString("UserNo");
+
+            url = "../../Comm/En.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PKVal=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
+            addTab(fk_flow + "PO", "流程属性" + fk_flow, url); //之前currFlow+ "PO"
+
+        }
+
+        //上移流程
+        function moveUpFlow(event) {
+            var fk_flow = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (fk_flow == null || fk_flow == "" || fk_flow == undefined) {
+                alert('没有获得当前的流程编号.');
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("FK_Flow", fk_flow);
+            var data = handler.DoMethodReturnString("MoveUpFlow");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            var before = $("a[data-id='" + fk_flow + "']").parent().prev();
+            if (before.length == 0) {
+                return;
+            }
+
+            $("a[data-id='" + fk_flow + "']").parent().insertBefore(before);
+
+
+        }
+
+        //下移流程
+        function moveDownFlow(event) {
+            var fk_flow = event.data.No;
+            var Name = event.data.Name;
+            var DType = event.data.Dtype;
+            if (fk_flow == null || fk_flow == "" || fk_flow == undefined) {
+                alert('没有获得当前的流程编号.');
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("FK_Flow", fk_flow);
+            var data = handler.DoMethodReturnString("MoveDownFlow");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            var next = $("a[data-id='" + fk_flow + "']").parent().next();
+            if (next.length == 0) {
+                return;
+            }
+
+            $("a[data-id='" + fk_flow + "']").parent().insertAfter(next);
+        }
+        //添加流程到流程树(无调用)
         function AppendFlowToFlowSortTree(FK_FlowSort, FK_Flow, FlowName) {
             var flowSortNode = $('#flowTree').tree('find', "F" + FK_FlowSort);
             $('#flowTree').tree('append', {
@@ -370,298 +501,325 @@
             RefreshFlowJson();
         }
 
-        //导出流程
-        function ExpFlow() {
-            var currFlow = $('#flowTree').tree('getSelected');
-            if (currFlow == null || currFlow.attributes.ISPARENT != '0') {
-                alert('没有获得当前的流程编号.');
-                return;
-            }
 
-            var fk_flow = currFlow.id;
-            url = "./../AttrFlow/Exp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
-            addTab(fk_flow + "PO", "导出流程模版", url);
-        }
 
-        //删除流程
-        function DeleteFlow() {
-            /// <summary>删除流程</summary>
-            var currFlow = $('#flowTree').tree('getSelected');
-            if (currFlow == null || currFlow.attributes.ISPARENT != '0')
-                return;
-
-            if (window.confirm("你确定要删除名称为“" + currFlow.text + "”的流程吗？") == false)
-                return;
-
-            //执行删除流程.
-            var en = new Entity("BP.WF.Flow", currFlow.id);
-            var data = en.DoMethodReturnString("DoDelete");
-            alert(data);
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //如果右侧有打开该流程，则关闭
-            var currFlowTab = $('#tabs').tabs('getTab', currFlow.text);
-            if (currFlowTab) {
-                //todo:此处因为有关闭前事件，直接这样用会弹出提示关闭框，怎么解决有待进一步确认
-                $('#tabs').tabs('close', currFlow.text);
-            }
-            $('#flowTree').tree('remove', currFlow.target);
-        }
-
-        //流程属性,树上的.
-        function FlowProperty() {
-
-            var currFlow = $('#flowTree').tree('getSelected');
-            if (currFlow == null || currFlow.attributes.ISPARENT != '0')
-                return;
-
-            var userNo = GetQueryString("UserNo");
-
-            var fk_flow = currFlow.id;
-            url = "../../Comm/En.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PKVal=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
-            addTab(currFlow + "PO", "流程属性" + fk_flow, url);
-
-        }
-
-        //上移流程
-        function moveUpFlow() {
-            var currFlow = $('#flowTree').tree('getSelected');
-            if (currFlow == null || currFlow.attributes.ISPARENT != '0')
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_Flow", currFlow.id);
-            var data = handler.DoMethodReturnString("MoveUpFlow");
-            if (data.indexOf("err@") != -1) {
-                alert(data);
-                return;
-            }
-
-            var before = $(currFlow.target).parent().prev();
-            if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOW") {
-                return;
-            }
-
-            $(currFlow.target).parent().insertBefore(before);
-
-            
-        }
-
-        //下移流程
-        function moveDownFlow() {
-            var currFlow = $('#flowTree').tree('getSelected');
-            if (currFlow == null || currFlow.attributes.ISPARENT != '0')
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_Flow", currFlow.id);
-            var data = handler.DoMethodReturnString("MoveDownFlow");
-            if (data.indexOf("err@") != -1) {
-                alert(data);
-                return;
-            }
-
-            var next = $(currFlow.target).parent().next();
-            if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOW") {
-                return;
-            }
-
-            $(currFlow.target).parent().insertAfter(next);
-        }
         //----------------------------------------------流程属性操作 End------------------------------------------------------------------------------------------
 
         //----------------------------------------------表单树节点操作 Start------------------------------------------------------------------------------------------
-        //新建表单树类别
-        function newCCFormSort(isSub) {
-
-            var currCCFormSort = $('#formTree').tree('getSelected');
-            if (currCCFormSort == null || currCCFormSort.attributes.TType != "FORMTYPE")
-                return;
-
-            var propName = (isSub ? '子级' : '同级') + '表单类别';
-
-            OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
-                if (val == null || val.length == 0) {
-                    $.messager.alert('错误', '请输入' + propName + '！', 'error');
-                    return false;
-                }
-
-                //执行的方法
-                var doWhat = isSub ? 'CCForm_NewSubSort' : 'CCForm_NewSameLevelSort';
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-                handler.AddPara("No", currCCFormSort.id);
-                handler.AddPara("Name", val);
-                var data = handler.DoMethodReturnString(doWhat);
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-                var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
-
-                $('#formTree').tree('append', {
-                    parent: parentNode.target,
-                    data: [{
-                        id: data,
-                        text: val,
-                        attributes: { MenuId: "mFormSort", TType: "FORMTYPE" },
-                        checked: false,
-                        iconCls: 'icon-tree_folder',
-                        state: 'open',
-                        children: []
-                    }]
-                });
-
-                $('#formTree').tree('select', $('#formTree').tree('find', data).target);
-              
-               
-            }, null, false, 'icon-new');
-        }
-
-        //编辑表单树类别
-        function EditCCFormSort() {
-
-            var currCCFormSort = $('#formTree').tree('getSelected');
-            if (currCCFormSort == null || currCCFormSort.attributes.TType != "FORMTYPE")
-                return;
-
-            OpenEasyUiSampleEditDialog("编辑类别名称", '', currCCFormSort.text, function (val) {
-                if (val == null || val.length == 0) {
-                    $.messager.alert('错误', '请输入类别名称', 'error');
-                    return false;
-                }
-
-                //传入参数
-                var params = {
-                    action: "CCForm_EditCCFormSort",
-                    No: currCCFormSort.id,
-                    Name: val
-                };
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-                handler.AddPara("No", currCCFormSort.id);
-                var data = handler.DoMethodReturnString("CCForm_EditCCFormSort");
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-                $('#formTree').tree('update', {
-                    target: currCCFormSort.target,
-                    text: val
-                });
-                $('#formTree').tree('select', $('#formTree').tree('find', data).target);
-
-               
-            }, null, false, 'icon-new');
-        }
-        //删除表单树类别
-        function DeleteCCFormSort() {
-            var currFormSort = $('#formTree').tree('getSelected');
-            if (currFormSort == null || currFormSort.attributes.TType != 'FORMTYPE')
-                return;
-
-            OpenEasyUiConfirm("你确定要删除名称为“" + currFormSort.text + "”的类别吗？", function () {
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-                handler.AddPara("No", currCCFormSort.id);
-                var data = handler.DoMethodReturnString("CCForm_DelFormSort");
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-                alert(data);
-                $('#flowTree').tree('remove', currFormSort.target);
-
-               
-            });
-        }
-
-        //上移表单类别
-        function moveUpCCFormSort() {
-            var currFormSort = $('#formTree').tree('getSelected');
-            if (currFormSort == null)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("No", currCCFormSort.id);
-            var data = handler.DoMethodReturnString("CCForm_MoveUpCCFormSort");
-            if (data.indexOf("err@") != -1) {
-                alert(data);
-                return;
-            }
-
-            var before = $(currFormSort.target).parent().prev();
-            if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORMTYPE") {
-                return;
-            }
-
-            $(currFormSort.target).parent().insertBefore(before);
-
-        }
-
-        //下移表单类别
-        function moveDownCCFormSort() {
-            var currFormSort = $('#formTree').tree('getSelected');
-            if (currFormSort == null)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("No", currCCFormSort.id);
-            var data = handler.DoMethodReturnString("CCForm_MoveUpCCFormSort");
-            if (data.indexOf("err@") != -1) {
-                alert(data);
-                return;
-            }
-
-            var next = $(currFormSort.target).parent().next();
-            if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORMTYPE") {
-                return;
-            }
-
-            $(currFormSort.target).parent().insertAfter(next);
-
-           
-        }
-        //----------------------------------------------表单树节点操作 End------------------------------------------------------------------------------------------
-
-        //----------------------------------------------表单属性操作 End------------------------------------------------------------------------------------------
         //新建表单
-        function newFrm() {
-            var node = $('#formTree').tree('getSelected');
-            if (!node) {
+        function newFrm(event) {
+            var nodeId = event.data.No;
+            var Name = event.data.Name;
+            var TType = event.data.Ttype;
+            //            var node = $('#formTree').tree('getSelected');
+            if (!nodeId) {
                 return;
             }
 
             var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0";
-            if (node.attributes) {
-                if (node.attributes.TType == "SRC") {
-                    url += "&Src=" + node.id;
-                } else if (node.attributes.TType == "FORMTYPE") {
-                    //在表单类别上单击，则传递表单类别
-                    var pnode = $('#formTree').tree('getParent', node.target);
-                    if (pnode != null) {
-                        url += "&FK_FrmSort=" + node.id;
 
-                        while (pnode && pnode.attributes) {
-                            if (pnode.attributes.TType == "SRC") {
-                                url += "&Src=" + pnode.id;
-                                break;
-                            }
-                            pnode = $('#formTree').tree('getParent', pnode.target);
-                        }
-                    }
-                }
-            }
+            //            if (TType == "SRC") {
+            //                url += "&Src=" + nodeId;
+            //            } else if (TType == "FORMTYPE") {
+            //                //在表单类别上单击，则传递表单类别
+            //                var pnode = $('#formTree').tree('getParent', node.target);
+            //                if (pnode != null) {
+            //                    url += "&FK_FrmSort=" + node.id;
+
+            //                    while (pnode && pnode.attributes) {
+            //                        if (pnode.attributes.TType == "SRC") {
+            //                            url += "&Src=" + pnode.id;
+            //                            break;
+            //                        }
+            //                        pnode = $('#formTree').tree('getParent', pnode.target);
+            //                    }
+            //                }
+            //            }
+
+            var myUl = $(".page-tabs-content").find("a");
+            myUl.each(function (index, e) {
+                console.log(index + ' ' + $(e).text())
+            })
             //如果右侧有打开该表单，则关闭
-            var currTab = $('#tabs').tabs('getTab', "新建表单");
-            if (currTab) {
-                $('#tabs').tabs('close', "新建表单");
-            }
-            addTab("NewFrm", "新建表单", url);
+            //            var currTab = $('#tabs').tabs('getTab', "新建表单");
+            //            if (currTab) {
+            //                $('#tabs').tabs('close', "新建表单");
+            //            } closeTab
+            //            addTab("NewFrm", "新建表单", url);
         }
+
+        //新建表单树同级类别
+        function newCCFormSameLevelSort(event) {
+            var currCCFormSortId = event.data.No;
+            var Name = event.data.Name;
+            var TType = event.data.Ttype;
+            //            var currCCFormSort = $('#formTree').tree('getSelected');
+            if (currCCFormSortId == null || TType != "FORMTYPE")
+                return;
+
+            var propName = '同级表单类别';
+            var val = window.prompt(propName, '');
+            if (val == null || val.length == 0) {
+                alert('必须输入名称.');
+                return false;
+            }
+
+            //传入参数
+            var doWhat = 'CCForm_NewSameLevelSort';
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currCCFormSortId);
+            handler.AddPara("Name", val);
+            var data = handler.DoMethodReturnString(doWhat);
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            //将新建同级插入到表单树中
+            var html = "";
+            var iconCls;
+            html += '<li class="treeview">';
+            html += '<a href="#" class="node" data-id="' + data + '" data-Name="' + val + '" data-Ttype="' + TType + '">'
+            html += '<i class="' + iconCls + '" ></i><span>' + val + '</span><i class="fa fa-angle-left pull-right"></i>'
+            html += '</a></li>'
+            var parentNode = $("a[data-id='" + currCCFormSortId + "']").parent();
+            if (parentNode.length == 0) {
+                return;
+            }
+            parentNode.after(html);
+
+        }
+
+        //新建表单树子级类别
+        function newCCFormSort(event) {
+            var currCCFormSortId = event.data.No;
+            var Name = event.data.Name;
+            var TType = event.data.Ttype;
+            //            var currCCFormSort = $('#formTree').tree('getSelected');
+            if (currCCFormSortId == null || TType != "FORMTYPE")
+                return;
+
+            var propName = '子级表单类别';
+            var val = window.prompt(propName, '');
+            if (val == null || val.length == 0) {
+                alert('必须输入名称.');
+                return false;
+            }
+            //传入参数
+            var doWhat = 'CCForm_NewSubSort';
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currCCFormSortId);
+            handler.AddPara("Name", val);
+            var data = handler.DoMethodReturnString(doWhat);
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            //将新建子级类别插入到表单树中
+            var html = "";
+            var iconCls;
+            var nextNode = $("a[data-id='" + currCCFormSortId + "']").next();
+            if (nextNode.length == 0) {
+                html += '<ul class="treeview-menu">';
+                html += '<li class="treeview">';
+                html += '<a href="#" class="node" data-id="' + data + '" data-Name="' + val + '">'
+                html += '<i class="undefined" ></i><span>' + val + '</span><i class="fa fa-angle-left pull-right"></i>'
+                html += '</a></li></ul>'
+
+                $("a[data-id='" + currCCFormSortId + "']").after(html);
+            }
+
+
+            html += '<li class="treeview">';
+            html += '<a href="#" class="node" data-id="' + data + '" data-Name="' + val + '">'
+            html += '<i class="' + iconCls + '" ></i><span>' + val + '</span><i class="fa fa-angle-left pull-right"></i>'
+            html += '</a></li>'
+
+            nextNode.append(html);
+
+
+        }
+
+        //编辑表单树类别
+        function EditCCFormSort(event) {
+            var currCCFormSortId = event.data.No;
+            var text = event.data.Name;
+            var TType = event.data.Ttype;
+            if (currCCFormSortId == null || TType != "FORMTYPE")
+                return;
+
+            var val = prompt("请输入编辑类别名称", text);
+            if (val == null || val == '')
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currCCFormSortId);
+            handler.AddPara("Name", val);
+            var data = handler.DoMethodReturnString("CCForm_EditCCFormSort");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            $("a[data-id='" + currCCFormSortId + "']").text(val);
+        }
+        //删除表单树类别
+        function DeleteCCFormSort(event) {
+            var currCCFormSortId = event.data.No;
+            var text = event.data.Name;
+            var TType = event.data.Ttype;
+            if (currCCFormSortId == null || TType != 'FORMTYPE')
+                return;
+
+            if (confirm("你确定要删除名称为“" + text + "”的类别吗？") == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currCCFormSortId);
+            var data = handler.DoMethodReturnString("CCForm_DelFormSort");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            alert(data);
+
+            //删除表单树中的节点
+            $("a[data-id='" + currCCFormSortId + "']").parent().remove();
+
+        }
+
+        //上移表单类别
+        function moveUpCCFormSort(event) {
+            var currFormSortId = event.data.No;
+            if (currFormSortId == null)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currFormSortId);
+            var data = handler.DoMethodReturnString("CCForm_MoveUpCCFormSort");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            var before = $("a[data-id='" + currFormSortId + "']").parent().prev();
+            if (before.length == 0) {
+                return;
+            }
+
+            $("a[data-id='" + currFormSortId + "']").parent().insertBefore(before);
+
+        }
+
+        //下移表单类别
+        function moveDownCCFormSort(event) {
+            var currFormSortId = event.data.No;
+            if (currFormSortId == null)
+                return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("No", currFormSortId);
+            var data = handler.DoMethodReturnString("CCForm_MoveUpCCFormSort");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            var next = $("a[data-id='" + currFormSortId + "']").parent().next();
+            if (next.length == 0) {
+                return;
+            }
+
+            $("a[data-id='" + currFormSortId + "']").parent().insertAfter(next);
+
+
+        }
+        function RefreshNode(sTreeId, oNodeId) {
+            /// <summary>刷新指定节点，此方法设计的只有刷新一级节点才可用此方法</summary>
+            /// <param name="sTreeId" type="String">定义树Id</param>
+            /// <param name="oNodeId" type="Object">要刷新节点的id</param> 
+            var node = $("#" + sTreeId).tree("find", oNodeId);
+            if (!node) {
+                $.messager.alert('错误', '未检索到要刷新的节点！', 'error');
+                return;
+            }
+
+            //首先将要刷新的节点下方的所有节点删除掉
+            var children = $("#" + sTreeId).tree("getChildren", node.target);
+            if (children.length > 0) {
+                $.each(children, function () {
+                    $("#" + sTreeId).tree("remove", this.target);
+                });
+            }
+
+            LoadLazyNodes(node.attributes.Node, node, Find(functrees, "Id", sTreeId)[0]);
+        }
+        //----------------------------------------------表单树节点操作 End------------------------------------------------------------------------------------------
+
+        //----------------------------------------------表单属性操作 Start------------------------------------------------------------------------------------------
+        //单据属性
+        function Bill_CCForm(event) {
+
+            if (plant != 'CCFlow') {
+                alert('功能尚未同步到该版本上.');
+                return;
+            }
+
+            var nodeId = event.data.No;
+            if (!nodeId) {
+                alert('请选择一个表单.');
+                return;
+            }
+            var url = '../../Comm/En.htm?EnName=BP.WF.CCBill.FrmBill&PKVal=' + nodeId;
+            OpenBootStrapModal(url, "CCForm_Attr", '单据属性', 900, 560, "icon-window", false, null, null, null, null, 'black');
+        }
+        //打开单据
+        function Bill_Open(event) {
+
+            if (plant != 'CCFlow') {
+                alert('功能尚未同步到该版本上.');
+                return;
+            }
+
+            var nodeId = event.data.No;
+            if (!nodeId) {
+                alert('请选择一个表单.');
+                return;
+            }
+            var url = '../../CCBill/Search.htm?FrmID=' + nodeId;
+            OpenBootStrapModal(url, "CCForm_Attr", '我的单据', 1100, 560, "icon-window", false, null, null, null, null, 'black');
+        }
+        //表单属性
+        function CCForm_Attr(event) {
+            var nodeId = event.data.No;
+            if (!nodeId) {
+                alert('请选择表单.');
+                return;
+            }
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + nodeId;
+            OpenBootStrapModal(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window", false, null, null, null, null, 'black');
+        }
+
+        //设计傻瓜表单
+        function designFoolFrm(event) {
+            var nodeId = event.data.No;
+            var nodeText = event.data.Name;
+            if (!nodeId) {
+                alert('请选择表单.');
+                return;
+            }
+            addTab("DesignerFoolFrm" + nodeId, nodeText, "../FoolFormDesigner/Designer.htm?FK_MapData=" + nodeId + "&IsFirst=1&MyPK=" + nodeId + "&IsEditMapData=True");
+        }
+
+        //设计自由表单
+        function designFreeFrm(event) {
+            var nodeId = event.data.No;
+            var nodeText = event.data.Name;
+            if (!nodeId) {
+                alert('请选择表单.');
+                return;
+            }
+            addTab("DesignerFreeFrm" + nodeId, nodeText, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + nodeId);
+        }
+
+
+
 
         ///表单树添加表单项
         ///FK_FormTree:表单类别编号，No:表单编号，Name:表单名称
@@ -686,123 +844,302 @@
             addTab("DesignerFreeFrm" + No, Name, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No);
         }
 
-        //表单属性
-        function CCForm_Attr() {
-            var node = $('#formTree').tree('getSelected');
-            if (!node) {
-                alert('请选择表单.');
-                return;
-            }
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
-            OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
-        }
 
-        //设计自由表单
-        function designFreeFrm() {
-            var node = $('#formTree').tree('getSelected');
-            if (!node) {
-                alert('请选择表单.');
-                return;
-            }
-            addTab("DesignerFreeFrm" + node.id, node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
-        }
-
-        //设计傻瓜表单
-        function designFoolFrm() {
-            var node = $('#formTree').tree('getSelected');
-            if (!node) {
-                alert('请选择表单.');
-                return;
-            }
-            addTab("DesignerFoolFrm" + node.id, node.text, "../FoolFormDesigner/Designer.htm?FK_MapData=" + node.id + "&IsFirst=1&MyPK=" + node.id + "&IsEditMapData=True");
-        }
-
-       
         //上移表单
-        function moveUpCCFormTree() {
-            var currForm = $('#formTree').tree('getSelected');
-            if (currForm == null)
+        function moveUpCCFormTree(event) {
+            var currFormId = event.data.No;
+            if (currFormId == null)
                 return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_MapData", currForm.id);
+            handler.AddPara("FK_MapData", currFormId);
             var data = handler.DoMethodReturnString("CCForm_MoveUpCCFormTree");
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
-            var before = $(currForm.target).parent().prev();
-            if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORM") {
+            var before = $("a[data-id='" + currFormId + "']").parent().prev();
+            if (before.length == 0) {
                 return;
             }
 
-            $(currForm.target).parent().insertBefore(before);
+            $("a[data-id='" + currFormId + "']").parent().insertBefore(before);
         }
 
         //下移表单
-        function moveDownCCFormTree() {
-            var currForm = $('#formTree').tree('getSelected');
-            if (currForm == null)
+        function moveDownCCFormTree(event) {
+            var currFormId = event.data.No;
+            if (currFormId == null)
                 return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            handler.AddPara("FK_MapData", currForm.id);
+            handler.AddPara("FK_MapData", currFormId);
             var data = handler.DoMethodReturnString("CCForm_MoveDownCCFormTree");
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
-
-            var next = $(currForm.target).parent().next();
-            if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORM") {
+            var next = $("a[data-id='" + currFormId + "']").parent().next();
+            if (next.length == 0) {
                 return;
             }
 
-            $(currForm.target).parent().insertAfter(next);
+            $("a[data-id='" + currFormId + "']").parent().insertAfter(next);
         }
 
         //删除表单
-        function deleteCCFormTreeMapData() {
-            var currForm = $('#formTree').tree('getSelected');
-            if (currForm == null)
+        function deleteCCFormTreeMapData(event) {
+            var currFormId = event.data.No;
+            var currFormText = event.data.Name;
+            if (currFormId == null)
+                return;
+            if (window.confirm("你确定要删除名称为“" + currFormText + "”的流程吗？") == false)
                 return;
 
-            OpenEasyUiConfirm("你确定要删除名称为“" + currForm.text + "”的表单吗？", function () {
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-                handler.AddPara("FK_MapData", currForm.id);
-                var data = handler.DoMethodReturnString("CCForm_DeleteCCFormMapData");
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-                alert("删除成功！");
-                //如果右侧有打开该表单，则关闭
-                var currTab = $('#tabs').tabs('getTab', currForm.text);
-                if (currTab) {
-                    $('#tabs').tabs('close', currForm.text);
-                }
-                //删除节点
-                $('#formTree').tree('remove', currForm.target);
+            //执行删除流程.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("FK_MapData", currFormId);
+            var data = handler.DoMethodReturnString("CCForm_DeleteCCFormMapData");
+            alert(data);
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            //关闭已打开的流程
+            closeTab(currFormId); //还有问题
+            //删除流程树中的节点
+            var my = $("a[data-id='" + currFormId + "']").parent();
+            if (my != null)
+                my.remove();
 
-            });
+
         }
 
 
         //----------------------------------------------表单属性操作 End------------------------------------------------------------------------------------------
-    </script>
-   
-   
+        //----------------------------------------------菜单树系统操作 Start------------------------------------------------------------------------------------------
+        //修改应用系统类别名称
+        function editSystemSort(event) {
+            /// <summary>修改应用系统类别名称</summary>
 
-   
-    
+            var currSortId = event.data.No;
+            var text = event.data.Name;
+
+            if (currSortId == null)
+                return;
+
+            var val = prompt("请输入类别名称", text);
+            if (val == null || val == '')
+                return;
+            var en = new Entity("BP.GPM.Menu", currSortId);
+            en.Name = val;
+            var data = en.Update();
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            };
+            $("a[data-id='" + currSortId + "']").children().eq(1).text(val);
+
+        }
+        //上移菜单树类别
+        function moveUpMenuSort(event) {
+            var currMenuSortId = event.data.No;
+            if (currMenuSortId == null)
+                return;
+            var en = new Entity("BP.GPM.Menu", currMenuSortId);
+            var data = en.DoMethodReturnString("DoUp");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            var before = $("a[data-id='" + currMenuSortId + "']").parent().prev();
+            if (before.length == 0) {
+                return;
+            }
+
+            $("a[data-id='" + currMenuSortId + "']").parent().insertBefore(before);
+
+        }
+
+        //下移菜单树类别
+        function moveDownMenuSort(event) {
+            var currMenuSortId = event.data.No;
+            if (currMenuSortId == null)
+                return;
+            var en = new Entity("BP.GPM.Menu", currMenuSortId);
+            var data = en.DoMethodReturnString("DoDown");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            var next = $("a[data-id='" + currMenuSortId + "']").parent().next();
+            if (next.length == 0) {
+                return;
+            }
+
+            $("a[data-id='" + currMenuSortId + "']").parent().insertAfter(next);
+
+
+        }
+
+        //----------------------------------------------菜单树系统操作 End------------------------------------------------------------------------------------------
+        //----------------------------------------------被属性操作调用的方法 Start------------------------------------------------------------------------------------------
+        //打开流程到流程图
+        function OpenFlowToCanvas(DType, id, text) {
+            //            $(".mymask").show();
+            var myUl = $(".page-tabs-content").find("a");
+            if (DType == "2") {//BPMN模式
+                myUl.each(function (index, e) {
+                    if ($(e).text().indexOf(text) == 0) {
+                        closeTab(id);
+                        addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=2");
+                        return;
+                    }
+                })
+                
+            } else if (DType == "1") {//CCBPM
+                myUl.each(function (index, e) {
+                    if ($(e).text().indexOf(text) == 0) {
+                        closeTab(id);
+                        addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1");
+                        return;
+                    }
+                })
+                
+            } else {
+
+            myUl.each(function (index, e) {
+                if ($(e).text().indexOf(text) == 0) {
+                    closeTab(id);
+                    addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0");
+                    return;
+                }
+
+            })
+                //                addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+                
+
+            }
+        }
+        //右键设计流程打开tab页
+        function addTab(id, title, url, iconCls, refresh) {
+
+            var dataId = id;
+            var dataUrl = url;
+            var menuName = title;
+            var flag = true;
+            if (dataUrl == undefined || $.trim(dataUrl).length == 0) {
+                return false;
+            }
+            var menu = $("a.menuItem");
+
+            for (var i = 0; i < menu.size(); i++) {
+                menu.eq(i).removeClass("no");
+            }
+            $(this).addClass("no");
+
+            $('.menuTab').each(function () {
+                if ($(this).data('id') == dataUrl) {
+                    if (!$(this).hasClass('active')) {
+                        $(this).addClass('active').siblings('.menuTab').removeClass('active');
+                        $.learuntab.scrollToTab(this);
+                        $('.mainContent .LRADMS_iframe').each(function () {
+                            if ($(this).data('id') == dataUrl) {
+                                $(this).show().siblings('.LRADMS_iframe').hide();
+                                return false;
+                            }
+                        });
+                    }
+                    flag = false;
+                    return false;
+                }
+            });
+            if (flag) {
+                var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '">' + menuName + ' <i class="fa fa-remove"></i></a>';
+                $('.menuTab').removeClass('active');
+                var str1 = '<iframe class="LRADMS_iframe" id="iframe' + dataId + '" name="iframe' + dataId + '"  width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
+                $('.mainContent').find('iframe.LRADMS_iframe').hide();
+                $('.mainContent').append(str1);
+                //$.loading(true);
+                $('.mainContent iframe:visible').load(function () {
+                    //$.loading(false);
+                });
+                $('.menuTabs .page-tabs-content').append(str);
+                $.learuntab.scrollToTab($('.menuTab.active'));
+            }
+            return false;
+        }
+
+        //关闭tab页
+        function closeTab(fk_flow) {
+
+            var selector = "a[data-id*='FK_Flow=" + fk_flow + "']";
+            var currentWidth = $(selector).parents('.menuTab').width();
+            if ($(selector).parents('.menuTab').hasClass('active')) {
+                if ($(selector).parents('.menuTab').next('.menuTab').size()) {
+                    var activeId = $(selector).parents('.menuTab').next('.menuTab:eq(0)').data('id');
+                    $(selector).parents('.menuTab').next('.menuTab:eq(0)').addClass('active');
+
+                    $('.mainContent .LRADMS_iframe').each(function () {
+                        if ($(selector).data('id') == activeId) {
+                            $(selector).show().siblings('.LRADMS_iframe').hide();
+                            return false;
+                        }
+                    });
+                    var marginLeftVal = parseInt($('.page-tabs-content').css('margin-left'));
+                    if (marginLeftVal < 0) {
+                        $('.page-tabs-content').animate({
+                            marginLeft: (marginLeftVal + currentWidth) + 'px'
+                        }, "fast");
+                    }
+                    $(selector).parents('.menuTab').remove();
+                    $('.mainContent .LRADMS_iframe').each(function () {
+                        if ($(selector).data('id').indexOf(fk_flow) > 0) {
+                            $(selector).remove();
+                            return false;
+                        }
+                    });
+                }
+                if ($(selector).parents('.menuTab').prev('.menuTab').size()) {
+                    var activeId = $(selector).parents('.menuTab').prev('.menuTab:last').data('id');
+                    $(selector).parents('.menuTab').prev('.menuTab:last').addClass('active');
+                    $('.mainContent .LRADMS_iframe').each(function () {
+                        if ($(selector).data('id') == activeId) {
+                            $(selector).show().siblings('.LRADMS_iframe').hide();
+                            return false;
+                        }
+                    });
+                    $(selector).parents('.menuTab').remove();
+                    $('.mainContent .LRADMS_iframe').each(function () {
+                        if ($(selector).data('id').indexOf(fk_flow) > 0) {
+                            $(selector).remove();
+                            return false;
+                        }
+                    });
+                }
+            }
+            else {
+                $(selector).parents('.menuTab').remove();
+                $('.mainContent .LRADMS_iframe').each(function () {
+                    var aa = $(selector).data('id');
+                    var bb = $(selector).attr('data-id');
+                    if ($(selector).data('id').indexOf(fk_flow) > 0) {
+                        $(selector).remove();
+                        return false;
+                    }
+                });
+                $.learuntab.scrollToTab($('.menuTab.active'));
+            }
+            return false;
+        }
+
+        //----------------------------------------------被属性操作调用的方法 End------------------------------------------------------------------------------------------
+    </script>
 </head>
-<body class="hold-transition skin-blue sidebar-mini" style="overflow:hidden;">
-	<!--<div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden; display:hidden" >
-		    <img src="img/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
-	</div>-->
-	<div class="wrapper">
-		<!--头部信息-->
-		<header class="main-header">
+<body class="hold-transition skin-blue sidebar-mini" style="overflow: hidden;">
+    <div class="wrapper">
+        <!--头部信息-->
+        <header class="main-header">
 			<a href="#" target="_blank" class="logo">
 				<span class="logo-mini">CCFLOW</span>
 				<span class="logo-lg"><strong>CCFLOW</strong></span>
@@ -833,77 +1170,89 @@
 				</div>
 			</nav>
 		</header>
-		<!--左边导航-->
-		<div class="main-sidebar">
-			<div class="sidebar">
-				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="padding: 6px 5px;text-align:left">
-						<button class="btn btn-blue">
+        <!--左边导航-->
+        <div class="main-sidebar">
+            <div class="sidebar">
+                <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="padding: 6px 5px;
+                        text-align: left">
+                        <button class="btn btn-blue">
                             <span class="tabs-title">流程树</span>
-						</button>
-
-						<button class="btn">
+                        </button>
+                        <button class="btn">
                             <span class="tabs-title">表单树</span>
-							
-						</button>
-
-						<button class="btn">
+                        </button>
+                        <button class="btn">
                             <span class="tabs-title">系统管理</span>
-							
-						</button>
-					</div>
-				</div>
-			<div id="sidebar">	
-              <ul class="sidebar-menu" id="sidebar-menu">	
-              </ul>		
-				
-				<!-- /.nav-list -->
-			</div>
-				
-			</div>
-		</div>
-		<!--中间内容-->
-		<div id="content-wrapper" class="content-wrapper">
-			<div class="content-tabs">
-				<button class="roll-nav roll-left tabLeft">
-					<i class="fa fa-backward"></i>
-				</button>
-				<nav class="page-tabs menuTabs">
+                        </button>
+                        <button class="btn">
+                            <span class="tabs-title">菜单树</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="sidebar">
+                    <ul class="sidebar-menu " id="sidebar-menu">
+                    </ul>
+                    <!-- /.nav-list -->
+                </div>
+            </div>
+        </div>
+        <!--中间内容-->
+        <div id="content-wrapper" class="content-wrapper">
+            <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: block;
+                width: 32px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
+                font-weight: bold;">
+                <img alt="" src="./Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
+            </div>
+            <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
+                z-index: 21006;">
+            </div>
+            <div class="content-tabs">
+                <button class="roll-nav roll-left tabLeft">
+                    <i class="fa fa-backward"></i>
+                </button>
+                <nav class="page-tabs menuTabs">
 					<div class="page-tabs-content" style="margin-left: 0px;">
 						<a href="javascript:;" class="menuTab active" data-id="default.html">欢迎首页</a>
 					</div>
 				</nav>
-				<button class="roll-nav roll-right tabRight">
-					<i class="fa fa-forward" style="margin-left: 3px;"></i>
-				</button>
-				<div class="btn-group roll-nav roll-right">
-					<button class="dropdown tabClose" data-toggle="dropdown">
-						页签操作<i class="fa fa-caret-down" style="padding-left: 3px;"></i>
-					</button>
-					<ul class="dropdown-menu dropdown-menu-right">
-						<li><a class="tabReload" href="javascript:void(0);">刷新当前</a></li>
-						<li><a class="tabCloseCurrent" href="javascript:void(0);">关闭当前</a></li>
-						<li><a class="tabCloseAll" href="javascript:void(0);">全部关闭</a></li>
-						<li><a class="tabCloseOther" href="javascript:void(0);">除此之外全部关闭</a></li>
-					</ul>
-				</div>
-				<button class="roll-nav roll-right fullscreen"><i class="fa fa-arrows-alt"></i></button>
-			</div>
-			<div class="content-iframe" style="overflow: hidden;">
-				<div class="mainContent" id="content-main" style="margin: 10px; margin-bottom: 0px; padding: 0;">
-					<iframe class="LRADMS_iframe" width="100%" height="100%" src="../../../DataUser/AppCoder/FlowDesignerWelcome.htm" frameborder="0" data-id="Welcome.htm"></iframe>
-				</div>
-			</div>
-		</div>
-	</div>
-
-    <a class="menuItem" data-id="" href="" style="display:none" id='ifnum'></a>
-	<div style="display:none" id="ifback"></div>
-
-     <script src="js/Default.js" type="text/javascript"></script>
-	<script type="text/javascript">
-        <!--初始化页面-- >
+                <button class="roll-nav roll-right tabRight">
+                    <i class="fa fa-forward" style="margin-left: 3px;"></i>
+                </button>
+                <div class="btn-group roll-nav roll-right">
+                    <button class="dropdown tabClose" data-toggle="dropdown">
+                        页签操作<i class="fa fa-caret-down" style="padding-left: 3px;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="tabReload" href="javascript:void(0);">刷新当前</a></li>
+                        <li><a class="tabCloseCurrent" href="javascript:void(0);">关闭当前</a></li>
+                        <li><a class="tabCloseAll" href="javascript:void(0);">全部关闭</a></li>
+                        <li><a class="tabCloseOther" href="javascript:void(0);">除此之外全部关闭</a></li>
+                    </ul>
+                </div>
+                <button class="roll-nav roll-right fullscreen">
+                    <i class="fa fa-arrows-alt"></i>
+                </button>
+            </div>
+            <div class="content-iframe" style="overflow: hidden;">
+                <div class="mainContent" id="content-main" style="margin: 10px; margin-bottom: 0px;
+                    padding: 0;">
+                    <iframe class="LRADMS_iframe" width="100%" height="100%" src="../../../DataUser/AppCoder/FlowDesignerWelcome.htm"
+                        frameborder="0" data-id="Welcome.htm"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="menuItem" data-id="" href="" style="display: none" id='ifnum'></a>
+    <div style="display: none" id="ifback">
+    </div>
+    <script src="js/Default.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        <!--        初始化页面-- >
         $(function () {
+            //定义等待界面的位置
+            $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
+            $(".mymask").show();
             //获取使用的用户及使用的平台
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnString("Default_Init");
@@ -927,11 +1276,23 @@
             InitPage();
             $.learunindex.load();
             $.learunindex.loadMenu(FLowJson, "Designer.htm?FK_Flow=@@id&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1");
+            $(".node").addClass("flowNode"); //添加右键菜单需要的class
+            $(".menuItem").addClass("flowMenu"); //添加右键菜单需要的class
             $.learuntab.init();
+            $(".mymask").hide();
+            //鼠标移开时右键菜单消失
+            $(document).on('mouseleave ', '.dropdown-menu', function () {
+                $(".dropdown-menu").hide();
+                $.learunindex.destroy
+            });
+
         });
+
+
         var FLowJson = "";
         var FromJSon = "";
         var SystemJson = "";
+        var MenuJson = "";
         var webUser = new WebUser();
 
         //处理数据
@@ -949,7 +1310,7 @@
 
             //表单结构
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            var data = handler.DoMethodReturnString("GetFormTreeTable");
+            var data = handler.DoMethodReturnString("GetFormTreeTable2019");
             if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
@@ -963,34 +1324,243 @@
                 return;
             }
             SystemJson = JSON.parse(data);
+
+            //菜单结构
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            var data = handler.DoMethodReturnString("Search_MapTree");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            MenuJson = JSON.parse(data);
+
         }
 
         $("#sidebar-shortcuts-large button").click(function () {
             var index = $(this).index();
             if (index == 0) { //流程树
-                $.learunindex.loadMenu(FLowJson,"Designer.htm?FK_Flow=@@id&UserNo="+webUser.No+"&SID="+webUser.SID+"&Flow_V=1");
+                $.learunindex.loadMenu(FLowJson, "Designer.htm?FK_Flow=@@id&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1");
+                $(".node").addClass("flowNode");
+                $(".menuItem").addClass("flowMenu");
+                $('.menuItem').on('click', $.learuntab.addTab);
             }
             if (index == 1) { //表单树
-                $.learunindex.loadMenu(FromJSon,"../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@id&UserNo="+webUser.No+"&SID="+webUser.SID);
+                $.learunindex.loadMenu(FromJSon, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@id&UserNo=" + webUser.No + "&SID=" + webUser.SID);
+                $(".node").addClass("formNode");
+                $(".menuItem").addClass("formMenu");
+                $('.menuItem').on('click', $.learuntab.addTab);
             }
+
             if (index == 2) { //系统管理
-                $.learunindex.loadMenu(SystemJson,"");
+                $.learunindex.loadMenu(SystemJson, "");
+                $(".node").addClass("systemNode");
+                $(".menuItem").addClass("systemMenu");
+                $('.menuItem').on('click', $.learuntab.addTab);
+
+            }
+            if (index == 3) { //菜单树
+                $.learunindex.loadMenu(MenuJson, "");
+                $(".node").addClass("menuNode");
+                $(".menuItem").addClass("menuTree");
+                $(".modal").addClass("menuModal");
+                $('.menuItem').on('click', $.learuntab.addTab);
+
             }
             $("#sidebar-shortcuts-large button").eq($(this).index()).addClass("btn-blue").siblings().removeClass('btn-blue');
             $("#sidebar>ul").eq($("#sidebar-shortcuts-large button").index(this)).addClass("on").siblings().removeClass('on');
         });
 
 
-        function ifnum(){
-			var ifback = $.trim($('#ifback').html());	
-			var arr = ifback.split('|');		
-			var menuName=$('#ifnum').text(arr['0']);
-			$("#ifnum").attr({"href" : arr['2'],"data-id" : arr['1'],
-    		});
-			if(menuName)
-			 $("#ifnum").click();
+        function ifnum() {
+            var ifback = $.trim($('#ifback').html());
+            var arr = ifback.split('|');
+            var menuName = $('#ifnum').text(arr['0']);
+            $("#ifnum").attr({ "href": arr['2'], "data-id": arr['1'] });
+            if (menuName)
+                $("#ifnum").click();
 
-	 } 
-	</script>
+        }
+
+        //----------------------------------------------右键菜单操作 Start---------------------------------------------------
+        //流程树：节点右键菜单
+        context.attach('.flowNode', [
+		    { text: '新建流程', action: newFlow },
+		    { text: '导入流程模板', action: ImpFlowBySort },
+		    { text: '新建同级类别', action: newSameLevelFlowSort },
+		    { text: '新建子级类别', action: newFlowSort },
+            { divider: true },
+		    { text: '编辑', action: editFlowSort },
+		    { text: '删除', action: deleteFlowSort },
+		    { text: '上移', action: moveUpFlowSort },
+		    { text: '下移', action: moveDownFlowSort },
+            { divider: true },
+        //          {text: '刷新',action:RefreshNode('flowTree', 'F99')},
+		    {text: '树节点属性', action: viewFlowSort },
+
+		    ]);
+        //流程树：属性右键菜单
+        context.attach('.flowMenu', [
+		        { text: '设计流程图', action: showFlow },
+		        { text: '导入流程模板', action: ImpFlow },
+		        { text: '导出流程模板', action: ExpFlow },
+		        { text: '删除流程', action: DeleteFlow },
+		        { text: '流程属性', action: FlowProperty },
+		        { divider: true },
+		        { text: '上移', 'action': moveUpFlow },
+		        { text: '下移', 'action': moveDownFlow }
+
+		    ]);
+
+        //表单树：节点右键菜单
+        context.attach('.formNode', [
+		    { text: '新建/导入表单', action: newFrm },
+		    { text: '新建同级类别', action: newCCFormSameLevelSort },
+		    { text: '新建子级类别', action: newCCFormSort },
+            { divider: true },
+		    { text: '编辑', action: EditCCFormSort },
+		    { text: '删除', action: DeleteCCFormSort },
+		    { text: '上移', action: moveUpCCFormSort },
+		    { text: '下移', action: moveDownCCFormSort },
+            { divider: true },
+        //            { text: '刷新', action: RefreshNode('formTree', '1') }
+
+		    ]);
+        //表单树：属性右键菜单
+        context.attach('.formMenu', [
+		        { text: '单据属性', action: Bill_CCForm },
+		        { text: '打开单据', action: Bill_Open },
+		        { text: '表单属性', action: CCForm_Attr },
+		        { text: '设计傻瓜表单', action: designFoolFrm },
+		        { text: '设计自由表单', action: designFreeFrm },
+		        { divider: true },
+		        { text: '上移', 'action': moveUpCCFormTree },
+		        { text: '下移', 'action': moveDownCCFormTree },
+                { text: '删除', 'action': deleteCCFormTreeMapData }
+
+		    ]);
+        //菜单树：系统右键菜单
+        context.attach('.menuNode', [
+		    { text: '修改名称', action: editSystemSort },
+        //		    { text: '新建系统', action: newSameLevelSort },
+		    {text: '删除系统', action: newCCFormSort },
+		    { text: '登录系统', action: EditCCFormSort },
+		    { text: '新建子模块', action: DeleteCCFormSort },
+            { divider: true },
+		    { text: '上移', action: moveUpMenuSort },
+		    { text: '下移', action: moveDownMenuSort }
+
+		    ]);
+        //菜单树：模块右键菜单
+        context.attach('.menuModal', [
+		    { text: '修改名称', action: newFrm },
+		    { text: '新建模块', action: newCCFormSameLevelSort },
+		    { text: '删除模块', action: newCCFormSort },
+            { divider: true },
+		    { text: '新建单据菜单', action: EditCCFormSort },
+		    { text: '新建实体类菜单', action: DeleteCCFormSort },
+		    { text: '新建自定义url菜单', action: moveUpCCFormSort },
+            { divider: true },
+		    { text: '上移', action: moveUpMenuSort },
+		    { text: '下移', action: moveDownMenuSort }
+
+		    ]);
+        //菜单树：功能右键菜单
+        //            context.attach('.formMenu', [
+        //		        { text: '单据属性', action: Bill_CCForm },
+        //		        { text: '打开单据', action: Bill_Open },
+        //		        { text: '表单属性', action: CCForm_Attr },
+        //		        { text: '设计傻瓜表单', action: designFoolFrm },
+        //		        { text: '设计自由表单', action: designFreeFrm },
+        //		        { divider: true },
+        //		        { text: '上移', 'action': moveUpCCFormTree },
+        //		        { text: '下移', 'action': moveDownCCFormTree },
+        //                { text: '删除', 'action': deleteCCFormTreeMapData }
+
+        //		    ]);
+
+
+        function NewBill() {
+
+            var billName = window.prompt('请输入单据名称,比如:学生台账', "学生台账");
+            if (billName == null || billName == undefined)
+                return;
+
+            var pinYin = "";
+
+            while (true) {
+                var frmID = window.prompt('请输入表单ID,比如是下划线或者英文字母组合符合字段命名要求格式', pinYin);
+                if (frmID == null || frmID == undefined)
+                    return;
+
+                //判断id是否存在？
+
+            }
+
+
+
+            var pTable = window.prompt('表单存储表', frmID);
+            if (pTable == null || pTable == undefined)
+                return;
+
+            /*  、*
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddFormData();
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("NewFrmGuide_Create");
+
+            if (data.indexOf('err@') >= 0) {
+            $("#Msg").html("<font color=red>" + data + "</font>");
+            return;
+            }
+            */
+
+            //检查保单ID
+
+            var en = new Entity("BP.GPM.Menu", 101);
+            var menu = en.DoMethodReturnJSON("DoMyCreateSubNode");
+            menu = new Entity("BP.GPM.Menu", menu.No);
+            menu.billName = name;
+            menu.Url = "/WF/CCBill/Search.htm?EnsName=" + frmID;
+            menu.Update();
+
+        }
+
+        function EditName(id, name) {
+
+            var myName = window.prompt('要修改的名称', name);
+            if (myName == null || myName == undefined)
+                return;
+
+            menu = new Entity("BP.GPM.Menu", id);
+            menu.Name = myName;
+            menu.Update();
+
+            //更新节点名称.
+
+        }
+
+        function NewEns() {
+
+            var ensName = window.prompt('请您输入实体类的集合名字,比如:BP.Port.Emps', "BP.");
+            if (ensName == null || ensName == undefined)
+                return;
+
+            var name = window.prompt('请输入菜单名称,比如:操作员', "");
+            if (name == null || name == undefined)
+                return;
+
+            var en = new Entity("BP.GPM.Menu", 101);
+
+            var menu = en.DoMethodReturnJSON("DoMyCreateSubNode");
+            menu = new Entity("BP.GPM.Menu", menu.No);
+            menu.Name = name;
+            menu.Url = "/WF/Comm/SearchBS.htm?EnsName=" + ensName;
+            menu.Update();
+
+            //把改节点增加到树里面.
+
+
+        }
+    </script>
 </body>
 </html>

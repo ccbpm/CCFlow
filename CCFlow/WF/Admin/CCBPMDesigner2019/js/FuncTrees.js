@@ -578,26 +578,26 @@ function LoadLazyNodes(oLazyNode, oNode, oFuncTree) {
     }
 }
 
-function RefreshNode(sTreeId, oNodeId) {
-    /// <summary>刷新指定节点，此方法设计的只有刷新一级节点才可用此方法</summary>
-    /// <param name="sTreeId" type="String">定义树Id</param>
-    /// <param name="oNodeId" type="Object">要刷新节点的id</param> 
-    var node = $("#" + sTreeId).tree("find", oNodeId);
-    if (!node) {
-        $.messager.alert('错误', '未检索到要刷新的节点！', 'error');
-        return;
-    }
+//function RefreshNode(sTreeId, oNodeId) {
+//    /// <summary>刷新指定节点，此方法设计的只有刷新一级节点才可用此方法</summary>
+//    /// <param name="sTreeId" type="String">定义树Id</param>
+//    /// <param name="oNodeId" type="Object">要刷新节点的id</param> 
+//    var node = $("#" + sTreeId).tree("find", oNodeId);
+//    if (!node) {
+//        $.messager.alert('错误', '未检索到要刷新的节点！', 'error');
+//        return;
+//    }
 
-    //首先将要刷新的节点下方的所有节点删除掉
-    var children = $("#" + sTreeId).tree("getChildren", node.target);
-    if (children.length > 0) {
-        $.each(children, function () {
-            $("#" + sTreeId).tree("remove", this.target);
-        });
-    }
+//    //首先将要刷新的节点下方的所有节点删除掉
+//    var children = $("#" + sTreeId).tree("getChildren", node.target);
+//    if (children.length > 0) {
+//        $.each(children, function () {
+//            $("#" + sTreeId).tree("remove", this.target);
+//        });
+//    }
 
-    LoadLazyNodes(node.attributes.Node, node, Find(functrees, "Id", sTreeId)[0]);
-}
+//    LoadLazyNodes(node.attributes.Node, node, Find(functrees, "Id", sTreeId)[0]);
+//}
 
 function CalculateServiceCount(oNode, oFuncTree) {
     /// <summary>计算树定义中含有多少Service类型的节点</summary>

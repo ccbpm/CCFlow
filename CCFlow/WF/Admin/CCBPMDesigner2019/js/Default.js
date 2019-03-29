@@ -309,32 +309,32 @@
             var _html = "";
             $.each(data, function (i) {
                 var row = data[i];
-                if (row.ParentNo == "0" ||row.ParentNo == "F99"|| row.GroupNo == "0" ) {
+                if (row.ParentNo == "0" || row.ParentNo == "F99" || row.ParentNo == "2000" || row.GroupNo == "0") {
                     if (i == 0) {
                         _html += '<li class="treeview active">';
                     } else {
                         _html += '<li class="treeview">';
                     }
-                    _html += '<a href="#">'
-                    _html += '<i class="' + row.F_Icon + '"></i><span>' + row.Name + '</span><i class="fa fa-angle-left pull-right"></i>'
+                    _html += '<a href="#" class="node" data-id="' + row.No + '" data-Name="' + row.Name + '" data-Ttype="' + row.TType + '">'
+                    _html += '<i class="' + row.F_Icon + ' " ></i><span>' + row.Name + '</span><i class="fa fa-angle-left pull-right"></i>'
                     _html += '</a>'
                     var childNodes = $.learunindex.jsonWhere(data, function (v) { return v.ParentNo == row.No || v.GroupNo == row.No });
-                    if (childNodes.length > 0) {
+                    if (childNodes.length > 0 || row.IsParent==1) {
                         _html += '<ul class="treeview-menu">';
                         $.each(childNodes, function (i) {
                             var subrow = childNodes[i];
                             var subchildNodes = $.learunindex.jsonWhere(data, function (v) { return v.ParentNo == subrow.No || v.GroupNo == subrow.No });
                             _html += '<li>';
-                            if (subchildNodes.length > 0) {
-                                _html += '<a href="#"><i class="' + subrow.F_Icon + '"></i>' + subrow.Name + '';
+                            if (subchildNodes.length > 0 || subrow.IsParent == 1) {
+                                _html += '<a href="#" class="node modal" data-id="' + subrow.No + '" data-Name="' + subrow.Name + '" data-Ttype="' + subrow.TType + '"><i class="' + subrow.F_Icon + '" ></i>' + subrow.Name + '';
                                 _html += '<i class="fa fa-angle-left pull-right"></i></a>';
                                 _html += '<ul class="treeview-menu">';
                                 $.each(subchildNodes, function (i) {
                                     var subchildNodesrow = subchildNodes[i];
                                     var fourchildNodes = $.learunindex.jsonWhere(data, function (v) { return v.ParentNo == subchildNodesrow.No || v.GroupNo == subchildNodesrow.No });
                                     _html += '<li>';
-                                    if (fourchildNodes.length > 0) {
-                                        _html += '<a href="#"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.Name + '';
+                                    if (fourchildNodes.length > 0 || subchildNodesrow.IsParent == 1) {
+                                        _html += '<a href="#" class="node modal"  data-id="' + subchildNodesrow.No + '" data-Name="' + subchildNodesrow.Name + '" data-Ttype="' + subchildNodesrow.TType + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.Name + '';
                                         _html += '<i class="fa fa-angle-left pull-right"></i></a>';
                                         _html += '<ul class="treeview-menu">';
                                         $.each(fourchildNodes, function (i) {
@@ -343,10 +343,10 @@
                                             if (url == "" || url == undefined)
                                                 url = F_UrlAddress.replace("@@id", fivechildNodesrow.No);
 
-                                            if (subchildNodesrow.IsParent == 0)
-                                                _html += '<li><a class="menuItem" data-id="' + fivechildNodesrow.No + '" href="' + url + '"><i class="' + fivechildNodesrow.F_Icon + '"></i>' + fivechildNodesrow.Name + '</a></li>';
+                                            if (subchildNodesrow.IsParent == 0 || subrow.GroupNo != 0)
+                                                _html += '<li><a class="menuItem" tabindex="-1" data-id="' + fivechildNodesrow.No + '" data-name="' + fivechildNodesrow.Name + '" data-Dtype="' + fivechildNodesrow.DTYPE + '" data-Ttype="' + fivechildNodesrow.TType + '" href="' + url + '"><i class="' + fivechildNodesrow.F_Icon + '"></i>' + fivechildNodesrow.Name + '</a></li>';
                                             else
-                                                _html += '<li><a class="menuItem" data-id="' + fivechildNodesrow.No + '"><i class="' + fivechildNodesrow.F_Icon + '"></i>' + fivechildNodesrow.Name + '</a></li>';
+                                                _html += '<li><a class="menuItem" tabindex="-1" data-id="' + fivechildNodesrow.No + '" data-name="' + fivechildNodesrow.Name + '" data-Dtype="' + fivechildNodesrow.DTYPE + '" data-Ttype="' + fivechildNodesrow.TType + '"><i class="' + fivechildNodesrow.F_Icon + '"></i>' + fivechildNodesrow.Name + '</a></li>';
                                         });
                                         _html += '</ul>';
                                     } else {
@@ -354,10 +354,10 @@
                                         if (url == "" || url == undefined)
                                             url = F_UrlAddress.replace("@@id", subchildNodesrow.No);
 
-                                        if (subchildNodesrow.IsParent == 0)
-                                            _html += '<a class="menuItem" data-id="' + subchildNodesrow.No + '" href="' + url + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.Name + '</a>';
+                                        if (subchildNodesrow.IsParent == 0 || subrow.GroupNo != 0)
+                                            _html += '<a class="menuItem" tabindex="-1" data-id="' + subchildNodesrow.No + '" data-name="' + subchildNodesrow.Name + '" data-Dtype="' + subchildNodesrow.DTYPE + '" data-Ttype="' + subchildNodesrow.TType + '" href="' + url + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.Name + '</a>';
                                         else
-                                            _html += '<a class="menuItem" data-id="' + subchildNodesrow.No + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.Name + '</a>';
+                                            _html += '<a class="menuItem" tabindex="-1" data-id="' + subchildNodesrow.No + '" data-name="' + subchildNodesrow.Name + '" data-Dtype="' + subchildNodesrow.DTYPE + '" data-Ttype="' + subchildNodesrow.TType + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.Name + '</a>';
 
                                     }
                                     _html += '</li>';
@@ -370,10 +370,10 @@
                                 if (url == "" || url == undefined)
                                     url = F_UrlAddress.replace("@@id", subrow.No);
 
-                                if (subrow.IsParent == 0)
-                                    _html += '<a class="menuItem" data-id="' + subrow.No + '" href="' + url + '"><i class="' + subrow.F_Icon + '"></i>' + subrow.Name + '</a>';
+                                if (subrow.IsParent == 0 || subrow.GroupNo != 0)
+                                    _html += '<a class="menuItem" tabindex="-1" data-id="' + subrow.No + '" data-name="' + subrow.Name + '" data-Dtype="' + subrow.DTYPE + '" data-Ttype="' + subrow.TType + '" href="' + url + '"><i class="' + subrow.F_Icon + '"></i>' + subrow.Name + '</a>';
                                 else
-                                    _html += '<a class="menuItem" data-id="' + subrow.No + '"><i class="' + subrow.F_Icon + '"></i>' + subrow.Name + '</a>';
+                                    _html += '<a class="menuItem" tabindex="-1" data-id="' + subrow.No + '" data-name="' + subrow.Name + '" data-Dtype="' + subrow.DTYPE + '" data-Ttype="' + subrow.TType + '"><i class="' + subrow.F_Icon + '"></i>' + subrow.Name + '</a>';
                             }
                             _html += '</li>';
                         });

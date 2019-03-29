@@ -50,7 +50,7 @@
         showCloseBtn = true;
     //关闭按钮
     if(showCloseBtn == true)
-        var btnClose = $("<button type='button'  style='color:white;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>&times;</button>");
+        var btnClose = $("<button type='button'  style='color:#0000007a;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>&times;</button>");
     if (closeBtnColor && closeBtnColor != "")
         btnClose = $("<button type='button'  style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>X</button>");
    

@@ -1920,7 +1920,7 @@ function initModal(modalType, toNode) {
        '<div class="modal-dialog">'
            + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
               + '<div class="modal-header">'
-                  + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                  + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                    + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
                + '</div>'
                + '<div class="modal-body" style="margin:0px;padding:0px">'

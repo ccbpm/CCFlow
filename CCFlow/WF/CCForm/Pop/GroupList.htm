@@ -68,7 +68,7 @@
             var groups = DBAccess.RunDBSrc(srcOfGroup, mapExt.DBType); //分组.
             var entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
 
-            var html = "<table style='width:100%;' >";
+            var html = "<table style='width:98%;' >";
 
             var isRB = true;
             if (mapExt.GetPara('SelectType') == 1)
@@ -155,16 +155,16 @@
                     }
                 }
 
-                if (idx == 1) {
+                if (myNum == 0) {
                     html += "<td colspan=2></td>";
                     html += "</tr>";
                 }
 
-                if (idx == 2) {
+                if (myNum == 1) {
                     html += "<td></td>";
                     html += "</tr>";
                 }
-
+               
             }
             html += "</table>";
 

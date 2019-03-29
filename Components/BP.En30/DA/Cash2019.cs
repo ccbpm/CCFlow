@@ -46,7 +46,6 @@ namespace BP.DA
         }
         public static void UpdateRow(string enName, string pkVal, Row row)
         {
-            return;
             lock (lockObj)
             {
                 Hashtable ht = hts[enName] as Hashtable;
@@ -81,8 +80,6 @@ namespace BP.DA
         /// <returns>row</returns>
         public static Row GetRow(string enName, string pkVal)
         {
-            return null;
-
             lock (lockObj)
             {
                 Hashtable ht = hts[enName] as Hashtable;

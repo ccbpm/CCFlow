@@ -518,6 +518,6 @@ function ActionTypeStr(at) {
         case ActionType.Info:
             return "../../Img/Action/Info.png";
         default:
-            return "../../Img/Dot.png";
+            return "../../Img/dot.png";
     }
 }

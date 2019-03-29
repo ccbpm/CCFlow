@@ -16,6 +16,10 @@ function GenerFoolFrm(mapData, frmData) {
     var tableWidth = 800; //  w - 40;
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
+    html += "<tr>";
+    html += "<td colspan=4 ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "</tr>";
+
 
     //遍历循环生成 listview
     for (var i = 0; i < Sys_GroupFields.length; i++) {

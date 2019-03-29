@@ -92,7 +92,7 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="flowNo">流的程模版ID</param>
         /// <param name="workid">工作ID</param>
-        /// <param name="ht">参数，或者表单字段.</param>
+        /// <param name="atParas">参数: @Field1=Val1@Field2=Val2</param>
         /// <param name="toNodeID">到达的节点ID.如果让系统自动计算就传入0</param>
         /// <param name="toEmps">到达的人员IDs,比如:zhangsan,lisi,wangwu. 如果为Null就标识让系统自动计算.</param>
         /// <returns>发送的结果信息.</returns>

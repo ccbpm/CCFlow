@@ -28,10 +28,9 @@
             padding: '5px 10'
         },
         itemStyle: {
-            fontFamily: 'verdana',
+			fontFamily: 'verdana, helvetica, arial, sans-serif',
 			color: '#333',
 			fontSize: '12px',
-			fontFamily:'verdana, helvetica, arial, sans-serif',
             border: '0',
             /*borderLeft:'5px solid #fff',*/
             padding: '5px 40px 5px 20px'

@@ -170,6 +170,12 @@
                 return;
             }
 
+            if (data.indexOf('info@') == 0) {
+                alert(data);
+                this.close();
+                return;
+            }
+
             var initData = {};
             if (data == null && data == undefined) {
                 alert("Accepter_Init&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +

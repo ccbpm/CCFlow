@@ -205,13 +205,13 @@
 
                 rNode.rText = r.text(rNode.x + STYLE_NODE_WIDTH / 2, rNode.y + STYLE_NODE_HEIGHT + Math.ceil(this.Name.length / 7.00) * 7 + 10, breakstr(this.Name, 7));    //edited by liuxc,2016-3-31,增加节点名称换行处理
 
-                // rNode.rText = this.Name;
-                //  rNode.rBorderColor = nodeBorderColor;
-
-
                 rNode.isTrackNode = nodeTrack != null;
                 rNode.tracks = nodeTracks;
                 rNode.currTrack = nodeTrack;
+                if (flowInfo.WFState == 3 && this.ID == currNode)
+                    rNode.IsEndNode = true;
+                else
+                    rNode.IsEndNode = false;
 
                 var borderColor = nodeBorderColor;
                 var TextColor = STYLE_NODE_COLOR_FORE;
@@ -224,8 +224,8 @@
                     //1.主干到主干
                     var currTrack = rNode.currTrack.track;
                     //node的最后两位判断是否为开始节点
-                    if ((this.ID == currNode && lastTwoBit == "01") 
-                        || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState!=3)) {
+                    if ((this.ID == currNode && lastTwoBit == "01")
+                        || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState != 3)) {
                         borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
                         TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
                     } else if (this.ID != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
@@ -300,8 +300,8 @@
 
                                 var rdt = gwl.RDT;
                                 if (rdt != "" && rdt != "无")
-                                   
-                                    rdt =  new Date(Date.parse(gwl.RDT.replace(/-/g, "/"))).format('yyyy-MM-dd hh:mm:ss');
+
+                                    rdt = new Date(Date.parse(gwl.RDT.replace(/-/g, "/"))).format('yyyy-MM-dd hh:mm:ss');
 
                                 var sdt = gwl.SDT;
                                 if (sdt != "" && sdt != "无")
@@ -400,6 +400,9 @@
                                 continue;
                             if (track.ActionType == ActionType.WorkCheck)
                                 continue;
+                            if (track.ActionType == ActionType.FlowOver)
+                                continue;
+
                             if (track.ActionType == ActionType.ForwardFL && track.EmpToT.indexOf("多人接受") == -1)
                                 continue;
 
@@ -408,6 +411,10 @@
                             if (track.NDTo == nodeId && track.FID != 0)
                                 continue;
                             if (track.NDTo == nodeId && track.EmpToT.indexOf("多人接受") != -1)
+                                continue;
+
+                            //不是多人接受，并且EmpTo不相同。
+                            if (track.EmpToT.indexOf("多人接受") == -1 && track.EmpTo != node.currTrack.track.EmpTo)
                                 continue;
 
                             if (track.NDFrom == nodeId || track.NDTo == nodeId) {
@@ -475,6 +482,12 @@
 
                                 if (track.NDFrom == node.id)
                                     trackhtml += "<td id='cdt'> " + track.RDT + "</td>";
+                                else if (track.NDTo == node.id && node.IsEndNode == true) {
+                                    //获取节点的track
+                                    var endTrack = Tracks[i - 1];
+                                    trackhtml += "<td id='cdt'> " + endTrack.RDT + "</td>";
+                                    rdt = new Date(Date.parse(endTrack.RDT.replace(/-/g, "/")));
+                                }
                                 else
                                     continue;
 
@@ -497,6 +510,8 @@
                                         if (track1.ActionType == ActionType.FlowBBS)
                                             continue;
                                         if (track1.ActionType == ActionType.WorkCheck)
+                                            continue;
+                                        if (track1.ActionType == ActionType.FlowOver)
                                             continue;
                                         if (track1.NDTo == node.id) {
                                             trackhtml += "<td>" + track1.EmpFrom + "," + track1.EmpFromT + "</td>";
@@ -956,6 +971,7 @@
             this.currTrack = null;
             this.rPossibleText = null;
             this.rPossible = null;
+            this.IsEndNode = false;
         }
 
         function RLabel(sPk, sLabelName, iX, iY) {
@@ -1040,7 +1056,7 @@
         function getTrackForCurrNode(tracks) {
             /// <summary>获取此节点轨迹集合中的用于绘制到此节点的轨迹</summary>
             /// <param name="tracks" Type="Array">轨迹数组</param>
-            for (var i = tracks.length - 1; i >= 0; i--) {
+            for (var i = 0; i < tracks.length; i++) {
                 if (tracks[i].track.ActionType == 1 ||    //前进
                 tracks[i].track.ActionType == 2 ||    //退回
                 tracks[i].track.ActionType == 6 ||    //分流前进

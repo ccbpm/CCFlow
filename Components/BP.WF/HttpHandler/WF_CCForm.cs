@@ -1187,6 +1187,13 @@ namespace BP.WF.HttpHandler
                     if (en.RetrieveFromDBSources() == 0)
                         en.Insert();
                 }
+
+                //把流程信息表发送过去.
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = pk;
+                gwf.RetrieveFromDBSources();
+                ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
+
                 #endregion 根据who is pk 获取数据.
 
                 #region 附加参数数据.

@@ -102,7 +102,7 @@ namespace BP.WF
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
-
+                myds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);

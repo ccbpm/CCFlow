@@ -19,8 +19,7 @@ function GenerFoolFrm(wn) {
     var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
-    html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
-    //  html += "<td colspan=2 ></td>";
+    html += "<td colspan=4 class='FDesc'><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;width:70%;font-style: oblique;color: #6379bb;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
 
     //遍历循环生成 listview
@@ -32,7 +31,7 @@ function GenerFoolFrm(wn) {
         if (gf.CtrlType == 'Dtl') {
 
             html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "  <th colspan=4 class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
             var dtls = flowData.Sys_MapDtl;
@@ -44,7 +43,7 @@ function GenerFoolFrm(wn) {
                     continue;
 
                 html += "<tr>";
-                html += "  <td colspan='4' >";
+                html += "  <td colspan='4' class='FDesc' >";
 
                 html += Ele_Dtl(dtl);
 
@@ -59,11 +58,11 @@ function GenerFoolFrm(wn) {
         if (gf.CtrlType == 'Ath') {
 
             html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "  <th colspan=4 class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "  <td colspan='4' >";
+            html += "  <td colspan='4'class='FDesc'>";
 
             html += Ele_Attachment(flowData, gf, node);
 
@@ -78,11 +77,11 @@ function GenerFoolFrm(wn) {
         if (gf.CtrlType == 'Frame') {
 
             html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "  <th colspan=4 class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "  <td colspan='4' >";
+            html += "  <td colspan='4' class='FDesc'>";
 
             html += Ele_Frame(flowData, gf);
 
@@ -96,11 +95,11 @@ function GenerFoolFrm(wn) {
         if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
 
             html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "  <th colspan=4 class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "  <td colspan='4' >";
+            html += "  <td colspan='4' class='FDesc'>";
 
             html += Ele_FrmCheck(node);
 
@@ -115,7 +114,7 @@ function GenerFoolFrm(wn) {
         if (gf.CtrlType == '' || gf.CtrlType == null) {
 
             html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "  <th colspan=4 class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
             html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID);
@@ -125,11 +124,11 @@ function GenerFoolFrm(wn) {
         //父子流程
         if (gf.CtrlType == 'SubFlow') {
             html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
+            html += "  <th colspan=4 class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "  <td colspan='4' >";
+            html += "  <td colspan='4' class='FDesc'>";
 
             html += Ele_SubFlow(node);
 
@@ -180,11 +179,11 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             isDropTR = true;
             html += "<tr>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9")
-                html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+                html += "<td  class='FDesc' style='width:15%;'>" + lab + "</td>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9")
-                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3 >";
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3  style='text-align:left;'>";
             else
-                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4 >";
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4 style='text-align:left;padding-left: 15% '>";
 
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
@@ -196,7 +195,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (attr.ColSpan == 4) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4'>" + lab + "</br>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' class='FDesc'>" + lab + "</br>";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -206,10 +205,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (isDropTR == true) {
             html += "<tr>";
             if (attr.UIContralType != "9") {
-                html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+                html += "<td class='FDesc' style='width:15%;'>" + lab + "</td>";
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;'>";
             } else {
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext' ColSpan=2 >";
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc' ColSpan=2 style='text-align:left;padding-left: 15%'>";
             }
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
@@ -219,10 +218,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         if (isDropTR == false) {
             if (attr.UIContralType != "9") {
-                html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+                html += "<td class='FDesc' style='width:15%;'>" + lab + "</td>";
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;'>";
             } else {
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext' ColSpan=2 >";
+                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc' ColSpan=2 style='text-align:left;padding-left: 15%'>";
             }
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
@@ -285,7 +284,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             sfTable.SetPKVal(uiBindKey);
             var count = sfTable.RetrieveFromDBSources();
             if (count != 0 && sfTable.CodeStruct == "1") {
-                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
+                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:60%'></select>";
             }
         }
         return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
@@ -306,7 +305,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             }
 
             var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
-            eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
             return eleHtml;
         }
         //超链接
@@ -392,7 +391,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return " <input type='text' " + enableAttr + " value='" + defValue + "' style='width:120px;' class='form-control Wdate' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' />";
+        return " <input type='text' " + enableAttr + " value='" + defValue + "'  class='form-control Wdate' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' />";
     }
 
     //时期时间类型.
@@ -404,7 +403,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return " <input  type='text'  value='" + defValue + "' style='width:160px;' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return " <input  type='text'  value='" + defValue + "'  class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     // boolen 类型.
@@ -458,7 +457,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
 
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;'class='form-control'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;'class='form-control'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -469,7 +468,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         //alert(defValue);
 
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     //AppMoney  AppRate
@@ -481,7 +480,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
         else
             bit = 2;
-        return "<input  value='" + defValue + "' style='text-align:right;width:125px;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');;limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');;limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

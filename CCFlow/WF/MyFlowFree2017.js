@@ -148,8 +148,15 @@ function figure_Template_IFrame(fram) {
             strs += "&" + str + "=" + paras[str];
     }
 
-
-
+    //4.追加GenerWorkFlow AtPara中的参数
+    var gwf = flowData.WF_GenerWorkFlow[0];
+    if (gwf != null) {
+        var atPara = gwf.AtPara;
+        if (atPara != null && atPara != "") {
+            atPara = atPara.replace(/@/g, '&');
+            url = url + atPara;
+        }
+    }
 
     url = url + strs + "&IsReadonly=0";
 

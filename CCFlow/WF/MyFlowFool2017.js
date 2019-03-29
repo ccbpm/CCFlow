@@ -852,6 +852,7 @@ function Ele_Frame(flowData, gf) {
         url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
     });
 
+    //3.替换表单中的参数
     var src = url.replace(new RegExp(/(：)/g), ':');
     if (src.indexOf("?") > 0) {
         var params = getQueryStringFromUrl(src);
@@ -869,7 +870,7 @@ function Ele_Frame(flowData, gf) {
             });
         }
     }
-
+   
 
     //处理URL需要的参数
     //1.拼接参数
@@ -884,6 +885,18 @@ function Ele_Frame(flowData, gf) {
 
 
     url = url + strs + "&IsReadonly=0";
+
+    //4.追加GenerWorkFlow AtPara中的参数
+    var gwf = flowData.WF_GenerWorkFlow[0];
+    if (gwf != null) {
+        var atPara = gwf.AtPara;
+        if (atPara != null && atPara != "") {
+            atPara = atPara.replace(/@/g, '&');
+            url = url + atPara;
+        }
+    }
+
+
 
     eleHtml += "<iframe style='width:100%;height:" + frame.H + "px;' ID='" + frame.MyPK + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;

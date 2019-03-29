@@ -521,6 +521,17 @@ function figure_Template_IFrame(fram) {
 
     url = url + strs + "&IsReadonly=0";
 
+    //4.追加GenerWorkFlow AtPara中的参数
+    var gwf = frmData.WF_GenerWorkFlow[0];
+    if (gwf != null) {
+        var atPara = gwf.AtPara;
+        if (atPara != null && atPara != "") {
+            atPara = atPara.replace(/@/g, '&');
+            url = url + atPara;
+        }
+    }
+
+
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
 	                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +

@@ -835,8 +835,18 @@ function Ele_Frame(frmData, gf) {
             strs += "&" + str + "=" + paras[str];
     }
 
-
     url = url + strs + "&IsReadonly=0";
+
+    //4.追加GenerWorkFlow AtPara中的参数
+    var gwf = frmData.WF_GenerWorkFlow[0];
+    if (gwf != null) {
+        var atPara = gwf.AtPara;
+        if (atPara != null && atPara != "") {
+            atPara = atPara.replace(/@/g, '&');
+            url = url + atPara;
+        }
+    }
+
 
     eleHtml += "<iframe style='width:100%;height:" + frame.H + "px;' ID='" + frame.MyPK + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;

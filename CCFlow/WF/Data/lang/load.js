@@ -1,5 +1,5 @@
 ﻿//定义多语言.
 //zh-cn   zh-tw  zh-hk  en-us ja-jp ko-kr
-//var currentLang = "zh-cn";
-var currentLang = "en-us";
+var currentLang = "zh-cn";
+//var currentLang = "en-us";
 document.write("<script language=javascript src='/WF/Data/lang/js/" + currentLang + ".js'></script>");

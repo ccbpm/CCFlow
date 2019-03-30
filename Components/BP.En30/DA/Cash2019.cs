@@ -10,7 +10,7 @@ namespace BP.DA
 {
     public class Cash2019
     {
-        #region hastable
+        #region 缓存ht
         private static Hashtable _hts;
         public static Hashtable hts
         {
@@ -91,7 +91,6 @@ namespace BP.DA
             }
         }
         #endregion 对实体的操作.
-
 
         #region 对实体的集合操作.
         /// <summary>

@@ -123,6 +123,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
+
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
 
                 #endregion 基本信息.
@@ -156,6 +157,13 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "日期输入限制";
+                rm.ClassMethodName = this.ToString() + ".DataFieldInputRole()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 #endregion 执行的方法.
 
                 this._enMap = map;
@@ -172,6 +180,14 @@ namespace BP.Sys.FrmUI
         public string BindFunction()
         {
             return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 日期输入限制
+        /// </summary>
+        /// <returns></returns>
+        public string DataFieldInputRole()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/DataFieldInputRole.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 自动计算

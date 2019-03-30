@@ -1,9 +1,4 @@
-﻿//定义多语言.
-//zh-cn   zh-tw  zh-hk  en-us ja-jp ko-kr
-//var currentLang = "zh-cn";
-var currentLang = "en-us";
-document.write("<script language=javascript src='/WF/Data/lang/js/" + currentLang + ".js'></script>");
-
+﻿
 //检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
     //首位可以是字母以及下划线。 

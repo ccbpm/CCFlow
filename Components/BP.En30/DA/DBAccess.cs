@@ -428,7 +428,6 @@ namespace BP.DA
 
         #endregion 文件存储数据库处理.
 
-
         #region 事务处理
         /// <summary>
         /// 执行增加一个事务

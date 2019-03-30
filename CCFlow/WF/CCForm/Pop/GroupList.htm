@@ -213,14 +213,15 @@
             var keyOfEn = mapExt.AttrOfOper;
             var oid = GetQueryString("PKVal");
             //
-            var insertArray = selectedElements(selectedEles, selectVals);
+            var insertArray = selectedElements(selectedEles, selectValTexts);
             $.each(insertArray, function (i, o) {
                 var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-                frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + o;
+                frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + o.No;
                 frmEleDB.FK_MapData = FK_MapData;
                 frmEleDB.EleID = keyOfEn;
                 frmEleDB.RefPKVal = oid;
-                frmEleDB.Tag1 = o;
+                frmEleDB.Tag1 = o.No; 
+                frmEleDB.Tag2 = o.Name;
                 if (frmEleDB.Update() == 0) {
                     frmEleDB.Insert();
                 }
@@ -245,7 +246,7 @@
                 }
                 var exists = false;
                 $.each(entities, function (n, o) {
-                    if (o.Tag1 == e) {
+                    if (o.Tag1 == e.No) {
                         exists = true;
                         return false;
                     }

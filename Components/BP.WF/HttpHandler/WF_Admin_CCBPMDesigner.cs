@@ -225,7 +225,7 @@ namespace BP.WF.HttpHandler
                     if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
-                    sql = "UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0];
+                    sql = "UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0]+"'";
                     DBAccess.RunSQL(sql);
                 }
 

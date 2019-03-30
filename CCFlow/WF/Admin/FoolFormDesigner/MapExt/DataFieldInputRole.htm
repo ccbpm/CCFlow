@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>日期字段输入控制</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+
+            //组织主键.
+            var mypk = "DataFieldInputRole_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            var i = en.RetrieveFromDBSources();
+
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+
+            //设置文本框选择的值.
+            $("#RB_" + en.DoWay).attr("checked", true);
+
+
+            if (en.Tag1 == 1)
+                document.getElementById("CB_History").checked = true;
+            else
+                document.getElementById("CB_History").checked = false;
+
+
+            //绑定外键.
+            var tables = new Entities("BP.Sys.MapAttrs");
+            tables.Retrieve("FK_MapData", frmID);
+
+            GenerBindDDL("DDL_DT", tables, "KeyOfEn", "Name", en.Tag3);
+
+            //去掉 ' 号。
+            var tag = en.Tag4;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+            $("#DDL_Tag").val(en.Tag);
+
+            //绑定SQL
+            $("#TB_SQL").val(tag);
+
+        });
+
+        //执行保存
+        function Save() {
+
+            //组织主键.
+            var mypk = "DataFieldInputRole_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "DataFieldInputRole";
+            en.MyPK = mypk;
+
+            var checkVal = $("input[name='RB']:checked").val();
+            en.DoWay = checkVal;
+
+            //是否启用了历史数据.
+            var history = document.getElementById("CB_History").checked;
+            if (history == true)
+                en.Tag1 = 1;
+            else
+                en.Tag1 = 0;
+
+
+            //            en.Tag2 = $("#DDL_Enums").val();
+
+            //            en.Tag3 = $("#DDL_SFTables").val();
+
+            //            en.Tag4 = $("#TB_SQL").val();
+
+            //            en.Tag = $("#DDL_Tag").val(); //工作方式.
+
+            if (en.Update() == 0)
+                en.Insert();
+
+            window.location.href = "DataFieldInputRole.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            return;
+        }
+
+        //删除.
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var mypk = "DataFieldInputRole_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+            en.Delete();
+
+            var url = "DataFieldInputRole.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+    <table style="width: 99%;">
+        <caption>
+            日期字段输入控制</caption>
+        <tr>
+            <td>
+                <fieldset>
+                    <legend>
+                        <input type="radio" value="0" id="RB_0" name="RB" /><label for="RB_0">无，不设置</label>
+                    </legend>不做任何设置.
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input type="radio" value="1" id="RB_1" name="RB" /><label for="RB_1">启用设置</label>
+                    </legend>
+                    <label>
+                        <input type="checkbox" id="CB_History" name="CB_History" />
+                        不能输入历史日期，只能输入当前日期以及未来日期。</label>
+                    <br />
+                    <label>
+                        <input type="checkbox" id="Checkbox1" name="CB_History" />
+                        不能输入大于等于小于等于指定字段的日期(未完成)</label>
+                    <br />
+                    运算符：<select>
+                        <option value="dayu">大于 </option>
+                        <option value="dayudengyu">大于等于 </option>
+                        <option value="xiaoyu">小于 </option>
+                        <option value="xiaoyudengyu">小于等于 </option>
+                        <option value="budengyu">不等于 </option>
+                    </select>
+                    指定的:<select id="DDL_DT">
+                        <option></option>
+                    </select>字段日期
+                    <br />
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
+    <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
+    <a href="javascript:ShowHidden('help')">帮助:</a>
+    <div id="help" style="color: Gray; display: none">
+        <ul>
+            <li>该功能提供了简单的、常用的日期输入判断限制规则。</li>
+            <li>如果需要更复杂高级的判断请使用事件绑定函数，把业务逻辑写入到函数里面判定。</li>
+            <li>如果要启用日期输入不能为空的限制，请到该字段基本信息里设置。</li>
+        </ul>
+    </div>
+    </form>
+</body>
+</html>

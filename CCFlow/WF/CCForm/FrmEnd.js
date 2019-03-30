@@ -367,18 +367,32 @@ function AfterBindEn_DealMapExt(frmData) {
             case "BindFunction": //控件绑定函数
                 if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
                     if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
+                        var method = $('#TB_' + mapExt.AttrOfOper).attr("onfocus");
+                        var minDate = "";
+                        if (method.indexOf("minDate") != -1)
+                            minDate = '%y-%M-#{%d}';
+
                         $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
                         var dateFmt = 'yyyy-MM-dd';
                         if (mapAttr.MyDataType == 7)
                             dateFmt = 'yyyy-MM-dd HH:mm';
-                        var mapextDoc = mapExt.Doc;
 
+
+                        var mapextDoc = mapExt.Doc;
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                            WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
-                                $(this).blur(); //失去焦点 
-                                DBAccess.RunFunctionReturnStr(mapextDoc);
-                            }
+                            if(minDate  == "")
+                                WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
+                                    $(this).blur(); //失去焦点 
+                                    DBAccess.RunFunctionReturnStr(mapextDoc);
+                                }
                             });
+                           else
+                               WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                       $(this).blur(); //失去焦点 
+                                       DBAccess.RunFunctionReturnStr(mapextDoc);
+                                   }
+                               });
+
                         });
 
                     }
@@ -509,6 +523,23 @@ function AfterBindEn_DealMapExt(frmData) {
                         if (obj.length != 0)
                             obj.attr("disabled", false);
                     });
+                }
+                break;
+            case "DataFieldInputRole": //时间限制
+                if (mapExt.DoWay == 1) {
+                    var tag1 = mapExt.Tag1;
+                    if(tag1 ==1){
+                     $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
+                        var dateFmt = 'yyyy-MM-dd';
+                        if (mapAttr.MyDataType == 7)
+                            dateFmt = 'yyyy-MM-dd HH:mm';
+
+                         var minDate = '%y-%M-#{%d}'
+                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                            WdatePicker({ dateFmt: dateFmt,minDate:minDate});
+                        });
+                    }
+
                 }
                 break;
             default:

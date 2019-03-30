@@ -8,11 +8,16 @@
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
  	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-
-</style>
 </head>
-
+<style >
+    /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
+     td
+        {
+           overflow:hidden;
+           white-space:nowrap;
+           text-overflow:ellipsis; 
+        }
+</style>
 
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -37,18 +42,18 @@
 			</div>
 		</div>
 
-		<table  class="table table-striped">
+		<table style="table-layout:fixed" class="table table-striped">
 			<thead id="Table2">
 			<tr >
 				<th>#</th>
-				<th width='380'>标题</th>
-				<th width='80'>发起人</th>
-				<th width='120'>发起日期</th>
-				<th width='120'>停留节点</th>
-				<th width='280'>审批人</th>
-				<th width='90'>应完成日期</th>
-				<th width='60'>状态</th>
-				<th width='60'>操作</th>
+				<th width='380px'>标题</th>
+				<th width='80px'>发起人</th>
+				<th width='120px'>发起日期</th>
+				<th width='120px'>停留节点</th>
+				<th width='280px'>审批人</th>
+				<th width='90px'>应完成日期</th>
+				<th width='60px'>状态</th>
+				<th width='60px'>操作</th>
 			</tr>
 			</thead>
 			<tbody id="Table1"></tbody>
@@ -206,7 +211,7 @@
 
                 htmlbox += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
 
-                htmlbox += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
+                htmlbox += "<td ><font color='" + color + "'>" + todoEmpsName + "</font></td>";
 
                 if (en.SDTOfNode == null)
                     htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
@@ -400,19 +405,19 @@
                 alert('未查询出来数据');
                 return;
             }
-
+           
             var tableHtml = "";
             tableHtml += "<tr>";
             tableHtml += "<th>Idx</th>";
-            tableHtml += "<th>标题</th>";
-            tableHtml += "<th width='60'>发起人</th>";
-            tableHtml += "<th>发起日期</th>";
-            tableHtml += "<th>流程</th>";
-            tableHtml += "<th>停留节点</th>";
-            tableHtml += "<th>审批人</th>";
-            tableHtml += "<th width='90'>应完成日期</th>";
-            tableHtml += "<th width='60'>状态</th>";
-            tableHtml += "<th width='50'>操作</th>";
+            tableHtml += "<th width='380px'>标题</th>";
+            tableHtml += "<th width='80px'>发起人</th>";
+            tableHtml += "<th width='120px'>发起日期</th>";
+            tableHtml += "<th width='120px'>流程</th>";
+            tableHtml += "<th width='120px'>停留节点</th>";
+            tableHtml += "<th width='160px'>审批人</th>";
+            tableHtml += "<th width='90px'>应完成日期</th>";
+            tableHtml += "<th width='60px'>状态</th>";
+            tableHtml += "<th width='60px'>操作</th>";
           //  tableHtml += "<th>参与人</th>";
             tableHtml += "</tr>";
 

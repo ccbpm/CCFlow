@@ -121,15 +121,6 @@
      ko-kr="sub-thread"
     />
   <item
-     key="sub_thread"
-     zh-cn="子线程"
-     zh-tw="子线程"
-     zh-hk="子线程"
-     en-us="sub-thread"
-     ja-jp="sub-thread"
-     ko-kr="sub-thread"
-    />
-  <item
     key="total_receivers"
     zh-cn="共({0})人接收\t\n"
     zh-tw="共({0})人接收\t\n"
@@ -156,5 +147,204 @@
     en-us="@The end-user had no choice of the target node."
     ja-jp="@The end-user had no choice of the target node."
     ko-kr="@The end-user had no choice of the target node."
+    />
+  <item
+    key="log_copy"
+    zh-cn="@记录测试明细表Copy过程,从节点ID:{0}, WorkID:{1}, 到节点ID:{2}"
+    zh-tw="@记录测试明细表Copy过程,从节点ID:{0}, WorkID:{1}, 到节点ID:{2}"
+    zh-hk="@记录测试明细表Copy过程,从节点ID:{0}, WorkID:{1}, 到节点ID:{2}"
+    en-us="@Log copy testing detail table: from Node ID{0}, WorkID:{1}, to Node ID:{2}"
+    ja-jp="@Log copy testing detail table: from Node ID{0}, WorkID:{1}, to Node ID:{2}"
+    ko-kr="@Log copy testing detail table: from Node ID{0}, WorkID:{1}, to Node ID:{2}"
+    />
+  <item
+    key="count_of_detail_table"
+    zh-cn="@到节点明细表数量是{0}个"
+    zh-tw="@到节点明细表数量是{0}个"
+    zh-hk="@到节点明细表数量是{0}个"
+    en-us="@Log copy testing detail table: from Node ID{0}, WorkID:{1}, to Node ID:{2}"
+    ja-jp="@Log copy testing detail table: from Node ID{0}, WorkID:{1}, to Node ID:{2}"
+    ko-kr="@Log copy testing detail table: from Node ID{0}, WorkID:{1}, to Node ID:{2}"
+    />
+  <item
+    key="start_copy_detail_tables"
+    zh-cn="@进入循环开始执行逐个明细表copy:"
+    zh-tw="@进入循环开始执行逐个明细表copy:"
+    zh-hk="@进入循环开始执行逐个明细表copy:"
+    en-us="@Start copying detail tables one by one:"
+    ja-jp="@Start copying detail tables one by one:"
+    ko-kr="@Start copying detail tables one by one:"
+    />
+  <item
+   key="start_copy_detail_table"
+   zh-cn="@进入循环开始执行明细表({0})copy:"
+   zh-tw="@进入循环开始执行明细表({0})copy:"
+   zh-hk="@进入循环开始执行明细表({0})copy:"
+   en-us="@Start copying the detail table({0}):"
+   ja-jp="@Start copying the detail table({0}):"
+   ko-kr="@Start copying the detail table({0}):"
+    />
+  <item
+   key="log_detail_table_1"
+   zh-cn="@从明细表({0})查询数据一共{1}条."
+   zh-tw="@从明细表({0})查询数据一共{1}条."
+   zh-hk="@从明细表({0})查询数据一共{1}条."
+   en-us="@The detail table is {0}, the count of data is {1}."
+   ja-jp="@The detail table is {0}, the count of data is {1}."
+   ko-kr="@The detail table is {0}, the count of data is {1}."
+    />
+  <item
+   key="log_detail_table_2"
+   zh-cn="@数据删除到达明细表:{0},并开始遍历明细表,执行一行行的copy."
+   zh-tw="@数据删除到达明细表:{0},并开始遍历明细表,执行一行行的copy."
+   zh-hk="@数据删除到达明细表:{0},并开始遍历明细表,执行一行行的copy."
+   en-us="@Delete data of the detail table {0}, and copying one by one from this table."
+   ja-jp="@Delete data of the detail table {0}, and copying one by one from this table."
+   ko-kr="@Delete data of the detail table {0}, and copying one by one from this table."
+    />
+
+  <item
+   key="system_error"
+   zh-cn="@系统出现错误,请将如下信息反馈给管理员,谢谢。技术信息:{0}."
+   zh-tw="@系统出现错误,请将如下信息反馈给管理员,谢谢。技术信息:{0}."
+   zh-hk="@系统出现错误,请将如下信息反馈给管理员,谢谢。技术信息:{0}."
+   en-us="@System Error,please feedback the following error information to ccflow administrator. Technical information:{0}."
+   ja-jp="@System Error,please feedback the following error information to ccflow administrator. Technical information:{0}."
+   ko-kr="@System Error,please feedback the following error information to ccflow administrator. Technical information:{0}."
+    />
+  <item
+   key="system_error_jump_automatically_1"
+   zh-cn="自动跳转(当没有找到操作人时)"
+   zh-tw="自动跳转(当没有找到操作人时)"
+   zh-hk="自动跳转(当没有找到操作人时)"
+   en-us="jump automatically(whenever not found operator)."
+   ja-jp="jump automatically(whenever not found operator)."
+   ko-kr="jump automatically(whenever not found operator)."
+    />
+  <item
+   key="system_error_not_found_operator"
+   zh-cn="@没有找到节点[{0}]的操作人"
+   zh-tw="@没有找到节点[{0}]的操作人"
+   zh-hk="@没有找到节点[{0}]的操作人"
+   en-us="@Cannot find the node[{0}] operator."
+   ja-jp="@Cannot find the node[{0}] operator."
+   ko-kr="@Cannot find the node[{0}] operator."
+    />
+  <item
+  key="system_error_jump_automatically_2"
+  zh-cn="自动跳转(操作人就是提交人)"
+  zh-tw="自动跳转(操作人就是提交人)"
+  zh-hk="自动跳转(操作人就是提交人)"
+  en-us="jump automatically(whenever the operator and the submitter are the same)."
+  ja-jp="jump automatically(whenever the operator and the submitter are the same)."
+  ko-kr="jump automatically(whenever the operator and the submitter are the same)."
+    />
+  <item
+  key="system_error_jump_automatically_3"
+  zh-cn="自动跳转(操作人已经完成)"
+  zh-tw="自动跳转(操作人已经完成)"
+  zh-hk="自动跳转(操作人已经完成)"
+  en-us="jump automatically(whenever the operator already finished)."
+  ja-jp="jump automatically(whenever the operator already finished)."
+  ko-kr="jump automatically(whenever the operator already finished)."
+    />
+  <item
+  key="found_next_node"
+  zh-cn="@找到下一步节点."
+  zh-tw="@找到下一步节点."
+  zh-hk="@找到下一步节点."
+  en-us="@Found the next node."
+  ja-jp="@Found the next node."
+  ko-kr="@Found the next node."
+    />
+  <item
+key="not_found_next_node"
+zh-cn="@没找到下一步节点."
+zh-tw="@没找到下一步节点."
+zh-hk="@没找到下一步节点."
+en-us="@Not found the next node."
+ja-jp="@Not found the next node."
+ko-kr="@Not found the next node."
+    />
+  <item
+  key="not_found_my_expected_data"
+  zh-cn="@没有找到自己期望的数据."
+  zh-tw="@没有找到自己期望的数据."
+  zh-hk="@没有找到自己期望的数据."
+  en-us="@Not found my own expected data."
+  ja-jp="@Not found my own expected data."
+  ko-kr="@Not found my own expected data."
+    />
+  <item
+  key="not_found_receiver_expected_data"
+  zh-cn="@没有找到接收人期望的数据."
+  zh-tw="@没有找到接收人期望的数据."
+  zh-hk="@没有找到接收人期望的数据."
+  en-us="@Not found the receiver expected data."
+  ja-jp="@Not found the receiver expected data."
+  ko-kr="@Not found the receiver expected data."
+    />
+  <item
+  key="current_work_send_to_returner"
+  zh-cn="@当前工作已经发送给退回人({0},{1})."
+  zh-tw="@当前工作已经发送给退回人({0},{1})."
+  zh-hk="@当前工作已经发送给退回人({0},{1})."
+  en-us="@Current work already sent to the returner({0}, {1})."
+  ja-jp="@Current work already sent to the returner({0}, {1})."
+  ko-kr="@Current work already sent to the returner({0}, {1})."
+    />
+  <item
+  key="error_node_jump_condition"
+  zh-cn="@当前用户({0})定义节点的方向条件错误:从节点({1}-{2})到其它所有节点的转向条件都不成立."
+  zh-tw="@当前用户({0})定义节点的方向条件错误:从节点({1}-{2})到其它所有节点的转向条件都不成立."
+  zh-hk="@当前用户({0})定义节点的方向条件错误:从节点({1}-{2})到其它所有节点的转向条件都不成立."
+  en-us="@current user({0}) defined the node jumping condition wrong: the node({1}-{2})to other nodes jumping conditions are all invalid."
+  ja-jp="@current user({0}) defined the node jumping condition wrong: the node({1}-{2})to other nodes jumping conditions are all invalid."
+  ko-kr="@current user({0}) defined the node jumping condition wrong: the node({1}-{2})to other nodes jumping conditions are all invalid."
+    />
+  <item
+ key="error_sub_thread"
+ zh-cn="@流程设计错误：不允许在子线程上设置流程完成条件。"
+ zh-tw="@流程设计错误：不允许在子线程上设置流程完成条件。"
+ zh-hk="@流程设计错误：不允许在子线程上设置流程完成条件。"
+ en-us="@Designed workflow error：not allow set the workflow completed condition on sub-thread."
+ ja-jp="@Designed workflow error：not allow set the workflow completed condition on sub-thread."
+ ko-kr="@Designed workflow error：not allow set the workflow completed condition on sub-thread."
+    />
+  <item
+ key="current_node_completed"
+ zh-cn="@当前节点工作[{0}]已经完成。"
+ zh-tw="@当前节点工作[{0}]已经完成。"
+ zh-hk="@当前节点工作[{0}]已经完成。"
+ en-us="@Current node work[{0}] completed."
+ ja-jp="@Current node work[{0}] completed."
+ ko-kr="@Current node work[{0}] completed."
+    />
+  <item
+key="match_workflow_completed"
+zh-cn="符合流程完成条件"
+zh-tw="符合流程完成条件"
+zh-hk="符合流程完成条件"
+en-us="Matched the workflow completion condition."
+ja-jp="Matched the workflow completion condition."
+ko-kr="Matched the workflow completion condition."
+    />
+  <item
+key="node_completed_success"
+zh-cn="@工作已经成功处理(一个流程的工作)。"
+zh-tw="@工作已经成功处理(一个流程的工作)。"
+zh-hk="@工作已经成功处理(一个流程的工作)。"
+en-us="@The node completed successfully(one workflow work)."
+ja-jp="@The node completed successfully(one workflow work)."
+ko-kr="@The node completed successfully(one workflow work)."
+    />
+  <item
+key="error_workflow_complete_condition"
+zh-cn="@判断流程({0})完成条件出现错误:{1}."
+zh-tw="@判断流程({0})完成条件出现错误:{1}."
+zh-hk="@判断流程({0})完成条件出现错误:{1}."
+en-us="@The workflow{0} completion condition is invalid: {1}."
+ja-jp="@The workflow{0} completion condition is invalid: {1}."
+ko-kr="@The workflow{0} completion condition is invalid: {1}."
     />
 </language>

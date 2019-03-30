@@ -56,7 +56,8 @@ namespace BP.WF
         public static string multilingual(string defaultMsg, string className, string key, string[] paramList)
         {
             //string currentLang = BP.Web.WebUser.SysLang;
-            string currentLang = "en-us";
+            //string currentLang = "en-us";
+            string currentLang = "zh-cn";
 
             if (currentLang == "zh-cn")
             {

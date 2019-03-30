@@ -14,26 +14,147 @@
       zh-cn="@没有找到接收人."
       zh-tw="@没有找到接收人."
       zh-hk="@没有找到接收人."
-      en-us="@Cannot found receiver."
+      en-us="@Receiver cannot be found."
       ja-jp="@受取人が見つかりませんでした。"
       ko-kr="@수신자를 찾을 수 없습니다."
     />
   <item
       key="receiver_required"
-      zh-cn="@接受人员列表为空."
-      zh-tw="@接受人员列表为空."
-      zh-hk="@接受人员列表为空."
+      zh-cn="@接收人员列表为空."
+      zh-tw="@接收人员列表为空."
+      zh-hk="@接收人员列表为空."
       en-us="@Receiver is required."
       ja-jp="@Receiver is required"
       ko-kr="@Receiver is required"
     />
   <item
-      key="no_permission_login_2"
-      zh-cn="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
-      zh-tw="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
-      zh-hk="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
-      en-us="@You are not an administrator or your account is disabled."
-      ja-jp="@"
-      ko-kr="@"
+      key="invalid_metadata"
+      zh-cn="@数据源不正确,到达的节点{0},表单类型是动态表单树,至少返回3列来标识表单ID."
+      zh-tw="@数据源不正确,到达的节点{0},表单类型是动态表单树,至少返回3列来标识表单ID."
+      zh-hk="@数据源不正确,到达的节点{0},表单类型是动态表单树,至少返回3列来标识表单ID."
+      en-us="@Invalid metadata, current node is {0}, the form category is dynamic form tree, please the least provide 3 columns to identify the form ID."
+      ja-jp="@Invalid metadata, current node is {0}, the form category is dynamic form tree, please the least provide 3 columns to identify the form ID."
+      ko-kr="@Invalid metadata, current node is {0}, the form category is dynamic form tree, please the least provide 3 columns to identify the form ID."
+    />
+
+  <item
+      key="invalid_setting_receiver"
+      zh-cn="@设置接收人规则错误, 接收人[{0}]不存在或者被停用。"
+      zh-tw="@设置接收人规则错误, 接收人[{0}]不存在或者被停用。"
+      zh-hk="@设置接收人规则错误, 接收人[{0}]不存在或者被停用。"
+      en-us="@Invalid setting for receiver, receiver [{0}] cannot be found or invalid."
+      ja-jp="@Invalid setting for receiver, receiver [{0}] cannot be found or invalid."
+      ko-kr="@Invalid setting for receiver, receiver [{0}] cannot be found or invalid."
+    />
+  
+  <item
+      key="no_value_in_group_tags"
+      zh-cn="@[{0}]分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确."
+      zh-tw="@[{0}]分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确."
+      zh-hk="@[{0}]分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确."
+      en-us="@The group tags({0}) has no value, this leads to generate sub-threads workflow failed, please double check the configuration."
+      ja-jp="@The group tags({0}) has no value, this leads to generate sub-threads workflow failed, please double check the configuration."
+      ko-kr="@The group tags({0}) has no value, this leads to generate sub-threads workflow failed, please double check the configuration."
+    />
+  <item
+      key="invalid_setting_external_receiver"
+      zh-cn="@当前节点[{0}]是中间节点，并且是外部用户处理节点，您需要正确的设置这个外部用户接收人规则。"
+      zh-tw="@当前节点[{0}]是中间节点，并且是外部用户处理节点，您需要正确的设置这个外部用户接收人规则。"
+      zh-hk="@当前节点[{0}]是中间节点，并且是外部用户处理节点，您需要正确的设置这个外部用户接收人规则。"
+      en-us="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+      ja-jp="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+      ko-kr="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+    />
+  <item
+      key="empty_group_tags"
+      zh-cn="@分组标志不能为空。"
+      zh-tw="@分组标志不能为空。"
+      zh-hk="@分组标志不能为空。"
+      en-us="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+      ja-jp="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+      ko-kr="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+    />
+  <item
+      key="invalid_receiver_data_source"
+      zh-cn="@接收人数据源不正确,表单IDs不能为空。"
+      zh-tw="@接收人数据源不正确,表单IDs不能为空。"
+      zh-hk="@接收人数据源不正确,表单IDs不能为空。"
+      en-us="@Invalid receivers data source, the form IDs is required."
+      ja-jp="@Invalid receivers data source, the form IDs is required."
+      ko-kr="@Invalid receivers data source, the form IDs is required."
+    />
+  <item
+      key="generate_receiver_error_by_depart"
+      zh-cn="@根据部门[{0}]产生工作人员出现错误，流程[{1}]中节点[{2}]定义错误,没有找到接收此工作的工作人员."
+      zh-tw="@根据部门[{0}]产生工作人员出现错误，流程[{1}]中节点[{2}]定义错误,没有找到接收此工作的工作人员."
+      zh-hk="@根据部门[{0}]产生工作人员出现错误，流程[{1}]中节点[{2}]定义错误,没有找到接收此工作的工作人员."
+      en-us="@Cannot find the receivers by department[{0}]. System cannot find receiver in the node[{1}] of the workflow[{2}]."
+      ja-jp="@Cannot find the receivers by department[{0}]. System cannot find receiver in the node[{1}] of the workflow[{2}]."
+      ko-kr="@Cannot find the receivers by department[{0}]. System cannot find receiver in the node[{1}] of the workflow[{2}]."
+    />
+
+  <item
+      key="workflow_error_1"
+      zh-cn="err@流程设计错误: 当前节点是合流节点，而到达的节点是子线程。"
+      zh-tw="err@流程设计错误: 当前节点是合流节点，而到达的节点是子线程。"
+      zh-hk="err@流程设计错误: 当前节点是合流节点，而到达的节点是子线程。"
+      en-us="err@Workflow designed error: current node is combined node，but the target node is sub-thread."
+      ja-jp="err@Workflow designed error: current node is combined node，but the target node is sub-thread."
+      ko-kr="err@Workflow designed error: current node is combined node，but the target node is sub-thread."
+    />
+  <item
+      key="workflow_error_2"
+      zh-cn="err@流程设计错误: 当前节点是普通节点，而到达的节点是子线程。"
+      zh-tw="err@流程设计错误: 当前节点是普通节点，而到达的节点是子线程。"
+      zh-hk="err@流程设计错误: 当前节点是普通节点，而到达的节点是子线程。"
+      en-us="err@Workflow designed error: current node is normal node，but the target node is sub-thread."
+      ja-jp="err@Workflow designed error: current node is normal node，but the target node is sub-thread."
+      ko-kr="err@Workflow designed error: current node is normal node，but the target node is sub-thread."
+    />
+  <item
+     key="sub_thread"
+     zh-cn="子线程"
+     zh-tw="子线程"
+     zh-hk="子线程"
+     en-us="sub-thread"
+     ja-jp="sub-thread"
+     ko-kr="sub-thread"
+    />
+  <item
+     key="sub_thread"
+     zh-cn="子线程"
+     zh-tw="子线程"
+     zh-hk="子线程"
+     en-us="sub-thread"
+     ja-jp="sub-thread"
+     ko-kr="sub-thread"
+    />
+  <item
+    key="total_receivers"
+    zh-cn="共({0})人接收\t\n"
+    zh-tw="共({0})人接收\t\n"
+    zh-hk="共({0})人接收\t\n"
+    en-us="Total({0}) receivers\t\n"
+    ja-jp="Total({0}) receivers\t\n"
+    ko-kr="Total({0}) receivers\t\n"
+    />
+
+  <item
+    key="multiple_receivers"
+    zh-cn="多人接收(见信息栏)"
+    zh-tw="多人接收(见信息栏)"
+    zh-hk="多人接收(见信息栏)"
+    en-us="Mult-receivers details please refer to the information bar"
+    ja-jp="Mult-receivers details please refer to the information bar"
+    ko-kr="Mult-receivers details please refer to the information bar"
+    />
+  <item
+    key="no_choice_of_target_node"
+    zh-cn="@用户没有选择发送到的节点."
+    zh-tw="@用户没有选择发送到的节点."
+    zh-hk="@用户没有选择发送到的节点."
+    en-us="@The end-user had no choice of the target node."
+    ja-jp="@The end-user had no choice of the target node."
+    ko-kr="@The end-user had no choice of the target node."
     />
 </language>

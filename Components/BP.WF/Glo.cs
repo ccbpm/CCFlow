@@ -53,9 +53,12 @@ namespace BP.WF
         /// <param name="key"></param>
         /// <param name="paramList"></param>
         /// <returns></returns>
-        public static string Multilingual(string defaultMsg, string className, string key, string[] paramList)
+        public static string multilingual(string defaultMsg, string className, string key, string[] paramList)
         {
-            if (BP.Web.WebUser.SysLang == "zh-cn")
+            //string currentLang = BP.Web.WebUser.SysLang;
+            string currentLang = "en-us";
+
+            if (currentLang == "zh-cn")
             {
                 return String.Format(defaultMsg, paramList);
             }
@@ -66,7 +69,7 @@ namespace BP.WF
             {
                 if ((string)dr.ItemArray[0] == key)
                 {
-                    switch (BP.Web.WebUser.SysLang)
+                    switch (currentLang)
                     {
                         case "zh-cn":
                             val = (string)dr.ItemArray[1];
@@ -90,6 +93,8 @@ namespace BP.WF
                             val = (string)dr.ItemArray[1];
                             break;
                     }
+
+                    break;
                 }
             }
             return String.Format(val, paramList);

@@ -53,9 +53,6 @@
     <Compile Include="Demo\CN\City.cs" />
     <Compile Include="Demo\CN\PQ.cs" />
     <Compile Include="Demo\CN\SF.cs" />
-    <Compile Include="Demo\CRM\Product.cs" />
-    <Compile Include="Demo\CRM\SalesBill.cs" />
-    <Compile Include="Demo\CRM\Supplier.cs" />
     <Compile Include="Demo\FlowEvent\F001.cs" />
     <Compile Include="Demo\FlowEvent\F025.cs" />
     <Compile Include="Demo\FlowEvent\F104.cs" />
@@ -80,10 +77,6 @@
     <Compile Include="Demo\SDK\ND018Rpt.cs" />
     <Compile Include="Demo\SDK\ND112Rpt.cs" />
     <Compile Include="Demo\SDK\QingJia.cs" />
-    <Compile Include="Demo\YuSuan\KM.cs" />
-    <Compile Include="Demo\YuSuan\Project.cs" />
-    <Compile Include="Demo\YuSuan\ProjectSort.cs" />
-    <Compile Include="Demo\YuSuan\PrjKM.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -100,6 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo\BPFramework\Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Demo\CRM\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

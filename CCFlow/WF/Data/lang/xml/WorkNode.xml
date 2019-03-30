@@ -1,9 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <language>
-  <item Key="test"  Val="Hi {0}, welcome to {1}." Desc="" />
-  
-  <item Key="invalid_username_or_pwd"  Val="err@用户名或密码错误." Desc="" />
-  <item Key="no_permission_login_1"  Val="err@您非管理员用户，不能登录." Desc="" />
-  <item Key="no_permission_login_2"  Val="err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户." Desc="" />
-  <item Key="secondary_user_no_permission_wf_tree"  Val="err@二级管理员用户没有设置流程树的权限." Desc="" />
+  <item
+    key="test"
+    zh-cn="你好{0}, 欢迎来到{1}."
+    zh-tw="妳好{0}, 歡迎來到{1}."
+    zh-hk="妳好{0}, 歡迎來到{1}."
+    en-us="Hi {0}, welcome to {1}."
+    ja-jp="こんにちは{0}, ようこそ{1}."
+    ko-kr="안녕하세요 {0}, 오신 것을 환영합니다{1}."
+    />
+  <item
+      key="cannot_found_receiver"
+      zh-cn="@没有找到接收人."
+      zh-tw="@没有找到接收人."
+      zh-hk="@没有找到接收人."
+      en-us="@Cannot found receiver."
+      ja-jp="@受取人が見つかりませんでした。"
+      ko-kr="@수신자를 찾을 수 없습니다."
+    />
+  <item
+      key="receiver_required"
+      zh-cn="@接受人员列表为空."
+      zh-tw="@接受人员列表为空."
+      zh-hk="@接受人员列表为空."
+      en-us="@Receiver is required."
+      ja-jp="@Receiver is required"
+      ko-kr="@Receiver is required"
+    />
+  <item
+      key="no_permission_login_2"
+      zh-cn="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
+      zh-tw="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
+      zh-hk="@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户."
+      en-us="@You are not an administrator or your account is disabled."
+      ja-jp="@"
+      ko-kr="@"
+    />
 </language>

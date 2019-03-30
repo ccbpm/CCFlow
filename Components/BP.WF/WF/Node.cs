@@ -167,6 +167,8 @@ namespace BP.WF
                     //把所有的节点字段.
                     foreach (DataRow dr in dtNodeIDs.Rows)
                     {
+                        if(frmIDs.Contains("ND"+dr[0].ToString()) == true)
+                            continue;
                         frmIDs += "'ND" + dr[0].ToString() + "',";
                     }
 

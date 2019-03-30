@@ -6526,7 +6526,7 @@ namespace BP.WF
                 {
                     if (this.rptGe.PWorkID != 0 && this.HisGenerWorkFlow.PWorkID == 0)
                     {
-                        BP.WF.Dev2Interface.SetParentInfo(this.HisFlow.No, this.WorkID, this.rptGe.PFlowNo, this.rptGe.PWorkID, this.rptGe.PNodeID, this.rptGe.PEmp);
+                        BP.WF.Dev2Interface.SetParentInfo(this.HisFlow.No, this.WorkID, this.rptGe.PWorkID);
 
                         //写入track, 调用了父流程.
                         Node pND = new Node(rptGe.PNodeID);
@@ -6555,7 +6555,7 @@ namespace BP.WF
                             string pEmp = BP.Sys.Glo.Request.QueryString["PEmp"];
 
                             // 设置成父流程关系.
-                            BP.WF.Dev2Interface.SetParentInfo(this.HisFlow.No, this.WorkID, pflowNo, Int64.Parse(pWorkID), int.Parse(pNodeID), pEmp);
+                            BP.WF.Dev2Interface.SetParentInfo(this.HisFlow.No, this.WorkID, Int64.Parse(pWorkID));
 
                             //写入track, 调用了父流程.
                             Node pND = new Node(pNodeID);

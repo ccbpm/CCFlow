@@ -4222,35 +4222,37 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL(ps);
         }
         /// <summary>
+        /// 设置父流程信息
+        /// </summary>
+        /// <param name="subFlowNo"></param>
+        /// <param name="subFlowWorkID"></param>
+        /// <param name="pflowNo"></param>
+        /// <param name="parentWorkID"></param>
+        /// <param name="pNodeID"></param>
+        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, string pflowNo, Int64 parentWorkID, int pNodeID, string parentEmpNo)
+        {
+            SetParentInfo(subFlowNo, subFlowWorkID, parentWorkID);
+        }
+        /// <summary>
         /// 设置父流程信息 
         /// </summary>
         /// <param name="subFlowNo">子流程编号</param>
         /// <param name="subFlowWorkID">子流程workid</param>
-        /// <param name="parentFlowNo">父流程编号</param>
         /// <param name="parentWorkID">父流程WorkID</param>
-        /// <param name="parentNodeID">调用子流程的节点ID</param>
-        /// <param name="parentEmpNo">调用人</param>
-        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, string parentFlowNo, Int64 parentWorkID,
-            int parentNodeID, string parentEmpNo)
+        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, Int64 parentWorkID, string parentEmpNo=null)
         {
-            if (parentWorkID == 0)
-                throw new Exception("@设置的父流程的流程WorkID为 0 ，这是非法的。");
+            //创建父流程.
+            GenerWorkFlow pgwf = new GenerWorkFlow(parentWorkID);
 
-            if (parentFlowNo==null)
-                throw new Exception("@设置的父流程的流程编号为 null ，这是非法的。");
-
-            if (parentNodeID == 0)
-                throw new Exception("@设置的父流程的流程编号为 0 ，这是非法的。"); //@李国文.
-
-            if (DataType.IsNullOrEmpty(parentEmpNo))
+            if (parentEmpNo == null)
                 parentEmpNo = WebUser.No;
 
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET PFlowNo=" + dbstr + "PFlowNo, PWorkID=" + dbstr + "PWorkID,PNodeID=" + dbstr + "PNodeID,PEmp=" + dbstr + "PEmp WHERE WorkID=" + dbstr + "WorkID";
-            ps.Add(GenerWorkFlowAttr.PFlowNo, parentFlowNo);
+            ps.Add(GenerWorkFlowAttr.PFlowNo, pgwf.FK_Flow);
             ps.Add(GenerWorkFlowAttr.PWorkID, parentWorkID);
-            ps.Add(GenerWorkFlowAttr.PNodeID, parentNodeID);
+            ps.Add(GenerWorkFlowAttr.PNodeID, pgwf.FK_Node);
             ps.Add(GenerWorkFlowAttr.PEmp, parentEmpNo);
             ps.Add(GenerWorkFlowAttr.WorkID, subFlowWorkID);
 
@@ -4260,9 +4262,9 @@ namespace BP.WF
             Flow fl = new Flow(subFlowNo);
             ps = new Paras();
             ps.SQL = "UPDATE " + fl.PTable + " SET PFlowNo=" + dbstr + "PFlowNo, PWorkID=" + dbstr + "PWorkID,PNodeID=" + dbstr + "PNodeID, PEmp=" + dbstr + "PEmp WHERE OID=" + dbstr + "OID";
-            ps.Add(NDXRptBaseAttr.PFlowNo, parentFlowNo);
-            ps.Add(NDXRptBaseAttr.PWorkID, parentWorkID);
-            ps.Add(NDXRptBaseAttr.PNodeID, parentNodeID);
+            ps.Add(NDXRptBaseAttr.PFlowNo, pgwf.FK_Flow);
+            ps.Add(NDXRptBaseAttr.PWorkID, pgwf.WorkID);
+            ps.Add(NDXRptBaseAttr.PNodeID, pgwf.FK_Node);
             ps.Add(NDXRptBaseAttr.PEmp, parentEmpNo);
             ps.Add(NDXRptBaseAttr.OID, subFlowWorkID);
 
@@ -6337,7 +6339,7 @@ namespace BP.WF
             if (parentWorkID != 0)
             {
                 //设置父流程信息
-                BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentFlowNo, parentWorkID, parentNodeID, parentEmp);
+                BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);
             }
 
             // 如果有跳转.

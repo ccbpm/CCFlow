@@ -160,7 +160,7 @@ namespace BP.WF
 
             // 设置流程信息
             if (parentWorkID != 0)
-                BP.WF.Dev2Interface.SetParentInfo(flowNo, workID, parentFlowNo, parentWorkID,parentNodeID,parentEmp);
+                BP.WF.Dev2Interface.SetParentInfo(flowNo, workID, parentWorkID);
 
             #region 处理generworkid
             // 设置父流程信息.

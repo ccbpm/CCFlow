@@ -105,7 +105,7 @@ namespace BP.UnitTesting.AttrFlow
                 objs = BP.WF.Dev2Interface.Node_SendWork(flSub.No, subWorkID);
 
                 //设置流程信息。
-                BP.WF.Dev2Interface.SetParentInfo(flSub.No, subWorkID, "023", workID,0,null);
+                BP.WF.Dev2Interface.SetParentInfo(flSub.No, subWorkID, workID);
                 if (i == 2)
                     continue;
 

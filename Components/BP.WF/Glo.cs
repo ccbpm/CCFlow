@@ -2287,7 +2287,7 @@ namespace BP.WF
                     gwfSubFlow.RetrieveFromDBSources();
 
                     //设置当前流程的ID
-                    BP.WF.Dev2Interface.SetParentInfo(gwfSubFlow.FK_Flow, workidC, gwfParent.FK_Flow, gwfParent.WorkID, gwfParent.FK_Node, WebUser.No);
+                    BP.WF.Dev2Interface.SetParentInfo(gwfSubFlow.FK_Flow, workidC, gwfParent.WorkID);
 
                     // 是否可以执行？
                     if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwfSubFlow.FK_Flow, gwfSubFlow.FK_Node, workidC, WebUser.No) == true)

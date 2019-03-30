@@ -43,7 +43,7 @@ namespace BP.UnitTesting
             Int64 workidSubFlow = BP.WF.Dev2Interface.Node_CreateBlankWork("012");
 
             //设置父子流程关系.
-            BP.WF.Dev2Interface.SetParentInfo("012", workidSubFlow, "011", workid, 1103, "guoxiangbin");
+            BP.WF.Dev2Interface.SetParentInfo("012", workidSubFlow,  workid );
 
             //让 fuhui 向下发送.
             BP.WF.Dev2Interface.Node_SendWork("012", workidSubFlow,0,null);

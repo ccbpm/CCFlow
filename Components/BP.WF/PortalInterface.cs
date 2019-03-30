@@ -153,7 +153,7 @@ namespace BP.WF
 
             // 设置流程信息
             if (parentWorkID != 0)
-                BP.WF.Dev2Interface.SetParentInfo(flowNo, workID, parentFlowNo, parentWorkID,parentNodeID,parentEmp);
+                BP.WF.Dev2Interface.SetParentInfo(flowNo, workID,  parentWorkID);
 
             return wk.OID;
         }

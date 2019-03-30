@@ -381,8 +381,7 @@ namespace BP.WF.HttpHandler
                         pEmp = WebUser.No;
 
                     //设置父子关系.
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, pFlowNo,
-                        pWorkID, pNodeID, pEmp);
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID,pWorkID);
                 }
             }
             #endregion
@@ -1776,7 +1775,7 @@ namespace BP.WF.HttpHandler
                     this.WorkID, this.GetMainTableHT(), null);
 
                 if (this.PWorkID != 0)
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.GetRequestVal("PFlow"), this.PWorkID, this.GetRequestValInt("PNodeID"), WebUser.No);
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID,this.PWorkID);
 
                 return str;
             }

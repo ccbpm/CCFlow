@@ -35,7 +35,7 @@
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
-    <script src="AppClassic/comm.js" type="text/javascript"></script>
+    <!--<script src="AppClassic/comm.js" type="text/javascript"></script>-->
     <script type="text/javascript">
     
         function GroupBarClick(groupName) {
@@ -89,6 +89,7 @@
 
         //初始化数据.
         function InitPage() {
+            document.title = window.lang.daiban;
             //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
             var flowNos = GetQueryString("FlowNos");
 
@@ -116,28 +117,28 @@
             var tablet = "";
             tablet += "<th style='width:40px;'>#</th>";
             // title += "<th >优先级</th>";
-            tablet += "<th>标题</th>";
+            tablet += "<th>" + window.lang.biaoti + "</th>";
 
             if (groupBy == "ByNode") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >流程</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >发起人</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
             }
 
             if (groupBy == "ByFlow") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >节点</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >发起人</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
             }
 
             if (groupBy == "ByStarter") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >流程</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >节点</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
             }
 
-            tablet += "<th>发起日期</th>";
-            tablet += "<th>到达</th>";
-            tablet += "<th>期限</th>";
-            tablet += "<th>状态</th>";
-            tablet += "<th>类型</th>";
+            tablet += "<th>" + window.lang.fqrq+ "</th>";
+            tablet += "<th>" + window.lang.sdrq + "</th>";
+            tablet += "<th>" + window.lang.qixian + "</th>";
+            tablet += "<th>" + window.lang.zhuangtai + "</th>";
+            tablet += "<th>" + window.lang.leixing + "<th>";
          
 
             
@@ -285,10 +286,10 @@
 
                     //判断流程是否逾期
                     if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT && paras.indexOf("&IsCC=1")==-1) {
-                        listbox += "<td><font color=red>逾期</font></td>";
+                        listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
                     }
                     else {
-                        listbox += "<td><font color=green>正常</font></td>";
+                        listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
                     }
 
                     listbox += "<td>" + GetState(work.WFState) + "</td>";
@@ -302,7 +303,7 @@
 
             //  $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
             $('#Table1').html(listbox);
-            $("#Table2").html("合计:" + realCount + "条");
+            $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
             if (div != null) {
@@ -316,26 +317,27 @@
 
             switch (wfState) {
                 case 1:
-                    return "草稿";
+                    return window.lang.caogao;
                 case 2:
-                    return "待办";
+                    return window.lang.daiban;
                     break;
                 case 3: //已完成.
+                    return window.lang.ywc;
                     break;
                 case 4:
-                    return "挂起";
+                    return window.lang.guaqi;
                 case 5:
-                    return "<font color=red>退回</font>";
+                    return "<font color=red>" + window.lang.tuihui + "</font>";
                 case 6:
-                    return "转发";
+                    return window.lang.zhuanfa;
                 case 7:
-                    return "删除";
+                    return window.lang.shanchu;
                 case 8:
-                    return "加签";
+                    return window.lang.jiaqian;
                 case 11:
-                    return "加签回复";
+                    return window.lang.jqhf;
                 default:
-                    return "其他";
+                    return window.lang.other;
             }
         }
         //获取当前时间
@@ -357,9 +359,6 @@
 
             return cdt;
         }
-
-        
     </script>
-    
 </body>
 </html>

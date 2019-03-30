@@ -87,7 +87,7 @@ namespace BP.WF
                             val = (string)dr.ItemArray[6];
                             break;
                         default:
-                            val = (string)dr.ItemArray[7];
+                            val = (string)dr.ItemArray[1];
                             break;
                     }
                 }
@@ -3012,7 +3012,7 @@ namespace BP.WF
                     return false;
             }
 
-      
+
             if (DataType.IsNumStr(valPara) == false)
                 throw new Exception("err@表达式错误:[" + exp + "]没有找到参数[" + valPara + "]的值，导致无法计算。");
 

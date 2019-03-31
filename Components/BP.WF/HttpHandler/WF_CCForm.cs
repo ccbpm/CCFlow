@@ -156,8 +156,6 @@ namespace BP.WF.HttpHandler
                 //athDesc.HisDeleteWay = AthDeleteWay.DelAll; 
                 #endregion 处理权限问题.
 
-
-                //为湖南中佳增加可以支持sql的模式查询出来附件的类别. @李国文
                 string sort = athDesc.Sort.Trim();
                 if (sort.Contains("SELECT") == true || sort.Contains("select") == true)
                 {

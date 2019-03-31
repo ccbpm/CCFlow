@@ -4,18 +4,18 @@
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
     <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"type="text/javascript"></script>
+    <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
+        type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
-    <script language="JavaScript" src="../Comm/JScript.js"  type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
-     <!-- 导入配置文件. -->
+    <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
 
-    <script type="text/javascript" language="javascript" >
-    
 
         if (typeof FrmSubFlowSta == "undefined") {
             var FrmSubFlowSta = {}
@@ -138,14 +138,29 @@
                     else
                         html += "<td nowrap>" + item.WFStateText + "</td>";
 
-
-
                     //  var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
                     //   handler.AddPara("TodoEmps", item.TodoEmps);
                     //  emps = handler.DoMethodReturnString("DealUserInfoShowModel");
 
+                    var emps = item.TodoEmps.split(';');
+                    var myemps = "";
+
+                    for (var i = 0; i < emps.length; i++) {
+
+                        var strs = emps[i];
+                        if (strs == null)
+                            continue;
+
+                        if (strs == '' ||  strs.length == 0 || strs == null)
+                            continue;
+
+                        strs = emps[i].split(',');
+                        myemps += "" + strs[1] + ",";
+                    }
+
+
                     //到达人员.
-                    html += "<td title='" + item.TodoEmps + "'>" + item.TodoEmps + "</td>";
+                    html += "<td title='" + item.TodoEmps + "'>" + myemps + "</td>";
 
                     //日期.
                     if (item.RDT == null || item.RDT == "")
@@ -175,8 +190,8 @@
             $("#showMsg").html(html);
         })
 
-        
-       function InsertSubFlows(flowNo, fid, workid,layer,html){
+
+        function InsertSubFlows(flowNo, fid, workid, layer, html) {
             //该流程的子流程信息, 并按照流程排序.
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
             gwfs.Retrieve("PWorkID", workid, "FK_Flow"); //流程.
@@ -184,43 +199,41 @@
                 return;
 
             var myFlowNo = "";
-            var item=null;
-            for (var i=0;i<gwfs.length;i++ )
-            {
+            var item = null;
+            for (var i = 0; i < gwfs.length; i++) {
                 item = gwfs[i];
                 if (item.WFState == 0)
                     continue;
 
-                if (myFlowNo.indexOf(item.FK_Flow)==-1)
-                {
+                if (myFlowNo.indexOf(item.FK_Flow) == -1) {
                     myFlowNo = myFlowNo + "," + item.FK_Flow;
 
                     //输出流程.
-                    var fl = new Entity("BP.WF.Flow",item.FK_Flow);
+                    var fl = new Entity("BP.WF.Flow", item.FK_Flow);
                     var tdhtml = "<div style='float:left'>" + GenerSpace(layer * 2) + "<img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div>";
-                    html+="<tr>";
-                    html+="<td class='TRSum' colspan=6>"+tdhtml+"</td>";
-                   html+="</tr>";
+                    html += "<tr>";
+                    html += "<td class='TRSum' colspan=6>" + tdhtml + "</td>";
+                    html += "</tr>";
                 }
 
-                html+="<tr>";
-                html+="<td style='word-break:break-all;' title='"+item.Title+"'> ";
-                html+= GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('../WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
-                
+                html += "<tr>";
+                html += "<td style='word-break:break-all;' title='" + item.Title + "'> ";
+                html += GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('../WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+
                 //到达节点名称.
                 if (item.NodeName == null || item.NodeName == "")
                     html += "<td nowrap>&nbsp;</td>";
                 else
                     html += "<td nowrap>" + item.NodeName + "</td>";
 
-                
-                if (item.WFState ==3)
+
+                if (item.WFState == 3)
                     html += "<td nowrap>已完成</td>";
                 else
                     html += "<td nowrap>未完成</td>";
 
-                 //到达人员.
-                htm +="<td title='" +item.TodoEmps + "'>"+item.TodoEmps+"</td>";
+                //到达人员.
+                htm += "<td title='" + item.TodoEmps + "'>" + item.TodoEmps + "</td>";
 
                 //日期.
                 if (item.RDT == null || item.RDT == "")
@@ -230,21 +243,20 @@
 
                 //流程备注.
                 htm += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
-                    
+
                 html += "</tr>";
                 //加载他下面的子流程.
-                InsertSubFlows(item.FK_Flow, item.FK_Node, item.WorkID, layer + 1,html);
+                InsertSubFlows(item.FK_Flow, item.FK_Node, item.WorkID, layer + 1, html);
             }
             return html;
         }
 
-        function GenerSpace(spaceNum){
+        function GenerSpace(spaceNum) {
             if (spaceNum <= 0)
                 return "";
 
             var strs = "";
-            while (spaceNum != 0)
-            {
+            while (spaceNum != 0) {
                 strs += "&nbsp;&nbsp;";
                 spaceNum--;
             }
@@ -287,11 +299,12 @@
     </script>
 </head>
 <body>
-
-<form id="cc">
-
-<center><div id="showMsg"> <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。 </div></center>
-</form>
-
+    <form id="cc">
+    <center>
+        <div id="showMsg">
+            <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。
+        </div>
+    </center>
+    </form>
 </body>
 </html>

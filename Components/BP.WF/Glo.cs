@@ -143,7 +143,6 @@ namespace BP.WF
 
         #endregion 多语言处理.
 
-
         #region 公共属性.
         /// <summary>
         /// 打印文件

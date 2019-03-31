@@ -545,7 +545,7 @@
     <Compile Include="Dev2InterfaceAnonymous.cs" />
     <Compile Include="PortalInterface.cs" />
     <Compile Include="Xml\AdminMenuGroup.cs" />
-    <Compile Include="Xml\EventList.cs">
+    <Compile Include="EventList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Xml\EventListDtl.cs">

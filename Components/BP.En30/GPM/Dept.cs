@@ -321,6 +321,12 @@ namespace BP.GPM
         {
             this.Retrieve(DeptAttr.ParentNo, parentNo);
         }
+        public override int RetrieveAll()
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.addOrderBy(GPM.DeptAttr.Idx);
+            return qo.DoQuery();
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成IList, c#代码调用会出错误。
         /// <summary>

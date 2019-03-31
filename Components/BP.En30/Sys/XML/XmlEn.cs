@@ -116,17 +116,17 @@ namespace BP.Sys.XML
             {
                 ens = this.GetNewEntities;
                 ens.RetrieveAll();
-
                 //Cash.SetConn(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
             }
 
             int i = 0;
             foreach (XmlEn en in ens)
             {
-                if (en.GetValStringByKey(key) == val)
+                if (en.GetValStringByKey(key).Equals(val))
                 {
                     this.Row = en.Row;
                     i++;
+                    break;
                 }
             }
             if (i == 1)
@@ -135,7 +135,7 @@ namespace BP.Sys.XML
             if (i > 1)
             {
                // BP.Sys.SystemConfig.DoClearCash();
-                throw new Exception("@XML = " + this.ToString() + " 中 PK=" + val + "不唯一。。。。");
+                throw new Exception("@XML=[" + this.ToString() + "]中PK=" + val + "不唯一...");
             }
             return 0;
         }

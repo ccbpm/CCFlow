@@ -53,7 +53,9 @@ namespace BP.Sys.XML
         {
             get
             {
-                return this.GetValStringByKey(BP.Web.WebUser.SysLang);
+                string str = BP.Web.WebUser.SysLang;
+                str = "CH";
+                return this.GetValStringByKey(str);
             }
         }
         #endregion

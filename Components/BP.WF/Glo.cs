@@ -45,7 +45,36 @@ namespace BP.WF
 
             return _Multilingual_Cache[className] as DataTable;
         }
+        /// <summary>
+        /// 转换语言.
+        /// </summary>
+        public static string multilingual(string defaultMsg, string className, string key, string p0 = null, string p1 = null, string p2 = null, string p3 = null)
+        {
+            int num = 0;
+            if (p0 == null)
+                num = 0;
+            if (p1 == null)
+                num = 1;
+            if (p2 == null)
+                num = 2;
+            if (p3 == null)
+                num = 3;
 
+            string[] paras = new string[num];
+            if (p0 != null)
+                paras[0] = p0;
+
+            if (p1 != null)
+                paras[1] = p1;
+
+            if (p2 != null)
+                paras[2] = p2;
+
+            if (p3 != null)
+                paras[3] = p3;
+
+            return multilingual(defaultMsg, className, key, paras);
+        }
         /// <summary>
         /// 获取多语言
         /// </summary>
@@ -55,14 +84,10 @@ namespace BP.WF
         /// <returns></returns>
         public static string multilingual(string defaultMsg, string className, string key, string[] paramList)
         {
-            //string currentLang = BP.Web.WebUser.SysLang;
-            //string currentLang = "en-us";
-            string currentLang = "zh-cn";
-
-            if (currentLang == "zh-cn")
-            {
+            if (BP.Web.WebUser.SysLang.Equals("zh-cn"))
                 return String.Format(defaultMsg, paramList);
-            }
+
+
             DataTable dt = getMultilingual_DT(className);
 
             string val = "";
@@ -70,7 +95,7 @@ namespace BP.WF
             {
                 if ((string)dr.ItemArray[0] == key)
                 {
-                    switch (currentLang)
+                    switch (BP.Web.WebUser.SysLang)
                     {
                         case "zh-cn":
                             val = (string)dr.ItemArray[1];
@@ -94,7 +119,6 @@ namespace BP.WF
                             val = (string)dr.ItemArray[1];
                             break;
                     }
-
                     break;
                 }
             }
@@ -4752,8 +4776,8 @@ namespace BP.WF
                 {
                     /* 继承模式 */
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "("+pWorkID + "," + pkval+")");
-                   // qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "(" + pWorkID + "," + pkval + ")");
+                    // qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
                 }

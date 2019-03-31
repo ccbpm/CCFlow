@@ -2141,10 +2141,10 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                string[] para1 = new string[2];
-                para1[0] = ex.StackTrace;
-                para1[1] = this.HisNode.Name;
-                throw new Exception(BP.WF.Glo.multilingual("@判断流程({0})完成条件出现错误:{1}.", "WorkNode", "error_workflow_complete_condition", para));
+                var str = BP.WF.Glo.multilingual("@判断流程({0})完成条件出现错误:{1}.",
+                    "WorkNode",
+                    "error_workflow_complete_condition", ex.StackTrace, this.HisNode.Name);
+                throw new Exception(str);
             }
             #endregion
         }

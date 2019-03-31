@@ -431,7 +431,7 @@ namespace BP.Web
         {
             get
             {
-                return "CH";
+                return "zh-cn";
 
                 string no = GetSessionByKey("Lang", null);
                 if (no == null || no == "")

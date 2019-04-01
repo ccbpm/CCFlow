@@ -127,6 +127,7 @@
 
             var sas = JSON.parse(data);
             BindTable(sas);
+            var int = setInterval("clock()", 1000);
 
         });
 
@@ -306,19 +307,17 @@
 
 
             data = data.replace('@', '<br/>@');
-            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+            data += " <center><input id='CloseBtn' type='button' value='    关    闭(5秒)    ' onclick='CloseAll();'  /></center>";
             $(".Msg").show();
             $(".Msg").html(data);
 
             $("#next").empty();
 
-
+           
             //隐藏table.
             document.getElementById("Table1").style.display = "none";
             document.getElementById("TB_Emps").style.display = "none";
             document.getElementById("Btn_SelectEmps").style.display = "none";
-
-            //document.getElementById("Btn_AddEmps").style.display = "none";
 
             var ctrl = document.getElementById("Btn_Send");
             if (ctrl != null)
@@ -331,6 +330,15 @@
             ctrl = document.getElementById("Btn_Close");
             if (ctrl != null)
                 ctrl.style.display = "none";
+        }
+        var num = 5;
+        function clock() {
+            if ($("#CloseBtn").length == 0)
+                return;
+            num >= 0 ? num-- : clearInterval(int);
+            $("#CloseBtn").attr("value","关    闭(" + num + "秒)");
+            if (num == 0)
+                CloseAll();
         }
 
         //取消移交

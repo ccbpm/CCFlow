@@ -4,7 +4,8 @@
     <meta charset="UTF-8"/>
 
     <link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
-
+    <link href="../WF/Scripts/zTree_v3/css/metroStyle/metroStyle.css" rel="stylesheet"
+        type="text/css" />
     <script type="text/javascript" src="../WF/Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
     <script src="../WF/Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
@@ -24,85 +25,98 @@
     <link href="../WF/Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
     <script src="../WF/Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
 	<script src="../WF/Scripts/bootstrap/BootstrapUIDialog.js" type="text/javaScript"></script>
-  
-  
+    <!--引入zTree树. -->
+    <!--<script src="../WF/Scripts/zTree_v3/js/jquery-1.4.4.min.js" type="text/javascript"></script>-->
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.all.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.core.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.excheck.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.exedit.js" type="text/javascript"></script>
    <script type="text/javascript">
-       var global = window;
        var deptNo = "";
-       global.selectedNodes = [];
-       global.selectedRows = [];
        var webUser = new WebUser();
 
+       var setting = {
+           view: {
+               dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
+               showLine: true, //是否显示节点之间的连线
+               fontCss: {}, //字体样式函数
+               selectedMulti: false //设置是否允许同时选中多个节点
+           },
+           check: {
+               chkboxType: { "Y": "ps", "N": "ps" },
+               chkboxType: { "Y": "", "N": "" },
+               chkStyle: "checkbox", //复选框类型
+               enable: false //每个节点上是否显示 CheckBox
+           },
+           edit: {
+               enable: false,
+               editNameSelectAll: true,
+               showRemoveBtn: true,
+               showRenameBtn: true,
+               removeTitle: "remove",
+               renameTitle: "rename"
+           },
+           data: {
+               simpleData: {
+                   enable: true,
+                   idKey: "id",
+                   pIdKey: "pid",
+                   rootPId: ""
+               }
+           },
+           callback: {
+           	   
+               onClick: function (event, treeId, treeNode) {
+                   deptNo = treeNode.id;
+                   BindEmps();
+               }
+           } //这里是节点点击事件
+       };
        //初始化
        $(function () {
 
-           $('#deptInfoDialog').dialog("close");
-           $('#deptEmpDialog').dialog("close");
-           $('#empInfo').dialog("close");
-           $('#connecteEmp').dialog("close");
-           $('#empDepts_Panel').dialog("close");
            $("#pageloading").show();
 
-           //加载菜单
-           LoadDeptTreeV2();
-
+           var ens = new Entities("BP.GPM.Depts");
+           ens.Retrieve("Idx");//Idx排序
+           var jsonTree = createJsonToTree(ens);
+           zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
+           fillter(zTreeObj); //设置展开前三级
            //绑定帮助信息.
            var html = " <h1 style='padding-left:5px'>请点击左侧节点显示数据。</h1>";
            $("#Emps").html(html);
+           $("#pageloading").hide();
        });
 
-       var nodeId = "";
-       var rootNo = "0";
-       function LoadDeptTreeV2() {
+       //设置展开前三级
+       function fillter(zTreeObj) {
+				//获得树形图对象
+				var nodeList = zTreeObj.getNodes();　　　　　　 //展开第一个根节点
+				for(var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+					zTreeObj.expandNode(nodeList[i], true, false, true);
+//					var nodespan = nodeList[i].children;
+//					for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
+//						zTreeObj.expandNode(nodespan[j], true, false, true);
+//					}
+				}
+			}
+       //转换ztree需要的数据格式
+       var treeJson = [];
+       function createJsonToTree(jsonArray) {
 
-           var ens = new Entities("BP.GPM.Depts");
-           ens.RetrieveAll();
-           if (webUser.No != "admin")
-               rootNo = webUser.FK_Dept;
+           for (var i = 0; i < jsonArray.length; i++) {
+               var data = jsonArray[i];
+               treeJson.push({
+                   "id": data.No,
+                   "pid": data.ParentNo,
+                   "name": data.Name,
+                   "idx": data.Idx
 
-
-           var pushData = createJsonToTree(ens, rootNo);
-           var jsonTree = pushData;
-
-           $('#appTree').treeview({
-
-               data: jsonTree,         // 数据源
-               highlightSelected: true,    //是否高亮选中
-               nodeIcon: 'glyphicon',
-               emptyIcon: '',    //没有子节点的节点图标
-               multiSelect: false,    //多选
-               onNodeChecked: function (event, node) {
-                   var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
-                   if (selectNodes) { //子节点不为空，则选中所有子节点
-                       $('#appTree').treeview('checkNode', [selectNodes, { silent: true}]);
-                   }
-               },
-               onNodeUnchecked: function (event, node) {
-                   var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
-                   if (selectNodes) { //子节点不为空，则取消选中所有子节点
-                       $('#appTree').treeview('uncheckNode', [selectNodes, { silent: true}]);
-                   }
-               },
-               onNodeSelected: function (event, node) {
-                   nodeId = node.nodeId;
-                   deptNo = node.id
-                   BindEmps(node.id);
-
-                   deptNo = $('#appTree').treeview('getNode', node.nodeId).id;
-                   var tree = $('#appTree');
-
-                   if (node.state.expanded) {
-                       //处于展开状态则折叠  
-                       tree.treeview('collapseNode', node.nodeId);
-                   } else {
-                       //展开  
-                       tree.treeview('expandNode', node.nodeId);
-                   }
-               }
-           });
-
-           $("#pageloading").hide();
+               });
+           }
+           return treeJson;
        }
+       
 
        //绑定人员.
        function BindEmps() {
@@ -141,7 +155,7 @@
                html += "<td>" + emp.Email + "</td>";
                html += "<td>" + emp.Tel + "</td>";
                html += "<td><a href=\"javascript:Del('" + emp.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
-               html += "<td><img src='../WF/Img/Btn/Up.gif' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
+               html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
                html += "</tr>";
                empNos += emp.No + ',';
            }
@@ -226,7 +240,7 @@
            var en = new Entity("BP.GPM.Emp", no);
            en.Delete();
 
-           BindEmps(deptNo);
+           BindEmps();
        }
 
        function Remove(no) {
@@ -241,97 +255,6 @@
            BindEmps();
        }
 
-       //树形结构转换
-       var treeJson = [];
-       function createJsonToTree(jsonArray, parentNo) {
-           for (var i = 0; i < jsonArray.length; i++) {
-               var data = jsonArray[i];
-               if (rootNo != "0") {
-                   if (data.No == parentNo) {
-                       var checked = false;
-                       var selectedNodes = window.selectedNodes;
-                       var sel = $.grep(selectedNodes, function (obj) {
-                           return data.No == obj.No;
-                       });
-                       if (sel.length > 0) {
-                           checked = true;
-                       }
-                       treeJson.push({
-                           "id": data.No,
-                           "text": data.Name,
-                           "nodes": creatTreeChildern(jsonArray, data.No),
-                           "state": { checked: checked, disabled: false }
-                       });
-                   }
-               } else {
-                   if (data.ParentNo == parentNo) {
-                       var checked = false;
-                       var selectedNodes = window.selectedNodes;
-                       var sel = $.grep(selectedNodes, function (obj) {
-                           return data.No == obj.No;
-                       });
-                       if (sel.length > 0) {
-                           checked = true;
-                       }
-                       treeJson.push({
-                           "id": data.No,
-                           "text": data.Name,
-                           "nodes": creatTreeChildern(jsonArray, data.No),
-                           "state": { checked: checked, disabled: false }
-                       });
-                   }
-               }
-           }
-           function _(treeArray) {
-               $.each(treeArray, function (i, o) {
-                   if ($.isArray(o.nodes)) {
-                       if (o.nodes.length == 0) {
-                           o.nodes = undefined;
-                       } else {
-                           _(o.nodes);
-                       }
-                   }
-               });
-           }
-           _(treeJson);
-           return treeJson;
-       }
-
-       function creatTreeChildern(jsonArray, parentNo) {
-           var childList = []
-           for (var i = 0; i < jsonArray.length; i++) {
-               var data = jsonArray[i];
-               if (data.ParentNo == parentNo) {
-                   var checked = false;
-
-                   childList.push({
-                       "id": data.No,
-                       "text": data.Name,
-                       "nodes": creatTreeChildern(jsonArray, data.No),
-                       "state": { checked: checked, disabled: false }
-                   });
-               }
-           }
-
-           return childList;
-       }
-       function getChildNodeIdArr(node, checked) {
-           var ts = [];
-           if (node.nodes) {
-               for (x in node.nodes) {
-                   ts.push(node.nodes[x].nodeId);
-                   if (node.nodes[x].nodes) {
-                       var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
-                       for (j in getNodeDieDai) {
-                           ts.push(getNodeDieDai[j]);
-                       }
-                   }
-               }
-           } else {
-               ts.push(node.nodeId);
-           }
-           return ts;
-       }
    </script>
     <style type="text/css">
     .tableLabel
@@ -348,10 +271,9 @@
 <body class="easyui-layout">
     <div id="pageloading">
     </div>
-    <div data-options="region:'west',split:true" style="width: 230px; padding: 1px; overflow: hidden;">
+    <div data-options="region:'west',split:true" style="width: 200px; padding: 1px; overflow: hidden;">
         <div style="width: 100%; height: 95%; overflow: auto;">
-            <ul id="appTree" class="easyui-tree-line" data-options="animate:false,dnd:false">
-            </ul>
+             <ul id="regionZTree" class="ztree" data-options="animate:false,dnd:false"></ul>
         </div>
     </div>
      

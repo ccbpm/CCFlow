@@ -195,6 +195,17 @@ namespace BP.Sys
         /// 合并单元格数
         /// </summary>
         public const string ColSpan = "ColSpan";
+
+        /// <summary>
+        /// 文本合并单元格数
+        /// </summary>
+        public const string TextColSpan = "TextColSpan";
+
+        /// <summary>
+        /// 合并行数
+        /// </summary>
+        public const string RowSpan = "RowSpan";
+
         /// <summary>
         /// 签名字段
         /// </summary>

@@ -287,6 +287,16 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            BP.Sys.FrmLink frmLink = new BP.Sys.FrmLink();
+            frmLink.MyPK = this.MyPK;
+            frmLink.RetrieveFromDBSources();
+            frmLink.Update();
+
+            base.afterInsertUpdateAction();
+        }
         #endregion
     }
     /// <summary>

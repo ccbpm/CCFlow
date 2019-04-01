@@ -138,6 +138,14 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
 
+                //文本占单元格数量
+                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "单元格数量", true, true, "ColSpanAttrString",
+                    "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
+
+                //文本跨行
+                map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "ColSpanAttrString",
+                   "@1=跨1个行@2=跨2行@3=跨3行");
+
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
@@ -263,6 +271,7 @@ namespace BP.Sys.FrmUI
                 this._enMap = map;
                 return this._enMap;
             }
+
         }
         /// <summary>
         /// 字段分组查询语句
@@ -285,6 +294,18 @@ namespace BP.Sys.FrmUI
 
             base.afterDelete();
         }
+
+
+        protected override void afterInsertUpdateAction()
+        {
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            mapAttr.RetrieveFromDBSources();
+            mapAttr.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
         #endregion
 
         #region 基本功能.

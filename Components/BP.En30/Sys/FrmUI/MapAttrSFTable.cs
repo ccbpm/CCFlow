@@ -172,6 +172,16 @@ namespace BP.Sys.FrmUI
         }
         #endregion
 
+        protected override void afterInsertUpdateAction()
+        {
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            mapAttr.RetrieveFromDBSources();
+            mapAttr.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
         #region 方法执行.
         /// <summary>
         /// 绑定函数

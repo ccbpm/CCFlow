@@ -227,6 +227,16 @@ namespace BP.Sys.FrmUI
 
             base.afterDelete();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            mapAttr.RetrieveFromDBSources();
+            mapAttr.Update();
+
+            base.afterInsertUpdateAction();
+        }
     }
     /// <summary>
     /// 实体属性s

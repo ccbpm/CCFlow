@@ -211,6 +211,17 @@ namespace BP.Sys.FrmUI
             //this.MyPK = this.FK_MapData + "_" + this.CtrlID;
             return base.beforeUpdateInsertAction();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            BP.Sys.FrmImgAth imgAth = new BP.Sys.FrmImgAth();
+            imgAth.MyPK = this.MyPK;
+            imgAth.RetrieveFromDBSources();
+            imgAth.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
     }
     /// <summary>
     /// 图片附件s

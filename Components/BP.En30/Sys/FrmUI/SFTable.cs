@@ -102,6 +102,18 @@ namespace BP.Sys.FrmUI
 
             return base.beforeUpdate();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            BP.Sys.SFTable sftable = new BP.Sys.SFTable();
+            sftable.No = this.No;
+            sftable.RetrieveFromDBSources();
+            sftable.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
+
         /// <summary>
         /// 编辑数据
         /// </summary>

@@ -170,6 +170,16 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            mapAttr.RetrieveFromDBSources();
+            mapAttr.Update();
+
+            base.afterInsertUpdateAction();
+        }
         #endregion
 
         #region 方法执行.

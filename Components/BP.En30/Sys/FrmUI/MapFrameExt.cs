@@ -151,6 +151,16 @@ namespace BP.Sys.FrmUI
 
             return base.beforeUpdateInsertAction();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            MapFrame mapframe = new MapFrame();
+            mapframe.MyPK = this.MyPK;
+            mapframe.RetrieveFromDBSources();
+            mapframe.Update();
+
+            base.afterInsertUpdateAction();
+        }
     }
     /// <summary>
     /// 框架s

@@ -83,6 +83,17 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            BP.Sys.FrmImg imgAth = new BP.Sys.FrmImg();
+            imgAth.MyPK = this.MyPK;
+            imgAth.RetrieveFromDBSources();
+            imgAth.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
         #endregion
     }
     /// <summary>

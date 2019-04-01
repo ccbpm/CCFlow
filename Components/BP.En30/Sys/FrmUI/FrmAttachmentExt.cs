@@ -995,6 +995,16 @@ namespace BP.Sys.FrmUI
             base.afterInsert();
         }
 
+        protected override void afterInsertUpdateAction()
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.MyPK = this.MyPK;
+            ath.RetrieveFromDBSources();
+            ath.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
         /// <summary>
         /// 删除之后.
         /// </summary>

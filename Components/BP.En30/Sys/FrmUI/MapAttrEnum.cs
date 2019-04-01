@@ -199,6 +199,16 @@ namespace BP.Sys.FrmUI
 
             return base.beforeUpdateInsertAction();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            mapAttr.RetrieveFromDBSources();
+            mapAttr.Update();
+
+            base.afterInsertUpdateAction();
+        }
         #endregion
 
         protected override void afterDelete()

@@ -71,6 +71,18 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            BP.Sys.FrmBtn frmBtn = new BP.Sys.FrmBtn();
+            frmBtn.MyPK = this.MyPK;
+            frmBtn.RetrieveFromDBSources();
+            frmBtn.Update();
+
+            base.afterInsertUpdateAction();
+        }
+
+
         #endregion
     }
     /// <summary>

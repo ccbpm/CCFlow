@@ -39,12 +39,7 @@ INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALU
 
 DELETE FROM Sys_SFTable WHERE No='Port_Station';
 INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALUES ('Port_Station','岗位','FK_Station','岗位','',1,'local');
-
-
-DELETE FROM Demo_Supplier ;
-INSERT INTO Demo_Supplier (No,Name,PWD,Tel,Email,Addr) VALUES('001','北京1所','123','010-61201120','ccflow@ccflow.org','北京xx区xx路xx号');
-INSERT INTO Demo_Supplier (No,Name,PWD,Tel,Email,Addr) VALUES('002','北京9所','123','010-61201220','ccflow@ccflow.org','北京xx区xx路xx号');
-
+ 
 DELETE FROM Demo_BanJi;
 INSERT INTO Demo_BanJi(No,Name,BZR) VALUES('001','一年级1班','张三');
 INSERT INTO Demo_BanJi(No,Name,BZR) VALUES('002','一年级2班','李四');

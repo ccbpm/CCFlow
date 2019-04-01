@@ -1774,6 +1774,12 @@ namespace BP.WF.Template
             }
             #endregion 为systype设置，当前所在节点的第2级别目录。
 
+            fl = new Flow();
+            fl.No = this.No;
+            fl.RetrieveFromDBSources();
+            fl.Update();
+           
+
 
             base.afterInsertUpdateAction();
         }

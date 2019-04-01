@@ -1301,6 +1301,15 @@ namespace BP.WF.Template
 
             return base.beforeUpdate();
         }
+        protected override void afterInsertUpdateAction()
+        {
+            Node fl = new Node();
+            fl.NodeID = this.NodeID;
+            fl.RetrieveFromDBSources();
+            fl.Update();
+           
+            base.afterInsertUpdateAction();
+        }
         #endregion
     }
     /// <summary>

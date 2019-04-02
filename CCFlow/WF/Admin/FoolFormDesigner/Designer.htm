@@ -155,7 +155,14 @@
 
                 //过滤attrs
                 var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+                //跨行问题，1.记录是否跨行 2.已经跨了几行 3.跨的行数
+                var isShowTdLeft = true;
+                var haveDropRowLeft = 0;
+                var recordRowLeft = 0;
 
+                var isShowTdRight = true;
+                var haveDropRowRight = 1;
+                var recordRowRight = 1;
 
                 var isDrawTR = true; //是否需要话tr ?
                 for (var j = 0; j < mapAttrs.length; j++) {
@@ -163,9 +170,7 @@
                     var mapAttr = mapAttrs[j];
                     if (mapAttr.UIVisible == 0)
                         continue;
-
-                    if (mapAttr.ColSpan <= 1 && mapAttr.UIContralType == "1") { //外键.
-
+                    if (mapAttr.UIContralType == "1") {
                         var ses = new Entities("BP.Sys.SysEnums");
                         ses.Retrieve("EnumKey", mapAttr.UIBindKey)
                         var operations = '';
@@ -173,7 +178,7 @@
                             operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
                         });
 
-                        if (mapAttr.ColSpan == 1) {
+                        if (mapAttr.ColSpan <= 1 && mapAttr.TextColSpan <= 1) { //外键.
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
@@ -189,11 +194,30 @@
                             isDrawTR = !isDrawTR;
                             continue;
                         }
-                    }
+                        if ((mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) ||
+                             (mapAttr.ColSpan == 3 && mapAttr.TextColSpan == 1) ||
+                             (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 3)) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + " ><div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div></td>";
+                            isDrawTR = true;
+                            continue;
+                        }
 
+                    }
 
                     // 添加文本框 ，日期控件等.
                     if (mapAttr.MyDataType == "1") { //不是外键
+
+                        if (mapAttr.ColSpan == 4) {
+                            //跨4列，并且多行. 是大块文本的情况.
+                            var uiHeight = mapAttr.UIHeight;
+                            html += "<tr>";
+                            html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' style='width:100%;height:" + uiHeight + "px;' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
 
                         if (mapAttr.ColSpan == 3 && mapAttr.UIHeight <= 40) {
                             //跨三列，并且单行.
@@ -217,18 +241,27 @@
                             continue;
                         }
 
-                        if (mapAttr.ColSpan == 4) {
-                            //跨4列，并且多行. 是大块文本的情况.
-                            var uiHeight = mapAttr.UIHeight;
+                        if (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) {
+
+                            //跨三列，并且单行.
                             html += "<tr>";
-                            html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' style='width:100%;height:" + uiHeight + "px;' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+                            html += "<td class='FDesc' ColSpan=2>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:99%;margin:3px;' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
                             html += "</tr>";
                             isDrawTR = true;
                             continue;
                         }
 
+                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && mapAttr.TextColSpan == 3) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=3>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
 
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) { // 一列文本框.
+                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && (mapAttr.TextColSpan == 1 || mapAttr.TextColSpan == 0)) { // 一列文本框.
 
                             if (isDrawTR == true) {
                                 html += "<tr>";
@@ -262,11 +295,38 @@
                             enableAttr = "disabled='disabled'";
                         }
 
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) {
+                        if ((mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) && mapAttr.TextColSpan == 1) {
+                            html += "<tr>";
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
+                        if (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 3) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
+
+                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && (mapAttr.TextColSpan == 1 || mapAttr.TextColSpan == 0)) {
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
-
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
 
 
@@ -280,14 +340,7 @@
                             continue;
                         }
 
-                        if (mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) {
-                            html += "<tr>";
-                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
-                            html += "</tr>";
-                            isDrawTR = true;
-                            continue;
-                        }
+
                     }
 
                     if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
@@ -297,7 +350,35 @@
                             enableAttr = "";
                         }
 
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) {
+                        if ((mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) && mapAttr.TextColSpan == 1) {
+                            html += "<tr>";
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
+                        if (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 3) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
+
+                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && mapAttr.TextColSpan == 1) {
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
@@ -313,19 +394,12 @@
                             continue;
                         }
 
-                        if (mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) {
-                            html += "<tr>";
-                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
-                            html += "</tr>";
-                            isDrawTR = true;
-                            continue;
-                        }
+
                     }
 
                     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
 
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) {
+                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && mapAttr.TextColSpan == 1) {
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
@@ -379,9 +453,97 @@
                             continue;
                         }
 
-                        if (mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) {
+                        if ((mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) && mapAttr.TextColSpan == 1) {
                             html += "<tr>";
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            if (mapAttr.UIContralType == 2) {
+                                var ses = new Entities("BP.Sys.SysEnums");
+                                ses.Retrieve("EnumKey", mapAttr.UIBindKey)
+                                var operations = "";
+                                $.each(ses, function (i, obj) {
+                                    operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                                });
+
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div></td>";
+
+                            } else {
+
+                                var rbHtmls = "";
+                                var ses = new Entities("BP.Sys.SysEnums");
+                                ses.Retrieve("EnumKey", mapAttr.UIBindKey);
+
+                                //显示方式,默认为横向展示.
+                                var RBShowModel = 0;
+                                if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+                                    RBShowModel = 1;
+
+                                for (var i = 0; i < ses.length; i++) {
+                                    var se = ses[i];
+
+                                    var br = "";
+                                    if (RBShowModel == 1)
+                                        br = "<br>";
+
+                                    var checked = "";
+                                    if (se.IntKey == mapAttr.DefVal)
+                                        checked = " checked=true";
+
+                                    rbHtmls += "<label style='font-weight:normal;'><input type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + se.Lab + " </label>&nbsp;" + br;
+                                }
+
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div> </td>";
+                            }
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+                        if (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            if (mapAttr.UIContralType == 2) {
+                                var ses = new Entities("BP.Sys.SysEnums");
+                                ses.Retrieve("EnumKey", mapAttr.UIBindKey)
+                                var operations = "";
+                                $.each(ses, function (i, obj) {
+                                    operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                                });
+
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div></td>";
+
+                            } else {
+
+                                var rbHtmls = "";
+                                var ses = new Entities("BP.Sys.SysEnums");
+                                ses.Retrieve("EnumKey", mapAttr.UIBindKey);
+
+                                //显示方式,默认为横向展示.
+                                var RBShowModel = 0;
+                                if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+                                    RBShowModel = 1;
+
+                                for (var i = 0; i < ses.length; i++) {
+                                    var se = ses[i];
+
+                                    var br = "";
+                                    if (RBShowModel == 1)
+                                        br = "<br>";
+
+                                    var checked = "";
+                                    if (se.IntKey == mapAttr.DefVal)
+                                        checked = " checked=true";
+
+                                    rbHtmls += "<label style='font-weight:normal;'><input type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + se.Lab + " </label>&nbsp;" + br;
+                                }
+
+                                html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div> </td>";
+                            }
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 3) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
                             if (mapAttr.UIContralType == 2) {
                                 var ses = new Entities("BP.Sys.SysEnums");
                                 ses.Retrieve("EnumKey", mapAttr.UIBindKey)
@@ -431,7 +593,7 @@
                                         mapAttr.MyDataType == 8 ||
                                         (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)
                                     ) {
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) {
+                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && mapAttr.TextColSpan == 1) {
                             if (isDrawTR == true)
                                 html += "<tr>";
 
@@ -444,7 +606,7 @@
                             isDrawTR = !isDrawTR;
                             continue;
                         }
-                        if (mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) {
+                        if ((mapAttr.ColSpan == 3 || mapAttr.ColSpan == 4) && mapAttr.TextColSpan == 1) {
                             html += "<tr>";
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
                             html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
@@ -452,6 +614,15 @@
                             isDrawTR = true;
                             continue;
                         }
+                        if ((mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 3)) {
+                            html += "<tr>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
+                            html += "</tr>";
+                            isDrawTR = true;
+                            continue;
+                        }
+
                     }
 
                     alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ' + mapAttr.ColSpan);
@@ -520,6 +691,8 @@
 
         });
 
+      
+      
         //记录改变字段样式 不可编辑，不可见
         var mapAttrs = [];
         function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
@@ -903,7 +1076,7 @@
 
         var pageParam = {};
         pageParam.fk_mapdata = GetQueryString("FK_MapData")
-       
+
         function ReLoad(data) {
             window.location.href = window.location.href;
         }

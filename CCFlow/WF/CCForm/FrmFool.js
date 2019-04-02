@@ -17,7 +17,7 @@ function GenerFoolFrm(mapData, frmData) {
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
     html += "<tr>";
-    html += "<td colspan=4 class='FDesc' ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;font-style: oblique;color: #6379bb;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 class='FDesc' ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit' style='float:right;padding:10px;bordder:none;width:70%;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
 
 

@@ -8,6 +8,8 @@
   <OneWork No="Truck" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm" IsDefault="1" />
   <OneWork No="TimeBase" CH="时间轴"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  IsDefault="0"/>
   <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm" IsDefault="0"/>
+  <OneWork No="Table" CH="时间表" UrlCCFlow="Table.htm" UrlJFlow="Table.htm" IsDefault="0"/>
+  
   
 
   <!-- 可以配置的. -->

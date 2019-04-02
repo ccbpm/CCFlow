@@ -31,7 +31,9 @@ function InitPage() {
     var checkStr = "";
     var dotColor = -1;
     var idx = 1;
-
+    var Msg = "";
+    var endTime = "";
+    var passTime = "";
     //获得流程引擎注册表信息.
     var gwf = data["WF_GenerWorkFlow"][0];
 
@@ -61,7 +63,7 @@ function InitPage() {
 
     //输出列表. zhoupeng 2017-12-19 修改算法，所有的审核动作都依靠发送来显示.
     for (var i = 0; i < tracks.length; i++) {
-
+        
         var track = tracks[i];
         if (track.FID != 0)
             continue;
@@ -71,89 +73,40 @@ function InitPage() {
         if (track.ActionType == ActionType.WorkCheck)
             continue;
 
-        //时间轴.
-        var timeBase = "";
-        var img = ActionTypeStr(track.ActionType);
-        img = "<img src='" + img + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
-
-        //是否显示审批意见？
+       //是否显示审批意见？
         var isShowCheckMsg = true;
         if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
             continue;
             //isShowCheckMsg = false;
         }
 
-        //内容.
-        var doc = "";
-        doc += img + track.NDFromT + " - " + track.ActionTypeText;
-        var at = track.ActionType;
 
-        if (at == ActionType.Return) {
-            doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font><span>退回给:</span><font color=green>" + track.EmpToT + "</font></p>";
-            doc += "<p><span>退回意见如下</span>  </p>";
-        }
+        //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
+        for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
 
-        if (at == ActionType.Forward || at == ActionType.FlowOver) {
-            doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
-            //  doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDFrom + "')\">表单</a></span></p>";
-
-            //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
-            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
-
-                var checkTrack = tracks[myIdx];
-                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    doc += "<p><span>审批意见：</span><font color=green>" + checkTrack.Msg + "</font> </p>";
-                }
+            var checkTrack = tracks[myIdx];
+            if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                Msg = checkTrack.Msg ;
             }
         }
+       
 
-        //协作发送.
-        if (at == ActionType.TeampUp) {
-
-            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
-
-                var checkTrack = tracks[myIdx];
-                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    doc += "<p><span>会签意见：</span><font color=green>" + checkTrack.Msg.replace('null', '') + "</font> </p>";
-                }
-            }
-        }
-
-        //输出备注信息.
-        var tag = track.Tag;
-        if (tag != null)
-            tag = tag.replace("~", "'");
-
-        var msg = track.Msg;
-        if (msg == "0")
-            msg = "";
-
-        if (msg != "") {
-
-            while (msg.indexOf('\t\n') >= 0) {
-                msg = msg.replace('\t\n', '<br>');
-            }
-
-            msg = msg.replace('null', '');
-
-            if (msg == "" || msg == undefined)
-                msg = "无";
-
-            doc += "<p>";
-            doc += "<font color=green><br>" + msg + "</font><br>";
-            doc += "</p>";
-        }
 
 
         //输出row
         var newRow = "";
-        newRow = "<tr  title='" + track.ActionTypeText + "' >";
-        newRow += "<td class='TDTime' >" + GenerLeftIcon(track) + "</td>";
-        newRow += "<td class='TDBase' ></td>";
-        newRow += "<td class='TDDoc' >" + doc + "</td>";
+        newRow = "<tr>";
+        newRow += "<td >" + idx + "</td>";
+        newRow += "<td >" + track.NDFromT + "</td>";
+        newRow += "<td >" + '' + "</td>";
+        newRow += "<td >" + Msg + "</td>";
+        newRow += "<td >" + '已审批' + "</td>";
+        newRow += "<td >" + track.EmpFromT + "</td>";
+        newRow += "<td >" + track.RDT + "</td>";
+        newRow += "<td >" + endTime + "</td>";
+        newRow += "<td >" + passTime + "</td>";
         newRow += "</tr>";
-
-        $("#Table1 tr:last").after(newRow);
+        $("tbody tr:last").after(newRow);
 
         idx++;
     }
@@ -175,10 +128,10 @@ function InitPage() {
         //如果有尚未审核的人员，就输出.
         if (isHaveNoChecker == true) {
 
-            var rowDay = "<tr>";
-            rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwf.NodeName + "</b></td>";
-            rowDay += "</tr>";
-            $("#Table1 tr:last").after(rowDay);
+//            var rowDay = "<tr>";
+//            rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwf.NodeName + "</b></td>";
+//            rowDay += "</tr>";
+//            $("#Table1 tr:last").after(rowDay);
 
 
             for (var i = 0; i < gwls.length; i++) {
@@ -242,13 +195,18 @@ function InitPage() {
                 left += "<br>" + gwl.FK_EmpText;
 
                 var newRow = "";
-                newRow = "<tr  title='等待审批人员' >";
-                newRow += "<td class='TDTime' >" + left + "</td>";
-                newRow += "<td class='TDBase' ></td>";
-                newRow += "<td class='TDDoc' >" + doc + "</td>";
+                newRow = "<tr>";
+                newRow += "<td >" + idx + "</td>";
+                newRow += "<td >" + gwl.FK_NodeText + "</td>";
+                newRow += "<td >" + '' + "</td>";
+                newRow += "<td >" + Msg + "</td>";
+                newRow += "<td >" + '等待审批' + "</td>";
+                newRow += "<td >" + gwl.FK_EmpText + "</td>";
+                newRow += "<td >" + gwl.RDT + "</td>";
+                newRow += "<td >" + endTime + "</td>";
+                newRow += "<td >" + timeLeft + "</td>";
                 newRow += "</tr>";
-
-                $("#Table1 tr:last").after(newRow);
+                $("tbody tr:last").after(newRow);
             }
         }
     }

@@ -82,6 +82,7 @@ namespace BP.WF.HttpHandler
             ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
             ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
             ht.Add("Todolist_Complete", BP.WF.Dev2Interface.Todolist_Complete); //完成数量.
+			ht.Add("UserDeptName",WebUser.FK_DeptName);
 
             //我发起
             MyStartFlows myStartFlows = new MyStartFlows();

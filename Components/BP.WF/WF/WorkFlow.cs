@@ -1093,7 +1093,8 @@ namespace BP.WF
             {
                 /*让父流程显示待办.*/
                 BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND WorkID="+this.HisGenerWorkFlow.PWorkID);
-                return "父流程已经显示待办.";
+                return "";
+                //return "父流程已经显示待办.";
             }
 
             //如果是结束子流程.
@@ -1130,7 +1131,6 @@ namespace BP.WF
 
             //当前登录用户.
             string currUserNo = BP.Web.WebUser.No;
-
             try
             {
                 //取得调起子流程的人员.

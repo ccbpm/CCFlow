@@ -20,6 +20,7 @@ namespace CCFlow.DataUser
     // [System.Web.Script.Services.ScriptService]
     public class LocalWS : System.Web.Services.WebService
     {
+       
         /// <summary>
         /// 获得待办
         /// </summary>
@@ -177,6 +178,18 @@ namespace CCFlow.DataUser
             Directions dirs = new Directions();
             Nodes nds = dirs.GetHisToNodes(currNodeID, false);
             return nds.ToJson();
+        }
+        /// <summary>
+        /// 退回
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="returnToNodeID">退回到nodeID</param>
+        /// <param name="returnMsg">退回信息</param>
+        /// <returns></returns>
+        public string Node_ReturnWork(Int64 workid, int returnToNodeID, string returnMsg)
+        {
+            GenerWorkFlow gwf=new GenerWorkFlow(workid);
+            return BP.WF.Dev2Interface.Node_ReturnWork(gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, returnToNodeID, returnMsg);
         }
         /// <summary>
         /// 获得当前节点信息.

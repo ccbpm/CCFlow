@@ -89,7 +89,7 @@ public partial class DataUser_Do : System.Web.UI.Page
 
             string rowsSql = "select *from " + dtlTable + " where RefPK ='" + getworkid + "'";
             int count = BP.DA.DBAccess.RunSQLReturnCOUNT(rowsSql);
-            if (!string.IsNullOrEmpty(onValue))
+            if (!DataType.IsNullOrEmpty(onValue))
             {
                 sqlParas = "select " + DtlColumn + "from " + dtlTable + " where RefPK =" + getworkid + " and " + DtlColumn + "='" + onValue + "'";
                 strRows = BP.DA.DBAccess.RunSQLReturnCOUNT(sqlParas);

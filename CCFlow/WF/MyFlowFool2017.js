@@ -187,6 +187,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         var rowSpan = attr.RowSpan;
         //线性展示并且colspan=4
         if (attr.ColSpan == 4) {
+            if (isDropTR == false) {
+                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "</tr>";
+            }
             isDropTR = true;
             html += "<tr>";
             html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' rowSpan=" + rowSpan + " class='FDesc'>" + lab + "</br>";
@@ -198,8 +202,11 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         //线性展示并且colspan=3,默认文本跨一行
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
+            if (isDropTR == false) {
+                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "</tr>";
+            }
             isDropTR = true;
-
             html += "<tr >";
             if (attr.MyDataType != 4 && attr.UIContralType != "9")
                 html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
@@ -216,6 +223,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         //线性展示并且colspan=2, 则文本也占据2行
         if (attr.ColSpan == 2 && attr.TextColSpan == 2) {
+            if (isDropTR == false) {
+                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "</tr>";
+            }
             isDropTR = true;
             html += "<tr>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9")
@@ -234,6 +245,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
         //线性展示并且colspan=1,则需要判断文本跨的单元格数
         if (attr.ColSpan == 1 && attr.TextColSpan == 3) {
+            if (isDropTR == false) {
+                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "</tr>";
+            }
             isDropTR = true;
             html += "<tr >";
             if (attr.MyDataType != 4 && attr.UIContralType != "9")
@@ -255,6 +270,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             html += "<tr >";
             if (isShowTdLeft == true) {
                 recordRowLeft = rowSpan;
+                haveDropRowLeft = 0;
                 if (attr.UIContralType != "9") {
                     html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
@@ -287,6 +303,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (isDropTR == false) {
             if (isShowTdRight == true) {
                 recordRowRight = rowSpan;
+                haveDropRowRight = 0;
                 if (attr.UIContralType != "9") {
                     html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";

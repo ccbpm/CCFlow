@@ -2116,10 +2116,12 @@ function SetHegiht() {
 
     var messageHeight = $('#Message').height();
     var topBarHeight = 40;
-    var childHeight = $('#childThread').height();
+    //var childHeight = $('#childThread').height();
     var infoHeight = $('#flowInfo').height();
 
-    var allHeight = messageHeight + topBarHeight + childHeight + childHeight + infoHeight;
+    //var allHeight = messageHeight + topBarHeight + childHeight + childHeight + infoHeight;
+
+    var allHeight = messageHeight + topBarHeight + infoHeight;
     try {
 
         var BtnWord = $("#BtnWord").val();

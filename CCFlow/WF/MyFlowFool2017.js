@@ -19,7 +19,7 @@ function GenerFoolFrm(wn) {
     var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
-    html += "<td colspan=4 class='FDesc'><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;width:70%;font-style: oblique;color: #6379bb;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 class='FDesc'><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit' style='float:right;padding:10px;width:70%;font-size: 18px;'  ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
 
     //遍历循环生成 listview
@@ -150,6 +150,16 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
     var html = "";
     var isDropTR = true;
+    //跨行问题，1.记录是否跨行 2.已经跨了几行 3.跨的行数
+    var isShowTdLeft = true;
+    var haveDropRowLeft = 0;
+    var recordRowLeft = 0;
+
+    var isShowTdRight = true;
+    var haveDropRowRight = 1;
+    var recordRowRight = 1;
+
+    //跨行问题
     for (var i = 0; i < Sys_MapAttr.length; i++) {
 
         var attr = Sys_MapAttr[i];
@@ -174,59 +184,137 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         if (attr.UIContralType == 3)
             lab = "<label id='Lab_" + attr.KeyOfEn + "' for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
-        //线性展示并且colspan=3
-        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
-            isDropTR = true;
-            html += "<tr>";
-            if (attr.MyDataType != 4 && attr.UIContralType != "9")
-                html += "<td  class='FDesc' style='width:15%;'>" + lab + "</td>";
-            if (attr.MyDataType != 4 && attr.UIContralType != "9")
-                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3  style='text-align:left;'>";
-            else
-                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4 style='text-align:left;padding-left: 15% '>";
-
-            html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
-            html += "</td>";
-            html += "</tr>";
-            continue;
-        }
-
+        var rowSpan = attr.RowSpan;
         //线性展示并且colspan=4
         if (attr.ColSpan == 4) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' class='FDesc'>" + lab + "</br>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' rowSpan=" + rowSpan + " class='FDesc'>" + lab + "</br>";
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
             html += "</tr>";
             continue;
         }
 
-        if (isDropTR == true) {
-            html += "<tr>";
-            if (attr.UIContralType != "9") {
-                html += "<td class='FDesc' style='width:15%;'>" + lab + "</td>";
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;'>";
-            } else {
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc' ColSpan=2 style='text-align:left;padding-left: 15%'>";
-            }
+        //线性展示并且colspan=3,默认文本跨一行
+        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
+            isDropTR = true;
+
+            html += "<tr >";
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
+                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3  rowSpan=" + rowSpan + " style='text-align:left;'>";
+            else
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4 rowSpan=" + rowSpan + " style='text-align:left;padding-left: 15% '>";
+
             html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
             html += "</td>";
+            html += "</tr>";
+            continue;
+        }
+
+        //线性展示并且colspan=2, 则文本也占据2行
+        if (attr.ColSpan == 2 && attr.TextColSpan == 2) {
+            isDropTR = true;
+            html += "<tr>";
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
+                html += "<td  class='FDesc' style='width:15%;' ColSpan=2  rowSpan=" + rowSpan + ">" + lab + "</td>";
+
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=2   rowSpan=" + rowSpan + " style='text-align:left;'>";
+            else
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4  rowSpan=" + rowSpan + " style='text-align:left;padding-left: 15% '>";
+
+            html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
+            html += "</td>";
+            html += "</tr>";
+            continue; 
+        }
+
+        //线性展示并且colspan=1,则需要判断文本跨的单元格数
+        if (attr.ColSpan == 1 && attr.TextColSpan == 3) {
+            isDropTR = true;
+            html += "<tr >";
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
+                html += "<td  class='FDesc' style='width:15%;' ColSpan=3  rowSpan=" + rowSpan + ">" + lab + "</td>";
+
+            if (attr.MyDataType != 4 && attr.UIContralType != "9")
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=1  rowSpan=" + rowSpan + " style='text-align:left;'>";
+            else
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4  rowSpan=" + rowSpan + " style='text-align:left;padding-left: 15% '>";
+
+            html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
+            html += "</td>";
+            html += "</tr>";
+            continue;
+        }
+
+        //线性展示都跨一个单元格
+        if (isDropTR == true) {
+            html += "<tr >";
+            if (isShowTdLeft == true) {
+                recordRowLeft = rowSpan;
+                if (attr.UIContralType != "9") {
+                    html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
+                } else {
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc' ColSpan=2 rowSpan=" + rowSpan + " style='text-align:left;padding-left: 15%'>";
+                }
+                html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
+                html += "</td>";
+                if (rowSpan == 2 || rowSpan == 3)
+                    isShowTdLeft = false;
+            }
+
             isDropTR = !isDropTR;
+           
+            haveDropRowRight++;
+             if (haveDropRowRight == recordRowRight) {
+                haveDropRowRight = 0;
+                recordRowRight = 1;
+                isShowTdRight = true;
+            }
+
+            if (isShowTdRight == false) {
+                html += "</tr>";
+                isDropTR = true;
+            }
+           
             continue;
         }
 
         if (isDropTR == false) {
-            if (attr.UIContralType != "9") {
-                html += "<td class='FDesc' style='width:15%;'>" + lab + "</td>";
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;'>";
-            } else {
-                html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc' ColSpan=2 style='text-align:left;padding-left: 15%'>";
+            if (isShowTdRight == true) {
+                recordRowRight = rowSpan;
+                if (attr.UIContralType != "9") {
+                    html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
+                } else {
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc' ColSpan=2 rowSpan=" + rowSpan + " style='text-align:left;padding-left: 15%'>";
+                }
+                isDropTR = !isDropTR;
+                html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
+                html += "</td>";
+                if (rowSpan == 2 || rowSpan == 3)
+                    isShowTdRight = false;
             }
-            html += InitMapAttrOfCtrlFool(flowData, attr, enable, defval);
-            html += "</td>";
             html += "</tr>";
-            isDropTR = !isDropTR;
+             haveDropRowLeft++;
+
+            if (haveDropRowLeft == recordRowLeft) {
+                haveDropRowLeft = 0;
+                recordRowLeft = 1;
+                isShowTdLeft = true;
+            }
+
+            if (isShowTdLeft == false) {
+                html += "<tr>";
+                isDropTR = false;
+            }
+
+
+           
             continue;
         }
     }

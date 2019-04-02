@@ -17,8 +17,102 @@
     position: relative !important;
  
 }
-.ucen
+#topContentDiv {
+    background: #fff;
+    border-radius: 5px;
+    padding: 8px 0px 0px 0px;
+    margin: 8px 15px 15px 15px;
+    border: #EFEFEF 1px solid;
+    overflow:hidden;
+}
+ div.richText
 {
-    overflow-y: auto;
-    height: 100%;
+    min-height: 40px;
+    border: 1px solid #d4d4d4;
+    cursor: text;
+    padding: 0 10px 0;
+    overflow: auto;
+    word-wrap: break-word;
+    box-shadow: 2px 2px 5px #d3d6da;
+    background-color: #fff;
+}
+.errorInput {
+    border: 1px red solid !important;
+}
+
+      
+body iframe {
+    border: none;
+}
+
+#header > b, .returnTackHeader b {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #fff;
+    margin: 12px;
+    float: left;
+    text-align: center;
+    color: rgb(192, 193, 204);
+    line-height: 25px;
+}
+
+#topContentDiv i.topContentDiv-i {
+    display: block;
+    width: 33px;
+    height: 22px;
+    background-size: 80%;
+    position: absolute;
+    top: 56px;
+    left: 50px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+h1
+{
+    font-family: "微软雅黑";
+    font-weight: normal;
+}
+        
+td
+{
+    border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 12px;
+    border-color: lightgrey ;
+}
+    .combo {
+    border-color: #d4d4d4;
+    background-color: #ffffff;
+    height:22px;
+}
+     
+.combo-arrow {
+    background-color: #E0ECFF;
+}
+.textbox-text
+{
+    border: none !important;
+    outline: none !important;
+    height:28px !important;
+}
+.combo-arrow
+{
+    height:28px !important;
+}
+.textbox-addon-right
+{
+    float:right;
+}
+.FDesc {
+padding: 4px;
+text-align: left;
+font-size: 12px;
+margin: 4px;
+border: lightgrey 1px solid;
+width: 18%;
 }

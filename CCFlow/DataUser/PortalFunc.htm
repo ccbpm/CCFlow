@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+     <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <script language="javascript" type="text/javascript" >
+        //页面启动函数.
+        $(function () {
+
+            var webUser = new WebUser();
+            if (webUser.No == "" || webUser.No == null) {
+
+                var hander = new HttpHandler("BP.WF.HttpHandler.DataUser_AppCoder");
+                hander.AddUrlData();
+
+                ///没有code.
+                var code = GetQueryString("code");
+                if (code == null || code == "") {
+                    var data = hander.DoMethodReturnString("GetCode");
+                    window.location.href = data;
+                    return;
+                }
+
+
+                //判断是否有code.
+                if (uri.hasQuery("code") && params.code != null && params.code != '') {
+                    var appKey = "100076";
+                    var appsecret = "qaa5VYd68WH4CvAWWmCQcibBw0D7Ip7x";
+                    //换票据--后台调用
+                    var code = uri.code;
+                    uri = new URI("https://testing.idaoben.com/hyip-api/v1/oauth2/access_token");
+                    uri.addQuery("appkey", appKey);
+                    uri.addQuery("appsecret", appsecret);
+                    uri.addQuery("code", code);
+                    uri.addQuery("grant_typ", "authorization_code");
+
+                    $get(uri, tokenCallBack);
+
+                } else {
+                    uri = new URI("https://testing.idaoben.com/hyip-api/v1/sso/login");
+                    uri.addQuery("appKey", appKey);
+                    uri.addQuery("redirect_uri", encodeURI(window.location.href))
+                    window.location.href = uri;
+                    return;
+                }
+
+                //如果没有登录信息，请在这里执行校验，并让其登录.
+
+            }
+
+            //登录成功之后，就开始跳转.
+            var doWhat = GetQueryString("DoWhat");
+            var url = "";
+            switch (doWhat) {
+                case "StartFlow":
+                    url = "../WF/MyFlow.htm";
+                    break;
+                case "Start":
+                    url = "../WF/Start.htm";
+                    break;
+                case "Todolist":
+                    url = "../WF/Todolist.htm";
+                case "Runing":
+                    url = "../WF/Runing.htm";
+                    break;
+                default:
+                    break;
+            }
+            window.location.href = url + GetPara();
+        });
+
+        function tokenCallBack(ssoTokenStr) {
+            /**
+            ssoTokenO
+            {
+            guid:用户id
+            access_token:网页授权接口调用凭证。该access_token 与平台对平台用 access_token 接口稍有区别，用户相关的接口必须使用授权获取的access_token
+            expires_in:接口 调用 凭证超时时间，单位（秒）
+            refresh_token:用于刷新 access_token
+            token_type:接口凭据类型。当前固定为bearer（持票人票据）
+            }
+            */
+            var ssoTokenO = JSON.parse(ssoTokenStr);
+
+            //获取当前登录者信息
+            uri = new URI("https://testing.idaoben.com/v1/user/detail");
+            uri.addQuery("guid", ssoTokenO.guid);
+
+            $get(uri, userDetailCallBack, {
+                "X-Dbsv1-App-Key": appKey,
+                "Authorization": " Bearer " + ssoTokenO.access_token
+            });
+        }
+        function userDetailCallBack(userDetailStr) {
+
+            var userInfo = JSON.parse(userDetailStr);
+            var userNo = userInfo.userName; //就是登录帐号. 002,003.
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            handler.AddPara("UserNo",userNo);
+            var data = handler.DoMethodReturnString("Portal_Login");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+        }
+     </script>
+</head>
+<body>
+
+</body>
+</html>

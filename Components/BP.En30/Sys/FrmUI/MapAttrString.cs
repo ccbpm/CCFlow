@@ -136,14 +136,14 @@ namespace BP.Sys.FrmUI
                 #region 傻瓜表单
                 //单元格数量 2013-07-24 增加
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrString",
-                    "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
+                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "单元格数量", true, true, "ColSpanAttrString",
-                    "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
+                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本跨行
-                map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
                    "@1=跨1个行@2=跨2行@3=跨3行");
 
                 //显示的分组.

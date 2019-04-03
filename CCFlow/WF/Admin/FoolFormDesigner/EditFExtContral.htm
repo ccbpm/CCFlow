@@ -28,14 +28,11 @@
 
             switch (mapAttr.UIContralType) {
                 case "0":
-                    break;
                 case "4":
-                    break;
                 case "5":
-                    break;
                 case "8": //手写签名版.
-                    break;
                 case "7":
+                case "10": //文本
                     break;
                 case "6": //附件扩展组件..
                     $("#DDL_Ath").val(mapAttr.AthRefObj); //设置选择的值.
@@ -140,6 +137,15 @@
         </legend>
         <ul>
             <li>不做任何设置. </li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_10" type="radio" name="Model" value="10" /><label for="RB_CtrlType_10">文本</label>
+        </legend>
+        <ul>
+            <li>用于文字显示 </li>
         </ul>
     </fieldset>
 

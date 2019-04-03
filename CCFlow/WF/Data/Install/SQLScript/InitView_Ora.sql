@@ -64,7 +64,7 @@ A.AtPara,
 1 as MyNum
 FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
- AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState<>0
+ AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState<>0 AND WhoExeIt<>1
  UNION
 SELECT A.PRI,A.WorkID,B.Sta AS IsRead, A.Starter,
 A.StarterName,

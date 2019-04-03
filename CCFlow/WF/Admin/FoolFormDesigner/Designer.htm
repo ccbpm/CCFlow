@@ -170,6 +170,10 @@
                     var mapAttr = mapAttrs[j];
                     if (mapAttr.UIVisible == 0)
                         continue;
+
+                    if (mapAttr.TextColSpan == undefined)
+                        mapAttr.TextColSpan = 1;
+
                     if (mapAttr.UIContralType == "1") {
                         var ses = new Entities("BP.Sys.SysEnums");
                         ses.Retrieve("EnumKey", mapAttr.UIBindKey)
@@ -278,7 +282,7 @@
                             continue;
                         }
 
-                        alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ColSpan=' + mapAttr.ColSpan);
+                        alert('*没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ColSpan=' + mapAttr.ColSpan);
                     }
 
 
@@ -625,7 +629,7 @@
 
                     }
 
-                    alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ' + mapAttr.ColSpan);
+                    alert('没有判断的string类型:' + mapAttr.KeyOfEn + ' - ' + mapAttr.Name + ' ColSpan=' + mapAttr.ColSpan + ' TextColSpan=' + mapAttr.TextColSpan);
                     continue;
 
                     if (mapAttr.LGType == 2) {

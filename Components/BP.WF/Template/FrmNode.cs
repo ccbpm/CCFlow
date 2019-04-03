@@ -114,7 +114,16 @@ namespace BP.WF.Template
         /// <summary>
         /// 延续流程ID是主键
         /// </summary>
-        CWorkID
+        CWorkID,
+        /// <summary>
+        /// 爷爷流程ID是主键
+        /// </summary>
+        PPWorkID,
+        /// <summary>
+        /// 太爷爷流程ID是主键
+        /// </summary>
+        PPPWorkID
+
     }
     /// <summary>
     /// 方案类型

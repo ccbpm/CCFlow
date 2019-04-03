@@ -397,13 +397,22 @@ namespace BP.WF.HttpHandler
                     currWK = currND.HisWork;
                     currWK.OID = this.WorkID;
                     currWK.Retrieve();
-                    this.WorkID = currWK.OID;
                 }
                 else
                 {
                     gwf.WorkID = this.WorkID;
                     gwf.RetrieveFromDBSources();
                 }
+
+                if (gwf.PWorkID == 0 && this.PWorkID != 0)
+                {
+                    gwf.WorkID = this.WorkID;
+                    gwf.PWorkID = this.PWorkID;
+                    if (DataType.IsNullOrEmpty(gwf.PFlowNo) == true)
+                        gwf.PFlowNo = this.PFlowNo;
+                    gwf.Update();
+                }
+
 
                 if (this.currND.IsStartNode)
                 {
@@ -1840,7 +1849,7 @@ namespace BP.WF.HttpHandler
                     gwf.DeptName = WebUser.FK_DeptName;
                     gwf.Starter = WebUser.No;
                     gwf.StarterName = WebUser.Name;
-                    gwf.RDT = DataType.CurrentDataTime;
+                    gwf.RDT = DataType.CurrentDataTimess;
                     gwf.Insert();
 
                     // 产生工作列表.
@@ -1858,7 +1867,7 @@ namespace BP.WF.HttpHandler
                     gwl.FK_DeptT = WebUser.FK_DeptName;
 
                     gwl.SDT = "无";
-                    gwl.DTOfWarning = DataType.CurrentDataTime;
+                    gwl.DTOfWarning = DataType.CurrentDataTimess;
                     gwl.IsEnable = true;
 
                     gwl.IsPass = false;

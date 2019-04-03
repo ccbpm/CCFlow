@@ -1470,6 +1470,13 @@ namespace BP.Sys
               //  map.AddTBString(MapAttrAttr.ColSpan, "1", "单元格数量", true, false, 0, 3, 3);
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
+                //文本占单元格数量
+                map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true,false);
+
+                //文本跨行
+                map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true,false);
+
+
                 //显示的分组. @shilianyu. 
                 map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);
 

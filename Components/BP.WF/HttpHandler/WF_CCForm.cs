@@ -644,6 +644,38 @@ namespace BP.WF.HttpHandler
 
                 if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {
+                    //太爷孙关系
+                    if (fn.WhoIsPK == WhoIsPK.PPPWorkID)
+                    {
+                        //根据PWorkID 获取PPPWorkID
+                        string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID="+this.PWorkID+")";
+                        string pppworkID = DBAccess.RunSQLReturnString(sql);
+                        if (DataType.IsNullOrEmpty(pppworkID) == true || pppworkID=="0")
+                            throw new Exception("err@不存在太爷孙流程关系，请联系管理员检查流程设计是否正确");
+
+                        Int64 PPPWorkID = Int64.Parse(pppworkID);
+                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + PPPWorkID);
+                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + PPPWorkID);
+                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + PPPWorkID);
+                    }
+                         
+
+                    if (fn.WhoIsPK == WhoIsPK.PPWorkID)
+                    {
+                        //根据PWorkID 获取PPWorkID
+                        GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
+                        if (gwf != null && gwf.PWorkID != 0)
+                        {
+                            paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + gwf.PWorkID);
+                            paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + gwf.PWorkID);
+                            paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + gwf.PWorkID);
+                        }
+                        else
+                        {
+                            throw new Exception("err@不存在爷孙流程关系，请联系管理员检查流程设计是否正确");
+                        }
+                    }
+                         
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                     {
                         paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + this.PWorkID);
@@ -658,7 +690,7 @@ namespace BP.WF.HttpHandler
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.FID);
                     }
 
-                    if (md.HisFrmType == FrmType.FreeFrm)
+                    if (md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
                     {
                         if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                             return "url@FrmGener.htm?1=2" + paras;
@@ -4536,6 +4568,8 @@ namespace BP.WF.HttpHandler
 
                         if (fn.WhoIsPK == WhoIsPK.PWorkID)
                             athDesc.HisCtrlWay = AthCtrlWay.PWorkID;
+
+                       
                     }
 
                     if (fn.FrmSln == FrmSln.Readonly)

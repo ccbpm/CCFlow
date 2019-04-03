@@ -31,9 +31,7 @@ function InitPage() {
     var checkStr = "";
     var dotColor = -1;
     var idx = 1;
-    var Msg = "";
-    var endTime = "";
-    var passTime = "";
+
     //获得流程引擎注册表信息.
     var gwf = data["WF_GenerWorkFlow"][0];
 
@@ -63,7 +61,11 @@ function InitPage() {
 
     //输出列表. zhoupeng 2017-12-19 修改算法，所有的审核动作都依靠发送来显示.
     for (var i = 0; i < tracks.length; i++) {
-        
+        var Msg = "";
+        var startTime = "";
+        var endTime = "";
+        var passTime = "";
+        var actionType = "";
         var track = tracks[i];
         if (track.FID != 0)
             continue;
@@ -73,25 +75,86 @@ function InitPage() {
         if (track.ActionType == ActionType.WorkCheck)
             continue;
 
-       //是否显示审批意见？
+        //是否显示审批意见？
         var isShowCheckMsg = true;
         if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
             continue;
             //isShowCheckMsg = false;
         }
 
+        //内容.
 
-        //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
-        for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
+        actionType = track.ActionTypeText;
+        var at = track.ActionType;
 
-            var checkTrack = tracks[myIdx];
-            if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                Msg = checkTrack.Msg ;
+        //        if (at == ActionType.Return) {
+        //            doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font><span>退回给:</span><font color=green>" + track.EmpToT + "</font></p>";
+        //            doc += "<p><span>退回意见如下</span>  </p>";
+        //        }
+
+        if (at == ActionType.Forward || at == ActionType.FlowOver) {
+
+
+            //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
+            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
+
+                var checkTrack = tracks[myIdx];
+                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                    Msg = checkTrack.Msg;
+                }
             }
         }
-       
+        //协作发送.
+        if (at == ActionType.TeampUp) {
 
+            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
 
+                var checkTrack = tracks[myIdx];
+                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                    Msg = checkTrack.Msg;
+                }
+            }
+        }
+        //输出备注信息.
+        var tag = track.Tag;
+        if (tag != null)
+            tag = tag.replace("~", "'");
+
+        Msg = track.Msg;
+        if (Msg == "0")
+            Msg = "";
+
+        if (Msg != "") {
+
+            while (Msg.indexOf('\t\n') >= 0) {
+                Msg = Msg.replace('\t\n', '<br>');
+            }
+
+            Msg = Msg.replace('null', '');
+
+            if (Msg == "" || Msg == undefined)
+                Msg = "无";
+
+        };
+        //获取轨迹中上一个节点的时间
+        if (i == 0) {
+            startTime = track.RDT;
+            endTime = track.RDT;
+        } else {
+            //上一节点的到达时间就是本节点的开始时间
+            var track1 = tracks[i - 1];
+            startTime = track1.RDT;
+            endTime = track.RDT;
+        }
+        //求得历时时间差
+        var sdt = startTime.replace(/\-/g, "/");
+        sdt = new Date(Date.parse(sdt.replace(/-/g, "/")));
+        var edt = endTime.replace(/\-/g, "/");
+        edt = new Date(Date.parse(edt.replace(/-/g, "/")));
+
+        passTime = GetSpanTime(sdt, edt);
+        if (passTime == '')
+            passTime = '0秒';
 
         //输出row
         var newRow = "";
@@ -100,9 +163,9 @@ function InitPage() {
         newRow += "<td >" + track.NDFromT + "</td>";
         newRow += "<td >" + '' + "</td>";
         newRow += "<td >" + Msg + "</td>";
-        newRow += "<td >" + '已审批' + "</td>";
+        newRow += "<td >" + track.ActionTypeText + "</td>";
         newRow += "<td >" + track.EmpFromT + "</td>";
-        newRow += "<td >" + track.RDT + "</td>";
+        newRow += "<td >" + startTime + "</td>";
         newRow += "<td >" + endTime + "</td>";
         newRow += "<td >" + passTime + "</td>";
         newRow += "</tr>";
@@ -128,12 +191,6 @@ function InitPage() {
         //如果有尚未审核的人员，就输出.
         if (isHaveNoChecker == true) {
 
-//            var rowDay = "<tr>";
-//            rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwf.NodeName + "</b></td>";
-//            rowDay += "</tr>";
-//            $("#Table1 tr:last").after(rowDay);
-
-
             for (var i = 0; i < gwls.length; i++) {
                 var html = "";
 
@@ -141,70 +198,22 @@ function InitPage() {
                 if (gwl.IsPass == 1)
                     continue;
 
-                var doc = "";
-                doc += "<span>审批人</span>";
-                doc += gwl.FK_EmpText;
-
-                doc += "<br>";
-                doc += "<span>阅读状态:</span>";
-
-                if (gwl.IsRead == "1")
-                    doc += "<span><font color=green>已阅读.</font></span>";
-                else
-                    doc += "<span><font color=green>尚未阅读.</font></span>";
-                doc += "<br>";
-                doc += "<span>工作到达日期:</span>";
-                doc += gwl.RDT;
-
-                //到达时间.
-                var toTime = gwl.RDT;
-                var toTimeDot = toTime.replace(/\-/g, "/");
-                toTimeDot = new Date(Date.parse(toTimeDot.replace(/-/g, "/")));
-
-                //当前发生日期.
-                timeDot = new Date();
-
-
-                doc += "<br>";
-                doc += "<span>已经耗时:</span>";
-                doc += GetSpanTime(toTimeDot, timeDot);
-
-                doc += "<br>";
-                doc += "<span>应完成日期:</span>";
-                doc += gwl.SDT;
-
-
-                //应该完成日期.
-                toTime = gwl.SDT;
-                toTimeDot = toTime.replace(/\-/g, "/");
-                toTimeDot = new Date(Date.parse(toTimeDot.replace(/-/g, "/")));
-
-                //当前发生日期.
-                timeDot = new Date();
-
-                var timeLeft = GetSpanTime(timeDot, toTimeDot);
-
-                if (timeLeft != 'NaN秒') {
-                    doc += "<br>";
-                    doc += "<span>还剩余:</span>";
-                    doc += timeLeft;
-                }
-
-                var left = "";
-                left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
-                left += "<br>" + gwl.FK_EmpText;
-
                 var newRow = "";
                 newRow = "<tr>";
                 newRow += "<td >" + idx + "</td>";
                 newRow += "<td >" + gwl.FK_NodeText + "</td>";
                 newRow += "<td >" + '' + "</td>";
-                newRow += "<td >" + Msg + "</td>";
+
+                if (gwl.IsRead == "1") {
+                    newRow += "<td ><span><font color=green>已阅读.</font></span></td>";
+                } else {
+                    newRow += "<td ><span><font color=green>尚未阅读.</font></span></td>";
+                }
                 newRow += "<td >" + '等待审批' + "</td>";
                 newRow += "<td >" + gwl.FK_EmpText + "</td>";
                 newRow += "<td >" + gwl.RDT + "</td>";
-                newRow += "<td >" + endTime + "</td>";
-                newRow += "<td >" + timeLeft + "</td>";
+                newRow += "<td ></td>";
+                newRow += "<td ></td>";
                 newRow += "</tr>";
                 $("tbody tr:last").after(newRow);
             }

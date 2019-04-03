@@ -62,6 +62,8 @@
 
             //获取设置显示的列数
             var showSpan = mapExt.GetPara("ShowCol");
+            if (showSpan == null || showSpan == undefined || showSpan == "")
+                showSpan = 3;
 
             var srcOfGroup = mapExt.Tag1; //分组.
             var srcOfEntitis = mapExt.Tag2; //实体.
@@ -150,8 +152,8 @@
                         html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='RB_" + en.No + "'>" + lab + "</label></td>";
                     else
                         html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
-                    
-                    if(myNum == showSpan-1){
+
+                    if (myNum == showSpan - 1) {
 
                         html += "</tr>";
                         myNum = -1;

@@ -142,13 +142,12 @@
            var emps = new Entities("BP.GPM.Emps");
            emps.Retrieve("FK_Dept", dept.No, "Idx");
 
-
            var empNos = ",";
            html += "<tbody>";
            for (var i = 0; i < emps.length; i++) {
                var emp = emps[i];
                html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
-               html += "<td class='Idx' >" + i + "</td>";
+               html += "<td class='Idx' >" + (i+1) + "</td>";
                html += "<td>" + emp.No + "</td>";
                html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                html += "<td>" + dept.Name + "</td>";

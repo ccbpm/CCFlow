@@ -544,17 +544,13 @@ namespace BP.WF
                 wl.FK_EmpText = emp.Name;
                 wl.FK_Dept = emp.FK_Dept;
                 wl.FK_DeptT = emp.FK_DeptText;
+                wl.WhoExeIt = town.HisNode.WhoExeIt; //设置谁执行它.
 
                 //应完成日期.
                 if (town.HisNode.HisCHWay == CHWay.None)
-                {
                     wl.SDT = "无";
-                }
                 else
-                {
                     wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
-                }
-
 
                 //警告日期.
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);

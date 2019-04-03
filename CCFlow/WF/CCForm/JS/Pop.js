@@ -44,11 +44,11 @@ function SelfUrl_Done(mapExt) {
 function PopBranchesAndLeaf(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
     var width = target.outerWidth();
-    var height = target.height();
+    var height = target.outerHeight();
     target.hide();
     var container = $("<div></div>");
     target.after(container);
-    container.width(width - 100);
+    container.width(width);
     container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 
@@ -125,11 +125,11 @@ function PopBranches(mapExt, val) {
     var target = $("#TB_" + mapExt.AttrOfOper);
   
     var width = target.outerWidth();
-    var height = target.height();
+    var height = target.outerHeight();
     target.hide();
     var container = $("<div></div>");
     target.after(container);
-    container.width(width - 100);
+    container.width(width);
     container.css("height", height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 
@@ -199,12 +199,12 @@ function PopTableSearch(mapExt) {
     var target = $("#TB_" + mapExt.AttrOfOper);
    
     var width = target.outerWidth();
-    var height = target.height();
+    var height = target.outerHeight();
     target.hide();
 
     var container = $("<div></div>");
     target.after(container);
-    container.width(width-100);
+    container.width(width);
     //container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 
@@ -284,11 +284,11 @@ function PopGroupList(mapExt) {
     
 
     var width = target.outerWidth();
-    var height = target.height();
+    var height = target.outerHeight();
     target.hide();
     var container = $("<div></div>");
     target.after(container);
-    container.width(width-100);
+    container.width(width);
     //container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 

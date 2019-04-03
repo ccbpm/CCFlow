@@ -8092,25 +8092,6 @@ namespace BP.WF
             sa.Insert();
         }
         /// <summary>
-        /// 改变当前节点的应完成日期.
-        /// </summary>
-        /// <param name="workID">工作ID</param>
-        /// <param name="sdt">应完成日期</param>
-        public static void Node_SetSDT(Int64 workID,string sdt)
-        {
-            GenerWorkFlow gwf = new GenerWorkFlow(workID);
-            gwf.SDTOfNode = sdt;
-            gwf.Update();
-
-            GenerWorkerLists ens = new GenerWorkerLists();
-            ens.Retrieve(GenerWorkerListAttr.WorkID, workID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
-            foreach (GenerWorkerList item in ens)
-            {
-                item.SDT = sdt;
-                item.Update();
-            }
-        }
-        /// <summary>
         /// 节点工作挂起
         /// </summary>
         /// <param name="fk_flow">流程编号</param>

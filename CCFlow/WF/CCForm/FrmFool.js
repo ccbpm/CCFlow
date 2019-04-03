@@ -17,7 +17,7 @@ function GenerFoolFrm(mapData, frmData) {
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
     html += "<tr>";
-    html += "<td colspan=4 class='FDesc' ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit' style='float:right;padding:10px;bordder:none;width:70%;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 class='FDesc' ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit-title' style='float:right;padding:10px;bordder:none;width:70%;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
 
 
@@ -283,7 +283,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             }
             isDropTR = true;
             html += "<tr>";
-            html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan='4' class='FDesc'>" + lab + "</br>";
+            html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan='4' class='FDesc' style='text-align:left'>" + lab + "</br>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -1031,41 +1031,19 @@ function Ele_Attachment(workNode, gf) {
 
     var src = "";
 
+
     //这里的连接要取 FK_MapData的值.
-    src = "Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+    src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
-        src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + GetQueryString("PKVal") + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+        src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
     }
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + gf.CtrlID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;
 
-    /*
-
-    var ath = workNode.Sys_FrmAttachment[0];
-    if (ath == null)
-    return "没有找到附件定义，请与管理员联系。";
-
-    var eleHtml = '';
-    //    if (ath.UploadType == 0) { //单附件上传 L4204
-    //        return '';
-    //    }
-
-    var pkval = GetQueryString("WorkID");
-    if (pkval == undefined)
-    pkval = GetQueryString("OID");
-
-    var src = "";
-    if (pageData.IsReadonly)
-    src = "Ath.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-    else
-    src = "Ath.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-
-    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-    return eleHtml; */
+   
 }
 
 

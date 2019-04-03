@@ -47,8 +47,8 @@ function PopBranchesAndLeaf(mapExt, val) {
     var height = target.height();
     target.hide();
     var container = $("<div></div>");
-    target.after(container-100);
-    container.width(width);
+    target.after(container);
+    container.width(width - 100);
     container.height(height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
 

@@ -79,7 +79,7 @@
 	function create(target) {
 		var opts = getOptions(target);
 		var html = "";
-		html += '<div class="col-xs-10 main-container">';
+		html += '<div class="main-container">';
 		html += 	'<div class="ccflow-input-span-container">';
 		html += 		'<div id="stuff" style="display: inline; border-left: 1px solid white; width: 1px;"></div>';
 		html += 	'</div>';

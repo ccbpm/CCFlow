@@ -1,4 +1,4 @@
-﻿* {
+* {
 	box-sizing: border-box;
 }
 .ccflow-input-span-container {
@@ -7,7 +7,7 @@
 	border: 1px solid #ccc;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 	display: inline-block;
-	padding: 2px 4px;
+	/**padding: 2px 4px;**/
 	color: #555;
 	vertical-align: middle;
 	border-radius: 1px;

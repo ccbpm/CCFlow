@@ -134,8 +134,8 @@ function InitPage() {
 
             html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
 
-
-            html += '<font color=green>' + this.Msg + '</font>';
+            var returnMsg = this.ActionType == 2 ? "退回原因：" : "";
+            html += '<font color=green>' + returnMsg + this.Msg + '</font>';
 
 
 
@@ -252,6 +252,8 @@ function InitPage() {
     }
 
     $("#tbTracks").append(html);
+
+    $(window.parent.document).find("#FWC").css('height', $("#tbTracks").height() + 5);
 
     if ($("#WorkCheck_Doc").length > 0) {
         if (wcDesc.FWCIsFullInfo == 1 && wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {

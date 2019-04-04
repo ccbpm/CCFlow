@@ -64,6 +64,7 @@
         var STYLE_LINE_COLOR = 'Gray'; //连线颜色
         var STYLE_LINE_HOVER_COLOR = 'blue';    //连线鼠标悬停时的颜色
         var STYLE_LINE_WIDTH = 1;   //连线宽度
+        var STYLE_LINE_TRACK_WIDTH = 2;   //走过的连线宽度
         var STYLE_LINE_TRACK_COLOR = 'green'; //走过的连线颜色
         var STYLE_NODE_TRACK_FONT_SIZE = 14;    //走过的节点轨迹信息字体大小
         var STYLE_NODE_TRACK_FORE_COLOR = 'green';    //走过的节点轨迹信息字体颜色
@@ -725,7 +726,7 @@
                     rDots: getDots(this.Dots),
                     node: this.Node,
                     tonode: this.ToNode,
-                    pathColor: datas.Track.findBy2Field("NDFROM", rDir.FromNode.id, "NDTO", rDir.ToNode.id) != null ? STYLE_LINE_TRACK_COLOR : STYLE_LINE_COLOR    //&& rDir.ToNode.isTrackNode,edited by liuxc,2016-03-15,工作到哪个节点的轨迹都显示出来
+                    pathColor: datas.Track.findBy2Field("NDFrom", rDir.FromNode.id, "NDTo", rDir.ToNode.id) != null ? STYLE_LINE_TRACK_COLOR : STYLE_LINE_COLOR    //&& rDir.ToNode.isTrackNode,edited by liuxc,2016-03-15,工作到哪个节点的轨迹都显示出来
                 });
 
                 arrs.push(rDir.rPath);
@@ -1208,7 +1209,11 @@
                 }
 
                 raphaelObj.arrPath = this.path(path1);
-                raphaelObj.arrPath.attr({ "stroke": pathColor, "stroke-width": STYLE_LINE_WIDTH }); //设置"arrow-end": "classic-wide-long"有问题
+                if (pathColor == STYLE_NODE_COLOR_FORE_TRACK) {
+                    raphaelObj.arrPath.attr({ "stroke": pathColor, "stroke-width": STYLE_LINE_TRACK_WIDTH }); 
+                } else {
+                    raphaelObj.arrPath.attr({ "stroke": pathColor, "stroke-width": STYLE_LINE_WIDTH }); //设置"arrow-end": "classic-wide-long"有问题
+                }
 
                 raphaelObj.arrPath.hover(function () {
                     this.attr("stroke", STYLE_LINE_HOVER_COLOR);

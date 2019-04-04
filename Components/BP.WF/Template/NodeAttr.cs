@@ -79,6 +79,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string ReturnReasonsItems = "ReturnReasonsItems";
         /// <summary>
+        /// 单节点退回规则
+        /// </summary>
+        public const string ReturnOneNodeRole = "ReturnOneNodeRole";
+        /// <summary>
         /// 退回提示
         /// </summary>
         public const string ReturnAlert = "ReturnAlert";

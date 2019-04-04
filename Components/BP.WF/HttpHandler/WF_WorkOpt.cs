@@ -2471,12 +2471,45 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 获得可以退回的节点.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>退回信息</returns>
         public string Return_Init()
         {
             try
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
+
+                // @shilianyu.
+                //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
+                if (dt.Rows.Count == 1)
+                {
+                   Node nd = new Node(this.FK_Node);
+                   if (nd.ReturnOneNodeRole != 0)
+                   {
+                       /* 如果:启用了单节点退回规则.
+                        */
+                       string returnMsg = "";
+                       if (nd.ReturnOneNodeRole == 1 && DataType.IsNullOrEmpty(nd.ReturnField) == false)
+                       {
+                           /*从表单字段里取意见.*/
+                           Flow fl = new Flow(nd.FK_Flow);
+                           string sql = "SELECT " + nd.ReturnField + " FROM " + fl.PTable + " WHERE OID=" + this.WorkID;
+                           returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
+                       }
+
+                       if (nd.ReturnOneNodeRole == 2)
+                       {
+                           /*从审核组件里取意见.*/
+                           string sql = "SELECT Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " NDFrom=" + this.FK_Node + " AND EmpFrom='" + WebUser.No + "' AND ActionType=" + (int)ActionType.WorkCheck;
+                           returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
+                       }
+
+                       int toNodeID = int.Parse(dt.Rows[0][0].ToString());
+
+                       string info = BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, 0, this.FK_Node, toNodeID, returnMsg, false);
+                       return "info@" + info;
+                   }
+                }
+
                 return BP.Tools.Json.ToJson(dt);
             }
             catch (Exception ex)

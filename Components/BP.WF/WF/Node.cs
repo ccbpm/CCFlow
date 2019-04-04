@@ -1625,6 +1625,37 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.HisBillIDs, value);
             }
         }
+
+
+        #endregion
+
+        #region 退回信息.
+
+        public string ReturnField
+        {
+            get
+            {
+                return this.GetValStrByKey(BtnAttr.ReturnField);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.ReturnField, value);
+            }
+        }
+        /// <summary>
+        /// 单节点退回规则
+        /// </summary>
+        public int ReturnOneNodeRole
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeAttr.ReturnOneNodeRole);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.ReturnOneNodeRole, value);
+            }
+        }
         #endregion
 
         #region 扩展属性
@@ -2527,6 +2558,10 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.ReturnRole, 2, "退回规则", true, true);
                 map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 50, 10, true);
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 50, 10, true);
+
+                map.AddTBInt(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true);
+                map.AddTBString(BtnAttr.ReturnField, null, "退回信息填写字段", true, false, 0, 50, 10, true); 
+
 
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "访问规则", true, true);
                 map.AddTBInt(NodeAttr.IsExpSender, 1, "本节点接收人不允许包含上一步发送人", true, true);

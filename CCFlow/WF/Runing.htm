@@ -21,20 +21,20 @@
                         </th>
                         <th width="350px;"> 标题  </th>
                         <!--  <th>流程</th>-->
-                        <th width="60">
+                        <th width="120">
                             发起人
                         </th>
                         <th width="100">
                             发起部门
                         </th>
                         <!--<th>申请时间</th>-->
-                        <th width="420">
+                        <th width="200">
                             当前节点
                         </th>
-                        <th width="120">
+                        <th width="180">
                             到达时间
                         </th>
-                        <th>
+                        <th width="120">
                             当前处理人
                         </th>
                         <th width="120">
@@ -345,11 +345,23 @@
                     listbox += "<td>" + work.RDT + "</td>";
 
                     var todoEmps = work.TodoEmps;
+                    var emp = "";
+                    var todoEmp = todoEmps.split(";");
+                    for (j = 0; j < todoEmp.length; j++) {
+                        if (todoEmp[j] == '' || todoEmp[j] == null || todoEmp[j] == undefined)
+                            continue;
+                        if (todoEmp[j].indexOf(',') != -1) {
+                            var aa = todoEmp[j].split(",")[1] + "、";
+                            emp += aa;
 
-                    if (todoEmps.indexOf(',') != -1)
-                        todoEmps = todoEmps.substring(todoEmps.indexOf(',') + 1);
+                        } else {
+                            emp += todoEmp[j]+"、";
+                        }
 
-                    listbox += "<td>" + todoEmps + "</td>";
+                    }
+                    emp = emp.substring(0,emp.lastIndexOf("、"));
+
+                    listbox += "<td>" + emp + "</td>";
                     listbox += "<td>";
 
                     //listbox += "[<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + nodeID + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>][<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','"+currNodeId+"')\">撤销</a>]";

@@ -18,7 +18,6 @@ $(function () {
     GenerWorkNode(); //表单数据.ajax
 
 
-
     if ($("#Message").html() == "") {
         $(".Message").hide();
     }
@@ -1806,7 +1805,7 @@ function InitToolBar() {
     if ($('[name=Return]').length > 0) {
         $('[name=Return]').attr('onclick', '');
         $('[name=Return]').unbind('click');
-        $('[name=Return]').bind('click', function () { initModal("returnBack"); $('#returnWorkModal').modal().show(); });
+        $('[name=Return]').bind('click', function () { if (Save()==false) return; initModal("returnBack"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Shift]').length > 0) {

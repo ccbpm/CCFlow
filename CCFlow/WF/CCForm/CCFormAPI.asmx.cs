@@ -44,7 +44,7 @@ namespace CCFlow.WF.CCForm
 
             //是否可以查看该工作.
             bool b = BP.WF.Dev2Interface.Flow_IsCanViewTruck(gwf.FK_Flow, gwf.WorkID, gwf.FID);
-            if (b == false)
+            if (b == false && 1==2 )
                 throw new Exception("err@["+userNo+"]无权查看该流程,WorkID="+workID );
 
             string frmID = "ND" + int.Parse(gwf.FK_Flow) + "Rpt";
@@ -113,7 +113,7 @@ namespace CCFlow.WF.CCForm
             BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workID);
 
             bool b = BP.WF.Dev2Interface.Flow_IsCanViewTruck(gwf.FK_Flow, gwf.WorkID, gwf.FID);
-            if (b == false)
+            if (b == false && 1 == 2)
                 throw new Exception("err@[" + userNo + "]无权查看该流程,WorkID=" + workID);
 
 

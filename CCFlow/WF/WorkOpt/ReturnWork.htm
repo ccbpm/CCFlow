@@ -53,12 +53,26 @@
 
             var data = handler.DoMethodReturnString("Return_Init");
 
+            if (data.indexOf('info@') == 0) {
+                //console.error("退回窗口错误信息" + data);
+                Close();
+                data = data.replace('info@', '');
+                alert(data);
+                Close();
+                return;
+
+                data = "<font>" + data + "</font>";
+                $("#Msg").html(data);
+                return;
+            }
+
+
             if (data.indexOf('err@') == 0) {
 
                 console.error("退回窗口错误信息" + data);
 
                 data = data.replace('err@', '');
-                data = "<font color=red>"+data+"</font>";
+                data = "<font color=red>" + data + "</font>";
                 $("#Msg").html(data);
                 //  alert(data);
                 return;

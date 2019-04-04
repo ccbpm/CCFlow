@@ -279,7 +279,8 @@
 			    //SDK表单或者是嵌入式表单
 			    if (data.indexOf('urlForm@') == 0) {
 			        data = data.replace('urlForm@', '');
-			        data = basePath + data;
+			        if (data.indexOf("http") == -1)
+			            data = basePath + data;
 			        if (data.indexOf('FromWorkOpt') == -1)
 			            data = data + "&FromWorkOpt=1";
 

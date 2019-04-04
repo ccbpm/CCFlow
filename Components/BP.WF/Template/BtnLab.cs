@@ -1265,6 +1265,11 @@ namespace BP.WF.Template
             fl.RetrieveFromDBSources();
             fl.Update();
 
+            BtnLab btnLab = new BtnLab();
+            btnLab.NodeID = this.NodeID;
+            btnLab.RetrieveFromDBSources();
+            btnLab.Update();
+
             base.afterInsertUpdateAction();
         }
         #endregion

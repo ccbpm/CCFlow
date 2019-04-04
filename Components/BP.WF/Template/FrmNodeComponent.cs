@@ -263,6 +263,16 @@ namespace BP.WF.Template
             return base.beforeUpdate();
         }
         #endregion
+
+        protected override void afterInsertUpdateAction()
+        {
+            Node fl = new Node();
+            fl.NodeID = this.NodeID;
+            fl.RetrieveFromDBSources();
+            fl.Update();
+
+            base.afterInsertUpdateAction();
+        }
     }
     /// <summary>
     /// 节点表单组件s

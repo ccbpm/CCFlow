@@ -764,6 +764,16 @@ namespace BP.WF.Template
             }   
             return base.beforeUpdateInsertAction();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            Node fl = new Node();
+            fl.NodeID = this.NodeID;
+            fl.RetrieveFromDBSources();
+            fl.Update();
+
+            base.afterInsertUpdateAction();
+        }
     }
     /// <summary>
     /// 审核组件s

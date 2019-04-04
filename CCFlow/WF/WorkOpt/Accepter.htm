@@ -141,13 +141,13 @@
                 data = data.replace('info@@', '');
                 data = data.replace('info@', '');
                 alert(data);
-                Close();
+                Close(true);
                 return;
             }
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
-                Close();
+                Close(false);
                 return;
             }
 
@@ -361,14 +361,20 @@
         }
 
         //取消【选择接收人并发送】
-        function Close() {
+        function Close(flag) {
 
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
-                window.close();
+                if (flag == true)
+                    window.parent.close();
+                else
+                 window.close();
             } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
                 window.opener.returnWorkWindowClose("取消");
-                window.close();
+                if (flag == true)
+                    window.opener.close();
+                else
+                    window.close();
             } else {
                 window.close();
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Collections;
 using System.Web;
@@ -44,8 +45,8 @@ namespace CCFlow.WF.CCForm
 
             //是否可以查看该工作.
             bool b = BP.WF.Dev2Interface.Flow_IsCanViewTruck(gwf.FK_Flow, gwf.WorkID, gwf.FID);
-            if (b == false && 1==2 )
-                throw new Exception("err@["+userNo+"]无权查看该流程,WorkID="+workID );
+            if (b == false && 1 == 2)
+                throw new Exception("err@[" + userNo + "]无权查看该流程,WorkID=" + workID);
 
             string frmID = "ND" + int.Parse(gwf.FK_Flow) + "Rpt";
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt("ND" + int.Parse(gwf.FK_Flow) + "Rpt", workID);
@@ -99,13 +100,15 @@ namespace CCFlow.WF.CCForm
         [WebMethod]
         public void WordFileGenerSiganture(string userNo, ref byte[] bytes)
         {
-            string filePath = SystemConfig.PathOfDataUser + "UserIcon\\" + userNo + ".png";
-            if (System.IO.File.Exists(filePath)==false)
-                filePath = SystemConfig.PathOfDataUser + "UserIcon\\Default.png";
-
+            string filePath = SystemConfig.PathOfDataUser + "Siganture\\" + userNo + ".jpg";
+            if (System.IO.File.Exists(filePath) == false)
+                filePath = SystemConfig.PathOfDataUser + "Siganture\\UnSiganture.jpg";
 
             //怎么把文件转化为字节， 把字节转化为文件，请参考。http://www.cnblogs.com/yy981420974/p/8193081.html
-
+            FileStream stream = new FileInfo(filePath).OpenRead();
+            bytes = new Byte[stream.Length];
+            //从流中读取字节块并将该数据写入给定缓冲区buffer中
+            stream.Read(bytes, 0, Convert.ToInt32(stream.Length));
         }
         /// <summary>
         /// 获得Word文件 - 未开发完成.

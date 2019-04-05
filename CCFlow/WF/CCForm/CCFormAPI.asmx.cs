@@ -92,6 +92,22 @@ namespace CCFlow.WF.CCForm
 
         #region 与公文相关的接口.
         /// <summary>
+        /// 获得文件签名
+        /// </summary>
+        /// <param name="userNo">用户号</param>
+        /// <param name="bytes">签名</param>
+        [WebMethod]
+        public void WordFileGenerSiganture(string userNo, ref byte[] bytes)
+        {
+            string filePath = SystemConfig.PathOfDataUser + "UserIcon\\" + userNo + ".png";
+            if (System.IO.File.Exists(filePath)==false)
+                filePath = SystemConfig.PathOfDataUser + "UserIcon\\Default.png";
+
+
+            //怎么把文件转化为字节， 把字节转化为文件，请参考。http://www.cnblogs.com/yy981420974/p/8193081.html
+
+        }
+        /// <summary>
         /// 获得Word文件 - 未开发完成.
         /// </summary>
         /// <param name="userNo">用户编号</param>

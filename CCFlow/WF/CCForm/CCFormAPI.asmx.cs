@@ -107,6 +107,7 @@ namespace CCFlow.WF.CCForm
             //怎么把文件转化为字节， 把字节转化为文件，请参考。http://www.cnblogs.com/yy981420974/p/8193081.html
             FileStream stream = new FileInfo(filePath).OpenRead();
             bytes = new Byte[stream.Length];
+
             //从流中读取字节块并将该数据写入给定缓冲区buffer中
             stream.Read(bytes, 0, Convert.ToInt32(stream.Length));
         }

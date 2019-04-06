@@ -9,11 +9,9 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-   
     <script type="text/javascript">
 
         $(function () {
-
 
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
@@ -37,9 +35,30 @@
 
             html += addFlowOverByCoercion(data.CanFlowOverByCoercion);
 
+            //增加回滚.
+            if (data.Rollback == "1")
+                html += Rollback();
+
             $("#ccop").append(html);
 
         });
+
+        function RollbackIt() {
+            window.location.href = "../Rollback.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow");
+        }
+
+        //删除流程
+        function Rollback() {
+
+            var html = addBlockBegin("回滚流程");
+
+            html += "回滚流程:<a href=\"javascript:RollbackIt();\" >执行回滚</a>。";
+            html += "<br />说明：从指定的节点上从新审批.";
+
+            html += addBlockEnd();
+
+            return html;
+        }
 
         //删除流程
         function addFlowOverByCoercion(isCan) {
@@ -50,7 +69,7 @@
 
             var html = addBlockBegin("删除流程");
 
-            if (isCan=="true") {
+            if (isCan == "true") {
                 html += "功能执行:<a href=\"javascript:DeleteFlowInstance('" + GetQueryString("fk_flow") + "','" + GetQueryString("WorkID") + "')\" >点击执行删除流程</a>。";
                 html += "<br />说明：如果执行流程将会被彻底的删除。";
             }
@@ -172,7 +191,7 @@
 
             var fk_node = GetQueryString("FK_Node");
             if (fk_node == null)
-                  fk_node = GetQueryString("NodeID");
+                fk_node = GetQueryString("NodeID");
 
             var html = addBlockBegin("打印/打包下载");
 
@@ -188,7 +207,7 @@
 
             return html;
         }
-        
+
 
         //删除流程.
         function DeleteFlowInstance(flowNo, workid) {
@@ -225,7 +244,7 @@
             var url = Handler + "?DoType=OP_UnSend&FK_Node=<%=FK_Node %>&FK_Flow=" + fk_flow + "&WorkID=" + workID;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData(); 
+            handler.AddUrlData();
             var data = handler.DoMethodReturnString("OP_UnSend");
             $("#opmsg").empty().append(data);
         }

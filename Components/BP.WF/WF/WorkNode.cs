@@ -4738,7 +4738,6 @@ namespace BP.WF
                 #endregion 检查附件个数的完整性.
 
 
-
                 #region 检查图片附件的必填，added by liuxc,2016-11-1
                 foreach (FrmImgAth imgAth in this.HisNode.MapData.FrmImgAths)
                 {
@@ -6643,9 +6642,10 @@ namespace BP.WF
                 //执行时效考核.
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
 
-                #region 触发下一个节点的自动发送, 处理国机的需求.
+                #region 触发下一个节点的自动发送, 处理国机的需求.  （去掉:2019-05-05）
                 if (this.HisMsgObjs.VarToNodeID != null
                     && this.town != null
+                    && 1==2
                     && this.town.HisNode.WhoExeIt != 0)
                 {
                     string currUser = BP.Web.WebUser.No;

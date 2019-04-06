@@ -314,7 +314,7 @@ namespace BP.WF.HttpHandler
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
                         string empFrom = dr[1].ToString();
-                        if (isFlowEnd==true && (isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No))
+                        if (isFlowEnd == true && (isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No))
                         {
                             CanPackUp = true;
                             break;
@@ -356,10 +356,7 @@ namespace BP.WF.HttpHandler
                             ht.Add("TackBackToNode", myNode);
                         }
                     }
-
                     ht.Add("CanTackBack", isCan.ToString().ToLower());
-
-
 
                     /*撤销发送*/
                     GenerWorkerLists workerlists = new GenerWorkerLists();
@@ -375,10 +372,14 @@ namespace BP.WF.HttpHandler
                     ht.Add("CanUnSend", isCan.ToString().ToLower());
                     break;
                 case WFState.Complete: // 完成.
-                case WFState.Delete: // 逻辑删除..
+                case WFState.Delete:   // 逻辑删除..
                     /*恢复使用流程*/
                     isCan = WebUser.No == "admin";
                     ht.Add("CanRollBack", isCan.ToString().ToLower());
+
+                    ht.Add("Rollback", "1");
+
+
                     //判断是否可以打印.
                     break;
                 case WFState.HungUp: // 挂起.
@@ -453,7 +454,7 @@ namespace BP.WF.HttpHandler
                     if (nd.FormUrl.Contains("?"))
                         url = "@url=&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
 
-                    url = "@url="+nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                    url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
                 }
                 re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\",\"IsDefault\":\"{3}\"", item.No, item.Name, url, item.IsDefault) + "},";
             }
@@ -576,7 +577,8 @@ namespace BP.WF.HttpHandler
                             }
 
                             newdt = dt;
-                        }else if (dt.Rows.Count > 1 &&( Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend)))
+                        }
+                        else if (dt.Rows.Count > 1 && (Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend)))
                         {
                             //删除已发送的节点，
                             if (dt.Rows.Count > 3)
@@ -612,7 +614,7 @@ namespace BP.WF.HttpHandler
                         else
                             newdt = dt.Copy();
 
-                       
+
                     }
 
                     newdt.TableName = "Track";

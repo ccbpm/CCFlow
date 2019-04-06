@@ -2466,6 +2466,37 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 回滚.
+        /// <summary>
+        /// 回滚操作.
+        /// </summary>
+        /// <returns></returns>
+        public string Rollback_Init()
+        {
+            string andsql = " ";
+            andsql += " AND ActionType=" + (int)ActionType.Start;
+            andsql += " AND ActionType=" + (int)ActionType.TeampUp;
+            andsql += " AND ActionType=" + (int)ActionType.Forward;
+            andsql += " AND ActionType=" + (int)ActionType.HuiQian;
+
+            string sql = "SELECT RDT,NDFrom, NDFromT,EmpFrom,EmpFromT  FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + andsql;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns[0].ColumnName = "RDT";
+                dt.Columns[1].ColumnName = "NDFrom";
+                dt.Columns[2].ColumnName = "NDFromT";
+                dt.Columns[3].ColumnName = "EmpFrom";
+                dt.Columns[4].ColumnName = "EmpFromT";
+            }
+
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 回滚.
+
+
 
         #region 工作退回.
         /// <summary>
@@ -2482,32 +2513,32 @@ namespace BP.WF.HttpHandler
                 //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
                 if (dt.Rows.Count == 1)
                 {
-                   Node nd = new Node(this.FK_Node);
-                   if (nd.ReturnOneNodeRole != 0)
-                   {
-                       /* 如果:启用了单节点退回规则.
-                        */
-                       string returnMsg = "";
-                       if (nd.ReturnOneNodeRole == 1 && DataType.IsNullOrEmpty(nd.ReturnField) == false)
-                       {
-                           /*从表单字段里取意见.*/
-                           Flow fl = new Flow(nd.FK_Flow);
-                           string sql = "SELECT " + nd.ReturnField + " FROM " + fl.PTable + " WHERE OID=" + this.WorkID;
-                           returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
-                       }
+                    Node nd = new Node(this.FK_Node);
+                    if (nd.ReturnOneNodeRole != 0)
+                    {
+                        /* 如果:启用了单节点退回规则.
+                         */
+                        string returnMsg = "";
+                        if (nd.ReturnOneNodeRole == 1 && DataType.IsNullOrEmpty(nd.ReturnField) == false)
+                        {
+                            /*从表单字段里取意见.*/
+                            Flow fl = new Flow(nd.FK_Flow);
+                            string sql = "SELECT " + nd.ReturnField + " FROM " + fl.PTable + " WHERE OID=" + this.WorkID;
+                            returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
+                        }
 
-                       if (nd.ReturnOneNodeRole == 2)
-                       {
-                           /*从审核组件里取意见.*/
-                           string sql = "SELECT Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " NDFrom=" + this.FK_Node + " AND EmpFrom='" + WebUser.No + "' AND ActionType=" + (int)ActionType.WorkCheck;
-                           returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
-                       }
+                        if (nd.ReturnOneNodeRole == 2)
+                        {
+                            /*从审核组件里取意见.*/
+                            string sql = "SELECT Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " NDFrom=" + this.FK_Node + " AND EmpFrom='" + WebUser.No + "' AND ActionType=" + (int)ActionType.WorkCheck;
+                            returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
+                        }
 
-                       int toNodeID = int.Parse(dt.Rows[0][0].ToString());
+                        int toNodeID = int.Parse(dt.Rows[0][0].ToString());
 
-                       string info = BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, 0, this.FK_Node, toNodeID, returnMsg, false);
-                       return "info@" + info;
-                   }
+                        string info = BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, 0, this.FK_Node, toNodeID, returnMsg, false);
+                        return "info@" + info;
+                    }
                 }
 
                 return BP.Tools.Json.ToJson(dt);

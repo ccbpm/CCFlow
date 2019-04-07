@@ -288,12 +288,24 @@
                     var len = nodeID.toString().length;
                     var entStr = nodeID.toString().substr(len - 2);
 
+                    //判断期限是否少于三天，加警告颜色
+                    
+                    var sdt = work.RDT.replace(/\-/g, "/");
+                    sdt = new Date(Date.parse(sdt.replace(/-/g, "/")));
+                    var edt = work.SDT.replace(/\-/g, "/");
+                    edt = new Date(Date.parse(edt.replace(/-/g, "/")));
+                    passTime = GetSpanTime(sdt, edt);
                     //判断流程是否逾期
                     if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT && paras.indexOf("&IsCC=1")==-1) {
                         listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
                     }
                     else {
-                        listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
+                        if (passTime < 3 * 24 * 3600*1000) {
+                            listbox += "<td><font color='#ffac38'>" + window.lang.zhengchang + "</font></td>";
+                        } else {
+                            listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
+                        }
+                        
                     }
 
                     listbox += "<td>" + GetState(work.WFState) + "</td>";
@@ -362,6 +374,14 @@
             + " " + date.getHours() + seperator2 + date.getMinutes();
 
             return cdt;
+        }
+        function GetSpanTime(date1, date2) {
+            ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
+            var date3 = date2.getTime() - date1.getTime();  //时间差秒
+            if (date1.getTime() > date2.getTime())
+                date3 = date1.getTime() - date2.getTime();
+
+            return date3;
         }
     </script>
 </body>

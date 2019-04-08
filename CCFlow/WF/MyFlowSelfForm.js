@@ -1079,8 +1079,16 @@ function GenerWorkNode() {
     showNoticeInfo();
 
     showTbNoticeInfo();
-    //        }
-    //    })
+
+}
+
+
+function figure_Template_MsgAlert(msgAlert, i) {
+    var eleHtml = $('<div></div>');
+    var titleSpan = $('<span class="titleAlertSpan"> ' + (parseInt(i) + 1) + "&nbsp;&nbsp;&nbsp;" + msgAlert.Title + '</span>');
+    var msgDiv = $('<div>' + msgAlert.Msg + '</div>');
+    eleHtml.append(titleSpan).append(msgDiv)
+    return eleHtml;
 }
 
 var workNodeData = {};

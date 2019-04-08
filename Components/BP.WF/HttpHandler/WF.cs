@@ -1129,9 +1129,20 @@ namespace BP.WF.HttpHandler
                     md.Update();
                 }
             }
+            string endUrl = "";
+
+            if (gwf.atPara.HisHT.Count > 0)
+            {
+                foreach (var item in gwf.atPara.HisHT.Keys)
+                {
+                    endUrl += "&" + item + "=" + gwf.atPara.HisHT[item];
+                }
+            }
+
+
 
             //加入是累加表单的标志，目的是让附件可以看到.
-            string endUrl = "";
+           
             if (nd.HisFormType == NodeFormType.FoolTruck)
             {
                 endUrl = "&FormType=10&FromWorkOpt=" + this.GetRequestVal("FromWorkOpt");

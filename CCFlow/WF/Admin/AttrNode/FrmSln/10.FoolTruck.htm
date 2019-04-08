@@ -133,12 +133,29 @@
                 alert('当前节点表单没有附件。');
                 return;
             }
+
+            var idx = -1;
             if (aths.length != 1) {
-                alert("未涉及到两个附件的情况.");
-                return;
+
+                for (var i = 0; i < aths.length; i++) {
+                    var ath = aths[i];
+
+                    var bool = window.confirm('设置附件[' + ath.Name + ']?');
+                    if (bool == false)
+                        continue;
+
+                    idx = i;
+                }
+
+                if (idx == -1)
+                    return;
             }
 
-            var ath = aths[0];
+            if (idx == -1)
+                idx = 0;
+
+            var ath = aths[idx];
+
             //设置当前节点的附件权限
             var athSln = new Entity("BP.Sys.FrmAttachment");
             athSln.MyPK = "ND" + currNodeID + "_" + ath.NoOfObj + "_" + currNodeID;

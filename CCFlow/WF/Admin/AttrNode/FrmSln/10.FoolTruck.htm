@@ -128,7 +128,7 @@
             //获取NodeID的的附件权限
             var FK_MapData = "ND" + nodeID;
             var aths = new Entities("BP.Sys.FrmAttachments");
-            aths.Retrieve("FK_MapData", FK_MapData);
+            aths.Retrieve("FK_MapData", FK_MapData, "FK_Node", 0);
             if (aths.length == 0) {
                 alert('当前节点表单没有附件。');
                 return;
@@ -158,12 +158,12 @@
 
             //设置当前节点的附件权限
             var athSln = new Entity("BP.Sys.FrmAttachment");
-            athSln.MyPK = "ND" + currNodeID + "_" + ath.NoOfObj + "_" + currNodeID;
+            athSln.MyPK = ath.MyPK + "_" + currNodeID;
             athSln.SetPKVal = athSln.MyPK;
             if (athSln.IsExits() == false) {
                 athSln.CopyJSON(ath);
                 athSln.FK_MapData = athSln.FK_MapData;
-                athSln.MyPK = athSln.FK_MapData + "_" + ath.NoOfObj + "_" + currNodeID;
+                athSln.MyPK = ath.FK_MapData + "_" + ath.NoOfObj + "_" + currNodeID;
                 athSln.FK_Node = currNodeID;
                 athSln.CtrlWay = 4;
                 athSln.SetPKVal = athSln.MyPK;

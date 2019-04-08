@@ -109,7 +109,57 @@
 
         }
 
+        function findChildren(jsonArray, parentNo) {
+            var appendToTree = function (treeToAppend, o) {
+                $.each(treeToAppend, function (i, child) {
+                    if (o.id == child.ParentNo)
+                        o.children.push({
+                            "id": child.No,
+                            "text": child.Name,
+                            "children": []
+                        });
+                });
 
+                $.each(o.children, function (i, o) {
+                    appendToTree(jsonArray, o);
+                });
+
+            };
+
+            var jsonTree = [];
+            var jsonchildTree = [];
+            if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
+                $.each(jsonArray, function (i, o) {
+                    if (o.ParentNo == parentNo) {
+                        jsonchildTree.push(o);
+                        jsonTree.push({
+                            "id": o.No,
+                            "text": o.Name,
+                            "children": []
+                        });
+                    }
+                });
+
+                $.each(jsonTree, function (i, o) {
+                    appendToTree(jsonArray, o);
+                });
+
+            }
+
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.children)) {
+                        if (o.children.length == 0) {
+                            o.children = undefined;
+                        } else {
+                            _(o.children);
+                        }
+                    }
+                });
+            }
+            _(jsonTree);
+            return jsonTree;
+        }
         function BindTree() {
 
             //创建处理器.
@@ -119,16 +169,20 @@
             var pushData = handler.DoMethodReturnString("Tree_Init");
             if (pushData.indexOf("err@") != -1) {
                 alert(pushData);
-                $("#enTree").append("<li>"+pushData.replace("err@","").replace("entity",this.GetQueryString("EnsName"))+"</li>");
+                $("#enTree").append("<li>" + pushData.replace("err@", "").replace("entity", this.GetQueryString("EnsName")) + "</li>");
                 return;
             }
 
+            console.log(pushData);
             pushData = ToJson(pushData);
+
+            var jsonTree = findChildren(pushData, '0');
+
             //绑定树结构.
             // var pushData = eval('(' + treeJson + ')');
             //加载类别树
             $("#enTree").tree({
-                data: pushData,
+                data: jsonTree,
                 collapsed: true,
                 lines: true,
                 onLoadSuccess: function () {
@@ -161,11 +215,11 @@
                     }
                 },
                 onDblClick: function (node) {
-                    if($("#View_Node").is(":hidden"))
-                         EditNode(0);
+                    if ($("#View_Node").is(":hidden"))
+                        EditNode(0);
                     else
-                      EditNode(1);
-                   
+                        EditNode(1);
+
                 }
 
             });

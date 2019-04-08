@@ -32,7 +32,8 @@ namespace BP.WF.HttpHandler
                 return "err@该实体[" + this.EnsName + "]不是一个树形实体.";
 
             ens.RetrieveAll(EntityTreeAttr.Idx);
-            return ens.ToJsonOfTree();
+            //return ens.ToJsonOfTree();
+            return BP.Tools.Json.ToJson(ens.ToDataTableField("TreeTable"));
         }
         #endregion 树的实体
 

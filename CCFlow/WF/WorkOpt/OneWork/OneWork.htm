@@ -96,7 +96,7 @@
 
             if (url.indexOf("@url=") == 0) {
                 url = url.replace("@url=", "");
-                if (data.indexOf("http") == -1)
+                if (url.indexOf("http") == -1)
                 url = basePath + url;
             }
 

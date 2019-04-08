@@ -500,6 +500,8 @@ namespace BP.WF.Template
              true, true, NodeAttr.CCWriteTo, "@0=写入抄送列表@1=写入待办@2=写入待办与抄送列表", true);
                 map.SetHelperUrl(NodeAttr.CCWriteTo, "http://ccbpm.mydoc.io/?v=5404&t=17976"); //增加帮助.
 
+                map.AddTBString(NodeAttr.DoOutTimeCond, null, "执行超时的条件", false, false, 0, 300, 100);
+
                 map.AddTBString(BtnAttr.ShiftLab, "移交", "移交按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ShiftEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.ShiftLab, "http://ccbpm.mydoc.io/?v=5404&t=16257"); //增加帮助.note:none
@@ -621,6 +623,8 @@ namespace BP.WF.Template
                 // 批量审核
                 map.AddTBString(BtnAttr.BatchLab, "批量审核", "批量审核标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
+
+               
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态

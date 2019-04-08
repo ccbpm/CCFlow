@@ -2649,6 +2649,8 @@ namespace BP.WF
 
                 map.AddTBString(NodeAttr.RefOneFrmTreeType, "", "独立表单类型", false, false, 0, 100, 10);//RefOneFrmTree
 
+                map.AddTBString(NodeAttr.DoOutTimeCond, null, "执行超时的条件", false, false, 0, 300, 100);
+
                 //按钮控制部分.
                 // map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
                 map.AddTBAtParas(500);

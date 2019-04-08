@@ -4536,11 +4536,11 @@ namespace BP.WF
                 /*检查审核意见 */
                 string sql = "SELECT Msg,EmpToT FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  EmpFrom='" + WebUser.No + "' AND NDFrom=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.WorkCheck;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
-                    throw new Exception("err@请填写审核意见.");
+                if (dt.Rows.Count <= 0)
+                    throw new Exception("err@请填写审核意见."+sql);
 
-                if (dt.Rows[0][0].ToString() == "")
-                    throw new Exception("err@审核意见不能为空.");
+                if ( DataType.IsNullOrEmpty( dt.Rows[0][0].ToString() )==true)
+                    throw new Exception("err@审核意见不能为空." + sql);
             }
             return true;
         }
@@ -5736,8 +5736,12 @@ namespace BP.WF
                 throw new Exception("@当前工作您已经处理完成，或者您(" + this.Execer + " " + this.ExecerName + ")没有处理当前工作的权限。");
 
             // 第1.2: 调用发起前的事件接口,处理用户定义的业务逻辑.
+            int toNodeID = 0;
+            if (jumpToNode != null)
+                toNodeID = jumpToNode.NodeID;
+
             string sendWhen = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, this.HisNode,
-                this.HisWork, null);
+                this.HisWork, null,null, toNodeID, jumpToEmp);
 
             //返回格式. @Info=xxxx@ToNodeID=xxxx@ToEmps=xxxx
             if (sendWhen != null && sendWhen.IndexOf("@") >= 0)
@@ -6048,14 +6052,13 @@ namespace BP.WF
                     {
                         string[] nds = strs.Split(',');
                         int fromNodeID = int.Parse(nds[0]);
-                        int toNodeID = int.Parse(nds[1]);
+                        toNodeID = int.Parse(nds[1]);
                         if (fromNodeID == this.HisNode.NodeID)
                         {
                             JumpToNode = new Node(toNodeID);
                             JumpToEmp = this.HisGenerWorkFlow.HuiQianSendToEmps;
                         }
                     }
-
                 }
             }
 

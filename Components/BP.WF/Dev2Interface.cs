@@ -8647,8 +8647,11 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="tackToNodeID">取回到的节点ID</param>
         /// <returns></returns>
-        public static string Node_Tackback(int fromNodeID, Int64 workid, int tackToNodeID)
+        public static string Node_Tackback(int fromNodeID, Int64 workid, int tackToNodeID,string doMsg=null)
         {
+            if (doMsg == null)
+                doMsg = " 执行跳转审核的取回";
+
             /*
              * 1,首先检查是否有此权限.
              * 2, 执行工作跳转.
@@ -8663,10 +8666,9 @@ namespace BP.WF
 
             WorkNode wn = new WorkNode(workid, fromNodeID);
             string msg = wn.NodeSend(new Node(tackToNodeID), BP.Web.WebUser.No).ToMsgOfHtml();
-            wn.AddToTrack(ActionType.Tackback, WebUser.No, WebUser.Name, tackToNodeID, nd.Name, "执行跳转审核的取回.");
+            wn.AddToTrack(ActionType.Tackback, WebUser.No, WebUser.Name, tackToNodeID, nd.Name, doMsg);
             return msg;
         }
-
         /// <summary>
         /// 执行抄送已阅
         /// </summary>

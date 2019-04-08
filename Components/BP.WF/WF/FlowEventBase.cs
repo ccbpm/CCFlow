@@ -454,13 +454,13 @@ namespace BP.WF
         /// </summary>
         /// <param name="eventType">事件类型</param>
         /// <param name="en">实体参数</param>
-        public string DoIt(string eventType, Node currNode, Entity en, string atPara)
+        public string DoIt(string eventType, Node currNode, Entity en, string atPara, int jumpToNodeID=0,string toEmps=null)
         {
             this.HisEn = en;
             this.HisNode = currNode;
           //  this.WorkID = en.GetValInt64ByKey("OID");
-            this.JumpToEmps = null;
-            this.JumpToNodeID = 0;
+            this.JumpToEmps = toEmps;
+            this.JumpToNodeID = jumpToNodeID;
             this.SysPara = null;
             this.IsStopFlow = false;
 

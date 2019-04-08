@@ -1152,6 +1152,14 @@ namespace BP.WF
                 //让父流程的userNo登录.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
+                //@袁丽娜.
+                if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.HisGenerWorkFlow.PFlowNo, pGWF.FK_Node, pGWF.WorkID, WebUser.No) == false)
+                {
+                    /*没有权限的情况下，就移交给当前人员，让其在发送. */
+                    BP.WF.Dev2Interface.Node_Shift(this.HisGenerWorkFlow.PFlowNo, pGWF.FK_Node, pGWF.WorkID, 0, WebUser.No, "工作自动移交，让其运行到下一步。");
+                }
+
+
                 // 让当前人员向下发送，但是这种发送一定不要检查发送权限，否则的话就出错误，不能发送下去.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, rpt.Row, null, 0, null,
                     emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null);

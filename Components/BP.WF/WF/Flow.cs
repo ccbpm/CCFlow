@@ -3827,7 +3827,7 @@ namespace BP.WF
         /// <param name="atPara">参数</param>
         /// <param name="objs">发送对象，可选</param>
         /// <returns>执行结果</returns>
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, int toNode=0,string toEmps=null)
         {
             if (currNode == null)
                 return null;
@@ -3860,7 +3860,7 @@ namespace BP.WF
             if (this.FEventEntity != null)
             {
                 this.FEventEntity.SendReturnObjs = objs;
-                str = this.FEventEntity.DoIt(doType, currNode, en, atPara);
+                str = this.FEventEntity.DoIt(doType, currNode, en, atPara,toNode,toEmps);
             }
 
             FrmEvents fes = currNode.FrmEvents;

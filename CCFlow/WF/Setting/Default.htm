@@ -17,8 +17,8 @@
 				<table class="table table-bordered">
 						<tr >
 						<td align="center">
-						
-						<img  id="touxiang" border=1 src="../../DataUser/UserIcon/Default.png"; onerror="this.src='../../DataUser/UserIcon/Default.png'" /><br />
+						<img  id="touxiang" width="100" border=1 src=""; onerror="this.src='../../DataUser/UserIcon/Default.png'" />
+						<!--<img  id="touxiang" border=1 src="../../DataUser/UserIcon/Default.png"; onerror="this.src='../../DataUser/UserIcon/Default.png'" />--><br />
 							<a href='Profile.htm'>设置/修改</a> 
 						</td>
 						<td>
@@ -112,13 +112,20 @@
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(data);
 
-            var url = "../../DataUser/Siganture/" + data.UserNo + ".jpg";
-
+            var qmUrl = "../../DataUser/Siganture/" + data.UserNo + ".jpg";
             //签名.
-            var img = document.getElementById("QianMing");
-            img.src = url;
+            var qmImg = document.getElementById("QianMing");
+            qmImg.src = qmUrl;
+
+
+            var txUrl = "../../DataUser/UserIcon/" + data.UserNo + ".png";
+
+            //头像.
+            var txImg = document.getElementById("touxiang");
+            txImg.src = txUrl;
             return;
         });
+        
     </script>
 </body>
 </html>

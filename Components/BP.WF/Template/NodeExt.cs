@@ -758,6 +758,32 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 表单设置.
 
+
+                #region 考核属性.
+                map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
+                                                                             //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
+                map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
+
+                map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
+                map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
+
+                map.AddTBFloat(NodeAttr.WarningDay, 1, "工作预警(天)", true, false);    // "警告期限(0不警告)"
+                //  map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
+                //  map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
+
+                map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
+                map.AddTBInt(NodeAttr.WAlertWay, 0, "预警提醒方式", false, false); //"限期(天)"
+
+                map.AddTBFloat(NodeAttr.TCent, 2, "扣分(每延期1小时)", false, false);
+                map.AddTBInt(NodeAttr.CHWay, 0, "考核方式", false, false); //"限期(天)"
+
+                //考核相关.
+                map.AddTBInt(NodeAttr.IsEval, 0, "是否工作质量考核", true, true);
+                map.AddTBInt(NodeAttr.OutTimeDeal, 0, "超时处理方式", false, false);
+
+                #endregion 考核属性.
+
+
                 #region 父子流程.
 
                 rm = new RefMethod();

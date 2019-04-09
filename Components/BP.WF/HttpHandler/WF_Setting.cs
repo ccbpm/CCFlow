@@ -155,6 +155,33 @@ namespace BP.WF.HttpHandler
         }
         #endregion 图片签名.
 
+        #region 头像.
+        public string HeadPic_Save()
+        {
+            HttpPostedFile f = context.Request.Files[0];
+            string empNo = this.GetRequestVal("EmpNo");
+
+            if (DataType.IsNullOrEmpty(empNo) == true)
+                empNo = WebUser.No;
+            try
+            {
+                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/UserIcon/" + empNo + ".png";
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
+
+                f.SaveAs(tempFile);
+                System.Drawing.Image img = System.Drawing.Image.FromFile(tempFile);
+                img.Dispose();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+            return "上传成功！";
+        }
+        #endregion 头像.
+
         #region 切换部门.
         /// <summary>
         /// 初始化切换部门.

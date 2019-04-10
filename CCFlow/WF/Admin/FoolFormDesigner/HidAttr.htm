@@ -21,13 +21,13 @@
               var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
               window.location.href = url;
           }
-          function EditEnum(mypk, refno, ftype) {
+          function EditEnum(fk_mapdata, mypk, ftype) {
 
-              var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&DoType=Edit&FK_MapData=' + mypk + '&MyPK=' + mypk + '&FType=' + ftype;
+              var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
               window.location.href = url;
           }
-          function EditTable(mypk, refno, ftype) {
-              var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&DoType=Edit&FK_MapData=' + mypk + '&MyPK=' + mypk + '&FType=' + ftype;
+          function EditTable(fk_mapdata, mypk, ftype) {
+              var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
               window.location.href = url;
           }
 

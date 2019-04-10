@@ -118,33 +118,40 @@
 		    }
 
 		    function findChildren(jsonArray, parentNo) {
-
-		        var appendToTree = function (treeToAppend, child) {
-		            $.each(treeToAppend, function (i, o) {
-		                if (o.id == child.ParentNo) {
+		        var appendToTree = function (treeToAppend, o) {
+		            $.each(treeToAppend, function (i, child) {
+		                if (o.id == child.ParentNo)
 		                    o.nodes.push({
 		                        "id": child.No,
 		                        "text": child.Name,
 		                        "nodes": []
 		                    });
-		                } else {
-		                    appendToTree(o.nodes, child);
-		                }
 		            });
+
+		                $.each(o.nodes, function (i, o) {
+		                appendToTree(jsonArray, o);
+		            });
+
 		        };
+
 		        var jsonTree = [];
+		        var jsonchildTree = [];
 		        if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
 		            $.each(jsonArray, function (i, o) {
 		                if (o.ParentNo == parentNo) {
+		                    jsonchildTree.push(o);
 		                    jsonTree.push({
 		                        "id": o.No,
 		                        "text": o.Name,
 		                        "nodes": []
 		                    });
-		                } else {
-		                    appendToTree(jsonTree, o);
 		                }
 		            });
+
+		            $.each(jsonTree, function (i, o) {
+		                appendToTree(jsonArray, o);
+		            });
+
 		        }
 		        function _(treeArray) {
 		            $.each(treeArray, function (i, o) {

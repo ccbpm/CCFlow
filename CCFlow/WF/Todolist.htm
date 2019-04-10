@@ -298,8 +298,8 @@
                         listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
                     }
                     else {
-                        if (passTime < 3 * 24 * 3600*1000) {
-                            listbox += "<td><font color='#ffac38'>" + window.lang.zhengchang + "</font></td>";
+                        if (passTime >= 0 && passTime < 3 * 24 * 3600 * 1000) {
+                            listbox += "<td><font color='#ffac38'>" + window.lang.jinggao + "</font></td>";
                         } else {
                             listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
                         }

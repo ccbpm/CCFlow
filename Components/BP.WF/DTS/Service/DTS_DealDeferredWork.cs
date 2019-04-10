@@ -117,7 +117,7 @@ namespace BP.WF.DTS
                         msg += BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, nextNodeID, null).ToMsgOfText();
                         break;
                     case OutTimeDeal.AutoShiftToSpecUser: //移交给指定的人员.
-                        msg += BP.WF.Dev2Interface.Node_Shift(fk_flow, fk_node, workid, fid, nd.DoOutTime, "来自ccflow的自动消息:(" + BP.Web.WebUser.Name + ")工作未按时处理(" + nd.Name + "),现在移交给您。");
+                        msg += BP.WF.Dev2Interface.Node_Shift( workid,nd.DoOutTime, "来自ccflow的自动消息:(" + BP.Web.WebUser.Name + ")工作未按时处理(" + nd.Name + "),现在移交给您。");
                         break;
                     case OutTimeDeal.SendMsgToSpecUser: //向指定的人员发消息.
                         BP.WF.Dev2Interface.Port_SendMsg(nd.DoOutTime,

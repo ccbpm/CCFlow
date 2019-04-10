@@ -141,7 +141,7 @@ namespace BP.WF.DTS
                             Emp empShift = new Emp(doOutTime);
                             try
                             {
-                                BP.WF.Dev2Interface.Node_Shift(fk_flow, fk_node, workid, 0, empShift.No,
+                                BP.WF.Dev2Interface.Node_Shift(workid, empShift.No,
                                     "流程节点已经逾期,系统自动移交");
 
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +

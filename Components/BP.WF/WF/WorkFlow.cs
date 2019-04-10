@@ -1147,7 +1147,6 @@ namespace BP.WF
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();
 
-                GERpt rpt = new GERpt("ND" + int.Parse(this.HisFlow.No) + "Rpt", this.WorkID);
 
                 //让父流程的userNo登录.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
@@ -1156,12 +1155,13 @@ namespace BP.WF
                 if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.HisGenerWorkFlow.PFlowNo, pGWF.FK_Node, pGWF.WorkID, WebUser.No) == false)
                 {
                     /*没有权限的情况下，就移交给当前人员，让其在发送. */
-                    BP.WF.Dev2Interface.Node_Shift(this.HisGenerWorkFlow.PFlowNo, pGWF.FK_Node, pGWF.WorkID, 0, WebUser.No, "工作自动移交，让其运行到下一步。");
+                    BP.WF.Dev2Interface.Node_Shift( pGWF.WorkID, WebUser.No, "工作自动移交，让其运行到下一步。");
                 }
 
+               // GERpt rpt = new GERpt("ND" + int.Parse(this.HisGenerWorkFlow.PFlowNo) + "Rpt", this.HisGenerWorkFlow.PWorkID);
 
                 // 让当前人员向下发送，但是这种发送一定不要检查发送权限，否则的话就出错误，不能发送下去.
-                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, rpt.Row, null, 0, null,
+                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, null, null, 0, null,
                     emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null);
 
                 this.HisGenerWorkFlow.WFState = WFState.Complete;

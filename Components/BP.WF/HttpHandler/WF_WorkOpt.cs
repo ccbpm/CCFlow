@@ -2073,7 +2073,7 @@ namespace BP.WF.HttpHandler
             {
                 /*如果是移交操作.*/
                 string toEmps = this.GetRequestVal("ShiftToEmp");
-                return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmps, note);
+                return BP.WF.Dev2Interface.Node_Shift( this.WorkID,  toEmps, note);
             }
 
             if (actionType == "Kill")
@@ -2577,7 +2577,7 @@ namespace BP.WF.HttpHandler
         {
             string msg = this.GetRequestVal("Message");
             string toEmp = this.GetRequestVal("ToEmp");
-            return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
+            return BP.WF.Dev2Interface.Node_Shift(this.WorkID,  toEmp, msg);
         }
         /// <summary>
         /// 撤销移交

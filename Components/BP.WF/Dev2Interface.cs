@@ -2744,27 +2744,30 @@ namespace BP.WF
                     rnds.Retrieve(NodeReturnAttr.FK_Node, fk_node);
                     if (rnds.Count == 0)
                         throw new Exception("@流程设计错误，您设置该节点可以退回指定的节点，但是指定的节点集合为空，请在节点属性设置它的制订节点。");
-                    foreach (WorkNode mywn in wns)
+
+                    foreach (NodeReturn item in rnds)
                     {
-                        if (mywn.HisNode.NodeID == fk_node)
+                        GenerWorkerLists gwls = new GenerWorkerLists();
+                        int i = gwls.Retrieve(GenerWorkerListAttr.FK_Node, item.ReturnTo,
+                            GenerWorkerListAttr.WorkID, workid);
+                        if (i == 0)
                             continue;
 
-                        if (rnds.Contains(NodeReturnAttr.ReturnTo,
-                            mywn.HisNode.NodeID) == false)
-                            continue;
+                        foreach (GenerWorkerList gwl in gwls)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["No"] = gwl.FK_Node.ToString();
+                            dr["Name"] = gwl.FK_NodeText;
+                            dr["Rec"] = gwl.FK_Emp;
+                            dr["RecName"] = gwl.FK_EmpText;
+                            Node mynd = new Node(item.FK_Node);
+                            if (mynd.IsBackTracking) //是否可以原路返回.
+                                dr["IsBackTracking"] = "1";
+                            else
+                                dr["IsBackTracking"] = "0";
 
-                        DataRow dr = dt.NewRow();
-                        dr["No"] = mywn.HisNode.NodeID.ToString();
-                        dr["Name"] = mywn.HisNode.Name;
-                        dr["Rec"] = mywn.HisWork.Rec;
-                        dr["RecName"] = mywn.HisWork.RecText;
-
-                        if (mywn.HisNode.IsBackTracking) //是否可以原路返回.
-                            dr["IsBackTracking"] = "1";
-                        else
-                            dr["IsBackTracking"] = "0";
-
-                        dt.Rows.Add(dr);
+                            dt.Rows.Add(dr);
+                        }
                     }
                     break;
                 case ReturnRole.ByReturnLine: //按照流程图画的退回线执行退回.
@@ -8376,14 +8379,32 @@ namespace BP.WF
         /// <summary>
         /// 工作移交
         /// </summary>
-        /// <param name="workid">工作ID</param>
-        /// <param name="toEmp">移交到人员(只给移交给一个人)</param>
-        /// <param name="msg">移交消息</param>
+        /// <param name="flowNo"></param>
+        /// <param name="nodeID"></param>
+        /// <param name="workID"></param>
+        /// <param name="fid"></param>
+        /// <param name="toEmp"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         public static string Node_Shift(string flowNo, int nodeID, Int64 workID, Int64 fid, string toEmp, string msg)
         {
+            return Node_Shift(workID, toEmp, msg);
+        }
+        /// <summary>
+        /// 工作移交
+        /// </summary>
+        /// <param name="workID">工作ID</param>
+        /// <param name="toEmp">要移交的人</param>
+        /// <param name="msg">移交信息</param>
+        /// <returns>执行结果</returns>
+        public static string Node_Shift(Int64 workID, string toEmp, string msg)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
+            int i = 0;
             //人员.
             Emp emp = new Emp(toEmp);
-            Node nd = new Node(nodeID);
+            Node nd = new Node(gwf.FK_Node);
 
             if (nd.TodolistModel == TodolistModel.Order
                 || nd.TodolistModel == TodolistModel.Teamup
@@ -8392,8 +8413,8 @@ namespace BP.WF
                 /*如果是队列模式，或者是协作模式. */
                 try
                 {
-                    string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + nodeID + " AND WorkID=" + workID;
-                    int i = BP.DA.DBAccess.RunSQL(sql);
+                    string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
+                    i = BP.DA.DBAccess.RunSQL(sql);
                 }
                 catch
                 {
@@ -8401,7 +8422,7 @@ namespace BP.WF
                 }
 
                 //记录日志.
-                Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, fid, nd.NodeID, nd.Name,
+                Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
                     WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
                 string info = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
@@ -8409,140 +8430,43 @@ namespace BP.WF
                 //移交后事件
                 info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
 
-                info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+                info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
                 return info;
             }
 
-            GenerWorkFlow gwf = new GenerWorkFlow();
-            gwf.WorkID = workID;
-            if (gwf.RetrieveFromDBSources() == 0)
+            if (gwf.WFSta == WFSta.Complete)
+                throw new Exception("@流程已经完成，您不能执行移交了。");
+
+            GenerWorkerLists gwls = new GenerWorkerLists();
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
+            gwls.Delete(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
+
+
+            foreach (GenerWorkerList item in gwls)
             {
-                /*说明开始节点数据表单移交.*/
-                gwf.WorkID = workID;
-                gwf.Title = "由" + WebUser.No + " ; " + WebUser.Name + ", 在(" + DataType.CurrentDataCNOfShort + ")移交来的工作";
-                gwf.FK_Dept = WebUser.FK_Dept;
-                gwf.FK_Flow = flowNo;
-
-                Flow fl = new Flow(flowNo);
-                gwf.FK_FlowSort = fl.FK_FlowSort;
-                gwf.SysType = fl.SysType;
-                gwf.FK_Node = nodeID;
-                gwf.Starter = emp.No;
-                gwf.StarterName = emp.Name;
-                gwf.WFState = WFState.Shift;
-                gwf.TodoEmps = toEmp + "," + emp.Name + ";";
-                gwf.TodoEmpsNum = 1;
-                gwf.RDT = DataType.CurrentDataTime;
-                gwf.NodeName = "";
-                gwf.FlowName = fl.Name;
-                gwf.Emps = toEmp;
-                gwf.DeptName = WebUser.FK_DeptName;
-                gwf.Insert();
-
-                GenerWorkerList gwl = new GenerWorkerList();
-                gwl.WorkID = workID;
-                gwl.FK_Dept = WebUser.FK_Dept;
-                gwl.FK_DeptT = WebUser.FK_DeptName;
-
-                //gwl.FK_DeptT = WebUser.FK_DeptName;
-                gwl.FK_Node = nodeID;
-                gwl.FK_NodeText = nd.Name;
-
-                gwl.FK_Emp = toEmp;
-                gwl.FK_EmpText = emp.Name;
-
-                gwl.FK_Flow = flowNo;
-
-                gwl.IsPass = false;
-                gwl.IsPassInt = 0;
-                gwl.IsRead = false;
-                gwl.PressTimes = 0;
-                gwl.SDT = gwf.RDT;
-                //gwl.Sender = WebUser.No;
-                gwl.Insert();
+                item.FK_Emp = emp.No;
+                item.FK_EmpText = emp.Name;
+                item.IsEnable = true;
+                item.Insert();
+                break;
             }
-            else
-            {
-                if (gwf.WFSta == WFSta.Complete)
-                    throw new Exception("@流程已经完成，您不能执行移交了。");
 
-                // 删除当前非配的工作。
-                // 已经非配或者自动分配的任务。
-                //设置所有的工作人员为不可处理.
-                string dbStr = SystemConfig.AppCenterDBVarStr;
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerlist SET IsEnable=0  WHERE WorkID=" + dbStr + "WorkID AND FK_Node=" + dbStr + "FK_Node";
-                ps.Add(GenerWorkerListAttr.WorkID, workID);
-                ps.Add(GenerWorkerListAttr.FK_Node, nodeID);
-                DBAccess.RunSQL(ps);
+            gwf.WFState = WFState.Shift;
+            gwf.TodoEmpsNum = 1;
+            gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
+            gwf.Update();
 
-
-                //设置被移交人的FK_Emp 为当前处理人，（有可能被移交人不在工作列表里，就返回0.）
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerlist SET IsEnable=1  WHERE WorkID=" + dbStr + "WorkID AND FK_Node=" + dbStr + "FK_Node AND FK_Emp=" + dbStr + "FK_Emp";
-                ps.Add(GenerWorkerListAttr.WorkID, workID);
-                ps.Add(GenerWorkerListAttr.FK_Node, nodeID);
-                ps.Add(GenerWorkerListAttr.FK_Emp, toEmp);
-                int i = DBAccess.RunSQL(ps);
-
-                GenerWorkerLists wls = null;
-                GenerWorkerList wl = null;
-                if (i == 0)
-                {
-                    /*说明: 用其它的岗位上的人来处理的，就给他增加共享工作。*/
-                    wls = new GenerWorkerLists(workID, nodeID);
-                    if (wls.Count == 0)
-                    {
-                        if (nd.IsStartNode == false)
-                            throw new Exception("@流程引擎 GenerWorkerLists 数据丢失, workID=" + workID + ",nodeID=" + nodeID);
-
-                        wl = new GenerWorkerList();
-                        wl.FK_Dept = BP.Web.WebUser.FK_Dept;
-                        wl.FK_DeptT = WebUser.FK_DeptName;
-
-                        //   mygwfl.FK_DeptT = BP.Web.WebUser.FK_DeptName;
-                        wl.WorkID = workID;
-                        wl.FID = 0;
-                        wl.FK_Emp = BP.Web.WebUser.No;
-                        wl.FK_EmpText = BP.Web.WebUser.Name;
-                        wl.FK_Node = nodeID;
-                        wl.FK_NodeText = nd.Name;
-                        wl.Sender = BP.Web.WebUser.No;
-                        wl.IsPass = false;
-                        wl.IsRead = false;
-                        wl.IsEnable = true;
-                        wl.Insert();
-                        wls.AddEntity(wl);
-                    }
-                    else
-                        wl = wls[0] as GenerWorkerList;
-
-                    wl.FK_Emp = toEmp.ToString();
-                    wl.FK_EmpText = emp.Name;
-                    wl.IsEnable = true;
-                    wl.IsRead = false;
-                    wl.Insert();
-
-                    // 清除工作者，为转发消息所用.
-                    wls.Clear();
-                    wls.AddEntity(wl);
-                }
-
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + (int)WFState.Shift + ", WFSta=" + (int)WFSta.Runing + "   WHERE WorkID=" + dbStr + "WorkID ";
-                ps.Add(GenerWorkerListAttr.WorkID, workID);
-                DBAccess.RunSQL(ps);
-            }
 
             ShiftWork sf = new ShiftWork();
             sf.WorkID = workID;
-            sf.FK_Node = nodeID;
+            sf.FK_Node = gwf.FK_Node;
             sf.ToEmp = toEmp;
             sf.ToEmpName = emp.Name;
             sf.Note = msg;
             sf.FK_Emp = WebUser.No;
             sf.FK_EmpName = WebUser.Name;
             sf.Insert();
+
             //记录日志.
             Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
                 WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
@@ -8555,7 +8479,7 @@ namespace BP.WF
             //移交后事件
             inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
 
-            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
             return inf1o;
         }
         /// <summary>
@@ -8586,6 +8510,19 @@ namespace BP.WF
         {
             WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg);
             return wr.DoIt();
+        }
+        /// <summary>
+        /// 退回
+        /// </summary>
+        /// <param name="workID">工作ID</param>
+        /// <param name="returnToNodeID">要退回的节点</param>
+        /// <param name="msg">退回信息</param>
+        /// <param name="isBackToThisNode">是否原路返回</param>
+        /// <returns>执行结果</returns>
+        public static string Node_ReturnWork(Int64 workID, int returnToNodeID, string msg, bool isBackToThisNode)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            return Node_ReturnWork(gwf.FK_Flow, workID, gwf.FID, gwf.FK_Node, returnToNodeID, null, msg, isBackToThisNode);
         }
         /// <summary>
         /// 退回
@@ -8647,7 +8584,7 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="tackToNodeID">取回到的节点ID</param>
         /// <returns></returns>
-        public static string Node_Tackback(int fromNodeID, Int64 workid, int tackToNodeID,string doMsg=null)
+        public static string Node_Tackback(int fromNodeID, Int64 workid, int tackToNodeID, string doMsg = null)
         {
             if (doMsg == null)
                 doMsg = " 执行跳转审核的取回";

@@ -981,7 +981,7 @@ namespace BP.WF.Data
 
             try
             {
-                BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, ToEmp, Note);
+                BP.WF.Dev2Interface.Node_Shift(this.WorkID, ToEmp, Note);
                 return "移交成功";
             }
             catch (Exception ex)

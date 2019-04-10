@@ -43,6 +43,7 @@
     "leixing": "类型",
     "yuqi": "逾期",
     "zhengchang": "正常",
+    "jinggao": "警告",
     "heji": "合计",
     "record": "条",
     "records": "条",

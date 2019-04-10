@@ -91,6 +91,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
 
         cbx.combobox("loadData", data);
+        $(".textbox-text").css("width", "100%");
         if (mapAttr != null && mapAttr.UIIsEnable != 1) {
             cbx.combobox('disable');
         }

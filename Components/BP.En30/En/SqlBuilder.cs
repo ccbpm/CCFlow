@@ -2452,21 +2452,18 @@ namespace BP.En
                             }
                             break;
                         case DataType.AppMoney:
-                            str = en.GetValStrByKey(attr.Key) as string;
-                            if (DataType.IsNullOrEmpty(str))
+                            object val = en.Row.GetValByKey(attr.Key);
+                            if (val == null || val == DBNull.Value)
                             {
-                                if (IsEnableNull)
-                                    ps.Add(attr.Key, DBNull.Value);
-                                else
-                                    ps.Add(attr.Key, 0);
-                            }
-                            else
-                            {
+                                str = "0";
+                            }else{
+                                str = val.ToString();
                                 str = str.Replace("￥", "");
                                 str = str.Replace(",", "");
-
-                                ps.Add(attr.Key, decimal.Parse(str));
                             }
+
+                            ps.Add(attr.Key, double.Parse(str, System.Globalization.NumberStyles.Any));
+                           
                             break;
                         case DataType.AppDate: // 如果是日期类型。
                         case DataType.AppDateTime:

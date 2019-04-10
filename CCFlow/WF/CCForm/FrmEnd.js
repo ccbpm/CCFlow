@@ -70,6 +70,17 @@
             if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
                 $('#editor').val(val);
             } else {
+                if (mapAttr.MyDataType == 8) {
+                    //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+                    var attrdefVal = mapAttr.DefVal;
+                    var bit;
+                    if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+                        bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+                    else
+                        bit = 2;
+                    if(bit == 2)
+                        val = formatNumber(val, 2, ",");
+                }
                 $('#TB_' + mapAttr.KeyOfEn).val(val);
             }
         }

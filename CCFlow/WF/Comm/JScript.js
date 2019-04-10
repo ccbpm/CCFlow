@@ -740,25 +740,31 @@ function valitationBefore(o, validateType) {
 }
 
 function valitationAfter(o, validateType) {
-	if (isFF()) {
-		var value = o.value;
-		var flag = false;
-		switch (validateType) {
-			case "int" :
-				flag = (!isNaN(value) && value % 1 === 0);
-			break;
-			case "float" :
-			case "money" :
-			    if (value.indexOf("-") == 0 && value.length == 1)
-			        break;
-			    else {
-			        flag = !isNaN(value);
-			        break;
-			    }
-		}        if (!flag) {
-			o.value = 0;
-		}
-	}
+    var value = o.value;
+    value = value.replace(/[^\d.-]/g, "");
+    if (isFF()) {
+        var flag = false;
+        switch (validateType) {
+            case "int":
+                flag = (!isNaN(value) && value % 1 === 0);
+                break;
+            case "float":
+            case "money":
+                if (value.indexOf("-") == 0 && value.length == 1)
+                    break;
+                else {
+                    flag = !isNaN(value);
+                    break;
+                }
+        }
+        if (!flag) {
+            o.value = 0;
+        }else
+        o.value = value;
+    } else {
+        if (isNaN(value)) execCommand('undo');
+        o.value = value;
+    }
 }
 
 /**
@@ -770,7 +776,7 @@ function limitLength(obj, length) {
     if (length != null && length != "" && length != "undefined") {
         if (obj.value.indexOf('.')>=0 && obj.value.split('.')[1].length > length) {
             obj.value = obj.value.substring(0, obj.value.length - 1);
-            obj.focus();
+            //obj.focus();
         }
     }
 }
@@ -797,4 +803,47 @@ function limitLength(obj, length) {
                 obj.value= obj.value.substr(1,obj.value.length);      
             }  
         }      
-    }      
+    }
+    function FormatMoney(obj, precision, separator) {
+        if (precision == undefined || precision == null || precision == "")
+            precision = 2;
+        if (precision != 2)
+            return;
+        var val = formatNumber(obj.value, precision, separator);
+        if (val != NaN)
+            obj.value = val;
+
+    }
+
+    /** 
+    * 将数值格式化成金额形式 
+    * 
+    * @param num 数值(Number或者String) 
+    * @param precision 精度，默认不变
+    * @param separator 分隔符，默认为逗号
+    * @return 金额格式的字符串,如'1,234,567'，默认返回NaN
+    * @type String 
+    */
+    function formatNumber(num, precision, separator) {
+        if (precision != 2)
+            return num;
+        var parts;
+        // 判断是否为数字
+        if (!isNaN(parseFloat(num)) && isFinite(num)) {
+            // 把类似 .5, 5. 之类的数据转化成0.5, 5, 为数据精度处理做准, 至于为什么
+            // 不在判断中直接写 if (!isNaN(num = parseFloat(num)) && isFinite(num))
+            // 是因为parseFloat有一个奇怪的精度问题, 比如 parseFloat(12312312.1234567119)
+            // 的值变成了 12312312.123456713
+            num = Number(num);
+            // 处理小数点位数
+            num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)).toFixed(precision) : num).toString();
+            // 分离数字的小数部分和整数部分
+            parts = num.split('.');
+            // 整数部分加[separator]分隔, 借用一个著名的正则表达式
+            parts[0] = parts[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + (separator || ','));
+
+            return parts.join('.');
+        }
+        return NaN;
+    }
+

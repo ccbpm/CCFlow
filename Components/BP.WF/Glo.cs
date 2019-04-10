@@ -1157,6 +1157,9 @@ namespace BP.WF
         {
             get
             {
+                if (SystemConfig.CustomerNo == "TianYe")
+                    return true;
+
                 return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableHuiQianList", false);
             }
         }

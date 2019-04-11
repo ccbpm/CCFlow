@@ -77,8 +77,11 @@ namespace BP.WF.HttpHandler
 
                 foreach (BP.GPM.DeptEmpStation item in des)
                 {
-                    BP.Port.Dept dept = new Dept(item.FK_Dept);
-                    depts += dept.Name + "、";
+                    BP.Port.Dept dept = new Dept();
+                    dept.No = item.FK_Dept;
+                    int count = dept.RetrieveFromDBSources();
+                    if(count !=0)
+                        depts += dept.Name + "、";
 
                    
                    if (DataType.IsNullOrEmpty(item.FK_Station) == true)
@@ -93,7 +96,10 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-                    BP.Port.Station sta = new Station(item.FK_Station);
+                    BP.Port.Station sta = new Station();
+                    sta.No = item.FK_Station;
+                    count = sta.RetrieveFromDBSources();
+                    if (count != 0)
                     stas += sta.Name + "、";
                 }
 

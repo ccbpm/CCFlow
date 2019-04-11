@@ -137,9 +137,9 @@ function GenerFoolFrm(mapData, frmData) {
 
     $('#CCForm').html("").append(html);
 
-
+    if (pageData.IsReadonly == "0")
     //表单联动设置
-    Set_Frm_Enable(frmData);
+        Set_Frm_Enable(frmData);
 
 }
 
@@ -172,7 +172,8 @@ function Set_Frm_Enable(frmData) {
                     /*启用了显示与隐藏.*/
                     var rb = $("#RB_" + mapAttr.KeyOfEn);
                     var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+                    if (nowKey != null || nowKey != undefined)
+                        setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }
             }
@@ -263,7 +264,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             }
             isDropTR = true;
             html += "<tr>";
-           if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
+            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
                 html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
@@ -312,7 +313,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=2   rowSpan=" + rowSpan + " style='text-align:left;'>";
-            else if (attr.MyDataType != 4 ||  attr.UIContralType != "9")
+            else if (attr.MyDataType != 4 || attr.UIContralType != "9")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=4  rowSpan=" + rowSpan + " class='tdSpan'>";
             if (attr.UIContralType != "10") {
                 html += InitMapAttrOfCtrl(attr, enable, defval);
@@ -353,7 +354,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             if (isShowTdLeft == true) {
                 recordRowLeft = rowSpan;
                 haveDropRowLeft = 0;
-               if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
+                if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
                     html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
                 } else if (attr.UIContralType == "10") {
@@ -388,7 +389,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             if (isShowTdRight == true) {
                 recordRowRight = rowSpan;
                 haveDropRowRight = 0;
-                 if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
+                if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
                     html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
                 } else if (attr.UIContralType == "10") {
@@ -561,7 +562,7 @@ function InitMapAttrOfCtrl(mapAttr) {
                 return eleHtml;
             }
 
-           
+
 
             var enableAttr = '';
             if (mapAttr.UIIsEnable == 0)
@@ -722,7 +723,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             bit = 2;
 
-        return "<input style='text-align:right;width:100%' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',');" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input style='text-align:right;width:100%' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");
@@ -1064,7 +1065,7 @@ function Ele_Attachment(workNode, gf) {
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + gf.CtrlID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;
 
-   
+
 }
 
 

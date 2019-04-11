@@ -844,6 +844,6 @@ function limitLength(obj, length) {
 
             return parts.join('.');
         }
-        return NaN;
+        return 0;
     }
 

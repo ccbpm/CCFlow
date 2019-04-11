@@ -929,7 +929,7 @@ function Send(isHuiQian) {
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
 
-//        var selectToNode = $('#DDL_ToNode  option:selected').data();
+       var selectToNode = $('#DDL_ToNode  option:selected').data();
         toNodeID = selectToNode.No;
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口

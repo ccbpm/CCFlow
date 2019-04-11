@@ -1,4 +1,7 @@
-.login-bg{ background: url(../images/login_bg.png) no-repeat center top;}
+.login-bg{ background: url(../images/login_bg.png) no-repeat center center fixed;
+             
+           background-size: 100% 100%;    
+    }
 
 /*login box*/
 .login-box{z-index:100;margin:0 auto;padding-top:10%;max-width:360px}

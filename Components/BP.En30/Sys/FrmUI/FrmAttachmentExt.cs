@@ -945,6 +945,7 @@ namespace BP.Sys.FrmUI
                 gf.Lab = this.Name;
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlType = "Ath";
+                gf.CtrlID = this.MyPK;
                 gf.Insert();
             }
             else
@@ -952,6 +953,7 @@ namespace BP.Sys.FrmUI
                 gf.Lab = this.Name;
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlType = "Ath";
+                gf.CtrlID = this.MyPK;
                 gf.Update();
             }
 

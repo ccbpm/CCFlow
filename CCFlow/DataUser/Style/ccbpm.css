@@ -1,4 +1,12 @@
 ﻿/*  Table 风格   */
+.no-input
+{
+     border: none; 
+     background: none; 
+     text-align: right; 
+     color: #666; 
+     cursor: no-drop;
+ }
 body
 {
     color: #333333;
@@ -7,6 +15,31 @@ body
     margin: 0px !important;
     font-size: 14px;
     direction: ltr;
+}
+
+.form-unit-title {
+    font-size: 15px;
+    font-style: oblique;
+    color: #6379bb;
+    margin: 8px 10px 25px 10px;
+    padding-bottom: 5px;
+}
+
+.form-unit {
+    font-size: 15px;
+    font-style: oblique;
+    color: #6379bb;
+    border-bottom: 1px solid #ddd;
+    margin: 8px 10px 25px 10px;
+    padding-bottom: 5px;
+}
+
+input[type=text], input[type=password], select
+{
+    border-radius: 5px;
+    border: thin solid #CCCCCC;
+    margin: 1px 1px;
+    height:28px;
 }
 
 /* 按钮风格 */
@@ -19,7 +52,7 @@ input[type="button"], input[type="submit"], input[type="file"]
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-    border:1px solid #1d7dd4;
+    border:1px solid #d2cdcd;
 }
 input:hover[type="button"]
 {
@@ -37,29 +70,55 @@ input:hover[type="button"]
 /*文本框只读风格.*/
 input[disabled], input:disabled
 {
-    border: 1px solid #DDD;
+    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
-    color: #009999;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
 }
 /*文本框只读风格.*/
 textarea[disabled], input:disabled
 {
-    border: 1px solid #DDD;
+    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
-    color: #009999;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
 }
 /*文本框只读风格.*/
 select[disabled], input:disabled
 {
-    border: 1px solid #DDD;
+   /**border: 1px solid #DDD;
     background-color: #F5F5F5;
-    color: #009999;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
+     appearance:none;   
+      -moz-appearance:none;   
+      -webkit-appearance:none;   
 }
+
+ 
   
 /*  table 类型风格 */
 table
 {
-    border: 1px outset #C0C0C0;
+    border: 0px outset #C0C0C0;
     padding: inherit;
     margin: 0;
     border-collapse: collapse;
@@ -83,14 +142,14 @@ table
 
 th
 {
-    border-width: 1px;
+    border-width: 0px;
     border-color: #C2D5E3;
     border-style: solid;
     line-height: 25px;
     color: 0a0a0a;
     white-space: nowrap;
     padding: 5px 2px;
-    background-color: #e0ecff;
+    /**background-color: #e0ecff;**/
     font-size: 14px;
     text-align: left;
     font-size: 12px;
@@ -127,7 +186,7 @@ td
     color: #333333;
     font-size: 12px;
     border-width: 1px;
-    border-color: #C2D5E3;
+    border-color: #d2cdcd;
 }
 
 
@@ -377,13 +436,7 @@ display:block;
     display: table;
 }
 
-input[type=text], input[type=password], select
-{
-    border-radius: 5px;
-    border: thin solid #CCCCCC;
-    margin: 1px 1px;
-    height:28px;
-}
+
 
 .FDesc
 {
@@ -422,7 +475,7 @@ textarea,iframe[src*="Ath.htm"] {
     padding: 8px 0px 0px 0px;
     margin: 8px 15px 15px 15px;
     border: #EFEFEF 1px solid;
-    overflow: auto;
+    /**overflow: auto;*/
 }
  
 #contentDiv {
@@ -444,7 +497,7 @@ display:none;
 }
 
 .modal-header {
-    background: #6975F4;
+    background: #f2f2f2;
     color: white;
     height:50px;
 }
@@ -454,12 +507,13 @@ display:none;
     border-radius: 20px;
     margin: 15px 10px;
     text-align:right;
+    
 }
 
 .btn {
-    background: #2884fa !important;
+    background: ##f2f2f2 !important;
     border-radius: 20px !important;
-    color:white !important;
+    color:#0000007a !important;
 }
 
 .errorBorder {
@@ -583,6 +637,7 @@ cursor:pointer;
 .modal-title {
     text-align: left;
     font-size: 16px;
+    color:#0000007a;
 }
 
 .input-group-addon {
@@ -756,5 +811,16 @@ body table tr td {
     margin-right: 10px !important;
 }
 
+/*
+fieldset
+{
+    border-style: none;
+    border-color: #999966;
+    border-top-width: 2px;
+}
 
- 
+legend
+{
+    background-color: #669999;
+}*/
+

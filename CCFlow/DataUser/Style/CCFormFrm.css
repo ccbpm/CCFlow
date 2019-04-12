@@ -117,3 +117,8 @@ border: lightgrey 0px solid;
 border-top: none;
 width: 18%;
 }
+
+.tdSpan
+{
+    text-align:left;padding-left: 15%;
+}

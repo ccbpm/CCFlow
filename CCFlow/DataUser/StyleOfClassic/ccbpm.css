@@ -37,23 +37,47 @@ input:hover[type="button"]
 /*文本框只读风格.*/
 input[disabled], input:disabled
 {
-    border: 1px solid #DDD;
+    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
-    color: #009999;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
 }
 /*文本框只读风格.*/
 textarea[disabled], input:disabled
 {
-    border: 1px solid #DDD;
+    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
-    color: #009999;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
 }
 /*文本框只读风格.*/
 select[disabled], input:disabled
 {
-    border: 1px solid #DDD;
+   /**border: 1px solid #DDD;
     background-color: #F5F5F5;
-    color: #009999;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
+     appearance:none;   
+      -moz-appearance:none;   
+      -webkit-appearance:none;   
 }
   
 /*  table 类型风格 */

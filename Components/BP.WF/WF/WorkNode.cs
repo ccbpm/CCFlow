@@ -925,12 +925,12 @@ namespace BP.WF
                 {
                     string[] para = new string[1];
                     para[0] = this.HisWorkerLists.Count.ToString();
-                    string info = BP.WF.Glo.multilingual("共({0})人接收\t\n", "WorkNode", "total_receivers", para);
+                    string info = BP.WF.Glo.multilingual("共({0})人接收:", "WorkNode", "total_receivers", para);
 
                     string emps = "";
                     foreach (GenerWorkerList wl in this.HisWorkerLists)
                     {
-                        info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + "\t\n";
+                        info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + ":";
 
                         emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
                     }

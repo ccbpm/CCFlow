@@ -214,7 +214,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 接受人sql
         /// </summary>
-        public string DeliveryParas
+        public string DeliveryParas11
         {
             get
             {

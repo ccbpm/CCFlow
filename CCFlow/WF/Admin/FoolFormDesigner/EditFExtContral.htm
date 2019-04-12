@@ -17,9 +17,18 @@
             var mypk = GetQueryString("MyPK");
             var keyOfEn = GetQueryString("KeyOfEn");
             var fk_mapData = GetQueryString("FK_MapData");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("SQLKey", "EditFExtContral_AthList");
+            handler.AddPara("Paras", "@FK_MapData=" + fk_mapData);
+            var data = handler.DoMethodReturnString("SQLList");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
 
-            // 绑定附件列表.
-            GenerBindSQL("DDL_Ath", "EditFExtContral_AthList", "@FK_MapData=" + fk_mapData);
+            data = JSON.parse(data);
+
+            // 绑定附件列表"
+            GenerBindDDL("DDL_Ath", data, "NO", "NAME");
 
             var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
 
@@ -35,8 +44,8 @@
                 case "10": //文本
                     break;
                 case "6": //附件扩展组件..
-                    $("#DDL_Ath").val(mapAttr.AthRefObj); //设置选择的值.
-                    $("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
+                    $("#DDL_Ath").val(mapAttr.GetPara("AthRefObj")); //设置选择的值.
+                    $("#DDL_AthShowModel").val(mapAttr.GetPara("AthShowModel")); //设置选择的值.
                     break;
                 case "9": //超链接
                     var url = mapAttr.GetPara("Url");

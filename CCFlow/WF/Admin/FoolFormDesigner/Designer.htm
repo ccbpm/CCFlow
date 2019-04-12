@@ -908,7 +908,8 @@
             switch (groupEn.CtrlType) {
 
                 case "Ath":
-
+                    if (groupEn.CtrlID == "")
+                        return "";
                     var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
                     var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK + "&IsReadonly=1";
 

@@ -23,6 +23,12 @@
             $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#RB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#TB_' + mapAttr.KeyOfEn).removeClass("form-control");
+            $('#CB_' + mapAttr.KeyOfEn).removeClass("form-control");
+            $('#RB_' + mapAttr.KeyOfEn).removeClass("form-control");
+            $('#DDL_' + mapAttr.KeyOfEn).removeClass("form-control");
+            if (mapAttr.MyDataType == "8")
+                $('#TB_' + mapAttr.KeyOfEn).css("text-align", "");
         }
     }
 
@@ -282,16 +288,6 @@ function AfterBindEn_DealMapExt(frmData) {
         }
 
         mapAttr = new Entity("BP.Sys.MapAttr", mapAttr);
-
-        //        mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-
-        //        var count = mapAttr.RetrieveFromDBSources();
-
-        //        //MapAttr属性不存在删除他的扩张
-        //        if (count == 0) {
-        //            mapExt.Delete();
-        //            continue;
-        //        }
 
         //判断MapAttr属性是否可编辑不可以编辑返回
         if (mapAttr.UIVisible == 0)

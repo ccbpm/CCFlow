@@ -382,7 +382,11 @@ function GenerFrm() {
 
     ShowTextBoxNoticeInfo();
 
-
+    //textarea的高度自适应的设置
+    var textareas = $("textarea");
+    $.each(textareas, function (idex, item) {
+        autoTextarea(item);
+    });
     //给富文本 创建编辑器
     if (document.BindEditorMapAttr) {
         var editor = document.activeEditor = UM.getEditor('editor', {
@@ -411,6 +415,7 @@ function GenerFrm() {
             setContentHeight();
         }
     }
+
 
 }
 

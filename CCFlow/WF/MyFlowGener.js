@@ -1574,6 +1574,12 @@ function GenerWorkNode() {
     $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
     //原有的
 
+    //textarea的高度自适应的设置
+    var textareas = $("textarea");
+    $.each(textareas, function (idex, item) {
+        autoTextarea(item);
+    });
+
     //为 DISABLED 的 TEXTAREA 加TITLE 
     var disabledTextAreas = $('#divCCForm textarea:disabled');
     $.each(disabledTextAreas, function (i, obj) {

@@ -5240,6 +5240,11 @@ namespace BP.WF
                 if (this.HisNode.IsEndNode == false)
                     this.CheckCompleteCondition();
 
+                //调用发送成功事件.
+                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                 //执行时效考核.
                 if (this.rptGe == null)
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
@@ -5913,6 +5918,12 @@ namespace BP.WF
                         gwl.Delete(GenerWorkerListAttr.FK_Node, this.HisNode.NodeID,
                             GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, this.Execer);
 
+                        //调用发送成功事件.
+                        string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                            this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                        this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+
                         //执行时效考核.
                         Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
@@ -5997,6 +6008,12 @@ namespace BP.WF
             {
                 if (this.DealOradeNode() == true)
                 {
+                    //调用发送成功事件.
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+
+                    this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;
@@ -6036,6 +6053,12 @@ namespace BP.WF
                         this.HisGenerWorkFlow.Update();
                     }
 
+
+                    //调用发送成功事件.
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    this.HisMsgObjs.AddMsg("info1", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;
@@ -6068,6 +6091,12 @@ namespace BP.WF
                 /* 如果是协作组长模式.*/
                 if (this.DealTeamupGroupLeader() == true)
                 {
+
+                    //调用发送成功事件.
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    this.HisMsgObjs.AddMsg("info1", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                     //执行时效考核.
                     //Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;
@@ -6123,6 +6152,11 @@ namespace BP.WF
                                 //写入track.
                                 this.AddToTrack(ActionType.Forward, this.JumpToEmp, toEmpName, this.JumpToNode.NodeID, this.JumpToNode.Name, "退回后发送");
 
+                                //调用发送成功事件.
+                                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                                this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                                 //执行时效考核.
                                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                                 return this.HisMsgObjs;
@@ -6142,6 +6176,12 @@ namespace BP.WF
 
                                 //写入track.
                                 this.AddToTrack(ActionType.Forward, this.JumpToEmp, toEmpName, this.JumpToNode.NodeID, this.JumpToNode.Name, "退回后发送(按照自定义运行模式)");
+
+                                //调用发送成功事件.
+                                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+
+                                this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
                                 //执行时效考核.
                                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);

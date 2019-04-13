@@ -777,9 +777,11 @@ namespace BP.WF
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        qo.addLeftBracket();
                         qo.AddWhere(GEDtlAttr.RefPK, pkval);
                         qo.addOr();
                         qo.AddWhere(GEDtlAttr.FID, pkval);
+                        qo.addRightBracket();
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.
                         if (fid == 0)

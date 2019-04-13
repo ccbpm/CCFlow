@@ -1004,12 +1004,12 @@ namespace BP.WF
 
                 // 需要更新当前人待办的状态, 把1000作为特殊标记，让其发送时可以找到他.
                 string sql = "UPDATE WF_GenerWorkerlist SET IsPass=1000 WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'";
-                if (BP.DA.DBAccess.RunSQL(sql) == 0)
-                    throw new Exception("@退回错误，没有找到要更新的目标数据.技术信息:" + sql);
+                if (BP.DA.DBAccess.RunSQL(sql) == 0 && 1 == 2)
+                    throw new Exception("@退回错误,没有找到要更新的目标数据.技术信息:" + sql);
 
                 //杨玉慧 将流程的  任务池状态设置为  NONE
                 sql = "UPDATE WF_GenerWorkFlow SET TaskSta=0 WHERE  WorkID=" + this.WorkID;
-                if (BP.DA.DBAccess.RunSQL(sql) == 0)
+                if (BP.DA.DBAccess.RunSQL(sql) == 0 && 1 == 2)
                     throw new Exception("@退回错误，没有找到要更新的目标数据.技术信息:" + sql);
             }
 

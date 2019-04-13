@@ -4537,9 +4537,9 @@ namespace BP.WF
                 string sql = "SELECT Msg,EmpToT FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  EmpFrom='" + WebUser.No + "' AND NDFrom=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.WorkCheck;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count <= 0)
-                    throw new Exception("err@请填写审核意见."+sql);
+                    throw new Exception("err@请填写审核意见." + sql);
 
-                if ( DataType.IsNullOrEmpty( dt.Rows[0][0].ToString() )==true)
+                if (DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
                     throw new Exception("err@审核意见不能为空." + sql);
             }
             return true;
@@ -5746,7 +5746,7 @@ namespace BP.WF
                 toNodeID = jumpToNode.NodeID;
 
             string sendWhen = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, this.HisNode,
-                this.HisWork, null,null, toNodeID, jumpToEmp);
+                this.HisWork, null, null, toNodeID, jumpToEmp);
 
             //返回格式. @Info=xxxx@ToNodeID=xxxx@ToEmps=xxxx
             if (sendWhen != null && sendWhen.IndexOf("@") >= 0)
@@ -6688,7 +6688,7 @@ namespace BP.WF
                 #region 触发下一个节点的自动发送, 处理国机的需求.  （去掉:2019-05-05）
                 if (this.HisMsgObjs.VarToNodeID != null
                     && this.town != null
-                    && 1==2
+                    && 1 == 2
                     && this.town.HisNode.WhoExeIt != 0)
                 {
                     string currUser = BP.Web.WebUser.No;

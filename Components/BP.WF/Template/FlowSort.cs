@@ -42,6 +42,17 @@ namespace BP.WF.Template
                 this.SetValByKey(FlowSortAttr.OrgNo, value);
             }
         }
+        public string Domain
+        {
+            get
+            {
+                return this.GetValStrByKey(FlowSortAttr.Domain);
+            }
+            set
+            {
+                this.SetValByKey(FlowSortAttr.Domain, value);
+            }
+        }
         #endregion 属性.
 
         #region 构造方法
@@ -94,6 +105,14 @@ namespace BP.WF.Template
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
+            DBAccess.RunSQL(sql);
+
+            return base.beforeUpdateInsertAction();
         }
     }
     /// <summary>

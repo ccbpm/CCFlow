@@ -77,14 +77,14 @@ namespace BP.GPM
             {
                 Paras ps = new Paras();
                 if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
-                ps.SQL = "SELECT top 17 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
-                
+                    ps.SQL = "SELECT top 17 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
+
                 ps.AddFK_Emp();
 
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
                 string html = "<ul>";
-                int idx=0;
+                int idx = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     string fk_flow = dr["FK_Flow"].ToString();

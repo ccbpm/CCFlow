@@ -435,6 +435,7 @@
                                 dbSrc = dbSrc + " and " + obj.FieldKey + ">='" + value+"'";
                             if (obj.CtrlType == "DateTo") {
                                 var key = obj.FieldKey.replace("_DateTo", "");
+                                value = value + " 23:59";
                                 dbSrc = dbSrc + " and " + key + "<='" + value+"'";
                             }
                         }

@@ -120,20 +120,22 @@ function InitPage() {
         if (tag != null)
             tag = tag.replace("~", "'");
 
-        Msg = track.Msg;
-        if (Msg == "0")
-            Msg = "";
+        msg = track.Msg;
+        if (msg == "0")
+            msg = "";
 
-        if (Msg != "") {
+        if (msg != "") {
 
-            while (Msg.indexOf('\t\n') >= 0) {
-                Msg = Msg.replace('\t\n', '<br>');
-            }
+            var reg = new RegExp('\t\n', "g")
 
-            Msg = Msg.replace('null', '');
+            msg = msg.replace(reg, '<br>');
 
-            if (Msg == "" || Msg == undefined)
-                Msg = "无";
+            // Msg = Msg.replace(/t\n/g, '<br>');
+
+            msg = msg.replace('null', '');
+
+            if (msg == "" || Msg == undefined)
+                msg = "无";
 
         };
         //获取轨迹中上一个节点的时间
@@ -161,8 +163,10 @@ function InitPage() {
         newRow = "<tr>";
         newRow += "<td >" + idx + "</td>";
         newRow += "<td >" + track.NDFromT + "</td>";
+
         newRow += "<td >" + '' + "</td>";
-        newRow += "<td >" + Msg + "</td>";
+
+        newRow += "<td >" + msg + "</td>";
         newRow += "<td >" + track.ActionTypeText + "</td>";
         newRow += "<td >" + track.EmpFromT + "</td>";
         newRow += "<td >" + startTime + "</td>";

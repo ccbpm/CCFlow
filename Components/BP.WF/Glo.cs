@@ -4778,7 +4778,12 @@ namespace BP.WF
                 {
                     /* 继承模式 */
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "(" + pWorkID + "," + pkval + ")");
+
+                    if (pWorkID.Equals(pkval) == true)
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                    else
+                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + pWorkID + "','" + pkval + "')");
+
                     // qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addOrderBy("RDT");
                     qo.DoQuery();

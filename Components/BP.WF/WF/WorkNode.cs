@@ -4594,7 +4594,7 @@ namespace BP.WF
                     }
                     foreach (MapAttr mapAttr in mapAttrs)
                     {
-                        if (mapAttr.UIIsInput == false)
+                        if (mapAttr.UIIsInput == false && mapAttr.UIIsEnable==true)
                             continue;
                         string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();
                         /*如果是检查不能为空 */
@@ -4610,14 +4610,13 @@ namespace BP.WF
 
             }
 
-
             if (this.HisNode.HisFormType == NodeFormType.FreeForm || this.HisNode.HisFormType == NodeFormType.FoolForm)
             {
                 MapAttrs attrs = this.HisNode.MapData.MapAttrs;
                 Row row = this.HisWork.Row;
                 foreach (MapAttr attr in attrs)
                 {
-                    if (attr.UIIsInput == false)
+                    if (attr.UIIsInput == false )
                         continue;
 
                     string str = row[attr.KeyOfEn] == null ? string.Empty : row[attr.KeyOfEn].ToString();
@@ -5819,6 +5818,12 @@ namespace BP.WF
                 this.rptGe.WFState = WFState.Complete;
                 this.rptGe.Update();
                 this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+
+                //调用发送成功事件.
+                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                 //执行考核
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
                 return this.HisMsgObjs;
@@ -6254,6 +6259,17 @@ namespace BP.WF
                     this.rptGe.Update();
                     this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                      * */
+
+                    //调用发送成功事件.
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+                    ////调用发送成功事件.
+                    //string  flowOver = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                    //    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    //this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
                     //执行考核
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
                     return HisMsgObjs;

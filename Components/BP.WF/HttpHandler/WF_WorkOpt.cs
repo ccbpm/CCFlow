@@ -1079,12 +1079,13 @@ namespace BP.WF.HttpHandler
              * 比如：多人处理规则中的已经审核同意的人员，会签人员,组合成成一个字符串。
              * 格式为: ,zhangsan,lisi,
              * 用于处理在审核列表中屏蔽临时的保存的审核信息.
+             * 12 为芒果增加一个非正常完成状态.
              * */
             string checkerPassed = ",";
-            if (gwf.WFState != WFState.Complete)
+            if (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12)
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist where workid=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
+                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FK_Node", this.FK_Node);
                 DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(ps);
@@ -1180,7 +1181,9 @@ namespace BP.WF.HttpHandler
                     }
 
                     //如果是多人处理，就让其显示已经审核过的意见.
-                    if (tk.NDFrom == this.FK_Node && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0 && gwf.WFState != WFState.Complete)
+                    if (tk.NDFrom == this.FK_Node
+                        && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0
+                        && (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12) )
                     {
                         continue;
                         //如果当前人，没有审核完成,就不显示.

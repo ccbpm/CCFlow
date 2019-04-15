@@ -1903,19 +1903,7 @@ function InitToolBar() {
 /* ss */
 function OpenOffice() {
 
-    //string paras = this.RequestParas;
-    //            if (paras.Contains("SID") == false)
-    //                paras += "&SID=" + BP.Web.WebUser.SID;
-    //		    
-    //            if (paras.Contains("UserNo") == false)
-    //                paras += "&UserNo=" + BP.Web.WebUser.No;
-    //            if (string.IsNullOrWhiteSpace(BP.Sys.SystemConfig.AppSettings["IsAutoTesting"]))
-    //                paras += "&IsAutoTesting=0";
-    //            else
-    //                paras += "&IsAutoTesting=" + Convert.ToInt32(BP.Sys.SystemConfig.AppSettings["IsAutoTesting"]); //用于自动化测试
-    //                        
-    //			paras = paras.Replace("&", ",");
-
+    
     var paras = "WorkID=" + GetQueryString("WorkID") + ",";
     paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
     paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
@@ -1932,6 +1920,12 @@ function OpenOffice() {
     window.open(url);
 }
 
+function setModalMax() {
+    //设置bootstrap最大化窗口
+    //获取width
+    var w = ddocument.body.clientWidth - 40;
+    $("#returnWorkModal .modal-dialog").css("width",w+"px");
+}
 
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode) {
@@ -1939,13 +1933,14 @@ function initModal(modalType, toNode) {
     //初始化退回窗口的SRC.
     var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
        '<div class="modal-dialog">'
-           + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
+           + '<div class="modal-content" style="border-radius:0px;width:900px;height:450px;text-align:left;">'
               + '<div class="modal-header">'
-                  + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+              + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                  + '<button id="MaxSizeBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
                    + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
                + '</div>'
-               + '<div class="modal-body" style="margin:0px;padding:0px">'
-                   + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+               + '<div class="modal-body" style="margin:0px;padding:0px;height:450px">'
+                   + '<iframe style="width:100%;border:0px;height:100%;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
                + '</div>'
            + '</div><!-- /.modal-content -->'
        + '</div><!-- /.modal-dialog -->'
@@ -1955,6 +1950,18 @@ function initModal(modalType, toNode) {
 
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
+    });
+    $("#MaxSizeBtn").click(function () {
+        var w = document.body.clientWidth - 80;
+        var h = document.body.clientHeight - 80;
+
+        $("#returnWorkModal .modal-dialog").css("width", w + "px");
+        $("#returnWorkModal .modal-dialog").css("height", h + "px");
+
+        $("#returnWorkModal .modal-content").css("width", w + "px");
+        $("#returnWorkModal .modal-content").css("height", h + "px");
+        $("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
+        
     });
     var modalIframeSrc = '';
     if (modalType != undefined) {

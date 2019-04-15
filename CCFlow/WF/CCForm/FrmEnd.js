@@ -84,7 +84,7 @@
                         bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
                     else
                         bit = 2;
-                    if(bit == 2)
+                    if (bit == 2)
                         val = formatNumber(val, 2, ",");
                 }
                 $('#TB_' + mapAttr.KeyOfEn).val(val);
@@ -296,7 +296,7 @@ function AfterBindEn_DealMapExt(frmData) {
         //处理Pop弹出框
         var PopModel = mapAttr.GetPara("PopModel");
 
-        if (PopModel != "" && (mapExt.ExtType == mapAttr.GetPara("PopModel"))) {
+        if (PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
             PopMapExt(mapAttr, mapExt, frmData);
             continue;
         }
@@ -387,18 +387,18 @@ function AfterBindEn_DealMapExt(frmData) {
 
                         var mapextDoc = mapExt.Doc;
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                            if(minDate  == "")
+                            if (minDate == "")
                                 WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
                                     $(this).blur(); //失去焦点 
                                     DBAccess.RunFunctionReturnStr(mapextDoc);
                                 }
-                            });
-                           else
-                               WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-                                       $(this).blur(); //失去焦点 
-                                       DBAccess.RunFunctionReturnStr(mapextDoc);
-                                   }
-                               });
+                                });
+                            else
+                                WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                    $(this).blur(); //失去焦点 
+                                    DBAccess.RunFunctionReturnStr(mapextDoc);
+                                }
+                                });
 
                         });
 
@@ -496,20 +496,20 @@ function AfterBindEn_DealMapExt(frmData) {
                         "Doc": mapExt.Doc,
                         "DtlColumn": docs[1],
                         "exp": docs[2],
-                        "Tag":mapExt.Tag,
-                        "Tag1":mapExt.Tag1
+                        "Tag": mapExt.Tag,
+                        "Tag1": mapExt.Tag1
                     };
                     if (!$.isArray(detailExt[ext.DtlNo])) {
                         detailExt[ext.DtlNo] = [];
                     }
                     detailExt[ext.DtlNo].push(ext);
-//                    var iframeDtl = $("#F" + ext.DtlNo);
-//                    iframeDtl.load(function () {
-//                        $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[ext.DtlNo]));
-//                        if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
-//                            this.contentWindow.parentStatistics(detailExt[ext.DtlNo]);
-//                        }
-//                    });
+                    //                    var iframeDtl = $("#F" + ext.DtlNo);
+                    //                    iframeDtl.load(function () {
+                    //                        $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[ext.DtlNo]));
+                    //                        if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+                    //                            this.contentWindow.parentStatistics(detailExt[ext.DtlNo]);
+                    //                        }
+                    //                    });
                     $(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
                 }
                 break;
@@ -535,15 +535,15 @@ function AfterBindEn_DealMapExt(frmData) {
             case "DataFieldInputRole": //时间限制
                 if (mapExt.DoWay == 1) {
                     var tag1 = mapExt.Tag1;
-                    if(tag1 ==1){
-                     $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
+                    if (tag1 == 1) {
+                        $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
                         var dateFmt = 'yyyy-MM-dd';
                         if (mapAttr.MyDataType == 7)
                             dateFmt = 'yyyy-MM-dd HH:mm';
 
-                         var minDate = '%y-%M-#{%d}'
-                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                            WdatePicker({ dateFmt: dateFmt,minDate:minDate});
+                        var minDate = '%y-%M-#{%d}'
+                        $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                            WdatePicker({ dateFmt: dateFmt, minDate: minDate });
                         });
                     }
 
@@ -600,45 +600,45 @@ function PopMapExt(mapAttr, mapExt, frmData) {
                 popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
             }
             switch (popWorkModelStr) {
-                /// <summary>               
-                /// 自定义URL               
-                /// </summary>               
-                //SelfUrl =1,               
+                /// <summary>                
+                /// 自定义URL                
+                /// </summary>                
+                //SelfUrl =1,                
                 case "1":
                     icon = "glyphicon glyphicon-th";
                     break;
-                /// <summary>               
-                /// 表格模式               
-                /// </summary>               
-                // TableOnly,               
+                /// <summary>                
+                /// 表格模式                
+                /// </summary>                
+                // TableOnly,                
                 case "2":
                     icon = "glyphicon glyphicon-list";
                     break;
-                /// <summary>               
-                /// 表格分页模式               
-                /// </summary>               
-                //TablePage,               
+                /// <summary>                
+                /// 表格分页模式                
+                /// </summary>                
+                //TablePage,                
                 case "3":
                     icon = "glyphicon glyphicon-list-alt";
                     break;
-                /// <summary>               
-                /// 分组模式               
-                /// </summary>               
-                // Group,               
+                /// <summary>                
+                /// 分组模式                
+                /// </summary>                
+                // Group,                
                 case "4":
                     icon = "glyphicon glyphicon-list-alt";
                     break;
-                /// <summary>               
-                /// 树展现模式               
-                /// </summary>               
-                // Tree,               
+                /// <summary>                
+                /// 树展现模式                
+                /// </summary>                
+                // Tree,                
                 case "5":
                     icon = "glyphicon glyphicon-tree-deciduous";
                     break;
-                /// <summary>               
-                /// 双实体树               
-                /// </summary>               
-                // TreeDouble               
+                /// <summary>                
+                /// 双实体树                
+                /// </summary>                
+                // TreeDouble                
                 case "6":
                     icon = "glyphicon glyphicon-tree-deciduous";
                     break;

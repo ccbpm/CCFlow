@@ -376,7 +376,8 @@ function GenerFrm() {
     }
 
     //处理下拉框级联等扩展信息
-    AfterBindEn_DealMapExt(frmData);
+    if(pageData.IsReadonly != "1")
+        AfterBindEn_DealMapExt(frmData);
 
     ShowNoticeInfo();
 

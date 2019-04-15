@@ -19,7 +19,7 @@ function GenerFoolFrm(wn) {
     var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
-    html += "<td colspan=4 class='FDesc'><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit-title' style='float:right;padding:10px;width:70%;font-size: 18px;'  ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 class='TitleFDesc'><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit-title' style='float:right;padding:10px;width:70%;font-size: 18px;'  ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
 
     //遍历循环生成 listview
@@ -229,9 +229,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             if (ath.AthRunModel == 2) {
                 src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
             }
-           
 
-            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\""+attr.KeyOfEn+"\")' style='text-align:left'>" + attr.Name + "</a></div></label>";
+
+            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\")' style='text-align:left'>" + attr.Name + "</a></div></label><image src='./img/Tree/dir.gif'></image>";
         }
 
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
@@ -245,7 +245,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         //线性展示并且colspan=4
         if (attr.ColSpan == 4) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
@@ -260,15 +260,15 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         //线性展示并且colspan=3,默认文本跨一行
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
             html += "<tr >";
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3  rowSpan=" + rowSpan + " style='text-align:left;'>";
@@ -286,15 +286,15 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         //线性展示并且colspan=2, 则文本也占据2行
         if (attr.ColSpan == 2 && attr.TextColSpan == 2) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
             html += "<tr>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
-                html += "<td  class='FDesc' style='width:15%;' ColSpan=2  rowSpan=" + rowSpan + ">" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' ColSpan=2  rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=2   rowSpan=" + rowSpan + " style='text-align:left;'>";
@@ -311,15 +311,15 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         //线性展示并且colspan=1,则需要判断文本跨的单元格数
         if (attr.ColSpan == 1 && attr.TextColSpan == 3) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
             html += "<tr >";
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
-                html += "<td  class='FDesc' style='width:15%;' ColSpan=3  rowSpan=" + rowSpan + ">" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' ColSpan=3  rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=1  rowSpan=" + rowSpan + " style='text-align:left;'>";
@@ -341,7 +341,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
                 recordRowLeft = rowSpan;
                 haveDropRowLeft = 0;
                 if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
-                    html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                    html += "<td class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
                 } else if (attr.UIContralType == "10") {
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc tdSpan' ColSpan=2 rowSpan=" + rowSpan + ">" + lab + "</td>";
@@ -378,12 +378,12 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
                 recordRowRight = rowSpan;
                 haveDropRowRight = 0;
                 if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
-                    html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                    html += "<td class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
                 } else if (attr.UIContralType == "10") {
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc tdSpan' ColSpan=2 rowSpan=" + rowSpan + ">" + lab + "</td>";
                 } else {
-                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc tdSpan' ColSpan=2 rowSpan=" + rowSpan + " >";
+                    html += "<td id='Td_" + attr.KeyOfEn + "' class=FDesc tdSpan' ColSpan=2 rowSpan=" + rowSpan + " >";
                 }
                 isDropTR = !isDropTR;
                 if (attr.UIContralType != "10") {

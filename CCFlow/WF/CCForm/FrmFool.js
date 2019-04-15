@@ -17,7 +17,7 @@ function GenerFoolFrm(mapData, frmData) {
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
     html += "<tr>";
-    html += "<td colspan=4 class='FDesc' ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit-title' style='float:right;padding:10px;bordder:none;width:70%;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan=4 class='TitleFDesc' ><div style='float:left' ><img src='../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit-title' style='float:right;padding:10px;bordder:none;width:70%;font-size: 18px;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
 
 
@@ -316,15 +316,15 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         //线性展示并且colspan=3
         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
             html += "<tr>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=3  rowSpan=" + rowSpan + " style='text-align:left;'>";
@@ -342,7 +342,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         //线性展示并且colspan=4
         if (attr.ColSpan == 4) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
@@ -358,15 +358,15 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         //线性展示并且colspan=2, 则文本也占据2行
         if (attr.ColSpan == 2 && attr.TextColSpan == 2) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
             html += "<tr>";
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
-                html += "<td  class='FDesc' style='width:15%;' ColSpan=2  rowSpan=" + rowSpan + ">" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' ColSpan=2  rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=2   rowSpan=" + rowSpan + " style='text-align:left;'>";
@@ -383,15 +383,15 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         //线性展示并且colspan=1,则需要判断文本跨的单元格数
         if (attr.ColSpan == 1 && attr.TextColSpan == 3) {
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='LabelFDesc' ColSpan='2'></td>";
                 html += "</tr>";
             }
             isDropTR = true;
             html += "<tr >";
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
-                html += "<td  class='FDesc' style='width:15%;' ColSpan=3  rowSpan=" + rowSpan + ">" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' ColSpan=3  rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
-                html += "<td  class='FDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
+                html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
 
             if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "' ColSpan=1  rowSpan=" + rowSpan + " style='text-align:left;'>";
@@ -412,7 +412,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
                 recordRowLeft = rowSpan;
                 haveDropRowLeft = 0;
                 if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
-                    html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                    html += "<td class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
                 } else if (attr.UIContralType == "10") {
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc tdSpan' ColSpan=2 rowSpan=" + rowSpan + ">" + lab + "</td>";
@@ -447,7 +447,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
                 recordRowRight = rowSpan;
                 haveDropRowRight = 0;
                 if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
-                    html += "<td class='FDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
+                    html += "<td class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' rowSpan=" + rowSpan + ">";
                 } else if (attr.UIContralType == "10") {
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc tdSpan' ColSpan=2 rowSpan=" + rowSpan + ">" + lab + "</td>";
@@ -771,7 +771,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
 
-        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' style='width:100%'  id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
     }
 
     //枚举类型.

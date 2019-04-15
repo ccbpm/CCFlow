@@ -472,7 +472,7 @@
                 if (sys_MapDtl.IsEnableAthM == 1) {
                     athTh.data(athThData);
                     threadTr.append(athTh);
-
+                    
                 }
 
 
@@ -877,12 +877,16 @@
         * @param template 统计单元格jquery对象
         */
         function doStatistics(exp, name, template, DXTemplate) {
+            var expVal = 0;
             if (exp == "Sum") {	// 和
                 var sum = 0;
                 //判断值是否含有小数
                 var flag = false;
                 $(":input[name=" + name + "]").each(function (i, e) {
-                    sum += parseFloat($(e).val());
+                    var val = $(e).val();
+                    val = val.replace(/,/g, "");
+                    val = val.replace(/￥/g, "");
+                    sum += parseFloat(val);
                     if ($(e).val().indexOf('.') >= 0)
                         flag = true;
                 });
@@ -892,42 +896,66 @@
                     //防止出现相加小数位数不正确的情况
                     parseFloat(sum).toFixed(2);
                 }
+                expVal = sum;
+
+                sum = formatNumber(sum, 2, ',');
+
                 template.val(sum);
             } else if (exp == "Avg") {	// 平均数
                 var sum = 0;
                 var count = 0;
                 $(":input[name=" + name + "]").each(function (i, e) {
-                    sum += parseFloat($(e).val());
+                    var val = $(e).val();
+                    val = val.replace(/,/g, "");
+                    val = val.replace(/￥/g, "");
+                    sum += parseFloat(val);
                     count++;
                 });
                 if (count > 0) {
-                    template.val(sum / count);
+                    expVal = sum / count;
+
+                    var avg = formatNumber(sum / count, 2, ',');
+
+                    template.val(avg);
                 }
             } else if (exp == "Max") {	// 最大
                 var max = null;
                 $(":input[name=" + name + "]").each(function (i, e) {
-                    var value = parseFloat($(e).val());
+                    var val = $(e).val();
+                    val = val.replace(/,/g, "");
+                    val = val.replace(/￥/g, "");
+
+                    var value = parseFloat(val);
                     if (max == null) {
                         max = value;
                     } else if (value > max) {
                         max = value;
                     }
                 });
+                expVal = max;
+                max = formatNumber(max, 2, ',');
                 template.val(max);
             } else if (exp == "Min") {	// 最小
                 var min = null;
                 $(":input[name=" + name + "]").each(function (i, e) {
-                    var value = parseFloat($(e).val());
+                    var val = $(e).val();
+                    val = val.replace(/,/g, "");
+                    val = val.replace(/￥/g, "");
+
+                    var value = parseFloat(val);
                     if (min == null) {
                         min = value;
                     } else if (value < min) {
                         min = value;
                     }
                 });
+                expVal = min;
+                min = formatNumber(min, 2, ',');
                 template.val(min);
             }
+
             if (DXTemplate.length == 1)
-                DXTemplate.val(Rmb2DaXie(template.val()));
+                DXTemplate.val(Rmb2DaXie(expVal));
         }
 
         function getColumnElementsName(KeyOfEn) {
@@ -1799,7 +1827,7 @@
                                                         var optionVal = mapExtDoc.substring(mapExdDocKeyOfEnIndex + tranValue.length + 1, mapExdDocKeyOfEnIndex + tranValue.length + 2);
 
                                                         if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
-                                                            mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val())");
+                                                            mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val().replace(/,/g,'').replace(/￥/g,''))");
                                                         } else {
                                                             hasKeyOfEn = false;
                                                         }
@@ -1807,8 +1835,12 @@
                                                 }
 
                                                 tmpResult = eval(mapExtDoc);
+
+                                                //修改值
+                                                tmpResult = formatNumber(tmpResult, 2, ',');
                                                 attrOfOperEle.val(tmpResult);
                                                 attrOfOperEle.trigger("change"); // 触发合计计算
+
 
                                                 $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
                                             });

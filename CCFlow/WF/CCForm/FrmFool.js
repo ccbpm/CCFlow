@@ -302,7 +302,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             }
 
 
-            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\")' style='text-align:left'>" + attr.Name + "</a></div></label>";
+            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='../img/Tree/dir.gif'></image></a></div></label>";
         }
 
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
@@ -605,7 +605,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             data = JSON.parse(data);
             var dbs = data["DBAths"];
             if (dbs.length == 0)
-                return "<div style='text-align:left;padding-left:10px'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
+                return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
 
             var eleHtml = "";
             if (athShowModel == "" || athShowModel == 0)
@@ -614,7 +614,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             eleHtml = "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
             for (var i = 0; i < dbs.length; i++) {
                 var db = dbs[i];
-                eleHtml += "<label><a href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\">" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\">" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
             }
             eleHtml += "</div>";
             return eleHtml;
@@ -1249,15 +1249,76 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
     });
     return rbHtml;
 }
+function Ath_Init(mypk, FK_MapData) {
+    var nodeID = pageData.FK_Node;
+    var no = nodeID.toString().substring(nodeID.toString().length - 2);
+    var IsStartNode = 0;
+    if (no == "01")
+        IsStartNode = 1;
 
+    var noOfObj = mypk.replace(FK_MapData + "_", "");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    handler.AddPara("WorkID", pageData.WorkID);
+    handler.AddPara("FID", pageData.FID);
+    handler.AddPara("FK_Node", nodeID);
+    handler.AddPara("FK_Flow", pageData.FK_Flow);
+    handler.AddPara("IsStartNode", IsStartNode);
+    handler.AddPara("PKVal", pageData.WorkID);
+    handler.AddPara("Ath", noOfObj);
+    handler.AddPara("FK_MapData", FK_MapData);
+    handler.AddPara("FromFrm", FK_MapData);
+    handler.AddPara("FK_FrmAttachment", mypk);
+    data = handler.DoMethodReturnString("Ath_Init");
+    return data;
+}
 //弹出附件
-function OpenAth(url, title, keyOfEn) {
+function OpenAth(url, title, keyOfEn,atPara,FK_MapData) {
     var H = document.body.clientHeight - 60;
 
     OpenBootStrapModal(url, "eudlgframe", title, frmData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
-        Save();
-        window.location.href = window.location.href;
 
+        //创建附件描述信息.
+        var mypk = GetPara(atPara, "AthRefObj");
+
+        //获取附件显示的格式
+        var athShowModel = GetPara(atPara, "AthShowModel");
+
+        var ath = new Entity("BP.Sys.FrmAttachment");
+        ath.MyPK = mypk;
+        if (ath.RetrieveFromDBSources() == 0) {
+            alert("没有找到附件属性,请联系管理员");
+            return;
+        }
+        var data = Ath_Init(mypk, FK_MapData)
+
+        if (data.indexOf('err@') == 0) {
+            alert(data);
+            return;
+        }
+
+        if (data.indexOf('url@') == 0) {
+            var url = data.replace('url@', '');
+            window.location.href = url;
+            return;
+        }
+        data = JSON.parse(data);
+        var dbs = data["DBAths"];
+        if (dbs.length == 0) {
+            $("#athModel_" + keyOfEn).html("<label>请点击[" + mapAttr.Name + "]执行上传</label>");
+            return;
+        }
+
+        var eleHtml = "";
+        if (athShowModel == "" || athShowModel == 0) {
+            $("#athModel_" + keyOfEn).html("<label >附件(" + dbs.length + ")</label>");
+            return;
+        }
+
+        for (var i = 0; i < dbs.length; i++) {
+            var db = dbs[i];
+            eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "','" + mypk + "')\">" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+        }
+        $("#athModel_" + keyOfEn).html(eleHtml);
     }, null, "black", true);
 
 }

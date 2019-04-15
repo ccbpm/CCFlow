@@ -537,7 +537,7 @@ Common.CustomPagePlug = function (operation) {
                 }
                 html += "<td colspan='" + colSpan + "'>";
                 //console.log(colSpan)
-              //  html += '-';
+                //  html += '-';
                 html += "</td>";
                 html += "</tr>";
                 $("#" + obj.InitData.DivId + ' table tbody').html(html);
@@ -714,7 +714,7 @@ Common.CustomPagePlug = function (operation) {
                                 var defValue = obje[$(headers[i]).data().colname];
                                 if (!/\./.test(defValue))
                                     defValue += '.00';
-
+                                defValue = formatNumber(defValue, 2, ',');
                                 html += "<td>" + defValue + "</td>"
                             }
                             else if ($(headers[i]).data().opeation != undefined) {//存在操作按钮的TD

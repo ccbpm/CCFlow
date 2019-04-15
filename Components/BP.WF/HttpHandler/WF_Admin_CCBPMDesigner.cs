@@ -935,7 +935,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["name"].ColumnName = "NAME";
                 dt.Columns["parentno"].ColumnName = "PARENTNO";
                 dt.Columns["idx"].ColumnName = "IDX";
-
+                dt.Columns["isparent"].ColumnName = "ISPARENT";
                 dt.Columns["ttype"].ColumnName = "TTYPE";
                 dt.Columns["dtype"].ColumnName = "DTYPE";
             }

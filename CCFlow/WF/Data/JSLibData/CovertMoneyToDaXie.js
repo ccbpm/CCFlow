@@ -1,5 +1,5 @@
 ﻿function Rmb2DaXie(s) {
-    s = clearNoNum(s);  //此处可预防如果控件是普通的文本框时，录入非数字的符号自动去除
+    s = clearNoNum(s.toString());  //此处可预防如果控件是普通的文本框时，录入非数字的符号自动去除
     var dx = AmountLtoU(s);
     if (dx == '无效') {
         alert('无效的数字格式！');

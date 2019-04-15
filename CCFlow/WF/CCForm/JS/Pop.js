@@ -158,6 +158,8 @@ function PopBranches(mapExt, val) {
 
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
+                    //删除保存的数据
+                    Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
                     var nodes = iframe.contentWindow.GetCheckNodes();
                     var nodeText;
                     if ($.isArray(nodes)) {

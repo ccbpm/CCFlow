@@ -34,8 +34,9 @@ input:hover[type="button"]
 }
 
 
+
 /*文本框只读风格.*/
-input[disabled], input:disabled
+input[disabled], input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
     background-color: #F5F5F5;
@@ -49,7 +50,7 @@ input[disabled], input:disabled
      cursor: no-drop;
 }
 /*文本框只读风格.*/
-textarea[disabled], input:disabled
+textarea[disabled], input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
     background-color: #F5F5F5;
@@ -62,8 +63,15 @@ textarea[disabled], input:disabled
      color: #666; 
      cursor: no-drop;
 }
+
+input[type=checkbox]:disabled
+{
+        display:inline;
+        width:20px;
+}
+
 /*文本框只读风格.*/
-select[disabled], input:disabled
+select[disabled], input[type=text]:disabled
 {
    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
@@ -79,7 +87,6 @@ select[disabled], input:disabled
       -moz-appearance:none;   
       -webkit-appearance:none;   
 }
-  
 /*  table 类型风格 */
 table
 {

@@ -5585,19 +5585,38 @@ namespace BP.WF
         /// <summary>
         /// 调整
         /// </summary>
-        /// <param name="workid">要调整的ID</param>
-        /// <param name="toNodeID">调整到人员</param>
+        /// <param name="workid">要调整的WorkID</param>
+        /// <param name="toNodeID">调整到的节点ID</param>
+        /// <param name="toEmpIDs">人员集合</param>
         /// <param name="note">调整原因</param>
-        public static string Flow_ReSend(Int64 workid, int toNodeID, string toEmpID, string note)
+        /// <returns></returns>
+        public static string Flow_ReSend(Int64 workid, int toNodeID, string toEmpIDs, string note)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             if (gwf.WFState == WFState.Complete)
                 return "err@该流程已经运行完成您不能执行调整,可以执行回滚.";
 
             Node nd = new Node(toNodeID);
-            BP.Port.Emp emp = new Emp(toEmpID);
 
-            gwf.TodoEmps = emp.No + "," + emp.Name + ";";
+            Emps emps = new Emps();
+
+            string[] strs = toEmpIDs.Split(',');
+
+            string todoEmps = "";
+            foreach (string empID in strs)
+            {
+                if (DataType.IsNullOrEmpty(empID) == true)
+                    continue;
+
+
+                BP.Port.Emp emp = new Emp(empID);
+                todoEmps += emp.No + "," + emp.Name;
+
+                emps.AddEntity(emp);
+            }
+
+
+            gwf.TodoEmps = todoEmps;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.WFState = WFState.Runing;
 
@@ -5610,19 +5629,23 @@ namespace BP.WF
             //删除当前节点人员信息.
             gwl.Delete(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
-            //插入一条信息，让调整的人员显示待办.
-            gwl.FK_Emp = emp.No;
-            gwl.FK_EmpText = emp.Name;
-            gwl.FK_Node = toNodeID;
-            gwl.IsPassInt = 0;
-            gwl.IsRead = false;
-            try
+            foreach (Emp item in emps)
             {
-                gwl.Insert();
-            }
-            catch
-            {
-                gwl.Update();
+                //插入一条信息，让调整的人员显示待办.
+                gwl.FK_Emp = item.No;
+                gwl.FK_EmpText = item.Name;
+                gwl.FK_Node = toNodeID;
+                gwl.IsPassInt = 0;
+                gwl.IsRead = false;
+                gwl.WhoExeIt = 0;
+                try
+                {
+                    gwl.Insert();
+                }
+                catch
+                {
+                    gwl.Update();
+                }
             }
 
             //更新当前节点状态.
@@ -5630,7 +5653,7 @@ namespace BP.WF
             gwf.NodeName = nd.Name;
             gwf.Update();
 
-            return "调整成功,调整到:" + gwf.NodeName + " , 调整给:" + emp.Name;
+            return "调整成功,调整到:" + gwf.NodeName + " , 调整给:" +todoEmps;
         }
         /// <summary>
         /// 取消、确认.

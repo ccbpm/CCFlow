@@ -847,7 +847,8 @@ function limitLength(obj, length) {
             precision = 2;
         if (precision != 2)
             return;
-        var val = formatNumber(obj.value, precision, separator);
+        oldV = oldV.replace(/[^\d.-]/g, "");
+        var val = formatNumber(oldV, precision, separator);
         if (val != NaN)
             obj.value = val;
         var didx = getStrCount(val.toString().substr(0, idx),',');

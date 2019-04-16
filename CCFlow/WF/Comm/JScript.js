@@ -739,9 +739,14 @@ function valitationBefore(o, validateType) {
 	}
 }
 
+var idx = 0;
+var oldCount = 0;
 function valitationAfter(o, validateType) {
+    idx = getCursortPosition(o);
+    oldCount = getStrCount(o.value.toString().substr(0, idx), ',');
     var value = o.value;
-    value = value.replace(/[^\d.-]/g, "");
+    value =   value.replace(/[^\d.-]/g, "");
+
     if (isFF()) {
         var flag = false;
         switch (validateType) {
@@ -759,11 +764,10 @@ function valitationAfter(o, validateType) {
         }
         if (!flag) {
             o.value = 0;
-        }else
-        o.value = value;
+        }
     } else {
         if (isNaN(value)) execCommand('undo');
-        o.value = value;
+       
     }
 }
 
@@ -802,9 +806,43 @@ function limitLength(obj, length) {
             if(obj.value.substr(0,1) == '0' && obj.value.length == 2){  
                 obj.value= obj.value.substr(1,obj.value.length);      
             }  
-        }      
+        }
     }
+
+    //设置光标位置
+    function setCaretPosition(ctrl, pos) {
+        if (ctrl.setSelectionRange) {
+            ctrl.focus();
+            ctrl.setSelectionRange(pos, pos);
+        }
+        else if (ctrl.createTextRange) {
+            var range = ctrl.createTextRange();
+            range.collapse(false);
+            range.moveEnd('character', pos);
+            range.moveStart('character', pos);
+            range.select();
+        }
+    }
+
+    // 获取光标位置
+    function getCursortPosition(ctrl) {
+        var CaretPos = 0;   // IE Support
+        if (document.selection) {
+            ctrl.focus();
+            var Sel = document.selection.createRange();
+            Sel.moveStart('character', -ctrl.value.length);
+            CaretPos = Sel.text.length;
+        }
+        // Firefox support
+        else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+            CaretPos = ctrl.selectionStart;
+        return (CaretPos);
+    }
+
     function FormatMoney(obj, precision, separator) {
+        //获取之前的，
+        var oldV = obj.value;
+        
         if (precision == undefined || precision == null || precision == "")
             precision = 2;
         if (precision != 2)
@@ -812,9 +850,25 @@ function limitLength(obj, length) {
         var val = formatNumber(obj.value, precision, separator);
         if (val != NaN)
             obj.value = val;
+        var didx = getStrCount(val.toString().substr(0, idx),',');
+        if (didx > oldCount && didx > 0)
+            idx = idx +1;
+        setCaretPosition(obj,idx);
+
 
     }
 
+    //统计字符串中特定字符串的个数
+function getStrCount(scrstr,armstr)
+{ //scrstr 源字符串 armstr 特殊字符
+     var count=0;
+     while(scrstr.indexOf(armstr) >=1 )
+     {
+        scrstr = scrstr.replace(armstr,"")
+        count++;    
+     }
+     return count;
+}
     /** 
     * 将数值格式化成金额形式 
     * 

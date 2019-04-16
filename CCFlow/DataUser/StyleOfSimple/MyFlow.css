@@ -276,7 +276,7 @@ legend
     width: 18%;
     border-style: solid;
     border-width: thin;
-    border-color: lightgrey;
+    border-color: lightgrey 1px solid;
 }
 
 .tdSpan

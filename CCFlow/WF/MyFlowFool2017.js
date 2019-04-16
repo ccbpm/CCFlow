@@ -1278,7 +1278,7 @@ function OpenAth(url,title,keyOfEn,atPara,FK_MapData){
         data = JSON.parse(data);
         var dbs = data["DBAths"];
         if (dbs.length == 0) {
-            $("#athModel_" + keyOfEn).html("<label>请点击[" + mapAttr.Name + "]执行上传</label>");
+            $("#athModel_" + keyOfEn).html("<label>请点击[" + title + "]执行上传</label>");
             return;
         }
 

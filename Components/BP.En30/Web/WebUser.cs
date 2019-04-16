@@ -111,15 +111,15 @@ namespace BP.Web
                 WebUser.Auth = null;
                 WebUser.AuthName = null;
             }
-            
+
             #region 解决部门的问题.
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
                 if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
                 {
                     string sql = "";
-                   
-                      sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
+
+                    sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
 
                     string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
                     if (DataType.IsNullOrEmpty(deptNo) == true)
@@ -168,7 +168,7 @@ namespace BP.Web
             if (IsRecSID)
             {
                 //判断是否视图，如果为视图则不进行修改 
-                if (BP.DA.DBAccess.IsView("Port_Emp",SystemConfig.AppCenterDBType) == false)
+                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
                 {
                     /*如果记录sid*/
                     string sid1 = DateTime.Now.ToString("MMddHHmmss");
@@ -534,7 +534,14 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("DeptParentNo", null, false);
                 if (val == null)
-                    throw new Exception("@err-001 DeptParentNo 登陆信息丢失。");
+                {
+                    if (BP.Web.WebUser.FK_Dept == null)
+                        throw new Exception("@err-001 DeptParentNo, FK_Dept 登陆信息丢失。");
+
+                    BP.Port.Dept dept = new Port.Dept(BP.Web.WebUser.FK_Dept);
+                    BP.Web.WebUser.DeptParentNo = dept.ParentNo;
+                    return val;
+                }
                 return val;
             }
             set
@@ -662,7 +669,7 @@ namespace BP.Web
         {
             get
             {
-                return  GetValFromCookie("No", null, true);
+                return GetValFromCookie("No", null, true);
             }
             set
             {
@@ -710,12 +717,12 @@ namespace BP.Web
         {
             get
             {
-                    Stations sts = new Stations();
-                    QueryObject qo = new QueryObject(sts);
-                    qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
-                    qo.DoQuery();
+                Stations sts = new Stations();
+                QueryObject qo = new QueryObject(sts);
+                qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+                qo.DoQuery();
 
-                    return sts;
+                return sts;
             }
         }
         /// <summary>
@@ -742,7 +749,7 @@ namespace BP.Web
         public static void SetSID(string sid)
         {
             //判断是否视图，如果为视图则不进行修改
-            if (BP.DA.DBAccess.IsView("Port_Emp",SystemConfig.AppCenterDBType) == false)
+            if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
             {
                 Paras ps = new Paras();
                 ps.SQL = "UPDATE Port_Emp SET SID=" + SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";

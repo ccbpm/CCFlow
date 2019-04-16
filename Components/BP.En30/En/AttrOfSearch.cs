@@ -185,6 +185,9 @@ namespace BP.En
                     if (_DefaultVal.Contains("@WebUser.FK_Dept"))
                         return _DefaultVal.Replace("@WebUser.FK_Dept", Web.WebUser.FK_Dept);
 
+                    if (_DefaultVal.Contains("@WebUser.DeptParentNo"))
+                        return _DefaultVal.Replace("@WebUser.DeptParentNo", Web.WebUser.DeptParentNo);
+                     
                     if (_DefaultVal.Contains("@WebUser.FK_DeptName"))
                         return _DefaultVal.Replace("@WebUser.FK_DeptName", Web.WebUser.FK_DeptName);
 

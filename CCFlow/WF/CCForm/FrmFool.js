@@ -153,6 +153,15 @@ function GenerFoolFrm(mapData, frmData) {
     //表单联动设置
         Set_Frm_Enable(frmData);
 
+    //处理附件的问题
+    var aths = $(".athModel");
+    $.each(aths, function (idx, ath) {
+        //获取ID
+        var name = $(ath).attr('id');
+        var keyOfEn = name.replace("athModel_", "");
+        $("#Lab_" + keyOfEn).html("<div style='text-align:left'>" + $("#Lab_" + keyOfEn).text() + "</div>");
+    });
+
 }
 
 
@@ -604,8 +613,12 @@ function InitMapAttrOfCtrl(mapAttr) {
             }
             data = JSON.parse(data);
             var dbs = data["DBAths"];
-            if (dbs.length == 0)
-                return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
+            if (dbs.length == 0) {
+                if (mapAttr.UIIsEnable == 1 || pageData.IsReadOnly == 0)
+                    return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
+                else
+                    return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
+            }
 
             var eleHtml = "";
             if (athShowModel == "" || athShowModel == 0)
@@ -1273,7 +1286,7 @@ function Ath_Init(mypk, FK_MapData) {
 }
 //弹出附件
 function OpenAth(url, title, keyOfEn,atPara,FK_MapData) {
-    var H = document.body.clientHeight - 60;
+    var H = document.body.clientHeight - 240;
 
     OpenBootStrapModal(url, "eudlgframe", title, frmData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
 

@@ -52,17 +52,15 @@
             handler.AddUrlData();
 
             var data = handler.DoMethodReturnString("Return_Init");
-
             if (data.indexOf('info@') == 0) {
-                //console.error("退回窗口错误信息" + data);
-                Close();
-                data = data.replace('info@', '');
-                alert(data);
-                Close();
-                return;
 
+                data = data.replace('info@', '');
                 data = "<font>" + data + "</font>";
-                $("#Msg").html(data);
+                $("#Msg").html("");
+                $("#DIV_Nodes").html(data);
+                $("#DIV_Doc").html("");
+                $("#btnReturn").css("display", "none");
+                $("#btnIsBackTracking").css("display", "none");
                 return;
             }
 
@@ -158,6 +156,7 @@
         function Close() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
+                window.parent.close();
             }
             else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
@@ -169,11 +168,11 @@
 </head>
 <body>
 <div class="wait" style="text-align: center;" id="Msg" >页面数据正在加载中，请稍候......</div>
-    <div style=" margin:30px;">
+    <div style=" margin:30px;" id="DIV_Nodes">
         请选择要退回到的节点:<br />
         <select id="DDL_Nodes" name="DDL_Nodes" style="width: 77%;"></select>
     </div>
-    <div style=" margin:30px;">
+    <div style=" margin:30px;" id="DIV_Doc">
         退回原因：
         <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%; height:150px;" maxlength="500"></textarea>
     </div>
@@ -181,8 +180,8 @@
     <!--<div> 上传附件：</div>
     <div style="height:100px;">上传附件预留：该功能正在建设中</div>
 -->
-    <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-        <input type="button" value="确定退回" onclick="ReturnWork(0);" />
+    <div style="position: fixed;right: 10px;bottom: 40px;" class="foot">
+        <input type="button" value="确定退回" onclick="ReturnWork(0);"  id="btnReturn" />
         <input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" id="btnIsBackTracking" />
         <input type="button" value="关闭" onclick="Close();" />
     </div>

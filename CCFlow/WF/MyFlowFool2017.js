@@ -155,6 +155,16 @@ function GenerFoolFrm(wn) {
 
     $('#CCForm').html(html);
 
+
+    //处理附件的问题
+    var aths = $(".athModel");
+    $.each(aths, function (idx, ath) {
+        //获取ID
+        var name = $(ath).attr('id');
+        var keyOfEn = name.replace("athModel_", "");
+        $("#Lab_" + keyOfEn).html("<div style='text-align:left'>"+$("#Lab_" + keyOfEn).text()+"</div>");
+    });
+
 }
 
 //解析表单字段 MapAttr.
@@ -231,7 +241,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             }
 
 
-            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='DDL_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='./img/Tree/dir.gif'></image></a></div></label>";
+            lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='./img/Tree/dir.gif'></image></a></div></label>";
         }
 
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
@@ -524,9 +534,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             }
             data = JSON.parse(data);
             var dbs = data["DBAths"];
-            if(dbs.length == 0)
-                return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
-
+            if (dbs.length == 0){
+                if(mapAttr.UIIsEnable == 1 || pageData.IsReadOnly == 0)
+                    return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
+                else
+                    return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
+            }
             var eleHtml = "";
             if (athShowModel == "" || athShowModel == 0)
                 return "<div style='text-align:left;padding-left:10px' id='athModel_"+mapAttr.KeyOfEn+"' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
@@ -1247,7 +1260,7 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
 
 //弹出附件
 function OpenAth(url,title,keyOfEn,atPara,FK_MapData){
-    var H = document.body.clientHeight-60;
+    var H = document.body.clientHeight-240;
 
     OpenBootStrapModal(url, "eudlgframe", title, flowData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
 

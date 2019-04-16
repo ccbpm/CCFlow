@@ -232,6 +232,8 @@ namespace BP.Sys
                                 this.SetValByKey(mattr.KeyOfEn, mattr.DefVal);
                                 s = mattr.DefVal.ToString();
                             }
+                            s = s.Replace("￥", "");
+                            s = s.Replace(",", "");
 
                             if (decimal.Parse(s) == mattr.DefValDecimal)
                                 continue;

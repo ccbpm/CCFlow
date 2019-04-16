@@ -614,7 +614,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             eleHtml = "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
             for (var i = 0; i < dbs.length; i++) {
                 var db = dbs[i];
-                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\">" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
             }
             eleHtml += "</div>";
             return eleHtml;
@@ -1316,7 +1316,7 @@ function OpenAth(url, title, keyOfEn,atPara,FK_MapData) {
 
         for (var i = 0; i < dbs.length; i++) {
             var db = dbs[i];
-            eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "','" + mypk + "')\">" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+            eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "','" + mypk + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
         }
         $("#athModel_" + keyOfEn).html(eleHtml);
     }, null, "black", true);

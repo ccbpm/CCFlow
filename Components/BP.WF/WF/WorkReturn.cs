@@ -61,14 +61,29 @@ namespace BP.WF
         /// <param name="workID">WorkID</param>
         /// <param name="fid">流程ID</param>
         /// <param name="currNodeID">从节点</param>
-        /// <param name="ReturnToNodeID">退回到节点</param>
+        /// <param name="returnToNodeID">退回到节点, 0表示上一个节点，或者指定的一个节点.</param>
         /// <param name="reutrnToEmp">退回到人</param>
         /// <param name="isBackTrack">是否需要原路返回？</param>
         /// <param name="returnInfo">退回原因</param>
-        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int ReturnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo)
+        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo)
         {
             this.HisNode = new Node(currNodeID);
-            this.ReturnToNode = new Node(ReturnToNodeID);
+
+
+            //如果退回的节点为0,就求出可以退回的唯一节点. @shilianyu 同步到jflow上。
+            if (returnToNodeID == 0)
+            {
+                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(currNodeID, workID, fid);
+                if (dt.Rows.Count==0)
+                    throw new Exception("err@当前节点不允许退回，系统根据退回规则没有找到可以退回的到的节点。");
+
+                if (dt.Rows.Count!=1)
+                    throw new Exception("err@当前节点可以退回的节点有["+dt.Rows.Count+"]个，您需要指定要退回的节点才能退回。");
+
+                returnToNodeID = int.Parse( dt.Rows[0][0].ToString());
+            }
+
+            this.ReturnToNode = new Node(returnToNodeID);
             this.WorkID = workID;
             this.FID = fid;
             this.IsBackTrack = isBackTrack;

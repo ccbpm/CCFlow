@@ -491,6 +491,9 @@ namespace BP.Sys
             ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Entities");
             foreach (Entities ens in al)
             {
+                if (ens == null || ens.ToString() == null)
+                    continue;
+
                 if (ens.ToString().Contains(nameS) == false)
                     continue;
 

@@ -8538,7 +8538,7 @@ namespace BP.WF
         /// 退回
         /// </summary>
         /// <param name="workID">工作ID</param>
-        /// <param name="returnToNodeID">要退回的节点</param>
+        /// <param name="returnToNodeID">要退回的节点,0 表示上一个节点或者指定的节点.</param>
         /// <param name="msg">退回信息</param>
         /// <param name="isBackToThisNode">是否原路返回</param>
         /// <returns>执行结果</returns>

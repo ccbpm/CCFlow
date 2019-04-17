@@ -239,7 +239,7 @@
                 var FK_MapData = GetQueryString("FK_MapData");
                 var FID = GetQueryString("FID");
                 var FK_Node = GetQueryString("FK_Node");
-                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitPage, FK_MapData, FK_Node, FID, false);
+                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitPage, FK_MapData, FK_Node, FID, false, sys_MapDtl.H);
                 return;
             }
 
@@ -375,6 +375,7 @@
         }
 
         //初始化数据.
+        var sys_MapDtl; //从表的属性
         function InitPage() {
 
             var isReadonly = GetQueryString("IsReadonly");
@@ -412,7 +413,7 @@
             var mainTable = data["MainTable"]; //主表数据.
 
             //从表信息.
-            var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
+            sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
             var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
             var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
             mapExts = sys_mapExtDtl;
@@ -1892,8 +1893,6 @@
                                 var ctlID = myCtl[0];
                                 var ddlC1 = $("#DDL_" + ctlID);
                                 if (ddlC1 == null) {
-                                    //me.Tag = "";
-                                    //me.Update();
                                     continue;
                                 }
 
@@ -1904,14 +1903,9 @@
                                 var sql = myCtl[1].replace("~", "'");
                                 sql = sql.replace("@Key", ddlOper.val());
 
-                                //                            var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5' }];
-                                //                            var operations = '';
-                                //                            $.each(items, function (i, item) {
-                                //                                operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
-                                //                            });
                                 ddlC1.children().remove();
                                 ddlC1.html(operations);
-                                //ddlC1.SetSelectItem(valC1);
+                              
                             }
                         }
                         break;

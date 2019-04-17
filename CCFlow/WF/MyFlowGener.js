@@ -79,7 +79,7 @@ function closeWindow() {
     }
 }
 //从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
+function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage,H) {
     // model=1 自由表单, model=2傻瓜表单.
     var pathName = document.location.pathname;
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
@@ -89,10 +89,10 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     if (wWidth > 1200) {
         wWidth = 1000;
     }
-    if (wHeight < 600) {
+    if (H < 600) {
         wHeight = 600;
     } else {
-        wHeight = wHeight - 10;
+        wHeight = H;
     }
 
     if (projectName == "WF") {

@@ -23,9 +23,9 @@ $(function () {
     //构造表单.
     GenerFrm(); //表单数据.
 
-    if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
+    if (parent != null && parent.document.getElementById('editSubGrid') != undefined) {
         //计算高度，展示滚动条
-        var height = $(parent.document.getElementById('MainFrames')).height() - 110;
+        var height = $(parent.document.getElementById('editSubGrid')).height() - 110;
         $('#topContentDiv').height(height);
 
         $(window).resize(function () {
@@ -52,7 +52,7 @@ $(function () {
     });
 
 
-    SetHegiht();
+    //SetHegiht();
     //打开表单检查正则表达式
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
         FormOnLoadCheckIsNull();
@@ -158,7 +158,7 @@ function GenerFrm() {
     //表单名称.
     document.title = mapData.Name;
 
-    $('#divCCForm').height(h);
+    //$('#divCCForm').height(h);
 
     $('#topContentDiv').height(h);
     $('#topContentDiv').width(w);

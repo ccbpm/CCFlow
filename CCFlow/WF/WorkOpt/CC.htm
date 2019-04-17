@@ -153,17 +153,11 @@
 
             var cc = new Entity("BP.WF.Template.CCList");
             cc.MyPK = mypk;
+            cc.SetPKVal(mypk);
             cc.Delete();
             window.location.href = window.location.href;
             return;
 
-            //delRow(row); //清空单个table tbody
-            ClearTable();
-
-            // 把返回的结果，重新绑定.
-            var sas = JSON.parse(data);
-            BindTable(sas);
-            return;
         }
 
 
@@ -218,13 +212,11 @@
             cc.FlowName = flowName;
             cc.Title = title;
 
-            //cc.PWorkID = gwf.PWorkID;
-            //cc.PFlowNo = gwf.PFlowNo;
+         
 
                cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
 
-            //cc.pkval = cc.MyPK;
-            //emp.SetPKVal(cc.MyPK);
+          
             if (cc.IsExits() == true) {
                 alert('该人员已经存在.');
                 return;

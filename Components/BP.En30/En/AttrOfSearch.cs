@@ -4,90 +4,90 @@ using BP.En;
 
 namespace BP.En
 {
-	public enum OperatorSymbol
-	{
-		/// <summary>
-		/// 大于
-		/// </summary>
-		DaYu,
-		/// <summary>
-		/// 等于
-		/// </summary>
-		DengYu,
-		/// <summary>
-		/// 小于
-		/// </summary>
-		XiaoYu,
-		/// <summary>
-		/// 相似
-		/// </summary>
-		Like,
-	}
-	/// <summary>
-	/// 属性属性关联
-	/// </summary>
-	public class AARef
-	{
-		/// <summary>
-		/// 目录属性
-		/// </summary>
-		public string CataAttr=null;
-		/// <summary>
-		/// 关联key
-		/// </summary>
-		public string RefKey=null;
-		/// <summary>
-		/// 子属性
-		/// </summary>
-		public string SubAttr=null;
-		/// <summary>
-		/// 属性属性关联
-		/// </summary>
-		/// <param name="CataAttr">属性</param>
-		/// <param name="RefKey"></param>
-		/// <param name="SubAttr"></param>
-		public AARef(string cataAttr,string subAttr,string refKey)
-		{
-			this.CataAttr=cataAttr;
-			this.SubAttr=subAttr;
-			this.RefKey=refKey;
+    public enum OperatorSymbol
+    {
+        /// <summary>
+        /// 大于
+        /// </summary>
+        DaYu,
+        /// <summary>
+        /// 等于
+        /// </summary>
+        DengYu,
+        /// <summary>
+        /// 小于
+        /// </summary>
+        XiaoYu,
+        /// <summary>
+        /// 相似
+        /// </summary>
+        Like,
+    }
+    /// <summary>
+    /// 属性属性关联
+    /// </summary>
+    public class AARef
+    {
+        /// <summary>
+        /// 目录属性
+        /// </summary>
+        public string CataAttr = null;
+        /// <summary>
+        /// 关联key
+        /// </summary>
+        public string RefKey = null;
+        /// <summary>
+        /// 子属性
+        /// </summary>
+        public string SubAttr = null;
+        /// <summary>
+        /// 属性属性关联
+        /// </summary>
+        /// <param name="CataAttr">属性</param>
+        /// <param name="RefKey"></param>
+        /// <param name="SubAttr"></param>
+        public AARef(string cataAttr, string subAttr, string refKey)
+        {
+            this.CataAttr = cataAttr;
+            this.SubAttr = subAttr;
+            this.RefKey = refKey;
 
-		}
-	}
-	public class AARefs : System.Collections.CollectionBase
-	{
-		#region 构造
-		public AARefs()
-		{
-		}
-		public AARefs this[int index]
-		{
-			get
-			{
-				return (AARefs)this.InnerList[index];
-			}
-		}
-		#endregion
-		 
-		#region 增加一个查询属性。
-		/// <summary>
-		/// 增加一个查询属性
-		/// </summary>
-		/// <param name="lab">标签</param>
-		/// <param name="refKey">实体的属性</param>
-		/// <param name="defaultvalue">默认值</param>
-		public void Add(string lab,string key, string refKey,string defaultSymbol, string defaultvalue, int tbWidth)
-		{
-			AttrOfSearch aos= new AttrOfSearch(key,lab,refKey,defaultSymbol,defaultvalue,tbWidth,false);
-			this.InnerList.Add(aos);
-		}
-		#endregion
-	}
+        }
+    }
+    public class AARefs : System.Collections.CollectionBase
+    {
+        #region 构造
+        public AARefs()
+        {
+        }
+        public AARefs this[int index]
+        {
+            get
+            {
+                return (AARefs)this.InnerList[index];
+            }
+        }
+        #endregion
 
-	/// <summary>
-	/// SearchKey 的摘要说明。
-	/// 用来处理一条记录的存放，问题。
-	/// </summary>
+        #region 增加一个查询属性。
+        /// <summary>
+        /// 增加一个查询属性
+        /// </summary>
+        /// <param name="lab">标签</param>
+        /// <param name="refKey">实体的属性</param>
+        /// <param name="defaultvalue">默认值</param>
+        public void Add(string lab, string key, string refKey, string defaultSymbol, string defaultvalue, int tbWidth)
+        {
+            AttrOfSearch aos = new AttrOfSearch(key, lab, refKey, defaultSymbol, defaultvalue, tbWidth, false);
+            this.InnerList.Add(aos);
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// SearchKey 的摘要说明。
+    /// 用来处理一条记录的存放，问题。
+    /// </summary>
     public class AttrOfSearch
     {
         #region 基本属性
@@ -187,7 +187,7 @@ namespace BP.En
 
                     if (_DefaultVal.Contains("@WebUser.DeptParentNo"))
                         return _DefaultVal.Replace("@WebUser.DeptParentNo", Web.WebUser.DeptParentNo);
-                     
+
                     if (_DefaultVal.Contains("@WebUser.FK_DeptName"))
                         return _DefaultVal.Replace("@WebUser.FK_DeptName", Web.WebUser.FK_DeptName);
 
@@ -303,71 +303,71 @@ namespace BP.En
         }
         #endregion
     }
-	/// <summary>
-	/// SearchKey 集合
-	/// </summary>
-	public class AttrsOfSearch : System.Collections.CollectionBase
-	{
-		#region 构造
-		public AttrsOfSearch()
-		{
-		}
-		public AttrsOfSearch this[int index]
-		{
-			get
-			{
-				return (AttrsOfSearch)this.InnerList[index];
-			}
-		}
-		#endregion
-		 
-		#region 增加一个查询属性。
-		/// <summary>
-		/// 增加一个隐藏的查询属性
-		/// </summary>
-		/// <param name="refKey">关联key</param>
-		/// <param name="symbol">操作符号</param>
-		/// <param name="val">操作的val.</param>
-		public void AddHidden(string refKey,string symbol, string val)
-		{
-			AttrOfSearch aos= new AttrOfSearch( "K"+this.InnerList.Count,refKey,refKey,symbol,val,0,true);
-			this.InnerList.Add(aos);
-		}
-		/// <summary>
-		/// 增加一个查询属性
-		/// </summary>
-		/// <param name="lab">标签</param>
-		/// <param name="refKey">实体的属性</param>
-		/// <param name="defaultvalue">默认值</param>
-		public void Add(string lab, string refKey,string defaultSymbol, string defaultvalue, int tbWidth)
-		{
-			AttrOfSearch aos= new AttrOfSearch( "K"+this.InnerList.Count,lab,refKey,defaultSymbol,defaultvalue,tbWidth,false);
-			this.InnerList.Add(aos);
-		}
-		public void Add( AttrOfSearch en)
-		{
-			this.InnerList.Add(en);
-		}
+    /// <summary>
+    /// SearchKey 集合
+    /// </summary>
+    public class AttrsOfSearch : System.Collections.CollectionBase
+    {
+        #region 构造
+        public AttrsOfSearch()
+        {
+        }
+        public AttrsOfSearch this[int index]
+        {
+            get
+            {
+                return (AttrsOfSearch)this.InnerList[index];
+            }
+        }
+        #endregion
 
-		/// <summary>
-		/// 增加2个属性。
-		/// </summary>
-		/// <param name="lab">标题</param>
-		/// <param name="refKey">关联的Key</param>
-		/// <param name="defaultvalueOfFrom">默认值从</param>
-		/// <param name="defaultvalueOfTo">默认值从</param>
-		/// <param name="tbWidth">宽度</param>
-		public void AddFromTo(string lab,string refKey,string defaultvalueOfFrom, string defaultvalueOfTo, int tbWidth)
-		{
-			AttrOfSearch aos= new AttrOfSearch( "Form_"+refKey,lab+"从",refKey,">=", defaultvalueOfFrom,tbWidth,false);
-			aos.SymbolEnable=false;
-			this.InnerList.Add(aos);
+        #region 增加一个查询属性。
+        /// <summary>
+        /// 增加一个隐藏的查询属性
+        /// </summary>
+        /// <param name="refKey">关联key</param>
+        /// <param name="symbol">操作符号</param>
+        /// <param name="val">操作的val.</param>
+        public void AddHidden(string refKey, string symbol, string val)
+        {
+            AttrOfSearch aos = new AttrOfSearch("K" + this.InnerList.Count, refKey, refKey, symbol, val, 0, true);
+            this.InnerList.Add(aos);
+        }
+        /// <summary>
+        /// 增加一个查询属性
+        /// </summary>
+        /// <param name="lab">标签</param>
+        /// <param name="refKey">实体的属性</param>
+        /// <param name="defaultvalue">默认值</param>
+        public void Add(string lab, string refKey, string defaultSymbol, string defaultvalue, int tbWidth)
+        {
+            AttrOfSearch aos = new AttrOfSearch("K" + this.InnerList.Count, lab, refKey, defaultSymbol, defaultvalue, tbWidth, false);
+            this.InnerList.Add(aos);
+        }
+        public void Add(AttrOfSearch en)
+        {
+            this.InnerList.Add(en);
+        }
 
-			AttrOfSearch aos1= new AttrOfSearch( "To_"+refKey,"到",refKey,  "<=" , defaultvalueOfTo,tbWidth,false);
-			aos1.SymbolEnable=false;
-			this.InnerList.Add(aos1);
+        /// <summary>
+        /// 增加2个属性。
+        /// </summary>
+        /// <param name="lab">标题</param>
+        /// <param name="refKey">关联的Key</param>
+        /// <param name="defaultvalueOfFrom">默认值从</param>
+        /// <param name="defaultvalueOfTo">默认值从</param>
+        /// <param name="tbWidth">宽度</param>
+        public void AddFromTo(string lab, string refKey, string defaultvalueOfFrom, string defaultvalueOfTo, int tbWidth)
+        {
+            AttrOfSearch aos = new AttrOfSearch("Form_" + refKey, lab + "从", refKey, ">=", defaultvalueOfFrom, tbWidth, false);
+            aos.SymbolEnable = false;
+            this.InnerList.Add(aos);
 
-		}
-		#endregion
-	}
+            AttrOfSearch aos1 = new AttrOfSearch("To_" + refKey, "到", refKey, "<=", defaultvalueOfTo, tbWidth, false);
+            aos1.SymbolEnable = false;
+            this.InnerList.Add(aos1);
+
+        }
+        #endregion
+    }
 }

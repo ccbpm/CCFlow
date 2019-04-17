@@ -6470,10 +6470,26 @@ namespace BP.WF
                 //执行抄送.
                 if (this.HisNode.IsEndNode == false)
                 {
-                    //执行自动抄送.
+                    //执行自动抄送
                     string ccMsg1 = WorkFlowBuessRole.DoCCAuto(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
                     //按照指定的字段抄送.
                     string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
+                    //手工抄送
+                    if (this.HisNode.HisCCRole == CCRole.HandCC)
+                    {
+                        //获取抄送人员列表
+                        CCLists cclist = new CCLists(this.HisNode.FK_Flow,this.WorkID, this.HisWork.FID);
+                        if (cclist.Count == 0)
+                            ccMsg1 = "@没有选择抄送人。";
+                        if (cclist.Count > 0)
+                        {
+                            ccMsg1 = "@消息自动抄送给";
+                            foreach (CCList cc in cclist)
+                            {
+                                ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
+                            }
+                        }
+                    }
                     string ccMsg = ccMsg1 + ccMsg2;
 
                     if (DataType.IsNullOrEmpty(ccMsg) == false)

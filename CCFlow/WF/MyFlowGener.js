@@ -89,7 +89,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage,H) {
     if (wWidth > 1200) {
         wWidth = 1000;
     }
-    if (H < 600) {
+    if (H < 600 || H==undefined) {
         wHeight = 600;
     } else {
         wHeight = H;

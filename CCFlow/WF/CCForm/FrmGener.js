@@ -146,6 +146,10 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node
     if (projectName.startsWith("/WF")) {
         projectName = "";
     }
+    if (H == undefined || H < 600)
+        H = 600;
+    if (H > 1000)
+        H = 1000;
     
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal + "&FK_MapData=" + FK_MapData + "&FK_Node=" + FK_Node + "&FID=" + FID + "&IsSave=" + IsSave;
     if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {

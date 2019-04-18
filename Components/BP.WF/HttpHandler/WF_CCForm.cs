@@ -3268,6 +3268,9 @@ namespace BP.WF.HttpHandler
                     }
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");
+                    if (DataType.IsNullOrEmpty(exts))
+                        return "err@上传的文件" + file.FileName + "没有扩展名";
+
                     string guid = BP.DA.DBAccess.GenerGUID();
                     string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
                     string ext = System.IO.Path.GetExtension(file.FileName);
@@ -3388,19 +3391,6 @@ namespace BP.WF.HttpHandler
                         //文件保存的路径
                         file.SaveAs(temp);
                     }
-
-
-                    //try
-                    //{
-                    //    file.SaveAs(temp);
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    System.IO.File.Delete(temp);
-                    //    file.SaveAs(temp);
-                    //}
-
-                    //  fu.SaveAs(temp);
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);

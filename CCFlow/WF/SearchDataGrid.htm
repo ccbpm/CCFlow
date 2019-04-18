@@ -412,11 +412,22 @@
 
             if (wfState != 3 && emps.indexOf(userNo) >= 0) {
                 url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+                var self = window.open(url);
+                var loop = setInterval(function () {
+                    if (self.closed) {
+                        clearInterval(loop);
+                        InitPage(); //初始化查询列表、
+                        InitData(); //初始化数据
+                        Paginator(pageCount, pageIdx); //分页
+                        InitHomeCount();
+                    }
+                }, 1);   
+                return;
+
             } else {
                 url = "WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
             }
-            //window.location.href = url;
-           // WinOpen(url);
+           
             layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 

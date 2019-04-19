@@ -112,6 +112,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\RefDLL\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>

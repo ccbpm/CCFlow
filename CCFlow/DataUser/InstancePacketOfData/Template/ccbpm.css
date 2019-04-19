@@ -648,7 +648,7 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
     border-radius: 5px;
     padding: 8px 0px 0px 0px;
     margin: 8px 15px 15px 15px;
-    border: #2854FF 1px solid;
+    border: white 1px solid;
     overflow: auto;
 }
 
@@ -730,7 +730,7 @@ display:none;
         }
  /*---������Ĭ����ʾ��ʽ--*/  
         ::-webkit-scrollbar-thumb{  
-          background-color: #2884fa;
+          /**background-color: #2884fa;*/
           height: 50px;
           outline-offset: -2px;
           outline: 2px solid white;

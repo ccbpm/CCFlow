@@ -296,9 +296,9 @@ namespace BP.WF.HttpHandler
                     nodeID = gwf.FK_Node;
                 }
 
-                Node nd = new Node(nodeID);
+                Node nd = new Node(nodeID); 
                 Work wk = nd.HisWork;
-                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null);
+                return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
             }
             catch (Exception ex)
             {
@@ -322,7 +322,7 @@ namespace BP.WF.HttpHandler
 
                 Node nd = new Node(nodeID);
                 Work wk = nd.HisWork;
-                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null, true);
+                return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
             }
             catch (Exception ex)
             {

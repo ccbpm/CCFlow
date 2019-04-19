@@ -79,7 +79,7 @@ function closeWindow() {
     }
 }
 //从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage,H) {
+function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, H) {
     // model=1 自由表单, model=2傻瓜表单.
     var pathName = document.location.pathname;
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
@@ -89,7 +89,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage,H) {
     if (wWidth > 1200) {
         wWidth = 1000;
     }
-    if (H < 600) {
+    if (H < 600 || H == undefined) {
         wHeight = 600;
     } else {
         wHeight = H;
@@ -646,7 +646,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
             operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
 
         });
-        if(mapAttr.UIIsInput == 0)
+        if (mapAttr.UIIsInput == 0)
             operations = "<option value=''>- 请选择 -</option>" + operations;
         return operations;
 
@@ -779,7 +779,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框         
+            //下拉框          
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -790,7 +790,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 }
                 break;
 
-            //文本区域                 
+            //文本区域                  
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -914,12 +914,12 @@ function Send(isHuiQian) {
     //必填项和正则表达式检查.
     if (checkBlanks() == false) {
         alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
-        return false ;
+        return false;
     }
 
     if (checkReg() == false) {
         alert("发送错误:请检查字段边框变红颜色的是否填写完整？");
-        return false; 
+        return false;
     }
 
     window.hasClickSend = true; //标志用来刷新待办.
@@ -929,7 +929,7 @@ function Send(isHuiQian) {
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
 
-       var selectToNode = $('#DDL_ToNode  option:selected').data();
+        var selectToNode = $('#DDL_ToNode  option:selected').data();
         toNodeID = selectToNode.No;
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
@@ -1508,7 +1508,11 @@ function GenerWorkNode() {
 
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     if (node.FormType == 11) {
-        GenerFreeFrm(flowData);
+        if (flowData.FrmNode[0] != null && flowData.FrmNode[0] != undefined)
+            if (flowData.FrmNode[0].FrmType == 0)
+                GenerFoolFrm(flowData); //傻瓜表单.
+        if (flowData.FrmNode[0].FrmType == 1)
+            GenerFreeFrm(flowData);
     }
 
     //公文表单
@@ -1614,7 +1618,7 @@ function GenerWorkNode() {
 
     var jsSrc = '';
     try {
-       
+
 
         var s = document.createElement('script');
         s.type = 'text/javascript';
@@ -1811,7 +1815,7 @@ function InitToolBar() {
     if ($('[name=Return]').length > 0) {
         $('[name=Return]').attr('onclick', '');
         $('[name=Return]').unbind('click');
-        $('[name=Return]').bind('click', function () { if (Save()==false) return; initModal("returnBack"); $('#returnWorkModal').modal().show(); });
+        $('[name=Return]').bind('click', function () { if (Save() == false) return; initModal("returnBack"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Shift]').length > 0) {
@@ -1903,7 +1907,7 @@ function InitToolBar() {
 /* ss */
 function OpenOffice() {
 
-    
+
     var paras = "WorkID=" + GetQueryString("WorkID") + ",";
     paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
     paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
@@ -1924,7 +1928,7 @@ function setModalMax() {
     //设置bootstrap最大化窗口
     //获取width
     var w = ddocument.body.clientWidth - 40;
-    $("#returnWorkModal .modal-dialog").css("width",w+"px");
+    $("#returnWorkModal .modal-dialog").css("width", w + "px");
 }
 
 //初始化退回、移交、加签窗口
@@ -1961,7 +1965,7 @@ function initModal(modalType, toNode) {
         $("#returnWorkModal .modal-content").css("width", w + "px");
         $("#returnWorkModal .modal-content").css("height", h + "px");
         $("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
-        
+
     });
     var modalIframeSrc = '';
     if (modalType != undefined) {
@@ -2018,7 +2022,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人             
+            //发送选择接收节点和接收人              
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

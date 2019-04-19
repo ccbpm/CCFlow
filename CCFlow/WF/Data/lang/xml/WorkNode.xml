@@ -10,22 +10,13 @@
     ko-kr="안녕하세요 {0}, 오신 것을 환영합니다{1}."
     />
   <item
-      key="cannot_found_receiver"
+      key="not_found_receiver"
       zh-cn="@没有找到接收人."
       zh-tw="@没有找到接收人."
       zh-hk="@没有找到接收人."
-      en-us="@Receiver cannot be found."
+      en-us="@Not found receiver(s)."
       ja-jp="@受取人が見つかりませんでした。"
       ko-kr="@수신자를 찾을 수 없습니다."
-    />
-  <item
-      key="receiver_required"
-      zh-cn="@接收人员列表为空."
-      zh-tw="@接收人员列表为空."
-      zh-hk="@接收人员列表为空."
-      en-us="@Receiver is required."
-      ja-jp="@Receiver is required"
-      ko-kr="@Receiver is required"
     />
   <item
       key="invalid_metadata"
@@ -46,7 +37,7 @@
       ja-jp="@Invalid setting for receiver, receiver [{0}] cannot be found or invalid."
       ko-kr="@Invalid setting for receiver, receiver [{0}] cannot be found or invalid."
     />
-  
+
   <item
       key="no_value_in_group_tags"
       zh-cn="@[{0}]分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确."
@@ -70,9 +61,9 @@
       zh-cn="@分组标志不能为空。"
       zh-tw="@分组标志不能为空。"
       zh-hk="@分组标志不能为空。"
-      en-us="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
-      ja-jp="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
-      ko-kr="@Current node[{0}] in the middle，and is external user operation node, please duoble check the external receiver rule."
+      en-us="@The group tags({0}) has no value or invalid."
+      ja-jp="@The group tags({0}) has no value or invalid."
+      ko-kr="@The group tags({0}) has no value or invalid."
     />
   <item
       key="invalid_receiver_data_source"
@@ -119,6 +110,15 @@
      en-us="sub-thread"
      ja-jp="sub-thread"
      ko-kr="sub-thread"
+    />
+  <item
+     key="not_sub_thread"
+     zh-cn="@当前节点非子线程节点"
+     zh-tw="@当前节点非子线程节点"
+     zh-hk="@当前节点非子线程节点"
+     en-us="@The current node is not sub-thread node."
+     ja-jp="@The current node is not sub-thread node."
+     ko-kr="@The current node is not sub-thread node."
     />
   <item
     key="total_receivers"
@@ -339,12 +339,929 @@ ja-jp="@The node completed successfully(one workflow work)."
 ko-kr="@The node completed successfully(one workflow work)."
     />
   <item
-key="error_workflow_complete_condition"
-zh-cn="@判断流程({0})完成条件出现错误:{1}."
-zh-tw="@判断流程({0})完成条件出现错误:{1}."
-zh-hk="@判断流程({0})完成条件出现错误:{1}."
-en-us="@The workflow{0} completion condition is invalid: {1}."
-ja-jp="@The workflow{0} completion condition is invalid: {1}."
-ko-kr="@The workflow{0} completion condition is invalid: {1}."
+  key="error_workflow_complete_condition"
+  zh-cn="@判断流程({0})完成条件出现错误:{1}."
+  zh-tw="@判断流程({0})完成条件出现错误:{1}."
+  zh-hk="@判断流程({0})完成条件出现错误:{1}."
+  en-us="@The workflow{0} completion condition is invalid: {1}."
+  ja-jp="@The workflow{0} completion condition is invalid: {1}."
+  ko-kr="@The workflow{0} completion condition is invalid: {1}."
+/>
+
+  <item
+key="workflow_completed"
+zh-cn="@流程已经完成."
+zh-tw="@流程已经完成."
+zh-hk="@流程已经完成."
+en-us="@Workflow completed."
+ja-jp="@Workflow completed."
+ko-kr="@Workflow completed."
+/>
+  <item
+key="error_initialize_workflow_operator"
+zh-cn="@初试化他们的工作人员 - 期间出现错误."
+zh-tw="@初试化他们的工作人员 - 期间出现错误."
+zh-hk="@初试化他们的工作人员 - 期间出现错误."
+en-us="@Error initializing workflow operators."
+ja-jp="@Error initializing workflow operators."
+ko-kr="@Error initializing workflow operators."
+/>
+  <item
+key="error_saving_target_node_data"
+zh-cn="@保存目标节点数据 - 期间出现错误."
+zh-tw="@保存目标节点数据 - 期间出现错误."
+zh-hk="@保存目标节点数据 - 期间出现错误."
+en-us="@Error saving target node data."
+ja-jp="@Error saving target node data."
+ko-kr="@Error saving target node data."
+/>
+  <item
+key="sql_exception_1"
+zh-cn="@出现SQL异常! 可能是没有修复表或者重复发送.详情:{0}."
+zh-tw="@出现SQL异常! 可能是没有修复表或者重复发送.详情:{0}."
+zh-hk="@出现SQL异常! 可能是没有修复表或者重复发送.详情:{0}."
+en-us="@SQL Exception! There may not be fixed table or sent duplicated. Please see details: {0}."
+ja-jp="@SQL Exception! There may not be fixed table or sent duplicated. Please see details: {0}."
+ko-kr="@SQL Exception! There may not be fixed table or sent duplicated. Please see details: {0}."
+/>
+  <item
+key="error_saving_data"
+zh-cn="@保存工作出错! 详情:{0}."
+zh-tw="@保存工作出错! 详情:{0}."
+zh-hk="@保存工作出错! 详情:{0}."
+en-us="@SQL Exception! There may not be fixed table or sent duplicated. Please see details: {0}."
+ja-jp="@SQL Exception! There may not be fixed table or sent duplicated. Please see details: {0}."
+ko-kr="@SQL Exception! There may not be fixed table or sent duplicated. Please see details: {0}."
+/>
+  <item
+key="send_to_the_following_operators"
+zh-cn="@发送给如下{0}位处理人{1}."
+zh-tw="@发送给如下{0}位处理人{1}."
+zh-hk="@发送给如下{0}位处理人{1}."
+en-us="@Send to the following {0} operator(s): {1}."
+ja-jp="@Send to the following {0} operator(s): {1}."
+ko-kr="@Send to the following {0} operator(s): {1}."
+/>
+  <item
+key="start_next_node_work_success"
+zh-cn="@下一步工作[{0}]成功启动."
+zh-tw="@下一步工作[{0}]成功启动."
+zh-hk="@下一步工作[{0}]成功启动."
+en-us="@Start next node work[{0}] successfully."
+ja-jp="@Start next node work[{0}] successfully."
+ko-kr="@Start next node work[{0}] successfully."
+/>
+  <item
+key="not_found_node_operator"
+zh-cn="@没有找到节点[{0}]的处理人员,所以此节点无法成功启动."
+zh-tw="@没有找到节点[{0}]的处理人员,所以此节点无法成功启动."
+zh-hk="@没有找到节点[{0}]的处理人员,所以此节点无法成功启动."
+en-us="@Not found the node[{0}] operators, so cannot start the node work successfully."
+ja-jp="@Not found the node[{0}] operators, so cannot start the node work successfully."
+ko-kr="@Not found the node[{0}] operators, so cannot start the node work successfully."
+/>
+  <item
+key="found_node_operator"
+zh-cn="@节点[{0}]成功启动, 发送给{1}位处理人:{2}."
+zh-tw="@节点[{0}]成功启动, 发送给{1}位处理人:{2}."
+zh-hk="@节点[{0}]成功启动, 发送给{1}位处理人:{2}."
+en-us="@Start the node[{0}] work successfully. This node has {1} operator(s): {2}."
+ja-jp="@Start the node[{0}] work successfully. This node has {1} operator(s): {2}."
+ko-kr="@Start the node[{0}] work successfully. This node has {1} operator(s): {2}."
+/>
+
+  <item
+key="not_generated"
+zh-cn="未生成"
+zh-tw="未生成"
+zh-hk="未生成"
+en-us="Not Generated"
+ja-jp="Not Generated"
+ko-kr="Not Generated"
+/>
+  <item
+     key="missing_FID"
+     zh-cn="@丢失FID信息"
+     zh-tw="@丢失FID信息"
+     zh-hk="@丢失FID信息"
+     en-us="@Missing FID value."
+     ja-jp="@Missing FID value."
+     ko-kr="@Missing FID value."
     />
+  <item
+     key="first_node_person"
+     zh-cn="@流程已经运行到合流节点[{0}]. @您的工作已经发送给如下人员[{1}]. @您是第一个到达此节点的处理人."
+     zh-tw="@流程已经运行到合流节点[{0}]. @您的工作已经发送给如下人员[{1}]. @您是第一个到达此节点的处理人."
+     zh-hk="@流程已经运行到合流节点[{0}]. @您的工作已经发送给如下人员[{1}]. @您是第一个到达此节点的处理人."
+     en-us="@This workflow has been run to the combined node[{0}]. @The combined node operator: {1}. @You are the first operator to arrive at this node."
+     ja-jp="@This workflow has been run to the combined node[{0}]. @The combined node operator: {1}. @You are the first operator to arrive at this node."
+     ko-kr="@This workflow has been run to the combined node[{0}]. @The combined node operator: {1}. @You are the first operator to arrive at this node."
+    />
+  <item
+       key="node_type_does_not_exist"
+       zh-cn="@没有判断的节点类型({0})."
+       zh-tw="@没有判断的节点类型({0})."
+       zh-hk="@没有判断的节点类型({0})."
+       en-us="@This node({0}) type does not exist."
+       ja-jp="@This node({0}) type does not exist."
+       ko-kr="@This node({0}) type does not exist."
+    />
+  <item
+      key="workflow_error_3"
+      zh-cn="@流程设计错误: 普通节点下面不能连接子线程节点({0})"
+      zh-tw="@流程设计错误: 普通节点下面不能连接子线程节点({0})"
+      zh-hk="@流程设计错误: 普通节点下面不能连接子线程节点({0})"
+      en-us="@Workflow designed error: normal node does not allow connected to sub-thread node({0})."
+      ja-jp="@Workflow designed error: normal node does not allow connected to sub-thread node({0})."
+      ko-kr="@Workflow designed error: normal node does not allow connected to sub-thread node({0})."
+    />
+  <item
+      key="workflow_error_4"
+      zh-cn="@不支持流程模式: 分流节点同时启动了同表单的子线程与异表单的子线程."
+      zh-tw="@不支持流程模式: 分流节点同时启动了同表单的子线程与异表单的子线程."
+      zh-hk="@不支持流程模式: 分流节点同时启动了同表单的子线程与异表单的子线程."
+      en-us="@System does not support this workflow mode: starting separate node also starts another same form sub-thread and different form sub-thread."
+      ja-jp="@System does not support this workflow mode: starting separate node also starts another same form sub-thread and different form sub-thread."
+      ko-kr="@System does not support this workflow mode: starting separate node also starts another same form sub-thread and different form sub-thread."
+    />
+  <item
+     key="workflow_error_5"
+     zh-cn="@不支持流程模式: 分流节点同时启动了多个同表单的子线程."
+     zh-tw="@不支持流程模式: 分流节点同时启动了多个同表单的子线程."
+     zh-hk="@不支持流程模式: 分流节点同时启动了多个同表单的子线程."
+     en-us="@System does not support this workflow mode: starting separate node also starts more than one sub-thread in the same form."
+     ja-jp="@System does not support this workflow mode: starting separate node also starts more than one sub-thread in the same form."
+     ko-kr="@System does not support this workflow mode: starting separate node also starts more than one sub-thread in the same form."
+    />
+  <item
+    key="workflow_error_6"
+    zh-cn="@流程设计错误: 合流节点({0})下面不能连接子线程节点({1})"
+    zh-tw="@流程设计错误: 合流节点({0})下面不能连接子线程节点({1})"
+    zh-hk="@流程设计错误: 合流节点({0})下面不能连接子线程节点({1})"
+    en-us="@Workflow designed error: combined node({0}) does not allow connected to sub-thread node({1})."
+    ja-jp="@Workflow designed error: combined node({0}) does not allow connected to sub-thread node({1})."
+    ko-kr="@Workflow designed error: combined node({0}) does not allow connected to sub-thread node({1})."
+    />
+  <item
+    key="workflow_error_7"
+    zh-cn="@流程设计错误: 合流节点({0})下面不能连接分流节点({1})"
+    zh-tw="@流程设计错误: 合流节点({0})下面不能连接分流节点({1})"
+    zh-hk="@流程设计错误: 合流节点({0})下面不能连接分流节点({1})"
+    en-us="@Workflow designed error: combined node({0}) does not allow connected to separate node({1})."
+    ja-jp="@Workflow designed error: combined node({0}) does not allow connected to separate node({1})."
+    ko-kr="@Workflow designed error: combined node({0}) does not allow connected to separate node({1})."
+    />
+  <item
+    key="workflow_error_8"
+    zh-cn="@流程设计错误: 子线程节点({0})下面不能连接普通节点({1})"
+    zh-tw="@流程设计错误: 子线程节点({0})下面不能连接普通节点({1})"
+    zh-hk="@流程设计错误: 子线程节点({0})下面不能连接普通节点({1})"
+    en-us="@Workflow designed error: sub-thread node({0}) does not allow connected to normal node({1})."
+    ja-jp="@Workflow designed error: sub-thread node({0}) does not allow connected to normal node({1})."
+    ko-kr="@Workflow designed error: sub-thread node({0}) does not allow connected to normal node({1})."
+    />
+  <item
+    key="workflow_error_9"
+    zh-cn="@流程设计错误: 子线程节点({0})下面不能连接分流节点({1})"
+    zh-tw="@流程设计错误: 子线程节点({0})下面不能连接分流节点({1})"
+    zh-hk="@流程设计错误: 子线程节点({0})下面不能连接分流节点({1})"
+    en-us="@Workflow designed error: sub-thread node({0}) does not allow connected to separate node({1})."
+    ja-jp="@Workflow designed error: sub-thread node({0}) does not allow connected to separate node({1})."
+    ko-kr="@Workflow designed error: sub-thread node({0}) does not allow connected to separate node({1})."
+    />
+  <item
+   key="workflow_error_10"
+   zh-cn="@流程设计错误：两个连续子线程的子线程模式不一样(从节点{0}到节点{1})."
+   zh-tw="@流程设计错误：两个连续子线程的子线程模式不一样(从节点{0}到节点{1})."
+   zh-hk="@流程设计错误：两个连续子线程的子线程模式不一样(从节点{0}到节点{1})."
+   en-us="@Workflow designed error： The two consecutive sub-thread model are different(从节点{0}到节点{1})."
+   ja-jp="@Workflow designed error： The two consecutive sub-thread model are different(从节点{0}到节点{1})."
+   ko-kr="@Workflow designed error： The two consecutive sub-thread model are different(从节点{0}到节点{1})."
+    />
+
+  <item
+   key="not_found_value"
+   zh-cn="@未能找到这个值:{0}."
+   zh-tw="@未能找到这个值:{0}."
+   zh-hk="@未能找到这个值:{0}."
+   en-us="@Not found the value: {0}."
+   ja-jp="@Not found the value: {0}."
+   ko-kr="@Not found the value: {0}."
+    />
+
+  <item
+   key="not_found_form_primary_key"
+   zh-cn="@未能获取表单主键."
+   zh-tw="@未能获取表单主键"
+   zh-hk="@未能获取表单主键."
+   en-us="@Not found the form primary key."
+   ja-jp="@Not found the form primary key."
+   ko-kr="@Not found the form primary key."
+    />
+
+  <item
+   key="audit_comments_is_required"
+   zh-cn="err@请填写审核意见."
+   zh-tw="err@请填写审核意见."
+   zh-hk="err@请填写审核意见."
+   en-us="err@Audit comments is required!"
+   ja-jp="err@Audit comments is required!"
+   ko-kr="err@Audit comments is required!"
+    />
+
+  <item
+   key="form_field_must_not_be_null_1"
+   zh-cn="@表单{0}字段{1},{2}不能为空."
+   zh-tw="@表单{0}字段{1},{2}不能为空."
+   zh-hk="@表单{0}字段{1},{2}不能为空."
+   en-us="@The form {0} field {1}, {2} must not be null."
+   ja-jp="@The form {0} field {1}, {2} must not be null."
+   ko-kr="@The form {0} field {1}, {2} must not be null."
+    />
+  <item
+   key="form_field_must_not_be_null_2"
+   zh-cn="@字段{0},{1}不能为空."
+   zh-tw="@字段{0},{1}不能为空."
+   zh-hk="@字段{0},{1}不能为空."
+   en-us="@The field {0}, {1} must not be null."
+   ja-jp="@The field {0}, {1} must not be null."
+   ko-kr="@The field {0}, {1} must not be null."
+    />
+
+  <item
+   key="detected_error"
+   zh-cn="@提交前检查到如下必填字段填写不完整:{0}."
+   zh-tw="@提交前检查到如下必填字段填写不完整:{0}."
+   zh-hk="@提交前检查到如下必填字段填写不完整:{0}."
+   en-us="@Detected the following required fields missing values: {0}."
+   ja-jp="@Detected the following required fields missing values: {0}."
+   ko-kr="@Detected the following required fields missing values: {0}."
+    />
+
+  <item
+   key="document_not_read"
+   zh-cn="@文件({0})未阅读."
+   zh-tw="@文件({0})未阅读."
+   zh-hk="@文件({0})未阅读."
+   en-us="@Document({0}) not read."
+   ja-jp="@Document({0}) not read."
+   ko-kr="@Document({0}) not read."
+    />
+  <item
+   key="you_have_document_not_read"
+   zh-cn="@您还有如下文件没有阅读:{0}."
+   zh-tw="@您还有如下文件没有阅读:{0}."
+   zh-hk="@您还有如下文件没有阅读:{0}."
+   en-us="@You haven't read the following documents: {0}."
+   ja-jp="@You haven't read the following documents: {0}."
+   ko-kr="@You haven't read the following documents: {0}."
+    />
+  <item
+   key="not_upload_attachment"
+   zh-cn="@您没有上传附件:{0}."
+   zh-tw="@您没有上传附件:{0}."
+   zh-hk="@您没有上传附件:{0}."
+   en-us="@You did not upload the attachment: {0}."
+   ja-jp="@You did not upload the attachment: {0}."
+   ko-kr="@You did not upload the attachment: {0}."
+    />
+  <item
+   key="attachment_less_than_required"
+   zh-cn="@您上传的附件数量小于最低上传数量要求."
+   zh-tw="@您上传的附件数量小于最低上传数量要求."
+   zh-hk="@您上传的附件数量小于最低上传数量要求."
+   en-us="@The number of attachments you upload is less than the minimum number of uploads required."
+   ja-jp="@The number of attachments you upload is less than the minimum number of uploads required."
+   ko-kr="@The number of attachments you upload is less than the minimum number of uploads required."
+    />
+  <item
+   key="you_have_finished"
+   zh-cn="@您已经会签完毕."
+   zh-tw="@您已经会签完毕."
+   zh-hk="@您已经会签完毕."
+   en-us="@You have finished."
+   ja-jp="@You have finished."
+   ko-kr="@You have finished."
+    />
+  <item
+   key="you_have_finished_1"
+   zh-cn="@您已经会签完毕. 当前未处理会签工作的人有:{0}."
+   zh-tw="@您已经会签完毕. 当前未处理会签工作的人有:{0}."
+   zh-hk="@您已经会签完毕. 当前未处理会签工作的人有:{0}."
+   en-us="@You have finished, and these guys({0}) haven't handled job yet."
+   ja-jp="@You have finished, and these guys({0}) haven't handled job yet."
+   ko-kr="@You have finished, and these guys({0}) haven't handled job yet."
+    />
+  <item
+   key="you_have_finished_todo"
+   zh-cn="@{0}工作已经完成,请到待办列表查看."
+   zh-tw="@{0}工作已经完成,请到待办列表查看."
+   zh-hk="@{0}工作已经完成,请到待办列表查看."
+   en-us="@You have finished {0}, please view details in To-do list."
+   ja-jp="@You have finished {0}, please view details in To-do list."
+   ko-kr="@You have finished {0}, please view details in To-do list."
+    />
+  <item
+   key="you_are_the_last_operator"
+   zh-cn="您是最后一个会签该工作的处理人，已经提醒主持人({0}, {1})处理当前工作."
+   zh-tw="您是最后一个会签该工作的处理人，已经提醒主持人({0}, {1})处理当前工作."
+   zh-hk="您是最后一个会签该工作的处理人，已经提醒主持人({0}, {1})处理当前工作."
+   en-us="您是最后一个会签该工作的处理人，已经提醒主持人({0}, {1})处理当前工作."
+   ja-jp="@You are the last operator, system already send notification to initiator({0}, {1})."
+   ko-kr="@You are the last operator, system already send notification to initiator({0}, {1})."
+    />
+
+  <item
+   key="cross_signing"
+   zh-cn="会签"
+   zh-tw="会签"
+   zh-hk="会签"
+   en-us="Cross-signing"
+   ja-jp="Cross-signing"
+   ko-kr="Cross-signing"
+    />
+  <item
+  key="cooperation_transferred"
+  zh-cn="协作发送"
+  zh-tw="协作发送"
+  zh-hk="协作发送"
+  en-us="Cooperation Transferred"
+  ja-jp="Cooperation Transferred"
+  ko-kr="Cooperation Transferred"
+    />
+
+  <item
+  key="queue_transferred"
+  zh-cn="队列发送"
+  zh-tw="队列发送"
+  zh-hk="队列发送"
+  en-us="Queue Transferred"
+  ja-jp="Queue Transferred"
+  ko-kr="Queue Transferred"
+    />
+
+  <item
+key="send_to_the_operator"
+zh-cn="@当前工作已经发送给({0},{1})."
+zh-tw="@当前工作已经发送给({0},{1})."
+zh-hk="@当前工作已经发送给({0},{1})."
+en-us="@Send to the user({0},{1})."
+ja-jp="@Send to the user({0},{1})."
+ko-kr="@Send to the user({0},{1})."
+/>
+
+  <item
+key="cannot_send_to_next"
+zh-cn="@符合发送阻塞规则，不能向下发送."
+zh-tw="@符合发送阻塞规则，不能向下发送."
+zh-hk="@符合发送阻塞规则，不能向下发送."
+en-us="@Cannot send to next step, match workflow blocking rule."
+ja-jp="@Cannot send to next step, match workflow blocking rule."
+ko-kr="@Cannot send to next step, match workflow blocking rule."
+/>
+
+  <item
+key="cannot_send_to_next_1"
+zh-cn="@如下子流程没有完成，不能发送下一步."
+zh-tw="@如下子流程没有完成，不能发送下一步."
+zh-hk="@如下子流程没有完成，不能发送下一步."
+en-us="@Cannot send to next step, sub-workflow not complete yet."
+ja-jp="@Cannot send to next step, sub-workflow not complete yet."
+ko-kr="@Cannot send to next step, sub-workflow not complete yet."
+/>
+
+  <item
+key="cannot_send_to_next_2"
+zh-cn="@请通知他们处理完成,或者强制删除子流程您才能向下发送."
+zh-tw="@请通知他们处理完成,或者强制删除子流程您才能向下发送."
+zh-hk="@请通知他们处理完成,或者强制删除子流程您才能向下发送."
+en-us="@Cannot send to next step. Please wait for the operator to finish the work or delete the sub-workflow WITH FORCE."
+ja-jp="@Cannot send to next step. Please wait for the operator to finish the work or delete the sub-workflow WITH FORCE."
+ko-kr="@Cannot send to next step. Please wait for the operator to finish the work or delete the sub-workflow WITH FORCE."
+/>
+
+  <item
+key="cannot_send_to_next_3"
+zh-cn="@请通知他们处理完成,您才能向下发送."
+zh-tw="@请通知他们处理完成,您才能向下发送."
+zh-hk="@请通知他们处理完成,您才能向下发送."
+en-us="@Cannot send to next step. Please wait for the operator to finish the work."
+ja-jp="@Cannot send to next step. Please wait for the operator to finish the work."
+ko-kr="@Cannot send to next step. Please wait for the operator to finish the work."
+/>
+
+  <item
+key="workflow_id"
+zh-cn="流程编号"
+zh-tw="流程编号"
+zh-hk="流程编号"
+en-us="Workflow ID"
+ja-jp="Workflow ID"
+ko-kr="Workflow ID"
+/>
+  <item
+key="workflow_title"
+zh-cn="流程标题"
+zh-tw="流程标题"
+zh-hk="流程标题"
+en-us="Workflow Title"
+ja-jp="Workflow Title"
+ko-kr="Workflow Title"
+/>
+  <item
+key="workflow_name"
+zh-cn="流程名称"
+zh-tw="流程名称"
+zh-hk="流程名称"
+en-us="Workflow Name"
+ja-jp="Workflow Name"
+ko-kr="Workflow Name"
+/>
+  <item
+key="sub_workflow_title"
+zh-cn="子流程标题"
+zh-tw="子流程标题"
+zh-hk="子流程标题"
+en-us="Sub-Workflow Title"
+ja-jp="Sub-Workflow Title"
+ko-kr="Sub-Workflow Title"
+/>
+  <item
+key="sub_workflow_name"
+zh-cn="流程名称"
+zh-tw="流程名称"
+zh-hk="流程名称"
+en-us="Sub-Workflow Name"
+ja-jp="Sub-Workflow Name"
+ko-kr="Sub-Workflow Name"
+/>
+  <item
+key="current_operator"
+zh-cn="当前执行人"
+zh-tw="当前执行人"
+zh-hk="当前执行人"
+en-us="Current Operator"
+ja-jp="Current Operator"
+ko-kr="Current Operator"
+/>
+
+  <item
+key="current_step"
+zh-cn="当前节点"
+zh-tw="当前节点"
+zh-hk="当前节点"
+en-us="Current Step"
+ja-jp="Current Step"
+ko-kr="Current Step"
+/>
+
+  <item
+key="error_in_param_setting"
+zh-cn="参数格式设置有误:{0}."
+zh-tw="参数格式设置有误:{0}."
+zh-hk="参数格式设置有误:{0}."
+en-us="Error in parameter setting: {0}."
+ja-jp="Error in parameter setting: {0}."
+ko-kr="Error in parameter setting: {0}."
+/>
+
+  <item
+key="not_found_receiver"
+zh-cn="@没有为延续子流程设置接收人."
+zh-tw="@没有为延续子流程设置接收人."
+zh-hk="@没有为延续子流程设置接收人."
+en-us="@Not found sub-workflow receiver."
+ja-jp="@Not found sub-workflow receiver."
+ko-kr="@Not found sub-workflow receiver."
+/>
+  <item
+key="not_found_receiver"
+zh-cn="@没有为延续子流程设置接收人."
+zh-tw="@没有为延续子流程设置接收人."
+zh-hk="@没有为延续子流程设置接收人."
+en-us="@Not found sub-workflow receiver."
+ja-jp="@Not found sub-workflow receiver."
+ko-kr="@Not found sub-workflow receiver."
+/>
+  <item
+key="error_in_access_rules_setting"
+zh-cn="@节点访问规则({0})错误:节点({1},{2}), 按照岗位与部门的交集确定接收人的范围错误，没有找到人员:SQL={3}."
+zh-tw="@节点访问规则({0})错误:节点({1},{2}), 按照岗位与部门的交集确定接收人的范围错误，没有找到人员:SQL={3}."
+zh-hk="@节点访问规则({0})错误:节点({1},{2}), 按照岗位与部门的交集确定接收人的范围错误，没有找到人员:SQL={3}."
+en-us="@The node access rules({0}) incorrect: not found the Node({1},{2}) receiver. SQL = {3}."
+ja-jp="@The node access rules({0}) incorrect: not found the Node({1},{2}) receiver. SQL = {3}."
+ko-kr="@The node access rules({0}) incorrect: not found the Node({1},{2}) receiver. SQL = {3}."
+/>
+  <item
+key="sub_wf_started"
+zh-cn="子流程({0})已经启动,发送给({1})处理人."
+zh-tw="子流程({0})已经启动,发送给({1})处理人."
+zh-hk="子流程({0})已经启动,发送给({1})处理人."
+en-us="Sub-workflow({0}) already started successfully, the receivers: {1}."
+ja-jp="Sub-workflow({0}) already started successfully, the receivers: {1}."
+ko-kr="Sub-workflow({0}) already started successfully, the receivers: {1}."
+/>
+  <item
+key="sub_wf_started_1"
+zh-cn="@子流程({0})已经启动,发送给:{1}, 发送到:{2}."
+zh-tw="@子流程({0})已经启动,发送给:{1}, 发送到:{2}."
+zh-hk="@子流程({0})已经启动,发送给:{1}, 发送到:{2}."
+en-us="@Sub-workflow({0}) already started successfully, the receivers: {1}, the next node: {2}."
+ja-jp="@Sub-workflow({0}) already started successfully, the receivers: {1}, the next node: {2}."
+ko-kr="@Sub-workflow({0}) already started successfully, the receivers: {1}, the next node: {2}."
+/>
+  <item
+key="to_do_list_invisible"
+zh-cn="当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度."
+zh-tw="当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度."
+zh-hk="当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度."
+en-us="Currently, your To-do list invisible, you can view progress in your Pending list."
+ja-jp="Currently, your To-do list invisible, you can view progress in your Pending list."
+ko-kr="Currently, your To-do list invisible, you can view progress in your Pending list."
+/>
+
+ <item
+key="should_gust"
+zh-cn="@当前节点({0})是客户执行节点,所以当前登录人员应当是Guest,现在是:{1}."
+zh-tw="@当前节点({0})是客户执行节点,所以当前登录人员应当是Guest,现在是:{1}."
+zh-hk="@当前节点({0})是客户执行节点,所以当前登录人员应当是Guest,现在是:{1}."
+en-us="@The current node work({0}) should be done by Guest, but the current logon user is: {1}."
+ja-jp="@The current node work({0}) should be done by Guest, but the current logon user is: {1}."
+ko-kr="@The current node work({0}) should be done by Guest, but the current logon user is: {1}."
+/>
+  <item
+key="current_work_completed"
+zh-cn="@当前工作您已经处理完成，或者您({0} {1})没有处理当前工作的权限."
+zh-tw="@当前工作您已经处理完成，或者您({0} {1})没有处理当前工作的权限."
+zh-hk="@当前工作您已经处理完成，或者您({0} {1})没有处理当前工作的权限."
+en-us="@You({0} {1}) completed the current work or you have no permission."
+ja-jp="@You({0} {1}) completed the current work or you have no permission."
+ko-kr="@You({0} {1}) completed the current work or you have no permission."
+/>
+  <item
+key="error_contradictory"
+zh-cn="err@在该流程的FEE中您指定了跳转到的节点,但同时又在外部传入了发送到的节点，两者相矛盾,系统不知道要转向:{0},还是转向:{1}."
+zh-tw="err@在该流程的FEE中您指定了跳转到的节点,但同时又在外部传入了发送到的节点，两者相矛盾,系统不知道要转向:{0},还是转向:{1}."
+zh-hk="err@在该流程的FEE中您指定了跳转到的节点,但同时又在外部传入了发送到的节点，两者相矛盾,系统不知道要转向:{0},还是转向:{1}."
+en-us="err@In the workflow FEE, you defined the next node, but while you  sent destination node external. It is contradictory each other, Workflow Engine doesn't know where to turn, {0} or {1}."
+ja-jp="err@In the workflow FEE, you defined the next node, but while you  sent destination node external. It is contradictory each other, Workflow Engine doesn't know where to turn, {0} or {1}."
+ko-kr="err@In the workflow FEE, you defined the next node, but while you  sent destination node external. It is contradictory each other, Workflow Engine doesn't know where to turn, {0} or {1}."
+/>
+  <item
+key="error_send"
+zh-cn="@执行发送前事件失败:{0}."
+zh-tw="@执行发送前事件失败:{0}."
+zh-hk="@执行发送前事件失败:{0}."
+en-us="@Error:{0}."
+ja-jp="@Error:{0}."
+ko-kr="@Error:{0}."
+/>
+
+  <item
+key="send_to_next"
+zh-cn="加签后向下发送，直接发送给下一步处理人。"
+zh-tw="加签后向下发送，直接发送给下一步处理人。"
+zh-hk="加签后向下发送，直接发送给下一步处理人。"
+en-us="After signed, send to next operator directly."
+ja-jp="After signed, send to next operator directly."
+ko-kr="After signed, send to next operator directly."
+    />
+  <item
+key="reply_comments"
+zh-cn="回复意见:{0}."
+zh-tw="回复意见:{0}."
+zh-hk="回复意见:{0}."
+en-us="Reply Comments:{0}."
+ja-jp="Reply Comments:{0}."
+ko-kr="Reply Comments:{0}."
+    />
+
+  <item
+key="wf_eng_error_1"
+zh-cn="@工作流引擎错误."
+zh-tw="@工作流引擎错误."
+zh-hk="@工作流引擎错误."
+en-us="@Workflow Engine Error."
+ja-jp="@Workflow Engine Error."
+ko-kr="@Workflow Engine Error."
+    />
+
+  <item
+key="wf_eng_error_2"
+zh-cn="@生成单据失败,请让管理员检查目录设置:[{0}].@Err:{1},@File={2},@Path:{3}."
+zh-tw="@生成单据失败,请让管理员检查目录设置:[{0}].@Err:{1},@File={2},@Path:{3}."
+zh-hk="@生成单据失败,请让管理员检查目录设置:[{0}].@Err:{1},@File={2},@Path:{3}."
+en-us="@Generated bill failed, please let administrator check the file directory setting:[{0}].@Err:{1},@File={2},@Path:{3}."
+ja-jp="@Generated bill failed, please let administrator check the file directory setting:[{0}].@Err:{1},@File={2},@Path:{3}."
+ko-kr="@Generated bill failed, please let administrator check the file directory setting:[{0}].@Err:{1},@File={2},@Path:{3}."
+    />
+
+  <item
+key="wf_eng_error_3"
+zh-cn="@系统已经做了可能性的修复，请您再发送一次，如果问题仍然存在请联系管理员。"
+zh-tw="@系统已经做了可能性的修复，请您再发送一次，如果问题仍然存在请联系管理员。"
+zh-hk="@系统已经做了可能性的修复，请您再发送一次，如果问题仍然存在请联系管理员。"
+en-us="@System has been fixed possible issue, please send again and contact the administrator if have any problem."
+ja-jp="@System has been fixed possible issue, please send again and contact the administrator if have any problem."
+ko-kr="@System has been fixed possible issue, please send again and contact the administrator if have any problem."
+    />
+
+  <item
+key="wf_eng_error_4"
+zh-cn="@回滚发送失败数据出现错误:{0}."
+zh-tw="@回滚发送失败数据出现错误:{0}."
+zh-hk="@回滚发送失败数据出现错误:{0}."
+en-us="@Rollback Error:{0}."
+ja-jp="@Rollback Error:{0}."
+ko-kr="@Rollback Error:{0}."
+    />
+  <item
+key="wf_eng_error_5"
+zh-cn="@工作流引擎错误:{0}."
+zh-tw="@工作流引擎错误:{0}."
+zh-hk="@工作流引擎错误:{0}."
+en-us="@Workflow Engine Error:{0}."
+ja-jp="@Workflow Engine Error:{0}."
+ko-kr="@Workflow Engine Error:{0}."
+    />
+  <item
+key="wf_eng_error_6"
+zh-cn="获取分合流之间的子线程节点集合为空，请检查流程设计，在分合流之间的节点必须设置为子线程节点。"
+zh-tw="获取分合流之间的子线程节点集合为空，请检查流程设计，在分合流之间的节点必须设置为子线程节点。"
+zh-hk="获取分合流之间的子线程节点集合为空，请检查流程设计，在分合流之间的节点必须设置为子线程节点。"
+en-us="Workflow designed error: you have to set the nodes(between separate and combined) as sub_thread nodes."
+ja-jp="Workflow designed error: you have to set the nodes(between separate and combined) as sub_thread nodes."
+ko-kr="Workflow designed error: you have to set the nodes(between separate and combined) as sub_thread nodes."
+    />
+
+  <item
+key="other_info"
+zh-cn="@其它信息:{0}."
+zh-tw="@其它信息:{0}."
+zh-hk="@其它信息:{0}."
+en-us="@Other information:{0}."
+ja-jp="@Other information:{0}."
+ko-kr="@Other information:{0}."
+    />
+  
+
+  <item
+key="current_operator"
+zh-cn="操作员:{0},{1}."
+zh-tw="操作员:{0},{1}."
+zh-hk="操作员:{0},{1}."
+en-us="Operator: {0},{1}."
+ja-jp="Operator: {0},{1}."
+ko-kr="Operator: {0},{1}."
+/>
+
+  <item
+key="current_node"
+zh-cn="当前节点:{0}."
+zh-tw="当前节点:{0}."
+zh-hk="当前节点:{0}."
+en-us="Current Node:{0}."
+ja-jp="Current Node:{0}."
+ko-kr="Current Node:{0}."
+/>
+
+  <item
+key="auto_delete"
+zh-cn="合流点发送时自动删除."
+zh-tw="合流点发送时自动删除."
+zh-hk="合流点发送时自动删除."
+en-us="Deleted automatically when combined  node send."
+ja-jp="Deleted automatically when combined  node send."
+ko-kr="Deleted automatically when combined  node send."
+/>
+
+  <item
+key="send_error_1"
+zh-cn="err@发送错误:当前流程已经被退回，您不能执行发送操作。技术信息:当前工作节点是子线程状态，主线程是退回状态。"
+zh-tw="err@发送错误:当前流程已经被退回，您不能执行发送操作。技术信息:当前工作节点是子线程状态，主线程是退回状态。"
+zh-hk="err@发送错误:当前流程已经被退回，您不能执行发送操作。技术信息:当前工作节点是子线程状态，主线程是退回状态。"
+en-us="err@Send error: The current workflow has been returned, you cannot send again.  Technical information: current work node is sub-workflow, main thread status is Returned."
+ja-jp="err@Send error: The current workflow has been returned, you cannot send again.  Technical information: current work node is sub-workflow, main thread status is Returned."
+ko-kr="err@Send error: The current workflow has been returned, you cannot send again.  Technical information: current work node is sub-workflow, main thread status is Returned."
+/>
+  <item
+key="send_error_2"
+zh-cn="退回后发送"
+zh-tw="退回后发送"
+zh-hk="退回后发送"
+en-us="Send after returned"
+ja-jp="Send after returned"
+ko-kr="Send after returned"
+/>
+
+  <item
+key="send_error_3"
+zh-cn="@流程出现错误:工作ID={0},当前活动点({1} {2})与发送点({3} {4})不一致."
+zh-tw="@流程出现错误:工作ID={0},当前活动点({1} {2})与发送点({3} {4})不一致."
+zh-hk="@流程出现错误:工作ID={0},当前活动点({1} {2})与发送点({3} {4})不一致."
+en-us="@Workflow error: WorkID={0},current active node({1} {2}) and destination node({3} {4}) are inconsistent."
+ja-jp="@Workflow error: WorkID={0},current active node({1} {2}) and destination node({3} {4}) are inconsistent."
+ko-kr="@Workflow error: WorkID={0},current active node({1} {2}) and destination node({3} {4}) are inconsistent."
+/>
+
+  <item
+key="wf_end_success"
+zh-cn="流程已经结束"
+zh-tw="流程已经结束"
+zh-hk="流程已经结束"
+en-us="The workflow has ended."
+ja-jp="The workflow has ended."
+ko-kr="The workflow has ended."
+/>
+
+  <item
+key="wf_not_end"
+zh-cn="流程未结束"
+zh-tw="流程未结束"
+zh-hk="流程未结束"
+en-us="The workflow is not end."
+ja-jp="The workflow is not end."
+ko-kr="The workflow is not end."
+/>
+
+  <item
+key="rpt_error"
+zh-cn="生成报表数据错误:{0}."
+zh-tw="生成报表数据错误:{0}."
+zh-hk="生成报表数据错误:{0}."
+en-us="Generated report error:{0}."
+ja-jp="Generated report error:{0}."
+ko-kr="Generated report error:{0}."
+/>
+
+  <item
+key="cc"
+zh-cn="@自动抄送给:{0}."
+zh-tw="@自动抄送给:{0}."
+zh-hk="@自动抄送给:{0}."
+en-us="@CC:{0}."
+ja-jp="@CC:{0}."
+ko-kr="@CC:{0}."
+    />
+  <item
+key="not_match_sub_wf"
+zh-cn="@不符合子流程[{0}]启动条件."
+zh-tw="@不符合子流程[{0}]启动条件."
+zh-hk="@不符合子流程[{0}]启动条件."
+en-us="@Do not meet the sub-workflow[{0}] start conditions."
+ja-jp="@Do not meet the sub-workflow[{0}] start conditions."
+ko-kr="@Do not meet the sub-workflow[{0}] start conditions."
+    />
+
+  <item
+key="not_match_sub_wf"
+zh-cn="@不符合子流程[{0}]启动条件."
+zh-tw="@不符合子流程[{0}]启动条件."
+zh-hk="@不符合子流程[{0}]启动条件."
+en-us="@Do not meet the sub-workflow[{0}] start conditions."
+ja-jp="@Do not meet the sub-workflow[{0}] start conditions."
+ko-kr="@Do not meet the sub-workflow[{0}] start conditions."
+    />
+
+  <item
+key="have_permission_next"
+zh-cn="@下一步工作您仍然可以处理。"
+zh-tw="@下一步工作您仍然可以处理。"
+zh-hk="@下一步工作您仍然可以处理。"
+en-us="@You have permission with the next work."
+ja-jp="@You have permission with the next work."
+ko-kr="@You have permission with the next work."
+    />
+
+  <item
+key="open_sub_wf"
+zh-cn="打开子流程"
+zh-tw="打开子流程"
+zh-hk="打开子流程"
+en-us="Open Sub-workflow"
+ja-jp="Open Sub-workflow"
+ko-kr="Open Sub-workflow"
+    />
+  <item
+key="start_wf"
+zh-cn="{0}发起工作流{1}"
+zh-tw="{0}发起工作流{1}"
+zh-hk="{0}发起工作流{1}"
+en-us="{0}started the workflow {1}"
+ja-jp="{0}started the workflow {1}"
+ko-kr="{0}started the workflow {1}"
+    />
+
+  <item
+key="start_sub_wf"
+zh-cn="发起子流程:{0}"
+zh-tw="发起子流程:{0}"
+zh-hk="发起子流程:{0}"
+en-us="Start Sub-workflow: {0}"
+ja-jp="Start Sub-workflow: {0}"
+ko-kr="Start Sub-workflow: {0}"
+    />
+
+  <item
+key="start_wf_title"
+zh-cn="{0},{1}在{2}发起"
+zh-tw="{0},{1}在{2}发起"
+zh-hk="{0},{1}在{2}发起"
+en-us="Started by {0},{1} at {2}"
+ja-jp="Started by {0},{1} at {2}"
+ko-kr="Started by {0},{1} at {2}"
+
+    />
+
+  <item
+key="delete_focus_field"
+zh-cn="@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}."
+zh-tw="@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}."
+zh-hk="@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}."
+en-us="@The focus field was been removed on the node({0}, {1}),{2} was replaced by {3}."
+ja-jp="@The focus field was been removed on the node({0}, {1}),{2} was replaced by {3}."
+ko-kr="@The focus field was been removed on the node({0}, {1}),{2} was replaced by {3}."
+
+    />
+
+  <item
+key="not_found_para"
+zh-cn="@您设置当前是自动运行，但是没有在该节点上设置参数。"
+zh-tw="@您设置当前是自动运行，但是没有在该节点上设置参数。"
+zh-hk="@您设置当前是自动运行，但是没有在该节点上设置参数。"
+en-us="@The current setting is runing automatically, but not found parameter at this node."
+ja-jp="@The current setting is runing automatically, but not found parameter at this node."
+ko-kr="@The current setting is runing automatically, but not found parameter at this node."
+
+    />
+
+  <item
+key="current_work_completed_para"
+zh-cn="当前工作[{0}]已经完成."
+zh-tw="当前工作[{0}]已经完成."
+zh-hk="当前工作[{0}]已经完成."
+en-us="Current work[{0}]completed."
+ja-jp="Current work[{0}]completed."
+ko-kr="Current work[{0}]completed."
+    />
+
+  <item
+key="start_next_combined_node_work_success"
+zh-cn="@下一步合流节点[{0}]工作成功启动."
+zh-tw="@下一步合流节点[{0}]工作成功启动."
+zh-hk="@下一步合流节点[{0}]工作成功启动."
+en-us="@Start next combined node work[{0}] successfully."
+ja-jp="@Start next combined node work[{0}] successfully."
+ko-kr="@Start next combined node work[{0}] successfully."
+/>
+
+  <item
+key="next_node_operator"
+zh-cn="@下一步的工作处理人[{0}]"
+zh-tw="@下一步的工作处理人[{0}]"
+zh-hk="@下一步的工作处理人[{0}]."
+en-us="@the next work node operator[{0}]"
+ja-jp="@the next work node operator[{0}]"
+ko-kr="@the next work node operator[{0}]"
+/>
+  <item
+key="not_found_pre_node_1"
+zh-cn="@此节点是开始节点,没有上一步工作"
+zh-tw="@此节点是开始节点,没有上一步工作"
+zh-hk="@此节点是开始节点,没有上一步工作"
+en-us="@The node is the first node, no previous node."
+ja-jp="@The node is the first node, no previous node."
+ko-kr="@The node is the first node, no previous node."
+/>
+
+  <item
+key="not_found_pre_node_2"
+zh-cn="@没有找到上一步节点"
+zh-tw="@没有找到上一步节点"
+zh-hk="@没有找到上一步节点"
+en-us="@Not found the previous node."
+ja-jp="@Not found the previous node."
+ko-kr="@Not found the previous node."
+/>
+
+  <item
+key="not_found_pre_node_3"
+zh-cn="@初始化失败，没有找到任何节点。"
+zh-tw="@初始化失败，没有找到任何节点。"
+zh-hk="@初始化失败，没有找到任何节点。"
+en-us="@Initialization failure: no node was found."
+ja-jp="@Initialization failure: no node was found."
+ko-kr="@Initialization failure: no node was found."
+/>
+  
+  <item
+key="current_node_not_separate"
+zh-cn="@当前工作节点不是分合流节点。"
+zh-tw="@当前工作节点不是分合流节点。"
+zh-hk="@当前工作节点不是分合流节点。"
+en-us="@The current node is not separate combined node."
+ja-jp="@The current node is not separate combined node."
+ko-kr="@The current node is not separate combined node."
+/>
+ 
 </language>

@@ -199,7 +199,12 @@ namespace BP.WF
         {
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+            
+            //如果事件返回的信息不是null，就终止执行。
             string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, this.HisWork, atPara);
+            if (msg != null)
+                return msg; 
+
 
             //执行退回的考核.
             Glo.InitCH(this.HisNode.HisFlow, this.HisNode, this.WorkID, this.FID, this.HisNode.Name + ":退回考核.");
@@ -886,8 +891,12 @@ namespace BP.WF
 
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+
+            //如果事件返回的信息不是null，就终止执行。
             string msg = fl.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
                 atPara);
+            if (msg != null)
+                return msg; 
 
             if (this.HisNode.FocusField != "")
             {

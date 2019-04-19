@@ -65,13 +65,24 @@ namespace CCFlow.WF.CCForm
                     {
                         string val = dr[item.Key].ToString();
                         if (val == "1")
-                            dr[item.Key + "Text"] = "[√]";
+                            dr[item.Key + "Text"] = "√";
                         else
-                            dr[item.Key + "Text"] = "[×]";
+                            dr[item.Key + "Text"] = "  ";
                     }
                 }
             }
             #endregion 处理bool类型.
+
+            //把从表数据加入里面去.
+            //MapDtls dtls = new MapDtls("ND" + gwf.FK_Node);
+            //foreach (MapDtl item in dtls)
+            //{
+            //    GEDtls dtlEns = new GEDtls(item.No);
+            //    dtlEns.Retrieve(GEDtlAttr.RefPK, workID);
+
+            //    DataTable dtDtl = dtlEns.ToDataTableField(item.No);
+            //    ds.Tables.Add(dtDtl);
+            //}
 
             //把从表数据加入里面去.
             MapDtls dtls = new MapDtls("ND" + gwf.FK_Node);
@@ -79,9 +90,36 @@ namespace CCFlow.WF.CCForm
             {
                 GEDtls dtlEns = new GEDtls(item.No);
                 dtlEns.Retrieve(GEDtlAttr.RefPK, workID);
+                DataTable Dtl = dtlEns.ToDataTableField(item.No);
+                ds.Tables.Add(Dtl);
+                foreach (GEDtl dtl in dtlEns)
+                {
+                    DataTable dtDtl = dtl.ToDataTableField(item.No);
+                    
+                    #region 处理bool类型.
+                    foreach (Attr dtlitem in dtl.EnMap.Attrs)
+                    {
+                        if (dtlitem.MyDataType == DataType.AppBoolean)
+                        {
+                            if(Dtl.Columns.Contains(dtlitem.Key + "Text"))
+                            {
+                                continue;
+                            }
+                            Dtl.Columns.Add(dtlitem.Key + "Text", typeof(string));
 
-                DataTable dtDtl = dtlEns.ToDataTableField(item.No);
-                ds.Tables.Add(dtDtl);
+                            foreach (DataRow dr in Dtl.Rows)
+                            {
+                                string val = dr[dtlitem.Key].ToString();
+                                if (val == "1")
+                                    dr[dtlitem.Key + "Text"] = "√";
+                                else
+                                    dr[dtlitem.Key + "Text"] = "  ";
+                            }
+                        }
+                    }
+                    #endregion 处理bool类型.
+                }
+
             }
 
             //生成模版的文件流.

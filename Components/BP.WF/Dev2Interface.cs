@@ -7253,112 +7253,107 @@ namespace BP.WF
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, Hashtable htWork, DataSet workDtls, int toNodeID,
             string toEmps, string execUserNo, string execUserName, string execUserDeptNo, string execUserDeptName, string title)
         {
-            try
+
+            //给临时的发送变量赋值，解决带有参数的转向。
+            Glo.SendHTOfTemp = htWork;
+
+            int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
+            if (htWork != null)
             {
-                //给临时的发送变量赋值，解决带有参数的转向。
-                Glo.SendHTOfTemp = htWork;
-
-                int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
-                if (htWork != null)
-                {
-                    BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
-                }
-
-                // 变量.
-                Node nd = new Node(currNodeId);
-                Work sw = nd.HisWork;
-                sw.OID = workID;
-                sw.RetrieveFromDBSources();
-
-                Node ndOfToNode = null; //到达节点ID
-                if (toNodeID != 0)
-                {
-                    ndOfToNode = new Node(toNodeID);
-                }
-
-                //补偿性修复.
-                if (nd.HisRunModel != RunModel.SubThread)
-                {
-                    if (sw.FID != 0)
-                    {
-                        sw.DirectUpdate();
-                    }
-                }
-
-                SendReturnObjs objs;
-                //执行流程发送.
-                WorkNode wn = new WorkNode(sw, nd);
-                wn.Execer = execUserNo;
-                wn.ExecerName = execUserName;
-                wn.title = title; // 设置标题，有可能是从外部传递过来的标题.
-                wn.SendHTOfTemp = htWork;
-
-                if (ndOfToNode == null)
-                {
-                    objs = wn.NodeSend(null, toEmps);
-                }
-                else
-                {
-                    objs = wn.NodeSend(ndOfToNode, toEmps);
-                }
-
-                #region 更新发送参数.
-                if (htWork != null)
-                {
-                    string dbstr = SystemConfig.AppCenterDBVarStr;
-                    Paras ps = new Paras();
-
-                    string paras = "";
-                    foreach (string key in htWork.Keys)
-                    {
-                        paras += "@" + key + "=" + htWork[key].ToString();
-                        switch (key)
-                        {
-                            case WorkSysFieldAttr.SysSDTOfFlow:
-                                ps = new Paras();
-                                ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfFlow=" + dbstr + "SDTOfFlow WHERE WorkID=" + dbstr + "WorkID";
-                                ps.Add(GenerWorkFlowAttr.SDTOfFlow, htWork[key].ToString());
-                                ps.Add(GenerWorkerListAttr.WorkID, workID);
-                                DBAccess.RunSQL(ps);
-
-                                break;
-                            case WorkSysFieldAttr.SysSDTOfNode:
-                                ps = new Paras();
-                                ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfNode=" + dbstr + "SDTOfNode WHERE WorkID=" + dbstr + "WorkID";
-                                ps.Add(GenerWorkFlowAttr.SDTOfNode, htWork[key].ToString());
-                                ps.Add(GenerWorkerListAttr.WorkID, workID);
-                                DBAccess.RunSQL(ps);
-
-                                ps = new Paras();
-                                ps.SQL = "UPDATE WF_GenerWorkerlist SET SDT=" + dbstr + "SDT WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
-                                ps.Add(GenerWorkerListAttr.SDT, htWork[key].ToString());
-                                ps.Add(GenerWorkerListAttr.WorkID, workID);
-                                ps.Add(GenerWorkerListAttr.FK_Node, objs.VarToNodeID);
-                                DBAccess.RunSQL(ps);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
-                    {
-                        ps = new Paras();
-                        ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
-                        ps.Add(GenerWorkerListAttr.Paras, paras);
-                        ps.Add(GenerWorkerListAttr.WorkID, workID);
-                        ps.Add(GenerWorkerListAttr.FK_Node, nd.NodeID);
-                        DBAccess.RunSQL(ps);
-                    }
-                }
-                #endregion 更新发送参数.
-
-                return objs;
+                BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
             }
-            catch (Exception ex) {
-                Log.DefaultLogWriteLineError(ex);
-                return null;
+
+            // 变量.
+            Node nd = new Node(currNodeId);
+            Work sw = nd.HisWork;
+            sw.OID = workID;
+            sw.RetrieveFromDBSources();
+
+            Node ndOfToNode = null; //到达节点ID
+            if (toNodeID != 0)
+            {
+                ndOfToNode = new Node(toNodeID);
             }
+
+            //补偿性修复.
+            if (nd.HisRunModel != RunModel.SubThread)
+            {
+                if (sw.FID != 0)
+                {
+                    sw.DirectUpdate();
+                }
+            }
+
+            SendReturnObjs objs;
+            //执行流程发送.
+            WorkNode wn = new WorkNode(sw, nd);
+            wn.Execer = execUserNo;
+            wn.ExecerName = execUserName;
+            wn.title = title; // 设置标题，有可能是从外部传递过来的标题.
+            wn.SendHTOfTemp = htWork;
+
+            if (ndOfToNode == null)
+            {
+                objs = wn.NodeSend(null, toEmps);
+            }
+            else
+            {
+                objs = wn.NodeSend(ndOfToNode, toEmps);
+            }
+
+            #region 更新发送参数.
+            if (htWork != null)
+            {
+                string dbstr = SystemConfig.AppCenterDBVarStr;
+                Paras ps = new Paras();
+
+                string paras = "";
+                foreach (string key in htWork.Keys)
+                {
+                    paras += "@" + key + "=" + htWork[key].ToString();
+                    switch (key)
+                    {
+                        case WorkSysFieldAttr.SysSDTOfFlow:
+                            ps = new Paras();
+                            ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfFlow=" + dbstr + "SDTOfFlow WHERE WorkID=" + dbstr + "WorkID";
+                            ps.Add(GenerWorkFlowAttr.SDTOfFlow, htWork[key].ToString());
+                            ps.Add(GenerWorkerListAttr.WorkID, workID);
+                            DBAccess.RunSQL(ps);
+
+                            break;
+                        case WorkSysFieldAttr.SysSDTOfNode:
+                            ps = new Paras();
+                            ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfNode=" + dbstr + "SDTOfNode WHERE WorkID=" + dbstr + "WorkID";
+                            ps.Add(GenerWorkFlowAttr.SDTOfNode, htWork[key].ToString());
+                            ps.Add(GenerWorkerListAttr.WorkID, workID);
+                            DBAccess.RunSQL(ps);
+
+                            ps = new Paras();
+                            ps.SQL = "UPDATE WF_GenerWorkerlist SET SDT=" + dbstr + "SDT WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
+                            ps.Add(GenerWorkerListAttr.SDT, htWork[key].ToString());
+                            ps.Add(GenerWorkerListAttr.WorkID, workID);
+                            ps.Add(GenerWorkerListAttr.FK_Node, objs.VarToNodeID);
+                            DBAccess.RunSQL(ps);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
+                {
+                    ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
+                    ps.Add(GenerWorkerListAttr.Paras, paras);
+                    ps.Add(GenerWorkerListAttr.WorkID, workID);
+                    ps.Add(GenerWorkerListAttr.FK_Node, nd.NodeID);
+                    DBAccess.RunSQL(ps);
+                }
+            }
+            #endregion 更新发送参数.
+
+            return objs;
+
         }
         /// <summary>
         /// 增加在队列工作中增加一个处理人.

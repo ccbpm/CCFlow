@@ -1108,13 +1108,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                /* 打包下载pdf */
-                if (btnLab.PrintPDFEnable == true)
-                {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
-                }
-
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true)
                 {

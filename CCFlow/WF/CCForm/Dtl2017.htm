@@ -1740,6 +1740,44 @@
                         if (changeEvent && changeEvent.indexOf(mapExt.Doc + '(') != -1) {
                             continue;
                         }
+                        //获取mapAttr;
+                        var mapAttr = new Entity(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+
+                            var method = ctrl.attr("onfocus");
+                            var minDate = "";
+                            if (method.indexOf("minDate") != -1)
+                                minDate = '%y-%M-#{%d}';
+
+                            ctrl.removeAttr("onfocus");
+                            var dateFmt = 'yyyy-MM-dd';
+                            if (mapAttr.MyDataType == 7)
+                                dateFmt = 'yyyy-MM-dd HH:mm';
+
+
+                            var mapextDoc = mapExt.Doc;
+                            ctrl.data().MapExt = mapExt;
+
+                            ctrl.bind("focus", function () {
+                                var mapExtThis = $(obj.target).data().MapExt;
+                                if (minDate == "")
+                                    WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
+                                        $(this).blur(); //失去焦点 
+                                        DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+                                    }
+                                    });
+                                else
+                                    WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                        $(this).blur(); //失去焦点 
+                                        DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+                                    }
+                                    });
+
+                            });
+
+
+                            break;
+                        }
                         ctrl.data().MapExt = mapExt;
                         ctrl.bind(mapExt.Tag, function (obj) {
                             var mapExtThis = $(obj.target).data().MapExt;

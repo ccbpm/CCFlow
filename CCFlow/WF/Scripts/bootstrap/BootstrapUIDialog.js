@@ -111,9 +111,11 @@
             }
             dlg.modal('hide');
         });
+
         //添加确定和关闭按钮
-        modalFooter.append(footerClose);
         modalFooter.append(footerOK);
+        modalFooter.append(footerClose);
+        
 
         //添加底层脚本
         modalContent.append(modalFooter);

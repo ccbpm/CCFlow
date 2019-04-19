@@ -52,6 +52,9 @@ namespace BP.DA
 
         public static void DefaultLogWriteLineError(Exception ex)
         {
+
+            DefaultLogWriteLine(LogType.Error, ex.Message);
+
             DefaultLogWriteLine(LogType.Error, ex.StackTrace);
         }
 

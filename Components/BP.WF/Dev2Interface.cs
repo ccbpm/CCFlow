@@ -6688,12 +6688,13 @@ namespace BP.WF
         /// <param name="parentFlowNo">父流程的流程编号,如果没有父流程就传入为null.</param>
         /// <param name="jumpToNode">要跳转到的节点,如果没有则为0.</param>
         /// <param name="jumpToEmp">要跳转到的人员,如果没有则为null.</param>
+        /// <param name="todoEmps">待办人员,如果没有则为null.</param>
         /// <returns>为开始节点创建工作后产生的WorkID.</returns>
         public static Int64 Node_CreateBlankWork(string flowNo, Hashtable ht = null, DataSet workDtls = null,
             string starter = null, string title = null, Int64 parentWorkID = 0,
             Int64 parentFID = 0, string parentFlowNo = null,
             int parentNodeID = 0, string parentEmp = null,
-            int jumpToNode = 0, string jumpToEmp = null)
+            int jumpToNode = 0, string jumpToEmp = null, string todoEmps = null)
         {
             //把一些其他的参数也增加里面去,传递给ccflow.
             Hashtable htPara = new Hashtable();
@@ -6885,33 +6886,52 @@ namespace BP.WF
                 gwf.Update();
             }
 
-            //插入待办.
+            #region 增加待办人员.
+            //删除以前的数据,也许没有.
             GenerWorkerList gwl = new GenerWorkerList();
-            gwl.WorkID = wk.OID;
-            gwl.FK_Node = nd.NodeID;
-            gwl.FK_Emp = empStarter.No;
-            i = gwl.RetrieveFromDBSources();
+            gwl.Delete(GenerWorkerListAttr.WorkID, wk.OID);
 
-            gwl.FK_EmpText = empStarter.Name;
-            gwl.FK_NodeText = nd.Name;
-            gwl.FID = 0;
-            gwl.FK_Flow = fl.No;
-            gwl.FK_Dept = empStarter.FK_Dept;
-            gwl.FK_DeptT = empStarter.FK_DeptText;
-
-            gwl.SDT = "无";
-            gwl.DTOfWarning = DataType.CurrentDataTime;
-            gwl.IsEnable = true;
-            gwl.IsPass = false;
-            gwl.PRI = gwf.PRI;
-            if (i == 0)
-            {
-                gwl.Insert();
-            }
+            if (todoEmps == null)
+                todoEmps = starter;
             else
+                todoEmps += ","+starter;
+
+            string[] emps = todoEmps.Split(','); //分开字符串.
+            string tempStrs = ""; //临时变量，防止重复插入.
+            foreach (string emp in emps)
             {
-                gwl.Update();
+                if (DataType.IsNullOrEmpty(emp) == true)
+                    continue;
+                if (tempStrs.Contains("," + emp+",") == true)
+                    continue;
+
+                Emp empEn = new Emp(emp);
+
+                //插入待办.
+                gwl = new GenerWorkerList();
+                gwl.WorkID = wk.OID;
+                gwl.FK_Node = nd.NodeID;
+                gwl.FK_Emp = empEn.No;
+                i = gwl.RetrieveFromDBSources();
+
+                gwl.FK_EmpText = empEn.Name;
+                gwl.FK_NodeText = nd.Name;
+                gwl.FID = 0;
+                gwl.FK_Flow = fl.No;
+                gwl.FK_Dept = empEn.FK_Dept;
+                gwl.FK_DeptT = empEn.FK_DeptText;
+
+                gwl.SDT = "无";
+                gwl.DTOfWarning = DataType.CurrentDataTime;
+                gwl.IsEnable = true;
+                gwl.IsPass = false;
+                gwl.PRI = gwf.PRI;
+                gwl.Insert();
+
+                tempStrs += "," + emp + ",";
             }
+            #endregion 增加待办人员.
+
 
             if (parentWorkID != 0)
             {

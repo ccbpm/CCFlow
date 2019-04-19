@@ -696,7 +696,7 @@
                     }
                 });
             }
-            if ($.isArray(dbDtl) && dbDtl.length > 0) {
+            if ($.isArray(dbDtl) && dbDtl.length >= 0) {
 
                 /**
                 * 统计行
@@ -876,6 +876,9 @@
             if ($.isArray(extArr)) {
                 $.each(extArr, function (i, extObj) {
                     var columnsName = getColumnElementsName(extObj.DtlColumn);
+                    if ($(":input[name=" + columnsName + "]").length == 0)
+                        doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
+
                     $(":input[name=" + columnsName + "]").each(function (i, e) {
                         $(e).bind("change", function (o) {
                             doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
@@ -1362,6 +1365,23 @@
                 return;
             }
 
+            //判断是否有必填项
+            var formCheckResult = true;
+
+            if (checkBlanks() == false) {
+                formCheckResult = false;
+            }
+
+            if (checkReg() == false) {
+                formCheckResult = false;
+            }
+
+            if (formCheckResult == false) {
+                //alert("请检查表单必填项和正则表达式");
+                return;
+            }
+
+
             //循环表格
             var trs = $('.table.wupop tbody tr');
             for(var i = 0; i<trs.length;i++) {
@@ -1395,22 +1415,7 @@
 
                 var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
 
-                //判断是否有必填项
-                //必填项和正则表达式检查
-                var formCheckResult = true;
-
-                if (checkBlanks(index) == false) {
-                    formCheckResult = false;
-                }
-
-                if (checkReg(index) == false) {
-                    formCheckResult = false;
-                }
-
-                if (formCheckResult == false) {
-                    saveAll = true;
-                    continue;
-                }
+                
 
                 if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
                     //值未改变，无需存盘
@@ -2031,73 +2036,86 @@
         }
 
         //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
-        function checkBlanks(idx) {
+        function checkBlanks() {
             var checkBlankResult = true;
             //获取所有的列名 找到带* 的LABEL mustInput
-            //var lbs = $('[class*=col-md-1] label:contains(*)');
+
             //var lbs = $('.mustInput');
-            var lbs = $($('table tbody tr')[idx]).find('.mustInput'); //获得所有的class=mustInput的元素.
-            $.each(lbs, function (i, obj) {
-                if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
-                    var keyofen = $(obj).data().keyofen
-                    var ele = $('[id$=_' + keyofen + '_'+idx+']');
-                    if (ele.length == 1) {
-                        switch (ele[0].tagName.toUpperCase()) {
-                            case "INPUT":
-                                if (ele.attr('type') == "text") {
+            var trs = $('.table.wupop tbody tr');
+            for (var idx = 0; idx < trs.length; idx++) {
+                var lbs = $($('table tbody tr')[idx]).find('.mustInput'); //获得所有的class=mustInput的元素.
+                $.each(lbs, function (i, obj) {
+                    if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
+                        var keyofen = $(obj).data().keyofen
+                        var ele = $('[id$=_' + keyofen + '_' + idx + ']');
+                        if (ele.length > 1) {
+                            var tempEle = ele;
+                            if (tempEle[0].tagName.toUpperCase() == "INPUT")
+                                ele = $(tempEle[0]);
+                            if (tempEle[1].tagName.toUpperCase() == "INPUT")
+                                ele = $(tempEle[1]);
+                        }
+                        if (ele.length == 1) {
+                            switch (ele[0].tagName.toUpperCase()) {
+                                case "INPUT":
+                                    if (ele.attr('type') == "text") {
+                                        if (ele.val() == "") {
+                                            checkBlankResult = false;
+                                            ele.addClass('errorInput');
+                                        } else {
+                                            ele.removeClass('errorInput');
+                                        }
+                                    }
+                                    break;
+                                case "SELECT":
+                                    if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
+                                        checkBlankResult = false;
+                                        ele.addClass('errorInput');
+                                    } else {
+                                        ele.removeClass('errorInput');
+                                    }
+                                    break;
+                                case "TEXTAREA":
                                     if (ele.val() == "") {
                                         checkBlankResult = false;
                                         ele.addClass('errorInput');
                                     } else {
                                         ele.removeClass('errorInput');
                                     }
-                                }
-                                break;
-                            case "SELECT":
-                                if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
-                                    checkBlankResult = false;
-                                    ele.addClass('errorInput');
-                                } else {
-                                    ele.removeClass('errorInput');
-                                }
-                                break;
-                            case "TEXTAREA":
-                                if (ele.val() == "") {
-                                    checkBlankResult = false;
-                                    ele.addClass('errorInput');
-                                } else {
-                                    ele.removeClass('errorInput');
-                                }
-                                break;
+                                    break;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
             return checkBlankResult;
         }
 
         //正则表达式检查
-        function checkReg(idx) {
+        function checkReg() {
             var checkRegResult = true;
-            var regInputs = $($('table tbody tr')[idx]).find('.CheckRegInput');
-            $.each(regInputs, function (i, obj) {
-                var name = obj.name;
-                var mapExtData = $(obj).data();
-                if (mapExtData.Doc != undefined) {
-                    var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
-                    var tag1 = mapExtData.Tag1;
-                    if ($(obj).val() != undefined && $(obj).val() != '') {
+            var trs = $('.table.wupop tbody tr');
+            for (var idx = 0; idx < trs.length; idx++) {
+                var regInputs = $($('table tbody tr')[idx]).find('.CheckRegInput');
+                $.each(regInputs, function (i, obj) {
+                    var name = obj.name;
+                    var mapExtData = $(obj).data();
+                    if (mapExtData.Doc != undefined) {
+                        var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
+                        var tag1 = mapExtData.Tag1;
+                        if ($(obj).val() != undefined && $(obj).val() != '') {
 
-                        var result = CheckRegInput(name, regDoc, tag1);
-                        if (!result) {
-                            $(obj).addClass('errorInput');
-                            checkRegResult = false;
-                        } else {
-                            $(obj).removeClass('errorInput');
+                            var result = CheckRegInput(name, regDoc, tag1);
+                            if (!result) {
+                                $(obj).addClass('errorInput');
+                                checkRegResult = false;
+                            } else {
+                                $(obj).removeClass('errorInput');
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
             return checkRegResult;
         }
 

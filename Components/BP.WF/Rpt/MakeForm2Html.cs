@@ -412,7 +412,7 @@ namespace BP.WF
                 switch (attr.LGType)
                 {
                     case FieldTypeS.Normal:  // 输出普通类型字段.
-                        text = en.GetValStrByKey(attr.KeyOfEn);
+                        
                         if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
                         {
                             if (attrs.Contains(attr.KeyOfEn + "Text") == true)
@@ -420,6 +420,9 @@ namespace BP.WF
                             if (DataType.IsNullOrEmpty(text))
                                 if (attrs.Contains(attr.KeyOfEn + "T") == true)
                                     text = en.GetValStrByKey(attr.KeyOfEn + "T");
+                        }
+                        else {
+                            text = en.GetValStrByKey(attr.KeyOfEn);
                         }
                         break;
                     case FieldTypeS.Enum:

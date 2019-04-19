@@ -61,6 +61,7 @@
                 $("#DIV_Doc").html("");
                 $("#btnReturn").css("display", "none");
                 $("#btnIsBackTracking").css("display", "none");
+                $("#btnClose").attr("onclick", "Close(1)");
                 return;
             }
 
@@ -153,9 +154,10 @@
         }
 
         //取消退回
-        function Close() {
+        function Close(flag) {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
+                if(flag == 1)
                 window.parent.close();
             }
             else {
@@ -183,7 +185,7 @@
     <div style="position: fixed;right: 10px;bottom: 40px;" class="foot">
         <input type="button" value="确定退回" onclick="ReturnWork(0);"  id="btnReturn" />
         <input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" id="btnIsBackTracking" />
-        <input type="button" value="关闭" onclick="Close();" />
+        <input type="button" value="关闭" onclick="Close();" id="btnClose"/>
     </div>
 </body>
 </html>

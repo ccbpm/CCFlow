@@ -1778,8 +1778,20 @@ namespace BP.WF
                 // wkhtmltopdf.exe --orientation Landscape  http://baidu.com afqc.pdf  .
 
                 string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
-                Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
+                //Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
+                
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = pdfFileExe;//设定需要执行的命令  
+                startInfo.Arguments =" --disable-external-links " + htmFile + " " + pdf;//“/C”表示执行完命令后马上退出  
+                startInfo.UseShellExecute = false;//不使用系统外壳程序启动  
+                startInfo.RedirectStandardInput = false;//不重定向输入  
+                startInfo.RedirectStandardOutput = true; //重定向输出  
+                startInfo.CreateNoWindow = true;//不创建窗口  
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                Process p = Process.Start(startInfo);
                 p.WaitForExit();
+                p.Close();
             }
             catch (Exception ex)
             {

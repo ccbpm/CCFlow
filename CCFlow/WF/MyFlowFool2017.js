@@ -560,8 +560,9 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             }
             data = JSON.parse(data);
             var dbs = data["DBAths"];
+            var athDesc = data["AthDesc"][0];
             if (dbs.length == 0){
-                if(mapAttr.UIIsEnable == 1 || pageData.IsReadOnly == 0)
+                if (athDesc.IsUpload == 1 || pageData.IsReadOnly == 0)
                     return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
                 else
                     return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";

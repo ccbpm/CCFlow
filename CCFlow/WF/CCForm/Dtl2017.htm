@@ -1741,7 +1741,7 @@
                             continue;
                         }
                         //获取mapAttr;
-                        var mapAttr = new Entity(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                        var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
                         if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
 
                             var method = ctrl.attr("onfocus");
@@ -1758,20 +1758,28 @@
                             var mapextDoc = mapExt.Doc;
                             ctrl.data().MapExt = mapExt;
 
-                            ctrl.bind("focus", function () {
+                            ctrl.bind("focus", function (obj) {
                                 var mapExtThis = $(obj.target).data().MapExt;
                                 if (minDate == "")
                                     WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
                                         $(this).blur(); //失去焦点 
-                                        DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+                                        if (mapExtThis.Doc.indexOf("(") != -1)
+                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
+                                        else
+                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
                                     }
                                     });
                                 else
                                     WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
                                         $(this).blur(); //失去焦点 
-                                        DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+                                        if (mapExtThis.Doc.indexOf("(") != -1)
+                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
+                                        else
+                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+
+                                       
                                     }
-                                    });
+                                  });
 
                             });
 
@@ -1781,7 +1789,10 @@
                         ctrl.data().MapExt = mapExt;
                         ctrl.bind(mapExt.Tag, function (obj) {
                             var mapExtThis = $(obj.target).data().MapExt;
-                            eval(mapExtThis.Doc + '(this)');
+                            if (mapExtThis.Doc.indexOf("(") != -1)
+                                eval(mapExtThis.Doc);
+                            else
+                                eval(mapExtThis.Doc + '(this)');
                         });
                         break;
                     case "TBFullCtrl": //自动填充  先不做.

@@ -2001,16 +2001,13 @@ namespace BP.WF
                                     string sql = nd.DeliveryParas;
                                     foreach (MapAttr item in mattrs)
                                     {
-                                        if (item.IsNum)
-                                            sql = sql.Replace("@" + item.KeyOfEn, "0");
-                                        else
-                                            sql = sql.Replace("@" + item.KeyOfEn, "'0'");
+                                        sql = sql.Replace("@" + item.KeyOfEn, "0"); 
                                     }
 
-                                    sql = sql.Replace("@WebUser.No", "'ss'");
-                                    sql = sql.Replace("@WebUser.Name", "'ss'");
-                                    sql = sql.Replace("@WebUser.FK_Dept", "'ss'");
-                                    sql = sql.Replace("@WebUser.FK_DeptName", "'ss'");
+                                    sql = sql.Replace("@WebUser.No", "ss");
+                                    sql = sql.Replace("@WebUser.Name", "ss");
+                                    sql = sql.Replace("@WebUser.FK_Dept", "ss");
+                                    sql = sql.Replace("@WebUser.FK_DeptName", "ss");
 
                                     sql = sql.Replace("''''", "''"); //出现双引号的问题.
 

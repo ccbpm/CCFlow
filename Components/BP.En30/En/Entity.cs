@@ -3448,7 +3448,10 @@ namespace BP.En
                 {
                     try
                     {
-                        this.RunSQL("alter table " + dr["OWNER"] + "." + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLength + ")");
+                        if(attr.MaxLength <3000)
+                            this.RunSQL("alter table " + dr["OWNER"] + "." + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLength + ")");
+                        else
+                            this.RunSQL("alter table " + dr["OWNER"] + "." + this._enMap.PhysicsTableExt + " modify " + attr.Field + " text");
                     }
                     catch (Exception ex)
                     {

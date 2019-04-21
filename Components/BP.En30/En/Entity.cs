@@ -1111,7 +1111,6 @@ namespace BP.En
                 }
             }
 
-
             try
             {
                 int num = EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this));

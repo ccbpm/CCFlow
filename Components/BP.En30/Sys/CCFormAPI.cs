@@ -1255,7 +1255,7 @@ namespace BP.Sys
         /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null)
         {
-            DataSet dsFrm = BP.DA.CashFrmTemplate.GetFrm(frmID);
+            DataSet dsFrm = BP.DA.CashFrmTemplate.GetFrmDataSetModel(frmID);
             if (dsFrm != null)
                 return dsFrm;
 

@@ -362,11 +362,9 @@ namespace BP.Tools
         public static DataSet ToDataSet(string json)
         {
             ////杨玉慧  写  用这个写
-            DataSet ds2 = JsonConvert.DeserializeObject<DataSet>(json);
-            return ds2;
-
-            DataSet ds = new DataSet();
+            DataSet ds = JsonConvert.DeserializeObject<DataSet>(json);
             return ds;
+             
         }
         /// <summary>
         /// 对象转换为Json字符串

@@ -1079,6 +1079,9 @@ namespace BP.WF
             atPara += "@SendToEmpIDs=" + gwl.FK_Emp;
 
             string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt, atPara);
+            if (text == null)
+                text = "";
+
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
 

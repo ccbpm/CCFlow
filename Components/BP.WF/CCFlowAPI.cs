@@ -59,6 +59,7 @@ namespace BP.WF
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
                     wk, null);
 
+
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No, nd.Name);
 
@@ -939,7 +940,7 @@ namespace BP.WF
         /// <param name="fid">FID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>返回dataset</returns>
-        public static DataSet GenerWorkNodeForAndroid(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo)
+        public static DataSet GenerWorkNodeForAndroid111_del(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo)
         {
             if (fk_node == 0)
                 fk_node = int.Parse(fk_flow + "01");
@@ -956,8 +957,6 @@ namespace BP.WF
                 md.No = "ND" + fk_node;
                 if (md.RetrieveFromDBSources() == 0)
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
-
-
 
                 //表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);

@@ -175,6 +175,7 @@
     <Compile Include="DA\EncodingBP.cs" />
     <Compile Include="DA\DTTemp.cs" />
     <Compile Include="DA\Cash2019.cs" />
+    <Compile Include="DA\CashFrmTemplate.cs" />
     <Compile Include="DTS\DataIOEn.cs">
       <SubType>Code</SubType>
     </Compile>

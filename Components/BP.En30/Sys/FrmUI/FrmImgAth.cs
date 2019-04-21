@@ -219,6 +219,9 @@ namespace BP.Sys.FrmUI
             imgAth.RetrieveFromDBSources();
             imgAth.Update();
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
             base.afterInsertUpdateAction();
         }
 

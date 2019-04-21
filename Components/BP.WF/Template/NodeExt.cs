@@ -319,12 +319,12 @@ namespace BP.WF.Template
                     "@0=操作员执行@1=机器执行@2=混合执行");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
 
-  
+
                 map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "已读回执", true, true, NodeAttr.ReadReceipts,
                 "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
                 map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
 
-               // map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
+                //map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
 
                 map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel, "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
                 map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
@@ -352,7 +352,7 @@ namespace BP.WF.Template
                 map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
                 map.AddTBInt("FWCSta", 0, "节点状态", false, false);
 
-               
+
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数", true, false, 0, 500, 10, true);
                 #endregion  基础属性
 
@@ -457,7 +457,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 999, 10, true);
 
                 map.AddDDLSysEnum(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true, NodeAttr.ReturnOneNodeRole,
-                   "@@0=不启用@1=按照[退回信息填写字段]作为退回意见直接退回@2=按照[审核组件]填写的信息作为退回意见直接退回",true);
+                   "@@0=不启用@1=按照[退回信息填写字段]作为退回意见直接退回@2=按照[审核组件]填写的信息作为退回意见直接退回", true);
 
 
                 map.AddTBString(BtnAttr.CCLab, "抄送", "抄送按钮标签", true, false, 0, 50, 10);
@@ -594,7 +594,7 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.BatchLab, "批量审核", "批量审核标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
 
-               
+
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
@@ -761,7 +761,7 @@ namespace BP.WF.Template
 
                 #region 考核属性.
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
-                                                                             //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
+                //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
@@ -1040,7 +1040,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/NodeYGFlow.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
         }
-         
+
 
         public string DoTurn()
         {
@@ -1309,7 +1309,7 @@ namespace BP.WF.Template
             fl.NodeID = this.NodeID;
             fl.RetrieveFromDBSources();
             fl.Update();
-           
+
             base.afterInsertUpdateAction();
         }
         #endregion

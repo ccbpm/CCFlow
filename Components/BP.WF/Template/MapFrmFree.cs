@@ -428,6 +428,10 @@ namespace BP.WF.Template
                 map.FK_FormTree = "";
                 map.DirectUpdate();
             }
+
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.No);
+
             base.afterUpdate();
         }
 

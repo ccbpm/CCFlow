@@ -1019,6 +1019,7 @@ namespace BP.Sys
             en.CheckPhysicsTable();
 
             PubClass.AddComment(en);
+            return "";
 
             string msg = "";
           

@@ -960,6 +960,9 @@ namespace BP.Sys.FrmUI
                 gf.Update();
             }
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeInsert()

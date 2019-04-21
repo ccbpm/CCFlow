@@ -515,15 +515,7 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(DataSet dataSet)
         {
-            string jsonStr = JsonConvert.SerializeObject(dataSet);
-            return jsonStr;
-
-            string jsonString = "{";
-            foreach (DataTable table in dataSet.Tables)
-            {
-                jsonString += "\"" + ToJson(table.TableName) + "\":" + ToJson(table) + ",";
-            }
-            return jsonString = DeleteLast(jsonString) + "}";
+            return  JsonConvert.SerializeObject(dataSet);
         }
         /// <summary>
         /// String转换为Json

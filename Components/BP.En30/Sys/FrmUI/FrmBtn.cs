@@ -12,6 +12,13 @@ namespace BP.Sys.FrmUI
     public class FrmBtn : EntityMyPK
     {
         #region 属性
+        public string FK_MapData
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmBtnAttr.FK_MapData);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -78,6 +85,9 @@ namespace BP.Sys.FrmUI
             frmBtn.MyPK = this.MyPK;
             frmBtn.RetrieveFromDBSources();
             frmBtn.Update();
+
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
             base.afterInsertUpdateAction();
         }

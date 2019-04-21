@@ -1240,18 +1240,31 @@ namespace BP.Sys
             MapData.ImpMapData(toFrmID, fromds);
         }
         /// <summary>
+        /// 修改frm的事件
+        /// </summary>
+        /// <param name="frmID"></param>
+        public static void AfterFrmEditAction(string frmID)
+        {
+            BP.DA.CashFrmTemplate.Remove(frmID);
+            return ;
+        }
+        /// <summary>
         /// 获得表单信息.
         /// </summary>
         /// <param name="frmID">表单</param>
         /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null)
         {
+            DataSet dsFrm = BP.DA.CashFrmTemplate.GetFrm(frmID);
+            if (dsFrm != null)
+                return dsFrm;
+
             DataSet ds = new DataSet();
 
             //创建实体对象.
             MapData md = new MapData(frmID);
 
-            if (DataType.IsNullOrEmpty(md.Name) == true && (frmName !=null))
+            if (DataType.IsNullOrEmpty(md.Name) == true && frmName !=null )
                 md.Name = frmName;
 
             //加入主表信息.
@@ -1321,6 +1334,9 @@ namespace BP.Sys
             //FrmImgAthDBs 上传图片信息
             DataTable Sys_FrmImgAthDB = md.FrmImgAthDB.ToDataTableField("Sys_FrmImgAthDB");
             ds.Tables.Add(Sys_FrmImgAthDB);
+
+            //放入缓存.
+            BP.DA.CashFrmTemplate.Put(frmID, ds);
 
             return ds;
         }

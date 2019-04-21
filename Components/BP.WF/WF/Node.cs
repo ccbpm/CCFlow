@@ -1525,23 +1525,7 @@ namespace BP.WF
                 SetValByKey(NodeAttr.PTable, value);
             }
         }
-        /// <summary>
-        /// 要显示在后面的表单
-        /// </summary>
-        public string ShowSheets
-        {
-            get
-            {
-                string s = this.GetValStrByKey(NodeAttr.ShowSheets);
-                if (s == "")
-                    return "@";
-                return s;
-            }
-            set
-            {
-                SetValByKey(NodeAttr.ShowSheets, value);
-            }
-        }
+       
         /// <summary>
         /// Doc
         /// </summary> 
@@ -2626,21 +2610,19 @@ namespace BP.WF
                 //表单相关.
                 map.AddTBInt(NodeAttr.FormType, 1, "表单类型", false, false);
                 map.AddTBString(NodeAttr.FormUrl, "http://", "表单URL", true, false, 0, 300, 10);
-                map.AddTBString(NodeAttr.DeliveryParas, null, "接受人SQL", true, false, 0, 300, 10, true);
                 map.AddTBInt(NodeAttr.TurnToDeal, 0, "转向处理", false, false);
                 map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 200, 10, true);
                 map.AddTBInt(NodeAttr.NodePosType, 0, "位置", false, false);
                 map.AddTBInt(NodeAttr.IsCCFlow, 0, "是否有流程完成条件", false, false);
-                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 3000, 10);
-                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 3000, 10);
+                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 300, 10);
+                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 50, 10);
                 map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 50, 10);
                 //  map.AddTBString(NodeAttr.HisEmps, null, "HisEmps", false, false, 0, 3000, 10);
                 map.AddTBString(NodeAttr.HisSubFlows, null, "HisSubFlows", false, false, 0, 30, 10);
                 map.AddTBString(NodeAttr.PTable, null, "物理表", false, false, 0, 100, 10);
 
-                map.AddTBString(NodeAttr.ShowSheets, null, "显示的表单", false, false, 0, 100, 10);
-                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 500, 10);
+                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 200, 10);
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
 
@@ -2659,15 +2641,11 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.SubFlowStartWay, 0, "子线程启动方式", true, false);
                 map.AddTBString(NodeAttr.SubFlowStartParas, null, "启动参数", true, false, 0, 100, 10);
 
-                //   map.AddTBString(NodeAttr.DocLeftWord, null, "公文左边词语(多个用@符合隔开)", true, false, 0, 100, 10);
-                //  map.AddTBString(NodeAttr.DocRightWord, null, "公文右边词语(多个用@符合隔开)", true, false, 0, 200, 10);
-
                 // 启动自动运行. 2013-01-04
                 map.AddTBInt(NodeAttr.AutoRunEnable, 0, "是否启动自动运行？", true, false);
                 map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行参数", true, false, 0, 100, 10);
 
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数(如果太小可以手动扩大)", true, false, 0, 1000, 10);
-
 
                 #region 与参数有关系的属性。
                 //map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,

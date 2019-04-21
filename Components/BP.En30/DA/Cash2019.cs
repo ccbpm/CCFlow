@@ -31,7 +31,6 @@ namespace BP.DA
         /// <param name="enPK"></param>
         public static void PutRow(string enName, string pkVal, Row row)
         {
-            return;
             lock (lockObj)
             {
                 Hashtable ht = hts[enName] as Hashtable;
@@ -58,7 +57,6 @@ namespace BP.DA
         }
         public static void DeleteRow(string enName, string pkVal)
         {
-            return;
             lock (lockObj)
             {
                 Hashtable ht = hts[enName] as Hashtable;
@@ -112,5 +110,6 @@ namespace BP.DA
             return null;
         }
         #endregion 对实体的集合操作.
+ 
     }
 }

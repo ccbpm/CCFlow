@@ -228,10 +228,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string SignType = "SignType";
         /// <summary>
-        /// 显示的表单
-        /// </summary>
-        public const string ShowSheets = "ShowSheets";
-        /// <summary>
         /// 运行模式
         /// </summary>
         public const string RunModel = "RunModel";

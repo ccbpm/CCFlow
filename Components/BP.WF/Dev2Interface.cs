@@ -633,49 +633,7 @@ namespace BP.WF
         #endregion 获取流程事例的轨迹图
 
         #region 获取流程事例的轨迹图
-        /// <summary>
-        /// 获取流程事例的运行轨迹数据.
-        /// 说明：使用这些数据可以生成流程的操作日志.
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        /// <returns>从临时表与轨迹表获取流程轨迹数据.</returns>
-        public static DataSet DB_GenerTrack(string fk_flow, Int64 workid, Int64 fid)
-        {
-            //定义变量，把数据都放入这个track里面.
-            DataSet ds = new DataSet();
-
-            //把轨迹表.
-            ds.Tables.Add(DB_GenerTrackTable(fk_flow, workid, fid));
-
-            //把抄送信息加入.
-            CCLists ens = new CCLists(fk_flow, workid, fid);
-            ds.Tables.Add(ens.ToDataTableField("WF_CCList"));
-
-            //把未来节点选择人信息写入里面.
-            Int64 wfid = 0;
-            if (fid != 0)
-            {
-                wfid = fid;
-            }
-
-            SelectAccpers accepts = new SelectAccpers(wfid);
-            ds.Tables.Add(ens.ToDataTableField("WF_SelectAccper"));
-
-
-            //把节点信息写入里面.
-            BP.WF.Nodes nds = new Nodes();
-            nds.Retrieve(NodeAttr.FK_Flow, fk_flow);
-            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
-
-
-            //把方向写入里面.
-            Directions dirs = new Directions();
-            dirs.Retrieve(NodeAttr.FK_Flow, fk_flow);
-            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
-            return ds;
-        }
+        
         public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid)
         {
             #region 获取track数据.
@@ -2204,7 +2162,6 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete()
         {
-
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -6886,51 +6843,7 @@ namespace BP.WF
                 gwf.Update();
             }
 
-            #region 增加待办人员.
-            //删除以前的数据,也许没有.
-            GenerWorkerList gwl = new GenerWorkerList();
-            gwl.Delete(GenerWorkerListAttr.WorkID, wk.OID);
-
-            if (todoEmps == null)
-                todoEmps = starter;
-            else
-                todoEmps += ","+starter;
-
-            string[] emps = todoEmps.Split(','); //分开字符串.
-            string tempStrs = ""; //临时变量，防止重复插入.
-            foreach (string emp in emps)
-            {
-                if (DataType.IsNullOrEmpty(emp) == true)
-                    continue;
-                if (tempStrs.Contains("," + emp+",") == true)
-                    continue;
-
-                Emp empEn = new Emp(emp);
-
-                //插入待办.
-                gwl = new GenerWorkerList();
-                gwl.WorkID = wk.OID;
-                gwl.FK_Node = nd.NodeID;
-                gwl.FK_Emp = empEn.No;
-                i = gwl.RetrieveFromDBSources();
-
-                gwl.FK_EmpText = empEn.Name;
-                gwl.FK_NodeText = nd.Name;
-                gwl.FID = 0;
-                gwl.FK_Flow = fl.No;
-                gwl.FK_Dept = empEn.FK_Dept;
-                gwl.FK_DeptT = empEn.FK_DeptText;
-
-                gwl.SDT = "无";
-                gwl.DTOfWarning = DataType.CurrentDataTime;
-                gwl.IsEnable = true;
-                gwl.IsPass = false;
-                gwl.PRI = gwf.PRI;
-                gwl.Insert();
-
-                tempStrs += "," + emp + ",";
-            }
-            #endregion 增加待办人员.
+           
 
 
             if (parentWorkID != 0)
@@ -6947,7 +6860,60 @@ namespace BP.WF
 
             return wk.OID;
         }
+        /// <summary>
+        /// 增加待办人员
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="todoEmps">要增加的处理人员,多个人员用逗号分开.</param>
+        public static void Node_AddTodolist(Int64 workid, string todoEmps)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            if (gwf.WFState == WFState.Complete)
+                throw new Exception("流程："+gwf.Title+"已经完成,您不能增加接受人.");
 
+            #region 增加待办人员.
+
+            GenerWorkerList  gwl = new GenerWorkerList();
+            gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+
+            string[] emps = todoEmps.Split(','); //分开字符串.
+            string tempStrs = ""; //临时变量，防止重复插入.
+            foreach (string emp in emps)
+            {
+                if (DataType.IsNullOrEmpty(emp) == true)
+                    continue;
+                if (tempStrs.Contains("," + emp+",") == true)
+                    continue;
+
+                //插入待办.
+                gwl = new GenerWorkerList();
+                gwl.WorkID = workid;
+                gwl.FK_Node = gwf.FK_Node;
+                gwl.FK_Emp = emp;
+                int  i = gwl.RetrieveFromDBSources();
+                if (i==1)
+                    continue;
+
+                Emp empEn = new Emp(emp);
+
+                gwl.FK_EmpText = empEn.Name;
+                gwl.FK_NodeText = gwf.NodeName;
+                gwl.FID = 0;
+                gwl.FK_Flow = gwf.FK_Flow;
+                gwl.FK_Dept = empEn.FK_Dept;
+                gwl.FK_DeptT = empEn.FK_DeptText;
+
+                gwl.SDT = "无";
+                gwl.DTOfWarning = DataType.CurrentDataTime;
+                gwl.IsEnable = true;
+                gwl.IsPass = false;
+                gwl.PRI = gwf.PRI;
+                gwl.Insert();
+
+                tempStrs += "," + emp + ",";
+            }
+            #endregion 增加待办人员.
+        }
         /// <summary>
         /// 创建开始节点工作
         /// 创建后可以创办人形成一个待办.

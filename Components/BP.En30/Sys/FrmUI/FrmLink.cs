@@ -295,6 +295,9 @@ namespace BP.Sys.FrmUI
             frmLink.RetrieveFromDBSources();
             frmLink.Update();
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
             base.afterInsertUpdateAction();
         }
         #endregion

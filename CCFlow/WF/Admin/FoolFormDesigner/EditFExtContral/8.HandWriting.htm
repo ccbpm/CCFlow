@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>扩展控件</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            InitBar("8");
+            var html = "";
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+            en.UIContralType = '8';
+            en.Update();
+            alert('保存成功');
+            window.location.href = window.location.href;
+
+        }
+       
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>帮助.</legend>
+        <ul>
+            <li>用于移动设备, PC设备的手写签名, 绘图等操作. </li>
+            <li>数据会存储在: \DataUser\HandWritingImg\年月\表单ID\字段名_OID.png </li>
+            <li>图片的高度，宽度与mapAttr的高度与宽度相同, 对于自由表单的x,y位置则与文本框的位置相同.</li>
+        </ul>
+    </fieldset>
+</body>
+</html>

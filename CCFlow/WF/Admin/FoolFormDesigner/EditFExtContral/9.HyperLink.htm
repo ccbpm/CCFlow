@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>扩展控件</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            InitBar("9");
+
+            var html = "";
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var mapAttr = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+            var url = mapAttr.GetPara("Url");
+            url = url.replace(/[$]/g, '@');
+            $("#TB_Url").val(url); //设置URL.
+        });
+        function Save() {
+
+            //更新节点表单类型.
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var frmData = $("#cc").serialize();
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+            en.UIContralType = '9';
+            en.SetPara("Url", $("#TB_Url").val().replace(/@/g, '$'));
+            en.Update();
+            alert('保存成功');
+            window.location.href = window.location.href;
+        }
+       
+
+    </script>
+</head>
+<body>
+<form id="cc">
+    <div id="bar">
+    </div>
+    <fieldset>
+        
+        <a href="javascript:ShowHidden('help')">自定义URL:</a>
+                
+            <div id="help" style="color:Gray; display:none">
+            <ul>
+            <li>您选择了使用外部的URL. </li>
+            <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+            <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.htm </li>
+            <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
+            </ul>
+            </div>
+
+            <input type="text" id="TB_Url" name="TB_Url" value=""  style="display:block;width:99%" />
+            <br />
+
+            宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
+            高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />  
+    </fieldset>
+</form>
+</body>
+</html>

@@ -259,6 +259,13 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "扩展控件2019";
+                rm.ClassMethodName = this.ToString() + ".DoEditFExtContral2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "批处理";
                 rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -468,6 +475,14 @@ namespace BP.Sys.FrmUI
         public string DoEditFExtContral()
         {
             return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+        }
+        /// <summary>
+        /// 扩展控件2019
+        /// </summary>
+        /// <returns></returns>
+        public string DoEditFExtContral2019()
+        {
+            return "../../Admin/FoolFormDesigner/EditFExtContral/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
         }
         #endregion 方法执行.
 

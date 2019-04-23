@@ -337,7 +337,8 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.CancelDisWhenRead, false, "对方已经打开就不能撤销", true, true);
 
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17904");
-                map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, true, "http://ccbpm.mydoc.io/?v=5404&t=17905");
+                map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true,false);
+                map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
 
                 map.AddTBDateTime("DTFrom", "生命周期从", true, true);
                 map.AddTBDateTime("DTTo", "生命周期到", true, true);

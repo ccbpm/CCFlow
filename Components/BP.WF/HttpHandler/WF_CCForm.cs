@@ -4442,7 +4442,7 @@ namespace BP.WF.HttpHandler
             if (sln.FrmSln == 2)
             {
                 BP.Sys.FrmAttachment athDescNode = new BP.Sys.FrmAttachment();
-                athDescNode.MyPK = "ND" + this.FK_Node + "_" + athDesc.NoOfObj + "_" + this.FK_Node;
+                athDescNode.MyPK = this.FK_FrmAttachment+ "_" + this.FK_Node;
                 if (athDescNode.RetrieveFromDBSources() == 0)
                 {
                     //没有设定附件权限，保持原来的附件权限模式

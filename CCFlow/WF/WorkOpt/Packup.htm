@@ -25,8 +25,31 @@
                 return;
             }
 
-            if (data.indexOf('info@') == 0) {
+            if (data.indexOf('warning@') == 0) {
                 document.getElementById("Msg").innerHTML = data;
+                return;
+            }
+
+            if (data.indexOf('info@') == 0) {
+                data = data.replace("info@", "");
+                data = JSON.parse(data);
+                if (data.length == 0) {
+                    alert("没有绑定表单，无需打印");
+                    return;
+                }
+                var html = "";
+                html += "<fieldset>";
+                html += "<legend>ND" + GetQueryString("FK_Node") + "绑定的表单</legend>";
+                html += "<ul>";
+               
+                for (var i = 0; i < data.length; i++) {
+                    html += "<li><a href='javaScript:void(0)' target=_blank onclick='PackUpPDF(\"" + data[i].No + "\",\"" + data[i].Name + "\")' >" + data[i].Name + "</a></li>";
+                }
+                html += "<li>说明：点击上面的表单名称生成PDF进行打印</li>";
+                html += "</ul>";
+                html += "</fieldset>";
+                html += "<br><br><center><div style=''><a href='javascript:window.parent.close();' >关闭窗口</a></div></center>";
+                document.getElementById("Msg").innerHTML = html;
                 return;
             }
 
@@ -98,11 +121,25 @@
 
         });
 
+        function PackUpPDF(frmId, frmName) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("FrmID", frmId);
+            handler.AddPara("FrmName", frmName);
+            handler.AddPara("BasePath", basePath);
+            var data = handler.DoMethodReturnString("Packup_FromInit");
+            if (data.indexOf('err@') == 0 || data.indexOf('warning@') == 0) {
+                alert(data);
+                return;
+            }
+            var url = JSON.parse(data);
+            
+            downloadFile(url[0].Name);
+        }
+
         function downloadFile(url) {
 
             window.open(url);
-            //   window.parent.close();
-            // window.close();
             return;
         }
 

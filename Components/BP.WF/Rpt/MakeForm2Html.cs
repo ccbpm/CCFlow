@@ -1745,6 +1745,10 @@ namespace BP.WF
             		    }
             		
             	    }
+                    url = url.Replace("@basePath", basePath);
+                    if (url.Contains("http") == false)
+                        url = basePath + url;
+
             	    string str="<iframe style='width:100%;height:auto;' ID='" + mapData.No + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe></div>";
             	    string  docs1 = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\indexUrl.htm");
             	    docs1 = docs1.Replace("@Docs", str.ToString());

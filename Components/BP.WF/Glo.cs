@@ -896,9 +896,6 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
                 #endregion
 
-
-
-
                 #region 更新表单的边界.2014-10-18
                 MapDatas mds = new MapDatas();
                 mds.RetrieveAll();

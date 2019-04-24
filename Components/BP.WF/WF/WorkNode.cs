@@ -7519,7 +7519,7 @@ namespace BP.WF
                         t.Msg += exp;
                         if (t.Msg.Contains("@"))
                         {
-                            string[] para = new string[3];
+                            string[] para = new string[4];
                             para[0] = this.HisNode.NodeID.ToString();
                             para[1] = this.HisNode.Name;
                             para[2] = this.HisNode.FocusField;
@@ -7634,7 +7634,7 @@ namespace BP.WF
                         t.Msg += exp;
                         if (t.Msg.Contains("@"))
                         {
-                            string[] para = new string[3];
+                            string[] para = new string[4];
                             para[0] = this.HisNode.NodeID.ToString();
                             para[1] = this.HisNode.Name;
                             para[2] = this.HisNode.FocusField;

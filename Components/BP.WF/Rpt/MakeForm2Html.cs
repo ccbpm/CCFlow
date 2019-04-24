@@ -1465,17 +1465,106 @@ namespace BP.WF
                     ht.Add("zip", "err@生成zip文件遇到权限问题:" + ex.Message + " @Path:" + pdfFile);
                 }
                 
-                #region 判断当前流程是否是最后一个节点，是否是反馈给申请人.
 
-                #endregion 判断当前流程是否是最后一个节点，是否是反馈给申请人.
 
                 return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
     	}
     	
-    	return "info@不存在需要打印的表单";
+    	return "warning@不存在需要打印的表单";
     	
     }
 
+    public static string MakeFormToPDF(string frmId,string frmName,Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)
+    {
+
+        string resultMsg = "";
+        GenerWorkFlow gwf = null;
+
+        //获取主干流程信息
+        if (flowNo != null)
+            gwf = new GenerWorkFlow(workid);
+
+        //存放信息地址
+        string hostURL = SystemConfig.GetValByKey("HostURL", "");
+        string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid;
+       
+        //处理正确的文件名.
+        if (fileNameFormat == null)
+        {
+            if (flowNo != null)
+                fileNameFormat = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "" + workid.ToString());
+            else
+                fileNameFormat = workid.ToString();
+        }
+
+        if (DataType.IsNullOrEmpty(fileNameFormat) == true)
+            fileNameFormat = workid.ToString();
+
+        fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
+
+        Hashtable ht = new Hashtable();
+
+        //生成pdf文件
+        string pdfPath = path + "\\pdf";
+      
+
+        DataRow dr = null;
+        resultMsg = setPDFPath("ND" + node.NodeID, workid, flowNo, gwf);
+        if (resultMsg.IndexOf("err@") != -1)
+            return resultMsg;
+
+        //获取绑定的表单
+        FrmNode frmNode = new FrmNode();
+        frmNode.Retrieve(FrmNodeAttr.FK_Frm, frmId);
+       
+        //判断当前绑定的表单是否启用
+        if (frmNode.FrmEnableRoleInt == (int)FrmEnableRole.Disable)
+            return "warning@" + frmName + "没有被启用";
+
+         //判断 who is pk
+        if (flowNo != null && frmNode.WhoIsPK == WhoIsPK.PWorkID) //如果是父子流程
+                workid = gwf.PWorkID;
+
+         //获取表单的信息执行打印
+        string billUrl = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid + "\\" + frmNode.FK_Frm + "index.htm";
+        resultMsg = MakeHtmlDocument(frmNode.FK_Frm, workid, flowNo, fileNameFormat, urlIsHostUrl, path, billUrl, "ND" + node.NodeID, basePath);
+
+        if (resultMsg.IndexOf("err@") != -1)
+            return resultMsg;
+
+       // ht.Add("htm", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + frmNode.FK_Frm + "index.htm");
+
+        //#region 把所有的文件做成一个zip文件.
+        if (System.IO.Directory.Exists(pdfPath) == false)
+            System.IO.Directory.CreateDirectory(pdfPath);
+
+        fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
+        string pdfFormFile = pdfPath + "\\" + frmNode.FK_Frm + ".pdf";
+        string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+        try
+        {
+            Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
+            if (urlIsHostUrl == false)
+                ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
+            else
+                ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
+    		
+               
+        }
+        catch (Exception ex)
+        {
+            /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
+            fileNameFormat = DBAccess.GenerGUID();
+            pdfFormFile = pdfPath + "\\" + fileNameFormat + ".pdf";
+
+            Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
+            ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
+        }
+	        
+        return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
+      
+
+    }
 
     /// <summary>
     /// 读取合并的pdf文件名称

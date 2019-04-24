@@ -496,6 +496,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
 
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);

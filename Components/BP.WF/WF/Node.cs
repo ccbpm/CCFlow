@@ -1455,6 +1455,23 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.PrintDocEnable, (int)value);
             }
         }
+
+        
+        /// <summary>
+        /// PDF打印规则
+        /// </summary>
+        public int HisPrintPDFModle
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.PrintPDFModle);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.PrintPDFModle, (int)value);
+            }
+        }
+
         /// <summary>
         /// 批处理规则
         /// </summary>
@@ -2601,6 +2618,8 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.BatchListCount, 12, "批处理数量", true, true);
                 map.AddTBString(NodeAttr.BatchParas, null, "参数", true, false, 0, 500, 10);
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
+                //打印PDF的处理
+                map.AddTBInt(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true);
 
                 //与未来处理人有关系.
                 //map.AddTBInt(NodeAttr.IsFullSA, 1, "是否计算未来处理人?", false, false);
@@ -2631,7 +2650,7 @@ namespace BP.WF
 
                 map.AddTBString(NodeAttr.RefOneFrmTreeType, "", "独立表单类型", false, false, 0, 100, 10);//RefOneFrmTree
 
-                map.AddTBString(NodeAttr.DoOutTimeCond, null, "执行超时的条件", false, false, 0, 300, 100);
+                map.AddTBString(NodeAttr.DoOutTimeCond, null, "执行超时的条件", false, false, 0, 200, 100);
 
                 //按钮控制部分.
                 // map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);

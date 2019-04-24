@@ -296,8 +296,18 @@ namespace BP.WF.HttpHandler
                     nodeID = gwf.FK_Node;
                 }
 
-                Node nd = new Node(nodeID); 
-                Work wk = nd.HisWork;
+                Node nd = new Node(nodeID);
+                //树形表单方案单独打印
+                if ((nd.HisFormType == NodeFormType.SheetTree && nd.HisPrintPDFModle == 1) == false)
+                    return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
+                else
+                {
+                    //获取该节点绑定的表单
+                    // 所有表单集合.
+                    MapDatas mds = new MapDatas();
+                    mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+                    return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
+                }
                 return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
             }
             catch (Exception ex)
@@ -305,6 +315,27 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+        /**
+	     * 独立表单PDF打印
+	     * @return
+	     * @throws Exception 
+	     */
+	    public String Packup_FromInit(){
+		    try {
+			    int nodeID = this.FK_Node;
+			    if (this.FK_Node == 0) {
+				    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+				    nodeID = gwf.FK_Node;
+			    }
+			    Node nd = new Node(nodeID);
+			    return MakeForm2Html.MakeFormToPDF(this.GetRequestVal("FrmID"),this.GetRequestVal("FrmName"),nd,this.WorkID, this.FK_Flow,null,false,this.GetRequestVal("BasePath"));
+            }
+            catch (Exception ex)
+            {
+			    return "err@" + ex.Message;
+		    }
+	    }
         /// <summary>
         /// 扫描二维码获得文件.
         /// </summary>
@@ -1037,6 +1068,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("ParentNode", typeof(int));
             tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
             tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
+            tkDt.Columns.Add("ActionType", typeof(int));
 
             //流程附件.
             DataTable athDt = new DataTable("Aths");
@@ -1152,6 +1184,13 @@ namespace BP.WF.HttpHandler
                             if (nodes.Contains(tk.NDFrom + ",") == false)
                                 nodes += tk.NDFrom + ",";
                             break;
+                        case ActionType.Return:
+                            if (fwc.FWCIsShowReturnMsg == true)
+                            {
+                                if (nodes.Contains(tk.NDFrom + ",") == false)
+                                    nodes += tk.NDFrom + ",";
+                            }
+                            break;
                         default:
                             continue;
                     }
@@ -1162,9 +1201,9 @@ namespace BP.WF.HttpHandler
                     if (nodes.Contains(tk.NDFrom + ",") == false)
                         continue;
 
-                    if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow)
+                    if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow && tk.HisActionType != ActionType.Return)
                         continue;
-
+                    
                     //如果是当前的节点. 当前人员可以处理, 已经审批通过的人员.
                     if (tk.NDFrom == this.FK_Node
                         && isCanDo == true
@@ -1255,7 +1294,7 @@ namespace BP.WF.HttpHandler
 
                     row["EmpFrom"] = tk.EmpFrom;
                     row["EmpFromT"] = tk.EmpFromT;
-
+                    row["ActionType"] = tk.HisActionType;
                     tkDt.Rows.Add(row);
 
                     #region //审核组件附件数据
@@ -1321,6 +1360,7 @@ namespace BP.WF.HttpHandler
                                     row["ParentNode"] = tk.NDFrom;
                                     row["T_NodeIndex"] = idx++;
                                     row["T_CheckIndex"] = noneEmpIdx++;
+                                    row["ActionType"] = mysubtk.HisActionType;
                                     tkDt.Rows.Add(row);
 
                                     if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
@@ -1414,7 +1454,7 @@ namespace BP.WF.HttpHandler
                         row["EmpFromT"] = WebUser.Name;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
-
+                        row["ActionType"] = ActionType.Forward;
                         tkDt.Rows.Add(row);
                     }
                 }
@@ -1432,7 +1472,7 @@ namespace BP.WF.HttpHandler
                     row["EmpFromT"] = WebUser.Name;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
-
+                    row["ActionType"] = ActionType.Forward;
                     tkDt.Rows.Add(row);
                 }
             }
@@ -2512,7 +2552,7 @@ namespace BP.WF.HttpHandler
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
 
-                // @shilianyu.
+                // 
                 //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
                 if (dt.Rows.Count == 1)
                 {

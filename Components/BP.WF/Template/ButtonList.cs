@@ -238,6 +238,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string PrintPDFEnable = "PrintPDFEnable";
         /// <summary>
+        /// 打印pdf规则
+        /// </summary>
+        public const string PrintPDFModle = "PrintPDFModle";
+        /// <summary>
         /// 打包下载
         /// </summary>
         public const string PrintZipLab = "PrintZipLab";

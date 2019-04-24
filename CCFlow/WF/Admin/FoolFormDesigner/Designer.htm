@@ -182,14 +182,14 @@
                             operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
                         });
 
-                        if (mapAttr.ColSpan <= 1 && mapAttr.TextColSpan <= 1) { //外键.
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 2)) { //外键.
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
 
-                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
 
-                            html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div></td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -198,6 +198,21 @@
                             isDrawTR = !isDrawTR;
                             continue;
                         }
+                        if (mapAttr.ColSpan == 0 && mapAttr.TextColSpan == 1) { //外键.
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
+
+                            html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
+
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
+
                         if ((mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 2) ||
                              (mapAttr.ColSpan == 3 && mapAttr.TextColSpan == 1) ||
                              (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 3)) {
@@ -265,14 +280,30 @@
                             continue;
                         }
 
-                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && (mapAttr.TextColSpan == 1 || mapAttr.TextColSpan == 0)) { // 一列文本框.
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 2)) { // 一列文本框.
+
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
+
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + " ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
+
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
+
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
+
+                        if (mapAttr.ColSpan == 0 && mapAttr.TextColSpan == 1) { // 一列文本框.
 
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -327,14 +358,27 @@
                         }
 
 
-                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && (mapAttr.TextColSpan == 1 || mapAttr.TextColSpan == 0)) {
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 2)) {
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+
+
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:160px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
+
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
+
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
+                        if (mapAttr.ColSpan == 0 && mapAttr.TextColSpan == 1) {
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-
-
-                            html += "<td ColSpan=1 ><div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:160px;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -382,13 +426,28 @@
                         }
 
 
-                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && mapAttr.TextColSpan == 1) {
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan ==2)) {
+                            if (isDrawTR == true) {
+                                html += "<tr>";
+                            }
+
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + " >" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + " ><div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
+
+                            if (isDrawTR == false) {
+                                html += "</tr>";
+                            }
+
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
+
+                        if (mapAttr.ColSpan == 0 && mapAttr.TextColSpan == 1) {
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1 ><div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div></td>";
 
                             if (isDrawTR == false) {
                                 html += "</tr>";
@@ -597,12 +656,24 @@
                                         mapAttr.MyDataType == 8 ||
                                         (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)
                                     ) {
-                        if ((mapAttr.ColSpan == 1 || mapAttr.ColSpan == 0) && mapAttr.TextColSpan == 1) {
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 2)) {
+                            if (isDrawTR == true)
+                                html += "<tr>";
+
+                            html += "<td class='FDesc' ColSpan=" + mapAttr.TextColSpan + ">" + GenerLabel(mapAttr) + "</td>";
+                            html += "<td ColSpan=" + mapAttr.ColSpan + "><div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
+
+                            if (isDrawTR == false)
+                                html += "</tr>";
+
+                            isDrawTR = !isDrawTR;
+                            continue;
+                        }
+                        if (mapAttr.ColSpan == 0 && mapAttr.TextColSpan == 1) {
                             if (isDrawTR == true)
                                 html += "<tr>";
 
                             html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                            html += "<td ColSpan=1><div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='text-align:right;width:120px;'  value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div> </td>";
 
                             if (isDrawTR == false)
                                 html += "</tr>";
@@ -695,8 +766,8 @@
 
         });
 
-      
-      
+
+
         //记录改变字段样式 不可编辑，不可见
         var mapAttrs = [];
         function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
@@ -992,9 +1063,14 @@
             var leftBtn = "<div style='text-align:left; float:left'>";
 
             var midBtn = "";
-
+            var isShow = true;
             switch (groupEn.CtrlType) {
                 case "Ath":
+                    if (groupEn.CtrlID == "") {
+                        isShow = false;
+                        break;
+                    }
+
                     leftBtn += "<a href=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</a>";
                     break;
                 case "Frame":
@@ -1019,23 +1095,25 @@
                     leftBtn += "<a href=\"javascript:GroupField('" + groupEn.EnName + "','" + groupEn.OID + "')\" >" + lab + "</a>";
                     break;
             }
-            leftBtn += "</div>";
+            if (isShow == true) {
+                leftBtn += "</div>";
 
 
-            //右边的按钮都一样.
-            var rightBtn = "<div style='text-align:right; float:right'>" + midBtn;
-            rightBtn += "<a href=\"javascript:GFDoUp('" + groupEn.OID + "' )\"  class='easyui-linkbutton l-btn l-btn-plain'  data-options='iconCls:icon-up,plain:true' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>";
-            rightBtn += "<a href=\"javascript:GFDoDown('" + groupEn.OID + "');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-down,plain:true'><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
-            rightBtn += "</div>";
+                //右边的按钮都一样.
+                var rightBtn = "<div style='text-align:right; float:right'>" + midBtn;
+                rightBtn += "<a href=\"javascript:GFDoUp('" + groupEn.OID + "' )\"  class='easyui-linkbutton l-btn l-btn-plain'  data-options='iconCls:icon-up,plain:true' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>";
+                rightBtn += "<a href=\"javascript:GFDoDown('" + groupEn.OID + "');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-down,plain:true'><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
+                rightBtn += "</div>";
 
-            var html = "<tr>";
-            html += "<th colspan=4>";
+                var html = "<tr>";
+                html += "<th colspan=4>";
 
 
-            html += leftBtn + rightBtn;
+                html += leftBtn + rightBtn;
 
-            html += "</th>";
-            html += "</tr>";
+                html += "</th>";
+                html += "</tr>";
+            }
 
             return html;
         }

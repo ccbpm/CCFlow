@@ -2319,7 +2319,7 @@ namespace BP.WF
                     BP.WF.Dev2Interface.SetParentInfo(gwfSubFlow.FK_Flow, workidC, gwfParent.WorkID);
 
                     // 是否可以执行？
-                    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwfSubFlow.FK_Flow, gwfSubFlow.FK_Node, workidC, WebUser.No) == true)
+                    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(workidC, WebUser.No) == true)
                     {
                         //执行向下发送.
                         try

@@ -384,7 +384,7 @@ namespace BP.WF.HttpHandler
                     break;
                 case WFState.HungUp: // 挂起.
                     /*撤销挂起*/
-                    isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(FK_Flow, FK_Node, WorkID, WebUser.No);
+                    isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No);
 
                     ht.Add("CanUnHungUp", isCan.ToString().ToLower());
                     break;

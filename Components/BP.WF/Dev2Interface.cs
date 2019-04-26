@@ -5167,12 +5167,10 @@ namespace BP.WF
         /// <param name="workID"></param>
         /// <param name="userNo"></param>
         /// <returns></returns>
-        public static bool Flow_IsCanDoCurrentWork(string flowNo, int nodeID, Int64 workID, string userNo)
+        public static bool Flow_IsCanDoCurrentWork(Int64 workID, string userNo)
         {
             if (workID == 0)
-            {
                 return true;
-            }
 
             GenerWorkFlow mygwf = new GenerWorkFlow(workID);
             {
@@ -5185,7 +5183,7 @@ namespace BP.WF
 
                     GenerWorkerList gwl = new GenerWorkerList();
                     int inum = gwl.Retrieve(GenerWorkerListAttr.WorkID, workID, GenerWorkerListAttr.FK_Emp, userNo,
-                       GenerWorkerListAttr.FK_Node, nodeID);
+                       GenerWorkerListAttr.FK_Node, mygwf.FK_Node);
                     if (inum == 1 && gwl.IsPassInt == 0)
                     {
                         return true;
@@ -5195,7 +5193,7 @@ namespace BP.WF
 
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */
-            string str = nodeID.ToString();
+            string str = mygwf.FK_Node.ToString();
             if (str.EndsWith("01") == true)
             {
                 //如果是开始节点，如何去判断是否可以处理当前节点的权限.
@@ -5206,7 +5204,7 @@ namespace BP.WF
                     return true;
                 }
 
-                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
+                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + gwf.FK_Node;
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                 if (mydt.Rows.Count == 0)
                 {
@@ -5228,33 +5226,25 @@ namespace BP.WF
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "SELECT c.RunModel,c.IsGuestNode, a.GuestNo, a.TaskSta, a.WFState, IsPass FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b, WF_Node c WHERE  b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.FK_Emp=" + dbstr + "FK_Emp AND (b.IsEnable=1 OR b.IsPass>=70)   AND a.WorkID=" + dbstr + "WorkID ";
+            ps.SQL = "SELECT c.RunModel,c.IsGuestNode, a.GuestNo, a.TaskSta, a.WFState, IsPass FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b, WF_Node c WHERE  b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.FK_Emp=" + dbstr + "FK_Emp AND (b.IsEnable=1 OR b.IsPass>=70 OR IsPass=0)   AND a.WorkID=" + dbstr + "WorkID ";
             ps.Add("FK_Emp", userNo);
             ps.Add("WorkID", workID);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (dt.Rows.Count == 0)
-            {
                 return false;
-            }
 
             //判断是否是待办.
             int myisPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
 
             //新增加的标记,=90 就是会签主持人执行会签的状态. 翻译.
             if (myisPass == 90)
-            {
                 return true;
-            }
 
             if (myisPass == 80)
-            {
                 return true;
-            }
 
             if (myisPass != 0)
-            {
                 return false;
-            }
 
             WFState wfsta = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
             if (wfsta == WFState.Complete)
@@ -8890,7 +8880,7 @@ namespace BP.WF
             BP.WF.GenerWorkFlow gwf = new GenerWorkFlow(workid);
 
             //检查当前人员是否开可以执行当前的工作?
-            if (Flow_IsCanDoCurrentWork(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, WebUser.No) == false)
+            if (Flow_IsCanDoCurrentWork(gwf.WorkID, WebUser.No) == false)
             {
                 throw new Exception("@当前的工作已经被别人处理或者您没有处理该工作的权限.");
             }

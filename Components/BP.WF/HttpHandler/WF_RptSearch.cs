@@ -193,7 +193,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string KeySearch_GenerOpenUrl()
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No) == true)
+            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, WebUser.No) == true)
                 return "1";
             else
                 return "0";

@@ -1089,7 +1089,7 @@ namespace BP.WF.HttpHandler
             if (isReadonly == true)
                 isCanDo = false;
             else
-                isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
+                isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( this.WorkID, BP.Web.WebUser.No);
 
             //如果是查看状态, 为了屏蔽掉正在审批的节点, 在查看审批意见中.
             bool isShowCurrNodeInfo = true;

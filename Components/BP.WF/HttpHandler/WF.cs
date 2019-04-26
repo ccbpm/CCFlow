@@ -2050,8 +2050,7 @@ namespace BP.WF.HttpHandler
                 {
                     case SMSMsgType.SendSuccess: // 发送成功的提示.
 
-                        if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(ap.GetValStrByKey("FK_Flow"),
-                            ap.GetValIntByKey("FK_Node"), ap.GetValInt64ByKey("WorkID"), BP.Web.WebUser.No) == true)
+                        if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( ap.GetValInt64ByKey("WorkID"), BP.Web.WebUser.No) == true)
                         {
                             return "url@MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
                         }

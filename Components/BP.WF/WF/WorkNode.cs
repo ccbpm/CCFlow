@@ -5793,8 +5793,7 @@ namespace BP.WF
 
             #region 安全性检查.
             //   第1: 检查是否可以处理当前的工作.
-            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.HisNode.FK_Flow, this.HisNode.NodeID,
-                this.WorkID, this.Execer) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, this.Execer) == false)
                 throw new Exception(BP.WF.Glo.multilingual("@当前工作您已经处理完成，或者您({0} {1})没有处理当前工作的权限.", "WorkNode", "current_work_completed", this.Execer, this.ExecerName));
 
             // 第1.2: 调用发起前的事件接口,处理用户定义的业务逻辑.

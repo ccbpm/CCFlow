@@ -282,7 +282,7 @@ namespace BP.WF.HttpHandler
             if (this.WorkID != 0)
             {
                 //判断是否有执行该工作的权限.
-                bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
+                bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(  this.WorkID, BP.Web.WebUser.No);
                 if (isCanDo == false)
                 {
                     GenerWorkFlow mygwf = new GenerWorkFlow(this.WorkID);

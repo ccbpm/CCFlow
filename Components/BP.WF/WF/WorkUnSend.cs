@@ -491,7 +491,7 @@ namespace BP.WF
             }
             #endregion 如果是越轨流程状态 .
 
-            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwf.FK_Flow, gwf.FK_Node, this.WorkID, WebUser.No) == true)
+            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( this.WorkID, WebUser.No) == true)
                 return "info@您有处理当前工作的权限,可能您已经执行了撤销,请使用退回或者发送功能.";
 
 

@@ -56,7 +56,7 @@ namespace BP.WF
         public bool IsCanDoCurrentWork(string empId)
         {
             WorkNode wn = this.GetCurrentWorkNode();
-            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(wn.HisNode.FK_Flow, wn.HisNode.NodeID, wn.WorkID, empId);
+            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(wn.WorkID, empId);
             #region 使用dev2InterFace 中的算法
             //return true;
             // 找到当前的工作节点
@@ -1152,7 +1152,7 @@ namespace BP.WF
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
                 //@袁丽娜.
-                if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.HisGenerWorkFlow.PFlowNo, pGWF.FK_Node, pGWF.WorkID, WebUser.No) == false)
+                if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( pGWF.WorkID, WebUser.No) == false)
                 {
                     /*没有权限的情况下，就移交给当前人员，让其在发送. */
                     BP.WF.Dev2Interface.Node_Shift( pGWF.WorkID, WebUser.No, "工作自动移交，让其运行到下一步。");

@@ -820,7 +820,7 @@ function figure_Template_Dtl(frmDtl) {
     }
 
     var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
+    eleIframe = $("<iframe class='Fdtl' ID='Dtl_" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     if (pageData.IsReadonly) {

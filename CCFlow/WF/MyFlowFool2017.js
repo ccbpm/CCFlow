@@ -1262,7 +1262,7 @@ function Ele_Dtl(frmDtl) {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
     }
-    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='F" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='Dtl_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }
 
 function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr) {

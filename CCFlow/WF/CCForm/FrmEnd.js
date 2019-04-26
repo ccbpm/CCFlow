@@ -555,7 +555,7 @@ function AfterBindEn_DealMapExt(frmData) {
     }
 
     $.each(detailExt, function (idx, obj) {
-        var iframeDtl = $("#F" + obj[0].DtlNo);
+        var iframeDtl = $("#Dtl_" + obj[0].DtlNo);
         iframeDtl.load(function () {
             $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[obj[0].DtlNo]));
             if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {

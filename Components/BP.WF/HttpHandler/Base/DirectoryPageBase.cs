@@ -1090,6 +1090,7 @@ namespace BP.WF.HttpHandler
                 {
                     foreach (Attr attr in selectedAttrs)
                     {
+
                         if (attr.UIVisible == false)
                             continue;
 
@@ -1106,6 +1107,10 @@ namespace BP.WF.HttpHandler
                         else
                         {
                             string text = dr[attr.IsFKorEnum ? (attr.Key + "Text") : attr.Key].ToString();
+                            if (attr.Key == "FK_NY")
+                            {
+                               text = dr[attr.Key].ToString();
+                            }
                             if (DataType.IsNullOrEmpty(text) == false && (text.Contains("\n") == true || text.Contains("\r") == true))
                                 text = text.Replace("\n", " ");
                                 text = text.Replace("\r", " ");

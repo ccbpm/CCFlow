@@ -572,9 +572,13 @@ namespace BP.WF.HttpHandler
             ur.MVals = mvals;
             ur.Update();
 
+           
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
+
             DataSet ds = new DataSet();
             MapData md = new MapData(rptNo);
-            MapAttrs attrs = new MapAttrs(rptNo);
+            //MapAttrs attrs = new MapAttrs(rptNo);
             GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
 
@@ -602,8 +606,12 @@ namespace BP.WF.HttpHandler
 
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
-
-            string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, title, ges.GetNewEntity.EnMap.Attrs);
+            Attrs attrsa = new Attrs();
+            foreach(MapAttr attr in attrs){
+                attrsa.Add(attr.HisAttr);
+            }
+            
+            string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, title, attrsa);
 
 
             return filePath;

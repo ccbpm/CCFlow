@@ -1107,13 +1107,15 @@ namespace BP.WF.HttpHandler
                         else
                         {
                             string text = dr[attr.IsFKorEnum ? (attr.Key + "Text") : attr.Key].ToString();
-                            if (attr.Key == "FK_NY")
+                            if (attr.Key == "FK_NY" && DataType.IsNullOrEmpty(text)==true)
                             {
                                text = dr[attr.Key].ToString();
                             }
                             if (DataType.IsNullOrEmpty(text) == false && (text.Contains("\n") == true || text.Contains("\r") == true))
+                            {
                                 text = text.Replace("\n", " ");
                                 text = text.Replace("\r", " ");
+                            }
                             strLine = strLine + text + Convert.ToChar(9);
                         }
                     }

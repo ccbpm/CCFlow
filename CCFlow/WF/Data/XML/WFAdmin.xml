@@ -7,7 +7,7 @@
   <OneWork No="TimeBase" CH="时间轴"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  IsDefault="0"/>
   <OneWork No="Table" CH="时间表"  UrlCCFlow="Table.htm" UrlJFlow="Table.htm" IsDefault="0" />
   <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm" IsDefault="0"/>
-  <OneWork No="Table" CH="时间表" UrlCCFlow="Table.htm" UrlJFlow="Table.htm" IsDefault="0"/>
+  
 
   <!-- 可以配置的. -->
   <OneWork1 No="LogOfTable" CH="流程日志(表格)"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />

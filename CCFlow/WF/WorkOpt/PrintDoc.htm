@@ -18,6 +18,7 @@
             var nodeID = GetQueryString("FK_Node");
             var workID = GetQueryString("WorkID");
             var flowNo = GetQueryString("FK_Flow");
+            var fid = GetQueryString("FID");
 
             //初始化页面信息
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
@@ -27,8 +28,29 @@
                 alert(data);
                 return;
             }
-            //alert(data);
-            //return;
+            if (data.indexOf("info@") == 0) {
+                data = data.replace("info@", "");
+                data = JSON.parse(data);
+                if (data.length == 0) {
+                    alert("没有绑定表单，无需打印");
+                    return;
+                }
+                var html = "";
+                html += "<fieldset>";
+                html += "<legend>ND" + GetQueryString("FK_Node") + "绑定的表单</legend>";
+                html += "<ul>";
+
+                for (var i = 0; i < data.length; i++) {
+                    html += "<li><a href='javaScript:void(0)' target=_blank onclick=PrintSignleFormIt(" + flowNo + "," + nodeID + "," + workID + ","+fid+",\""+data[i].No+"\")>" + data[i].Name + "</a></li>";
+                }
+                html += "<li>说明：点击上面的表单名称进行RTF进行打印</li>";
+                html += "</ul>";
+                html += "</fieldset>";
+
+                document.getElementById("Msg").innerHTML = html;
+                return;
+            }
+
 
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
@@ -57,22 +79,46 @@
 
         });
 
+        function PrintSignleFormIt(flowNo, nodeId, WorkID,FID,ccfromId) {
+            $("#rtf").html("");
+            var ens = new Entities("BP.WF.Template.BillTemplates");
+            ens.Retrieve("NodeID", nodeId);
+            if (ens.length == 0){
+                alert("当前节点上没有绑定单据模板");
+                return false;
+             }
+            if (ens.length == 1) {
+                PrintIt(ens[0].No, flowNo, nodeId, WorkID, FID, ccfromId);
+                return;
+             }
+
+            var html = "<ul>";
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
+                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + ","+FID+",\""+ccfromId+"\") >" + en.Name + "</li>";
+            }
+
+            html += "</ul>";
+            $("#rtf").html(html);
+        }
+
         //打印.
-        function PrintIt(billNo, flowNo, nodeID, workID) {
+        function PrintIt(billNo, flowNo, nodeID, workID, FID, ccfromId) {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddPara("FK_Bill", billNo);
             handler.AddPara("FK_Flow", flowNo);
             handler.AddPara("FK_Node", nodeID);
             handler.AddPara("WorkID", workID);
+            handler.AddPara("FID", FID);
+            handler.AddPara("CCFormID", ccfromId);
 
             var data = handler.DoMethodReturnString("PrintDoc_Done");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
-
-
 
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
@@ -87,8 +133,7 @@
                     return;
                 }
 
-                alert(data);
-
+             
                 WinOpen(data);
                 return;
             }
@@ -109,6 +154,7 @@
 <body>
     <div id="Msg">
     </div>
+    <div id="rtf"></div>
     <center>
         <input type="button" value='关闭' onclick="window.close();" />
     </center>

@@ -47,6 +47,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string PrintDoc_Init()
         {
+            Node nd = new Node(this.FK_Node);
+            if (nd.HisFormType == NodeFormType.SheetTree)
+            {
+                //获取该节点绑定的表单
+                // 所有表单集合.
+                MapDatas mds = new MapDatas();
+                mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node + " AND FrmEnableRole !=5");
+                return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
+            }
+
             BillTemplates templetes = new BillTemplates();
             string billNo = this.GetRequestVal("FK_Bill");
             if (billNo == null)
@@ -73,6 +83,7 @@ namespace BP.WF.HttpHandler
             string billTemplateNo = this.GetRequestVal("FK_Bill");
             return PrintDoc_DoneIt(billTemplateNo);
         }
+
         /// <summary>
         /// 打印pdf.
         /// </summary>
@@ -80,8 +91,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string PrintDoc_DoneIt(string billTemplateNo = null)
         {
+            Node nd = new Node(this.FK_Node);
+
             if (billTemplateNo == null)
                 billTemplateNo = this.GetRequestVal("FK_Bill");
+           
 
             BillTemplate func = new BillTemplate(billTemplateNo);
 
@@ -94,7 +108,13 @@ namespace BP.WF.HttpHandler
                 return "url@httpccword://-fromccflow,App=BillTemplateWord,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID;
 
             string billInfo = "";
-            Node nd = new Node(this.FK_Node);
+
+            string ccformId = this.GetRequestVal("CCFormID");
+            if (DataType.IsNullOrEmpty(ccformId) == false)
+            {
+                return PrintDoc_FormDoneIt(nd, this.WorkID, this.FID, ccformId, func);
+            }
+           
             Work wk = nd.HisWork;
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
@@ -137,7 +157,7 @@ namespace BP.WF.HttpHandler
 
                             wk = null;
                             wk = nd.HisWork;
-                            wk.OID = this.FID;
+                            wk.OID = this.WorkID;
                             wk.RetrieveFromDBSources();
                         }
                         else
@@ -267,6 +287,181 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        public string PrintDoc_FormDoneIt(Node nd, long wrkID, long fid, string formID, BillTemplate func)
+        {
+
+            string billInfo = "";
+            Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.RetrieveFromDBSources();
+            MapData mapData = new MapData(formID);
+
+            string file = DateTime.Now.Year + "_" + WebUser.FK_Dept + "_" + func.No + "_" + WorkID + ".doc";
+            BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();
+
+            string[] paths;
+            string path;
+            Int64 newWorkID = 0;
+            try
+            {
+                #region 单据变量.
+                Bill bill = new Bill();
+                bill.MyPK = wk.FID + "_" + wk.OID + "_" + nd.NodeID + "_" + func.No;
+                #endregion
+
+                #region 生成单据
+                rtf.HisEns.Clear();
+                rtf.EnsDataDtls.Clear();
+                if (func.NodeID != 0)
+                {
+                    //把流程主表数据放入里面去.
+                    GEEntity ndxxRpt = new GEEntity(formID);
+                    try
+                    {
+                        ndxxRpt.PKVal = this.WorkID;
+                        ndxxRpt.Retrieve();
+
+                        newWorkID = this.WorkID;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (FID > 0)
+                        {
+                            ndxxRpt.PKVal = this.FID;
+                            ndxxRpt.Retrieve();
+
+                            newWorkID = this.FID;
+
+                            wk = null;
+                            wk = nd.HisWork;
+                            wk.OID = this.WorkID;
+                            wk.RetrieveFromDBSources();
+                        }
+                        else
+                        {
+                            BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
+                            dir.Do();
+                            path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                            string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
+                            billInfo += "@<font color=red>" + msgErr + "</font>";
+                            throw new Exception(msgErr + "@其它信息:" + ex.Message);
+                        }
+                    }
+                    //ndxxRpt.Copy(wk);
+
+                    //把数据赋值给wk. 有可能用户还没有执行流程检查，字段没有同步到 NDxxxRpt.
+                    //if (ndxxRpt.Row.Count > wk.Row.Count)
+                     //   wk.Row = ndxxRpt.Row;
+
+                    rtf.HisGEEntity = ndxxRpt;
+
+                    //加入他的明细表.
+                    List<Entities> al = mapData.GetDtlsDatasOfList();
+                    foreach (Entities ens in al)
+                        rtf.AddDtlEns(ens);
+
+                    //增加多附件数据
+                    FrmAttachments aths = mapData.FrmAttachments;
+                    foreach (FrmAttachment athDesc in aths)
+                    {
+                        FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
+                        if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, newWorkID, "RDT") == 0)
+                            continue;
+
+                        rtf.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
+                    }
+
+                    //把审核日志表加入里面去.
+                    Paras ps = new BP.DA.Paras();
+                    ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
+                    ps.Add(TrackAttr.WorkID, newWorkID);
+
+                    rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                }
+
+                paths = file.Split('_');
+                path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
+
+                string billUrl = "url@" + BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
+
+                if (func.HisBillFileType == BillFileType.PDF)
+                    billUrl = billUrl.Replace(".doc", ".pdf");
+
+                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                //  path = Server.MapPath(path);
+                if (System.IO.Directory.Exists(path) == false)
+                    System.IO.Directory.CreateDirectory(path);
+
+                string tempFile = func.TempFilePath;
+                if (tempFile.Contains(".rtf") == false)
+                    tempFile = tempFile + ".rtf";
+
+                //用于扫描打印.
+                string qrUrl = SystemConfig.HostURL + "WF/WorkOpt/PrintDocQRGuide.htm?MyPK=" + bill.MyPK;
+                rtf.MakeDoc(tempFile,
+                    path, file, false, qrUrl);
+                #endregion
+
+                #region 转化成pdf.
+                if (func.HisBillFileType == BillFileType.PDF)
+                {
+                    string rtfPath = path + file;
+                    string pdfPath = rtfPath.Replace(".doc", ".pdf");
+                    try
+                    {
+                        BP.WF.Glo.Rtf2PDF(rtfPath, pdfPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        return "err@" + ex.Message;
+                    }
+                }
+                #endregion
+
+                #region 保存单据.
+
+                bill.FID = wk.FID;
+                bill.WorkID = wk.OID;
+                bill.FK_Node = wk.NodeID;
+                bill.FK_Dept = WebUser.FK_Dept;
+                bill.FK_Emp = WebUser.No;
+                bill.Url = billUrl;
+                bill.RDT = DataType.CurrentDataTime;
+                bill.FullPath = path + file;
+                bill.FK_NY = DataType.CurrentYearMonth;
+                bill.FK_Flow = nd.FK_Flow;
+                // bill.FK_BillType = func.FK_BillType;
+                bill.Emps = rtf.HisGEEntity.GetValStrByKey("Emps");
+                bill.FK_Starter = rtf.HisGEEntity.GetValStrByKey("Rec");
+                bill.StartDT = rtf.HisGEEntity.GetValStrByKey("RDT");
+                bill.Title = rtf.HisGEEntity.GetValStrByKey("Title");
+                bill.FK_Dept = rtf.HisGEEntity.GetValStrByKey("FK_Dept");
+
+                try
+                {
+                    bill.Save();
+                }
+                catch
+                {
+                    bill.Update();
+                }
+                #endregion
+
+                //在线WebOffice打开
+                if (func.BillOpenModel == BillOpenModel.WebOffice)
+                    return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
+                return billUrl;
+            }
+            catch (Exception ex)
+            {
+                BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
+                dir.Do();
+                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
+                return "err@<font color=red>" + msgErr + "</font>" + ex.Message;
+            }
+        }
         /// <summary>
         /// 页面功能实体
         /// </summary>
@@ -305,7 +500,7 @@ namespace BP.WF.HttpHandler
                     //获取该节点绑定的表单
                     // 所有表单集合.
                     MapDatas mds = new MapDatas();
-                    mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+                    mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node + " AND FrmEnableRole != 5");
                     return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
                 }
                 return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));

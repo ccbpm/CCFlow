@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript">
 
+        var printType = 0;
         $(function () {
 
             $("#Msg").html("<h3>正在加载请稍候....</h3>");
@@ -19,7 +20,7 @@
             var workID = GetQueryString("WorkID");
             var flowNo = GetQueryString("FK_Flow");
             var fid = GetQueryString("FID");
-
+            printType = GetQueryString("PrintType");
             //初始化页面信息
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
@@ -41,7 +42,7 @@
                 html += "<ul>";
 
                 for (var i = 0; i < data.length; i++) {
-                    html += "<li><a href='javaScript:void(0)' target=_blank onclick=PrintSignleFormIt(" + flowNo + "," + nodeID + "," + workID + ","+fid+",\""+data[i].No+"\")>" + data[i].Name + "</a></li>";
+                    html += "<li><a href='javaScript:void(0)' target=_blank onclick=PrintSignleFormIt(" + flowNo + "," + nodeID + "," + workID + "," + fid + ",\"" + data[i].No + "\")>" + data[i].Name + "</a></li>";
                 }
                 html += "<li>说明：点击上面的表单名称进行RTF进行打印</li>";
                 html += "</ul>";
@@ -55,7 +56,7 @@
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                if (plant == 'CCFlow') {
+                if (plant == 'CCFlow' && printType == 1) {
                     url += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
                 }
                 window.location.href = url;
@@ -125,10 +126,10 @@
 
                 data = data.replace('url@', '');
 
-                if (plant == 'CCFlow') {
+                if (plant == 'CCFlow' && printType == 1) {
                     data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
                 }
-                else {
+               if(plant == "JFlow"){
                     alert('还没有翻译.');
                     return;
                 }

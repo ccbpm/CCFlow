@@ -1094,6 +1094,9 @@ namespace BP.WF.HttpHandler
                         if (attr.UIVisible == false)
                             continue;
 
+                        if (attr.Key.Equals("OID"))
+                            continue;
+
                         if (attr.Key == "MyNum")
                             continue;
 

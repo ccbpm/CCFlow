@@ -606,6 +606,7 @@ namespace BP.WF.HttpHandler
 
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
+            qo.addOrderByDesc("OID");
             Attrs attrsa = new Attrs();
             foreach(MapAttr attr in attrs){
                 attrsa.Add(attr.HisAttr);

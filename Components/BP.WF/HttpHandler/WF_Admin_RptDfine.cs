@@ -152,6 +152,7 @@ namespace BP.WF.HttpHandler
 
             foreach (MapAttr attr in allAttrs)
             {
+                attr.UIVisible = true;
                 #region 处理特殊字段.
                 if (attr.KeyOfEn == "FK_NY")
                 {

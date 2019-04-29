@@ -54,6 +54,13 @@
             var data = handler.DoMethodReturnString("Return_Init");
             if (data.indexOf('info@') == 0) {
 
+                //设置弹出框的大小
+                $(".modal-content", parent.document).css("width", "");
+                $(".modal-content", parent.document).css("height", "300px");
+
+                $("#iframeReturnWorkForm", parent.document).css("height", "300px");
+				
+
                 data = data.replace('info@', '');
                 data = "<font>" + data + "</font>";
                 $("#Msg").html("");

@@ -868,13 +868,15 @@ namespace BP.WF
                     //处理分组数据，非当前分组的数据不输出
                     if (attr.GroupID != gf.OID)
                         continue;
-
+                    
                     string text = "";
+                   
                     switch (attr.LGType)
                     {
                         case FieldTypeS.Normal:  // 输出普通类型字段.
                             if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
                             {
+                                
                                 if (attrs.Contains(attr.KeyOfEn + "Text") == true)
                                     text = en.GetValRefTextByKey(attr.KeyOfEn);
                                 if (DataType.IsNullOrEmpty(text))
@@ -884,6 +886,10 @@ namespace BP.WF
                             else
                             {
                                 text = en.GetValStrByKey(attr.KeyOfEn);
+                                if (attr.IsRichText == true)
+                                {
+                                    text = text.Replace("white-space: nowrap;", "");
+                                }
                             }
                             
                             break;

@@ -16,7 +16,7 @@
 
             var frmType = GetQueryString("FrmType");
             if (frmType == null || frmType == "")
-                frmType = '1';
+                frmType = '0';
 
             //创建表单类型.
             GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);

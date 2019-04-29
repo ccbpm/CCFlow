@@ -307,6 +307,7 @@
 
 
             data = data.replace('@', '<br/>@');
+            data = data.replace(/null/g, '');
             data += " <center><input id='CloseBtn' type='button' value='    关    闭(5秒)    ' onclick='CloseAll();'  /></center>";
             $(".Msg").show();
             $(".Msg").html(data);

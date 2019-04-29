@@ -59,9 +59,10 @@
                 $(".modal-content", parent.document).css("height", "300px");
 
                 $("#iframeReturnWorkForm", parent.document).css("height", "300px");
-				
+
 
                 data = data.replace('info@', '');
+                data = data.replace(/null/g, '');
                 data = "<font>" + data + "</font>";
                 $("#Msg").html("");
                 $("#DIV_Nodes").html(data);
@@ -148,6 +149,7 @@
             handler.AddPara("ReturnInfo", doc);
             handler.AddPara("IsBack", isBack);
             var data = handler.DoMethodReturnString("DoReturnWork");
+            data = data.replace(/null/g, '');
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose(data);
             } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {

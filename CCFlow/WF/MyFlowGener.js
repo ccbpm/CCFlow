@@ -1059,7 +1059,7 @@ function OptSuc(msg) {
     }
     msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
-    $("#msgModalContent").html(msg.replace(/@/g, '<br/>'));
+    $("#msgModalContent").html(msg.replace(/@/g, '<br/>').replace(/null/g,''));
     var trackA = $('#msgModalContent a:contains("工作轨迹")');
     var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
     trackA.remove();
@@ -1074,8 +1074,8 @@ var num = 5;
 function clock() {
     num >= 0 ? num-- : clearInterval(int);
     $("#btnMsgModalOK").html("确定(" + num + "秒)");
-    if (num == 0)
-        closeWindow();
+    //if (num == 0)
+        //closeWindow();
 }
 
 

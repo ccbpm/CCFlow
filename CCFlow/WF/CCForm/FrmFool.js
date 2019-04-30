@@ -1168,9 +1168,7 @@ function Ele_Attachment(workNode, gf) {
     url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.
 
     var nodeID = GetQueryString("FK_Node");
-    if (nodeID == null || nodeID == undefined) {
-        nodeID = 0;
-    } else {
+    if (nodeID != null && nodeID.length>2) {
         var no = nodeID.substring(nodeID.length - 2);
         var IsStartNode = 0;
         if (no == "01")
@@ -1190,9 +1188,15 @@ function Ele_Attachment(workNode, gf) {
 
     var src = "";
 
+    var athUrl = "Ath.htm";
+    var local = window.location.href;
+    if (local.indexOf('CCBill') != -1) {
+        athUrl = '../CCForm/' + athUrl;
+    }
+
 
     //这里的连接要取 FK_MapData的值.
-    src = "Ath.htm?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+    src = athUrl+"?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {

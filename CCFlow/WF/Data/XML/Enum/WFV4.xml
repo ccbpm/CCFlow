@@ -43,6 +43,13 @@
    RU="@0=普通@1=合流@2=分流@3=分合流@4=子线程" />
 
 
+  <Item Key="BillFileType"
+   CH="@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)"
+   EN="@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)"
+   JP="@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)"
+   RU="@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)" />
+
+
   <Item Key="SaveModel"
     CH="@0=仅节点表@1=节点表与Rpt表"
     EN="@0=仅节点表@1=节点表与Rpt表"

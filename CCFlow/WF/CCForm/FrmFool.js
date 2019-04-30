@@ -1168,10 +1168,14 @@ function Ele_Attachment(workNode, gf) {
     url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.
 
     var nodeID = GetQueryString("FK_Node");
-    var no = nodeID.substring(nodeID.length - 2);
-    var IsStartNode = 0;
-    if (no == "01")
-        url += "&IsStartNode=1"; //是否是开始节点
+    if (nodeID == null || nodeID == undefined) {
+        nodeID = 0;
+    } else {
+        var no = nodeID.substring(nodeID.length - 2);
+        var IsStartNode = 0;
+        if (no == "01")
+            url += "&IsStartNode=1"; //是否是开始节点
+    }
 
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)

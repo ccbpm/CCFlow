@@ -1189,40 +1189,47 @@ function CheckBlanks() {
     //var lbs = $('[class*=col-md-1] label:contains(*)');
     var lbs = $('.mustInput');
     $.each(lbs, function (i, obj) {
-        if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
-            var keyofen = $(obj).data().keyofen
-            var ele = $('[id$=_' + keyofen + ']');
-            if (ele.length == 1) {
-                switch (ele[0].tagName.toUpperCase()) {
-                    case "INPUT":
-                        if (ele.attr('type') == "text") {
-                            if (ele.val() == "") {
-                                checkBlankResult = false;
-                                ele.addClass('errorInput');
-                            } else {
-                                ele.removeClass('errorInput');
-                            }
-                        }
-                        break;
-                    case "SELECT":
-                        if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
-                            checkBlankResult = false;
-                            ele.addClass('errorInput');
-                        } else {
-                            ele.removeClass('errorInput');
-                        }
-                        break;
-                    case "TEXTAREA":
-                        if (ele.val() == "") {
-                            checkBlankResult = false;
-                            ele.addClass('errorInput');
-                        } else {
-                            ele.removeClass('errorInput');
-                        }
-                        break;
-                }
-            }
+        if ($(obj).parent().css('display') != 'none' && ($(obj).parent().next().css('display') || $(obj).siblings("textarea").css('display'))) {
+        } else {
+            return;
         }
+
+        var keyofen = $(obj).data().keyofen;
+        var ele = $('[id$=_' + keyofen + ']');
+        if (ele.length == 0)
+            return;
+
+        $.each(ele, function (i, obj) {
+            var eleM = $(obj);
+            switch (eleM[0].tagName.toUpperCase()) {
+                case "INPUT":
+                    if (eleM.attr('type') == "text") {
+                        if (eleM.val() == "") {
+                            checkBlankResult = false;
+                            eleM.addClass('errorInput');
+                        } else {
+                            eleM.removeClass('errorInput');
+                        }
+                    }
+                    break;
+                case "SELECT":
+                    if (eleM.val() == "" || eleM.children('option:checked').text() == "*请选择") {
+                        checkBlankResult = false;
+                        eleM.addClass('errorInput');
+                    } else {
+                        eleM.removeClass('errorInput');
+                    }
+                    break;
+                case "TEXTAREA":
+                    if (eleM.val() == "") {
+                        checkBlankResult = false;
+                        eleM.addClass('errorInput');
+                    } else {
+                        eleM.removeClass('errorInput');
+                    }
+                    break;
+            }
+        });
     });
 
 

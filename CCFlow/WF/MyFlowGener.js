@@ -1074,8 +1074,8 @@ var num = 5;
 function clock() {
     num >= 0 ? num-- : clearInterval(int);
     $("#btnMsgModalOK").html("确定(" + num + "秒)");
-    //if (num == 0)
-        //closeWindow();
+    if (num == 0)
+        closeWindow();
 }
 
 

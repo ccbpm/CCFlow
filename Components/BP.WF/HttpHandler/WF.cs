@@ -319,7 +319,7 @@ namespace BP.WF.HttpHandler
                         BP.WF.Dev2Interface.Node_TaskPoolTakebackOne(this.WorkID);
                         return "info@Close";
                     case "DoOpenCC":
-
+                    case "WFRpt":
                         string Sta = this.GetRequestVal("Sta");
                         if (Sta == "0")
                         {
@@ -1865,6 +1865,10 @@ namespace BP.WF.HttpHandler
                 return this.GetRequestVal("SID");
             }
         }
+        /// <summary>
+        /// 调用页面入口
+        /// </summary>
+        /// <returns></returns>
         public string Port_Init()
         {
             #region 安全性校验.
@@ -1872,19 +1876,13 @@ namespace BP.WF.HttpHandler
             //    return "err@必要的参数没有传入，请参考接口规则。UserNo";
 
             if (this.SID == null)
-            {
                 return "err@必要的参数没有传入，请参考接口规则。SID";
-            }
 
             if (this.DoWhat == null)
-            {
                 return "err@必要的参数没有传入，请参考接口规则。DoWhat";
-            }
 
             if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
-            {
                 return "err@非法的访问，请与管理员联系。SID=" + this.SID;
-            }
 
             if (DataType.IsNullOrEmpty(WebUser.No) == true || BP.Web.WebUser.No.Equals(this.UserNo) == false)
             {
@@ -1982,15 +1980,17 @@ namespace BP.WF.HttpHandler
                 {
                     return "err@参数 FK_Flow 或者 WorkID 为Null 。";
                 }
-
                 return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras;
             }
 
             //请求在途.
             if (this.DoWhat.Equals(DoWhatList.Runing) == true)
-            {
                 return "url@Runing.htm?FK_Flow=" + this.FK_Flow;
-            }
+
+            //请求在途.
+            if (this.DoWhat.Equals(DoWhatList.Runing) == true)
+                return "url@Runing.htm?FK_Flow=" + this.FK_Flow;
+      
 
             //请求待办。
             if (this.DoWhat.Equals(DoWhatList.EmpWorks) == true || this.DoWhat.Equals("Todolist") == true)

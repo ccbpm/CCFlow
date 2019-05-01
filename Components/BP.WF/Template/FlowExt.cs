@@ -427,8 +427,13 @@ namespace BP.WF.Template
 
                 #region 开发者信息.
                 //map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
-                map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, false, 0, 50, 10, false);
-                map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, false, 0, 50, 10, false);
+                map.AddTBString(FlowAttr.DesignerNo, null, "创建者", true, false, 0, 50, 10, false);
+                map.AddTBString(FlowAttr.DesignerName, null, "创建者名称", true, false, 0, 50, 10, false);
+
+                //map.AddTBString("CreateDT", null, "创建者日期", true, false, 0, 50, 10, false);
+                //map.AddTBString("Editer", null, "更新者", true, false, 0, 50, 10, false);
+                //map.AddTBString("EditerDT", null, "更新日期", true, false, 0, 50, 10, false);
+
                 map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
 

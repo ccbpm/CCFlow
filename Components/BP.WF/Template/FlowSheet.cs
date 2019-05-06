@@ -639,8 +639,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Target = "_blank";
                 //  map.AddRefMethod(rm);
-
-
                
 
                 this._enMap = map;

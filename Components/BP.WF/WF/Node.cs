@@ -1997,6 +1997,9 @@ namespace BP.WF
         {
             get
             {
+                if (this.IsStartNode == true)
+                    return WF.TodolistModel.QiangBan;
+
                 return (TodolistModel)this.GetValIntByKey(NodeAttr.TodolistModel);
             }
             set

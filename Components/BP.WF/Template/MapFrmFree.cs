@@ -105,6 +105,8 @@ namespace BP.WF.Template
         {
             get
             {
+                if (this.No.IndexOf("ND") != 0)
+                    return 0;
                 return int.Parse(this.No.Replace("ND", ""));
             }
         }
@@ -302,7 +304,14 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "模板打印";
+                rm.ClassMethodName = this.ToString() + ".DoBill";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
 
+                map.AddRefMethod(rm);
+             
 
 
                 //rm = new RefMethod();
@@ -467,6 +476,15 @@ namespace BP.WF.Template
 
 
         #region 节点表单方法.
+        /// <summary>
+        /// 单据打印
+        /// </summary>
+        /// <returns></returns>
+        public string DoBill()
+        {
+            return "../../Admin/AttrNode/Bill.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+        }
+
         /// <summary>
         /// 启动自由表单设计器(SL)
         /// </summary>

@@ -99,6 +99,10 @@ namespace BP.WF.Template
         /// 文件打开方式
         /// </summary>
         public const string BillOpenModel = "BillOpenModel";
+        /// <summary>
+        /// 表单的ID
+        /// </summary>
+        public const string FK_MapData = "FK_MapData";
     }
 	/// <summary>
 	/// 单据模板
@@ -232,6 +236,19 @@ namespace BP.WF.Template
                 this.SetValByKey(BillTemplateAttr.NodeID, value);
             }
         }
+
+        public string FK_MapData
+        {
+            get
+            {
+                return this.GetValStringByKey(BillTemplateAttr.FK_MapData);
+            }
+            set
+            {
+                this.SetValByKey(BillTemplateAttr.FK_MapData, value);
+            }
+        }
+
         #endregion
 
         #region 构造函数
@@ -278,6 +295,7 @@ namespace BP.WF.Template
                 map.AddTBString(BillTemplateAttr.Name, null, "Name", true, false, 0, 200, 20);
                 map.AddTBString(BillTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);
+                map.AddTBString(BillTemplateAttr.FK_MapData, null, "表单编号", false, false,0,300,300);
 
                 map.AddDDLSysEnum(BillTemplateAttr.BillFileType, 0, "生成的文件类型", true, false,
                     "BillFileType","@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)");

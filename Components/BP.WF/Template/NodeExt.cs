@@ -502,9 +502,10 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
-                    true, BtnAttr.PrintDocEnable, "@0=不打印@1=打印网页@2=打印RTF模板@3=打印Word模版");
-                map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //增加帮助
+                //map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
+                //    true, BtnAttr.PrintDocEnable, "@0=不打印@1=打印网页@2=打印RTF模板@3=打印Word模版");
+                map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
+                //map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //增加帮助
 
                 // map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
                 //map.AddTBString(BtnAttr.AthLab, "附件", "附件按钮标签", true, false, 0, 50, 10);
@@ -690,11 +691,11 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "绑定打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)";
-                rm.ClassMethodName = this.ToString() + ".DoBill";
-                rm.Icon = "../../WF/Img/FileType/doc.gif";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //rm = new RefMethod();
+                //rm.Title = "绑定打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)";
+                //rm.ClassMethodName = this.ToString() + ".DoBill";
+                //rm.Icon = "../../WF/Img/FileType/doc.gif";
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
                 //设置相关字段.
                 rm.RefAttrKey = NodeAttr.PrintDocEnable;

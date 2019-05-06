@@ -57,12 +57,20 @@ namespace BP.WF.HttpHandler
                 return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
             }
 
+            string FK_MapData = "ND" + this.FK_Node;
+
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                FK_MapData = nd.NodeFrmID;
+
+            if(nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm){
+                return "err@SDK表单、嵌入式表单暂时不支持打印功能";
+            }
             BillTemplates templetes = new BillTemplates();
             string billNo = this.GetRequestVal("FK_Bill");
             if (billNo == null)
-                templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node);
+                templetes.Retrieve(BillTemplateAttr.FK_MapData, FK_MapData);
             else
-                templetes.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.No, billNo);
+                templetes.Retrieve(BillTemplateAttr.FK_MapData, this.FK_MapData, BillTemplateAttr.No, billNo);
 
             if (templetes.Count == 0)
                 return "err@当前节点上没有绑定单据模板。";
@@ -312,7 +320,7 @@ namespace BP.WF.HttpHandler
                 #region 生成单据
                 rtf.HisEns.Clear();
                 rtf.EnsDataDtls.Clear();
-                if (func.NodeID != 0)
+                if (DataType.IsNullOrEmpty(func.FK_MapData) == false)
                 {
                     //把流程主表数据放入里面去.
                     GEEntity ndxxRpt = new GEEntity(formID);

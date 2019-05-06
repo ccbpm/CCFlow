@@ -55,9 +55,13 @@
 
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                if (plant == 'CCFlow' && printType == 1) {
-                    url += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                var ens = new Entities("BP.WF.Template.BillTemplates");
+                ens.Retrieve("NodeID", nodeID);
+                if (ens.length == 1) {
+                    var url = data.replace('url@', '');
+                    if (plant == 'CCFlow' && ens[0].TemplateFileModel == 1) {
+                        url += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                    }
                 }
                 window.location.href = url;
                 $("#Msg").html("");
@@ -71,7 +75,7 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + ") >" + en.Name + "</li>";
+                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + ",null,\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
             }
 
             html += "</ul>";
@@ -83,7 +87,7 @@
         function PrintSignleFormIt(flowNo, nodeId, WorkID,FID,ccfromId) {
             $("#rtf").html("");
             var ens = new Entities("BP.WF.Template.BillTemplates");
-            ens.Retrieve("NodeID", nodeId);
+            ens.Retrieve("FK_MapData", ccfromId);
             if (ens.length == 0){
                 alert("当前节点上没有绑定单据模板");
                 return false;
@@ -97,7 +101,7 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeId + "," + WorkID + "," + FID + ",\"" + ccfromId + "\") >" + en.Name + "</li>";
+                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeId + "," + WorkID + "," + FID + ",\"" + ccfromId + "\",\""+en.TemplateFileModel+"\") >" + en.Name + "</li>";
             }
 
             html += "</ul>";
@@ -105,7 +109,7 @@
         }
 
         //打印.
-        function PrintIt(billNo, flowNo, nodeID, workID, FID, ccfromId) {
+        function PrintIt(billNo, flowNo, nodeID, workID, FID, ccfromId,printModal) {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddPara("FK_Bill", billNo);
@@ -126,7 +130,7 @@
 
                 data = data.replace('url@', '');
 
-                if (plant == 'CCFlow' && printType == 1) {
+                if (plant == 'CCFlow' && printModal == 1) {
                     data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
                 }
                if(plant == "JFlow"){

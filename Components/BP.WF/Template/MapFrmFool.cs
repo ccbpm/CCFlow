@@ -55,6 +55,8 @@ namespace BP.WF.Template
         {
             get
             {
+                if (this.No.IndexOf("ND") != 0)
+                    return 0;
                 return int.Parse(this.No.Replace("ND", ""));
             }
         }
@@ -267,6 +269,14 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Check.png";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "模板打印";
+                rm.ClassMethodName = this.ToString() + ".DoBill";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+               
+                map.AddRefMethod(rm);
              
                 #endregion 方法 - 基本功能.
 
@@ -363,6 +373,15 @@ namespace BP.WF.Template
             base.afterUpdate();
         }
         #region 节点表单方法.
+        /// <summary>
+        /// 单据打印
+        /// </summary>
+        /// <returns></returns>
+        public string DoBill()
+        {
+            return "../../Admin/AttrNode/Bill.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+        }
+
 
         /// <summary>
         /// 傻瓜表单设计器

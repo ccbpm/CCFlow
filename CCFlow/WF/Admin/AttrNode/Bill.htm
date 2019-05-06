@@ -96,7 +96,7 @@
             var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
             
             $.ajax({
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName +"&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod="+ doMethod +"&HttpHandlerName=" + httpHandlerName +"&FK_MapData="+GetQueryString("FK_MapData")+"&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
                 type: 'POST',
                 xhrFields: {
                     withCredentials: true
@@ -186,10 +186,10 @@
 
                  <td>模版文件格式</td>
              <td> 
-                <select id="DDL_TemplateFileModel" name="DDL_TemplateFileModel" style="width: 60%;" disabled="disabled">
+                <select id="DDL_TemplateFileModel" name="DDL_TemplateFileModel" style="width: 60%;">
                         <option value="0">rtf格式的模版 </option>
                         <option value="1">vsto格式word模版</option>
-                        <option value="2">vsto格式Excel模版</option>
+                        <!--<option value="2">vsto格式Excel模版</option>-->
                     </select>
              </td>
               

@@ -982,7 +982,7 @@ function FullDtl(selectVal, mapExt) {
         for (var k in dataObj.Head[i]) {
             var fullDtl = dataObj.Head[i][k];
             //  alert('您确定要填充从表吗?，里面的数据将要被删除。' + key + ' ID= ' + fullDtl);
-            var frm = document.getElementById('F' + fullDtl);
+            var frm = document.getElementById('Dtl_' + fullDtl);
             var src = frm.src;
             var idx = src.indexOf("&Key");
             if (idx == -1)

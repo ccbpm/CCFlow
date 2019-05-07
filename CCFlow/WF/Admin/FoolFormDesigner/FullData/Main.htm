@@ -51,6 +51,11 @@
             en.DBType = $("#DDL_DBType").val(); //获得选择的值.
 
             var sql = $("#TB_Doc").val();
+            if (sql == '') {
+
+                alert("填充主表的sql不能为空！");
+                return;
+            }
             en.Doc = sql; //设置主表的SQL.
             var tag2 = $("#TB_Tag2").val();
             en.Tag2 = tag2; //设置主表的SQL.

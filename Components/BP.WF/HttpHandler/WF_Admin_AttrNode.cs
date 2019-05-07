@@ -98,6 +98,7 @@ namespace BP.WF.HttpHandler
             file.SaveAs(filepath);
 
             bt.NodeID = this.FK_Node;
+            bt.FK_MapData = this.FK_MapData;
             bt.No = this.GetRequestVal("TB_No");
 
             if (DataType.IsNullOrEmpty(bt.No))
@@ -531,8 +532,6 @@ namespace BP.WF.HttpHandler
             DataTable dtGroups = groups.ToDataTableField("dtGroups");
             DataTable dtNoGroupAttrs = null;
             DataRow[] rows_Attrs = null;
-            //LinkBtn btn = null;
-            //DDL ddl = null;
             int idx_Attr = 1;
             int gidx = 1;
             GroupField group = null;
@@ -540,20 +539,6 @@ namespace BP.WF.HttpHandler
             if (mapdata != null)
             {
                 #region 一、面板1、 分组数据+未分组数据
-                //pub1.AddEasyUiPanelInfoBegin(mapdata.Name + "[" + mapdata.No + "]字段排序", padding: 5);
-                //pub1.AddTable("class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'");
-
-                #region 标题行常量
-
-                //pub1.AddTR();
-                //pub1.AddTDGroupTitle("style='width:40px;text-align:center'", "序");
-                //pub1.AddTDGroupTitle("style='width:100px;'", "字段名称");
-                //pub1.AddTDGroupTitle("style='width:160px;'", "中文描述");
-                //pub1.AddTDGroupTitle("style='width:160px;'", "字段分组");
-                //pub1.AddTDGroupTitle("字段排序");
-                //pub1.AddTREnd();
-
-                #endregion
 
                 #region A、构建数据dtNoGroupAttrs，这个放在前面
                 //检索全部字段，查找出没有分组或分组信息不正确的字段，存入“无分组”集合
@@ -659,21 +644,27 @@ namespace BP.WF.HttpHandler
                 #endregion
 
                 #region 增加节点信息
-                nodes = new Nodes();
-                nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
-
-                if (nodes.Count == 0)
+                if (DataType.IsNullOrEmpty(FK_Flow) == false)
                 {
-                    string nodeid = FK_MapData.Replace("ND", "");
-                    string flowno = string.Empty;
+                    nodes = new Nodes();
+                    nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
 
-                    if (nodeid.Length > 2)
+                    if (nodes.Count == 0)
                     {
-                        flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
-                        nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
+                        string nodeid = FK_MapData.Replace("ND", "");
+                        string flowno = string.Empty;
+
+                        if (nodeid.Length > 2)
+                        {
+                            flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
+                            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
+                        }
                     }
+                    DataTable dtNodes = nodes.ToDataTableField("dtNodes");
+                    dtNodes.TableName = "dtNodes";
+                    ds.Tables.Add(dtNodes);
                 }
-                DataTable dtNodes = nodes.ToDataTableField("dtNodes");
+               
                 #endregion
 
                 ds.Tables.Add(mapdatas.ToDataTableField("mapdatas"));
@@ -688,8 +679,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(athMents.ToDataTableField("athMents"));
                 ds.Tables.Add(btns.ToDataTableField("btns"));
                 ds.Tables.Add(isDtl);
-                dtNodes.TableName = "dtNodes";
-                ds.Tables.Add(dtNodes);
+               
                 //ds.Tables.Add(nodes.ToDataTableField("nodes"));
             }
         }

@@ -36,7 +36,7 @@ input:hover[type="button"]
 
 
 /*文本框只读风格.*/
-input[disabled], input[type=text]:disabled
+ input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
     background-color: #F5F5F5;

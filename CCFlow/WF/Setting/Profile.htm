@@ -51,11 +51,21 @@
     });
 
     function Upload() {
+        var webUser = new WebUser();
         if (File_Upload.files.length == 0) {
-            alert('请选择要上传的文件');
+
+            var wfemp = new Entity("BP.WF.Port.WFEmp", webUser.No);
+            wfemp.Tel = $("#_TB_Tel").val();
+            wfemp.Email = $("#_TB_Email").val();
+            wfemp.Update();
+            window.location.href = window.location.href;
             return;
         }
-
+        //保存手机号，Email
+        var wfemp = new Entity("BP.WF.Port.WFEmp", webUser.No);
+        wfemp.Tel = $("#_TB_Tel").val();
+        wfemp.Email = $("#_TB_Email").val();
+        wfemp.Update();
         var fileName = File_Upload.files[0].name;
 
         //判断文件类型.
@@ -107,26 +117,6 @@
                                         <label class="col-sm-3 control-label">Email</label>
 										<div class="col-sm-8">
 										<input name="TB_Email" type="text" value="" id="_TB_Email" class="form-control"/>
-										</div>
-                                    </div>
-									<div class="form-group">
-                                        <label class="col-sm-3 control-label">QQ/RTX/MSN</label>
-										<div class="col-sm-8">
-										<input name="TB_TM" type="text" value="zhoupeng@ccflow.org" id="_TB_TM" class="form-control"/>
-										</div>
-                                    </div>
-									<div class="form-group">
-                                        <label class="col-sm-3 control-label">信息接收方式</label>
-										<div class="col-sm-8">
-												<select name="DDL_Way" id="_DDL_Way"  class="form-control">
-												<option value="0">不接收</option>
-												<option value="1">短信</option>
-												<option value="2">邮件</option>
-												<option selected="selected" value="3">内部消息</option>
-												<option value="4">QQ消息</option>
-												<option value="5">RTX消息</option>
-												<option value="6">MSN消息</option>
-											</select>
 										</div>
                                     </div>
 

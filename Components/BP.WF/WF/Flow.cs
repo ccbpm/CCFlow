@@ -1143,13 +1143,17 @@ namespace BP.WF
             if (this.BillNoFormat.Length > 3)
             {
                 string billNoFormat = this.BillNoFormat.Clone() as string;
-                //生成单据编号.
-                rpt.BillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable);
-                if (wk.Row.ContainsKey(GERptAttr.BillNo) == true)
+                string billNo = rpt.BillNo;
+                if (DataType.IsNullOrEmpty(billNo) == true)
                 {
-                    wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
+                    //生成单据编号.
+                    rpt.BillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable);
+                    if (wk.Row.ContainsKey(GERptAttr.BillNo) == true)
+                    {
+                        wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
+                    }
+                    rpt.Update();
                 }
-                rpt.Update();
             }
             #endregion 处理单据编号.
 

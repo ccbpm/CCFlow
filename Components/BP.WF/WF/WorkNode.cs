@@ -1140,7 +1140,19 @@ namespace BP.WF
                 {
                     /*如果是最后一个节点了,仍然找不到下一步节点...*/
                     if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
+                    {
+                        this.HisWorkFlow.HisGenerWorkFlow.FK_Node=mynd.NodeID;
+                        this.HisWorkFlow.HisGenerWorkFlow.NodeName=mynd.Name;
+                        this.HisGenerWorkFlow.FK_Node= mynd.NodeID;
+                        this.HisGenerWorkFlow.NodeName=mynd.Name;
+                        this.HisGenerWorkFlow.Update();
+
+                        String msg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "流程已经走到最后一个节点，流程成功结束。",
+                                mynd, this.rptGe);
+                        this.addMsg(SendReturnMsgFlag.End, msg);
                         this.IsStopFlow = true;
+                    }
+                    
                     return mynd;
                 }
 
@@ -1600,6 +1612,8 @@ namespace BP.WF
                         this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, nd, skipWork, null);
                         ndFrom = nd;
                         this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess, nd, skipWork, null, this.HisMsgObjs);
+
+                        CC(nd);//执行抄送
                         continue;
                     }
 
@@ -1633,6 +1647,7 @@ namespace BP.WF
                         this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, nd, skipWork, null);
                         ndFrom = nd;
                         this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess, nd, skipWork, null, this.HisMsgObjs);
+                        CC(nd);//执行抄送
                         continue;
                     }
 
@@ -1782,6 +1797,7 @@ namespace BP.WF
                         this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, nd, wk, null);
                         ndFrom = nd;
                         this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess, nd, wk, null, this.HisMsgObjs);
+                        CC(nd);//执行抄送
                         continue;
                     }
 
@@ -1795,6 +1811,38 @@ namespace BP.WF
 
             #endregion 计算到达的节点.
             throw new Exception(BP.WF.Glo.multilingual("@找到下一步节点.", "WorkNode", "found_next_node", new string[0]));
+        }
+
+        private void CC(Node node )
+        {
+            //执行自动抄送
+            string ccMsg1 = WorkFlowBuessRole.DoCCAuto(node, this.rptGe, this.WorkID, this.HisWork.FID);
+            //按照指定的字段抄送.
+            string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(node, this.rptGe, this.WorkID, this.HisWork.FID);
+            //手工抄送
+            if (this.HisNode.HisCCRole == CCRole.HandCC)
+            {
+                //获取抄送人员列表
+                CCLists cclist = new CCLists(node.FK_Flow, this.WorkID, this.HisWork.FID);
+                if (cclist.Count == 0)
+                    ccMsg1 = "@没有选择抄送人。";
+                if (cclist.Count > 0)
+                {
+                    ccMsg1 = "@消息自动抄送给";
+                    foreach (CCList cc in cclist)
+                    {
+                        ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
+                    }
+                }
+            }
+            string ccMsg = ccMsg1 + ccMsg2;
+
+            if (DataType.IsNullOrEmpty(ccMsg) == false)
+            {
+                this.addMsg("CC", BP.WF.Glo.multilingual("@自动抄送给:{0}.", "WorkNode", "cc", ccMsg));
+
+                this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, node.NodeID, node.Name, ccMsg1 + ccMsg2, node);
+            }
         }
         /// <summary>
         /// 处理OrderTeamup退回模式

@@ -1989,7 +1989,6 @@ namespace BP.WF
                 return this.GetValBooleanByKey(NodeAttr.IsCanDelFlow);
             }
         }
-
         /// <summary>
         /// 普通工作节点处理模式
         /// </summary>

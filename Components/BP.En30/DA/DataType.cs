@@ -817,9 +817,7 @@ namespace BP.DA
 
         public static string Html2Text(string htmlstr)
         {
-            htmlstr = htmlstr.Replace("<BR>", "\n");
-            return htmlstr.Replace("&nbsp;", " ");
-            //	return htmlstr;
+            return System.Text.RegularExpressions.Regex.Replace(htmlstr, "<[^>]*>", ""); 
         }
         public static string ByteToString(byte[] bye)
         {

@@ -154,10 +154,10 @@ namespace BP.Pub
                 {
                     imgs.AppendLine();
                 }
-                else if ((i % 8) == 0)
-                {
-                    imgs.Append(" ");
-                }
+                //else if ((i % 8) == 0)
+                //{
+                //    imgs.Append(" ");
+                //}
                 byte num2 = buffer[i];
                 int num3 = (num2 & 240) >> 4;
                 int num4 = num2 & 15;
@@ -649,11 +649,11 @@ namespace BP.Pub
 
                 if (strs[1].Trim() == "ImgAth")
                 {
-                    string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                    string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".jpeg";
                     if (!File.Exists(path1))
                     {
                         FrmImgAthDB dbImgAth = new FrmImgAthDB(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
-                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
+                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".jpeg";
                         if (!File.Exists(path1))
                             return this.GetCode(key);
                     }

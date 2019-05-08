@@ -649,11 +649,11 @@ namespace BP.Pub
 
                 if (strs[1].Trim() == "ImgAth")
                 {
-                    string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".jpeg";
+                    string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
                     {
                         FrmImgAthDB dbImgAth = new FrmImgAthDB(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
-                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".jpeg";
+                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
                         if (!File.Exists(path1))
                             return this.GetCode(key);
                     }

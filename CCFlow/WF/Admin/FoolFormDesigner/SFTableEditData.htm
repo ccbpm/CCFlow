@@ -5,37 +5,147 @@
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
+    <!--<link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />-->
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >
-        //页面启动函数.
+
+        var maxIndx = 0;//定义新增之后的最大序号
         $(function () {
+            InitPage();
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
-
-            var url = window.location.href;
-
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
         });
+
+        function InitPage() {
+            var FK_SFTable = GetQueryString("FK_SFTable");
+            var sql = "select No, Name from " + FK_SFTable;
+            var ens = DBAccess.RunSQLReturnTable(sql);
+            maxIndx = ens.length;
+            var html = "<table border=0 cellpadding='0'  style='border-collapse: collapse;width:100%' cellspacing='0' >";
+            html += "<tr>";
+            html += "<th class='GroupTitle' nowrap=''style='width:70px;text-align:center'><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></th>";
+            html += "<th class='GroupTitle' nowrap=''>编号</th>";
+            html += "<th class='GroupTitle' nowrap=''>名称</th>";
+            html += "</tr>";
+            //绑定数据.
+            for (var i = 0; i < ens.length; i++) {
+                html += "<tr>";
+                html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + ens[i].No + "'  type='checkbox' name='IDX_" + ens[i].No + "' /><label for='IDX_" + ens[i].No + "'>" + (i + 1) + "</label></td>";
+                html += "<td><input  name='TB_No_" + (i + 1) + "' id='TB_No_" + (i + 1) + "' type='text' disabled='disabled' value='" + ens[i].No + "'/></td>";
+                html += "<td><input  name='TB_Name_" + (i + 1) + "' id='TB_Name_" + (i + 1) + "' type='text' value='" + ens[i].Name + "'/></td>";
+                html += "</tr>";
+            }
+            html += "</tble>";
+            $('#mytable').html("").append(html);
+        }
+
+        
+        //新建.
+        function New() {
+            maxIndx++;
+            var html = "";
+            html += "<tr>";
+            html += "<td class='Idx'><font color=red>*</font></td>";
+            html += "<td><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' /></td>";
+            html += "<td><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' /></td>";
+            html += "</tr>";
+
+            $("#mytable tbody:last").append(html);
+
+        }
+
+        //更新.
+        function Save() {
+            //保存更新
+            var FK_SFTable = GetQueryString("FK_SFTable");
+            var sql = "select No, Name from " + FK_SFTable;
+            var ens = DBAccess.RunSQLReturnTable(sql);
+            for (var i = 0; i < ens.length; i++) {
+                var newName = $("#TB_Name_" + (i + 1)).val();
+                var sql = "update " + FK_SFTable + " set Name = '" + newName + "' where No = " + ens[i].No;
+                DBAccess.RunSQLReturnTable(sql);
+            }
+            //保存新增
+            for (var j = ens.length; j < maxIndx; j++) {
+                var No = $("#TB_No_" + (j + 1)).val();
+                if (No == '' || No == null) {
+                    alert("编号不能为空！");
+                    return;
+                }
+                var Name = $("#TB_Name_" + (j + 1)).val();
+                if (No != undefined || Name != undefined) {
+                    var FK_SFTable = GetQueryString("FK_SFTable");
+                    var sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
+                    var flag = DBAccess.RunSQLReturnTable(sql);
+                }
+            }
+            
+            InitPage(); //刷新.
+        }
+        //删除
+        function Delete() {
+            //            var ensName = GetQueryString("EnsName");
+            var FK_SFTable = GetQueryString("FK_SFTable");
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            //获得存储的值.
+            var cbs = $("input[type='checkbox']:checked");
+            var str = "";
+
+            cbs.each(function () {
+                if (this.id.indexOf('IDX_') == -1)
+                    return true;
+                str = this.id.substring(4);
+                var sql = "delete from " + FK_SFTable + " where No = '" + str + "'";
+                var flag = DBAccess.RunSQLReturnTable(sql);
+
+            });
+
+            InitPage(); //刷新.
+        }
+        //选中所有
+        function SelectAll(obj) {
+            var checkeds = $("input[type='checkbox']");
+            if (obj.checked == true) {
+                //获取name=box的复选框 遍历输出复选框
+                for (var i = 0; i < checkeds.length; i++) {
+                    checkeds[i].checked = true;
+                }
+            } else {
+                for (var i = 0; i < checkeds.length; i++) {
+                    checkeds[i].checked = false;
+                }
+            }
+
+        }
+    
+ 
     </script>
 </head>
 <body  >
 
-<form id="cc">
- <h2> 正在加载，请稍后。。。</h2>
+<form id="divCCForm">
+  <div data-options="region:'center'" style="padding: 0px;" border="false" style="overflow: hidden;">
+         <div class="easyui-panel" >
+             <div id="Btns" class="ToolBar" style="width:auto">
+              
+                <a href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-save'" onclick="Save()">保存</a>
+                <a id="newbtn" href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新增</a>
+                <a id="delbtn" href="#" class="easyui-linkbutton l-btn l-btn-plain" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
+                 </div>
+              <div id="mytable"> </div>
+         </div>
+      </div> 
+                
+    <div id="Msg"></div>   
 </form>
 
 </body>

@@ -1140,7 +1140,8 @@
         }
 
         //新建表单
-        function newFrm() {
+        function newFrm( frmType ) {
+
             var node = $('#formTree').tree('getSelected');
             if (!node) {
                 return;
@@ -1789,7 +1790,14 @@
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
         <div onclick="newFrm()" data-options="iconCls:'icon-add'">
-            新建/导入表单</div>
+            新建独立表单</div>
+
+            <div onclick="newFrm1()" data-options="iconCls:'icon-add'">
+            新建实体表单</div>
+
+            <div onclick="newFrm2()" data-options="iconCls:'icon-add'">
+            新建单据表单</div>
+
         <div class="menu-sep">
         </div>
         <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-new'">

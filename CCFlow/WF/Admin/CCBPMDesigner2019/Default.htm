@@ -1413,7 +1413,9 @@
 
         //表单树：节点右键菜单
         context.attach('.formNode', [
-		    { text: '新建/导入表单', action: newFrm },
+		    { text: '新建-导入独立表单', action: newFrm },
+		    { text: '新建实体表单', action: newFrmEntity },
+		    { text: '新建单据表单', action: newFrmBill },
 		    { text: '新建同级类别', action: newCCFormSameLevelSort },
 		    { text: '新建子级类别', action: newCCFormSort },
             { divider: true },

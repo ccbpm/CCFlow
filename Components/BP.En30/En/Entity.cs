@@ -466,16 +466,18 @@ namespace BP.En
             throw new Exception("@在取[" + this.EnDesc + "]的明细时出现错误。[" + ens.GetNewEntity.EnDesc + "],不在他的集合内。");
         }
 
-        public Entities GetDtlEnsDa(EnDtl dtl)
+        public Entities GetDtlEnsDa(EnDtl dtl,string pkval=null)
         {
             try
             {
+                if (pkval == null)
+                    pkval = this.PKVal.ToString();
                 QueryObject qo = new QueryObject(dtl.Ens);
                 MapDtl md = new MapDtl();
                 md.No = dtl.Ens.GetNewEntity.ClassID;
                 if (md.RetrieveFromDBSources() == 0)
                 {
-                    qo.AddWhere(dtl.RefKey, this.PKVal.ToString());
+                    qo.AddWhere(dtl.RefKey, pkval);
                     qo.DoQuery();
                     return dtl.Ens;
                 }
@@ -484,12 +486,12 @@ namespace BP.En
                 switch (md.DtlOpenType)
                 {
                     case DtlOpenType.ForEmp:  // 按人员来控制.
-                        qo.AddWhere(GEDtlAttr.RefPK, this.PKVal.ToString());
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval);
                         qo.addAnd();
                         qo.AddWhere(GEDtlAttr.Rec, BP.Web.WebUser.No);
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
-                        qo.AddWhere(GEDtlAttr.RefPK, this.PKVal.ToString());
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval);
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.这里不允许修改，如需修改则加新case.
                         //if (nd == null)
@@ -498,7 +500,7 @@ namespace BP.En
                         //if (nd.HisNodeWorkType == BP.WF.NodeWorkType.SubThreadWork)
                         //    qo.AddWhere(GEDtlAttr.RefPK, this.FID); //edit by zhoupeng 2016.04.23
                         //else
-                        qo.AddWhere(GEDtlAttr.FID, this.PKVal.ToString());
+                        qo.AddWhere(GEDtlAttr.FID, pkval);
                         break;
                 }
 
@@ -555,12 +557,12 @@ namespace BP.En
             return al;
         }
 
-        public List<Entities> GetDtlsDatasOfList()
+        public List<Entities> GetDtlsDatasOfList(string pkval=null)
         {
             List<Entities> al = new List<Entities>();
             foreach (EnDtl dtl in this.EnMap.Dtls)
             {
-                al.Add(this.GetDtlEnsDa(dtl));
+                al.Add(this.GetDtlEnsDa(dtl,pkval));
             }
             return al;
         }

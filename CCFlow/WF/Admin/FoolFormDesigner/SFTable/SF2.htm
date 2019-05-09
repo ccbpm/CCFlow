@@ -16,7 +16,7 @@
     <style type="text/css">
         .style1
         {
-            width: 184px;
+            width: 35%;
         }
     </style>
     <script type="text/javascript" language="javascript">
@@ -31,12 +31,12 @@
         function loadStructSet(value, text) {
             if (value == CONST_STRUCTS[0].No) {
                 $("#parentTr").hide();
-                $("#rootTr").hide();
+//                $("#rootTr").hide();
                 //$("#DDL_ParentValue").val("");
                 //$("#TB_RootValue").val("");
             } else {
                 $("#parentTr").show();
-                $("#rootTr").show();
+//                $("#rootTr").show();
                 // 根节点值
                 $("#TB_RootValue").val("0");
             }
@@ -225,133 +225,98 @@
 </head>
 <body>
     <form action="" id="cc">
-    <table style="width: 95%; margin: 5px; padding: 5px;">
+    <table style="width: 98%; margin: 5px; padding: 5px;">
         <caption>
             <a href="./Default.htm">返回</a> - 表或者视图
         </caption>
        
         <tr>
-            <td>
-                <a href="javascript:alert('连接到那个数据库上');">数据源</a>
+            <td style="width:15%">
+                <a href="javascript:alert('选择字典表所属数据源');">数据源</a>
             </td>
             <td class="style1">
                 <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" onchange="loadTableViews(this.value)" />
             </td>
-            <td>
-                选择字典表所属数据源
-            </td>
-        </tr>
-        <tr>
-            <td>
-                表/视图
+             <td style="width:15%">
+                <a href="javascript:alert('选择一个表或视图');">表/视图</a>
             </td>
             <td class="style1">
                 <select id="DDL_SrcTable" name="DDL_SrcTable" onchange="SetColumns()" />
             </td>
-            <td>
-                选择一个表或视图
-            </td>
         </tr>
         <tr>
-            <td>
-                数据格式
-            </td>
-            <td class="style1">
-                <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
-                </select>
-            </td>
-            <td>
-                选择具体有指定字段的格式
-            </td>
-        </tr>
-        <tr>
-            <td>
-                编码列
+            
+            <td style="width:15%">
+                <a href="javascript:alert('即No列');">编码列</a>
             </td>
             <td class="style1">
                 <select id="DDL_ColumnValue" name="DDL_ColumnValue">
                 </select>
             </td>
-            <td>
-                即No列
-            </td>
-        </tr>
-        <tr>
-            <td>
-                标签列
+            <td style="width:15%">
+                <a href="javascript:alert('即Name列');">标签列</a>
             </td>
             <td class="style1">
                 <select id="DDL_ColumnText" name="DDL_ColumnText">
                 </select>
             </td>
-            <td>
-                即Name列
+        </tr>
+        <tr>
+            
+            <td style="width:15%">
+                <a href="javascript:alert('选择具体有指定字段的格式');">数据格式</a>
             </td>
+            <td class="style1">
+                <select id="DDL_CodeStruct" name="DDL_CodeStruct" onchange="loadStructSet(this.value, this.options[this.selectedIndex].text)">
+                </select>
+            </td>
+            <td colspan='2'></td>
         </tr>
         <tr id="parentTr" style="display: none;">
-            <td>
-                父节点列
+            <td style="width:15%">
+                <a href="javascript:alert('即ParentNo列');">父节点列</a>
             </td>
             <td class="style1">
                 <select id="DDL_ParentValue" name="DDL_ParentValue">
                 </select>
             </td>
-            <td>
-                即ParentNo列
-            </td>
-        </tr>
-        <tr id="rootTr" style="display: none;">
-            <td>
-                根节点值
+            <td style="width:15%">
+                <a href="javascript:alert('填写此树的根节点值');">根节点值</a>
+                
             </td>
             <td class="style1">
                 <input type="text" id="TB_RootValue" value="0" name="TB_RootValue" />
             </td>
-            <td>
-                填写此树的根节点值
-            </td>
         </tr>
         <tr>
             <td>
-                过滤SQL
+                <a href="javascript:alert('比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName');">过滤SQL</a>
+                
             </td>
-            <td class="style1" colspan="2">
+            <td class="style1" colspan="3">
                 <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" 
-                    style="width: 391%;" />
-                <br />
-                比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
+                    style="width: 99%;" />
             </td>
         </tr>
 
          <tr>
-            <td>
-                字典名称
+            <td style="width:15%">
+                <a href="javascript:alert('创建字典表的中文名称');">字典名称</a>
+                
             </td>
             <td class="style1">
                 <input type="text" id="TB_Name" name="TB_Name" />
             </td>
-            <td>创建字典表的中文名称</td>
-        </tr>
-        <tr>
-            <td>
-                字典编号
+            <td style="width:15%">
+                <a href="javascript:alert('创建字典表的英文名称,不要以数字开头否则创建表出错.');">字典编号</a>
             </td>
             <td class="style1">
                 <input type="text" id="TB_No" name="TB_No" />
             </td>
-            <td>
-                创建字典表的英文名称,不要以数字开头否则创建表出错.
-                <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
-                <label for="RB_QP">
-                    全拼</label>
-                <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
-                <label for="RB_JP">
-                    简拼</label>
-            </td>
         </tr>
 
         <tr>
-            <td colspan="3">
+            <td colspan="4">
                 <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
                     onclick="Save()">保存</a>
             </td>

@@ -364,7 +364,18 @@ namespace BP.WF.HttpHandler
                     rtf.HisGEEntity = ndxxRpt;
 
                     //加入他的明细表.
-                    List<Entities> al = mapData.GetDtlsDatasOfList();
+                    List<Entities> al = mapData.GetDtlsDatasOfList(this.WorkID.ToString());
+                    if (al.Count == 0)
+                    {
+                        MapDtls mapdtls = mapData.MapDtls;
+                        foreach (MapDtl dtl in mapdtls)
+                        {
+                            GEDtls dtls1 = new GEDtls(dtl.No);
+                            mapData.EnMap.AddDtl(dtls1, "RefPK");
+                           
+                        }
+                        al = mapData.GetDtlsDatasOfList(this.WorkID.ToString());
+                    }
                     foreach (Entities ens in al)
                         rtf.AddDtlEns(ens);
 
@@ -2776,7 +2787,7 @@ namespace BP.WF.HttpHandler
                         if (nd.ReturnOneNodeRole == 2)
                         {
                             /*从审核组件里取意见.*/
-                            string sql = "SELECT Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " NDFrom=" + this.FK_Node + " AND EmpFrom='" + WebUser.No + "' AND ActionType=" + (int)ActionType.WorkCheck;
+                            string sql = "SELECT Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + this.FK_Node + " AND EmpFrom='" + WebUser.No + "' AND ActionType=" + (int)ActionType.WorkCheck;
                             returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
                         }
 

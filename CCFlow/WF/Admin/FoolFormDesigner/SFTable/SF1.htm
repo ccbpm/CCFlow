@@ -70,7 +70,10 @@
             en.Insert();
 
             alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
+
             window.location.href = "Default.htm";
+            window.location.href = "../SFTableEditData.htm?FK_SFTable="+en.No;
+
         }
     </script>
 </head>

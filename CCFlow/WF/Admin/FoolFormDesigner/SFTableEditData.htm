@@ -39,13 +39,16 @@
                 html += "<tr>";
                 html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + ens[i].No + "'  type='checkbox' name='IDX_" + ens[i].No + "' /><label for='IDX_" + ens[i].No + "'>" + (i + 1) + "</label></td>";
                 html += "<td><input  name='TB_No_" + (i + 1) + "' id='TB_No_" + (i + 1) + "' type='text' disabled='disabled' value='" + ens[i].No + "'/></td>";
-                html += "<td><input  name='TB_Name_" + (i + 1) + "' id='TB_Name_" + (i + 1) + "' type='text' value='" + ens[i].Name + "'/></td>";
+                html += "<td><input  name='TB_Name_" + (i + 1) + "' id='TB_Name_" + (i + 1) + "' type='text' value='" + ens[i].Name + "' style='width:98%;'/></td>";
                 html += "</tr>";
             }
             html += "</tble>";
             $('#mytable').html("").append(html);
         }
 
+        //是否保存过了.
+        var isSave = true;
+        var currNewNo = "";
         
         //新建.
         function New() {
@@ -53,18 +56,33 @@
             maxIndx++;
             var html = "";
 
-            var fk_sftable = GetQueryString("FK_SFTable");
-            var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
-            var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNo");
+            if (isSave == true) {
+
+                var fk_sftable = GetQueryString("FK_SFTable");
+                var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                if (generNewNo.indexOf('err@') == 0)
+                    generNewNo = "";
+
+                currNewNo = generNewNo;
+            } 
+            
+            if (isSave==false) {
+
+                generNewNo = currNewNo + 1;
+                currNewNo++;
+            }
+
 
             html += "<tr>";
             html += "<td class='Idx'><font color=red>*</font></td>";
             html += "<td><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='"+generNewNo+"' /></td>";
-            html += "<td><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' /></td>";
+            html += "<td><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' style='width:98%;' /></td>";
             html += "</tr>";
 
             $("#mytable tbody:last").append(html);
 
+            isSave = false;
         }
 
         //更新.
@@ -75,7 +93,7 @@
             var ens = DBAccess.RunSQLReturnTable(sql);
             for (var i = 0; i < ens.length; i++) {
                 var newName = $("#TB_Name_" + (i + 1)).val();
-                var sql = "update " + FK_SFTable + " set Name = '" + newName + "' where No = " + ens[i].No;
+                var sql = "update " + FK_SFTable + " set Name = '" + newName + "' where No = '" + ens[i].No+"'";
                 DBAccess.RunSQLReturnTable(sql);
             }
             //保存新增
@@ -92,6 +110,8 @@
                     var flag = DBAccess.RunSQLReturnTable(sql);
                 }
             }
+
+            isSave = true;
             
             InitPage(); //刷新.
         }

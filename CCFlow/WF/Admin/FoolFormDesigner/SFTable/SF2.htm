@@ -232,7 +232,7 @@
        
         <tr>
             <td>
-                数据源
+                <a href="javascript:alert('连接到那个数据库上');">数据源</a>
             </td>
             <td class="style1">
                 <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc" onchange="loadTableViews(this.value)" />
@@ -305,7 +305,7 @@
                 根节点值
             </td>
             <td class="style1">
-                <input type="text" id="TB_RootValue" name="TB_RootValue" />
+                <input type="text" id="TB_RootValue" value="0" name="TB_RootValue" />
             </td>
             <td>
                 填写此树的根节点值
@@ -316,7 +316,8 @@
                 过滤SQL
             </td>
             <td class="style1" colspan="2">
-                <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" style="width: 98%;" />
+                <input type="text" id="TB_SelectStatement" name="TB_SelectStatement" 
+                    style="width: 391%;" />
                 <br />
                 比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
             </td>

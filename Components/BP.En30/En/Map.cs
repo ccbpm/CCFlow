@@ -996,7 +996,7 @@ namespace BP.En
 		public bool IsEnableVer = false;
 		public bool IsShowSearchKey = true;
 		public BP.Sys.DTSearchWay DTSearchWay = BP.Sys.DTSearchWay.None;
-		public string DTSearchLable = "日期从:";
+		public string DTSearchLable = "日期从";
 		public string DTSearchKey = null;
 		/// <summary>
 		/// 图片DefaultImageUrl

@@ -21,29 +21,7 @@
     </style>
     <script type="text/javascript" language="javascript">
 
-        function getColumns() {
-
-            var src = $('#DDL_FK_DBSrc').val();
-            var table = $('#DDL_SrcTable').val();
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
-            handler.AddPara("SF2_GetCols", src);
-            handler.AddPara("table", table);
-            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            var data = handler.DoMethodReturnString("SF2_GetCols");
-
-            if (data.indexOf('err@') == 0) {
-                alert('获取列信息出错：' + data);
-            } else {
-                data = JSON.parse(data);
-                //绑定数据源.
-                GenerBindDDL("DDL_ColumnValue", data, "No", "Name");
-                GenerBindDDL("DDL_ColumnText", data, "No", "Name");
-                if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
-                    GenerBindDDL("DDL_ParentValue", data, "No", "Name");
-                }
-            }
-        }
+      
 
         var CONST_STRUCTS = [{ No: '0', Name: '普通的编码表(具有No,Name)' }, { No: '1', Name: '树结构(具有No,Name,ParentNo)'}];
 
@@ -62,13 +40,16 @@
                 // 根节点值
                 $("#TB_RootValue").val("0");
             }
-            getColumns();
+            SetColumns();
         }
 
         /**
         * 加载表/视图
         */
         function loadTableViews(src) {
+
+            if (src == null || src == "")
+                return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
             handler.AddPara("src", src);
@@ -77,12 +58,17 @@
 
             if (data.indexOf('err@') == 0) {
                 alert('获取表/视图列表出错：' + data);
-            } else {
-                data = JSON.parse(data);
-                //绑定数据源.
-                GenerBindDDL("DDL_SrcTable", data, "No", "Name");
-                getColumns();
+                return;
             }
+
+            data = JSON.parse(data);
+
+            //绑定数据源.
+            GenerBindDDL("DDL_SrcTable", data, "No", "Name");
+            SetColumns();
+
+           
+
         }
 
         //页面启动函数.
@@ -137,6 +123,36 @@
 
             $("#Msg").html("");
         });
+
+        function SetColumns() {
+
+            var src = $('#DDL_FK_DBSrc').val();
+            var table = $('#DDL_SrcTable').val();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
+            handler.AddPara("SF2_GetCols", src);
+            handler.AddPara("table", table);
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            var data = handler.DoMethodReturnString("SF2_GetCols");
+
+            if (data.indexOf('err@') == 0) {
+                alert('获取列信息出错：' + data);
+            } else {
+                data = JSON.parse(data);
+                //绑定数据源.
+                GenerBindDDL("DDL_ColumnValue", data, "No", "Name");
+                GenerBindDDL("DDL_ColumnText", data, "No", "Name");
+                if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
+                    GenerBindDDL("DDL_ParentValue", data, "No", "Name");
+                }
+            }
+
+            //怎么设置？ @sly
+            var str = $("#DDL_SrcTable").val();
+            $("TB_Name").val(str);
+            $("TB_No").val(str);
+            //  alert(str);
+        }
 
         // 保存
         function Save() {
@@ -202,36 +218,9 @@
     <form action="" id="cc">
     <table style="width: 95%; margin: 5px; padding: 5px;">
         <caption>
-            <a href="./Default.htm">返回</a> - 表或者视图 - 该功能暂时提供支持，如果需要使用自己定义的数据表，请手工的创建视图，然后使用[创建本地数据表(外键表)]的模式创建.
+            <a href="./Default.htm">返回</a> - 表或者视图
         </caption>
-        <tr>
-            <td>
-                字典名称
-            </td>
-            <td class="style1">
-                <input type="text" id="TB_Name" name="TB_Name" />
-            </td>
-            <td>
-                创建字典表的中文名称
-            </td>
-        </tr>
-        <tr>
-            <td>
-                字典编号
-            </td>
-            <td class="style1">
-                <input type="text" id="TB_No" name="TB_No" />
-            </td>
-            <td>
-                创建字典表的英文名称,不要以数字开头否则创建表出错.
-                <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
-                <label for="RB_QP">
-                    全拼</label>
-                <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
-                <label for="RB_JP">
-                    简拼</label>
-            </td>
-        </tr>
+       
         <tr>
             <td>
                 数据源
@@ -248,7 +237,7 @@
                 表/视图
             </td>
             <td class="style1">
-                <select id="DDL_SrcTable" name="DDL_SrcTable" onchange="getColumns()" />
+                <select id="DDL_SrcTable" name="DDL_SrcTable" onchange="SetColumns()" />
             </td>
             <td>
                 选择一个表或视图
@@ -323,6 +312,34 @@
                 比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName
             </td>
         </tr>
+
+         <tr>
+            <td>
+                字典名称
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_Name" name="TB_Name" />
+            </td>
+            <td>创建字典表的中文名称</td>
+        </tr>
+        <tr>
+            <td>
+                字典编号
+            </td>
+            <td class="style1">
+                <input type="text" id="TB_No" name="TB_No" />
+            </td>
+            <td>
+                创建字典表的英文名称,不要以数字开头否则创建表出错.
+                <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
+                <label for="RB_QP">
+                    全拼</label>
+                <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
+                <label for="RB_JP">
+                    简拼</label>
+            </td>
+        </tr>
+
         <tr>
             <td colspan="3">
                 <a href="javascript:void(0)" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"

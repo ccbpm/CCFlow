@@ -24,9 +24,9 @@
         });
 
         function InitPage() {
-            var FK_SFTable = GetQueryString("FK_SFTable");
-            var sql = "select No, Name from " + FK_SFTable;
-            var ens = DBAccess.RunSQLReturnTable(sql);
+            var fk_sftable = GetQueryString("FK_SFTable");
+            var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            var ens = sfTable.DoMethodReturnJSON("GenerDataOfJson");
             maxIndx = ens.length;
             var html = "<table border=0 cellpadding='0'  style='border-collapse: collapse;width:100%' cellspacing='0' >";
             html += "<tr>";
@@ -49,11 +49,17 @@
         
         //新建.
         function New() {
+
             maxIndx++;
             var html = "";
+
+            var fk_sftable = GetQueryString("FK_SFTable");
+            var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNo");
+
             html += "<tr>";
             html += "<td class='Idx'><font color=red>*</font></td>";
-            html += "<td><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' /></td>";
+            html += "<td><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='"+generNewNo+"' /></td>";
             html += "<td><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' /></td>";
             html += "</tr>";
 

@@ -1147,7 +1147,7 @@
                 return;
             }
 
-            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0";
+            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType="+frmType;
             if (node.attributes) {
                 if (node.attributes.TType == "SRC") {
                     url += "&Src=" + node.id;
@@ -1789,13 +1789,13 @@
         <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
-        <div onclick="newFrm()" data-options="iconCls:'icon-add'">
+        <div onclick="newFrm(0)" data-options="iconCls:'icon-add'">
             新建独立表单</div>
 
-            <div onclick="newFrm1()" data-options="iconCls:'icon-add'">
+            <div onclick="newFrm(1)" data-options="iconCls:'icon-add'">
             新建实体表单</div>
 
-            <div onclick="newFrm2()" data-options="iconCls:'icon-add'">
+            <div onclick="newFrm(2)" data-options="iconCls:'icon-add'">
             新建单据表单</div>
 
         <div class="menu-sep">

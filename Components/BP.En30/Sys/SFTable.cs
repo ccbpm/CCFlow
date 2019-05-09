@@ -42,11 +42,11 @@ namespace BP.Sys
         /// <summary>
         /// hand
         /// </summary>
-        Handler=5,
+        Handler = 5,
         /// <summary>
         /// JS请求数据.
         /// </summary>
-        JQuery=6
+        JQuery = 6
     }
     /// <summary>
     /// 编码表类型
@@ -287,7 +287,7 @@ namespace BP.Sys
                     string runObj = this.SelectStatement;
 
                     if (DataType.IsNullOrEmpty(runObj))
-                        throw new Exception("@外键类型SQL配置错误," + this.No + " " + this.Name + " 是一个(SQL)类型("+this.GetValStrByKey("SrcType") +")，但是没有配置sql.");
+                        throw new Exception("@外键类型SQL配置错误," + this.No + " " + this.Name + " 是一个(SQL)类型(" + this.GetValStrByKey("SrcType") + ")，但是没有配置sql.");
 
                     if (runObj == null)
                         runObj = string.Empty;
@@ -317,6 +317,51 @@ namespace BP.Sys
                 return null;
 
                 //throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
+            }
+        }
+        /// <summary>
+        /// 自动生成编号
+        /// </summary>
+        /// <returns></returns>
+        public string GenerSFTableNewNo()
+        {
+            string table = this.SrcTable;
+
+            try
+            {
+                string sql = null;
+                string field = "No";
+                switch (this.EnMap.EnDBUrl.DBType)
+                {
+                    case DBType.MSSQL:
+                        sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + table;
+                        break;
+                    case DBType.PostgreSQL:
+                        sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
+                        break;
+                    case DBType.Oracle:
+                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
+                        break;
+                    case DBType.MySQL:
+                        sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM " + table;
+                        break;
+                    case DBType.Informix:
+                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
+                        break;
+                    case DBType.Access:
+                        sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM " + table;
+                        break;
+                    default:
+                        throw new Exception("error");
+                }
+                string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
+                if (str == "0" || str == "")
+                    str = "1";
+                return str.PadLeft(3, '0');
+            }
+            catch (Exception ex)
+            {
+                return "";
             }
         }
         /// <summary>
@@ -752,7 +797,7 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_SFTable", "字典表");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
@@ -1014,7 +1059,7 @@ namespace BP.Sys
                 /*初始化数据.*/
                 if (this.CodeStruct == Sys.CodeStruct.Tree)
                 {
-                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('1','"+this.Name+"','0') ";
+                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('1','" + this.Name + "','0') ";
                     this.RunSQL(sql);
 
                     for (int i = 1; i < 4; i++)

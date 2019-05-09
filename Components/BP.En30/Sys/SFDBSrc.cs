@@ -1134,6 +1134,31 @@ namespace BP.Sys
             if (this.No == "local")
             {
                 allTables = DBAccess.RunSQLReturnTable(sql.ToString());
+
+                #region 把tables 的英文名称替换为中文. @sly 翻译.
+                //把tables 的英文名称替换为中文.
+                string mapDT = "SELECT PTable,Name FROM Sys_MapData ";
+                DataTable myDT = DBAccess.RunSQLReturnTable(mapDT);
+                foreach (DataRow myDR in allTables.Rows)
+                {
+                    string no = myDR["No"].ToString();
+
+                    string name = null;
+                    foreach (DataRow dr in myDT.Rows)
+                    {
+                        string pTable = dr["PTable"].ToString();
+                        if (pTable.Equals(no) == false)
+                            continue;
+
+                        name = dr["Name"].ToString();
+                        break;
+                    }
+                    if (name != null)
+                        myDR["Name"] = myDR["Name"].ToString() + "-" + name;
+                }
+                #endregion 把tables 的英文名称替换为中文.
+
+
             }
             else
             {
@@ -1519,9 +1544,13 @@ namespace BP.Sys
                     throw new Exception("没有涉及到的连接测试类型...");
             }
 
-
-            if (this.No == "local")
-                return DBAccess.RunSQLReturnTable(sql.ToString());
+            DataTable dt = null;
+            if (this.No.Equals("local") == true)
+            {
+                dt = DBAccess.RunSQLReturnTable(sql.ToString());
+                return dt;
+            }
+                
 
             var dsn = GetDSN();
             var conn = GetConnection(dsn);

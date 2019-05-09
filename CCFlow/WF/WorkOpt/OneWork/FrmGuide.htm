@@ -36,6 +36,13 @@
                 //WinOpen(data);
                 return;
             }
+            if (data.indexOf("urlForm@") == 0) {
+                data = data.replace('urlForm@', '');
+                if (data.indexOf("http") == -1)
+                    data = basePath + data;
+                window.location.href = data;
+                return;
+            }
 
             alert(data);
 

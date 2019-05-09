@@ -1101,6 +1101,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Field");
             dt.Columns.Add("Name");
             dt.Columns.Add("Width");
+            dt.Columns.Add("UIContralType");
             dt.TableName = "Attrs";
 
             AttrSearchs attrs = map.SearchAttrs;
@@ -1110,6 +1111,8 @@ namespace BP.WF.HttpHandler
                 dr["Field"] = item.Key;
                 dr["Name"] = item.HisAttr.Desc;
                 dr["Width"] = item.Width; //下拉框显示的宽度.
+                dr["UIContralType"] = item.HisAttr.UIContralType;
+                
                 dt.Rows.Add(dr);
             }
             ds.Tables.Add(dt);

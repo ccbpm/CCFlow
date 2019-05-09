@@ -184,7 +184,7 @@ namespace BP.WF
                 gwf.Title = title;
             gwf.Starter = WebUser.No;
             gwf.StarterName = WebUser.Name;
-            gwf.RDT = DataType.CurrentDataTime;
+            gwf.RDT = DataType.CurrentDataTimess;
             gwf.PWorkID = parentWorkID;
            // gwf.PFID = parentFID;
             gwf.PFlowNo = parentFlowNo;

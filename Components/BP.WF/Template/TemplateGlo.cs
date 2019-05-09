@@ -28,6 +28,13 @@ namespace BP.WF.Template
             fl.No = flowNo;
             fl.Retrieve();
 
+           FlowExt flowExt = new FlowExt(flowNo);
+           flowExt.DesignerNo = BP.Web.WebUser.No;
+           flowExt.DesignerName = BP.Web.WebUser.Name;
+           flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+           flowExt.DirectSave();
+
+
             //如果为CCFlow模式则不进行写入Json串
             if (flowVer == "0")
                 return flowNo;

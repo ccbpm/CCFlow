@@ -147,10 +147,19 @@
                 }
             }
 
-            //怎么设置？ @sly
-            var str = $("#DDL_SrcTable").val();
-            $("TB_Name").val(str);
-            $("TB_No").val(str);
+            //怎么设置？ @sly 
+            var no = $("#DDL_SrcTable").val();
+            var str = $("#DDL_SrcTable option:selected").text();
+            var index = str.indexOf("-");
+
+            if (index < 0 || no == '') {
+                $("#TB_Name").val(no);
+            } else {
+                str = str.substring(index + 1, str.length);
+                $("#TB_Name").val(str);
+            }
+            
+            $("#TB_No").val(no);
             //  alert(str);
         }
 

@@ -878,8 +878,10 @@ namespace BP.WF
                             drs = dtsftable.Select("No='" + dr[attr.KeyOfEn] + "'");
                             if (drs.Length == 0)
                                 continue;
-
-                            dr[attr.KeyOfEn + "Text"] = drs[0]["Name"];
+                            if (dtsftable.Columns.Contains(attr.KeyOfEn + "Text") == true)
+                                dr[attr.KeyOfEn + "Text"] = drs[0]["Name"];
+                            if (dtsftable.Columns.Contains(attr.KeyOfEn + "T") == true)
+                                dr[attr.KeyOfEn + "T"] = drs[0]["Name"];
                         }
                     }
                 }

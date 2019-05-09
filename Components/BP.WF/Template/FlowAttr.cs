@@ -153,6 +153,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string DesignerName = "DesignerName";
         /// <summary>
+        /// 流程设计时间
+        /// </summary>
+        public const string DesignTime = "DesignTime";
+        /// <summary>
         /// 历史发起查看字段
         /// </summary>
         public const string HistoryFields = "HistoryFields";

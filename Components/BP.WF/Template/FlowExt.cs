@@ -236,6 +236,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 设计时间
+        /// </summary>
+        public string DesignTime
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.DesignTime);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.DesignTime, value);
+            }
+        }
+        /// <summary>
         /// 编号生成格式
         /// </summary>
         public string BillNoFormat
@@ -426,14 +440,10 @@ namespace BP.WF.Template
                 #endregion 表单数据.
 
                 #region 开发者信息.
-                //map.AddTBString("NodeAppType", null, "业务类型枚举", true, false, 0, 50, 10, true);
-                map.AddTBString(FlowAttr.DesignerNo, null, "创建者", true, false, 0, 50, 10, false);
-                map.AddTBString(FlowAttr.DesignerName, null, "创建者名称", true, false, 0, 50, 10, false);
-
-                //map.AddTBString("CreateDT", null, "创建者日期", true, false, 0, 50, 10, false);
-                //map.AddTBString("Editer", null, "更新者", true, false, 0, 50, 10, false);
-                //map.AddTBString("EditerDT", null, "更新日期", true, false, 0, 50, 10, false);
-
+               
+                map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, true, 0, 50, 10, false);
+                map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, true, 0, 50, 10, false);
+                map.AddTBString(FlowAttr.DesignTime, null, "创建时间", true, true, 0, 50, 20, false);
                 map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
 
@@ -518,6 +528,27 @@ namespace BP.WF.Template
                 //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
                 //map.AddRefMethod(rm);
                 #endregion 流程设置.
+
+                #region 时限规则
+                rm = new RefMethod();
+                rm.GroupName = "时限规则";
+                rm.Title = "时限规则";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/CH.png";
+                rm.ClassMethodName = this.ToString() + ".DoDeadLineRole()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                // rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "时限规则";
+                rm.Title = "预警、超期消息事件";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/OvertimeRole.png";
+                rm.ClassMethodName = this.ToString() + ".DoOverDeadLineRole()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                // rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                #endregion 时限规则
 
                 #region 模拟测试.
                 rm = new RefMethod();
@@ -1039,6 +1070,26 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Ver.htm?FK_Flow=" + this.No;
         }
+
+        /// <summary>
+        /// 时限规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoDeadLineRole()
+        {
+            return "../../Admin/AttrFlow/DeadLineRole.htm?FK_Flow=" + this.No;
+        }
+
+        /// <summary>
+        /// 预警、超期规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoOverDeadLineRole()
+        {
+            return "../../Admin/AttrFlow/OverDeadLineRole.htm?FK_Flow=" + this.No;
+        }
+
+
         #endregion 开发接口
 
         #region  基本功能

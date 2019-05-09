@@ -29,8 +29,9 @@
 
 
             var nodeID = GetQueryString("FK_Node");
+            var FK_MapData = GetQueryString("FK_MapData");
             var ens = new Entities("BP.WF.Template.BillTemplates");
-            ens.Retrieve("NodeID", nodeID);
+            ens.Retrieve("FK_MapData", FK_MapData);
 
             var fk_BillTemplate = GetQueryString("FK_BillTemplate");
             var currBill = null;

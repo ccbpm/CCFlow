@@ -69,7 +69,14 @@
             
             if (isSave==false) {
 
-                generNewNo = currNewNo + 1;
+                generNewNo = parseInt(currNewNo) + 1;
+                if (generNewNo>=10) {
+                    generNewNo = "0" + generNewNo;
+                }
+                if (generNewNo > 0 && generNewNo < 10) {
+                    generNewNo = "00" + generNewNo;
+                }
+
                 currNewNo++;
             }
 
@@ -112,7 +119,7 @@
             }
 
             isSave = true;
-            
+            alert("保存成功！");
             InitPage(); //刷新.
         }
         //删除
@@ -134,7 +141,7 @@
                 var flag = DBAccess.RunSQLReturnTable(sql);
 
             });
-
+            alert("删除成功！");
             InitPage(); //刷新.
         }
         //选中所有

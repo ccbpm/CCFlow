@@ -959,8 +959,9 @@ namespace BP.En
         {
             string from = " FROM " + en.EnMap.PhysicsTable;
 
-            if (en.EnMap.HisFKAttrs.Count == 0)
-                return from + " WHERE (1=1)";
+            //去除原因有时获取外键不正确
+            //if (en.EnMap.HisFKAttrs.Count == 0)
+            //    return from + " WHERE (1=1)";
 
             string mytable = en.EnMap.PhysicsTable;
             Attrs fkAttrs = en.EnMap.Attrs;

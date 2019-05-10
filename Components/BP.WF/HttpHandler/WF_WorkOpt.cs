@@ -2731,10 +2731,10 @@ namespace BP.WF.HttpHandler
         public string Rollback_Init()
         {
             string andsql = " ";
-            andsql += " AND ActionType=" + (int)ActionType.Start;
-            andsql += " AND ActionType=" + (int)ActionType.TeampUp;
-            andsql += " AND ActionType=" + (int)ActionType.Forward;
-            andsql += " AND ActionType=" + (int)ActionType.HuiQian;
+            andsql += " OR ActionType=" + (int)ActionType.Start;
+            andsql += " OR ActionType=" + (int)ActionType.TeampUp;
+            andsql += " OR ActionType=" + (int)ActionType.Forward;
+            andsql += " OR ActionType=" + (int)ActionType.HuiQian;
 
             string sql = "SELECT RDT,NDFrom, NDFromT,EmpFrom,EmpFromT  FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + andsql;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

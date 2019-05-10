@@ -2731,12 +2731,12 @@ namespace BP.WF.HttpHandler
         public string Rollback_Init()
         {
             string andsql = " ";
-            andsql += " OR ActionType=" + (int)ActionType.Start;
+            andsql += "  ActionType=" + (int)ActionType.Start;
             andsql += " OR ActionType=" + (int)ActionType.TeampUp;
             andsql += " OR ActionType=" + (int)ActionType.Forward;
             andsql += " OR ActionType=" + (int)ActionType.HuiQian;
 
-            string sql = "SELECT RDT,NDFrom, NDFromT,EmpFrom,EmpFromT  FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + andsql;
+            string sql = "SELECT RDT,NDFrom, NDFromT,EmpFrom,EmpFromT  FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND("+andsql +") Order By RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -2750,6 +2750,16 @@ namespace BP.WF.HttpHandler
 
 
             return BP.Tools.Json.ToJson(dt);
+        }
+
+        /// <summary>
+        /// 执行回滚操作
+        /// </summary>
+        /// <returns></returns>
+        public string Rollback_Done()
+        {
+            FlowExt flow = new FlowExt(this.FK_Flow);
+            return flow.DoRebackFlowData(this.WorkID, this.FK_Node, this.GetRequestVal("Msg"));
         }
         #endregion 回滚.
 

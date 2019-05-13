@@ -295,9 +295,19 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        public string PrintDoc_FormDoneIt(Node nd, long wrkID, long fid, string formID, BillTemplate func)
+        public string PrintDoc_FormDoneIt(Node nd, long workID, long fid, string formID, BillTemplate func)
         {
-
+            Int64 pkval = workID;
+            BP.WF.Template.FrmNode fn = new FrmNode();
+            fn = new FrmNode(nd.FK_Flow, nd.NodeID, formID);
+            //先判断解决方案
+            if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
+            {
+                if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                    pkval = this.PWorkID;
+                if (fn.WhoIsPK == WhoIsPK.FID)
+                    pkval = fid;
+            }
             string billInfo = "";
             Work wk = nd.HisWork;
             wk.OID = this.WorkID;
@@ -326,10 +336,10 @@ namespace BP.WF.HttpHandler
                     GEEntity ndxxRpt = new GEEntity(formID);
                     try
                     {
-                        ndxxRpt.PKVal = this.WorkID;
+                        ndxxRpt.PKVal = pkval;
                         ndxxRpt.Retrieve();
 
-                        newWorkID = this.WorkID;
+                        newWorkID = pkval;
                     }
                     catch (Exception ex)
                     {
@@ -364,7 +374,7 @@ namespace BP.WF.HttpHandler
                     rtf.HisGEEntity = ndxxRpt;
 
                     //加入他的明细表.
-                    List<Entities> al = mapData.GetDtlsDatasOfList(this.WorkID.ToString());
+                    List<Entities> al = mapData.GetDtlsDatasOfList(pkval.ToString());
                     if (al.Count == 0)
                     {
                         MapDtls mapdtls = mapData.MapDtls;
@@ -374,7 +384,7 @@ namespace BP.WF.HttpHandler
                             mapData.EnMap.AddDtl(dtls1, "RefPK");
                            
                         }
-                        al = mapData.GetDtlsDatasOfList(this.WorkID.ToString());
+                        al = mapData.GetDtlsDatasOfList(pkval.ToString());
                     }
                     foreach (Entities ens in al)
                         rtf.AddDtlEns(ens);

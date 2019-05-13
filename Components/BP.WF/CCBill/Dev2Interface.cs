@@ -33,7 +33,8 @@ namespace BP.WF.CCBill
 
             FrmBill fb = new FrmBill(frmID);
 
-            gb.Title = "单据:" + fb.Name + "," + BP.Web.WebUser.FK_DeptName + "," + WebUser.Name;
+         
+
             gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
@@ -45,13 +46,24 @@ namespace BP.WF.CCBill
             gb.RDT = BP.DA.DataType.CurrentDataTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
-            gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
 
             //创建rpt.
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
 
             //设置标题.
-            gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+            if (fb.EntityType == EntityType.Bill)
+            {
+                gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+                gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+            }
+
+
+            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName)
+            {
+                gb.BillNo = gb.GenerNewNoByKey("BillNo");// BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+                gb.Title = "";
+            }
+
             gb.DirectInsert(); //执行插入.
 
 

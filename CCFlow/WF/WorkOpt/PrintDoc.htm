@@ -42,6 +42,8 @@
                 html += "<ul>";
 
                 for (var i = 0; i < data.length; i++) {
+                    if (data[i].FrmType == 3) //url
+                        continue;
                     html += "<li><a href='javaScript:void(0)' target=_blank onclick=PrintSignleFormIt(" + flowNo + "," + nodeID + "," + workID + "," + fid + ",\"" + data[i].No + "\")>" + data[i].Name + "</a></li>";
                 }
                 html += "<li>说明：点击上面的表单名称进行RTF进行打印</li>";

@@ -486,7 +486,6 @@ namespace BP.GPM
                 fb.No = no;
                 fb.Name = name;
                 fb.PTable = ptable;
-                fb.FrmBillWorkModel = 1;
                 fb.Update();
 
                 //执行绑定.

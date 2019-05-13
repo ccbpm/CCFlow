@@ -12,6 +12,17 @@ using System.Collections.Generic;
 namespace BP.WF.CCBill
 {
     /// <summary>
+    /// 实体类型
+    /// </summary>
+    public enum EntityType
+    {
+        CCFrom = 0,
+        Bill = 1,
+        EnityNoName = 2,
+        EntityTree = 3
+    }
+
+    /// <summary>
     /// 单据属性 - Attr
     /// </summary>
     public class FrmBillAttr : BP.En.EntityOIDNameAttr
@@ -21,6 +32,10 @@ namespace BP.WF.CCBill
         /// 工作模式
         /// </summary>
         public const string FrmBillWorkModel = "FrmBillWorkModel";
+        /// <summary>
+        /// 实体类型
+        /// </summary>
+        public const string EntityType = "EntityType";
         /// <summary>
         /// 单据编号生成规则
         /// </summary>
@@ -180,21 +195,21 @@ namespace BP.WF.CCBill
             }
         }
         /// <summary>
-        /// 单据工作类型
+        /// 实体类型：@0=单据@1=编号名称实体@2=树结构实体
         /// </summary>
-        public int FrmBillWorkModel
+        public EntityType EntityType
         {
             get
             {
-                return this.GetValIntByKey(FrmBillAttr.FrmBillWorkModel);
+                return (EntityType)this.GetValIntByKey(FrmBillAttr.EntityType);
             }
             set
             {
-                this.SetValByKey(FrmBillAttr.FrmBillWorkModel, value);
+                this.SetValByKey(FrmBillAttr.EntityType, (int)value);
             }
         }
         /// <summary>
-        /// 表单类型
+        /// 表单类型 (0=傻瓜，2=自由 ...)
         /// </summary>
         public FrmType FrmType
         {
@@ -228,7 +243,7 @@ namespace BP.WF.CCBill
         {
             get
             {
-                string str= this.GetValStrByKey(FrmBillAttr.BillNoFormat);
+                string str = this.GetValStrByKey(FrmBillAttr.BillNoFormat);
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = "{LSH4}";
                 return str;
@@ -288,18 +303,22 @@ namespace BP.WF.CCBill
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
-                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20,true);
-                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20,true);
+                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20, true);
+                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 #endregion 基本属性.
 
                 #region 单据属性.
-                map.AddDDLSysEnum(FrmBillAttr.FrmBillWorkModel, 0, "工作模式", true, true, FrmBillAttr.FrmBillWorkModel,
-                    "@0=独立表单@1=单据工作模式@2=流程工作模式");
+                //map.AddDDLSysEnum(FrmBillAttr.FrmBillWorkModel, 0, "工作模式", true, false, FrmBillAttr.FrmBillWorkModel,
+                //    "@0=独立表单@1=单据工作模式");
 
-               // map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "", "@0=独立表单@1=单据工作模式@2=流程工作模式");
-                
-                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20,false);
+                map.AddDDLSysEnum(FrmBillAttr.EntityType, 0, "业务类型", true, false, FrmBillAttr.EntityType,
+                   "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
+                map.SetHelperAlert(FrmBillAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
+
+                //map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "", "@0=独立表单@1=单据工作模式@2=流程工作模式");
+
+                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20, false);
                 map.AddTBString(FrmBillAttr.RefFlowNo, null, "关联流程号", true, false, 0, 100, 20);
 
                 map.AddTBString(FrmBillAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
@@ -352,6 +371,8 @@ namespace BP.WF.CCBill
 
                 #endregion 查询按钮权限.
 
+
+
                 #region 设计者信息.
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
@@ -361,6 +382,9 @@ namespace BP.WF.CCBill
                 map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
+
+                map.AddTBAtParas(800); //参数属性.
+
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
@@ -449,7 +473,7 @@ namespace BP.WF.CCBill
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-             //   map.AddRefMethod(rm);
+                //   map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "报表定义";
@@ -473,7 +497,7 @@ namespace BP.WF.CCBill
         /// <returns></returns>
         public string DoRpt_ColsChose()
         {
-            return "../../CCBill/Admin/ColsChose.htm?FrmID="+this.No;
+            return "../../CCBill/Admin/ColsChose.htm?FrmID=" + this.No;
         }
         /// <summary>
         /// 列的顺序
@@ -509,7 +533,7 @@ namespace BP.WF.CCBill
         {
             return "../../Admin/CCFormDesigner/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
-    
+
 
         /// <summary>
         /// 设计表单
@@ -521,60 +545,15 @@ namespace BP.WF.CCBill
                 return "";
             return "";
         }
-
         /// <summary>
-        /// 更新
+        /// 检查检查实体类型
         /// </summary>
-        /// <returns></returns>
-        protected override bool beforeUpdate()
-        {
-            //如果是单据,就要检查一下单据状态.
-            if (this.FrmBillWorkModel == 1)
-            {
-                this.CheckBill(); //检查bill的状态.
-            }
-            return base.beforeUpdate();
-        }
-        /// <summary>
-        /// 检查单据.
-        /// </summary>
-        public void CheckBill()
+        public void CheckEnityTypeAttrsFor_Bill()
         {
             //取出来全部的属性.
             MapAttrs attrs = new MapAttrs(this.No);
 
-            #region 补充上流程字段到NDxxxRpt.
-            int groupID = 0;
-            foreach (MapAttr attr in attrs)
-            {
-                switch (attr.KeyOfEn)
-                {
-                    case StartWorkAttr.FK_Dept:
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.UIVisible = true;
-                        attr.GroupID = groupID;// gfs[0].GetValIntByKey("OID");
-                        attr.UIIsEnable = false;
-                        attr.DefVal = "";
-                        attr.MaxLen = 100;
-                        attr.Update();
-                        break;
-                    case "FK_NY":
-                        //  attr.UIBindKey = "BP.Pub.NYs";
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.UIVisible = true;
-                        attr.UIIsEnable = false;
-                        attr.GroupID = groupID;
-                        attr.Update();
-                        break;
-                    case "FK_Emp":
-                        break;
-                    default:
-                        break;
-                }
-            }
-
+            #region 补充上流程字段到 NDxxxRpt.
             if (attrs.Contains(this.No + "_" + GERptAttr.Title) == false)
             {
                 /* 标题 */
@@ -582,7 +561,7 @@ namespace BP.WF.CCBill
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
-                attr.Name = "标题"; //  
+                    attr.Name = "标题"; //   单据模式， ccform的模式.
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -591,7 +570,7 @@ namespace BP.WF.CCBill
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
                 attr.MaxLen = 400;
-                attr.Idx = -101;
+                attr.Idx = -100;
                 attr.Insert();
             }
 
@@ -601,7 +580,7 @@ namespace BP.WF.CCBill
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.KeyOfEn = "OID";
-                attr.Name = "WorkID";
+                attr.Name = "主键ID";
                 attr.MyDataType = BP.DA.DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -613,12 +592,13 @@ namespace BP.WF.CCBill
             }
             if (attrs.Contains(this.No + "_" + GERptAttr.BillNo) == false)
             {
-                /* 父流程 流程编号 */
+                /* 单据编号 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.BillNo;
-                attr.Name = "编号"; //  单据编号
+
+                attr.Name = "单据编号"; //  单据编号
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -633,7 +613,7 @@ namespace BP.WF.CCBill
 
             if (attrs.Contains(this.No + "_" + GERptAttr.AtPara) == false)
             {
-                /* 参数 流程编号 */
+                /* 参数 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
@@ -653,7 +633,7 @@ namespace BP.WF.CCBill
 
             if (attrs.Contains(this.No + "_BillState") == false)
             {
-                /* 参与人 */
+                /* 单据状态 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
@@ -671,7 +651,7 @@ namespace BP.WF.CCBill
                 attr.Insert();
             }
 
-            if (attrs.Contains(this.No + "_Starter" ) == false)
+            if (attrs.Contains(this.No + "_Starter") == false)
             {
                 /* 发起人 */
                 MapAttr attr = new BP.Sys.MapAttr();
@@ -692,12 +672,12 @@ namespace BP.WF.CCBill
             }
             if (attrs.Contains(this.No + "_StarterName") == false)
             {
-                /* 发起人 */
+                /* 创建人名称 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "StarterName";
-                attr.Name = "创建人"; //  
+                attr.Name = "创建人名称"; //  
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -727,156 +707,82 @@ namespace BP.WF.CCBill
                 attr.Idx = -97;
                 attr.Insert();
             }
-            return;
+            #endregion 补充上流程字段。
+        }
 
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowEnder) == false)
+        /// <summary>
+        /// 检查enittyNoName类型的实体
+        /// </summary>
+        public void CheckEnityTypeAttrsFor_EntityNoName()
+        {
+            //取出来全部的属性.
+            MapAttrs attrs = new MapAttrs(this.No);
+
+            #region 补充上流程字段到 NDxxxRpt.
+            if (attrs.Contains(this.No + "_" + GERptAttr.Title) == false)
             {
-                /* 发起人 */
+                /* 标题 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowEnder;
-                attr.Name = "结束人"; //  
-                attr.MyDataType = DataType.AppString;
-                // attr.UIBindKey = "BP.Port.Emps";
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 32;
-                attr.Idx = -1;
-                attr.Insert();
-            }
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowEnderRDT) == false)
-            {
-                /* MyNum */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowEnderRDT; // "FlowStartRDT";
-                attr.Name = "结束时间";
-                attr.MyDataType = DataType.AppDateTime;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.Idx = -101;
-                attr.Insert();
-            }
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowEndNode) == false)
-            {
-                /* 结束节点 */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowEndNode;
-                attr.Name = "结束节点";
-                attr.MyDataType = DataType.AppInt;
-                attr.DefVal = "0";
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.HisEditType = EditType.UnDel;
-                attr.Idx = -101;
-                attr.Insert();
-            }
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.PFlowNo) == false)
-            {
-                /* 父流程 流程编号 */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.PFlowNo;
-                attr.Name = "父流程编号"; //  父流程流程编号
+                attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
+                attr.Name = "名称"; //   单据模式， ccform的模式.
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = true;
-                attr.UIIsEnable = false;
+                attr.UIIsEnable = true;
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
-                attr.MaxLen = 3;
+                attr.MaxLen = 400;
                 attr.Idx = -100;
                 attr.Insert();
             }
 
-            if (attrs.Contains(this.No + "_" + GERptAttr.PNodeID) == false)
+            if (attrs.Contains(this.No + "_" + GERptAttr.OID) == false)
             {
-                /* 父流程WorkID */
+                /* WorkID */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.PNodeID;
-                attr.Name = "父流程启动的节点";
-                attr.MyDataType = DataType.AppInt;
-                attr.DefVal = "0";
+                attr.KeyOfEn = "OID";
+                attr.Name = "主键ID";
+                attr.MyDataType = BP.DA.DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
+                attr.UIVisible = false;
                 attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.HisEditType = EditType.UnDel;
-                attr.Idx = -101;
-                attr.Insert();
-            }
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.PWorkID) == false)
-            {
-                /* 父流程WorkID */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.PWorkID;
-                attr.Name = "父流程WorkID";
-                attr.MyDataType = DataType.AppInt;
                 attr.DefVal = "0";
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.HisEditType = EditType.UnDel;
-                attr.Idx = -101;
+                attr.HisEditType = BP.En.EditType.Readonly;
                 attr.Insert();
             }
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.PEmp) == false)
+            if (attrs.Contains(this.No + "_" + GERptAttr.BillNo) == false)
             {
-                /* 调起子流程的人员 */
+                /* 单据编号 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.PEmp;
-                attr.Name = "调起子流程的人员";
+                attr.KeyOfEn = GERptAttr.BillNo;
+                attr.Name = "编号"; //  单据编号
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
-                attr.UIIsLine = true;
+                attr.UIIsLine = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 32;
+                attr.MaxLen = 100;
                 attr.Idx = -100;
                 attr.Insert();
             }
 
-        
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.GUID) == false)
+            if (attrs.Contains(this.No + "_" + GERptAttr.AtPara) == false)
             {
-                /* GUID 流程编号 */
+                /* 参数 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.GUID;
-                attr.Name = "GUID"; // 单据编号
+                attr.KeyOfEn = GERptAttr.AtPara;
+                attr.Name = "参数"; // 单据编号
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -884,70 +790,104 @@ namespace BP.WF.CCBill
                 attr.UIIsEnable = false;
                 attr.UIIsLine = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 32;
-                attr.Idx = -100;
+                attr.MaxLen = 4000;
+                attr.Idx = -99;
                 attr.Insert();
             }
 
-            if (attrs.Contains(this.No + "_" + GERptAttr.PrjNo) == false)
+            if (attrs.Contains(this.No + "_BillState") == false)
             {
-                /* 项目编号 */
+                /* 单据状态 */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.PrjNo;
-                attr.Name = "项目编号"; //  项目编号
-                attr.MyDataType = DataType.AppString;
+                attr.KeyOfEn = "BillState"; // "FlowEmps";
+                attr.Name = "单据状态"; //  
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 100;
-                attr.Idx = -100;
-                attr.Insert();
-            }
-            if (attrs.Contains(this.No + "_" + GERptAttr.PrjName) == false)
-            {
-                /* 项目名称 */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.PrjName;
-                attr.Name = "项目名称"; //  项目名称
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 100;
-                attr.Idx = -100;
-                attr.Insert();
-            }
-
-            if (attrs.Contains(this.No + "_" + GERptAttr.FlowNote) == false)
-            {
-                /* 流程信息 */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowNote;
-                attr.Name = "流程信息"; //  父流程流程编号
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
+                attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
-                attr.MaxLen = 500;
-                attr.Idx = -100;
+                attr.MaxLen = 10;
+                attr.Idx = -98;
+                attr.Insert();
+            }
+
+            if (attrs.Contains(this.No + "_Starter") == false)
+            {
+                /* 发起人 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "Starter";
+                attr.Name = "创建人"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
+                attr.Insert();
+            }
+            if (attrs.Contains(this.No + "_StarterName") == false)
+            {
+                /* 创建人名称 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "StarterName";
+                attr.Name = "创建人名称"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
+                attr.Insert();
+            }
+
+            if (attrs.Contains(this.No + "_RDT") == false)
+            {
+                /* MyNum */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "RDT"; // "FlowStartRDT";
+                attr.Name = "创建时间";
+                attr.MyDataType = DataType.AppDateTime;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.UIIsLine = false;
+                attr.Idx = -97;
                 attr.Insert();
             }
             #endregion 补充上流程字段。
+
+            #region 注册到外键表.
+            SFTable sf = new SFTable();
+            sf.No = this.No;
+            if (sf.RetrieveFromDBSources() == 0)
+            {
+                sf.Name = this.Name;
+                sf.SrcType = SrcType.SQL;
+                sf.SrcTable = this.PTable;
+                sf.ColumnValue = "BillNo";
+                sf.ColumnText = "Title";
+                sf.SelectStatement = "SELECT BillNo AS No, Title as Name FROM " + this.PTable;
+                sf.Insert();
+            }
+
+            #endregion 注册到外键表
         }
         /// <summary>
         /// 绑定菜单树
@@ -958,9 +898,9 @@ namespace BP.WF.CCBill
             string sql = "SELECT FK_App FROM GPM_Menu WHERE No='" + menumDirNo + "'";
             string app = DBAccess.RunSQLReturnString(sql);
 
-            string guid=DBAccess.GenerGUID();
+            string guid = DBAccess.GenerGUID();
 
-            string url = "../WF/CCBill/Search.htm?FrmID="+this.No;
+            string url = "../WF/CCBill/Search.htm?FrmID=" + this.No;
             sql = "INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, Url, OpenWay,Icon,MenuCtrlWay) VALUES ('" + guid + "', '" + menuName + "', '" + menumDirNo + "', 1, 4, '" + app + "', '" + url + "',  0,'',1)";
             DBAccess.RunSQL(sql);
             return "加入成功,如何<a href='En.htm?EnName=BP.GPM.Menu&No=" + guid + "'>控制权限请转GPM.</a>";

@@ -1287,6 +1287,8 @@ namespace BP.WF.Template
 
                 #region 加入退回信息, 让接受人能够看到退回原因.
                 ReturnWork rw = new ReturnWork();
+                rw.Delete(ReturnWorkAttr.WorkID, workid); //先删除历史的信息.
+
                 rw.WorkID = workid;
                 rw.ReturnNode = backToNodeID;
                 rw.ReturnNodeName = endN.Name;
@@ -1299,6 +1301,7 @@ namespace BP.WF.Template
                 rw.RDT = DataType.CurrentDataTime;
                 rw.IsBackTracking = false;
                 rw.MyPK = BP.DA.DBAccess.GenerGUID();
+                rw.Insert();
                 #endregion   加入退回信息, 让接受人能够看到退回原因.
 
                 //更新流程表的状态.

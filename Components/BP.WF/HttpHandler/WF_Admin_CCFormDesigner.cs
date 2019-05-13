@@ -222,6 +222,45 @@ namespace BP.WF.HttpHandler
             //增加上OID字段.
             BP.Sys.CCFormAPI.RepareCCForm(md.No);
 
+            BP.WF.CCBill.EntityType entityType = (CCBill.EntityType)this.GetRequestValInt("EntityType");
+
+            #region 如果是单据.
+            if (entityType == CCBill.EntityType.Bill)
+            {
+                BP.WF.CCBill.FrmBill bill = new CCBill.FrmBill(md.No);
+                bill.EntityType = CCBill.EntityType.Bill;
+                bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
+
+
+                //设置默认的查询条件.
+                bill.SetPara("IsSearchKey", 1);
+                bill.SetPara("DTSearchWay", 0);
+
+                bill.Update();
+                bill.CheckEnityTypeAttrsFor_Bill();
+            }
+            #endregion 如果是单据.
+
+            #region 如果是实体 EnityNoName .
+            if (entityType == CCBill.EntityType.EnityNoName)
+            {
+                BP.WF.CCBill.FrmBill entityDict = new CCBill.FrmBill(md.No);
+                entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
+
+
+                //设置默认的查询条件.
+                entityDict.SetPara("IsSearchKey", 1);
+                entityDict.SetPara("DTSearchWay", 0);
+
+                entityDict.Update();
+                entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+            }
+            #endregion 如果是实体 EnityNoName .
+
+            //创建表与字段.
+            GEEntity en = new GEEntity(md.No);
+            en.CheckPhysicsTable();
+
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
             {
                 /*把表单模版存储到数据库里 */

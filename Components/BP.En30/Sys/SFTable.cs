@@ -326,7 +326,6 @@ namespace BP.Sys
         public string GenerSFTableNewNo()
         {
             string table = this.SrcTable;
-
             try
             {
                 string sql = null;

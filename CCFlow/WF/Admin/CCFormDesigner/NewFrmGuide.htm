@@ -9,6 +9,8 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript">
+
+        var entityType = 0;
         //页面启动函数.
         $(function () {
 
@@ -18,15 +20,49 @@
             if (frmType == null || frmType == "")
                 frmType = '0';
 
+            //实体类型.
+            entityType = GetQueryString("EntityType");
+            if (entityType == null || entityType == undefined)
+                entityType = 0;
+
             //创建表单类型.
-            GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
+            if (entityType == 0) {
+                GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
+            }
+
+            if (entityType == 1 || entityType == 2) {
+
+                //先创建好select里面的option元素
+                var option = document.createElement("option");
+                $(option).val('0');
+                $(option).text('傻瓜表单');
+                $('#DDL_FrmType').append(option);
+
+                var option1 = document.createElement("option");
+                $(option1).val('1');
+                $(option1).text('自由表单');
+                $('#DDL_FrmType').append(option1);
+                //$("#DDL_FrmType").it;
+            }
+
+            var caption = "";
+            var caption = document.getElementById('Table').createCaption();
+
+            if (entityType == 1) {
+                caption.innerHTML = "创建单据: 比如:请假单、出库单、入库单、带有流水性质的数据.";
+            }
+
+            if (entityType == 2) {
+                caption.innerHTML = "创建实体台账: 比如:学生台账、供应商、销售网点等,具有编号名称类型的数据.";
+            }
+
+            //http://localhost:2207/WF/Admin/CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=2&FK_FrmSort=1133
 
             //创建数据源.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
             // var sort = GetQueryString("FK_FrmSort");
             // $("#HD_FK_FormTree").val(sort);
-
             //创建表单树.
             // GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees", sort);
 
@@ -79,8 +115,6 @@
 
                 //隐藏TR
             }
-
-
         }
 
         //选择一个表.
@@ -92,12 +126,16 @@
 </head>
 <body>
     <form id="cc">
-    <table style="width: 95%;">
-        <caption> 创建独立表单</caption>
-
+    <table style="width: 95%;" id="Table">
+        <caption>
+            创建独立表单</caption>
         <tr>
-            <td class="Idx"> 1 </td>
-            <td> 创建的表单类型</td>
+            <td class="Idx">
+                1
+            </td>
+            <td>
+                创建的表单类型
+            </td>
             <td>
                 <select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />
             </td>
@@ -213,7 +251,7 @@
             <td>
             </td>
             <td colspan="2">
-                <input type="button" value="创建" onclick="Save()" id="Btn_Save" />
+                <input type="button" value="创建 - Create" onclick="Save()" id="Btn_Save" />
                 <script type="text/javascript">
 
                     function GenerPinYin() {
@@ -230,6 +268,7 @@
 
                         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
                         handler.AddPara("IsQuanPin", isQuanPin);
+                        handler.AddPara("EntityType", entityType);
                         handler.AddPara("TB_Name", encodeURIComponent(name));
                         var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
 
@@ -240,10 +279,25 @@
                             return;
                         }
 
+                        var key = "";
+
                         $('#TB_No').val("CCFrm_" + data);
+
                         var frmType = $("#DDL_FrmType").val();
-                        if (frmType != "3" && frmType != "7")
-                            $('#TB_PTable').val("CCFrm_" + data);
+                        if (frmType != "3" && frmType != "7") {
+
+                            if (entityType == 0)
+                                key = "Frm_" + data;
+
+                            if (entityType == 1)
+                                key = "Bill_" + data;
+
+                            if (entityType == 2)
+                                key = "Dict_" + data;
+                        }
+
+                        $('#TB_No').val(key);
+                        $('#TB_PTable').val(key);
                         return;
                     }
 

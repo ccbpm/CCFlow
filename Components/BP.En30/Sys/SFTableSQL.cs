@@ -80,12 +80,38 @@ namespace BP.Sys
                 rm.ClassMethodName = this.ToString() + ".DoEdit";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.IsForEns = false;
-             //   map.AddRefMethod(rm);
+                 map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 编辑数据
+        /// </summary>
+        /// <returns></returns>
+        public string DoEdit()
+        {
+            if (this.IsClass)
+                return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
+            else
+                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+        }
+
+        /// <summary>
+        /// 是否是类
+        /// </summary>
+        public bool IsClass
+        {
+            get
+            {
+                if (this.No.Contains("."))
+                    return true;
+                else
+                    return false;
+            }
+        }
 
         protected override bool beforeDelete()
         {

@@ -126,16 +126,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
-            //   handler.AddFormData();
-
             var data = handler.DoMethodReturnString("Accepter_Init");
-
-            //   alert(data);
-            //   handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            //   handler.AddPara("ToNode", GetQueryString("ToNode"));
-            //   handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-            //   handler.AddPara("WorkID", GetQueryString("WorkID"));
-            //  var data = handler.DoMethodReturnString("Accepter_Init");
 
             if (data.indexOf('info@') == 0) {
                 data = data.replace('info@@', '');

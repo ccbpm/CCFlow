@@ -57,7 +57,6 @@ namespace BP.WF.CCBill
                 gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
             }
 
-
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName)
             {
                 Attr attr = gb.EnMap.GetAttrByKey("BillNo");

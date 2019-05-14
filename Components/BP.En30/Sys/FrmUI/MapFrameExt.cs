@@ -92,11 +92,12 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20, true);
 
+                map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
+                    "@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
                 map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
-
-                map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType, "@0=自定义@1=表单库");
+               
                 //显示的分组.
-                map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
+               // map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
 
                 map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
                 map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
@@ -112,19 +113,39 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
-             
+                #region 执行的方法.
+                RefMethod rm = new RefMethod();
+
+                rm = new RefMethod();
+                rm.Title = "预制";
+                rm.ClassMethodName = this.ToString() + ".DoFrameExt()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion 执行的方法.
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
+        #region 框架扩展.
+        /// <summary>
+        /// 框架扩展
+        /// </summary>
+        /// <returns></returns>
+        public string DoFrameExt()
+        {
+            return "../../Admin/FoolFormDesigner/FrameExt/Default.htm?MyPK=" + this.MyPK;
+        }
+        #endregion 框架扩展.
+
+
         protected override void afterDelete()
         {
             //删除分组信息.
             GroupField gf = new GroupField();
             gf.Delete(GroupFieldAttr.CtrlID,this.MyPK);
-
             base.afterDelete();
         }
 
@@ -137,7 +158,6 @@ namespace BP.Sys.FrmUI
                 string url = DBAccess.RunSQLReturnStringIsNull(sql, "");
                 this.SetValByKey(MapFrameAttr.URL, url);
             }
-
 
             //更新group.
             GroupField gf = new GroupField();

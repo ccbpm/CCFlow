@@ -238,6 +238,12 @@ namespace BP.Sys
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
                 map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
 
+                map.AddTBInt(MapFrameAttr.UrlSrcType, 0, "URL来源", false, false);
+
+//@sly.
+              //  map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
+                //"@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
+
                 map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
                 map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
 

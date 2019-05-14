@@ -1674,6 +1674,7 @@ namespace BP.En
 
                     if (item.UIIsLine == true)
                         mattr.ColSpan = 3;
+
                     //帮助url.
                     mattr.SetPara("HelpUrl", item.HelperUrl);
                     mattr.UIRefKeyText = item.UIRefKeyText;

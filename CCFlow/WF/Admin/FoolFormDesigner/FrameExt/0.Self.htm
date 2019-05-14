@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>从表导入</title>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitBar("Self");
+
+            var html = "";
+            //设置按钮是否可以用?
+            $("#Btn_FullData").attr("disabled", true);
+
+            var myPK = GetQueryString("MyPK");
+
+            var en = new Entity("BP.Sys.MapFrame", myPK);
+            $("#TB_URL").val(en.URL);
+
+        });
+
+        function Save() {
+
+
+            var myPK = GetQueryString("MyPK");
+
+            var en = new Entity("BP.Sys.MapFrame", myPK);
+            en.UrlSrcType = 0;
+            en.URL = $("#TB_URL").val();
+            en.Update();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+    <style type="text/css">
+        #TB_URL
+        {
+            width: 579px;
+        }
+    </style>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>请输入URL</legend>
+        
+        <input type="text" value="" id="TB_URL"  style="width:100%" name="TB_URL" /> 
+
+    </fieldset>
+
+       
+
+</body>
+</html>

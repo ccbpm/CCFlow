@@ -719,26 +719,7 @@ namespace BP.WF.CCBill
             MapAttrs attrs = new MapAttrs(this.No);
 
             #region 补充上流程字段到 NDxxxRpt.
-            if (attrs.Contains(this.No + "_" + GERptAttr.Title) == false)
-            {
-                /* 标题 */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
-                attr.Name = "名称"; //   单据模式， ccform的模式.
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
-                attr.UIIsLine = true;
-                attr.MinLen = 0;
-                attr.MaxLen = 400;
-                attr.Idx = -100;
-                attr.Insert();
-            }
-
+            
             if (attrs.Contains(this.No + "_" + GERptAttr.OID) == false)
             {
                 /* WorkID */
@@ -794,7 +775,25 @@ namespace BP.WF.CCBill
                 attr.Idx = -99;
                 attr.Insert();
             }
-
+            if (attrs.Contains(this.No + "_" + GERptAttr.Title) == false)
+            {
+                /* 标题 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
+                attr.Name = "名称"; //   单据模式， ccform的模式.
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = true;
+                attr.UIIsEnable = true;
+                attr.UIIsLine = true;
+                attr.MinLen = 0;
+                attr.MaxLen = 400;
+                attr.Idx = -100;
+                attr.Insert();
+            }
             if (attrs.Contains(this.No + "_BillState") == false)
             {
                 /* 单据状态 */

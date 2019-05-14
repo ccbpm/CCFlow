@@ -60,7 +60,9 @@ namespace BP.WF.CCBill
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName)
             {
-                gb.BillNo = gb.GenerNewNoByKey("BillNo");// BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+                Attr attr = gb.EnMap.GetAttrByKey("BillNo");
+                attr.UIIsReadonly = true;
+                gb.BillNo = gb.GenerNewNoByKey("BillNo",attr);// BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
             }
 
@@ -106,8 +108,16 @@ namespace BP.WF.CCBill
             //创建rpt.
             BP.WF.Data.GERpt rpt = new Data.GERpt(gb.FrmID, workID);
 
+            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName)
+            {
+              
+                gb.Title = rpt.Title;
+                gb.Update();
+                return "保存成功...";
+            }
+
             //单据编号.
-            if (DataType.IsNullOrEmpty(gb.BillNo) == true)
+            if (DataType.IsNullOrEmpty(gb.BillNo) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName))
             {
                 gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
                 //更新单据里面的billNo字段.
@@ -116,7 +126,7 @@ namespace BP.WF.CCBill
             }
 
             //标题.
-            if (DataType.IsNullOrEmpty(gb.Title) == true)
+            if (DataType.IsNullOrEmpty(gb.Title) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName))
             {
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
                 //更新单据里面的 Title 字段.

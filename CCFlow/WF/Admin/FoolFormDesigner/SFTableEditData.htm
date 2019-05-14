@@ -30,9 +30,9 @@
             maxIndx = ens.length;
             var html = "<table border=0 cellpadding='0'  style='border-collapse: collapse;width:100%' cellspacing='0' >";
             html += "<tr>";
-            html += "<th class='GroupTitle' nowrap=''style='width:70px;text-align:center'><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></th>";
-            html += "<th class='GroupTitle' nowrap=''>编号</th>";
-            html += "<th class='GroupTitle' nowrap=''>名称</th>";
+            html += "<th class='GroupTitle' nowrap=''style='width:10%;text-align:center'><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></th>";
+            html += "<th class='GroupTitle' nowrap='' style='width:30%'>编号</th>";
+            html += "<th class='GroupTitle' nowrap='' style='width:60%'>名称</th>";
             html += "</tr>";
             //绑定数据.
             for (var i = 0; i < ens.length; i++) {
@@ -65,26 +65,31 @@
                     generNewNo = "";
 
                 currNewNo = generNewNo;
-            } 
-            
-            if (isSave==false) {
+            }
 
-                generNewNo = parseInt(currNewNo) + 1;
-                if (generNewNo>=10) {
-                    generNewNo = "0" + generNewNo;
-                }
-                if (generNewNo > 0 && generNewNo < 10) {
-                    generNewNo = "00" + generNewNo;
-                }
+            if (isSave == false) {
+                if (currNewNo != "") {
+                 generNewNo = parseInt(currNewNo) + 1;
+                    if (generNewNo >= 10) {
+                        generNewNo = "0" + generNewNo;
+                    }
+                    if (generNewNo > 0 && generNewNo < 10) {
+                        generNewNo = "00" + generNewNo;
+                    }
 
-                currNewNo++;
+                    currNewNo++;
+                } else {
+                    generNewNo = "";
+
+                }
+               
             }
 
 
             html += "<tr>";
             html += "<td class='Idx'><font color=red>*</font></td>";
-            html += "<td><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='"+generNewNo+"' /></td>";
-            html += "<td><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' style='width:98%;' /></td>";
+            html += "<td ><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='"+generNewNo+"' /></td>";
+            html += "<td ><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' style='width:98%;' /></td>";
             html += "</tr>";
 
             $("#mytable tbody:last").append(html);
@@ -141,7 +146,6 @@
                 var flag = DBAccess.RunSQLReturnTable(sql);
 
             });
-            alert("删除成功！");
             InitPage(); //刷新.
         }
         //选中所有

@@ -593,12 +593,13 @@ namespace BP.En
         /// </summary>
         /// <param name="attrKey">属性</param>
         /// <returns>产生的序号</returns> 
-        public string GenerNewNoByKey(string attrKey)
+        public string GenerNewNoByKey(string attrKey,Attr attr=null)
         {
             try
             {
                 string sql = null;
-                Attr attr = this.EnMap.GetAttrByKey(attrKey);
+                if(attr == null)
+                    attr = this.EnMap.GetAttrByKey(attrKey);
                 if (attr.UIIsReadonly == false)
                     throw new Exception("@需要自动生成编号的列(" + attr.Key + ")必须为只读。");
 

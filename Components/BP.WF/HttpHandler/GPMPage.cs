@@ -27,7 +27,7 @@ namespace BP.WF.HttpHandler
         public string Siganture_Init()
         {
             if (BP.Web.WebUser.NoOfRel == null)
-                return "err@登陆信息丢失";
+                return "err@登录信息丢失";
             Hashtable ht = new Hashtable();
             ht.Add("No", BP.Web.WebUser.No);
             ht.Add("Name",BP.Web.WebUser.Name);

@@ -23,9 +23,14 @@
     <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
-    <script type="text/javascript" src="MapExt2016.js"></script>
+    <script type="text/javascript" src="MapExt2019.js"></script>
     <script src="../Comm/JS/TBHelpDiv.js"  type="text/javascript" ></script>
-    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+
+   <!-- <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>-->
+    <link href="../Scripts/bootstrap/DatePicker/bootstrap-datepicker.min.css" rel="stylesheet"
+        type="text/css" />
+    <script src="../Scripts/bootstrap/DatePicker/bootstrap-datepicker.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/DatePicker/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Data/JSLibData/CovertMoneyToDaXie.js" type="text/javascript"></script>
@@ -361,6 +366,12 @@
             } else {
                 $('#dtlDiv div table tbody').append(insertTr);
             }
+
+            $(".dataPicker").datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: moment.locale('zh-cn')
+            });
+    
 
             AfterBindEn_DealMapExt(insertTr, newRowIndex);
             setTdDataByTrData(newRowIndex);
@@ -1173,7 +1184,7 @@
                         //AppString   
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + (workNodeData, mapAttr, defValue) + "</select>";
+                                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                             } else {//文本区域
                                 if (mapAttr.UIHeight <= 40) {
                                     eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
@@ -1186,16 +1197,16 @@
                         else if (mapAttr.MyDataType == 6) {//AppDate
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="' + 'WdatePicker();SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
+                                enableAttr = 'onfocus="' + 'SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);"  style="width:85px;border-width:0px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text'  class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text'  class='datepicker yyMMdd'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                         }
                         else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="' + 'WdatePicker({dateFmt:' + '\'yyyy-MM-dd HH:mm\'});SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
+                                enableAttr = 'onfocus="' + 'SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="datepicker" style="width:85px;border-width:0px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
@@ -1733,59 +1744,60 @@
                         var ctrl = $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']');
 
                         if (ctrl.length == 0) {
-                            continue;
+                            ctrl = $(tr).find('[name=DDL_' + mapExt.AttrOfOper + ']');
+                            if(ctrl.length == 0)
+                                ctrl = $(tr).find('[name=RB_' + mapExt.AttrOfOper + ']');
+                            if(ctrl.length == 0)
+                                 ctrl = $(tr).find('[name=CB_' + mapExt.AttrOfOper + ']');
                         }
 
-                        var changeEvent = ctrl.attr(mapExt.Tag);
-                        if (changeEvent && changeEvent.indexOf(mapExt.Doc + '(') != -1) {
-                            continue;
-                        }
-                        //获取mapAttr;
-                        var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+                       
+//                        //获取mapAttr;
+//                        var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+//                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
 
-                            var method = ctrl.attr("onfocus");
-                            var minDate = "";
-                            if (method.indexOf("minDate") != -1)
-                                minDate = '%y-%M-#{%d}';
+//                            var method = ctrl.attr("onfocus");
+//                            var minDate = "";
+//                            if (method.indexOf("minDate") != -1)
+//                                minDate = '%y-%M-#{%d}';
 
-                            ctrl.removeAttr("onfocus");
-                            var dateFmt = 'yyyy-MM-dd';
-                            if (mapAttr.MyDataType == 7)
-                                dateFmt = 'yyyy-MM-dd HH:mm';
+//                            ctrl.removeAttr("onfocus");
+//                            var dateFmt = 'yyyy-MM-dd';
+//                            if (mapAttr.MyDataType == 7)
+//                                dateFmt = 'yyyy-MM-dd HH:mm';
 
 
-                            var mapextDoc = mapExt.Doc;
-                            ctrl.data().MapExt = mapExt;
+//                            var mapextDoc = mapExt.Doc;
+//                            ctrl.data().MapExt = mapExt;
 
-                            ctrl.bind("focus", function (obj) {
-                                var mapExtThis = $(obj.target).data().MapExt;
-                                if (minDate == "")
-                                    WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
-                                        $(this).blur(); //失去焦点 
-                                        if (mapExtThis.Doc.indexOf("(") != -1)
-                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
-                                        else
-                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
-                                    }
-                                    });
-                                else
-                                    WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-                                        $(this).blur(); //失去焦点 
-                                        if (mapExtThis.Doc.indexOf("(") != -1)
-                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
-                                        else
-                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+//                            ctrl.bind("focus", function (obj) {
+//                                var mapExtThis = $(obj.target).data().MapExt;
+//                                if (minDate == "")
+//                                    WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
+//                                        $(this).blur(); //失去焦点 
+//                                        if (mapExtThis.Doc.indexOf("(") != -1)
+//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
+//                                        else
+//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+//                                    }
+//                                    });
+//                                else
+//                                    WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+//                                        $(this).blur(); //失去焦点 
+//                                        if (mapExtThis.Doc.indexOf("(") != -1)
+//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
+//                                        else
+//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
 
-                                       
-                                    }
-                                  });
+//                                       
+//                                    }
+//                                  });
 
-                            });
+//                            });
 
 
-                            break;
-                        }
+//                            break;
+//                        }
                         ctrl.data().MapExt = mapExt;
                         ctrl.bind(mapExt.Tag, function (obj) {
                             var mapExtThis = $(obj.target).data().MapExt;
@@ -2016,28 +2028,126 @@
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(workNodeData, mapAttr, defVal) {
             var operations = '';
-            //外键类型
-            if (mapAttr.LGType == 2 || mapAttr.LGType == 1) {
-                if (workNodeData[mapAttr.KeyOfEn] != undefined) {
-                    $.each(workNodeData[mapAttr.KeyOfEn], function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
+            var operations = '';
+            //外键类型.
+            if (mapAttr.LGType == 2) {
+
+                var data = workNodeData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = workNodeData[mapAttr.UIBindKey];
+
+                if (data == undefined) {
+                    var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+                    if (sfTable != null && sfTable != "") {
+                        var selectStatement = sfTable.SelectStatement;
+                        var srcType = sfTable.SrcType;
+                        //Handler 获取外部数据源
+                        if (srcType == 5)
+                            data = DBAccess.RunDBSrc(selectStatement, 1);
+                        //JavaScript获取外部数据源
+                        if (srcType == 6)
+                            data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                    }
                 }
-                else if (workNodeData[mapAttr.UIBindKey] != undefined) {
-                    $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
+
+                if (data == undefined) {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    return;
                 }
-            } else {
+
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+                return operations;
+            }
+
+
+            //枚举类型.
+            if (mapAttr.LGType == 1) {
                 var enums = workNodeData.Sys_Enum;
-                enums = $.grep(enums, function (value) {
-                    return value.EnumKey == mapAttr.UIBindKey;
-                });
+                if (enums != undefined) {
+                    enums = $.grep(enums, function (value) {
+                        return value.EnumKey == mapAttr.UIBindKey;
+                    });
+
+                    $.each(enums, function (i, obj) {
+                        operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    });
+                }
+                return operations;
+            }
 
 
-                $.each(enums, function (i, obj) {
-                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+           
+
+            //外部数据源类型 FrmGener.js.InitDDLOperation
+            if (mapAttr.LGType == 0) {
+
+                //如果是一个函数.
+                var fn;
+                try {
+                    if (mapAttr.UIBindKey) {
+                        fn = eval(mapAttr.UIBindKey);
+                    }
+                } catch (e) {
+                    //alert(e);
+                }
+
+                if (typeof fn == "function") {
+                    $.each(fn.call(), function (i, obj) {
+                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                    });
+                    return operations;
+                }
+
+                var data = workNodeData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = workNodeData[mapAttr.UIBindKey];
+
+                if (data == undefined) {
+                    var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+                    if (sfTable != null && sfTable != "") {
+                        var selectStatement = sfTable.SelectStatement;
+                        var srcType = sfTable.SrcType;
+                        // SQL获取外部数据源
+                        if (srcType == 3)
+                            data = DBAccess.RunDBSrc(selectStatement, 0);
+                        //WebService 获取外部数据源
+                        if (srcType == 5) {
+                            data = SFTaleHandler(selectStatement);
+                            if (data == "false") {
+                                alert(mapAttr.KeyOfEn + "外部数据源获取错误");
+                                return;
+                            }
+
+                            data = JSON.parse(data);
+                        }
+                        //JavaScript获取外部数据源
+                        if (srcType == 6)
+                            data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+
+                    }
+                }
+                if (data == undefined) {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    return;
+                }
+
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+
                 });
+                if (mapAttr.UIIsInput == 0)
+                    operations = "<option value=''>- 请选择 -</option>" + operations;
+                return operations;
+
+                if (mapAttr.UIIsEnable == 0) {
+
+                    alert('不可编辑');
+                    operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
+                    return operations;
+                }
+
 
             }
             return operations;

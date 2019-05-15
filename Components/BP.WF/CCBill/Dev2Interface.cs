@@ -57,9 +57,8 @@ namespace BP.WF.CCBill
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
-                Attr attr = gb.EnMap.GetAttrByKey("BillNo");
-                attr.UIIsReadonly = true;
-                gb.BillNo = gb.GenerNewNoByKey("BillNo",attr);
+              
+                gb.BillNo = rpt.GenerNewNoByKey("BillNo");
                 // BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
             }

@@ -316,7 +316,7 @@ namespace BP.WF.CCBill
                    "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
                 map.SetHelperAlert(FrmDictAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
 
-                map.AddTBString(FrmDictAttr.BillNoFormat, null, "实体编号规则", true, false, 0, 100, 20, false);
+                map.AddTBString(FrmDictAttr.BillNoFormat, null, "实体编号规则", true, false, 0, 100, 20, true);
                 #endregion 实体表单.
 
                 #region MyBill - 按钮权限.

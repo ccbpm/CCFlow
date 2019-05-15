@@ -33,8 +33,6 @@ namespace BP.WF.CCBill
 
             FrmBill fb = new FrmBill(frmID);
 
-         
-
             gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
@@ -61,7 +59,8 @@ namespace BP.WF.CCBill
             {
                 Attr attr = gb.EnMap.GetAttrByKey("BillNo");
                 attr.UIIsReadonly = true;
-                gb.BillNo = gb.GenerNewNoByKey("BillNo",attr);// BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+                gb.BillNo = gb.GenerNewNoByKey("BillNo");
+                // BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
             }
 

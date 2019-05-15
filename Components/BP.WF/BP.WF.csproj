@@ -170,6 +170,7 @@
     <Compile Include="CCBill\FrmMethodLink.cs" />
     <Compile Include="CCBill\FrmMethodFunc.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin.cs" />
+    <Compile Include="CCBill\FrmDict.cs" />
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />

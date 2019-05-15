@@ -12,26 +12,15 @@ using System.Collections.Generic;
 namespace BP.WF.CCBill
 {
     /// <summary>
-    /// 实体类型
+    /// 实体表单 - Attr
     /// </summary>
-    public enum EntityType
-    {
-        CCFrom = 0,
-        Bill = 1,
-        EnityNoName = 2,
-        EntityTree = 3
-    }
-
-    /// <summary>
-    /// 单据属性 - Attr
-    /// </summary>
-    public class FrmBillAttr : BP.En.EntityOIDNameAttr
+    public class FrmDictAttr : BP.En.EntityOIDNameAttr
     {
         #region 基本属性
         /// <summary>
         /// 工作模式
         /// </summary>
-        public const string FrmBillWorkModel = "FrmBillWorkModel";
+        public const string FrmDictWorkModel = "FrmDictWorkModel";
         /// <summary>
         /// 实体类型
         /// </summary>
@@ -140,7 +129,6 @@ namespace BP.WF.CCBill
         /// 是否启用导入
         /// </summary>
         public const string BtnImpExcelEnable = "BtnImpExcelEnable";
-
         /// <summary>
         /// 导出Excel
         /// </summary>
@@ -150,13 +138,11 @@ namespace BP.WF.CCBill
         /// </summary>
         public const string BtnExpExcelEnable = "BtnExpExcelEnable";
         #endregion 集合的操作.
-
-
     }
     /// <summary>
-    /// 单据属性
+    /// 实体表单
     /// </summary>
-    public class FrmBill : EntityNoName
+    public class FrmDict : EntityNoName
     {
         #region 权限控制.
         public override UAC HisUAC
@@ -201,11 +187,11 @@ namespace BP.WF.CCBill
         {
             get
             {
-                return (EntityType)this.GetValIntByKey(FrmBillAttr.EntityType);
+                return (EntityType)this.GetValIntByKey(FrmDictAttr.EntityType);
             }
             set
             {
-                this.SetValByKey(FrmBillAttr.EntityType, (int)value);
+                this.SetValByKey(FrmDictAttr.EntityType, (int)value);
             }
         }
         /// <summary>
@@ -243,14 +229,14 @@ namespace BP.WF.CCBill
         {
             get
             {
-                string str = this.GetValStrByKey(FrmBillAttr.BillNoFormat);
+                string str = this.GetValStrByKey(FrmDictAttr.BillNoFormat);
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = "{LSH4}";
                 return str;
             }
             set
             {
-                this.SetValByKey(FrmBillAttr.BillNoFormat, value);
+                this.SetValByKey(FrmDictAttr.BillNoFormat, value);
             }
         }
         /// <summary>
@@ -260,30 +246,30 @@ namespace BP.WF.CCBill
         {
             get
             {
-                string str = this.GetValStrByKey(FrmBillAttr.TitleRole);
+                string str = this.GetValStrByKey(FrmDictAttr.TitleRole);
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = "@WebUser.FK_DeptName @WebUser.Name @RDT";
                 return str;
             }
             set
             {
-                this.SetValByKey(FrmBillAttr.BillNoFormat, value);
+                this.SetValByKey(FrmDictAttr.BillNoFormat, value);
             }
         }
         #endregion
 
         #region 构造方法
         /// <summary>
-        /// 单据属性
+        /// 实体表单
         /// </summary>
-        public FrmBill()
+        public FrmDict()
         {
         }
         /// <summary>
-        /// 单据属性
+        /// 实体表单
         /// </summary>
         /// <param name="no">映射编号</param>
-        public FrmBill(string no)
+        public FrmDict(string no)
             : base(no)
         {
         }
@@ -296,7 +282,7 @@ namespace BP.WF.CCBill
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapData", "单据属性");
+                Map map = new Map("Sys_MapData", "实体表单");
                 map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("4");
 
@@ -308,65 +294,65 @@ namespace BP.WF.CCBill
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 #endregion 基本属性.
 
-                #region 单据属性.
-                //map.AddDDLSysEnum(FrmBillAttr.FrmBillWorkModel, 0, "工作模式", true, false, FrmBillAttr.FrmBillWorkModel,
+                #region 实体表单.
+                //map.AddDDLSysEnum(FrmDictAttr.FrmDictWorkModel, 0, "工作模式", true, false, FrmDictAttr.FrmDictWorkModel,
                 //    "@0=独立表单@1=单据工作模式");
 
-                map.AddDDLSysEnum(FrmBillAttr.EntityType, 0, "业务类型", true, false, FrmBillAttr.EntityType,
+                map.AddDDLSysEnum(FrmDictAttr.EntityType, 0, "业务类型", true, false, FrmDictAttr.EntityType,
                    "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
-                map.SetHelperAlert(FrmBillAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
+                map.SetHelperAlert(FrmDictAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
 
                 //map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "", "@0=独立表单@1=单据工作模式@2=流程工作模式");
 
-                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20, false);
-                map.AddTBString(FrmBillAttr.RefFlowNo, null, "关联流程号", true, false, 0, 100, 20);
-                map.AddTBString(FrmBillAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
-                #endregion 单据属性.
+                map.AddTBString(FrmDictAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20, false);
+                map.AddTBString(FrmDictAttr.RefFlowNo, null, "关联流程号", true, false, 0, 100, 20);
+                map.AddTBString(FrmDictAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
+                #endregion 实体表单.
 
                 #region MyBill - 按钮权限.
-                map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnNewEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnStartFlowLable, "启动流程", "启动流程", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnStartFlowLable, "启动流程", "启动流程", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnStartFlowEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSearchLabel, "查询", "查询", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnSearchLabel, "查询", "查询", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnGroupEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnGroupEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnPrintHtmlEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintPDF, "打印PDF", "打印PDF", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnPrintPDF, "打印PDF", "打印PDF", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnPrintPDFEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintRTF, "打印RTF", "打印RTF", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnPrintRTF, "打印RTF", "打印RTF", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnPrintRTFEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintCCWord, "打印CCWord", "打印CCWord", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnPrintCCWord, "打印CCWord", "打印CCWord", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnPrintCCWordEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnExpZipEnable, false, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnExpZipEnable, false, "是否可用？", true, true);
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.
-                map.AddTBString(FrmBillAttr.BtnImpExcel, "导入Excel文件", "导入Excel文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnImpExcel, "导入Excel文件", "导入Excel文件", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnExpExcel, "导出Excel文件", "导出Excel文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnExpExcel, "导出Excel文件", "导出Excel文件", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnGroupEnable, true, "是否可用？", true, true);
 
                 #endregion 查询按钮权限.
 
@@ -924,15 +910,15 @@ namespace BP.WF.CCBill
 
     }
     /// <summary>
-    /// 单据属性s
+    /// 实体表单s
     /// </summary>
-    public class FrmBills : EntitiesNoName
+    public class FrmDicts : EntitiesNoName
     {
         #region 构造
         /// <summary>
-        /// 单据属性s
+        /// 实体表单s
         /// </summary>
-        public FrmBills()
+        public FrmDicts()
         {
         }
         /// <summary>
@@ -942,7 +928,7 @@ namespace BP.WF.CCBill
         {
             get
             {
-                return new FrmBill();
+                return new FrmDict();
             }
         }
         #endregion
@@ -952,20 +938,20 @@ namespace BP.WF.CCBill
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmBill> ToJavaList()
+        public System.Collections.Generic.IList<FrmDict> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmBill>)this;
+            return (System.Collections.Generic.IList<FrmDict>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmBill> Tolist()
+        public System.Collections.Generic.List<FrmDict> Tolist()
         {
-            System.Collections.Generic.List<FrmBill> list = new System.Collections.Generic.List<FrmBill>();
+            System.Collections.Generic.List<FrmDict> list = new System.Collections.Generic.List<FrmDict>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmBill)this[i]);
+                list.Add((FrmDict)this[i]);
             }
             return list;
         }

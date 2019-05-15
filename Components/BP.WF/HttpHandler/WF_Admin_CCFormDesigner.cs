@@ -225,12 +225,11 @@ namespace BP.WF.HttpHandler
             BP.WF.CCBill.EntityType entityType = (CCBill.EntityType)this.GetRequestValInt("EntityType");
 
             #region 如果是单据.
-            if (entityType == CCBill.EntityType.Bill)
+            if (entityType == CCBill.EntityType.FrmBill)
             {
                 BP.WF.CCBill.FrmBill bill = new CCBill.FrmBill(md.No);
-                bill.EntityType = CCBill.EntityType.Bill;
+                bill.EntityType = CCBill.EntityType.FrmBill;
                 bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
-
 
                 //设置默认的查询条件.
                 bill.SetPara("IsSearchKey", 1);
@@ -242,15 +241,18 @@ namespace BP.WF.HttpHandler
             #endregion 如果是单据.
 
             #region 如果是实体 EnityNoName .
-            if (entityType == CCBill.EntityType.EnityNoName)
+            if (entityType == CCBill.EntityType.FrmDict)
             {
-                BP.WF.CCBill.FrmBill entityDict = new CCBill.FrmBill(md.No);
+                BP.WF.CCBill.FrmDict entityDict = new CCBill.FrmDict(md.No);
                 entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
 
+                entityDict.BtnNewModel = 0;
 
                 //设置默认的查询条件.
                 entityDict.SetPara("IsSearchKey", 1);
                 entityDict.SetPara("DTSearchWay", 0);
+
+                entityDict.EntityType = CCBill.EntityType.FrmDict;
 
                 entityDict.Update();
                 entityDict.CheckEnityTypeAttrsFor_EntityNoName();

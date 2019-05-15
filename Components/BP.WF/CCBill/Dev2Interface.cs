@@ -49,13 +49,13 @@ namespace BP.WF.CCBill
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
 
             //设置标题.
-            if (fb.EntityType == EntityType.Bill)
+            if (fb.EntityType == EntityType.FrmBill)
             {
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
                 gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
             }
 
-            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName)
+            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
                 Attr attr = gb.EnMap.GetAttrByKey("BillNo");
                 attr.UIIsReadonly = true;
@@ -106,7 +106,7 @@ namespace BP.WF.CCBill
             //创建rpt.
             BP.WF.Data.GERpt rpt = new Data.GERpt(gb.FrmID, workID);
 
-            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName)
+            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
               
                 gb.Title = rpt.Title;
@@ -115,7 +115,7 @@ namespace BP.WF.CCBill
             }
 
             //单据编号.
-            if (DataType.IsNullOrEmpty(gb.BillNo) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName))
+            if (DataType.IsNullOrEmpty(gb.BillNo) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict))
             {
                 gb.BillNo = BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
                 //更新单据里面的billNo字段.
@@ -124,7 +124,7 @@ namespace BP.WF.CCBill
             }
 
             //标题.
-            if (DataType.IsNullOrEmpty(gb.Title) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.EnityNoName))
+            if (DataType.IsNullOrEmpty(gb.Title) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict))
             {
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
                 //更新单据里面的 Title 字段.

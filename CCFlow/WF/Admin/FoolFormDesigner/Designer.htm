@@ -1755,16 +1755,16 @@
             en.Y = 100;
             en.Insert();
 
-            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + en.MyPK;
-            OpenEasyUiDialog(url, "eudlgframe", '框架', 600, 400, "icon-property", true, null, null, null, function () {
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + en.MyPK;
+            OpenEasyUiDialog(url, "eudlgframe", '框架', 900, 400, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
             return;
         }
 
         function EditFrame(myPK) {
-            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + myPK;
-            OpenEasyUiDialog(url, "eudlgframe", '框架', 600, 400, "icon-property", true, null, null, null, function () {
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + myPK;
+            OpenEasyUiDialog(url, "eudlgframe", '框架', 900, 400, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

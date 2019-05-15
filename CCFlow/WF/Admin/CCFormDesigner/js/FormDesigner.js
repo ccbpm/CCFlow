@@ -337,7 +337,7 @@ function showFigurePropertyWin(figure) {
     if (shap == 'iFrame') {
 
 
-        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal='+figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal='+figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '框架');
         return;
     }

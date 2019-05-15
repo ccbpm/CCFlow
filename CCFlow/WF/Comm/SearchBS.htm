@@ -854,7 +854,6 @@
         }
 
         function Imp(){
-           var user = new WebUser();
            var url = "./Sys/ImpData.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
            //获取屏幕的长宽
            var W = document.body.clientWidth-80;
@@ -865,7 +864,6 @@
         }
 
         function Setting() {
-            var user = new WebUser();
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
             //获取屏幕的长宽
            var W = document.body.clientWidth-340;

@@ -321,7 +321,7 @@ namespace BP.WF.CCBill
 
                 #region MyBill - 按钮权限.
                 map.AddTBString(FrmDictAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
-                map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, false, FrmDictAttr.BtnNewModel,
+                map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
                    "@0=表格模式@1=卡片模式@2=不可用");
 
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);

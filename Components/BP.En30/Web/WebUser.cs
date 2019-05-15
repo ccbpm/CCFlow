@@ -536,7 +536,7 @@ namespace BP.Web
                 if (val == null)
                 {
                     if (BP.Web.WebUser.FK_Dept == null)
-                        throw new Exception("@err-001 DeptParentNo, FK_Dept 登陆信息丢失。");
+                        throw new Exception("@err-001 DeptParentNo, FK_Dept 登录信息丢失。");
 
                     BP.Port.Dept dept = new Port.Dept(BP.Web.WebUser.FK_Dept);
                     BP.Web.WebUser.DeptParentNo = dept.ParentNo;
@@ -616,7 +616,7 @@ namespace BP.Web
             {
                 return isNullAsVal;
             }
-            throw new Exception("@err-001 (" + valKey + ")登陆信息丢失。");
+            throw new Exception("@err-001 (" + valKey + ")登录信息丢失。");
         }
         /// <summary>
         /// 设置信息.
@@ -687,7 +687,7 @@ namespace BP.Web
 
                 string val = GetValFromCookie("Name", no, true);
                 if (val == null)
-                    throw new Exception("@err-002 Name 登陆信息丢失。");
+                    throw new Exception("@err-002 Name 登录信息丢失。");
 
                 return val;
             }
@@ -705,7 +705,7 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("Domain", null, true);
                 if (val == null)
-                    throw new Exception("@err-003 Domain 登陆信息丢失。");
+                    throw new Exception("@err-003 Domain 登录信息丢失。");
                 return val;
             }
             set

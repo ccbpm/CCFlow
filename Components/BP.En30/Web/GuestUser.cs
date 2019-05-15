@@ -292,7 +292,7 @@ namespace BP.Web
             {
                 return isNullAsVal;
             }
-            throw new Exception("@err-001 登陆信息丢失。");
+            throw new Exception("@err-001 登录信息丢失。");
         }
         /// <summary>
         /// 编号
@@ -319,7 +319,7 @@ namespace BP.Web
                        GuestUser.Name = hc["GuestName"];
                        return hc.Values["GuestNo"];
                     }
-                    throw new Exception("@err-002 Guest 登陆信息丢失。");
+                    throw new Exception("@err-002 Guest 登录信息丢失。");
                 }
                 return no;
             }
@@ -337,7 +337,7 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("GuestName", null, true);
                 if (val == null)
-                    throw new Exception("@err-001 GuestName 登陆信息丢失。");
+                    throw new Exception("@err-001 GuestName 登录信息丢失。");
                 return val;
             }
             set
@@ -354,7 +354,7 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("DeptNo", null, true);
                 if (val == null)
-                    throw new Exception("@err-003 DeptNo 登陆信息丢失。");
+                    throw new Exception("@err-003 DeptNo 登录信息丢失。");
                 return val;
             }
             set
@@ -371,7 +371,7 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("DeptName", null, true);
                 if (val == null)
-                    throw new Exception("@err-002 DeptName 登陆信息丢失。");
+                    throw new Exception("@err-002 DeptName 登录信息丢失。");
                 return val;
             }
             set

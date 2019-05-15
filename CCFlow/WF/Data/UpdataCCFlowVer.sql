@@ -109,6 +109,8 @@ UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.CCBill.FrmBill';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.CCBill.FrmBill','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
 
-
-
+-- 2019.05.15 ; 
+DELETE FROM Sys_EnCfg WHERE No='BP.WF.CCBill.FrmDict';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.CCBill.FrmDict','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
+ 
 

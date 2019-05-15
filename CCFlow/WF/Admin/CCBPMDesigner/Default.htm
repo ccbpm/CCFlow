@@ -1221,8 +1221,26 @@
                 alert('请选择一个表单.');
                 return;
             }
-            var url = '../../Comm/En.htm?EnName=BP.WF.CCBill.FrmBill&PKVal=' + node.id;
-            OpenEasyUiDialog(url, "CCForm_Attr", '单据属性', 900, 560, "icon-window");
+
+           // alert('sss');
+
+            var en = new Entity("BP.WF.CCBill.FrmBill", node.id);
+
+            //流程单据.
+            if (en.EntityType == 0)
+                url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
+
+            if (en.EntityType==1)
+                url = '../../Comm/En.htm?EnName=BP.WF.CCBill.FrmBill&PKVal=' + node.id;
+
+            if (en.EntityType == 2)
+                url = '../../Comm/En.htm?EnName=BP.WF.CCBill.FrmDict&PKVal=' + node.id;
+
+            alert(en.EntityType);
+
+           // http: //localhost:2207/WF/Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=CCFrm_GDZC&s=0.635120123659069
+
+            OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
         }
         //打开单据
         function Bill_Open() {
@@ -1237,6 +1255,12 @@
                 alert('请选择一个表单.');
                 return;
             }
+            var en = new Entity("BP.WF.CCBill.FrmBill", node.id);
+            if (en.EntityType == 0) {
+                alert('独立表单暂不支持列表打开...');
+                return;
+            }
+
             var url = '../../CCBill/Search.htm?FrmID=' + node.id;
             OpenEasyUiDialog(url, "CCForm_Attr", '我的单据', 1100, 560, "icon-window");
         }
@@ -1824,13 +1848,13 @@
     </div>
     <div id="mForm" class="easyui-menu" style="width: 120px;">
         <div onclick="Bill_CCForm()" data-options="iconCls:'icon-property'">
-            单据属性</div>
+            表单属性</div>
         <div onclick="Bill_Open()" data-options="iconCls:'icon-property'">
-            打开单据</div>
+            数据列表</div>
         <div class="menu-sep">
         </div>
-        <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
-            表单属性</div>
+      <!--  <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
+            表单属性</div>-->
         <div onclick="designFoolFrm()" data-options="iconCls:'icon-sheet'">
             设计傻瓜表单</div>
         <div onclick="designFreeFrm()" data-options="iconCls:'icon-library'">

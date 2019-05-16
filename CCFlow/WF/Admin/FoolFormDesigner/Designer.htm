@@ -1731,7 +1731,12 @@
 
         function NewFrame() {
 
-            var val = prompt('请输入框架ID：(要求是字母数字下划线，非中文等特殊字符.)', 'Frame1');
+            var alert = "\t\n1.为了更好的支持应用扩展,ccform可以用iFrame的地图、流程轨迹图、轨迹表的展示。";
+            alert += "\t\n2.在创建一个框架后，在框架属性里设置。";
+            alert += "\t\n3.请输入框架ID,要求是字母数字下划线，非中文等特殊字符。";
+
+            var val = prompt('新建框架:'+alert, 'Frame1');
+
             if (val == null) {
                 return;
             }

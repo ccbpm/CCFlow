@@ -260,8 +260,58 @@
         //var url = 'ImpTableField.htm?FK_MapData='+GetQueryString('FK_MapData')+'&FType=Class&Idx=&GroupField=0';
         //window.location.href = url;
     }
-</script>
 
+    function ExtImg() {
+
+        var imgName = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
+        if (imgName == null || imgName == undefined)
+            return;
+
+        var frmID = GetQueryString("FK_MapData");
+        // alert(frmID + imgName);
+        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+        mapAttrs.Retrieve("FK_MapData", frmID, "Name", imgName);
+        if (mapAttrs.length >= 1) {
+            alert('名称：[' + imgName + "]已经存在.");
+            ExtImg();
+            return;
+        }
+
+        //获得ID.
+        var id = StrToPinYin(imgName);
+
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.MyPK = mypk;
+        if (mapAttr.IsExits == true) {
+            alert('名称：[' + imgName + "]已经存在.");
+            return;
+        }
+        mapAttr.FK_MapData = frmID;
+        mapAttr.KeyOfEn = id;
+        mapAttr.Name = imgName;
+        mapAttr.GroupID = groupID;
+        mapAttr.UIContralType = 11; //FrmImg 类型的控件.
+        mapAttr.MyDataType = 1;
+        mapAttr.LGType = 0;
+        mapAttr.UIWidth = 150;
+        mapAttr.UIHeight = 170;
+        mapAttr.Insert(); //插入字段.
+        mapAttr.Retrieve();
+
+        var img = new Entity("BP.Sys.FrmUI.FrmImg");
+        img.MyPK = frmID + "_" + id;
+        img.FK_MapData = frmID;
+        img.KeyOfEn = id;
+
+        img.ImgAppType = 0; //图片.
+        img.FK_MapData = frmID;
+        img.GroupID = mapAttr.GroupID; //设置分组列.
+        img.Name = imgName;
+        img.Insert(); //插入到数据库.
+        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&MyPK=" + img.MyPK;
+    }
+</script>
 
 <ul>
 <li><a href="javascript:Enum('AddEnum');"  ><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
@@ -300,6 +350,20 @@
  </td>
 </tr>
  
+
+   <tr>
+            <th colspan="2">
+                扩展功能
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ul>
+                    <li><a href="javascript:ExtImg();"><b>装饰类图片</b></a> &nbsp;&nbsp;用于显示icon、头像、作业示意图等.</li>
+                </ul>
+            </td>
+        </tr>
+
 
 </table>
 

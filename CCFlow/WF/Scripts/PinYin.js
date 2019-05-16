@@ -16,6 +16,16 @@ function ParsePinYin(str, model, textBoxId) {
     document.getElementById(textBoxId).value = data;
     return data;
 }
+
+function StrToPinYin(str) {
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+    handler.AddPara("name", str);
+    handler.AddPara("flag", "false");
+    data = handler.DoMethodReturnString("ParseStringToPinyin");
+    return data;
+}
+
 //特别词汇.
 function SpecWords(str) {
 
@@ -23,6 +33,7 @@ function SpecWords(str) {
     if (str == '电话') return 'Tel';
     if (str == '地址') return 'Addr';
     if (str == '邮件') return 'Email';
-
+    if (str.indexOf('编号') != -1) return 'BillNo';
+    if (str.indexOf('单据') != -1) return 'BillNo';
     return null;
 }

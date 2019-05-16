@@ -161,7 +161,7 @@
         //选择接受人
 
         function SelectEmps(toNodeID) {
-            $('#modalHeader').text("发送到节点");
+            $('#modalHeader').text("选择接受人");
             modalIframeSrc = "./Accepter.htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + toNodeID +"&IsSend=0"+ "&s=" + Math.random();
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
             $('#returnWorkModal').modal().show(); 
@@ -225,7 +225,7 @@
                         toNodeID = params[i].split("=")[1];
                         break;
                     }
-                    $('#modalHeader').text("发送到节点");
+                    $('#modalHeader').text("选择接受人");
                     modalIframeSrc = "./Accepter.htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + toNode + "&IsSend=0" + "&s=" + Math.random();
                     $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
                     $('#returnWorkModal').modal().show();

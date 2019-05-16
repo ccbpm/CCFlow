@@ -1573,7 +1573,10 @@
 
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + GetQueryString("FK_MapData");
 
-            OpenEasyUiDialog(url, "eudlgframe", '属性', 800, 450, "icon-property", true, null, null, null, function () {
+            //获取页面的大小
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 80;
+            OpenEasyUiDialog(url, "eudlgframe", '属性', W, H, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

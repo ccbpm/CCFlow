@@ -2,13 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>扩展控件</title>
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+     <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
 
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         //页面启动函数.
@@ -53,11 +58,19 @@
                     $("#TB_Url").val(url); //设置URL.
                     //$("#DDL_AthShowModel").val(mapAttr.AthShowModel); //设置选择的值.
                     break;
+                case "11":
+                   
+                    var html = "";
+                    html += "<li><a href='javascript:EditImg(\""+mypk+"\")'>编辑图片</a></li>";
+                    $("#FrmImg").append(html);
+                    break;
                 default:
                     alert('没有判断的元素.' + mapAttr.UIContralType);
                     break;
             }
         });
+
+        
 
         //执行保存
         function Save() {
@@ -78,7 +91,7 @@
             // var model = $("#Model").val();
             var model = $('input:radio:checked').val();
 
-            if (model != 6 && model !=9) {
+            if (model != 6 && model !=9 && model!=11) {
                 var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
                 mapAttr.UIContralType = model;
                 mapAttr.Update();
@@ -118,8 +131,37 @@
                 return;
             }
 
-        }
+            //保存图片
+            if (model == 11) {
+                //修改字段属性
+                var mapAttr = new Entity("BP.Sys.MapAttr", GetQueryString("MyPK"));
+                mapAttr.UIContralType = model;
+                mapAttr.Update();
+                //增加FrmImg 属性
 
+                var frmImg = new Entity("BP.Sys.FrmUI.FrmImg");
+                frmImg.MyPK = mapAttr.MyPK;
+                frmImg.FK_MapData = mapAttr.FK_MapData;
+                frmImg.Name = mapAttr.Name;
+                frmImg.IsEdit = 1;
+                frmImg.ImgAppType = 0;
+                frmImg.Save();
+
+                //保存完后编辑图片的属性
+                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&PKVal=' + frmImg.MyPK;
+               
+                WinOpen(url);
+             
+
+
+            }
+
+
+        }
+        function EditImg(mypk) {
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&MyPK=' + mypk;
+            WinOpen(url);
+        }
         function SaveAndClose() {
             Save();
             window.close();
@@ -248,6 +290,15 @@
         </legend>
         <ul>
             <li>用于移动设备 </li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <input id="RB_CtrlType_11" type="radio" name="Model" value="11" /><label for="RB_CtrlType_11">图片控件</label>
+        </legend>
+        <ul id="FrmImg">
+            <li>用于显示图片文件 </li>
+            
         </ul>
     </fieldset>
       </td>

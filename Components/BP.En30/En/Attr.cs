@@ -97,7 +97,16 @@ namespace BP.En
         /// <summary>
         /// 超链接
         /// </summary>
-        HyperLink = 9
+        HyperLink = 9,
+        /// <summary>
+        /// 文本
+        /// </summary>
+        Lab = 10,
+        /// <summary>
+        /// 图片
+        /// </summary>
+        FrmImg = 11
+
     }
     /// <summary>
     /// 逻辑类型

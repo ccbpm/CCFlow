@@ -173,13 +173,9 @@
                 return;
             }
 
-            //  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PK=" + data;
             window.location.href = data;
             return;
 
-            //  var url = 'EditTable.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupField=' + groupID;
-            //window.location.href = url;
-            //return;
 
         }
         function AddSFSQL(mypk, idx, key) {
@@ -210,22 +206,27 @@
         function Edit(fk_sftable, sfType) {
 
             var ensName = '';
-            //if (sfType == "0" || sfType==1 ) {
+  
             ensName = "BP.Sys.SFTable";
-            //}
+          
 
             if (fk_sftable.indexOf('.') != -1) {
                 ensName = 'BP.Sys.FrmUI.SFTableClass';
             }
 
             if (sfType == "3")
-                ensName = 'BP.Sys.SFTable';
+                ensName = 'BP.Sys.SFTableSQL';
 
 
             var url = '../../Comm/En.htm?EnName=' + ensName + '&No=' + fk_sftable;
-            window.location.href = url;
+            // window.location.href = url;
 
-            //OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 900, 495, 'icon-edit');
+            //获取页面的大小
+            var W = document.body.clientWidth - 120;
+            var H = document.body.clientHeight - 40;
+            if(parent.document.body!=null)
+                H = parent.document.body.clientHeight - 40;
+            OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, W, H, 'icon-edit');
 
         }
 

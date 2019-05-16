@@ -22,9 +22,6 @@
 
             var en = new Entity("BP.Sys.MapFrame", myPK);
 
-            alert(en.UrlSrcType);
-
-
             var url = GetUrl(en.UrlSrcType);
 
             document.location.href = url + "?MyPK=" + myPK;

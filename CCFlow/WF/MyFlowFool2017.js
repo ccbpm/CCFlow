@@ -278,7 +278,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             }
             isDropTR = true;
             html += "<tr >";
-            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
+            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10" && attr.UIContralType != "11")
                 html += "<td  class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
@@ -304,7 +304,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             }
             isDropTR = true;
             html += "<tr>";
-            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
+            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10" && attr.UIContralType != "11")
                 html += "<td  class='LabelFDesc' style='width:15%;' ColSpan=2  rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
@@ -329,7 +329,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             }
             isDropTR = true;
             html += "<tr >";
-            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10")
+            if (attr.MyDataType != 4 && attr.UIContralType != "9" && attr.UIContralType != "10" && attr.UIContralType != "11")
                 html += "<td  class='LabelFDesc' style='width:15%;' ColSpan=3  rowSpan=" + rowSpan + ">" + lab + "</td>";
             else if (attr.UIContralType == "10")
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + " ColSpan=4 class='tdSpan'>" + lab + "</td>";
@@ -358,7 +358,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
                     html += "<td id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:15%;' ColSpan=1 rowSpan=" + rowSpan + ">" + lab + "</td>"; 
                 }
                 if (attr.ColSpan == 1 && attr.TextColSpan == 1 || attr.ColSpan == 2 && attr.TextColSpan == 1) {
-                    if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
+                    if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10" && attr.UIContralType != "11") {
                         html += "<td class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                         html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;'ColSpan="+attr.ColSpan+" rowSpan=" + rowSpan + ">";
                     } else if (attr.UIContralType == "10") {
@@ -408,7 +408,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
                     html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                 }
                 if (attr.ColSpan == 1 && attr.TextColSpan == 1 || attr.ColSpan == 2 && attr.TextColSpan == 1) {
-                    if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10") {
+                    if (attr.UIContralType != "9" && attr.MyDataType != 4 && attr.UIContralType != "10" && attr.UIContralType != "11") {
                         html += "<td class='LabelFDesc' style='width:15%;' rowSpan=" + rowSpan + ">" + lab + "</td>";
                         html += "<td id='Td_" + attr.KeyOfEn + "' class='FDesc'  style='width:35%;' ColSpan=" + attr.ColSpan + "  rowSpan=" + rowSpan + ">";
                     } else if (attr.UIContralType == "10") {
@@ -625,6 +625,61 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
             return eleHtml;
         }
+        //图片控件
+        if (mapAttr.UIContralType == "11") {
+            //获取图片控件的信息
+            var frmImg = new Entity("BP.Sys.FrmUI.FrmImg");
+            frmImg.SetPKVal(mapAttr.MyPK);
+            var count = frmImg.RetrieveFromDBSources();
+            if (count == 0) {
+                alert("主键为" + mapAttr.MyPK + "名称为" + mapAttr.Name+"的图片控件信息丢失，请联系管理员");
+                return "";
+            }
+            //解析图片
+            if (frmImg.ImgAppType == 0) {//图片类型
+                //数据来源为本地.
+                var webUser = new WebUser();
+                var imgSrc = '';
+                if (frmImg.ImgSrcType == 0) {
+                    //替换参数
+                    var frmPath = frmImg.ImgPath;
+                    //替换表达式常用的用户信息
+                    frmPath = frmPath.replace('@basePath', basePath);
+                    frmPath = frmPath.replace('@WebUser.No', webUser.No);
+                    frmPath = frmPath.replace('@WebUser.Name', webUser.Name);
+                    frmPath = frmPath.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+                    frmPath = frmPath.replace('@WebUser.DeptName', webUser.DeptName);
+                    frmPath = frmPath.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+                    imgSrc = frmImg.ImgPath;
+
+                }
+                //数据来源为指定路径.
+                if (frmImg.ImgSrcType == 1) {
+                    var imgURL = frmImg.ImgURL;
+                   //替换表达式常用的用户信息
+                    imgURL = imgURL.replace('@WebUser.No', webUser.No);
+                    imgURL = imgURL.replace('@WebUser.Name', webUser.Name);
+                    imgURL = imgURL.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+                    imgURL = imgURL.replace('@WebUser.DeptName', webUser.DeptName);
+                    imgURL = imgURL.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+                    imgSrc = imgURL;
+                }
+                // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
+                if (imgSrc == "" || imgSrc == null)
+                    imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
+                
+                return "<img src='" + imgSrc + "' style='width:100%;height:100%' onerror=\"this.src='../DataUser/ICON/CCFlow/LogBig.png'\" />";
+ 
+            } else if (frmImg.ImgAppType == 3)//二维码  手机
+            {
+
+
+            } else if (frmImg.ImgAppType == 1) {//暂不解析
+                //电子签章  写后台
+            }
+            return "";
+
+        }
         if (mapAttr.UIHeight <= 40) //普通的文本框.
         {
             if (mapAttr.IsSigan == "1") {
@@ -637,6 +692,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
             return "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  class='form-control' type='text' placeholder='" + (mapAttr.Tip || '') + "'/>";
         }
+
+
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
 
@@ -1120,67 +1177,75 @@ function Ele_Frame(flowData, gf) {
     if (frame == null)
         return "没有找到框架的定义，请与管理员联系。";
 
+    //获取框架的类型 0 自定义URL 1 地图开发 2流程轨迹表 3流程轨迹图
+    var urlType = frame.UrlSrcType;
+
     var eleHtml = '';
+    var url = "";
+    if (urlType == 0) {
+        url = frame.URL;
+        if (url.indexOf('?') == -1)
+            url += "?1=2";
 
-    var url = frame.URL;
-    if (url.indexOf('?') == -1)
-        url += "?1=2";
+        if (url.indexOf("@basePath") == 0)
+            url = url.replace("@basePath", basePath);
 
-    if (url.indexOf("@basePath") == 0)
-        url = url.replace("@basePath", basePath);
+        //2.替换@参数
+        var pageParams = getQueryString();
+        $.each(pageParams, function (i, pageParam) {
+            var pageParamArr = pageParam.split('=');
+            url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+        });
 
-    //2.替换@参数
-    var pageParams = getQueryString();
-    $.each(pageParams, function (i, pageParam) {
-        var pageParamArr = pageParam.split('=');
-        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
-    });
-
-    //3.替换表单中的参数
-    var src = url.replace(new RegExp(/(：)/g), ':');
-    if (src.indexOf("?") > 0) {
-        var params = getQueryStringFromUrl(src);
-        if (params != null && params.length > 0) {
-            $.each(params, function (i, param) {
-                if (param.indexOf('@') != -1) {//是需要替换的参数
-                    paramArr = param.split('=');
-                    if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
-                        if (paramArr[1].indexOf('@WebUser.') == 0)
-                            url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
-                        else
-                            url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr(1)]);
+        //3.替换表单中的参数
+        var src = url.replace(new RegExp(/(：)/g), ':');
+        if (src.indexOf("?") > 0) {
+            var params = getQueryStringFromUrl(src);
+            if (params != null && params.length > 0) {
+                $.each(params, function (i, param) {
+                    if (param.indexOf('@') != -1) {//是需要替换的参数
+                        paramArr = param.split('=');
+                        if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                            if (paramArr[1].indexOf('@WebUser.') == 0)
+                                url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+                            else
+                                url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr(1)]);
+                        }
                     }
-                }
-            });
+                });
+            }
+        }
+
+
+        //处理URL需要的参数
+        //1.拼接参数
+        var paras = this.pageData;
+        var strs = "";
+        for (var str in paras) {
+            if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+                continue
+            else
+                strs += "&" + str + "=" + paras[str];
+        }
+
+
+        url = url + strs + "&IsReadonly=0";
+
+        //4.追加GenerWorkFlow AtPara中的参数
+        var gwf = flowData.WF_GenerWorkFlow[0];
+        if (gwf != null) {
+            var atPara = gwf.AtPara;
+            if (atPara != null && atPara != "") {
+                atPara = atPara.replace(/@/g, '&');
+                url = url + atPara;
+            }
         }
     }
-   
 
-    //处理URL需要的参数
-    //1.拼接参数
-    var paras = this.pageData;
-    var strs = "";
-    for (var str in paras) {
-        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-            continue
-        else
-            strs += "&" + str + "=" + paras[str];
-    }
-
-
-    url = url + strs + "&IsReadonly=0";
-
-    //4.追加GenerWorkFlow AtPara中的参数
-    var gwf = flowData.WF_GenerWorkFlow[0];
-    if (gwf != null) {
-        var atPara = gwf.AtPara;
-        if (atPara != null && atPara != "") {
-            atPara = atPara.replace(/@/g, '&');
-            url = url + atPara;
-        }
-    }
-
-
+    if (urlType == 2) //轨迹表
+        url = "./WorkOpt/OneWork/Table.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID;
+    if (urlType == 3)//轨迹图
+        url = "./WorkOpt/OneWork/TimeBase.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID;
 
     eleHtml += "<iframe style='width:100%;height:" + frame.H + "px;' ID='" + frame.MyPK + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     return eleHtml;

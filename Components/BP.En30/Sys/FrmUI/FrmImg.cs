@@ -67,17 +67,22 @@ namespace BP.Sys.FrmUI
 
                 //如果是 seal 就是岗位集合。
                 map.AddTBString(FrmImgAttr.Tag0, null, "参数", true, false, 0, 500, 20);
-                
-                //map.AddTBInt(FrmImgAttr.IsEdit, 0, "是否可以编辑", true, false);
 
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
-
+                map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
                 map.AddTBString(FrmImgAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'", true);
+
+                //跨单元格
+                map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrString",
+                    "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
+                //跨行
+                map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
+                   "@1=跨1个行@2=跨2行@3=跨3行");
 
                 this._enMap = map;
                 return this._enMap;

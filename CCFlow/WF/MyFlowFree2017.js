@@ -104,61 +104,69 @@ function figure_Template_IFrame(fram) {
 
 
     var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
+    //获取框架的类型 0 自定义URL 1 地图开发 2流程轨迹表 3流程轨迹图
+    var urlType = fram.UrlSrcType;
+      var url = "";
+      if (urlType == 0) {
+          url = fram.URL;
+          if (url.indexOf('?') == -1)
+              url += "?1=2";
 
-    var url = fram.URL;
-    if (url.indexOf('?') == -1)
-        url += "?1=2";
+          if (url.indexOf("@basePath") == 0)
+              url = url.replace("@basePath", basePath);
 
-    if (url.indexOf("@basePath") == 0)
-        url = url.replace("@basePath", basePath);
+          //1.处理URL需要的参数
+          var pageParams = getQueryString();
+          $.each(pageParams, function (i, pageParam) {
+              var pageParamArr = pageParam.split('=');
+              url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+          });
 
-    //1.处理URL需要的参数
-    var pageParams = getQueryString();
-    $.each(pageParams, function (i, pageParam) {
-        var pageParamArr = pageParam.split('=');
-        url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
-    });
-
-    var src = url.replace(new RegExp(/(：)/g), ':');
-    if (src.indexOf("?") > 0) {
-        var params = getQueryStringFromUrl(src);
-        if (params != null && params.length > 0) {
-            $.each(params, function (i, param) {
-                if (param.indexOf('@') != -1) {//是需要替换的参数
-                    paramArr = param.split('=');
-                    if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
-                        if (paramArr[1].indexOf('@WebUser.') == 0)
-                            url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
-                        else
-                            url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr(1)]);
-                    }
-                }
-            });
-        }
-    }
+          var src = url.replace(new RegExp(/(：)/g), ':');
+          if (src.indexOf("?") > 0) {
+              var params = getQueryStringFromUrl(src);
+              if (params != null && params.length > 0) {
+                  $.each(params, function (i, param) {
+                      if (param.indexOf('@') != -1) {//是需要替换的参数
+                          paramArr = param.split('=');
+                          if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                              if (paramArr[1].indexOf('@WebUser.') == 0)
+                                  url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+                              else
+                                  url = url.replace(paramArr[1], flowData.MainTable[0][paramArr[1].substr(1)]);
+                          }
+                      }
+                  });
+              }
+          }
 
 
-    //1.拼接参数
-    var paras = this.pageData;
-    var strs = "";
-    for (var str in paras) {
-        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-            continue
-        else
-            strs += "&" + str + "=" + paras[str];
-    }
+          //1.拼接参数
+          var paras = this.pageData;
+          var strs = "";
+          for (var str in paras) {
+              if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+                  continue
+              else
+                  strs += "&" + str + "=" + paras[str];
+          }
 
-    //4.追加GenerWorkFlow AtPara中的参数
-    var gwf = flowData.WF_GenerWorkFlow[0];
-    if (gwf != null) {
-        var atPara = gwf.AtPara;
-        if (atPara != null && atPara != "") {
-            atPara = atPara.replace(/@/g, '&');
-            url = url + atPara;
-        }
-    }
+          //4.追加GenerWorkFlow AtPara中的参数
+          var gwf = flowData.WF_GenerWorkFlow[0];
+          if (gwf != null) {
+              var atPara = gwf.AtPara;
+              if (atPara != null && atPara != "") {
+                  atPara = atPara.replace(/@/g, '&');
+                  url = url + atPara;
+              }
+          }
 
-    url = url + strs + "&IsReadonly=0";
+          url = url + strs + "&IsReadonly=0";
+      }
+      if (urlType == 2) //轨迹表
+          url = "./WorkOpt/OneWork/Table.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID;
+      if (urlType == 3)//轨迹图
+          url = "./WorkOpt/OneWork/TimeBase.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID;
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +

@@ -275,7 +275,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyFlow_Init()
         {
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init1"); 
             string isCC = this.GetRequestVal("IsCC");
             if (isCC != null && isCC == "1")
                 return "url@WFRpt.htm?1=2" + this.RequestParasOfAll;
@@ -283,7 +282,7 @@ namespace BP.WF.HttpHandler
             if (this.WorkID != 0)
             {
                 //判断是否有执行该工作的权限.
-                bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(  this.WorkID, BP.Web.WebUser.No);
+                bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
                 if (isCanDo == false)
                 {
                     GenerWorkFlow mygwf = new GenerWorkFlow(this.WorkID);
@@ -292,7 +291,7 @@ namespace BP.WF.HttpHandler
             }
 
             GenerWorkFlow gwf = new GenerWorkFlow();
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init2"); 
+
             //当前工作.
             Work currWK = this.currND.HisWork;
             if (this.WorkID != 0)
@@ -312,15 +311,21 @@ namespace BP.WF.HttpHandler
                     return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
                 }
             }
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init3"); 
+
             //第一次加载.
             if (this.WorkID == 0 && this.currND.IsStartNode && this.GetRequestVal("IsCheckGuide") == null)
             {
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
                     WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null);
 
+                /*
+                Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
+                if (this.PWorkID != 0)
+                {
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, workid, this.PFlowNo, this.PWorkID, this.PNodeID, WebUser.No);
+                }
+                */
 
-                BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init4"); 
                 string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
                 if (DataType.IsNullOrEmpty(hostRun) == false)
                     hostRun += "/WF/";
@@ -376,11 +381,11 @@ namespace BP.WF.HttpHandler
                         pEmp = WebUser.No;
 
                     //设置父子关系.
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID,pWorkID);
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, pWorkID);
                 }
             }
             #endregion
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init5"); 
+
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
                  || this.currND.HisFormType == NodeFormType.SheetAutoTree)
@@ -568,7 +573,6 @@ namespace BP.WF.HttpHandler
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);
-                BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init");
                 return "url@" + url;
             }
 
@@ -637,7 +641,7 @@ namespace BP.WF.HttpHandler
             myurl = myurl.Replace("DoType=MyFlow_Init&", "");
             myurl = myurl.Replace("&DoWhat=StartClassic", "");
 
-             BP.Sys.Glo.WriteUserLog("Login", "发起流程0", "myFlow_init");
+
 
             return "url@" + myurl;
         }
@@ -764,7 +768,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBar()
         {
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程1", "按钮开始"); 
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             if (this.FK_Node.ToString().EndsWith("01") == false)
@@ -978,14 +981,7 @@ namespace BP.WF.HttpHandler
                 // @李国文.
                 if (btnLab.PrintDocEnable == true)
                 {
-                  
-                    int printType = 1;
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintRTF)//打印RTF
-                        printType = 2;
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)//打印RTF
-                        printType = 3;
-
-                    string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&PrintType=" + printType + "&s=" + tKey;
+                    string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
                 }
 
@@ -1146,7 +1142,6 @@ namespace BP.WF.HttpHandler
                 BP.DA.Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程1", "按钮结束"); 
             return toolbar;
         }
 
@@ -1338,24 +1333,9 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.PrintDocEnable)
                 {
-                    /*如果不是加签 */
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintRTF)
-                    {
                         string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                         toolbar += "<a data-role='button' type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" ></a>";
-                    }
-
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)
-                    {
-                        string urlr = appPath + "WF/Rpt/RptDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1&s=" + tKey;
-                        toolbar += "<a data-role='button' type=button name='PrintDoc'  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" ></a>";
-                    }
-
-                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintHtml)
-                    {
-                        string urlr = appPath + "PrintSample.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + BP.Web.WebUser.No + "&IsPrint=1";
-                        toolbar += "<a data-role='button' type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"alert('目前'); //printFrom('" + urlr + "'); \" ></a>";
-                    }
+                    
                 }
 
                 if (btnLab.TrackEnable)
@@ -1585,7 +1565,7 @@ namespace BP.WF.HttpHandler
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = this.WorkID;
                 int i = gwf.RetrieveFromDBSources();
-                if (i==0)
+                if (i == 0)
                     return "该流程的工作已删除,请联系管理员";
 
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null);
@@ -1782,7 +1762,7 @@ namespace BP.WF.HttpHandler
                     this.WorkID, this.GetMainTableHT(), null);
 
                 if (this.PWorkID != 0)
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID,this.PWorkID);
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID);
 
                 return str;
             }
@@ -2364,7 +2344,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GenerWorkNode()
         {
-            BP.Sys.Glo.WriteUserLog("Login", "发起流程2", "workNode开始"); 
             string json = string.Empty;
             try
             {
@@ -2404,11 +2383,10 @@ namespace BP.WF.HttpHandler
 
                 #region 处理多语言.
                 Langues langs = new Langues();
-                langs.Retrieve(LangueAttr.Model, LangueModel.CCForm, 
-                    LangueAttr.Sort,"Fields", LangueAttr.Langue, WebUser.SysLang); //查询语言.
+                langs.Retrieve(LangueAttr.Model, LangueModel.CCForm,
+                    LangueAttr.Sort, "Fields", LangueAttr.Langue, WebUser.SysLang); //查询语言.
 
                 #endregion 处理多语言.
-                BP.Sys.Glo.WriteUserLog("Login", "发起流程2", "workNode结束"); 
 
                 return BP.Tools.Json.ToJson(ds);
 

@@ -244,7 +244,7 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'Image') {
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmImg&PKVal=' + figure.CCForm_MyPK;
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&PKVal=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片' + figure.CCForm_MyPK + '属性');
         return;
     }

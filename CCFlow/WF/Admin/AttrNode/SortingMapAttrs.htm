@@ -475,7 +475,8 @@
                     //预览
                     backHtml += "<a href='#' onclick=Form_View('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;margin-botton:0.5em\"> <span class='l-btn-left'><span class='l-btn-text icon-search l-btn-icon-left'>预览</span></span></a>";
                     //复制排序
-                    backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
+                    if(dtNodes!=null && dtNodes!=undefined && dtNodes.length >0)
+                        backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
 
                     //新建分组
                     backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].FK_MapData + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
@@ -506,7 +507,7 @@
                     nodesHtml += "</select>";
 
                     $('#nodes_panel').html([nodesHtml].join(''));
-                }
+                } 
             }
         }
     </script>

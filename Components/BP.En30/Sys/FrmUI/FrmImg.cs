@@ -56,10 +56,11 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
+                map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", true, true, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "对应字段", true, true, 0, 200, 20);
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, true, 0, 500, 20);
-
                 map.AddDDLSysEnum(FrmImgAttr.ImgSrcType, 0, "装饰图片来源", true, true, FrmImgAttr.ImgSrcType, "@0=本地@1=URL");
+
                 map.AddTBString(FrmImgAttr.ImgPath, null, "装饰图片路径", true, false, 0, 200, 20,true);
                 map.AddTBString(FrmImgAttr.ImgURL, null, "装饰图片URL", true, false, 0, 200, 20, true);
                 map.AddTBString(FrmImgAttr.LinkURL, null, "连接到URL", true, false, 0, 200, 20);
@@ -73,8 +74,7 @@ namespace BP.Sys.FrmUI
                 //map.AddTBString(FrmImgAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
-                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'", true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 //跨单元格
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrString",

@@ -103,7 +103,7 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowSheet','@No=基
 --2016.07 升级数据源;
 UPDATE Sys_SFTable SET FK_SFDBSrc='local' WHERE FK_SFDBSrc IS NULL OR FK_SFDBSrc='';
 UPDATE Sys_SFTable SET  SrcType=0 WHERE SrcType IS NULL ;
-UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3;
+--UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3;
 
 -- 2019.03.10 ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.CCBill.FrmBill';

@@ -375,7 +375,6 @@ namespace BP.Sys
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
 
-
                 this._enMap = map;
                 return this._enMap;
             }
@@ -388,14 +387,10 @@ namespace BP.Sys
         /// <returns></returns>
         public bool IsExitGenerPK()
         {
-            string sql = "SELECT COUNT(*) FROM " + this.EnMap.PhysicsTable + " WHERE FK_MapData='" + this.FK_MapData + "' AND X=" + this.X + " AND Y=" + this.Y ;
+            string sql = "SELECT COUNT(*) FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "' AND X=" + this.X + " AND Y=" + this.Y;
             if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 return false;
             return true;
-        }
-        protected override void afterInsertUpdateAction()
-        {
-            base.afterInsertUpdateAction();
         }
     }
     /// <summary>

@@ -88,6 +88,15 @@ namespace BP.Sys.FrmUI
         {
         }
         /// <summary>
+        /// 实体属性
+        /// </summary>
+        public MapAttrString(string myPK)
+        {
+            this.MyPK = myPK;
+            this.Retrieve();
+
+        }
+        /// <summary>
         /// EnMap
         /// </summary>
         public override Map EnMap
@@ -297,6 +306,11 @@ namespace BP.Sys.FrmUI
         {
             //删除可能存在的关联属性.
             string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
+            DBAccess.RunSQL(sql);
+
+            //删除相关的图片信息. @shilianyu.
+            if (DBAccess.IsExitsTableCol("Sys_FrmImg", "KeyOfEn") == true)
+                sql = "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);
 
             base.afterDelete();

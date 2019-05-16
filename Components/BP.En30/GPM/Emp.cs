@@ -372,6 +372,47 @@ namespace BP.GPM
 
             return base.beforeUpdateInsertAction();
         }
+        public static string GenerPinYin(string no,string name)
+        {
+            //增加拼音，以方便查找.
+            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(name).ToLower();
+            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(name).ToLower();
+            string py = "," + pinyinQP + "," + pinyinJX + ",";
+
+            //处理岗位信息.
+            DeptEmpStations des = new DeptEmpStations();
+            des.Retrieve(DeptEmpStationAttr.FK_Emp, no);
+
+            string depts = "";
+            string stas = "";
+
+            foreach (DeptEmpStation item in des)
+            {
+                BP.GPM.Dept dept = new BP.GPM.Dept();
+                dept.No = item.FK_Dept;
+                if (dept.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                //给拼音重新定义值,让其加上部门的信息.
+                py = py + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
+
+                BP.Port.Station sta = new Port.Station();
+                sta.No = item.FK_Station;
+                if (sta.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                stas += "@" + dept.NameOfPath + "|" + sta.Name;
+                depts += "@" + dept.NameOfPath;
+            }
+
+            return py;
+        }
 
         /// <summary>
         /// 向上移动

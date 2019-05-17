@@ -26,35 +26,53 @@ namespace CCFlow.DataUser
         /// <param name="workID">workID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>返回待办</returns>
-        public string DB_Todolist(Int64 workID, string userNo = null)
+        public string DB_JobSchedule(Int64 workID, string userNo = null)
         {
             string sql = "";
             DataSet ds = new DataSet();
 
-            //流程控制主表, 可以得到流程状态，停留节点，当前的执行人.
+            /*
+             * 流程控制主表, 可以得到流程状态，停留节点，当前的执行人.
+             * 该表里有如下字段是重点:
+             *  0. WorkID 流程ID.
+             *  1. WFState 字段用于标识当前流程的状态..
+             *  2. FK_Node 停留节点.
+             *  3. NodeName 停留节点名称.
+             *  4. TodoEmps 停留的待办人员.
+             */
             GenerWorkFlow gwf=new GenerWorkFlow(workID);
-            DataTable dt1 = gwf.ToDataTableField();
-            dt1.TableName = "WF_GenerWorkFlow";
-            ds.Tables.Add(dt1);
+            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
-            //节点信息.
+
+
+            /*节点信息: 节点信息表,存储每个环节的节点信息数据.
+             * NodeID 节点ID.
+             * Name 名称.
+             * X,Y 节点图形位置，如果使用进度图就不需要了.
+            */
             Nodes nds = new Nodes(gwf.FK_Flow);
-            DataTable dt2 = nds.ToDataTableField("WF_Node");
-            ds.Tables.Add(dt2);
+            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
 
-            //方向。
+            /*
+             * 节点的连接线. 
+             */
             Directions dirs = new Directions(gwf.FK_Flow);
             ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
 
 
+            #region 运动轨迹
+            /*
+             * 运动轨迹： 构造的一个表，用与存储运动轨迹.
+             * 
+             */
             DataTable dtHistory = new DataTable();
             dtHistory.TableName = "Track";
-            dtHistory.Columns.Add("FK_Node");
-            dtHistory.Columns.Add("NodeName");
-            dtHistory.Columns.Add("EmpNo");
-            dtHistory.Columns.Add("EmpName");
+            dtHistory.Columns.Add("FK_Node"); //节点ID.
+            dtHistory.Columns.Add("NodeName"); //名称.
+            dtHistory.Columns.Add("EmpNo");  //人员编号.
+            dtHistory.Columns.Add("EmpName"); //名称
             dtHistory.Columns.Add("RDT"); //记录日期.
-            dtHistory.Columns.Add("SDT"); //应完成日期.
+            dtHistory.Columns.Add("SDT"); //应完成日期(可以不用.)
 
             //执行人.
             if (gwf.WFState == WFState.Complete)
@@ -91,8 +109,11 @@ namespace CCFlow.DataUser
                     dtHistory.Rows.Add(dr);
                 }
             }
+            ds.Tables.Add(dtHistory);
+            #endregion 运动轨迹
 
-            ds.Tables.Add(dtHistory); 
+
+
 
             return BP.Tools.Json.ToJson(ds);
               

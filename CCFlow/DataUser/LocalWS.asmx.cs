@@ -20,6 +20,83 @@ namespace CCFlow.DataUser
     // [System.Web.Script.Services.ScriptService]
     public class LocalWS : System.Web.Services.WebService
     {
+        /// <summary>
+        /// 获得工作进度-用于展示流程的进度图
+        /// </summary>
+        /// <param name="workID">workID</param>
+        /// <param name="userNo">用户编号</param>
+        /// <returns>返回待办</returns>
+        public string DB_Todolist(Int64 workID, string userNo = null)
+        {
+            string sql = "";
+            DataSet ds = new DataSet();
+
+            //流程控制主表, 可以得到流程状态，停留节点，当前的执行人.
+            GenerWorkFlow gwf=new GenerWorkFlow(workID);
+            DataTable dt1 = gwf.ToDataTableField();
+            dt1.TableName = "WF_GenerWorkFlow";
+            ds.Tables.Add(dt1);
+
+            //节点信息.
+            Nodes nds = new Nodes(gwf.FK_Flow);
+            DataTable dt2 = nds.ToDataTableField("WF_Node");
+            ds.Tables.Add(dt2);
+
+            //方向。
+            Directions dirs = new Directions(gwf.FK_Flow);
+            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
+
+
+            DataTable dtHistory = new DataTable();
+            dtHistory.TableName = "Track";
+            dtHistory.Columns.Add("FK_Node");
+            dtHistory.Columns.Add("NodeName");
+            dtHistory.Columns.Add("EmpNo");
+            dtHistory.Columns.Add("EmpName");
+            dtHistory.Columns.Add("RDT"); //记录日期.
+            dtHistory.Columns.Add("SDT"); //应完成日期.
+
+            //执行人.
+            if (gwf.WFState == WFState.Complete)
+            {
+                //历史执行人. 
+                sql = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workID + " AND ActionType=1 ORDER BY RDT DESC";
+                DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+                foreach (DataRow drTrack in dtTrack.Rows)
+                {
+                    DataRow dr = dtHistory.NewRow();
+                    dr["FK_Node"] = drTrack["NDFrom"];
+                   // dr["ActionType"] = drTrack["NDFrom"];
+                    dr["NodeName"] = drTrack["NDFromT"];
+                    dr["EmpNo"] = drTrack["EmpFrom"];
+                    dr["EmpName"] = drTrack["EmpFromT"];
+                    dr["RDT"] = drTrack["RDT"];
+                    dr["SDT"] = drTrack[""];
+                    dtHistory.Rows.Add(dr);
+                }
+            }
+            else
+            {
+                GenerWorkerLists gwls = new GenerWorkerLists(workID);
+                foreach (GenerWorkerList gwl in gwls)
+                {
+                    DataRow dr = dtHistory.NewRow();
+                    dr["FK_Node"] = gwl.FK_Node;
+                    dr["NodeName"] = gwl.FK_NodeText;
+                    dr["EmpNo"] = gwl.FK_Emp;
+                    dr["EmpName"] = gwl.FK_EmpText;
+                    dr["RDT"] = gwl.RDT;
+                    dr["SDT"] = gwl.SDT;
+                    dtHistory.Rows.Add(dr);
+                }
+            }
+
+            ds.Tables.Add(dtHistory); 
+
+            return BP.Tools.Json.ToJson(ds);
+              
+        }
        
         /// <summary>
         /// 获得待办

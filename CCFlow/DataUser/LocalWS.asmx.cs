@@ -60,7 +60,7 @@ namespace CCFlow.DataUser
             if (gwf.WFState == WFState.Complete)
             {
                 //历史执行人. 
-                sql = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workID + " AND ActionType=1 ORDER BY RDT DESC";
+                sql = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workID + " AND (ActionType=1 OR ActionType=0)  ORDER BY RDT DESC";
                 DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 foreach (DataRow drTrack in dtTrack.Rows)

@@ -727,7 +727,7 @@ function ConvertDefVal(flowData, defVal, keyOfEn) {
 
 function isExistArray(arrys, no) {
     for (var i = 0; i < arrys.length; i++) {
-        if (arrys[i].indexOf(no) != -1)
+        if (arrys[i].split('=')[0] == no)
             return i;
     }
     return -1;

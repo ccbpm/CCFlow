@@ -24,9 +24,8 @@ namespace CCFlow.DataUser
         /// 获得工作进度-用于展示流程的进度图
         /// </summary>
         /// <param name="workID">workID</param>
-        /// <param name="userNo">用户编号</param>
-        /// <returns>返回待办</returns>
-        public string DB_JobSchedule(Int64 workID, string userNo = null)
+        /// <returns>返回进度数据</returns>
+        public string DB_JobSchedule(Int64 workID)
         {
             string sql = "";
             DataSet ds = new DataSet();
@@ -44,7 +43,6 @@ namespace CCFlow.DataUser
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
 
-
             /*节点信息: 节点信息表,存储每个环节的节点信息数据.
              * NodeID 节点ID.
              * Name 名称.
@@ -58,7 +56,6 @@ namespace CCFlow.DataUser
              */
             Directions dirs = new Directions(gwf.FK_Flow);
             ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
-
 
             #region 运动轨迹
             /*
@@ -112,11 +109,7 @@ namespace CCFlow.DataUser
             ds.Tables.Add(dtHistory);
             #endregion 运动轨迹
 
-
-
-
             return BP.Tools.Json.ToJson(ds);
-              
         }
        
         /// <summary>

@@ -334,7 +334,7 @@
                         en.Insert(); //插入到数据库.
                         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&MyPK=" + en.MyPK;
                     }
-
+                    //附件.
                     function ExtAth() {
 
                         var name = window.prompt('请输入附件名称:\t\n比如:报送材料、报销资料', '附件');
@@ -384,6 +384,56 @@
                         en.IsVisable = 0; //让其不可见.
                         en.Insert(); //插入到数据库.
                         window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
+                    }
+
+                    //超链接.
+                    function ExtLink() {
+
+                        var name = window.prompt('请输入超链接名称:\t\n比如:我的连接、点击这里打开', '我的连接');
+                        if (name == null || name == undefined)
+                            return;
+
+                        var frmID = GetQueryString("FK_MapData");
+                        // alert(frmID + imgName);
+                        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+                        if (mapAttrs.length >= 1) {
+                            alert('名称：[' + name + "]已经存在.");
+                            ExtAth();
+                            return;
+                        }
+
+                        //获得ID.
+                        var id = StrToPinYin(name);
+                        var mypk = frmID + "_" + id;
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.MyPK = mypk;
+                        if (mapAttr.IsExits == true) {
+                            alert('名称：[' + name + "]已经存在.");
+                            return;
+                        }
+
+                        var link = window.prompt('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
+                        if (link == null || link == undefined)
+                            return;
+
+                        var mypk = frmID + "_" + id;
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.SetPara("Url", link.replace(/@/g, '$'));
+                        mapAttr.UIContralType = 9; //超链接.
+                        mapAttr.MyPK = mypk; 
+                        mapAttr.FK_MapData = frmID;
+                        mapAttr.KeyOfEn = id;
+                        mapAttr.Name = name;
+                        mapAttr.GroupID = groupID;
+                        mapAttr.MyDataType = 1;
+                        mapAttr.LGType = 0;
+                        mapAttr.ColSpan = 0; //
+                        mapAttr.UIWidth = 150;
+                        mapAttr.UIHeight = 170;
+                        mapAttr.Insert(); //插入字段.
+                        mapAttr.Retrieve();
+                        window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + mapAttr.MyPK;
                     }
 
                 </script>

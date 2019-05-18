@@ -39,8 +39,7 @@ function InitMapAttr(Sys_MapAttr) {
             if (isDropTR == true) {
                 html += "<tr >";
                 if (isShowTdLeft == true) {
-                    if (haveDropRowRight == recordRowRight)
-                        recordRowRight = rowSpan;
+                    recordRowRight = rowSpan;
                     haveDropRowLeft = 0;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
                     if (rowSpan != 1)
@@ -65,8 +64,7 @@ function InitMapAttr(Sys_MapAttr) {
 
             if (isDropTR == false) {
                 if (isShowTdRight == true) {
-                    if (haveDropRowLeft== recordRowLeft)
-                        recordRowLeft = rowSpan;
+                    recordRowLeft = rowSpan;
                     haveDropRowRight = 0;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
                     if (rowSpan != 1)
@@ -127,8 +125,8 @@ function InitMapAttr(Sys_MapAttr) {
         if (isDropTR == true) {
             html += "<tr >";
             if (isShowTdLeft == true) {
-                if (haveDropRowLeft == recordRowLeft)
-                    recordRowLeft = rowSpan;
+                
+                 recordRowLeft = rowSpan;
                 haveDropRowLeft = 0;
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
@@ -158,8 +156,7 @@ function InitMapAttr(Sys_MapAttr) {
 
         if (isDropTR == false) {
             if (isShowTdRight == true) {
-                if (haveDropRowRight == recordRowRight)
-                    recordRowRight = rowSpan;
+                recordRowRight = rowSpan;
                 haveDropRowRight = 0;
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";

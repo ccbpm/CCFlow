@@ -374,6 +374,10 @@ namespace BP.Sys
                 map.AddTBInt(FrmImgAttr.IsEdit, 0, "是否可以编辑", true, false);
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
+                map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
+                map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", false, true);
+                map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", false, true);
+
 
                 this._enMap = map;
                 return this._enMap;

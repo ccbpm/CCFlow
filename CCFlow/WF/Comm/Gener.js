@@ -2316,9 +2316,13 @@ function DealExp(expStr, webUser) {
     var length1;
     for (var i = 0; i < objs.length; i++) {
 
+        if (expStr.indexOf('@') == -1)
+            return expStr;
+
         var obj = objs[i].tagName;
         if (obj == null)
             continue;
+
 
         //把标签名转换为小写
         obj = obj.toLowerCase();
@@ -2347,9 +2351,8 @@ function DealExp(expStr, webUser) {
             NodeValue = decodeURI(objs[i].value);
         }
         expStr = expStr.replace("@" + NodeID.substring(NodeID.indexOf("_") + 1), NodeValue);
-
-
     }
+
     return expStr;
 }
 

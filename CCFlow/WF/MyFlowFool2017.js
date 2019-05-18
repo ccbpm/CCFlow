@@ -1360,26 +1360,13 @@ function GetLab(flowData, attr) {
             if (frmImg.ImgSrcType == 0) {
                 //替换参数
                 var frmPath = frmImg.ImgPath;
-                //替换表达式常用的用户信息
                 frmPath = frmPath.replace('@basePath', basePath);
-                frmPath = frmPath.replace('@WebUser.No', webUser.No);
-                frmPath = frmPath.replace('@WebUser.Name', webUser.Name);
-                frmPath = frmPath.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-                frmPath = frmPath.replace('@WebUser.DeptName', webUser.DeptName);
-                frmPath = frmPath.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
-                imgSrc = frmImg.ImgPath;
-
+                imgSrc = DealExp(frmPath, webUser);
             }
             //数据来源为指定路径.
             if (frmImg.ImgSrcType == 1) {
-                var imgURL = frmImg.ImgURL;
-                //替换表达式常用的用户信息
-                imgURL = imgURL.replace('@WebUser.No', webUser.No);
-                imgURL = imgURL.replace('@WebUser.Name', webUser.Name);
-                imgURL = imgURL.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-                imgURL = imgURL.replace('@WebUser.DeptName', webUser.DeptName);
-                imgURL = imgURL.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
-                imgSrc = imgURL;
+               var url= frmImg.ImgURL.replace('@basePath', basePath);
+               imgSrc = DealExp(url, webUser);
             }
             // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
             if (imgSrc == "" || imgSrc == null)

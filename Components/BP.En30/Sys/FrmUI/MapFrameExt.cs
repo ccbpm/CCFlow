@@ -146,6 +146,7 @@ namespace BP.Sys.FrmUI
             //删除分组信息.
             GroupField gf = new GroupField();
             gf.Delete(GroupFieldAttr.CtrlID,this.MyPK);
+
             base.afterDelete();
         }
 

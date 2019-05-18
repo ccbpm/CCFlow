@@ -1021,6 +1021,12 @@ namespace BP.Sys.FrmUI
             GroupField gf = new GroupField();
             gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
+            //把相关的字段也要删除.
+            MapAttrString attr = new MapAttrString();
+            attr.MyPK = this.MyPK;
+            attr.Delete();
+
+
             base.afterDelete();
         }
     }

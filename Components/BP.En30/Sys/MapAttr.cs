@@ -144,6 +144,18 @@ namespace BP.Sys
         /// </summary>
         public const string Tag = "Tag";
         /// <summary>
+        /// 扩展字段1
+        /// </summary>
+        public const string Tag1 = "Tag1";
+        /// <summary>
+        /// 扩展字段2
+        /// </summary>
+        public const string Tag2 = "Tag2";
+        /// <summary>
+        /// 扩展字段3
+        /// </summary>
+        public const string Tag3 = "Tag3";
+        /// <summary>
         /// MyDataType
         /// </summary>
         public const string MyDataType = "MyDataType";
@@ -1461,8 +1473,14 @@ namespace BP.Sys
                 map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
                 map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
                 map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-                map.AddTBString(MapAttrAttr.Tag, null, "标识（存放临时数据）", true, false, 0, 100, 20);
+
                 map.AddTBInt(MapAttrAttr.EditType, 0, "编辑类型", true, false);
+
+                map.AddTBString(MapAttrAttr.Tag, null, "标识", true, false, 0, 100, 20);
+                map.AddTBString(MapAttrAttr.Tag1, null, "标识1", true, false, 0, 100, 20);
+                map.AddTBString(MapAttrAttr.Tag2, null, "标识2", true, false, 0, 100, 20);
+                map.AddTBString(MapAttrAttr.Tag3, null, "标识3", true, false, 0, 100, 20);
+
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", false, true, 0, 200, 20);
 

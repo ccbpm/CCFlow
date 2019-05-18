@@ -410,6 +410,7 @@
                         mapAttr.MyPK = mypk;
                         if (mapAttr.IsExits == true) {
                             alert('名称：[' + name + "]已经存在.");
+                            ExtLink();
                             return;
                         }
 
@@ -452,7 +453,7 @@
                         mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
                         if (mapAttrs.length >= 1) {
                             alert('名称：[' + name + "]已经存在.");
-                            ExtAth();
+                            ExtHandWriting();
                             return;
                         }
 
@@ -463,16 +464,12 @@
                         mapAttr.MyPK = mypk;
                         if (mapAttr.IsExits == true) {
                             alert('名称：[' + name + "]已经存在.");
+                            ExtHandWriting();
                             return;
                         }
 
-                        var link = window.prompt('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
-                        if (link == null || link == undefined)
-                            return;
-
                         var mypk = frmID + "_" + id;
                         var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.SetPara("Url", link.replace(/@/g, '$'));
                         mapAttr.UIContralType = 8; //手写签名版.
                         mapAttr.MyPK = mypk;
                         mapAttr.FK_MapData = frmID;
@@ -486,10 +483,8 @@
                         mapAttr.UIHeight = 170;
                         mapAttr.Insert(); //插入字段.
                         mapAttr.Retrieve();
-                        window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + mapAttr.MyPK;
+                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
                     }
-
-                    
 
                 </script>
                 <ul>
@@ -534,7 +529,7 @@
                     <li><a href="javascript:ExtImg();"><b>装饰类图片</b></a> &nbsp;&nbsp;用于显示icon、头像、作业示意图等.</li>
                     <li><a href="javascript:ExtAth();"><b>多附件</b></a> &nbsp;&nbsp;上传多附件.</li>
                     <li><a href="javascript:ExtLink();"><b>超链接</b></a> &nbsp;&nbsp;用于解析把字段做为超链接展现.</li>
-
+                    <li><a href="javascript:ExtHandWriting();"><b>写字板</b></a> &nbsp;&nbsp;手写签名版，画图等.</li>
 
                 </ul>
             </td>

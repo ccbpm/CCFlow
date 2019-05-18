@@ -399,7 +399,7 @@
                         mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
                         if (mapAttrs.length >= 1) {
                             alert('名称：[' + name + "]已经存在.");
-                            ExtAth();
+                            ExtLink();
                             return;
                         }
 
@@ -431,10 +431,65 @@
                         mapAttr.ColSpan = 0; //
                         mapAttr.UIWidth = 150;
                         mapAttr.UIHeight = 170;
+                        debugger
+                        mapAttr.Tag1 = "_blank"; //打开目标.
+                        mapAttr.Tag2 = link; // 超链接地址.
+                        mapAttr.Insert(); //插入字段.
+                        mapAttr.Retrieve();
+                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
+                    }
+
+                    //手写签名版.
+                    function ExtHandWriting() {
+
+                        var name = window.prompt('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
+                        if (name == null || name == undefined)
+                            return;
+
+                        var frmID = GetQueryString("FK_MapData");
+                        // alert(frmID + imgName);
+                        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+                        if (mapAttrs.length >= 1) {
+                            alert('名称：[' + name + "]已经存在.");
+                            ExtAth();
+                            return;
+                        }
+
+                        //获得ID.
+                        var id = StrToPinYin(name);
+                        var mypk = frmID + "_" + id;
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.MyPK = mypk;
+                        if (mapAttr.IsExits == true) {
+                            alert('名称：[' + name + "]已经存在.");
+                            return;
+                        }
+
+                        var link = window.prompt('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
+                        if (link == null || link == undefined)
+                            return;
+
+                        var mypk = frmID + "_" + id;
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.SetPara("Url", link.replace(/@/g, '$'));
+                        mapAttr.UIContralType = 8; //手写签名版.
+                        mapAttr.MyPK = mypk;
+                        mapAttr.FK_MapData = frmID;
+                        mapAttr.KeyOfEn = id;
+                        mapAttr.Name = name;
+                        mapAttr.GroupID = groupID;
+                        mapAttr.MyDataType = 1;
+                        mapAttr.LGType = 0;
+                        mapAttr.ColSpan = 1; // 
+                        mapAttr.UIWidth = 150;
+                        mapAttr.UIHeight = 170;
                         mapAttr.Insert(); //插入字段.
                         mapAttr.Retrieve();
                         window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + mapAttr.MyPK;
                     }
+
+                    
 
                 </script>
                 <ul>

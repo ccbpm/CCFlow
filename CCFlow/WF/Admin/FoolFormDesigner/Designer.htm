@@ -1335,9 +1335,25 @@
             var title = '';
             if (ftype == 1) {
 
-                if (uiContralType == 0) {
+
+                if (uiContralType == 0 ) {
                     title = '字段String属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 9) {
+                    title = '字段String超连接';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 8) {   
+                    title = '手写签名版';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 6) {
+                    title = '附件组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
                 if (uiContralType == 11) {

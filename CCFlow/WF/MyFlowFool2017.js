@@ -1365,18 +1365,17 @@ function GetLab(flowData, attr) {
         //解析图片
         if (frmImg.ImgAppType == 0) { //图片类型
             //数据来源为本地.
-            var webUser = new WebUser();
             var imgSrc = '';
             if (frmImg.ImgSrcType == 0) {
                 //替换参数
                 var frmPath = frmImg.ImgPath;
                 frmPath = frmPath.replace('@basePath', basePath);
-                imgSrc = DealExp(frmPath, webUser);
+                imgSrc = DealJsonExp(flowData.MainTable[0], frmPath);
             }
             //数据来源为指定路径.
             if (frmImg.ImgSrcType == 1) {
                var url= frmImg.ImgURL.replace('@basePath', basePath);
-               imgSrc = DealExp(url, webUser);
+               imgSrc = DealJsonExp(flowData.MainTable[0], url) ;
             }
             // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
             if (imgSrc == "" || imgSrc == null)

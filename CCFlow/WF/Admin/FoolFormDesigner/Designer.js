@@ -213,6 +213,11 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             return "<img  src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
         }
 
+        //工作进度图
+        if (mapAttr.UIContralType == 50) {
+            return "<img  src='./Img/JobSchedule.png'  style='border:0px;height:" + mapAttr.UIHeight + "px;width:100%;' id='Img" + mapAttr.KeyOfEn + "' />";
+        }
+
         if(mapAttr.UIHeight <= 40)
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:99%;margin:3px;' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
         if (mapAttr.UIHeight > 23) {
@@ -221,6 +226,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         }
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
     }
+
     if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
          //生成中间的部分.
         var enableAttr = '';

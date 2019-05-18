@@ -227,8 +227,9 @@
                             isDrawTR = true;
                             continue;
                         }
-
                     }
+
+
 
                     // 添加文本框 ，日期控件等.
                     if (mapAttr.MyDataType == "1") { //不是外键
@@ -237,7 +238,15 @@
                             //跨4列，并且多行. 是大块文本的情况.
                             var uiHeight = mapAttr.UIHeight;
                             html += "<tr>";
-                            html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' style='width:100%;height:" + uiHeight + "px;' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+
+                            if (mapAttr.UIContralType == 50) {
+                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <img src='./Img/JobSchedule.png' style='width:100%;height:" + uiHeight + "px;' /></div></td>";
+                            }
+
+                            if (mapAttr.UIContralType == 0) {
+                                html += "<td ColSpan=4>" + GenerLabel(mapAttr) + "<br><div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' style='width:100%;height:" + uiHeight + "px;' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'  type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div></td>";
+                            }
+
                             html += "</tr>";
                             isDrawTR = true;
                             continue;

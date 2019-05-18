@@ -513,8 +513,9 @@
                         mapAttr.MyDataType = 1;
                         mapAttr.LGType = 0;
                         mapAttr.ColSpan = 4; // 
-                        mapAttr.UIWidth = 150;
-                        mapAttr.UIHeight = 170;
+                        mapAttr.UIWidth = 0;
+                        mapAttr.UIHeight = 100;
+                        mapAttr.Idx = 0;
                         mapAttr.Insert(); //插入字段.
                         mapAttr.Retrieve();
                         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;

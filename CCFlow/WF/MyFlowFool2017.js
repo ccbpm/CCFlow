@@ -59,7 +59,7 @@ function GenerFoolFrm(wn) {
 
             //获取附件的主键
             var MyPK = gf.CtrlID;
-            if (MyPK == "" )
+            if (MyPK == "")
                 continue;
             //创建附件描述信息.
             var ath = new Entity("BP.Sys.FrmAttachment");
@@ -73,7 +73,7 @@ function GenerFoolFrm(wn) {
             html += "</tr>";
             html += "<tr>";
             html += "  <td colspan='4'class='FDesc'>";
-            html += Ele_Attachment(flowData, gf, node,ath);
+            html += Ele_Attachment(flowData, gf, node, ath);
             html += "  </td>";
             html += "</tr>";
 
@@ -155,7 +155,7 @@ function GenerFoolFrm(wn) {
         //获取ID
         var name = $(ath).attr('id');
         var keyOfEn = name.replace("athModel_", "");
-        $("#Lab_" + keyOfEn).html("<div style='text-align:left'>"+$("#Lab_" + keyOfEn).text()+"</div>");
+        $("#Lab_" + keyOfEn).html("<div style='text-align:left'>" + $("#Lab_" + keyOfEn).text() + "</div>");
     });
 
 }
@@ -199,14 +199,18 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         textColSpan = attr.TextColSpan;
         textWidth = 15 * parseInt(textColSpan);
         width = 15 * parseInt(colSpan);
+
+
         if (colSpan == 0) {
             //占一行
             if (textColSpan == 4) {
                 isDropTR = true;
+
                 html += "<tr>";
                 html += "<td  ColSpan='4' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
                 html += "</tr>";
                 continue;
+
             }
             //线性展示都跨一个单元格
             if (isDropTR == true) {
@@ -260,9 +264,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
                 continue;
             }
-            
+
         }
-       
+
         //线性展示并且colspan=4
         if (colSpan == 4) {
             isDropTR = true;
@@ -271,7 +275,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             html += "</tr>";
             html += "<tr>";
             html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' rowSpan=" + rowSpan + " class='FDesc' style='text-align:left'>";
+
             html += InitMapAttrOfCtrlFool(flowData, attr);
+
             html += "</td>";
             html += "</tr>";
             continue;
@@ -283,7 +289,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
             isDropTR = true;
             html += "<tr >";
-            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" +lab + "</td>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
             html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + width + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
             html += InitMapAttrOfCtrlFool(flowData, attr);
             html += "</td>";
@@ -298,7 +304,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             if (isShowTdLeft == true) {
                 recordRowLeft = rowSpan;
                 haveDropRowLeft = 0;
-                html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" +lab + "</td>";
+                html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + width + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrlFool(flowData, attr);
                 html += "</td>";
@@ -327,7 +333,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             if (isShowTdRight == true) {
                 recordRowRight = rowSpan;
                 haveDropRowRight = 0;
-                html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab+ "</td>";
+                html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + width + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrlFool(flowData, attr);
                 html += "</td>";
@@ -354,7 +360,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         }
     }
 
-   
+
     return html;
 }
 
@@ -422,9 +428,9 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             var IsStartNode = 0;
             if (no == "01")
                 IsStartNode = 1;
-          
+
             //创建附件描述信息.
-            var mypk =mapAttr.MyPK;
+            var mypk = mapAttr.MyPK;
 
             //获取附件显示的格式
             var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel");
@@ -446,7 +452,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             handler.AddPara("Ath", noOfObj);
             handler.AddPara("FK_MapData", mapAttr.FK_MapData);
             handler.AddPara("FromFrm", mapAttr.FK_MapData);
-            handler.AddPara("FK_FrmAttachment",mypk);
+            handler.AddPara("FK_FrmAttachment", mypk);
             data = handler.DoMethodReturnString("Ath_Init");
 
             if (data.indexOf('err@') == 0) {
@@ -462,7 +468,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             data = JSON.parse(data);
             var dbs = data["DBAths"];
             var athDesc = data["AthDesc"][0];
-            if (dbs.length == 0){
+            if (dbs.length == 0) {
                 if (athDesc.IsUpload == 1 || pageData.IsReadOnly == 0)
                     return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
                 else
@@ -470,15 +476,15 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             }
             var eleHtml = "";
             if (athShowModel == "" || athShowModel == 0)
-                return "<div style='text-align:left;padding-left:10px' id='athModel_"+mapAttr.KeyOfEn+"' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
+                return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
 
             eleHtml = "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
-            for(var i=0;i<dbs.length;i++){
+            for (var i = 0; i < dbs.length; i++) {
                 var db = dbs[i];
                 eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='./Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
             }
             eleHtml += "</div>";
-             return eleHtml;
+            return eleHtml;
         }
         //签字板
         if (mapAttr.UIContralType == "8") {
@@ -494,7 +500,19 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
             return eleHtml;
         }
-       
+
+        //进度条
+        if (mapAttr.UIContralType == "50") {
+
+            var url = './WorkOpt/OneWork/JobSchedule.js';
+            $.getScript(url, function () {
+                alert('done');
+            });
+
+            return "<div id='JobSchedule' >JobSchedule</div>";
+        }
+
+
         if (mapAttr.UIHeight <= 40) //普通的文本框.
         {
             if (mapAttr.IsSigan == "1") {
@@ -1067,7 +1085,7 @@ function Ele_Frame(flowData, gf) {
 
 
 //初始化 附件
-function Ele_Attachment(flowData, gf, node,ath) {
+function Ele_Attachment(flowData, gf, node, ath) {
 
     var eleHtml = '';
     var nodeID = GetQueryString("FK_Node");
@@ -1084,7 +1102,7 @@ function Ele_Attachment(flowData, gf, node,ath) {
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)
         isReadonly = true;
-    
+
 
     var athPK = gf.CtrlID;
     var noOfObj = athPK.replace(gf.FrmID + "_", "");
@@ -1164,8 +1182,8 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
 }
 
 //弹出附件
-function OpenAth(url,title,keyOfEn,athMyPK,atPara,FK_MapData){
-    var H = document.body.clientHeight-240;
+function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
+    var H = document.body.clientHeight - 240;
 
     OpenBootStrapModal(url, "eudlgframe", title, flowData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
 
@@ -1262,7 +1280,7 @@ function GetLab(flowData, attr) {
         forID = "RB_" + attr.KeyOfEn;
     }
     //文本框，下拉框，单选按钮
-    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 8) {
+    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 8 || contralType == 50) {
         lab = "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
@@ -1304,14 +1322,14 @@ function GetLab(flowData, attr) {
         if (ath.AthRunModel == 2) {
             src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         }
-        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\""+attr.MyPK+"\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";
+        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";
         return lab;
     }
 
     //超链接
     if (contralType == 9) {
         //URL @ 变量替换
-        var url =attr.Tag2;
+        var url = attr.Tag2;
         $.each(flowData.Sys_MapAttr, function (i, obj) {
             if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
                 url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
@@ -1341,15 +1359,7 @@ function GetLab(flowData, attr) {
 
     }
 
-    //如果是进度图.
-    if (contralType == 111) {
-        //加载Js.
-        var url = './WorkOpt/OneWork/JobSchedule.js';
-        $.getScript(url, function () {
-            //alert('done');
-        });
-        return "<div id='JobSchedule' /></div>";
-    }
+
 
     //图片
     if (contralType == 11) {
@@ -1370,12 +1380,13 @@ function GetLab(flowData, attr) {
                 //替换参数
                 var frmPath = frmImg.ImgPath;
                 frmPath = frmPath.replace('@basePath', basePath);
-                imgSrc = DealJsonExp(flowData.MainTable[0], frmPath);
+                imgSrc = DealJsonExp(flowData.MainTable[0],frmPath);
             }
             //数据来源为指定路径.
             if (frmImg.ImgSrcType == 1) {
-               var url= frmImg.ImgURL.replace('@basePath', basePath);
-               imgSrc = DealJsonExp(flowData.MainTable[0], url) ;
+          
+                var url = frmImg.ImgURL.replace('@basePath', basePath);
+                imgSrc = DealJsonExp(flowData.MainTable[0], url);
             }
             // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
             if (imgSrc == "" || imgSrc == null)
@@ -1383,7 +1394,7 @@ function GetLab(flowData, attr) {
 
             return "<img src='" + imgSrc + "' style='width:100%;height:100%' onerror=\"this.src='../DataUser/ICON/CCFlow/LogBig.png'\" />";
 
-        } 
+        }
         return "";
 
     }

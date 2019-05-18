@@ -234,6 +234,7 @@
     <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFSQL.cs" />
     <Compile Include="Sys\FrmUI\ExtLink.cs" />
+    <Compile Include="Sys\FrmUI\ExtHandWriting.cs" />
     <Compile Include="Sys\GloVarExt.cs" />
     <Compile Include="Sys\MapExtXml.cs">
       <SubType>Code</SubType>

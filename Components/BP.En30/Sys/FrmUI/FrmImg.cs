@@ -63,11 +63,10 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(FrmImgAttr.ImgPath, null, "装饰图片路径", true, false, 0, 200, 20,true);
                 map.AddTBString(FrmImgAttr.ImgURL, null, "装饰图片URL", true, false, 0, 200, 20, true);
-                map.AddTBString(FrmImgAttr.LinkURL, null, "连接到URL", true, false, 0, 200, 20);
+                map.AddTBString(FrmImgAttr.LinkURL, null, "连接到URL", true, false, 0, 200, 20, true);
                 map.AddTBString(FrmImgAttr.LinkTarget, "_blank", "连接目标", true, false, 0, 200, 20);
 
-               // UIContralType.FrmImg
-
+                //UIContralType.FrmImg
                 //map.AddTBString(FrmImgAttr.Tag0, null, "参数", true, false, 0, 500, 20);
                 //map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
                 //map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);

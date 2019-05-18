@@ -7,7 +7,7 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 超连接
     /// </summary>
-    public class ExtLink : EntityMyPK
+    public class ExtHandWriting : EntityMyPK
     {
         #region 属性
         /// <summary>
@@ -83,14 +83,14 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 超连接
         /// </summary>
-        public ExtLink()
+        public ExtHandWriting()
         {
         }
         /// <summary>
         /// 超连接
         /// </summary>
         /// <param name="mypk"></param>
-        public ExtLink(string mypk)
+        public ExtHandWriting(string mypk)
         {
             this.MyPK = mypk;
             this.Retrieve();
@@ -117,15 +117,17 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");                
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
+
+                map.AddTBInt(MapAttrAttr.UIHeight, 1, "高度", true, false);
+                map.AddTBInt(MapAttrAttr.UIWidth, 1, "宽度", true, false);
+
+                map.AddTBString(MapAttrAttr.Name, null, "名称", true, false, 0, 500, 20, true);
                 #endregion 通用的属性.
 
-
                 #region 个性化属性.
-                map.AddTBString(MapAttrAttr.Name, "New Link", "标签", true, false, 0, 500, 20, true);
-                map.AddTBString(MapAttrAttr.Tag1, "_blank", "连接目标(_blank,_parent,_self)", true, false, 0, 20, 20);
-                map.AddTBString(MapAttrAttr.Tag2, null, "URL", true, false, 0, 500, 20, true);
+               // map.AddTBString(MapAttrAttr.Tag1, "_blank", "连接目标(_blank,_parent,_self)", true, false, 0, 20, 20);
+               // map.AddTBString(MapAttrAttr.Tag2, null, "URL", true, false, 0, 500, 20, true);
                 #endregion 个性化属性.
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -136,13 +138,13 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 超连接s
     /// </summary>
-    public class ExtLinks : EntitiesMyPK
+    public class ExtHandWritings : EntitiesMyPK
     {
         #region 构造
         /// <summary>
         /// 超连接s
         /// </summary>
-        public ExtLinks()
+        public ExtHandWritings()
         {
         }
         /// <summary>
@@ -152,7 +154,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new ExtLink();
+                return new ExtHandWriting();
             }
         }
         #endregion
@@ -162,20 +164,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<ExtLink> ToJavaList()
+        public System.Collections.Generic.IList<ExtHandWriting> ToJavaList()
         {
-            return (System.Collections.Generic.IList<ExtLink>)this;
+            return (System.Collections.Generic.IList<ExtHandWriting>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<ExtLink> Tolist()
+        public System.Collections.Generic.List<ExtHandWriting> Tolist()
         {
-            System.Collections.Generic.List<ExtLink> list = new System.Collections.Generic.List<ExtLink>();
+            System.Collections.Generic.List<ExtHandWriting> list = new System.Collections.Generic.List<ExtHandWriting>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((ExtLink)this[i]);
+                list.Add((ExtHandWriting)this[i]);
             }
             return list;
         }

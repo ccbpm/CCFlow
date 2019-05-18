@@ -1093,7 +1093,7 @@ function figure_Template_ImageAth(frmImageAth) {
             refpkVal = pageData.FID
         var node = frmData.WF_Node[0];
         if ((node.FormType == 5 || node.FormType == 10) && fn.FrmSln == 2) {
-           var imgAth = new Entity("BP.Sys.FrmUI.FrmImgAth");
+           var imgAth = new Entity("BP.Sys.FrmUI.ExtImgAth");
            imgAth.SetPKVal(frmImageAth.MyPK + "_" + pageData.FK_Node);
             count = imgAth.RetrieveFromDBSources();
            if(count !=0)

@@ -139,7 +139,7 @@
                 mapAttr.Update();
                 //增加FrmImg 属性
 
-                var frmImg = new Entity("BP.Sys.FrmUI.FrmImg");
+                var frmImg = new Entity("BP.Sys.FrmUI.ExtImg");
                 frmImg.MyPK = mapAttr.MyPK;
                 frmImg.FK_MapData = mapAttr.FK_MapData;
                 frmImg.Name = mapAttr.Name;
@@ -148,7 +148,7 @@
                 frmImg.Save();
 
                 //保存完后编辑图片的属性
-                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&PKVal=' + frmImg.MyPK;
+                var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + frmImg.MyPK;
                
                 WinOpen(url);
              
@@ -159,7 +159,7 @@
 
         }
         function EditImg(mypk) {
-            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&MyPK=' + mypk;
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=' + mypk;
             WinOpen(url);
         }
         function SaveAndClose() {

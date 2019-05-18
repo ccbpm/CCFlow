@@ -322,7 +322,7 @@
                         mapAttr.Insert(); //插入字段.
                         mapAttr.Retrieve();
 
-                        var en = new Entity("BP.Sys.FrmUI.FrmImg");
+                        var en = new Entity("BP.Sys.FrmUI.ExtImg");
                         en.MyPK = frmID + "_" + id;
                         en.FK_MapData = frmID;
                         en.KeyOfEn = id;
@@ -332,7 +332,7 @@
                         en.GroupID = mapAttr.GroupID; //设置分组列.
                         en.Name = name;
                         en.Insert(); //插入到数据库.
-                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&MyPK=" + en.MyPK;
+                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK;
                     }
                     //附件.
                     function ExtAth() {

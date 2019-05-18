@@ -56,14 +56,14 @@
         //编辑附件的原始属性.
         function EditFJYuanShi(fk_mapdata, ath) {
             var pk = fk_mapdata + '_' + ath;
-            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&PK=' + pk;
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&PK=' + pk;
             WinOpen(url);
         }
 
         //编辑附件在该节点权限.
         function EditFJ(fk_node, fk_mapdata, ath) {
             var mypk = fk_mapdata + '_' + ath + '_' + fk_node;
-            var en = new Entity("BP.Sys.FrmUI.FrmImgAth");
+            var en = new Entity("BP.Sys.FrmUI.ExtImgAth");
             en.SetPKVal(mypk);
             if (en.RetrieveFromDBSources() == 0) {
                 en.SetPKVal(fk_mapdata + '_' + ath);
@@ -74,7 +74,7 @@
                 en.Insert();
             }
             window.location.href = window.location.href;
-            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&FK_MapData=' + fk_mapdata + '&PK=' + mypk + '&FK_Node=' + fk_node;
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&FK_MapData=' + fk_mapdata + '&PK=' + mypk + '&FK_Node=' + fk_node;
             WinOpen(url);
         }
 
@@ -84,7 +84,7 @@
             if (confirm('您确定要删除该控件在当前节点的权限控制吗？') == false)
                 return;
             var mypk = fk_mapdata + '_' + ath + '_' + fk_node;
-            var en = new Entity("BP.Sys.FrmUI.FrmImgAth");
+            var en = new Entity("BP.Sys.FrmUI.ExtImgAth");
             en.MyPK = mypk;
             en.Delete();
             alert("删除成功!");

@@ -1376,8 +1376,21 @@
                 }
 
                 if (uiContralType == 11) {
+
+                    debugger;
+                    var imgEn = new Entity("BP.Sys.FrmUI.ExtImg");
+                    imgEn.SetPKVal(mypk);
+
+                    if (imgEn.RetrieveFromDBSources() == 0) {
+                        var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+                        
+                        imgEn.CopyJSON(mapAttr);
+                        imgEn.MyPK = mypk;
+                        imgEn.Insert();
+                    }
+
                     title = '装饰类图片属性';
-                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImg&PKVal=' + mypk + '&s=' + Math.random();
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + mypk + '&s=' + Math.random();
                 }
                 if (uiContralType == 8) {
                     title = '书写签字版';

@@ -204,7 +204,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
     for (var i = 0; i < json.length; i++) {
 
         if (filterKey1 != undefined) {
-            if (json[i][filterKey1] != filterVal1 )
+            if (json[i][filterKey1] != filterVal1)
                 continue;
         }
 
@@ -238,10 +238,10 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
         type: 'post',
         async: false,
-        xhrFields:{
-            withCredentials:true
+        xhrFields: {
+            withCredentials: true
         },
-        crossDomain:true,
+        crossDomain: true,
         url: dynamicHandler + "?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
@@ -821,7 +821,7 @@ var Entity = (function () {
 
     if (plant == "CCFlow") {
         // CCFlow
-        dynamicHandler =basePath+ "/WF/Comm/Handler.ashx";
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
     } else {
         // JFlow
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
@@ -1462,6 +1462,10 @@ var Entity = (function () {
                 var self = this;
                 $.each(json, function (n, o) {
                     if (typeof self[n] !== "function") {
+
+                        if (n == 'enName' || n == 'MyPK')
+                            return;
+
                         self[n] = o;
                         jsonString[n] = o;
                         count++;
@@ -1808,7 +1812,7 @@ var DBAccess = (function () {
 
     if (plant == "CCFlow") {
         // CCFlow
-        dynamicHandler = basePath+"/WF/Comm/Handler.ashx";
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
     } else {
         // JFlow
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
@@ -2050,7 +2054,7 @@ var HttpHandler = (function () {
 
     if (plant == "CCFlow") {
         // CCFlow
-        dynamicHandler =basePath+ "/WF/Comm/Handler.ashx";
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
     } else {
         // JFlow
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
@@ -2189,7 +2193,7 @@ var WebUser = function () {
 
     if (plant == "CCFlow") {
         // CCFlow
-        dynamicHandler = basePath+"/WF/Comm/Handler.ashx";
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
     } else {
         // JFlow
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";

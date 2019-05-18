@@ -24,12 +24,27 @@
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
-            var url = '../FoolFormDesigner/GroupField.htm?DoType=NewGroup&FK_MapData=' + ensName + "&inlayer=1";
-            OpenDialogAndCloseRefresh(url, "新建分组", 600, 550, "icon-new");
+            var name = window.prompt('请输入分组名称', '分组');
+            if (name == null || name == undefined)
+                return;
+            var groupFields = new Entities("BP.Sys.GroupFields");
+            groupFields.Retrieve("FrmID", ensName, "Lab", name);
+            if (groupFields.length >= 1) {
+                alert('名称：[' + name + "]已经存在.");
+                return;
+            }
+
+            var group = new Entity("BP.Sys.GroupField");
+            group.Lab = name;
+            group.FrmID = ensName;
+            group.Idx = 100;
+            group.Insert();
+            window.location.href = window.location.href;
+           
         }
         //编辑分组名称
         function GroupField(fk_mapdata, OID) {
-            var url = '../FoolFormDesigner/GroupField.htm?FK_MapData=' + fk_mapdata + "&GroupField=" + OID + "&inlayer=1";
+            var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.GroupField&PKVal=' + OID + '&inlayer=1';
             OpenDialogAndCloseRefresh(url, "编辑分组", 600, 550, "icon-edit");
         }
         //.net保存并关闭层所用函数

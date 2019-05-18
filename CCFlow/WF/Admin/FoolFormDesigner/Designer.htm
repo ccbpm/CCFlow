@@ -19,6 +19,7 @@
         defer="defer"></script>
     <script language="JavaScript" type="text/javascript" src="../../CCForm/FrmEnd.js"
         defer="defer"></script>
+    <script src="Designer.js" type="text/javascript"  defer="defer"> </script>
     <base target="_self" />
     <style type="text/css">
         body
@@ -155,6 +156,10 @@
 
                 //过滤attrs
                 var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+
+                html += InitMapAttr(mapAttrs);
+                continue;
+
                 //跨行问题，1.记录是否跨行 2.已经跨了几行 3.跨的行数
                 var isShowTdLeft = true;
                 var haveDropRowLeft = 0;
@@ -426,7 +431,7 @@
                         }
 
 
-                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan ==2)) {
+                        if (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 1 || (mapAttr.ColSpan == 2 && mapAttr.TextColSpan == 1) || (mapAttr.ColSpan == 1 && mapAttr.TextColSpan == 2)) {
                             if (isDrawTR == true) {
                                 html += "<tr>";
                             }
@@ -982,6 +987,10 @@
                     if (groupEn.CtrlID == "")
                         return "";
                     var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
+                    if (athEn.RetrieveFromDBSources() == 0)
+                        return "";
+                    if (athEn.IsVisable == "0")
+                        return "";
                     var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK + "&IsReadonly=1";
 
                     var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
@@ -1070,7 +1079,17 @@
                         isShow = false;
                         break;
                     }
-
+                    //创建附件描述信息.
+                    var ath = new Entity("BP.Sys.FrmAttachment");
+                    ath.MyPK = groupEn.CtrlID;
+                    if (ath.RetrieveFromDBSources() == 0) {
+                        isShow = false;
+                        break;
+                    }
+                    if (ath.IsVisable == "0") {
+                        isShow = false;
+                        break;
+                    }
                     leftBtn += "<a href=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</a>";
                     break;
                 case "Frame":
@@ -1836,6 +1855,8 @@
             WinOpen(url);
             //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         }
+
+
        
     </script>
 </head>

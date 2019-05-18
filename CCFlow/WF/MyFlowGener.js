@@ -1667,7 +1667,7 @@ function GenerWorkNode() {
         var editor = document.activeEditor = UM.getEditor('editor', {
             'autoHeightEnabled': false,
             'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-            'initialFrameWidth': document.BindEditorMapAttr.UIWidth
+            'initialFrameWidth': '100%'
         });
         var height = document.BindEditorMapAttr.UIHeight;
         $(".edui-container").css("height", height);

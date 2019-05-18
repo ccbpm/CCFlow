@@ -1084,7 +1084,6 @@ function Ele_Attachment(flowData, gf, node,ath) {
     var isReadonly = false;
     if (gf.FrmID.indexOf(nodeID) == -1)
         isReadonly = true;
-
     
 
     var athPK = gf.CtrlID;
@@ -1338,9 +1337,20 @@ function GetLab(flowData, attr) {
 
         eleHtml = '<span ><a href="' + url + '" target="_blank">' + attr.Name + '</a></span>';
 
-        return eleHtml; 
-        
+        return eleHtml;
+
     }
+
+    //如果是进度图.
+    if (contralType == 111) {
+        //加载Js.
+        var url = './WorkOpt/OneWork/JobSchedule.js';
+        $.getScript(url, function () {
+            //alert('done');
+        });
+        return "<div id='JobSchedule' /></div>";
+    }
+
     //图片
     if (contralType == 11) {
         //获取图片控件的信息
@@ -1353,7 +1363,7 @@ function GetLab(flowData, attr) {
         }
 
         //解析图片
-        if (frmImg.ImgAppType == 0) {//图片类型
+        if (frmImg.ImgAppType == 0) { //图片类型
             //数据来源为本地.
             var webUser = new WebUser();
             var imgSrc = '';

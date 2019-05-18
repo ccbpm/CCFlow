@@ -17,39 +17,13 @@
     }
     </style>
     <script type="text/javascript">
-
-        /* 打开表单. */
-        function OpenFrm(nodeID) {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            if (nodeID != undefined)
-                handler.AddPara("FK_Node", nodeID);
-
-            var data = handler.DoMethodReturnString("Runing_OpenFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-                WinOpen(data);
-                return;
-            }
-            alert(data);
-        }
+     
     </script>
 </head>
 <body>
-    <table style="width: 100%;" id="Table1">
-        <tr>
-            <th class="TDTime">工作人员</th>
-            <th class="TDBase"> </th>
-            <th> 内容</th>
-        </tr>
-    </table>
+    
+    <div id="JobSchedule"></div>
+
     <script type="text/javascript">
         var currtab = GetQueryString("CurrTab");
         var fk_node = GetQueryString("FK_Node");
@@ -59,7 +33,7 @@
         var tpo = {};
 
         $(function () {
-            InitPage();
+         //   InitPage();
         });
 
     </script>

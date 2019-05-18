@@ -487,6 +487,39 @@
                         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
                     }
 
+                    //流程进度图.
+                    function ExtJobSchedule() {
+
+                        var name = "流程进度图";
+                        var id = "JobSchedule";
+                        var frmID = GetQueryString("FK_MapData");
+
+                        //获得ID.
+                        var mypk = frmID + "_" + id;
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.MyPK = mypk;
+                        if (mapAttr.IsExits == true) {
+                            alert("已经存在，一个表单仅仅允许有一个流程进度图.");
+                            return;
+                        }
+
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.UIContralType = 50; //流程进度图.
+                        mapAttr.MyPK = mypk;
+                        mapAttr.FK_MapData = frmID;
+                        mapAttr.KeyOfEn = id;
+                        mapAttr.Name = name;
+                        mapAttr.GroupID = groupID;
+                        mapAttr.MyDataType = 1;
+                        mapAttr.LGType = 0;
+                        mapAttr.ColSpan = 4; // 
+                        mapAttr.UIWidth = 150;
+                        mapAttr.UIHeight = 170;
+                        mapAttr.Insert(); //插入字段.
+                        mapAttr.Retrieve();
+                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
+                    }
+                    
                 </script>
                 <ul>
                     <li><a href="javascript:Enum('AddEnum');"><b>枚举型</b></a> - 比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li>
@@ -535,6 +568,20 @@
                 </ul>
             </td>
         </tr>
+
+         <tr>
+            <th colspan="2">
+                字段扩展组件-流程类
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ul>
+                    <li><a href="javascript:ExtJobSchedule();"><b>工作进度图</b></a> &nbsp;&nbsp;流程进度的图形,适用于直线流程.</li>
+                </ul>
+            </td>
+        </tr>
+
     </table>
     </form>
 </body>

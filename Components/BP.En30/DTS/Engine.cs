@@ -647,15 +647,59 @@ namespace BP.Pub
                 if (strs.Length == 1)
                     return this.HisGEEntity.GetValStringByKey(key);
 
+                if (strs[1].Trim() == "Editor")
+                {
+                    //获取富文本的内容
+                    string content = this.HisGEEntity.GetValStringByKey(strs[0]);
+                    content = content.Replace("img+", "img ");
+                    string contentHtml = "<html><head></head><body>" + content + "</body></html>";
+                    string StrNohtml = System.Text.RegularExpressions.Regex.Replace(contentHtml, "<[^>]+>", "");
+                    StrNohtml = System.Text.RegularExpressions.Regex.Replace(StrNohtml, "&[^;]+;", "");
+
+                    return this.GetCode(StrNohtml); 
+
+
+                    string htmlpath = BP.Sys.SystemConfig.PathOfDataUser + "Bill\\Temp\\EditorHtm.html";
+                    if (File.Exists(htmlpath) == false)
+                        File.Create(htmlpath);
+                    using (StreamWriter sw = new StreamWriter(htmlpath))
+                    {
+                        sw.Write(contentHtml);
+                    }
+
+                    //如何写入到word
+                    string html = File.ReadAllText(htmlpath, Encoding.UTF8);
+
+                    //byte[] array = Encoding.ASCII.GetBytes(content);
+                    //StringBuilder editors = new StringBuilder();
+                    //for (int i = 0; i < array.Length; i++)
+                    //{
+
+                    //    editors.Append(array[i]);
+
+                    //}
+                    //MemoryStream stream = new MemoryStream(array);             //convert stream 2 string      
+
+                    //System.IO.StreamReader readStream = new System.IO.StreamReader(contentHtml, Encoding.UTF8);
+                    return html;
+
+                }
+
                 if (strs[1].Trim() == "ImgAth")
                 {
                     string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
                     {
-                        FrmImgAthDB dbImgAth = new FrmImgAthDB(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
-                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
-                        if (!File.Exists(path1))
-                            return this.GetCode(key);
+                        FrmImgAthDB dbImgAth = new FrmImgAthDB();
+                        dbImgAth.MyPK = strs[0].Trim() + "_" + this.HisGEEntity.PKVal;
+                        int count = dbImgAth.RetrieveFromDBSources();
+                        if (count == 1)
+                        {
+                            path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
+                            if (!File.Exists(path1))
+                                return this.GetCode(key);
+                        }
+                        return "";
                     }
                     //定义rtf中图片字符串.
                     StringBuilder mypict = new StringBuilder();
@@ -995,7 +1039,9 @@ namespace BP.Pub
 
                     try
                     {
-                        if (para.Contains("ImgAth"))
+                        if(para.Contains("Editor"))
+                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
+                        else if (para.Contains("ImgAth"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains("Siganture"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
@@ -1071,6 +1117,7 @@ namespace BP.Pub
                     if (pos_rowKey != -1)
                     {
                         row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
+                       
                         row_end = str.Substring(pos_rowKey).IndexOf("\\row");
                     }
 
@@ -1174,6 +1221,25 @@ namespace BP.Pub
                 #endregion 从表合计
 
                 #region 审核组件组合信息，added by liuxc,2016-12-16
+
+                //节点单个审核人
+		       if (dtTrack != null && str.Contains("<WorkCheckBegin>")== false && str.Contains("<WorkCheckEnd>") ==false){
+                   foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+	                {
+                        int acType = int.Parse(row["ACTIONTYPE"].ToString());
+	                    if (acType != 22)
+	                        continue;
+	                    str = str.Replace(
+							    "<WorkCheck.Msg." + row["NDFrom"] + ">", this.GetCode(this.GetValueCheckWorkByKey(row, "Msg")));
+	                    str = str.Replace(
+							    "<WorkCheck.Rec." + row["NDFrom"] + ">", this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFromT")));
+	                    str = str.Replace(
+							    "<WorkCheck.RDT." + row["NDFrom"] + ">",this.GetCode(this.GetValueCheckWorkByKey(row, "RDT")));
+	                
+	                
+	                }
+		       }
+
                 if (dtTrack != null && str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
                 {
                     int beginIdx = str.IndexOf("<WorkCheckBegin>"); //len:16

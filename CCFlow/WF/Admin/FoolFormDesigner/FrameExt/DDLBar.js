@@ -12,6 +12,9 @@ function InitBar(optionKey) {
     html += "<option value=null  disabled='disabled'>+流程相关</option>";
     html += "<option value='FlowTable' >流程轨迹表</option>";
     html += "<option value='FlowChart' >流程轨迹图</option>";
+    html += "<option value='FlowJobSchedule' >简易进度图(进展中)</option>";
+    html += "<option value='FlowGanttChart' >甘特图(进展中)</option>";
+
 
     html += "</select >";
 
@@ -29,7 +32,6 @@ function HelpOnline() {
 }
 
 function changeOption() {
-
 
     var obj = document.getElementById("changBar");
     var sele = obj.options;
@@ -54,15 +56,25 @@ function GetUrl(popModel) {
         case 1:
             url = "1.Map.htm";
             break;
-        case "FlowTable":
+        case "FlowTable": //流程表.
         case "2":
         case 2:
             url = "2.FlowTable.htm";
             break;
         case "FlowChart":
-        case "3":
+        case "3": //流程轨迹图.
         case 3:
             url = "3.FlowChart.htm";
+            break;
+        case "FlowJobSchedule":  //工作进度图.
+        case "4":
+        case 4:
+            url = "4.FlowJobSchedule.htm";
+            break;
+        case "FlowGanttChart":  //甘特图.
+        case "5":
+        case 5:
+            url = "5.FlowGanttChart.htm";
             break;
         default:
             url = "0.Self.htm";

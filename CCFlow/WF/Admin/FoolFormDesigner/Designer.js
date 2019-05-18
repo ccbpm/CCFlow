@@ -1,0 +1,314 @@
+﻿
+//解析表单字段 MapAttr.
+function InitMapAttr(Sys_MapAttr) {
+    var html = "";
+    var isDropTR = true;
+    //跨行问题，1.记录是否跨行 2.已经跨了几行 3.跨的行数
+    var isShowTdLeft = true;
+    var haveDropRowLeft = 0;
+    var recordRowLeft = 0;
+
+    var isShowTdRight = true;
+    var haveDropRowRight = 1;
+    var recordRowRight = 1;
+    var lab = "";
+    var rowSpan = 1;
+    var colSpan = 1;
+    var textColSpan = 1;
+    var textWidth = "15%";
+    var colWidth = "15%";
+    //跨行问题
+    for (var i = 0; i < Sys_MapAttr.length; i++) {
+        var attr = Sys_MapAttr[i];
+        if (attr.UIVisible == 0)
+            continue;
+        rowSpan = attr.RowSpan;
+        colSpan = attr.ColSpan;
+        textColSpan = attr.TextColSpan;
+        colWidth = 15 * parseInt(colSpan) + "%";
+        textWidth = 15 * parseInt(textColSpan) + "%";
+        //跨列设置(显示的是文本)
+        if (colSpan == 0) {
+            
+            if (textColSpan == 4) {
+                html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+                isDropTR = true;
+                continue;
+            }
+            //线性展示都跨一个单元格
+            if (isDropTR == true) {
+                html += "<tr >";
+                if (isShowTdLeft == true) {
+                    if (haveDropRowRight == recordRowRight)
+                        recordRowRight = rowSpan;
+                    haveDropRowLeft = 0;
+                    html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+                    if (rowSpan != 1)
+                        isShowTdLeft = false;
+                }
+                isDropTR = !isDropTR;
+
+                haveDropRowRight++;
+                if (haveDropRowRight == recordRowRight) {
+                    haveDropRowRight = 0;
+                    recordRowRight = 1;
+                    isShowTdRight = true;
+                }
+
+                if (isShowTdRight == false) {
+                    html += "</tr>";
+                    isDropTR = true;
+                }
+
+                continue;
+            }
+
+            if (isDropTR == false) {
+                if (isShowTdRight == true) {
+                    if (haveDropRowLeft== recordRowLeft)
+                        recordRowLeft = rowSpan;
+                    haveDropRowRight = 0;
+                    html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+                    if (rowSpan != 1)
+                        isShowTdLeft = false;
+                    isDropTR = !isDropTR;
+                }
+               
+                html += "</tr>";
+                haveDropRowLeft++;
+
+                if (haveDropRowLeft == recordRowLeft) {
+                    haveDropRowLeft = 0;
+                    recordRowLeft = 1;
+                    isShowTdLeft = true;
+                    isDropTR = true;
+                } else {
+                }
+
+                if (isShowTdLeft == false) {
+                    html += "<tr>";
+                    isDropTR = false;
+                }
+
+                continue;
+            }
+           
+        }
+        //解析占一行的情况
+        if (colSpan == 4) {
+            html += "<tr>";
+            html += "<td  ColSpan='4' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + GenerLabel(attr) + "</br>";
+            html += "</tr>";
+            html += "<tr>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' rowSpan=" + rowSpan + " class='FDesc' style='text-align:left'>";
+            html += InitMapAttrOfCtrlFool(attr);
+            html += "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            continue;
+        }
+
+        if ((colSpan == 3 && textColSpan == 1)
+            || (colSpan == 2 && textColSpan == 2)
+            || (colSpan == 1 && textColSpan == 3)) {
+
+            isDropTR = true;
+            html += "<tr >";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
+            html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+            html += InitMapAttrOfCtrlFool(attr);
+            html += "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            continue;
+        }
+
+        //换行的情况
+        if (isDropTR == true) {
+            html += "<tr >";
+            if (isShowTdLeft == true) {
+                if (haveDropRowLeft == recordRowLeft)
+                    recordRowLeft = rowSpan;
+                haveDropRowLeft = 0;
+                html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                html += InitMapAttrOfCtrlFool(attr);
+                html += "</td>";
+                if (rowSpan != 1)
+                    isShowTdLeft = false;
+                isDropTR = !isDropTR;
+                
+            }
+           
+            haveDropRowRight++;
+            if (haveDropRowRight == recordRowRight) {
+                haveDropRowRight = 0;
+                recordRowRight = 1;
+                isShowTdRight = true;
+               
+            }
+
+            if (isShowTdRight == false) {
+                html += "</tr>";
+                isDropTR = true;
+            }
+
+            continue;
+        }
+
+        if (isDropTR == false) {
+            if (isShowTdRight == true) {
+                if (haveDropRowRight == recordRowRight)
+                    recordRowRight = rowSpan;
+                haveDropRowRight = 0;
+                html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
+                html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                html += InitMapAttrOfCtrlFool(attr);
+                html += "</td>";
+
+                isDropTR = !isDropTR;
+                if (rowSpan != 1)
+                    isShowTdRight = false;
+
+
+            }
+           
+            haveDropRowLeft++;
+            html += "</tr>";
+           
+
+            if (haveDropRowLeft == recordRowLeft) {
+                haveDropRowLeft = 0;
+                recordRowLeft = 1;
+                isShowTdLeft = true;
+               
+            }
+
+            if (isShowTdLeft == false) {
+                html += "<tr>";
+                isDropTR = false;
+            }
+            continue;
+        }
+    }
+    return html;
+}
+
+
+function InitMapAttrOfCtrlFool(mapAttr) {
+     var elemHtml="";
+     if (mapAttr.UIContralType == "1") {
+         var ses = new Entities("BP.Sys.SysEnums");
+        ses.Retrieve("EnumKey", mapAttr.UIBindKey)
+        var operations = '';
+        $.each(ses, function (i, obj) {
+            operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+        });
+         elemHtml += "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
+        return elemHtml;
+     }
+
+    if (mapAttr.MyDataType == "1") {
+        if (mapAttr.UIContralType == 6) {
+            return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
+        }
+        if (mapAttr.UIContralType == 8) {
+            return "<img  src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
+        }
+
+        if(mapAttr.UIHeight <= 40)
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:99%;margin:3px;' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
+        if (mapAttr.UIHeight > 23) {
+            var uiHeight = mapAttr.UIHeight;
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
+        }
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
+    }
+    if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+         //生成中间的部分.
+        var enableAttr = '';
+        var dateFmt = "yyyy-MM-dd"; //日期格式.
+        if (mapAttr.MyDataType == 7)
+            dateFmt = "yyyy-MM-dd HH:mm";
+
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = '  onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
+        } else {
+            enableAttr = "disabled='disabled'";
+        }
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div>";
+    }
+
+     if (mapAttr.MyDataType == 4) { 
+          if (mapAttr.UIIsEnable == 0) {
+            enableAttr = "disabled='disabled'";
+          } else {
+            enableAttr = "";
+          }
+          return "<div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div>";
+     }
+
+     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { 
+        if (mapAttr.UIContralType == 2) {
+            var ses = new Entities("BP.Sys.SysEnums");
+            ses.Retrieve("EnumKey", mapAttr.UIBindKey)
+            var operations = "";
+            $.each(ses, function (i, obj) {
+                operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+            });
+
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
+
+        } else {
+
+            var rbHtmls = "";
+            var ses = new Entities("BP.Sys.SysEnums");
+            ses.Retrieve("EnumKey", mapAttr.UIBindKey);
+
+            //显示方式,默认为横向展示.
+            var RBShowModel = 0;
+            if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+                RBShowModel = 1;
+
+            for (var i = 0; i < ses.length; i++) {
+                var se = ses[i];
+
+                var br = "";
+                if (RBShowModel == 1)
+                    br = "<br>";
+
+                var checked = "";
+                if (se.IntKey == mapAttr.DefVal)
+                    checked = " checked=true";
+
+                rbHtmls += "<label style='font-weight:normal;'><input type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + se.Lab + " </label>&nbsp;" + br;
+            }
+
+           return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
+        }
+     }
+  
+}
+
+function GenerLabel(attr) {
+
+    var fk_mapdata = GetQueryString("FK_MapData");
+
+    var tdUp = "<a href=\"javascript:Up('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-left,plain:true'  alt='向左动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-left'>&nbsp;</span></span></span></a>";
+    var tdDown = "<a href=\"javascript:Down('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-right,plain:true' alt='向右动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-right'>&nbsp;</span></span></span></a>";
+
+    if (attr.LGType == 0 && attr.UIContralType == 1) {
+        return tdUp + "<a href=\"javascript:EditTableSQL('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+    }
+
+    if (attr.LGType == 0) {
+       
+        return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "','" + attr.UIContralType + "');\" > " + attr.Name + "</a>" + tdDown;
+    }
+
+    if (attr.LGType == 1)
+        return tdUp + "<a href=\"javascript:EditEnum('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+
+    if (attr.LGType == 2)
+        return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+}

@@ -1373,7 +1373,7 @@ function GetLab(frmData, attr) {
     //图片
     if (contralType == 11) {
         //获取图片控件的信息
-        var frmImg = new Entity("BP.Sys.FrmUI.FrmImg");
+        var frmImg = new Entity("BP.Sys.FrmUI.ExtImg");
         frmImg.SetPKVal(attr.MyPK);
         var count = frmImg.RetrieveFromDBSources();
         if (count == 0) {

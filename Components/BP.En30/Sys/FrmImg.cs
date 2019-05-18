@@ -352,6 +352,8 @@ namespace BP.Sys
                 map.AddMyPK();
 
                 map.AddTBString(FrmImgAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
+                map.AddTBString(MapAttrAttr.KeyOfEn, null, "对应字段", true, false, 1, 100, 20);
+
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
                 
                 map.AddTBFloat(FrmImgAttr.X, 5, "X", true, false);
@@ -378,6 +380,8 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", false, true);
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", false, true);
 
+                //显示的分组.
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",BP.Sys.FrmUI.MapAttrString.SQLOfGroupAttr, true);
 
                 this._enMap = map;
                 return this._enMap;

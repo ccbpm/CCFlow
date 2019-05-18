@@ -914,11 +914,11 @@ namespace BP.Sys
         {
             get
             {
-                FrmImgs obj = this.GetRefObject("FrmLabs") as FrmImgs;
+                FrmImgs obj = this.GetRefObject("FrmImgs") as FrmImgs;
                 if (obj == null)
                 {
                     obj = new FrmImgs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
+                    this.SetRefObject("FrmImgs", obj);
                 }
                 return obj;
             }
@@ -2179,7 +2179,7 @@ namespace BP.Sys
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
                             //en.MyPK = "Img_" + idx + "_" + fk_mapdata;
-                            en.MyPK = DBAccess.GenerGUID();
+                            //  en.MyPK = DBAccess.GenerGUID();
                             en.Insert();
                         }
                         break;

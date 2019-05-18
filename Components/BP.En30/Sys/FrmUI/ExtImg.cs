@@ -9,7 +9,7 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 装饰图片
     /// </summary>
-    public class FrmImg : EntityMyPK
+    public class ExtImg : EntityMyPK
     {
         #region 构造方法
         /// <summary>
@@ -29,14 +29,14 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 装饰图片
         /// </summary>
-        public FrmImg()
+        public ExtImg()
         {
         }
         /// <summary>
         /// 装饰图片
         /// </summary>
         /// <param name="mypk"></param>
-        public FrmImg(string mypk)
+        public ExtImg(string mypk)
         {
             this.MyPK = mypk;
             this.Retrieve();
@@ -50,6 +50,7 @@ namespace BP.Sys.FrmUI
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("Sys_FrmImg", "装饰图片");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
@@ -59,10 +60,11 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", true, true, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "对应字段", true, true, 0, 200, 20);
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, true, 0, 500, 20);
-                map.AddDDLSysEnum(FrmImgAttr.ImgSrcType, 0, "装饰图片来源", true, true, FrmImgAttr.ImgSrcType, "@0=本地@1=URL");
+                map.AddDDLSysEnum(FrmImgAttr.ImgSrcType, 0, "图片来源", true, true, FrmImgAttr.ImgSrcType, "@0=本地@1=URL");
 
-                map.AddTBString(FrmImgAttr.ImgPath, null, "装饰图片路径", true, false, 0, 200, 20,true);
-                map.AddTBString(FrmImgAttr.ImgURL, null, "装饰图片URL", true, false, 0, 200, 20, true);
+                map.AddTBString(FrmImgAttr.ImgPath, null, "图片路径", true, false, 0, 200, 20,true);
+                map.AddTBString(FrmImgAttr.ImgURL, null, "图片URL", true, false, 0, 200, 20, true);
+
                 map.AddTBString(FrmImgAttr.LinkURL, null, "连接到URL", true, false, 0, 200, 20, true);
                 map.AddTBString(FrmImgAttr.LinkTarget, "_blank", "连接目标", true, false, 0, 200, 20);
 
@@ -71,7 +73,9 @@ namespace BP.Sys.FrmUI
                 //map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
                 //map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
                 //map.AddTBString(FrmImgAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
+
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
@@ -106,10 +110,6 @@ namespace BP.Sys.FrmUI
             attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); //名称.
             attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); //名称.
             attr.Update();
-             
-            //attr.RowSpan.
-            //调用frmEditAction, 完成其他的操作.
-            //BP.Sys.CCFormAPI.AfterFrmEditAction(this.fk);
 
             base.afterInsertUpdateAction();
         }
@@ -128,20 +128,20 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 装饰图片s
     /// </summary>
-    public class FrmImgs : EntitiesMyPK
+    public class ExtImgs : EntitiesMyPK
     {
         #region 构造
         /// <summary>
         /// 装饰图片s
         /// </summary>
-        public FrmImgs()
+        public ExtImgs()
         {
         }
         /// <summary>
         /// 装饰图片s
         /// </summary>
         /// <param name="fk_mapdata">s</param>
-        public FrmImgs(string fk_mapdata)
+        public ExtImgs(string fk_mapdata)
         {
             if (SystemConfig.IsDebug)
                 this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
@@ -165,20 +165,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmImg> ToJavaList()
+        public System.Collections.Generic.IList<ExtImg> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmImg>)this;
+            return (System.Collections.Generic.IList<ExtImg>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmImg> Tolist()
+        public System.Collections.Generic.List<ExtImg> Tolist()
         {
-            System.Collections.Generic.List<FrmImg> list = new System.Collections.Generic.List<FrmImg>();
+            System.Collections.Generic.List<ExtImg> list = new System.Collections.Generic.List<ExtImg>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmImg)this[i]);
+                list.Add((ExtImg)this[i]);
             }
             return list;
         }

@@ -1404,8 +1404,11 @@ namespace BP.Sys
             ds.Tables.Add(Sys_FrmLab);
 
             //img.
-            DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
-            ds.Tables.Add(Sys_FrmImg);
+            //Sys_FrmLab.
+            FrmImgs frmImgs = new FrmImgs();
+            frmImgs.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
+           // DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
+            ds.Tables.Add(frmImgs.ToDataTableField("Sys_FrmImg"));
 
             //Sys_FrmRB.
             DataTable Sys_FrmRB = md.FrmRBs.ToDataTableField("Sys_FrmRB");

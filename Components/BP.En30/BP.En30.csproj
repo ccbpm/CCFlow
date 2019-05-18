@@ -225,7 +225,7 @@
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
-    <Compile Include="Sys\FrmUI\FrmImg.cs" />
+    <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />

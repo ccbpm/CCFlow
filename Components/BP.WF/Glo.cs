@@ -444,7 +444,6 @@ namespace BP.WF
             }
             #endregion 升级 填充数据.
 
-
             string msg = "";
             try
             {
@@ -908,7 +907,7 @@ namespace BP.WF
                 FrmImg img = new FrmImg();
                 img.CheckPhysicsTable();
 
-                BP.Sys.FrmUI.FrmImg myimg = new BP.Sys.FrmUI.FrmImg();
+                BP.Sys.FrmUI.ExtImg myimg = new BP.Sys.FrmUI.ExtImg();
                 myimg.CheckPhysicsTable();
                 if (DBAccess.IsExitsTableCol("Sys_FrmImg", "SrcType") == true)
                 {

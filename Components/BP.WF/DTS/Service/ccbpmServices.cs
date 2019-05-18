@@ -29,7 +29,6 @@ namespace BP.WF.DTS
         }
         public override void Init()
         {
-
         }
         /// <summary>
         /// 当前的操纵员是否可以执行这个方法

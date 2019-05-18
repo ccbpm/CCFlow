@@ -2356,6 +2356,28 @@ function DealExp(expStr, webUser) {
     return expStr;
 }
 
+function DealJsonExp(json, expStr,webUser) {
+    if (webUser == null || webUser == undefined)
+        webUser = new WebUser();
+
+    //替换表达式常用的用户信息
+    expStr = expStr.replace('@WebUser.No', webUser.No);
+    expStr = expStr.replace('@WebUser.Name', webUser.Name);
+    expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+    expStr = expStr.replace('@WebUser.DeptName', webUser.DeptName);
+    expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+
+    if (expStr.indexOf('@') == -1)
+        return expStr;
+
+    $.each(json, function (n, val) {
+        if (expStr.indexOf("@") == -1)
+            return;
+        expStr = expStr.replace("@" + n, val);
+    });
+    return expStr;
+}
+
 //根据AtPara例如AtPara=@Helpurl=XXX@Count=XXX,获取HelpUrl的值
 function GetPara(atPara, key) {
     if (typeof atPara != "string" || typeof key == "undefined" || key == "") {

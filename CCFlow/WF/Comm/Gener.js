@@ -768,15 +768,22 @@ var Entity = (function () {
 
     var Entity = function (enName, pkval) {
 
-        this.enName = enName;
-
-        if (pkval != null && typeof pkval === "object") {
-            jsonString = {};
-            this.CopyJSON(pkval);
-        } else {
-            this.pkval = pkval || "";
-            this.loadData();
+        if (pkval == Object) {
+            alert(pkval);
         }
+
+        if (pkval == null || pkval == "" || pkval == undefined) {
+            alert('主键不能为空');
+            return;
+        }
+        if (enName == null || enName == "" || enName == undefined) {
+            alert('enName不能为空');
+            return;
+        }
+        this.enName = enName;
+        this.pkval = pkval;
+        this.loadData();
+
     };
 
     function setData(self) {
@@ -845,7 +852,9 @@ var Entity = (function () {
                 success: function (data) {
 
                     if (data.indexOf("err@") != -1) {
+                        data = data.replace('@@', '@');
                         alert(data);
+                        throw new Error(data);
                         return;
                     }
                     if (data == "")
@@ -2356,7 +2365,7 @@ function DealExp(expStr, webUser) {
     return expStr;
 }
 
-function DealJsonExp(json, expStr,webUser) {
+function DealJsonExp(json, expStr, webUser) {
     if (webUser == null || webUser == undefined)
         webUser = new WebUser();
 

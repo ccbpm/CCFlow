@@ -1316,11 +1316,21 @@ function GetLab(flowData, attr) {
         var isReadonly = false;
         if (attr.FK_MapData.indexOf(nodeID) == -1)
             isReadonly = true;
+
+        if (isReadonly == false) {
+            var strRD = GetQueryString("IsReadonly");
+            if (strRD == 1)
+                isReadonly = true;
+        }
+
         var noOfObj = mypk.replace(attr.FK_MapData + "_", "");
         var src = "";
 
         //这里的连接要取 FK_MapData的值.
         src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FromFrm=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
+        if (isReadonly == true)
+            src += "&IsReadOnly=1";
+
         //自定义表单模式.
         if (ath.AthRunModel == 2) {
             src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();

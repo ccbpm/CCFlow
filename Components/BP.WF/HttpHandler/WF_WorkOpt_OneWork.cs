@@ -290,42 +290,9 @@ namespace BP.WF.HttpHandler
             bool isCan;
 
             #region 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
-            bool CanPackUp = false;
-            if (SystemConfig.CustomerNo == "TianYe")
-            {
-                bool isFlowEnd = false;
-                //前提，流程结束后才可以看到打印权限
-                if (gwf.WFState == BP.WF.WFState.Complete)
-                    isFlowEnd = true;
-
-                bool isAdmin = false;
-                if (BP.Web.WebUser.No == "admin")
-                    isAdmin = true;
-
-                // 判断是否可以打印.
-                //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
-                string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID;
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    //判断节点是否启用了按钮?
-                    int nodeid = int.Parse(dr[0].ToString());
-                    BtnLab btn = new BtnLab(nodeid);
-                    if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
-                    {
-                        string empFrom = dr[1].ToString();
-                        if (isFlowEnd == true && (isAdmin == true || BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No))
-                        {
-                            CanPackUp = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                CanPackUp = true;
-            }
+            bool CanPackUp = true;
+            if (SystemConfig.CustomerNo == "TianYe" && WebUser.No != "admin")
+                CanPackUp = IsCanPrintSpecForTianYe(gwf);
             #endregion 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
 
             ht.Add("CanPackUp", CanPackUp.ToString().ToLower());
@@ -396,6 +363,40 @@ namespace BP.WF.HttpHandler
 
             //return json + "}";
         }
+        /// <summary>
+        /// 是否可以打印.
+        /// </summary>
+        /// <param name="gwf"></param>
+        /// <returns></returns>
+        private bool IsCanPrintSpecForTianYe(GenerWorkFlow gwf)
+        {
+            //如果已经完成了，并且节点不是最后一个节点就不能打印.
+            if (gwf.WFState == WFState.Complete)
+            {
+                Node nd = new Node(gwf.FK_Node);
+                if (nd.IsEndNode == false)
+                    return false;
+            }
+
+            // 判断是否可以打印.
+            string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow dr in dt.Rows)
+            {
+                //判断节点是否启用了按钮?
+                int nodeid = int.Parse(dr[0].ToString());
+                BtnLab btn = new BtnLab(nodeid);
+                if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
+                {
+                    string empFrom = dr[1].ToString();
+                    if (gwf.WFState == BP.WF.WFState.Complete && (BP.Web.WebUser.No == empFrom || gwf.Starter == WebUser.No))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
 
         /// <summary>
         /// 获取附件列表及单据列表

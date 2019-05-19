@@ -187,6 +187,7 @@ namespace BP.En
 		/// <param name="context">连接</param>
 		public void SetHelperAlert(string key, string context)
 		{
+            context = context.Replace("@", "＠");
 			Attr attr = this.GetAttrByKey(key);
 			attr.HelperUrl = "javascript:alert('" + context + "')";
 		}

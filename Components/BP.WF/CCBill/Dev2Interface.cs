@@ -57,7 +57,7 @@ namespace BP.WF.CCBill
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
-              
+
                 gb.BillNo = rpt.GenerNewNoByKey("BillNo");
                 // BP.WF.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
@@ -107,7 +107,7 @@ namespace BP.WF.CCBill
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
-              
+
                 gb.Title = rpt.Title;
                 gb.Update();
                 return "保存成功...";
@@ -309,7 +309,13 @@ namespace BP.WF.CCBill
         public static string GenerBillNo(string billNo, Int64 workid, Entity en, string frmID)
         {
             if (DataType.IsNullOrEmpty(billNo))
-                return "";
+                billNo = "3";
+
+            //if (DataType.IsNumStr(billNo) == true)
+            //{
+            //    return  en.GenerNewNoByKey("BillNo");
+            //}
+
 
             if (billNo.Contains("@"))
                 billNo = BP.WF.Glo.DealExp(billNo, en, null);

@@ -1225,11 +1225,6 @@ namespace BP.Sys
                     continue;
 
                 string val = reqest.Params[key];
-                //if (key.IndexOf("CB_") == 0)
-                //{
-                //    en.Row[attrKey] = 1;
-                //    continue;
-                //}
 
                 //其他的属性.
                 en.Row[attrKey] = val;

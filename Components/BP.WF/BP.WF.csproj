@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCBill\Dev2Interface.cs" />
+    <Compile Include="CCBill\FrmAttr.cs" />
     <Compile Include="CCBill\FrmBill.cs" />
     <Compile Include="CCBill\GenerBill.cs" />
     <Compile Include="CCBill\FrmMethod.cs" />
@@ -281,6 +282,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Template\Direction.cs" />
+    <Compile Include="Template\ExtJobSchedule.cs" />
     <Compile Include="Template\FindWorkerRole.cs">
       <SubType>Code</SubType>
     </Compile>

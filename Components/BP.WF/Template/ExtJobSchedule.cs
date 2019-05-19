@@ -2,12 +2,15 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-namespace BP.Sys.FrmUI
+using BP.Sys;
+using BP.Sys.FrmUI;
+
+namespace BP.WF.Template
 {
     /// <summary>
-    /// 手写签名版
+    /// 流程进度图
     /// </summary>
-    public class ExtHandWriting : EntityMyPK
+    public class ExtJobSchedule : EntityMyPK
     {
         #region 属性
         /// <summary>
@@ -76,21 +79,24 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.Readonly();
                 if (BP.Web.WebUser.No == "admin")
+                {
                     uac.IsUpdate = true;
+                    uac.IsDelete = true;
+                }
                 return uac;
             }
         }
         /// <summary>
-        /// 手写签名版
+        /// 流程进度图
         /// </summary>
-        public ExtHandWriting()
+        public ExtJobSchedule()
         {
         }
         /// <summary>
-        /// 手写签名版
+        /// 流程进度图
         /// </summary>
         /// <param name="mypk"></param>
-        public ExtHandWriting(string mypk)
+        public ExtJobSchedule(string mypk)
         {
             this.MyPK = mypk;
             this.Retrieve();
@@ -104,7 +110,7 @@ namespace BP.Sys.FrmUI
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapAttr", "手写签名版");
+                Map map = new Map("Sys_MapAttr", "流程进度图");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -114,9 +120,10 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段", true, true, 1, 100, 20);
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
-                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");                
-                map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
+
+                //map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                //    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");                
+                //map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 map.AddTBInt(MapAttrAttr.UIHeight, 1, "高度", true, false);
                 map.AddTBInt(MapAttrAttr.UIWidth, 1, "宽度", true, false);
@@ -136,15 +143,15 @@ namespace BP.Sys.FrmUI
         #endregion
     }
     /// <summary>
-    /// 手写签名版s
+    /// 流程进度图s
     /// </summary>
-    public class ExtHandWritings : EntitiesMyPK
+    public class ExtJobSchedules : EntitiesMyPK
     {
         #region 构造
         /// <summary>
-        /// 手写签名版s
+        /// 流程进度图s
         /// </summary>
-        public ExtHandWritings()
+        public ExtJobSchedules()
         {
         }
         /// <summary>
@@ -154,7 +161,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new ExtHandWriting();
+                return new ExtJobSchedule();
             }
         }
         #endregion
@@ -164,20 +171,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<ExtHandWriting> ToJavaList()
+        public System.Collections.Generic.IList<ExtJobSchedule> ToJavaList()
         {
-            return (System.Collections.Generic.IList<ExtHandWriting>)this;
+            return (System.Collections.Generic.IList<ExtJobSchedule>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<ExtHandWriting> Tolist()
+        public System.Collections.Generic.List<ExtJobSchedule> Tolist()
         {
-            System.Collections.Generic.List<ExtHandWriting> list = new System.Collections.Generic.List<ExtHandWriting>();
+            System.Collections.Generic.List<ExtJobSchedule> list = new System.Collections.Generic.List<ExtJobSchedule>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((ExtHandWriting)this[i]);
+                list.Add((ExtJobSchedule)this[i]);
             }
             return list;
         }

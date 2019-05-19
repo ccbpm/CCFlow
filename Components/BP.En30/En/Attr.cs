@@ -105,7 +105,11 @@ namespace BP.En
         /// <summary>
         /// 图片
         /// </summary>
-        FrmImg = 11
+        FrmImg = 11,
+        /// <summary>
+        /// 流程进度图
+        /// </summary>
+        JobSchedule=50
 
     }
     /// <summary>

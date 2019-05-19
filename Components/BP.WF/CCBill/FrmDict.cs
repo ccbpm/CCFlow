@@ -14,132 +14,8 @@ namespace BP.WF.CCBill
     /// <summary>
     /// 实体表单 - Attr
     /// </summary>
-    public class FrmDictAttr : BP.En.EntityOIDNameAttr
+    public class FrmDictAttr : FrmAttr
     {
-        #region 基本属性
-        /// <summary>
-        /// 工作模式
-        /// </summary>
-        public const string FrmDictWorkModel = "FrmDictWorkModel";
-        /// <summary>
-        /// 实体类型
-        /// </summary>
-        public const string EntityType = "EntityType";
-        /// <summary>
-        /// 单据编号生成规则
-        /// </summary>
-        public const string BillNoFormat = "BillNoFormat";
-        /// <summary>
-        /// 关联的流程号
-        /// </summary>
-        public const string RefFlowNo = "RefFlowNo";
-        /// <summary>
-        /// 单据编号生成规则
-        /// </summary>
-        public const string TitleRole = "TitleRole";
-        #endregion
-
-        #region 隐藏属性.
-        /// <summary>
-        /// 要显示的列
-        /// </summary>
-        public const string ShowCols = "ShowCols";
-        #endregion 隐藏属性
-
-        #region 按钮信息.
-        /// <summary>
-        /// 按钮New标签
-        /// </summary>
-        public const string BtnNewLable = "BtnNewLable";
-        /// <summary>
-        /// 按钮New启用规则
-        /// </summary>
-        public const string BtnNewModel = "BtnNewModel";
-        /// <summary>
-        /// 按钮Save标签
-        /// </summary>
-        public const string BtnSaveLable = "BtnSaveLable";
-        /// <summary>
-        /// 按钮save启用规则
-        /// </summary>
-        public const string BtnSaveEnable = "BtnSaveEnable";
-        /// <summary>
-        /// 按钮del标签
-        /// </summary>
-        public const string BtnDelLable = "BtnDelLable";
-        /// <summary>
-        /// 按钮del启用规则
-        /// </summary>
-        public const string BtnDelEnable = "BtnDelEnable";
-        /// <summary>
-        /// 按钮del标签
-        /// </summary>
-        public const string BtnStartFlowLable = "BtnStartFlowLable";
-        /// <summary>
-        /// 按钮del启用规则
-        /// </summary>
-        public const string BtnStartFlowEnable = "BtnStartFlowEnable";
-        /// <summary>
-        /// 查询
-        /// </summary>
-        public const string BtnSearchLabel = "BtnSearchLabel";
-        /// <summary>
-        /// 查询
-        /// </summary>
-        public const string BtnSearchEnable = "BtnSearchEnable";
-        /// <summary>
-        /// 分析
-        /// </summary>
-        public const string BtnGroupLabel = "BtnGroupLabel";
-        /// <summary>
-        /// 分析
-        /// </summary>
-        public const string BtnGroupEnable = "BtnGroupEnable";
-        #endregion
-
-        #region 打印
-        public const string BtnPrintHtml = "BtnPrintHtml";
-        public const string BtnPrintHtmlEnable = "BtnPrintHtmlEnable";
-
-        public const string BtnPrintPDF = "BtnPrintPDF";
-        public const string BtnPrintPDFEnable = "BtnPrintPDFEnable";
-
-        public const string BtnPrintRTF = "BtnPrintRTF";
-        public const string BtnPrintRTFEnable = "BtnPrintRTFEnable";
-
-        public const string BtnPrintCCWord = "BtnPrintCCWord";
-        public const string BtnPrintCCWordEnable = "BtnPrintCCWordEnable";
-        #endregion
-
-        /// <summary>
-        /// 导出zip文件
-        /// </summary>
-        public const string BtnExpZip = "BtnExpZip";
-        /// <summary>
-        /// 是否可以启用?
-        /// </summary>
-        public const string BtnExpZipEnable = "BtnExpZipEnable";
-
-        #region 集合的操作.
-        /// <summary>
-        /// 导入Excel
-        /// </summary>
-        public const string BtnImpExcel = "BtnImpExcel";
-        /// <summary>
-        /// 是否启用导入
-        /// </summary>
-        public const string BtnImpExcelEnable = "BtnImpExcelEnable";
-        /// <summary>
-        /// 导出Excel
-        /// </summary>
-        public const string BtnExpExcel = "BtnExpExcel";
-        /// <summary>
-        /// 导出excel
-        /// </summary>
-        public const string BtnExpExcelEnable = "BtnExpExcelEnable";
-
-
-        #endregion 集合的操作.
     }
     /// <summary>
     /// 实体表单
@@ -305,10 +181,18 @@ namespace BP.WF.CCBill
 
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
+                map.SetHelperAlert(MapDataAttr.No, "也叫表单ID,系统唯一.");
+
                 map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20, true);
-                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
-                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                map.SetHelperAlert(MapDataAttr.PTable, "存储的表名,如果您修改一个不存在的系统将会自动创建一个表.");
+
+                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 200, 20, true);
+                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), false);
+
+                map.AddDDLSysEnum(FrmAttr.RowOpenMode, 0, "行记录打开模式", true, true,
+                    "RowOpenMode", "@0=新窗口打开@1=弹出窗口打开,关闭后刷新列表@2=弹出窗口打开,关闭后不刷新列表");
+
                 #endregion 基本属性.
 
                 #region 实体表单.
@@ -317,6 +201,8 @@ namespace BP.WF.CCBill
                 map.SetHelperAlert(FrmDictAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
 
                 map.AddTBString(FrmDictAttr.BillNoFormat, null, "实体编号规则", true, false, 0, 100, 20, true);
+                map.SetHelperAlert(FrmDictAttr.BillNoFormat, "\t\n实体编号规则: \t\n 2标识:01,02,03等, 3标识:001,002,003,等..");
+
                 #endregion 实体表单.
 
                 #region MyBill - 按钮权限.
@@ -373,6 +259,14 @@ namespace BP.WF.CCBill
                 map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
+
+
+                #region 扩展参数.
+                map.AddTBString(FrmDictAttr.Tag0, null, "Tag0", false, false, 0, 500, 20);
+                map.AddTBString(FrmDictAttr.Tag1, null, "Tag1", false, false, 0, 4000, 20);
+                map.AddTBString(FrmDictAttr.Tag2, null, "Tag2", false, false, 0, 500, 20);
+                #endregion 扩展参数.
+
 
                 map.AddTBAtParas(800); //参数属性.
 
@@ -445,6 +339,24 @@ namespace BP.WF.CCBill
                 map.AddRefMethod(rm);
 
 
+                rm = new RefMethod();
+                rm.Title = "创建规则"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoCreateRole";
+                //  rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //  rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "删除规则"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDeleteRole";
+              //  rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+              //  rm.Target = "_blank";
+                map.AddRefMethod(rm);
                 #endregion 基本功能.
 
                 #region 报表定义.
@@ -685,6 +597,22 @@ namespace BP.WF.CCBill
             return "../../CCBill/Admin/SearchCond.htm?FrmID=" + this.No;
         }
         #endregion 报表定义.
+
+        public string DoCreateRole()
+        {
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
+
+        
+
+        /// <summary>
+        /// 删除规则.
+        /// </summary>
+        /// <returns></returns>
+        public string DoDeleteRole()
+        {
+            return "../../CCBill/Admin/DeleteRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
 
         public string DoMethod()
         {

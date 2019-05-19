@@ -183,14 +183,61 @@ namespace BP.WF.CCBill
         public string MyBill_SaveIt()
         {
             //执行保存.
-            GERpt rpt = new GERpt(this.FrmID, this.WorkID);
-            rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GERpt;
+            GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GEEntity;
+
+            Hashtable ht = GetMainTableHT();
+            foreach (string item in ht.Keys)
+            {
+                rpt.SetValByKey(item, ht[item]);
+            }
+
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Editing);
             rpt.Update();
 
             string str = BP.WF.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
+        }
+        private Hashtable GetMainTableHT()
+        {
+            Hashtable htMain = new Hashtable();
+            foreach (string key in this.context.Request.Form.Keys)
+            {
+                if (key == null)
+                    continue;
+
+                if (key.Contains("TB_"))
+                {
+
+                    string val = context.Request.Form[key];
+                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
+                    {
+                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
+                        htMain.Add(key.Replace("TB_", ""), val);
+                    }
+                    continue;
+                }
+
+                if (key.Contains("DDL_"))
+                {
+                    htMain.Add(key.Replace("DDL_", ""), context.Request.Form[key]);
+                    continue;
+                }
+
+                if (key.Contains("CB_"))
+                {
+                    htMain.Add(key.Replace("CB_", ""), context.Request.Form[key]);
+                    continue;
+                }
+
+                if (key.Contains("RB_"))
+                {
+                    htMain.Add(key.Replace("RB_", ""), context.Request.Form[key]);
+                    continue;
+                }
+            }
+            return htMain;
         }
 
         public string MyBill_SaveAsDraft()

@@ -421,6 +421,31 @@ namespace BP.WF.Data
                 this.SetValByKey(NDXRptBaseAttr.PFlowNo, value);
             }
         }
+        /// <summary>
+        /// PNodeID
+        /// </summary>
+        public string PNodeID
+        {
+            get
+            {
+                return this.GetValStringByKey(NDXRptBaseAttr.PNodeID);
+            }
+            set
+            {
+                this.SetValByKey(NDXRptBaseAttr.PNodeID, value);
+            }
+        }
+        public string PEmp
+        {
+            get
+            {
+                return this.GetValStringByKey(NDXRptBaseAttr.PEmp);
+            }
+            set
+            {
+                this.SetValByKey(NDXRptBaseAttr.PEmp, value);
+            }
+        }
         #endregion attrs
 
         #region 构造

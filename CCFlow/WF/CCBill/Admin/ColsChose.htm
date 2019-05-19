@@ -45,17 +45,26 @@
             }
 
             //不显示的字段.
-            var cutAttrs = "OID,AtPara,RDT,Title,BillNo,";
+            var cutAttrs = "OID,AtPara,RDT,Title,BillNo,Starter,StarterName,BillState,";
+            var idx = 0;
             for (var i = 0; i < mapAttrs.length; i++) {
 
                 var mapAttr = mapAttrs[i];
-                if (cutAttrs.indexOf(mapAttr.KeyOfEn + ",") != -1)
-                    continue;
-                var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
 
+                if (mapAttr.IsRefAttr == 1)
+                    continue; //@yuanlina 如果是外键的扩展字段也要排除. Dict_BanJi 显示， Dict_BanJiT就不要显示了.
+
+                if (cutAttrs.indexOf(mapAttr.KeyOfEn + ",") != -1)
+                    continue; //排除不让其显示的字段.
+
+
+                idx++;
+
+                var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
                 var html = "";
+
                 html += "<tr>";
-                html += "<td>" + i + "</td>";
+                html += "<td>" + idx + "</td>";
                 html += "<td>" + mapAttr.KeyOfEn + "</td>";
 
                 html += "<td> <input value='" + mapAttr.Name + "' type=text style='width:100%;'  id='TB_" + mapAttr.KeyOfEn + "' /></td>";

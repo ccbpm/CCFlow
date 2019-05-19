@@ -359,8 +359,6 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
             continue;
         }
     }
-
-
     return html;
 }
 
@@ -506,12 +504,10 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
             var url = './WorkOpt/OneWork/JobSchedule.js';
             $.getScript(url, function () {
-                alert('done');
+                //alert('done');
             });
-
             return "<div id='JobSchedule' >JobSchedule</div>";
         }
-
 
         if (mapAttr.UIHeight <= 40) //普通的文本框.
         {
@@ -1103,6 +1099,11 @@ function Ele_Attachment(flowData, gf, node, ath) {
     if (gf.FrmID.indexOf(nodeID) == -1)
         isReadonly = true;
 
+    if (isReadonly == false) {
+        var strRD = GetQueryString("IsReadonly");
+        if (strRD == 1)
+            isReadonly = true;
+    }
 
     var athPK = gf.CtrlID;
     var noOfObj = athPK.replace(gf.FrmID + "_", "");
@@ -1111,6 +1112,8 @@ function Ele_Attachment(flowData, gf, node, ath) {
 
     //这里的连接要取 FK_MapData的值.
     src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=ND" + node.NodeID + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+    if (isReadonly == true)
+        src += "&IsReadOnly=1";
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
@@ -1359,8 +1362,6 @@ function GetLab(flowData, attr) {
 
     }
 
-
-
     //图片
     if (contralType == 11) {
         //获取图片控件的信息
@@ -1392,7 +1393,19 @@ function GetLab(flowData, attr) {
             if (imgSrc == "" || imgSrc == null)
                 imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
 
-            return "<img src='" + imgSrc + "' style='width:100%;height:100%' onerror=\"this.src='../DataUser/ICON/CCFlow/LogBig.png'\" />";
+            var style = "text-align:center;";
+            if (attr.UIWidth == 0)
+                style += "width:100%;";
+            else
+                style += "width:" + attr.UIWidth + "px;";
+
+            if (attr.UIHeight == 0)
+                style += "Height:100%;";
+            else
+                style += "Height:" + attr.UIHeight + "px;";
+
+
+            return "<img src='" + imgSrc + "' style='" + style + "' onerror=\"this.src='../DataUser/ICON/CCFlow/LogBig.png'\" />";
 
         }
         return "";

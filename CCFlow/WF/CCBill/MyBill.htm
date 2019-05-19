@@ -186,9 +186,16 @@
             window.location.href = url;
         }
         function SaveIt() {
+
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddUrlData();
             handler.AddFormData();
+
+            /*
+            //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
+            // @yuanlina. 
+            */
+
             var data = handler.DoMethodReturnString("MyBill_SaveIt");
             if (data.indexOf('err@') == 0) {
                 alert(data);

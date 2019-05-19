@@ -1,15 +1,15 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>删除规则</title>
+    <title>创建规则</title>
     <script type="text/javascript">
-        //删除.
+        //创建规则.
         function Del(mypk, nodeid) {
             if (mypk == '') {
-                alert("默认发送不允许删除，您可以修改。");
+                alert("默认发送不允许创建规则，您可以修改。");
                 return;
             }
-            if (window.confirm('您确定要删除吗?') == false)
+            if (window.confirm('您确定要创建规则吗?') == false)
                 return;
             window.location.href = 'Method.htm?MyPK=' + mypk + '&DoType=Del&FrmID=' + nodeid;
         }
@@ -57,76 +57,80 @@
 <body onkeypress="Esc();" style="font-size: smaller">
     <table id="Table1" style="width: 100%">
         <caption>
-            单行数据删除规则
+            数据创建规则
         </caption>
         <!-- 规则1 -->
         <tr>
             <th>
                 <label>
-                    <input type="checkbox" value="1" disabled=disabled checked=true id="CBPara_DeleteMySelf" name="CBPara_DeleteMySelf" />
-                    仅仅可以删除自己新建的</label>
+                    <input type="checkbox" value="1"  checked=true id="CBPara_DeleteMySelf" name="CBPara_DeleteMySelf" />
+                    任何人都可以创建</label>
             </th>
         </tr>
         <tr>
             <td>
                 <ul>
-                    <li>仅仅可以删除自己的数据，但是不能删除别人新建的数据。</li>
-                    <li>删除别人的数据提示出错。</li>
+                    <li>所有的人都可以创建。</li>
+                    <li>如果选择改规则，其他的规则都不用设置了。</li>
                 </ul>
             </td>
         </tr>
         <!-- end规则1 -->
 
-          <!-- 规则2 -->
+        <!-- 规则2 -->
         <tr>
             <th>
                 <label>
                     <input type="checkbox" value="1" id="CBPara_DeleteMyDept" name="CBPara_DeleteMyDept" />
-                    可以删除我本部门人员编辑创建的数据</label>
+                    启用按照岗位计算创建规则</label>
             </th>
         </tr>
         <tr>
             <td>
                 <ul>
-                    <li>仅仅可以删除自己部门的数据，但是不能删除别人部门新建的数据。</li>
-                    <li>删除别人部门的数据提示出错。</li>
+                    <li>选择岗位下的所有人员都可以创建记录.</li>
+                    <li><a href="">设置岗位</a></li>
                 </ul>
             </td>
         </tr>
         <!-- end规则2 -->
 
-        <!-- 规则3 -->
+    
+       <!-- 规则3 -->
         <tr>
             <th>
                 <label>
-                    <input type="checkbox" value="1" id="CBPara_DeleteMySQL" name="CBPara_DeleteMySQL" />
-                    如果按照下列sql查询出来数据的时候，就不能删除。</label>
+                    <input type="checkbox" value="1" id="Checkbox1" name="CBPara_DeleteMyDept" />
+                    启用按照设置的人员计算创建规则</label>
             </th>
         </tr>
         <tr>
             <td>
-                <textarea rows="5" id="TB_Tag1" name="TB_Tag1" style="width: 98%;">
-          </textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <fieldset>
-                    <legend>帮助 </legend>
-                    <ul>
-                        <li>多用于如果该数据被其他表所引用，就不能被删除， 执行的SQL是一个返回一行的一列的数据，如果改值大于0就不能执行删除。</li>
-                        <li>比如：SELECT COUNT(*) FROM XXX WHERE FK_Emp='@Key' , 其中@Key 就是该数据的主键. </li>
-                        <li>如果多个SQL:就使用;符号分开. </li>
-                        <li>比如:SELECT COUNT(*) FROM XXX WHERE FK_Emp='@Key';
-                            <br />
-                            SELECT COUNT(*) FROM BBB WHERE FK_Emp='@Key'; </li>
-                    </ul>
-                </fieldset>
+                <ul>
+                    <li>选择的所有人员都可以创建记录.</li>
+                    <li><a href="">设置人员</a></li>
+                </ul>
             </td>
         </tr>
         <!-- end规则3 -->
 
-
+        <!-- 规则4 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="checkbox" value="1" id="Checkbox2" name="CBPara_DeleteMyDept" />
+                    启用按照设置的部门计算创建规则</label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>选择的部门下所有人员都可以创建记录.</li>
+                    <li><a href="">设置部门</a></li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则4 -->
     </table>
 
                 <input type="button" id="Btn_Save" value="保存" onclick="Save()" />

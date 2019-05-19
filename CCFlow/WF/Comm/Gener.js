@@ -768,21 +768,31 @@ var Entity = (function () {
 
     var Entity = function (enName, pkval) {
 
-        if (pkval == Object) {
-            alert(pkval);
-        }
-
-        if (pkval == null || pkval == "" || pkval == undefined) {
-            alert('主键不能为空');
-            return;
-        }
+//        if (pkval == null || pkval == "" || pkval == undefined) {
+//            var str = '在给[' + enName + ']查询的时候，主键不能为空';
+//            alert(str);
+//            throw Error(str);
+//            return;
+//        }
         if (enName == null || enName == "" || enName == undefined) {
             alert('enName不能为空');
+            throw Error('enName不能为空');
             return;
         }
+
         this.enName = enName;
-        this.pkval = pkval;
-        this.loadData();
+
+        if (pkval != null && typeof pkval === "object") {
+            jsonString = {};
+            this.CopyJSON(pkval);
+        } else {
+            this.pkval = pkval || "";
+            this.loadData();
+        }
+
+      //  this.enName = enName;
+       // this.pkval = pkval;
+       // this.loadData();
 
     };
 
@@ -857,8 +867,10 @@ var Entity = (function () {
                         throw new Error(data);
                         return;
                     }
+
                     if (data == "")
                         return;
+
                     try {
                         jsonString = JSON.parse(data);
                         setData(self);

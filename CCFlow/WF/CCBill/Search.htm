@@ -221,7 +221,7 @@
                     html += "<tr>";
                     W = 130;
                 }
-
+                debugger;
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
                 html += "<td align='left'><select class='form-control' style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
             }
@@ -454,7 +454,7 @@
                         fixed: false,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
-                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='14px;' >" +value + "</a>";
+                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='14px;' />" +value + "</a>";
                         }
                     });
                     continue;

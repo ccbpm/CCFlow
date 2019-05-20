@@ -399,6 +399,29 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 查看父流程标签
+        /// </summary>
+        public string ShowParentFormLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.ShowParentFormLab);
+            }
+        }
+
+        /// <summary>
+        /// 是否启用查看父流程
+        /// </summary>
+        public bool ShowParentFormEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.ShowParentFormEnable);
+            }
+        }
+
+
+        /// <summary>
         /// 抄送标签
         /// </summary>
         public string CCLab
@@ -1086,10 +1109,7 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ThreadIsCanDel, false, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
                 map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
 
-                //功能和子流程组件重复，屏蔽 hzm
-              //  map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
-               // map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
-
+              
                 // add 2019.1.9 for 东孚.
                 map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
@@ -1119,11 +1139,12 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", true, true);
 
+                map.AddTBString(BtnAttr.ShowParentFormLab, "查看父流程", "查看父流程按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
+
+
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
-
-                //map.AddTBString(BtnAttr.AthLab, "附件", "附件按钮标签", true, false, 0, 50, 10);
-                //map.AddBoolean(BtnAttr.FJOpen, true, "是否启用", true, true);
 
                 map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);

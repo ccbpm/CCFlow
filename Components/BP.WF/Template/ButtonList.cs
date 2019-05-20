@@ -138,6 +138,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string HungEnable = "HungEnable";
         /// <summary>
+        /// 查看父流程
+        /// </summary>
+        public const string ShowParentFormLab = "ShowParentFormLab";
+        /// <summary>
+        /// 是否启用查看父流程
+        /// </summary>
+        public const string ShowParentFormEnable = "ShowParentFormEnable";
+        /// <summary>
         /// 审核
         /// </summary>
         public const string WorkCheckLab = "WorkCheckLab";

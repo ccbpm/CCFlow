@@ -339,6 +339,7 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17904");
                 map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true,false);
                 map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
+                map.AddBoolean(NodeAttr.IsGuestNode, false, "是否打开即审批?", true, true, true);
 
                 map.AddTBDateTime("DTFrom", "生命周期从", true, true);
                 map.AddTBDateTime("DTTo", "生命周期到", true, true);
@@ -484,6 +485,10 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.EndFlowLab, "结束流程", "结束流程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.EndFlowEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //增加帮助
+
+                map.AddTBString(BtnAttr.ShowParentFormLab, "查看父流程", "查看父流程按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
+                
 
                 // add 2019.1.9 for 东孚.
                 map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
@@ -1173,7 +1178,6 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/Bill.htm?FK_Node=" + this.NodeID + "&NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
-
 
         protected override bool beforeUpdate()
         {

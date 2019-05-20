@@ -2081,7 +2081,8 @@ function DoStop(msg, flowNo, workid) {
         return;
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    handler.AddUrlData();
+    handler.AddPara("FK_Flow", flowNo);
+    handler.AddPara("WorkID", workid);
     var data = handler.DoMethodReturnString("MyFlow_StopFlow");
     alert(msg);
 

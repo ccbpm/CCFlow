@@ -3476,7 +3476,7 @@ namespace BP.DA
                         return false;
 
                     //    throw new Exception("@表不存在[" + tabelOrViewName + "]");
-                    if (oradt.Rows[0][0].ToString().ToUpper().Trim() == "V".ToString().ToUpper() )
+                    if (oradt.Rows[0][0].ToString().ToUpper().Trim() == "VIEW".ToString().ToUpper() )
                         return true;
                     else
                         return false;

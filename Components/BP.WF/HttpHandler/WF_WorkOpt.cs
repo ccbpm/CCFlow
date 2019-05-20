@@ -1425,8 +1425,14 @@ namespace BP.WF.HttpHandler
                     if (nodes.Contains(tk.NDFrom + ",") == false)
                         continue;
 
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+                    if (fwc.FWCIsShowReturnMsg == false && tk.HisActionType == ActionType.Return)
+                        continue;
+
                     if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow && tk.HisActionType != ActionType.Return)
                         continue;
+
+                   
                     
                     //如果是当前的节点. 当前人员可以处理, 已经审批通过的人员.
                     if (tk.NDFrom == this.FK_Node

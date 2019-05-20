@@ -168,7 +168,7 @@
             if (athDesc.IsExpCol != 0) {
                 mapAttrs = new Entities("BP.Sys.MapAttrs");
                 // ND26501_Ath1
-                var extMapData = GetQueryString("FromFrm") + "_Ath1";
+                var extMapData = GetQueryString("FK_MapData") + "_"+athDesc.NoOfObj;
                 mapAttrs.Retrieve("FK_MapData", extMapData);
 
                 //  alert(extMapData);
@@ -309,9 +309,9 @@
                     for (var ii = 0; ii < mapAttrs.length; ii++) {
                         var attr = mapAttrs[ii];
                         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1)
-                            html += "<th nowrap=true ><span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
+                            html += "<th nowrap=true style='border: 1px solid #ddd;'><span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
                         else
-                            html += "<th nowrap=true >";
+                            html += "<th nowrap=true style='border: 1px solid #ddd;'>";
                         if (attr.UIContralType == 0)
                             html += "<label for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' >" + attr.Name + "</label></th>";
 
@@ -462,7 +462,7 @@
                         }
                     }
                     if (athDesc.IsExpCol == 1)
-                        html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                        html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a>&nbsp;&nbsp;&nbsp;<a href=\"\" onclick=\"return SaveUpload()\">保存</a></td>";
                     else {
                         var explorer = window.navigator.userAgent;
                         var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
@@ -499,7 +499,7 @@
                     }
                 }
                 if (athDesc.IsExpCol == 1)
-                    html += "<td><a href=\"\" onclick=\"return SaveUpload()\">保存</a></td>";
+                    html += "<td><a href='javaScript:void(0)' onclick='changeSort()'>上传</a>&nbsp;&nbsp;&nbsp;<a href=\"\" onclick=\"return SaveUpload()\">保存</a></td>";
                 else
                     html += "<td>&nbsp&nbsp</td>";
                 html += "</tr>";

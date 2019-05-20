@@ -441,7 +441,7 @@ namespace BP.WF.HttpHandler
             if (nodeID == 0)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                nodeID = this.FK_Node;
+                nodeID = gwf.FK_Node;
             }
 
             Node nd = new Node(nodeID);

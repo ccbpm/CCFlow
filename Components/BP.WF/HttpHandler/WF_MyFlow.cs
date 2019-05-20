@@ -919,6 +919,14 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button  value='" + btnLab.ThreadLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
                 }
 
+                if (btnLab.ShowParentFormEnable && this.PWorkID!=0)
+                {
+                    /*如果要查看父流程.*/
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
+                    string ur2 = "./WorkOpt/OneWork/FrmGuide.htm?FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "&WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&s=" + tKey;
+                    toolbar += "<input type=button  value='" + btnLab.ShowParentFormLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
+                }
+
                 if (btnLab.TCEnable == true)
                 {
                     /*流转自定义..*/

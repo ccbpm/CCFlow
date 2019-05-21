@@ -8,26 +8,26 @@ using BP.WF.Port;
 namespace BP.WF.CCBill
 {
     /// <summary>
-    /// 单据可创建的工作岗位属性	  
+    /// 单据可创建的部门属性	  
     /// </summary>
-    public class FrmStationCreateAttr
+    public class FrmDeptCreateAttr
     {
         /// <summary>
         /// 单据
         /// </summary>
         public const string FrmID = "FrmID";
         /// <summary>
-        /// 工作岗位
+        /// 部门
         /// </summary>
-        public const string FK_Station = "FK_Station";
+        public const string FK_Dept = "FK_Dept";
     }
     /// <summary>
-    /// 单据可创建的工作岗位
-    /// 单据的工作岗位有两部分组成.	 
+    /// 单据可创建的部门
+    /// 单据的部门有两部分组成.	 
     /// 记录了从一个单据到其他的多个单据.
     /// 也记录了到这个单据的其他的单据.
     /// </summary>
-    public class FrmStationCreate : EntityMM
+    public class FrmDeptCreate : EntityMM
     {
         #region 基本属性
         /// <summary>
@@ -45,45 +45,38 @@ namespace BP.WF.CCBill
         /// <summary>
         ///单据
         /// </summary>
-        public int FrmID
+        public string FrmID
         {
             get
             {
-                return this.GetValIntByKey(FrmStationCreateAttr.FrmID);
+                return this.GetValStringByKey(FrmDeptCreateAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmStationCreateAttr.FrmID, value);
-            }
-        }
-        public string FK_StationT
-        {
-            get
-            {
-                return this.GetValRefTextByKey(FrmStationCreateAttr.FK_Station);
+                this.SetValByKey(FrmDeptCreateAttr.FrmID, value);
             }
         }
         /// <summary>
-        /// 工作岗位
+        /// 部门
         /// </summary>
-        public string FK_Station
+        public string FK_Dept
         {
             get
             {
-                return this.GetValStringByKey(FrmStationCreateAttr.FK_Station);
+                return this.GetValStringByKey(FrmDeptCreateAttr.FK_Dept);
             }
             set
             {
-                this.SetValByKey(FrmStationCreateAttr.FK_Station, value);
+                this.SetValByKey(FrmDeptCreateAttr.FK_Dept, value);
             }
         }
         #endregion
 
         #region 构造方法
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的部门
         /// </summary>
-        public FrmStationCreate() { }
+        public FrmDeptCreate() { }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -94,11 +87,11 @@ namespace BP.WF.CCBill
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_FrmStationCreate", "单据岗位");
+                Map map = new Map("WF_FrmDeptCreate", "单据部门");
 
-                map.AddTBStringPK(FrmStationCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
-                map.AddDDLEntitiesPK(FrmStationCreateAttr.FK_Station, null, "可以创建岗位",
-                   new BP.GPM.Stations(), true);
+                map.AddTBStringPK(FrmDeptCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
+                map.AddDDLEntitiesPK(FrmDeptCreateAttr.FK_Dept, null, "可以创建部门",
+                   new BP.GPM.Depts(), true);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -107,33 +100,33 @@ namespace BP.WF.CCBill
 
     }
     /// <summary>
-    /// 单据可创建的工作岗位
+    /// 单据可创建的部门
     /// </summary>
-    public class FrmStationCreates : EntitiesMM
+    public class FrmDeptCreates : EntitiesMM
     {
         #region 构造函数.
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的部门
         /// </summary>
-        public FrmStationCreates() { }
+        public FrmDeptCreates() { }
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的部门
         /// </summary>
         /// <param name="nodeID">单据ID</param>
-        public FrmStationCreates(int nodeID)
+        public FrmDeptCreates(int nodeID)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmStationCreateAttr.FrmID, nodeID);
+            qo.AddWhere(FrmDeptCreateAttr.FrmID, nodeID);
             qo.DoQuery();
         }
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的部门
         /// </summary>
         /// <param name="StationNo">StationNo </param>
-        public FrmStationCreates(string StationNo)
+        public FrmDeptCreates(string StationNo)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmStationCreateAttr.FK_Station, StationNo);
+            qo.AddWhere(FrmDeptCreateAttr.FK_Dept, StationNo);
             qo.DoQuery();
         }
         /// <summary>
@@ -143,7 +136,7 @@ namespace BP.WF.CCBill
         {
             get
             {
-                return new FrmStationCreate();
+                return new FrmDeptCreate();
             }
         }
         #endregion 构造函数.
@@ -153,20 +146,20 @@ namespace BP.WF.CCBill
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmStationCreate> ToJavaList()
+        public System.Collections.Generic.IList<FrmDeptCreate> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmStationCreate>)this;
+            return (System.Collections.Generic.IList<FrmDeptCreate>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmStationCreate> Tolist()
+        public System.Collections.Generic.List<FrmDeptCreate> Tolist()
         {
-            System.Collections.Generic.List<FrmStationCreate> list = new System.Collections.Generic.List<FrmStationCreate>();
+            System.Collections.Generic.List<FrmDeptCreate> list = new System.Collections.Generic.List<FrmDeptCreate>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmStationCreate)this[i]);
+                list.Add((FrmDeptCreate)this[i]);
             }
             return list;
         }

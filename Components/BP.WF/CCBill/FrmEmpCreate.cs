@@ -13,9 +13,9 @@ namespace BP.WF.CCBill
 	public class FrmEmpCreateAttr
 	{
 		/// <summary>
-		/// 节点
+		/// 表单ID
 		/// </summary>
-		public const string FK_Bill="FK_Bill";
+		public const string FrmID="FrmID";
 		/// <summary>
 		/// 人员
 		/// </summary>
@@ -23,25 +23,25 @@ namespace BP.WF.CCBill
 	}
 	/// <summary>
 	/// 单据可创建的人员
-	/// 节点的到人员有两部分组成.	 
-	/// 记录了从一个节点到其他的多个节点.
-	/// 也记录了到这个节点的其他的节点.
+	/// 表单ID的到人员有两部分组成.	 
+	/// 记录了从一个表单ID到其他的多个表单ID.
+	/// 也记录了到这个表单ID的其他的表单ID.
 	/// </summary>
 	public class FrmEmpCreate :EntityMM
 	{
 		#region 基本属性
 		/// <summary>
-		///节点
+		///表单ID
 		/// </summary>
-		public int  FK_Bill
+		public int  FrmID
 		{
 			get
 			{
-				return this.GetValIntByKey(FrmEmpCreateAttr.FK_Bill);
+				return this.GetValIntByKey(FrmEmpCreateAttr.FrmID);
 			}
 			set
 			{
-				this.SetValByKey(FrmEmpCreateAttr.FK_Bill,value);
+				this.SetValByKey(FrmEmpCreateAttr.FrmID,value);
 			}
 		}
 		/// <summary>
@@ -84,9 +84,9 @@ namespace BP.WF.CCBill
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("_FrmEmpCreate", "单据可创建的人员");
+                Map map = new Map("WF_FrmEmpCreate", "单据可创建的人员");
 
-                map.AddTBStringPK(FrmEmpCreateAttr.FK_Bill,null,"表单",true,true,1,100,100 );
+                map.AddTBStringPK(FrmEmpCreateAttr.FrmID,null,"表单",true,true,1,100,100 );
                 map.AddDDLEntitiesPK(FrmEmpCreateAttr.FK_Emp, null, "人员", new Emps(), true);
 
                 this._enMap = map;
@@ -108,11 +108,11 @@ namespace BP.WF.CCBill
         /// <summary>
         /// 单据可创建的人员
         /// </summary>
-        /// <param name="NodeID">节点ID</param>
+        /// <param name="NodeID">表单IDID</param>
         public FrmEmpCreates(int NodeID)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmEmpCreateAttr.FK_Bill, NodeID);
+            qo.AddWhere(FrmEmpCreateAttr.FrmID, NodeID);
             qo.DoQuery();
         }
         /// <summary>

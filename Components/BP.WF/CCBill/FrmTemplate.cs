@@ -208,23 +208,23 @@ namespace BP.WF.CCBill
                 #region 可以创建的权限.
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new FrmStationCreates(), new BP.WF.Port.Stations(),
-                    FrmStationCreateAttr.FK_Bill,
+                    FrmStationCreateAttr.FrmID,
                     FrmStationCreateAttr.FK_Station, "可以创建的岗位", StationAttr.FK_StationType);
 
                 map.AttrsOfOneVSM.AddGroupListModel(new FrmStationCreates(), new BP.WF.Port.Stations(),
-                  FrmStationCreateAttr.FK_Bill,
+                  FrmStationCreateAttr.FrmID,
                   FrmStationCreateAttr.FK_Station, "可以创建的岗位AddGroupListModel", StationAttr.FK_StationType);
 
-                ////节点绑定部门. 节点绑定部门.
-                //map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
-                //   BP.WF.Template.NodeDeptAttr.FK_Node,
-                //   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                //节点绑定部门. 节点绑定部门.
+                map.AttrsOfOneVSM.AddBranches(new FrmDeptCreates(), new BP.Port.Depts(),
+                   FrmDeptCreateAttr.FrmID,
+                   FrmDeptCreateAttr.FK_Dept, "可以创建的部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new FrmEmpCreates(), new BP.Port.Emps(),
-                   FrmEmpCreateAttr.FK_Bill,
+                   FrmEmpCreateAttr.FrmID,
                    FrmEmpCreateAttr.FK_Emp, "可以创建的人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
-                #endregion
+                #endregion 可以创建的权限
 
                 this._enMap = map;
                 return this._enMap;

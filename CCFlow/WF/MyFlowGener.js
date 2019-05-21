@@ -421,6 +421,10 @@ function CheckMinMaxLength() {
 
 //保存
 function Save() {
+    //保存前事件
+    if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
+        if (beforeSave() == false)
+            return false;
 
     //判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
     var btn = document.getElementById('Btn_Save');
@@ -923,6 +927,11 @@ function GenerCheckIDs() {
 
 //发送
 function Send(isHuiQian) {
+
+    //保存前事件
+    if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
+        if (beforeSend() == false)
+            return false;
 
     if (CheckFWC() == false)
         return false;
@@ -1840,7 +1849,16 @@ function InitToolBar() {
     if ($('[name=Return]').length > 0) {
         $('[name=Return]').attr('onclick', '');
         $('[name=Return]').unbind('click');
-        $('[name=Return]').bind('click', function () { if (Save() == false) return; initModal("returnBack"); $('#returnWorkModal').modal().show(); });
+        $('[name=Return]').bind('click', function () {
+            //增加退回前的事件
+            if (typeof beforeReturn != 'undefined' && beforeReturn instanceof Function)
+                if (beforeReturn() == false) 
+                    return false;
+
+            if (Save() == false) return;
+            initModal("returnBack");
+            $('#returnWorkModal').modal().show();
+        });
     }
 
     if ($('[name=Shift]').length > 0) {
@@ -1921,6 +1939,10 @@ function InitToolBar() {
         $('[name=Delete]').attr('onclick', '');
         $('[name=Delete]').unbind('click');
         $('[name=Delete]').bind('click', function () {
+            //增加删除前事件
+            if (typeof beforeDelete != 'undefined' && beforeDelete instanceof Function)
+                if (beforeDelete() == false)
+                    return false;
 
             DeleteFlow();
         });

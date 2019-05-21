@@ -368,6 +368,7 @@ namespace BP.WF.CCBill
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Width", typeof(int));
             dt.Columns.Add("UIContralType", typeof(int));
+            dt.Columns.Add("LGType", typeof(int));
 
             //设置标题、单据号位于开始位置
 
@@ -384,6 +385,7 @@ namespace BP.WF.CCBill
                 row["Name"] = attr.Name;
                 row["Width"] = attr.UIWidthInt;
                 row["UIContralType"] = attr.UIContralType;
+                row["LGType"] = attr.LGType;
                 dt.Rows.Add(row);
             }
             ds.Tables.Add(dt);

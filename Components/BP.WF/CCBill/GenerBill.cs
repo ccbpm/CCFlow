@@ -736,9 +736,7 @@ namespace BP.WF.CCBill
                 map.AddTBString(GenerBillAttr.Emps, null, "参与人", true, false, 0, 4000, 10);
                 map.AddTBString(GenerBillAttr.GUID, null, "GUID", false, false, 0, 36, 10);
                 map.AddTBString(GenerBillAttr.FK_NY, null, "年月", false, false, 0, 7, 7);
-
                 map.AddTBInt(GenerBillAttr.TSpan, 0, "TSpan", true, true);
-
 
                 //待办状态(0=待办中,1=预警中,2=逾期中,3=按期完成,4=逾期完成) 
                 map.AddTBInt(GenerBillAttr.TodoSta, 0, "待办状态", true, true);

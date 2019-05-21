@@ -690,7 +690,6 @@ namespace BP.WF.CCBill
         }
         #endregion 执行父类的重写方法.
 
-
         #region 获得demo信息.
         public string MethodDocDemoJS_Init()
         {

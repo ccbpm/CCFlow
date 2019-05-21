@@ -336,15 +336,17 @@ namespace BP.WF.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                map.AddRefMethod(rm);             
+                #endregion 基本功能.
 
-
+                #region 权限规则.
                 rm = new RefMethod();
                 rm.Title = "创建规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCreateRole";
                 //  rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "权限规则";
                 //  rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
@@ -352,12 +354,22 @@ namespace BP.WF.CCBill
                 rm = new RefMethod();
                 rm.Title = "删除规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDeleteRole";
-              //  rm.Icon = "../../WF/Img/Event.png";
+                //  rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-              //  rm.Target = "_blank";
+                //  rm.Target = "_blank";
+                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
-                #endregion 基本功能.
+
+                rm = new RefMethod();
+                rm.Title = "查询权限"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoSearchRole";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //  rm.Target = "_blank";
+                rm.GroupName = "权限规则";
+                map.AddRefMethod(rm);
+                #endregion
 
                 #region 报表定义.
                 rm = new RefMethod();
@@ -598,13 +610,19 @@ namespace BP.WF.CCBill
         }
         #endregion 报表定义.
 
+        #region 查询权限.
         public string DoCreateRole()
         {
             return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
-
-        
-
+        /// <summary>
+        /// 查询权限
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearchRole()
+        {
+            return "../../CCBill/Admin/SearchRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
         /// <summary>
         /// 删除规则.
         /// </summary>
@@ -613,6 +631,7 @@ namespace BP.WF.CCBill
         {
             return "../../CCBill/Admin/DeleteRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
+        #endregion 查询权限.
 
         public string DoMethod()
         {

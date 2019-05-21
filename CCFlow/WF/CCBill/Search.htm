@@ -460,10 +460,14 @@
                     continue;
                 }
 
-                if (attr.UIContralType == 1){
+                if (attr.UIContralType == 1 || attr.UIContralType == 3){
                     if(width==null || width==""|| width==undefined)
                         width = 180;
-                    field = field + "Text";
+                    if(attr.LGType == 0)
+                        field = field +"T";
+                    else
+                        field = field + "Text";
+
                      columns.push({
                         field: field,
                         title: title,
@@ -488,6 +492,8 @@
                     });
                     continue;
                 }
+
+              
                 if(width==null || width==""|| width==undefined)
                     width = 100;
                 columns.push({
@@ -507,6 +513,8 @@
                 striped: true,
                 height:tableH,
                 singleSelect: true,
+                clickToSelect:true,
+                maintainSelected:true,
                 sidePagination: "server",
                 pageNumber: 1,
                 strictSearch: true,
@@ -619,8 +627,8 @@
         }
 
         function New(workid) {
-
             var frmID = GetQueryString("FrmID");
+           
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
@@ -629,18 +637,20 @@
             window.location.href=url;
             return;
 
-            var loop = setInterval(function () {
-			    if (self.closed) {
-			        clearInterval(loop);
-                    InitPage();
-			    }
-			}, 1);   
         }
 
-        function Delete(workid) {
+        function Delete() {
 
             if (confirm("您确定要删除吗？") == false)
                 return;
+            //删除选中的行
+            var selectRow = $('#dg').bootstrapTable('getSelections');
+
+            if(selectRow.length ==0){
+                alert("没有选择行，不能删除");
+                return ;
+            }
+            var workid = selectRow["WorkID"];
 
             var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));

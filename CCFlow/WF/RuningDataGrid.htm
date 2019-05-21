@@ -394,7 +394,7 @@
                 total = sourceData.length;
                 //获取分页的数据信息
                 data = [];
-                pageStartN = (pageIdex-1) <0?1:(pageIdx-1)*pageSize;
+                pageStartN = (pageIdx-1) <0?1:(pageIdx-1)*pageSize;
                 pageEndN = pageIdx*pageSize>total?total:pageIdx*pageSize;
                 for (var i = pageStartN; i < pageEndN; i++) {
                     data.push(sourceData[i]);

@@ -92,7 +92,7 @@
             //获取NodeID的的附件权限
             var FK_MapData = "ND" + nodeID;
             var mapDtls = new Entities("BP.Sys.MapDtls");
-            mapDtls.Retrieve("FK_MapData", FK_MapData);
+            mapDtls.Retrieve("FK_MapData", FK_MapData, "FK_Node", 0);
             if (mapDtls.length == 0) {
                 alert('当前节点表单没有从表。');
                 return;

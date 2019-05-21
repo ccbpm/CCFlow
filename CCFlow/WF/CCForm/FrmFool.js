@@ -623,8 +623,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             //如果是富文本就使用百度 UEditor
             if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == 1) {
                 //只读状态直接 div 展示富文本内容
-                //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
-                //eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+                defValue = defValue.replace(/white-space: nowrap;/g, "");   
                 eleHtml += "<div class='richText'>" + defValue + "</div>";
             } else {
 

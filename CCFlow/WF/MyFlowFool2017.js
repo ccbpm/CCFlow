@@ -527,7 +527,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             var eleHtml = "";
             //如果是富文本就使用百度 UEditor
             if (mapAttr.UIIsEnable == "0") {
-                //只读状态直接 div 展示富文本内容                
+                //只读状态直接 div 展示富文本内容
+                defValue = defValue.replace(/white-space: nowrap;/g, "");             
                 eleHtml += "<div class='richText' style='width:99%;margin-right:2px'>" + defValue + "</div>";
 
             } else {

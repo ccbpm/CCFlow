@@ -163,42 +163,54 @@
             $("#srclayout").html(tableHtml);
 
             //05.从其他流程导入
-            var treedata = data["WF_FlowSort"],
-                        rootdata = $.grep(treedata, function (item) {
-                            return item.ParentNo == "0";
-                        })[0];
+            //            var treedata = data["WF_FlowSort"],
+            //                        rootdata = $.grep(treedata, function (item) {
+            //                            return item.ParentNo == "0";
+            //                        })[0];
+            //           
+
+            //            //构建树节点数据
+            //            var root = {};
+            //            root.text = rootdata.Name;
+            //            root.state = "open";
+            //            root.children = [];
+
+            //            $.grep(treedata, function (item) {
+            //                //选出一级节点
+            //                return item.ParentNo == rootdata.No;
+            //            }).forEach(function (folder) {
+            //                //构建node开始
+            //                var node = {};
+            //                node.text = folder.Name;
+            //                node.state = "closed";
+            //                node.children = [];
+            //                $.grep(data["WF_Flow"], function (map) {
+            //                    //选出当前节点的二级节点
+            //                    return map.FK_FlowSort == folder.No;
+
+            //                }).forEach(function (frm) {
+            //                    node.children.push({
+            //                        text: frm.Name,
+            //                        id: frm.No
+            //                    });
+            //                });
+            //                //构建node结束
+            //                root.children.push(node);
+            //            });
+            var treedata1 = data["WF_FlowSort"];
+            var rootdata1 = $.grep(treedata1, function (item) {
+                return item.ParentNo == "0";
+            })[0];
 
             //构建树节点数据
-            var root = {};
-            root.text = rootdata.Name;
-            root.state = "open";
-            root.children = [];
-
-            $.grep(treedata, function (item) {
-                //选出一级节点
-                return item.ParentNo == rootdata.No;
-            }).forEach(function (folder) {
-                //构建node开始
-                var node = {};
-                node.text = folder.Name;
-                node.state = "closed";
-                node.children = [];
-                $.grep(data["WF_Flow"], function (map) {
-                    //选出当前节点的二级节点
-                    return map.FK_FlowSort == folder.No;
-
-                }).forEach(function (frm) {
-                    node.children.push({
-                        text: frm.Name,
-                        id: frm.No
-                    });
-                });
-                //构建node结束
-                root.children.push(node);
-            });
+            var root1 = {};
+            treeJson = [];
+            root1.text = rootdata1.Name;
+            root1.state = "open";
+            root1.children = createJsonToTree(treedata1, rootdata1.No, data, "Flow");
 
             $('#ul1').tree({
-                data: [root],
+                data: [root1],
                 onSelect: function (node) {
                     if (node.children == undefined) {
                         Btn_Flows.disabled = "";
@@ -215,14 +227,14 @@
 
         //树形结构转换
         var treeJson = [];
-        function createJsonToTree(treedata, parentNo, data) {
+        function createJsonToTree(treedata, parentNo, data,Type) {
             for (var i = 0; i < treedata.length; i++) {
                 var folder = treedata[i];
                 if (folder.ParentNo == parentNo) {
                     treeJson.push({
                         "id": folder.No,
                         "text": folder.Name,
-                        "children": creatTreeChildern(treedata, folder.No, data),
+                        "children": creatTreeChildern(treedata, folder.No, data,Type),
                         "state": "closed"
                     });
                 }
@@ -242,7 +254,7 @@
             return treeJson;
         }
 
-        function creatTreeChildern(jsonArray, parentNo, data) {
+        function creatTreeChildern(jsonArray, parentNo, data,Type) {
             var childList = []
             for (var i = 0; i < jsonArray.length; i++) {
                 var folder = jsonArray[i];
@@ -250,21 +262,34 @@
                     childList.push({
                         "id": folder.No,
                         "text": folder.Name,
-                        "children": creatTreeChildern(jsonArray, folder.No, data),
+                        "children": creatTreeChildern(jsonArray, folder.No, data,Type),
                         "state": "closed"
                     });
                 }
             }
-            $.grep(data["Sys_MapData"], function (map) {
-                //选出当前节点的二级节点
-                return map.FK_FormTree == parentNo;
+            if (Type == "Flow") {
+                $.grep(data["WF_Flow"], function (map) {
+                    //选出当前节点的二级节点
+                    return map.FK_FlowSort == parentNo;
 
-            }).forEach(function (frm) {
-                childList.push({
-                    "text": frm.Name,
-                    "id": frm.No
+                }).forEach(function (frm) {
+                    childList.push({
+                        "text": frm.Name,
+                        "id": frm.No
+                    });
                 });
-            });
+            }
+            else
+                $.grep(data["Sys_MapData"], function (map) {
+                    //选出当前节点的二级节点
+                    return map.FK_FormTree == parentNo;
+
+                }).forEach(function (frm) {
+                    childList.push({
+                        "text": frm.Name,
+                        "id": frm.No
+                    });
+                });
             return childList;
         }
     </script>

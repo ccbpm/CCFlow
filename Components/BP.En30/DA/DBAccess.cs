@@ -1622,6 +1622,13 @@ namespace BP.DA
                 BP.DA.DBAccess.RunSQL(mysql);
             }
         }
+        public static string DealSQL(string sql)
+        {
+            return sql;
+            // sql p = sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|"); 
+            //String presult = p.matcher(sql).replaceAll("$1"); 
+            //return presult;
+        }
         /// <summary>
         /// 运行SQLs
         /// </summary>
@@ -1630,6 +1637,8 @@ namespace BP.DA
         {
             if (DataType.IsNullOrEmpty(sql))
                 return;
+
+            sql = DealSQL(sql);//去掉注释.
 
             sql = sql.Replace("@GO", "~");
             sql = sql.Replace("@", "~");

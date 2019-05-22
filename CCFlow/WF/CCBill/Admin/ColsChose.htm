@@ -70,6 +70,13 @@
                 html += "<td> <input value='" + mapAttr.Name + "' type=text style='width:100%;'  id='TB_" + mapAttr.KeyOfEn + "' /></td>";
                 html += "<td> <input value='" + mapAttr.UIWidth + "' type=text style='width:40px;'  id='TBW_" + mapAttr.KeyOfEn + "' /></td>";
 
+                if (mapAttrEn.LGType == 0)
+                    html += "<td>普通</td>";
+                if (mapAttrEn.LGType == 1)
+                    html += "<td>枚举</td>";
+                if (mapAttrEn.LGType == 2)
+                    html += "<td>外键</td>";
+
                 if (mapAttrEn.GetPara("SearchVisable") == "1")
                     html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
                 else
@@ -155,13 +162,15 @@
                 宽度
             </th>
             <th>
+                类型
+            </th>
+            <th>
                 设置显示/隐藏
             </th>
             <th>
                 顺序
             </th>
         </tr>
-
     </table>
     <input type="button" value="保存" onclick="Save()" />
     <input type="button" value="设置查询条件" onclick="SaveAndSetSearchCond()" />

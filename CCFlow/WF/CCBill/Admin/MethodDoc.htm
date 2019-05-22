@@ -81,6 +81,36 @@
             html += "<font color=yellow ><b>)</b></font>&nbsp;<font color=yellow font-size='12px'><b>{</b></font>";
             $("#paras").html(html);
 
+
+            //输出实体的其他信息，方便用户更改.
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", en.FrmID);
+
+            var mapData = new Entity("BP.Sys.MapData", en.FrmID);
+
+            html = "<table style='width:100%;'>";
+            html += "<caption>表单:" + mapData.Name + ",表单ID:" + mapData.No + ",表:" + mapData.PTable + "</caption>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>字段</th>";
+            html += "<th>字段名</th>";
+            html += "<th>类型</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td>" + attr.KeyOfEn + "</td>";
+                html += "<td>" + attr.Name + "</td>";
+                html += "<td>" + attr.MyDataType + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            html += "UPDATE " + mapData.PTable + " SET xxx=xx,XXX=11 WHERE OID=@OID";
+
+            $("#FrmDocs").html(html);
+
         });
 
         function FullDoc() {
@@ -107,7 +137,7 @@
             handler.AddPara("TypeOfFunc", funcType);
             handler.AddPara("MyPK", en.MyPK);
             var data = handler.DoMethodReturnString("MethodDoc_GetScript");
-            
+
             editor.setValue(data);
             docsLast = data; //记录最后的值，用于判断是否更改.
         }
@@ -131,6 +161,8 @@
             var doc = editor.getValue();
             doc = doc.replace(/-/g, "/$");
             doc = doc.replace(/[+]/g, "/#");
+
+           // alert(doc);
 
             handler.AddPara("doc", doc); //不知道是否可以存储.
             handler.AddPara("TypeOfFunc", selectFuncType);
@@ -156,15 +188,15 @@
                 方法类型:
                 <label>
                     <input type="radio" value="0" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_0"
-                        onclick="FullDoc();">SQL
+                        onclick="FullDoc();" />SQL
                 </label>
                 <label>
                     <input type="radio" value="1" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_1"
-                        onclick="FullDoc();">javascript
+                        onclick="FullDoc();" />javascript
                 </label>
                 <label>
                     <input type="radio" value="2" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_2"
-                        onclick="FullDoc();">URL模式
+                        onclick="FullDoc();" />URL模式
                 </label>
                 <input type="button" value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
                 <input type="button" value="内容编辑demo for javascript" onclick="DemoJS()" id="Button1"
@@ -228,5 +260,11 @@
         });*/
     </script>
     </form>
+    <a href="javascript:ShowHidden('h_title')">
+        <img src='../../Img/Help.png' />实体的其他信息.</a>
+    <div id="h_title" style="color: Gray; display: none">
+        <div id="FrmDocs">
+        </div>
+    </div>
 </body>
 </html>

@@ -15,11 +15,15 @@
         }
     </script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <base target="_self" />
     <script type="text/javascript">
         function Esc() {
@@ -52,6 +56,45 @@
             en.Update();
             window.location.href = window.location.href;
         }
+
+        //设置岗位.
+        function OpenDot2DotStations() {
+
+            var frmID = GetQueryString("FrmID");
+
+            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmStationCreates";
+            url += "&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
+            url += "&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
+
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+        //设置岗位新方式.
+        function OpenNewStations() {
+
+            var frmID = GetQueryString("FrmID");
+
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmStationCreates&Dot2DotEnName=BP.WF.CCBill.FrmStationCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
+            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+        }
+        //绑定人员
+        function BindEmps() {
+
+            var frmID = GetQueryString("FrmID");
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmEmpCreates&Dot2DotEnName=BP.WF.CCBill.FrmEmpCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
+            url += '&FrmID=' + frmID + '&PKVal=' + frmID + "&M=" + Math.random();
+
+            OpenEasyUiDialogExt(url, '设置人员', 800, 500, true);
+
+        }
+        //弹出新页面
+        function BindDepts() {
+
+            var frmID = GetQueryString("FrmID");
+            var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmDeptCreates&Dot2DotEnName=BP.WF.CCBill.FrmDeptCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+            url += url + '&FrmID=' + frmID + '&PKVal=' + frmID;
+            OpenEasyUiDialogExt(url, "绑定部门", 800, 600, true);
+        }
+
     </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
@@ -63,7 +106,7 @@
         <tr>
             <th>
                 <label>
-                    <input type="checkbox" value="1"  checked=true id="CBPara_DeleteMySelf" name="CBPara_DeleteMySelf" />
+                    <input type="checkbox" value="1" checked="true" id="CBPara_CreateEveryone" name="CBPara_CreateEveryone" />
                     任何人都可以创建</label>
             </th>
         </tr>
@@ -76,64 +119,57 @@
             </td>
         </tr>
         <!-- end规则1 -->
-
         <!-- 规则2 -->
         <tr>
             <th>
                 <label>
-                    <input type="checkbox" value="1" id="CBPara_DeleteMyDept" name="CBPara_DeleteMyDept" />
+                    <input type="checkbox" value="1" id="CBPara_CreateByStations" name="CBPara_CreateByStations" />
                     启用按照岗位计算创建规则</label>
             </th>
         </tr>
         <tr>
             <td>
                 <ul>
-                    <li>选择岗位下的所有人员都可以创建记录.</li>
-                    <li><a href="">设置岗位</a></li>
+                    <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+                    <li><a href="javascript:OpenNewStations()">设置/更改岗位（左右树结构）</a> </li>
                 </ul>
             </td>
         </tr>
         <!-- end规则2 -->
-
-    
-       <!-- 规则3 -->
+        <!-- 规则3 -->
         <tr>
             <th>
                 <label>
-                    <input type="checkbox" value="1" id="Checkbox1" name="CBPara_DeleteMyDept" />
+                    <input type="checkbox" value="1" id="CBPara_CreateByEmps" name="CBPara_CreateByEmps" />
                     启用按照设置的人员计算创建规则</label>
             </th>
         </tr>
         <tr>
             <td>
                 <ul>
-                    <li>选择的所有人员都可以创建记录.</li>
-                    <li><a href="">设置人员</a></li>
+                    <li><a href="javascript:BindEmps()">设置/更改人员</a></li>
                 </ul>
             </td>
         </tr>
         <!-- end规则3 -->
-
         <!-- 规则4 -->
         <tr>
             <th>
                 <label>
-                    <input type="checkbox" value="1" id="Checkbox2" name="CBPara_DeleteMyDept" />
+                    <input type="checkbox" value="1" id="CBPara_CreateByDepts" name="CBPara_CreateByDepts" />
                     启用按照设置的部门计算创建规则</label>
             </th>
         </tr>
         <tr>
             <td>
                 <ul>
-                    <li>选择的部门下所有人员都可以创建记录.</li>
-                    <li><a href="">设置部门</a></li>
+                    <li><a href="javascript:BindDepts()">设置/更改部门</a></li>
                 </ul>
             </td>
         </tr>
         <!-- end规则4 -->
     </table>
-
-                <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
-                <input type="button" id="Btn_Help" value="我需要帮助" onclick="Help()" />
+    <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+    <input type="button" id="Btn_Help" value="我需要帮助" onclick="Help()" />
 </body>
 </html>

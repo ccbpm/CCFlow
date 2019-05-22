@@ -54,16 +54,21 @@
             //绑定外键字段.
             var dateMapAttrs = [];
             for (var i = 0, length = mapAttrs.length; i < length; i++) {
-                var attr = mapAttrs[i],
-                            flag = false;
+
+                var attr = mapAttrs[i];
                 if (attr.MyDataType == 6 || attr.MyDataType == 7) {
                     dateMapAttrs.push(attr);
                     continue;
                 }
 
-                if (attr.UIContralType != 1) {
+                if (attr.UIBindKey == ""   ) {
                     continue;
                 }
+                if ( attr.UIVisible == 0) {
+                    continue;
+                }  
+
+                flag = false;
                 if (RptSearchKeys) {
                     flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
                 }
@@ -132,13 +137,16 @@
         <caption>
             设置查询条件</caption>
         <tr>
-            <th> 关键字查询 </th>
+            <th>
+                关键字查询
+            </th>
         </tr>
         <tr>
             <td>
                 关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br>
                 <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
-                <br />关键字搜索提示
+                <br />
+                关键字搜索提示
                 <input id="TB_Alert" name="TB_Alert" type="text" value="" />,默认为:请输入关键字...
             </td>
         </tr>

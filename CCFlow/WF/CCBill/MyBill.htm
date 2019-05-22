@@ -70,7 +70,7 @@
                 workID = 0;
 
             if (workID == 0) {
-                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
                 var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
                 var url = window.location.href + "&WorkID=" + workID + "&OID=" + workID;
@@ -82,8 +82,8 @@
 
             //获得单据模版信息.
             var frmID = GetQueryString("FrmID");
-            var frmBill = new Entity("BP.WF.CCBill.FrmBill", frmID);
-            var generBill = new Entity("BP.WF.CCBill.GenerBill", workID);
+            var frmBill = new Entity("BP.Frm.FrmBill", frmID);
+            var generBill = new Entity("BP.Frm.GenerBill", workID);
 
             var html = "<table style='width:100%;padding:15px;'>";
             html += "<tr>";
@@ -139,7 +139,7 @@
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
             //获得当前的集合.
-            var fms = new Entities("BP.WF.CCBill.FrmMethods", "FrmID", frmID);
+            var fms = new Entities("BP.Frm.FrmMethods", "FrmID", frmID);
             for (var i = 0; i < fms.length; i++) {
                 var fm = fms[i];
 
@@ -178,7 +178,7 @@
         //保存为草稿.
         function SaveAsDraft() {
 
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_SaveAsDraft");
 
@@ -187,7 +187,7 @@
         }
         function SaveIt() {
 
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
 
             //组织数据.
             var dataStrs = getFormData(true, true);
@@ -393,7 +393,7 @@
         function DeleteIt() {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_Delete");
             alert(data);
@@ -410,7 +410,7 @@
         }
 
         function NewIt() {
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
             window.location.href = 'MyBill.htm?FrmID=' + GetQueryString("FrmID") + "&FK_MapData=" + GetQueryString("FrmID");

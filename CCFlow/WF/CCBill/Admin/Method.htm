@@ -44,12 +44,12 @@
         $(function () {
 
             var frmID = GetQueryString("FrmID");
-            var ens = new Entities("BP.WF.CCBill.FrmMethods");
+            var ens = new Entities("BP.Frm.FrmMethods");
             ens.Retrieve("FrmID", frmID, "Idx");
 
             for (var i = 0; i < ens.length; i++) {
 
-               // var en = new Entity("BP.WF.CCBill.FrmMethod", ens[i]);
+               // var en = new Entity("BP.Frm.FrmMethod", ens[i]);
 
                 var en =  ens[i];
 
@@ -84,19 +84,19 @@
         //打开.
         function Open(mypk, type) {
 
-            var url = "../../Comm/EnOnly.htm?EnName=BP.WF.CCBill.FrmMethodLink&MyPK=" + mypk;
+            var url = "../../Comm/EnOnly.htm?EnName=BP.Frm.FrmMethodLink&MyPK=" + mypk;
             if (type == 0)
-                url = "../../Comm/En.htm?EnName=BP.WF.CCBill.FrmMethodFunc&MyPK=" + mypk;
+                url = "../../Comm/En.htm?EnName=BP.Frm.FrmMethodFunc&MyPK=" + mypk;
             WinOpen(url);
         }
         function Up(no) {
-            var emp = new Entity("BP.WF.CCBill.FrmMethod", no);
+            var emp = new Entity("BP.Frm.FrmMethod", no);
             var data = emp.DoMethodReturnString("DoUp");
             window.location.href = window.location.href;
         }
         function Down(no) {
 
-            var emp = new Entity("BP.WF.CCBill.FrmMethod", no);
+            var emp = new Entity("BP.Frm.FrmMethod", no);
             var data = emp.DoMethodReturnString("DoDown");
             window.location.href = window.location.href;
         }
@@ -104,7 +104,7 @@
         function Delete(myPK) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var en = new Entity("BP.WF.CCBill.FrmMethod");
+            var en = new Entity("BP.Frm.FrmMethod");
             en.MyPK = myPK;
             en.Delete();
             window.location.href = window.location.href;
@@ -121,7 +121,7 @@
             if (name == null || name == undefined)
                 return;
 
-            var en = new Entity("BP.WF.CCBill.FrmMethod");
+            var en = new Entity("BP.Frm.FrmMethod");
             en.FrmID = GetQueryString("FrmID");
             en.MethodID = id;
             en.MethodName = name;
@@ -133,7 +133,7 @@
             }
             en.Insert();
 
-            var url = "../../Comm/EnOnly.htm?EnName=BP.WF.CCBill.FrmMethodLink&MyPK=" + en.MyPK;
+            var url = "../../Comm/EnOnly.htm?EnName=BP.Frm.FrmMethodLink&MyPK=" + en.MyPK;
             WinOpenFull(url);
             //window.location.href = window.location.href;
         }
@@ -150,7 +150,7 @@
             if (name == null || name == undefined)
                 return;
 
-            var en = new Entity("BP.WF.CCBill.FrmMethod");
+            var en = new Entity("BP.Frm.FrmMethod");
             en.FrmID = GetQueryString("FrmID");
             en.MethodID = id;
             en.MethodName = name;
@@ -162,7 +162,7 @@
             }
             en.Insert();
 
-            var url = "../../Comm/En.htm?EnName=BP.WF.CCBill.FrmMethodFunc&MyPK=" + en.MyPK;
+            var url = "../../Comm/En.htm?EnName=BP.Frm.FrmMethodFunc&MyPK=" + en.MyPK;
             WinOpenFull(url);
             //window.location.href = window.location.href;
         }

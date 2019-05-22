@@ -42,7 +42,7 @@
         //页面启动函数.
         $(function () {
             var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.WF.CCBill.FrmDict", frmID);
+            var en = new Entity("BP.Frm.FrmDict", frmID);
             GenerFullAllCtrlsVal(en);
 
         });
@@ -50,7 +50,7 @@
         function Save() {
             //创建实体.
             var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.WF.CCBill.FrmDict", frmID);
+            var en = new Entity("BP.Frm.FrmDict", frmID);
             en.CopyForm();
             en.SetPKVal(frmID);
             en.Update();
@@ -62,7 +62,7 @@
 
             var frmID = GetQueryString("FrmID");
 
-            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmStationCreates";
+            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmStationCreates";
             url += "&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
             url += "&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
 
@@ -73,14 +73,14 @@
 
             var frmID = GetQueryString("FrmID");
 
-            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmStationCreates&Dot2DotEnName=BP.WF.CCBill.FrmStationCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmStationCreates&Dot2DotEnName=BP.Frm.FrmStationCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
             OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
         }
         //绑定人员
         function BindEmps() {
 
             var frmID = GetQueryString("FrmID");
-            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmEmpCreates&Dot2DotEnName=BP.WF.CCBill.FrmEmpCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmEmpCreates&Dot2DotEnName=BP.Frm.FrmEmpCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
             url += '&FrmID=' + frmID + '&PKVal=' + frmID + "&M=" + Math.random();
 
             OpenEasyUiDialogExt(url, '设置人员', 800, 500, true);
@@ -90,7 +90,7 @@
         function BindDepts() {
 
             var frmID = GetQueryString("FrmID");
-            var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.WF.CCBill.FrmTemplate&Dot2DotEnsName=BP.WF.CCBill.FrmDeptCreates&Dot2DotEnName=BP.WF.CCBill.FrmDeptCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+            var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmDeptCreates&Dot2DotEnName=BP.Frm.FrmDeptCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
             url += url + '&FrmID=' + frmID + '&PKVal=' + frmID;
             OpenEasyUiDialogExt(url, "绑定部门", 800, 600, true);
         }

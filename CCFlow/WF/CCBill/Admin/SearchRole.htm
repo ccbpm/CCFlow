@@ -38,7 +38,7 @@
         //页面启动函数.
         $(function () {
             var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.WF.CCBill.FrmDict", frmID);
+            var en = new Entity("BP.Frm.FrmDict", frmID);
             GenerFullAllCtrlsVal(en);
 
         });
@@ -46,7 +46,7 @@
         function Save() {
             //创建实体.
             var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.WF.CCBill.FrmDict", frmID);
+            var en = new Entity("BP.Frm.FrmDict", frmID);
             en.CopyForm();
             en.SetPKVal(frmID);
             en.Update();

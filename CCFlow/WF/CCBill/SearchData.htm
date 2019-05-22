@@ -105,7 +105,7 @@
             if (_frmID == "" && _tspan == "")
                 _tspan = "-1";
 
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", _frmID);
             handler.AddPara("TSpan", _tspan);
             handler.AddPara("BillState", _billState);
@@ -240,7 +240,7 @@
             if (confirm("您确定要撤销吗？") == false)
                 return;
 
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
             var data = handler.DoMethodReturnString("MyBill_Delete");
@@ -389,7 +389,7 @@
                 return;
             }
 
-            var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("TB_KWds", val);
 
             var data = handler.DoMethodReturnString("SearchData_Init");

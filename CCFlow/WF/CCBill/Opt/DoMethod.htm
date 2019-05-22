@@ -19,11 +19,11 @@
             var myPK = GetQueryString("MyPK");
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
-            var func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+            var func = new Entity("BP.Frm.FrmMethodFunc", myPK);
 
             //ÒªÖ´ÐÐsql.
             if (func.MethodDocTypeOfFunc == 0) {
-                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
                 var data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //Ö´ÐÐSQLs
                 alert(data);

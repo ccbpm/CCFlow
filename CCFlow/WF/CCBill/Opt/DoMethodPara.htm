@@ -24,7 +24,7 @@
             var myPK = GetQueryString("MyPK");
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
-            func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+            func = new Entity("BP.Frm.FrmMethodFunc", myPK);
             attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
             frmData = new Entity(func.FrmID, workID);
 
@@ -45,7 +45,7 @@
         function DoIt() {
 
             var myPK = GetQueryString("MyPK");
-            func = new Entity("BP.WF.CCBill.FrmMethodFunc", myPK);
+            func = new Entity("BP.Frm.FrmMethodFunc", myPK);
 
             if (func.WarningMsg == "")
                 func.WarningMsg = "您确定要执行吗？";
@@ -57,7 +57,7 @@
 
             //如果是执行的SQL . 
             if (func.MethodDocTypeOfFunc == 0) {
-                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
                 handler.AddFormData();
                 var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
@@ -120,7 +120,7 @@
 
 
 
-                var handler = new HttpHandler("BP.WF.CCBill.WF_CCBill");
+                var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
                 handler.AddFormData();
                 var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");

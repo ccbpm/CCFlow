@@ -19,22 +19,21 @@ namespace BP.Frm
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class Frm_Bill_Admin : DirectoryPageBase
+    public class WF_CCBill_Admin : DirectoryPageBase
     {
         /// <summary>
         /// 页面功能实体
         /// </summary>
         /// <param name="mycontext"></param>
-        public Frm_Bill_Admin(HttpContext mycontext)
+        public WF_CCBill_Admin(HttpContext mycontext)
         {
             this.context = mycontext;
         }
         /// <summary>
         /// 构造函数
         /// </summary>
-        public Frm_Bill_Admin()
+        public WF_CCBill_Admin()
         {
-
         }
         /// <summary>
         /// 获得js,sql内容.

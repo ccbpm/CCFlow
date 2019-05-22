@@ -19,21 +19,21 @@ namespace BP.Frm
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class Frm_Bill : DirectoryPageBase
+    public class WF_CCBill : DirectoryPageBase
     {
         #region 构造方法.
         /// <summary>
         /// 页面功能实体
         /// </summary>
         /// <param name="mycontext"></param>
-        public Frm_Bill(HttpContext mycontext)
+        public WF_CCBill(HttpContext mycontext)
         {
             this.context = mycontext;
         }
         /// <summary>
         /// 构造函数
         /// </summary>
-        public Frm_Bill()
+        public WF_CCBill()
         {
         }
         #endregion 构造方法.

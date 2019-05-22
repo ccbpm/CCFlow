@@ -1141,7 +1141,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ShowParentFormLab, "查看父流程", "查看父流程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
-
+                map.SetHelperAlert(BtnAttr.ShowParentFormLab,"如果当前流程实例不是子流程，即时启用了，也不显示该按钮。");
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);

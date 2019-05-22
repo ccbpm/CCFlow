@@ -225,7 +225,7 @@ namespace BP.WF.HttpHandler
                     if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
-                    sql = "UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0]+"'";
+                    sql = "UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0] + "'";
                     DBAccess.RunSQL(sql);
                 }
 
@@ -657,7 +657,7 @@ namespace BP.WF.HttpHandler
 
                 if (adminEmp.IsAdmin == false)
                     return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
-                    //return BP.WF.Glo.lang("no_permission_login_2", para);
+                //return BP.WF.Glo.lang("no_permission_login_2", para);
 
                 if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
                     return "err@二级管理员用户没有设置流程树的权限..";

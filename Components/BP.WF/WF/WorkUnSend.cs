@@ -934,7 +934,7 @@ namespace BP.WF
             Node nd = new Node(this.UnSendToNode);
             gwf.NodeName = nd.Name;
             gwf.Sender = BP.Web.WebUser.No;
-            gwf.SendDT = BP.DA.DataType.CurrentDataTime;
+            gwf.SendDT = BP.DA.DataType.CurrentDataTimess;
             gwf.Update();
 
 

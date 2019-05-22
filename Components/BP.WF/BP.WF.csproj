@@ -166,12 +166,16 @@
     <Compile Include="CCBill\FrmBill.cs" />
     <Compile Include="CCBill\GenerBill.cs" />
     <Compile Include="CCBill\FrmMethod.cs" />
+    <Compile Include="CCBill\FrmEmpCreate.cs" />
+    <Compile Include="CCBill\FrmStationCreate.cs" />
     <Compile Include="CCBill\Track.cs" />
     <Compile Include="CCBill\WF_CCBill.cs" />
     <Compile Include="CCBill\FrmMethodLink.cs" />
     <Compile Include="CCBill\FrmMethodFunc.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin.cs" />
     <Compile Include="CCBill\FrmDict.cs" />
+    <Compile Include="CCBill\FrmTemplate.cs" />
+    <Compile Include="CCBill\FrmDeptCreate.cs" />
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />

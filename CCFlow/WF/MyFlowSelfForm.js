@@ -368,7 +368,7 @@ function initModal(modalType, toNode) {
            + '<div class="modal-content" style="border-radius:0px;width:700px;text-align:left;">'
               + '<div class="modal-header">'
                   + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                   + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
+                   + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
                + '</div>'
                + '<div class="modal-body">'
                    + '<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
@@ -384,7 +384,7 @@ function initModal(modalType, toNode) {
     if (modalType != undefined) {
         switch (modalType) {
             case "returnBack":
-                $('#modalHeader').text("工作退回");
+                $('#modalHeader').text("提示信息");
                 modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             case "accpter":

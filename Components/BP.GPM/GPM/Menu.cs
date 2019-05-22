@@ -482,7 +482,7 @@ namespace BP.GPM
                     BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.FreeFrm);
 
                 //更改单据属性.
-                BP.WF.CCBill.FrmBill fb = new WF.CCBill.FrmBill(no);
+                BP.Frm.FrmBill fb = new BP.Frm.FrmBill(no);
                 fb.No = no;
                 fb.Name = name;
                 fb.PTable = ptable;
@@ -491,7 +491,7 @@ namespace BP.GPM
                 //执行绑定.
                 fb.DoBindMenu(this.No,name);
 
-                return "<a href='../Comm/En.htm?EnName=BP.WF.CCBill.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
+                return "<a href='../Comm/En.htm?EnName=BP.Frm.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
             }
             catch (Exception ex)
             {

@@ -85,7 +85,7 @@ namespace BP.Frm
             string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
-            doc = Glo.DealExp(doc, en, null); //替换里面的内容.
+            doc = BP.WF.Glo.DealExp(doc, en, null); //替换里面的内容.
 
             try
             {
@@ -112,7 +112,7 @@ namespace BP.Frm
             string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
-            doc = Glo.DealExp(doc, en, null); //替换里面的内容.
+            doc = BP.WF.Glo.DealExp(doc, en, null); //替换里面的内容.
 
             #region 替换参数变量.
             MapAttrs attrs = new MapAttrs();

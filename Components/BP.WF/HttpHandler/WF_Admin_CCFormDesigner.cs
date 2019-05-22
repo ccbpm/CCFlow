@@ -10,6 +10,7 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
+using BP.Frm;
 
 namespace BP.WF.HttpHandler
 {
@@ -222,13 +223,13 @@ namespace BP.WF.HttpHandler
             //增加上OID字段.
             BP.Sys.CCFormAPI.RepareCCForm(md.No);
 
-            BP.Frm.EntityType entityType = (CCBill.EntityType)this.GetRequestValInt("EntityType");
+            BP.Frm.EntityType entityType = (EntityType)this.GetRequestValInt("EntityType");
 
             #region 如果是单据.
-            if (entityType == CCBill.EntityType.FrmBill)
+            if (entityType == EntityType.FrmBill)
             {
-                BP.Frm.FrmBill bill = new CCBill.FrmBill(md.No);
-                bill.EntityType = CCBill.EntityType.FrmBill;
+                BP.Frm.FrmBill bill = new FrmBill(md.No);
+                bill.EntityType = EntityType.FrmBill;
                 bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
 
                 //设置默认的查询条件.
@@ -241,9 +242,9 @@ namespace BP.WF.HttpHandler
             #endregion 如果是单据.
 
             #region 如果是实体 EnityNoName .
-            if (entityType == CCBill.EntityType.FrmDict)
+            if (entityType == EntityType.FrmDict)
             {
-                BP.Frm.FrmDict entityDict = new CCBill.FrmDict(md.No);
+                BP.Frm.FrmDict entityDict = new FrmDict(md.No);
                 entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
 
                 entityDict.BtnNewModel = 0;
@@ -252,7 +253,7 @@ namespace BP.WF.HttpHandler
                 entityDict.SetPara("IsSearchKey", 1);
                 entityDict.SetPara("DTSearchWay", 0);
 
-                entityDict.EntityType = CCBill.EntityType.FrmDict;
+                entityDict.EntityType = EntityType.FrmDict;
 
                 entityDict.Update();
                 entityDict.CheckEnityTypeAttrsFor_EntityNoName();

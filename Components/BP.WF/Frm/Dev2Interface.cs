@@ -9,6 +9,7 @@ using BP.DA;
 using BP.Web;
 using BP.En;
 using BP.WF.Template;
+using BP.WF.Data;
 
 namespace BP.Frm
 {
@@ -103,7 +104,7 @@ namespace BP.Frm
             gb.BillState = BillState.Editing;
 
             //创建rpt.
-            BP.WF.Data.GERpt rpt = new Data.GERpt(gb.FrmID, workID);
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(gb.FrmID, workID);
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {

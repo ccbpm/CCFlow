@@ -4,6 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Sys;
 using BP.WF.Template;
+using BP.WF;
 
 namespace BP.Frm
 {

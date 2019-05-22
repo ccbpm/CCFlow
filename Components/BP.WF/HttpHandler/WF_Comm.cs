@@ -451,20 +451,16 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
 
-                //if (en.HisUAC.IsDelete == false)
-                //    return "err@xx";
-
-
                 #region 首先判断参数删除.
                 string key1 = this.GetRequestVal("Key1");
                 string key2 = this.GetRequestVal("Key2");
                 string val1 = this.GetRequestVal("Val1");
                 string val2 = this.GetRequestVal("Val2");
 
-                if (key1.Equals("undefined") == false)
+                if (DataType.IsNullOrEmpty(key1) == false && key1.Equals("undefined") == false)
                 {
                     int num = 0;
-                    if (key2.Equals("undefined") == false)
+                    if (DataType.IsNullOrEmpty(key2) == false && key2.Equals("undefined") == false)
                     {
                         num = en.Delete(key1, val1, key2, val2);
                     }

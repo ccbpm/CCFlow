@@ -76,7 +76,6 @@ function GenerFoolFrm(wn) {
             html += Ele_Attachment(flowData, gf, node, ath);
             html += "  </td>";
             html += "</tr>";
-
             continue;
         }
 

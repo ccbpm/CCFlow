@@ -179,21 +179,15 @@ namespace BP.Frm
                 if (strs == null || strs.Equals("") == true)
                     return this.MethodDoc_JavaScript_Demo;
 
-                strs = strs.Replace("/#", "+"); //为什么？
-                strs = strs.Replace("/$", "-"); //为什么？
+                strs = strs.Replace("/#", "+"); 
+                strs = strs.Replace("/$", "-"); 
                 return strs;
             }
             set
             {
+
                 this.SaveBigTxtToDB("JSScript", value);
-
-                //string path = SystemConfig.PathOfDataUser + "JSLibData\\Method\\";
-                //if (System.IO.Directory.Exists(path) == false)
-                //    System.IO.Directory.CreateDirectory(path);
-
-                ////写入文件.
-                //string file = path + this.MyPK + ".js";
-                //DataType.WriteFile(file, value);
+                 
             }
         }
 

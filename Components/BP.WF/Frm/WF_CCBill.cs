@@ -81,7 +81,7 @@ namespace BP.Frm
         /// <returns>返回执行结果</returns>
         public string DoMethod_ExeSQL()
         {
-            FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
+            MethodFunc func = new MethodFunc(this.MyPK);
             string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
@@ -108,7 +108,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoMethodPara_ExeSQL()
         {
-            FrmMethodFunc func = new FrmMethodFunc(this.MyPK);
+            MethodFunc func = new MethodFunc(this.MyPK);
             string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
@@ -693,12 +693,12 @@ namespace BP.Frm
         #region 获得demo信息.
         public string MethodDocDemoJS_Init()
         {
-            var func = new FrmMethodFunc(this.MyPK);
+            var func = new MethodFunc(this.MyPK);
             return func.MethodDoc_JavaScript_Demo;
         }
         public string MethodDocDemoSQL_Init()
         {
-            var func = new FrmMethodFunc(this.MyPK);
+            var func = new MethodFunc(this.MyPK);
             return func.MethodDoc_SQL_Demo;
         }
         #endregion 获得demo信息.

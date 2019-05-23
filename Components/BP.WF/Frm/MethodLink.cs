@@ -12,7 +12,7 @@ namespace BP.Frm
 	/// <summary>
 	/// 连接方法
 	/// </summary>
-    public class FrmMethodLink : EntityMyPK
+    public class MethodLink : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -22,11 +22,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.FrmID);
+                return this.GetValStringByKey(MethodAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.FrmID, value);
+                this.SetValByKey(MethodAttr.FrmID, value);
             }
         }
         /// <summary>
@@ -36,11 +36,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MethodID);
+                return this.GetValStringByKey(MethodAttr.MethodID);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodID, value);
+                this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
         /// <summary>
@@ -50,25 +50,25 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MethodName);
+                return this.GetValStringByKey(MethodAttr.MethodName);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodName, value);
+                this.SetValByKey(MethodAttr.MethodName, value);
             }
         }
         public string MethodDoc_Url
         {
             get
             {
-                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc_Url);
+                string s = this.GetValStringByKey(MethodAttr.MethodDoc_Url);
                 if (DataType.IsNullOrEmpty(s) == true)
                     s = "http://192.168.0.100/MyPath/xxx.xx";
                 return s;
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodDoc_Url, value);
+                this.SetValByKey(MethodAttr.MethodDoc_Url, value);
             }
         }
         /// <summary>
@@ -78,11 +78,11 @@ namespace BP.Frm
         {
             get
             {
-                return (RefMethodType)this.GetValIntByKey(FrmMethodAttr.RefMethodType);
+                return (RefMethodType)this.GetValIntByKey(MethodAttr.RefMethodType);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.RefMethodType, (int)value);
+                this.SetValByKey(MethodAttr.RefMethodType, (int)value);
             }
         }
         #endregion
@@ -104,7 +104,7 @@ namespace BP.Frm
         /// <summary>
         /// 连接方法
         /// </summary>
-        public FrmMethodLink()
+        public MethodLink()
         {
         }
         /// <summary>
@@ -122,21 +122,21 @@ namespace BP.Frm
 
                 map.AddMyPK();
 
-                map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
-                map.AddDDLSysEnum(FrmMethodAttr.RefMethodType, 0, "方法类型", true, true, "RefMethodTypeLink",
+                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
+                map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, true, "RefMethodTypeLink",
                   "@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
 
-                map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
+                map.AddDDLSysEnum(MethodAttr.ShowModel, 0, "显示方式", true, true, MethodAttr.ShowModel,
                  "@0=按钮@1=超链接");
 
-                map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
-                map.AddTBStringDoc(FrmMethodAttr.MethodDoc_Url, null, "连接URL", true, false);
+                map.AddTBString(MethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
+                map.AddTBStringDoc(MethodAttr.MethodDoc_Url, null, "连接URL", true, false);
 
                 #region 工具栏.
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
-                map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
+                map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 工具栏.
 
                 this._enMap = map;
@@ -148,12 +148,12 @@ namespace BP.Frm
 	/// <summary>
 	/// 连接方法
 	/// </summary>
-    public class FrmMethodLinks : EntitiesMyPK
+    public class MethodLinks : EntitiesMyPK
     {
         /// <summary>
         /// 连接方法
         /// </summary>
-        public FrmMethodLinks() { }
+        public MethodLinks() { }
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>
@@ -161,7 +161,7 @@ namespace BP.Frm
         {
             get
             {
-                return new FrmMethodLink();
+                return new MethodLink();
             }
         }
         #region 为了适应自动翻译成java的需要,把实体转换成List.
@@ -169,20 +169,20 @@ namespace BP.Frm
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmMethodLink> ToJavaList()
+        public System.Collections.Generic.IList<MethodLink> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmMethodLink>)this;
+            return (System.Collections.Generic.IList<MethodLink>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmMethodLink> Tolist()
+        public System.Collections.Generic.List<MethodLink> Tolist()
         {
-            System.Collections.Generic.List<FrmMethodLink> list = new System.Collections.Generic.List<FrmMethodLink>();
+            System.Collections.Generic.List<MethodLink> list = new System.Collections.Generic.List<MethodLink>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmMethodLink)this[i]);
+                list.Add((MethodLink)this[i]);
             }
             return list;
         }

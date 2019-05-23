@@ -12,7 +12,7 @@ namespace BP.Frm
     /// <summary>
     /// 功能执行
     /// </summary>
-    public class FrmMethodFunc : EntityMyPK
+    public class MethodFunc : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -22,11 +22,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.FrmID);
+                return this.GetValStringByKey(MethodAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.FrmID, value);
+                this.SetValByKey(MethodAttr.FrmID, value);
             }
         }
         /// <summary>
@@ -36,11 +36,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MethodID);
+                return this.GetValStringByKey(MethodAttr.MethodID);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodID, value);
+                this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
         /// <summary>
@@ -50,33 +50,33 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MethodName);
+                return this.GetValStringByKey(MethodAttr.MethodName);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodName, value);
+                this.SetValByKey(MethodAttr.MethodName, value);
             }
         }
         public string MsgErr
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MsgErr);
+                return this.GetValStringByKey(MethodAttr.MsgErr);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MsgErr, value);
+                this.SetValByKey(MethodAttr.MsgErr, value);
             }
         }
         public string MsgSuccess
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MsgSuccess);
+                return this.GetValStringByKey(MethodAttr.MsgSuccess);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MsgSuccess, value);
+                this.SetValByKey(MethodAttr.MsgSuccess, value);
             }
         }
 
@@ -85,14 +85,14 @@ namespace BP.Frm
         {
             get
             {
-                string s = this.GetValStringByKey(FrmMethodAttr.MethodDoc_Url);
+                string s = this.GetValStringByKey(MethodAttr.MethodDoc_Url);
                 if (DataType.IsNullOrEmpty(s) == true)
                     s = "http://192.168.0.100/MyPath/xxx.xx";
                 return s;
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodDoc_Url, value);
+                this.SetValByKey(MethodAttr.MethodDoc_Url, value);
             }
         }
         /// <summary>
@@ -198,11 +198,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValIntByKey(FrmMethodAttr.MethodDocTypeOfFunc);
+                return this.GetValIntByKey(MethodAttr.MethodDocTypeOfFunc);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodDocTypeOfFunc, value);
+                this.SetValByKey(MethodAttr.MethodDocTypeOfFunc, value);
             }
         }
         /// <summary>
@@ -212,11 +212,11 @@ namespace BP.Frm
         {
             get
             {
-                return (RefMethodType)this.GetValIntByKey(FrmMethodAttr.RefMethodType);
+                return (RefMethodType)this.GetValIntByKey(MethodAttr.RefMethodType);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.RefMethodType, (int)value);
+                this.SetValByKey(MethodAttr.RefMethodType, (int)value);
             }
         }
         #endregion
@@ -241,10 +241,10 @@ namespace BP.Frm
         /// <summary>
         /// 功能执行
         /// </summary>
-        public FrmMethodFunc()
+        public MethodFunc()
         {
         }
-        public FrmMethodFunc(string mypk)
+        public MethodFunc(string mypk)
         {
             this.MyPK = mypk;
             this.Retrieve();
@@ -262,28 +262,28 @@ namespace BP.Frm
                 Map map = new Map("Frm_Method", "功能方法");
                 map.AddMyPK();
 
-                map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
-                map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
+                map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
 
-                map.AddDDLSysEnum(FrmMethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, FrmMethodAttr.WhatAreYouTodo,
+                map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
 
-                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10, true);
-                map.AddDDLSysEnum(FrmMethodAttr.ShowModel, 0, "显示方式", true, true, FrmMethodAttr.ShowModel,
+                map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10, true);
+                map.AddDDLSysEnum(MethodAttr.ShowModel, 0, "显示方式", true, true, MethodAttr.ShowModel,
                   "@0=按钮@1=超链接");
 
-                map.AddDDLSysEnum(FrmMethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, false, "MethodDocTypeOfFunc",
+                map.AddDDLSysEnum(MethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, false, "MethodDocTypeOfFunc",
                "@0=SQL@1=URL@2=JavaScript@3=业务单元");
 
-                map.AddTBString(FrmMethodAttr.MethodDoc_Url, null, "URL执行内容", false, false, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
-                map.AddTBString(FrmMethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
+                map.AddTBString(MethodAttr.MethodDoc_Url, null, "URL执行内容", false, false, 0, 300, 10);
+                map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
+                map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
 
                 #region 显示位置控制.
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
-                map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
+                map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
 
                 RefMethod rm = new RefMethod();
@@ -331,12 +331,12 @@ namespace BP.Frm
     /// <summary>
     /// 功能执行
     /// </summary>
-    public class FrmMethodFuncs : EntitiesMyPK
+    public class MethodFuncs : EntitiesMyPK
     {
         /// <summary>
         /// 功能执行
         /// </summary>
-        public FrmMethodFuncs() { }
+        public MethodFuncs() { }
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>
@@ -344,7 +344,7 @@ namespace BP.Frm
         {
             get
             {
-                return new FrmMethodFunc();
+                return new MethodFunc();
             }
         }
         #region 为了适应自动翻译成java的需要,把实体转换成List.
@@ -352,20 +352,20 @@ namespace BP.Frm
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmMethodFunc> ToJavaList()
+        public System.Collections.Generic.IList<MethodFunc> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmMethodFunc>)this;
+            return (System.Collections.Generic.IList<MethodFunc>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmMethodFunc> Tolist()
+        public System.Collections.Generic.List<MethodFunc> Tolist()
         {
-            System.Collections.Generic.List<FrmMethodFunc> list = new System.Collections.Generic.List<FrmMethodFunc>();
+            System.Collections.Generic.List<MethodFunc> list = new System.Collections.Generic.List<MethodFunc>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmMethodFunc)this[i]);
+                list.Add((MethodFunc)this[i]);
             }
             return list;
         }

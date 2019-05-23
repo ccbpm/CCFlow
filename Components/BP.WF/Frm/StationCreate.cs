@@ -10,7 +10,7 @@ namespace BP.Frm
     /// <summary>
     /// 单据可创建的工作岗位属性	  
     /// </summary>
-    public class FrmStationCreateAttr
+    public class StationCreateAttr
     {
         /// <summary>
         /// 单据
@@ -27,7 +27,7 @@ namespace BP.Frm
     /// 记录了从一个单据到其他的多个单据.
     /// 也记录了到这个单据的其他的单据.
     /// </summary>
-    public class FrmStationCreate : EntityMM
+    public class StationCreate : EntityMM
     {
         #region 基本属性
         /// <summary>
@@ -49,18 +49,18 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValIntByKey(FrmStationCreateAttr.FrmID);
+                return this.GetValIntByKey(StationCreateAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmStationCreateAttr.FrmID, value);
+                this.SetValByKey(StationCreateAttr.FrmID, value);
             }
         }
         public string FK_StationT
         {
             get
             {
-                return this.GetValRefTextByKey(FrmStationCreateAttr.FK_Station);
+                return this.GetValRefTextByKey(StationCreateAttr.FK_Station);
             }
         }
         /// <summary>
@@ -70,11 +70,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmStationCreateAttr.FK_Station);
+                return this.GetValStringByKey(StationCreateAttr.FK_Station);
             }
             set
             {
-                this.SetValByKey(FrmStationCreateAttr.FK_Station, value);
+                this.SetValByKey(StationCreateAttr.FK_Station, value);
             }
         }
         #endregion
@@ -83,7 +83,7 @@ namespace BP.Frm
         /// <summary>
         /// 单据可创建的工作岗位
         /// </summary>
-        public FrmStationCreate() { }
+        public StationCreate() { }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -96,8 +96,8 @@ namespace BP.Frm
 
                 Map map = new Map("Frm_StationCreate", "单据岗位");
 
-                map.AddTBStringPK(FrmStationCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
-                map.AddDDLEntitiesPK(FrmStationCreateAttr.FK_Station, null, "可以创建岗位",
+                map.AddTBStringPK(StationCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
+                map.AddDDLEntitiesPK(StationCreateAttr.FK_Station, null, "可以创建岗位",
                    new BP.GPM.Stations(), true);
                 this._enMap = map;
                 return this._enMap;
@@ -109,31 +109,31 @@ namespace BP.Frm
     /// <summary>
     /// 单据可创建的工作岗位
     /// </summary>
-    public class FrmStationCreates : EntitiesMM
+    public class StationCreates : EntitiesMM
     {
         #region 构造函数.
         /// <summary>
         /// 单据可创建的工作岗位
         /// </summary>
-        public FrmStationCreates() { }
+        public StationCreates() { }
         /// <summary>
         /// 单据可创建的工作岗位
         /// </summary>
         /// <param name="nodeID">单据ID</param>
-        public FrmStationCreates(int nodeID)
+        public StationCreates(int nodeID)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmStationCreateAttr.FrmID, nodeID);
+            qo.AddWhere(StationCreateAttr.FrmID, nodeID);
             qo.DoQuery();
         }
         /// <summary>
         /// 单据可创建的工作岗位
         /// </summary>
         /// <param name="StationNo">StationNo </param>
-        public FrmStationCreates(string StationNo)
+        public StationCreates(string StationNo)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmStationCreateAttr.FK_Station, StationNo);
+            qo.AddWhere(StationCreateAttr.FK_Station, StationNo);
             qo.DoQuery();
         }
         /// <summary>
@@ -143,7 +143,7 @@ namespace BP.Frm
         {
             get
             {
-                return new FrmStationCreate();
+                return new StationCreate();
             }
         }
         #endregion 构造函数.
@@ -153,20 +153,20 @@ namespace BP.Frm
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmStationCreate> ToJavaList()
+        public System.Collections.Generic.IList<StationCreate> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmStationCreate>)this;
+            return (System.Collections.Generic.IList<StationCreate>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmStationCreate> Tolist()
+        public System.Collections.Generic.List<StationCreate> Tolist()
         {
-            System.Collections.Generic.List<FrmStationCreate> list = new System.Collections.Generic.List<FrmStationCreate>();
+            System.Collections.Generic.List<StationCreate> list = new System.Collections.Generic.List<StationCreate>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmStationCreate)this[i]);
+                list.Add((StationCreate)this[i]);
             }
             return list;
         }

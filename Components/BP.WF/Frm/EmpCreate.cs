@@ -10,7 +10,7 @@ namespace BP.Frm
 	/// <summary>
 	/// 单据可创建的人员属性
 	/// </summary>
-	public class FrmEmpCreateAttr
+	public class EmpCreateAttr
 	{
 		/// <summary>
 		/// 表单ID
@@ -27,7 +27,7 @@ namespace BP.Frm
 	/// 记录了从一个表单ID到其他的多个表单ID.
 	/// 也记录了到这个表单ID的其他的表单ID.
 	/// </summary>
-	public class FrmEmpCreate :EntityMM
+	public class EmpCreate :EntityMM
 	{
 		#region 基本属性
 		/// <summary>
@@ -37,11 +37,11 @@ namespace BP.Frm
 		{
 			get
 			{
-				return this.GetValIntByKey(FrmEmpCreateAttr.FrmID);
+				return this.GetValIntByKey(EmpCreateAttr.FrmID);
 			}
 			set
 			{
-				this.SetValByKey(FrmEmpCreateAttr.FrmID,value);
+				this.SetValByKey(EmpCreateAttr.FrmID,value);
 			}
 		}
 		/// <summary>
@@ -51,18 +51,18 @@ namespace BP.Frm
 		{
 			get
 			{
-				return this.GetValStringByKey(FrmEmpCreateAttr.FK_Emp);
+				return this.GetValStringByKey(EmpCreateAttr.FK_Emp);
 			}
 			set
 			{
-				this.SetValByKey(FrmEmpCreateAttr.FK_Emp,value);
+				this.SetValByKey(EmpCreateAttr.FK_Emp,value);
 			}
 		}
         public string FK_EmpT
         {
             get
             {
-                return this.GetValRefTextByKey(FrmEmpCreateAttr.FK_Emp);
+                return this.GetValRefTextByKey(EmpCreateAttr.FK_Emp);
             }
         }
 		#endregion 
@@ -71,7 +71,7 @@ namespace BP.Frm
 		/// <summary>
 		/// 单据可创建的人员
 		/// </summary>
-		public FrmEmpCreate()
+		public EmpCreate()
         {
         }
 		/// <summary>
@@ -86,8 +86,8 @@ namespace BP.Frm
 
                 Map map = new Map("Frm_EmpCreate", "单据可创建的人员");
 
-                map.AddTBStringPK(FrmEmpCreateAttr.FrmID,null,"表单",true,true,1,100,100 );
-                map.AddDDLEntitiesPK(FrmEmpCreateAttr.FK_Emp, null, "人员", new Emps(), true);
+                map.AddTBStringPK(EmpCreateAttr.FrmID,null,"表单",true,true,1,100,100 );
+                map.AddDDLEntitiesPK(EmpCreateAttr.FK_Emp, null, "人员", new Emps(), true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -98,31 +98,31 @@ namespace BP.Frm
 	/// <summary>
 	/// 单据可创建的人员
 	/// </summary>
-    public class FrmEmpCreates : EntitiesMM
+    public class EmpCreates : EntitiesMM
     {
         #region 构造函数.
         /// <summary>
         /// 单据可创建的人员
         /// </summary>
-        public FrmEmpCreates() { }
+        public EmpCreates() { }
         /// <summary>
         /// 单据可创建的人员
         /// </summary>
         /// <param name="NodeID">表单IDID</param>
-        public FrmEmpCreates(int NodeID)
+        public EmpCreates(int NodeID)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmEmpCreateAttr.FrmID, NodeID);
+            qo.AddWhere(EmpCreateAttr.FrmID, NodeID);
             qo.DoQuery();
         }
         /// <summary>
         /// 单据可创建的人员
         /// </summary>
         /// <param name="EmpNo">EmpNo </param>
-        public FrmEmpCreates(string EmpNo)
+        public EmpCreates(string EmpNo)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmEmpCreateAttr.FK_Emp, EmpNo);
+            qo.AddWhere(EmpCreateAttr.FK_Emp, EmpNo);
             qo.DoQuery();
         }
         /// <summary>
@@ -132,7 +132,7 @@ namespace BP.Frm
         {
             get
             {
-                return new FrmEmpCreate();
+                return new EmpCreate();
             }
         }
         #endregion 构造函数.
@@ -142,20 +142,20 @@ namespace BP.Frm
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmEmpCreate> ToJavaList()
+        public System.Collections.Generic.IList<EmpCreate> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmEmpCreate>)this;
+            return (System.Collections.Generic.IList<EmpCreate>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmEmpCreate> Tolist()
+        public System.Collections.Generic.List<EmpCreate> Tolist()
         {
-            System.Collections.Generic.List<FrmEmpCreate> list = new System.Collections.Generic.List<FrmEmpCreate>();
+            System.Collections.Generic.List<EmpCreate> list = new System.Collections.Generic.List<EmpCreate>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmEmpCreate)this[i]);
+                list.Add((EmpCreate)this[i]);
             }
             return list;
         }

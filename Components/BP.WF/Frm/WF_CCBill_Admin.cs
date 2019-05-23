@@ -41,7 +41,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string MethodDoc_GetScript() 
         {
-            var en = new BP.Frm.FrmMethodFunc(this.MyPK);
+            var en = new BP.Frm.MethodFunc(this.MyPK);
             int type = this.GetRequestValInt("TypeOfFunc");
             if (type == 0)
                 return en.MethodDoc_SQL;
@@ -60,7 +60,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string MethodDoc_SaveScript()
         {
-            var en = new BP.Frm.FrmMethodFunc(this.MyPK);
+            var en = new BP.Frm.MethodFunc(this.MyPK);
 
             int type = this.GetRequestValInt("TypeOfFunc");
             string doc = this.GetRequestVal("doc");

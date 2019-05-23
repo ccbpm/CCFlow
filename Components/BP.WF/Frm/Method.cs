@@ -13,7 +13,7 @@ namespace BP.Frm
 	/// <summary>
 	/// 表单方法属性
 	/// </summary>
-    public class FrmMethodAttr:EntityMyPKAttr
+    public class MethodAttr:EntityMyPKAttr
     {
         /// <summary>
         /// 表单ID
@@ -83,7 +83,7 @@ namespace BP.Frm
 	/// <summary>
 	/// 表单方法
 	/// </summary>
-    public class FrmMethod : EntityMyPK
+    public class Method : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -93,11 +93,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.FrmID);
+                return this.GetValStringByKey(MethodAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.FrmID, value);
+                this.SetValByKey(MethodAttr.FrmID, value);
             }
         }
         /// <summary>
@@ -107,11 +107,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MethodID);
+                return this.GetValStringByKey(MethodAttr.MethodID);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodID, value);
+                this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
         /// <summary>
@@ -121,11 +121,11 @@ namespace BP.Frm
         {
             get
             {
-                return this.GetValStringByKey(FrmMethodAttr.MethodName);
+                return this.GetValStringByKey(MethodAttr.MethodName);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.MethodName, value);
+                this.SetValByKey(MethodAttr.MethodName, value);
             }
         }
         
@@ -136,11 +136,11 @@ namespace BP.Frm
         {
             get
             {
-                return (RefMethodType)this.GetValIntByKey(FrmMethodAttr.RefMethodType);
+                return (RefMethodType)this.GetValIntByKey(MethodAttr.RefMethodType);
             }
             set
             {
-                this.SetValByKey(FrmMethodAttr.RefMethodType, (int)value);
+                this.SetValByKey(MethodAttr.RefMethodType, (int)value);
             }
         }
         #endregion
@@ -149,7 +149,7 @@ namespace BP.Frm
         /// <summary>
         /// 表单方法
         /// </summary>
-        public FrmMethod()
+        public Method()
         {
         }
         /// <summary>
@@ -166,27 +166,27 @@ namespace BP.Frm
 
                 map.AddMyPK();
 
-                map.AddTBString(FrmMethodAttr.FrmID, null, "表单ID", true, false, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.MethodID, null, "方法ID", true, false, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10);
-                map.AddTBString(FrmMethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
+                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, false, 0, 300, 10);
+                map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, false, 0, 300, 10);
+                map.AddTBString(MethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10);
+                map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
 
-                map.AddDDLSysEnum(FrmMethodAttr.RefMethodType, 0, "方法类型", true, false, FrmMethodAttr.RefMethodType,
+                map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, false, MethodAttr.RefMethodType,
                     "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开@4=实体集合的功能");
 
                 #region 显示位置控制.
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
-                map.AddBoolean(FrmMethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
-                map.AddBoolean(FrmMethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
+                map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
 
                 //对功能有效.
-                map.AddTBString(FrmMethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
-                map.AddTBString(FrmMethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
-                map.AddDDLSysEnum(FrmMethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, FrmMethodAttr.WhatAreYouTodo,
+                map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
+                map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
+                map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
 
-                map.AddTBInt(FrmMethodAttr.Idx, 0, "Idx", true, false);
+                map.AddTBInt(MethodAttr.Idx, 0, "Idx", true, false);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -195,11 +195,11 @@ namespace BP.Frm
 
         public void DoUp()
         {
-            this.DoOrderUp(FrmMethodAttr.FrmID, this.FrmID, FrmMethodAttr.Idx);
+            this.DoOrderUp(MethodAttr.FrmID, this.FrmID, MethodAttr.Idx);
         }
         public void DoDown()
         {
-            this.DoOrderDown(FrmMethodAttr.FrmID, this.FrmID, FrmMethodAttr.Idx);
+            this.DoOrderDown(MethodAttr.FrmID, this.FrmID, MethodAttr.Idx);
         }
 
        
@@ -212,20 +212,20 @@ namespace BP.Frm
 	/// <summary>
 	/// 表单方法
 	/// </summary>
-    public class FrmMethods : EntitiesMyPK
+    public class Methods : EntitiesMyPK
     {
         /// <summary>
         /// 表单方法
         /// </summary>
-        public FrmMethods() { }
+        public Methods() { }
         /// <summary>
         /// 表单方法
         /// </summary>
         /// <param name="nodeid">方法IDID</param>
-        public FrmMethods(int nodeid)
+        public Methods(int nodeid)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmMethodAttr.MethodID, nodeid);
+            qo.AddWhere(MethodAttr.MethodID, nodeid);
             qo.DoQuery();
         }
         /// <summary>
@@ -235,7 +235,7 @@ namespace BP.Frm
         {
             get
             {
-                return new FrmMethod();
+                return new Method();
             }
         }
         #region 为了适应自动翻译成java的需要,把实体转换成List.
@@ -243,20 +243,20 @@ namespace BP.Frm
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmMethod> ToJavaList()
+        public System.Collections.Generic.IList<Method> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmMethod>)this;
+            return (System.Collections.Generic.IList<Method>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmMethod> Tolist()
+        public System.Collections.Generic.List<Method> Tolist()
         {
-            System.Collections.Generic.List<FrmMethod> list = new System.Collections.Generic.List<FrmMethod>();
+            System.Collections.Generic.List<Method> list = new System.Collections.Generic.List<Method>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmMethod)this[i]);
+                list.Add((Method)this[i]);
             }
             return list;
         }

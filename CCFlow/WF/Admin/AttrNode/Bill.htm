@@ -53,7 +53,7 @@
                 newRow += "<td>" + en.TemplateFileModelText + "</td>";
                 newRow += "<td>" + en.QRModelText + "</td>";
 
-                newRow += "<td><a href='" + Handler + "?DoType=Bill_Download&No=" + en.No + "'>" + en.TempFilePath + "</td>";
+                newRow += "<td><a href='javaScript:void(0)' onclick='window.open(\"../../../DataUser/CyclostyleFile/"+en.TempFilePath+"\")'>" + en.TempFilePath + "</td>";
 
                 newRow += "<td>";
                 newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='" + basePath + "/WF/Img/Btn/Delete.gif' border=0 />删除</a>";

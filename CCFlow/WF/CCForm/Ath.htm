@@ -422,7 +422,7 @@
                     html += "<td>";
                     if (athDesc.IsDownload == 1)
                         html += "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">下载</a>";
-                    //if (IsReadonly != "1") {
+                    if (IsReadonly != "1") {
                         var op = "";
 
                         if (athDesc.DeleteWay == AthDeleteWay.DelAll)//删除所有
@@ -432,7 +432,7 @@
                                 op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">删除</a>";
 
                         html += op;
-                    //}
+                    }
 
                     html += "</td>";
 

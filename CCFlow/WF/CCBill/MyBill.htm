@@ -139,7 +139,7 @@
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
             //获得当前的集合.
-            var fms = new Entities("BP.Frm.FrmMethods", "FrmID", frmID);
+            var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);
             for (var i = 0; i < fms.length; i++) {
                 var fm = fms[i];
 

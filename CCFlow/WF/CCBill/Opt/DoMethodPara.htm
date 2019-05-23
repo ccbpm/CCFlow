@@ -24,7 +24,7 @@
             var myPK = GetQueryString("MyPK");
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
-            func = new Entity("BP.Frm.FrmMethodFunc", myPK);
+            func = new Entity("BP.Frm.MethodFunc", myPK);
             attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
             frmData = new Entity(func.FrmID, workID);
 
@@ -45,7 +45,7 @@
         function DoIt() {
 
             var myPK = GetQueryString("MyPK");
-            func = new Entity("BP.Frm.FrmMethodFunc", myPK);
+            func = new Entity("BP.Frm.MethodFunc", myPK);
 
             if (func.WarningMsg == "")
                 func.WarningMsg = "您确定要执行吗？";

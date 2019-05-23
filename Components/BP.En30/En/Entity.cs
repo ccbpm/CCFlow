@@ -2308,6 +2308,8 @@ namespace BP.En
         #region 对文件的处理.
         public void SaveBigTxtToDB(string saveToField, string bigTxt)
         {
+            bigTxt = "$" + bigTxt;
+
             try
             {
                 string temp = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.EnMap.PhysicsTable + this.PKVal + ".tmp";

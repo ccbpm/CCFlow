@@ -66,7 +66,6 @@ namespace BP.Frm
 
             gb.DirectInsert(); //执行插入.
 
-
             //更新基础的数据到表单表.
             // rpt = new BP.WF.Data.GERpt(frmID);
             rpt.SetValByKey("BillState", (int)gb.BillState);

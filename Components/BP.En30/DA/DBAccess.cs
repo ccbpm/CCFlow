@@ -276,9 +276,11 @@ namespace BP.DA
             if (byteFile == null)
                 return null;
 
-            //System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-            //return converter.GetString(byteFile);
-            return System.Text.Encoding.UTF8.GetString(byteFile);
+            string strs= System.Text.Encoding.UTF8.GetString(byteFile);
+            int idx = strs.LastIndexOf('$');
+            if (idx != 0)
+                strs = strs.Substring(idx + 1);
+            return strs;
         }
         /// <summary>
         /// 从数据库里提取文件
@@ -1625,9 +1627,10 @@ namespace BP.DA
         public static string DealSQL(string sql)
         {
             return sql;
-            // sql p = sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|"); 
-            //String presult = p.matcher(sql).replaceAll("$1"); 
-            //return presult;
+          ////  return sql;
+          //= sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
+          //  String presult = p.matcher(sql).replaceAll("$1");
+          //  return presult;
         }
         /// <summary>
         /// 运行SQLs
@@ -1642,6 +1645,12 @@ namespace BP.DA
 
             sql = sql.Replace("@GO", "~");
             sql = sql.Replace("@", "~");
+            sql = sql.Replace(";", "~");
+
+            sql = sql.Replace("UPDATE", "~UPDATE");
+            sql = sql.Replace("DELETE", "~DELETE");
+            sql = sql.Replace("INSERT", "~INSERT");
+
             string[] strs = sql.Split('~');
             foreach (string str in strs)
             {

@@ -4430,7 +4430,7 @@ namespace BP.WF.HttpHandler
             if (result == 0 || sln.FrmSln == 1)
             {
                 athDesc.IsUpload = false;
-                athDesc.IsDownload = false;
+                athDesc.IsDownload = true;
                 athDesc.HisDeleteWay = AthDeleteWay.None; //删除模式.
                 return athDesc;
             }
@@ -4572,6 +4572,7 @@ namespace BP.WF.HttpHandler
 
                         athDesc.HisDeleteWay = AthDeleteWay.None;
                         athDesc.IsUpload = false;
+                        athDesc.IsDownload = true;
                         athDesc.MyPK = this.FK_FrmAttachment;
                         return athDesc;
                     }

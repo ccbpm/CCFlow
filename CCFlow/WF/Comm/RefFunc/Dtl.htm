@@ -508,14 +508,13 @@
             handler.AddFormData();
             handler.AddPara("NewRowCount", newRowCount);
             var data = handler.DoMethodReturnString("Dtl_Save");
-            if (data.indexOf("err@")==0)
-            {
+            if (data.indexOf("err@") == 0) {
                 alert(data);
                 $("#Btn_Save").attr("disabled", false);
-              return;
+                return;
             }
-          alert(data);
-          window.location.href = window.location.href;
+         //   alert(data);
+            window.location.href = window.location.href;
         }
 
         function Delete(pkval) {

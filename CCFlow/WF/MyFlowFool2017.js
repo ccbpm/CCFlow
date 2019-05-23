@@ -528,7 +528,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             //如果是富文本就使用百度 UEditor
             if (mapAttr.UIIsEnable == "0") {
                 //只读状态直接 div 展示富文本内容
-                defValue = defValue.replace(/white-space: nowrap;/g, "");             
+                defValue = defValue.replace(/white-space: nowrap;/g, "");
                 eleHtml += "<div class='richText' style='width:99%;margin-right:2px'>" + defValue + "</div>";
 
             } else {
@@ -1391,18 +1391,25 @@ function GetLab(flowData, attr) {
             if (frmImg.ImgSrcType == 0) {
                 //替换参数
                 var frmPath = frmImg.ImgPath;
+                frmPath = frmPath.replace('＠', '@');
                 frmPath = frmPath.replace('@basePath', basePath);
-                imgSrc = DealJsonExp(flowData.MainTable[0],frmPath);
+                frmPath = frmPath.replace('@basePath', basePath);
+                imgSrc = DealJsonExp(flowData.MainTable[0], frmPath);
             }
+
             //数据来源为指定路径.
             if (frmImg.ImgSrcType == 1) {
-          
-                var url = frmImg.ImgURL.replace('@basePath', basePath);
+                var url = frmImg.ImgURL;
+                url = url.replace('＠', '@');
+                url = url.replace('@basePath', basePath);
                 imgSrc = DealJsonExp(flowData.MainTable[0], url);
             }
             // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
             if (imgSrc == "" || imgSrc == null)
                 imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
+
+            //＠basePath
+            //alert(imgSrc);
 
             var style = "text-align:center;";
             if (attr.UIWidth == 0)
@@ -1414,9 +1421,7 @@ function GetLab(flowData, attr) {
                 style += "Height:100%;";
             else
                 style += "Height:" + attr.UIHeight + "px;";
-
-
-            return "<img src='" + imgSrc + "' style='" + style + "' onerror=\"this.src='../DataUser/ICON/CCFlow/LogBig.png'\" />";
+            return "<img src='" + imgSrc + "' style='" + style + "'  />";
 
         }
         return "";

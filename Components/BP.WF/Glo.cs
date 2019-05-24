@@ -4781,9 +4781,10 @@ namespace BP.WF
                     }
                     else
                     {
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
-                        qo.addOr();
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, '('+pWorkID + ',' + pkval+')');
+                        //qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, "=", pWorkID, "RefPKVal1");
+                        //qo.addOr();
+                        //qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, "=", pkval, "");
                     }
                     qo.addOrderBy("RDT");
                     qo.DoQuery();

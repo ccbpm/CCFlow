@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>有参数的方法</title>
+    <meta charset="utf-8" />
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -30,13 +31,13 @@
 
             document.title = func.MethodName;
 
-            var html = "<table>";
+            var html = "<table style='width:95%;'>";
             html += "<caption>" + func.MethodName + "</caption>";
 
             html += InitMapAttr(attrs, frmData);
             html += "</table>";
-            html += "<input type='button' value='执行' onclick=\"javascript:DoIt();\" />";
-            html += "<input type='button' value='关闭' onclick=\"javascript:window.close();\" />";
+            html += "<input type='button' value='Done' onclick=\"javascript:DoIt();\" />";
+            html += "<input type='button' value='Close' onclick=\"javascript:window.close();\" />";
 
             $("#docs").html(html);
         });
@@ -67,7 +68,7 @@
 
             //执行Script.
             if (func.MethodDocTypeOfFunc == 1) {
-                 
+
                 var scriptFunc = func.DoMethodReturnString("Gener_MethodDoc_JavaScript_function");
 
                 //生成参数.
@@ -85,7 +86,7 @@
                     if (attr.UIContralType == 2)
                         val = $("#CB_" + attr.KeyOfEn).val();
 
-                    if (i == attrs.length-1)
+                    if (i == attrs.length - 1) {
                         if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
                             if (val == "" || val == undefined)
                                 val = 0;
@@ -93,25 +94,29 @@
                         }
                         else
                             paras += "'" + val + "'";
-                    else
+                    }
+                    else {
                         if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
                             if (val == "" || val == undefined)
                                 val = 0;
-                            paras += val+",";
+                            paras += val + ",";
                         }
                         else
                             paras += "'" + val + "',";
-
-                  
+                    }
                 }
 
                 //执行这个 script.
                 try {
 
                     addDynamicJS(scriptFunc);
+
+                  //  alert(paras);
                     eval(func.MethodID + "(" + paras + ")");
                     return;
                 } catch (e) {
+                    alert(e);
+
                     $("#Msg").html(e);
                     return;
                 }
@@ -142,7 +147,7 @@
                 script.text = src;
             }
             document.body.appendChild(script);
-          
+
         }
 
         //解析表单字段 MapAttr.
@@ -264,8 +269,10 @@
 </head>
 <body>
     <form name="cc" id="cc">
-    <div id="docs"></div>
-    <div id="Msg"></div>
+    <div id="docs">
+    </div>
+    <div id="Msg">
+    </div>
     </form>
 </body>
 </html>

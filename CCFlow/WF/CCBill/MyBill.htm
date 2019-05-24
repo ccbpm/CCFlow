@@ -169,11 +169,6 @@
         ///执行方法.
         function Done(msg, funMyPK, methodName, afterOper, w, h) {
 
-            if (w == 0)
-                w = 360;
-
-            if (h == 0)
-                h = 260;
 
             var isHaveAttr = false;
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
@@ -182,7 +177,12 @@
                 isHaveAttr = true;
             }
 
+            //带有参数的方法.
             if (isHaveAttr == true) {
+
+                if (w == 0) w = 560;
+                if (h == 0) h = 260;
+
                 var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
                 //WinOpen(url);
                 OpenBootStrapModal(url, "MethodePara", methodName, w, h, null, false, null, null, function () {
@@ -201,20 +201,22 @@
                         else
                             window.location.href = "./Search.htm?FrmID=" + GetQueryString("FrmID");
                     }
-
                 });
-               
-                
+                return;
             }
 
+            //不带有参数的方法.
             if (msg != '' && msg.length > 5 ) {
                 if (window.confirm(msg) == false)
                     return;
             }
-
             var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
             //WinOpen(url);
             OpenBootStrapModal(url, "Methode", methodName, w, h, null, null, null, null, function () {
+
+                if (w == 0) w = 360;
+                if (h == 0) h = 260;
+
                 //afterOper=0 关闭提示窗口，不做任何操作
 
                 //afterOper=1 关闭提示窗口刷新页面

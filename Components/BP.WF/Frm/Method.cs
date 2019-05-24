@@ -193,8 +193,8 @@ namespace BP.Frm
                 #endregion 显示位置控制.
 
                 #region 外观.
-                map.AddTBInt(MethodAttr.PopHeight, 100, "弹窗高度", true, false);
-                map.AddTBInt(MethodAttr.PopWidth, 260, "弹窗宽度", true, false);
+                map.AddTBInt(MethodAttr.PopHeight, 0, "弹窗高度", true, false);
+                map.AddTBInt(MethodAttr.PopWidth, 0, "弹窗宽度", true, false);
                 #endregion 外观.
 
 

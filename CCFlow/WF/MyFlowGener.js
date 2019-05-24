@@ -1362,7 +1362,7 @@ function checkBlanks() {
 
     $.each(lbs, function (i, obj) {
 
-        if ($(obj).parent().css('display') != 'none' && ($(obj).parent().next().css('display') || $(obj).siblings("textarea").css('display'))) {
+        if ($(obj).parent().css('display') != 'none' && (($(obj).parent().next().css('display')) != 'none' || ($(obj).siblings("textarea").css('display')) != 'none')) {
         } else {
             return;
         }

@@ -1031,7 +1031,11 @@ function execSend(toNodeID) {
     var data = handler.DoMethodReturnString("Send"); //执行保存方法.
 
     if (data.indexOf('err@') == 0) { //发送时发生错误
-        $('#Message').html(data.substring(4, data.length));
+
+        var reg = new RegExp('err@', "g")
+        var data = data.replace(reg, '');
+
+        $('#Message').html(data );
         $('#MessageDiv').modal().show();
         setToobarEnable();
         return;

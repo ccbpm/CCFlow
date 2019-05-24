@@ -48,11 +48,11 @@
             var myPK = GetQueryString("MyPK");
             func = new Entity("BP.Frm.MethodFunc", myPK);
 
-            if (func.WarningMsg == "")
-                func.WarningMsg = "您确定要执行吗？";
-
-            if (confirm(func.WarningMsg) == false)
-                return;
+            if (func.WarningMsg != "") {
+                if (confirm(func.WarningMsg) == false)
+                    return;
+            }
+           
 
             var doc = func.MethodDoc;
 
@@ -62,7 +62,15 @@
                 handler.AddUrlData();
                 handler.AddFormData();
                 var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
-                $("#Msg").html(data);
+
+                if (data.indexOf('err@') == -1) {
+
+                    $("#Msg").html(data);
+
+
+                } else {
+                    $("#Msg").html('系统错误:'+data);
+                }
                 return;
             }
 

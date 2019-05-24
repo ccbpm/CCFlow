@@ -64,6 +64,18 @@ namespace BP.Frm
         /// </summary>
         public const string WhatAreYouTodo = "WhatAreYouTodo";
 
+        #region 外观.
+        /// <summary>
+        /// 宽度.
+        /// </summary>
+        public const string PopWidth = "PopWidth";
+        /// <summary>
+        /// 高度
+        /// </summary>
+        public const string PopHeight = "PopHeight";
+        #endregion 外观.
+
+
 
         #region 显示位置
         /// <summary>
@@ -179,6 +191,12 @@ namespace BP.Frm
                 map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
                 map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
+
+                #region 外观.
+                map.AddTBInt(MethodAttr.PopHeight, 100, "弹窗高度", true, false);
+                map.AddTBInt(MethodAttr.PopWidth, 260, "弹窗宽度", true, false);
+                #endregion 外观.
+
 
                 //对功能有效.
                 map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);

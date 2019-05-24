@@ -189,11 +189,14 @@ namespace BP.Frm
 
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 200, 20, true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), false);
-
-                map.AddDDLSysEnum(FrmAttr.RowOpenMode, 0, "行记录打开模式", true, true,
-                    "RowOpenMode", "@0=新窗口打开@1=弹出窗口打开,关闭后刷新列表@2=弹出窗口打开,关闭后不刷新列表");
-
                 #endregion 基本属性.
+
+                #region 外观.
+                map.AddDDLSysEnum(FrmAttr.RowOpenMode, 0, "行记录打开模式", true, true,
+                  "RowOpenMode", "@0=新窗口打开@1=在本窗口打开@2=弹出窗口打开,关闭后不刷新列表@3=弹出窗口打开,关闭后刷新列表");
+                map.AddTBInt(FrmAttr.PopHeight, 500, "弹窗高度", true, false);
+                map.AddTBInt(FrmAttr.PopWidth, 760, "弹窗宽度", true, false);
+                #endregion 外观.
 
                 #region 实体表单.
                 map.AddDDLSysEnum(FrmDictAttr.EntityType, 0, "业务类型", true, false, FrmDictAttr.EntityType,

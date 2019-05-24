@@ -123,6 +123,9 @@ namespace BP.Frm
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("/#", "+"); //为什么？
                 doc = doc.Replace("/$", "-"); //为什么？
+
+                doc = doc.Replace("@FrmID", this.FrmID);
+
                 return doc;
             }
         }
@@ -132,6 +135,7 @@ namespace BP.Frm
             {
                 string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
+                doc = doc.Replace("@FrmID", this.FrmID);
                 return doc;
             }
         }
@@ -279,6 +283,12 @@ namespace BP.Frm
                 map.AddTBString(MethodAttr.MethodDoc_Url, null, "URL执行内容", false, false, 0, 300, 10);
                 map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
                 map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
+
+                #region 外观.
+                map.AddTBInt(MethodAttr.PopHeight, 100, "弹窗高度", true, false);
+                map.AddTBInt(MethodAttr.PopWidth, 260, "弹窗宽度", true, false);
+                #endregion 外观.
+
 
                 #region 显示位置控制.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);

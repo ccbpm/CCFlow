@@ -277,7 +277,7 @@ namespace BP.DA
                 return null;
 
             string strs= System.Text.Encoding.UTF8.GetString(byteFile);
-            int idx = strs.LastIndexOf('$');
+            int idx = strs.IndexOf('$');
             if (idx != 0)
                 strs = strs.Substring(idx + 1);
             return strs;

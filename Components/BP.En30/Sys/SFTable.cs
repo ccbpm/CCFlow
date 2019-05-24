@@ -319,6 +319,10 @@ namespace BP.Sys
                 //throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
             }
         }
+        public string GenerHisJson()
+        {
+            return BP.Tools.Json.ToJson(this.GenerHisDataTable);
+        }
         /// <summary>
         /// 自动生成编号
         /// </summary>

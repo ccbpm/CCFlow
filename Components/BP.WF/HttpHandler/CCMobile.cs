@@ -211,6 +211,16 @@ namespace BP.WF.HttpHandler
             DataTable dt = BP.WF.Dev2Interface.DB_Todolist(WebUser.No, this.FK_Node);
             return BP.Tools.Json.ToJson(dt);
         }
+        /// <summary>
+        /// 查询已完成.
+        /// </summary>
+        /// <returns></returns>
+        public string Complete_Init()
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_FlowComplete();
+            return BP.Tools.Json.ToJson(dt);
+        }
         public string DB_GenerReturnWorks()
         {
             /* 如果工作节点退回了*/

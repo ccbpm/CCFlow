@@ -61,8 +61,7 @@
                 handler.AddUrlData();
                 handler.AddFormData();
                 var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
-                alert(data);
-                window.close();
+                $("#Msg").html(data);
                 return;
             }
 
@@ -113,8 +112,7 @@
                     eval(func.MethodID + "(" + paras + ")");
                     return;
                 } catch (e) {
-                    alert(e);
-                    window.close();
+                    $("#Msg").html(e);
                     return;
                 }
 
@@ -124,8 +122,7 @@
                 handler.AddUrlData();
                 handler.AddFormData();
                 var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
-                alert(data);
-                window.close();
+                $("#Msg").html(data);
 
                 return;
             }
@@ -267,8 +264,8 @@
 </head>
 <body>
     <form name="cc" id="cc">
-    <div id="docs">
-    </div>
+    <div id="docs"></div>
+    <div id="Msg"></div>
     </form>
 </body>
 </html>

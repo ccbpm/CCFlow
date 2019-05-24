@@ -146,13 +146,13 @@
                 if (fm.IsMyBillToolBar != 1)
                     continue;
 
-                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
+                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','"+fm.MethodName+"',"+fm.WhatAreYouTodo+");\" />";
             }
             $("#toolbar").html(toolBar);
         }
 
         ///执行方法.
-        function Done(msg, funMyPK) {
+        function Done(msg, funMyPK,methodName,afterOper) {
 
             var isHaveAttr = false;
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
@@ -163,8 +163,27 @@
 
             if (isHaveAttr == true) {
                 var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
-                WinOpen(url);
-                return;
+                //WinOpen(url);
+                OpenBootStrapModal(url, "MethodePara", methodName, 600, 500, null, null, null, null, function () {
+                    //afterOper=0 关闭提示窗口，不做任何操作
+
+                    //afterOper=1 关闭提示窗口刷新页面
+                    if (afterOper == 1)
+                        window.location.href = window.location.href;
+
+                    //afterOper=2 关闭提示窗口跳转到Search.htm
+                    if (afterOper == 2) {
+
+                        if (window.parent.location.href.indexOf("Search.htm") != -1) {
+                            window.close();
+                        }
+                        else
+                            window.location.href = "./Search.htm?FrmID=" + GetQueryString("FrmID");
+                    }
+
+                });
+               
+                
             }
 
             if (msg != '' && msg.length > 5 ) {
@@ -173,7 +192,26 @@
             }
 
             var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
-            WinOpen(url);
+            //WinOpen(url);
+            OpenBootStrapModal(url, "Methode", methodName, 600, 500, null, null, null, null, function () {
+                //afterOper=0 关闭提示窗口，不做任何操作
+
+                //afterOper=1 关闭提示窗口刷新页面
+                if (afterOper == 1)
+                    window.location.href = window.location.href;
+
+                //afterOper=2 关闭提示窗口跳转到Search.htm
+                if (afterOper == 2) {
+
+                    if (window.parent.location.href.indexOf("Search.htm") != -1) {
+                        window.close();
+                    }
+                    else
+                        window.location.href = "./Search.htm?FrmID=" + GetQueryString("FrmID");
+                }
+
+            });
+
         }
         //保存为草稿.
         function SaveAsDraft() {

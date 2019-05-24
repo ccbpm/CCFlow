@@ -59,7 +59,7 @@
 
 		        var nameLink = "";
 		        if (lgType == 0) {
-		            nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "')\" > " + name + "</a>";
+		            nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "',null,'"+attr.FK_MapData+"',"+uiContralType+")\" > " + name + "</a>";
 		        }
 
 		        if (lgType == 1) {
@@ -197,16 +197,16 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             //  window.location.href = window.location.href;
         }
-        function Edit(mypk, ftype) {
+        function Edit(mypk, ftype,gf,fk_mapdata,uiControlType) {
             var parentwin = parent.window;
             if (parentwin) {
 
                 var iFrame = parentwin.document.getElementById("F");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
-                    parentwin.Edit(mypk, ftype);
+                    parentwin.Edit(mypk, ftype, gf, fk_mapdata, uiControlType);
                     return;
                 }
-                parentwin.Edit(mypk, ftype);
+                parentwin.Edit(mypk, ftype, gf, fk_mapdata, uiControlType);
                 //alert("err");
                 return;
             }

@@ -87,7 +87,7 @@
             var url = "../../Comm/EnOnly.htm?EnName=BP.Frm.MethodLink&MyPK=" + mypk;
             if (type == 0)
                 url = "../../Comm/En.htm?EnName=BP.Frm.MethodFunc&MyPK=" + mypk;
-            WinOpen(url);
+            WinOpenFull(url);
         }
         function Up(no) {
             var emp = new Entity("BP.Frm.Method", no);

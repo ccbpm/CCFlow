@@ -50,6 +50,8 @@
             var myPK = GetQueryString("MyPK");
             en = new Entity("BP.Frm.MethodFunc", myPK);
 
+            GenerBindEnumKey("DDL_WhatAreYouTodo", "WhatAreYouTodo", en.WhatAreYouTodo);
+
             //给控件赋值.
             GenerFullAllCtrlsVal(en);
 
@@ -198,6 +200,10 @@
                     <input type="radio" value="2" name="RB_MethodDocTypeOfFunc" id="RB_MethodDocTypeOfFunc_2"
                         onclick="FullDoc();" />URL模式
                 </label>
+
+                执行完毕后干啥？
+                <select id="DDL_WhatAreYouTodo" name="DDL_WhatAreYouTodo"> </select>
+                
                 <input type="button" value="保存" onclick="Save()" id="Btn_Save" name="Btn_Save" />
                 <input type="button" value="内容编辑demo for javascript" onclick="DemoJS()" id="Button1"
                     name="Btn_D1" />

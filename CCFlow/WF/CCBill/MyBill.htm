@@ -146,13 +146,34 @@
                 if (fm.IsMyBillToolBar != 1)
                     continue;
 
-                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','"+fm.MethodName+"',"+fm.WhatAreYouTodo+");\" />";
+                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.MethodName + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "');\" />";
             }
+
+
+            var webUser = new WebUser();
+
+            if (webUser.No == 'admin') {
+                toolBar += "<input type='button' value='setting' id='Btn_OpenSetting' onclick='OpenSetting();' />";
+            }
+
+
+
             $("#toolbar").html(toolBar);
         }
 
+        function OpenSetting() {
+            var url = "http://localhost:2207/WF/Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
+            WinOpenFull(url);
+        }
+
         ///执行方法.
-        function Done(msg, funMyPK,methodName,afterOper) {
+        function Done(msg, funMyPK, methodName, afterOper, w, h) {
+
+            if (w == 0)
+                w = 360;
+
+            if (h == 0)
+                h = 260;
 
             var isHaveAttr = false;
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
@@ -164,7 +185,7 @@
             if (isHaveAttr == true) {
                 var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
                 //WinOpen(url);
-                OpenBootStrapModal(url, "MethodePara", methodName, 600, 500, null, null, null, null, function () {
+                OpenBootStrapModal(url, "MethodePara", methodName, w, h, null, false, null, null, function () {
                     //afterOper=0 关闭提示窗口，不做任何操作
 
                     //afterOper=1 关闭提示窗口刷新页面
@@ -193,7 +214,7 @@
 
             var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
             //WinOpen(url);
-            OpenBootStrapModal(url, "Methode", methodName, 600, 500, null, null, null, null, function () {
+            OpenBootStrapModal(url, "Methode", methodName, w, h, null, null, null, null, function () {
                 //afterOper=0 关闭提示窗口，不做任何操作
 
                 //afterOper=1 关闭提示窗口刷新页面

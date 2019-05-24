@@ -196,8 +196,8 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID) {
         rowSpan = attr.RowSpan;
         colSpan = attr.ColSpan;
         textColSpan = attr.TextColSpan;
-        textWidth = 15 * parseInt(textColSpan);
-        width = 15 * parseInt(colSpan);
+        textWidth = 15 * parseInt(textColSpan)+"%";
+        width = 15 * parseInt(colSpan)+"%";
 
 
         if (colSpan == 0) {

@@ -708,24 +708,32 @@
         }
 
         function OpenIt(BillState, workid, frmID, nodeID, emps, userNo) {
+
+            //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
+            var rowOpenModel = parseInt(frmBill.RowOpenMode);
             var url = "";
             url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
-             var self = window.open(url);
-			var loop = setInterval(function () {
-			    if (self.closed) {
-			        clearInterval(loop);
-			    }
-			}, 1);   
+            if(rowOpenModel == 0)
+                window.open(url);
+			if(rowOpenModel == 1)
+                window.location.href = url;
+            if(rowOpenModel == 2){
+                var W = document.body.clientWidth-40;
+                var H = document.body.clientHeight-40;
+
+                OpenBootStrapModal(url,"eudlgframe",frmBill.Name,W,H,"icon-property", null, null, null, null, null, "black"); 
+            }
+            if(rowOpenModel == 3){
+                var W = document.body.clientWidth-40;
+                var H = document.body.clientHeight-40;
+                OpenBootStrapModal(url,"eudlgframe",frmBill.Name,W,H,"icon-property", null, null, null, function(){
+                    window.location.href = window.location.href;
+                }, null, "black"); 
+            }
            
             return;
 
-            layer.open({
-                skin: 'layer-class',
-                type: 2,
-                title: '我的流程',
-                area: ['96%', '90%'],
-                content: url
-            });
+           
         }
 
         function SearchKey() {

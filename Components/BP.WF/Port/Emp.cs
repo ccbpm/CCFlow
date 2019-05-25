@@ -321,8 +321,8 @@ namespace BP.WF.Port
 
         protected override bool beforeDelete()
         {
-            if (BP.Web.WebUser.IsAdmin == false)
-                throw new Exception("err@非管理员不能删除.");
+            //if (BP.Web.WebUser.IsAdmin == false)
+            //    throw new Exception("err@非管理员不能删除.");
 
             return base.beforeDelete();
         }

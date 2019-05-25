@@ -923,6 +923,7 @@ namespace BP.WF.HttpHandler
 
             if (pk != 0)
                 return FrmGener_Init();
+
             MapDtl dtl = new MapDtl(this.EnsName);
 
             GEEntity en = new GEEntity(this.EnsName);
@@ -1014,7 +1015,6 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-
 
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
@@ -1172,7 +1172,6 @@ namespace BP.WF.HttpHandler
                 isLoadData = fn.IsEnableLoadData;
             }
             #endregion 定义流程信息的所用的 配置entity.
-
 
             try
             {

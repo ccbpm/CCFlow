@@ -188,7 +188,7 @@ namespace BP.Sys
         /// 流程控件
         /// </summary>
         public const string FlowCtrls = "FlowCtrls";
-        
+
 
         #region 报表属性(参数的方式存储).
         /// <summary>
@@ -784,21 +784,21 @@ namespace BP.Sys
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         string strs = "";
-                       
+
                         DataTable dt = DBAccess.RunSQLReturnTable("SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1  ");
 
                         foreach (DataRow dr in dt.Rows)
                         {
-                            strs += "'"+dr[0].ToString()+"',";
+                            strs += "'" + dr[0].ToString() + "',";
                         }
 
-                        if (dt.Rows.Count >=1)
+                        if (dt.Rows.Count >= 1)
                         {
-                            strs+="'ssss'";
+                            strs += "'ssss'";
                             obj.RetrieveIn("EnumKey", strs);
                         }
-                            
-                        
+
+
                     }
                     else
                     {
@@ -1021,7 +1021,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FormEventEntity, value);
             }
         }
- 
+
         public static Boolean IsEditDtlModel
         {
             get
@@ -1555,7 +1555,7 @@ namespace BP.Sys
 
                 //@周朋 表存储格式0=自定义表,1=指定表,可以修改字段2=执行表不可以修改字段.
                 map.AddTBInt(MapDataAttr.PTableModel, 0, "表存储模式", true, true);
-                
+
 
                 map.AddTBString(MapDataAttr.Url, null, "连接(对嵌入式表单有效)", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.Dtls, null, "从表", true, false, 0, 500, 20);
@@ -1716,7 +1716,7 @@ namespace BP.Sys
         public string DoEvent(string eventType, Entity en, string atParas = null)
         {
 
-           #region 首先执行通用的事件重载方法.
+            #region 首先执行通用的事件重载方法.
             if (FrmEventList.FrmLoadBefore.Equals(eventType) == true)
                 BP.En.OverrideFile.FrmEvent_LoadBefore(this.No, en);
 
@@ -1928,8 +1928,8 @@ namespace BP.Sys
                 item.Update();
             }
         }
-  
-      
+
+
         /// <summary>
         /// 导入表单
         /// </summary>
@@ -1998,7 +1998,7 @@ namespace BP.Sys
                     oldMapID = dtMap.Rows[0]["No"].ToString();
             }
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
-             
+
 
 
             #region 表单元素
@@ -2336,7 +2336,7 @@ namespace BP.Sys
                             int beforeID = en.OID;
                             en.OID = 0;
                             en.DirectInsert();
-                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + fk_mapdata + "' AND GroupID='" + beforeID+"'";
+                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + fk_mapdata + "' AND GroupID='" + beforeID + "'";
                         }
                         break;
                     case "Sys_Enum":
@@ -2430,7 +2430,7 @@ namespace BP.Sys
                     GroupField gfFirst = gfs[0] as GroupField;
 
                     string sqls = "";
-                 //   sqls += "@UPDATE Sys_MapAttr SET GroupID=" + gfFirst.OID + "       WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapAttr       WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.No + "') or GroupID is null) AS X) AND FK_MapData='" + this.No + "' ";
+                    //   sqls += "@UPDATE Sys_MapAttr SET GroupID=" + gfFirst.OID + "       WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapAttr       WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.No + "') or GroupID is null) AS X) AND FK_MapData='" + this.No + "' ";
                     sqls += "@UPDATE Sys_FrmAttachment SET GroupID=" + gfFirst.OID + " WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_FrmAttachment WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
 
 #warning 这些sql 对于Oracle 有问题，但是不影响使用.
@@ -2763,14 +2763,14 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_FrmRB WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmAttachment WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_MapFrame WHERE " + whereFK_MapData;
-            
-            if (this.No.Contains("BP.")==false)
-               sql += "@DELETE FROM Sys_MapExt WHERE " + whereFK_MapData;
+
+            if (this.No.Contains("BP.") == false)
+                sql += "@DELETE FROM Sys_MapExt WHERE " + whereFK_MapData;
 
             sql += "@DELETE FROM Sys_MapAttr WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_GroupField WHERE " + whereEnsName;
             sql += "@DELETE FROM Sys_MapData WHERE " + whereNo;
-           // sql += "@DELETE FROM Sys_M2M WHERE " + whereFK_MapData;
+            // sql += "@DELETE FROM Sys_M2M WHERE " + whereFK_MapData;
             sql += "@DELETE FROM WF_FrmNode WHERE FK_Frm='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmSln WHERE " + whereFK_MapData;
             DBAccess.RunSQLs(sql);
@@ -2800,6 +2800,17 @@ namespace BP.Sys
 
             #endregion
 
+
+            #region 删除注册到的外检表.
+            SFTables sfs = new SFTables();
+            sfs.Retrieve(SFTableAttr.SrcTable, this.PTable);
+            foreach (SFTable item in sfs)
+            {
+                if (item.IsCanDelete() == null)
+                    item.Delete();
+            }
+            #endregion 删除注册到的外检表.
+
             return base.beforeDelete();
         }
         /// <summary>
@@ -2820,7 +2831,7 @@ namespace BP.Sys
             }
             return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
         }
-        #endregion 常用方法.
+            #endregion 常用方法.
 
         #region 与Excel相关的操作 .
         /// <summary>
@@ -2875,7 +2886,7 @@ namespace BP.Sys
             if (by != null)
             {
                 bytes = by;
-                return ;
+                return;
             }
             else //说明当前excel文件没有生成.
             {

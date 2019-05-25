@@ -886,7 +886,7 @@ namespace BP.Sys
             else
                 return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
         }
-        protected override bool beforeDelete()
+        public string IsCanDelete()
         {
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.UIBindKey, this.No);
@@ -895,8 +895,16 @@ namespace BP.Sys
                 string err = "";
                 foreach (MapAttr item in attrs)
                     err += " @ " + item.MyPK + " " + item.Name;
-                throw new Exception("@如下实体字段在引用:" + err + "。您不能删除该表。");
+                return "err@如下实体字段在引用:" + err + "。您不能删除该表。";
             }
+            return null;
+        }
+        protected override bool beforeDelete()
+        {
+            string delMsg = this.IsCanDelete();
+            if (delMsg != null)
+                throw new Exception(delMsg);
+
             return base.beforeDelete();
         }
         protected override bool beforeInsert()

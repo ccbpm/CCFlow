@@ -1580,9 +1580,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string CCForm_DeleteCCFormMapData()
         {
-            MapData mapData = new MapData(this.FK_MapData);
-            mapData.Delete();
-            return mapData.No;
+            try
+            {
+                MapData mapData = new MapData(this.FK_MapData);
+                mapData.Delete();
+                return "删除成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
         }
 
         public string EditFlowSort()

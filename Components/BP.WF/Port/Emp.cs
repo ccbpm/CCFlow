@@ -319,6 +319,13 @@ namespace BP.WF.Port
             return "已经执行(启用)成功";
         }
 
+        protected override bool beforeDelete()
+        {
+            if (BP.Web.WebUser.IsAdmin == false)
+                throw new Exception("err@非管理员不能删除.");
+
+            return base.beforeDelete();
+        }
         protected override bool beforeUpdate()
         {
             WFEmp emp = new WFEmp(this.No);

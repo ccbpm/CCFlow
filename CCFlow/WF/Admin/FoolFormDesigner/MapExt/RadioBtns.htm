@@ -12,6 +12,8 @@
         var initData = {};
         var pageData = {};
 
+        var expStrs = ",FID,OID,Title,MyNum,FK_NY,Emps,RDT,EDT,CDT,Rec,";
+
         $(function () {
 
             pageData = {
@@ -61,13 +63,18 @@
             //绑定表单的所有字段
             var mapAttrHtml = '';
             //            alert(initData.Sys_MapAttr);
+            var myIdx = 0;
             $.each(initData.Sys_MapAttr, function (i, attr) {
 
-                //    if (attr.UIVisible == 0)
-                //   continue;
+                // if (attr.KeyOfEn==""
+
+              //  if (attr.UIVisible == 0)
+                //    return;
+
+                myIdx++;
 
                 mapAttrHtml += '<tr>';
-                mapAttrHtml += '<td>' + (i + 1) + '</td>';
+                mapAttrHtml += '<td>' +  myIdx + '</td>';
                 mapAttrHtml += '<td>' + attr.KeyOfEn + '</td>';
                 mapAttrHtml += '<td>' + attr.Name + '</td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td>';
@@ -301,7 +308,7 @@
                     </div>
                 </fieldset>
                 <fieldset>
-                    <legend>联动其他的控件使其属性该表(可见，只读)</legend>
+                    <legend>联动其他的控件使其属性该表(可见，只读) 注意:<font color=red>被联动的控件在傻瓜表单模式下要占三行</font></legend>
                     <form id="formFields">
                     <div id="Fields">
                         <table>

@@ -1,12 +1,4 @@
-﻿//初始化函数
-$(function () {
-
-    //webUser = new WebUser();
-
-});
-
-
-function Search() {
+﻿function Search() {
     var url = "Search.htm?FrmID=" + GetQueryString("FrmID");
     window.location.href = url;
 }

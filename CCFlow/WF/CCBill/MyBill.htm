@@ -162,7 +162,7 @@
         }
 
         function OpenSetting() {
-            var url = "http://localhost:2207/WF/Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
+            var url = "../Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
             WinOpenFull(url);
         }
 
@@ -183,7 +183,7 @@
                 if (w == 0) w = 560;
                 if (h == 0) h = 260;
 
-                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
+                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
                 //WinOpen(url);
                 OpenBootStrapModal(url, "MethodePara", methodName, w, h, null, false, null, null, function () {
                     //afterOper=0 关闭提示窗口，不做任何操作
@@ -205,17 +205,17 @@
                 return;
             }
 
+            if (w == 0) w = 260;
+            if (h == 0) h = 160;
+
             //不带有参数的方法.
-            if (msg != '' && msg.length > 5 ) {
+            if (msg != '' && msg.length > 5) {
                 if (window.confirm(msg) == false)
                     return;
             }
-            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID")+"&FrmID="+GetQueryString("FrmID");
+            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
             //WinOpen(url);
-            OpenBootStrapModal(url, "Methode", methodName, w, h, null, null, null, null, function () {
-
-                if (w == 0) w = 360;
-                if (h == 0) h = 260;
+            OpenBootStrapModal(url, "Methode", methodName, w, h, null, true, null, null, function () {
 
                 //afterOper=0 关闭提示窗口，不做任何操作
 
@@ -347,7 +347,7 @@
                                 break;
                         }
                         break;
-                    //下拉框           
+                    //下拉框            
                     case "SELECT":
                         formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                         var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -358,7 +358,7 @@
                         }
                         break;
 
-                    //文本区域                   
+                    //文本区域                    
                     case "TEXTAREA":
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
@@ -558,7 +558,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人                  
+                    //发送选择接收节点和接收人                   
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

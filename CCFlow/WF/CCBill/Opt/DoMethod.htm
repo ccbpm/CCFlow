@@ -40,6 +40,7 @@
                 return;
             }
 
+
             //要执行script.  wangyanyan完成.
             if (func.MethodDocTypeOfFunc == 1) {
                 var script = func.DoMethodReturnString("Gener_MethodDoc_JavaScript");
@@ -47,9 +48,7 @@
                 //获得单据的数据.
                 // var geEn = new Entity(func.FrmID, workID);
                 //替换script的变量.
-
                 //   alert(script);
-
                 //                //Opera、FF、Chrome等：
                 //                var script = document.createElement("script");
                 //                script.setAttribute("type", "text/javascript");
@@ -57,9 +56,11 @@
                 //                    alert("加载成功啦！");
                 //                }
                 //                script.setAttribute("src", scripts[i]); 
-
                 // script = " var en =new Entity('Dict_XueShengJiBenXinXi',workID);  ";
                 //script += " alert(en.OID); en.Email='zzzz';en.Update();  ";
+
+
+
 
                 //执行这个script.
                 try {

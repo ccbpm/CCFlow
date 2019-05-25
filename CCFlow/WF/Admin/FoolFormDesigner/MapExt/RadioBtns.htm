@@ -62,19 +62,18 @@
 
             //绑定表单的所有字段
             var mapAttrHtml = '';
-            //            alert(initData.Sys_MapAttr);
+            var showMapAttr = [];
             var myIdx = 0;
             $.each(initData.Sys_MapAttr, function (i, attr) {
 
-                // if (attr.KeyOfEn==""
-
-              //  if (attr.UIVisible == 0)
-                //    return;
+                if (expStrs.indexOf(attr.KeyOfEn) != -1)
+                    return;
+                showMapAttr.push(attr);
 
                 myIdx++;
 
                 mapAttrHtml += '<tr>';
-                mapAttrHtml += '<td>' +  myIdx + '</td>';
+                mapAttrHtml += '<td>' + myIdx + '</td>';
                 mapAttrHtml += '<td>' + attr.KeyOfEn + '</td>';
                 mapAttrHtml += '<td>' + attr.Name + '</td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td>';
@@ -106,7 +105,9 @@
 
             //为表单字段绑定DATA
             $.each($('#Fields tbody tr'), function (i, tr) {
-                $(tr).data(initData.Sys_MapAttr[i]);
+                var mapAttr = showMapAttr[i];
+               
+                $(tr).data(mapAttr);
             });
 
             BindConfig();

@@ -147,7 +147,8 @@ namespace BP.Frm
         /// <summary>
         /// 行打开模式
         /// </summary>
-        public const string RowOpenMode = "RowOpenMode";
+        public const string RowOpenModel = "RowOpenModel";
+
 
         public const string PopHeight = "PopHeight";
         public const string PopWidth = "PopWidth";
@@ -156,6 +157,12 @@ namespace BP.Frm
         public const string Tag0 = "Tag0";
         public const string Tag1 = "Tag1";
         public const string Tag2 = "Tag2";
+
+        /// <summary>
+        /// 实体编辑模式
+        /// </summary>
+        public const string EntityEditModel = "EntityEditModel";
+        
 
     }
 }

@@ -191,8 +191,8 @@ namespace BP.Frm
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 200, 20, true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), false);
 
-                map.AddDDLSysEnum(FrmAttr.RowOpenMode, 0, "行记录打开模式", true, true,
-                    "RowOpenMode", "@0=新窗口打开@1=弹出窗口打开,关闭后刷新列表@2=弹出窗口打开,关闭后不刷新列表");
+                map.AddDDLSysEnum(FrmAttr.RowOpenModel, 0, "行记录打开模式", true, true,
+                    FrmAttr.RowOpenModel, "@0=新窗口打开@1=弹出窗口打开,关闭后刷新列表@2=弹出窗口打开,关闭后不刷新列表");
                 #endregion 基本属性.
 
                 #region 单据模版.
@@ -203,6 +203,11 @@ namespace BP.Frm
                 map.AddTBString(FrmTemplateAttr.BillNoFormat, null, "实体编号规则", true, false, 0, 100, 20, true);
                 map.SetHelperAlert(FrmTemplateAttr.BillNoFormat, "\t\n实体编号规则: \t\n 2标识:01,02,03等, 3标识:001,002,003,等..");
                 #endregion 单据模版.
+
+                #region 实体属性
+                map.AddTBInt(FrmTemplateAttr.EntityEditModel, 0, "编辑模式", true, false);
+                //map.AddDDLSysEnum(FrmAttr.EntityEditModel, 0, "编辑模式", true, true, FrmAttr.EntityEditModel, "@0=只读列表模式@1=Table编辑模式");
+                #endregion 实体属性.
 
 
                 #region 可以创建的权限.

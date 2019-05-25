@@ -192,10 +192,13 @@ namespace BP.Frm
                 #endregion 基本属性.
 
                 #region 外观.
-                map.AddDDLSysEnum(FrmAttr.RowOpenMode, 0, "行记录打开模式", true, true,
+                map.AddDDLSysEnum(FrmAttr.RowOpenModel, 0, "行记录打开模式", true, true,
                   "RowOpenMode", "@0=新窗口打开@1=在本窗口打开@2=弹出窗口打开,关闭后不刷新列表@3=弹出窗口打开,关闭后刷新列表");
                 map.AddTBInt(FrmAttr.PopHeight, 500, "弹窗高度", true, false);
                 map.AddTBInt(FrmAttr.PopWidth, 760, "弹窗宽度", true, false);
+
+                map.AddDDLSysEnum(FrmAttr.EntityEditModel, 0, "编辑模式", true, true, FrmAttr.EntityEditModel, "@0=表格@1=行编辑");
+                map.SetHelperAlert(FrmAttr.EntityEditModel,"用什么方式打开实体列表进行编辑0=只读查询模式SearchDict.htm,1=行编辑模式SearchEditer.htm");
                 #endregion 外观.
 
                 #region 实体表单.
@@ -295,8 +298,16 @@ namespace BP.Frm
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "打开单据数据"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoOpenBill";
+                rm.Title = "打开单据数据(表格)"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoOpenBillDict";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "打开单据数据(行编辑)"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoOpenBillEditer";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -681,9 +692,14 @@ namespace BP.Frm
         /// 打开单据
         /// </summary>
         /// <returns></returns>
-        public string DoOpenBill()
+        public string DoOpenBillDict()
         {
-            return "../../CCBill/Search.htm?FrmID=" +
+            return "../../CCBill/SearchDict.htm?FrmID=" +
+              this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
+        }
+        public string DoOpenBillEditer()
+        {
+            return "../../CCBill/SearchEditer.htm?FrmID=" +
               this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
         public string DoAPI()

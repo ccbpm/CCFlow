@@ -182,8 +182,8 @@ namespace BP.Frm
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
 
 
-                map.AddDDLSysEnum(FrmAttr.RowOpenMode, 0, "行记录打开模式", true, true,
-                    "RowOpenMode", "@0=新窗口打开@1=弹出窗口打开,关闭后刷新列表@2=弹出窗口打开,关闭后不刷新列表");
+                map.AddDDLSysEnum(FrmAttr.RowOpenModel, 0, "行记录打开模式", true, true,
+                    FrmAttr.RowOpenModel, "@0=新窗口打开@1=弹出窗口打开,关闭后刷新列表@2=弹出窗口打开,关闭后不刷新列表");
 
                 #endregion 基本属性.
 
@@ -201,7 +201,8 @@ namespace BP.Frm
                 map.AddTBString(FrmBillAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
                 #endregion 单据属性.
 
-                #region MyBill - 按钮权限.
+
+                #region 按钮权限.
                 map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
 

@@ -185,10 +185,10 @@
         var runOnPlant = "BP";
         var initData = null;
         $(function () {
-            if(plant=="CCFlow")
+            if (plant == "CCFlow")
                 Handler = basePath + "/WF/Admin/CCBPMDesigner/Handler.ashx";
             else
-                Handler = basePath+"/WF/Admin/CCBPMDesigner/ProcessRequest.do";
+                Handler = basePath + "/WF/Admin/CCBPMDesigner/ProcessRequest.do";
 
             //定义等待界面的位置
             $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
@@ -1140,14 +1140,14 @@
         }
 
         //新建表单
-        function newFrm( frmType ) {
+        function newFrm(frmType) {
 
             var node = $('#formTree').tree('getSelected');
             if (!node) {
                 return;
             }
 
-            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType="+frmType;
+            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType;
             if (node.attributes) {
                 if (node.attributes.TType == "SRC") {
                     url += "&Src=" + node.id;
@@ -1222,7 +1222,7 @@
                 return;
             }
 
-           // alert('sss');
+            // alert('sss');
 
             var en = new Entity("BP.Frm.FrmBill", node.id);
 
@@ -1230,14 +1230,14 @@
             if (en.EntityType == 0)
                 url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
 
-            if (en.EntityType==1)
+            if (en.EntityType == 1)
                 url = '../../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + node.id;
 
             if (en.EntityType == 2)
                 url = '../../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + node.id;
 
-         //   alert(en.EntityType);
-           // http: //localhost:2207/WF/Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=CCFrm_GDZC&s=0.635120123659069
+            //   alert(en.EntityType);
+            // http: //localhost:2207/WF/Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=CCFrm_GDZC&s=0.635120123659069
 
             OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
         }
@@ -1254,13 +1254,30 @@
                 alert('请选择一个表单.');
                 return;
             }
-            var en = new Entity("BP.Frm.FrmBill", node.id);
+
+            var en = new Entity("BP.Frm.FrmTemplate", node.id);
             if (en.EntityType == 0) {
                 alert('独立表单暂不支持列表打开...');
                 return;
             }
 
-            var url = '../../CCBill/Search.htm?FrmID=' + node.id;
+            var url = "";
+
+            //单据模式.
+            if (en.EntityType == 1)
+                url = '../../CCBill/SearchBill.htm?FrmID=' + node.id;
+
+            //如果是实体就判断他的编辑模式.
+            if (en.EntityType == 2) {
+                if (en.EntityEditModel == 0)
+                    url = '../../CCBill/SearchDict.htm?FrmID=' + node.id;
+                else
+                    url = '../../CCBill/SearchEditer.htm?FrmID=' + node.id;
+            }
+
+            alert(en.EntityType);
+
+
             OpenEasyUiDialog(url, "CCForm_Attr", '我的单据', 1100, 560, "icon-window");
         }
         //设计自由表单
@@ -1336,13 +1353,13 @@
             var en = new Entity("BP.Sys.MapData", currForm.id);
             en.Delete();
 
-//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-//            handler.AddPara("FK_MapData", currForm.id);
-//            var data = handler.DoMethodReturnString("CCForm_DeleteCCFormMapData");
-//            if (data.indexOf('err@') != -1) {
-//                alert(data);
-//                return;
-//            }
+            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            //            handler.AddPara("FK_MapData", currForm.id);
+            //            var data = handler.DoMethodReturnString("CCForm_DeleteCCFormMapData");
+            //            if (data.indexOf('err@') != -1) {
+            //                alert(data);
+            //                return;
+            //            }
 
             //如果右侧有打开该表单，则关闭
             var currTab = $('#tabs').tabs('getTab', currForm.text);
@@ -1818,14 +1835,10 @@
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
         <div onclick="newFrm(0)" data-options="iconCls:'icon-add'">
             新建独立表单</div>
-
-             <div onclick="newFrm(1)" data-options="iconCls:'icon-add'">
+        <div onclick="newFrm(1)" data-options="iconCls:'icon-add'">
             新建单据表单</div>
-
-            <div onclick="newFrm(2)" data-options="iconCls:'icon-add'">
+        <div onclick="newFrm(2)" data-options="iconCls:'icon-add'">
             新建实体表单</div>
-             
-
         <div class="menu-sep">
         </div>
         <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-new'">
@@ -1856,7 +1869,7 @@
             数据查询</div>
         <div class="menu-sep">
         </div>
-      <!--  <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
+        <!--  <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
             表单属性</div>-->
         <div onclick="designFoolFrm()" data-options="iconCls:'icon-sheet'">
             设计傻瓜表单</div>

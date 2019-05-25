@@ -1,0 +1,930 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
+        media="all" />
+    <!--jquery-->
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../Comm/JS/layer/layer.js" type="text/javascript"></script>
+    <link href="../Comm/JS/layer/layer.css" rel="stylesheet" type="text/css" />
+    <!--bootstrap-table-->
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
+        type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js"
+        type="text/javascript"></script>
+    <!--公共JS-->
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .fixed-table-container thead th .th-inner
+        {
+            padding: 8px;
+            line-height: 24px;
+            vertical-align: top;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; /**background-color: #eaf2ff;**/
+            width: 100%;
+        }
+        .fixed-table-header
+        {
+            background-color: #f2f2f2;
+        }
+        
+        td
+        {
+            word-break: keep-all; /* 不换行 */
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+            text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+            -o-text-overflow: ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+        body
+        {
+            margin: 0px;
+        }
+        .panel-header, .panel-body
+        {
+            border-width: 1px;
+            border-top: 0px;
+            border-left: 0px;
+            border-right: 0px;
+        }
+        
+        .table
+        {
+            table-layout: fixed;
+        }
+        
+        table > td
+        {
+            width: 100%;
+        }
+        .pagination
+        {
+            margin: 8px 0;
+            display: block;
+            font-size: 13px;
+        }
+        .pagination .controls
+        {
+            float: left;
+            border: 0;
+            padding: 7px 0 0 15px;
+            color: #777;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var webUser = null;
+        var frmBill = null;
+        var frmID;
+        var ur;//当前用户的查询信息
+        var pageIdx = 1;
+
+        //分页信息
+        var count = 0;//总条数
+        var pageSize = 10;//一页10条
+        var pages = 1; //总页数
+
+        var firstLoadTable = false;
+
+        //初始化页面
+        $(function () {
+            InitPage();
+        });
+        function InitPage(){
+            webUser = new WebUser();
+            if (webUser.No == null)
+                return;
+
+            frmID = GetQueryString("FrmID");
+
+            pageIdx = GetQueryString("PageIdx");//当前页
+
+            frmBill = new Entity("BP.Frm.FrmBill", frmID);
+            document.title = frmBill.Name;
+
+            //当前用户查询信息.
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            //初始化查询条件
+            Init_ToolBar();
+
+            //显示查询数据
+            BindTable();
+
+            $("td").on("mouseover",function() {
+                if (this.offsetWidth < this.scrollWidth) {
+                    var that = this;
+                    var text = $(this).text();
+                   layer.tips(text, that,{
+                        tips: 1,
+                        time: 0
+                   });
+                }
+              });
+              $("td").on("mouseout",function(){
+                layer.closeAll();
+              });
+            
+            if(pageIdx==null || pageIdx==undefined || pageIdx == "")
+                pageIdx = 1;
+            //分页
+            Paginator(pages,pageIdx);
+        };
+
+
+        function Init_ToolBar() {
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+            var data = handler.DoMethodReturnString("Search_ToolBar");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                $("#Msg").html(data);
+                return;
+            }
+            var data = JSON.parse(data);
+
+            //单据表单属性
+            var mapData = data.Sys_MapData;
+            var attrs = data.Attrs;
+
+            var html = "";
+
+            if (attrs.length == 0)
+                html += "<table style='' >";
+
+            if (attrs.length == 1)
+                html += "<table style='width:50%;' >";
+
+            if (attrs.length > 1)
+                html += "<table style='width:100%;' >";
+
+
+            html += "<tr>";
+            var atPara = mapData[0].AtPara;
+             
+            if (GetPara(atPara, "IsSearchKey") == "1") {
+
+            var keyLabel= GetPara(atPara, "DTSearchLabel");
+                var keyLabel = "关键字";
+                html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' placeholder='请输入关键字...' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+            }
+
+            if (GetPara(atPara, "DTSearchWay") != "0") {
+
+            var dtFrom= GetPara(atPara, "DTSearchLabel");
+            if (dtFrom==undefined)
+            dtFrom='日期从';
+
+                html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + dtFrom + ":</label></td>";
+
+                if (GetPara(atPara, "DTSearchWay") == "1") {
+                    html += "<td align='left' style='width:120px'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' /></td>";
+                    html += "<td align='right'><label>到&nbsp;&nbsp;</label></td><td align='left'><input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' /></td>";
+                } else {
+                    html += "<td align='left' style='width:160px'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:160px;' class='form-control Wdate' /></td>";
+                    html += "<td align='right'><label>到&nbsp;&nbsp;</label></td><td align='left'><input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:160px;' class='form-control Wdate' /></td>";
+                }
+            }
+
+            //格式为: @WFSta=0@FK_Dept=02
+             var json = AtParaToJson(ur.Vals); 
+
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var W = attr.Width;
+                if (attr.Width >= 1000) {
+                    html += "</tr>";
+                    html += "<tr>";
+                    W = 130;
+                }
+                debugger;
+                html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
+                html += "<td align='left'><select class='form-control' style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
+            }
+
+            //增加按钮.
+            html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
+
+            //获得配置的按钮.
+            var fb=new Entity("BP.Frm.FrmBill", frmID);
+
+            if (fb.BtnNewLable=="") fb.BtnNewLable="新建";
+            if (fb.BtnDelLable=="") fb.BtnDelLable="删除";
+            if (fb.BtnImpExcel=="") fb.BtnImpExcel="导入";
+            if (fb.BtnExpExcel=="") fb.BtnExpExcel="导出";
+            if (fb.BtnGroupLabel=="") fb.BtnGroupLabel="分析";
+             
+            //权限判断按钮.
+            if (fb.BtnNewEnable==1)
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">'+fb.BtnNewLable+'</a>';
+
+            if (fb.BtnDelEnable==1)
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Del" onclick="javascript:Delete();">'+fb.BtnDelLable+'</a>';
+
+            if (fb.BtnImpExcelEnable==1)
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Imp" onclick="Imp()">'+fb.BtnImpExcel+'</a> ';
+
+            if (fb.BtnExpExcelEnable==1)
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_ExpExcel" onclick="ExpExcel()">'+fb.BtnExpExcel+'</a>';
+
+            if (fb.BtnGroupEnable==1)
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Group" onclick="Group()">'+fb.BtnGroupLabel+'</a>';
+
+
+            //增加方法.
+               //获得当前的集合.
+            var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);
+            for (var i = 0; i < fms.length; i++) {
+                var fm = fms[i];
+
+             //   alert( fm.IsSearchBar);
+
+                if (fm.IsSearchBar != 1 )
+                    continue;
+
+                html += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
+            }
+
+
+            html += "</td></tr>";
+
+            html += "</table>";
+
+            $("#toolBar").append(html);
+        }
+
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(frmData, mapAttr, defVal) {
+
+            var operations = "";
+            operations += "<option value='all' >全部</option>";
+
+            var ens = frmData[mapAttr.Field];
+            if (ens == null) {
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是'}];
+            }
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                if (en.No == undefined)
+                    operations += "<option value='" + en.IntKey + "'>" + en.Lab + "</option>";
+                else
+                    operations += "<option value='" + en.No + "'>" + en.Name + "</option>";
+            }
+            return operations;
+        }
+
+
+         //执行查询.
+        function Search() {
+
+            //保存查询条件.
+           
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.FK_Emp = webUser.No;
+
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "")
+                ur.SearchKey = $("#TB_Key").val();
+            else
+                ur.SearchKey = "";
+
+            //设置查询时间.
+            if ($("#TB_DTFrom").length == 1)
+                ur.DTFrom = $("#TB_DTFrom").val();
+
+            if ($("#TB_DTTo").length == 1)
+                ur.DTTo = $("#TB_DTTo").val();
+
+            //获得外键的查询条件,存储里面去.
+            var str = "";
+            $("select[name^='DDL_']").each(function () {
+                var id = $(this).attr("id");
+                id = id.replace("DDL_", "");
+                str += "@" + id + "=" + $(this).val();
+            });
+
+            ur.FK_Emp = webUser.No;
+            ur.CfgKey = "SearchAttrs";
+            ur.Vals = str;
+            ur.FK_MapData = frmID;
+            ur.SetPara("RecCount", count);
+            var i = ur.Save();
+            
+            var url = window.location.href;
+            if(url.indexOf("PageIdx")!=-1)
+             url = replaceParamVal(url, "PageIdx", 1);
+           
+            BindTable();
+
+            window.location.href = url;
+        }
+
+    
+        function SearchData() {
+            //创建处理器.
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData()
+            handler.AddPara("PageIdx", pageIdx);
+            handler.AddPara("PageSize", pageSize);
+
+            //查询集合
+            var data = handler.DoMethodReturnString("Search_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+
+            count = ur.GetPara("RecCount");
+            if (count%pageSize!=0)
+                pages = parseInt(count / pageSize) + 1;
+            else
+                pages = parseInt(count / pageSize);
+
+            if(pages == 0) pages =1;
+
+             if (firstLoadTable){
+                $('#dg').bootstrapTable("load",data["DT"]);
+                return;
+           }
+            return data;
+        }
+
+        //生成查询页面..
+        function BindTable() {
+           
+            //获取页面的高度
+            var H = document.body.clientHeight;
+            var tableH = H-$("#toolbar").outerHeight()-$("#page-nav").outerHeight()-70;
+
+            if (pageIdx == "" || pageIdx == undefined)
+                pageIdx = "1";
+            if (pageSize == "" || pageSize == undefined)
+                pageSize = "20";
+
+
+            var mapdata = SearchData();
+            var attrs = mapdata["Attrs"];
+
+            if (attrs == undefined) {
+                alert('没有取得属性.');
+                return;
+            }
+
+            var keyOfEn = "";
+
+            var columns = new Array(); ;
+           columns.push({
+                title: '序',
+                field: '',
+                align: 'center',
+                width:25,
+                formatter: function (value, row, index) {
+                    return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+                }
+           });
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+
+                if (attr.UIVisible == 0
+                || attr.KeyOfEn == "OID"
+                || attr.KeyOfEn == "WorkID"
+                || attr.KeyOfEn == "NodeID"
+                || attr.KeyOfEn == "MyNum"
+                || attr.KeyOfEn == "MyPK") {
+                    keyOfEn = attr.KeyOfEn
+                    continue;
+                }
+
+
+                var field = attr.KeyOfEn;
+                var title = attr.Name;
+                var width = attr.Width;
+
+                if(field == "BillState"){
+                  columns.push({
+                        field: field,
+                        title: title,
+                        width:attr.Width,
+                        fixed: false,
+                        formatter: function (value, row, index) {
+                            return GetBillState(value);
+                        }
+                    });
+                    continue;
+                }
+
+                if(field == "Title"){
+                  columns.push({
+                        field: field,
+                        title: title,
+                        width:attr.Width,
+                        fixed: false,
+                        formatter: function (value, row, index) {
+                            var icon = GenerICON(false, row.BillState);
+                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='14px;' />" +value + "</a>";
+                        }
+                    });
+                    continue;
+                }
+
+                if (attr.UIContralType == 1 || attr.UIContralType == 3){
+                    if(width==null || width==""|| width==undefined)
+                        width = 180;
+                    if(attr.LGType == 0)
+                        field = field +"T";
+                    else
+                        field = field + "Text";
+
+                     columns.push({
+                        field: field,
+                        title: title,
+                        fixed: false,
+                        width:width,
+                        cellStyle:{
+                            css:{"white-space": "nowrap","word-break":"keep-all",  "width":"100%"}
+                        }
+                    });
+                    continue;
+                }
+                if (attr.UIContralType == 2){
+                    columns.push({
+                        field: field,
+                        title: title,
+                        width:attr.Width,
+                        fixed: false,
+                        formatter: function (value, row, index) {
+                            if (value == "0") return "否";
+                            if (value == "1") return "是";
+                        }
+                    });
+                    continue;
+                }
+
+              
+                if(width==null || width==""|| width==undefined)
+                    width = 100;
+                columns.push({
+                    field: field,
+                    title: title,
+                    width:attr.Width,
+                    fixed: false
+
+                });
+            }
+           
+            $('#dg').html("");
+            $('#dg').bootstrapTable({
+                data: mapdata["DT"],
+                columns: [columns],
+                cache:false,
+                striped: true,
+                height:tableH,
+                singleSelect: true,
+                clickToSelect:true,
+                maintainSelected:true,
+                sidePagination: "server",
+                pageNumber: 1,
+                strictSearch: true,
+                //得到查询的参数
+                queryParams: function (params) {
+                    //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    var temp = {
+                        rows: 10,                         //页面大小
+                        page: (count /10) + 1,   //页码
+
+                    };
+                    return temp;
+                },
+
+                onDblClickRow: function (row, $element) {
+                    var pkval = row["OID"];
+                    var paras = "&OID" + "=" + pkval;
+                    for (var i = 0; i < attrs.length; i++) {
+                        var attr = attrs[i];
+                        if (attr.UIContralType == 1)
+                            paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
+                    }
+
+                    OpenEn(pkval, paras);
+                }
+
+            });  
+             firstLoadTable = true;
+
+     }
+  
+     //分页功能
+    function Paginator(pageCount,currentPage) {
+        var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
+        var options = {
+            bootstrapMajorVersion: 3, //版本
+            currentPage: currentPage, //当前页数
+            totalPages: pageCount, //总页数
+            shouldShowPage: true, //是否显示该按钮
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            }, //点击事件，用于通过Ajax来刷新整个list列表
+            onPageClicked: function (event, originalEvent, type, page) {
+                pageIdx = page;
+                SearchData(page);
+               $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
+                                "页,总共"+count+"条记录。</li>");
+            }
+        };
+        $('#page_nav').bootstrapPaginator(options);
+        $('#page_info').append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
+                                "页,总共"+count+"条记录。</li>");
+        
+    }
+   
+        function Exp() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            //查询集合
+            var data = handler.DoMethodReturnString("Search_Exp");
+            var url = "";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+            if (plant != 'CCFlow') {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                data = path + data;
+            }
+            window.open(data);
+            return;
+
+        }
+        
+
+
+        //导入.
+        function Imp() {
+            alert('尚未实现');
+        }
+
+        function GenerOper(workID, BillState, frmID, nodeID, fid, isCanDo) {
+
+            if (BillState == 3)
+                return "";
+
+            if (BillState == 2 && isCanDo == true)
+                return "";
+
+            if (BillState == 3)
+                return "<a href=''>轨迹</a>";
+
+            if (BillState == 2)
+                return "<a href=\"javascript:UnSend('" + frmID + "','" + nodeID + "','" + workID + "','" + fid + "');\" >撤销</a>";
+
+            var url = "WFRpt.htm?WorkID=" + workID + "&FrmID=" + frmID;
+
+            return "<a href=\"javascript:WinOpen('" + url + "');\" >轨迹</a>";
+        }
+
+        function New(workid) {
+            var frmID = GetQueryString("FrmID");
+           
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+            var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
+
+            var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
+            window.location.href=url;
+            return;
+
+        }
+
+        function Delete() {
+
+            if (confirm("您确定要删除吗？") == false)
+                return;
+            //删除选中的行
+            var selectRow = $('#dg').bootstrapTable('getSelections');
+
+            if(selectRow.length ==0){
+                alert("没有选择行，不能删除");
+                return ;
+            }
+            var workid = selectRow["WorkID"];
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("FrmID", GetQueryString("FrmID"));
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("MyBill_Delete");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            window.location.href = window.location.href;
+        }
+        function GenerColor(BillState, isCanDo) {
+
+            if (BillState == 100) {
+                return "green";
+            }
+
+            if (BillState == 1) {
+                return "yellow";
+            }
+            return "";
+        }
+
+        function GetBillState(BillState, isCanDo) {
+         if (BillState == 0)
+                return "空白";
+
+            if (BillState == 1)
+                return "草稿";
+
+            if (BillState == 2)
+                return "编辑中";
+
+            if (BillState == 100)
+                return "归档";
+
+            return BillState;
+        }
+        function GenerICON(isCanDo, BillState) {
+
+            if (BillState == 3)
+                icon = "./Img/BillState/Complete.png";  //已经完成.
+            else if (BillState == 2)
+                icon = "./Img/BillState/Runing.png"; //运行中. 
+            else if (BillState == 5)
+                icon = "./Img/BillState/ReturnSta.png"; //退回.
+            else
+                icon = "./Img/BillState/Etc.png"; //其他.
+
+            if (isCanDo == true && BillState != 3)
+                icon = "./Img/BillState/Todo.png"; //其他.
+
+            return icon;
+        }
+
+        function OpenIt(BillState, workid, frmID, nodeID, emps, userNo) {
+
+            //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
+            var rowOpenModel = parseInt(frmBill.RowOpenMode);
+            var url = "";
+            url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
+            if(rowOpenModel == 0)
+                window.open(url);
+			if(rowOpenModel == 1)
+                window.location.href = url;
+            if(rowOpenModel == 2){
+                var W = document.body.clientWidth-40;
+                var H = document.body.clientHeight-40;
+
+                OpenBootStrapModal(url,"eudlgframe",frmBill.Name,W,H,"icon-property", null, null, null, null, null, "black"); 
+            }
+            if(rowOpenModel == 3){
+                var W = document.body.clientWidth-40;
+                var H = document.body.clientHeight-40;
+                OpenBootStrapModal(url,"eudlgframe",frmBill.Name,W,H,"icon-property", null, null, null, function(){
+                    window.location.href = window.location.href;
+                }, null, "black"); 
+            }
+           
+            return;
+
+           
+        }
+
+        function SearchKey() {
+
+            var val = $("#TB_Key").val();
+            if (val == null || val == undefined || val == "") {
+                alert("请输入关键字,单据编号，标题。。。");
+                return;
+            }
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("TB_KWds", val);
+
+            var data = handler.DoMethodReturnString("Search_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //转化成json.
+            data = JSON.parse(data);
+            if (data.length <= 0) {
+                alert('未查询出来数据');
+                return;
+            }
+
+            var tableHtml = "";
+            tableHtml += "<tr>";
+            tableHtml += "<th>Idx</th>";
+            tableHtml += "<th>标题</th>";
+            tableHtml += "<th>制单日期</th>";
+            tableHtml += "<th>单据编号</th>";
+            tableHtml += "<th>操作员</th>";
+            tableHtml += "<th width='90'>编辑日期</th>";
+            tableHtml += "<th width='60'>状态</th>";
+            tableHtml += "<th width='50'>操作</th>";
+            tableHtml += "</tr>";
+
+            var user = new WebUser();
+            var userNo = user.No;
+            htmlboxs = "";
+            data.forEach(function (en, index) {
+
+                var tr = "";
+
+                //是否可以执行当前工作?
+                var isCanDo = false;
+                if (en.TodoEmps.indexOf(webUser.No) != -1)
+                    isCanDo = true;
+
+                //图片.
+                var icon = GenerICON(isCanDo, en.BillState);
+
+                // 获得颜色.
+                var color = GenerColor(en.BillState, isCanDo);
+
+                var todoEmpsName = en.TodoEmps;
+                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
+
+                htmlboxs += "<tr>";
+                htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
+
+                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.BillSta + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
+                htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+                htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
+                htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
+                if (en.TDTime == null)
+                    htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+                else
+                    htmlboxs += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
+
+                htmlboxs += "<td><font color='" + color + "'>" + GetBillState(en.BillState, isCanDo) + "</font></td>";
+                htmlboxs += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.BillState, en.FrmID, en.FK_Node, en.FID, isCanDo) + "</font></td>";
+                htmlboxs += "</tr>";
+
+            });
+
+            $("#Table2").html(tableHtml);
+            $("#Table1").html(htmlboxs);
+        }
+
+        ///导入.
+        function Imp() {
+            var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
+        function Group() {
+            var url = "Group.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
+    </script>
+    <style>
+        /* 按钮风格 */
+        input[type="button"], input[type="submit"], input[type="file"]
+        {
+            border: 0; /*background: #4D77A7;*/
+            background: #fff;
+            color: #545454;
+            font-size: 12px;
+            padding: 4px 15px;
+            margin: 5px 3px 5px 3px;
+            border-radius: 3px;
+            border: 1px solid #1d7dd4;
+        }
+        input:hover[type="button"]
+        {
+            border: 0; /*background: #4D77A7;*/
+            background: #1d7dd4;
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 15px;
+            margin: 5px 3px 5px 3px;
+            border-radius: 3px;
+            border: 1px solid #1d7dd4;
+        }
+    </style>
+</head>
+<body id="SearchHtml">
+    <div class="wrapper wrapper-content animated fadeInRight" style="padding: 0px 10px 0px 10px">
+        <div class="ibox-content">
+            <div class="row">
+                <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
+                    <div id="toolBar" style="width: 100%">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
+                </table>
+            </div>
+            <!-- 显示分页信息 -->
+            <div class="row" style="text-align: left;">
+                <ul class="pagination" id="page_nav">
+                </ul>
+                <ul class="pagination controls" id="page_info">
+                </ul>
+                <div style="clear: both;">
+                </div>
+            </div>
+        </div>
+        <div id="Msg">
+        </div>
+    </div>
+</body>
+<!--<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <div class="row search-padding" style="float: left" id="toolBar">
+                
+                <input type='text' placeholder="请输入关键字..." id='TB_Key' />
+              
+
+                <input type="button" id="Btn_Search" onclick="javascript:SearchKey();" value="查询" />
+                <input type="button" id="Btn_New" onclick="javascript:New();" value="新建" />
+                <input type="button" id="Btn_Del" onclick="javascript:Delete();" value="删除" />
+                <input type="button" id="Btn_Imp" onclick="javascript:Imp();" value="导入" />
+                <input type="button" id="Button1" onclick="javascript:Group();" value="分析" />
+            </div>
+            <table class="table table-striped">
+                <thead id="Table2">
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            标题
+                        </th>
+                        <th>
+                            单号
+                        </th>
+                        <th width='60'>
+                            创建人
+                        </th>
+                        <th>
+                            创建日期
+                        </th>
+                        <th>
+                            编辑日期
+                        </th>
+                        <th width='60'>
+                            状态
+                        </th>
+                        <th width='60'>
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="Table1">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>-->
+</html>

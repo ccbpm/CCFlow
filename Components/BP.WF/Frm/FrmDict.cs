@@ -298,7 +298,7 @@ namespace BP.Frm
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "打开单据数据(表格)"; // "设计表单";
+                rm.Title = "打开数据(表格)"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoOpenBillDict";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
@@ -306,7 +306,7 @@ namespace BP.Frm
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "打开单据数据(行编辑)"; // "设计表单";
+                rm.Title = "打开数据(行编辑)"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoOpenBillEditer";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;

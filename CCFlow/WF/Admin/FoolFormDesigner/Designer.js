@@ -227,6 +227,10 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
     }
 
+    if ((mapAttr.MyDataType == 2)) {
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input  value='0' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/></div>";
+    }
+
     if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
          //生成中间的部分.
         var enableAttr = '';
@@ -241,6 +245,17 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         }
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input  class='form-control Wdate' style='width:96%;' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div>";
     }
+    if (mapAttr.MyDataType == 8) {
+        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+        var attrdefVal = mapAttr.DefVal;
+        var bit;
+        if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+            bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+        else
+            bit = 2;
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input value='0.00' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/></div>";
+    }
+
 
      if (mapAttr.MyDataType == 4) { 
           if (mapAttr.UIIsEnable == 0) {
@@ -249,7 +264,8 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             enableAttr = "";
           }
           return "<div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div>";
-     }
+      }
+     
 
      if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { 
         if (mapAttr.UIContralType == 2) {

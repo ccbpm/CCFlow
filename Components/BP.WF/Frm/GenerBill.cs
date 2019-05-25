@@ -132,7 +132,7 @@ namespace BP.Frm
         /// <summary>
         /// 父单据编号
         /// </summary>
-        public const string PFlowNo = "PFlowNo";
+        public const string PFrmID = "PFrmID";
         /// <summary>
         /// 父单据节点
         /// </summary>
@@ -502,17 +502,17 @@ namespace BP.Frm
             }
         }
         /// <summary>
-        /// PFlowNo
+        /// PFrmID
         /// </summary>
-        public string PFlowNo
+        public string PFrmID
         {
             get
             {
-                return this.GetValStrByKey(GenerBillAttr.PFlowNo);
+                return this.GetValStrByKey(GenerBillAttr.PFrmID);
             }
             set
             {
-                SetValByKey(GenerBillAttr.PFlowNo, value);
+                SetValByKey(GenerBillAttr.PFrmID, value);
             }
         }
         /// <summary>
@@ -718,28 +718,17 @@ namespace BP.Frm
                 map.AddTBDateTime(GenerBillAttr.SDTOfFlow, "单据应完成时间", true, true);
 
                 //父子单据信息.
-                map.AddTBString(GenerBillAttr.PFlowNo, null, "父单据编号", true, false, 0, 3, 10);
+                map.AddTBString(GenerBillAttr.PFrmID, null, "父单据编号", true, false, 0, 3, 10);
                 map.AddTBInt(GenerBillAttr.PWorkID, 0, "父单据ID", true, true);
-                map.AddTBInt(GenerBillAttr.PNodeID, 0, "父单据调用节点", true, true);
-                map.AddTBString(GenerBillAttr.PEmp, null, "子单据的调用人", true, false, 0, 32, 10);
-
                 map.AddTBString(GenerBillAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
-                map.AddTBString(GenerBillAttr.FlowNote, null, "备注", true, false, 0, 4000, 10);
 
-                //任务池相关。
-                map.AddTBString(GenerBillAttr.TodoEmps, null, "待办人员", true, false, 0, 4000, 10);
-                map.AddTBInt(GenerBillAttr.TodoEmpsNum, 0, "待办人员数量", true, true);
-                map.AddTBInt(GenerBillAttr.TaskSta, 0, "共享状态", true, true);
-
+                 
                 //参数.
                 map.AddTBString(GenerBillAttr.AtPara, null, "参数(单据运行设置临时存储的参数)", true, false, 0, 2000, 10);
                 map.AddTBString(GenerBillAttr.Emps, null, "参与人", true, false, 0, 4000, 10);
                 map.AddTBString(GenerBillAttr.GUID, null, "GUID", false, false, 0, 36, 10);
                 map.AddTBString(GenerBillAttr.FK_NY, null, "年月", false, false, 0, 7, 7);
-                map.AddTBInt(GenerBillAttr.TSpan, 0, "TSpan", true, true);
-
-                //待办状态(0=待办中,1=预警中,2=逾期中,3=按期完成,4=逾期完成) 
-                map.AddTBInt(GenerBillAttr.TodoSta, 0, "待办状态", true, true);
+                 
 
                 this._enMap = map;
                 return this._enMap;

@@ -260,8 +260,6 @@ namespace BP.Frm
 
             //根据FrmID获取Mapdata
             MapData md = new MapData(this.FrmID);
-
-
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             //获取字段属性
@@ -548,8 +546,6 @@ namespace BP.Frm
             mydt.TableName = "DT";
 
             ds.Tables.Add(mydt); //把数据加入里面.
-
-
 
             return BP.Tools.Json.ToJson(ds);
         }

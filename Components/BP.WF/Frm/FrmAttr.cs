@@ -24,13 +24,13 @@ namespace BP.Frm
         /// </summary>
         public const string BillNoFormat = "BillNoFormat";
         /// <summary>
-        /// 关联的流程号
-        /// </summary>
-        public const string RefFlowNo = "RefFlowNo";
-        /// <summary>
         /// 单据编号生成规则
         /// </summary>
         public const string TitleRole = "TitleRole";
+        /// <summary>
+        /// 关联单据
+        /// </summary>
+        public const string RefBill = "RefBill";
         #endregion
 
         #region 隐藏属性.
@@ -113,6 +113,15 @@ namespace BP.Frm
         /// 是否可以启用?
         /// </summary>
         public const string BtnExpZipEnable = "BtnExpZipEnable";
+        /// <summary>
+        /// 关联单据
+        /// </summary>
+        public const string BtnRefBill = "BtnRefBill";
+        /// <summary>
+        /// 关联单据是否可用
+        /// </summary>
+        public const string RefBillRole = "RefBillRole";
+
 
         #region 集合的操作.
         /// <summary>

@@ -197,8 +197,7 @@ namespace BP.Frm
 
                 //map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "", "@0=独立表单@1=单据工作模式@2=流程工作模式");
 
-                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20, false);
-                map.AddTBString(FrmBillAttr.RefFlowNo, null, "关联流程号", true, false, 0, 100, 20);
+                map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
                 #endregion 单据属性.
 
@@ -208,9 +207,6 @@ namespace BP.Frm
 
                 map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
-
-                map.AddTBString(FrmBillAttr.BtnStartFlowLable, "启动流程", "启动流程", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnStartFlowEnable, false, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
@@ -235,6 +231,16 @@ namespace BP.Frm
 
                 map.AddTBString(FrmBillAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnExpZipEnable, false, "是否可用？", true, true);
+
+
+                map.AddTBString(FrmBillAttr.BtnRefBill, "关联单据", "关联单据", true, false, 0, 50, 20);
+
+                map.AddDDLSysEnum(FrmAttr.RefBillRole, 0, "关联单据工作模式", true, true,
+                    "RefBillRole", "@0=不启用@1=非必须选择关联单据@2=必须选择关联单据");
+
+                map.AddTBString(FrmBillAttr.RefBill, null, "关联单据ID", true, false, 0, 100, 20, true);
+                map.SetHelperAlert(FrmBillAttr.RefBill, "请输入单据编号,多个单据编号用逗号分开.\t\n比如:Bill_Sale,Bill_QingJia");
+
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.
@@ -442,7 +448,7 @@ namespace BP.Frm
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
-                    attr.Name = "标题"; //   单据模式， ccform的模式.
+                attr.Name = "标题"; //   单据模式， ccform的模式.
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -590,7 +596,7 @@ namespace BP.Frm
             }
             #endregion 补充上流程字段。
         }
-       
+
         /// <summary>
         /// 绑定菜单树
         /// </summary>

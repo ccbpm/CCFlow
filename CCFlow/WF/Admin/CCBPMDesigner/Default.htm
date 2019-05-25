@@ -1330,23 +1330,27 @@
             if (currForm == null)
                 return;
 
-            OpenEasyUiConfirm("你确定要删除名称为“" + currForm.text + "”的表单吗？", function () {
-                //传入后台参数
-                var params = {
-                    DoType: "CCForm_DeleteCCFormMapData",
-                    FK_MapData: currForm.id
-                };
-                ajaxService(params, function (data) {
-                    alert("删除成功！");
-                    //如果右侧有打开该表单，则关闭
-                    var currTab = $('#tabs').tabs('getTab', currForm.text);
-                    if (currTab) {
-                        $('#tabs').tabs('close', currForm.text);
-                    }
-                    //删除节点
-                    $('#formTree').tree('remove', currForm.target);
-                });
-            });
+            if (confirm('您确认要删除吗？') == false)
+                return;
+
+            var en = new Entity("BP.Sys.MapData", currForm.id);
+            en.Delete();
+
+//            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+//            handler.AddPara("FK_MapData", currForm.id);
+//            var data = handler.DoMethodReturnString("CCForm_DeleteCCFormMapData");
+//            if (data.indexOf('err@') != -1) {
+//                alert(data);
+//                return;
+//            }
+
+            //如果右侧有打开该表单，则关闭
+            var currTab = $('#tabs').tabs('getTab', currForm.text);
+            if (currTab) {
+                $('#tabs').tabs('close', currForm.text);
+            }
+            //删除节点
+            $('#formTree').tree('remove', currForm.target);
         }
 
         function CopyFrm() {

@@ -11,7 +11,9 @@ function InitBar(optionKey) {
     html += "<option value='PopBranches' >树干模式(简单)</option>";
     html += "<option value='PopBranchesLazyLoad' >树干模式(简单)-懒加载</option>";
     html += "<option value='PopGroupList' >分组列表平铺</option>";
-    html += "<option value='PopTableList' >单实体平铺</option>";
+    html += "<option value='PopTableList' >单实体平铺(未解析)</option>";
+    html += "<option value='PopBindSFTable' >绑定外键(字典表)表(未解析)</option>";
+    html += "<option value='PopBindEnum' >绑定枚举(未解析)</option>";
     html += "<option value='PopTableSearch' >表格条件查询</option>";
     html += "<option value='PopSelfUrl' >自定义URL</option>"; 
     html += "</select >";
@@ -86,6 +88,12 @@ function GetUrl(popModel) {
             break;
         case "PopSelfUrl":
             url = "8.SelfUrl.htm";
+            break;
+        case "PopBindEnum":
+            url = "9.BindEnum.htm";
+            break;
+        case "PopBindSFTable":
+            url = "10.BindSFTable.htm";
             break;
         default:
             url = "0.None.htm";

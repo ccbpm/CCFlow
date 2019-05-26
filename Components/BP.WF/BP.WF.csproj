@@ -218,6 +218,7 @@
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
     <Compile Include="DTS\Service\ccbpmServices.cs" />
     <Compile Include="DTS\GenerDeptTree.cs" />
+    <Compile Include="Frm\WF_CCBill_Opt.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

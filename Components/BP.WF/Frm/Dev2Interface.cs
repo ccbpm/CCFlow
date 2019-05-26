@@ -18,9 +18,7 @@ namespace BP.Frm
     /// </summary>
     public class Dev2Interface
     {
-        public static Int64 SetRefBill(string frmID, string userNo, Hashtable htParas)
-        {
-        }
+        
         /// <summary>
         /// 创建工作ID
         /// </summary>

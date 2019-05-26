@@ -843,7 +843,6 @@
         //更新.
         function Update() {
             var url = window.location.href;
-            url = url.substring(0, url.indexOf("?"));
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
             var pkval = GetPKVal();
@@ -886,10 +885,12 @@
                 if (entityAthType == 1 || entityAthType == 2)
                     uploadFile(en.GetPKVal());
 
-                url = window.location.href;
+                
                 url = url.replace("#", "");
                 url = replaceParamVal(url, "PKVal", en.GetPKVal());
                 url = replaceParamVal(url, "tabIndex", index);
+                if (url.indexOf("&tabIndex") == -1)
+                    url += "&tabIndex=" + index;
 
                 if (url.indexOf('&PKVal=') == -1)
                     url += "&PKVal=" + en.GetPKVal();
@@ -921,9 +922,11 @@
             if (entityAthType == 1 || entityAthType == 2)
                 uploadFile(pkval);
 
-            url = window.location.href;
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
+
+            if (url.indexOf("&tabIndex") == -1)
+                url += "&tabIndex=" + index;
 
 
             window.location.href = url; ; //刷新.

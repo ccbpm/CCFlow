@@ -1007,6 +1007,21 @@
                 return;
 
             var propName = (isSub ? '子级' : '同级') + '表单类别';
+            var text = window.prompt(propName, "我的目录");
+            if (text == null || text == undefined)
+                return;
+
+            var en = new Entity("BP.WF.Template.SysFormTree");
+
+            if (isSub)
+                en.DoMethodReturnString("DoCreateSubNode", text);
+            else
+                en.DoMethodReturnString("DoCreateSameLevelNode", text);
+
+
+            
+
+             
 
             OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
                 if (val == null || val.length == 0) {
@@ -1023,6 +1038,7 @@
                 };
 
                 ajaxService(params, function (data) {
+
                     var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
 
                     $('#formTree').tree('append', {
@@ -1830,23 +1846,23 @@
         <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
-        <div onclick="newFrm(0)" data-options="iconCls:'icon-add'">
+        <div onclick="newFrm(0)" data-options="iconCls:'icon-excel'">
             新建独立表单</div>
-        <div onclick="newFrm(1)" data-options="iconCls:'icon-add'">
+        <div onclick="newFrm(1)" data-options="iconCls:'icon-sheet'">
             新建单据表单</div>
         <div onclick="newFrm(2)" data-options="iconCls:'icon-add'">
             新建实体表单</div>
         <div class="menu-sep">
         </div>
-        <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-new'">
+        <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-tree_folder'">
             新建同级类别</div>
-        <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-new'">
+        <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-tree_folder'">
             新建子级类别</div>
         <div class="menu-sep">
         </div>
         <div onclick="EditCCFormSort()" data-options="iconCls:'icon-edit'">
             编辑</div>
-        <div onclick="DeleteCCFormSort()" data-options="iconCls:'icon-delete'">
+        <div onclick="DeleteCCFormSort()" data-options="iconCls:'icon-cancel'">
             删除</div>
         <div class="menu-sep">
         </div>

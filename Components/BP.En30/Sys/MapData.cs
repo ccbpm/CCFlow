@@ -849,7 +849,7 @@ namespace BP.Sys
         {
             get
             {
-                FrmBtns obj = this.GetRefObject("FrmLinks") as FrmBtns;
+                FrmBtns obj = this.GetRefObject("FrmBtns") as FrmBtns;
                 if (obj == null)
                 {
                     obj = new FrmBtns(this.No);
@@ -1005,6 +1005,33 @@ namespace BP.Sys
             }
         }
         #endregion
+
+        public void CleanObject()
+        {
+            this.Row = null;
+            return;
+
+            this.Row.SetValByKey("FrmEles", null);
+            this.Row.SetValByKey("MapFrames", null);
+            this.Row.SetValByKey("GroupFields", null);
+            this.Row.SetValByKey("MapExts", null);
+            this.Row.SetValByKey("FrmEvents", null);
+            this.Row.SetValByKey("MapDtls", null);
+            this.Row.SetValByKey("SysEnums", null);
+            this.Row.SetValByKey("FrmRpts", null);
+            this.Row.SetValByKey("FrmLinks", null);
+            this.Row.SetValByKey("FrmBtns", null);
+            this.Row.SetValByKey("FrmEles", null);
+            this.Row.SetValByKey("FrmLines", null);
+            this.Row.SetValByKey("FrmLabs", null);
+            this.Row.SetValByKey("FrmAttachments", null);
+            this.Row.SetValByKey("FrmImgAthDBs", null);
+            this.Row.SetValByKey("FrmRBs", null);
+            this.Row.SetValByKey("MapAttrs", null);
+            
+
+
+        }
 
         #region 基本属性.
         /// <summary>

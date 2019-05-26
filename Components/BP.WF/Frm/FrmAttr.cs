@@ -142,7 +142,6 @@ namespace BP.Frm
         public const string BtnExpExcelEnable = "BtnExpExcelEnable";
         #endregion 集合的操作.
 
-        public const string FrmBillWorkModel = "FrmBillWorkModel";
         public const string BtnNewEnable = "BtnNewEnable";
         /// <summary>
         /// 行打开模式

@@ -2840,25 +2840,7 @@ namespace BP.Sys
 
             return base.beforeDelete();
         }
-        /// <summary>
-        /// 生成自动的ｊｓ程序。
-        /// </summary>
-        /// <param name="pk"></param>
-        /// <param name="attrs"></param>
-        /// <param name="attr"></param>
-        /// <param name="tbPer"></param>
-        /// <returns></returns>
-        public static string GenerAutoFull(string pk, MapAttrs attrs, MapExt me, string tbPer)
-        {
-            string left = "\n document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value = ";
-            string right = me.Doc;
-            foreach (MapAttr mattr in attrs)
-            {
-                right = right.Replace("@" + mattr.KeyOfEn, " parseFloat( document.forms[0]." + tbPer + "_TB_" + mattr.KeyOfEn + "_" + pk + ".value) ");
-            }
-            return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
-        }
-            #endregion 常用方法.
+        #endregion 常用方法.
 
         #region 与Excel相关的操作 .
         /// <summary>
@@ -2898,8 +2880,6 @@ namespace BP.Sys
             BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
         }
         #endregion 与Excel相关的操作 .
-
-
 
         #region 与Word相关的操作 .
         /// <summary>

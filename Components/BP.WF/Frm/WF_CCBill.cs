@@ -572,7 +572,7 @@ namespace BP.Frm
             gb.CheckPhysicsTable();
 
 
-            sql = "SELECT TSpan as No, COUNT(WorkID) as Num FROM Frm_Bill WHERE FrmID='" + this.FrmID + "'  AND Starter='" + WebUser.No + "' AND BillState >= 1 GROUP BY TSpan";
+            sql = "SELECT TSpan as No, COUNT(WorkID) as Num FROM Frm_GenerBill WHERE FrmID='" + this.FrmID + "'  AND Starter='" + WebUser.No + "' AND BillState >= 1 GROUP BY TSpan";
 
             DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
@@ -590,7 +590,7 @@ namespace BP.Frm
             #endregion
 
             #region 2、处理流程类别列表.
-            sql = " SELECT  A.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM Frm_Bill A, Sys_Enum B ";
+            sql = " SELECT  A.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM Frm_GenerBill A, Sys_Enum B ";
             sql += " WHERE A.BillState=B.IntKey AND B.EnumKey='BillState' AND  A.Starter='" + WebUser.No + "' AND BillState >=1";
             if (tSpan.Equals("-1") == false)
                 sql += "  AND A.TSpan=" + tSpan;
@@ -629,11 +629,11 @@ namespace BP.Frm
             string fields = " WorkID,FrmID,FrmName,Title,BillState, Starter, StarterName,Sender,RDT ";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT " + fields + " FROM (SELECT * FROM Frm_Bill WHERE " + sqlWhere + ") WHERE rownum <= 50";
+                sql = "SELECT " + fields + " FROM (SELECT * FROM Frm_GenerBill WHERE " + sqlWhere + ") WHERE rownum <= 50";
             else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                sql = "SELECT  TOP 50 " + fields + " FROM Frm_Bill WHERE " + sqlWhere;
+                sql = "SELECT  TOP 50 " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere;
             else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                sql = "SELECT  " + fields + " FROM Frm_Bill WHERE " + sqlWhere + " LIMIT 50";
+                sql = "SELECT  " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere + " LIMIT 50";
 
             DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)

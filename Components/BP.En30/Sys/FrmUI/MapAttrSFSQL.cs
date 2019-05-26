@@ -110,7 +110,7 @@ namespace BP.Sys.FrmUI
                 //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
-                map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见", true, false);
+                map.AddBoolean(MapAttrAttr.UIVisible, true, "可见", true, false);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
 
                // map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
@@ -131,7 +131,6 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
-
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.

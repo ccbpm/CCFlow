@@ -212,7 +212,7 @@ namespace BP.Frm
                 map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSearchLabel, "查询", "查询", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnSearchLabel, "列表", "列表", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);

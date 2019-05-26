@@ -689,7 +689,7 @@ namespace BP.Frm
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Frm_Bill", "单据控制表");
+                Map map = new Map("Frm_GenerBill", "单据控制表");
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBIntPK(GenerBillAttr.WorkID, 0, "WorkID", true, true);

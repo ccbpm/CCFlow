@@ -168,10 +168,9 @@ namespace BP.Frm
         public static string MyBill_Delete(string frmID, Int64 workID)
         {
             FrmBill fb = new FrmBill(frmID);
-            string sqls = "DELETE FROM WF_CCBill WHERE WorkID=" + workID;
+            string sqls = "DELETE FROM Frm_GenerBill WHERE WorkID=" + workID;
             sqls += "@DELETE FROM " + fb.PTable + " WHERE OID=" + workID;
             DBAccess.RunSQLs(sqls);
-
             return "删除成功.";
         }
 
@@ -207,7 +206,7 @@ namespace BP.Frm
 
             //查询出来单据运行模式的.
             FrmBills bills = new FrmBills();
-            bills.Retrieve(FrmBillAttr.FrmBillWorkModel, 1);
+            bills.Retrieve(FrmBillAttr.EntityType, 0); //实体类型.
 
             DataTable dtStart = bills.ToDataTableField();
             dtStart.TableName = "Start";
@@ -376,7 +375,7 @@ namespace BP.Frm
             }
 
             //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
-            sql = "SELECT BillNo FROM WF_CCBill WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") + "'"
+            sql = "SELECT BillNo FROM Frm_GenerBill WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") + "'"
                 + " AND WorkID <> " + workid
                 + " AND FrmID ='" + frmID + "' "
                 + " ORDER BY BillNo DESC ";

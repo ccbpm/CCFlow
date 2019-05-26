@@ -172,9 +172,17 @@ namespace BP.Frm
         /// 创建空白的WorkID.
         /// </summary>
         /// <returns></returns>
-        public string MyBill_CreateBlankWorkID()
+        public string MyBill_CreateBlankBillID()
         {
-            return BP.Frm.Dev2Interface.CreateBlankWork(this.FrmID, BP.Web.WebUser.No, null).ToString();
+            return BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null).ToString();
+        }
+        /// <summary>
+        /// 创建空白的DictID.
+        /// </summary>
+        /// <returns></returns>
+        public string MyBill_CreateBlankDictID()
+        {
+            return BP.Frm.Dev2Interface.CreateBlankDictID(this.FrmID, BP.Web.WebUser.No, null).ToString();
         }
         /// <summary>
         /// 执行保存

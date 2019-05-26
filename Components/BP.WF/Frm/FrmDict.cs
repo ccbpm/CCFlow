@@ -683,7 +683,7 @@ namespace BP.Frm
         #region 业务逻辑.
         public string CreateBlankWorkID()
         {
-            return BP.Frm.Dev2Interface.CreateBlankWork(this.No, BP.Web.WebUser.No, null).ToString();
+            return BP.Frm.Dev2Interface.CreateBlankDictID(this.No, BP.Web.WebUser.No, null).ToString();
         }
         #endregion 业务逻辑.
 

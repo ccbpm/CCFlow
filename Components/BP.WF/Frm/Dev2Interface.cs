@@ -25,7 +25,7 @@ namespace BP.Frm
         /// <param name="userNo">用户编号</param>
         /// <param name="htParas">参数</param>
         /// <returns>一个新的WorkID</returns>
-        public static Int64 CreateBlankWork(string frmID, string userNo, Hashtable htParas)
+        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas)
         {
             GenerBill gb = new GenerBill();
             int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
@@ -78,6 +78,35 @@ namespace BP.Frm
             rpt.InsertAsOID(gb.WorkID);
 
             return gb.WorkID;
+        }
+        public static Int64 CreateBlankDictID(string frmID, string userNo, Hashtable htParas)
+        {
+
+            FrmBill fb = new FrmBill(frmID);
+
+            //创建rpt.
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
+
+            int i= rpt.Retrieve("Starter", WebUser.No, "BillState", 0);
+            if (i >= 1)
+            {
+                rpt.SetValByKey("RDT", DataType.CurrentData);
+                return rpt.OID;
+            }
+
+            //更新基础的数据到表单表.
+            rpt.SetValByKey("BillState", 0);
+            rpt.SetValByKey("Starter", WebUser.No);
+            rpt.SetValByKey("StarterName", WebUser.Name);
+            rpt.SetValByKey("RDT", DataType.CurrentData);
+
+            rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;
+
+            //rpt.SetValByKey("Title", gb.Title);
+            rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
+            rpt.OID = DBAccess.GenerOID(frmID);
+            rpt.InsertAsOID(rpt.OID);
+            return rpt.OID;
         }
         /// <summary>
         /// 发送工作

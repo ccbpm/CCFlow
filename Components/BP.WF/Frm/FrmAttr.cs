@@ -149,10 +149,8 @@ namespace BP.Frm
         /// </summary>
         public const string RowOpenModel = "RowOpenModel";
 
-
         public const string PopHeight = "PopHeight";
         public const string PopWidth = "PopWidth";
-
 
         public const string Tag0 = "Tag0";
         public const string Tag1 = "Tag1";

@@ -26,13 +26,13 @@ namespace BP.WF.HttpHandler
         {
             string sql = @"SELECT * FROM (SELECT 'F'+No as No,'F'+ParentNo ParentNo, Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT NO, 'F'+FK_FlowSort as ParentNo,(NO + '.' + NAME) as Name,IDX,0 IsParent,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+                           SELECT NO, 'F'+FK_FlowSort as ParentNo,(NO + '.' + NAME) as Name,IDX,0 IsParent,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow) A  ORDER BY IDX";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 sql = @"SELECT * FROM (SELECT 'F'||No as No,'F'||ParentNo as ParentNo,Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                         union 
-                        SELECT NO, 'F'||FK_FlowSort as ParentNo,NO||'.'||NAME as Name,IDX,0 IsParent,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+                        SELECT NO, 'F'||FK_FlowSort as ParentNo,NO||'.'||NAME as Name,IDX,0 IsParent,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow) A  ORDER BY IDX";
             }
 
 
@@ -40,7 +40,7 @@ namespace BP.WF.HttpHandler
             {
                 sql = @"SELECT * FROM (SELECT CONCAT('F', No) No, CONCAT('F', ParentNo) ParentNo, Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT NO, CONCAT('F', FK_FlowSort) ParentNo, CONCAT(NO, '.', NAME) Name,IDX,0 IsParent,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
+                           SELECT NO, CONCAT('F', FK_FlowSort) ParentNo, CONCAT(NO, '.', NAME) Name,IDX,0 IsParent,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow) A  ORDER BY IDX";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -1468,32 +1468,7 @@ namespace BP.WF.HttpHandler
             fsSub.DoDown();
             return "F" + fsSub.No;
         }
-        /// <summary>
-        /// 表单树 - 创建表单同级类别
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_NewSameLevelSort()
-        {
-            SysFormTree formTree = new SysFormTree(this.No);
-            string sameLevelNo = formTree.DoCreateSameLevelNode().No;
-            SysFormTree sameLevelFormTree = new SysFormTree(sameLevelNo);
-            sameLevelFormTree.Name = this.Name;
-            sameLevelFormTree.Update();
-            return sameLevelFormTree.No;
-        }
-        /// <summary>
-        /// 表单树 - 创建表单子类别
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_NewSubSort()
-        {
-            SysFormTree formTree = new SysFormTree(this.No);
-            string subNo = formTree.DoCreateSubNode().No;
-            SysFormTree subFormTree = new SysFormTree(subNo);
-            subFormTree.Name = this.Name;
-            subFormTree.Update();
-            return subFormTree.No;
-        }
+       
         /// <summary>
         /// 表单树 - 编辑表单类别
         /// </summary>

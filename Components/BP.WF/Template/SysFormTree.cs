@@ -136,24 +136,24 @@ namespace BP.WF.Template
                 DeleteChild(item.No);
             }
         }
-        public SysFormTree DoCreateSameLevelNode()
+        public string DoCreateSameLevelNodeIt(string name)
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
             en.No = BP.DA.DBAccess.GenerOID().ToString();
-            en.Name = "新建节点";
+            en.Name = name;
             en.Insert();
-            return en;
+            return en.No;
         }
-        public SysFormTree DoCreateSubNode()
+        public string DoCreateSubNodeIt(string name)
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
             en.No = BP.DA.DBAccess.GenerOID().ToString();
             en.ParentNo = this.No;
-            en.Name = "新建节点";
+            en.Name = name;
             en.Insert();
-            return en;
+            return en.No;
         }
         public void DoUp()
         {

@@ -204,6 +204,20 @@ namespace BP.Frm
         }
 
         /// <summary>
+        /// 删除实体单据
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        public static string MyBill_DeleteDicts(string frmID, string workIds)
+        {
+            FrmBill fb = new FrmBill(frmID);
+            string sql = "DELETE FROM " + fb.PTable + " WHERE OID in (" + workIds+")";
+            DBAccess.RunSQLs(sql);
+            return "删除成功.";
+        }
+
+        /// <summary>
         /// 工作退回
         /// </summary>
         /// <param name="frmID"></param>

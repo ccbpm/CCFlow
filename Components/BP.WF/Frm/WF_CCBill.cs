@@ -257,6 +257,11 @@ namespace BP.Frm
         {
             return BP.Frm.Dev2Interface.MyBill_Delete(this.FrmID, this.WorkID);
         }
+
+        public string MyBill_Deletes()
+        {
+            return BP.Frm.Dev2Interface.MyBill_DeleteDicts(this.FrmID, this.GetRequestVal("workid"));
+        }
         #endregion 单据处理.
 
         #region 获取查询条件
@@ -673,6 +678,400 @@ namespace BP.Frm
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 查询.
+
+        #region 单据导出
+        public string Search_Exp()
+        {
+            FrmBill frmBill = new FrmBill(this.FrmID);
+            GEEntitys rpts = new GEEntitys(this.FrmID);
+           
+            string name = "数据导出";
+            string filename = frmBill.Name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + ".xls";
+            string filePath = ExportDGToExcel(Search_Data(), rpts.GetNewEntity, null, null, filename);
+            
+
+            return filePath;
+        }
+
+        public DataTable Search_Data()
+        {
+            DataSet ds = new DataSet();
+
+            #region 查询语句
+
+            MapData md = new MapData(this.FrmID);
+
+
+            //取出来查询条件.
+            BP.Sys.UserRegedit ur = new UserRegedit();
+            ur.MyPK = WebUser.No + "_" + this.FrmID + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            GEEntitys rpts = new GEEntitys(this.FrmID);
+
+            Attrs attrs = rpts.GetNewEntity.EnMap.Attrs;
+
+            QueryObject qo = new QueryObject(rpts);
+
+            #region 关键字字段.
+            string keyWord = ur.SearchKey;
+
+            if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+            {
+                Attr attrPK = new Attr();
+                foreach (Attr attr in attrs)
+                {
+                    if (attr.IsPK)
+                    {
+                        attrPK = attr;
+                        break;
+                    }
+                }
+                int i = 0;
+                string enumKey = ","; //求出枚举值外键.
+                foreach (Attr attr in attrs)
+                {
+                    switch (attr.MyFieldType)
+                    {
+                        case FieldType.Enum:
+                            enumKey = "," + attr.Key + "Text,";
+                            break;
+                        case FieldType.FK:
+
+                            continue;
+                        default:
+                            break;
+                    }
+
+                    if (attr.MyDataType != DataType.AppString)
+                        continue;
+
+                    //排除枚举值关联refText.
+                    if (attr.MyFieldType == FieldType.RefText)
+                    {
+                        if (enumKey.Contains("," + attr.Key + ",") == true)
+                            continue;
+                    }
+
+                    if (attr.Key == "FK_Dept")
+                        continue;
+
+                    i++;
+                    if (i == 1)
+                    {
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        else
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        continue;
+                    }
+                    qo.addOr();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    else
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+
+                }
+                qo.MyParas.Add("SKey", keyWord);
+                qo.addRightBracket();
+
+            }
+            else
+            {
+                qo.AddHD();
+            }
+            #endregion 关键字段查询
+
+            #region 时间段的查询
+            if (md.GetParaInt("DTSearchWay") != (int)DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
+            {
+                string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
+                string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
+
+                //按日期查询
+                if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDate)
+                {
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    dtTo += " 23:59:59";
+                    qo.SQL = md.GetParaString("DTSearchKey") + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = md.GetParaString("DTSearchKey") + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+
+                if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDateTime)
+                {
+                    //取前一天的24：00
+                    if (dtFrom.Trim().Length == 10) //2017-09-30
+                        dtFrom += " 00:00:00";
+                    if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
+                        dtFrom += ":00";
+
+                    dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
+
+                    if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
+                        dtTo += " 24:00";
+
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = md.GetParaString("DTSearchKey") + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = md.GetParaString("DTSearchKey") + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+            }
+            #endregion 时间段的查询
+
+            #region 外键或者枚举的查询
+
+            //获得关键字.
+            AtPara ap = new AtPara(ur.Vals);
+            foreach (string str in ap.HisHT.Keys)
+            {
+                var val = ap.GetValStrByKey(str);
+                if (val.Equals("all"))
+                    continue;
+                qo.addAnd();
+                qo.addLeftBracket();
+                qo.AddWhere(str, ap.GetValStrByKey(str));
+                qo.addRightBracket();
+            }
+            #endregion 外键或者枚举的查询
+
+            #endregion 查询语句
+            qo.addOrderBy("OID");
+            return qo.DoQueryToTable();
+           
+        }
+        #endregion  执行导出
+
+        #region 单据导入
+        public string ImpData_Done()
+        {
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要导入的数据信息。";
+
+            string errInfo = "";
+
+            string ext = ".xls";
+            string fileName = System.IO.Path.GetFileName(files[0].FileName);
+            if (fileName.Contains(".xlsx"))
+                ext = ".xlsx";
+
+
+            //设置文件名
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
+
+            //文件存放路径
+            string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
+            files[0].SaveAs(filePath);
+
+            //从excel里面获得数据表.
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath);
+
+            //删除临时文件
+            System.IO.File.Delete(filePath);
+
+            if (dt.Rows.Count == 0)
+                return "err@无导入的数据";
+
+            //获得entity.
+            FrmBill bill = new FrmBill(this.FrmID);
+            GEEntitys rpts = new GEEntitys(this.FrmID);
+            GERpt en = new GERpt(this.FrmID);
+
+            
+            string noColName = ""; //实体列的编号名称.
+            string nameColName = ""; //实体列的名字名称.
+
+            BP.En.Map map = en.EnMap;
+            Attr attr = map.GetAttrByKey("BillNo");
+            noColName = attr.Desc; //
+            String codeStruct = bill.EnMap.CodeStruct;
+            attr = map.GetAttrByKey("Title");
+            nameColName = attr.Desc; //
+
+            //定义属性.
+            Attrs attrs = map.Attrs;
+
+            int impWay = this.GetRequestValInt("ImpWay");
+
+            #region 清空方式导入.
+            //清空方式导入.
+            int count = 0;//导入的行数
+            int changeCount = 0;//更新的行数
+            String successInfo = "";
+            if (impWay == 0)
+            {
+                rpts.ClearTable();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string no = dr[noColName].ToString();
+                    string name = dr[nameColName].ToString();
+
+                    //判断是否是自增序列，序列的格式
+                    if (!DataType.IsNullOrEmpty(codeStruct))
+                    {
+                        no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
+                    }
+
+                    GERpt myen = new BP.WF.Data.GERpt(this.FrmID);
+
+                    myen.SetValByKey("BillNo", no);
+
+                    if (myen.Retrieve("BillNo", no) == 1)
+                    {
+                        errInfo += "err@编号[" + no + "][" + name + "]重复.";
+                        continue;
+                    }
+
+                  
+                    //给实体赋值
+                    errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0);
+                    count++;
+                    successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
+                }
+            }
+
+            #endregion 清空方式导入.
+
+            #region 更新方式导入
+            if (impWay == 1 || impWay == 2)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string no = dr[noColName].ToString();
+                    string name = dr[nameColName].ToString();
+                    //判断是否是自增序列，序列的格式
+                    if (!DataType.IsNullOrEmpty(codeStruct))
+                    {
+                        no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
+                    }
+                    GERpt myen = rpts.GetNewEntity as GERpt;
+                    myen.SetValByKey("BillNo", no);
+                    if (myen.Retrieve("BillNo", no) == 1)
+                    {
+                        //给实体赋值
+                        errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 1);
+                        changeCount++;
+                        successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
+                        continue;
+                    }
+                    
+
+                    //给实体赋值
+                    errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0);
+                    count++;
+                    successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
+                }
+            }
+            #endregion
+
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
+        }
+
+        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GERpt en, DataTable dt, int saveType)
+        {
+            if (saveType == 0)
+            {
+                string OID = MyBill_CreateBlankDictID();
+                en.OID = long.Parse(OID);
+                en.RetrieveFromDBSources();
+            }
+
+            string errInfo = "";
+            //按照属性赋值.
+            foreach (Attr item in attrs)
+            {
+                if (item.Key == "BillNo")
+                {
+                    en.SetValByKey(item.Key, no);
+                    continue;
+                }
+                if (item.Key == "Title")
+                {
+                    en.SetValByKey(item.Key, dr[item.Desc].ToString());
+                    continue;
+                }
+
+
+                if (dt.Columns.Contains(item.Desc) == false)
+                    continue;
+
+                //枚举处理.
+                if (item.MyFieldType == FieldType.Enum)
+                {
+                    string val = dr[item.Desc].ToString();
+
+                    SysEnum se = new SysEnum();
+                    int i = se.Retrieve(SysEnumAttr.EnumKey, item.UIBindKey, SysEnumAttr.Lab, val);
+
+                    if (i == 0)
+                    {
+                        errInfo += "err@枚举[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        continue;
+                    }
+
+                    en.SetValByKey(item.Key, se.IntKey);
+                    continue;
+                }
+
+                //外键处理.
+                if (item.MyFieldType == FieldType.FK)
+                {
+                    string val = dr[item.Desc].ToString();
+                    Entity attrEn = item.HisFKEn;
+                    int i = attrEn.Retrieve("Name", val);
+                    if (i == 0)
+                    {
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        continue;
+                    }
+
+                    if (i != 1)
+                    {
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
+                        continue;
+                    }
+
+                    //把编号值给他.
+                    en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
+                    continue;
+                }
+
+                //boolen类型的处理..
+                if (item.MyDataType == DataType.AppBoolean)
+                {
+                    string val = dr[item.Desc].ToString();
+                    if (val == "是" || val == "有")
+                        en.SetValByKey(item.Key, 1);
+                    else
+                        en.SetValByKey(item.Key, 0);
+                    continue;
+                }
+
+                string myval = dr[item.Desc].ToString();
+                en.SetValByKey(item.Key, myval);
+            }
+
+            try
+            {   
+                    en.Update();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+            return errInfo;
+        }
+
+        #endregion
 
         #region 执行父类的重写方法.
         /// <summary>

@@ -73,7 +73,10 @@ namespace BP.Web
 
             try
             {
-                BP.DA.DBAccess.RunSQL(sql);
+                if (sql.Contains("UPDATE Port_Emp SET FK_Dept=") == true)
+                    if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+                        return;
+                 BP.DA.DBAccess.RunSQL(sql);
             }
             catch (Exception ex)
             {

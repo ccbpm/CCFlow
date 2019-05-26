@@ -1090,8 +1090,10 @@ namespace BP.WF.HttpHandler
                 {
                     foreach (Attr attr in selectedAttrs)
                     {
+                        if (attr.IsFKorEnum)
+                            continue;
 
-                        if (attr.UIVisible == false)
+                        if (attr.UIVisible == false && attr.MyFieldType != FieldType.RefText)
                             continue;
 
                         if (attr.Key.Equals("OID"))
@@ -1101,7 +1103,16 @@ namespace BP.WF.HttpHandler
                             continue;
 
                         if (attr.Key == "WorlID")
+
                             continue;
+
+                        if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt")
+                            || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
+                            || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")
+                            || attr.Key.Equals("RefPK"))
+                            continue;
+
+                        
 
                         if (attr.MyDataType == DataType.AppBoolean)
                         {

@@ -18,7 +18,6 @@ namespace BP.Frm
     /// </summary>
     public class Dev2Interface
     {
-        
         /// <summary>
         /// 创建工作ID
         /// </summary>
@@ -109,16 +108,7 @@ namespace BP.Frm
             rpt.InsertAsOID(rpt.OID);
             return rpt.OID;
         }
-        /// <summary>
-        /// 发送工作
-        /// </summary>
-        /// <param name="frmID"></param>
-        /// <param name="workID"></param>
-        /// <returns></returns>
-        public static string SendWork(string frmID, Int64 workID, string sendToEmpID)
-        {
-            return "发送chenggong.";
-        }
+
         /// <summary>
         /// 保存
         /// </summary>
@@ -217,19 +207,7 @@ namespace BP.Frm
             DBAccess.RunSQLs(sql);
             return "删除成功.";
         }
-
-        /// <summary>
-        /// 工作退回
-        /// </summary>
-        /// <param name="frmID"></param>
-        /// <param name="workID"></param>
-        /// <param name="returnToEmpID"></param>
-        /// <param name="returnMsg"></param>
-        /// <returns></returns>
-        public static string ReturnWork(string frmID, Int64 workID, string returnToEmpID, string returnMsg)
-        {
-            return "发送chenggong.";
-        }
+ 
         /// <summary>
         /// 获得发起列表
         /// </summary>

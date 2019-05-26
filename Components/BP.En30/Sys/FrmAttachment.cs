@@ -1254,8 +1254,8 @@ namespace BP.Sys
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "H", false, false);
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
-                map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
-
+                map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否可见", false, false);
+              //  map.AddTBInt(FrmAttachmentAttr.IsDelete, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
 
                 
                 //hzm新增列
@@ -1270,7 +1270,6 @@ namespace BP.Sys
 
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", false, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadType, 0, "上传类型0单个1多个2指定", false, false);
-
                 #region 流程属性.
                 //对于父子流程有效.
                 map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);

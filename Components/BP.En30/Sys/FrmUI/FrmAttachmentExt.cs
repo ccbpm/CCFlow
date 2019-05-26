@@ -940,27 +940,38 @@ namespace BP.Sys.FrmUI
             else
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
 
+            #region 处理分组. 
             //更新相关的分组信息.
-            GroupField gf = new GroupField();
-            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
-            if (i == 0)
+            if (this.IsVisable == true)
             {
-                gf.Lab = this.Name;
-                gf.FrmID = this.FK_MapData;
-                gf.CtrlType = "Ath";
-                //gf.CtrlID = this.MyPK;
-                gf.Insert();
-            }
-            else
-            {
-                gf.Lab = this.Name;
-                gf.FrmID = this.FK_MapData;
-                gf.CtrlType = "Ath";
-                //gf.CtrlID = this.MyPK;
-                gf.Update();
+                GroupField gf = new GroupField();
+                int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+                if (i == 0)
+                {
+                    gf.Lab = this.Name;
+                    gf.FrmID = this.FK_MapData;
+                    gf.CtrlType = "Ath";
+                    //gf.CtrlID = this.MyPK;
+                    gf.Insert();
+                }
+                else
+                {
+                    gf.Lab = this.Name;
+                    gf.FrmID = this.FK_MapData;
+                    gf.CtrlType = "Ath";
+                    //gf.CtrlID = this.MyPK;
+                    gf.Update();
+                }
             }
 
-            
+            if (this.IsVisable == false)
+            {
+                GroupField gf = new GroupField();
+                gf.Delete(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+            }
+            #endregion 处理分组.
+
+
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeInsert()

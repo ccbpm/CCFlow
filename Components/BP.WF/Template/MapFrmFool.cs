@@ -423,7 +423,7 @@ namespace BP.WF.Template
 
             string str = "";
 
-             // 处理失去分组的字段. 
+            //处理失去分组的字段. 
             string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(sql);
@@ -495,6 +495,9 @@ namespace BP.WF.Template
             FrmAttachments aths = new FrmAttachments(this.No);
             foreach (FrmAttachment ath in aths)
             {
+                if (ath.IsVisable == false)
+                    continue;
+
                 GroupField gf = new GroupField();
                 int i = gf.Retrieve(GroupFieldAttr.CtrlID, ath.MyPK, GroupFieldAttr.FrmID, this.No);
                 if (i == 1)

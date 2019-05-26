@@ -640,7 +640,7 @@
            
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
-            var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
+            var workID = handler.DoMethodReturnString("MyBill_CreateBlankDictID");
             OpenIt(workID,frmID);
             //var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
             //window.location.href=url;
@@ -721,7 +721,7 @@
             //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
             var rowOpenModel = parseInt(frmBill.RowOpenModel);
             var url = "";
-            url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
+            url = "MyDict.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
             if(rowOpenModel == 0)
                 window.open(url);
 			if(rowOpenModel == 1)

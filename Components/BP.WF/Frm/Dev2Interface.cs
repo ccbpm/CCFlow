@@ -18,6 +18,9 @@ namespace BP.Frm
     /// </summary>
     public class Dev2Interface
     {
+        public static Int64 SetRefBill(string frmID, string userNo, Hashtable htParas)
+        {
+        }
         /// <summary>
         /// 创建工作ID
         /// </summary>
@@ -234,7 +237,7 @@ namespace BP.Frm
         /// </summary>
         /// <param name="empID"></param>
         /// <returns></returns>
-        public static DataSet DB_StartFlows(string empID)
+        public static DataSet DB_StartBills(string empID)
         {
             //定义容器.
             DataSet ds = new DataSet();
@@ -249,7 +252,8 @@ namespace BP.Frm
 
             //查询出来单据运行模式的.
             FrmBills bills = new FrmBills();
-            bills.Retrieve(FrmBillAttr.EntityType, 0); //实体类型.
+            bills.RetrieveAll();
+            //bills.Retrieve(FrmBillAttr.EntityType, 0); //实体类型.
 
             DataTable dtStart = bills.ToDataTableField();
             dtStart.TableName = "Start";

@@ -266,15 +266,12 @@ namespace BP.Frm
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
-
                 #region 扩展参数.
+                map.AddTBAtParas(3000); //参数属性.
                 map.AddTBString(FrmDictAttr.Tag0, null, "Tag0", false, false, 0, 500, 20);
                 map.AddTBString(FrmDictAttr.Tag1, null, "Tag1", false, false, 0, 4000, 20);
                 map.AddTBString(FrmDictAttr.Tag2, null, "Tag2", false, false, 0, 500, 20);
                 #endregion 扩展参数.
-
-
-                map.AddTBAtParas(800); //参数属性.
 
 
                 #region 基本功能.
@@ -325,15 +322,6 @@ namespace BP.Frm
                 //rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "装载填充"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
-                //rm.Icon = "../../WF/Img/FullData.png";
-                //rm.Visable = true;
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "表单事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoEvent";
@@ -357,21 +345,16 @@ namespace BP.Frm
                 rm = new RefMethod();
                 rm.Title = "创建规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCreateRole";
-                //  rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "权限规则";
-                //  rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "删除规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDeleteRole";
-                //  rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //  rm.Target = "_blank";
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
@@ -380,7 +363,6 @@ namespace BP.Frm
                 rm.ClassMethodName = this.ToString() + ".DoSearchRole";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //  rm.Target = "_blank";
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
                 #endregion
@@ -624,7 +606,7 @@ namespace BP.Frm
         }
         #endregion 报表定义.
 
-        #region 查询权限.
+        #region 权限控制.
         public string DoCreateRole()
         {
             return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
@@ -645,7 +627,7 @@ namespace BP.Frm
         {
             return "../../CCBill/Admin/DeleteRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
-        #endregion 查询权限.
+        #endregion 权限控制.
 
         public string DoMethod()
         {

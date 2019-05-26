@@ -45,7 +45,7 @@ namespace BP.Frm
         public string Start_Init()
         {
             //获得发起列表. 
-            DataSet ds = BP.Frm.Dev2Interface.DB_StartFlows(BP.Web.WebUser.No);
+            DataSet ds = BP.Frm.Dev2Interface.DB_StartBills(BP.Web.WebUser.No);
 
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
@@ -70,7 +70,7 @@ namespace BP.Frm
         public string MyBill_Init()
         {
             //获得发起列表. 
-            DataSet ds = BP.Frm.Dev2Interface.DB_StartFlows(BP.Web.WebUser.No);
+            DataSet ds = BP.Frm.Dev2Interface.DB_StartBills(BP.Web.WebUser.No);
 
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);

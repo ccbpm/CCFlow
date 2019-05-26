@@ -382,7 +382,7 @@
                         en.GroupID = mapAttr.GroupID; //设置分组列.
                         en.Name = name;
                         en.UploadType = 1; //多附件.
-                        en.IsVisable = 0; //让其不可见.
+                        en.IsVisable = 0; //让其不可见. 
                         en.Insert(); //插入到数据库.
                         window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
                     }

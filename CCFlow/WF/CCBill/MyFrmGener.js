@@ -1,5 +1,5 @@
-﻿function Search() {
-    var url = "Search.htm?FrmID=" + GetQueryString("FrmID");
+﻿function SearchBill() {
+    var url = "SearchBill.htm?FrmID=" + GetQueryString("FrmID");
     window.location.href = url;
 }
 

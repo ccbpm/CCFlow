@@ -1007,57 +1007,36 @@
                 return;
 
             var propName = (isSub ? '子级' : '同级') + '表单类别';
-            var text = window.prompt(propName, "我的目录");
-            if (text == null || text == undefined)
+            var val = window.prompt(propName, "我的目录");
+            if (val == null || val == undefined)
                 return;
 
-            var en = new Entity("BP.WF.Template.SysFormTree");
-
+            var en = new Entity("BP.WF.Template.SysFormTree", currCCFormSort.id);
+            var data = "";
             if (isSub)
-                en.DoMethodReturnString("DoCreateSubNode", text);
+                data = en.DoMethodReturnString("DoCreateSubNodeIt", val);
             else
-                en.DoMethodReturnString("DoCreateSameLevelNode", text);
+                data = en.DoMethodReturnString("DoCreateSameLevelNodeIt", val);
 
+            alert(data);
 
-            
+            var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
 
-             
+            $('#formTree').tree('append', {
+                parent: parentNode.target,
+                data: [{
+                    id: data,
+                    text: val,
+                    attributes: { MenuId: "mFormSort", TType: "FORMTYPE" },
+                    checked: false,
+                    iconCls: 'icon-tree_folder',
+                    state: 'open',
+                    children: []
+                }]
+            });
 
-            OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
-                if (val == null || val.length == 0) {
-                    $.messager.alert('错误', '请输入' + propName + '！', 'error');
-                    return false;
-                }
+            $('#formTree').tree('select', $('#formTree').tree('find', data).target);
 
-                //传入参数
-                var doWhat = isSub ? 'CCForm_NewSubSort' : 'CCForm_NewSameLevelSort';
-                var params = {
-                    action: doWhat,
-                    No: currCCFormSort.id,
-                    Name: val
-                };
-
-                ajaxService(params, function (data) {
-
-                    var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
-
-                    $('#formTree').tree('append', {
-                        parent: parentNode.target,
-                        data: [{
-                            id: data,
-                            text: val,
-                            attributes: { MenuId: "mFormSort", TType: "FORMTYPE" },
-                            checked: false,
-                            iconCls: 'icon-tree_folder',
-                            state: 'open',
-                            children: []
-                        }]
-                    });
-
-                    $('#formTree').tree('select', $('#formTree').tree('find', data).target);
-
-                }, this);
-            }, null, false, 'icon-new');
         }
 
         //编辑表单树类别

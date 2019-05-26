@@ -1,4 +1,18 @@
-﻿function SearchBill() {
+﻿
+function keyDown(e){
+    e.preventDefault();
+	var currKey=0, e=e||event||window.event;
+	currKey = e.keyCode||e.which||e.charCode;
+	if (currKey == 83 && (e.ctrlKey || e.metaKey)) {
+
+		//$('#Btn_Save').click();
+	//	return false;
+	}
+	return true;
+}
+//document.onkeydown = keyDown;
+ 
+function SearchBill() {
     var url = "SearchBill.htm?FrmID=" + GetQueryString("FrmID");
     window.location.href = url;
 }

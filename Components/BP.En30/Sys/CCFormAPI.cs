@@ -1246,6 +1246,8 @@ namespace BP.Sys
         public static void AfterFrmEditAction(string frmID)
         {
             BP.DA.CashFrmTemplate.Remove(frmID);
+            MapData mapdata = new MapData(frmID);
+            mapdata.CleanObject();
             return ;
         }
         /// <summary>

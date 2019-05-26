@@ -636,6 +636,7 @@
         }
 
         function New(workid) {
+
             var frmID = GetQueryString("FrmID");
            
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
@@ -723,6 +724,7 @@
 
             //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
             var rowOpenModel = parseInt(frmBill.RowOpenModel);
+
             var url = "";
             url = "MyDict.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
             if(rowOpenModel == 0)

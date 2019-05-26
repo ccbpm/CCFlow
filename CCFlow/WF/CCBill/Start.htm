@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>流程发起列表</title>
+    <title>菜单</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
@@ -54,13 +54,11 @@
 				}
 			}
         //发起时打开窗口
-        function LanchFrm(frmID,title) {
+        function LanchBill(frmID,title) {
 
-        	var url = "Search.htm?FrmID=" + frmID+"&FK_MapData="+frmID;
+        	var url = "SearchBill.htm?FrmID=" + frmID+"&FK_MapData="+frmID;
             window.location.href=url;
-            //window.open(url);
             return;
-
 			layer.open({
 				  skin: 'layer-class',	
 				  type: 2, 
@@ -68,6 +66,12 @@
 				  area:['96%','90%'],
 				  content: url
 				}); 
+        }
+        //发起时打开窗口
+        function LanchDict(frmID,title) {
+
+        	var url = "SearchDict.htm?FrmID=" + frmID+"&FK_MapData="+frmID;
+            window.location.href=url;
         }
 
          //查询
@@ -218,17 +222,30 @@
                 //增加处理.
                 for (var idx = 0; idx < dtStart.length; idx++) {
 
-                    var flow = dtStart[idx];
-                    var flowSort = flow.FK_FormTree;
+                    var frm = dtStart[idx];
+                    var flowSort = frm.FK_FormTree;
                     if (sortNo != flowSort)
                         continue;
 
-					listbox+="<tr><td><a href=\"javascript:LanchFrm('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" > &sdot; " + flow.Name + "</a></td><td class='chooser'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><i class='icon iconfont icon-gongju1'></i></a><ul class='dropdown-menu dropdown-user'>"
+					listbox+="<tr>";
+					listbox+="  <td>";
+
+                    if (frm.EntityType==1)
+					   listbox+="<a href=\"javascript:LanchBill('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" > &sdot; " + frm.Name + "</a></td><td class='chooser'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><i class='icon iconfont icon-gongju1'></i></a>";
+                    if (frm.EntityType==2 )
+					   listbox+="<a href=\"javascript:LanchDict('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" > &sdot; " + frm.Name + "</a></td><td class='chooser'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><i class='icon iconfont icon-gongju1'></i></a>";
+
+
 					
-					listbox+="<li><a href=\"javascript:WinOpenStart('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >新建</a></li>";
-					listbox+="<li><a href=\"javascript:WinOpenJoin('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >查询</a></li>";
-					listbox+="<li><a href=\"javascript:WinOpenMyFlow('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
-					listbox+="<li><a href=\"javascript:WinOpenSearch('" + flow.No + "','" +sortName+ " - "+ flow.Name + "');\" >查询主页</a></li></ul></td></tr>";
+//					listbox+="<ul class='dropdown-menu dropdown-user'>";
+//					listbox+="<li><a href=\"javascript:WinOpenStart('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >新建</a></li>";
+//					listbox+="<li><a href=\"javascript:WinOpenJoin('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >查询</a></li>";
+//					listbox+="<li><a href=\"javascript:WinOpenMyFlow('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
+//					listbox+="<li><a href=\"javascript:WinOpenSearch('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >查询主页</a></li></ul>";
+//					listbox+="</ul>";
+
+					listbox+="  </td>";
+					listbox+="</tr>";
 
                 }
                 listbox+='</tbody></table></div></div></div>';

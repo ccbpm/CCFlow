@@ -462,7 +462,7 @@
                         fixed: false,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
-                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='14px;' />" +value + "</a>";
+                            return "<a href=\"javascript:OpenIt('" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "','" + row.BillState + "',)\"><img src=" + icon + " border=0 width='14px;' />" +value + "</a>";
                         }
                     });
                     continue;
@@ -805,7 +805,7 @@
                 htmlboxs += "<tr>";
                 htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
 
-                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.BillSta + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
+                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "','" + en.BillSta + "',)\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
                 htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
                 htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
                 htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";

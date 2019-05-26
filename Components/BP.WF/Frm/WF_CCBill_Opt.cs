@@ -45,27 +45,38 @@ namespace BP.Frm
         /// <returns></returns>
         public string RefBill_Done()
         {
-            string frmID = this.GetRequestVal("FrmID");
-            Int64 workID = this.GetRequestValInt64("WorkID");
-            GERpt rpt = new GERpt(frmID, workID);
+            try
+            {
+                string frmID = this.GetRequestVal("FrmID");
+                Int64 workID = this.GetRequestValInt64("WorkID");
+                GERpt rpt = new GERpt(frmID, workID);
 
-            string pFrmID = this.GetRequestVal("PFrmID");
-            Int64 pWorkID = this.GetRequestValInt64("PWorkID");
+                string pFrmID = this.GetRequestVal("PFrmID");
+                Int64 pWorkID = this.GetRequestValInt64("PWorkID");
 
-            //把数据copy到当前的子表单里.
-            GERpt rptP = new GERpt(pFrmID, pWorkID);
-            rpt.Copy(rptP);
-            rpt.PWorkID = pWorkID;
-            rpt.SetValByKey("PFrmID", pFrmID);
-            rpt.Update();
+                //把数据copy到当前的子表单里.
+                GERpt rptP = new GERpt(pFrmID, pWorkID);
+                rpt.Copy(rptP);
+                rpt.PWorkID = pWorkID;
+                rpt.SetValByKey("PFrmID", pFrmID);
+                rpt.Update();
 
-            //更新控制表,设置父子关系.
-            GenerBill gbill = new GenerBill(workID);
-            gbill.PFrmID = pFrmID;
-            gbill.PWorkID = pWorkID;
-            gbill.Update();
-            return "执行成功";
+                //更新控制表,设置父子关系.
+                GenerBill gbill = new GenerBill(workID);
+                gbill.PFrmID = pFrmID;
+                gbill.PWorkID = pWorkID;
+                gbill.Update();
+                return "执行成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
+        /// <summary>
+        /// 单据初始化
+        /// </summary>
+        /// <returns></returns>
         public string RefBill_Init()
         {
             return "";

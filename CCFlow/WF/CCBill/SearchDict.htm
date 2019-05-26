@@ -659,18 +659,21 @@
                 alert("没有选择行，不能删除");
                 return ;
             }
-            var workid = selectRow["WorkID"];
-
+            var workid="";
+            for(var i=0;i<selectRow.length;i++){
+                workid +="'"+selectRow[i]["OID"]+"',";
+            }
+            workid = workid.substring(0,workid.length-1);
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
-            var data = handler.DoMethodReturnString("MyBill_Delete");
+            var data = handler.DoMethodReturnString("MyBill_DeleteDicts");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
             }
-
-            window.location.href = window.location.href;
+            pageIdx = 1;
+            SearchData();
         }
         function GenerColor(BillState, isCanDo) {
 
@@ -829,6 +832,24 @@
             var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID");
             window.location.href = url;
         }
+
+       //导出EXCEL表
+       function ExpExcel() {
+             var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("FrmID", GetQueryString("FrmID"));
+            //查询集合
+            var data = handler.DoMethodReturnString("Search_Exp");
+            var url = "";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            data = basePath+data;
+            window.open(data);
+            return;
+
+        }
+
         function Group() {
             var url = "Group.htm?FrmID=" + GetQueryString("FrmID");
             window.location.href = url;

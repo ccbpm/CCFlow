@@ -38,26 +38,40 @@ namespace BP.Frm
         }
         #endregion 构造方法.
 
+        #region 关联单据.
         /// <summary>
-        /// 
+        /// 设置父子关系.
         /// </summary>
         /// <returns></returns>
-        public string RefBill_SetBill()
+        public string RefBill_Done()
         {
             string frmID = this.GetRequestVal("FrmID");
             Int64 workID = this.GetRequestValInt64("WorkID");
+            GERpt rpt = new GERpt(frmID, workID);
 
             string pFrmID = this.GetRequestVal("PFrmID");
             Int64 pWorkID = this.GetRequestValInt64("PWorkID");
 
+            //把数据copy到当前的子表单里.
+            GERpt rptP = new GERpt(pFrmID, pWorkID);
+            rpt.Copy(rptP);
+            rpt.PWorkID = pWorkID;
+            rpt.SetValByKey("PFrmID", pFrmID);
+            rpt.Update();
 
+            //更新控制表,设置父子关系.
+            GenerBill gbill = new GenerBill(workID);
+            gbill.PFrmID = pFrmID;
+            gbill.PWorkID = pWorkID;
+            gbill.Update();
             return "执行成功";
         }
-
         public string RefBill_Init()
         {
             return "";
         }
+        #endregion 关联单据.
+
 
     }
 }

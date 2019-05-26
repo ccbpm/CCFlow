@@ -454,7 +454,7 @@
                         fixed: false,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
-                            return "<a href=\"javascript:OpenIt('" + row.BillState + "','" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "')\"><img src=" + icon + " border=0 width='14px;' />" +value + "</a>";
+                            return "<a href=\"javascript:OpenIt('" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "','" + row.BillState + "',)\"><img src=" + icon + " border=0 width='14px;' />" +value + "</a>";
                         }
                     });
                     continue;
@@ -538,7 +538,7 @@
                             paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                     }
 
-                    OpenEn(pkval, paras);
+                    OpenIt(pkval, frmID);
                 }
 
             });  
@@ -632,9 +632,9 @@
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
-
-            var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
-            window.location.href=url;
+            OpenIt(workID, frmID);
+            //var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
+           // window.location.href=url;
             return;
 
         }
@@ -707,10 +707,10 @@
             return icon;
         }
 
-        function OpenIt(BillState, workid, frmID, nodeID, emps, userNo) {
+        function OpenIt(workid, frmID) {
 
             //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
-            var rowOpenModel = parseInt(frmBill.RowOpenMode);
+            var rowOpenModel = parseInt(frmBill.RowOpenModel);
             var url = "";
             url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
             if(rowOpenModel == 0)
@@ -796,7 +796,7 @@
                 htmlboxs += "<tr>";
                 htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
 
-                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.BillSta + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
+                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.WorkID + "','" + en.FrmID + "')\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
                 htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
                 htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
                 htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";

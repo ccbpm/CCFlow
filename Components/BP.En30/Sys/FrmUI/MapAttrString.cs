@@ -312,6 +312,9 @@ namespace BP.Sys.FrmUI
                 sql = "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
             base.afterDelete();
         }
 

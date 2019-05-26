@@ -224,6 +224,8 @@ namespace BP.Sys.FrmUI
         {
             //删除可能存在的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'");
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
             base.afterDelete();
         }
 

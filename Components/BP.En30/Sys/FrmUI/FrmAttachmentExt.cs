@@ -960,9 +960,7 @@ namespace BP.Sys.FrmUI
                 gf.Update();
             }
 
-            //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
-
+            
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeInsert()
@@ -1009,6 +1007,8 @@ namespace BP.Sys.FrmUI
             ath.MyPK = this.MyPK;
             ath.RetrieveFromDBSources();
             ath.Update();
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
             base.afterInsertUpdateAction();
         }
@@ -1026,6 +1026,8 @@ namespace BP.Sys.FrmUI
             attr.MyPK = this.MyPK;
             attr.Delete();
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
             base.afterDelete();
         }

@@ -242,6 +242,16 @@ namespace BP.Sys.FrmUI
 
             base.afterInsertUpdateAction();
         }
+
+        /// <summary>
+        /// 删除后清缓存
+        /// </summary>
+        protected override void afterDelete()
+        {
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            base.afterDelete();
+        }
         #endregion
 
         #region 基本功能.

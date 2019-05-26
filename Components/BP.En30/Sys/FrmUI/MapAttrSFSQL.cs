@@ -232,6 +232,8 @@ namespace BP.Sys.FrmUI
             attr.MyPK = attr.FK_MapData + "_" + this.KeyOfEn + "T";
             attr.Delete();
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
             base.afterDelete();
         }
 

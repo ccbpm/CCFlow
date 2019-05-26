@@ -147,6 +147,8 @@ namespace BP.Sys.FrmUI
             GroupField gf = new GroupField();
             gf.Delete(GroupFieldAttr.CtrlID,this.MyPK);
 
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
             base.afterDelete();
         }
 
@@ -169,9 +171,6 @@ namespace BP.Sys.FrmUI
                 gf.Update();
             }
 
-            //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
-
             return base.beforeUpdateInsertAction();
         }
 
@@ -181,6 +180,9 @@ namespace BP.Sys.FrmUI
             mapframe.MyPK = this.MyPK;
             mapframe.RetrieveFromDBSources();
             mapframe.Update();
+
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
             base.afterInsertUpdateAction();
         }

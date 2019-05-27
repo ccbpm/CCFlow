@@ -207,6 +207,29 @@ namespace BP.Frm
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
+        public string MyDict_SaveIt()
+        {
+            //执行保存.
+            GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GEEntity;
+
+            Hashtable ht = GetMainTableHT();
+            foreach (string item in ht.Keys)
+            {
+                rpt.SetValByKey(item, ht[item]);
+            }
+
+            rpt.OID = this.WorkID;
+            rpt.SetValByKey("BillState", (int)BillState.Editing);
+            rpt.Update();
+
+            string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+            return str;
+        }
         private Hashtable GetMainTableHT()
         {
             Hashtable htMain = new Hashtable();

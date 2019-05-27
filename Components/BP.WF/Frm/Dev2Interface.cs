@@ -119,7 +119,11 @@ namespace BP.Frm
         {
             FrmBill fb = new FrmBill(frmID);
 
-            GenerBill gb = new GenerBill(workID);
+            GenerBill gb = new GenerBill();
+            gb.WorkID = workID;
+           int i= gb.RetrieveFromDBSources();
+           if (i == 0)
+               return "";
             gb.BillState = BillState.Editing;
 
             //创建rpt.

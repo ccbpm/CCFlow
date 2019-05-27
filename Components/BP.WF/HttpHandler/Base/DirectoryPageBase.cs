@@ -390,6 +390,9 @@ namespace BP.WF.HttpHandler
                     str = this.GetRequestVal("FK_MapData");
 
                 if (str == null || str == "" || str == "null")
+                    str = this.GetRequestVal("FrmID");
+
+                if (str == null || str == "" || str == "null")
                 {
                     if (this.EnName == null)
                         return null;

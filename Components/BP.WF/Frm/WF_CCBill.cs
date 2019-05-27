@@ -563,6 +563,16 @@ namespace BP.Frm
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string GenerBill_Init()
+        {
+            GenerBills bills = new GenerBills();
+            bills.Retrieve(GenerBillAttr.Starter, WebUser.No);
+            return bills.ToJson();
+        }
+        /// <summary>
         /// 查询初始化
         /// </summary>
         /// <returns></returns>
@@ -583,7 +593,6 @@ namespace BP.Frm
 
             GenerBill gb = new GenerBill();
             gb.CheckPhysicsTable();
-
 
             sql = "SELECT TSpan as No, COUNT(WorkID) as Num FROM Frm_GenerBill WHERE FrmID='" + this.FrmID + "'  AND Starter='" + WebUser.No + "' AND BillState >= 1 GROUP BY TSpan";
 

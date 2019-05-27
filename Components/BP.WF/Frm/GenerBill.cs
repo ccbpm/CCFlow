@@ -697,12 +697,14 @@ namespace BP.Frm
                 map.AddTBString(GenerBillAttr.FK_FrmTree, null, "单据类别", true, false, 0, 10, 10);
                 map.AddTBString(GenerBillAttr.FrmID, null, "单据ID", true, false, 0, 100, 10);
                 map.AddTBString(GenerBillAttr.FrmName, null, "单据名称", true, false, 0, 200, 10);
+
+                map.AddTBString(GenerBillAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
                 map.AddTBString(GenerBillAttr.Title, null, "标题", true, false, 0, 1000, 10);
                 map.AddDDLSysEnum(GenerBillAttr.BillSta, 0, "状态(简)", true, false, GenerBillAttr.BillSta, "@0=运行中@1=已完成@2=其他");
                 map.AddDDLSysEnum(GenerBillAttr.BillState, 0, "单据状态", true, false, GenerBillAttr.BillState, "@0=空白@1=草稿@2=编辑中@100=归档");
 
-                map.AddTBString(GenerBillAttr.Starter, null, "发起人", true, false, 0, 200, 10);
-                map.AddTBString(GenerBillAttr.StarterName, null, "发起人名称", true, false, 0, 200, 10);
+                map.AddTBString(GenerBillAttr.Starter, null, "创建人", true, false, 0, 200, 10);
+                map.AddTBString(GenerBillAttr.StarterName, null, "创建人名称", true, false, 0, 200, 10);
                 map.AddTBString(GenerBillAttr.Sender, null, "发送人", true, false, 0, 200, 10);
 
                 map.AddTBDateTime(GenerBillAttr.RDT, "记录日期", true, true);
@@ -720,8 +722,7 @@ namespace BP.Frm
                 //父子单据信息.
                 map.AddTBString(GenerBillAttr.PFrmID, null, "父单据编号", true, false, 0, 3, 10);
                 map.AddTBInt(GenerBillAttr.PWorkID, 0, "父单据ID", true, true);
-                map.AddTBString(GenerBillAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
-
+                map.AddDDLSysEnum(GenerBillAttr.TSpan, 0, "时间段", true, false, GenerBillAttr.TSpan, "@0=本周@1=上周@2=上上周@3=更早");
                  
                 //参数.
                 map.AddTBString(GenerBillAttr.AtPara, null, "参数(单据运行设置临时存储的参数)", true, false, 0, 2000, 10);

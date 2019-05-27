@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单据查询</title>
+    <title>我的单据</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
@@ -44,8 +44,8 @@
                         <th>
                             标题
                         </th>
-                        <th width='60'>
-                            发起人
+                        <th>
+                            单据名
                         </th>
                         <th>
                             制单日期
@@ -85,75 +85,10 @@
             if (webUser.No == null)
                 return;
 
-            var url = "";
+            var ens = new Entities("BP.Frm.GenerBills");
+            ens.Retrieve("Starter", webUser.No);
 
-            var _billState = GetQueryString("BillState");
-            if (_billState == undefined || _billState == null || _billState == "" || _billState == "null") {
-                _billState = 0;
-            }
 
-            var _tspan = GetQueryString("TSpan");
-            if (_tspan == undefined || _tspan == null || _tspan == "" || _tspan == "null") {
-                _tspan = "-1";
-            }
-
-            var _frmID = GetQueryString("FrmID");
-            if (_frmID == undefined || _frmID == null || _frmID == "" || _frmID == "null") {
-                _frmID = "";
-            }
-
-            if (_frmID == "" && _tspan == "")
-                _tspan = "-1";
-
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
-            handler.AddPara("FrmID", _frmID);
-            handler.AddPara("TSpan", _tspan);
-            handler.AddPara("BillState", _billState);
-            var data = handler.DoMethodReturnString("SearchData_Init");
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                $("#Msg").html(data);
-                return;
-            }
-
-            var data = JSON.parse(data);
-
-            //时间段列表. 
-            var tSpans = data['TSpan'];
-            if (_tspan == "-1")
-                html = "<button onclick=\"TSpan('');\" class=\"btn btn-info\" type=\"button\">全部</button> ";
-            else
-                html = "<button onclick=\"TSpan('');\" class=\"btn btn-default \" >全部</button> ";
-
-            for (var i = 0; i < tSpans.length; i++) {
-
-                var tSpan = tSpans[i];
-
-                if (_tspan == tSpan.IntKey)
-                    html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-info\" >" + tSpan.Lab + "</button> ";
-                else
-                    html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-default \">" + tSpan.Lab + "</button> ";
-            }
-
-            $("#TSpan").html(html);
-
-            //流程名称列表.
-            var flows = data['Flows'];
-            if (_frmID == null || _frmID == "")
-                html = "<button onclick=\"Flows('');\" class=\"btn btn-info\"  >全部</button> ";
-            else
-                html = "<button onclick=\"Flows('');\"  class=\"btn btn-default \" >全部</button> ";
-
-            for (var i = 0; i < flows.length; i++) {
-
-                var en = flows[i];
-
-                html += "<button class=\"btn btn-default \"  onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</button> ";
-            }
-            $("#Flows").html(html);
-
-            // 流程实例列表.
-            var ens = data['WF_CCBill'];
 
             _Html = "";
 
@@ -172,20 +107,18 @@
 
                 var isCanDo = true;
 
-
                 //获得icon.
                 var icon = GenerICON(isCanDo, en.BillState);
 
                 // 获得颜色.
                 var color = GenerColor(en.BillState, isCanDo);
 
-
                 htmlbox += "<tr >";
                 htmlbox += "<td class=Idx>" + realIndex + "</td>";
 
-                htmlbox += "<td><a href=\"javascript:OpenIt('" + en.BillState + "','" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\">" + en.Title + "</td>";
+                htmlbox += "<td><a href=\"javascript:OpenIt('" + en.BillState + "','" + en.WorkID + "','" + en.FrmID + "')\">" + en.Title + "</td>";
 
-                htmlbox += "<td><font color='" + color + "'>" + en.StarterName + "</font></td>";
+                htmlbox += "<td><font color='" + color + "'><a href=\"javascript:OpenFrm('" + en.FrmID + "')\" >" + en.FrmName + "</a></font></td>";
 
                 htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
 
@@ -205,6 +138,13 @@
 
             //$("#LV_Search").listview('refresh');
         });
+
+        function OpenFrm(frmID) {
+
+            var url = "SearchBill.htm?FrmID=" + frmID;
+             
+            WinOpenFull(url);
+        }
 
 
         function GenerOper(workID, BillState, frmID, nodeID, fid, isCanDo) {

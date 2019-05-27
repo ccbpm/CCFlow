@@ -10,6 +10,10 @@ function keyDown(e){
 	}
 	return true;
 }
+function SearchDict() {
+    var url = "SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+    window.location.href = url;
+}
 //document.onkeydown = keyDown;
  
 function SearchBill() {

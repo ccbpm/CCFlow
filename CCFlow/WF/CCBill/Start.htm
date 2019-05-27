@@ -104,11 +104,42 @@
 				}); 
         }
 
-        //我发起的流程.
-        function WinOpenStart(flowNo,title) {
+           //我发起的流程.
+        function WinOpenFrmHome(frmID,title, entityType) {
 
-            var intFlowNo = flowNo;
-            var url = "../RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            var url="";
+            if (entityType==1)
+              url = "SearchBill.htm?FrmID="+frmID;
+
+                 if (entityType==1 || entityType==2)
+              url = "SearchDict.htm?FrmID="+frmID;
+
+              WinOpenFull(url,frmID);
+              return;
+              }
+        //我发起的流程.
+        function WinOpenStart(frmID,title, entityType) {
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+
+            var url="";
+            if (entityType==1)
+            {
+            var workID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+              url = "MyBill.htm?FrmID="+frmID+"&WorkID="+workID;
+              }
+
+                 if (entityType==1 || entityType==2)
+                {
+                  var workID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+              url = "MyDict.htm?FrmID="+frmID+"&WorkID="+workID;
+              }
+
+              WinOpenFull(url,frmID);
+              return;
+
+
             //window.open(url);
            // return;
 
@@ -120,33 +151,7 @@
 				  content: url
 				});
         }
-
-        //我发起的流程.
-        function WinOpenJoin(flowNo,title) {
-            var intFlowNo = flowNo;
-            var url = "../RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
-            layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: title+' : 我审批的流程', 
-				  area:['96%','90%'],
-				  content: url
-				});
-        }
-
-        //批量发起.
-        function WinOpenBatch(flowNo,title) {
-
-            var url = "BatchStart.htm?FK_Flow=" + flowNo;
-            layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: title+' : 批量发起', 
-				  area:['96%','90%'],
-				  content: url
-				});
-        }
-
+ 
 
         //页面启动函数.
         $(function () {
@@ -237,12 +242,15 @@
 
 
 					
-//					listbox+="<ul class='dropdown-menu dropdown-user'>";
-//					listbox+="<li><a href=\"javascript:WinOpenStart('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >新建</a></li>";
-//					listbox+="<li><a href=\"javascript:WinOpenJoin('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >查询</a></li>";
-//					listbox+="<li><a href=\"javascript:WinOpenMyFlow('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
-//					listbox+="<li><a href=\"javascript:WinOpenSearch('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >查询主页</a></li></ul>";
-//					listbox+="</ul>";
+					listbox+="<ul class='dropdown-menu dropdown-user'>";
+                     
+					listbox+="<li><a href=\"javascript:WinOpenStart('" + frm.No + "','" +sortName+ " - "+ frm.Name + "','"+frm.EntityType+"');\" >新建</a></li>";
+
+				  listbox+="<li><a href=\"javascript:WinOpenFrmHome('" + frm.No + "','" +sortName+ " - "+ frm.Name + "','"+frm.EntityType+"');\" >查询</a></li>";
+
+				//	listbox+="<li><a href=\"javascript:WinOpenMyFlow('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
+				//	listbox+="<li><a href=\"javascript:WinOpenSearch('" + frm.No + "','" +sortName+ " - "+ frm.Name + "');\" >查询主页</a></li></ul>";
+					listbox+="</ul>";
 
 					listbox+="  </td>";
 					listbox+="</tr>";
@@ -251,6 +259,8 @@
                 listbox+='</tbody></table></div></div></div>';
                myNum++;
             }
+
+           // listbox+="<a href='GenerBill.htm'>单据列表</a>";
              $('#lists').html(listbox);
         }
 

@@ -626,10 +626,9 @@
             return "<a href=\"javascript:WinOpen('" + url + "');\" >轨迹</a>";
         }
 
-        function New(workid) {
+        function New() {
 
             var frmID = GetQueryString("FrmID");
-           
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");

@@ -574,6 +574,7 @@ function AfterBindEn_DealMapExt(frmData) {
 /**Pop弹出框的处理**/
 function PopMapExt(mapAttr, mapExt, frmData) {
     switch (mapAttr.GetPara("PopModel")) {
+       
         case "PopBranchesAndLeaf": //树干叶子模式.
             var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
             PopBranchesAndLeaf(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
@@ -581,6 +582,18 @@ function PopMapExt(mapAttr, mapExt, frmData) {
         case "PopBranches": //树干简单模式.
             var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
             PopBranches(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+            break;
+        case "PopBindSFTable": //绑定字典表，外部数据源.
+            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            PopBindSFTable(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+            break;
+        case "PopBindEnum": //绑定枚举.
+            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            PopBindEnum(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+            break;
+        case "PopTableList": //绑定实体表.
+            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            PopTableList(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
             break;
         case "PopGroupList": //分组模式.
             PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.

@@ -365,6 +365,274 @@ function PopGroupList(mapExt) {
 
 }
 
+
+/******************************************  绑定外键-外部数据源 **********************************/
+
+function PopBindSFTable(mapExt) {
+
+    var target = $("#TB_" + mapExt.AttrOfOper);
+
+
+    var width = target.outerWidth();
+    var height = target.outerHeight();
+    target.hide();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    //container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+
+        }
+    });
+
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK;
+    var title = mapExt.GetPara("Title");
+    var oid = GetPKVal();
+
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+
+    //解项羽 这里需要相对路径.
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/BindSFTable.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    container.on("click", function () {
+        if (window.parent && window.parent.OpenBootStrapModal) {
+            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
+
+                var iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    var selectedRows = iframe.contentWindow.Save();
+                    if ($.isArray(selectedRows)) {
+                        mtags.mtags("loadData", selectedRows);
+                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+
+                        //执行JS方法
+                        var No = "";
+                        if (selectedRows != null && $.isArray(selectedRows))
+                            $.each(selectedRows, function (i, selectedRows) {
+                                No += selectedRows.No + ",";
+                            });
+                        //执行JS
+                        var backFunc = mapExt.Tag5;
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                    }
+                }
+
+            }, null, function () {
+
+            }, "div_" + iframeId);
+            return;
+        }
+    });
+}
+
+
+
+/******************************************  绑定外键-单表数据源 **********************************/
+function TableList(mapExt) {
+    PopTableList(mapExt);
+}
+function PopTableList(mapExt) {
+
+    var target = $("#TB_" + mapExt.AttrOfOper);
+
+    var width = target.outerWidth();
+    var height = target.outerHeight();
+    target.hide();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    //container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+
+        }
+    });
+
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK;
+    var title = mapExt.GetPara("Title");
+    var oid = GetPKVal();
+
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+
+    //解项羽 这里需要相对路径.
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/TableList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    container.on("click", function () {
+        if (window.parent && window.parent.OpenBootStrapModal) {
+            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
+
+                var iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    var selectedRows = iframe.contentWindow.Save();
+                    if ($.isArray(selectedRows)) {
+                        mtags.mtags("loadData", selectedRows);
+                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+
+                        //执行JS方法
+                        var No = "";
+                        if (selectedRows != null && $.isArray(selectedRows))
+                            $.each(selectedRows, function (i, selectedRows) {
+                                No += selectedRows.No + ",";
+                            });
+                        //执行JS
+                        var backFunc = mapExt.Tag5;
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                    }
+                }
+
+            }, null, function () {
+
+            }, "div_" + iframeId);
+            return;
+        }
+    });
+}
+
+
+
+
+
+
+/******************************************  绑定枚举 **********************************/
+
+function PopBindEnum(mapExt) {
+
+    var target = $("#TB_" + mapExt.AttrOfOper);
+
+
+    var width = target.outerWidth();
+    var height = target.outerHeight();
+    target.hide();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    //container.height(height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+
+        }
+    });
+
+    var width = mapExt.W;
+    var height = mapExt.H;
+    var iframeId = mapExt.MyPK;
+    var title = mapExt.GetPara("Title");
+    var oid = GetPKVal();
+
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+
+    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+    mtags.mtags("loadData", initJsonData);
+    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+
+    //解项羽 这里需要相对路径.
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/BindEnum.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    container.on("click", function () {
+        if (window.parent && window.parent.OpenBootStrapModal) {
+            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
+
+                var iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    var selectedRows = iframe.contentWindow.Save();
+                    if ($.isArray(selectedRows)) {
+                        mtags.mtags("loadData", selectedRows);
+                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        // 单选复制当前表单
+                        if (selectType == "0" && selectedRows.length == 1) {
+                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+
+                        //执行JS方法
+                        var No = "";
+                        if (selectedRows != null && $.isArray(selectedRows))
+                            $.each(selectedRows, function (i, selectedRows) {
+                                No += selectedRows.No + ",";
+                            });
+                        //执行JS
+                        var backFunc = mapExt.Tag5;
+                        if (backFunc != null && backFunc != "" && backFunc != undefined)
+                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                    }
+                }
+
+            }, null, function () {
+
+            }, "div_" + iframeId);
+            return;
+        }
+    });
+}
+
+
 function ValSetter(tag4, key) {
     if (!tag4 || !key) {
         return;

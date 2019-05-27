@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>分组平铺</title>
+     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+
+    <script type="text/javascript">
+
+        var selectedEles = null;
+        var mapExt = null;
+        var webUser = new WebUser();
+
+        function loadEntities(mapExt) {
+            selectedEles = new Entities("BP.Sys.FrmEleDBs");
+            selectedEles.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
+        }
+
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var mypk = GetQueryString("FK_MapExt");
+            mapExt = new Entity("BP.Sys.MapExt", mypk);
+
+            //获取设置显示的列数
+            var showSpan = mapExt.GetPara("ShowCol");
+            if (showSpan == null || showSpan == undefined || showSpan == "")
+                showSpan = 3;
+
+            //创建实体.
+
+            var entities = new Entities("BP.Sys.SysEnums");
+            entities.Retrieve("EnumKey", mapExt.Tag2);
+
+            var html = "<table style='width:98%;' >";
+
+            var isRB = true;
+            if (mapExt.GetPara('SelectType') == 1)
+                isRB = false;
+
+            //获得已经选择的集合.
+            loadEntities(mapExt);
+
+            var myNum = -1;
+            for (var idx = 0; idx < entities.length; idx++) {
+
+                en = entities[idx];
+
+                var myidx = 0;
+                var oOfEn;
+                for (var obj in en) {
+                    if (myidx == 2) {
+                        oOfEn = obj;
+                        break;
+                    }
+                    myidx++;
+                }
+
+                myidx = 0;
+                var oOfGroup;
+                for (var obj in en) {
+                    if (myidx == 0) {
+                        oOfGroup = obj;
+                        break;
+                    }
+                    myidx++;
+                }
+
+                var isHave = false;
+                for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+                    var ele = selectedEles[iEle];
+                    if (ele == null || ele == undefined)
+                        continue;
+
+                    if (ele.Tag1 == en.IntKey) {
+                        isHave = true;
+                        break;
+                    }
+                }
+
+                var lab = en.Lab;
+                var checked = "";
+                if (isHave) {
+                    lab = "<font color=green>" + en.Lab + "</font>";
+                    checked = "checked";
+                }
+
+                myNum++;
+                if (myNum == 0)
+                    html += "<TR>";
+
+                if (isRB == true)
+                    html += "<td><input type='radio' name='RB' id='RB_" + en.IntKey + "' value='" + en.IntKey + "' " + checked + " /><label for='RB_" + en.IntKey + "'>" + lab + "</label></td>";
+                else
+                    html += "<td><input type='checkbox' name='" + en.IntKey + "' id='CB_" + en.IntKey + "' value='" + en.IntKey + "' " + checked + " /><label for='CB_" + en.IntKey + "'>" + lab + "</label></td>";
+
+                if (myNum == showSpan - 1) {
+
+                    html += "</tr>";
+                    myNum = -1;
+                }
+            }
+
+
+            html += "</table>";
+
+            $("#Msg").html("");
+            $("#Msg").html(html);
+        });
+
+        //选择与取消选择.
+        function CheckAll(checked, no) {
+
+            $("input[name='" + no + "']").each(function () {
+                this.checked = checked;
+            });
+
+        }
+
+        //保存.
+        function Save() {
+
+            //获得存储的值.
+            var selectVals = [];
+
+            //获得存储的text
+            var selectValTexts = [];
+
+            //获得选择的数据.
+            var selectType = mapExt.GetPara("SelectType");
+            if (selectType == "0") {  //单选.
+                selectVals.push($("input[name='RB']:checked").val());
+                selectValTexts.push({ No:$("input[name='RB']:checked").val(),Name: $("input[name='RB']:checked").siblings().text() });
+            } else {
+
+                var cbs = $("input[type='checkbox']:checked");
+
+                cbs.each(function () {
+                    if (this.id.indexOf('CB_') == -1)
+                        return true;
+                    selectVals.push(this.value);
+
+                    selectValTexts.push({ No: this.value, Name: $(this).siblings().text() });
+                });
+            }
+
+            //删除变量中没有的数据,已经取消掉的.  selectedEles 数据.
+            var FK_MapData = mapExt.FK_MapData;
+            var keyOfEn = mapExt.AttrOfOper;
+            var oid = GetQueryString("PKVal");
+            //
+            var insertArray = selectedElements(selectedEles, selectValTexts);
+            $.each(insertArray, function (i, o) {
+                var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+                frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + o.No;
+                frmEleDB.FK_MapData = FK_MapData;
+                frmEleDB.EleID = keyOfEn;
+                frmEleDB.RefPKVal = oid;
+                frmEleDB.Tag1 = o.No; 
+                frmEleDB.Tag2 = o.Name;
+                if (frmEleDB.Update() == 0) {
+                    frmEleDB.Insert();
+                }
+            });
+
+            var deleteArray = canceledElements(selectedEles, selectVals);
+            $.each(deleteArray, function (i, o) {
+                var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+                frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + o;
+                frmEleDB.Delete();
+            });
+
+            return selectValTexts;
+        }
+
+        // 新增
+        function selectedElements(entities, selectedArray) {
+            var array = [];
+            $.each(selectedArray, function (i, e) {
+                if (typeof e === "undefined") {
+                    return true;
+                }
+                var exists = false;
+                $.each(entities, function (n, o) {
+                    if (o.Tag1 == e.No) {
+                        exists = true;
+                        return false;
+                    }
+                });
+                if (!exists) {
+                    array.push(e);
+                }
+            });
+            return array;
+        }
+        // 删除
+        function canceledElements(entities, selectedArray) {
+            if (!$.isArray(selectedArray)) {
+                return;
+            }
+            var array = [];
+            $.each(entities, function (i, o) {
+                var value = o.Tag1;
+                var t = selectedArray.filter(function (e) {
+                    return e == value;
+                });
+                if (t.length == 0) {
+                    array.push(value);
+                }
+            });
+            return array;
+        }
+    </script>
+</head>
+<body>
+ 
+ <table id="Table1" >
+  
+ </table>
+
+ <input type=button id="Btn_Save" onclick="Save();" style="display: none;" value="Save"/>
+ <div id="Msg"> </div>
+
+</body>
+</html>

@@ -77,7 +77,7 @@
             if (workID == 0) {
                 var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
-                var workID = handler.DoMethodReturnString("MyBill_CreateBlankDictID");
+                var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
                 var url = window.location.href + "&WorkID=" + workID + "&OID=" + workID;
                 window.location.href = url;
                 return;
@@ -226,18 +226,8 @@
                 }
 
             });
-
         }
-        //保存为草稿.
-        function SaveAsDraft() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyBill_SaveAsDraft");
-
-            var url = "Draft.htm?FrmID=" + GetQueryString("FrmID");
-            window.location.href = url;
-        }
         function SaveIt() {
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
@@ -259,7 +249,7 @@
             // @yuanlina. 
             */
 
-            var data = handler.DoMethodReturnString("MyBill_SaveIt");
+            var data = handler.DoMethodReturnString("MyDict_SaveIt");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -448,7 +438,7 @@
                 return;
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyBill_Delete");
+            var data = handler.DoMethodReturnString("MyDict_Delete");
             alert(data);
 
             window.location.href = 'SearchDict.htm?FrmID=' + GetQueryString("FrmID");
@@ -465,7 +455,7 @@
         function NewIt() {
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyBill_CreateBlankDictID");
+            var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
             window.location.href = 'MyDict.htm?FrmID=' + GetQueryString("FrmID") + "&FK_MapData=" + GetQueryString("FrmID");
 
         }

@@ -17,6 +17,13 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            if (i == 0) {
+                mapExt.H = 300;
+                mapExt.W = 600;
+                mapExt.SetPara("Title", "请选择");
+            }
+
             // alert(mapExt.Tag);
             //alert(mapExt.MyPK);
 

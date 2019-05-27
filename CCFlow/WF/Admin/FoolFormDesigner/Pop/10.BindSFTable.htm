@@ -19,6 +19,11 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopBindSFTable_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            if (i == 0) {
+                mapExt.H = 300;
+                mapExt.W = 600;
+                mapExt.SetPara("Title", "请选择");
+            }
 
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
@@ -26,7 +31,7 @@
             //批量为赋值.
             GenerFullAllCtrlsVal(mapExt);
 
-            GenerBindEntities("DDL_Enum", "BP.Sys.SFTables", mapExt.Tag2);
+            GenerBindEntities("DDL_SFTable", "BP.Sys.SFTables", mapExt.Tag2);
 
 
             //设置按钮是否可以用?
@@ -56,7 +61,7 @@
 
             mapExt.ExtType = "PopBindSFTable";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-            mapExt.Tag2 = $("#DDL_Enum").val();
+            mapExt.Tag2 = $("#DDL_SFTable").val();
 
             // alert(mapExt.Tag2);
 
@@ -118,7 +123,7 @@
                 弹窗属性
             </td>
             <td>
-                高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                高度:<input type="text" id="TB_H" name="TB_H"  style="width: 80px; text-align: right" />
                 宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
                 <font color="gray">用于控制弹出窗口的大小</font>
             </td>
@@ -150,7 +155,7 @@
         </tr>
         <tr>
             <td colspan="1">
-                <a href="javascript:ShowHidden('entity')">选择一个枚举值</a>
+                <a href="javascript:ShowHidden('entity')">选择一个外键、外部数据源</a>
                 <div id="entity" style="color: Gray; display: none">
                     <ul>
                         <li>设置一个可以返回json的数据源该数据源有No,Name, 关联外键列 三个约定的列. </li>
@@ -160,7 +165,7 @@
                 </div>
             </td>
             <td colspan="3">
-                <select id="DDL_Enum" name="DDL_Enum">
+                <select id="DDL_SFTable" name="DDL_SFTable">
                 </select>
             </td>
         </tr>

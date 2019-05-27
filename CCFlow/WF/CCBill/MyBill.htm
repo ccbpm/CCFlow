@@ -67,7 +67,6 @@
         });
 
         function InitToolbar() {
-
             //判断是否有WorkID.
             var workID = GetQueryString("WorkID");
             if (workID == null || workID == undefined)
@@ -111,6 +110,7 @@
             if (frmBill.BtnPrintRTF == "") frmBill.BtnPrintRTF = "打印rtf";
             if (frmBill.BtnPrintCCWord == "") frmBill.BtnPrintCCWord = "打印CCWord";
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
+            
 
 
             //是初始化状态.
@@ -140,6 +140,12 @@
 
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
+
+            if (frmBill.RefBillRole != 0) {
+                if (frmBill.BtnRefBill == "") frmBill.BtnRefBill = "关联单据";
+                toolBar += "<input type='button' value='" + frmBill.BtnRefBill + "' id='Btn_BtnExpZip' onclick='RefBill(\"" + frmBill.RefBill + "\");' />";
+                toolBar += "<input type='button' value='查看关联单据信息' id='Btn_BtnExpZip' onclick='ShowRefBillInfo(\"" + frmBill.RefBill + "\");' />";
+            }
 
             //获得当前的集合.
             var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);

@@ -1444,15 +1444,15 @@ namespace BP.WF
         /// <summary>
         /// 打印方式
         /// </summary>
-        public PrintDocEnable HisPrintDocEnable
+        public bool HisPrintDocEnable
         {
             get
             {
-                return (PrintDocEnable)this.GetValIntByKey(NodeAttr.PrintDocEnable);
+                return this.GetValBooleanByKey(NodeAttr.PrintDocEnable);
             }
             set
             {
-                this.SetValByKey(NodeAttr.PrintDocEnable, (int)value);
+                this.SetValByKey(NodeAttr.PrintDocEnable, value);
             }
         }
 

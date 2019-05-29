@@ -47,24 +47,34 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string PrintDoc_Init()
         {
-            Node nd = new Node(this.FK_Node);
-            if (nd.HisFormType == NodeFormType.SheetTree)
+            string sourceType = this.GetRequestVal("SourceType");
+            string FK_MapData = "";
+            if (this.FK_Node != 0 && this.FK_Node != 9999)
             {
-                //获取该节点绑定的表单
-                // 所有表单集合.
-                MapDatas mds = new MapDatas();
-                mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node + " AND FrmEnableRole !=5");
-                return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
+                Node nd = new Node(this.FK_Node);
+
+                if (nd.HisFormType == NodeFormType.SheetTree)
+                {
+                    //获取该节点绑定的表单
+                    // 所有表单集合.
+                    MapDatas mds = new MapDatas();
+                    mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node + " AND FrmEnableRole !=5");
+                    return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
+                }
+
+                 FK_MapData = "ND" + this.FK_Node;
+
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                    FK_MapData = nd.NodeFrmID;
+
+                if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
+                {
+                    return "err@SDK表单、嵌入式表单暂时不支持打印功能";
+                }
             }
+            if (DataType.IsNullOrEmpty(sourceType) == false && sourceType.Equals("Bill"))
+                FK_MapData = this.GetRequestVal("FrmID");
 
-            string FK_MapData = "ND" + this.FK_Node;
-
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-                FK_MapData = nd.NodeFrmID;
-
-            if(nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm){
-                return "err@SDK表单、嵌入式表单暂时不支持打印功能";
-            }
             BillTemplates templetes = new BillTemplates();
             string billNo = this.GetRequestVal("FK_Bill");
             if (billNo == null)
@@ -78,6 +88,11 @@ namespace BP.WF.HttpHandler
             if (templetes.Count == 1)
             {
                 BillTemplate templete = templetes[0] as BillTemplate;
+
+                //单据的打印
+                if (DataType.IsNullOrEmpty(sourceType) == false && sourceType.Equals("Bill"))
+                    return PrintDoc_FormDoneIt(null, this.WorkID, this.FID, FK_MapData, templete);
+
                 return PrintDoc_DoneIt(templete.No);
             }
             return templetes.ToJson();
@@ -298,20 +313,25 @@ namespace BP.WF.HttpHandler
         public string PrintDoc_FormDoneIt(Node nd, long workID, long fid, string formID, BillTemplate func)
         {
             Int64 pkval = workID;
-            BP.WF.Template.FrmNode fn = new FrmNode();
-            fn = new FrmNode(nd.FK_Flow, nd.NodeID, formID);
-            //先判断解决方案
-            if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
-            {
-                if (fn.WhoIsPK == WhoIsPK.PWorkID)
-                    pkval = this.PWorkID;
-                if (fn.WhoIsPK == WhoIsPK.FID)
-                    pkval = fid;
-            }
+            Work wk = null;
             string billInfo = "";
-            Work wk = nd.HisWork;
-            wk.OID = this.WorkID;
-            wk.RetrieveFromDBSources();
+            if (nd != null)
+            {
+                BP.WF.Template.FrmNode fn = new FrmNode();
+                fn = new FrmNode(nd.FK_Flow, nd.NodeID, formID);
+                //先判断解决方案
+                if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
+                {
+                    if (fn.WhoIsPK == WhoIsPK.PWorkID)
+                        pkval = this.PWorkID;
+                    if (fn.WhoIsPK == WhoIsPK.FID)
+                        pkval = fid;
+                }
+                wk = nd.HisWork;
+                wk.OID = this.WorkID;
+                wk.RetrieveFromDBSources();
+            }
+            
             MapData mapData = new MapData(formID);
 
             string file = DateTime.Now.Year + "_" + WebUser.FK_Dept + "_" + func.No + "_" + WorkID + ".doc";
@@ -324,7 +344,10 @@ namespace BP.WF.HttpHandler
             {
                 #region 单据变量.
                 Bill bill = new Bill();
-                bill.MyPK = wk.FID + "_" + wk.OID + "_" + nd.NodeID + "_" + func.No;
+                if (nd != null)
+                    bill.MyPK = wk.FID + "_" + wk.OID + "_" + nd.NodeID + "_" + func.No;
+                else
+                    bill.MyPK = fid + "_" + workID + "_0_" + func.No;
                 #endregion
 
                 #region 生成单据
@@ -400,19 +423,25 @@ namespace BP.WF.HttpHandler
                         rtf.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
                     }
 
-                    //把审核日志表加入里面去.
-                    Paras ps = new BP.DA.Paras();
-                    ps.SQL = "SELECT * FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-                    ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
-                    ps.Add(TrackAttr.WorkID, newWorkID);
+                    if (nd!= null)
+                    {
+                        //把审核日志表加入里面去.
+                        Paras ps = new BP.DA.Paras();
+                        ps.SQL = "SELECT * FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                        ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
+                        ps.Add(TrackAttr.WorkID, newWorkID);
 
-                    rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                        rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                    }
                 }
 
                 paths = file.Split('_');
                 path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
+                string fileModelT ="rtf";
+                if ((int)func.TemplateFileModel == 1)
+                    fileModelT = "word";
 
-                string billUrl = "url@" + BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
+                string billUrl = "url@" + fileModelT + "@" + BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
 
                 if (func.HisBillFileType == BillFileType.PDF)
                     billUrl = billUrl.Replace(".doc", ".pdf");
@@ -449,18 +478,26 @@ namespace BP.WF.HttpHandler
                 #endregion
 
                 #region 保存单据.
-
-                bill.FID = wk.FID;
-                bill.WorkID = wk.OID;
-                bill.FK_Node = wk.NodeID;
+                if (nd != null)
+                {
+                    bill.FID = wk.FID;
+                    bill.WorkID = wk.OID;
+                    bill.FK_Node = wk.NodeID;
+                    bill.FK_Flow = nd.FK_Flow;
+                }
+                else
+                {
+                    bill.FID = fid;
+                    bill.WorkID = workID;
+                    bill.FK_Node = 0;
+                    bill.FK_Flow = "0";
+                }
                 bill.FK_Dept = WebUser.FK_Dept;
                 bill.FK_Emp = WebUser.No;
                 bill.Url = billUrl;
                 bill.RDT = DataType.CurrentDataTime;
                 bill.FullPath = path + file;
                 bill.FK_NY = DataType.CurrentYearMonth;
-                bill.FK_Flow = nd.FK_Flow;
-                // bill.FK_BillType = func.FK_BillType;
                 bill.Emps = rtf.HisGEEntity.GetValStrByKey("Emps");
                 bill.FK_Starter = rtf.HisGEEntity.GetValStrByKey("Rec");
                 bill.StartDT = rtf.HisGEEntity.GetValStrByKey("RDT");
@@ -513,6 +550,12 @@ namespace BP.WF.HttpHandler
         {
             try
             {
+                string sourceType = this.GetRequestVal("SourceType");
+                //打印单据实体、单据表单
+                if (DataType.IsNullOrEmpty(sourceType) == false && sourceType.Equals("Bill"))
+                {
+                    return MakeForm2Html.MakeBillToPDF(this.GetRequestVal("FrmID"),this.WorkID,this.GetRequestVal("BasePath"),false);
+                }
                 int nodeID = this.FK_Node;
                 if (this.FK_Node == 0)
                 {
@@ -522,9 +565,7 @@ namespace BP.WF.HttpHandler
 
                 Node nd = new Node(nodeID);
                 //树形表单方案单独打印
-                if ((nd.HisFormType == NodeFormType.SheetTree && nd.HisPrintPDFModle == 1) == false)
-                    return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
-                else
+                if ((nd.HisFormType == NodeFormType.SheetTree && nd.HisPrintPDFModle == 1))
                 {
                     //获取该节点绑定的表单
                     // 所有表单集合.
@@ -532,7 +573,10 @@ namespace BP.WF.HttpHandler
                     mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node + " AND FrmEnableRole != 5");
                     return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
                 }
-                return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
+                     
+               
+               return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
+             
             }
             catch (Exception ex)
             {

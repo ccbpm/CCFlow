@@ -87,12 +87,12 @@ namespace BP.Frm
             //创建rpt.
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
 
-            int i= rpt.Retrieve("Starter", WebUser.No, "BillState", 0);
-            if (i >= 1)
-            {
-                rpt.SetValByKey("RDT", DataType.CurrentData);
-                return rpt.OID;
-            }
+            //int i= rpt.Retrieve("Starter", WebUser.No, "BillState", 0);
+            //if (i >= 1)
+            //{
+            //    rpt.SetValByKey("RDT", DataType.CurrentData);
+            //    return rpt.OID;
+            //}
 
             //更新基础的数据到表单表.
             rpt.SetValByKey("BillState", 0);

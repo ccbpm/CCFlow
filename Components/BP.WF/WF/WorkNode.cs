@@ -6494,7 +6494,7 @@ namespace BP.WF
                 #endregion 处理子流程
 
                 #region 生成单据
-                if (this.HisNode.HisPrintDocEnable == PrintDocEnable.PrintRTF && this.HisNode.BillTemplates.Count > 0)
+                if (this.HisNode.HisPrintDocEnable == true && this.HisNode.BillTemplates.Count > 0)
                 {
 
                     BillTemplates reffunc = this.HisNode.BillTemplates;

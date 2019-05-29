@@ -268,7 +268,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
     var colSpan = 1;
     var textColSpan = 2;
     var textWidth = "15%";
-    var width = "15%";
+    var colWidth = "15%";
 
 
     var lab = "";
@@ -290,8 +290,8 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             colWidth = 35 * parseInt(colSpan) + "%";
             textWidth = 15 * parseInt(textColSpan) + "%";
         } else {
-            colWidth = 25 * parseInt(colSpan) + "%";
-            textWidth = 8 * parseInt(textColSpan) + "%";
+            colWidth = 23 * parseInt(colSpan) + "%";
+            textWidth = 10 * parseInt(textColSpan) + "%";
         }
 
         //单元格为0的情况
@@ -418,7 +418,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 luColSpan += colSpan + textColSpan;
                 if (attr.MyDataType == 4) {
                     colSpan = colSpan + textColSpan;
-                    width = 35 * parseInt(colSpan) + "%";
+                    colWidth = (parseInt(colSpan) * 23 + 10 * parseInt(textColSpan)) + "%";
                 } else {
                     html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                 }

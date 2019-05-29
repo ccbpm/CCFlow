@@ -57,16 +57,23 @@
 
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
-                var ens = new Entities("BP.WF.Template.BillTemplates");
-                ens.Retrieve("NodeID", nodeID);
-                if (ens.length == 1) {
-                    var url = data.replace('url@', '');
-                    if (plant == 'CCFlow' && ens[0].TemplateFileModel == 1) {
-                        url += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+
+                data = data.replace('url@', '');
+                if (data.indexOf('rtf@') != -1) {
+                    window.location.href = data.replace('rtf@', '');
+                } else {
+                    data = data.replace('work@', '');
+                    if (plant == 'CCFlow') {
+                        data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
                     }
+                    if (plant == "JFlow") {
+                        alert('还没有翻译.');
+                        return;
+                    }
+
+
+                    WinOpen(data);
                 }
-                window.location.href = url;
-                $("#Msg").html("");
                 return;
             }
 
@@ -77,7 +84,7 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + ","+fid+",\""+en.FK_MapData+"\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
+                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + "," + fid + ",\"" + en.FK_MapData + "\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
             }
 
             html += "</ul>";
@@ -131,6 +138,7 @@
             if (data.indexOf('url@') == 0) {
 
                 data = data.replace('url@', '');
+                data = data.replace('rtf@', '').replace('word@', '');
 
                 if (plant == 'CCFlow' && printModal == 1) {
                     data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";

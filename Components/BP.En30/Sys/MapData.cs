@@ -1593,7 +1593,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.FrmW, 900, "FrmW", true, true);
                 map.AddTBInt(MapDataAttr.FrmH, 1200, "FrmH", true, true);
 
-                map.AddTBInt(MapDataAttr.TableCol, 4, "傻瓜表单显示的列", true, true);
+                map.AddTBInt(MapDataAttr.TableCol, 0, "傻瓜表单显示的列", true, true);
 
                 //Tag
                 map.AddTBString(MapDataAttr.Tag, null, "Tag", true, false, 0, 500, 20);

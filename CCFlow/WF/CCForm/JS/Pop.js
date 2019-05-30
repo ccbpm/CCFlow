@@ -454,10 +454,8 @@ function PopBindSFTable(mapExt) {
 
 
 
-/******************************************  绑定外键-单表数据源 **********************************/
-function TableList(mapExt) {
-    PopTableList(mapExt);
-}
+/******************************************  绑定外键-单表数据源 PopTableList **********************************/
+ 
 function PopTableList(mapExt) {
 
     var target = $("#TB_" + mapExt.AttrOfOper);

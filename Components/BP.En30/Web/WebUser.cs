@@ -543,7 +543,7 @@ namespace BP.Web
 
                     BP.Port.Dept dept = new Port.Dept(BP.Web.WebUser.FK_Dept);
                     BP.Web.WebUser.DeptParentNo = dept.ParentNo;
-                    return val;
+                    return dept.ParentNo;
                 }
                 return val;
             }

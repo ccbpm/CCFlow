@@ -43,15 +43,31 @@
 //根据当前节点获得下一个节点.
 function GetNextNodeID(nodeID, dirs) {
 
+    var toNodeID = 0;
     for (var i = 0; i < dirs.length; i++) {
         var dir = dirs[i];
-        if (dir.Node == nodeID)
-            return dir.ToNode;
+        if (dir.Node == nodeID) {
+            toNodeID = dir.ToNode;
+            break;
+        }
     }
+
+    var toNodeID2 = 0;
+    for (var i = 0; i < dirs.length; i++) {
+        var dir = dirs[i];
+        if (dir.Node == nodeID) {
+            toNodeID2 = dir.ToNode;
+        }
+    }
+
+    //两次去的不一致，就有分支，有分支就reutrn 0 .
+    if (toNodeID2 == toNodeID)
+        return toNodeID;
+
     return 0;
 }
 
-function GetNextNodeIDExpSpecNode(nodeID,specToNode, dirs) {
+function GetNextNodeIDExpSpecNode_del(nodeID, specToNode, dirs) {
 
     for (var i = 0; i < dirs.length; i++) {
         var dir = dirs[i];

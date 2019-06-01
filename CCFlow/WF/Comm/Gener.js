@@ -1274,7 +1274,9 @@ var Entity = (function () {
 
         DoMethodReturnString: function (methodName, myparams) {
             var params = {};
-            params["paras"] = myparams;
+            if (myparams == null || myparams == undefined)
+                myparams = "";
+            arguments["paras"] = myparams;
 
             /*$.each(arguments, function (i, o) {
             if (i > 0)
@@ -1293,13 +1295,13 @@ var Entity = (function () {
             $.ajax({
                 type: 'post',
                 async: false,
-                data: arguments,
                 xhrFields: {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName +  "&t=" + new Date().getTime(),
                 dataType: 'html',
+                data: arguments,
                 success: function (data) {
                     string = data;
                 },

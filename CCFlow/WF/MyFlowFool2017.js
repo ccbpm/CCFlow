@@ -689,7 +689,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
             var url = './WorkOpt/OneWork/JobSchedule.js';
             $.getScript(url, function () {
-                //alert('done');
+
+            
             });
             return "<div id='JobSchedule' >JobSchedule</div>";
         }

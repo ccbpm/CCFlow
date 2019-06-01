@@ -2180,7 +2180,6 @@ var HttpHandler = (function () {
 
             var jsonString = this.DoMethodReturnString(methodName);
 
-
             if (jsonString.indexOf("err@") == 0) {
                 alert(jsonString);
 
@@ -2190,6 +2189,7 @@ var HttpHandler = (function () {
             }
 
             try {
+
                 jsonString = ToJson(jsonString);
 
                 //jsonString = JSON.parse(jsonString);

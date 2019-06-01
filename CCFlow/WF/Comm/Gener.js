@@ -768,12 +768,6 @@ var Entity = (function () {
 
     var Entity = function (enName, pkval) {
 
-//        if (pkval == null || pkval == "" || pkval == undefined) {
-//            var str = '在给[' + enName + ']查询的时候，主键不能为空';
-//            alert(str);
-//            throw Error(str);
-//            return;
-//        }
         if (enName == null || enName == "" || enName == undefined) {
             alert('enName不能为空');
             throw Error('enName不能为空');
@@ -789,10 +783,6 @@ var Entity = (function () {
             this.pkval = pkval || "";
             this.loadData();
         }
-
-      //  this.enName = enName;
-       // this.pkval = pkval;
-       // this.loadData();
 
     };
 
@@ -1283,11 +1273,14 @@ var Entity = (function () {
         },
 
         DoMethodReturnString: function (methodName, myparams) {
-            var params = [];
-            $.each(arguments, function (i, o) {
-                if (i > 0)
-                    params.push(o);
-            });
+            var params = {};
+            params["paras"] = myparams;
+
+            /*$.each(arguments, function (i, o) {
+            if (i > 0)
+            params.push(o);
+            });*/
+
 
             var pkavl = this.GetPKVal();
             if (pkavl == null || pkavl == "") {

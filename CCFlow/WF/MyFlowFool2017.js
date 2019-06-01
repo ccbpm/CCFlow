@@ -12,8 +12,10 @@ function GenerFoolFrm(wn) {
     var tableCol = flowData.Sys_MapData[0].TableCol;
     if (tableCol == 0)
         tableCol = 4;
-    else
+    else if(tableCol == 1)
         tableCol = 6;
+    else if (tableCol == 2)
+        tableCol = 3;
 
     $('#CCForm').html('');
 
@@ -125,8 +127,10 @@ function GenerFoolFrm(wn) {
             html += "<tr>";
             html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
-
-            html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
+            if(tableCol == 4 || tableCol ==6)
+                html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
+            else if (tableCol == 3)
+                html += InitThreeColMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
             continue;
         }
 
@@ -162,6 +166,125 @@ function GenerFoolFrm(wn) {
         $("#Lab_" + keyOfEn).html("<div style='text-align:left'>" + $("#Lab_" + keyOfEn).text() + "</div>");
     });
 
+}
+
+//解析表单是三列的情况
+function InitThreeColMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
+    var html = "";
+    var isDropTR = true;
+
+    var lab = "";
+    var colSpan = 1;
+    var rowSpan = 1;
+    var textColSpan = 1;
+    var textWidth = "33%";
+    var colWidth = "33%";
+
+    //记录一行已占用的列输
+    var UseColSpan = 0;
+    var IsMiddle = false;
+    //跨行问题
+    for (var i = 0; i < Sys_MapAttr.length; i++) {
+        var attr = Sys_MapAttr[i];
+
+        if (attr.GroupID != groupID || attr.UIVisible == 0)
+            continue;
+        //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
+        lab = GetLab(flowData, attr);
+
+        rowSpan = attr.RowSpan;
+        colSpan = attr.ColSpan;
+        textColSpan = attr.TextColSpan;
+
+        colWidth = 33 * parseInt(colSpan) + "%";
+        textWidth = 33 * parseInt(textColSpan) + "%";
+
+        //跨列设置(显示的是文本)
+        if (colSpan == 0) {
+
+            if (textColSpan == tableCol) {
+                html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+                isDropTR = true;
+                continue;
+            }
+            //线性展示都跨一个单元格
+            //换行的情况
+            if (isDropTR == true) {
+                html += "<tr >";
+                UseColSpan = 0;
+                UseColSpan += colSpan + textColSpan;
+                html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+
+                if (UseColSpan == tableCol) {
+                    isDropTR = true;
+                } else {
+                    isDropTR = false;
+                }
+                continue;
+            }
+
+            if (isDropTR == false) {
+                UseColSpan += colSpan + textColSpan;
+                html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+                if (UseColSpan == tableCol) {
+                    html += "</tr>";
+                    isDropTR = true;
+                } else {
+                    isDropTR = false;
+                }
+                continue;
+            }
+        }
+        //解析占一行的情况
+        if (colSpan == tableCol) {
+            html += "<tr>";
+            html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
+            html += InitMapAttrOfCtrlFool(flowData, attr);
+            html += "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            UseColSpan = 0;
+            continue;
+        }
+
+        //换行的情况
+        if (isDropTR == true) {
+            html += "<tr >";
+            UseColSpan = 0;
+
+            UseColSpan += colSpan;
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + colSpan + " class='tdSpan'>" + lab + "<br/>";
+            html += InitMapAttrOfCtrlFool(flowData, attr);
+            html += "</td>";
+            if (UseColSpan == tableCol) {
+                isDropTR = true;
+            } else {
+                isDropTR = false;
+            }
+
+
+            continue;
+        }
+
+        if (isDropTR == false) {
+
+            UseColSpan += colSpan;
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + colSpan + " class='tdSpan'>" + lab + "<br/>";
+            html += InitMapAttrOfCtrlFool(flowData, attr);
+            html += "</td>";
+
+            if (UseColSpan == tableCol) {
+                html += "</tr>";
+                isDropTR = true;
+            } else {
+                isDropTR = false;
+            }
+
+
+            continue;
+        }
+    }
+    return html;
 }
 
 //解析表单字段 MapAttr.
@@ -1336,7 +1459,6 @@ function Down2018(fk_ath, pkVal, delPKVal, FK_Flow, FK_Node, FK_MapData, Ath) {
 //解析傻瓜表单的字段lab
 function GetLab(flowData, attr) {
     var lab = "";
-    var lab = "";
     var forID = "TB_" + attr.KeyOfEn;
     var contralType = attr.UIContralType;
     if (contralType == 1) {//外键下拉框
@@ -1347,10 +1469,11 @@ function GetLab(flowData, attr) {
     }
     //文本框，下拉框，单选按钮
     if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 8 || contralType == 50) {
-        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
-            lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
+            lab = " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
+        lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='padding-bottom: 10px;'>" + attr.Name + "</label>";
+       
         return lab;
     }
     //附件控件
@@ -1376,10 +1499,8 @@ function GetLab(flowData, attr) {
         if (no == "01")
             url += "&IsStartNode=" + 1; //是否是开始节点
 
-        var isReadonly = false;
-        if (attr.FK_MapData.indexOf(nodeID) == -1)
-            isReadonly = true;
-
+        var isReadonly = pageData.IsReadonly;
+      
         if (isReadonly == false) {
             var strRD = GetQueryString("IsReadonly");
             if (strRD == 1)

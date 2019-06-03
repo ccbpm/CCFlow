@@ -15,8 +15,13 @@ function GenerFoolFrm(mapData, frmData) {
     var tableCol = frmData.Sys_MapData[0].TableCol;
     if (tableCol == 0)
         tableCol = 4;
-    else
+    else if (tableCol == 1)
         tableCol = 6;
+    else if (tableCol == 2)
+        tableCol = 3;
+    else
+        tableCol = 4;
+
 
     var tableWidth = 800; //  w - 40;
     var html = "<table style='width:100%;' >";

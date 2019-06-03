@@ -12,10 +12,12 @@ function GenerFoolFrm(wn) {
     var tableCol = flowData.Sys_MapData[0].TableCol;
     if (tableCol == 0)
         tableCol = 4;
-    else if(tableCol == 1)
+    else if (tableCol == 1)
         tableCol = 6;
     else if (tableCol == 2)
         tableCol = 3;
+    else
+        tableCol = 4;
 
     $('#CCForm').html('');
 

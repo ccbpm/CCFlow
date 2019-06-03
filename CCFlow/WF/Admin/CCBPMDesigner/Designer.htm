@@ -190,22 +190,14 @@
 	</style>
 	<div id="processMenu" style="display: none;">
 		<ul id="mainul">
-			<!--li id="pm_begin"><i class="icon-play"></i>&nbsp;<span class="_label">设为第一步</span></li-->
-			<!--li id="pm_addson"><i class="icon-plus"></i>&nbsp;<span class="_label">添加子步骤</span></li-->
-			<!--li id="pm_copy"><i class="icon-check"></i>&nbsp;<span class="_label">复制</span></li-->
-			<!--<li id="Li1"><i class="icon-cog"></i>&nbsp;<span class="_label">修改名称</span></li>-->
 			<li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
-			<!--<li id="pmAttributeOld"><i class="icon-cog"></i>&nbsp;<span class="_label">属性(旧)</span></li>-->
 			<li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
 			<li id="pmFrmD"><i class="icon-th"></i>&nbsp;<span class="_label">设计节点表单</span></li>
-			<!-- <li id="pmFrmFool"><i class="icon-th"></i>&nbsp;<span class="_label">傻瓜表单</span></li>
-			 <li id="pmFrmFree"><i class="icon-th"></i>&nbsp;<span class="_label">自由表单</span></li>
-			-->
 			<li id="pmfun"><i class="icon-th"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
 			<li id="pmNodeAccepterRole"><i class="icon-wrench"></i>&nbsp;<span class="_label">接收人规则</span></li>
-			<!--<li id="cmNewNodeFromNode"><i class="icon-plus"></i>&nbsp;<span class="_label">添加步骤</span></li>-->
 			<li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
 			<li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
+            <li id="ShowChildrenFlow"><i class="icon-plus"></i>&nbsp;<span class="_label">显示子流程</span></li>
 		</ul>
 	</div>
 	<div id="processMenu3" style=" padding: 0px; position: absolute; background: #fff;
@@ -569,6 +561,7 @@
 				}
 				/*步骤右键*/
 				, processMenus: {
+                   
 
 					"pmBegin": function (t) {
 						var activeId = _canvas.getActiveId(); //右键当前的ID

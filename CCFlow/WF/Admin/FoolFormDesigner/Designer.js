@@ -1,22 +1,18 @@
-﻿
-//解析表单字段 MapAttr.
-function InitMapAttr(Sys_MapAttr) {
+﻿//解析表单是三列的情况
+function InitThreeColMapAttr(Sys_MapAttr, tableCol) {
     var html = "";
     var isDropTR = true;
-    //跨行问题，1.记录是否跨行 2.已经跨了几行 3.跨的行数
-    var isShowTdLeft = true;
-    var haveDropRowLeft = 0;
-    var recordRowLeft = 0;
-
-    var isShowTdRight = true;
-    var haveDropRowRight = 1;
-    var recordRowRight = 1;
+ 
     var lab = "";
-    var rowSpan = 1;
     var colSpan = 1;
+    var rowSpan = 1;
     var textColSpan = 1;
-    var textWidth = "15%";
-    var colWidth = "15%";
+    var textWidth = "33%";
+    var colWidth = "33%";
+
+    //记录一行已占用的列输
+    var UseColSpan = 0;
+    var IsMiddle = false;
     //跨行问题
     for (var i = 0; i < Sys_MapAttr.length; i++) {
         var attr = Sys_MapAttr[i];
@@ -25,165 +21,330 @@ function InitMapAttr(Sys_MapAttr) {
         rowSpan = attr.RowSpan;
         colSpan = attr.ColSpan;
         textColSpan = attr.TextColSpan;
-        colWidth = 15 * parseInt(colSpan) + "%";
-        textWidth = 15 * parseInt(textColSpan) + "%";
+       
+        colWidth = 33 * parseInt(colSpan) + "%";
+        textWidth = 33 * parseInt(textColSpan) + "%";
+       
         //跨列设置(显示的是文本)
         if (colSpan == 0) {
-            
-            if (textColSpan == 4) {
+
+            if (textColSpan == tableCol) {
                 html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
                 isDropTR = true;
                 continue;
             }
             //线性展示都跨一个单元格
+            //换行的情况
             if (isDropTR == true) {
                 html += "<tr >";
-                if (isShowTdLeft == true) {
-                    recordRowRight = rowSpan;
-                    haveDropRowLeft = 0;
-                    html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
-                    if (rowSpan != 1)
-                        isShowTdLeft = false;
+                UseColSpan = 0;
+                UseColSpan += colSpan + textColSpan;
+                html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+               
+                if (UseColSpan == tableCol) {
+                    isDropTR = true;
+                } else {
+                    isDropTR = false;
                 }
-                isDropTR = !isDropTR;
+                continue;
+            }
 
-                haveDropRowRight++;
-                if (haveDropRowRight == recordRowRight) {
-                    haveDropRowRight = 0;
-                    recordRowRight = 1;
-                    isShowTdRight = true;
-                }
-
-                if (isShowTdRight == false) {
+            if (isDropTR == false) {
+                UseColSpan += colSpan + textColSpan;  
+                html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+                if (UseColSpan == tableCol) {
                     html += "</tr>";
                     isDropTR = true;
+                } else {
+                    isDropTR = false;
+                }
+                continue;
+            }
+        }
+        //解析占一行的情况
+        if (colSpan == tableCol) {
+            html += "<tr>";
+            html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + GenerLabel(attr) + "</br>";
+            html += InitMapAttrOfCtrlFool(attr);
+            html += "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            UseColSpan = 0;
+            continue;
+        }
+       
+        //换行的情况
+        if (isDropTR == true) {
+            html += "<tr >";
+            UseColSpan = 0;
+           
+            UseColSpan += colSpan;
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + colSpan + " class='tdSpan'>" + GenerLabel(attr) + "<br/>";
+            html += InitMapAttrOfCtrlFool(attr);
+            html += "</td>";
+            if (UseColSpan == tableCol) {
+                isDropTR = true;
+            } else {
+                isDropTR = false;
+            }
+
+
+            continue;
+        }
+
+        if (isDropTR == false) {
+           
+            UseColSpan += colSpan;
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + colSpan + " class='tdSpan'>" + GenerLabel(attr) + "<br/>";
+            html += InitMapAttrOfCtrlFool(attr);
+            html += "</td>";
+
+            if (UseColSpan == tableCol) {
+                html += "</tr>";
+                isDropTR = true;
+            } else {
+                isDropTR = false;
+            }
+
+           
+            continue;
+        }
+    }
+    return html;
+}
+
+
+
+//解析表单字段 MapAttr.(表单4列/6列)
+function InitMapAttr(Sys_MapAttr, tableCol) {
+    var html = "";
+    var isDropTR = true;
+    //跨行问题定义的字段
+    //右侧跨行
+    var IsShowRight = true; // 是否显示右侧列
+    var rRowSpan = 0; //跨的行数
+    var ruRowSpan = 0;//已近解析的行数
+    var ruColSpan = 0;//该跨行总共跨的列数
+
+    //左侧跨行
+    var IsShowLeft = true; // 是否显示左侧列
+    var lRowSpan = 0; //跨的行数
+    var luRowSpan = 0; //已近解析的行数
+    var luColSpan = 0; //该跨行总共跨的列数
+
+    
+    var lab = "";
+    var rowSpan = 1;
+    var colSpan = 1;
+    var textColSpan = 1;
+    var textWidth = "15%";
+    var colWidth = "15%";
+   
+    //记录一行已占用的列输
+    var UseColSpan = 0;
+    var IsMiddle = false;
+
+    //跨行问题
+    for (var i = 0; i < Sys_MapAttr.length; i++) {
+        var attr = Sys_MapAttr[i];
+        if (attr.UIVisible == 0)
+            continue;
+        rowSpan = attr.RowSpan;
+        colSpan = attr.ColSpan;
+        textColSpan = attr.TextColSpan;
+        if (tableCol == 4) {
+            colWidth = 35 * parseInt(colSpan) + "%";
+            textWidth = 15 * parseInt(textColSpan) + "%";
+        } else {
+            colWidth = 25 * parseInt(colSpan) + "%";
+            textWidth = 8 * parseInt(textColSpan) + "%";
+        }
+        //跨列设置(显示的是文本)
+        if (colSpan == 0) {
+
+            if (textColSpan == tableCol) {
+                html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+                isDropTR = true;
+                continue;
+            }
+            //线性展示都跨一个单元格
+            //换行的情况
+            if (isDropTR == true) {
+                html += "<tr >";
+                UseColSpan = 0;
+                if (IsShowLeft == true) {
+                    UseColSpan += colSpan + textColSpan;
+                    lRowSpan = rowSpan;
+                    luColSpan += colSpan + textColSpan;
+                    html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
+                    if (rowSpan != 1) {
+                        IsShowLeft = false;
+                    }
+
+                }
+                if (UseColSpan == tableCol) {
+                    ruRowSpan++;
+                    isDropTR = true;
+                } else {
+                    isDropTR = false;
+                }
+
+                //复位右侧信息
+                if (ruRowSpan == rRowSpan) {
+                    ruRowSpan = 0;
+                    rRowSpan = 0;
+                    IsShowRight = true;
+                }
+
+
+                if (IsShowRight == false && (UseColSpan == tableCol)) {
+                    html += "</tr>";
+                    isDropTR = true;
+                    UseColSpan = ruColSpan;
+
                 }
 
                 continue;
             }
 
             if (isDropTR == false) {
-                if (isShowTdRight == true) {
-                    recordRowLeft = rowSpan;
-                    haveDropRowRight = 0;
+                if (IsShowRight == true) {
+                    UseColSpan += colSpan + textColSpan;
+                    rRowSpan = rowSpan;
+                    ruColSpan += colSpan + textColSpan;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
-                    if (rowSpan != 1)
-                        isShowTdLeft = false;
-                    isDropTR = !isDropTR;
-                }
-               
-                html += "</tr>";
-                haveDropRowLeft++;
-
-                if (haveDropRowLeft == recordRowLeft) {
-                    haveDropRowLeft = 0;
-                    recordRowLeft = 1;
-                    isShowTdLeft = true;
-                    isDropTR = true;
-                } else {
+                    if (UseColSpan == tableCol)
+                        isDropTR = true;
+                    if (rowSpan != 1) {
+                        IsShowRight = false;
+                    }
                 }
 
-                if (isShowTdLeft == false) {
+                if (UseColSpan == tableCol) {
+                    luRowSpan++;
+                    html += "</tr>";
+                }
+
+                //复位左侧信息
+                if (luRowSpan == lRowSpan) {
+                    luRowSpan = 0;
+                    lRowSpan = 0;
+                    IsShowLeft = true;
+
+                }
+
+                if (IsShowLeft == false && (UseColSpan == tableCol)) {
                     html += "<tr>";
+                    UseColSpan = 0;
                     isDropTR = false;
+                    UseColSpan = luColSpan;
                 }
-
                 continue;
             }
-           
         }
         //解析占一行的情况
-        if (colSpan == 4) {
+        if (colSpan == tableCol) {
             html += "<tr>";
-            html += "<td  ColSpan='4' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + GenerLabel(attr) + "</br>";
+            html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + GenerLabel(attr) + "</br>";
             html += "</tr>";
             html += "<tr>";
-            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='4' rowSpan=" + rowSpan + " class='FDesc' style='text-align:left'>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='"+colSpan+"' rowSpan=" + rowSpan + " class='FDesc' style='text-align:left'>";
             html += InitMapAttrOfCtrlFool(attr);
             html += "</td>";
             html += "</tr>";
             isDropTR = true;
+            UseColSpan = 0;
             continue;
         }
-
-        if ((colSpan == 3 && textColSpan == 1)
-            || (colSpan == 2 && textColSpan == 2)
-            || (colSpan == 1 && textColSpan == 3)) {
-
+        var sumColSpan = colSpan + textColSpan;
+        if (sumColSpan == tableCol) {
             isDropTR = true;
+            UseColSpan = 0;
             html += "<tr >";
             html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
             html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
             html += InitMapAttrOfCtrlFool(attr);
             html += "</td>";
             html += "</tr>";
-            isDropTR = true;
             continue;
         }
 
         //换行的情况
         if (isDropTR == true) {
             html += "<tr >";
-            if (isShowTdLeft == true) {
-                
-                 recordRowLeft = rowSpan;
-                haveDropRowLeft = 0;
+            UseColSpan = 0;
+            if (IsShowLeft == true) {
+                UseColSpan += colSpan + textColSpan;
+                lRowSpan = rowSpan;
+                luColSpan += colSpan + textColSpan;
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrlFool(attr);
                 html += "</td>";
-                if (rowSpan != 1)
-                    isShowTdLeft = false;
-                isDropTR = !isDropTR;
+                if (rowSpan != 1) {
+                    IsShowLeft = false;
+                }
                 
             }
-           
-            haveDropRowRight++;
-            if (haveDropRowRight == recordRowRight) {
-                haveDropRowRight = 0;
-                recordRowRight = 1;
-                isShowTdRight = true;
-               
+            if (UseColSpan == tableCol) {
+                ruRowSpan++;
+                isDropTR = true;
+            } else {
+            isDropTR = false;
             }
+            
+            //复位右侧信息
+            if (ruRowSpan == rRowSpan) {
+                ruRowSpan = 0;
+                rRowSpan = 0;
+                IsShowRight = true;
+            }
+            
 
-            if (isShowTdRight == false) {
+            if (IsShowRight == false && (UseColSpan == tableCol)) {
                 html += "</tr>";
                 isDropTR = true;
+                UseColSpan = ruColSpan;
+             
             }
 
             continue;
         }
 
         if (isDropTR == false) {
-            if (isShowTdRight == true) {
-                recordRowRight = rowSpan;
-                haveDropRowRight = 0;
+            if (IsShowRight == true ) {
+                UseColSpan += colSpan + textColSpan;
+                rRowSpan = rowSpan;
+                ruColSpan += colSpan + textColSpan;
                 html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrlFool(attr);
                 html += "</td>";
-
-                isDropTR = !isDropTR;
-                if (rowSpan != 1)
-                    isShowTdRight = false;
-
-
+                if (UseColSpan == tableCol)
+                     isDropTR = true;
+                 if (rowSpan != 1) {
+                     IsShowRight = false;
+                 }
             }
-           
-            haveDropRowLeft++;
-            html += "</tr>";
-           
-
-            if (haveDropRowLeft == recordRowLeft) {
-                haveDropRowLeft = 0;
-                recordRowLeft = 1;
-                isShowTdLeft = true;
-               
+            
+            if (UseColSpan == tableCol) {
+                luRowSpan++;
+                html += "</tr>";
             }
 
-            if (isShowTdLeft == false) {
+            //复位左侧信息
+            if (luRowSpan == lRowSpan) {
+                luRowSpan = 0;
+                lRowSpan = 0;
+                IsShowLeft = true;
+                
+            }
+
+            if (IsShowLeft == false &&(UseColSpan == tableCol)) {
                 html += "<tr>";
+                UseColSpan = 0;
                 isDropTR = false;
+                UseColSpan = luColSpan;
             }
             continue;
         }
@@ -231,6 +392,15 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input  value='0' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/></div>";
     }
 
+    if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
+        var attrdefVal = mapAttr.DefVal;
+        var bit;
+        if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+            bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+
+        return "<input  value='0.00' style='text-align:right;'class='form-control'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+    }
+
     if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
          //生成中间的部分.
         var enableAttr = '';
@@ -265,8 +435,8 @@ function InitMapAttrOfCtrlFool(mapAttr) {
           }
           return "<div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' />&nbsp;" + mapAttr.Name + "</label></div>";
       }
-     
 
+      
      if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { 
         if (mapAttr.UIContralType == 2) {
             var ses = new Entities("BP.Sys.SysEnums");

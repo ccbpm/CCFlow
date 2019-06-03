@@ -2058,14 +2058,13 @@
 
             //枚举类型.
             if (mapAttr.LGType == 1) {
-                var enums = workNodeData.Sys_Enum;
-                if (enums != undefined) {
-                    enums = $.grep(enums, function (value) {
-                        return value.EnumKey == mapAttr.UIBindKey;
-                    });
+                var data = workNodeData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = workNodeData[mapAttr.UIBindKey];
+                if (data != undefined) {
 
-                    $.each(enums, function (i, obj) {
-                        operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    $.each(data, function (i, obj) {
+                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
                     });
                 }
                 return operations;

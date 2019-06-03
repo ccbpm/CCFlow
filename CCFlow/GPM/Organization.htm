@@ -226,25 +226,26 @@
        
 
        //初始化
-       $(function () {
+        $(function () {
 
-           $("#pageloading").show();
+            $("#pageloading").show();
 
-           var ens = new Entities("BP.GPM.Depts");
-           ens.Retrieve("Idx");//Idx排序
-           var jsonTree = createJsonToTree(ens);
-           zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
-           fillter(zTreeObj); //设置展开前三级
-           //绑定帮助信息.
-           var html = " <h1 style='padding-left:5px'>请点击左侧节点显示数据。</h1>";
-           $("#Emps").html(html);
-           $("#pageloading").hide();
-           //鼠标移开时右键菜单消失
-           $(document).on('mouseleave ', '.dropdown-menu', function () {
-               $(".dropdown-menu").hide();
-               $.learunindex.destroy
-           });
-       });
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            var ens = handler.DoMethodReturnJSON("Organization_Init");
+
+            var jsonTree = createJsonToTree(ens);
+            zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
+            fillter(zTreeObj); //设置展开前三级
+            //绑定帮助信息.
+            var html = " <h1 style='padding-left:5px'>请点击左侧节点显示数据。</h1>";
+            $("#Emps").html(html);
+            $("#pageloading").hide();
+            //鼠标移开时右键菜单消失
+            $(document).on('mouseleave ', '.dropdown-menu', function () {
+                $(".dropdown-menu").hide();
+                $.learunindex.destroy
+            });
+        });
 
        //设置展开前三级
        function fillter(zTreeObj) {
@@ -264,6 +265,8 @@
 
            for (var i = 0; i < jsonArray.length; i++) {
                var data = jsonArray[i];
+               if (data.No == "" || data.No == undefined)
+                   continue;
                treeJson.push({
                    "id": data.No,
                    "pid": data.ParentNo,

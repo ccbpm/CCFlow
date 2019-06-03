@@ -83,6 +83,13 @@
         ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
         ur.RetrieveFromDBSources();
 
+         //获取Url传的查询Key值
+        var key = GetQueryString("Key");
+        if(key!=null && key!=undefined){
+            ur.SearchKey = key;
+            ur.Update();
+        }
+
         var count = ur.GetPara("RecCount");//查询总条数
         var mapBase;
         var pageIdx = this.GetQueryString("PageIdx");//当前页

@@ -1416,9 +1416,8 @@ function GetLab(frmData, attr) {
                 url = url.replace('@' + obj.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
             }
         });
-        var OID = GetQueryString("OID");
-        if (OID == undefined || OID == "");
-        OID = GetQueryString("WorkID");
+
+       
         var FK_Node = GetQueryString("FK_Node");
         var FK_Flow = GetQueryString("FK_Flow");
         var webUser = new WebUser();
@@ -1432,7 +1431,7 @@ function GetLab(frmData, attr) {
         if (url.indexOf("SearchBS.htm") != -1)
             url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
         else
-            url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+            url = url + "&OID=" + pageData.OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&FK_Frm=" + pageData.FK_MapData + "&UserNo=" + userNo + "&SID=" + SID;
 
         eleHtml = '<span ><a href="' + url + '" target="_blank">' + attr.Name + '</a></span>';
 

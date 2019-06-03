@@ -87,11 +87,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Organization_Init()
         {
-            //根据用户判断当前人员是否为二级管理员
-            BP.WF.Port.AdminEmp emp = new BP.WF.Port.AdminEmp(WebUser.No);
-            //二级管理员
+        
             BP.GPM.Depts depts = new GPM.Depts();
-            if (emp.No.Equals("admin")==false && emp.UserType == 1)
+            if (WebUser.No.Equals("admin") == false )
             {
                 depts.Retrieve("ParentNo",WebUser.FK_Dept);
                 depts.AddEntity(new Dept(WebUser.FK_Dept));

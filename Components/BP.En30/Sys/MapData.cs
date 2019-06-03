@@ -1418,6 +1418,18 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FlowCtrls, value);
             }
         }
+
+        public int TableCol
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDataAttr.TableCol);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.TableCol,value);
+            }
+        }
         #endregion
 
         #region 构造方法

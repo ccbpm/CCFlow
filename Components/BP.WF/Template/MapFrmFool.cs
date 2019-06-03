@@ -136,8 +136,8 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
-                map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, "表单显示列数",
-                    "@0=4列@1=6列");
+                map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, MapDataAttr.TableCol,
+                    "@0=4列@1=6列@2=3列");
 
               //  map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
                // map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);

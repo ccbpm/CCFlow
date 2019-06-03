@@ -82,17 +82,25 @@ namespace BP.WF.HttpHandler
         
         #region 组织结构维护.
         /// <summary>
-        /// 初始化组织结构维护.
+        /// 初始化组织结构部门表维护.
         /// </summary>
         /// <returns></returns>
         public string Organization_Init()
         {
-            //BP.GPM.Depts depts = new GPM.Depts();
-            //depts.RetrieveAll();
+            //根据用户判断当前人员是否为二级管理员
+            BP.WF.Port.AdminEmp emp = new BP.WF.Port.AdminEmp(WebUser.No);
+            //二级管理员
+            BP.GPM.Depts depts = new GPM.Depts();
+            if (emp.No.Equals("admin")==false && emp.UserType == 1)
+            {
+                depts.Retrieve("ParentNo",WebUser.FK_Dept);
+                depts.AddEntity(new Dept(WebUser.FK_Dept));
+                return depts.ToJson();
+            }
 
-            //return depts.ToJsonOfTree("0");
+            depts.RetrieveAll();
 
-            return "";
+            return depts.ToJson();
         }
 
         /// <summary>

@@ -2244,6 +2244,7 @@ var WebUser = function () {
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+
             alert("WebUser_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
         }
     });

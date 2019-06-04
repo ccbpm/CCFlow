@@ -21,6 +21,15 @@ namespace BP.WF.HttpHandler
     public class WF_WorkOpt_OneWork : DirectoryPageBase
     {
         /// <summary>
+        /// 进度图.
+        /// </summary>
+        /// <returns></returns>
+        public string JobSchedule_Init()
+        {
+            DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(this.WorkID);
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
         /// 页面功能实体
         /// </summary>
         /// <param name="mycontext"></param>

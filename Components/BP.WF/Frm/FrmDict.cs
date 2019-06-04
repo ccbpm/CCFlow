@@ -197,6 +197,9 @@ namespace BP.Frm
                 map.AddTBInt(FrmAttr.PopHeight, 500, "弹窗高度", true, false);
                 map.AddTBInt(FrmAttr.PopWidth, 760, "弹窗宽度", true, false);
 
+                map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, "傻瓜表单显示方式",
+                  "@0=4列@1=6列@2=上下模式3列");
+
                 map.AddDDLSysEnum(FrmAttr.EntityEditModel, 0, "编辑模式", true, true, FrmAttr.EntityEditModel, "@0=表格@1=行编辑");
                 map.SetHelperAlert(FrmAttr.EntityEditModel,"用什么方式打开实体列表进行编辑0=只读查询模式SearchDict.htm,1=行编辑模式SearchEditer.htm");
                 #endregion 外观.

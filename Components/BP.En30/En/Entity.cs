@@ -3876,12 +3876,16 @@ namespace BP.En
                 md.Insert();
 
             md.EnPK = this.PK; //主键
-            md.EnsName = this.ClassID; //类名.
+            md.EnsName = fk_mapdata; //类名.
             md.Name = map.EnDesc;
             md.PTable = map.PhysicsTable;
             md.Update();
             #endregion 更新主表信息.
 
+            //删除.
+            MapAttrs attrs = new MapAttrs();
+            attrs.Delete(MapAttrAttr.FK_MapData, fk_mapdata);
+                
             //同步属性 mapattr.
             DTSMapToSys_MapData_InitMapAttr(map.Attrs, fk_mapdata);
 

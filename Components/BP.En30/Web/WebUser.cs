@@ -499,7 +499,7 @@ namespace BP.Web
         /// <summary>
         /// 所在的集团编号
         /// </summary>
-        public static string GroupNo
+        public static string GroupNo111
         {
             get
             {

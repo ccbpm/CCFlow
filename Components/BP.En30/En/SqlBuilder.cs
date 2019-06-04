@@ -1405,6 +1405,13 @@ namespace BP.En
             if (en.EnMap.HisFKAttrs.Count != 0)
                 mainTable = en.EnMap.PhysicsTable + ".";
 
+            if (en.EnMap.Attrs.Count == 0)
+            {
+                en.DTSMapToSys_MapData();
+                throw new Exception("err@错误:" + en.ToString() + "没有attrs属性，无法生成SQL, 如果是动态实体请关闭后，重新打开一次。");
+            }
+
+
             foreach (Attr attr in en.EnMap.Attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
@@ -1696,7 +1703,7 @@ namespace BP.En
 
             return " SELECT   " + val.Substring(1) + SqlBuilder.GenerFormWhereOfMS(en);
         }
-        
+
         /// <summary>
         /// 建立selectSQL 
         /// </summary>
@@ -2457,14 +2464,16 @@ namespace BP.En
                             if (val == null || val == DBNull.Value)
                             {
                                 str = "0";
-                            }else{
+                            }
+                            else
+                            {
                                 str = val.ToString();
                                 str = str.Replace("￥", "");
                                 str = str.Replace(",", "");
                             }
 
                             ps.Add(attr.Key, double.Parse(str, System.Globalization.NumberStyles.Any));
-                           
+
                             break;
                         case DataType.AppDate: // 如果是日期类型。
                         case DataType.AppDateTime:

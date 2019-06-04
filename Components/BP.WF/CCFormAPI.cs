@@ -278,8 +278,8 @@ namespace BP.WF
             {
                 // 执行map同步.
                 Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
-                Entity en = ens.GetNewEntity;
-                en.DTSMapToSys_MapData();
+                Entity myen = ens.GetNewEntity;
+                myen.DTSMapToSys_MapData();
 
                 return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
 
@@ -298,14 +298,34 @@ namespace BP.WF
             //映射实体.
             MapData md = new MapData(frmID);
 
-            //实体.
-            GEEntity wk = new GEEntity(frmID);
-            wk.OID = int.Parse(pkval.ToString());
-            if (wk.RetrieveFromDBSources() == 0)
-                wk.Insert();
+            Map map = md.GenerHisMap();
+
+            Entity en = null;
+            if (map.Attrs.Contains("OID") == true)
+            {
+                //实体.
+                GEEntity wk = new GEEntity(frmID);
+                wk.OID = int.Parse(pkval.ToString());
+                if (wk.RetrieveFromDBSources() == 0)
+                    wk.Insert();
+
+                md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
+
+                en = wk;
+            }
+
+            if (map.Attrs.Contains("MyPK") == true)
+            {
+                //实体.
+                GEEntityMyPK wk = new GEEntityMyPK(frmID);
+                wk.MyPK = pkval.ToString();
+                if (wk.RetrieveFromDBSources() == 0)
+                    wk.Insert();
+                md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
+                en = wk;
+            }
 
             //加载事件.
-            md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
 
             //把参数放入到 En 的 Row 里面。
             if (DataType.IsNullOrEmpty(atParas) == false)
@@ -313,10 +333,10 @@ namespace BP.WF
                 AtPara ap = new AtPara(atParas);
                 foreach (string key in ap.HisHT.Keys)
                 {
-                    if (wk.Row.ContainsKey(key) == true) //有就该变.
-                        wk.Row[key] = ap.GetValStrByKey(key);
+                    if (en.Row.ContainsKey(key) == true) //有就该变.
+                        en.Row[key] = ap.GetValStrByKey(key);
                     else
-                        wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                        en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
                 }
             }
 
@@ -424,7 +444,7 @@ namespace BP.WF
                     {
                         string fullSQL = me.Doc.Clone() as string;
                         fullSQL = fullSQL.Replace("~", ",");
-                        fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
+                        fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
                         dt = DBAccess.RunSQLReturnTable(fullSQL);
 
@@ -456,17 +476,17 @@ namespace BP.WF
                 // 处理传递过来的参数。
                 foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
                 {
-                    wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
                 }
             }
 
             // 执行表单事件..
-            string msg = md.DoEvent(FrmEventList.FrmLoadBefore, wk);
+            string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
             if (DataType.IsNullOrEmpty(msg) == false)
                 throw new Exception("err@错误:" + msg);
 
             //重设默认值.
-            wk.ResetDefaultVal();
+            en.ResetDefaultVal();
 
             //执行装载填充.
             me = new MapExt();
@@ -475,11 +495,11 @@ namespace BP.WF
                 //执行通用的装载方法.
                 MapAttrs attrs = new MapAttrs(frmID);
                 MapDtls dtls = new MapDtls(frmID);
-                wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as GEEntity;
+                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
             }
 
             //增加主表数据.
-            DataTable mainTable = wk.ToDataTableField(md.No);
+            DataTable mainTable = en.ToDataTableField(md.No);
             mainTable.TableName = "MainTable";
             myds.Tables.Add(mainTable);
 
@@ -501,27 +521,36 @@ namespace BP.WF
 
                 GEDtls dtls = new GEDtls(dtl.No);
                 QueryObject qo = null;
-                try
+
+                if (dtl.RefPK == "")
                 {
-                    qo = new QueryObject(dtls);
-                    switch (dtl.DtlOpenType)
+                    try
                     {
-                        case DtlOpenType.ForEmp:  // 按人员来控制.
-                            qo.AddWhere(GEDtlAttr.RefPK, pkval);
-                            qo.addAnd();
-                            qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
-                            break;
-                        case DtlOpenType.ForWorkID: // 按工作ID来控制
-                            qo.AddWhere(GEDtlAttr.RefPK, pkval);
-                            break;
-                        case DtlOpenType.ForFID: // 按流程ID来控制.
-                            qo.AddWhere(GEDtlAttr.FID, pkval);
-                            break;
+                        qo = new QueryObject(dtls);
+                        switch (dtl.DtlOpenType)
+                        {
+                            case DtlOpenType.ForEmp:  // 按人员来控制.
+                                qo.AddWhere(GEDtlAttr.RefPK, pkval);
+                                qo.addAnd();
+                                qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
+                                break;
+                            case DtlOpenType.ForWorkID: // 按工作ID来控制
+                                qo.AddWhere(GEDtlAttr.RefPK, pkval);
+                                break;
+                            case DtlOpenType.ForFID: // 按流程ID来控制.
+                                qo.AddWhere(GEDtlAttr.FID, pkval);
+                                break;
+                        }
+                    }
+                    catch
+                    {
+                        dtls.GetNewEntity.CheckPhysicsTable();
                     }
                 }
-                catch
+                else
                 {
-                    dtls.GetNewEntity.CheckPhysicsTable();
+                    qo = new QueryObject(dtls);
+                    qo.AddWhere(dtl.RefPK, pkval);
                 }
 
                 //条件过滤.
@@ -590,7 +619,7 @@ namespace BP.WF
                 {
                     string fullSQL = me.Doc.Clone() as string;
                     fullSQL = fullSQL.Replace("~", ",");
-                    fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
+                    fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
                     dt = DBAccess.RunSQLReturnTable(fullSQL);
                     dt.TableName = myPK; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
                     myds.Tables.Add(dt);

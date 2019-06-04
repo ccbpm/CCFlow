@@ -523,8 +523,8 @@ namespace BP.Sys
                     case FieldTypeS.FK:
                         attr.UIContralType = this.UIContralType;
                         attr.MyFieldType = FieldType.FK;
-                        attr.UIRefKeyValue = "No";
-                        attr.UIRefKeyText = "Name";
+                        //attr.UIRefKeyValue = "No";
+                        //attr.UIRefKeyText = "Name";
                         attr.UIIsReadonly = this.UIIsEnable;
                         break;
                     default:

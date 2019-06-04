@@ -2812,7 +2812,7 @@ namespace BP.WF.HttpHandler
             ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
             ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
 
-            ht.Add("GroupNo", WebUser.GroupNo);
+          //  ht.Add("GroupNo", WebUser.GroupNo);
             ht.Add("SID", WebUser.SID);
 
             return BP.Tools.Json.ToJson(ht);

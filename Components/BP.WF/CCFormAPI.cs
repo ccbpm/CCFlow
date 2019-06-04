@@ -807,7 +807,7 @@ namespace BP.WF
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
                         qo.addLeftBracket();
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval);
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
                         qo.addOr();
                         qo.AddWhere(GEDtlAttr.FID, pkval);
                         qo.addRightBracket();
@@ -887,6 +887,42 @@ namespace BP.WF
                     }
                 }
                 #endregion 修改区分大小写.
+
+
+                #region 修改区分大小写.
+                if (BP.DA.DBType.PostgreSQL == SystemConfig.AppCenterDBType)
+                {
+                    foreach (DataColumn dr in dtDtl.Columns)
+                    {
+                        var a = attr.KeyOfEn;
+                        var b = dr.ColumnName;
+                        if (attr.KeyOfEn.ToLower().Equals(dr.ColumnName))
+                        {
+                            dr.ColumnName = attr.KeyOfEn;
+                            continue;
+                        }
+
+                        if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
+                        {
+                            if (dr.ColumnName.Equals(attr.KeyOfEn.ToLower() + "TEXT"))
+                            {
+                                dr.ColumnName = attr.KeyOfEn + "Text";
+                            }
+                        }
+                    }
+                    foreach (DataRow dr in dtDtl.Rows)
+                    {
+                        //本身是大写的不进行修改
+                        if (DataType.IsNullOrEmpty(dr[attr.KeyOfEn] + ""))
+                        {
+                            dr[attr.KeyOfEn] = dr[attr.KeyOfEn.ToLower()];
+                            dr[attr.KeyOfEn.ToLower()] = null;
+                        }
+                    }
+                }
+                #endregion 修改区分大小写.
+
+               
 
                 if (attr.UIContralType == UIContralType.TB)
                     continue;

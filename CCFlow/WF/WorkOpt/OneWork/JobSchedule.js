@@ -36,20 +36,21 @@ $(function () {
 
         html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
     }
-    debugger
+    //debugger
     //流程未完成的状态.
     if (gwf.WFState != 3) {
 
         //当前停留的节点.
         var currNode = gwf.FK_Node;
 
+        var nodeName = "";
         for (var i = 0; i < 100; i++) {
+
             var nextNode = GetNextNodeID(currNode, dirs);
+            if (nextNode == 0)
+                break;
 
-            var nodeName = "";
             for (var idx = 0; idx < nodes.length; idx++) {
-                debugger
-
                 var nd = nodes[idx];
                 if (nd.NodeID == nextNode) {
                     nodeName = nd.Name;
@@ -57,9 +58,10 @@ $(function () {
                 }
             }
 
-            var doc = "<b><i>" + nodeName+"</i></b>";
-            doc += "<br>" ;
-            doc += "<br>" ;
+            var doc = "<b><i>" + nodeName + "</i></b>";
+            doc += "<br>";
+            doc += "<br>";
+            doc += "<br>";
 
             step = step + 1;
             currNode = nextNode;
@@ -92,30 +94,28 @@ $(function () {
 
 function GenerIcon(icon, step, docs, isEndNode) {
 
-
     var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
-
 
     var barUrlLeft = "";
     var barUrlRight = "";
 
     if (icon == 'DotGreen') {
-        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;' />";
-        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;' />";
+        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
+        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
     }
 
     if (icon == "DotBlue") {
 
-        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;' />";
-        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;' />";
+        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
+        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
 
         if (step == 1)
             barUrlLeft = "";
     }
 
     if (icon == 'DotEnd') {
-        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGiay.png' style='width:100%;' />";
-        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGiay.png' style='width:100%;' />";
+        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGiay.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
+        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGiay.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
     }
 
     if (isEndNode == true)
@@ -135,17 +135,15 @@ function GenerIcon(icon, step, docs, isEndNode) {
     html += "</table>";
 
     return html;
-
 }
 
 function GenerStart() {
     var str = "<div><img src='" + basePath + "/WF/WorkOpt/OneWork/Img/DotGreen1.png' /></div>";
 }
 
-
 //根据当前节点获得下一个节点.
 function GetNextNodeID(nodeID, dirs) {
-    debugger
+ //   debugger
 
     var toNodeID = 0;
     for (var i = 0; i < dirs.length; i++) {

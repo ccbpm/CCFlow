@@ -1898,6 +1898,11 @@ namespace BP.WF.HttpHandler
             }
             #endregion 安全性校验.
 
+            if (this.DoWhat.Equals("PortLogin") == true)
+            {
+                return "登陆成功";
+            }
+
             #region 生成参数串.
             string paras = "";
             foreach (string str in this.context.Request.QueryString)

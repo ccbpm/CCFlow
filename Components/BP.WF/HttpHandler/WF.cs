@@ -1889,7 +1889,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Dev2Interface.Port_SigOut();
                 try
                 {
-                    BP.WF.Dev2Interface.Port_Login(this.UserNo, this.SID);
+                    BP.WF.Dev2Interface.Port_Login(this.UserNo);
                 }
                 catch (Exception ex)
                 {
@@ -1991,6 +1991,10 @@ namespace BP.WF.HttpHandler
             //请求在途.
             if (this.DoWhat.Equals(DoWhatList.Runing) == true)
                 return "url@Runing.htm?FK_Flow=" + this.FK_Flow;
+
+            //请求在途.
+            if (this.DoWhat.Equals("Home") == true)
+                return "url@Home.htm?FK_Flow=" + this.FK_Flow;
 
             //请求在途.
             if (this.DoWhat.Equals(DoWhatList.Runing) == true)

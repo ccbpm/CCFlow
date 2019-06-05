@@ -1645,7 +1645,9 @@ namespace BP.DA
 
             sql = sql.Replace("@GO", "~");
             sql = sql.Replace("@", "~");
-            sql = sql.Replace(";", "~");
+
+            if (sql.Contains("';'")==false)
+              sql = sql.Replace(";", "~");
 
             sql = sql.Replace("UPDATE", "~UPDATE");
             sql = sql.Replace("DELETE", "~DELETE");

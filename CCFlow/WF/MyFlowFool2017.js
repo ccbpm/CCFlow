@@ -198,6 +198,7 @@ function InitThreeColMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
         colSpan = attr.ColSpan;
         textColSpan = attr.TextColSpan;
 
+
         colWidth = 33 * parseInt(colSpan) + "%";
         textWidth = 33 * parseInt(textColSpan) + "%";
 

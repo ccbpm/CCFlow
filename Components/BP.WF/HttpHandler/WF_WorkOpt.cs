@@ -2576,7 +2576,7 @@ namespace BP.WF.HttpHandler
             else
             {
                 //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
-                sql = "SELECT distinct A.No,A.Name, '" + fk_dept + "' as FK_Dept, Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
+                sql = "SELECT distinct A.No,A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
                 sql += " ORDER BY A.Idx ";
             }
 

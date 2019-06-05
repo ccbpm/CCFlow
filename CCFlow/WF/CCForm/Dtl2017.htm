@@ -32,6 +32,7 @@
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Data/JSLibData/CovertMoneyToDaXie.js" type="text/javascript"></script>
     <script src="../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
+    <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
     <style type="text/css">
         .errorInput {
             border-color: red !important;
@@ -429,6 +430,30 @@
             mapExts = sys_mapExtDtl;
             var dbDtl = data["DBDtl"]; //从表数据.
 
+            var uiBindKeys = data["UIBindKey"];
+            if (uiBindKeys.length != 0) {
+                //获取外部数据源 handler/JavaScript
+                var operdata;
+                for (var i = 0; i < uiBindKeys.length; i++) {
+                    var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+                    var srcType = sfTable.SrcType;
+                    if (srcType != null && srcType!="") {
+                        //Handler 获取外部数据源
+                        if (srcType == 5) {
+                            var selectStatement = sfTable.SelectStatement;
+                            selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                            operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                        }
+                        //JavaScript获取外部数据源
+                        if (srcType == 6) {
+                           operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                        }
+                        data[uiBindKeys[i].No] = operdata;
+                    }
+                }
+
+            }
+
             $('#dtlDiv div table tbody').html(''); //清空表格数据
 
             if (sys_MapDtl.ShowCols) {
@@ -644,6 +669,8 @@
                                     if (o.data().UIIsEnable == "0") {
                                         var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
                                         var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
+                                        if (ddlText == undefined)
+                                            ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"] ;
                                         var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
                                         $(tmplate).children().remove();
                                         $(tmplate).append(option);
@@ -1154,6 +1181,12 @@
             });
         }
 
+        function ChangeValue(obj) {
+            //获取他的兄弟节点
+            var s = $(obj).prev();
+            $(s).val(obj.options[obj.selectedIndex].text);
+
+        }
 
         //升级表单元素 初始化文本框、日期、时间
         function figure_MapAttr_Template(mapAttr) {
@@ -1173,12 +1206,14 @@
 
                     if (mapAttr.LGType == 2) {
                         eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+
                     } else {
                         //添加文本框 ，日期控件等
                         //AppString   
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
+                                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + " onChange='ChangeValue(this)'>" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                             } else {//文本区域
                                 if (mapAttr.UIHeight <= 40) {
                                     eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
@@ -1219,6 +1254,7 @@
 
                         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
                             if (mapAttr.UIContralType == 1) {//DDL
+                                
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                             }
                         }
@@ -2022,128 +2058,22 @@
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(workNodeData, mapAttr, defVal) {
             var operations = '';
-            var operations = '';
-            //外键类型.
-            if (mapAttr.LGType == 2) {
+            var data = workNodeData[mapAttr.KeyOfEn];
+            if (data == undefined)
+                data = workNodeData[mapAttr.UIBindKey];
 
-                var data = workNodeData[mapAttr.KeyOfEn];
-                if (data == undefined)
-                    data = workNodeData[mapAttr.UIBindKey];
-
-                if (data == undefined) {
-                    var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-                    if (sfTable != null && sfTable != "") {
-                        var selectStatement = sfTable.SelectStatement;
-                        var srcType = sfTable.SrcType;
-                        //Handler 获取外部数据源
-                        if (srcType == 5)
-                            data = DBAccess.RunDBSrc(selectStatement, 1);
-                        //JavaScript获取外部数据源
-                        if (srcType == 6)
-                            data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-                    }
-                }
-
-                if (data == undefined) {
-                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-                    return;
-                }
-
-                $.each(data, function (i, obj) {
-                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                });
+            if (data == undefined)
                 return operations;
-            }
-
-
-            //枚举类型.
-            if (mapAttr.LGType == 1) {
-                var data = workNodeData[mapAttr.KeyOfEn];
-                if (data == undefined)
-                    data = workNodeData[mapAttr.UIBindKey];
-                if (data != undefined) {
-
-                    $.each(data, function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
-                }
-                return operations;
-            }
-
-
-           
-
-            //外部数据源类型 FrmGener.js.InitDDLOperation
-            if (mapAttr.LGType == 0) {
-
-                //如果是一个函数.
-                var fn;
-                try {
-                    if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
-                    }
-                } catch (e) {
-                    //alert(e);
-                }
-
-                if (typeof fn == "function") {
-                    $.each(fn.call(), function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
-                    return operations;
-                }
-
-                var data = workNodeData[mapAttr.KeyOfEn];
-                if (data == undefined)
-                    data = workNodeData[mapAttr.UIBindKey];
-
-                if (data == undefined) {
-                    var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-                    if (sfTable != null && sfTable != "") {
-                        var selectStatement = sfTable.SelectStatement;
-                        var srcType = sfTable.SrcType;
-                        // SQL获取外部数据源
-                        if (srcType == 3)
-                            data = DBAccess.RunDBSrc(selectStatement, 0);
-                        //WebService 获取外部数据源
-                        if (srcType == 5) {
-                            data = SFTaleHandler(selectStatement);
-                            if (data == "false") {
-                                alert(mapAttr.KeyOfEn + "外部数据源获取错误");
-                                return;
-                            }
-
-                            data = JSON.parse(data);
-                        }
-                        //JavaScript获取外部数据源
-                        if (srcType == 6)
-                            data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-
-                    }
-                }
-                if (data == undefined) {
-                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-                    return;
-                }
-
-                $.each(data, function (i, obj) {
-                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-
-                });
-                if (mapAttr.UIIsInput == 0)
+            
+             if (mapAttr.UIIsInput == 0)
                     operations = "<option value=''>- 请选择 -</option>" + operations;
-                return operations;
 
-                if (mapAttr.UIIsEnable == 0) {
+            $.each(data, function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
 
-                    alert('不可编辑');
-                    operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
-                    return operations;
-                }
-
-
-            }
             return operations;
+           
         }
 
         //填充默认数据

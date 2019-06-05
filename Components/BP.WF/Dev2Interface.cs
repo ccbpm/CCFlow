@@ -2166,8 +2166,50 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
 
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["TYPE"].ColumnName="Type";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["TITLE"].ColumnName = "Title";
+
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                dt.Columns["PFLOWNO"].ColumnName = "PflowNo";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+
+                dt.Columns["PNODEID"].ColumnName = "PNodeID";
+                dt.Columns["PEMP"].ColumnName = "PEmp";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["DOMAIN"].ColumnName = "Domain";
+                dt.Columns["SENDDT"].ColumnName = "SendDT";
+                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+            }
+            return dt;
         }
         /// <summary>
         /// 获取某一个人已完成的工作

@@ -60,47 +60,13 @@ namespace BP.EAI.Plugins.WXin
             string access_token = getAccessToken();
             string url = URL + "access_token=" + access_token;
 
-            HttpWebResponse response = new HttpWebResponseUtility().WXCreateGetHttpResponse(url, parameters, 10000, null, Encoding.UTF8, null);
+            HttpWebResponse response = new HttpWebResponseUtility().WXCreateGetHttpResponse(url, parameters,
+                10000, null, Encoding.UTF8, null);
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             string str = reader.ReadToEnd();
-            WriteLog(url + "----------------" + parameters + "---------------" + str);
+            
+            BP.DA.Log.DebugWriteInfo(url + "----------------" + parameters + "---------------" + str);
             return str;
-        }
-        #endregion
-
-        #region 记录相关交互日志
-        /// 写日志(用于跟踪)
-        /// </summary>
-        private void WriteLog(string strMemo)
-        {
-            return;
-
-            //if (!Directory.Exists(System.Web.HttpContext.Current.Server.MapPath(@"logs\")))
-            //{
-            //    Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(@"logs\"));
-            //}
-            //string filename = System.Web.HttpContext.Current.Server.MapPath(@"logs/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt");
-            //StreamWriter sr = null;
-            //try
-            //{
-            //    if (!File.Exists(filename))
-            //    {
-            //        sr = File.CreateText(filename);
-            //    }
-            //    else
-            //    {
-            //        sr = File.AppendText(filename);
-            //    }
-            //    sr.WriteLine(strMemo);
-            //}
-            //catch
-            //{
-            //}
-            //finally
-            //{
-            //    if (sr != null)
-            //        sr.Close();
-            //}
         }
         #endregion
 

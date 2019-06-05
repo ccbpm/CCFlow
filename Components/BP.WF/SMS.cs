@@ -671,15 +671,15 @@ namespace BP.WF
                             soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
                             //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, "17699430990", this.MobileInfo, tag, this.Title, this.OpenURL);
 
-
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
                             soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
-                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToWeiXin(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                            //写入微信.
+                            BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo,this.Title,this.Doc, WebUser.No );
+
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

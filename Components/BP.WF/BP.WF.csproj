@@ -385,6 +385,10 @@
     <Compile Include="UnitTesting\TestData\TestSample.cs" />
     <Compile Include="UnitTesting\TestData\TestVer.cs" />
     <Compile Include="UnitTesting\Etc\YGFlow.cs" />
+    <Compile Include="WeiXin\WeinXinModel.cs" />
+    <Compile Include="WeiXin\WeiXin.cs" />
+    <Compile Include="WeiXin\WeiXinMessage.cs" />
+    <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

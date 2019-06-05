@@ -44,17 +44,7 @@ $(function () {
             $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
-    //    else {
-    //        //新加
-    //        //计算高度，展示滚动条
-    //        var height = $(window).height() - 150;
-    //        $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
-    //        $('#topContentDiv').height(height);
-
-    //        $(window).resize(function () {
-    //            $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
-    //        });
-    //    }
+  
     function movetb() {
         var move;
         $("#nav").css("top", top);
@@ -62,9 +52,6 @@ $(function () {
     $('#btnCloseMsg').bind('click', function () {
         $('.Message').hide();
     });
-
-    //    setAttachDisabled();
-    //    setFormEleDisabled();
 
     SetHegiht();
     //打开表单检查正则表达式
@@ -196,6 +183,31 @@ function GenerFrm() {
         alert(" frmData数据转换JSON失败:" + data);
         console.log(data);
         return;
+    }
+
+    //获取没有解析的外部数据源
+    var uiBindKeys = frmData["UIBindKey"];
+    if (uiBindKeys.length != 0) {
+        //获取外部数据源 handler/JavaScript
+        var operdata;
+        for (var i = 0; i < uiBindKeys.length; i++) {
+            var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+            var srcType = sfTable.SrcType;
+            if (srcType != null && srcType != "") {
+                //Handler 获取外部数据源
+                if (srcType == 5) {
+                    var selectStatement = sfTable.SelectStatement;
+                    selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                }
+                //JavaScript获取外部数据源
+                if (srcType == 6) {
+                    operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                }
+                frmData[uiBindKeys[i].No] = operdata;
+            }
+        }
+
     }
 
     //获得sys_mapdata.
@@ -384,7 +396,7 @@ function GenerFrm() {
     if(pageData.IsReadonly != "1")
         AfterBindEn_DealMapExt(frmData);
 
-    ShowNoticeInfo();
+    //ShowNoticeInfo();
 
     ShowTextBoxNoticeInfo();
 
@@ -620,123 +632,16 @@ function GepParaByName(name, atPara) {
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(frmData, mapAttr, defVal) {
     var operations = '';
-    //外键类型.
-    if (mapAttr.LGType == 2) {
-
-        var data = frmData[mapAttr.KeyOfEn];
-        if (data == undefined)
-            data = frmData[mapAttr.UIBindKey];
-
-        if (data == undefined) {
-            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-            if (sfTable != null && sfTable != "") {
-                var selectStatement = sfTable.SelectStatement;
-                var srcType = sfTable.SrcType;
-                //Handler 获取外部数据源
-                if (srcType == 5)
-                    data = DBAccess.RunDBSrc(selectStatement, 1);
-                //JavaScript获取外部数据源
-                if (srcType == 6)
-                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-            }
-        }
-
-        if (data == undefined) {
-            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-            return;
-        }
-
-        $.each(data, function (i, obj) {
-            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-        });
-        return operations;
-    }
-
-
-    //枚举类型.
-    if (mapAttr.LGType == 1) {
-        var enums = frmData.Sys_Enum;
-
-        enums = $.grep(enums, function (value) {
-            return value.EnumKey == mapAttr.UIBindKey;
-        });
-
-        $.each(enums, function (i, obj) {
-            operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-        });
-        return operations;
-    }
-
-    //外部数据源类型 FrmGener.js.InitDDLOperation
-    if (mapAttr.LGType == 0) {
-
-        //如果是一个函数.
-        var fn;
-        try {
-            if (mapAttr.UIBindKey) {
-                fn = eval(mapAttr.UIBindKey);
-            }
-        } catch (e) {
-            //alert(e);
-        }
-
-        if (typeof fn == "function") {
-            $.each(fn.call(), function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-            return operations;
-        }
-
-        var data = frmData[mapAttr.KeyOfEn];
-        if (data == undefined)
-            data = frmData[mapAttr.UIBindKey];
-
-        if (data == undefined) {
-            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-            if (sfTable != null && sfTable != "") {
-                var selectStatement = sfTable.SelectStatement;
-                var srcType = sfTable.SrcType;
-                // SQL获取外部数据源
-                if (srcType == 3)
-                    data = DBAccess.RunDBSrc(selectStatement, 0);
-                //WebService 获取外部数据源
-                if (srcType == 5) {
-                    data = SFTaleHandler(selectStatement);
-                    if (data == "false") {
-                        alert(mapAttr.KeyOfEn+"外部数据源获取错误");
-                        return;
-                    }
-                      
-                    data = JSON.parse(data);
-                }
-                //JavaScript获取外部数据源
-                if (srcType == 6)
-                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-
-            }
-        }
-        if (data == undefined) {
-            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-            return;
-        }
-
-        $.each(data, function (i, obj) {
-            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-
-        });
-        if (mapAttr.UIIsInput == 0)
-            operations = "<option value=''>- 请选择 -</option>" + operations;
+    var data = frmData[mapAttr.KeyOfEn];
+    if (data == undefined)
+        data = frmData[mapAttr.UIBindKey];
+    if (data == undefined)
         return operations;
 
-        if (mapAttr.UIIsEnable == 0) {
-
-            alert('不可编辑');
-            operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
-            return operations;
-        }
-
-
-    }
+    $.each(data, function (i, obj) {
+        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+    });
+    return operations;
 }
 
 

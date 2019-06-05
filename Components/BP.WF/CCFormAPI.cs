@@ -695,15 +695,14 @@ namespace BP.WF
             MapExts mes = dtl.MapExts;
             MapExt me = null;
 
+            DataTable ddlTable = new DataTable();
+            ddlTable.Columns.Add("No");
             foreach (DataRow dr in Sys_MapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
                 string ctrlType = dr[MapAttrAttr.UIContralType].ToString();
 
-                ////不是枚举/外键字段
-                //if (lgType.Equals("0") && ctrlType.Equals("0") )
-                //    continue;
-
+                //没有绑定外键
                 string uiBindKey = dr["UIBindKey"].ToString();
                 if (DataType.IsNullOrEmpty(uiBindKey) == true)
                     continue;
@@ -763,10 +762,22 @@ namespace BP.WF
 
                 // 获得数据.
                 DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
-                myds.Tables.Add(mydt);
 
+                if (mydt == null)
+                {
+                    DataRow ddldr = ddlTable.NewRow();
+                    ddldr["No"] = uiBindKey;
+                    ddlTable.Rows.Add(ddldr);
+                }
+                else
+                {
+                    myds.Tables.Add(mydt);
+                }
+               
                 #endregion 外键字段
             }
+            ddlTable.TableName = "UIBindKey";
+            myds.Tables.Add(ddlTable);
             #endregion 把从表的- 外键表/枚举 加入 DataSet.
 
 

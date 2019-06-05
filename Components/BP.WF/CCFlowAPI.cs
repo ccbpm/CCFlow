@@ -712,6 +712,9 @@ namespace BP.WF
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
                 MapExts mes = md.MapExts;
+                DataTable ddlTable = new DataTable();
+                ddlTable.Columns.Add("No");
+
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
@@ -764,9 +767,22 @@ namespace BP.WF
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    if (BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey) != null)
-                        myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                    DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    if (mydt == null)
+                    {
+                        DataRow ddldr = ddlTable.NewRow();
+                        ddldr["No"] = uiBindKey;
+                        ddlTable.Rows.Add(ddldr);
+                    }
+                    else
+                    {
+                        myds.Tables.Add(mydt);
+                    }
+
+                    
                 }
+                ddlTable.TableName = "UIBindKey";
+                myds.Tables.Add(ddlTable);
                 #endregion End把外键表加入DataSet
 
                 #region 处理流程-消息提示.

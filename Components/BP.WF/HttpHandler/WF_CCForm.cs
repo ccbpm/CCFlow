@@ -1298,6 +1298,9 @@ namespace BP.WF.HttpHandler
                 #region 把外键表加入DataSet.
                 DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
                 MapExts mes = md.MapExts;
+                DataTable ddlTable = new DataTable();
+                ddlTable.Columns.Add("No");
+
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();
@@ -1341,7 +1344,15 @@ namespace BP.WF.HttpHandler
                     DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
+                    else
+                    {
+                        DataRow ddldr = ddlTable.NewRow();
+                        ddldr["No"] = uiBindKey;
+                        ddlTable.Rows.Add(ddldr);
+                    }
                 }
+                ddlTable.TableName = "UIBindKey";
+                ds.Tables.Add(ddlTable);
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.

@@ -1,4 +1,5 @@
 ﻿
+var step = 0;
 $(function () {
     var workid = GetQueryString("WorkID");
 
@@ -15,20 +16,24 @@ $(function () {
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
 
+    var step = 0;
     //循环历史记录.
     for (var i = 0; i < tracks.length; i++) {
+
         var tk = tracks[i];
 
-        var doc="<br><b>" + tk.NodeName + "</b>";
+        var doc = "<br><b>" + tk.NodeName + "</b>";
         doc += "<br>" + tk.EmpName;
         doc += "<br>" + tk.RDT.substring(0, 16);
 
         var info = "";
         if (tk.FK_Node == gwf.FK_Node)
-              info = GenerIcon("DotGreen", i + 1, doc);
+            info = GenerIcon("DotGreen", i + 1, doc);
         else
-              info = GenerIcon("DotBlue", i + 1, doc); 
-        
+            info = GenerIcon("DotBlue", i + 1, doc);
+
+        step = i + 1;
+
         html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
     }
     debugger
@@ -39,14 +44,11 @@ $(function () {
         var currNode = gwf.FK_Node;
 
         for (var i = 0; i < 100; i++) {
-
             var nextNode = GetNextNodeID(currNode, dirs);
-            if (nextNode == 0)
-                break;
 
-            var info = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/DotGiay.png' />";
             var nodeName = "";
             for (var idx = 0; idx < nodes.length; idx++) {
+                debugger
 
                 var nd = nodes[idx];
                 if (nd.NodeID == nextNode) {
@@ -55,16 +57,27 @@ $(function () {
                 }
             }
 
-            info += "<br>" + nodeName;
+            var doc = "<b><i>" + nodeName+"</i></b>";
+            doc += "<br>" ;
+            doc += "<br>" ;
+
+            step = step + 1;
+            currNode = nextNode;
+
+            if (nextNode == 0)
+                var info = GenerIcon("DotEnd", step, doc, true);
+            else
+                var info = GenerIcon("DotEnd", step, doc, false);
 
             html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
 
-            currNode = nextNode;
+            if (nextNode == 0)
+                break;
         }
     }
 
-   // var info = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/DotEnd.png' />";
-   // html += "<td style='text-align:center;vertical-align:top;'>" + info + "<br>结束</td>";
+    // var info = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/DotEnd.png' />";
+    // html += "<td style='text-align:center;vertical-align:top;'>" + info + "<br>结束</td>";
 
     html += "</tr>";
     html += "</table>";
@@ -77,13 +90,14 @@ $(function () {
 });
 
 
-function GenerIcon(icon, step, docs) {
+function GenerIcon(icon, step, docs, isEndNode) {
 
-    var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-"+step+".png";
+
+    var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
+
 
     var barUrlLeft = "";
     var barUrlRight = "";
-
 
     if (icon == 'DotGreen') {
         barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;' />";
@@ -98,6 +112,14 @@ function GenerIcon(icon, step, docs) {
         if (step == 1)
             barUrlLeft = "";
     }
+
+    if (icon == 'DotEnd') {
+        barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGiay.png' style='width:100%;' />";
+        barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGiay.png' style='width:100%;' />";
+    }
+
+    if (isEndNode == true)
+        barUrlRight = "";
 
     var html = "";
     html += "<table style='height:100px;width: 100%; table-layout: fixed;border:none;margin:0px; padding:0px;'>";

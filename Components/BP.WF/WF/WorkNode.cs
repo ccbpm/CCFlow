@@ -7745,6 +7745,7 @@ namespace BP.WF
         }
         /// <summary>
         /// 向他们发送消息
+        /// 
         /// </summary>
         /// <param name="gwls">接收人</param>
         public void SendMsgToThem(GenerWorkerLists gwls)
@@ -8634,72 +8635,6 @@ namespace BP.WF
 
             WorkNode wn = new WorkNode(wk, nd);
             return wn;
-
-
-            //WorkNodes wns = new WorkNodes();
-            //Nodes nds = this.HisNode.FromNodes;
-            //foreach (Node nd in nds)
-            //{
-            //    switch (this.HisNode.HisNodeWorkType)
-            //    {
-            //        case NodeWorkType.WorkHL: /* 如果是合流 */
-            //            if (this.IsSubFlowWorkNode == false)
-            //            {
-            //                /* 如果不是线程 */
-            //                Node pnd = nd.HisPriFLNode;
-            //                if (pnd == null)
-            //                    throw new Exception("@没有取道它的上一步骤的分流节点，请确认设计是否错误？");
-
-            //                Work wk1 = (Work)pnd.HisWorks.GetNewEntity;
-            //                wk1.OID = this.HisWork.OID;
-            //                if (wk1.RetrieveFromDBSources() == 0)
-            //                    continue;
-            //                WorkNode wn11 = new WorkNode(wk1, pnd);
-            //                return wn11;
-            //                break;
-            //            }
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    Work wk = (Work)nd.HisWorks.GetNewEntity;
-            //    wk.OID = this.HisWork.OID;
-            //    if (wk.RetrieveFromDBSources() == 0)
-            //        continue;
-
-            //    string table = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
-            //    string actionSQL = "SELECT EmpFrom,EmpFromT,RDT FROM " + table + " WHERE WorkID=" + this.WorkID + " AND NDFrom=" + nd.NodeID + " AND ActionType=" + (int)ActionType.Forward;
-            //    DataTable dt = DBAccess.RunSQLReturnTable(actionSQL);
-            //    if (dt.Rows.Count == 0)
-            //        continue;
-
-            //    wk.Rec = dt.Rows[0]["EmpFrom"].ToString();
-            //    wk.RecText = dt.Rows[0]["EmpFromT"].ToString();
-            //    wk.SetValByKey("RDT", dt.Rows[0]["RDT"].ToString());
-
-            //    WorkNode wn = new WorkNode(wk, nd);
-            //    wns.Add(wn);
-            //}
-            //switch (wns.Count)
-            //{
-            //    case 0:
-            //        throw new Exception("没有找到他的上一步工作，系统错误，请通知管理员来处理，请上让上一步处理人撤消发送、或者用本区县管理员用户登陆=》待办工作=》流程查询=》在关键字中输入Workid其它条件选择全部，查询到该流程删除它。 @WorkID=" + this.WorkID);
-            //    case 1:
-            //        return (WorkNode)wns[0];
-            //    default:
-            //        break;
-            //}
-            //Node nd1 = wns[0].HisNode;
-            //Node nd2 = wns[1].HisNode;
-            //if (nd1.FromNodes.Contains(NodeAttr.NodeID, nd2.NodeID))
-            //{
-            //    return wns[0];
-            //}
-            //else
-            //{
-            //    return wns[1];
-            //}
         }
         #endregion
     }

@@ -2168,6 +2168,7 @@ namespace BP.WF
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
 
+            //@史连雨,需要翻译.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["TYPE"].ColumnName="Type";

@@ -54,7 +54,6 @@ namespace BP.WF
         /// 错误信息
         /// </summary>
         public const string Err = "Err";
-
     }
     /// <summary>
     /// 消息状态

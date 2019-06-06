@@ -136,9 +136,6 @@
     <Reference Include="Npgsql">
       <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
     </Reference>
-    <Reference Include="StackExchange.Redis">
-      <HintPath>..\..\RefDLL\StackExchange.Redis.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

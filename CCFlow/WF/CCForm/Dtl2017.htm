@@ -610,14 +610,20 @@
                                 if (sys_MapDtl.EditModel != 0) {
                                     tmplate.attr("disabled", "disabled");
                                 }
-                                if (tmplate.length >= 2 && tmplate[1].nodeName == "SPAN") {
-                                    $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn });
+                                if (tmplate.length >= 2) {
+                                    if (tmplate[1].nodeName == "SPAN") {
+                                        $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn });
 
-                                    //ID 设置为  id+'_1'
-                                    var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
-                                    //先写出 NAME   单选扭会出问题
-                                    $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + rowIndex);
-                                }else{
+                                        //ID 设置为  id+'_1'
+                                        var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
+                                        //先写出 NAME   单选扭会出问题
+                                        $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + rowIndex);
+                                    }
+                                    if (tmplate[1].nodeName == "INPUT") {
+                                        $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn + "T" });
+                                        $(tmplate[1]).data({ KeyOfEn: o.data().KeyOfEn });
+                                    }
+                                } else {
                                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
 
                                     //ID 设置为  id+'_1'
@@ -660,23 +666,29 @@
                                 $($(tbodyTrObj).children('td')[k]).text('');
                                 $($(tbodyTrObj).children('td')[k]).append(tmplate);
 
-                                if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {
+                                if (tmplate.attr('name') != undefined && tmplate.length == 1 && tmplate.attr('name').indexOf('TB_') == 0) {
                                     $(tmplate).bind('blur', function (obj) {
                                         $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
                                     });
-                                } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
+                                } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0 || (tmplate.length > 1 && $(tmplate[1]).attr('name').indexOf('DDL_') == 0)) {
                                     //对于只读的下拉框做如下处理  为只读的下拉框赋值.
                                     if (o.data().UIIsEnable == "0") {
                                         var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
                                         var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
-                                        if (ddlText == undefined)
-                                            ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"] ;
+                                        if (tmplate.length > 1)
+                                            ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"];
                                         var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
-                                        $(tmplate).children().remove();
-                                        $(tmplate).append(option);
+                                        if (tmplate.length > 1) {
+                                            $(tmplate[1]).children().remove();
+                                            $(tmplate[1]).append(option);
+                                        } else {
+                                            $(tmplate).children().remove();
+                                            $(tmplate).append(option);
+                                        }
                                     } else {
                                         $(tmplate).bind('change', function (obj) {
                                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
+
                                         });
                                     }
                                 } else if (tmplate.attr('name') == undefined && tmplate.find('[name^=CB_]').length == 1) {
@@ -1185,6 +1197,7 @@
             //获取他的兄弟节点
             var s = $(obj).prev();
             $(s).val(obj.options[obj.selectedIndex].text);
+            $(obj).parent().parent().data().data[$(obj).data().KeyOfEn + "T"] = obj.options[obj.selectedIndex].text;
 
         }
 

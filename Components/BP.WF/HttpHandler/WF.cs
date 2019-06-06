@@ -941,6 +941,97 @@ namespace BP.WF.HttpHandler
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE Emps LIKE '%@" + WebUser.No + "@%' and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
+            //添加oracle的处理
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["PRI"].ColumnName = "PRI";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+                dt.Columns["TSPAN"].ColumnName = "TSpan";
+                dt.Columns["TOTOSTA"].ColumnName = "TodoSta";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["SENDDT"].ColumnName = "SendDT";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["PFID"].ColumnName = "PFID";
+                dt.Columns["PEMP"].ColumnName = "PEmp";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["MYNUM"].ColumnName = "MyNum";
+                dt.Columns["GUID"].ColumnName = "Guid";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["FK_NY"].ColumnName = "FK_NY";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FKLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["DOMAIN"].ColumnName = "Domain";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["pri"].ColumnName = "PRI";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["wfsta"].ColumnName = "WFSta";
+                dt.Columns["weeknum"].ColumnName = "WeekNum";
+                dt.Columns["tspan"].ColumnName = "TSpan";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+                dt.Columns["systype"].ColumnName = "SysType";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["senddt"].ColumnName = "SendDT";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["sdtofflow"].ColumnName = "SDTOfFlow";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["pfid"].ColumnName = "PFID";
+                dt.Columns["pemp"].ColumnName = "PEmp";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["mynum"].ColumnName = "MyNum";
+                dt.Columns["guid"].ColumnName = "Guid";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["fk_ny"].ColumnName = "FK_NY";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["emps"].ColumnName = "Emps";
+                dt.Columns["domain"].ColumnName = "Domain";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["billno"].ColumnName = "BillNo";
+            }
+   
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

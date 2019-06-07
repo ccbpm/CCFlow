@@ -180,7 +180,7 @@ namespace BP.Frm
         /// 创建空白的DictID.
         /// </summary>
         /// <returns></returns>
-        public string MyBill_CreateBlankDictID()
+        public string MyDict_CreateBlankDictID()
         {
             return BP.Frm.Dev2Interface.CreateBlankDictID(this.FrmID, BP.Web.WebUser.No, null).ToString();
         }
@@ -1011,7 +1011,7 @@ namespace BP.Frm
         {
             if (saveType == 0)
             {
-                string OID = MyBill_CreateBlankDictID();
+                string OID = MyDict_CreateBlankDictID();
                 en.OID = long.Parse(OID);
                 en.RetrieveFromDBSources();
             }

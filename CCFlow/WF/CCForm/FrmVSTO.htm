@@ -18,11 +18,27 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
+            var frmID = GetQueryString("FK_MapData");
+            if (frmID == null || frmID == undefined || frmID == "null")
+                frmID = GetQueryString("EnName");
+
+            if (frmID == null || frmID == undefined || frmID == "null")
+                frmID = GetQueryString("EnsName");
+
             var url = "excelform://-fromccflow,App=FrmExcel";
-            url += ",FK_MapData=" + GetQueryString("FK_MapData");
+            url += ",FK_MapData=" + frmID;
+
+            if (GetQueryString("MyPK") != null)
+                url += ",MyPK=" + GetQueryString("MyPK");
+
+            if (GetQueryString("No") != null)
+                url += ",No=" + GetQueryString("No");
+
+            if (GetQueryString("WorkID") != null)
+                url += ",WorkID=" + GetQueryString("WorkID");
+
             url += ",IsEdit=" + GetQueryString("IsEdit");
             url += ",IsPrint=" + GetQueryString("IsPrint");
-            url += ",WorkID=" + GetQueryString("WorkID");
             url += ",FK_Flow=" + GetQueryString("FK_Flow");
             url += ",FK_Node=" + GetQueryString("FK_Node");
             url += ",UserNo=" + GetQueryString("UserNo");
@@ -52,8 +68,8 @@
             var html1 = "<a href='" + url + "'>打开VSTO版本excel模式的表单</a>";
             $("#UrlOfVSTO").html(html1); //打开Excel表单.
 
-            var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
-            $("#UrlOfFrm").html(html1); //打开Excel表单.
+          //  var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
+           // $("#UrlOfFrm").html(html1); //打开Excel表单.
 
             $("#Msg").html("");
         });

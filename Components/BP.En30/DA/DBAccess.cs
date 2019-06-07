@@ -2812,11 +2812,28 @@ namespace BP.DA
                     return RunSQLReturnTable_201612_Ora(sql, pageSize, pageIdx, orderKey, orderType);
                 case DBType.MySQL:
                     return RunSQLReturnTable_201612_MySql(sql, pageSize, pageIdx, key, orderKey, orderType);
+                case DBType.PostgreSQL:
+                    return RunSQLReturnTable_201612_PostgreSQL(sql, pageSize, pageIdx, key, orderKey, orderType);
                 default:
                     throw new Exception("@未涉及的数据库类型！");
             }
         }
+        private static DataTable RunSQLReturnTable_201612_PostgreSQL(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
+        {
+            string sqlstr = string.Empty;
+            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
 
+            if (pageIdx < 1)
+                pageIdx = 1;
+            //    limit  A  offset  B;  A就是你需要多少行B就是查询的起点位置
+            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType == "ASC" ? " >= " : " <= ")
+                     + "(SELECT T2." + key + " FROM (" + sql + ") T2"
+                     + (string.IsNullOrWhiteSpace(orderKey)
+                            ? string.Empty
+                            : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
+                     + " LIMIT " + ((pageIdx - 1) * pageSize + 1) + " offset 1) LIMIT " + pageSize;
+            return RunSQLReturnTable(sqlstr);
+        }
         /// <summary>
         /// 通用SqlServer查询分页返回DataTable
         /// </summary>

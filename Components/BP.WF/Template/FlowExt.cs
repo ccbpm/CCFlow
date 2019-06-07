@@ -1872,7 +1872,11 @@ namespace BP.WF.Template
             foreach (Node nd in nds)
             {
                 if (nd.IsStartNode)
+                {
+                    nd.HisFormType = NodeFormType.FoolForm;
+                    nd.Update();                     
                     continue;
+                }
 
                 BP.WF.Template.FrmNodeComponent fnd = new FrmNodeComponent(nd.NodeID);
 
@@ -1880,16 +1884,21 @@ namespace BP.WF.Template
                 {
                     nd.FrmWorkCheckSta = FrmWorkCheckSta.Readonly;
                     nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
+                    nd.HisFormType = NodeFormType.FoolForm;
                     nd.Update();
 
                     fnd.Update();
                     continue;
                 }
 
+              //  fnd.HisFormType = NodeFormType.FoolForm;
+
                 fnd.Update(); //不执行更新，会导致部分字段错误.
 
                 nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
                 nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
+                nd.HisFormType = NodeFormType.FoolForm;
+
                 nd.Update();
             }
 

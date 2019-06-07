@@ -110,7 +110,7 @@
             if (frmBill.BtnPrintRTF == "") frmBill.BtnPrintRTF = "打印rtf";
             if (frmBill.BtnPrintCCWord == "") frmBill.BtnPrintCCWord = "打印CCWord";
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
-            
+
 
 
             //是初始化状态.
@@ -157,7 +157,7 @@
 
                 toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.MethodName + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "');\" />";
             }
-            
+
             if (webUser.No == 'admin') {
                 toolBar += "<input type='button' value='Setting' id='Btn_OpenSetting' onclick='OpenSetting();' />";
             }
@@ -350,7 +350,7 @@
                                 break;
                         }
                         break;
-                    //下拉框              
+                    //下拉框               
                     case "SELECT":
                         formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                         var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -361,7 +361,7 @@
                         }
                         break;
 
-                    //文本区域                      
+                    //文本区域                       
                     case "TEXTAREA":
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
@@ -460,10 +460,8 @@
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_Delete");
-            alert(data);
 
             window.location.href = 'SearchBill.htm?FrmID=' + GetQueryString("FrmID");
-            //window.close();
 
         }
 
@@ -474,10 +472,11 @@
         }
 
         function NewIt() {
+
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
-            window.location.href = 'MyBill.htm?FrmID=' + GetQueryString("FrmID") + "&FK_MapData=" + GetQueryString("FrmID");
+            window.location.href = 'MyBill.htm?FrmID=' + GetQueryString("FrmID") + "&WorkID=" + data;
 
         }
 
@@ -561,7 +560,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人                     
+                    //发送选择接收节点和接收人                      
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

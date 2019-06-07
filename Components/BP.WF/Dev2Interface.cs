@@ -8873,6 +8873,8 @@ namespace BP.WF
         /// <param name="Del_Selected">是否删除历史选择</param>
         public static void Node_AddNextStepAccepters(Int64 workID, int toNodeID, string fk_emp, bool del_Selected = true)
         {
+            if (DataType.IsNullOrEmpty(fk_emp)==true)
+                return;
 
             SelectAccper sa = new SelectAccper();
             //删除历史选择
@@ -8887,8 +8889,12 @@ namespace BP.WF
             {
                 sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
             }
-
-            Emp emp = new Emp(fk_emp);
+            
+            //@shilianyu.
+            Emp emp = new Emp();
+            emp.No = fk_emp;
+            if (emp.RetrieveFromDBSources() == 0)
+                return;
 
             sa.ResetPK();
             sa.FK_Emp = emp.No;

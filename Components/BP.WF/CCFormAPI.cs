@@ -57,13 +57,14 @@ namespace BP.WF
             DataSet myds = new DataSet();
 
             // 创建实体..
-            Entities myens = BP.En.ClassFactory.GetEns(enName + "s");
-
             #region 主表
 
-            Entity en = myens.GetNewEntity;
+            Entity en = BP.En.ClassFactory.GetEn(enName); 
             en.PKVal = pkval;
-            en.RetrieveFromDBSources();
+
+           // if (DataType.IsNullOrEmpty(pkval)==false)
+                en.Retrieve();
+
 
             //设置外部传入的默认值.
             if (BP.Sys.SystemConfig.IsBSsystem == true)

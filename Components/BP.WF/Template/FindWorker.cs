@@ -244,7 +244,7 @@ namespace BP.WF.Template
                     Int64 myworkid = this.currWn.WorkID;
                     if (this.currWn.HisWork.FID != 0)
                         myworkid = this.currWn.HisWork.FID;
-                    dt = DBAccess.RunSQLReturnTable("SELECT Starter No, StarterName Name FROM WF_GenerWorkFlow WHERE WorkID=" + myworkid);
+                    dt = DBAccess.RunSQLReturnTable("SELECT Starter as No, StarterName as Name FROM WF_GenerWorkFlow WHERE WorkID=" + myworkid);
                     if (dt.Rows.Count == 1)
                         return dt;
 

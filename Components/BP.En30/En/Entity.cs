@@ -1304,11 +1304,6 @@ namespace BP.En
                 else
                     return true;
             }
-            //else
-            //{
-            //    string sql = "SELECT " + pk + " FROM " + this.EnMap.PhysicsTable + " WHERE " + pk + " ='" + val + "'";
-            //    return DBAccess.IsExits(sql);
-            //}
 
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(pk, val);
@@ -1728,8 +1723,6 @@ namespace BP.En
             // 开始更新内存数据。 @wangyanyan
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                 Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
-
-
 
             this.afterInsert();
             this.afterInsertUpdateAction();
@@ -3862,8 +3855,12 @@ namespace BP.En
         public MapData DTSMapToSys_MapData(string fk_mapdata = null)
         {
             if (fk_mapdata == null)
-                fk_mapdata = this.ClassIDOfShort;
+            {
+                //fk_mapdata = this.ClassIDOfShort;
 
+                //为了适应配置vsto系统的需要，这里需要全称.
+                fk_mapdata = this.ToString();
+            }
 
             Map map = this.EnMap;
 

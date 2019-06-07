@@ -716,7 +716,6 @@ namespace BP.WF.HttpHandler
                         }
                     }
 
-
                     if (emps.Contains(",") == true)
                     {
                         if (emps.Contains("'") == true)
@@ -725,10 +724,8 @@ namespace BP.WF.HttpHandler
                             foreach (string str in strs)
                             {
                                 string[] emp = str.Split(',');
-
                                 string empNo = emp[0];
-
-                                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emp[0], false);
+                                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, empNo, false);
                             }
                         }
                     }

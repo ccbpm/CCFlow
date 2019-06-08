@@ -1871,6 +1871,7 @@ namespace BP.WF.Template
 
             foreach (Node nd in nds)
             {
+
                 if (nd.IsStartNode)
                 {
                     nd.HisFormType = NodeFormType.FoolForm;
@@ -1880,12 +1881,16 @@ namespace BP.WF.Template
 
                 BP.WF.Template.FrmNodeComponent fnd = new FrmNodeComponent(nd.NodeID);
 
-                if (nd.IsEndNode == true)
+                if (nd.IsEndNode == true || nd.HisToNodes.Count==0)
                 {
                     nd.FrmWorkCheckSta = FrmWorkCheckSta.Readonly;
                     nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
                     nd.HisFormType = NodeFormType.FoolForm;
                     nd.Update();
+
+
+                    fnd.SetValByKey(NodeAttr.NodeFrmID, nd.NodeFrmID);
+                    fnd.SetValByKey(NodeAttr.FWCSta, (int)nd.FrmWorkCheckSta);
 
                     fnd.Update();
                     continue;
@@ -1898,7 +1903,6 @@ namespace BP.WF.Template
                 nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
                 nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
                 nd.HisFormType = NodeFormType.FoolForm;
-
                 nd.Update();
             }
 

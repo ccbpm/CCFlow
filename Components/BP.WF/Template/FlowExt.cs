@@ -1873,7 +1873,7 @@ namespace BP.WF.Template
                 if (nd.IsStartNode)
                 {
                     nd.HisFormType = NodeFormType.FoolForm;
-                    nd.Update();                     
+                    nd.Update();
                     continue;
                 }
 

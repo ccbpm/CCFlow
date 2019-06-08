@@ -1141,10 +1141,10 @@ namespace BP.WF
                     /*如果是最后一个节点了,仍然找不到下一步节点...*/
                     if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
                     {
-                        this.HisWorkFlow.HisGenerWorkFlow.FK_Node=mynd.NodeID;
-                        this.HisWorkFlow.HisGenerWorkFlow.NodeName=mynd.Name;
-                        this.HisGenerWorkFlow.FK_Node= mynd.NodeID;
-                        this.HisGenerWorkFlow.NodeName=mynd.Name;
+                        this.HisWorkFlow.HisGenerWorkFlow.FK_Node = mynd.NodeID;
+                        this.HisWorkFlow.HisGenerWorkFlow.NodeName = mynd.Name;
+                        this.HisGenerWorkFlow.FK_Node = mynd.NodeID;
+                        this.HisGenerWorkFlow.NodeName = mynd.Name;
                         this.HisGenerWorkFlow.Update();
 
                         String msg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "流程已经走到最后一个节点，流程成功结束。",
@@ -1152,7 +1152,7 @@ namespace BP.WF
                         this.addMsg(SendReturnMsgFlag.End, msg);
                         this.IsStopFlow = true;
                     }
-                    
+
                     return mynd;
                 }
 
@@ -1813,7 +1813,7 @@ namespace BP.WF
             throw new Exception(BP.WF.Glo.multilingual("@找到下一步节点.", "WorkNode", "found_next_node", new string[0]));
         }
 
-        private void CC(Node node )
+        private void CC(Node node)
         {
             //执行自动抄送
             string ccMsg1 = WorkFlowBuessRole.DoCCAuto(node, this.rptGe, this.WorkID, this.HisWork.FID);
@@ -4619,11 +4619,14 @@ namespace BP.WF
             string err = "";
             if (this.HisNode.HisFormType == NodeFormType.SheetTree)
             {
-                //获取绑定的表单
+                //获取绑定的表单.
                 FrmNodes nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
                 foreach (FrmNode item in nds)
                 {
                     if (item.FrmEnableRole == FrmEnableRole.Disable)
+                        continue;
+
+                    if (item.HisFrmType != FrmType.FoolForm && item.HisFrmType != FrmType.FreeFrm)
                         continue;
 
                     MapData md = new MapData();
@@ -4636,7 +4639,9 @@ namespace BP.WF
                     //主表实体.
                     GEEntity en = new GEEntity(item.FK_Frm);
                     en.OID = this.WorkID;
-                    en.RetrieveFromDBSources();
+                    int i = en.RetrieveFromDBSources();
+                    if (i == 0)
+                        continue;
 
                     Row row = en.Row;
                     if (item.FrmSln == FrmSln.Self)
@@ -4673,7 +4678,6 @@ namespace BP.WF
                     throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
 
                 return true;
-
             }
 
             if (this.HisNode.HisFormType == NodeFormType.FreeForm || this.HisNode.HisFormType == NodeFormType.FoolForm)
@@ -4685,10 +4689,10 @@ namespace BP.WF
                     if (attr.UIIsInput == false)
                         continue;
 
-                    string str = row[attr.KeyOfEn] as string; 
+                    string str = row[attr.KeyOfEn] as string;
 
                     /*如果是检查不能为空 */
-                    if (  DataType.IsNullOrEmpty(str) == true )
+                    if (DataType.IsNullOrEmpty(str) == true)
                         err += BP.WF.Glo.multilingual("@字段{0},{1}不能为空.", "WorkNode", "form_field_must_not_be_null_2", attr.KeyOfEn, attr.Name);
                 }
 
@@ -5863,7 +5867,7 @@ namespace BP.WF
                 int nodeid = ap.GetValIntByKey("ToNodeID", 0);
                 if (nodeid != 0)
                 {
-             jumpToNode = new Node(nodeid);
+                    jumpToNode = new Node(nodeid);
                 }
 
                 //监测是否有停止流程的标志？
@@ -6654,7 +6658,7 @@ namespace BP.WF
                     if (this.HisNode.HisCCRole == CCRole.HandCC)
                     {
                         //获取抄送人员列表
-                        CCLists cclist = new CCLists(this.HisNode.FK_Flow,this.WorkID, this.HisWork.FID);
+                        CCLists cclist = new CCLists(this.HisNode.FK_Flow, this.WorkID, this.HisWork.FID);
                         if (cclist.Count == 0)
                             ccMsg1 = "@没有选择抄送人。";
                         if (cclist.Count > 0)

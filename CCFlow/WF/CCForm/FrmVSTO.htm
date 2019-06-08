@@ -18,6 +18,9 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
+            var webUser = new WebUser();
+
+
             var frmID = GetQueryString("FK_MapData");
             if (frmID == null || frmID == undefined || frmID == "null")
                 frmID = GetQueryString("EnName");
@@ -26,7 +29,7 @@
                 frmID = GetQueryString("EnsName");
 
             var url = "excelform://-fromccflow,App=FrmExcel";
-            url += ",FK_MapData=" + frmID;
+            url += ",FrmID=" + frmID;
 
             if (GetQueryString("MyPK") != null)
                 url += ",MyPK=" + GetQueryString("MyPK");
@@ -37,12 +40,19 @@
             if (GetQueryString("WorkID") != null)
                 url += ",WorkID=" + GetQueryString("WorkID");
 
+            if (GetQueryString("OID") != null)
+                url += ",OID=" + GetQueryString("OID");
+
+            //javascript: OpenUrlInRightFrame(this, "/WF/CCForm/FrmVSTO.htm?EnName=BP.LI.BZQXcg&UseSheet=%e5%a4%a7%e5%9e%8b%e4%bb%aa%e5%99%a8%e6%a0%a1%e5%87%86%e6%9b%b2%e7%ba%bf&OID=304874")
+            if (GetQueryString("UseSheet") != null)
+                url += ",UseSheet=" + GetQueryString("UseSheet");
+
             url += ",IsEdit=" + GetQueryString("IsEdit");
             url += ",IsPrint=" + GetQueryString("IsPrint");
             url += ",FK_Flow=" + GetQueryString("FK_Flow");
             url += ",FK_Node=" + GetQueryString("FK_Node");
-            url += ",UserNo=" + GetQueryString("UserNo");
-            url += ",SID=" + GetQueryString("SID");
+            url += ",UserNo=" + webUser.No;
+            url += ",SID=" + webUser.SID; 
             url += ",FID=" + GetQueryString("FID");
             url += ",PFlowNo=" + GetQueryString("PFlowNo");
             url += ",IsLoadData=" + GetQueryString("IsLoadData");
@@ -68,8 +78,8 @@
             var html1 = "<a href='" + url + "'>打开VSTO版本excel模式的表单</a>";
             $("#UrlOfVSTO").html(html1); //打开Excel表单.
 
-          //  var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
-           // $("#UrlOfFrm").html(html1); //打开Excel表单.
+            //  var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
+            // $("#UrlOfFrm").html(html1); //打开Excel表单.
 
             $("#Msg").html("");
         });

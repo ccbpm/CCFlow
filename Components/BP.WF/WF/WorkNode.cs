@@ -4623,6 +4623,9 @@ namespace BP.WF
                 FrmNodes nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
                 foreach (FrmNode item in nds)
                 {
+                    if (item.FrmEnableRole == FrmEnableRole.Disable)
+                        continue;
+
                     MapData md = new MapData();
                     md.No = item.FK_Frm;
                     md.Retrieve();
@@ -4658,6 +4661,7 @@ namespace BP.WF
                     {
                         if (mapAttr.UIIsInput == false && mapAttr.UIIsEnable == true)
                             continue;
+
                         string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();
                         /*如果是检查不能为空 */
                         if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")

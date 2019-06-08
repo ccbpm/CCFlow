@@ -1868,10 +1868,8 @@ namespace BP.WF.Template
         public string DoSetFWCModel()
         {
             Nodes nds = new Nodes(this.No);
-
             foreach (Node nd in nds)
             {
-
                 if (nd.IsStartNode)
                 {
                     nd.HisFormType = NodeFormType.FoolForm;

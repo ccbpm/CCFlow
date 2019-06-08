@@ -4681,9 +4681,10 @@ namespace BP.WF
                     if (attr.UIIsInput == false)
                         continue;
 
-                    string str = row[attr.KeyOfEn] == null ? string.Empty : row[attr.KeyOfEn].ToString();
+                    string str = row[attr.KeyOfEn] as string; 
+
                     /*如果是检查不能为空 */
-                    if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")
+                    if (  DataType.IsNullOrEmpty(str) == true )
                         err += BP.WF.Glo.multilingual("@字段{0},{1}不能为空.", "WorkNode", "form_field_must_not_be_null_2", attr.KeyOfEn, attr.Name);
                 }
 
@@ -4748,7 +4749,6 @@ namespace BP.WF
                         }
                     }
                     #endregion 增加阅读规则.
-
 
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.None)
                         continue;

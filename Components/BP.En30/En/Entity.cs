@@ -3483,8 +3483,6 @@ namespace BP.En
                     {
                         Log.DefaultLogWriteLineError("运行sql 失败:alter table  " + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
                     }
-
-
                 }
             }
             #endregion

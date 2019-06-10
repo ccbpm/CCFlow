@@ -3012,7 +3012,11 @@ namespace BP.WF.HttpHandler
         }
         #endregion 流程数据模版.
 
-
+        #region tonodes
+        /// <summary>
+        /// 初始化.
+        /// </summary>
+        /// <returns></returns>
         public string ToNodes_Init()
         {
             //获取到下一个节点的节点Nodes
@@ -3053,7 +3057,10 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
 
-
+        /// <summary>
+        /// 发送
+        /// </summary>
+        /// <returns></returns>
         public string ToNodes_Send()
         {
             string toNodes = this.GetRequestVal("ToNodes");
@@ -3214,5 +3221,36 @@ namespace BP.WF.HttpHandler
 
             }
         }
+#endregion tonodes
+
+
+
+        #region 自定义.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string TransferCustom_Init()
+        {
+            DataSet ds = new DataSet();
+
+            Nodes nds = new Nodes(this.FK_Flow);
+
+            //增加节点s.
+            DataTable dt = nds.ToDataTableField("WF_Node");
+            ds.Tables.Add(dt);
+
+
+            //选择的人员信息.
+            SelectAccpers sas = new SelectAccpers();
+            sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID);
+            DataTable dtSas = sas.ToDataTableField("WF_SelectAccper");
+            ds.Tables.Add(dtSas);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 自定义.
+
+
     }
 }

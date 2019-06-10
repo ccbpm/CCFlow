@@ -11,31 +11,16 @@ namespace BP.WF.WeiXin
 {
     public class WeiXin
     {
-        private string appid = BP.Sys.SystemConfig.WX_CorpID;// "wx8eac6a18c5efec30";
-        private string appsecret = BP.Sys.SystemConfig.WX_AppSecret;// "KfFkE9AZ3Zp09zTuKvmqWLgtLj-_cHMPTvV992apOWgSKJHcbjpbu1jYVXh7gI7K";
-        public string getAccessToken()
+        public string GenerAccessToken()
         {
             string accessToken = string.Empty;
-            string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + appid + "&corpsecret=" + appsecret + "";
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + BP.Sys.SystemConfig.WX_CorpID + "&corpsecret=" + BP.Sys.SystemConfig.WX_AppSecret + "";
 
-            try
-            {
-                AccessToken AT = new AccessToken();
-                HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
-                StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-                string str = reader.ReadToEnd();
-                AT = FormatToJson.ParseFromJson<AccessToken>(str);
-                reader.Dispose();
-                reader.Close();
-                if (response != null) response.Close();
-                if (AT != null)
-                {
-                    accessToken = AT.access_token;
-                }
-            }
-            catch
-            {
-            }
+            AccessToken AT = new AccessToken();
+            string str = BP.DA.DataType.ReadURLContext(url, 1000, Encoding.UTF8);
+            AT = FormatToJson.ParseFromJson<AccessToken>(str);
+            accessToken = AT.access_token;
+
             return accessToken;
         }
 
@@ -57,14 +42,14 @@ namespace BP.WF.WeiXin
         /// <returns>返回字符</returns>
         public string PostForWeiXin(StringBuilder parameters, string URL)
         {
-            string access_token = getAccessToken();
+            string access_token = GenerAccessToken();
             string url = URL + "access_token=" + access_token;
 
             HttpWebResponse response = new HttpWebResponseUtility().WXCreateGetHttpResponse(url, parameters,
                 10000, null, Encoding.UTF8, null);
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             string str = reader.ReadToEnd();
-            
+
             BP.DA.Log.DebugWriteInfo(url + "----------------" + parameters + "---------------" + str);
             return str;
         }
@@ -119,7 +104,7 @@ namespace BP.WF.WeiXin
         /// <returns></returns>
         public UserInfoBelongDept GetUserListByDeptIDAndTel(string FK_Dept, string Tel = null)
         {
-            string access_token = getAccessToken();
+            string access_token = GenerAccessToken();
             string url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token= " + access_token + "&department_id=" + FK_Dept + "&status=0";
             try
             {
@@ -149,7 +134,7 @@ namespace BP.WF.WeiXin
         /// </summary>
         public DeptMent_GetList GetDeptMentList()
         {
-            string access_token = getAccessToken();
+            string access_token = GenerAccessToken();
             string url = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=" + access_token;
             try
             {
@@ -174,7 +159,7 @@ namespace BP.WF.WeiXin
         /// <returns></returns>
         public UsersBelongDept GetUserListByDeptID(string FK_Dept)
         {
-            string access_token = getAccessToken();
+            string access_token = GenerAccessToken();
             string url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=" + access_token + "&department_id=" + FK_Dept + "&status=0";
             try
             {

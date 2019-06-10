@@ -17,7 +17,7 @@ namespace BP.WF.WeiXin
             string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + BP.Sys.SystemConfig.WX_CorpID + "&corpsecret=" + BP.Sys.SystemConfig.WX_AppSecret + "";
 
             AccessToken AT = new AccessToken();
-            string str = BP.DA.DataType.ReadURLContext(url, 1000, Encoding.UTF8);
+            string str = BP.DA.DataType.ReadURLContext(url, 5000, Encoding.UTF8);
             AT = FormatToJson.ParseFromJson<AccessToken>(str);
             accessToken = AT.access_token;
 

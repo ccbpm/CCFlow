@@ -749,7 +749,7 @@
             }
         };
         $('#page_nav').bootstrapPaginator(options);
-        $('#page_info').append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
+        $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
                                 "页,总共"+count+"条记录。</li>");
         
     }
@@ -759,7 +759,7 @@
             return '<a href="#" onclick="editUser(' + index + ')">查看明细</a>';
         }
 
-        function OpenEn(pk, paras) {
+        function OpenEn(pk, paras,flag) {
             
             //当前URL参数
             var  currUrl = window.location.search.substring(1);
@@ -811,37 +811,16 @@
             if (windowH == "" || windowH == undefined)
                 windowH = 500;
 
-            var localUrl = window.location.href;
-
-
-            var localArr = new Array();
-            localArr = localUrl.split("&");
-            if (localArr.length == 1) {
-                localUrl = localUrl + "&PageIdx=" + pageIdx + "&PageSize=" + pageSize;
-            } else {
-                for (var i = 0; i < localArr.length; i++) {
-                    if (localArr[i].indexOf("PageIdx") != -1) {
-                        localArr[i] = "PageIdx=" + pageIdx;
-                    }
-                    if (localArr[i].indexOf("PageSize") != -1) {
-                        localArr[i] = "PageSize=" + pageSize;
-                    }
-                }
-                localUrl = "";
-                for (var i = 0; i < localArr.length; i++) {
-                    localUrl += localArr[i];
-                    if (i != localArr.length - 1) localUrl += "&";
-                }
-            }
 
             OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null,  null, function () {
-            //@袁丽娜 如何判断没有修改，就不要执行刷新？
-               // window.location.href = localUrl;
+                    SearchData(1);
+                    Paginator(pages,1);
+                 
             },null,'black');
         }
 
         function New() {
-            OpenEn("");
+            OpenEn("","",0);
         }
 
         function Exp() {
@@ -1000,11 +979,6 @@
         //不为空的时候赋值
          $("#" + ddlChild).append("<option value='all' >全部</option>");
         $.each(dataObj, function (idx, item) {
-
-            //  alert(item[idx][1]);
-            //console.log(item);
-            //return;
-
             var no = item.No;
             if (no == undefined)
                 no = item.NO;

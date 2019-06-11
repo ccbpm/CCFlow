@@ -140,7 +140,7 @@ function GenerFoolFrm(mapData, frmData) {
             html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
 
-            html += InitMapAttr(frmData.Sys_MapAttr, frmData, gf.OID,tableCol);
+            html += InitMapAttr(frmData.Sys_MapAttr, frmData, gf.OID, tableCol);
             continue;
         }
     }
@@ -273,7 +273,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
     var colSpan = 1;
     var textColSpan = 2;
     var textWidth = "15%";
-    var colWidth = "15%";
+    var colWidth = "35%";
 
 
     var lab = "";
@@ -288,9 +288,9 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         lab = GetLab(frmData, attr);
 
         //赋值
-        rowSpan = attr.RowSpan;
-        colSpan = attr.ColSpan;
-        textColSpan = attr.TextColSpan;
+        rowSpan = parseInt(attr.RowSpan);
+        colSpan = parseInt(attr.ColSpan);
+        textColSpan = parseInt(attr.TextColSpan);
         if (tableCol == 4) {
             colWidth = 35 * parseInt(colSpan) + "%";
             textWidth = 15 * parseInt(textColSpan) + "%";
@@ -314,7 +314,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 html += "<tr >";
                 UseColSpan = 0;
                 if (IsShowLeft == true) {
-                    UseColSpan += colSpan + textColSpan;
+                    UseColSpan += colSpan + textColSpan + ruColSpan;
                     lRowSpan = rowSpan;
                     luColSpan += colSpan + textColSpan;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
@@ -382,7 +382,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 }
                 continue;
             }
-           
+
         }
 
 
@@ -418,7 +418,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             html += "<tr >";
             UseColSpan = 0;
             if (IsShowLeft == true) {
-                UseColSpan += colSpan + textColSpan;
+                UseColSpan += colSpan + textColSpan + ruColSpan;
                 lRowSpan = rowSpan;
                 luColSpan += colSpan + textColSpan;
                 if (attr.MyDataType == 4) {
@@ -430,7 +430,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrl(attr);
                 html += "</td>";
-                
+
                 if (rowSpan != 1) {
                     IsShowLeft = false;
                 }
@@ -503,7 +503,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             }
             continue;
         }
-       
+
     }
 
     return html;
@@ -645,7 +645,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             eleHtml += "</div>";
             return eleHtml;
         }
-       
+
     }
 
     //添加文本框 ，日期控件等
@@ -693,7 +693,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             //如果是富文本就使用百度 UEditor
             if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == 1) {
                 //只读状态直接 div 展示富文本内容
-                defValue = defValue.replace(/white-space: nowrap;/g, "");   
+                defValue = defValue.replace(/white-space: nowrap;/g, "");
                 eleHtml += "<div class='richText'>" + defValue + "</div>";
             } else {
 
@@ -718,13 +718,13 @@ function InitMapAttrOfCtrl(mapAttr) {
     if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 8) {
         //如果是图片签名，并且可以编辑
         var ondblclick = ""
-        if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly ==0) {
+        if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly == 0) {
             ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + defValue + "\")'";
         }
 
         var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + defValue + "' type=hidden />";
         if (defValue.indexOf("../DataUser") != 0)
-            defValue = defValue.replace("../DataUser","../../DataUser");
+            defValue = defValue.replace("../DataUser", "../../DataUser");
         eleHtml += "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
         return eleHtml;
     }
@@ -987,7 +987,7 @@ function SetCtrlUnEnable(key) {
     ctrl = $("#RB_" + key);
     if (ctrl != null) {
         $('input[name=RB_' + key + ']').attr("disabled", "disabled");
-      
+
     }
 }
 //设置隐藏?
@@ -1159,7 +1159,7 @@ function Ele_Attachment(workNode, gf) {
     url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.
 
     var nodeID = GetQueryString("FK_Node");
-    if (nodeID != null && nodeID.length>2) {
+    if (nodeID != null && nodeID.length > 2) {
         var no = nodeID.substring(nodeID.length - 2);
         var IsStartNode = 0;
         if (no == "01")
@@ -1187,7 +1187,7 @@ function Ele_Attachment(workNode, gf) {
 
 
     //这里的连接要取 FK_MapData的值.
-    src = athUrl+"?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+    src = athUrl + "?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
@@ -1284,7 +1284,7 @@ function Ath_Init(mypk, FK_MapData) {
     return data;
 }
 //弹出附件
-function OpenAth(url, title, keyOfEn, athMyPK,atPara, FK_MapData) {
+function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
     var H = document.body.clientHeight - 240;
 
     OpenBootStrapModal(url, "eudlgframe", title, frmData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
@@ -1417,7 +1417,7 @@ function GetLab(frmData, attr) {
             }
         });
 
-       
+
         var FK_Node = GetQueryString("FK_Node");
         var FK_Flow = GetQueryString("FK_Flow");
         var webUser = new WebUser();

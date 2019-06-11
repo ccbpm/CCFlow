@@ -73,17 +73,15 @@
                 workID = 0;
 
             if (workID == 0) {
+
                 var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
                 var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
-
-                alert(workID);
 
                 if (workID.indexOf('err@') != 0) {
                     alert(workID);
                     return;
                 }
-
 
                 var url = window.location.href + "&WorkID=" + workID + "&OID=" + workID;
                 window.location.href = url;
@@ -119,7 +117,6 @@
 
 
             //是初始化状态.
-
             toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
 
             if (frmBill.BtnSearchEnable == 1)
@@ -231,7 +228,6 @@
                     else
                         window.location.href = "./SearchDict.htm?FrmID=" + GetQueryString("FrmID");
                 }
-
             });
         }
 
@@ -336,7 +332,7 @@
                                 break;
                         }
                         break;
-                    //下拉框                
+                    //下拉框                 
                     case "SELECT":
                         formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                         var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -347,7 +343,7 @@
                         }
                         break;
 
-                    //文本区域                        
+                    //文本区域                         
                     case "TEXTAREA":
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
@@ -468,7 +464,7 @@
                 alert(data);
                 return;
             }
-            window.location.href = 'MyDict.htm?FrmID=' + GetQueryString("FrmID") +  "&WorkID=" + data;
+            window.location.href = 'MyDict.htm?FrmID=' + GetQueryString("FrmID") + "&WorkID=" + data;
         }
 
 
@@ -551,7 +547,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人                       
+                    //发送选择接收节点和接收人                        
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
@@ -844,17 +840,8 @@
         });
     </script>
 </head>
-<body onclick="hiddenDiv()">
+<body >
     <div id="toolbar" style="margin-left: 10px;">
-        <!-- <input type='button' value="新建" id="Btn_New" onclick="New();" />
-        <input type='button' value="保存" id="Btn_Save" onclick="Save();" />
-        <input type='button' value="启动流程" id="Btn_StartFlow" onclick="StartFlow();" />
-        <input type='button' value="关联单据" id="Btn_RefBill" onclick="RefBill();" />
-        <input type='button' value="删除" id="Btn_Del" onclick="DeleteIt();" />
-        <input type='button' value="查询" id="Btn_Sarch" onclick="Search();" />
-        <input type='button' value="分析" id="Btn_Group" onclick="Group();" />
-        <input type='button' value="上一条" id="Button1" onclick="Pri();" />
-        <input type='button' value="下一条" id="Button2" onclick="Next();" />-->
     </div>
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
         <!--上半部分表单-->

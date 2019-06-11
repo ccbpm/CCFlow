@@ -29,10 +29,8 @@ $(function () {
 
     initPageParam(); //初始化参数.
 
-
     //构造表单.
     GenerFrm(); //表单数据.
-
 
 
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {

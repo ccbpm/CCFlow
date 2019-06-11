@@ -7776,6 +7776,7 @@ namespace BP.WF
                     continue;
 
                 string msg = pm.DoSendMessage(this.town.HisNode, this.town.HisWork, null, null, null, toEmps);
+
                 this.addMsg("alert" + pm.MyPK, msg, msg, SendReturnMsgType.Info);
                 // this.addMsg(SendReturnMsgFlag.SendSuccessMsg, "已经转给，加签的发起人(" + item.FK_Emp + "," + item.FK_EmpText + ")", SendReturnMsgType.Info);
             }

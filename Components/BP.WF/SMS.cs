@@ -188,59 +188,7 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.'
 
             sms.AtPara = paras;
-
             sms.afterInsert();
-            // sms.Insert();
-        }
-        /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <param name="mobileNum">手机号吗</param>
-        /// <param name="mobileInfo">短信信息</param>
-        /// <param name="email">邮件</param>
-        /// <param name="title">标题</param>
-        /// <param name="infoBody">邮件内容</param>
-        /// <param name="msgFlag">消息标记，可以为空。</param>
-        /// <param name="guestNo">用户编号</param>
-        public static void SendMsg(string mobileNum, string mobileInfo, string email, string title, string
-            infoBody, string msgFlag, string msgType, string guestNo)
-        {
-            SMS sms = new SMS();
-            sms.Sender = WebUser.No;
-            sms.RDT = BP.DA.DataType.CurrentDataTimess;
-            sms.SendToEmpNo = guestNo;
-
-            // 邮件信息
-            sms.HisEmailSta = MsgSta.UnRun;
-            sms.Title = title;
-            sms.DocOfEmail = infoBody;
-
-            //手机信息.
-            sms.Mobile = mobileNum;
-            sms.HisMobileSta = MsgSta.UnRun;
-            sms.MobileInfo = mobileInfo;
-            sms.MsgFlag = msgFlag; // 消息标志.
-
-            if (DataType.IsNullOrEmpty(msgFlag))
-            {
-                sms.MyPK = DBAccess.GenerGUID();
-
-                sms.afterInsert();
-                //sms.Insert();
-            }
-            else
-            {
-                // 如果已经有该PK,就不让插入了.
-                try
-                {
-                    sms.MyPK = msgFlag;
-                    sms.afterInsert();
-                    // sms.Insert();
-                }
-                catch
-                {
-                }
-            }
         }
         #endregion 新方法
 
@@ -474,7 +422,6 @@ namespace BP.WF
                 SetValByKey(SMSAttr.EmailDoc, value);
             }
         }
-
         /// <summary>
         /// 打开的连接
         /// </summary>
@@ -489,7 +436,6 @@ namespace BP.WF
                 this.SetPara(SMSAttr.OpenUrl, value);
             }
         }
-
         #endregion
 
         #region 构造函数
@@ -664,21 +610,19 @@ namespace BP.WF
                     {
                         case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
                             break;
-                        case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
+                        case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag,this.Title,this.OpenURL);
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
                             //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, "17699430990", this.MobileInfo, tag, this.Title, this.OpenURL);
-
                             break;
-                        case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
+                        case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
                             soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
                             break;
-                        case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
+                        case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信. 3
                             //写入微信.
-                            BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo,this.Title,this.Doc, WebUser.No );
-
+                            BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
@@ -689,7 +633,7 @@ namespace BP.WF
                     }
                 }
             }
-          catch (Exception ex)
+            catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }

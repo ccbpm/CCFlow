@@ -2884,7 +2884,8 @@ namespace BP.En
             sqlFields += " where c.relname = '" + this.EnMap.PhysicsTable.ToLower() + "' and a.attrelid = c.oid and a.attnum>0  ";
 
             //约束信息.
-            //  sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + this.EnMap.PhysicsTable + "') ";
+            //sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + this.EnMap.PhysicsTable + "') ";
+
             DataTable dtAttr = DBAccess.RunSQLReturnTable(sqlFields);
 
             foreach (DataRow dr in dtAttr.Rows)

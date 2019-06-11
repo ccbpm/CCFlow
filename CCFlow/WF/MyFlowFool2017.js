@@ -129,7 +129,7 @@ function GenerFoolFrm(wn) {
             html += "<tr>";
             html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
-            if(tableCol == 4 || tableCol ==6)
+            if (tableCol == 4 || tableCol == 6)
                 html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
             else if (tableCol == 3)
                 html += InitThreeColMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
@@ -143,7 +143,7 @@ function GenerFoolFrm(wn) {
             html += "</tr>";
 
             html += "<tr>";
-            html += "  <td colspan='"+tableCol+"' class='FDesc'>";
+            html += "  <td colspan='" + tableCol + "' class='FDesc'>";
 
             html += Ele_SubFlow(node);
 
@@ -329,9 +329,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
         lab = GetLab(flowData, attr);
 
         //赋值
-        rowSpan = attr.RowSpan;
-        colSpan = attr.ColSpan;
-        textColSpan = attr.TextColSpan;
+        rowSpan = parseInt(attr.RowSpan);
+        colSpan = parseInt(attr.ColSpan);
+        textColSpan = parseInt(attr.TextColSpan);
         if (tableCol == 4) {
             colWidth = 35 * parseInt(colSpan) + "%";
             textWidth = 15 * parseInt(textColSpan) + "%";
@@ -356,7 +356,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 html += "<tr >";
                 UseColSpan = 0;
                 if (IsShowLeft == true) {
-                    UseColSpan += colSpan + textColSpan;
+                    UseColSpan += colSpan + textColSpan + ruColSpan;
                     lRowSpan = rowSpan;
                     luColSpan += colSpan + textColSpan;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
@@ -461,7 +461,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             html += "<tr >";
             UseColSpan = 0;
             if (IsShowLeft == true) {
-                UseColSpan += colSpan + textColSpan;
+                UseColSpan += colSpan + textColSpan + ruColSpan;
                 lRowSpan = rowSpan;
                 luColSpan += colSpan + textColSpan;
                 if (attr.MyDataType == 4) {
@@ -545,7 +545,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             }
             continue;
         }
-        
+
     }
     return html;
 }
@@ -693,7 +693,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             var url = './WorkOpt/OneWork/JobSchedule.js';
             $.getScript(url, function () {
 
-            
+
             });
             return "<div id='JobSchedule' >JobSchedule</div>";
         }
@@ -1477,7 +1477,7 @@ function GetLab(flowData, attr) {
             lab = " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
         lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='padding-bottom: 10px;'>" + attr.Name + "</label>";
-       
+
         return lab;
     }
     //附件控件
@@ -1504,7 +1504,7 @@ function GetLab(flowData, attr) {
             url += "&IsStartNode=" + 1; //是否是开始节点
 
         var isReadonly = pageData.IsReadonly;
-      
+
         if (isReadonly == false) {
             var strRD = GetQueryString("IsReadonly");
             if (strRD == 1)

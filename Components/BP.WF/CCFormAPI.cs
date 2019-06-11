@@ -649,10 +649,7 @@ namespace BP.WF
         {
             //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
-
-            //映射实体.
-            //MapData md = new MapData(frmID);
-
+             
             //实体.
             GEEntity en = new GEEntity(frmID);
             en.OID = pkval;
@@ -691,6 +688,7 @@ namespace BP.WF
             //明细表的配置信息.
             DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
             myds.Tables.Add(Sys_MapExt);
+            #endregion 加载从表表单模版信息.
 
             #region 把从表的- 外键表/枚举 加入 DataSet.
             MapExts mes = dtl.MapExts;
@@ -774,15 +772,11 @@ namespace BP.WF
                 {
                     myds.Tables.Add(mydt);
                 }
-               
                 #endregion 外键字段
             }
             ddlTable.TableName = "UIBindKey";
             myds.Tables.Add(ddlTable);
             #endregion 把从表的- 外键表/枚举 加入 DataSet.
-
-
-            #endregion 加载从表表单模版信息.
 
             #region 把主表数据放入.
             if (BP.Sys.SystemConfig.IsBSsystem == true)
@@ -860,14 +854,11 @@ namespace BP.WF
             DataTable dtsftable = null;
             DataRow[] drs = null;
 
-            SFTables sftables = new SFTables();
-            sftables.Retrieve(SFTableAttr.SrcType, (int)SrcType.SQL);
-
             // 为明细表设置默认值.
             MapAttrs dtlAttrs = new MapAttrs(dtl.No);
             foreach (MapAttr attr in dtlAttrs)
             {
-                #region 修改区分大小写.
+                #region 修改区分大小写. Oracle
                 if (BP.DA.DBType.Oracle == SystemConfig.AppCenterDBType)
                 {
                     foreach (DataColumn dr in dtDtl.Columns)
@@ -900,8 +891,7 @@ namespace BP.WF
                 }
                 #endregion 修改区分大小写.
 
-
-                #region 修改区分大小写.
+                #region 修改区分大小写. PostgreSQL
                 if (BP.DA.DBType.PostgreSQL == SystemConfig.AppCenterDBType)
                 {
                     foreach (DataColumn dr in dtDtl.Columns)
@@ -934,34 +924,8 @@ namespace BP.WF
                 }
                 #endregion 修改区分大小写.
 
-               
-
                 if (attr.UIContralType == UIContralType.TB)
                     continue;
-
-                //处理增加动态SQL查询类型的下拉框选中值Text值，added by liuxc,2017-9-22
-                if (attr.UIContralType == UIContralType.DDL
-                    && attr.LGType == FieldTypeS.Normal
-                    && attr.UIIsEnable == true)
-                {
-                    sftable = sftables.GetEntityByKey(attr.UIBindKey) as SFTable;
-                    if (sftable != null)
-                    {
-                        dtsftable = sftable.GenerHisDataTable;
-
-                        //为Text赋值
-                        foreach (DataRow dr in dtDtl.Rows)
-                        {
-                            drs = dtsftable.Select("No='" + dr[attr.KeyOfEn] + "'");
-                            if (drs.Length == 0)
-                                continue;
-                            if (dtsftable.Columns.Contains(attr.KeyOfEn + "Text") == true)
-                                dr[attr.KeyOfEn + "Text"] = drs[0]["Name"];
-                            if (dtsftable.Columns.Contains(attr.KeyOfEn + "T") == true)
-                                dr[attr.KeyOfEn + "T"] = drs[0]["Name"];
-                        }
-                    }
-                }
 
                 //处理它的默认值.
                 if (attr.DefValReal.Contains("@") == false)

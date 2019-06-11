@@ -1019,7 +1019,6 @@ namespace BP.WF.HttpHandler
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
-
                 #region 把主表数据放入.
                 string atParas = "";
                 Entities ens = ClassFactory.GetEns(this.EnsName);
@@ -1303,21 +1302,22 @@ namespace BP.WF.HttpHandler
 
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
+                    string uiVisible = dr["UIVisible"].ToString();
+                    if (uiVisible.Equals("0") == true)
+                        continue;
+
                     string lgType = dr["LGType"].ToString();
-                    if (lgType.Equals("2") == false)
-                        continue;
-
-                    string UIIsEnable = dr["UIVisible"].ToString();
-                    if (UIIsEnable == "0")
-                        continue;
-
                     string uiBindKey = dr["UIBindKey"].ToString();
-                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    string ctrlType = dr["UIContralType"].ToString();
+                    if (DataType.IsNullOrEmpty(uiBindKey) == false && ctrlType.Equals("1") == true)
                     {
-                        string myPK = dr["MyPK"].ToString();
-                        /*如果是空的*/
-                        //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                        /*如果是外部数据源的情况. */
                     }
+                    else if (lgType.Equals("2") == false)
+                    {
+                        continue;
+                    }
+
 
                     // 检查是否有下拉框自动填充。
                     string keyOfEn = dr["KeyOfEn"].ToString();
@@ -1342,6 +1342,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                     
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
                     else

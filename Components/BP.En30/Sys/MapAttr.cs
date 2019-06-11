@@ -416,7 +416,7 @@ namespace BP.Sys
                         if (sf.SrcType == SrcType.SQL)
                         {
                             //此种类型时，没有物理表或视图，从SQL直接查出数据
-                            DataTable dt = sf.GenerHisDataTable;
+                            DataTable dt = sf.GenerHisDataTable();
                             EntityNoName enn = null;
                             foreach (DataRow row in dt.Rows)
                             {
@@ -459,7 +459,7 @@ namespace BP.Sys
                         throw new Exception("@属性：" + this.MyPK + " 丢失属性 UIBindKey 字段。");
 
                     SFTable sf = new SFTable(this.UIBindKey);
-                    _dt= sf.GenerHisDataTable;
+                    _dt= sf.GenerHisDataTable();
                 }
                 return _dt;
             }
@@ -1567,7 +1567,7 @@ namespace BP.Sys
         public string GenerHisFKData()
         {
             SFTable sf = new SFTable(this.UIBindKey);
-            return BP.Tools.Json.ToJson(sf.GenerHisDataTable);
+            return BP.Tools.Json.ToJson(sf.GenerHisDataTable());
         }
     
         /// <summary>

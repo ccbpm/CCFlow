@@ -542,7 +542,7 @@ namespace BP.Sys
             {
                 if (sf.SrcType == SrcType.Handler || sf.SrcType == SrcType.JQuery)
                     return null;
-                dt = sf.GenerHisDataTable;
+                dt = sf.GenerHisDataTable();
             }
 
             if (dt == null)

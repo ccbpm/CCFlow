@@ -2578,7 +2578,7 @@ namespace BP.WF.HttpHandler
         public string SFTable()
         {
             SFTable sftable = new SFTable(this.GetRequestVal("SFTable"));
-            DataTable dt = sftable.GenerHisDataTable;
+            DataTable dt = sftable.GenerHisDataTable();
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

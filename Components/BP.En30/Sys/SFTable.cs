@@ -152,176 +152,171 @@ namespace BP.Sys
         /// <summary>
         /// 获得外部数据表
         /// </summary>
-        public System.Data.DataTable GenerHisDataTable
+        public System.Data.DataTable GenerHisDataTable()
         {
-            get
+            //创建数据源.
+            SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
+
+            #region BP类
+            if (this.SrcType == Sys.SrcType.BPClass)
             {
-                //创建数据源.
-                SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
-
-                #region BP类
-                if (this.SrcType == Sys.SrcType.BPClass)
-                {
-                    Entities ens = ClassFactory.GetEns(this.No);
-                    return ens.RetrieveAllToTable();
-                }
-                #endregion
-
-                #region  WebServices
-                // this.SrcType == Sys.SrcType.WebServices，by liuxc 
-                //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
-                if (this.SrcType == Sys.SrcType.WebServices)
-                {
-                    var td = this.TableDesc.Split(','); //接口名称,返回类型
-                    var ps = (this.SelectStatement ?? string.Empty).Split('&');
-                    var args = new ArrayList();
-                    string[] pa = null;
-
-                    foreach (var p in ps)
-                    {
-                        if (string.IsNullOrWhiteSpace(p)) continue;
-
-                        pa = p.Split('=');
-                        if (pa.Length != 2) continue;
-
-                        //此处要SL中显示表单时，会有问题
-                        try
-                        {
-                            if (pa[1].Contains("@WebUser.No"))
-                                pa[1] = pa[1].Replace("@WebUser.No", BP.Web.WebUser.No);
-                            if (pa[1].Contains("@WebUser.Name"))
-                                pa[1] = pa[1].Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                            if (pa[1].Contains("@WebUser.FK_Dept"))
-                                pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                            if (pa[1].Contains("@WebUser.FK_DeptName"))
-                                pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
-                        }
-                        catch
-                        { }
-
-                        if (pa[1].Contains("@WorkID"))
-                            pa[1] = pa[1].Replace("@WorkID", BP.Sys.Glo.Request["WorkID"] ?? "");
-                        if (pa[1].Contains("@NodeID"))
-                            pa[1] = pa[1].Replace("@NodeID", BP.Sys.Glo.Request["NodeID"] ?? "");
-                        if (pa[1].Contains("@FK_Node"))
-                            pa[1] = pa[1].Replace("@FK_Node", BP.Sys.Glo.Request["FK_Node"] ?? "");
-                        if (pa[1].Contains("@FK_Flow"))
-                            pa[1] = pa[1].Replace("@FK_Flow", BP.Sys.Glo.Request["FK_Flow"] ?? "");
-                        if (pa[1].Contains("@FID"))
-                            pa[1] = pa[1].Replace("@FID", BP.Sys.Glo.Request["FID"] ?? "");
-
-                        args.Add(pa[1]);
-                    }
-
-                    var result = InvokeWebService(src.IP, td[0], args.ToArray());
-
-                    switch (td[1])
-                    {
-                        case "DataSet":
-                            return result == null ? new DataTable() : (result as DataSet).Tables[0];
-                        case "DataTable":
-                            return result as DataTable;
-                        case "Json":
-                            var jdata = LitJson.JsonMapper.ToObject(result as string);
-
-                            if (!jdata.IsArray)
-                                throw new Exception("@返回的JSON格式字符串“" + (result ?? string.Empty) + "”不正确");
-
-                            var dt = new DataTable();
-                            dt.Columns.Add("No", typeof(string));
-                            dt.Columns.Add("Name", typeof(string));
-
-                            for (var i = 0; i < jdata.Count; i++)
-                            {
-                                dt.Rows.Add(jdata[i]["No"].ToString(), jdata[i]["Name"].ToString());
-                            }
-
-                            return dt;
-                        case "Xml":
-                            if (result == null || string.IsNullOrWhiteSpace(result.ToString()))
-                                throw new Exception("@返回的XML格式字符串不正确。");
-
-                            var xml = new XmlDocument();
-                            xml.LoadXml(result as string);
-
-                            XmlNode root = null;
-
-                            if (xml.ChildNodes.Count < 2)
-                                root = xml.ChildNodes[0];
-                            else
-                                root = xml.ChildNodes[1];
-
-                            dt = new DataTable();
-                            dt.Columns.Add("No", typeof(string));
-                            dt.Columns.Add("Name", typeof(string));
-
-                            foreach (XmlNode node in root.ChildNodes)
-                            {
-                                dt.Rows.Add(node.SelectSingleNode("No").InnerText,
-                                            node.SelectSingleNode("Name").InnerText);
-                            }
-
-                            return dt;
-                        default:
-                            throw new Exception("@不支持的返回类型" + td[1]);
-                    }
-                }
-                #endregion
-
-                #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
-                if (this.SrcType == Sys.SrcType.TableOrView)
-                {
-                    string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
-                    if (this.CodeStruct == Sys.CodeStruct.Tree)
-                        sql += ", " + this.ParentValue + " ParentNo";
-
-                    sql += " FROM " + this.SrcTable;
-                    return src.RunSQLReturnTable(sql);
-                }
-                #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
-
-
-                #region 动态SQL，edited by liuxc,2016-12-29
-                if (this.SrcType == Sys.SrcType.SQL)
-                {
-                    string runObj = this.SelectStatement;
-
-                    if (DataType.IsNullOrEmpty(runObj))
-                        throw new Exception("@外键类型SQL配置错误," + this.No + " " + this.Name + " 是一个(SQL)类型(" + this.GetValStrByKey("SrcType") + ")，但是没有配置sql.");
-
-                    if (runObj == null)
-                        runObj = string.Empty;
-
-                    runObj = runObj.Replace("~", "'");
-                    if (runObj.Contains("@WebUser.No"))
-                        runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-                    if (runObj.Contains("@WebUser.Name"))
-                        runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-
-                    if (runObj.Contains("@WebUser.FK_Dept"))
-                        runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
-                    return src.RunSQLReturnTable(runObj);
-                }
-                #endregion
-
-                #region 自定义表.
-                if (this.SrcType == Sys.SrcType.CreateTable)
-                {
-                    string sql = "SELECT No, Name FROM " + this.No;
-                    return src.RunSQLReturnTable(sql);
-                }
-                #endregion
-
-                return null;
-
-                //throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
+                Entities ens = ClassFactory.GetEns(this.No);
+                return ens.RetrieveAllToTable();
             }
+            #endregion
+
+            #region  WebServices
+            // this.SrcType == Sys.SrcType.WebServices，by liuxc 
+            //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
+            if (this.SrcType == Sys.SrcType.WebServices)
+            {
+                var td = this.TableDesc.Split(','); //接口名称,返回类型
+                var ps = (this.SelectStatement ?? string.Empty).Split('&');
+                var args = new ArrayList();
+                string[] pa = null;
+
+                foreach (var p in ps)
+                {
+                    if (string.IsNullOrWhiteSpace(p)) continue;
+
+                    pa = p.Split('=');
+                    if (pa.Length != 2) continue;
+
+                    //此处要SL中显示表单时，会有问题
+                    try
+                    {
+                        if (pa[1].Contains("@WebUser.No"))
+                            pa[1] = pa[1].Replace("@WebUser.No", BP.Web.WebUser.No);
+                        if (pa[1].Contains("@WebUser.Name"))
+                            pa[1] = pa[1].Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        if (pa[1].Contains("@WebUser.FK_Dept"))
+                            pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                        if (pa[1].Contains("@WebUser.FK_DeptName"))
+                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                    }
+                    catch
+                    { }
+
+                    if (pa[1].Contains("@WorkID"))
+                        pa[1] = pa[1].Replace("@WorkID", BP.Sys.Glo.Request["WorkID"] ?? "");
+                    if (pa[1].Contains("@NodeID"))
+                        pa[1] = pa[1].Replace("@NodeID", BP.Sys.Glo.Request["NodeID"] ?? "");
+                    if (pa[1].Contains("@FK_Node"))
+                        pa[1] = pa[1].Replace("@FK_Node", BP.Sys.Glo.Request["FK_Node"] ?? "");
+                    if (pa[1].Contains("@FK_Flow"))
+                        pa[1] = pa[1].Replace("@FK_Flow", BP.Sys.Glo.Request["FK_Flow"] ?? "");
+                    if (pa[1].Contains("@FID"))
+                        pa[1] = pa[1].Replace("@FID", BP.Sys.Glo.Request["FID"] ?? "");
+
+                    args.Add(pa[1]);
+                }
+
+                var result = InvokeWebService(src.IP, td[0], args.ToArray());
+
+                switch (td[1])
+                {
+                    case "DataSet":
+                        return result == null ? new DataTable() : (result as DataSet).Tables[0];
+                    case "DataTable":
+                        return result as DataTable;
+                    case "Json":
+                        var jdata = LitJson.JsonMapper.ToObject(result as string);
+
+                        if (!jdata.IsArray)
+                            throw new Exception("@返回的JSON格式字符串“" + (result ?? string.Empty) + "”不正确");
+
+                        var dt = new DataTable();
+                        dt.Columns.Add("No", typeof(string));
+                        dt.Columns.Add("Name", typeof(string));
+
+                        for (var i = 0; i < jdata.Count; i++)
+                        {
+                            dt.Rows.Add(jdata[i]["No"].ToString(), jdata[i]["Name"].ToString());
+                        }
+
+                        return dt;
+                    case "Xml":
+                        if (result == null || string.IsNullOrWhiteSpace(result.ToString()))
+                            throw new Exception("@返回的XML格式字符串不正确。");
+
+                        var xml = new XmlDocument();
+                        xml.LoadXml(result as string);
+
+                        XmlNode root = null;
+
+                        if (xml.ChildNodes.Count < 2)
+                            root = xml.ChildNodes[0];
+                        else
+                            root = xml.ChildNodes[1];
+
+                        dt = new DataTable();
+                        dt.Columns.Add("No", typeof(string));
+                        dt.Columns.Add("Name", typeof(string));
+
+                        foreach (XmlNode node in root.ChildNodes)
+                        {
+                            dt.Rows.Add(node.SelectSingleNode("No").InnerText,
+                                        node.SelectSingleNode("Name").InnerText);
+                        }
+
+                        return dt;
+                    default:
+                        throw new Exception("@不支持的返回类型" + td[1]);
+                }
+            }
+            #endregion
+
+            #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
+            if (this.SrcType == Sys.SrcType.TableOrView)
+            {
+                string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
+                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                    sql += ", " + this.ParentValue + " ParentNo";
+
+                sql += " FROM " + this.SrcTable;
+                return src.RunSQLReturnTable(sql);
+            }
+            #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
+
+            #region 动态SQL，edited by liuxc,2016-12-29
+            if (this.SrcType == Sys.SrcType.SQL)
+            {
+                string runObj = this.SelectStatement;
+
+                if (DataType.IsNullOrEmpty(runObj))
+                    throw new Exception("@外键类型SQL配置错误," + this.No + " " + this.Name + " 是一个(SQL)类型(" + this.GetValStrByKey("SrcType") + ")，但是没有配置sql.");
+
+                if (runObj == null)
+                    runObj = string.Empty;
+
+                runObj = runObj.Replace("~", "'");
+                if (runObj.Contains("@WebUser.No"))
+                    runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
+
+                if (runObj.Contains("@WebUser.Name"))
+                    runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+
+                if (runObj.Contains("@WebUser.FK_Dept"))
+                    runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                return src.RunSQLReturnTable(runObj);
+            }
+            #endregion
+
+            #region 自定义表.
+            if (this.SrcType == Sys.SrcType.CreateTable)
+            {
+                string sql = "SELECT No, Name FROM " + this.No;
+                return src.RunSQLReturnTable(sql);
+            }
+            #endregion
+
+            return null;
+
         }
         public string GenerHisJson()
         {
-            return BP.Tools.Json.ToJson(this.GenerHisDataTable);
+            return BP.Tools.Json.ToJson(this.GenerHisDataTable());
         }
         /// <summary>
         /// 自动生成编号
@@ -1054,15 +1049,14 @@ namespace BP.Sys
         /// <returns></returns>
         public string GenerDataOfJson()
         {
-            return BP.Tools.Json.ToJson(this.GenerHisDataTable);
+            return BP.Tools.Json.ToJson(this.GenerHisDataTable());
         }
-
         /// <summary>
         /// 初始化数据.
         /// </summary>
         public void InitDataTable()
         {
-            DataTable dt = this.GenerHisDataTable;
+            DataTable dt = this.GenerHisDataTable();
 
             string sql = "";
             if (dt.Rows.Count == 0)

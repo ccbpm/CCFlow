@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>授权人列表</title>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" />
+    <script type="text/javascript">
+    </script>
+    <script language="javascript" type="text/javascript">
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        function LogAs(fk_emp, empName) {
+
+            if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("No", fk_emp);
+            var data = handler.DoMethodReturnString("LoginAs");
+
+            if (msg.indexOf('err') == 0) {
+                alert('授权登录失败!');
+                return;
+            }
+
+            parent.location.reload();
+            //top.location.href = '../WF/App/Classic/index.jsp';
+            top.location.href = './Todolist.htm';
+            //window.open('Todolist.htm');
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnString("Load_Author");
+            data = JSON.parse(data);
+
+            var html = "<ul>";
+
+            for (var i = 0; i < data.length; i++) {
+
+                var en = data[i];
+
+                html += "<li>" + en.Name + "</li>";
+            }
+
+
+            html += "</ul>";
+
+            $("#docs").html(html);
+        }
+    </script>
+</head>
+<body>
+    <center>
+        <table style="width: 50%;">
+            <caption>
+                授权人列表
+            </caption>
+            <tr>
+                <td>
+                    <div id="docs" name="docs">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

@@ -1,19 +1,18 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>授权待办列表</title>
-    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="./Comm/Gener.js" type="text/javascript"></script>
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-     <base target="_self" />
+    <base target="_self" />
     <script type="text/javascript">
     </script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -169,6 +168,7 @@
                 conMenu += "</table>";
                 conMenu += "</div>";
             }
+
             //显示tab标签
             $('#Tab_Menu').html([
                         newRow
@@ -199,39 +199,112 @@
             return cdt;
         }
     </script>
-     <style type="text/css"> 
-        body{font:"宋体";font-size:12px;} 
-        a:link,a:visited{font-size:12px;color:#666;text-decoration:none;} 
-        a:hover{color:#ff0000;text-decoration:underline;} 
-        #Tab{margin:0 auto;width:100%;border:1px solid #BCE2F3;} 
-        .Menubox{height:28px;border-bottom:1px solid #64B8E4;background:#E4F2FB;} 
-        .Menubox ul{list-style:none;margin:7px 5px;padding:0;position:absolute;} 
-        .Menubox ul li{float:left;background:#64B8E4;line-height:20px;display:block;cursor:pointer;width:135px;text-align:center;color:#fff;font-weight:bold;border-top:1px solid #64B8E4;border-left:1px solid #64B8E4;border-right:1px solid #64B8E4;} 
-        .Menubox ul li.hover{background:#fff;border-bottom:1px solid #fff;color:#147AB8;} 
-        .Contentbox{clear:both;margin-top:0px;border-top:none;height:181px;padding-top:8px;height:100%;}
-        .Contentbox ul{list-style:none;margin:7px;padding:0;} 
-        .Contentbox ul li{line-height:24px;border-bottom:1px dotted #ccc;} 
-</style> 
-<script type="text/javascript">
-    function setTab(name, cursel, n) {
-        for (i = 1; i <= n; i++) {
-            var menu = document.getElementById(name + i);
-            var con = document.getElementById("con_" + name + "_" + i);
-            menu.className = i == cursel ? "hover" : "";
-            con.style.display = i == cursel ? "block" : "none";
+    <style type="text/css">
+        body
+        {
+            font: "宋体";
+            font-size: 12px;
         }
-    } 
-</script> 
+        a:link, a:visited
+        {
+            font-size: 12px;
+            color: #666;
+            text-decoration: none;
+        }
+        a:hover
+        {
+            color: #ff0000;
+            text-decoration: underline;
+        }
+        #Tab
+        {
+            margin: 0 auto;
+            width: 100%;
+            border: 1px solid #BCE2F3;
+        }
+        .Menubox
+        {
+            height: 28px;
+            border-bottom: 1px solid #64B8E4;
+            background: #E4F2FB;
+        }
+        .Menubox ul
+        {
+            list-style: none;
+            margin: 7px 5px;
+            padding: 0;
+            position: absolute;
+        }
+        .Menubox ul li
+        {
+            float: left;
+            background: #64B8E4;
+            line-height: 20px;
+            display: block;
+            cursor: pointer;
+            width: 135px;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            border-top: 1px solid #64B8E4;
+            border-left: 1px solid #64B8E4;
+            border-right: 1px solid #64B8E4;
+        }
+        .Menubox ul li.hover
+        {
+            background: #fff;
+            border-bottom: 1px solid #fff;
+            color: #147AB8;
+        }
+        .Contentbox
+        {
+            clear: both;
+            margin-top: 0px;
+            border-top: none;
+            height: 181px;
+            padding-top: 8px;
+            height: 100%;
+        }
+        .Contentbox ul
+        {
+            list-style: none;
+            margin: 7px;
+            padding: 0;
+        }
+        .Contentbox ul li
+        {
+            line-height: 24px;
+            border-bottom: 1px dotted #ccc;
+        }
+    </style>
+    <script type="text/javascript">
+        function setTab(name, cursel, n) {
+            for (i = 1; i <= n; i++) {
+                var menu = document.getElementById(name + i);
+                var con = document.getElementById("con_" + name + "_" + i);
+                menu.className = i == cursel ? "hover" : "";
+                con.style.display = i == cursel ? "block" : "none";
+            }
+        } 
+    </script>
 </head>
 <body>
-    <caption><div class='CaptionMsg' >授权待办列表</div></caption>
-        <div id="Tab">
-            <div class="Menubox"> 
-                <ul id="Tab_Menu"> 
-                </ul> 
-            </div> 
-            <div id="Div_Content" class="Contentbox"> 
-            </div> 
-    </div>
+    <table style="width: 100%;">
+        <caption>
+            授权待办列表
+        </caption>
+        <tr>
+            <td>
+                <div id="Tab">
+                    <div class="Menubox">
+                        <ul id="Tab_Menu">
+                        </ul>
+                    </div>
+                    <div id="Div_Content" class="Contentbox">
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

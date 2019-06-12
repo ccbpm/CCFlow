@@ -31,7 +31,13 @@
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
-
+    <style type="text/css">
+        th
+        {
+            border: 1px solid #ccc;
+            background-color:#f5f5f5;
+        }
+    </style>
     <script type="text/javascript">
 
         var newRowIdx = -1;
@@ -59,12 +65,12 @@
             // mainData = frmData["MainData"];
             document.title = mapData.Name;
             var isReadonly = GetQueryString("IsReadonly");
-            
+
             InitToolbar(); //初始工具栏.
 
             //绑定数据.
             BindDtls(mapData, mainData, frmData);
- 
+
         })
 
         function OpenEn(pkVal) {
@@ -80,7 +86,7 @@
 
             });
         }
-         
+
         //设置按钮
         function InitToolbar() {
 
@@ -115,8 +121,8 @@
             var html = "<table border=0 id='Table1' style='width:99%;'>";
             html += "<tr>";
             html += "<th>序</th>";
-           
-            
+
+
             for (var i = 0; i < mapAtrrs.length; i++) {
                 var mapAttr = mapAtrrs[i];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
@@ -129,7 +135,7 @@
             html += "</tr>";
 
 
-            var hidden="";
+            var hidden = "";
 
             //生成内容.
             for (var i = 0; i < dtls.length; i++) {
@@ -148,33 +154,32 @@
 
                 html += "<tr ondblclick='OpenEn(\"" + pkval + "\")'>";
                 html += "<td class='Idx'>" + (i + 1) + "</td>";
-                     
- 
+
+
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
                     var mapAttr = mapAtrrs[attrIdx];
                     mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
-                    if (mapAttr.UIVisible == "0")
-                    {
-                        html += "<input type='hidden' id='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' name='TB_"+pkval+"_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
+                    if (mapAttr.UIVisible == "0") {
+                        html += "<input type='hidden' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
                         continue;
                     }
 
-                    html += "<td>" + InitMapAttrOfCtrl(mapAttr,dtl, pkval) + "</td>";
+                    html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, pkval) + "</td>";
                 }
 
-                html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";          
-                if (mapData.GetPara("IsDelete")=="1")
-                 html += "<td><a href=\"javascript:Delete('"+pkval+"')\"><img src='../../Img/Btn/Delete.png' /></a></td>";
+                html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";
+                if (mapData.GetPara("IsDelete") == "1")
+                    html += "<td><a href=\"javascript:Delete('" + pkval + "')\"><img src='../../Img/Btn/Delete.png' /></a></td>";
                 else
-                  html += "<td></td>";
+                    html += "<td></td>";
 
-              
+
 
                 html += "</tr>";
             }
             html += "</table>";
 
-            
+
             var html = $(html);
             $('#mytable').html("").append(html);
             $('#mytable').append(hidden);
@@ -195,7 +200,7 @@
                 for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
                     var mapAttr = mapAttrs[attrIdx];
                     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-                        if ($("#TB_"+pkval+"_" + mapAttr.KeyOfEn + "Text").length == 1) {
+                        if ($("#TB_" + pkval + "_" + mapAttr.KeyOfEn + "Text").length == 1) {
                             if (defValue == "")
                                 $("#TB_" + pkval + "_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + pkval + "_" + mapAttr.KeyOfEn + " option:first").text());
                             else
@@ -204,27 +209,27 @@
                     }
                 }
             }
-            
-          
+
+
         }
 
-        function ChangeKeyOfEnText(obj, KeyOfEn,pkval) {
-            if ($("#TB_" + pkval+"_" + KeyOfEn + "Text").length == 1)
+        function ChangeKeyOfEnText(obj, KeyOfEn, pkval) {
+            if ($("#TB_" + pkval + "_" + KeyOfEn + "Text").length == 1)
                 $("#TB_" + pkval + "_" + KeyOfEn + "Text").val($(obj).find("option:selected").text());
         }
 
-        function InitMapAttrOfCtrl(mapAttr,dtl, pkval) {
+        function InitMapAttrOfCtrl(mapAttr, dtl, pkval) {
 
             var str = '';
-            var defValue =  ConvertDefVal(mapAttr, dtl);
+            var defValue = ConvertDefVal(mapAttr, dtl);
             var isInOneRow = false; //是否占一整行
             var islabelIsInEle = false; //
             var eleHtml = '';
 
             //加入隐藏控件.
             if (mapAttr.UIVisible == 0) {
-               
-                html += "<input type='hidden' id='TB_" + pkval+"_" + mapAttr.KeyOfEn + "' name='TB_" +pkval+"_"+ mapAttr.KeyOfEn + "' value='" + defValue + "' />";
+
+                html += "<input type='hidden' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' />";
             }
 
             //外部数据源类型.
@@ -236,7 +241,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\"" + mapAttr.KeyOfEn + "\",\""+pkval+"\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\"" + mapAttr.KeyOfEn + "\",\"" + pkval + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -332,7 +337,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select  style='width:" + mapAttr.UIWidth*2+ "px' class='form-control'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select  style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             // AppDouble  AppFloat
@@ -348,7 +353,7 @@
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
+                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn == "NodeID") {
                     enableAttr = "disabled='disabled'";
                 }
                 return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
@@ -411,8 +416,8 @@
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     return;
                 }
-                
-              //  alert(defVal);
+
+                //  alert(defVal);
 
 
                 $.each(data, function (i, obj) {
@@ -456,13 +461,13 @@
                     alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
                     //alert('没有获得约定的数据源.');
                 }
-                
+
             }
             return operations;
         }
 
         //新建.
-        var newRowCount = 0;//新增行
+        var newRowCount = 0; //新增行
         function New() {
             newRowCount = newRowCount + 1;
             var ensName = GetQueryString("EnsName");
@@ -477,10 +482,10 @@
 
             var html = "";
             html += "<tr>";
-            html += "<td class='Idx'><font color=red>"+(newRowIdx+1)+"</font></td>";
-           
-            
-            var hidden="";
+            html += "<td class='Idx'><font color=red>" + (newRowIdx + 1) + "</font></td>";
+
+
+            var hidden = "";
 
             for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
                 var mapAttr = mapAtrrs[attrIdx];
@@ -513,7 +518,7 @@
                 $("#Btn_Save").attr("disabled", false);
                 return;
             }
-         //   alert(data);
+            //   alert(data);
             window.location.href = window.location.href;
         }
 
@@ -523,14 +528,14 @@
                 return;
 
             var ensName = GetQueryString("EnsName");
-            var enName=ensName.substring(0,ensName.length-1 );
+            var enName = ensName.substring(0, ensName.length - 1);
 
             //执行删除.
             var en = new Entity(enName);
             en.SetPKVal(pkval);
             en.Delete();
 
-            window.location.href=window.location.href;
+            window.location.href = window.location.href;
         }
 
         function CloseIt() {
@@ -543,7 +548,7 @@
 
         //导入
         function Import() {
-            var title = mapData.Name+"导入数据";
+            var title = mapData.Name + "导入数据";
             var W = document.body.clientWidth - 40;
             var H = document.body.clientHeight - 40;
             var url = "../../CCForm/DtlImpByExcel.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefVal") + "&FK_MapData=" + GetQueryString("EnName");
@@ -565,9 +570,9 @@
                 alert(data);
             }
             //if (plant != 'CCFlow') {
-             //   var currentPath = window.document.location.href;
+            //   var currentPath = window.document.location.href;
             //   var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                data = basePath+"/" + data;
+            data = basePath + "/" + data;
             //}
             window.open(data);
             return;

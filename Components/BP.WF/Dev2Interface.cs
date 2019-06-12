@@ -780,7 +780,7 @@ namespace BP.WF
             }
             else
             {
-                ps.SQL = "SELECT * FROM WF_CCList WHERE CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.WorkID=A.WorkID";
                 ps.Add("FK_Emp", FK_Emp);
             }
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -1367,9 +1367,7 @@ namespace BP.WF
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0)
         {
             if (DataType.IsNullOrEmpty(userNo) == true)
-            {
                 throw new Exception("err@登录信息丢失.");
-            }
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;

@@ -6413,6 +6413,7 @@ namespace BP.WF
                     {
                         //执行自动抄送
                         string ccMsg1 = WorkFlowBuessRole.DoCCAuto(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
+
                         //按照指定的字段抄送.
                         string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
                         //手工抄送

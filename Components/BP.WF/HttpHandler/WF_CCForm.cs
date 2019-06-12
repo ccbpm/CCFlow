@@ -1272,7 +1272,7 @@ namespace BP.WF.HttpHandler
                         {
                             try
                             {
-                                //判断是否自定义权限
+                                //判断是否自定义权限.
                                 bool IsSelf = false;
                                 if ((nd.HisFormType == NodeFormType.SheetTree
                                      || nd.HisFormType == NodeFormType.RefOneFrmTree)
@@ -1284,6 +1284,7 @@ namespace BP.WF.HttpHandler
                             }
                             catch (Exception ex)
                             {
+
                             }
                         }
 
@@ -1317,7 +1318,6 @@ namespace BP.WF.HttpHandler
                     {
                         continue;
                     }
-
 
                     // 检查是否有下拉框自动填充。
                     string keyOfEn = dr["KeyOfEn"].ToString();

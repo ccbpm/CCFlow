@@ -1505,7 +1505,7 @@ namespace BP.WF
         public static string DoCCAuto(Node node, GERpt rpt, Int64 workid, Int64 fid)
         {
 
-            if (node.HisCCRole == CCRole.AutoCC
+                if (node.HisCCRole == CCRole.AutoCC
               || node.HisCCRole == CCRole.HandAndAuto)
             {
 

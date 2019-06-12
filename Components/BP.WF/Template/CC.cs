@@ -420,14 +420,13 @@ namespace BP.WF.Template
                 map.AddBoolean(CCAttr.CCIsAttr, false, "按表单字段抄送", true, true, true);
                 map.AddTBString(CCAttr.CCFormAttr, null, "抄送人员字段", true, false, 0, 100, 10, true);
                 
-                map.AddBoolean(CCAttr.CCIsStations, false, "按照岗位抄送", true, true, true);
+                map.AddBoolean(CCAttr.CCIsStations, false, "是否启用？-按照岗位抄送", true, true, false);
                 map.AddDDLSysEnum(CCAttr.CCStaWay, 0, "抄送岗位计算方式", true, true, CCAttr.CCStaWay,
                     "@0=仅按岗位计算@1=按岗位智能计算(当前节点)@2=按岗位智能计算(发送到节点)@3=按岗位与部门的交集@4=按直线上级部门找岗位下的人员(当前节点)@5=按直线上级部门找岗位下的人员(接受节点)");
 
-                map.AddBoolean(CCAttr.CCIsDepts, false, "按照部门抄送", true, true, true);
-                map.AddBoolean(CCAttr.CCIsEmps, false, "按照人员抄送", true, true, true);
-
-                map.AddBoolean(CCAttr.CCIsSQLs, false, "按照SQL抄送", true, true, true);
+                map.AddBoolean(CCAttr.CCIsDepts, false, "是否启用？-按照部门抄送", true, true, false);
+                map.AddBoolean(CCAttr.CCIsEmps, false, "是否启用？-按照人员抄送", true, true, false);
+                map.AddBoolean(CCAttr.CCIsSQLs, false, "是否启用？-按照SQL抄送", true, true, true);
                 map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 200, 10, true);
 
                 map.AddTBString(CCAttr.CCTitle, null, "抄送标题", true, false, 0, 100, 10, true);

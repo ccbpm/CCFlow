@@ -1819,15 +1819,14 @@ namespace BP.WF.HttpHandler
         public string Load_Author()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM WF_EMP WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
+            ps.SQL = "SELECT * FROM WF_Emp WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
             ps.Add("AUTHOR", BP.Web.WebUser.No);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                dt.Columns["NO"].ColumnName = "NO";
+                dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["NO"].ColumnName = "NO";
             }
             return BP.Tools.Json.ToJson(dt);
         }
@@ -1880,17 +1879,13 @@ namespace BP.WF.HttpHandler
         {
             string sta = this.GetRequestVal("Sta");
             if (sta == null || sta == "")
-            {
                 sta = "-1";
-            }
 
-            int pageSize = 6;// int.Parse(pageSizeStr);
+            int pageSize = 6; // int.Parse(pageSizeStr);
 
             string pageIdxStr = this.GetRequestVal("PageIdx");
             if (pageIdxStr == null)
-            {
                 pageIdxStr = "1";
-            }
 
             int pageIdx = int.Parse(pageIdxStr);
 
@@ -1900,24 +1895,16 @@ namespace BP.WF.HttpHandler
 
             System.Data.DataTable dt = null;
             if (sta == "-1")
-            {
                 dt = BP.WF.Dev2Interface.DB_CCList(BP.Web.WebUser.No);
-            }
 
             if (sta == "0")
-            {
                 dt = BP.WF.Dev2Interface.DB_CCList_UnRead(BP.Web.WebUser.No);
-            }
 
             if (sta == "1")
-            {
                 dt = BP.WF.Dev2Interface.DB_CCList_Read(BP.Web.WebUser.No);
-            }
 
             if (sta == "2")
-            {
                 dt = BP.WF.Dev2Interface.DB_CCList_Delete(BP.Web.WebUser.No);
-            }
 
             //int allNum = qo.GetCount();
             //qo.DoQuery(BP.WF.SMSAttr.MyPK, pageSize, pageIdx);

@@ -287,11 +287,17 @@
         function showBarTable(attrs,data){
                var html = "";
           
-              if (attrs.length==0)
-                  html +="<table style='width:30%;' >";
-
-             if (attrs.length==1)
-                 html +="<table style='width:50%;' >";
+              if(mapBase.DTSearchWay == "0"){
+                  if (attrs.length==0 )
+                    html +="<table style='width:30%;' >";
+                  if (attrs.length==1 )
+                     html +="<table style='width:50%;' >";
+              }else{
+                 if (attrs.length==0 )
+                    html +="<table style='width:60%;' >";
+                 if (attrs.length==1 )
+                     html +="<table style='width:80%;' >";
+              }
 
             if (attrs.length>1)
                 html +="<table style='width:100%;' >";

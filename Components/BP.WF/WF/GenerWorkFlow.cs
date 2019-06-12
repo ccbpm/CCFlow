@@ -295,6 +295,8 @@ namespace BP.WF
         /// </summary>
         public const string Domain = "Domain";
 
+        public const string PrjNo = "PrjNo";
+        public const string PrjName = "PrjName";
         #endregion
     }
 	/// <summary>
@@ -1222,6 +1224,11 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.TodoSta, 0, "待办状态", true, true);
                 map.AddTBString(GenerWorkFlowAttr.Domain, null, "域/系统编号", true, false, 0, 100, 30);
                 map.SetHelperAlert(GenerWorkFlowAttr.Domain, "用于区分不同系统的流程,比如:一个集团有多个子系统每个子系统都有自己的流程,就需要标记那些流程是那个子系统的.");
+
+                map.AddTBString(GenerWorkFlowAttr.PrjNo, null, "PrjNo", true, false, 0, 100, 10);
+                map.AddTBString(GenerWorkFlowAttr.PrjName, null, "PrjNo", true, false, 0, 100, 10);
+
+
 
                 map.AddTBMyNum();
 

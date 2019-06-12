@@ -103,7 +103,7 @@ namespace BP.WF.WeiXin
             if (BP.DA.DataType.IsNullOrEmpty(agentId) == true)
                 return null;
 
-            string accessToken = new BP.WF.WeiXin.WeiXin().getAccessToken();//获取 AccessToken
+            string accessToken = new BP.WF.WeiXin.WeiXin().GenerAccessToken();//获取 AccessToken
             
             News_Articles newArticle = new News_Articles();
             newArticle.title = title;

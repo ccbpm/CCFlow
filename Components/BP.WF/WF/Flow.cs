@@ -1791,6 +1791,8 @@ namespace BP.WF
 
             BP.DA.Cash.ClearCash();
 
+            Nodes nds = new Nodes(this.No);
+
             #region 检查独立表单
             FrmNodes fns = new FrmNodes();
             fns.Retrieve(FrmNodeAttr.FK_Flow, this.No);
@@ -1814,6 +1816,24 @@ namespace BP.WF
                 }
             }
             #endregion
+
+            #region 检查消息推送。
+            PushMsgs pus = new PushMsgs();
+            pus.Retrieve(PushMsgAttr.FK_Flow, this.No);
+            foreach (Node nd in nds)
+            {
+                bool isHave = false;
+                foreach (PushMsg item in pus)
+                {
+                    if (item.FK_Node != nd.NodeID)
+                        continue;
+
+                    //     if (item.FK_Event == 
+                    //   isHave = true;
+                }
+            }
+            #endregion 检查消息推送。
+
 
             try
             {
@@ -1845,7 +1865,6 @@ namespace BP.WF
                 msg += "@信息输出分为三种: 信息  警告  错误. 如果遇到输出的错误，则必须要去修改或者设置.";
                 msg += "@流程检查目前还不能覆盖100%的错误,需要手工的运行一次才能确保流程设计的正确性.";
 
-                Nodes nds = new Nodes(this.No);
 
                 #region 检查是否是数据合并模式?
                 if (this.HisDataStoreModel == Template.DataStoreModel.SpecTable)
@@ -2419,7 +2438,6 @@ namespace BP.WF
         #region 检查流程.
 
         #endregion 检查流程.
-
 
         #region 产生数据模板。
         readonly static string PathFlowDesc;

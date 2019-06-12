@@ -124,7 +124,6 @@ namespace BP.WF.Template
         /// 推送邮件的节点s
         /// </summary>
         public const string MailNodes = "MailNodes";
-
     }
 	/// <summary>
 	/// 消息推送

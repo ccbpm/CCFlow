@@ -481,6 +481,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             if (UseColSpan == tableCol) {
                 ruRowSpan++;
                 isDropTR = true;
+
             } else {
                 isDropTR = false;
             }
@@ -490,6 +491,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 ruRowSpan = 0;
                 rRowSpan = 0;
                 IsShowRight = true;
+                luColSpan = 0;
             }
 
 
@@ -517,8 +519,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrlFool(flowData, attr);
                 html += "</td>";
-                if (UseColSpan == tableCol)
+                if (UseColSpan == tableCol) {
                     isDropTR = true;
+
+                }
                 if (rowSpan != 1) {
                     IsShowRight = false;
                 }
@@ -534,6 +538,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 luRowSpan = 0;
                 lRowSpan = 0;
                 IsShowLeft = true;
+                ruColSpan = 0;
 
             }
 

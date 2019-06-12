@@ -98,23 +98,25 @@ namespace BP.WF.WeiXin
         /// <returns></returns>
         public static MessageErrorModel SendMsgToUsers(string toUsers, string title, string msg, string sender)
         {
-            //企业应用必须存在.
+            //企业应用必须存在
             string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
             if (BP.DA.DataType.IsNullOrEmpty(agentId) == true)
                 return null;
 
-            string accessToken = new BP.WF.WeiXin.WeiXin().GenerAccessToken();//获取 AccessToken
-
+            string accessToken = new BP.WF.WeiXin.WeiXin().getAccessToken();//获取 AccessToken
+            
             News_Articles newArticle = new News_Articles();
             newArticle.title = title;
             newArticle.description = msg;
 
             string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=empwork_#wechat_redirect";
+                + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=Todolist#wechat_redirect";
             newArticle.url = New_Url;
 
             //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-            //newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
+            newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
+
+            toUsers = toUsers.Replace(',','|');
 
             WX_Msg_News wxMsg = new WX_Msg_News();
             wxMsg.Access_Token = accessToken;

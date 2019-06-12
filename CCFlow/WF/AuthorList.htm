@@ -34,9 +34,12 @@
                 return;
             }
 
-            parent.location.reload();
+            window.location.href = 'AuthorTodolist.htm?RefNo=' + fk_emp;
+            return;
+
+           // parent.location.reload();
             //top.location.href = '../WF/App/Classic/index.jsp';
-            top.location.href = './Todolist.htm';
+            top.location.href = './AuthorTodolist.htm';
             //window.open('Todolist.htm');
         }
 
@@ -57,16 +60,17 @@
             var data = handler.DoMethodReturnString("Load_Author");
             data = JSON.parse(data);
 
+            if (data.length == 0) {
+                $("#docs").html("");
+                return;              
+            }
+
             var html = "<ul>";
 
             for (var i = 0; i < data.length; i++) {
-
                 var en = data[i];
-
-                html += "<li>" + en.Name + "</li>";
+                html += "<li><a href=\"javascript:LogAs('"+en.No+"','"+en.Name+"');\"> " + en.Name + "</a></li>";
             }
-
-
             html += "</ul>";
 
             $("#docs").html(html);

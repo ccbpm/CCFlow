@@ -7376,6 +7376,8 @@ namespace BP.WF
             gwf.FlowNote = note;
 
 
+
+
             if (srcNum == 0)
                 gwf.DirectInsert();
             else
@@ -7384,6 +7386,11 @@ namespace BP.WF
             StartWork sw = (StartWork)this.HisWork;
 
             #region 设置  HisGenerWorkFlow
+
+
+            //设置项目名称. @shilianyu.
+            gwf.PrjNo = this.rptGe.PrjNo;
+            gwf.PrjName = this.rptGe.PrjName;
 
             this.HisGenerWorkFlow = gwf;
 
@@ -7403,6 +7410,10 @@ namespace BP.WF
             // wl.WarningHour = this.HisNode.WarningHour;
             wl.SDT = "无";
             wl.DTOfWarning = DataType.CurrentDataTime;
+
+
+
+
 
             try
             {

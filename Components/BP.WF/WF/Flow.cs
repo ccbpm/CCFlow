@@ -1822,15 +1822,8 @@ namespace BP.WF
             pus.Retrieve(PushMsgAttr.FK_Flow, this.No);
             foreach (Node nd in nds)
             {
-                bool isHave = false;
-                foreach (PushMsg item in pus)
-                {
-                    if (item.FK_Node != nd.NodeID)
-                        continue;
-
-                    //     if (item.FK_Event == 
-                    //   isHave = true;
-                }
+                //创建默认信息.
+                CreatePushMsg(nd);
             }
             #endregion 检查消息推送。
 
@@ -2024,7 +2017,7 @@ namespace BP.WF
                                     string sql = nd.DeliveryParas;
                                     foreach (MapAttr item in mattrs)
                                     {
-                                        sql = sql.Replace("@" + item.KeyOfEn, "0"); 
+                                        sql = sql.Replace("@" + item.KeyOfEn, "0");
                                     }
 
                                     sql = sql.Replace("@WebUser.No", "ss");
@@ -2247,8 +2240,8 @@ namespace BP.WF
                     strs = Glo.DealExp(strs, rpt, "err");
                     if (strs.Contains("@") == true)
                     {
-                       // msg += "@错误:焦点字段（" + nd.FocusField + "）在节点(step:" + nd.Step + " 名称:" + nd.Name + ")属性里的设置已无效，表单里不存在该字段.";
-                       //删除节点属性中的焦点字段
+                        // msg += "@错误:焦点字段（" + nd.FocusField + "）在节点(step:" + nd.Step + " 名称:" + nd.Name + ")属性里的设置已无效，表单里不存在该字段.";
+                        //删除节点属性中的焦点字段
                         nd.FocusField = "";
                         nd.Update();
                     }
@@ -3828,7 +3821,7 @@ namespace BP.WF
             GERpt gerpt = this.HisGERpt;
             gerpt.CheckPhysicsTable();  //让报表重新生成.
 
-                DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+            DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
 
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='活动时间' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='CDT'");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='参与者' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='Emps'");
@@ -3846,7 +3839,7 @@ namespace BP.WF
         /// <param name="atPara">参数</param>
         /// <param name="objs">发送对象，可选</param>
         /// <returns>执行结果</returns>
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, int toNode=0,string toEmps=null)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, int toNode = 0, string toEmps = null)
         {
             if (currNode == null)
                 return null;
@@ -3879,7 +3872,7 @@ namespace BP.WF
             if (this.FEventEntity != null)
             {
                 this.FEventEntity.SendReturnObjs = objs;
-                str = this.FEventEntity.DoIt(doType, currNode, en, atPara,toNode,toEmps);
+                str = this.FEventEntity.DoIt(doType, currNode, en, atPara, toNode, toEmps);
             }
 
             FrmEvents fes = currNode.FrmEvents;
@@ -6074,10 +6067,6 @@ namespace BP.WF
         }
         public void CreatePushMsg(Node nd)
         {
-
-            if (SystemConfig.IsEnableCCIM == false)
-                return;
-
             /*创建发送短消息,为默认的消息.*/
             BP.WF.Template.PushMsg pm = new BP.WF.Template.PushMsg();
             int i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.SendSuccess,
@@ -6513,7 +6502,6 @@ namespace BP.WF
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion 版本管理.
-
 
     }
     /// <summary>

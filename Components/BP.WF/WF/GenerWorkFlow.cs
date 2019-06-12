@@ -722,6 +722,34 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 项目编号
+        /// </summary>
+        public string PrjNo
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.PrjNo);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.PrjNo, value);
+            }
+        }
+        /// <summary>
+        /// 项目名称
+        /// </summary>
+        public string PrjName
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.PrjName);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.PrjName, value);
+            }
+        }
+        /// <summary>
         /// 吊起子流程的人员
         /// </summary>
         public string PEmp

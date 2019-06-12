@@ -234,7 +234,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 控件状态
         /// </summary>
-        public FrmSubFlowSta SFSta 
+        public FrmSubFlowSta SFSta
         {
             get
             {
@@ -434,7 +434,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string str= this.GetValStringByKey(FrmSubFlowAttr.SFCaption);
+                string str = this.GetValStringByKey(FrmSubFlowAttr.SFCaption);
                 if (str == "")
                     str = "启动子流程";
                 return str;
@@ -568,7 +568,7 @@ namespace BP.WF.Template
                     true, true, FrmSubFlowAttr.SFShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
                 map.AddTBString(FrmSubFlowAttr.SFCaption, "启动子流程", "连接标题", true, false, 0, 100, 10, true);
-                map.AddTBString(FrmSubFlowAttr.SFDefInfo, null, "可启动的子流程编号(多个用逗号分开)", true, false, 0, 50, 10,true);
+                map.AddTBString(FrmSubFlowAttr.SFDefInfo, null, "可启动的子流程编号(多个用逗号分开)", true, false, 0, 50, 10, true);
                 map.AddTBString(FrmSubFlowAttr.SFActiveFlows, null, "可触发的子流程编号(多个用逗号分开)", true, false, 0, 50, 10, true);
 
                 map.AddTBFloat(FrmSubFlowAttr.SF_X, 5, "位置X", true, false);
@@ -577,14 +577,14 @@ namespace BP.WF.Template
                 map.AddTBFloat(FrmSubFlowAttr.SF_H, 300, "高度", true, false);
                 map.AddTBFloat(FrmSubFlowAttr.SF_W, 400, "宽度", true, false);
 
-                map.AddTBString(FrmSubFlowAttr.SFFields, null, "审批格式字段", true, false, 0, 50, 10,true);
+                map.AddTBString(FrmSubFlowAttr.SFFields, null, "审批格式字段", true, false, 0, 50, 10, true);
 
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, (int)SFShowCtrl.All, "显示控制方式",
                   true, true, FrmSubFlowAttr.SFShowCtrl, "@0=可以看所有的子流程@1=仅仅可以看自己发起的子流程"); //此属性暂时没有用.
-            
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFOpenType,0, "打开子流程显示",
+
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFOpenType, 0, "打开子流程显示",
                  true, true, FrmSubFlowAttr.SFOpenType, "@0=工作查看器@1=傻瓜表单轨迹查看器"); //此属性暂时没有用.
-              
+
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 

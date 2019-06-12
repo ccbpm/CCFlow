@@ -566,126 +566,28 @@ function GepParaByName(name, atPara) {
 function InitDDLOperation(flowData, mapAttr, defVal) {
 
     var operations = '';
-
-    //外键类型的.
-    if (mapAttr.LGType == 2) {
-
-        var data = flowData[mapAttr.KeyOfEn];
-
-        if (data == undefined)
-            data = flowData[mapAttr.UIBindKey];
-
-        if (data == undefined) {
-            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-            if (sfTable != null && sfTable != "") {
-                var selectStatement = sfTable.SelectStatement;
-                var srcType = sfTable.SrcType;
-                //Handler 获取外部数据源
-                if (srcType == 5)
-                    data = DBAccess.RunDBSrc(selectStatement, 1);
-                //JavaScript获取外部数据源
-                if (srcType == 6)
-                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-            }
-        }
-
-        if (data == undefined) {
-            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-            return;
-        }
-
-        $.each(data, function (i, obj) {
-            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-        });
-
-
-        return operations;
-    }
-
-    //枚举类型的.
-    if (mapAttr.LGType == 1) {
-
-        var enums = flowData.Sys_Enum;
-        enums = $.grep(enums, function (value) {
-            return value.EnumKey == mapAttr.UIBindKey;
-        });
-
-
-        $.each(enums, function (i, obj) {
-            operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-        });
-        return operations;
-    }
-
-
-
-    //外部数据源类型 FrmGener.js.InitDDLOperation
-    if (mapAttr.LGType == 0) {
-
-        //如果是一个函数.
-        var fn;
-        try {
-            if (mapAttr.UIBindKey) {
-                fn = eval(mapAttr.UIBindKey);
-            }
-        } catch (e) {
-            //alert(e);
-        }
-
-        if (typeof fn == "function") {
-            $.each(fn.call(), function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+    var data = flowData[mapAttr.KeyOfEn];
+    if (data == undefined)
+        data = flowData[mapAttr.UIBindKey];
+    if (data == undefined) {
+        //枚举类型的.
+        if (mapAttr.LGType == 1){
+            var enums = flowData.Sys_Enum;
+            enums = $.grep(enums, function (value) {
+                return value.EnumKey == mapAttr.UIBindKey;
             });
-            return operations;
+
+
+            $.each(enums, function (i, obj) {
+                operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+            });
         }
-
-        var data = flowData[mapAttr.KeyOfEn];
-        if (data == undefined)
-            data = flowData[mapAttr.UIBindKey];
-
-        if (data == undefined) {
-            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-            if (sfTable != null && sfTable != "") {
-                var selectStatement = sfTable.SelectStatement;
-                var srcType = sfTable.SrcType;
-                // SQL获取外部数据源
-                if (srcType == 3)
-                    data = DBAccess.RunDBSrc(selectStatement, 0);
-                //WebService 获取外部数据源
-                if (srcType == 5) {
-                    data = SFTaleHandler(selectStatement);
-                    if (data == "false") {
-                        alert(mapAttr.KeyOfEn + "外部数据源获取错误");
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-                }
-                //JavaScript获取外部数据源
-                if (srcType == 6)
-                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-            }
-        }
-        if (data == undefined) {
-            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-            return;
-        }
-
-        $.each(data, function (i, obj) {
-            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-
-        });
-        if (mapAttr.UIIsInput == 0)
-            operations = "<option value=''>- 请选择 -</option>" + operations;
         return operations;
-
-        if (mapAttr.UIIsEnable == 0) {
-
-            alert('不可编辑');
-            operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
-            return operations;
-        }
     }
+    $.each(data, function (i, obj) {
+        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+    });
+    return operations;
 }
 
 
@@ -1471,7 +1373,6 @@ function GenerWorkNode() {
 
     if (data.indexOf('err@') == 0) {
         alert(data);
-        // console.log(data);
         return;
     }
 
@@ -1483,6 +1384,32 @@ function GenerWorkNode() {
         //console.log(data);
         alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
         return;
+    }
+
+
+    //获取没有解析的外部数据源
+    var uiBindKeys = flowData["UIBindKey"];
+    if (uiBindKeys.length != 0) {
+        //获取外部数据源 handler/JavaScript
+        var operdata;
+        for (var i = 0; i < uiBindKeys.length; i++) {
+            var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+            var srcType = sfTable.SrcType;
+            if (srcType != null && srcType!="") {
+                //Handler 获取外部数据源
+                if (srcType == 5) {
+                    var selectStatement = sfTable.SelectStatement;
+                    selectStatement = basePath +"/DataUser/SFTableHandler.ashx" + selectStatement;
+                    operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                }
+                //JavaScript获取外部数据源
+                if (srcType == 6) {
+                    operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                }
+                flowData[uiBindKeys[i].No] = operdata;
+            }
+        }
+
     }
 
     var node = flowData.WF_Node[0];

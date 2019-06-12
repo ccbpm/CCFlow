@@ -2075,8 +2075,22 @@
             if (data == undefined)
                 data = workNodeData[mapAttr.UIBindKey];
 
-            if (data == undefined)
+            if (data == undefined) {
+                //枚举类型的.
+                if (mapAttr.LGType == 1) {
+                    var enums = workNodeData.Sys_Enum;
+                    enums = $.grep(enums, function (value) {
+                        return value.EnumKey == mapAttr.UIBindKey;
+                    });
+
+
+                    $.each(enums, function (i, obj) {
+                        operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    });
+                }
                 return operations;
+
+            }
 
             if (mapAttr.UIIsInput == 0)
                 operations = "<option value=''>- 请选择 -</option>" + operations;

@@ -633,8 +633,22 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     var data = frmData[mapAttr.KeyOfEn];
     if (data == undefined)
         data = frmData[mapAttr.UIBindKey];
-    if (data == undefined)
+    if (data == undefined) {
+        //枚举类型的.
+        if (mapAttr.LGType == 1) {
+            var enums = frmData.Sys_Enum;
+            enums = $.grep(enums, function (value) {
+                return value.EnumKey == mapAttr.UIBindKey;
+            });
+
+
+            $.each(enums, function (i, obj) {
+                operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+            });
+        }
         return operations;
+
+    }
 
     $.each(data, function (i, obj) {
         operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";

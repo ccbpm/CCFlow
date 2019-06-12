@@ -335,6 +335,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     ruRowSpan = 0;
                     rRowSpan = 0;
                     IsShowRight = true;
+                    luColSpan = 0;
                 }
 
 
@@ -371,6 +372,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     luRowSpan = 0;
                     lRowSpan = 0;
                     IsShowLeft = true;
+                    ruColSpan = 0;
 
                 }
 
@@ -448,6 +450,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 ruRowSpan = 0;
                 rRowSpan = 0;
                 IsShowRight = true;
+                luColSpan = 0;
             }
 
 
@@ -492,6 +495,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 luRowSpan = 0;
                 lRowSpan = 0;
                 IsShowLeft = true;
+                ruColSpan = 0;
 
             }
 

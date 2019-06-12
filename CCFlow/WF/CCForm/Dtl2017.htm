@@ -367,8 +367,8 @@
 
             AfterBindEn_DealMapExt(insertTr, newRowIndex);
 
-           
-  
+
+
             setTdDataByTrData(newRowIndex);
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
@@ -437,7 +437,7 @@
                 for (var i = 0; i < uiBindKeys.length; i++) {
                     var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
                     var srcType = sfTable.SrcType;
-                    if (srcType != null && srcType!="") {
+                    if (srcType != null && srcType != "") {
                         //Handler 获取外部数据源
                         if (srcType == 5) {
                             var selectStatement = sfTable.SelectStatement;
@@ -446,7 +446,7 @@
                         }
                         //JavaScript获取外部数据源
                         if (srcType == 6) {
-                           operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                            operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
                         }
                         data[uiBindKeys[i].No] = operdata;
                     }
@@ -481,8 +481,8 @@
 
                 threadTr.append(snTh);
                 $.each(sys_mapAttr, function (i, mapAttrObj) {
-                    
-                    var mustInput ="";
+
+                    var mustInput = "";
                     if (mapAttrObj.UIIsInput == 1)
                         mustInput = '<span style="color:red" class="mustInput" data-keyofen="' + mapAttrObj.KeyOfEn + '">*</span>';
                     var th = $('<th class="thStyle"></th>');
@@ -514,7 +514,7 @@
                 if (sys_MapDtl.IsEnableAthM == 1) {
                     athTh.data(athThData);
                     threadTr.append(athTh);
-                    
+
                 }
 
 
@@ -670,7 +670,7 @@
                                     $(tmplate).bind('blur', function (obj) {
                                         $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
                                     });
-                                } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0 || (tmplate.length > 1 && $(tmplate[1]).attr('name').indexOf('DDL_') == 0)) {
+                                } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0 || (tmplate.length > 1 && $(tmplate[1]).attr('name') != undefined && $(tmplate[1]).attr('name').indexOf('DDL_') == 0)) {
                                     //对于只读的下拉框做如下处理  为只读的下拉框赋值.
                                     if (o.data().UIIsEnable == "0") {
                                         var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
@@ -905,7 +905,7 @@
                             //children.width(20.34);
                         } else if (hi + 1 == headerCount) {
                             // 最后一列
-                            td.width(40);
+                            td.width(width - 1);
                         } else {
                             td.width(width - 3);
                             children.width(width - paddWidth - 5);
@@ -1267,7 +1267,7 @@
 
                         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
                             if (mapAttr.UIContralType == 1) {//DDL
-                                
+
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                             }
                         }
@@ -1438,7 +1438,7 @@
 
             //循环表格
             var trs = $('.table.wupop tbody tr');
-            for(var i = 0; i<trs.length;i++) {
+            for (var i = 0; i < trs.length; i++) {
                 var obj = trs[i];
                 var sn = $($(obj).children()[0]).text();
                 if (sn == null || sn == "" || isNaN(sn)) {
@@ -1448,12 +1448,12 @@
                 needSaveCount = trs.length;
                 saveAll = true;
                 //$('#Msg').show();
-               // $('#ContentDtlDiv').hide();
+                // $('#ContentDtlDiv').hide();
                 var index = i;
-                
+
                 //让界面的值=DAT 的值
                 setTrDataByData(index);
-                
+
                 var trData = $($('table tbody tr')[index]).data().data;
                 var rowData = trData;
                 if ($($('table tbody tr')[index]).data().customRowType == "statistics") {
@@ -1469,7 +1469,7 @@
 
                 var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
 
-                
+
 
                 if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
                     //值未改变，无需存盘
@@ -1699,45 +1699,45 @@
                             popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                         }
                         switch (popWorkModelStr) {
-                            /// <summary>    
-                            /// 自定义URL    
-                            /// </summary>    
-                            //SelfUrl =1,    
+                            /// <summary>     
+                            /// 自定义URL     
+                            /// </summary>     
+                            //SelfUrl =1,     
                             case "1":
                                 icon = "glyphicon glyphicon-th";
                                 break;
-                            /// <summary>    
-                            /// 表格模式    
-                            /// </summary>    
-                            // TableOnly,    
+                            /// <summary>     
+                            /// 表格模式     
+                            /// </summary>     
+                            // TableOnly,     
                             case "2":
                                 icon = "glyphicon glyphicon-list";
                                 break;
-                            /// <summary>    
-                            /// 表格分页模式    
-                            /// </summary>    
-                            //TablePage,    
+                            /// <summary>     
+                            /// 表格分页模式     
+                            /// </summary>     
+                            //TablePage,     
                             case "3":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary>    
-                            /// 分组模式    
-                            /// </summary>    
-                            // Group,    
+                            /// <summary>     
+                            /// 分组模式     
+                            /// </summary>     
+                            // Group,     
                             case "4":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary>    
-                            /// 树展现模式    
-                            /// </summary>    
-                            // Tree,    
+                            /// <summary>     
+                            /// 树展现模式     
+                            /// </summary>     
+                            // Tree,     
                             case "5":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
-                            /// <summary>    
-                            /// 双实体树    
-                            /// </summary>    
-                            // TreeDouble    
+                            /// <summary>     
+                            /// 双实体树     
+                            /// </summary>     
+                            // TreeDouble     
                             case "6":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
@@ -1788,59 +1788,59 @@
 
                         if (ctrl.length == 0) {
                             ctrl = $(tr).find('[name=DDL_' + mapExt.AttrOfOper + ']');
-                            if(ctrl.length == 0)
+                            if (ctrl.length == 0)
                                 ctrl = $(tr).find('[name=RB_' + mapExt.AttrOfOper + ']');
-                            if(ctrl.length == 0)
-                                 ctrl = $(tr).find('[name=CB_' + mapExt.AttrOfOper + ']');
+                            if (ctrl.length == 0)
+                                ctrl = $(tr).find('[name=CB_' + mapExt.AttrOfOper + ']');
                         }
 
-                       
-//                        //获取mapAttr;
-//                        var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-//                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
 
-//                            var method = ctrl.attr("onfocus");
-//                            var minDate = "";
-//                            if (method.indexOf("minDate") != -1)
-//                                minDate = '%y-%M-#{%d}';
+                        //                        //获取mapAttr;
+                        //                        var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                        //                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
 
-//                            ctrl.removeAttr("onfocus");
-//                            var dateFmt = 'yyyy-MM-dd';
-//                            if (mapAttr.MyDataType == 7)
-//                                dateFmt = 'yyyy-MM-dd HH:mm';
+                        //                            var method = ctrl.attr("onfocus");
+                        //                            var minDate = "";
+                        //                            if (method.indexOf("minDate") != -1)
+                        //                                minDate = '%y-%M-#{%d}';
 
-
-//                            var mapextDoc = mapExt.Doc;
-//                            ctrl.data().MapExt = mapExt;
-
-//                            ctrl.bind("focus", function (obj) {
-//                                var mapExtThis = $(obj.target).data().MapExt;
-//                                if (minDate == "")
-//                                    WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
-//                                        $(this).blur(); //失去焦点 
-//                                        if (mapExtThis.Doc.indexOf("(") != -1)
-//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
-//                                        else
-//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
-//                                    }
-//                                    });
-//                                else
-//                                    WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-//                                        $(this).blur(); //失去焦点 
-//                                        if (mapExtThis.Doc.indexOf("(") != -1)
-//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
-//                                        else
-//                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
-
-//                                       
-//                                    }
-//                                  });
-
-//                            });
+                        //                            ctrl.removeAttr("onfocus");
+                        //                            var dateFmt = 'yyyy-MM-dd';
+                        //                            if (mapAttr.MyDataType == 7)
+                        //                                dateFmt = 'yyyy-MM-dd HH:mm';
 
 
-//                            break;
-//                        }
+                        //                            var mapextDoc = mapExt.Doc;
+                        //                            ctrl.data().MapExt = mapExt;
+
+                        //                            ctrl.bind("focus", function (obj) {
+                        //                                var mapExtThis = $(obj.target).data().MapExt;
+                        //                                if (minDate == "")
+                        //                                    WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
+                        //                                        $(this).blur(); //失去焦点 
+                        //                                        if (mapExtThis.Doc.indexOf("(") != -1)
+                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
+                        //                                        else
+                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+                        //                                    }
+                        //                                    });
+                        //                                else
+                        //                                    WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                        //                                        $(this).blur(); //失去焦点 
+                        //                                        if (mapExtThis.Doc.indexOf("(") != -1)
+                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
+                        //                                        else
+                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
+
+                        //                                       
+                        //                                    }
+                        //                                  });
+
+                        //                            });
+
+
+                        //                            break;
+                        //                        }
                         ctrl.data().MapExt = mapExt;
                         ctrl.bind(mapExt.Tag, function (obj) {
                             var mapExtThis = $(obj.target).data().MapExt;
@@ -2052,7 +2052,7 @@
 
                                 ddlC1.children().remove();
                                 ddlC1.html(operations);
-                              
+
                             }
                         }
                         break;
@@ -2077,16 +2077,16 @@
 
             if (data == undefined)
                 return operations;
-            
-             if (mapAttr.UIIsInput == 0)
-                    operations = "<option value=''>- 请选择 -</option>" + operations;
+
+            if (mapAttr.UIIsInput == 0)
+                operations = "<option value=''>- 请选择 -</option>" + operations;
 
             $.each(data, function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
 
             return operations;
-           
+
         }
 
         //填充默认数据

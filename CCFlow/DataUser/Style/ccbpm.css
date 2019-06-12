@@ -1,12 +1,4 @@
 ﻿/*  Table 风格   */
-.no-input
-{
-     border: none; 
-     background: none; 
-     text-align: right; 
-     color: #666; 
-     cursor: no-drop;
- }
 body
 {
     color: #333333;
@@ -32,14 +24,6 @@ body
     border-bottom: 1px solid #ddd;
     margin: 8px 10px 25px 10px;
     padding-bottom: 5px;
-}
-
-input[type=text], input[type=password], select
-{
-    border-radius: 5px;
-    border: thin solid #CCCCCC;
-    margin: 1px 1px;
-    height:28px;
 }
 
 /* 按钮风格 */
@@ -68,7 +52,7 @@ input:hover[type="button"]
 
 
 /*文本框只读风格.*/
-input[disabled], input:disabled
+input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
     background-color: #F5F5F5;
@@ -82,7 +66,7 @@ input[disabled], input:disabled
      cursor: no-drop;
 }
 /*文本框只读风格.*/
-textarea[disabled], input:disabled
+textarea[disabled], input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
     background-color: #F5F5F5;
@@ -95,8 +79,15 @@ textarea[disabled], input:disabled
      color: #666; 
      cursor: no-drop;
 }
+
+input[type=checkbox]:disabled
+{
+        display:inline;
+        width:20px;
+}
+
 /*文本框只读风格.*/
-select[disabled], input:disabled
+select[disabled], input[type=text]:disabled
 {
    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
@@ -112,8 +103,6 @@ select[disabled], input:disabled
       -moz-appearance:none;   
       -webkit-appearance:none;   
 }
-
- 
   
 /*  table 类型风格 */
 table
@@ -436,7 +425,13 @@ display:block;
     display: table;
 }
 
-
+input[type=text], input[type=password], select
+{
+    border-radius: 5px;
+    border: thin solid #CCCCCC;
+    margin: 1px 1px;
+    height:28px;
+}
 
 .FDesc
 {

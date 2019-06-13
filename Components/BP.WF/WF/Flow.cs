@@ -1033,9 +1033,6 @@ namespace BP.WF
                             //new 一个实例.
                             GEDtl dtlData = new GEDtl(dtl.No);
 
-                            //检查该明细表是否有数据，如果没有数据，就copy过来，如果有，就说明已经copy过了。
-                            //  sql = "SELECT COUNT(OID) FROM "+dtlData.EnMap.PhysicsTable+" WHERE RefPK="+wk.OID;
-
                             //删除以前的数据.
                             sql = "DELETE FROM " + dtlData.EnMap.PhysicsTable + " WHERE RefPK=" + wk.OID;
                             DBAccess.RunSQL(sql);
@@ -1047,18 +1044,35 @@ namespace BP.WF
                             dtlsFromData.Retrieve(GEDtlAttr.RefPK, PWorkID);
                             foreach (GEDtl geDtlFromData in dtlsFromData)
                             {
+                                //是否启用多附件
+                                FrmAttachmentDBs dbs = null;
+                                if (dtl.IsEnableAthM == true)
+                                {
+                                    //根据从表的OID 获取附件信息
+                                    dbs = new FrmAttachmentDBs();
+                                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, geDtlFromData.OID);
+                                }
+
                                 dtlData.Copy(geDtlFromData);
                                 dtlData.RefPK = wk.OID.ToString();
-                                if (this.No == PFlowNo)
+                                if (this.No.Equals(PFlowNo) == false && (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow)){
+                                     dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
+                                }else
                                 {
                                     dtlData.InsertAsNew();
-                                }
-                                else
-                                {
-                                    if (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow)
-                                        dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
-                                    else
-                                        dtlData.InsertAsNew();
+                                    if (dbs != null && dbs.Count != 0)
+                                    {
+                                        //复制附件信息
+                                        FrmAttachmentDB newDB = new FrmAttachmentDB();
+                                        foreach (FrmAttachmentDB db in dbs)
+                                        {
+                                            newDB.Copy(db);
+                                            newDB.RefPKVal = dtlData.OID.ToString();
+                                            newDB.FID = dtlData.OID;
+                                            newDB.MyPK = BP.DA.DBAccess.GenerGUID();
+                                            newDB.Insert();
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -324,7 +324,8 @@ namespace BP.WF
                             return false;
                     }
                 }
-                throw new Exception("@没有找到系统变量IsStopFlow");
+                //throw new Exception("@没有找到系统变量IsStopFlow");
+                return false;
             }
         }
 

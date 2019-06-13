@@ -1766,6 +1766,15 @@ namespace BP.WF
         public string ClearCash()
         {
             BP.DA.Cash.ClearCash();
+            //清空流程中的缓存
+            //获取改流程中的节点数据
+            Nodes nds = new Nodes(this.No);
+            foreach(Node nd in nds){
+                //判断表单的类型
+                if(nd.HisFormType  == NodeFormType.FoolForm || nd.HisFormType  == NodeFormType.FreeForm)
+                    BP.Sys.CCFormAPI.AfterFrmEditAction("ND"+nd.No);
+            }
+
             return "清除成功.";
         }
 

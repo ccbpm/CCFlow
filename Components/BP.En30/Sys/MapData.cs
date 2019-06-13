@@ -1008,9 +1008,6 @@ namespace BP.Sys
 
         public void CleanObject()
         {
-            this.Row = null;
-            return;
-
             this.Row.SetValByKey("FrmEles", null);
             this.Row.SetValByKey("MapFrames", null);
             this.Row.SetValByKey("GroupFields", null);
@@ -1028,9 +1025,19 @@ namespace BP.Sys
             this.Row.SetValByKey("FrmImgAthDBs", null);
             this.Row.SetValByKey("FrmRBs", null);
             this.Row.SetValByKey("MapAttrs", null);
+            return;
             
 
 
+        }
+
+        /// <summary>
+        /// 清空缓存
+        /// </summary>
+        public void ClearCash()
+        {
+            BP.DA.CashFrmTemplate.Remove(this.No);
+            CleanObject();
         }
 
         #region 基本属性.

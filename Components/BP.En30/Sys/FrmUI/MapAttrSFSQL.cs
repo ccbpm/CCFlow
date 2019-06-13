@@ -231,6 +231,14 @@ namespace BP.Sys.FrmUI
             attr.MyPK = attr.FK_MapData + "_" + this.KeyOfEn + "T";
             attr.Delete();
 
+            //删除相对应的rpt表中的字段
+            if (this.FK_MapData.Contains("ND") == true)
+            {
+                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn + "')";
+                DBAccess.RunSQL(sql);
+            }
+
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
             base.afterDelete();

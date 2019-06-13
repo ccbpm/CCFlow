@@ -75,6 +75,12 @@ namespace BP.WF.HttpHandler
                 cols.DoCheckFixFrmForUpdateVer();
                 return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
             }
+            //把表单属性放入里面去.
+            MapData md = new MapData(this.FK_MapData);
+            //清缓存
+            md.ClearCash();
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+
 
             // 字段属性.
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
@@ -92,9 +98,7 @@ namespace BP.WF.HttpHandler
             MapFrames frms = new MapFrames(this.FK_MapData);
             ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
 
-            //把表单属性放入里面去.
-            MapData md = new MapData(this.FK_MapData);
-            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+            
 
             //附件表.
             FrmAttachments aths = new FrmAttachments(this.FK_MapData);

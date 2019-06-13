@@ -490,9 +490,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SaveForm()
         {
+            //清缓存
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
             string docs = this.GetRequestVal("diagram");
             BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, docs);
-            //   BP.DA.DataType.WriteFile("c:\\xxxx.txt", docs);
+            
             return "保存成功.";
         }
 

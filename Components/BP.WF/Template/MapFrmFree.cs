@@ -444,6 +444,16 @@ namespace BP.WF.Template
             base.afterUpdate();
         }
 
+        /// <summary>
+        /// 删除后清缓存
+        /// </summary>
+        protected override void afterDelete()
+        {
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.No);
+            base.afterDelete();
+        }
+
         #region 高级设置.
         /// <summary>
         /// 改变表单类型 @李国文 ，需要搬到jflow.

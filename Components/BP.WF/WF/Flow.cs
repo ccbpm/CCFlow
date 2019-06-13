@@ -1772,7 +1772,7 @@ namespace BP.WF
             foreach(Node nd in nds){
                 //判断表单的类型
                 if(nd.HisFormType  == NodeFormType.FoolForm || nd.HisFormType  == NodeFormType.FreeForm)
-                    BP.Sys.CCFormAPI.AfterFrmEditAction("ND"+nd.No);
+                    BP.Sys.CCFormAPI.AfterFrmEditAction("ND"+nd.NodeID);
             }
 
             return "清除成功.";

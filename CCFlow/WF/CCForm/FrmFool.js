@@ -139,8 +139,10 @@ function GenerFoolFrm(mapData, frmData) {
             html += "<tr>";
             html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
             html += "</tr>";
-
-            html += InitMapAttr(frmData.Sys_MapAttr, frmData, gf.OID, tableCol);
+            if (tableCol == 4 || tableCol == 6)
+                html += InitMapAttr(frmData.Sys_MapAttr, frmData, gf.OID, tableCol);
+            else if (tableCol == 3)
+                html += InitThreeColMapAttr(frmData.Sys_MapAttr, frmData, gf.OID, tableCol);
             continue;
         }
     }
@@ -245,6 +247,125 @@ function Ele_FrmCheck(wf_node) {
     return eleHtml;
 }
 
+//解析表单是三列的情况
+function InitThreeColMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
+    var html = "";
+    var isDropTR = true;
+
+    var lab = "";
+    var colSpan = 1;
+    var rowSpan = 1;
+    var textColSpan = 1;
+    var textWidth = "33%";
+    var colWidth = "33%";
+
+    //记录一行已占用的列输
+    var UseColSpan = 0;
+    var IsMiddle = false;
+    //跨行问题
+    for (var i = 0; i < Sys_MapAttr.length; i++) {
+        var attr = Sys_MapAttr[i];
+
+        if (attr.GroupID != groupID || attr.UIVisible == 0)
+            continue;
+        //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
+        lab = GetLab(frmData, attr);
+
+        rowSpan = attr.RowSpan;
+        colSpan = attr.ColSpan;
+        textColSpan = attr.TextColSpan;
+
+
+        colWidth = 33 * parseInt(colSpan) + "%";
+        textWidth = 33 * parseInt(textColSpan) + "%";
+
+        //跨列设置(显示的是文本)
+        if (colSpan == 0) {
+
+            if (textColSpan == tableCol) {
+                html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+                isDropTR = true;
+                continue;
+            }
+            //线性展示都跨一个单元格
+            //换行的情况
+            if (isDropTR == true) {
+                html += "<tr >";
+                UseColSpan = 0;
+                UseColSpan += colSpan + textColSpan;
+                html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+
+                if (UseColSpan == tableCol) {
+                    isDropTR = true;
+                } else {
+                    isDropTR = false;
+                }
+                continue;
+            }
+
+            if (isDropTR == false) {
+                UseColSpan += colSpan + textColSpan;
+                html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+                if (UseColSpan == tableCol) {
+                    html += "</tr>";
+                    isDropTR = true;
+                } else {
+                    isDropTR = false;
+                }
+                continue;
+            }
+        }
+        //解析占一行的情况
+        if (colSpan == tableCol) {
+            html += "<tr>";
+            html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
+            html += InitMapAttrOfCtrl(attr);
+            html += "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            UseColSpan = 0;
+            continue;
+        }
+
+        //换行的情况
+        if (isDropTR == true) {
+            html += "<tr >";
+            UseColSpan = 0;
+
+            UseColSpan += colSpan;
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + colSpan + " class='tdSpan'>" + lab + "<br/>";
+            html += InitMapAttrOfCtrl(attr);
+            html += "</td>";
+            if (UseColSpan == tableCol) {
+                isDropTR = true;
+            } else {
+                isDropTR = false;
+            }
+
+
+            continue;
+        }
+
+        if (isDropTR == false) {
+
+            UseColSpan += colSpan;
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + colSpan + " class='tdSpan'>" + lab + "<br/>";
+            html += InitMapAttrOfCtrl(attr);
+            html += "</td>";
+
+            if (UseColSpan == tableCol) {
+                html += "</tr>";
+                isDropTR = true;
+            } else {
+                isDropTR = false;
+            }
+
+
+            continue;
+        }
+    }
+    return html;
+}
 
 
 //解析表单字段 MapAttr.
@@ -313,6 +434,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             if (isDropTR == true) {
                 html += "<tr >";
                 UseColSpan = 0;
+                luColSpan = 0;
                 if (IsShowLeft == true) {
                     UseColSpan += colSpan + textColSpan + ruColSpan;
                     lRowSpan = rowSpan;
@@ -335,7 +457,9 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     ruRowSpan = 0;
                     rRowSpan = 0;
                     IsShowRight = true;
-                    luColSpan = 0;
+                    if (rowSpan == 1)
+                      luColSpan = 0;
+                    ruColSpan = 0;
                 }
 
 
@@ -350,15 +474,21 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             }
 
             if (isDropTR == false) {
+                ruColSpan = 0;
                 if (IsShowRight == true) {
                     UseColSpan += colSpan + textColSpan;
                     rRowSpan = rowSpan;
                     ruColSpan += colSpan + textColSpan;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
-                    if (UseColSpan == tableCol)
+                    if (UseColSpan == tableCol) {
                         isDropTR = true;
+                        if (rowSpan != 1) {
+                            ruRowSpan++;
+                        }
+                    }
                     if (rowSpan != 1) {
                         IsShowRight = false;
+                        lRowSpan = rowSpan;
                     }
                 }
 
@@ -419,6 +549,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         if (isDropTR == true) {
             html += "<tr >";
             UseColSpan = 0;
+            luColSpan = 0;
             if (IsShowLeft == true) {
                 UseColSpan += colSpan + textColSpan + ruColSpan;
                 lRowSpan = rowSpan;
@@ -450,7 +581,9 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 ruRowSpan = 0;
                 rRowSpan = 0;
                 IsShowRight = true;
-                luColSpan = 0;
+                if (rowSpan == 1)
+                    luColSpan = 0;
+                ruColSpan = 0;
             }
 
 
@@ -465,6 +598,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         }
 
         if (isDropTR == false) {
+            ruColSpan = 0;
             if (IsShowRight == true) {
                 UseColSpan += colSpan + textColSpan;
                 rRowSpan = rowSpan;
@@ -478,10 +612,15 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrl(attr);
                 html += "</td>";
-                if (UseColSpan == tableCol)
+                if (UseColSpan == tableCol) {
                     isDropTR = true;
+                    if (rowSpan != 1) {
+                        ruRowSpan++;
+                    }
+                }
                 if (rowSpan != 1) {
                     IsShowRight = false;
+                    lRowSpan = rowSpan;
                 }
             }
 
@@ -508,6 +647,12 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             continue;
         }
 
+    }
+
+    if (isDropTR == false) {
+        var unUseColSpan = tableCol - UseColSpan;
+        html += "<td colspan=" + unUseColSpan + "></td>";
+        html += "</tr>";
     }
 
     return html;

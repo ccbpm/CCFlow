@@ -40,7 +40,7 @@
             group.Idx = 100;
             group.Insert();
             window.location.href = window.location.href;
-           
+
         }
         //编辑分组名称
         function GroupField(fk_mapdata, OID) {
@@ -128,7 +128,7 @@
             var mapattr = new Entity("BP.Sys.MapAttr", mypkOfAttr);
             mapattr.GroupID = groupID;
             mapattr.Update();
-             
+
             window.location.reload();
 
         }
@@ -160,21 +160,24 @@
             }
 
             window.location.reload();
- 
+
         }
         //复制到其他节点
         function BtnCopy() {
 
             var v = $('#pub1_lbNodes').val();
             var FK_MapData = GetQueryString("FK_MapData");
-            if (!v) {
+            if (v == null || v.length == 0) {
                 alert('请选择将此排序复制到的节点！');
                 return false;
             }
-
+            var str = "";
+            for (var i = 0; i < v.length; i++) {
+                str += v[i] + ",";
+            }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddPara("FK_MapData", FK_MapData);
-            handler.AddPara("NodeIDs", v);
+            handler.AddPara("NodeIDs", str);
             var data = handler.DoMethodReturnString("SortingMapAttrs_Copy");
 
             if (data.indexOf('err') >= 0) {
@@ -230,14 +233,6 @@
                 //1.1 在面板里添加表格
                 var htmlstr = ""
                 htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%'>";
-//                htmlstr += "<tr>";
-//                htmlstr += "<td class='GroupTitle' style='width: 40px; text-align: center'>序</td>";
-//                htmlstr += "<td class='GroupTitle' style='width: 100px;'>字段名称</td>";
-//                htmlstr += "<td class='GroupTitle' style='width: 160px;'>中文描述</td>";
-//                htmlstr += "<td class='GroupTitle' style='width: 160px;'>字段分组</td>";
-//                htmlstr += "<td class='GroupTitle' style='width: 160px;'>字段排序</td>";
-//                htmlstr += "<td class='GroupTitle' nowrap>是否显示</td>";
-//                htmlstr += "</tr>";
                 htmlstr += "</table>";
 
                 $("#p").append(htmlstr);
@@ -285,13 +280,7 @@
                         var table = "";
                         table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
                         table += "<tbody>";
-//                        table += "<tr>";
-//                        table += "<td class='GroupTitle' style='width:40px;text-align:center'>序</td>";
-//                        table += "<td class='GroupTitle' style='width:100px;'>明细表编号</td>";
-//                        table += "<td class='GroupTitle' style='width:160px;'>中文名称</td>";
-//                        table += "<td class='GroupTitle' style='width:120px;'>字段分组</td>";
-//                        table += "<td class='GroupTitle' nowrap=''>字段排序</td>";
-//                        table += "</tr>";
+
 
                         //明细表字段，进入单独页面设计
                         groupOfDtls.forEach(function (item, index) {
@@ -319,13 +308,6 @@
                         //重新生成多附件表头
                         var table = "";
                         table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
-//                        table += "<tbody><tr>";
-//                        table += "<td class='GroupTitle' style='width:40px;text-align:center'>序</td>";
-//                        table += "<td class='GroupTitle' style='width:100px;'>多附件编号</td>";
-//                        table += "<td class='GroupTitle' style='width:160px;'>中文名称</td>";
-//                        table += "<td class='GroupTitle' style='width:120px;'>字段分组</td>";
-//                        table += "<td class='GroupTitle' nowrap=''>字段排序</td>";
-//                        table += "</tr>";
 
                         //多附件字段，字段可不调整，只可调整顺序
                         groupOfAthMents.forEach(function (item, index) {
@@ -470,7 +452,7 @@
                 }
                 //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
                 var backHtml = "";
-                if (trdtl[0].tdDtl=="1") {
+                if (trdtl[0].tdDtl == "1") {
                     backHtml = "<tr><td colspan=6>";
                     backHtml += "<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
 
@@ -490,7 +472,7 @@
                     //预览
                     backHtml += "<a href='#' onclick=Form_View('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;margin-botton:0.5em\"> <span class='l-btn-left'><span class='l-btn-text icon-search l-btn-icon-left'>预览</span></span></a>";
                     //复制排序
-                    if(dtNodes!=null && dtNodes!=undefined && dtNodes.length >0)
+                    if (dtNodes != null && dtNodes != undefined && dtNodes.length > 0)
                         backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
 
                     //新建分组
@@ -522,7 +504,7 @@
                     nodesHtml += "</select>";
 
                     $('#nodes_panel').html([nodesHtml].join(''));
-                } 
+                }
             }
         }
     </script>

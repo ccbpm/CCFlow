@@ -4,7 +4,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
     var data = [];
     var valueField = "No";
     var textField = "Name";
-    switch (mapExt.DoWay) {
+    switch (parseInt(mapExt.DoWay)) {
         case 1:
             var tag1 = mapExt.Tag1;
             tag1 = tag1.replace(/;/g, ',');

@@ -35,6 +35,7 @@
             SFShowCtrl.MySelf = 1
 
         }
+
         $(function () {
 
             //当IsShowTitle 不为0时，不显示标题
@@ -145,17 +146,17 @@
                     var emps = item.TodoEmps.split(';');
                     var myemps = "";
 
-                    for (var i = 0; i < emps.length; i++) {
+                    for (var idx = 0; idx < emps.length; idx++) {
 
-                        var strs = emps[i];
-                        if (strs == null)
+                        var empstrs = emps[idx];
+                        if (empstrs == null)
                             continue;
 
-                        if (strs == '' ||  strs.length == 0 || strs == null)
+                        if (empstrs == '' || empstrs.length == 0 || empstrs == null)
                             continue;
 
-                        strs = emps[i].split(',');
-                        myemps += "" + strs[1] + ",";
+                        empstrs = emps[idx].split(',');
+                        myemps += "" + empstrs[1] + ",";
                     }
 
 
@@ -173,7 +174,6 @@
                         html += "<td title='" + item.FlowNote + "'></td>";
                     else
                         html += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
-
 
                     html += "</tr>";
 

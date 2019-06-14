@@ -115,7 +115,11 @@
 
             //循环取出来的数据
             for (var i in data) {
-                var key; var Name;
+
+                var key="No";
+                var Name = "Name";
+
+
                 var thHtml = "<tr><th>Idx</th>";
                 //如果是第一行，先生成table列名
                 if (i < 1) {
@@ -177,8 +181,11 @@
 
                 //根据sql查询的列名，依次显示，并对应列名.
                 for (var v in data[i]) {
+                  
                     if (v == "NO" || v == "No") {//此处No列不显示
                         key = data[i][v];
+                        if (key == null)
+                            key = "";
                     }
 
                     else if (v == "NAME" || v == "Name") {

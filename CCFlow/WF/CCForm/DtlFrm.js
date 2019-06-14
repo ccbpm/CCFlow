@@ -32,17 +32,7 @@ $(function () {
             $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
-    /*else {
-    //新加
-    //计算高度，展示滚动条
-    var height = $(window).height() - 150;
-    $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
-    $('#topContentDiv').height(height);
 
-    $(window).resize(function () {
-    $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
-    });
-    }*/
     function movetb() {
         var move;
         $("#nav").css("top", top);
@@ -145,6 +135,35 @@ function GenerFrm() {
         console.log(data);
         return;
     }
+
+    //获取没有解析的外部数据源
+    var uiBindKeys = frmData["UIBindKey"];
+    if (uiBindKeys.length != 0) {
+        //获取外部数据源 handler/JavaScript
+        var operdata;
+        for (var i = 0; i < uiBindKeys.length; i++) {
+            var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+            var srcType = sfTable.SrcType;
+            if (srcType != null && srcType != "") {
+                //Handler 获取外部数据源
+                if (srcType == 5) {
+                    var selectStatement = sfTable.SelectStatement;
+                    if (plant == "CCFlow")
+                        selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    else
+                        selectStatement = basePath + "/DataUser/SFTableHandler" + selectStatement;
+                    operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                }
+                //JavaScript获取外部数据源
+                if (srcType == 6) {
+                    operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                }
+                frmData[uiBindKeys[i].No] = operdata;
+            }
+        }
+
+    }
+
 
     //获得sys_mapdata.
     var mapData = frmData["Sys_MapData"][0];
@@ -249,7 +268,7 @@ function GenerFrm() {
         if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
             var uiBindKey = mapAttr.UIBindKey;
             if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-                var sfTable = new Entity("BP.Sys.FrmUI.SFTable");
+                var sfTable = new Entity("BP.Sys.SFTable");
                 sfTable.SetPKVal(uiBindKey);
                 var count = sfTable.RetrieveFromDBSources();
                 if (count != 0 && sfTable.CodeStruct == "1") {
@@ -277,71 +296,71 @@ function GenerFrm() {
             if (mapAttr.MyDataType == 8)
                 if (!/\./.test(defValue))
                     defValue += '.00';
-        $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-    }
-
-    if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-        // 判断下拉框是否有对应option, 若没有则追加
-        if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-            var mainTable = frmData.MainTable[0];
-            var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+            $('#TB_' + mapAttr.KeyOfEn).val(defValue);
         }
 
-        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+        if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+            // 判断下拉框是否有对应option, 若没有则追加
+            if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                var mainTable = frmData.MainTable[0];
+                var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+            }
+
+            $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+        }
+
+        if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
+            if (defValue == "1")
+                $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
+            else
+                $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+        }
+
+        //只读或者属性为不可编辑时设置
+        if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
+
+            $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+        }
+
+
     }
 
-    if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
-        if (defValue == "1")
-            $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
-        else
-            $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+    //处理下拉框级联等扩展信息
+    AfterBindEn_DealMapExt(frmData);
+
+    ShowNoticeInfo();
+
+    ShowTextBoxNoticeInfo();
+
+    //初始化复选下拉框 
+    var selectPicker = $('.selectpicker');
+    $.each(selectPicker, function (i, selectObj) {
+        var defVal = $(selectObj).attr('data-val');
+        var defValArr = defVal.split(',');
+        $(selectObj).selectpicker('val', defValArr);
+    });
+
+    //给富文本 创建编辑器
+    var editor = document.activeEditor = UM.getEditor('editor', {
+        'autoHeightEnabled': false,
+        'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+    });
+    if (document.BindEditorMapAttr) {
+        editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+        editor.MinLen = document.BindEditorMapAttr.MinLen;
+        editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+        editor.BindFieldName = document.BindEditorMapAttr.Name;
     }
+    //调整样式,让必选的红色 * 随后垂直居中
+    editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
 
-    //只读或者属性为不可编辑时设置
-    if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
-
-        $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-        $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-        $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+    // 表单计算 /WF/CCForm/FrmFree.js
+    if (typeof calculator === "function") {
+        calculator(frmData.Sys_MapExt);
     }
-
-
-}
-
-//处理下拉框级联等扩展信息
-AfterBindEn_DealMapExt(frmData);
-
-ShowNoticeInfo();
-
-ShowTextBoxNoticeInfo();
-
-//初始化复选下拉框 
-var selectPicker = $('.selectpicker');
-$.each(selectPicker, function (i, selectObj) {
-    var defVal = $(selectObj).attr('data-val');
-    var defValArr = defVal.split(',');
-    $(selectObj).selectpicker('val', defValArr);
-});
-
-//给富文本 创建编辑器
-var editor = document.activeEditor = UM.getEditor('editor', {
-    'autoHeightEnabled': false,
-    'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
-});
-if (document.BindEditorMapAttr) {
-    editor.MaxLen = document.BindEditorMapAttr.MaxLen;
-    editor.MinLen = document.BindEditorMapAttr.MinLen;
-    editor.BindField = document.BindEditorMapAttr.KeyOfEn;
-    editor.BindFieldName = document.BindEditorMapAttr.Name;
-}
-//调整样式,让必选的红色 * 随后垂直居中
-editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
-
-// 表单计算 /WF/CCForm/FrmFree.js
-if (typeof calculator === "function") {
-    calculator(frmData.Sys_MapExt);
-}
 
 }
 
@@ -518,223 +537,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
     athModal.modal().show();
 }
 
-//处理MapExt
-function AfterBindEn_DealMapExt(frmData) {
 
-    var mapExtArr = frmData.Sys_MapExt;
-    for (var i = 0; i < mapExtArr.length; i++) {
-        var mapExt = mapExtArr[i];
-        switch (mapExt.ExtType) {
-            case "PopVal": //PopVal窗返回值
-            case "PopFullCtrl": //PopFullCtrl.
-                var tb = $('[name$=' + mapExt.AttrOfOper + ']');
-                //tb.attr("placeholder", "请双击选择。。。");
-                tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-                //  tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
-
-                tb.attr('readonly', 'true');
-                tb.attr('disabled', 'true');
-                var icon = '';
-                var popWorkModelStr = '';
-                var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;
-                if (popWorkModelIndex >= 0) {
-                    popWorkModelIndex = popWorkModelIndex + '@PopValWorkModel='.length;
-                    popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
-                }
-                switch (popWorkModelStr) {
-                    /// <summary>   
-                    /// 自定义URL   
-                    /// </summary>   
-                    //SelfUrl =1,   
-                    case "1":
-                        icon = "glyphicon glyphicon-th";
-                        break;
-                    /// <summary>   
-                    /// 表格模式   
-                    /// </summary>   
-                    // TableOnly,   
-                    case "2":
-                        icon = "glyphicon glyphicon-list";
-                        break;
-                    /// <summary>   
-                    /// 表格分页模式   
-                    /// </summary>   
-                    //TablePage,   
-                    case "3":
-                        icon = "glyphicon glyphicon-list-alt";
-                        break;
-                    /// <summary>   
-                    /// 分组模式   
-                    /// </summary>   
-                    // Group,   
-                    case "4":
-                        icon = "glyphicon glyphicon-list-alt";
-                        break;
-                    /// <summary>   
-                    /// 树展现模式   
-                    /// </summary>   
-                    // Tree,   
-                    case "5":
-                        icon = "glyphicon glyphicon-tree-deciduous";
-                        break;
-                    /// <summary>   
-                    /// 双实体树   
-                    /// </summary>   
-                    // TreeDouble   
-                    case "6":
-                        icon = "glyphicon glyphicon-tree-deciduous";
-                        break;
-                    default:
-                        icon = "glyphicon glyphicon-th";
-                        break;
-                }
-                var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
-                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('" + mapExt.ExtType + "','TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-                tb.parent().html(eleHtml);
-                break;
-            case "RegularExpression": //正则表达式  统一在保存和提交时检查
-                var tb = $('[name$=' + mapExt.AttrOfOper + ']');
-                //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
-
-                if (tb.attr('class') != undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
-                    break;
-                } else {
-                    tb.addClass("CheckRegInput");
-                    tb.data(mapExt)
-                    //tb.data().name = tb.attr('name');
-                    //tb.data().Doc = mapExt.Doc;
-                    //tb.data().Tag1 = mapExt.Tag1;
-                    //tb.attr("data-name", tb.attr('name'));
-                    //tb.attr("data-Doc", tb.attr('name'));
-                    //tb.attr("data-checkreginput", "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
-                }
-                break;
-            case "InputCheck": //输入检查
-                //var tbJS = $("#TB_" + mapExt.AttrOfOper);
-                //if (tbJS != undefined) {
-                //    tbJS.attr(mapExt.Tag2, mapExt.Tag1 + "(this)");
-                //}
-                //else {
-                //    tbJS = $("#DDL_" + mapExt.AttrOfOper);
-                //    if (ddl != null)
-                //        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
-                //}
-                break;
-            case "TBFullCtrl": //自动填充  先不做
-                var tbAuto = $("#TB_" + mapExt.AttrOfOper);
-                if (tbAuto == null)
-                    continue;
-
-                tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value, '" + 'TB_' + mapExt.AttrOfOper + "', '" + mapExt.MyPK + "');");
-                tbAuto.attr("AUTOCOMPLETE", "OFF");
-                if (mapExt.Tag != "") {
-                    /* 处理下拉框的选择范围的问题 */
-                    var strs = mapExt.Tag.split('$');
-                    for (var str in strs) {
-                        var str = strs[k];
-                        if (str = "" || str == null) {
-                            continue;
-                        }
-
-                        var myCtl = str.Split(':');
-                        var ctlID = myCtl[0];
-                        var ddlC1 = $("#DDL_" + ctlID);
-                        if (ddlC1 == null) {
-                            continue;
-                        }
-
-                        //如果文本库数值为空，就让其返回.
-                        var txt = tbAuto.val();
-                        if (txt == '')
-                            continue;
-
-                        //获取要填充 ddll 的SQL.
-                        var sql = myCtl[1].Replace("~", "'");
-                        sql = sql.Replace("@Key", txt);
-                        //sql = BP.WF.Glo.DealExp(sql, en, null);  怎么办
-                    }
-                }
-
-                break;
-            case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
-                var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
-                var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
-                if (ddlPerant == null || ddlChild == null)
-                    continue;
-                ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\')");
-                // 处理默认选择。
-                //string val = ddlPerant.SelectedItemStringVal;
-                var valClient = ConvertDefVal(frmData, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
-
-                //ddlChild.select(valClient);  未写
-                break;
-            case "AutoFullDLL": // 自动填充下拉框.
-                continue; //已经处理了。
-            case "DDLFullCtrl": // 自动填充其他的控件..  先不做
-                var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
-                if (ddlOper == null)
-                    continue;
-
-                ddlOper.attr("onchange", "Change('" + frmData.Sys_MapData[0].No + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
-                if (me.Tag != "") {
-                    /* 下拉框填充范围. */
-                    var strs = me.Tag.split('$');
-                    for (var k = 0; k < strs.length; k++) {
-                        var str = strs[k];
-                        if (str == "")
-                            continue;
-
-                        var myCtl = str.split(':');
-                        var ctlID = myCtl[0];
-                        var ddlC1 = $("#DDL_" + ctlID);
-                        if (ddlC1 == null) {
-                            //me.Tag = "";
-                            //me.Update();
-                            continue;
-                        }
-
-                        //如果触发的dll 数据为空，则不处理.
-                        if (ddlOper.val() == "")
-                            continue;
-
-                        var sql = myCtl[1].Replace("~", "'");
-                        sql = sql.Replace("@Key", ddlOper.val());
-
-                        //需要执行SQL语句
-                        //sql = BP.WF.Glo.DealExp(sql, en, null);
-
-                        //dt = DBAccess.RunSQLReturnTable(sql);
-                        //string valC1 = ddlC1.SelectedItemStringVal;
-                        //if (dt.Rows.Count != 0)
-                        //{
-                        //    foreach (DataRow dr in dt.Rows)
-                        //{
-                        //        ListItem li = ddlC1.Items.FindByValue(dr[0].ToString());
-                        //    if (li == null)
-                        //    {
-                        //        ddlC1.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
-                        //    }
-                        //    else
-                        //    {
-                        //        li.Attributes["visable"] = "false";
-                        //    }
-                        //}
-
-                        var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5'}];
-                        var operations = '';
-                        $.each(items, function (i, item) {
-                            operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
-                        });
-                        ddlC1.children().remove();
-                        ddlC1.html(operations);
-                        //ddlC1.SetSelectItem(valC1);
-                    }
-                }
-                break;
-        }
-    }
-}
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
     var params = atPara.split('@');
@@ -746,93 +549,30 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(frmData, mapAttr, defVal) {
-
     var operations = '';
-    //外键类型
-    if (mapAttr.LGType == 2) {
-        if (frmData[mapAttr.KeyOfEn] != undefined) {
-            $.each(frmData[mapAttr.KeyOfEn], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+    var data = frmData[mapAttr.KeyOfEn];
+    if (data == undefined)
+        data = frmData[mapAttr.UIBindKey];
+    if (data == undefined) {
+        //枚举类型的.
+        if (mapAttr.LGType == 1) {
+            var enums = frmData.Sys_Enum;
+            enums = $.grep(enums, function (value) {
+                return value.EnumKey == mapAttr.UIBindKey;
+            });
+
+
+            $.each(enums, function (i, obj) {
+                operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
             });
         }
-        else if (frmData[mapAttr.UIBindKey] != undefined) {
-            $.each(frmData[mapAttr.UIBindKey], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-        }
-    } else {
-        var enums = frmData.Sys_Enum;
-        enums = $.grep(enums, function (value) {
-            return value.EnumKey == mapAttr.UIBindKey;
-        });
-
-
-        $.each(enums, function (i, obj) {
-            operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-        });
-    }
-
-
-    //外部数据源类型 FrmGener.js.InitDDLOperation
-    if (mapAttr.LGType == 0) {
-
-        //如果是一个函数.
-        var fn;
-        try {
-            if (mapAttr.UIBindKey) {
-                fn = eval(mapAttr.UIBindKey);
-            }
-        } catch (e) {
-            //alert(e);
-        }
-
-        if (typeof fn == "function") {
-            $.each(fn.call(), function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-            return operations;
-        }
-
-        var data = frmData[mapAttr.KeyOfEn];
-        if (data == undefined)
-            data = frmData[mapAttr.UIBindKey];
-
-        if (data == undefined) {
-            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
-            if (sfTable != null && sfTable != "") {
-                var selectStatement = sfTable.SelectStatement;
-                var srcType = sfTable.SrcType;
-                //Handler 获取外部数据源
-                if (srcType == 3)
-                    data = DBAccess.RunDBSrc(selectStatement, 0);
-                //JavaScript获取外部数据源
-                //if (srcType == 1)
-                //data = DBAccess.RunDBSrc(sfTable.No, 0);
-            }
-        }
-        if (data == undefined) {
-            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-            return;
-        }
-
-        $.each(data, function (i, obj) {
-            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-
-        });
-        if (mapAttr.UIIsInput == 0)
-            operations = "<option value=''>- 请选择 -</option>" + operations;
         return operations;
 
-        if (mapAttr.UIIsEnable == 0) {
-
-            alert('不可编辑');
-            operations = "<option  value='" + defVal + "'>" + defVal + "</option>";
-            return operations;
-        }
-
-
     }
 
+    $.each(data, function (i, obj) {
+        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+    });
     return operations;
 }
 
@@ -924,20 +664,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框    
+            //下拉框     
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //对于复选下拉框获取值得方法    
-            //                if ($('[data-id=' + name + ']').length > 0) {   
-            //                    var val = $(disabledEle).val().join(',');   
-            //                    formArrResult.push(name + '=' + val);   
-            //                } else {   
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
-            //                }   
-            //                break;   
-            //文本区域    
+            //对于复选下拉框获取值得方法     
+            //                if ($('[data-id=' + name + ']').length > 0) {    
+            //                    var val = $(disabledEle).val().join(',');    
+            //                    formArrResult.push(name + '=' + val);    
+            //                } else {    
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());    
+            //                }    
+            //                break;    
+            //文本区域     
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;

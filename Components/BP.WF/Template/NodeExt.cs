@@ -544,9 +544,10 @@ namespace BP.WF.Template
                 //map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.BatchLab, "http://ccbpm.mydoc.io/?v=5404&t=17920"); //增加帮助
 
-                map.AddTBString(BtnAttr.AskforLab, "加签", "加签按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
-                map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
+                //功能暂时取消
+                //map.AddTBString(BtnAttr.AskforLab, "加签", "加签按钮标签", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
+                //map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
 
 
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);

@@ -355,6 +355,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             if (isDropTR == true) {
                 html += "<tr >";
                 UseColSpan = 0;
+                luColSpan = 0;
                 if (IsShowLeft == true) {
                     UseColSpan += colSpan + textColSpan + ruColSpan;
                     lRowSpan = rowSpan;
@@ -377,6 +378,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                     ruRowSpan = 0;
                     rRowSpan = 0;
                     IsShowRight = true;
+                    if (rowSpan == 1)
+                        luColSpan = 0;
+                    ruColSpan = 0;
                 }
 
 
@@ -391,15 +395,21 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             }
 
             if (isDropTR == false) {
+                ruColSpan = 0;
                 if (IsShowRight == true) {
                     UseColSpan += colSpan + textColSpan;
                     rRowSpan = rowSpan;
                     ruColSpan += colSpan + textColSpan;
                     html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
-                    if (UseColSpan == tableCol)
+                    if (UseColSpan == tableCol) {
                         isDropTR = true;
+                        if (rowSpan != 1) {
+                            ruRowSpan++;
+                        }
+                    }
                     if (rowSpan != 1) {
                         IsShowRight = false;
+                        lRowSpan = rowSpan;
                     }
                 }
 
@@ -413,6 +423,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                     luRowSpan = 0;
                     lRowSpan = 0;
                     IsShowLeft = true;
+                    ruColSpan = 0;
 
                 }
 
@@ -460,6 +471,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
         if (isDropTR == true) {
             html += "<tr >";
             UseColSpan = 0;
+            luColSpan = 0;
             if (IsShowLeft == true) {
                 UseColSpan += colSpan + textColSpan + ruColSpan;
                 lRowSpan = rowSpan;
@@ -491,7 +503,9 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 ruRowSpan = 0;
                 rRowSpan = 0;
                 IsShowRight = true;
-                luColSpan = 0;
+                if (rowSpan == 1)
+                    luColSpan = 0;
+                ruColSpan = 0;
             }
 
 
@@ -506,6 +520,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
         }
 
         if (isDropTR == false) {
+            ruColSpan = 0;
             if (IsShowRight == true) {
                 UseColSpan += colSpan + textColSpan;
                 rRowSpan = rowSpan;
@@ -521,10 +536,13 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 html += "</td>";
                 if (UseColSpan == tableCol) {
                     isDropTR = true;
-
+                    if (rowSpan != 1) {
+                        ruRowSpan++;
+                    }
                 }
                 if (rowSpan != 1) {
                     IsShowRight = false;
+                    lRowSpan = rowSpan;
                 }
             }
 
@@ -551,6 +569,12 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             continue;
         }
 
+    }
+
+    if (isDropTR == false) {
+        var unUseColSpan = tableCol - UseColSpan;
+        html += "<td colspan=" + unUseColSpan + "></td>";
+        html += "</tr>";
     }
     return html;
 }

@@ -160,31 +160,30 @@ namespace BP.WF.HttpHandler
 
             #region 把外键表加入DataSet
             DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
-
+            DataTable dt = new DataTable();
             MapExts mes = md.MapExts;
             MapExt me = new MapExt();
-            DataTable dt = new DataTable();
+            DataTable ddlTable = new DataTable();
+            ddlTable.Columns.Add("No");
             foreach (DataRow dr in dtMapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
-                if (lgType.Equals("2") == false)
-                {
-                    continue;
-                }
-
-                string UIIsEnable = dr["UIVisible"].ToString();
-                if (UIIsEnable == "0")
-                {
-                    continue;
-                }
-
                 string uiBindKey = dr["UIBindKey"].ToString();
+
                 if (DataType.IsNullOrEmpty(uiBindKey) == true)
-                {
-                    string myPK = dr["MyPK"].ToString();
-                    /*如果是空的*/
-                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
-                }
+                    continue; //为空就continue.
+
+                if (lgType.Equals("1") == true)
+                    continue; //枚举值就continue;
+
+                string uiIsEnable = dr["UIIsEnable"].ToString();
+                if (uiIsEnable.Equals("0") == true && lgType.Equals("1") == true)
+                    continue; //如果是外键，并且是不可以编辑的状态.
+
+                if (uiIsEnable.Equals("1") == true && lgType.Equals("0") == true)
+                    continue; //如果是外部数据源，并且是不可以编辑的状态.
+
+
 
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString();
@@ -221,8 +220,20 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                if (mydt == null)
+                {
+                    DataRow ddldr = ddlTable.NewRow();
+                    ddldr["No"] = uiBindKey;
+                    ddlTable.Rows.Add(ddldr);
+                }
+                else
+                {
+                    myds.Tables.Add(mydt);
+                }
             }
+            ddlTable.TableName = "UIBindKey";
+            myds.Tables.Add(ddlTable);
             #endregion End把外键表加入DataSet
 
             #region 图片附件

@@ -2896,7 +2896,7 @@ namespace BP.Sys
         /// <param name="bty"></param>
         public void ExcelSaveFile(string pkValue, byte[] bty, string saveTo)
         {
-            BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
+            BP.DA.DBAccess.SaveBytesToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
         }
         #endregion 与Excel相关的操作 .
 
@@ -2932,7 +2932,7 @@ namespace BP.Sys
         /// <param name="bty"></param>
         public void WordSaveFile(string pkValue, byte[] bty, string saveTo)
         {
-            BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
+            BP.DA.DBAccess.SaveBytesToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
         }
         #endregion 与Excel相关的操作 .
 

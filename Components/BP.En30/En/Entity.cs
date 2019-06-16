@@ -2327,7 +2327,7 @@ namespace BP.En
         {
             try
             {
-                BP.DA.DBAccess.SaveFileToDB(bytes, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+                BP.DA.DBAccess.SaveBytesToDB(bytes, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
             }
             catch (Exception ex)
             {

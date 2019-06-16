@@ -976,7 +976,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoShift(string ToEmp, string Note)
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID, this.FID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try
@@ -995,7 +995,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoDelete()
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID, this.FID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try

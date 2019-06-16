@@ -53,7 +53,7 @@ namespace BP.DA
         /// <param name="tablePK">表主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="saveFileField">保存到字段</param>
-        public static void SaveFileToDB(byte[] bytes, string tableName, string tablePK, string pkVal, string saveToFileField)
+        public static void SaveBytesToDB(byte[] bytes, string tableName, string tablePK, string pkVal, string saveToFileField)
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
@@ -87,7 +87,7 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
                         BP.DA.DBAccess.RunSQL(sql);
-                        SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+                        SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
@@ -130,7 +130,7 @@ namespace BP.DA
                         //修改数据类型   oracle 不存在image类型   edited by qin 16.7.1
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " blob ";
                         BP.DA.DBAccess.RunSQL(sql);
-                        SaveFileToDB(bytes,tableName,tablePK,pkVal,saveToFileField);
+                        SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
@@ -169,7 +169,7 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " bytea NULL ";
                         BP.DA.DBAccess.RunSQL(sql);
-                        SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+                        SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
                     throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
@@ -209,7 +209,7 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " BLOB NULL ";
                         BP.DA.DBAccess.RunSQL(sql);
-                        SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+                        SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
 
@@ -231,8 +231,9 @@ namespace BP.DA
             System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
             //byte[] inputBytes = converter.GetBytes(docs);
             byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
+
             //执行保存.
-            SaveFileToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
+            SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
         }
         /// <summary>
         /// 保存文件到数据库
@@ -254,7 +255,7 @@ namespace BP.DA
             fs.Dispose();
 
             //执行保存.
-            SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+            SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
         }
         public static void GetFileFromDB(string fileFullName, string tableName, string tablePK, string pkVal, string fileSaveField)
         {

@@ -5214,23 +5214,18 @@ namespace BP.WF
                 return true;
 
             GenerWorkFlow mygwf = new GenerWorkFlow(workID);
-            {
-                if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)
-                {
-                    //string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
-                    //DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
-                    //if (mydt.Rows.Count == 0)
-                    //    return true;
 
-                    GenerWorkerList gwl = new GenerWorkerList();
-                    int inum = gwl.Retrieve(GenerWorkerListAttr.WorkID, workID, GenerWorkerListAttr.FK_Emp, userNo,
-                       GenerWorkerListAttr.FK_Node, mygwf.FK_Node);
-                    if (inum == 1 && gwl.IsPassInt == 0)
-                    {
-                        return true;
-                    }
+            if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)
+            {
+                GenerWorkerList gwl = new GenerWorkerList();
+                int inum = gwl.Retrieve(GenerWorkerListAttr.WorkID, workID, GenerWorkerListAttr.FK_Emp, userNo,
+                   GenerWorkerListAttr.FK_Node, mygwf.FK_Node);
+                if (inum == 1 && gwl.IsPassInt == 0)
+                {
+                    return true;
                 }
             }
+            
 
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */
@@ -5405,12 +5400,12 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="fid">FID</param>
         /// <returns></returns>
-        public static bool Flow_IsCanViewTruck(string flowNo, Int64 workid, Int64 fid)
+        public static bool Flow_IsCanViewTruck(string flowNo, Int64 workid, string userNo=null)
         {
-            if (WebUser.No == "admin")
-            {
+            if (userNo == null)
+                userNo = WebUser.No;
+            if (userNo == "admin")
                 return true;
-            }
 
             //先从轨迹里判断.
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -5422,9 +5417,7 @@ namespace BP.WF
             ps.Add("Emp2", WebUser.No);
 
             if (BP.DA.DBAccess.RunSQLReturnValInt(ps) > 1)
-            {
                 return true;
-            }
 
             //在查看该流程的发起者，与当前人是否在同一个部门，如果是也返回true.
             ps = new Paras();

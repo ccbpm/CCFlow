@@ -46,7 +46,7 @@ namespace BP.DA
     {
         #region 文件存储数据库处理.
         /// <summary>
-        /// 保存文件到数据库
+        /// 保存文件到数据库 @shilianyu
         /// </summary>
         /// <param name="bytes">数据流</param>
         /// <param name="tableName">表名称</param>
@@ -87,6 +87,8 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
                         BP.DA.DBAccess.RunSQL(sql);
+                        SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+                        return;
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
@@ -128,6 +130,8 @@ namespace BP.DA
                         //修改数据类型   oracle 不存在image类型   edited by qin 16.7.1
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " blob ";
                         BP.DA.DBAccess.RunSQL(sql);
+                        SaveFileToDB(bytes,tableName,tablePK,pkVal,saveToFileField);
+                        return;
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
@@ -165,9 +169,10 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " bytea NULL ";
                         BP.DA.DBAccess.RunSQL(sql);
+                        SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+                        return;
                     }
-
-                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                    throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
                 }
                 return;
             }
@@ -204,6 +209,8 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " BLOB NULL ";
                         BP.DA.DBAccess.RunSQL(sql);
+                        SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
+                        return;
                     }
 
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);

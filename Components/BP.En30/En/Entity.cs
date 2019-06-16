@@ -2754,7 +2754,7 @@ namespace BP.En
                         break;
                     case DataType.AppInt:
                     case DataType.AppBoolean:
-                        if (FType != "int")
+                        if (FType.Contains( "int") ==false )
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
                             BP.DA.Log.DebugWriteWarning(err);
@@ -2772,7 +2772,7 @@ namespace BP.En
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case 9:
-                        if (FType != "float")
+                        if (FType.Contains( "float")==false )
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
                             BP.DA.Log.DebugWriteWarning(err);
@@ -3038,10 +3038,10 @@ namespace BP.En
                         break;
                     case DataType.AppInt:
                     case DataType.AppBoolean:
-                        if (FType != "int")
+                        if (FType.Contains("int")==false)
                         {
-                            string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            BP.DA.Log.DebugWriteWarning(err);
+                          //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
+                        //    BP.DA.Log.DebugWriteWarning(err);
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
                             //{
@@ -3058,8 +3058,8 @@ namespace BP.En
                     case 9:
                         if (FType != "float")
                         {
-                            string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            BP.DA.Log.DebugWriteWarning(err);
+                          //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
+                          //  BP.DA.Log.DebugWriteWarning(err);
 
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)

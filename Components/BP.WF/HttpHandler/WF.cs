@@ -1484,9 +1484,7 @@ namespace BP.WF.HttpHandler
         {
             BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(this.No);
             if (wfemp.AuthorIsOK == false)
-            {
                 return "err@授权登录失败！";
-            }
 
             BP.Port.Emp emp1 = new BP.Port.Emp(this.No);
             BP.Web.WebUser.SignInOfGener(emp1, "CH", false, false, BP.Web.WebUser.No, BP.Web.WebUser.Name);

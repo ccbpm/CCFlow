@@ -80,19 +80,16 @@ namespace BP.WF.HttpHandler
                     BP.Port.Dept dept = new Dept();
                     dept.No = item.FK_Dept;
                     int count = dept.RetrieveFromDBSources();
-                    if(count !=0)
+                    if (count != 0)
                         depts += dept.Name + "、";
 
-                   
-                   if (DataType.IsNullOrEmpty(item.FK_Station) == true)
-                    {
-                    //    item.Delete();
+
+                    if (DataType.IsNullOrEmpty(item.FK_Station) == true)
                         continue;
-                    }
 
                     if (DataType.IsNullOrEmpty(item.FK_Dept) == true)
                     {
-                     //   item.Delete();
+                        //   item.Delete();
                         continue;
                     }
 
@@ -100,18 +97,19 @@ namespace BP.WF.HttpHandler
                     sta.No = item.FK_Station;
                     count = sta.RetrieveFromDBSources();
                     if (count != 0)
-                    stas += sta.Name + "、";
+                        stas += sta.Name + "、";
                 }
 
                 ht.Add("Depts", depts);
                 ht.Add("Stations", stas);
             }
 
-           
 
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
             ht.Add("Tel", wfemp.Tel);
             ht.Add("Email", wfemp.Email);
+            ht.Add("Author", wfemp.Author);
+
             return BP.Tools.Json.ToJson(ht);
         }
 
@@ -150,7 +148,7 @@ namespace BP.WF.HttpHandler
             }
 
             //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
-           // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
+            // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
 
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();
@@ -197,7 +195,7 @@ namespace BP.WF.HttpHandler
         {
             Paras ps = new Paras();
             ps.SQL = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.Add("FK_Emp",BP.Web.WebUser.No );
+            ps.Add("FK_Emp", BP.Web.WebUser.No);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -248,7 +246,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string sql = "UPDATE Port_Emp Set fk_dept='"+deptNo+"' WHERE no='"+WebUser.No+"'";
+                string sql = "UPDATE Port_Emp Set fk_dept='" + deptNo + "' WHERE no='" + WebUser.No + "'";
                 DBAccess.RunSQL(sql);
                 BP.WF.Dev2Interface.Port_Login(WebUser.No);
             }
@@ -294,7 +292,7 @@ namespace BP.WF.HttpHandler
                 return "err@旧密码错误.";
 
             if (BP.Sys.SystemConfig.IsEnablePasswordEncryption == true)
-                    pass = BP.Tools.Cryptography.EncryptString(pass);
+                pass = BP.Tools.Cryptography.EncryptString(pass);
             emp.Pass = pass;
             emp.Update();
 

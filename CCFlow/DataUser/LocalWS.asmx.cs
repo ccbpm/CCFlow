@@ -27,88 +27,7 @@ namespace CCFlow.DataUser
         /// <returns>返回进度数据</returns>
         public string DB_JobSchedule(Int64 workID)
         {
-            string sql = "";
-            DataSet ds = new DataSet();
-
-            /*
-             * 流程控制主表, 可以得到流程状态，停留节点，当前的执行人.
-             * 该表里有如下字段是重点:
-             *  0. WorkID 流程ID.
-             *  1. WFState 字段用于标识当前流程的状态..
-             *  2. FK_Node 停留节点.
-             *  3. NodeName 停留节点名称.
-             *  4. TodoEmps 停留的待办人员.
-             */
-            GenerWorkFlow gwf=new GenerWorkFlow(workID);
-            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
-
-
-            /*节点信息: 节点信息表,存储每个环节的节点信息数据.
-             * NodeID 节点ID.
-             * Name 名称.
-             * X,Y 节点图形位置，如果使用进度图就不需要了.
-            */
-            Nodes nds = new Nodes(gwf.FK_Flow);
-            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
-
-            /*
-             * 节点的连接线. 
-             */
-            Directions dirs = new Directions(gwf.FK_Flow);
-            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
-
-            #region 运动轨迹
-            /*
-             * 运动轨迹： 构造的一个表，用与存储运动轨迹.
-             * 
-             */
-            DataTable dtHistory = new DataTable();
-            dtHistory.TableName = "Track";
-            dtHistory.Columns.Add("FK_Node"); //节点ID.
-            dtHistory.Columns.Add("NodeName"); //名称.
-            dtHistory.Columns.Add("EmpNo");  //人员编号.
-            dtHistory.Columns.Add("EmpName"); //名称
-            dtHistory.Columns.Add("RDT"); //记录日期.
-            dtHistory.Columns.Add("SDT"); //应完成日期(可以不用.)
-
-            //执行人.
-            if (gwf.WFState == WFState.Complete)
-            {
-                //历史执行人. 
-                sql = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workID + " AND (ActionType=1 OR ActionType=0)  ORDER BY RDT DESC";
-                DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
-                foreach (DataRow drTrack in dtTrack.Rows)
-                {
-                    DataRow dr = dtHistory.NewRow();
-                    dr["FK_Node"] = drTrack["NDFrom"];
-                   // dr["ActionType"] = drTrack["NDFrom"];
-                    dr["NodeName"] = drTrack["NDFromT"];
-                    dr["EmpNo"] = drTrack["EmpFrom"];
-                    dr["EmpName"] = drTrack["EmpFromT"];
-                    dr["RDT"] = drTrack["RDT"];
-                    dr["SDT"] = drTrack[""];
-                    dtHistory.Rows.Add(dr);
-                }
-            }
-            else
-            {
-                GenerWorkerLists gwls = new GenerWorkerLists(workID);
-                foreach (GenerWorkerList gwl in gwls)
-                {
-                    DataRow dr = dtHistory.NewRow();
-                    dr["FK_Node"] = gwl.FK_Node;
-                    dr["NodeName"] = gwl.FK_NodeText;
-                    dr["EmpNo"] = gwl.FK_Emp;
-                    dr["EmpName"] = gwl.FK_EmpText;
-                    dr["RDT"] = gwl.RDT;
-                    dr["SDT"] = gwl.SDT;
-                    dtHistory.Rows.Add(dr);
-                }
-            }
-            ds.Tables.Add(dtHistory);
-            #endregion 运动轨迹
-
+            DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(workID);
             return BP.Tools.Json.ToJson(ds);
         }
        
@@ -167,6 +86,21 @@ namespace CCFlow.DataUser
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 运行一个sql，返回一个json.
+        /// </summary>
+        /// <param name="sqlOfSelect">要运行的SQL,查询</param>
+        /// <param name="password">密码,双方约定的密码</param>
+        /// <returns>json</returns>
+        [WebMethod]
+        public string DB_RunSQLReturnJSON(string sqlOfSelect, string password)
+        {
+            // if ( password.Equals("xxxxxx") == false)
+            //  return "err@密码错误";
+            // DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlOfSelect);
+            // return BP.Tools.Json.ToJson(dt);
+            throw new Exception("err@请实现该方法,密码部分是双方约定的,不对外公开的.");
         }
         /// <summary>
         /// 创建WorkID
@@ -277,16 +211,41 @@ namespace CCFlow.DataUser
         /// <param name="returnToNodeID">退回到nodeID</param>
         /// <param name="returnMsg">退回信息</param>
         /// <returns></returns>
+        [WebMethod]
         public string Node_ReturnWork(Int64 workid, int returnToNodeID, string returnMsg)
         {
             GenerWorkFlow gwf=new GenerWorkFlow(workid);
             return BP.WF.Dev2Interface.Node_ReturnWork(gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, returnToNodeID, returnMsg);
         }
         /// <summary>
+        /// 是否可以查看该工作
+        /// </summary>
+        /// <param name="flowNo">流程No</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="userNo">人员ID</param>
+        /// <returns>true,false</returns>
+        [WebMethod]
+        public bool Flow_IsCanView(string flowNo, Int64 workid, string userNo)
+        {
+            return BP.WF.Dev2Interface.Flow_IsCanViewTruck(flowNo, workid,userNo);
+        }
+        /// <summary>
+        /// 是否可以处理当前工作.
+        /// </summary>
+        /// <param name="workid">当前工作ID</param>
+        /// <param name="workid">处理人员ID</param>
+        /// <returns>true,false</returns>
+        [WebMethod]
+        public bool Flow_IsCanDoCurrentWork(Int64 workid, string userNo)
+        {
+            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(workid, userNo);
+        }
+        /// <summary>
         /// 获得当前节点信息.
         /// </summary>
         /// <param name="currNodeID">节点ID.</param>
         /// <returns>当前节点信息</returns>
+        [WebMethod]
         public string CurrNodeInfo(int currNodeID)
         {
             Node nd = new Node(currNodeID);
@@ -297,6 +256,7 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="flowNo">流程ID.</param>
         /// <returns>当前节点信息</returns>
+        [WebMethod]
         public string CurrFlowInfo(string flowNo)
         {
             Flow fl = new Flow(flowNo);
@@ -307,6 +267,7 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="flowNo">流程ID.</param>
         /// <returns>当前节点信息</returns>
+        [WebMethod]
         public string CurrGenerWorkFlowInfo(Int64 workID)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);

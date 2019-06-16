@@ -81,7 +81,6 @@ namespace ccbpm
         public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
-
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
                 BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;

@@ -29,8 +29,8 @@
             handler.AddPara("No", fk_emp);
             var data = handler.DoMethodReturnString("LoginAs");
 
-            if (msg.indexOf('err') == 0) {
-                alert('授权登录失败!');
+            if (data.indexOf('err') == 0) {
+                alert('授权登录失败! \t\n'+data);
                 return;
             }
 
@@ -39,7 +39,7 @@
 
            // parent.location.reload();
             //top.location.href = '../WF/App/Classic/index.jsp';
-            top.location.href = './AuthorTodolist.htm';
+         //   top.location.href = './AuthorTodolist.htm';
             //window.open('Todolist.htm');
         }
 

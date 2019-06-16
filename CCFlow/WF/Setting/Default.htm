@@ -73,7 +73,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="userbox">
-									<div class="box1"><span id="Span1" ></span></div>
+									<div class="box1"><span id="Author" ></span></div>
 									<div class="box2">授权情况</div>
 									<div class="box3"><a href='Author.htm' >执行授权</a></div>
 								</div>
@@ -117,12 +117,13 @@
             var qmImg = document.getElementById("QianMing");
             qmImg.src = qmUrl;
 
-
             var txUrl = "../../DataUser/UserIcon/" + data.UserNo + ".png";
 
             //头像.
             var txImg = document.getElementById("touxiang");
             txImg.src = txUrl;
+
+            $("#Author").html(data.Author);
             return;
         });
         

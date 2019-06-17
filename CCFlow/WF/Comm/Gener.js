@@ -2207,8 +2207,7 @@ var HttpHandler = (function () {
 
 var WebUser = function () {
 
-    //if (webUser != undefined)
-
+  //if (webUser != undefined)
   //this.self
 
     if (plant == "CCFlow") {

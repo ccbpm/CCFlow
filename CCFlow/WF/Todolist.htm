@@ -47,8 +47,16 @@
         $(function () {
             if (webUser == null)
                 webUser = new WebUser();
-            if (webUser.No == null) 
+            if (webUser.No == null)
                 return;
+
+            //授权的情况下.
+            if (webUser.IsAuthorize == "1") 
+            {
+                window.location.href = "AuthorTodolist.htm";
+            return;
+            }
+
 
             InitPage();
         });
@@ -281,7 +289,7 @@
             $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
             if (webUser.IsAuthorize=="0")
-                $("#Table2").append(", <a href='AuthorList.htm' target=_parent >查看授权待办</a>");
+                $("#Table2").append(", <a href='AuthorList.htm' >查看授权待办</a>");
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
             if (div != null) {

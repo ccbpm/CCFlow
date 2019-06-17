@@ -20,29 +20,6 @@
             return true;
         }
 
-        function LogAs(fk_emp, empName) {
-
-            if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddPara("No", fk_emp);
-            var data = handler.DoMethodReturnString("AuthorList_LoginAs");
-
-            if (data.indexOf('err') == 0) {
-                alert('授权登录失败! \t\n'+data);
-                return;
-            }
-
-            window.location.href = 'AuthorTodolist.htm?RefNo=' + fk_emp;
-            return;
-
-           // parent.location.reload();
-            //top.location.href = '../WF/App/Classic/index.jsp';
-         //   top.location.href = './AuthorTodolist.htm';
-            //window.open('Todolist.htm');
-        }
-
         //页面启动函数.
         $(function () {
 
@@ -80,6 +57,28 @@
             html += "</ul>";
 
             $("#docs").html(html);
+        }
+        function LogAs(fk_emp, empName) {
+
+            if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("No", fk_emp);
+            var data = handler.DoMethodReturnString("AuthorList_LoginAs");
+
+            if (data.indexOf('err') == 0) {
+                alert('授权登录失败! \t\n' + data);
+                return;
+            }
+
+            window.location.href = 'AuthorTodolist.htm?RefNo=' + fk_emp;
+            return;
+
+            // parent.location.reload();
+            //top.location.href = '../WF/App/Classic/index.jsp';
+            //   top.location.href = './AuthorTodolist.htm';
+            //window.open('Todolist.htm');
         }
     </script>
 </head>

@@ -14,6 +14,10 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox-content">
             <table class="table  table-striped">
+                <caption>
+                    <div id="cap">
+                    </div>
+                </caption>
                 <thead>
                     <tr id="tablet">
                     </tr>
@@ -87,6 +91,16 @@
 
         //页面启动函数.
         $(function () {
+
+            var webUser = new WebUser();
+            if (webUser.IsAuthorize == "0") {
+                //alert('当前非授权登录状态，无法处理待办。');
+                window.location.href = 'AuthorList.htm';
+                return;
+            }
+
+            $("#cap").html("<font color=red>" + webUser.Name + "</font>授权给您的代办");
+
             InitPage();
         });
 
@@ -301,14 +315,12 @@
                         } else {
                             listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
                         }
-
                     }
 
                     listbox += "<td>" + GetState(work.WFState) + "</td>";
 
                     //备注
                     //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
-
                     listbox += "</tr>";
                 }
             }
@@ -317,11 +329,28 @@
             $('#Table1').html(listbox);
             $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
+            $('#Table2').append(" - <a href='javascript:BackToMyTodolist();'>返回我的待办</a>");
+
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
             if (div != null) {
                 div.innerHTML = realCount;
             }
         }
+
+        function ExitAuth() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            var data = handler.DoMethodReturnString("WebUser_BackToAuthorize");
+            window.location.href = 'AuthorList.htm';
+        }
+
+        function BackToMyTodolist() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            var data = handler.DoMethodReturnString("WebUser_BackToAuthorize");
+            window.location.href = 'Todolist.htm';
+        }
+
         function GetState(wfState) {
 
             //alert(wfState);

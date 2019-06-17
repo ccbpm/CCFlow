@@ -143,15 +143,13 @@
 		</div>
 	</div>
 	<!-- 点击线的提示 -->
-	<div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+	<div id="LineModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
 		 aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 				×
 			</button>
-			<h3>
-				修改方向
-			</h3>
+			<h3>修改方向</h3>
 		</div>
 		<div class="modal-body">
 			<p>
@@ -421,8 +419,8 @@
 			fAlert = function (messages, s) {
 				if (!messages) messages = "请选择您要执行的操作";
 				if (!s) s = 200000;
-				$("#alertModal2").find(".modal-body").html(messages);
-				$("#alertModal2").modal('toggle');
+				$("#LineModal").find(".modal-body").html(messages);
+				$("#LineModal").modal('toggle');
 				setTimeout(function () { alertModal1.modal("hide") }, s);
 			}
 			//属性设置

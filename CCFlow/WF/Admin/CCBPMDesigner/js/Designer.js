@@ -271,11 +271,16 @@ function DesignMyRptNew() {
     });
 }
 
+//标记是否可以删除连接线.
+var isCanDelLine = false;
 
 //连线右键
 function Line_MenusFuns(item, cId) {
+
     var rFirstFigure = STACK.figureGetAsFirstFigureForConnector(cId);
     var rSecondFigure = STACK.figureGetAsSecondFigureForConnector(cId);
+
+
     //连接线右键菜单点击事件
     switch (item.name) {
         case "linecondition":
@@ -295,15 +300,17 @@ function Line_MenusFuns(item, cId) {
                 Designer_ShowMsg("所选连线终点连接的不是节点，不能设置方向条件。");
                 return;
             }
+            /*
             if (rFirstFigure.CCBPM_Shape == CCBPM_Shape_Node && rSecondFigure.CCBPM_Shape == CCBPM_Shape_Node) {
                 var fNode = rFirstFigure.CCBPM_OID;
                 var tNode = rSecondFigure.CCBPM_OID;
                 var url = "../Cond/ConditionLine.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + fNode + "&FK_Node=" + fNode + "&ToNodeID=" + tNode + "&CondType=2&Lang=CH&t=" + new Date().getTime();
+
                 //window.parent.addTab(CCBPM_Data_FK_Flow + fNode + "DIRECTION" + tNode, "设置方向条件" + fNode + "->" + tNode, url);
                 OpenEasyUiDialog(url, CCBPM_Data_FK_Flow + fNode + "DIRECTION" + tNode, "设置方向条件" + fNode + "->" + tNode, 880, 500, "icon-property", true, null, null, null, function () {
 
                 });
-            }
+            }*/
             break;
         case "rename":
             var connector = CONNECTOR_MANAGER.connectorGetById(cId);
@@ -335,6 +342,7 @@ function Line_MenusFuns(item, cId) {
             draw();
             break;
         case "deleteline":
+
             CONNECTOR_MANAGER.connectorRemoveById(cId, true);
             state = STATE_NONE;
             redraw = true;
@@ -439,7 +447,7 @@ function NodeProperty_Funs(item) {
             url = "../XAP/DoPort.htm?DoType=StaDefNew&PKVal=" + FK_Node + "&Lang=CH";
             WinOpenIt(url, 500, 400);
             break;
-        // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400);    
+        // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400);      
         case "NodeCCRole": // 抄送人规则.
             url = "../AttrNode/NodeCCRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {

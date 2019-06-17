@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>修改个人资料-驰骋工作流程管理系统</title>
-     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-	<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
-	<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../Scripts/jquery/jquery.min.js"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,135 +14,133 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
 </head>
-<body  class="gray-bg">
-<script type="text/javascript">
+<body class="gray-bg">
+    <script type="text/javascript">
 
-    //页面启动函数.
-    $(function () {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
-        var data = handler.DoMethodReturnString("Default_Init");
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return;
-        }
-
-        data = JSON.parse(data);
-
-        //调用公共类库的方法:执行批量主表赋值
-        $("#_TB_Tel").val(data.Tel);
-        $("#_TB_Email").val(data.Email);
-        //显示头像
-        var doMethod = "Siganture_Init";
-        var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
-        var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
-        //初始化
-        $.ajax({
-
-            url: url,
-            dataType: "json",
-            success: function (data) {
-                var img = document.getElementById("sigimg");
-                var url = '../../DataUser/UserIcon/' + data.No + '.png';
-                img.src = url;
+        //页面启动函数.
+        $(function () {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var data = handler.DoMethodReturnString("Default_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
             }
+
+            data = JSON.parse(data);
+
+            //调用公共类库的方法:执行批量主表赋值
+            $("#_TB_Tel").val(data.Tel);
+            $("#_TB_Email").val(data.Email);
+            //显示头像
+            var doMethod = "Siganture_Init";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
+            //初始化
+            $.ajax({
+
+                url: url,
+                dataType: "json",
+                success: function (data) {
+                    var img = document.getElementById("sigimg");
+                    var url = '../../DataUser/UserIcon/' + data.No + '.png';
+                    img.src = url;
+                }
+            });
+
         });
 
+        function Upload() {
+            var webUser = new WebUser();
+            if (File_Upload.files.length == 0) {
 
-    });
-
-    function Upload() {
-        var webUser = new WebUser();
-        if (File_Upload.files.length == 0) {
-
+                var wfemp = new Entity("BP.WF.Port.WFEmp", webUser.No);
+                wfemp.Tel = $("#_TB_Tel").val();
+                wfemp.Email = $("#_TB_Email").val();
+                wfemp.Update();
+                window.location.href = "Default.htm";
+                return;
+            }
+            //保存手机号，Email
             var wfemp = new Entity("BP.WF.Port.WFEmp", webUser.No);
             wfemp.Tel = $("#_TB_Tel").val();
             wfemp.Email = $("#_TB_Email").val();
             wfemp.Update();
-            window.location.href = window.location.href;
-            return;
-        }
-        //保存手机号，Email
-        var wfemp = new Entity("BP.WF.Port.WFEmp", webUser.No);
-        wfemp.Tel = $("#_TB_Tel").val();
-        wfemp.Email = $("#_TB_Email").val();
-        wfemp.Update();
-        var fileName = File_Upload.files[0].name;
+            var fileName = File_Upload.files[0].name;
 
-        //判断文件类型.
-        var fileExt = "bpm,jpg,jpeg,png,gif";
-        //获取文件的后缀名
-        var ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-        if (fileExt.indexOf(ext.toLowerCase()) == -1) {
-            alert("上传的文件必须是以图片格式:" + fileExt + "  类型, 现在类型是:" + ext);
-            return;
-        }
-        var doMethod = "HeadPic_Save";
-        var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
-        var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
-
-        
-        $("#cc").form("submit", {
-            type: 'POST',
-            dataType: 'html',
-            url: url,
-            onSubmit: function (param) {
-                //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
-            },
-            success: function (data) {
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-                alert(data);
-                window.location.href = window.location.href;
+            //判断文件类型.
+            var fileExt = "bpm,jpg,jpeg,png,gif";
+            //获取文件的后缀名
+            var ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+            if (fileExt.indexOf(ext.toLowerCase()) == -1) {
+                alert("上传的文件必须是以图片格式:" + fileExt + "  类型, 现在类型是:" + ext);
+                return;
             }
-        });
+            var doMethod = "HeadPic_Save";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
 
-    }
-	</script>
-<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
-<div class="wrapper wrapper-content animated fadeInRight">
-					<div class="ibox float-e-margins">
-						
-						<div class="ibox-content">
-						<div class="usercenter">设置/修改</div>
-							<div class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">手机</label>
-										<div class="col-sm-8">
-                                       <input name="TB_Tel" type="text" value="" id="_TB_Tel" class="form-control"/>
-									   </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Email</label>
-										<div class="col-sm-8">
-										<input name="TB_Email" type="text" value="" id="_TB_Email" class="form-control"/>
-										</div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">头像上传</label>
-                                        <div class="col-sm-1">
-					                        <img id="sigimg"  width="70"    border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
-				                        </div>
-				                        <div class="col-sm-2">
-                                            
-					                        <input type="file" name="File_Upload" id="File_Upload" />
-				                        </div>
-                                    </div>
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: url,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = "Default.htm";
+                }
+            });
 
-									<div class="form-group">
-                                <div class="col-sm-offset-3 col-sm-8">
-                                    <button class="btn btn-info" type="button" id="ctl24" onclick="Upload()">保存</button>
-									<a class="btn btn-white"  href="Default.htm" >返回</a>
-                                </div>
-                            </div>
-							</div>
-					
-				</div>
-			</div>
-		
-		</div>
-  </form>
+        }
+    </script>
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="usercenter">
+                    设置/修改</div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            手机</label>
+                        <div class="col-sm-8">
+                            <input name="TB_Tel" type="text" value="" id="_TB_Tel" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Email</label>
+                        <div class="col-sm-8">
+                            <input name="TB_Email" type="text" value="" id="_TB_Email" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            头像上传</label>
+                        <div class="col-sm-1">
+                            <img id="sigimg" width="70" border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="file" name="File_Upload" id="File_Upload" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-8">
+                            <button class="btn btn-info" type="button" id="ctl24" onclick="Upload()">
+                                保存</button>
+                            <a class="btn btn-white" href="Default.htm">返回</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
 </body>
 </html>

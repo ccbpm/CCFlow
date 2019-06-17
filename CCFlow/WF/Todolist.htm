@@ -280,7 +280,8 @@
             $('#Table1').html(listbox);
             $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
-            $("#Table2").append(", <a href='AuthorList.htm' target=_parent >授权待办</a>");
+            if (webUser.IsAuthorize=="0")
+                $("#Table2").append(", <a href='AuthorList.htm' target=_parent >查看授权待办</a>");
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
             if (div != null) {

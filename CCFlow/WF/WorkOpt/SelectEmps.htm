@@ -17,14 +17,15 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <style type="text/css">
-        #TB_Doc {
+        #TB_Doc
+        {
             height: 132px;
             width: 433px;
         }
@@ -207,7 +208,7 @@
                 GetSelectedEmpsReturnVal();
             }).bind("loaded.jstree", function (event, data) {
                 data.instance.open_node();
-               
+
             });
         }
         //弹出树
@@ -284,12 +285,12 @@
     </script>
 </head>
 <body>
-  <input type="button" onclick="Close()" value="取消"/><input type="button" value="上一级" id="toPrevDept" /><input type="button" onclick="SelectEmps()" value="确定" />
-
+    <input type="button" onclick="Close()" value="取消" /><input type="button" value="上一级"
+        id="toPrevDept" />
+    <input type="button" onclick="SelectEmps()" value="确定" />
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
-
-    <input type="button" onclick="Close()" value="取消"/><input type="button" onclick="SelectEmps()" value="确定" />
- 
+    <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
+        value="确定" />
 </body>
 </html>

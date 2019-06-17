@@ -4,13 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>授权详细信息-驰骋工作流程管理系统</title>
-    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
-    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <!-- 引用通用的js文件. -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript">
@@ -20,18 +24,48 @@
 
         $(function () {
 
+            BindPop();
+
             var webUser = new WebUser();
             emp = new Entity("BP.WF.Port.WFEmp", webUser.No);
 
             $("#TB_Author").val(emp.Author); //设置授权人.
             $("#TB_DT").val(emp.AuthorDate); //授权到日期.
-
-            alert(emp.AuthorWay);
-
             $("#DDL_AuthorWay").val(emp.AuthorWay); //授权方式.
-            DDL_AuthorWay
+
+            $('#Btn_Auto').bind('click', function () { $('#selectEmpsModal').modal().show(); });
 
         });
+
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
+
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+
+            var no = frames["iframeSelectEmpsForm"].window.returnVal.No;
+            $("#TB_Author").val(no);
+        }
+
+
+        function BindPop() {
+
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+            var url = "../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
+            //  url = url.replace('101', '10102');
+            url = url.replace('=101&', '=10102&');
+            $('#iframeSelectEmpsForm').attr('src', url);
+        }
+
 
         //执行保存.
         function Save() {
@@ -53,7 +87,8 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="usercenter">
-                    授权详细信息</div>
+                    <h4>授权详细信息</h4></div>
+
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
@@ -65,12 +100,12 @@
                             <input type="button" value="选择授权人" id="Btn_Auto" class="btn btn-default" />
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group"  style=" visibility:hidden; ">
                         <label class="col-sm-3 control-label">
-                            收回授权日期</label>
+                            收回授权日期:</label>
                         <div class="col-sm-8">
-                            <input name="TB_DT" type="text" class="form-control" value="2017-10-13 12:20" maxlength="20"
-                                id="TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:yyyy-MM-dd;});" />
+                            <input name="TB_DT" type="text" class="form-control"  value="2099-01-01 01:01" maxlength="20"
+                                id="TB_DT"  onfocus="WdatePicker({dateFmt:yyyy-MM-dd;});" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -100,6 +135,25 @@
                 </div>
             </div>
         </div>
+        <!-- 弹出窗台.. -->
+        <div class="modal fade" id="selectEmpsModal">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius: 0px; width: 700px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" style="color: white; opacity: 1;" data-dismiss="modal"
+                            aria-hidden="true">
+                            &times;</button>
+                        <h4 class="modal-title">
+                            选择会签人</h4>
+                    </div>
+                    <div class="modal-body">
+                        <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
+                            name="iframeSelectEmpsForm"></iframe>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
     </form>
 </body>
 </html>

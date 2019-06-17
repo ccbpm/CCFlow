@@ -1365,7 +1365,7 @@ namespace BP.WF.HttpHandler
                 if (attr.IsHidden)
                 {
                     qo.addAnd();
-                    qo.addLeftBracket();
+                    qo.addLeftBracket();                    
                     qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
                     qo.addRightBracket();
                     continue;
@@ -2723,6 +2723,12 @@ namespace BP.WF.HttpHandler
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~", "'");
             sql = sql.Replace("[%]", "%");  //防止URL编码
+
+            sql = sql.Replace("@WebUser.No", WebUser.No);  //替换变量.
+            sql = sql.Replace("@WebUser.Name", WebUser.Name);  //替换变量.
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);  //替换变量.
+            sql = sql.Replace("@WebUser.DeptParentNo)", WebUser.DeptParentNo);  //替换变量.
+
 
 
 #warning zhoupeng把这个去掉了. 2018.10.24

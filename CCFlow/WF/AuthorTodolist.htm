@@ -1,184 +1,357 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <title>授权待办列表</title>
-    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="./Scripts/config.js" type="text/javascript"></script>
-    <script src="./Comm/Gener.js" type="text/javascript"></script>
-    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <base target="_self" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>待办</title>
+    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <table class="table  table-striped">
+                <thead>
+                    <tr id="tablet">
+                    </tr>
+                </thead>
+                <tbody id="Table1">
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-sm-12">
+                    <span id="Table2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
+    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <!-- 处理多语言 -->
+    <script src="Data/lang/load.js" type="text/javascript"></script>
+    <script src="Data/lang/lang.js" type="text/javascript"></script>
+    <!--<script src="AppClassic/comm.js" type="text/javascript"></script>-->
     <script type="text/javascript">
-    </script>
-    <script language="javascript" type="text/javascript">
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
 
-        function LogAs(fk_emp, empName) {
+        function GroupBarClick(groupName) {
 
-            if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddPara("No", fk_emp);
-            var data = handler.DoMethodReturnString("LoginAs");
-
-            if (msg.indexOf('err') == 0) {
-                alert('授权登录失败!');
-                return;
+            var alt = document.getElementById('Img' + groupName).alert;
+            var sta = 'block';
+            if (alt == 'Max') {
+                sta = 'block';
+                alt = 'Min';
+                classname = 'fa fa-minus-square';
+            } else {
+                sta = 'none';
+                alt = 'Max';
+                classname = 'fa  fa-plus-square';
             }
 
-            parent.location.reload();
-            //top.location.href = '../WF/App/Classic/index.jsp';
-            top.location.href = './Todolist.htm';
-            //window.open('Todolist.htm');
+            document.getElementById('Img' + groupName).className = classname;
+            document.getElementById('Img' + groupName).alert = alt;
+
+            var i = 0;
+            for (i = 0; i <= 600; i++) {
+
+                var row = document.getElementById(groupName + i);
+
+                if (row == null || row == undefined || row.style == null)
+                    continue;
+
+                if (sta == 'block') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = sta;
+                }
+            }
+        }
+
+        function WinOpenIt(url) {
+            var self = window.open(url);
+            var loop = setInterval(function () {
+                if (self.closed) {
+                    clearInterval(loop);
+                    InitPage();
+                    InitHomeCount();
+                }
+            }, 1);
         }
 
         //页面启动函数.
         $(function () {
-
-            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
-
             InitPage();
-
-            $("#Msg").html("");
         });
 
         //初始化数据.
         function InitPage() {
+            document.title = window.lang.daiban;
+            //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
+            var flowNos = GetQueryString("FlowNos");
 
-            var fk_node = GetQueryString("FK_Node");
+            //获取当前时间
+            var cdt = getNowFormatDate();
+            var timeKey = Math.random();
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddPara("FK_Node", fk_node);
-            var data = handler.DoMethodReturnString("Load_Author");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Todolist_Init");
 
-            data = JSON.parse(data);
-
-            var timeKey = "ss";
-            var newRow = ""; //tab标签
-            var conMenu = ""; //待办列表
-            for (var i = 0; i < data.length; i++) {
-                if (i == 0) {
-                    newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\" class='hover'>" + data[i].NAME + "的待办</li>";
-                    conMenu += "<div id='con_menu_" + (i + 1) + "' class='hover'>";
-                }
-                else {
-                    newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\">" + data[i].NAME + "的待办</li>";
-                    conMenu += "<div id='con_menu_" + (i + 1) + "'  style='display:none'>";
-                }
-
-                //生成对应授权人的待办列表的top
-                conMenu += "<table id='Table" + (i + 1) + "' width='100%'  cellspacing='0' cellpadding='0' align='left'>";
-                conMenu += "<tr class='centerTitle'>";
-                conMenu += "<th>序</th><th>优先级</th><th>标题</th><th>流程</th><th>节点</th><th>发起人</th>";
-                conMenu += "<th>发起日期</th><th>接受日期</th><th>应完成日期</th><th>状态</th><th>类型</th><th>备注</th>";
-                conMenu += "</tr>";
-
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-                handler.AddPara("No", data[i].NO);
-                handler.AddPara("FK_Node", fk_node);
-                var msg = handler.DoMethodReturnString("Todolist_Author");
-
-                //输出待办详细信息
-
-                msg = JSON.parse(msg);
-
-                for (var j = 0; j < msg.length; j++) {
-                    var title = msg[j].TITLE;
-                    var isRead = msg[j].ISREAD;
-                    var flowNo = msg[j].FK_FLOW;
-                    var flowName = msg[j].FLOWNAME;
-                    var nodeName = msg[j].NODENAME;
-                    var starterName = msg[j].STARTERNAME;
-                    var pri = msg[j].PRI;
-                    var nodeID = msg[j].FK_NODE;
-                    var fid = msg[j].FID;
-                    var workID = msg[j].WORKID;
-                    var paras = msg[j].PARAS;
-                    var cdt = getNowFormatDate();
-
-                    conMenu += "<tr > <td>" + (j + 1) + "</td>"; //序号
-                    conMenu += "<td><img class=Icon src='../WF/Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
-                    var url = "";
-                    if (isRead == 0) {
-                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_UnRead.png' />" + title + "</a>";
-                    } else {
-                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='../WF/Img/Mail_Read.png' />" + title + "</a>";
-                    }
-
-                    conMenu += "<td>" + url + "</td>"; //标题
-                    conMenu += "<td>" + flowName + "</td>"; //流程类别
-                    conMenu += "<td>" + nodeName + "</td>"; //节点名称
-                    conMenu += "<td>" + starterName + "</td>"; //发起人
-
-
-                    conMenu += "<td>" + msg[j].RDT + "</td>"; //发起时间
-                    conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
-                    conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
-                    //判断流程是否逾期
-                    if (cdt > msg[j].SDT && msg[j].WFSTATE == 2) {
-                        conMenu += "<td><img src='../WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
-                    }
-                    else {
-                        conMenu += "<td><img src='../WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
-                    }
-                    //待办的状态.
-                    switch (msg[j].WFSTATE) {
-                        case 1:
-                            conMenu += "<td>草稿</td>";
-                            break;
-                        case 2:
-                            conMenu += "<td>待办</td>";
-                            break;
-                        case 3: //已完成.
-                            break;
-                        case 4:
-                            conMenu += "<td>挂起</td>";
-                            break;
-                        case 5:
-                            conMenu += "<td>退回</td>";
-                            break;
-                        case 6:
-                            conMenu += "<td>转发</td>";
-                            break;
-                        case 7:
-                            conMenu += "<td>删除</td>";
-                            break;
-                        case 8:
-                            conMenu += "<td>加签</td>";
-                            break;
-                        case 11:
-                            conMenu += "<td>加签回复</td>";
-                            break;
-                        default:
-                            conMenu += "<td>其他</td>";
-                            break;
-                    }
-                    //备注
-                    conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FLOWNOTE + "'>" + msg[j].FLOWNOTE + "</div></td>";
-                    conMenu += "</tr>";
-                }
-                conMenu += "</table>";
-                conMenu += "</div>";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
             }
 
-            //显示tab标签
-            $('#Tab_Menu').html([
-                        newRow
-                    ].join(''));
-            //显示待办列表
-            $('#Div_Content').html([
-                        conMenu
-                    ].join(''));
-        }
+            data = eval('(' + data + ')');
 
+            //设置表头.
+            var groupBy = GetQueryString("GroupBy");
+            if (groupBy == "" || groupBy == null) groupBy = "ByFlow";
+
+            var nodeIDt = GetQueryString("FK_Node");
+
+            var tablet = "";
+            tablet += "<th style='width:40px;'>#</th>";
+            // title += "<th >优先级</th>";
+            tablet += "<th>" + window.lang.biaoti + "</th>";
+
+            if (groupBy == "ByNode") {
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
+            }
+
+            if (groupBy == "ByFlow") {
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
+            }
+
+            if (groupBy == "ByStarter") {
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
+            }
+
+            tablet += "<th>" + window.lang.fqrq + "</th>";
+            tablet += "<th>" + window.lang.sdrq + "</th>";
+            tablet += "<th>" + window.lang.qixian + "</th>";
+            tablet += "<th>" + window.lang.zhuangtai + "</th>";
+            tablet += "<th>" + window.lang.leixing + "<th>";
+
+
+            $("#tablet").html(tablet);
+
+
+            //生成分组的字符串.
+            var str = "";
+            var listbox = '';
+            for (var i = 0; i < data.length; i++) {
+
+                if (groupBy == "ByNode" || groupBy == "NodeName") {
+                    if (str.indexOf('@' + data[i].NodeName + "@") == -1) {
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].NodeName + "@";
+                    }
+                }
+
+                if (groupBy == "ByFlow") {
+                    if (str.indexOf('@' + data[i].FlowName + "@") == -1) {
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].FlowName + "@";
+                    }
+
+                }
+
+                if (groupBy == "ByStarter") {
+                    if (str.indexOf('@' + data[i].StarterName + "@") == -1) {
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].StarterName + "@";
+                    }
+                }
+            }
+            var strs = str.split("@"); //生成数组.
+
+            var num = 0;
+            var is1 = false;
+            var realCount = 0;
+
+            //循环数组.
+            for (var idx = 0; idx < strs.length; idx++) {
+
+                var groupName = strs[idx];
+
+                if (groupName == "" || groupName == null)
+                    continue;
+
+                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=9 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+
+                //增加处理.
+                for (var i = 0; i < data.length; i++) {
+
+                    var work = data[i];
+                    if (groupBy == "ByNode" || groupBy == "NodeName") {
+                        if (work.NodeName != groupName) {
+                            continue;
+                        }
+                    } else if (groupBy == "ByFlow") {
+                        if (work.FlowName != groupName) {
+                            continue;
+                        }
+                    } else if (groupBy == "ByStarter") {
+                        if (work.StarterName != groupName) {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+
+                    //当参数flowNos不为空时，流程编码存在于flowNos时显示
+                    if (flowNos != null && flowNos.indexOf(data[i].FK_Flow) == -1)
+                        continue;
+
+                    realCount++;
+
+                    var newRow = "";
+                    var title = work.Title;
+                    var isRead = work.IsRead;
+                    var flowNo = work.FK_Flow;
+                    var flowName = work.FlowName;
+                    var nodeName = work.NodeName;
+                    var starterName = work.StarterName;
+                    var pri = work.PRI;
+                    var nodeID = work.FK_Node;
+                    var fid = work.FID;
+                    var workID = work.WorkID;
+                    var pWorkID = work.PWorkID;
+                    var paras = work.AtPara;
+
+                    if (paras) {
+
+                        paras = paras.replace("'", "\\'");
+
+                        while (true) {
+                            paras = paras.replace('@', '&');
+
+                            if (paras.indexOf('@') < 0) {
+                                break;
+                            }
+                        }
+                        paras = "1" + paras;
+                    }
+
+                    num++;
+
+                    if (is1 == true) {
+                        listbox += "<tr  id='" + groupName + num + "' >";
+                        is1 = false;
+                    }
+                    else {
+                        listbox += "<tr   id='" + groupName + num + "' >";
+                        is1 = true;
+                    }
+
+                    listbox += "<td>" + num + "</td>"; //序号.
+
+                    var url = "";
+                    if (isRead == 0)
+                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
+                    else
+                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+
+                    listbox += "<td>" + url + "</td>"; //标题
+
+                    if (groupBy == "ByNode" || groupBy == "NodeName") {
+                        listbox += "<td>" + flowName + "</td>"; //流程类别
+                        listbox += "<td>" + starterName + "</td>"; //发起人
+                    } else if (groupBy == "ByFlow") {
+                        listbox += "<td>" + nodeName + "</td>"; //节点名称
+                        listbox += "<td>" + starterName + "</td>"; //发起人
+
+                    } else if (groupBy == "ByStarter") {
+                        listbox += "<td>" + flowName + "</td>"; //流程类别
+                        listbox += "<td>" + nodeName + "</td>"; //节点名称
+                    }
+
+
+                    listbox += "<td>" + work.RDT + "</td>"; //发起时间
+                    listbox += "<td>" + work.ADT + "</td>"; //接受时间
+                    listbox += "<td>" + work.SDT + "</td>"; //应完成时间
+
+                    //为天业解决开始节点撤销回来后，就是逾期状态.
+                    var len = nodeID.toString().length;
+                    var entStr = nodeID.toString().substr(len - 2);
+
+                    //判断期限是否少于三天，加警告颜色
+                    var date = new Date();
+                    var edt = work.SDT.replace(/\-/g, "/");
+                    edt = new Date(Date.parse(edt.replace(/-/g, "/")));
+                    passTime = GetSpanTime(date, edt);
+                    //判断流程是否逾期
+                    if (cdt > work.SDT && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT && paras.indexOf("&IsCC=1") == -1) {
+                        listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
+                    }
+                    else {
+                        if (passTime >= 0 && passTime < 3 * 24 * 3600 * 1000) {
+                            listbox += "<td><font color='#ffac38'>" + window.lang.jinggao + "</font></td>";
+                        } else {
+                            listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
+                        }
+
+                    }
+
+                    listbox += "<td>" + GetState(work.WFState) + "</td>";
+
+                    //备注
+                    //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+
+                    listbox += "</tr>";
+                }
+            }
+
+            //  $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
+            $('#Table1').html(listbox);
+            $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
+
+            var div = window.parent.document.getElementById("Todolist_EmpWorks");
+            if (div != null) {
+                div.innerHTML = realCount;
+            }
+
+        }
+        function GetState(wfState) {
+
+            //alert(wfState);
+
+            switch (wfState) {
+                case 1:
+                    return window.lang.caogao;
+                case 2:
+                    return window.lang.daiban;
+                    break;
+                case 3: //已完成.
+                    return window.lang.ywc;
+                    break;
+                case 4:
+                    return window.lang.guaqi;
+                case 5:
+                    return "<font color=red>" + window.lang.tuihui + "</font>";
+                case 6:
+                    return window.lang.zhuanfa;
+                case 7:
+                    return window.lang.shanchu;
+                case 8:
+                    return window.lang.jiaqian;
+                case 11:
+                    return window.lang.jqhf;
+                default:
+                    return window.lang.other;
+            }
+        }
         //获取当前时间
         function getNowFormatDate() {
             var date = new Date();
@@ -198,113 +371,13 @@
 
             return cdt;
         }
+        function GetSpanTime(date1, date2) {
+            ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
+            var date3 = date2.getTime() - date1.getTime();  //时间差秒.
+            //            if (date1.getTime() > date2.getTime())
+            //                date3 = date1.getTime() - date2.getTime();
+            return date3;
+        }
     </script>
-    <style type="text/css">
-        body
-        {
-            font: "宋体";
-            font-size: 12px;
-        }
-        a:link, a:visited
-        {
-            font-size: 12px;
-            color: #666;
-            text-decoration: none;
-        }
-        a:hover
-        {
-            color: #ff0000;
-            text-decoration: underline;
-        }
-        #Tab
-        {
-            margin: 0 auto;
-            width: 100%;
-            border: 1px solid #BCE2F3;
-        }
-        .Menubox
-        {
-            height: 28px;
-            border-bottom: 1px solid #64B8E4;
-            background: #E4F2FB;
-        }
-        .Menubox ul
-        {
-            list-style: none;
-            margin: 7px 5px;
-            padding: 0;
-            position: absolute;
-        }
-        .Menubox ul li
-        {
-            float: left;
-            background: #64B8E4;
-            line-height: 20px;
-            display: block;
-            cursor: pointer;
-            width: 135px;
-            text-align: center;
-            color: #fff;
-            font-weight: bold;
-            border-top: 1px solid #64B8E4;
-            border-left: 1px solid #64B8E4;
-            border-right: 1px solid #64B8E4;
-        }
-        .Menubox ul li.hover
-        {
-            background: #fff;
-            border-bottom: 1px solid #fff;
-            color: #147AB8;
-        }
-        .Contentbox
-        {
-            clear: both;
-            margin-top: 0px;
-            border-top: none;
-            height: 181px;
-            padding-top: 8px;
-            height: 100%;
-        }
-        .Contentbox ul
-        {
-            list-style: none;
-            margin: 7px;
-            padding: 0;
-        }
-        .Contentbox ul li
-        {
-            line-height: 24px;
-            border-bottom: 1px dotted #ccc;
-        }
-    </style>
-    <script type="text/javascript">
-        function setTab(name, cursel, n) {
-            for (i = 1; i <= n; i++) {
-                var menu = document.getElementById(name + i);
-                var con = document.getElementById("con_" + name + "_" + i);
-                menu.className = i == cursel ? "hover" : "";
-                con.style.display = i == cursel ? "block" : "none";
-            }
-        } 
-    </script>
-</head>
-<body>
-    <table style="width: 100%;">
-        <caption>
-            授权待办列表
-        </caption>
-        <tr>
-            <td>
-                <div id="Tab">
-                    <div class="Menubox">
-                        <ul id="Tab_Menu">
-                        </ul>
-                    </div>
-                    <div id="Div_Content" class="Contentbox">
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
 </body>
 </html>

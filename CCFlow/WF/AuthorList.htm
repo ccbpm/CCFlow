@@ -27,7 +27,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("No", fk_emp);
-            var data = handler.DoMethodReturnString("LoginAs");
+            var data = handler.DoMethodReturnString("AuthorList_LoginAs");
 
             if (data.indexOf('err') == 0) {
                 alert('授权登录失败! \t\n'+data);

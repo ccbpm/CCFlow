@@ -144,7 +144,8 @@
         function Delete(mypk) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var en = new Entity("BP.WF.Template.Cond", mypk);
+            var en = new Entity("BP.WF.Template.Cond");
+            en.SetPKVal(mypk);
             en.Delete();
             window.location.href = window.location.href;
         }

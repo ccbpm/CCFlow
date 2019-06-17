@@ -56,6 +56,12 @@
         //初始化数据.
         function InitPage() {
 
+            var webUser = new WebUser();
+            if (webUser.IsAuthorize == "1") {
+                window.location.href = 'AuthorTodolist.htm';
+                return;              
+            }
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             var data = handler.DoMethodReturnString("Load_Author");
             data = JSON.parse(data);

@@ -38,7 +38,7 @@ namespace ccbpm
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)
-                BP.WF.Dev2Interface.Port_Login(userNo, sid);
+                BP.WF.Dev2Interface.Port_LoginBySID(userNo, sid);
 
             flowNo = BP.DA.DataType.ParseStringOnlyIntNumber(flowNo);   //规避注入风险，added by liuxc
 
@@ -61,11 +61,11 @@ namespace ccbpm
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)
-                BP.WF.Dev2Interface.Port_Login(userNo, sid);
+                BP.WF.Dev2Interface.Port_LoginBySID(userNo, sid);
 
             BP.DA.AtPara ap = new BP.DA.AtPara(paras);
 
-            BP.WF.SendReturnObjs objs= BP.WF.Dev2Interface.Node_SendWork(flowNo,workid,ap.HisHT,null,toNodeID,toEmps);
+            BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ap.HisHT, null, toNodeID, toEmps);
             return objs.ToMsgOfSpecText(); //输出特殊的格式，让接受者解析.
         }
         #endregion 流程引擎操作相关.
@@ -82,8 +82,10 @@ namespace ccbpm
         {
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             if (emp.CheckPass(pass) == false)
-                return null;
-            return BP.WF.Dev2Interface.Port_Login(userNo);
+                return "err@登录失败";
+
+            BP.WF.Dev2Interface.Port_Login(userNo);
+            return "登录成功";
         }
         /// <summary>
         /// 退出
@@ -91,7 +93,7 @@ namespace ccbpm
         [WebMethod]
         public void Port_LoginOut()
         {
-           BP.WF.Dev2Interface.Port_SigOut(); 
+            BP.WF.Dev2Interface.Port_SigOut();
         }
         #endregion Port门户处理.
 
@@ -107,7 +109,7 @@ namespace ccbpm
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)
-                BP.WF.Dev2Interface.Port_Login(userNo, sid);
+                BP.WF.Dev2Interface.Port_LoginBySID(userNo, sid);
 
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
             return BP.Tools.Json.ToJson(dt);

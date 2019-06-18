@@ -466,7 +466,7 @@ namespace BP.En
             throw new Exception("@在取[" + this.EnDesc + "]的明细时出现错误。[" + ens.GetNewEntity.EnDesc + "],不在他的集合内。");
         }
 
-        public Entities GetDtlEnsDa(EnDtl dtl,string pkval=null)
+        public Entities GetDtlEnsDa(EnDtl dtl, string pkval = null)
         {
             try
             {
@@ -557,12 +557,12 @@ namespace BP.En
             return al;
         }
 
-        public List<Entities> GetDtlsDatasOfList(string pkval=null)
+        public List<Entities> GetDtlsDatasOfList(string pkval = null)
         {
             List<Entities> al = new List<Entities>();
             foreach (EnDtl dtl in this.EnMap.Dtls)
             {
-                al.Add(this.GetDtlEnsDa(dtl,pkval));
+                al.Add(this.GetDtlEnsDa(dtl, pkval));
             }
             return al;
         }
@@ -593,12 +593,12 @@ namespace BP.En
         /// </summary>
         /// <param name="attrKey">属性</param>
         /// <returns>产生的序号</returns> 
-        public string GenerNewNoByKey(string attrKey,Attr attr=null)
+        public string GenerNewNoByKey(string attrKey, Attr attr = null)
         {
             try
             {
                 string sql = null;
-                if(attr == null)
+                if (attr == null)
                     attr = this.EnMap.GetAttrByKey(attrKey);
                 if (attr.UIIsReadonly == false)
                     throw new Exception("@需要自动生成编号的列(" + attr.Key + ")必须为只读。");
@@ -1107,7 +1107,7 @@ namespace BP.En
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
             {
                 var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal.ToString());
-                if (row != null && row.Count >2 )
+                if (row != null && row.Count > 2)
                 {
                     this.Row = row;
                     return 1;
@@ -2754,7 +2754,7 @@ namespace BP.En
                         break;
                     case DataType.AppInt:
                     case DataType.AppBoolean:
-                        if (FType.Contains( "int") ==false )
+                        if (FType.Contains("int") == false)
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
                             BP.DA.Log.DebugWriteWarning(err);
@@ -2772,7 +2772,7 @@ namespace BP.En
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case 9:
-                        if (FType.Contains( "float")==false )
+                        if (FType.Contains("float") == false)
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
                             BP.DA.Log.DebugWriteWarning(err);
@@ -3038,10 +3038,10 @@ namespace BP.En
                         break;
                     case DataType.AppInt:
                     case DataType.AppBoolean:
-                        if (FType.Contains("int")==false)
+                        if (FType.Contains("int") == false)
                         {
-                          //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                        //    BP.DA.Log.DebugWriteWarning(err);
+                            //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
+                            //    BP.DA.Log.DebugWriteWarning(err);
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
                             //{
@@ -3058,8 +3058,8 @@ namespace BP.En
                     case 9:
                         if (FType != "float")
                         {
-                          //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                          //  BP.DA.Log.DebugWriteWarning(err);
+                            //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
+                            //  BP.DA.Log.DebugWriteWarning(err);
 
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
@@ -3446,7 +3446,7 @@ namespace BP.En
                 {
                     try
                     {
-                        if(attr.MaxLength <3000)
+                        if (attr.MaxLength < 3000)
                             this.RunSQL("alter table " + dr["OWNER"] + "." + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLength + ")");
                         else
                             this.RunSQL("alter table " + dr["OWNER"] + "." + this._enMap.PhysicsTableExt + " modify " + attr.Field + " text");
@@ -3881,7 +3881,7 @@ namespace BP.En
             //删除.
             MapAttrs attrs = new MapAttrs();
             attrs.Delete(MapAttrAttr.FK_MapData, fk_mapdata);
-                
+
             //同步属性 mapattr.
             DTSMapToSys_MapData_InitMapAttr(map.Attrs, fk_mapdata);
 

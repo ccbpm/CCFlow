@@ -229,10 +229,15 @@
                     listbox += "<td>" + num + "</td>"; //序号.
 
                     var url = "";
-                    if (isRead == 0)
-                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
-                    else
-                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+                    if (paras.indexOf("&IsCC=1") == -1) {
+                        if (isRead == 0)
+                            url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
+                        else
+                            url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+                    } else {
+                        var batchUrl = './WFRpt.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID + '&WorkID=' + workID + '&FID=' + fid;
+                         url = "<a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a>";
+                    }
 
                     listbox += "<td>" + url + "</td>"; //标题
 
@@ -383,6 +388,17 @@
                     row.style.display = sta;
                 }
             }
+        }
+
+        //打开默认窗口
+        function WinOpenFull(url) {
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title: '待办',
+                area: ['96%', '90%'],
+                content: url
+            });
         }
 
         function WinOpenIt(url) {

@@ -137,7 +137,9 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 map.Java_SetEnType(EnType.Sys);
+
                 map.AddMyPK();
+
                 map.AddTBString(UserLogAttr.FK_Emp, null, "用户", true, false, 0, 30, 20);
                 map.AddTBString(UserLogAttr.IP, null, "IP", true, false, 0, 200, 20);
                 map.AddTBString(UserLogAttr.LogFlag, null, "标识", true, false, 0, 300, 20);

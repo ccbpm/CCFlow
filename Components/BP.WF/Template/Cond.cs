@@ -1100,6 +1100,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_Cond", "流程条件");
 
                 map.AddMyPK();
+
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
                 //map.AddDDLSysEnum(CondAttr.CondType, 0, "条件类型", true, false, CondAttr.CondType,"@0=节点完成条件@1=流程完成条件@2=方向条件");
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);

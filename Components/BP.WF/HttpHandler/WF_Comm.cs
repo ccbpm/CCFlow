@@ -2809,19 +2809,48 @@ namespace BP.WF.HttpHandler
         public string WebUser_Init()
         {
             Hashtable ht = new Hashtable();
+
+            string userNo = Web.WebUser.No;
+            if (DataType.IsNullOrEmpty(userNo) == true)
+            {
+                ht.Add("No", "");
+                ht.Add("Name", "");
+                ht.Add("FK_Dept", "");
+                ht.Add("FK_DeptName", "");
+                ht.Add("FK_DeptNameOfFull", "");
+
+                ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
+                ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+                return BP.Tools.Json.ToJson(ht);
+            }
+
             ht.Add("No", WebUser.No);
             ht.Add("Name", WebUser.Name);
             ht.Add("FK_Dept", WebUser.FK_Dept);
             ht.Add("FK_DeptName", WebUser.FK_DeptName);
             ht.Add("FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-
             ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
             ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
-
-          //  ht.Add("GroupNo", WebUser.GroupNo);
             ht.Add("SID", WebUser.SID);
 
+            //检查是否是授权状态.
+            if (WebUser.IsAuthorize == true)
+            {
+                ht.Add("IsAuthorize", "1");
+                ht.Add("Auth", WebUser.Auth);
+                ht.Add("AuthName", WebUser.AuthName);
+            }
+            else
+            {
+                ht.Add("IsAuthorize", "0");
+            }
             return BP.Tools.Json.ToJson(ht);
+        }
+
+        public string WebUser_BackToAuthorize()
+        {
+            BP.WF.Dev2Interface.Port_Login(WebUser.Auth);
+            return "登录成功";
         }
         /// <summary>
         /// 当前登录人员信息

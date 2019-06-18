@@ -633,7 +633,7 @@ namespace BP.WF
         #endregion 获取流程事例的轨迹图
 
         #region 获取流程事例的轨迹图
-        
+
         public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid)
         {
             #region 获取track数据.
@@ -2033,15 +2033,12 @@ namespace BP.WF
         /// <returns>具有FlowNo,FlowName,Num三个列的指定人员的待办列表</returns>
         public static DataTable DB_FlowCompleteGroup(string userNo)
         {
-
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT FK_Flow as No,FlowName,COUNT(*) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + userNo + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " GROUP BY FK_Flow,FlowName";
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
-
         }
-
         /// <summary>
         /// 获取指定页面已经完成流程
         /// </summary>
@@ -2052,7 +2049,6 @@ namespace BP.WF
         /// <returns>用户编号</returns>
         public static DataTable DB_FlowComplete(string userNo, string flowNo, int pageSize, int pageIdx)
         {
-
             /* 如果不是删除流程注册表. */
             GenerWorkFlows ens = new GenerWorkFlows();
             QueryObject qo = new QueryObject(ens);
@@ -2164,12 +2160,12 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
             //@史连雨,需要翻译.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                dt.Columns["TYPE"].ColumnName="Type";
+                dt.Columns["TYPE"].ColumnName = "Type";
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
                 dt.Columns["SYSTYPE"].ColumnName = "SysType";
@@ -3565,35 +3561,23 @@ namespace BP.WF
         /// </summary>
         /// <param name="userNo">用户名</param>
         /// <param name="SID">安全ID,请参考流程设计器操作手册</param>
-        public static void Port_Login(string userNo, string sid)
+        public static void Port_LoginBySID(string userNo, string sid, string deviceNo = "PC")
         {
             if (WebUser.No == userNo)
-            {
                 return;
-            }
 
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
-            {
-                Paras ps = new Paras();
-                ps.SQL = "SELECT SID FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("No", userNo);
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count == 0)
-                {
-                    throw new Exception("用户不存在或者SID错误。");
-                }
 
-                if (dt.Rows[0]["SID"].ToString() != sid)
-                {
-                    throw new Exception("用户不存在或者SID错误。");
-                }
-            }
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(userNo);
 
-            BP.Port.Emp emp = new BP.Port.Emp(userNo);
-            WebUser.SignInOfGener(emp);
+            string key = "SID_" + deviceNo + "" + userNo;
+            string guid = emp.GetParaString(key);
+            if (guid.Equals(sid) == false)
+                throw new Exception("err@非法的sid.");
+
+            BP.Port.Emp myEmp = new BP.Port.Emp(userNo);
+            WebUser.SignInOfGener(myEmp);
             return;
         }
-
         /// <summary>
         /// 登录
         /// </summary>
@@ -3602,33 +3586,14 @@ namespace BP.WF
         /// <param name="fk_dept">所在部门</param>
         /// <param name="deptName">部门名称</param>
         /// <returns></returns>
-        public static string Port_Login(string userNo, string userName = null, string deptNo = null, string deptName = null,
-            string authNo = null, string authName = null)
+        public static void Port_Login(string userNo)
         {
-
             /* 仅仅传递了人员编号，就按照人员来取.*/
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = userNo;
             emp.RetrieveFromDBSources();
-
-
-            emp.SID = DBAccess.GenerGUID();
-            try
-            {
-                if (DBAccess.IsView(emp.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
-                {
-                    emp.DirectUpdate();
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-
             WebUser.SignInOfGener(emp);
-            WebUser.Auth = ""; //设置授权人为空.
-            return emp.SID;
-            //  return Port_GetSID(userNo);
+
         }
         /// <summary>
         /// 注销当前登录
@@ -3670,63 +3635,61 @@ namespace BP.WF
             Port_SendMsg(userNo, msgTitle, msgDoc, msgFlag, BP.WF.SMSMsgType.Self, null, 0, 0, 0);
         }
         /// <summary>
-        /// 获取SID
+        /// 获取有效的SID
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <returns>SID</returns>
-        public static string Port_GetSIDName(string userNo)
+        /// <param name="logDev">设备编号</param>
+        /// <param name="activeMinutes">登录有效时间</param>
+        /// <returns>返回一个新的SID</returns>
+        public static string Port_GenerSID(string userNo, string logDev = "PC", int activeMinutes = 0)
         {
-            string info = "";
-            Paras ps = new Paras();
-            ps.SQL = "SELECT SID, Name FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
-            ps.Add("No", userNo);
-            DataTable table = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            info = BP.Tools.Json.ToJson(table);
-            return info;
-        }
-        /// <summary>
-        /// 获取SID
-        /// </summary>
-        /// <param name="userNo">用户编号</param>
-        /// <returns>SID</returns>
-        public static string Port_GetSID(string userNo)
-        {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
+            if (logDev == null)
+                logDev = "PC";
+
+            if (activeMinutes == 0)
+                activeMinutes = 300; //默认为300分钟.
+
+            string key = "SID_" + logDev;
+
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(userNo);
+
+            //如果第一次登录.
+            string myGuid = emp.GetParaString(key);
+            string guidOID_Dt = emp.GetParaString(key + "_DT");
+
+            if (DataType.IsNullOrEmpty(myGuid) == true || DataType.IsNullOrEmpty(guidOID_Dt) == true)
             {
-                Paras ps = new Paras();
-                ps.SQL = "SELECT SID FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("No", userNo);
-                string sid = BP.DA.DBAccess.RunSQLReturnString(ps);
-                if (DataType.IsNullOrEmpty(sid) == true)
-                {
-                    try
-                    {
-                        //判断是否更新的是用户表中的SID
-                        if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
-                        {
-                            //判断是否视图，如果为视图则不进行修改 需要翻译
-                            if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
-                            {
-                                return sid;
-                            }
-                        }
-                        //执行已配置表的更新，可以是Port_Emp，也可以是其他表
-                        sid = BP.DA.DBAccess.GenerGUID();
-                        ps = new Paras();
-                        ps.SQL = Glo.UpdataSID;
-                        ps.Add("SID", sid);
-                        ps.Add("No", userNo);
-                        BP.DA.DBAccess.RunSQL(ps);
-                    }
-                    catch
-                    {
-                        // throw new Exception("@可");
-                        /*这里有可能是更新失败，是因为用户连接的视图. */
-                    }
-                }
-                return sid;
+                string guid = DBAccess.GenerGUID();
+                emp.SetPara(key, guid);
+
+                DateTime dt = DateTime.Now;
+                dt = dt.AddMinutes(activeMinutes);
+
+                emp.SetPara(key + "_DT", dt.ToString("yyyy-MM-dd HH:mm:ss"));
+                emp.Update();
+                return guid;
             }
-            throw new Exception("@没有判断的数据源模式...");
+
+            DateTime dtTo = DataType.ParseSysDateTime2DateTime(guidOID_Dt);
+            if (dtTo < DateTime.Now)
+            {
+                DateTime dtUpdate = DateTime.Now;
+                dtUpdate = dtUpdate.AddMinutes(activeMinutes);
+
+                emp.SetPara(key + "_DT", dtUpdate.ToString("yyyy-MM-dd HH:mm:ss"));
+                emp.Update();
+                return myGuid;
+            }
+
+            string guidNew = DBAccess.GenerGUID();
+            emp.SetPara(key, guidNew);
+
+            DateTime dtNew = DateTime.Now;
+            dtNew = dtNew.AddMinutes(activeMinutes);
+
+            emp.SetPara(key + "_DT", dtNew.ToString("yyyy-MM-dd HH:mm:ss"));
+            emp.Update();
+            return guidNew;
         }
         /// <summary>
         /// 验证用户的合法性
@@ -5225,7 +5188,7 @@ namespace BP.WF
                     return true;
                 }
             }
-            
+
 
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */
@@ -5400,7 +5363,7 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="fid">FID</param>
         /// <returns></returns>
-        public static bool Flow_IsCanViewTruck(string flowNo, Int64 workid, string userNo=null)
+        public static bool Flow_IsCanViewTruck(string flowNo, Int64 workid, string userNo = null)
         {
             if (userNo == null)
                 userNo = WebUser.No;
@@ -6957,7 +6920,7 @@ namespace BP.WF
                 gwf.Update();
             }
 
-           
+
 
 
             if (parentWorkID != 0)
@@ -6983,11 +6946,11 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             if (gwf.WFState == WFState.Complete)
-                throw new Exception("流程："+gwf.Title+"已经完成,您不能增加接受人.");
+                throw new Exception("流程：" + gwf.Title + "已经完成,您不能增加接受人.");
 
             #region 增加待办人员.
 
-            GenerWorkerList  gwl = new GenerWorkerList();
+            GenerWorkerList gwl = new GenerWorkerList();
             gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
             string[] emps = todoEmps.Split(','); //分开字符串.
@@ -6996,7 +6959,7 @@ namespace BP.WF
             {
                 if (DataType.IsNullOrEmpty(emp) == true)
                     continue;
-                if (tempStrs.Contains("," + emp+",") == true)
+                if (tempStrs.Contains("," + emp + ",") == true)
                     continue;
 
                 //插入待办.
@@ -7004,8 +6967,8 @@ namespace BP.WF
                 gwl.WorkID = workid;
                 gwl.FK_Node = gwf.FK_Node;
                 gwl.FK_Emp = emp;
-                int  i = gwl.RetrieveFromDBSources();
-                if (i==1)
+                int i = gwl.RetrieveFromDBSources();
+                if (i == 1)
                     continue;
 
                 Emp empEn = new Emp(emp);
@@ -8864,7 +8827,7 @@ namespace BP.WF
         /// <param name="Del_Selected">是否删除历史选择</param>
         public static void Node_AddNextStepAccepters(Int64 workID, int toNodeID, string fk_emp, bool del_Selected = true)
         {
-            if (DataType.IsNullOrEmpty(fk_emp)==true)
+            if (DataType.IsNullOrEmpty(fk_emp) == true)
                 return;
 
             SelectAccper sa = new SelectAccper();
@@ -8880,7 +8843,7 @@ namespace BP.WF
             {
                 sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
             }
-            
+
             //@shilianyu.
             Emp emp = new Emp();
             emp.No = fk_emp;

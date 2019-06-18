@@ -96,7 +96,7 @@ namespace BP.WF.HttpHandler
                 return "err@用户名或者密码错误.";
 
             //调用登录方法.
-            BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
+            BP.WF.Dev2Interface.Port_Login(emp.No);
 
             return "登录成功.";
         }

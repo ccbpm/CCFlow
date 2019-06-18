@@ -263,7 +263,8 @@ namespace BP.WF.HttpHandler
         public string TestFlow_ReturnToUser()
         {
             string userNo = this.GetRequestVal("UserNo");
-            string sid = BP.WF.Dev2Interface.Port_Login(userNo);
+             BP.WF.Dev2Interface.Port_Login(userNo);
+            string sid = BP.WF.Dev2Interface.Port_GenerSID(userNo);
             string url = "../../WF/Port.htm?UserNo=" + userNo + "&SID=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
             return "url@" + url;
         }

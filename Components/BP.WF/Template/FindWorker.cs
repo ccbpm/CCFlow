@@ -987,7 +987,7 @@ namespace BP.WF.Template
             DataTable mydt = Func_GenerWorkerList_DiGui_ByDepts(subDepts, empNo);
             if (mydt == null && this.town.HisNode.HisWhenNoWorker == false)
             {
-                  //如果递归没有找到人,就全局搜索岗位
+                  //如果递归没有找到人,就全局搜索岗位.
 			     sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                  ps = new Paras();
                  ps.Add("FK_Node", town.HisNode.NodeID);
@@ -1003,7 +1003,6 @@ namespace BP.WF.Template
                     mydt.Columns.Add(new DataColumn("No", typeof(string)));
                     mydt.Columns.Add(new DataColumn("Name", typeof(string)));
                  }
-
             }
                 
             return mydt;

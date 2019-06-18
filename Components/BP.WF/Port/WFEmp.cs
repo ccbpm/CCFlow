@@ -3,8 +3,8 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.WF;
-using BP.Port; 
-using BP.Port; 
+using BP.Port;
+using BP.Port;
 using BP.En;
 using BP.Web;
 using System.Drawing;
@@ -54,9 +54,9 @@ namespace BP.WF.Port
         /// </summary>
         AppSystemMsg
     }
-	/// <summary>
-	/// 操作员
-	/// </summary>
+    /// <summary>
+    /// 操作员
+    /// </summary>
     public class WFEmpAttr
     {
         #region 基本属性
@@ -111,9 +111,9 @@ namespace BP.WF.Port
         public const string SPass = "SPass";
         #endregion
     }
-	/// <summary>
-	/// 操作员
-	/// </summary>
+    /// <summary>
+    /// 操作员
+    /// </summary>
     public class WFEmp : EntityNoName
     {
         #region 基本属性
@@ -232,8 +232,8 @@ namespace BP.WF.Port
         {
             get
             {
-                if (this.Email==null || this.Email.Length == 0)
-                    return  "未设置";
+                if (this.Email == null || this.Email.Length == 0)
+                    return "未设置";
                 else
                     return "<a href='Mailto:" + this.Email + "' ><img src='/WF/Img/SMS.gif' border=0/>" + this.Email + "</a>";
             }
@@ -289,9 +289,9 @@ namespace BP.WF.Port
         {
             get
             {
-                string s= this.GetValStringByKey(WFEmpAttr.AuthorFlows);
+                string s = this.GetValStringByKey(WFEmpAttr.AuthorFlows);
                 s = s.Replace(",", "','");
-                return "('"+s+"')";
+                return "('" + s + "')";
             }
             set
             {
@@ -374,9 +374,12 @@ namespace BP.WF.Port
         {
             get
             {
-                int b= this.GetValIntByKey(WFEmpAttr.AuthorWay);
+                int b = this.GetValIntByKey(WFEmpAttr.AuthorWay);
                 if (b == 0)
-                    return false;
+                    return false; //不授权.
+
+                // if (DataType.IsNullOrEmpty(this.Author) == true)
+                //  return false;
 
                 if (this.AuthorToDate.Length < 4)
                     return true; /*没有填写时间,当做无期限*/
@@ -429,7 +432,7 @@ namespace BP.WF.Port
                 Map map = new Map("WF_Emp", "操作员");
 
                 map.AddTBStringPK(WFEmpAttr.No, null, "No", true, true, 1, 50, 36);
-                map.AddTBString(WFEmpAttr.Name, null, "Name", true,false, 0, 50, 20);
+                map.AddTBString(WFEmpAttr.Name, null, "Name", true, false, 0, 50, 20);
                 map.AddTBInt(WFEmpAttr.UseSta, 1, "用户状态0禁用,1正常.", true, true);
 
                 map.AddTBString(WFEmpAttr.Tel, null, "Tel", true, true, 0, 50, 20);
@@ -437,7 +440,7 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.TM, null, "即时通讯号", true, true, 0, 50, 20);
 
-                map.AddDDLSysEnum(WFEmpAttr.AlertWay, 3, "收听方式", true, true, 
+                map.AddDDLSysEnum(WFEmpAttr.AlertWay, 3, "收听方式", true, true,
                     WFEmpAttr.AlertWay);
                 map.AddTBString(WFEmpAttr.Author, null, "授权人", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.AuthorDate, null, "授权日期", true, true, 0, 50, 20);
@@ -446,7 +449,7 @@ namespace BP.WF.Port
                 map.AddTBInt(WFEmpAttr.AuthorWay, 0, "授权方式", true, true);
                 map.AddTBDate(WFEmpAttr.AuthorToDate, null, "授权到日期", true, true);
 
-                map.AddTBString(WFEmpAttr.AuthorFlows, null, "可以执行的授权流程", true, true,0,3900,0);
+                map.AddTBString(WFEmpAttr.AuthorFlows, null, "可以执行的授权流程", true, true, 0, 3900, 0);
 
                 map.AddTBString(WFEmpAttr.Stas, null, "岗位s", true, true, 0, 3000, 20);
                 map.AddTBString(WFEmpAttr.Depts, null, "Deptss", true, true, 0, 100, 36);
@@ -460,6 +463,9 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 
                 map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);
+
+                map.AddTBAtParas(3500); //增加字段.
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -533,34 +539,34 @@ namespace BP.WF.Port
             return;
         }
     }
-	/// <summary>
-	/// 操作员s 
-	/// </summary>
-	public class WFEmps : EntitiesNoName
-	{	 
-		#region 构造
-		/// <summary>
-		/// 操作员s
-		/// </summary>
-		public WFEmps()
-		{
-		}
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new WFEmp();
-			}
-		}
+    /// <summary>
+    /// 操作员s 
+    /// </summary>
+    public class WFEmps : EntitiesNoName
+    {
+        #region 构造
+        /// <summary>
+        /// 操作员s
+        /// </summary>
+        public WFEmps()
+        {
+        }
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new WFEmp();
+            }
+        }
 
         public override int RetrieveAll()
         {
-            return base.RetrieveAll("FK_Dept","Idx");
+            return base.RetrieveAll("FK_Dept", "Idx");
         }
-		#endregion
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -586,6 +592,6 @@ namespace BP.WF.Port
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
 
-	}
-	
+    }
+
 }

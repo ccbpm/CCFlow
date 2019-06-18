@@ -1774,7 +1774,7 @@ namespace BP.DA
         /// <summary>
         /// 2005-11-04 09:12
         /// </summary>
-        /// <param name="sysDateformat"></param>
+        /// <param name="sysDateformat"> 2005-11-04 09:12 </param>
         /// <returns></returns>
         public static DateTime ParseSysDateTime2DateTime(string sysDateformat)
         {

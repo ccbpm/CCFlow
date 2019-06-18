@@ -1473,24 +1473,26 @@ namespace BP.WF.HttpHandler
             }
 
             //让其登录.
-            string sid = BP.WF.Dev2Interface.Port_Login(emp.No);
-            return sid;
+            BP.WF.Dev2Interface.Port_Login(emp.No);
+
+            return "登录成功.";
         }
         /// <summary>
         /// 执行授权登录
         /// </summary>
         /// <returns></returns>
-        public string LoginAs()
+        public string AuthorList_LoginAs()
         {
             BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(this.No);
-            if (wfemp.AuthorIsOK == false)
-                return "err@授权登录失败！";
+
+            //if (wfemp.AuthorIsOK == false)
+            //   return "err@授权登录失败！";
 
             BP.Port.Emp emp1 = new BP.Port.Emp(this.No);
             BP.Web.WebUser.SignInOfGener(emp1, "CH", false, false, BP.Web.WebUser.No, BP.Web.WebUser.Name);
-            return "success@授权登录成功！";
-        }
 
+            return "授权登录成功！";
+        }
         /// <summary>
         /// 批处理审批
         /// </summary>

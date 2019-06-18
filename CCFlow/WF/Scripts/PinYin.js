@@ -30,9 +30,14 @@ function StrToPinYin(str) {
 function SpecWords(str) {
 
     if (str == '单价') return 'DanJia';
+    if (str == '项目编号') return 'PrjNo';
+    if (str == '项目名称') return 'PrjName';
     if (str == '电话') return 'Tel';
     if (str == '地址') return 'Addr';
     if (str == '邮件') return 'Email';
+    if (str == '手机') return 'Mobile';
+    if (str == '合计') return 'HeJi';
+
     if (str.indexOf('编号') != -1) return 'BillNo';
     if (str.indexOf('单据') != -1) return 'BillNo';
     return null;

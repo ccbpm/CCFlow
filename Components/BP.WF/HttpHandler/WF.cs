@@ -1827,7 +1827,7 @@ namespace BP.WF.HttpHandler
         /// 获取授权人列表
         /// </summary>
         /// <returns></returns>
-        public string Load_Author()
+        public string AuthorList_Init()
         {
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM WF_Emp WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";

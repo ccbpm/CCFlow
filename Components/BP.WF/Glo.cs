@@ -1210,6 +1210,9 @@ namespace BP.WF
 
 
             #region 首先创建Port类型的表, 让admin登录.
+            BP.Port.Emp portEmp = new BP.Port.Emp();
+            portEmp.CheckPhysicsTable();
+
             BP.GPM.Emp myemp = new BP.GPM.Emp();
             myemp.CheckPhysicsTable();
 
@@ -1239,7 +1242,6 @@ namespace BP.WF
             #region 3, 执行基本的 sql
             string sqlscript = "";
 
-            /*如果是OneMore模式*/
             sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
             BP.DA.DBAccess.RunSQLScript(sqlscript);
 

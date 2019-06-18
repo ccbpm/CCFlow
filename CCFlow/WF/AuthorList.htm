@@ -40,7 +40,7 @@
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            var data = handler.DoMethodReturnString("Load_Author");
+            var data = handler.DoMethodReturnString("AuthorList_Init");
             data = JSON.parse(data);
 
             if (data.length == 0) {

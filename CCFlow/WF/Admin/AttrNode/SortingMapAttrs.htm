@@ -289,7 +289,7 @@
                             table += "<td nowrap=''><a href=\"javascript:EditDtl('" + FK_MapData + "','" + item.No + "')\">" + item.No + "</a></td>";
                             table += "<td nowrap=''>" + item.Name + "</td>";
                             table += "<td nowrap=''>&nbsp;</td>";
-                            table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + item.No + "&amp;t=20170825185859310892' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>字段排序</span></span></a>";
+                            table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='./SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + item.No + "&amp;t=20170825185859310892' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>字段排序</span></span></a>";
                             table += "</td>";
                             table += "</tr>";
                         });
@@ -454,7 +454,7 @@
                 var backHtml = "";
                 if (trdtl[0].tdDtl == "1") {
                     backHtml = "<tr><td colspan=6>";
-                    backHtml += "<a href='/WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
+                    backHtml += "<a href='./SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:1em;\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
 
                     //新建分组
                     backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].No + "') class='easyui-linkbutton l-btn' data-options=\"iconCls:'icon-back'\" style=\"margin-top:0.6em;\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
@@ -510,22 +510,22 @@
     </script>
 </head>
 <body class="easyui-layout">
-    <form id="form1">
+<form id="form1">
     <div id="layoutDiv" data-options="region:'center',title:'字段排序',border:false" style="padding:5px">
         <div id="p" style="padding:5px">
         </div>
-        
+
 
         <div id="nodes" class="easyui-dialog" data-options="title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'" style="width:280px;height:340px">
             <div id="nodes_panel" style="width:100%;height:100%"></div>
         </div>
-        <div id="btns" class="dialog-button"> 
+        <div id="btns" class="dialog-button">
             <a onclick="BtnCopy()"  class="easyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-            <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span></span></a>
+                <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span></span></a>
             <a onclick="$('#nodes').dialog('close');" class="eeasyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-            <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span></a>
-       </div>
+                <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span></a>
+        </div>
     </div>
-    </form>
+</form>
 </body>
 </html>

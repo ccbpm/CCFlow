@@ -2323,11 +2323,11 @@ namespace BP.En
         /// </summary>
         /// <param name="saveToField">要保存的字段</param>
         /// <param name="bytes">文件流</param>
-        public void SaveFileToDB(string saveToField, byte[] bytes)
+        public void SaveFileToDB(string saveToField, byte[] bytesOfFile)
         {
             try
             {
-                BP.DA.DBAccess.SaveBytesToDB(bytes, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+                BP.DA.DBAccess.SaveBytesToDB(bytesOfFile, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
             }
             catch (Exception ex)
             {

@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190225;
+        public static int Ver = 20190619;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -447,6 +447,20 @@ namespace BP.WF
             string msg = "";
             try
             {
+                #region 更新wf_emp. 的字段类型. 2019.06.19
+
+                if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                {
+                    if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+                        DBAccess.RunSQL("ALTER TABLE WF_Emp ADD StartFlows Image NULL ");
+                    else
+                        DBAccess.RunSQL("ALTER TABLE WF_Emp ALTER COLUMN StartFlows text NULL ");
+                }
+
+
+                #endregion 更新wf_emp 的字段类型.
+
+
                 #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
                 if (DBAccess.IsExitsObject("Port_Inc") == false)
                 {
@@ -1124,6 +1138,7 @@ namespace BP.WF
             System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
             string myVer = fi.LastWriteTime.ToString("MMddHHmmss");
 
+            //判断是否可以执行，当文件发生变化后，才执行。
             if (currDBVer == "" || int.Parse(currDBVer) < int.Parse(myVer))
             {
                 BP.DA.DBAccess.RunSQLScript(sqlScript);

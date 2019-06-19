@@ -1055,6 +1055,7 @@ namespace BP.WF
 
                                 dtlData.Copy(geDtlFromData);
                                 dtlData.RefPK = wk.OID.ToString();
+                                dtlData.FID = wk.OID;
                                 if (this.No.Equals(PFlowNo) == false && (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow)){
                                      dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
                                 }else

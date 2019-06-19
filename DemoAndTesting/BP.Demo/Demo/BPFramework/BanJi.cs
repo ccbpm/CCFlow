@@ -92,7 +92,7 @@ namespace BP.Demo.BPFramework
 				#endregion
 
 				#region 字段 
-                map.AddTBStringPK(BanJiAttr.No, null, "编号", true, true, 3, 3, 3);
+                map.AddTBStringPK(BanJiAttr.No, null, "编号", true, true, 3, 3, 50);
 				map.AddTBString(BanJiAttr.Name,null,"名称",true,false,0,50,200);
                 map.AddTBString(BanJiAttr.BZR, null, "班主任", true, false, 0, 50, 200);
                 map.AddTBString(BanJiAttr.Tel, null, "班主任电话", true, false, 0, 50, 200);

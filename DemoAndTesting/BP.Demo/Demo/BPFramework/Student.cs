@@ -286,8 +286,8 @@ namespace BP.Demo.BPFramework
                 #region 字段映射 - 普通字段.
                 map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 90); // 如果设置自动编号字段必须是只读的.
                 map.AddTBString(StudentAttr.Name, null, "名称", true, false, 0, 200, 70);
-                map.AddTBStringDoc(StudentAttr.PWD, null, "密码", true, false);
-                //map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 70);
+                //map.AddTBStringDoc(StudentAttr.PWD, null, "密码", true, false);
+                map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 50);
 
 
                 map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
@@ -301,7 +301,6 @@ namespace BP.Demo.BPFramework
                 //map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
                 //map.AddDDLEntities(StudentAttr.FK_City, null, "城市",new BP.CN.Citys(),true);
 
-
                 //枚举字段
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
 
@@ -314,9 +313,14 @@ namespace BP.Demo.BPFramework
                 map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
                 map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
 
+                map.AddTBStringDoc(ResumeAttr.BeiZhu, null, "备注", true, false);
+
                 //枚举字段 - 整治面貌.
                 map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
                     "@0=少先队员@1=团员@2=党员");
+
+                map.AddTBAtParas(2000);
+
                 #endregion 字段映射 - 普通字段.
 
                 //map.AddHidden("XB", " = ", "0");
@@ -328,11 +332,11 @@ namespace BP.Demo.BPFramework
                 //设置查询条件。
                 map.AddSearchAttr(StudentAttr.XB);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
-                map.AddSearchAttr(StudentAttr.ZZMM);
+               // map.AddSearchAttr(StudentAttr.ZZMM);
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
-                  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "学习的科目");
+                  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "选修的科目");
 
                 //明细表映射.
                 map.AddDtl(new Resumes(), ResumeAttr.RefPK);

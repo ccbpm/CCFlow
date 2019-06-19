@@ -229,7 +229,7 @@ namespace BP.WF
                 map.AddTBInt(ReturnWorkAttr.ReturnNode, 0, "退回节点", true, true);
                 map.AddTBString(ReturnWorkAttr.ReturnNodeName, null, "退回节点名称", true, true, 0, 100, 10);
 
-                map.AddTBString(ReturnWorkAttr.Returner, null, "退回人", true, true, 0, 20, 10);
+                map.AddTBString(ReturnWorkAttr.Returner, null, "退回人", true, true, 0, 50, 10);
                 map.AddTBString(ReturnWorkAttr.ReturnerName, null, "退回人名称", true, true, 0, 100, 10);
 
                 map.AddTBInt(ReturnWorkAttr.ReturnToNode, 0, "ReturnToNode", true, true);

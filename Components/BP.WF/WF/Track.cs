@@ -508,7 +508,7 @@ namespace BP.WF
                 map.AddTBInt(TrackAttr.NDTo, 0, "到节点", true, false);
                 map.AddTBString(TrackAttr.NDToT, null, "到节点(名称)", true, false, 0, 999, 900);
 
-                map.AddTBString(TrackAttr.EmpFrom, null, "从人员", true, false, 0, 20, 100);
+                map.AddTBString(TrackAttr.EmpFrom, null, "从人员", true, false, 0, 50, 100);
                 map.AddTBString(TrackAttr.EmpFromT, null, "从人员(名称)", true, false, 0, 30, 100);
 
                 map.AddTBString(TrackAttr.EmpTo, null, "到人员", true, false, 0, 2000, 100);

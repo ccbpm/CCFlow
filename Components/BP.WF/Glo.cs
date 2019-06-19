@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190619;
+        public static int Ver = 20190620;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -451,10 +451,10 @@ namespace BP.WF
 
                 if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
                 {
-                    if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
-                        DBAccess.RunSQL("ALTER TABLE WF_Emp ADD StartFlows Image NULL ");
-                    else
-                        DBAccess.RunSQL("ALTER TABLE WF_Emp ALTER COLUMN StartFlows text NULL ");
+                    //if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+                    //    DBAccess.RunSQL("ALTER TABLE WF_Emp ADD StartFlows Image NULL ");
+                    //else
+                    //    DBAccess.RunSQL("ALTER TABLE WF_Emp ALTER COLUMN StartFlows text NULL ");
                 }
 
 

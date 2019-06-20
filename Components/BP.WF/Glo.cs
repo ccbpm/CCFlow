@@ -529,6 +529,7 @@ namespace BP.WF
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
                 if (dbtype == DBType.MSSQL)
                 {
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp drop constraint StartFlows");
                     DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows text");
                 }
 

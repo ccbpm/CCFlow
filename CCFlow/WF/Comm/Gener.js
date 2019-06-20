@@ -1299,7 +1299,7 @@ var Entity = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName +  "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: arguments,
                 success: function (data) {
@@ -2167,7 +2167,11 @@ var HttpHandler = (function () {
                     jsonString = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    jsonString = " Handler DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    if (XMLHttpRequest.status == 500)
+                        jsonString = "1. Handler DoMethodReturnString err@系统发生异常. \t\n2.估计是数据库连接错误或者是系统环境问题. \t\n3.技术信息:status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    else
+                        jsonString = " Handler DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+
                     alert(jsonString);
                 }
             });
@@ -2207,8 +2211,8 @@ var HttpHandler = (function () {
 
 var WebUser = function () {
 
-  //if (webUser != undefined)
-  //this.self
+    //if (webUser != undefined)
+    //this.self
 
     if (plant == "CCFlow") {
         // CCFlow

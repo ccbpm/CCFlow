@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190628;
+        public static int Ver = 20190622;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -529,8 +529,9 @@ namespace BP.WF
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
                 if (dbtype == DBType.MSSQL)
                 {
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp drop constraint StartFlows");
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows text");
+
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp drop  column  StartFlows");
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ADD  StartFlows text");
                 }
 
                 if (dbtype == DBType.PostgreSQL)

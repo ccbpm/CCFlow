@@ -874,6 +874,20 @@ namespace BP.WF.HttpHandler
                 return Start_InitTianYe();
             }
 
+            BP.WF.Port.WFEmp em = new WFEmp();
+            em.No = BP.Web.WebUser.No;
+            if (em.RetrieveFromDBSources() == 0)
+            {
+                em.FK_Dept = BP.Web.WebUser.FK_Dept;
+                em.Name = Web.WebUser.Name;
+                em.Insert();
+            }
+            string json = em.StartFlows;
+            if (DataType.IsNullOrEmpty(json) == false)
+            {
+                return json;
+            }
+
             //定义容器.
             DataSet ds = new DataSet();
 
@@ -891,7 +905,17 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtStart);
 
             //返回组合
-            return BP.Tools.Json.DataSetToJson(ds, false);
+            json = BP.Tools.Json.DataSetToJson(ds, false);
+
+            //把json存入数据表，避免下一次再取.
+            if (json.Length > 40)
+            {
+                em.StartFlows = json;
+                em.Update();
+            }
+
+            //返回组合
+            return json;
         }
         /// <summary>
         /// 获得发起列表

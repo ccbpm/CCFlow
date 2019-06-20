@@ -6405,6 +6405,10 @@ namespace BP.WF
 
             // 执行录制的sql scripts.
             DBAccess.RunSQLs(sql);
+           
+            //清空WF_Emp中的StartFlow 
+            DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+
             this.Delete(); //删除需要移除缓存.
 
             return "执行成功.";

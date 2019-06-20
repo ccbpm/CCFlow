@@ -1354,6 +1354,9 @@ namespace BP.WF.HttpHandler
                 string flowVer = ps[5]; // 流程版本.
 
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
+
+                //清空WF_Emp 的StartFlows
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
                 return flowNo;
             }
             catch (Exception ex)

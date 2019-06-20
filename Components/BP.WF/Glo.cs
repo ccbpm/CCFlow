@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190620;
+        public static int Ver = 20190621;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -447,19 +447,6 @@ namespace BP.WF
             string msg = "";
             try
             {
-                #region 更新wf_emp. 的字段类型. 2019.06.19
-
-                if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
-                {
-                    //if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
-                    //    DBAccess.RunSQL("ALTER TABLE WF_Emp ADD StartFlows Image NULL ");
-                    //else
-                    //    DBAccess.RunSQL("ALTER TABLE WF_Emp ALTER COLUMN StartFlows text NULL ");
-                }
-
-
-                #endregion 更新wf_emp 的字段类型.
-
 
                 #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
                 if (DBAccess.IsExitsObject("Port_Inc") == false)
@@ -523,6 +510,37 @@ namespace BP.WF
                 //增加列FlowStars
                 BP.WF.Port.WFEmp wfemp = new Port.WFEmp();
                 wfemp.CheckPhysicsTable();
+
+                #region 更新wf_emp. 的字段类型. 2019.06.19
+                DBType dbtype = BP.Sys.SystemConfig.AppCenterDBType;
+
+                if (dbtype == DBType.Oracle)
+                {
+                    DBAccess.RunSQL("ALTER TABLE  WF_EMP add startFlows_temp BLOB");
+                    //将需要改成大字段的项内容copy到大字段中
+                    DBAccess.RunSQL("UPDate WF_EMP set startFlows_temp=STARTFLOWS");
+                    //删除原有字段
+                     DBAccess.RunSQL("ALTER TABLE  WF_EMP drop column STARTFLOWS");
+                    //将大字段名改成原字段名
+                     DBAccess.RunSQL("ALTER TABLE  WF_EMP rename column startFlows_temp to STARTFLOWS");
+                    
+                }
+                if (dbtype == DBType.MySQL)
+                    DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
+                if (dbtype == DBType.MSSQL)
+                {
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows text");
+                }
+
+                if (dbtype == DBType.PostgreSQL)
+                {
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows type text");
+                }
+                    
+             
+
+
+                #endregion 更新wf_emp 的字段类型.
 
                 BP.Sys.FrmRB rb = new FrmRB();
                 rb.CheckPhysicsTable();

@@ -690,6 +690,18 @@ namespace BP.WF
             }
             return base.beforeUpdate();
         }
+
+        /// <summary>
+        /// 清空WFEmp中的StartFlows文件
+        /// </summary>
+        protected override void afterInsertUpdateAction()
+        {
+            if (this.IsStartNode == true)
+            {
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+            }
+            base.afterInsertUpdateAction();
+        }
         #endregion
 
         #region 基本属性

@@ -44,7 +44,7 @@ namespace BP.WF
             }
             return request.GetResponse() as HttpWebResponse;
         }
-        /// <summary>  
+        /// <summary>
         /// 创建POST方式的HTTP请求  
         /// </summary>  
         /// <param name="url">请求的URL</param>  

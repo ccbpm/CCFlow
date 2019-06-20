@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190622;
+        public static int Ver = 20180622;
         /// <summary>
         /// 执行升级
         /// </summary>

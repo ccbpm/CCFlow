@@ -81,18 +81,18 @@ namespace BP.WF.HttpHandler
             string rptNo = this.GetRequestVal("RptNo");
 
             //所有的字段.
-            string fk_mapdata = "ND"+int.Parse(this.FK_Flow)+"Rpt";
+            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
             MapAttrs mattrs = new MapAttrs(fk_mapdata);
             ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
 
             //判断rptNo是否存在于mapdata中
             MapData md = new MapData();
             md.No = rptNo;
-            if(md.RetrieveFromDBSources() == 0)
+            if (md.RetrieveFromDBSources() == 0)
             {
                 Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
-                     
-                switch(rptNo.Substring(fk_mapdata.Length))
+
+                switch (rptNo.Substring(fk_mapdata.Length))
                 {
                     case "My":
                         rd.DoReset_MyStartFlow();
@@ -128,7 +128,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
 
             //返回.
-            return BP.Tools.Json.DataSetToJson(ds, false) ;
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
         /// 选择列的保存.
@@ -140,7 +140,7 @@ namespace BP.WF.HttpHandler
             string rptNo = this.GetRequestVal("RptNo");
 
             //保存的字段,从外面传递过来的值. 用逗号隔开的: 比如:  ,Name,Tel,Addr,
-            string fields = ","+this.GetRequestVal("Fields")+",";
+            string fields = "," + this.GetRequestVal("Fields") + ",";
 
             //构造一个空的集合.
             MapAttrs mrattrsOfRpt = new MapAttrs();
@@ -243,8 +243,8 @@ namespace BP.WF.HttpHandler
         {
             string orders = this.GetRequestVal("Orders");
             //格式为  @KeyOfEn,Lable,idx  比如： @DianHua,电话,1@Addr,地址,2
-            
-            string rptNo=this.GetRequestVal("RptNo");
+
+            string rptNo = this.GetRequestVal("RptNo");
 
             string[] strs = orders.Split('@');
             foreach (string item in strs)
@@ -267,7 +267,7 @@ namespace BP.WF.HttpHandler
             }
 
             MapAttr myattr = new MapAttr();
-            myattr.MyPK = rptNo+"_OID";
+            myattr.MyPK = rptNo + "_OID";
             myattr.RetrieveFromDBSources();
             myattr.Idx = 200;
             myattr.Name = "工作ID";
@@ -292,7 +292,7 @@ namespace BP.WF.HttpHandler
 
             //定义容器.
             DataSet ds = new DataSet();
-            
+
             //判断rptNo是否存在于mapdata中
             MapData md = new MapData();
             md.No = rptNo;
@@ -334,7 +334,7 @@ namespace BP.WF.HttpHandler
             {
                 if (mattr.UIVisible == false)
                     continue;
-                
+
                 if (mattr.MyDataType == DataType.AppDate || mattr.MyDataType == DataType.AppDateTime)
                 {
                     isHave = true;
@@ -366,7 +366,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                return  this.GetRequestVal("RptNo");
+                return this.GetRequestVal("RptNo");
             }
         }
         /// <summary>

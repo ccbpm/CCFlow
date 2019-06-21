@@ -439,10 +439,10 @@ namespace BP.WF.Rpt
                 case "My":
                 case "MyJoin":
                 case "MyDept":
-                    md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
+                    //md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
                     break;
                 case "Adminer":
-                    md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
+                   // md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
                     break;
                 default:
                     break;
@@ -452,7 +452,9 @@ namespace BP.WF.Rpt
             md.PTable = fl.PTable;
             md.Update();
 
-            string keys = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
+            string keys_old = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
+
+            string keys = ",OID,Title,WFSta,";
 
             //查询出来所有的字段.
             MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");

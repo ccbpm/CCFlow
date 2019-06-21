@@ -4988,16 +4988,14 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>是否可以发起当前流程</returns>
-        public static bool Flow_IsCanStartThisFlow(string flowNo, string userNo)
+        public static bool Flow_IsCanStartThisFlow(string flowNo, string userNo, string pFlowNo = null, int pNodeID = 0, Int64 pworkID = 0)
         {
+            #region 判断开始节点是否可以发起.
             Node nd = new Node(int.Parse(flowNo + "01"));
             if (nd.IsGuestNode == true)
             {
                 if (BP.Web.WebUser.No != "Guest")
-                {
                     throw new Exception("@当前节点是来宾处理节点，但是目前您{" + BP.Web.WebUser.No + "}不是来宾帐号。");
-                }
-
                 return true;
             }
 
@@ -5101,9 +5099,31 @@ namespace BP.WF
                 }
             }
             if (num == 0)
-            {
                 return false;
+
+            if (pFlowNo == null)
+                return true;
+            #endregion 判断开始节点是否可以发起.
+
+            #region 检查流程发起限制规则.
+            Flow fl = new Flow(flowNo);
+            if (fl.StartLimitRole == StartLimitRole.None)
+                return true;
+
+            //只有一个子流程,才能发起.
+            if (fl.StartLimitRole == StartLimitRole.OnlyOneSubFlow)
+            {
+                if (pworkID == 0)
+                    return true;
+
+                string sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + fl.No + "' AND WFState >=2 ";
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
+                    return true;
+
+                throw new Exception("该流程只能允许发起一个子流程.");
             }
+            #endregion 检查流程发起限制规则.
 
             return true;
         }
@@ -6699,6 +6719,9 @@ namespace BP.WF
             //}
             //#endregion 复制独立表单数据.
         }
+        //public static string Node_IsCanCreateBlankWork(string flowNo, string userNo, string pflowNo, int pNodeID, Int64 pWorkID)
+        //{
+        //}
         /// <summary>
         /// 创建一个空白的WorkID
         /// </summary>

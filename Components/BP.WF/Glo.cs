@@ -448,10 +448,10 @@ namespace BP.WF
             try
             {
 
-                #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
+                #region 创建缺少的视图 Port_Inc. 需要翻译.
                 if (DBAccess.IsExitsObject("Port_Inc") == false)
                 {
-                    sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE (No='100' OR No='1060' OR No='1070') ";
+                    sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE 1=1 ";
                     DBAccess.RunSQL(sql);
                 }
                 #endregion 创建缺少的视图 Port_Inc.
@@ -463,7 +463,7 @@ namespace BP.WF
                     fe.CheckPhysicsTable();
 
                     DBAccess.RunSQL("UPDATE Sys_FrmEvent SET EventDoType=DoType  ");
-                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent   DROP COLUMN	DoType  ");
+                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent DROP COLUMN	DoType  ");
                 }
                 #endregion
 
@@ -2194,61 +2194,12 @@ namespace BP.WF
                 str += GERptAttr.Title + ",";
                 str += GERptAttr.WFSta + ",";
                 str += GERptAttr.WFState + ",";
+                str += "Rec,";
+                str += "CDT,";
                 return str;
                 // return typeof(GERptAttr).GetFields().Select(o => o.Name).ToList();
             }
         }
-        /// <summary>
-        /// 根据文字处理抄送，与发送人
-        /// </summary>
-        /// <param name="note"></param>
-        /// <param name="emps"></param>
-        public static void DealNote(string note, BP.Port.Emps emps)
-        {
-            note = "请综合处阅知。李江龙核示。请王薇、田晓红批示。";
-            note = note.Replace("阅知", "阅知@");
-
-            note = note.Replace("请", "@");
-            note = note.Replace("呈", "@");
-            note = note.Replace("报", "@");
-            string[] strs = note.Split('@');
-
-            string ccTo = "";
-            string sendTo = "";
-            foreach (string str in strs)
-            {
-                if (string.IsNullOrEmpty(str))
-                    continue;
-
-                if (str.Contains("阅知") == true
-                    || str.Contains("阅度") == true)
-                {
-                    /*抄送的.*/
-                    foreach (BP.Port.Emp emp in emps)
-                    {
-                        if (str.Contains(emp.No) == false)
-                            continue;
-                        ccTo += emp.No + ",";
-                    }
-                    continue;
-                }
-
-                if (str.Contains("阅处") == true
-                  || str.Contains("阅办") == true)
-                {
-                    /*发送送的.*/
-                    foreach (BP.Port.Emp emp in emps)
-                    {
-                        if (str.Contains(emp.No) == false)
-                            continue;
-                        sendTo += emp.No + ",";
-                    }
-                    continue;
-                }
-            }
-        }
-
-
 
         #region 与流程事件实体相关.
         private static Hashtable Htable_FlowFEE = null;

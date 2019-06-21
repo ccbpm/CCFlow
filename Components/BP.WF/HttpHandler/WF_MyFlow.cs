@@ -305,10 +305,17 @@ namespace BP.WF.HttpHandler
             #region 判断前置导航.
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
             {
-                if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
+                try
                 {
-                    /*是否可以发起流程？ @李国文. */
-                    return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
+                    if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No, this.PFlowNo, this.PNodeID, this.PWorkID) == false)
+                    {
+                        /*是否可以发起流程？ @李国文. */
+                        return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return "err@" + ex.Message;
                 }
             }
 

@@ -6190,7 +6190,7 @@ namespace BP.WF
                     dr["EmpNo"] = drTrack["EmpFrom"];
                     dr["EmpName"] = drTrack["EmpFromT"];
                     dr["RDT"] = drTrack["RDT"];
-                    dr["SDT"] = drTrack[""];
+                    dr["SDT"] = "";  
                     dtHistory.Rows.Add(dr);
                 }
             }

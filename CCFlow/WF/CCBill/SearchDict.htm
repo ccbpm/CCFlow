@@ -669,8 +669,8 @@
             workid = workid.substring(0,workid.length-1);
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
-            handler.AddPara("WorkID", workid);
-            var data = handler.DoMethodReturnString("MyBill_DeleteDicts");
+            handler.AddPara("WorkIDs", workid);
+            var data = handler.DoMethodReturnString("MyBill_Deletes");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -912,53 +912,4 @@
         </div>
     </div>
 </body>
-<!--<body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="ibox-content">
-            <div class="row search-padding" style="float: left" id="toolBar">
-                
-                <input type='text' placeholder="请输入关键字..." id='TB_Key' />
-              
-
-                <input type="button" id="Btn_Search" onclick="javascript:SearchKey();" value="查询" />
-                <input type="button" id="Btn_New" onclick="javascript:New();" value="新建" />
-                <input type="button" id="Btn_Del" onclick="javascript:Delete();" value="删除" />
-                <input type="button" id="Btn_Imp" onclick="javascript:Imp();" value="导入" />
-                <input type="button" id="Button1" onclick="javascript:Group();" value="分析" />
-            </div>
-            <table class="table table-striped">
-                <thead id="Table2">
-                    <tr>
-                        <th>
-                            #
-                        </th>
-                        <th>
-                            标题
-                        </th>
-                        <th>
-                            单号
-                        </th>
-                        <th width='60'>
-                            创建人
-                        </th>
-                        <th>
-                            创建日期
-                        </th>
-                        <th>
-                            编辑日期
-                        </th>
-                        <th width='60'>
-                            状态
-                        </th>
-                        <th width='60'>
-                            操作
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="Table1">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>-->
 </html>

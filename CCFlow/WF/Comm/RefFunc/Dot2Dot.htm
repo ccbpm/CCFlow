@@ -42,7 +42,23 @@
                 BindGroupModel();
             }
         });
-
+        //去重复的人员
+        function unique(arr) {
+            var result = [], isRepeated;
+            for (var i = 0, len = arr.length; i < len; i++) {
+                isRepeated = false;
+                for (var j = 0, len1 = result.length; j < len1; j++) {
+                    if (arr[i].No == result[j].No) {
+                        isRepeated = true;
+                        break;
+                    }
+                }
+                if (!isRepeated) {
+                    result.push(arr[i]);
+                }
+            }
+            return result;
+        }
         function BindListModel() {
 
             var enName = GetQueryString("EnName"); // 主表实体. A实体.
@@ -53,6 +69,7 @@
             var ensOfM = GetQueryString("EnsOfM"); // 主表实体. A实体.
             var entities = new Entities(ensOfM);
             entities.RetrieveAll();
+            entities = unique(entities);//去重复的人员
 
             var html = "<table style='width:100%;' >";
             html += "<tr>";

@@ -96,7 +96,10 @@
                 }
                 str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
                 str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
-                str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
+
+                var del = "<a href=\"javascript:Delete('"+attr.MyPK+"');\" >删除</a>";
+                str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a> - "+del;
+
                 str += "</td>";
                 str += "</tr>";
                 $("table").append(str);
@@ -108,6 +111,16 @@
             $(".down").linkbutton({
                 iconCls: 'icon-down'
             });
+        }
+        function Delete(mypk) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var attr = new Entity("BP.Sys.MapAttr");
+            attr.SetPKVal(mypk);
+            attr.Delete();
+            window.location.href = window.location.href;
         }
 
         function Btn_Save_Click() {

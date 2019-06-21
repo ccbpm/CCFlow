@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>2. 设置报表显示列</title>
@@ -11,7 +10,7 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
 
         //页面启动函数.
         $(function () {
@@ -154,7 +153,7 @@
             var checkBoxIDs = "";
             var arrObj = document.getElementsByTagName("input");
 
-            for (var i = 0,len = arrObj.length; i < len;i++) {
+            for (var i = 0, len = arrObj.length; i < len; i++) {
 
                 if (arrObj[i].type == 'checkbox') {
                     if (arrObj[i].checked)
@@ -165,14 +164,13 @@
         }
 
     </script>
-    <base target="_self" /> 
+    <base target="_self" />
 </head>
 <body class="easyui-layout">
     <form id="form1" method="post">
     <div data-options="region:'center',title:'2. 设置报表显示列',border:false" style="padding: 5px;
         height: auto">
-
-        <table id="tsys" class='Table' style="width:90%" cellpadding='2' cellspacing='2'>
+        <table id="tsys" class='Table' style="width: 90%" cellpadding='2' cellspacing='2'>
             <tr>
                 <td class='GroupTitle' colspan="3">
                     系统字段
@@ -180,21 +178,20 @@
             </tr>
             <tr>
                 <td nowrap style='width: 33%'>
-                        <input id="OID" type="checkbox" name="OID"
-                            checked="checked" disabled="disabled" /><label for="OID">WorkID(OID)</label>
+                    <input id="OID" type="checkbox" name="OID" checked="checked" disabled="disabled" /><label
+                        for="OID">WorkID(OID)</label>
                 </td>
                 <td nowrap style='width: 33%'>
-                        <input id="Title" type="checkbox" name="Title"
-                            checked="checked" disabled="disabled" /><label for="Title">标题(Title)</label>
+                    <input id="Title" type="checkbox" name="Title" checked="checked" disabled="disabled" /><label
+                        for="Title">标题(Title)</label>
                 </td>
                 <td nowrap style='width: 33%'>
-                        <!--<input id="WFSta" type="checkbox" name="WFSta"
+                    <!--<input id="WFSta" type="checkbox" name="WFSta"
                             checked="checked" disabled="disabled" /><label for="WFSta">状态(WFSta)</label>-->
                 </td>
             </tr>
         </table>
-        
-        <table id="tall" class='Table' style="width:90%" cellpadding='2' cellspacing='2'>
+        <table id="tall" class='Table' style="width: 90%" cellpadding='2' cellspacing='2'>
             <tr>
                 <td class='GroupTitle' colspan="3">
                     业务字段

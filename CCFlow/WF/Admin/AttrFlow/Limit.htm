@@ -254,12 +254,17 @@
                     <legend>
                         <input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
                         <label for="RB_OnlyOneSubFlow">
-                            为子流程时，仅仅只能被调用1次</label>
+                            为子流程时的规则.</label>
                     </legend>
                     <ul>
-                        <li>如果当前为子流程，仅仅只能被调用1次。</li>
+                        <li><label> <input type="checkbox" id="" /> 如果当前为子流程，仅仅只能被调用1次，不能被重复调用。</label></li>
+                        <li><label> <input type="checkbox" /> 如果当前为子流程，需要等到指定的子流程结束以后才能启动该流程。</label></li>
+
+                        <li>指定的流程编号:<input type=text />多个子流程用逗号分开.比如:001,003</li>
+
                     </ul>
                 </fieldset>
+
                 <fieldset>
                     <legend>
                         <input type="radio" name="xzgz" id="RB_ColNotExit">

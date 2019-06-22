@@ -207,6 +207,11 @@ namespace BP.Sys
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "调整字段顺序";
+                rm.ClassMethodName = this.ToString() + ".DoGroupFieldIdx";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -223,10 +228,8 @@ namespace BP.Sys
             this.InsertAsNew();
             return "执行成功.";
         }
-        protected override bool beforeUpdateInsertAction()
-        {
-            return base.beforeUpdateInsertAction();
-        }
+       
+        
         /// <summary>
         /// 删除所有隶属该分组的字段.
         /// </summary>
@@ -235,15 +238,15 @@ namespace BP.Sys
         {
             string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "' AND GroupID=" + this.OID + " AND KeyOfEn NOT IN ('OID','RDT','REC','RefPK','FID')";
             int i= BP.DA.DBAccess.RunSQL(sql);
-            return "删除字段{"+i+"}个，被删除成功, 执行的SQL:"+sql;
+            return "删除字段{"+i+"}个，被删除成功.";
         }
         /// <summary>
-        /// 增加字段
+        /// 分组内的字段顺序调整
         /// </summary>
         /// <returns></returns>
-        public string DoAddField()
+        public string DoGroupFieldIdx()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FieldTypeList.htm?DoType=AddF&FK_MapData11=" + this.FrmID + "&GroupField=" + this.OID; // DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/GroupFieldIdx.htm?FrmID=" + this.FrmID + "&GroupField=" + this.OID;  
         }
         protected override bool beforeUpdate()
         {

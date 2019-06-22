@@ -1,24 +1,23 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>设置tab键顺序</title>
-    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" /><link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"
+        defer="defer"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-      
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../../Scripts/QueryString.js" ></script>
-
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <style type="text/css">
         body
         {
-            margin: 0 auto;
-            /*color: #000;
+            margin: 0 auto; /*color: #000;
             line-height: 20px;
             font-family: 宋体;
             text-align: center;
@@ -28,33 +27,33 @@
     <base target="_self" />
     <script type="text/javascript">
         //页面启动函数
+
+        var ens = null;
         $(function () {
-            var ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("FK_MapData"), "UIVisible", "1", "Idx");
 
-            if (ens.length > 0) {
-                for (var i = 0; i < ens.length; i++) {
-                    var en = ens[i];
-                    var addRow = "";
-                    var rowNo = i + 1;
+              ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("FK_MapData"), "UIVisible", "1", "Idx");
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                var addRow = "";
+                var rowNo = i + 1;
 
-                    addRow = "<tr class=" + rowNo + "><td>" + rowNo + "</td>";
-                    addRow += "<td>" + en.KeyOfEn + "</td>";
-                    addRow += "<td>" + en.Name + "</td>";
-                    addRow += "<td>" + en.Idx + "</td>";
-                    addRow += "<td><a href='javascript:void(0);' onclick='doUp(parseInt(this.id))' id='"+rowNo+"'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
-                    addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(parseInt(this.id))'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
+                addRow = "<tr class=" + rowNo + "><td>" + rowNo + "</td>";
+                addRow += "<td>" + en.KeyOfEn + "</td>";
+                addRow += "<td>" + en.Name + "</td>";
+                addRow += "<td><input type=text value='"+en.Idx+"'id='TB_"+en.KeyOfEn+"' /></td>";
+                addRow += "<td><a href='javascript:void(0);' onclick='doUp(parseInt(this.id))' id='" + rowNo + "'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
+                addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(parseInt(this.id))'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
 
-                    addRow += "</tr>";
+                addRow += "</tr>";
 
-                    $("#Table1 tr:last").after(addRow);
-                }
+                $("#Table1 tr:last").after(addRow);
             }
         });
         //获取行对象的函数
         function getRowEn(paramNo) {
             var KeyOfEn = $("table tr:eq(" + paramNo + ") td:eq(1)").text();
-            var MyPK = GetQueryString("FK_MapData") + "_" + KeyOfEn;
-            var en = new Entity("BP.Sys.MapAttr", MyPK);
+            var mypk = GetQueryString("FK_MapData") + "_" + KeyOfEn;
+            var en = new Entity("BP.Sys.MapAttr", mypk);
             return en;
         }
         //向上移动
@@ -104,18 +103,40 @@
 
             window.location.href = window.location.href;
         }
+
+        //保存.
+        function Save() {
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var idx = $("#TB_" + en.KeyOfEn).val();
+                en = new Entity("BP.Sys.MapAttr", en.MyPK);
+                en.Idx = idx;
+                en.Update();
+            }
+
+            ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", GetQueryString("FK_MapData"), "UIVisible", "1", "Idx");
+
+            //重新排序.
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                en = new Entity("BP.Sys.MapAttr", en.MyPK);
+                en.Idx = i*10;
+                en.Update();
+            }
+
+            window.location.href = window.location.href;
+        }
     </script>
 </head>
-<body onkeypress="Esc();" class="easyui-layout"  topmargin="0" leftmargin="0" >
-<form method="post" action="" id="form1">
-<div">
-        
-    <table id ="Table1" width='100%'>
+<body onkeypress="Esc();">
+    <form method="post" action="" id="form1">
+    <table id="Table1" width='100%'>
         <caption>
             正确的调整好Tab键的顺序,可以方便用户数据录入.</caption>
         <tr>
             <th>
-                IDX
+                Idx
             </th>
             <th>
                 字段
@@ -134,7 +155,7 @@
             </th>
         </tr>
     </table>
-    </div>
+     <center><input type="button" value=" 保 存 "  onclick="Save();" /></center>
     </form>
 </body>
 </html>

@@ -212,9 +212,7 @@
                         }
                     }
                 }
-
             }
-
 
             $("#Msg").html("");
             ResizeWindow();
@@ -430,7 +428,8 @@
 
         }
 
-        function GenerGroupContext(groupEn, data,tableCol) {
+        function GenerGroupContext(groupEn, data, tableCol) {
+
 
             switch (groupEn.CtrlType) {
 
@@ -545,6 +544,9 @@
                     break;
                 case "Frame":
                     leftBtn += "<a href=\"javascript:EditFrame('" + groupEn.CtrlID + "')\" >" + lab + "</a>";
+                    break;
+                case "SubFlow":
+                    leftBtn += "<a href=\"javascript:EditSubFlow('" + groupEn.CtrlID + "')\" >" + lab + "</a>";
                     break;
                 case "Dtl":
 
@@ -1031,13 +1033,15 @@
         }
         //子流程.
         function EditSubFlow(mypk) {
-            if (mypk == null || mypk == "undefined")
+
+            //alert(mypk);
+          //  if (mypk == null || mypk == "undefined")
                 mypk = GetQueryString("FK_Node");
 
             // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=父子流程组件';
+                var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
 
-            OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 700, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

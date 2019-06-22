@@ -234,7 +234,7 @@
         function SaveIt() {
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
-
+            handler.AddUrlData();
             //组织数据.
             var dataStrs = getFormData(true, true);
 

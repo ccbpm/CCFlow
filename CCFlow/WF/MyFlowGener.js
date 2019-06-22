@@ -15,7 +15,9 @@ $(function () {
 
     InitToolBar(); //工具栏.ajax
 
+    //debugger
     GenerWorkNode(); //表单数据.ajax
+    //debugger
 
 
     if ($("#Message").html() == "") {
@@ -426,84 +428,84 @@ function Save() {
         if (beforeSave() == false)
             return false;
 
-    //判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
-    var btn = document.getElementById('Btn_Save');
-    if (btn != null) {
-        //检查最小最大长度.
-        var f = CheckMinMaxLength();
-        if (f == false)
-            return false;
-    }
-
-    if (checkAths() == false)
+//判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
+var btn = document.getElementById('Btn_Save');
+if (btn != null) {
+    //检查最小最大长度.
+    var f = CheckMinMaxLength();
+    if (f == false)
         return false;
+}
+
+if (checkAths() == false)
+    return false;
 
 
-    //必填项和正则表达式检查
-    var formCheckResult = true;
+//必填项和正则表达式检查
+var formCheckResult = true;
 
-    if (checkBlanks() == false) {
-        formCheckResult = false;
-    }
+if (checkBlanks() == false) {
+    formCheckResult = false;
+}
 
-    if (checkReg() == false) {
-        formCheckResult = false;
-    }
+if (checkReg() == false) {
+    formCheckResult = false;
+}
 
-    if (formCheckResult == false) {
-        //alert("请检查表单必填项和正则表达式");
-        return false;
-    }
+if (formCheckResult == false) {
+    //alert("请检查表单必填项和正则表达式");
+    return false;
+}
 
-    setToobarDisiable();
+setToobarDisiable();
 
-    //判断是否启用审核组件
-    var iframe = document.getElementById("FWC");
-    if (iframe)
-        iframe.contentWindow.SaveWorkCheck();
+//判断是否启用审核组件
+var iframe = document.getElementById("FWC");
+if (iframe)
+    iframe.contentWindow.SaveWorkCheck();
 
-    //树形表单保存
-    if (flowData) {
-        var node = flowData.WF_Node[0];
-        //   alert(node.FormType);
-        if (node && node.FormType == 5) {
-            if (OnTabChange("btnsave") == true) {
-                //判断内容是否保存到待办
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-                handler.AddPara("FK_Flow", pageData.FK_Flow);
-                handler.AddPara("FK_Node", pageData.FK_Node);
-                handler.AddPara("WorkID", pageData.WorkID);
-                handler.DoMethodReturnString("SaveFlow_ToDraftRole");
-            }
-            setToobarEnable();
-            return;
+//树形表单保存
+if (flowData) {
+    var node = flowData.WF_Node[0];
+    //   alert(node.FormType);
+    if (node && node.FormType == 5) {
+        if (OnTabChange("btnsave") == true) {
+            //判断内容是否保存到待办
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", pageData.FK_Flow);
+            handler.AddPara("FK_Node", pageData.FK_Node);
+            handler.AddPara("WorkID", pageData.WorkID);
+            handler.DoMethodReturnString("SaveFlow_ToDraftRole");
         }
+        setToobarEnable();
+        return;
     }
+}
 
-    var params = getFormData(true, true);
+var params = getFormData(true, true);
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    $.each(params.split("&"), function (i, o) {
-        var param = o.split("=");
-        if (param.length == 2 && validate(param[1])) {
-            handler.AddPara(param[0], decodeURIComponent(param[1], true));
-        } else {
-            handler.AddPara(param[0], "");
-        }
-    });
-    var data = handler.DoMethodReturnString("Save"); //执行保存方法.
-
-    setToobarEnable();
-    //刷新 从表的IFRAME
-    var dtls = $('.Fdtl');
-    $.each(dtls, function (i, dtl) {
-        $(dtl).attr('src', $(dtl).attr('src'));
-    });
-
-    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-        $('#Message').html(data.substring(4, data.length));
-        $('#MessageDiv').modal().show();
+var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+$.each(params.split("&"), function (i, o) {
+    var param = o.split("=");
+    if (param.length == 2 && validate(param[1])) {
+        handler.AddPara(param[0], decodeURIComponent(param[1], true));
+    } else {
+        handler.AddPara(param[0], "");
     }
+});
+var data = handler.DoMethodReturnString("Save"); //执行保存方法.
+
+setToobarEnable();
+//刷新 从表的IFRAME
+var dtls = $('.Fdtl');
+$.each(dtls, function (i, dtl) {
+    $(dtl).attr('src', $(dtl).attr('src'));
+});
+
+if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+    $('#Message').html(data.substring(4, data.length));
+    $('#MessageDiv').modal().show();
+}
 
 
 }
@@ -571,7 +573,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
         data = flowData[mapAttr.UIBindKey];
     if (data == undefined) {
         //枚举类型的.
-        if (mapAttr.LGType == 1){
+        if (mapAttr.LGType == 1) {
             var enums = flowData.Sys_Enum;
             enums = $.grep(enums, function (value) {
                 return value.EnumKey == mapAttr.UIBindKey;
@@ -710,7 +712,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框          
+            //下拉框            
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -721,7 +723,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 }
                 break;
 
-            //文本区域                  
+            //文本区域                    
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -937,7 +939,7 @@ function execSend(toNodeID) {
         var reg = new RegExp('err@', "g")
         var data = data.replace(reg, '');
 
-        $('#Message').html(data );
+        $('#Message').html(data);
         $('#MessageDiv').modal().show();
         setToobarEnable();
         return;
@@ -999,7 +1001,7 @@ function OptSuc(msg) {
     }
     msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
-    $("#msgModalContent").html(msg.replace(/@/g, '<br/>').replace(/null/g,''));
+    $("#msgModalContent").html(msg.replace(/@/g, '<br/>').replace(/null/g, ''));
     var trackA = $('#msgModalContent a:contains("工作轨迹")');
     var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
     trackA.remove();
@@ -1395,11 +1397,11 @@ function GenerWorkNode() {
         for (var i = 0; i < uiBindKeys.length; i++) {
             var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
             var srcType = sfTable.SrcType;
-            if (srcType != null && srcType!="") {
+            if (srcType != null && srcType != "") {
                 //Handler 获取外部数据源
                 if (srcType == 5) {
                     var selectStatement = sfTable.SelectStatement;
-                    selectStatement = basePath +"/DataUser/SFTableHandler.ashx" + selectStatement;
+                    selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
                     operdata = DBAccess.RunDBSrc(selectStatement, 1);
                 }
                 //JavaScript获取外部数据源
@@ -1783,7 +1785,7 @@ function InitToolBar() {
         $('[name=Return]').bind('click', function () {
             //增加退回前的事件
             if (typeof beforeReturn != 'undefined' && beforeReturn instanceof Function)
-                if (beforeReturn() == false) 
+                if (beforeReturn() == false)
                     return false;
 
             if (Save() == false) return;
@@ -2000,7 +2002,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人              
+            //发送选择接收节点和接收人                
             case "sendAccepter":
                 $('#modalHeader').text("选择接受人");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

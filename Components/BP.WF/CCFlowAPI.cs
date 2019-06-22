@@ -536,26 +536,14 @@ namespace BP.WF
                         dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
 
                         #region 增加到达延续子流程节点。
-                        NodeYGFlows ygflows = new NodeYGFlows(fk_node.ToString());
-                        if (ygflows.Count > 1 && SystemConfig.CustomerNo.Equals("CZBank") == true)
-                            dtToNDs.Rows.Clear();  //为浙商银行做的特殊判断，如果配置了延续流程，就不让其走分支节点.
+                        NodeYGFlows ygflows = new NodeYGFlows(fk_node);
 
                         foreach (NodeYGFlow item in ygflows)
                         {
                             DataRow dr = dtToNDs.NewRow();
                             dr["No"] = item.FK_Flow + "01";
                             dr["Name"] = "启动:" + item.FlowName;
-                            //if (item.HisDeliveryWay == DeliveryWay.BySelected)
                             dr["IsSelectEmps"] = "1";
-                            //else
-                            //  dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
-
-                            //设置默认选择的节点.
-                            //if (defalutSelectedNodeID == item.NodeID)
-                            //    dr["IsSelected"] = "1";
-                            //else
-                            //    dr["IsSelected"] = "0";
-
                             dr["IsSelected"] = "0";
                             dtToNDs.Rows.Add(dr);
                         }

@@ -6190,7 +6190,7 @@ namespace BP.WF
                     dr["EmpNo"] = drTrack["EmpFrom"];
                     dr["EmpName"] = drTrack["EmpFromT"];
                     dr["RDT"] = drTrack["RDT"];
-                    dr["SDT"] = "";  
+                    dr["SDT"] = "";
                     dtHistory.Rows.Add(dr);
                 }
             }
@@ -6753,47 +6753,25 @@ namespace BP.WF
             int parentNodeID = 0, string parentEmp = null,
             int jumpToNode = 0, string jumpToEmp = null, string todoEmps = null)
         {
+
             //把一些其他的参数也增加里面去,传递给ccflow.
             Hashtable htPara = new Hashtable();
+
             if (parentWorkID != 0)
             {
                 htPara.Add(StartFlowParaNameList.PWorkID, parentWorkID);
-            }
-
-            if (parentFID != 0)
-            {
                 htPara.Add(StartFlowParaNameList.PFID, parentFID);
-            }
-
-            if (parentFlowNo != null)
-            {
                 htPara.Add(StartFlowParaNameList.PFlowNo, parentFlowNo);
-            }
-
-            if (parentNodeID != 0)
-            {
                 htPara.Add(StartFlowParaNameList.PNodeID, parentNodeID);
-            }
-
-            if (parentEmp != null)
-            {
                 htPara.Add(StartFlowParaNameList.PEmp, parentEmp);
             }
 
             // 给全局变量赋值.
             BP.WF.Glo.SendHTOfTemp = ht;
 
-            if (parentFlowNo == null)
-            {
-                parentFlowNo = "";
-            }
-
             string dbstr = SystemConfig.AppCenterDBVarStr;
-
             if (DataType.IsNullOrEmpty(starter))
-            {
                 starter = WebUser.No;
-            }
 
             Flow fl = new Flow(flowNo);
             Node nd = new Node(fl.StartNodeID);
@@ -6835,9 +6813,8 @@ namespace BP.WF
                     foreach (MapDtl dtl in wk.HisMapDtls)
                     {
                         if (dt.TableName != dtl.No)
-                        {
                             continue;
-                        }
+
                         //获取dtls
                         GEDtls daDtls = new GEDtls(dtl.No);
                         daDtls.Delete(GEDtlAttr.RefPK, wk.OID); // 清除现有的数据.
@@ -6865,34 +6842,17 @@ namespace BP.WF
             #endregion 赋值
 
             Paras ps = new Paras();
-            // 执行对报表的数据表WFState状态的更新,让它为runing的状态.
-            if (DataType.IsNullOrEmpty(title) == false)
-            {
-                ps = new Paras();
-                ps.SQL = "UPDATE " + fl.PTable + " SET PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID,WFState=" + dbstr + "WFState,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
-                ps.Add(GERptAttr.PFlowNo, parentFlowNo);
-                ps.Add(GERptAttr.PWorkID, parentWorkID);
-                //   ps.Add(GERptAttr.PFID, parentFID); PFID=" + dbstr + "PFID,
 
-                ps.Add(GERptAttr.WFState, (int)WFState.Blank);
-                ps.Add(GERptAttr.Title, title);
-                ps.Add(GERptAttr.OID, wk.OID);
-                DBAccess.RunSQL(ps);
-            }
-            else
-            {
-                ps = new Paras();
-                ps.SQL = "UPDATE " + fl.PTable + " SET PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID,WFState=" + dbstr + "WFState,FK_Dept=" + dbstr + "FK_Dept,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
-                ps.Add(GERptAttr.PFlowNo, parentFlowNo);
-                ps.Add(GERptAttr.PWorkID, parentWorkID);
-                //  ps.Add(GERptAttr.PFID, parentFID);
+            if (DataType.IsNullOrEmpty(title) == true)
+                title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 
-                ps.Add(GERptAttr.WFState, (int)WFState.Blank);
-                ps.Add(GERptAttr.FK_Dept, empStarter.FK_Dept);
-                ps.Add(GERptAttr.Title, BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk));
-                ps.Add(GERptAttr.OID, wk.OID);
-                DBAccess.RunSQL(ps);
-            }
+            //执行对报表的数据表WFState状态的更新,让它为runing的状态.
+            ps = new Paras();
+            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=0,FK_Dept=" + dbstr + "FK_Dept,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
+            ps.Add(GERptAttr.FK_Dept, empStarter.FK_Dept);
+            ps.Add(GERptAttr.Title, title);
+            ps.Add(GERptAttr.OID, wk.OID);
+            DBAccess.RunSQL(ps);
 
             // 设置父流程信息.
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -6910,22 +6870,7 @@ namespace BP.WF
             gwf.FK_Node = fl.StartNodeID;
             gwf.NodeName = nd.Name;
             gwf.WFState = WFState.Blank;
-
-
-            //默认启用草稿,如果写入待办则状态为运行, zhoupeng 去掉. 2017.1.23 
-            //if(fl.DraftRole == DraftRole.SaveToTodolist)
-            //    gwf.WFState = WFState.Runing;
-            //if (fl.DraftRole == DraftRole.SaveToDraftList)
-            //    gwf.WFState = WFState.Draft;
-
-            if (DataType.IsNullOrEmpty(title))
-            {
-                gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
-            }
-            else
-            {
-                gwf.Title = title;
-            }
+            gwf.Title = title;
 
             gwf.Starter = empStarter.No;
             gwf.StarterName = empStarter.Name;
@@ -6935,29 +6880,16 @@ namespace BP.WF
             gwf.PFlowNo = parentFlowNo;
             gwf.PNodeID = parentNodeID;
             if (i == 0)
-            {
                 gwf.Insert();
-            }
             else
-            {
                 gwf.Update();
-            }
-
-
-
 
             if (parentWorkID != 0)
-            {
-                //设置父流程信息
-                BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);
-            }
+                BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);//设置父流程信息
 
             // 如果有跳转.
             if (jumpToNode != 0)
-            {
                 BP.WF.Dev2Interface.Node_SendWork(flowNo, wk.OID, null, null, jumpToNode, jumpToEmp);
-            }
-
             return wk.OID;
         }
         /// <summary>

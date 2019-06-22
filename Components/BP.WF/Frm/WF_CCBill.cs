@@ -213,6 +213,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string MyDict_SaveIt()
         {
+          //  throw new Exception("dddssds");
             //执行保存.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GEEntity;

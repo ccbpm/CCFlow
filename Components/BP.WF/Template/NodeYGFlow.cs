@@ -205,7 +205,7 @@ namespace BP.WF.Template
         /// 延续子流程集合.
         /// </summary>
         /// <param name="fk_node"></param>
-        public NodeYGFlows(string fk_node)
+        public NodeYGFlows(int fk_node)
         {
             this.Retrieve(NodeYGFlowAttr.FK_Node, fk_node);
         }

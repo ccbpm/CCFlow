@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>字段顺序</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"
+        defer="defer"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <style type="text/css">
+        body
+        {
+            margin: 0 auto; /*color: #000;
+            line-height: 20px;
+            font-family: 宋体;
+            text-align: center;
+            width: 90%;*/
+        }
+    </style>
+    <base target="_self" />
+    <script type="text/javascript">
+        //页面启动函数
+
+        var ens = null;
+        $(function () {
+
+            var frmID = GetQueryString("FrmID");
+            ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", frmID, "GroupID", GetQueryString("GroupField"), "UIVisible", "1", "Idx");
+
+            //alert(ens.length);
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                var addRow = "";
+                var rowNo = i + 1;
+
+                addRow = "<tr class=" + rowNo + "><td>" + rowNo + "</td>";
+                addRow += "<td>" + en.KeyOfEn + "</td>";
+                addRow += "<td><input type=text value='" + en.Name + "'id='TBN_" + en.KeyOfEn + "' /></td>";
+                addRow += "<td><input type=text value='" + en.Idx + "'id='TB_" + en.KeyOfEn + "' /></td>";
+                addRow += "<td><a href='javascript:void(0);' onclick='doUp(parseInt(this.id))' id='" + rowNo + "'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
+                addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(parseInt(this.id))'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
+
+                addRow += "</tr>";
+
+                $("#Table1 tr:last").after(addRow);
+            }
+        });
+        //获取行对象的函数
+        function getRowEn(paramNo) {
+            var KeyOfEn = $("table tr:eq(" + paramNo + ") td:eq(1)").text();
+            var mypk = GetQueryString("FK_MapData") + "_" + KeyOfEn;
+            var en = new Entity("BP.Sys.MapAttr", mypk);
+            return en;
+        }
+        //向上移动
+        function doUp(paramNo) {
+            //最顶端,直接返回
+            if (paramNo == 1) {
+                return;
+            }
+            //获取当前行对象
+            var nowRowEn = getRowEn(paramNo);
+            var nowIdx = nowRowEn.Idx;
+            //获取上一行对象
+            var lastRowEn = getRowEn(paramNo - 1);
+
+            //将当前行上移
+            nowRowEn.Idx = lastRowEn.Idx;
+            nowRowEn.Update();
+            //将上一行下移
+            lastRowEn.Idx = nowIdx;
+            lastRowEn.Update();
+
+            window.location.href = window.location.href;
+        }
+        //向下移动
+        function doDown(paramNo) {
+
+            //获取表的总行数(-1去掉表头)
+            allRowNums = $("#Table1").find("tr").length - 1;
+            //最底端,直接返回
+            if (paramNo == allRowNums) {
+                return;
+            }
+            //alert(Number.isInteger(paramNo));
+            //获取当前行对象
+            var nowRowEn = getRowEn(paramNo);
+            var nowIdx = nowRowEn.Idx;
+            //获取下一行对象
+            var nextRowEn = getRowEn(paramNo + 1);
+
+            //将当前行下移
+            nowRowEn.Idx = nextRowEn.Idx;
+            nowRowEn.Update();
+
+            //将下一行上移
+            nextRowEn.Idx = nowIdx;
+            nextRowEn.Update();
+
+            window.location.href = window.location.href;
+        }
+
+        //保存.
+        function Save() {
+            $("#Msg").html("正在保存请稍后....");
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var idx = $("#TB_" + en.KeyOfEn).val();
+                en = new Entity("BP.Sys.MapAttr", en);
+                en.Idx = idx;
+
+                var name = $("#TBN_" + en.KeyOfEn).val();
+                en.Name = name;
+
+                en.Update();
+            }
+
+            var frmID = GetQueryString("FrmID");
+            ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", frmID, "GroupID", GetQueryString("GroupField"), "UIVisible", "1", "Idx");
+
+
+            //重新排序.
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                en = new Entity("BP.Sys.MapAttr", en);
+                en.Idx = i * 10;
+                en.Update();
+            }
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body onkeypress="Esc();">
+    <form method="post" action="" id="form1">
+    <table id="Table1" width='100%'>
+        <caption>
+            分组内的字段顺序.</caption>
+        <tr>
+            <th>
+                Idx
+            </th>
+            <th>
+                字段
+            </th>
+            <th>
+                描述
+            </th>
+            <th>
+                顺序号
+            </th>
+            <th>
+                移动
+            </th>
+            <th>
+                移动
+            </th>
+        </tr>
+    </table>
+    <center>
+        <input type="button" value=" 保 存 " onclick="Save();" /></center>
+        <div id="Msg" name="Msg"></div>
+    </form>
+</body>
+</html>

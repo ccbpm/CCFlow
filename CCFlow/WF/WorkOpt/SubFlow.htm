@@ -83,7 +83,12 @@
                     continue;
 
                 //输出标题.
-                var fl = new Entity("BP.WF.Flow", str);
+                var fl = new Entity("BP.WF.Flow");
+                fl.SetPKVal(str);
+                var val = fl.RetrieveFromDBSources();
+                if (val == 0)
+                    continue;
+
 
                 if (sf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View")
                     tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + fl.No + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";

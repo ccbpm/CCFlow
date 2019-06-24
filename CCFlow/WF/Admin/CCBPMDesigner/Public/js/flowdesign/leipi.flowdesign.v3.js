@@ -172,7 +172,7 @@
 					.attr("process_to", row.process_to)
 					.attr("process_id", row.id)
 					.addClass("process-step btn btn-small")//给节点名称添加一个span元素
-					.html('<span class="process-flag badge ' + badge + '"><i class="' + icon + ' icon-white"></i></span>&nbsp;<span id="span_' + row.id + '">' + row.process_name + '</span>')
+					.html('<span class="process-flag badge ' + badge + '"  alt=' + nodeId + ' ><i class="' + icon + ' icon-white"></i></span>&nbsp;<span id="span_' + row.id + '"  >' + row.process_name + '</span>')
 					.mousedown(function (e) {
 					    if (e.which == 3) { //右键绑定
 					        _canvas.find('#leipi_active_id').val(row.id);
@@ -181,19 +181,19 @@
 					        var node = new Entity("BP.WF.Node", nodeID.value);
 
 					        if (node.RunModel == 0) {
-					            $('#pmfun span').text("普通");
+					            $('#pmfun span').text("普通:" + nodeID.value);
 					        }
 					        else if (node.RunModel == 1) {
-					            $('#pmfun span').text("合流");
+					            $('#pmfun span').text("合流:" + nodeID.value);
 					        }
 					        else if (node.RunModel == 2) {
-					            $('#pmfun span').text("分流");
+					            $('#pmfun span').text("分流:" + nodeID.value);
 					        }
 					        else if (node.RunModel == 3) {
-					            $('#pmfun span').text("分合流");
+					            $('#pmfun span').text("分合流:" + nodeID.value);
 					        }
 					        else if (node.RunModel == 4) {
-					            $('#pmfun span').text("子线程");
+					            $('#pmfun span').text("子线程:" + nodeID.value);
 					        }
 					        $(this).contextMenu('processMenu', contextmenu);
 					        ////$(this).contextMenu('processMenu3', contextmenu);

@@ -16,6 +16,8 @@ $(function () {
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
 
+
+    debugger
     var step = 0;
     //循环历史记录.
     for (var i = 0; i < tracks.length; i++) {
@@ -23,19 +25,22 @@ $(function () {
         var tk = tracks[i];
 
         var doc = "<br><b>" + tk.NodeName + "</b>";
+
+        doc = "";
         doc += "<br>" + tk.EmpName;
         doc += "<br>" + tk.RDT.substring(0, 16);
 
         var info = "";
         if (tk.FK_Node == gwf.FK_Node)
-            info = GenerIcon("DotGreen", i + 1, doc);
+            info = GenerIcon("DotGreen", i + 1, doc, tk.NodeName);
         else
-            info = GenerIcon("DotBlue", i + 1, doc);
+            info = GenerIcon("DotBlue", i + 1, doc, tk.NodeName);
 
         step = i + 1;
 
         html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
     }
+
     //debugger
     //流程未完成的状态.
     if (gwf.WFState != 3) {
@@ -58,18 +63,20 @@ $(function () {
                 }
             }
 
-            var doc = "<b><i>" + nodeName + "</i></b>";
+            var doc = "<b></b>";
             doc += "<br>";
             doc += "<br>";
             doc += "<br>";
+
+          //  doc = "";
 
             step = step + 1;
             currNode = nextNode;
 
             if (nextNode == 0)
-                var info = GenerIcon("DotEnd", step, doc, true);
+                var info = GenerIcon("DotEnd", step, doc, true, nodeName);
             else
-                var info = GenerIcon("DotEnd", step, doc, false);
+                var info = GenerIcon("DotEnd", step, doc, false, nodeName);
 
             html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
 
@@ -92,7 +99,7 @@ $(function () {
 });
 
 
-function GenerIcon(icon, step, docs, isEndNode) {
+function GenerIcon(icon, step, docs, isEndNode,nodeName) {
 
     var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
 
@@ -124,9 +131,9 @@ function GenerIcon(icon, step, docs, isEndNode) {
     var html = "";
     html += "<table style='height:100px;width: 100%; table-layout: fixed;border:none;margin:0px; padding:0px;'>";
     html += "<tr>";
-    html += "<td style='border:none;width:40%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
-    html += "<td style='border:none;margin:0px; padding:0px;width:20%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><img src='" + url + "'/></td>";
-    html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
+    html += "<td style='border:none;width:30%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
+    html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><table ><tr><td><img src='" + url + "' style='width:18px;'/></td><td ><nobr>" + nodeName + "</nobr></td></tr></table></td>";
+    html += "<td style='border:none;margin:0px; padding:0px;width:30%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
     html += "<tr>";
 
     html += "<tr>";

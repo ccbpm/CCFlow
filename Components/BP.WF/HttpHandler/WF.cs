@@ -1341,7 +1341,8 @@ namespace BP.WF.HttpHandler
         public string Todolist_Init()
         {
             string fk_node = this.GetRequestVal("FK_Node");
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
+            string showWhat = this.GetRequestVal("ShowWhat");
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

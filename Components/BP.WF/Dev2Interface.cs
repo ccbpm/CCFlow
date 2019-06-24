@@ -1398,11 +1398,15 @@ namespace BP.WF
         /// </summary>
         /// <param name="fk_node">节点编号</param>
         /// <returns>共享工作列表</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0)
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0,string showWhat = null)
         {
             if (DataType.IsNullOrEmpty(userNo) == true)
                 throw new Exception("err@登录信息丢失.");
-
+            string wfStateSql ="";
+            if (DataType.IsNullOrEmpty(showWhat) == true)
+                wfStateSql = " A.WFState!=" + (int)WFState.Batch;
+            else
+                wfStateSql = "  A.WFState=" + showWhat;
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string sql;
@@ -1415,11 +1419,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT A.* FROM BPM.WF_EmpWorks A, BPM.WF_Flow B, BPM.WF_FlowSort C WHERE A.FK_Flow=B.No AND B.FK_FlowSort=C.No AND A.FK_Emp=" + dbstr + "FK_Emp AND A.TaskSta=0 AND A.WFState!=" + (int)WFState.Batch + " ORDER BY C.Idx, B.Idx, ADT DESC ";
+                            ps.SQL = "SELECT A.* FROM BPM.WF_EmpWorks A, BPM.WF_Flow B, BPM.WF_FlowSort C WHERE A.FK_Flow=B.No AND B.FK_FlowSort=C.No AND A.FK_Emp=" + dbstr + "FK_Emp AND A.TaskSta=0 AND " + wfStateSql + " ORDER BY C.Idx, B.Idx, ADT DESC ";
                         }
                         else
                         {
-                            ps.SQL = "SELECT A.* FROM BPM.WF_EmpWorks A, BPM.WF_Flow B, BPM.WF_FlowSort C WHERE A.FK_Flow=B.No AND B.FK_FlowSort=C.No AND A.FK_Emp=" + dbstr + "FK_Emp  AND A.WFState!=" + (int)WFState.Batch + " ORDER BY C.Idx,B.Idx, A.ADT DESC ";
+                            ps.SQL = "SELECT A.* FROM BPM.WF_EmpWorks A, BPM.WF_Flow B, BPM.WF_FlowSort C WHERE A.FK_Flow=B.No AND B.FK_FlowSort=C.No AND A.FK_Emp=" + dbstr + "FK_Emp  AND " + wfStateSql + " ORDER BY C.Idx,B.Idx, A.ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);
@@ -1428,11 +1432,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND "+wfStateSql + " ORDER BY  ADT DESC ";
                         }
                         else
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp  AND WFState!=" + (int)WFState.Batch + " ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp  AND " + wfStateSql + " ORDER BY ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);
@@ -1442,11 +1446,11 @@ namespace BP.WF
                 {
                     if (BP.WF.Glo.IsEnableTaskPool == true)
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Node=" + dbstr + "FK_Node  AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Node=" + dbstr + "FK_Node  AND " + wfStateSql + " ORDER BY  ADT DESC ";
                     }
                     else
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node  AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node  AND " + wfStateSql + " ORDER BY  ADT DESC ";
                     }
 
                     ps.Add("FK_Node", fk_node);

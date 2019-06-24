@@ -82,23 +82,30 @@ namespace BP.GPM
                 if (dt.Rows.Count == 0)
                     return "无待办工作...";
 
-                string html = "<ul>";
+                string html = "<table>";
+
                 Int32 idx = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
+                    if (idx == 8)
+                        break;
+
                     string fk_flow = dr["FK_Flow"].ToString();
                     string workID = dr["WorkID"].ToString();
                     string nodeID = dr["FK_Node"].ToString();
                     string title = dr["Title"].ToString();
                     string sender = dr["Sender"].ToString();
                     string rdt = dr["RDT"].ToString();
+                  
                     idx++;
-                    html += "<li><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'  target=_blank  >" + idx + "." + dr["Sender"].ToString() + " - " + title + "</a></li>";
-                    if (idx == 12)
-                        break;
+                    html += "<tr>";
+                    html += "<td>"+idx+"</td>";
+                    html += "<td><a href='../../WF/MyFlow.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2'  target=_blank  >" + title + "</a></td>";
+                    html += "<td>" + sender + "</td>";
+                    html += "</tr>";
                 }
 
-                html += "</ul>";
+                html += "</table>";
                 return html;
             }
         }

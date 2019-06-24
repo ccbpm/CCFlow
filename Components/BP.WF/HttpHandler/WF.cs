@@ -910,8 +910,11 @@ namespace BP.WF.HttpHandler
             //把json存入数据表，避免下一次再取.
             if (json.Length > 40)
             {
-                em.StartFlows = json;
-                em.Update();
+                Paras ps = new Paras();
+                ps.SQL = "UPDATE WF_Emp SET StartFlows=" + ps.DBStr + "StartFlows WHERE No=" + ps.DBStr + "No";
+                ps.Add("StartFlows", json);
+                ps.Add("No", WebUser.No);
+                DBAccess.RunSQL(ps);
             }
 
             //返回组合

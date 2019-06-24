@@ -931,12 +931,47 @@ namespace BP.WF
         /// </summary>
         /// <param name="userNo">发起人编号</param>
         /// <returns></returns>
-        public static DataTable DB_StarFlows(string userNo)
+        public static DataTable DB_StarFlows(string userNo, string domain = null)
         {
-            DataTable dt = DB_GenerCanStartFlowsOfDataTable(userNo);
+            DataTable dt = DB_GenerCanStartFlowsOfDataTable(userNo, domain);
             DataView dv = new DataView(dt);
             dv.Sort = "Idx";
             return dv.Table;
+        }
+        public static DataTable DB_GenerCanStartFlowsOfDataTable(string userNo, string domain = null)
+        {
+            string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,A.IsStartInMobile, A.Idx";
+            sql += " FROM WF_Flow A, V_FlowStarterBPM B, WF_FlowSort C  ";
+            sql += " WHERE A.No=B.FK_Flow AND A.FK_FlowSort=C.No  AND FK_Emp='" + WebUser.No + "' ";
+            if (DataType.IsNullOrEmpty(domain) == false)
+                sql += " AND C.Domain='" + domain + "'";
+
+            sql += " ORDER BY C.Idx, A.Idx";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
+                dt.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
+                dt.Columns["IDX"].ColumnName = "Idx";
+
+            }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["isbatchstart"].ColumnName = "IsBatchStart";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["fk_flowsorttext"].ColumnName = "FK_FlowSortText";
+                dt.Columns["isstartinmobile"].ColumnName = "IsStartInMobile";
+                dt.Columns["idx"].ColumnName = "Idx";
+            }
+            return dt;
         }
         /// <summary>
         /// 获取指定人员能够发起流程的集合
@@ -945,9 +980,8 @@ namespace BP.WF
         /// <param name="userNo">操作员编号</param>
         /// <returns>Datatable类型的数据集合,数据结构与表WF_Flow大致相同.
         /// 如何使用该方法形成发起工作列表,请参考:\WF\UC\Start.ascx</returns>
-        public static DataTable DB_GenerCanStartFlowsOfDataTable(string userNo)
+        public static DataTable DB_GenerCanStartFlowsOfDataTable_DEL(string userNo)
         {
-
             string sql = "";
             sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
             Flows fls = new Flows();

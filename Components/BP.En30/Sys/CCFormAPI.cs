@@ -1714,11 +1714,7 @@ namespace BP.Sys
 
             if (removeSpecialSymbols)
                 name = DataType.ParseStringForName(name, maxLen);
-
-         
-
-
-
+             
 
             try
             {

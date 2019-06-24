@@ -1245,6 +1245,11 @@ namespace BP.WF
 
 
             #region 首先创建Port类型的表, 让admin登录.
+
+            FrmRB rb = new FrmRB();
+            rb.CheckPhysicsTable();
+
+
             BP.Port.Emp portEmp = new BP.Port.Emp();
             portEmp.CheckPhysicsTable();
 

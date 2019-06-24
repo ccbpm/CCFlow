@@ -24,6 +24,9 @@
                         <th>
                             节点
                         </th>
+                         <th>
+                            状态
+                        </th>
                         <th>
                             抄送人
                         </th>
@@ -64,6 +67,7 @@
         $(function () {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddUrlData();
             var data = handler.DoMethodReturnString("CC_Init");
 
             if (data.indexOf('err@') == 0) {
@@ -84,14 +88,13 @@
                 row += "<tr>";
                 row += "<td>" + i + "</td>";
                 row += "<td>" + data[i].FlowName + "</td>";
+                row += "<td>" + data[i].FlowName + "</td>";
                 row += "<td>" + data[i].NodeName + "</td>";
                 row += "<td>" + data[i].Rec + "</td>";
-                //row += "<td><a href='" + batchUrl + "' target=_blank >" + data[i].Title + "</a></td>";
                 row += "<td><a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a></td>";
                 row += "<td>" + data[i].Doc + "</td>";
                 row += "<td>" + data[i].RDT + "</td>";
-                //row += "<td><a href='" + url + "' target=_blank >回复</a></td>";
-                //row += "<td><a href='#' onclick='WinOpenFull(\"" + url + "\")' >回复</a></td>";
+
                 row += "</tr>";
             }
             $("#Rows").html(row);

@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20180622;
+        public static int Ver = 20190626;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -448,10 +448,10 @@ namespace BP.WF
             try
             {
 
-                #region 创建缺少的视图 Port_Inc. 需要翻译.
+                #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
                 if (DBAccess.IsExitsObject("Port_Inc") == false)
                 {
-                    sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE 1=1 ";
+                    sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE (No='100' OR No='1060' OR No='1070') ";
                     DBAccess.RunSQL(sql);
                 }
                 #endregion 创建缺少的视图 Port_Inc.
@@ -463,7 +463,7 @@ namespace BP.WF
                     fe.CheckPhysicsTable();
 
                     DBAccess.RunSQL("UPDATE Sys_FrmEvent SET EventDoType=DoType  ");
-                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent DROP COLUMN	DoType  ");
+                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent   DROP COLUMN	DoType  ");
                 }
                 #endregion
 
@@ -529,9 +529,11 @@ namespace BP.WF
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
                 if (dbtype == DBType.MSSQL)
                 {
+                    DataTable dtYueSu = DBAccess.RunSQLReturnTable("SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('WF_Emp') and a.Name='StartFlows' ");
+                    if (dtYueSu.Rows.Count != 0)
+                        DBAccess.RunSQL(" ALTER TABLE WF_Emp drop  constraint " + dtYueSu.Rows[0][0]);
 
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp drop  column  StartFlows");
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ADD  StartFlows text");
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows text");
                 }
 
                 if (dbtype == DBType.PostgreSQL)
@@ -2199,12 +2201,14 @@ namespace BP.WF
                 str += GERptAttr.Title + ",";
                 str += GERptAttr.WFSta + ",";
                 str += GERptAttr.WFState + ",";
-                str += "Rec,";
+  				str += "Rec,";
                 str += "CDT,";
                 return str;
                 // return typeof(GERptAttr).GetFields().Select(o => o.Name).ToList();
             }
         }
+     
+
 
         #region 与流程事件实体相关.
         private static Hashtable Htable_FlowFEE = null;

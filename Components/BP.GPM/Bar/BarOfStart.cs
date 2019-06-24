@@ -77,13 +77,13 @@ namespace BP.GPM
             {
                 Paras ps = new Paras();
                 if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    ps.SQL = "SELECT top 17 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
+                    ps.SQL = "SELECT top 9 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
 
                 ps.AddFK_Emp();
 
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-                string html = "<ul>";
+                string html = "<table style='width:100%;'>";
                 int idx = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -94,9 +94,14 @@ namespace BP.GPM
                     string sender = dr["Sender"].ToString();
                     string rdt = dr["RDT"].ToString();
                     idx++;
-                    html += "<li style='list-style-type:none'>" + idx + ".<a href='../WF/WFRpt.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2' target=_blank >" + title + "</a></li>";
+
+                    html += "<tr>";
+                    html += "<td>"+idx+"</td>";
+                    html += "<td><a href='../WF/WFRpt.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2' target=_blank >" + title + "</a></td>";
+                    html += "<td>" + sender + "</td>";
+                    html += "</tr>";
                 }
-                html += "</ul>";
+                html += "</table>";
                 return html;
             }
         }

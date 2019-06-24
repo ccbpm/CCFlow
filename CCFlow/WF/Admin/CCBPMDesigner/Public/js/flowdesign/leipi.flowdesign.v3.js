@@ -427,21 +427,27 @@
 					        contextmenu.bindings = defaults.processMenus;
 					        var nodeID = document.getElementById("leipi_active_id");
 					        var node = new Entity("BP.WF.Node", nodeID.value);
+
 					        if (node.RunModel == 0) {
-					            $('#pmfun span').text("普通" + nodeID.NodeID);
+					            $('#pmfun span').text("普通" + nodeID.value);
 					        }
-					        else if (node.RunModel == 1) {
+					        
+                             if (node.RunModel == 1) {
 					            $('#pmfun span').text("合流");
 					        }
-					        else if (node.RunModel == 2) {
+					        
+                             if (node.RunModel == 2) {
 					            $('#pmfun span').text("分流");
 					        }
-					        else if (node.RunModel == 3) {
+					        
+                             if (node.RunModel == 3) {
 					            $('#pmfun span').text("分合流");
 					        }
-					        else if (node.RunModel == 4) {
+					        
+                             if (node.RunModel == 4) {
 					            $('#pmfun span').text("子线程");
 					        }
+
 					        $(this).contextMenu('processMenu', contextmenu);
 					    }
 					});

@@ -709,7 +709,7 @@
                         text: val,
                         attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
                         checked: false,
-                        iconCls: 'icon-flowtree',
+                        iconCls: 'icon-tree_folder',
                         state: 'open',
                         children: []
                     }]
@@ -1747,7 +1747,7 @@
             按关键字查询流程</div>
         <div class="menu-sep">
         </div>
-        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-new'">
+        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-tree_folder'">
             新建子级类别</div>
         <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
             编辑</div>
@@ -1763,15 +1763,15 @@
             导入流程模板</div>
         <div class="menu-sep">
         </div>
-        <div onclick="newFlowSort(false)" data-options="iconCls:'icon-new'">
+        <div onclick="newFlowSort(false)" data-options="iconCls:'icon-tree_folder'">
             新建同级类别</div>
-        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-new'">
+        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-tree_folder'">
             新建子级类别</div>
         <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
             编辑</div>
         <div class="menu-sep">
         </div>
-        <div onclick="deleteFlowSort()" data-options="iconCls:'icon-delete'">
+        <div onclick="deleteFlowSort()" data-options="iconCls:'icon-Delete'">
             删除</div>
         <div class="menu-sep">
         </div>

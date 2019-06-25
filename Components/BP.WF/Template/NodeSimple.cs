@@ -102,8 +102,9 @@ namespace BP.WF.Template
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 150, 10);
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", true, false, 0, 150, 10);
+                map.AddTBInt(NodeAttr.Step, 0, "步骤", true, true);
                 #endregion 基本属性.
-  
+
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
                  

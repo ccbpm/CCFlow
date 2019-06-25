@@ -15,10 +15,10 @@
 
             var html = "<table style='width:100%;' >";
             html += "<tr>";
-            html += "<td>步骤</td>";
-            html += "<td>节点</td>";
-            html += "<td>处理人</td>";
-            html += "<td>操作</td>";
+            html += "<th>步骤</th>";
+            html += "<th>节点</th>";
+            html += "<th>处理人</th>";
+            html += "<th>操作</th>";
             html += "</tr>";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
@@ -26,12 +26,89 @@
             var data = handler.DoMethodReturnJSON("TransferCustom_Init");
 
             var nds = data["WF_Node"]; //节点.
-            var sas = data["WF_SelectAccper"]; //选择的接受人.
+            var tcs = data["WF_TransferCustoms"]; //选择的接受人.
+            var gwls = data["WF_GenerWorkerList"]; //选择的接受人.
 
+            //输出已经走过的节点.
+            html += "<tr><th colspan=4>已经运行的节点</tr>";
+            for (var i = 0; i < gwls.length; i++) {
+                var gwl = gwls[i];
+
+                html += "<tr>";
+                html += "<td>" + gwl.FK_Node + " </td>";
+                html += "<td>" + gwl.NodeName + " </td>";
+                html += "<td>" + gwl.FK_EmpT + " </td>";
+                html += "<td>无</td>";
+                html += "</tr>";
+            }
+
+
+            //要排列的节点.
+            html += "<tr><th colspan=4>运行的节点</tr>";
+            for (var i = 0; i < tcs.length; i++) {
+                var tc = tcs[i];
+                if (tc.IsEnable == 0)
+                    continue;
+                html += "<tr>";
+                html += "<td>" + tc.FK_Node + " </td>";
+                html += "<td>" + tc.NodeName + " </td>";
+                html += "<td>" + tc.WorkerName + " </td>";
+                html += "<td>[<a href=\"javascript:DoUp('" + tc.MyPK + "');\">上移</a>][<a href=\"javascript:DoDown('" + tc.MyPK + "');\">下移</a>][<a href=\"javascript:Remove('" + tc.MyPK + "');\">排除</a>]</td>";
+                html += "</tr>";
+            }
+
+            //可选步骤.
+            html += "<tr><th colspan=4>可选步骤</tr>";
+            for (var i = 0; i < tcs.length; i++) {
+                var tc = tcs[i];
+                if (tc.IsEnable == 1)
+                    continue;
+
+                html += "<tr>";
+                html += "<td>" + tc.FK_Node + " </td>";
+                html += "<td>" + tc.NodeName + " </td>";
+                html += "<td>" + tc.WorkerName + " </td>";
+                html += "<td>[<a href=\"javascript:Add('" + tc.MyPK + "');\">增加</a>]</td>";
+                html += "</tr>";
+            }
 
             $("#docs").html(html);
 
         })
+
+
+        function DoUp(myPK) {
+
+            var en = new Entity("BP.WF.TransferCustom", myPK);
+            en.DoMethodReturnString("DoUp");
+            window.location.href = window.location.href;
+        }
+
+        function DoDown(myPK) {
+
+            var en = new Entity("BP.WF.TransferCustom", myPK);
+            en.DoMethodReturnString("DoDown");
+            window.location.href = window.location.href;
+        }
+
+
+        function Add(myPK) {
+
+            var en = new Entity("BP.WF.TransferCustom", myPK);
+            en.IsEnable = 1;
+            en.Update();
+            window.location.href = window.location.href;
+        }
+        function Remove(myPK) {
+
+            var en = new Entity("BP.WF.TransferCustom", myPK);
+            en.IsEnable = 0;
+            en.Update();
+            window.location.href = window.location.href;
+        }
+        function Back() {
+
+        }
     </script>
 </head>
 <body>
@@ -40,24 +117,21 @@
         <table style="width: 90%;">
             <caption>
                 流转设置</caption>
-               <tr>
-
-             <td> 
-             <div id="docs" name="docs" ></div>
-             </td>
-            </tr>
- 
-
             <tr>
-                <th colspan=1>
-                可选节点
+                <td>
+                    <div id="docs" name="docs">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="1">
+                    可选节点
                 </th>
             </tr>
-
             <tr>
-                <td colspan=4>
-                    <input type="button" value="保存为自动运行模式" onclick="SaveAsAuto()" />
-                    <input type="button" value="保存为手动运行模式" onclick="SaveAsHand()" />
+                <td colspan="4">
+                    <input type="button" value="返回" onclick="Back()" />
+                   <!-- <input type="button" value="保存为手动运行模式" onclick="SaveAsHand()" />-->
                 </td>
             </tr>
         </table>

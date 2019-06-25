@@ -220,7 +220,7 @@ namespace BP.Sys
                 {
                     case "Rec":
                     case "RDT":
-                    case "RefPK":
+                   // case "RefPK":
                     case "FID":
                         break;
                     default:

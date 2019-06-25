@@ -45,19 +45,46 @@
 
             if (data.length == 0) {
                 $("#docs").html("");
-                return;              
+                return;
             }
 
-            var html = "<ul>";
+            var currDT = getNowFormatDate();
+
+            var html = "<table style='width:90%;'>";
+            html += "<tr>";
+            html += "<th>授权人</th>";
+            html += "<th>授权到日期</th>";
+            html += "</tr>";
 
             for (var i = 0; i < data.length; i++) {
                 var en = data[i];
-                html += "<li><a href=\"javascript:LogAs('"+en.No+"','"+en.Name+"');\"> " + en.Name + "</a></li>";
+
+                if (en.AuthorDate >= currDT)
+                    html += "<tr><td><a href=\"javascript:LogAs('" + en.No + "','" + en.Name + "');\"> " + en.Name + "</a></td><td>" + en.AuthorDate + "</td></tr>";
+                else
+                    html += "<tr><td>  " + en.Name + " - <font color=red>授权逾期</font></td><td>" + en.AuthorDate + "</td></tr>";
             }
-            html += "</ul>";
+            html += "</table>";
 
             $("#docs").html(html);
         }
+
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
         function LogAs(fk_emp, empName) {
 
             if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
@@ -89,7 +116,7 @@
                 授权人列表
             </caption>
             <tr>
-                <td>
+                <td style=" padding:40px;">
                     <div id="docs" name="docs">
                     </div>
                 </td>

@@ -1136,7 +1136,8 @@
 
         //新增从表.
         function NewMapDtl() {
-            var val = prompt('21请输入从表ID，要求表单唯一。', pageParam.fk_mapdata + 'Dtl1');
+
+            var val = prompt('请输入从表ID，要求表单唯一。', pageParam.fk_mapdata + 'Dtl1');
 
             if (val == null) {
                 return;
@@ -1156,6 +1157,8 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", pageParam.fk_mapdata);
             handler.AddPara("DtlNo", val);
+            handler.AddPara("FK_Node", GetQueryString("FK_Node")); //为流程用的节点ID.
+
             var data = handler.DoMethodReturnString("Designer_NewMapDtl");
 
             if (data.indexOf('err@') == 0) {

@@ -21,7 +21,7 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.IsView = true;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin==true)
+                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
                 {
                     uac.IsUpdate = true;
                     uac.IsDelete = true;
@@ -79,7 +79,7 @@ namespace BP.Sys.FrmUI
                 this.SetPara(FrmAttachmentAttr.UploadFileNumCheck, (int)value);
             }
         }
-       
+
         #endregion 参数属性.
 
         #region 属性
@@ -746,7 +746,7 @@ namespace BP.Sys.FrmUI
                 Map map = new Map("Sys_FrmAttachment", "附件");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 
@@ -759,7 +759,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthRunModel, 0, "运行模式", true, true, FrmAttachmentAttr.AthRunModel,
                   "@0=流水模式@1=固定模式@2=自定义页面");
 
-                map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20,true);
+                map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20, true);
 
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式", true, false, 0, 50, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Exts, "上传要求,设置模式为: *.*, *.doc, *.docx, *.png,多个中间用逗号分开.\t\n表示仅仅允许上传指定的后缀的文件.");
@@ -775,11 +775,11 @@ namespace BP.Sys.FrmUI
                   "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", false, false, 0, 150, 20, true, null);
-                 
+
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Sort, "设置格式:生产类,文件类,其他，也可以设置一个SQL，比如select Name FROM Port_Dept  \t\n目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
 
-                map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true,true);
+                map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true, true);
 
                 //位置.
                 map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", false, false);
@@ -796,7 +796,7 @@ namespace BP.Sys.FrmUI
                 //hzm新增列
                 // map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
 
-                map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
+                map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay,
                     "@0=不能删除@1=删除所有@2=只能删除自己上传的");
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", true, true);
@@ -808,11 +808,11 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(FrmAttachmentAttr.IsExpCol, true, "是否启用扩展列", true, true);
 
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
-                map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false,FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
+                map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false, FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
 
-                map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay,"@0=继承模式@1=协作模式");
+                map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay, "@0=继承模式@1=协作模式");
 
-                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, "Ath"+FrmAttachmentAttr.CtrlWay,
+                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, "Ath" + FrmAttachmentAttr.CtrlWay,
                     "@0=PK-主键@1=FID-流程ID@2=ParentID-父流程ID@3=仅能查看自己上传的附件@4=按照WorkID计算(对流程节点表单有效)");
 
 
@@ -857,10 +857,10 @@ namespace BP.Sys.FrmUI
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "高级配置";
-              //  rm.Icon = "/WF/Admin/CCFormDesigner/Img/Menu/CC.png";
+                //  rm.Icon = "/WF/Admin/CCFormDesigner/Img/Menu/CC.png";
                 //rm.ClassMethodName = this.ToString() + ".DoAdv";
-               // rm.RefMethodType = RefMethodType.RightFrameOpen;
-              //  map.AddRefMethod(rm);
+                // rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "类别设置";
@@ -888,7 +888,7 @@ namespace BP.Sys.FrmUI
 
         public string DtlOfAth()
         {
-            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl="+this.MyPK+"&For="+this.MyPK;
+            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=" + this.MyPK + "&For=" + this.MyPK;
             return url;
         }
 
@@ -901,12 +901,12 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP,SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "err@连接失败:"+ex.Message;
+                return "err@连接失败:" + ex.Message;
             }
         }
         /// <summary>
@@ -937,10 +937,17 @@ namespace BP.Sys.FrmUI
                 else
                     this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
             }
-            else
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
 
-            #region 处理分组. 
+            if (this.FK_Node != 0)
+            {
+                /*工作流程模式.*/
+                if (this.HisCtrlWay == AthCtrlWay.PK)
+                    this.HisCtrlWay = AthCtrlWay.WorkID;
+                this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+            }
+
+
+            #region 处理分组.
             //更新相关的分组信息.
             if (this.IsVisable == true)
             {

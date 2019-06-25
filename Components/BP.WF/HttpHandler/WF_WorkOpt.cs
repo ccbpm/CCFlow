@@ -3238,40 +3238,69 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.TransferCustomType != TransferCustomType.ByWorkerSet)
+            {
+                gwf.TransferCustomType = TransferCustomType.ByWorkerSet;
+                gwf.Update();
+            }
+
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
-            //增加节点s.
+            //所有的节点s.
             Nodes nds = new Nodes(this.FK_Flow);
             ds.Tables.Add(nds.ToDataTableField("WF_Node"));
 
-            //工作人员列表.
+            //工作人员列表.已经走完的节点与人员.
             GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
             ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
 
-            //选择的人员信息.
-            SelectAccpers sas = new SelectAccpers();
-            sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID);
-
-            //说明第一次加载.
-            if (sas.Count == 0)
+            //设置的手工运行的流转信息.
+            TransferCustoms tcs = new TransferCustoms(this.WorkID);
+            if (tcs.Count == 0)
             {
-                Node nd = new Node(gwf.FK_Node);
-                Work wk = nd.HisWork;
-                wk.OID = this.WorkID;
-                wk.Retrieve();
+                foreach (Node nd in nds)
+                {
+                    var gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, nd.NodeID);
+                    if (gwl == null)
+                    {
+                        /*说明没有 */
+                        TransferCustom tc = new TransferCustom();
+                        tc.WorkID = this.WorkID;
+                        tc.FK_Node = nd.NodeID;
+                        tc.NodeName = nd.Name;
 
 
-                WorkNode wn = new WorkNode(wk, nd);
-                wn.HisFlow.IsFullSA = true;
+                        #region 计算出来当前节点的工作人员.
+                        Work wk = nd.HisWork;
+                        wk.OID = this.WorkID;
+                        wk.Retrieve();
+                        WorkNode wn = new WorkNode(wk, nd);
+                        wn.HisFlow.IsFullSA = true;
 
-                //执行计算未来处理人.
-                FullSA sa = new FullSA(wn);
+                        //执行计算未来处理人.
+                        FullSA fsa = new FullSA(wn);
+                        SelectAccpers sas = new SelectAccpers();
+                        sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, nd.NodeID);
 
-                sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID);
+                        string workerID = "";
+                        string workerName = "";
+                        foreach (SelectAccper sa in sas)
+                        {
+                            workerID += sa.FK_Emp + ",";
+                            workerName += sa.EmpName + ",";
+                        }
+                        #endregion 计算出来当前节点的工作人员.
+
+                        tc.Worker = workerID;
+                        tc.WorkerName = workerName;
+                        tc.Idx = nd.Step;
+                        tc.IsEnable = true;
+                        tc.Insert();
+                    }
+                }
             }
 
-            DataTable dtSas = sas.ToDataTableField("WF_SelectAccper");
-            ds.Tables.Add(dtSas);
+            ds.Tables.Add(tcs.ToDataTableField("WF_TransferCustoms"));
 
             return BP.Tools.Json.ToJson(ds);
         }

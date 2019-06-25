@@ -22,6 +22,10 @@ namespace BP.WF
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
+        /// 节点名称
+        /// </summary>
+        public const string NodeName = "NodeName";
+        /// <summary>
         /// 处理人编号（多个人用逗号分开）
         /// </summary>
         public const string Worker = "Worker";
@@ -49,6 +53,10 @@ namespace BP.WF
         /// 是否通过了
         /// </summary>
         public const string TodolistModel = "TodolistModel";
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public const string IsEnable = "IsEnable";
         #endregion
     }
     /// <summary>
@@ -80,6 +88,20 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(TransferCustomAttr.WorkID, value);
+            }
+        }
+        /// <summary>
+        /// 节点名称
+        /// </summary>
+        public string NodeName
+        {
+            get
+            {
+                return this.GetValStringByKey(TransferCustomAttr.NodeName);
+            }
+            set
+            {
+                this.SetValByKey(TransferCustomAttr.NodeName, value);
             }
         }
         /// <summary>
@@ -180,6 +202,17 @@ namespace BP.WF
                 this.SetValByKey(TransferCustomAttr.Idx, value);
             }
         }
+        public bool IsEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(TransferCustomAttr.IsEnable);
+            }
+            set
+            {
+                this.SetValByKey(TransferCustomAttr.IsEnable, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -206,12 +239,16 @@ namespace BP.WF
                 //主键.
                 map.AddTBInt(TransferCustomAttr.WorkID, 0, "WorkID", true, false);
                 map.AddTBInt(TransferCustomAttr.FK_Node, 0, "节点ID", true, false);
+                map.AddTBString(TransferCustomAttr.NodeName, null, "节点名称", true, false, 0, 200, 10);
+
                 map.AddTBString(TransferCustomAttr.Worker, null, "处理人(多个人用逗号分开)", true, false, 0, 200, 10);
                 map.AddTBString(TransferCustomAttr.WorkerName, null, "处理人(多个人用逗号分开)", true, false, 0, 200, 10);
 
                 map.AddTBString(TransferCustomAttr.SubFlowNo, null, "要经过的子流程编号", true, false, 0, 3, 10);
                 map.AddTBDateTime(TransferCustomAttr.PlanDT, null, "计划完成日期", true, false);
                 map.AddTBInt(TransferCustomAttr.TodolistModel, 0, "多人工作处理模式", true, false);
+                map.AddTBInt(TransferCustomAttr.IsEnable, 0, "是否启用", true, false);
+
                 map.AddTBInt(TransferCustomAttr.Idx, 0, "顺序号", true, false);
 
                 //map.AddTBString(TransferCustomAttr.StartDT, null, "发起时间", true, false, 0, 20, 10);
@@ -221,6 +258,18 @@ namespace BP.WF
             }
         }
         #endregion
+
+        public string DoUp()
+        {
+            this.DoOrderUp(TransferCustomAttr.WorkID, this.WorkID.ToString(), TransferCustomAttr.Idx);
+            return "执行成功";
+        }
+
+        public string DoDown()
+        {
+            this.DoOrderDown(TransferCustomAttr.WorkID, this.WorkID.ToString(), TransferCustomAttr.Idx);
+            return "执行成功";
+        }
 
         protected override bool beforeUpdateInsertAction()
         {
@@ -249,7 +298,7 @@ namespace BP.WF
             bool isMeet = false;
             foreach (TransferCustom item in ens)
             {
-                if (item.FK_Node == currNodeID)
+                if (item.FK_Node == currNodeID && item.IsEnable==true)
                 {
                     isMeet = true;
                     continue;

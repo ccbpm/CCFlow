@@ -503,7 +503,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="fk_flow"></param>
         /// <param name="workid"></param>
-        public SelectAccpers( Int64 workid)
+        public SelectAccpers(Int64 workid)
         {
             BP.En.QueryObject qo = new QueryObject(this);
             qo.AddWhere(SelectAccperAttr.WorkID, workid);

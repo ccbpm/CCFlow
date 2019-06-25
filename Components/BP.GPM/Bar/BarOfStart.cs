@@ -96,7 +96,7 @@ namespace BP.GPM
                     idx++;
 
                     html += "<tr>";
-                    html += "<td>"+idx+"</td>";
+                    html += "<td>" + idx + "</td>";
                     html += "<td><a href='../WF/WFRpt.htm?FK_Flow=" + fk_flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&1=2' target=_blank >" + title + "</a></td>";
                     html += "<td>" + sender + "</td>";
                     html += "</tr>";

@@ -6212,9 +6212,7 @@ namespace BP.WF
             dtHistory.Columns.Add("RDT"); //记录日期.
             dtHistory.Columns.Add("SDT"); //应完成日期(可以不用.)
             dtHistory.Columns.Add("IsPass"); //是否通过?
-
-            
-
+             
             //执行人.
             if (gwf.WFState == WFState.Complete)
             {

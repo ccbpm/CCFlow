@@ -342,9 +342,11 @@ namespace BP.WF.HttpHandler
             }
             else
             {
+                en.FK_Node = this.FK_Node;
                 //en.Name = "从表" + en.No;
                 en.Name = "从表";
                 en.PTable = en.No;
+                en.H = 300;
                 en.Insert();
                 en.IntMapAttrs();
             }

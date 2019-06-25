@@ -111,62 +111,63 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
                 }
-
+                item.SetValByKey("OID",pkval);
                 item.Update(); //执行更新.
             }
+            return "保存成功.";
             #endregion  查询出来从表数据.
 
-            #region 保存新加行.
+            //#region 保存新加行.
           
-            string keyVal = "";
-            foreach (Attr attr in map.Attrs)
-            {
+            //string keyVal = "";
+            //foreach (Attr attr in map.Attrs)
+            //{
 
-                if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
-                {
-                    if (attr.UIIsReadonly == true)
-                        continue;
+            //    if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+            //    {
+            //        if (attr.UIIsReadonly == true)
+            //            continue;
 
-                    keyVal = this.GetValFromFrmByKey("TB_" + attr.Key + "_0", null);
-                    dtl.SetValByKey(attr.Key, keyVal);
-                    continue;
-                }
+            //        keyVal = this.GetValFromFrmByKey("TB_" + attr.Key + "_0", null);
+            //        dtl.SetValByKey(attr.Key, keyVal);
+            //        continue;
+            //    }
 
 
-                if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
-                {
-                    keyVal = this.GetValFromFrmByKey("TB_" + attr.Key + "_0");
-                    if (attr.IsNum && keyVal == "")
-                        keyVal = "0";
-                    dtl.SetValByKey(attr.Key, keyVal);
-                    continue;
-                }
+            //    if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+            //    {
+            //        keyVal = this.GetValFromFrmByKey("TB_" + attr.Key + "_0");
+            //        if (attr.IsNum && keyVal == "")
+            //            keyVal = "0";
+            //        dtl.SetValByKey(attr.Key, keyVal);
+            //        continue;
+            //    }
 
-                if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
-                {
-                    keyVal = this.GetValFromFrmByKey("DDL_" + attr.Key + "_0");
-                    dtl.SetValByKey(attr.Key, keyVal);
-                    continue;
-                }
+            //    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+            //    {
+            //        keyVal = this.GetValFromFrmByKey("DDL_" + attr.Key + "_0");
+            //        dtl.SetValByKey(attr.Key, keyVal);
+            //        continue;
+            //    }
 
-                if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
-                {
-                    keyVal = this.GetValFromFrmByKey("CB_" + attr.Key + "_0", "-1");
-                    if (keyVal == "-1")
-                        dtl.SetValByKey(attr.Key, 0);
-                    else
-                        dtl.SetValByKey(attr.Key, 1);
-                    continue;
-                }
-            }
+            //    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+            //    {
+            //        keyVal = this.GetValFromFrmByKey("CB_" + attr.Key + "_0", "-1");
+            //        if (keyVal == "-1")
+            //            dtl.SetValByKey(attr.Key, 0);
+            //        else
+            //            dtl.SetValByKey(attr.Key, 1);
+            //        continue;
+            //    }
+            //}
 
-            dtl.SetValByKey("RefPK", this.GetRequestVal("RefPKVal"));
-            dtl.PKVal = "0";
-            dtl.Insert();
+            //dtl.SetValByKey("RefPK", this.GetRequestVal("RefPKVal"));
+            //dtl.PKVal = "0";
+            //dtl.Insert();
             
-            #endregion 保存新加行.
+            //#endregion 保存新加行.
 
-            return "保存成功.";
+            //return "保存成功.";
         }
 
         //多附件上传方法

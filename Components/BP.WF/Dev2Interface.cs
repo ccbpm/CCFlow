@@ -6211,6 +6211,9 @@ namespace BP.WF
             dtHistory.Columns.Add("EmpName"); //名称
             dtHistory.Columns.Add("RDT"); //记录日期.
             dtHistory.Columns.Add("SDT"); //应完成日期(可以不用.)
+            dtHistory.Columns.Add("IsPass"); //是否通过?
+
+            
 
             //执行人.
             if (gwf.WFState == WFState.Complete)
@@ -6223,12 +6226,13 @@ namespace BP.WF
                 {
                     DataRow dr = dtHistory.NewRow();
                     dr["FK_Node"] = drTrack["NDFrom"];
-                    // dr["ActionType"] = drTrack["NDFrom"];
+                    //dr["ActionType"] = drTrack["NDFrom"];
                     dr["NodeName"] = drTrack["NDFromT"];
                     dr["EmpNo"] = drTrack["EmpFrom"];
                     dr["EmpName"] = drTrack["EmpFromT"];
                     dr["RDT"] = drTrack["RDT"];
                     dr["SDT"] = "";
+                    dr["IsPass"] = 1; // gwl.IsPassInt; //是否通过.
                     dtHistory.Rows.Add(dr);
                 }
             }
@@ -6244,9 +6248,23 @@ namespace BP.WF
                     dr["EmpName"] = gwl.FK_EmpText;
                     dr["RDT"] = gwl.RDT;
                     dr["SDT"] = gwl.SDT;
+                    dr["IsPass"] = gwl.IsPassInt; //是否通过.
                     dtHistory.Rows.Add(dr);
                 }
             }
+
+            if (dtHistory.Rows.Count == 0)
+            {
+                DataRow dr = dtHistory.NewRow();
+                dr["FK_Node"] = gwf.FK_Node;
+                dr["NodeName"] = gwf.NodeName;
+                dr["EmpNo"] = gwf.Starter;
+                dr["EmpName"] = gwf.StarterName;
+                dr["RDT"] = gwf.RDT;
+                dr["SDT"] = gwf.SDTOfNode;
+                dtHistory.Rows.Add(dr);
+            }
+
             ds.Tables.Add(dtHistory);
             #endregion 运动轨迹
 

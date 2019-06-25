@@ -15,34 +15,46 @@ $(function () {
 
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
-
-
-    debugger
+     
     var step = 0;
-    //循环历史记录.
+    //循环历史记录, 生成唯一的节点连续字符串比如 101,102,103
+    var nds = "";
     for (var i = 0; i < tracks.length; i++) {
-
         var tk = tracks[i];
-
-        var doc = "<br><b>" + tk.NodeName + "</b>";
-
-        doc = "";
-        doc += "<br>" + tk.EmpName;
-        doc += "<br>" + tk.RDT.substring(0, 16);
-
-        var info = "";
-        if (tk.FK_Node == gwf.FK_Node)
-            info = GenerIcon("DotGreen", i + 1, doc, tk.NodeName);
+        if (nds.indexOf(tk.FK_Node) == -1)
+            nds += "," + tk.FK_Node;
         else
-            info = GenerIcon("DotBlue", i + 1, doc, tk.NodeName);
-
-        step = i + 1;
-
-        html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
+            continue;
     }
 
-    //debugger
-    //流程未完成的状态.
+    //把节点转化为数组.
+    var nds = nds.split(",");
+
+    for (var i = 0; i < nds.length; i++) {
+        var nodeID = nds[i];
+        if (nodeID == "")
+            continue;
+
+        var nodeNums = 0;
+        for (var myidx = 0; myidx < tracks.length; myidx++) {
+            var tk = tracks[myidx];
+            if (tk.FK_Node == nodeID)
+                nodeNums++;
+        }
+
+        //如果是单个节点.
+        if (nodeNums == 1) {
+            html += GenerSingerNode(tracks, nodeID, gwf);
+            continue;
+        }
+
+        if (nodeNums > 1) {
+            html += GenerMNode(tracks, nodeID, gwf);
+            continue;
+        }
+    }
+     
+    //流程未完成的状态, 输出没有经过的节点。
     if (gwf.WFState != 3) {
 
         //当前停留的节点.
@@ -57,18 +69,19 @@ $(function () {
 
             for (var idx = 0; idx < nodes.length; idx++) {
                 var nd = nodes[idx];
+
                 if (nd.NodeID == nextNode) {
                     nodeName = nd.Name;
                     break;
                 }
             }
 
-            var doc = "<b></b>";
+            var doc = "<b>-</b>";
             doc += "<br>";
             doc += "<br>";
             doc += "<br>";
 
-          //  doc = "";
+            //  doc = "";
 
             step = step + 1;
             currNode = nextNode;
@@ -99,9 +112,68 @@ $(function () {
 });
 
 
+//生成多个节点处理人. .
+function GenerMNode(tracks, nodeID, gwf) {
+
+    step = step + 1;
+    var info = "<ul>";
+    for (var i = 0; i < tracks.length; i++) {
+
+        var tk = tracks[i];
+
+        if (tk.FK_Node != nodeID)
+            continue;
+        debugger
+        if (tk.IsPass == 1)
+            info += "<li><font color=blue><b>" + tk.EmpName + "</b></font></li>";
+        else
+            info += "<li>" + tk.EmpName + "</li>";
+    }
+    info += "</ul>";
+
+    if (tk.FK_Node == gwf.FK_Node)
+        info = GenerIcon("DotGreen", step, info, false, tk.NodeName);
+    else
+        info = GenerIcon("DotBlue", step, info, false, tk.NodeName);
+
+    return "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
+
+}
+
+
+//生成单个节点的样式风格.
+function GenerSingerNode(tracks, nodeID, gwf) {
+
+    for (var i = 0; i < tracks.length; i++) {
+
+        var tk = tracks[i];
+
+        if (tk.FK_Node != nodeID) 
+            continue;
+
+        var html = "";
+        var doc = "";
+        doc += "<br>" + tk.EmpName;
+        doc += "<br>" + tk.RDT.substring(0, 16);
+
+        step = i + 1;
+
+        var info = "";
+        if (tk.FK_Node == gwf.FK_Node)
+            info = GenerIcon("DotGreen", i + 1, doc, false, tk.NodeName);
+        else
+            info = GenerIcon("DotBlue", i + 1, doc, false, tk.NodeName);
+
+        return "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
+    }
+}
+
 function GenerIcon(icon, step, docs, isEndNode,nodeName) {
 
     var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
+
+
+    debugger;
 
     var barUrlLeft = "";
     var barUrlRight = "";

@@ -538,11 +538,9 @@ namespace BP.WF
 
                 if (dbtype == DBType.PostgreSQL)
                 {
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows type text");
+                  //  DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows type text");
                 }
                     
-             
-
 
                 #endregion 更新wf_emp 的字段类型.
 

@@ -482,6 +482,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\FlowCheckError.cs" />
+    <Compile Include="WF\FullSA.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WF\Node.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -516,7 +519,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DTS\ToImplement\RepariDB.cs" />
-    <Compile Include="WF\FullSA.cs" />
     <Compile Include="WF\SendReturnObj.cs" />
     <Compile Include="WF\ShiftWork.cs">
       <SubType>Code</SubType>

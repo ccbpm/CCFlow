@@ -791,14 +791,18 @@ namespace BP.WF
             {
                 // 处理传递过来的参数。
                 int i = 0;
+
+                string expKeys="OID,DoType,HttpHandlerName,DoMethod,t,";
                 foreach (string k in paras.Keys)
                 {
-
-                    if (k == "OID")
+                    if (expKeys.IndexOf(","+k+",")!=-1)
                         continue;
 
+                    var str= paras[k] as string;
+                    if (DataType.IsNullOrEmpty(str)==true)
+                        continue;
                     i++;
-                    wk.SetValByKey(k, paras[k].ToString());
+                    wk.SetValByKey(k, str);
                 }
 
                 if (i >= 3)
@@ -4486,7 +4490,6 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.IsStartInMobile, 1, "是否可以在手机里发起？", true, true);
 
                 map.AddTBDecimal(FlowAttr.AvgDay, 0, "平均运行用天", false, false);
-
 
                 map.AddTBInt(FlowAttr.IsFullSA, 0, "是否自动计算未来的处理人？(启用后,ccflow就会为已知道的节点填充处理人到WF_SelectAccper)", false, false);
                 map.AddTBInt(FlowAttr.IsMD5, 0, "IsMD5", false, false);

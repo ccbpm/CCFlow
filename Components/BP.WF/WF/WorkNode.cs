@@ -6946,11 +6946,11 @@ namespace BP.WF
                 #region 计算未来处理人.
                 if (this.town == null)
                 {
-                    FullSA fsa1 = new FullSA(this);
+                //    FullSA fsa1 = new FullSA(this);
                 }
                 else
                 {
-                    FullSA fsa = new FullSA(this.town);
+                  //  FullSA fsa = new FullSA(this.town);
                 }
 
                 #endregion 计算未来处理人.

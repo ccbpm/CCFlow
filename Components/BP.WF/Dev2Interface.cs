@@ -6189,7 +6189,7 @@ namespace BP.WF
              * Name 名称.
              * X,Y 节点图形位置，如果使用进度图就不需要了.
             */
-            Nodes nds = new Nodes(gwf.FK_Flow);
+            NodeSimples nds = new NodeSimples(gwf.FK_Flow);
             ds.Tables.Add(nds.ToDataTableField("WF_Node"));
 
             /*

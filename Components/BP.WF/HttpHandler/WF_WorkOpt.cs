@@ -62,7 +62,7 @@ namespace BP.WF.HttpHandler
                     return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
                 }
 
-                 FK_MapData = "ND" + this.FK_Node;
+                FK_MapData = "ND" + this.FK_Node;
 
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                     FK_MapData = nd.NodeFrmID;
@@ -118,7 +118,7 @@ namespace BP.WF.HttpHandler
 
             if (billTemplateNo == null)
                 billTemplateNo = this.GetRequestVal("FK_Bill");
-           
+
 
             BillTemplate func = new BillTemplate(billTemplateNo);
 
@@ -137,7 +137,7 @@ namespace BP.WF.HttpHandler
             {
                 return PrintDoc_FormDoneIt(nd, this.WorkID, this.FID, ccformId, func);
             }
-           
+
             Work wk = nd.HisWork;
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
@@ -331,7 +331,7 @@ namespace BP.WF.HttpHandler
                 wk.OID = this.WorkID;
                 wk.RetrieveFromDBSources();
             }
-            
+
             MapData mapData = new MapData(formID);
 
             string file = DateTime.Now.Year + "_" + WebUser.FK_Dept + "_" + func.No + "_" + WorkID + ".doc";
@@ -392,7 +392,7 @@ namespace BP.WF.HttpHandler
 
                     //把数据赋值给wk. 有可能用户还没有执行流程检查，字段没有同步到 NDxxxRpt.
                     //if (ndxxRpt.Row.Count > wk.Row.Count)
-                     //   wk.Row = ndxxRpt.Row;
+                    //   wk.Row = ndxxRpt.Row;
 
                     rtf.HisGEEntity = ndxxRpt;
 
@@ -405,7 +405,7 @@ namespace BP.WF.HttpHandler
                         {
                             GEDtls dtls1 = new GEDtls(dtl.No);
                             mapData.EnMap.AddDtl(dtls1, "RefPK");
-                           
+
                         }
                         al = mapData.GetDtlsDatasOfList(pkval.ToString());
                     }
@@ -423,7 +423,7 @@ namespace BP.WF.HttpHandler
                         rtf.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
                     }
 
-                    if (nd!= null)
+                    if (nd != null)
                     {
                         //把审核日志表加入里面去.
                         Paras ps = new BP.DA.Paras();
@@ -437,7 +437,7 @@ namespace BP.WF.HttpHandler
 
                 paths = file.Split('_');
                 path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
-                string fileModelT ="rtf";
+                string fileModelT = "rtf";
                 if ((int)func.TemplateFileModel == 1)
                     fileModelT = "word";
 
@@ -554,7 +554,7 @@ namespace BP.WF.HttpHandler
                 //打印单据实体、单据表单
                 if (DataType.IsNullOrEmpty(sourceType) == false && sourceType.Equals("Bill"))
                 {
-                    return MakeForm2Html.MakeBillToPDF(this.GetRequestVal("FrmID"),this.WorkID,this.GetRequestVal("BasePath"),false);
+                    return MakeForm2Html.MakeBillToPDF(this.GetRequestVal("FrmID"), this.WorkID, this.GetRequestVal("BasePath"), false);
                 }
                 int nodeID = this.FK_Node;
                 if (this.FK_Node == 0)
@@ -573,10 +573,10 @@ namespace BP.WF.HttpHandler
                     mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node + " AND FrmEnableRole != 5");
                     return "info@" + BP.Tools.Json.ToJson(mds.ToDataTableField());
                 }
-                     
-               
-               return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
-             
+
+
+                return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
+
             }
             catch (Exception ex)
             {
@@ -589,21 +589,24 @@ namespace BP.WF.HttpHandler
 	     * @return
 	     * @throws Exception 
 	     */
-	    public String Packup_FromInit(){
-		    try {
-			    int nodeID = this.FK_Node;
-			    if (this.FK_Node == 0) {
-				    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-				    nodeID = gwf.FK_Node;
-			    }
-			    Node nd = new Node(nodeID);
-			    return MakeForm2Html.MakeFormToPDF(this.GetRequestVal("FrmID"),this.GetRequestVal("FrmName"),nd,this.WorkID, this.FK_Flow,null,false,this.GetRequestVal("BasePath"));
+        public String Packup_FromInit()
+        {
+            try
+            {
+                int nodeID = this.FK_Node;
+                if (this.FK_Node == 0)
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                    nodeID = gwf.FK_Node;
+                }
+                Node nd = new Node(nodeID);
+                return MakeForm2Html.MakeFormToPDF(this.GetRequestVal("FrmID"), this.GetRequestVal("FrmName"), nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
             }
             catch (Exception ex)
             {
-			    return "err@" + ex.Message;
-		    }
-	    }
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 扫描二维码获得文件.
         /// </summary>
@@ -1357,7 +1360,7 @@ namespace BP.WF.HttpHandler
             if (isReadonly == true)
                 isCanDo = false;
             else
-                isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( this.WorkID, BP.Web.WebUser.No);
+                isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
 
             //如果是查看状态, 为了屏蔽掉正在审批的节点, 在查看审批意见中.
             bool isShowCurrNodeInfo = true;
@@ -1476,8 +1479,8 @@ namespace BP.WF.HttpHandler
                     if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow && tk.HisActionType != ActionType.Return)
                         continue;
 
-                   
-                    
+
+
                     //如果是当前的节点. 当前人员可以处理, 已经审批通过的人员.
                     if (tk.NDFrom == this.FK_Node
                         && isCanDo == true
@@ -1496,7 +1499,7 @@ namespace BP.WF.HttpHandler
                     //如果是多人处理，就让其显示已经审核过的意见.
                     if (tk.NDFrom == this.FK_Node
                         && checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0
-                        && (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12) )
+                        && (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12))
                     {
                         continue;
                         //如果当前人，没有审核完成,就不显示.
@@ -2390,7 +2393,7 @@ namespace BP.WF.HttpHandler
             {
                 /*如果是移交操作.*/
                 string toEmps = this.GetRequestVal("ShiftToEmp");
-                return BP.WF.Dev2Interface.Node_Shift( this.WorkID,  toEmps, note);
+                return BP.WF.Dev2Interface.Node_Shift(this.WorkID, toEmps, note);
             }
 
             if (actionType == "Kill")
@@ -2794,7 +2797,7 @@ namespace BP.WF.HttpHandler
             andsql += " OR ActionType=" + (int)ActionType.Forward;
             andsql += " OR ActionType=" + (int)ActionType.HuiQian;
 
-            string sql = "SELECT RDT,NDFrom, NDFromT,EmpFrom,EmpFromT  FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND("+andsql +") Order By RDT DESC";
+            string sql = "SELECT RDT,NDFrom, NDFromT,EmpFrom,EmpFromT  FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND(" + andsql + ") Order By RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -2902,7 +2905,7 @@ namespace BP.WF.HttpHandler
         {
             string msg = this.GetRequestVal("Message");
             string toEmp = this.GetRequestVal("ToEmp");
-            return BP.WF.Dev2Interface.Node_Shift(this.WorkID,  toEmp, msg);
+            return BP.WF.Dev2Interface.Node_Shift(this.WorkID, toEmp, msg);
         }
         /// <summary>
         /// 撤销移交
@@ -3221,7 +3224,7 @@ namespace BP.WF.HttpHandler
 
             }
         }
-#endregion tonodes
+        #endregion tonodes
 
 
 
@@ -3234,16 +3237,39 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-            Nodes nds = new Nodes(this.FK_Flow);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
             //增加节点s.
-            DataTable dt = nds.ToDataTableField("WF_Node");
-            ds.Tables.Add(dt);
+            Nodes nds = new Nodes(this.FK_Flow);
+            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
 
+            //工作人员列表.
+            GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
+            ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
 
             //选择的人员信息.
             SelectAccpers sas = new SelectAccpers();
             sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID);
+
+            //说明第一次加载.
+            if (sas.Count == 0)
+            {
+                Node nd = new Node(gwf.FK_Node);
+                Work wk = nd.HisWork;
+                wk.OID = this.WorkID;
+                wk.Retrieve();
+
+
+                WorkNode wn = new WorkNode(wk, nd);
+                wn.HisFlow.IsFullSA = true;
+
+                //执行计算未来处理人.
+                FullSA sa = new FullSA(wn);
+
+                sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID);
+            }
+
             DataTable dtSas = sas.ToDataTableField("WF_SelectAccper");
             ds.Tables.Add(dtSas);
 

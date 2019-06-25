@@ -24,6 +24,9 @@
 	        //求出来已经设置的延续子流程.
 	        var nodeID = GetQueryString("FK_Node");
 	        var orgNo = GetQueryString("OrgNo");
+	        if (orgNo == null || orgNo == undefined)
+	            orgNo = "";
+
 	        //已经选择的岗位.
 	        var ens = new Entities("BP.WF.Template.NodeStations");
 	        ens.Retrieve("FK_Node", nodeID);
@@ -33,11 +36,11 @@
 	        stas.Retrieve("OrgNo", orgNo);
 
 	        //查询出来数据.	       
-	        var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station where OrgNo =" + orgNo + ") group by No,Name";
-	       
+	        var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station where OrgNo ='" + orgNo + "') group by No,Name";
+
 	        //获得要增加的流程集合.
 	        var stationTypes = DBAccess.RunSQLReturnTable(sql);
-	       
+
 	        BindGroupModel(stationTypes, stas, ens);
 
 	    });

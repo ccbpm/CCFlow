@@ -1,6 +1,7 @@
 ﻿
 var step = 0;
 $(function () {
+
     var workid = GetQueryString("WorkID");
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
@@ -15,7 +16,7 @@ $(function () {
 
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
-     
+
     var step = 0;
     //循环历史记录, 生成唯一的节点连续字符串比如 101,102,103
     var nds = "";
@@ -48,12 +49,12 @@ $(function () {
             continue;
         }
 
-        if (nodeNums > 1) {
+        if (nodeNums > 1) { //多个人的节点.
             html += GenerMNode(tracks, nodeID, gwf);
             continue;
         }
     }
-     
+
     //流程未完成的状态, 输出没有经过的节点。
     if (gwf.WFState != 3) {
 
@@ -147,8 +148,7 @@ function GenerSingerNode(tracks, nodeID, gwf) {
     for (var i = 0; i < tracks.length; i++) {
 
         var tk = tracks[i];
-
-        if (tk.FK_Node != nodeID) 
+        if (tk.FK_Node != nodeID)
             continue;
 
         var html = "";
@@ -168,7 +168,7 @@ function GenerSingerNode(tracks, nodeID, gwf) {
     }
 }
 
-function GenerIcon(icon, step, docs, isEndNode,nodeName) {
+function GenerIcon(icon, step, docs, isEndNode, nodeName) {
 
     var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
 
@@ -222,7 +222,7 @@ function GenerStart() {
 
 //根据当前节点获得下一个节点.
 function GetNextNodeID(nodeID, dirs) {
- //   debugger
+    //   debugger
 
     var toNodeID = 0;
     for (var i = 0; i < dirs.length; i++) {

@@ -44,6 +44,21 @@ namespace BP.WF.Template
                 this.SetValByKey(FlowAttr.SysType, value);
             }
         }
+
+        /// <summary>
+        /// 是否可以独立启动
+        /// </summary>
+        public bool IsCanStart
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsCanStart);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.IsCanStart, value);
+            }
+        }
         /// <summary>
         /// 流程事件实体
         /// </summary>
@@ -204,6 +219,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FlowAttr.IsLoadPriData, value);
+            }
+        }
+        /// <summary>
+        /// 是否可以在手机里启用
+        /// </summary>
+        public bool IsStartInMobile
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsStartInMobile);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.IsStartInMobile, value);
             }
         }
         #endregion
@@ -1797,6 +1826,13 @@ namespace BP.WF.Template
                 }
             }
             #endregion 检查数据完整性. - 同步业务表数据。
+
+            #region StartFlows的清缓存
+            if(fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart){
+                //清空WF_Emp 的StartFlows
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+            }
+            #endregion StartFlows的清缓存
 
             return base.beforeUpdate();
         }

@@ -588,11 +588,23 @@ namespace BP.WF.Template
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
+                RefMethod rm = new RefMethod();
+                rm.Title = "设置子流程";
+                rm.ClassMethodName = this.ToString() + ".DoSubFlow";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        public string DoSubFlow()
+        {
+            return  "../../Admin/AttrNode/FrmNodeComponent/FrmSubFlow.htm?NodeID=" + this.NodeID;
+        }
 
         #region 重写方法.
         protected override bool beforeUpdateInsertAction()

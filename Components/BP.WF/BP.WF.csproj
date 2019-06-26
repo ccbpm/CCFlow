@@ -318,8 +318,9 @@
     </Compile>
     <Compile Include="Template\SQLTemplate.cs" />
     <Compile Include="Template\DirectionStation.cs" />
-    <Compile Include="Template\NodeYGFlow.cs" />
+    <Compile Include="Template\SubFlow\SubFlowYanXu.cs" />
     <Compile Include="Template\MapFrmNode.cs" />
+    <Compile Include="Template\SubFlow\SubFlowHand.cs" />
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -507,7 +508,7 @@
     <Compile Include="WF.cs" />
     <Compile Include="WFEnum.cs" />
     <Compile Include="WF\GenerWorkFlow.cs" />
-    <Compile Include="Template\FrmSubFlow.cs" />
+    <Compile Include="Template\SubFlow\FrmSubFlow.cs" />
     <Compile Include="WF\FlowEventBase.cs" />
     <Compile Include="WF\FlowOpList.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />

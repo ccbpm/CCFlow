@@ -92,10 +92,8 @@ namespace BP.WF.Port
         public const string Depts = "Depts";
         public const string FK_Dept = "FK_Dept";
         public const string Idx = "Idx";
-        public const string FtpUrl = "FtpUrl";
         public const string Style = "Style";
         public const string Msg = "Msg";
-        public const string TM = "TM";
         public const string UseSta = "UseSta";
         /// <summary>
         /// 授权的人员
@@ -149,6 +147,9 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.UseSta, value);
             }
         }
+        /// <summary>
+        /// 部门编号
+        /// </summary>
         public string FK_Dept
         {
             get
@@ -160,6 +161,9 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.FK_Dept, value);
             }
         }
+        /// <summary>
+        /// 风格文件
+        /// </summary>
         public string Style
         {
             get
@@ -171,31 +175,10 @@ namespace BP.WF.Port
                 this.SetValByKey(WFEmpAttr.Style, value);
             }
         }
-        public string TM
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.TM);
-            }
-            set
-            {
-                this.SetValByKey(WFEmpAttr.TM, value);
-            }
-        }
+         
         /// <summary>
-        /// 微信号的OpenID.
+        /// 电话
         /// </summary>
-        public string OpenID
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.TM);
-            }
-            set
-            {
-                this.SetValByKey(WFEmpAttr.TM, value);
-            }
-        }
         public string Tel
         {
             get
@@ -335,17 +318,7 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.SPass, value);
             }
         }
-        public string FtpUrl
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.FtpUrl);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.FtpUrl, value);
-            }
-        }
+
         /// <summary>
         /// 授权方式
         /// </summary>
@@ -438,10 +411,8 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.Tel, null, "Tel", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.FK_Dept, null, "FK_Dept", true, true, 0, 100, 36);
                 map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
-                map.AddTBString(WFEmpAttr.TM, null, "即时通讯号", true, true, 0, 50, 20);
 
-                map.AddDDLSysEnum(WFEmpAttr.AlertWay, 3, "收听方式", true, true,
-                    WFEmpAttr.AlertWay);
+                map.AddDDLSysEnum(WFEmpAttr.AlertWay, 3, "收听方式", true, true, WFEmpAttr.AlertWay);
                 map.AddTBString(WFEmpAttr.Author, null, "授权人", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.AuthorDate, null, "授权日期", true, true, 0, 50, 20);
 
@@ -454,7 +425,6 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.Stas, null, "岗位s", true, true, 0, 3000, 20);
                 map.AddTBString(WFEmpAttr.Depts, null, "Deptss", true, true, 0, 100, 36);
 
-                map.AddTBString(WFEmpAttr.FtpUrl, null, "FtpUrl", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
                 map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 4000, 20);
 

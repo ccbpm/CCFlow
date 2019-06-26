@@ -1847,7 +1847,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                msg = "err@退出时发生错误。" + ex.Message;
+                msg = "err@退出时发生错误:" + ex.Message;
             }
             return msg;
         }
@@ -1858,7 +1858,7 @@ namespace BP.WF.HttpHandler
         public string AuthorList_Init()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM WF_Emp WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
+            ps.SQL = "SELECT No,Name,AuthorDate FROM WF_Emp WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
             ps.Add("AUTHOR", BP.Web.WebUser.No);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
@@ -1866,6 +1866,7 @@ namespace BP.WF.HttpHandler
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["AUTHORDATE"].ColumnName = "AuthorDate";
             }
             return BP.Tools.Json.ToJson(dt);
         }

@@ -794,9 +794,8 @@ namespace BP.WF.Template
 
 
                 #region 父子流程.
-
                 rm = new RefMethod();
-                rm.Title = "父子流程";
+                rm.Title = "子流程基本设置";
                 rm.Icon = "../../WF/Admin/AttrNode/Img/SubFlows.png";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlow";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -804,8 +803,22 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "手动启动子流程"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoSubFlowHand";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "父子流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "自动触发子流程"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoSubFlowAuto";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "父子流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "延续子流程"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoYGFlows";
+                rm.ClassMethodName = this.ToString() + ".DoSubFlowYanXu";
                 //  rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "父子流程";
@@ -949,14 +962,7 @@ namespace BP.WF.Template
             return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
         }
 
-        /// <summary>
-        /// 父子流程
-        /// </summary>
-        /// <returns></returns>
-        public string DoSubFlow()
-        {
-            return "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PK=" + this.NodeID;
-        }
+     
         /// <summary>
         /// 接受人规则
         /// </summary>
@@ -1041,14 +1047,40 @@ namespace BP.WF.Template
         }
         #endregion
 
+        #region 子流程。
+        /// <summary>
+        /// 父子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlow()
+        {
+            return "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PK=" + this.NodeID;
+        }
+        /// <summary>
+        /// 自动触发
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlowAuto()
+        {
+            return "../../Admin/AttrNode/SubFlow/SubFlowAuto.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
+        }
+        /// <summary>
+        /// 手动启动子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlowHand()
+        {
+            return "../../Admin/AttrNode/SubFlow/SubFlowHand.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
+        }
         /// <summary>
         /// 延续子流程
         /// </summary>
         /// <returns></returns>
-        public string DoYGFlows()
+        public string DoSubFlowYanXu()
         {
-            return "../../Admin/AttrNode/NodeYGFlow.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/SubFlow/SubFlowYanXu.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
         }
+        #endregion 子流程。
 
 
         public string DoTurn()

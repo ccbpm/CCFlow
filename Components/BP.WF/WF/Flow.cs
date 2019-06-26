@@ -2198,9 +2198,9 @@ namespace BP.WF
                 #endregion
 
                 #region 检查越轨流程,子流程发起。
-                NodeYGFlows ygflows = new NodeYGFlows();
-                ygflows.Retrieve(NodeYGFlowAttr.FK_Flow, this.No);
-                foreach (NodeYGFlow flow in ygflows)
+                SubFlowYanXus ygflows = new SubFlowYanXus();
+                ygflows.Retrieve(SubFlowYanXuAttr.FK_Flow, this.No);
+                foreach (SubFlowYanXu flow in ygflows)
                 {
                     Flow fl = new Flow(flow.FK_Flow);
 
@@ -2678,7 +2678,7 @@ namespace BP.WF
 
 
             // 延续子流程。
-            NodeYGFlows fls = new Template.NodeYGFlows();
+            SubFlowYanXus fls = new Template.SubFlowYanXus();
             fls.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
             ds.Tables.Add(fls.ToDataTableField("WF_NodeSubFlow"));
 
@@ -4905,7 +4905,7 @@ namespace BP.WF
                     case "WF_NodeSubFlow": //延续子流程.
                         foreach (DataRow dr in dt.Rows)
                         {
-                            NodeYGFlow yg = new NodeYGFlow();
+                            SubFlowYanXu yg = new SubFlowYanXu();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;

@@ -8,15 +8,37 @@ using BP.Port;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// 子流程类型
+    /// </summary>
+    public enum SubFlowType
+    {
+        /// <summary>
+        /// 手动的子流程
+        /// </summary>
+        HandSubFlow,
+        /// <summary>
+        /// 自动触发的子流程
+        /// </summary>
+        AutoSubFlow,
+        /// <summary>
+        /// 延续子流程
+        /// </summary>
+        YGFlow
+    }
+    /// <summary>
     /// 延续子流程属性
     /// </summary>
-    public class NodeYGFlowAttr : BP.En.EntityOIDNameAttr
+    public class SubFlowYanXuAttr : BP.En.EntityOIDNameAttr
     {
         #region 基本属性
         /// <summary>
         /// 标题
         /// </summary>
         public const string FK_Flow = "FK_Flow";
+        /// <summary>
+        /// 流程名称
+        /// </summary>
+        public const string FlowName = "FlowName";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -45,12 +67,16 @@ namespace BP.WF.Template
         /// 要退回的节点
         /// </summary>
         public const string ReturnToNode = "ReturnToNode";
+        /// <summary>
+        /// 子流程类型
+        /// </summary>
+        public const string SubFlowType = "SubFlowType";
         #endregion
     }
     /// <summary>
-    /// 延续子流程.	 
+    /// 延续子流程.
     /// </summary>
-    public class NodeYGFlow : EntityOID
+    public class SubFlowYanXu : EntityOID
     {
         #region 基本属性
         /// <summary>
@@ -62,7 +88,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
-                uac.IsInsert=false;
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -73,11 +99,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(NodeYGFlowAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(NodeYGFlowAttr.FK_Flow, value);
+                SetValByKey(SubFlowYanXuAttr.FK_Flow, value);
             }
         }
         /// <summary>
@@ -87,7 +113,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValRefTextByKey(NodeYGFlowAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
             }
         }
         /// <summary>
@@ -97,11 +123,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(NodeYGFlowAttr.CondExp);
+                return this.GetValStringByKey(SubFlowYanXuAttr.CondExp);
             }
             set
             {
-                SetValByKey(NodeYGFlowAttr.CondExp, value);
+                SetValByKey(SubFlowYanXuAttr.CondExp, value);
             }
         }
         /// <summary>
@@ -111,22 +137,22 @@ namespace BP.WF.Template
         {
             get
             {
-                return (ConnDataFrom)this.GetValIntByKey(NodeYGFlowAttr.ExpType);
+                return (ConnDataFrom)this.GetValIntByKey(SubFlowYanXuAttr.ExpType);
             }
             set
             {
-                SetValByKey(NodeYGFlowAttr.ExpType, (int)value);
+                SetValByKey(SubFlowYanXuAttr.ExpType, (int)value);
             }
         }
         public string FK_Node
         {
             get
             {
-                return this.GetValStringByKey(NodeYGFlowAttr.FK_Node);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Node);
             }
             set
             {
-                SetValByKey(NodeYGFlowAttr.FK_Node, value);
+                SetValByKey(SubFlowYanXuAttr.FK_Node, value);
             }
         }
         #endregion
@@ -135,7 +161,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 延续子流程
         /// </summary>
-        public NodeYGFlow() { }
+        public SubFlowYanXu() { }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -148,38 +174,60 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_NodeSubFlow", "延续子流程");
 
-                map.AddTBIntPKOID();                 
-                map.AddTBInt(NodeYGFlowAttr.FK_Node, 0, "节点", false, true);
+                map.AddTBIntPKOID();
+                map.AddTBInt(SubFlowYanXuAttr.FK_Node, 0, "节点", false, true);
 
-                map.AddDDLEntities(NodeYGFlowAttr.FK_Flow, null, "延续子流程", new Flows(), false);
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowType, 2, "子流程类型", true, false, SubFlowYanXuAttr.SubFlowType,
+                "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 
-                //map.AddDDLSysEnum(NodeYGFlowAttr.YGWorkWay, 1, "工作方式", true, true, NodeYGFlowAttr.YGWorkWay,
-                //    "@0=停止当前节点等待延续子流程运行完毕后该节点自动向下运行@1=启动延续子流程运行到下一步骤上去");
-
-                map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
-                map.AddDDLSysEnum(NodeYGFlowAttr.ExpType, 3, "表达式类型", true, true, NodeYGFlowAttr.ExpType,
+                map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
+                map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+                map.AddDDLSysEnum(SubFlowYanXuAttr.ExpType, 3, "表达式类型", true, true, SubFlowYanXuAttr.ExpType,
                    "@3=按照SQL计算@4=按照参数计算");
 
-                map.AddTBString(NodeYGFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+                map.AddTBString(SubFlowYanXuAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
 
                 //@du.
-                map.AddDDLSysEnum(NodeYGFlowAttr.YBFlowReturnRole, 0, "退回方式", true, true, NodeYGFlowAttr.YBFlowReturnRole,
+                map.AddDDLSysEnum(SubFlowYanXuAttr.YBFlowReturnRole, 0, "退回方式", true, true, SubFlowYanXuAttr.YBFlowReturnRole,
                   "@0=不能退回@1=退回到父流程的开始节点@2=退回到父流程的任何节点@3=退回父流程的启动节点@4=可退回到指定的节点");
 
-               // map.AddTBString(NodeYGFlowAttr.ReturnToNode, null, "要退回的节点", true, false, 0, 200, 150, true);
-                map.AddDDLSQL(NodeYGFlowAttr.ReturnToNode, "0", "要退回的节点",
-                    "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node; )",true);
+                // map.AddTBString(SubFlowYanXuAttr.ReturnToNode, null, "要退回的节点", true, false, 0, 200, 150, true);
+                map.AddDDLSQL(SubFlowYanXuAttr.ReturnToNode, "0", "要退回的节点",
+                    "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node; )", true);
 
+                map.AddTBInt(SubFlowYanXuAttr.Idx, 0, "显示顺序", true, false);
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        #region 移动.
+        /// <summary>
+        /// 上移
+        /// </summary>
+        /// <returns></returns>
+        public string DoUp()
+        {
+            this.DoOrderUp(SubFlowYanXuAttr.FK_Node, this.FK_Node, SubFlowYanXuAttr.SubFlowType, "2", SubFlowYanXuAttr.Idx);
+            return "执行成功";
+        }
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <returns></returns>
+        public string DoDown()
+        {
+            this.DoOrderDown(SubFlowYanXuAttr.FK_Node, this.FK_Node, SubFlowYanXuAttr.SubFlowType, "2", SubFlowYanXuAttr.Idx);
+            return "执行成功";
+        }
+        #endregion 移动.
+
     }
     /// <summary>
     /// 延续子流程集合
     /// </summary>
-    public class NodeYGFlows : EntitiesOID
+    public class SubFlowYanXus : EntitiesOID
     {
         #region 方法
         /// <summary>
@@ -189,7 +237,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new NodeYGFlow();
+                return new SubFlowYanXu();
             }
         }
         #endregion
@@ -198,38 +246,38 @@ namespace BP.WF.Template
         /// <summary>
         /// 延续子流程集合
         /// </summary>
-        public NodeYGFlows()
+        public SubFlowYanXus()
         {
         }
         /// <summary>
         /// 延续子流程集合.
         /// </summary>
         /// <param name="fk_node"></param>
-        public NodeYGFlows(int fk_node)
+        public SubFlowYanXus(int fk_node)
         {
-            this.Retrieve(NodeYGFlowAttr.FK_Node, fk_node);
+            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node);
         }
         #endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   
+        #region 为了适应自动翻译成java的需要,把实体转换成List
         /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<NodeYGFlow> ToJavaList()
+        public System.Collections.Generic.IList<SubFlowYanXu> ToJavaList()
         {
-            return (System.Collections.Generic.IList<NodeYGFlow>)this;
+            return (System.Collections.Generic.IList<SubFlowYanXu>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<NodeYGFlow> Tolist()
+        public System.Collections.Generic.List<SubFlowYanXu> Tolist()
         {
-            System.Collections.Generic.List<NodeYGFlow> list = new System.Collections.Generic.List<NodeYGFlow>();
+            System.Collections.Generic.List<SubFlowYanXu> list = new System.Collections.Generic.List<SubFlowYanXu>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((NodeYGFlow)this[i]);
+                list.Add((SubFlowYanXu)this[i]);
             }
             return list;
         }

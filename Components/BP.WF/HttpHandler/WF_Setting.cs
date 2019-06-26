@@ -54,6 +54,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+
         public string Default_Init()
         {
             Hashtable ht = new Hashtable();
@@ -111,6 +112,26 @@ namespace BP.WF.HttpHandler
             ht.Add("Author", wfemp.Author);
 
             return BP.Tools.Json.ToJson(ht);
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns>json数据</returns>
+        public string Author_Init()
+        {
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(BP.Web.WebUser.No);
+            Hashtable ht = emp.Row;
+            ht.Remove(BP.WF.Port.WFEmpAttr.StartFlows); //移除这一列不然无法形成json.
+            return emp.ToJson();
+        }
+        public string Author_Save()
+        {
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(BP.Web.WebUser.No);
+            emp.Author = this.GetRequestVal("Author");
+            emp.AuthorDate = this.GetRequestVal("AuthorDate");
+            emp.AuthorWay = this.GetRequestValInt("AuthorWay");
+            emp.Update();
+            return "保存成功";
         }
 
         #region 图片签名.

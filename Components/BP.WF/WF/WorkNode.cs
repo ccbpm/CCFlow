@@ -1110,11 +1110,11 @@ namespace BP.WF
 
 
             #region (最后)判断是否有延续流程.
-            NodeYGFlows ygflows = new NodeYGFlows();
-            ygflows.Retrieve(NodeYGFlowAttr.FK_Node, this.HisNode.NodeID);
+            SubFlowYanXus ygflows = new SubFlowYanXus();
+            ygflows.Retrieve(SubFlowYanXuAttr.FK_Node, this.HisNode.NodeID);
             if (ygflows.Count != 0 && 1 == 2)
             {
-                foreach (NodeYGFlow item in ygflows)
+                foreach (SubFlowYanXu item in ygflows)
                 {
                     bool isPass = false;
 

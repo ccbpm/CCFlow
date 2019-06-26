@@ -120,9 +120,9 @@ namespace BP.En
             Hashtable ht = this.Row;
             //如果不包含参数字段.
             if (isInParaFields == false)
-            {
-                return BP.Tools.Json.ToJsonEntityModel(ht);
-            }
+                   return BP.Tools.Json.ToJsonEntityModel(ht);
+
+            
 
             if (ht.ContainsKey("AtPara") == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);

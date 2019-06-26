@@ -21,7 +21,7 @@
         defer="defer"></script>
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt2019.js"
         defer="defer"></script>
-    <script src="Designer.js" type="text/javascript"  defer="defer"> </script>
+    <script src="Designer.js" type="text/javascript" defer="defer"> </script>
     <base target="_self" />
     <style type="text/css">
         body
@@ -142,18 +142,18 @@
 
             var tableCol = data.Sys_MapData[0].TableCol;
             if (tableCol == 0)
-                tableCol =  4;
+                tableCol = 4;
             else if (tableCol == 1)
-                tableCol =  6;
+                tableCol = 6;
             else if (tableCol == 2)
                 tableCol = 3;
             else
                 tableCol = 4;
-           
+
             var html = "";
-            
+
             html += "<tr>";
-            html += "<td colspan="+tableCol+" ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
+            html += "<td colspan=" + tableCol + " ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
             html += "</tr>";
 
             for (var k = 0; k < groupFields.length; k++) {
@@ -444,7 +444,7 @@
                     var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK + "&IsReadonly=1";
 
                     var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan="+tableCol+" id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
+                    return "<tr><td colspan=" + tableCol + " id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
 
                     break;
                 case "SubFlow":
@@ -457,7 +457,7 @@
                     var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
 
                     var frameDocs = "<iframe ID='F_SubFlow_" + nodeID + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + compent.SF_H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan="+tableCol+" id='SubFlow" + nodeID + "' style='width:300px;'>" + frameDocs + "</td></tr>";
+                    return "<tr><td colspan=" + tableCol + " id='SubFlow" + nodeID + "' style='width:300px;'>" + frameDocs + "</td></tr>";
 
                     break;
                 case "Frame":
@@ -471,7 +471,7 @@
                         src = athEn.URL + "&PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + athEn.MyPK;
 
                     var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan="+tableCol+" id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
+                    return "<tr><td colspan=" + tableCol + " id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
 
                     break;
                 case "FWC":
@@ -488,7 +488,7 @@
                         h = 400;
 
                     var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;' leftMargin='0' topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan="+tableCol+" style='width:100%;height:" + h + "px;' id='FWC' >" + frameUrl + "</td></tr>";
+                    return "<tr><td colspan=" + tableCol + " style='width:100%;height:" + h + "px;' id='FWC' >" + frameUrl + "</td></tr>";
                 case "Dtl":
 
                     var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });
@@ -499,9 +499,9 @@
                     if (dtl.length == 1) {
                         var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageParam.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
                         var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                        return "<tr><td colspan="+tableCol+" id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
+                        return "<tr><td colspan=" + tableCol + " id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
                     } else {
-                        html = "<tr><td colspan="+tableCol+" style='width:100%;height:200px;' > 从表[" + groupEn.CtrlID + "]丢失</td></tr>";
+                        html = "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 从表[" + groupEn.CtrlID + "]丢失</td></tr>";
                         return html;
                     }
                     break;
@@ -512,7 +512,7 @@
             return html;
         }
 
-        function GenerGroupTR(groupEn,tabCol) {
+        function GenerGroupTR(groupEn, tabCol) {
 
             var lab = groupEn.Lab;
             if (lab == "")
@@ -578,7 +578,7 @@
                 rightBtn += "</div>";
 
                 var html = "<tr>";
-                html += "<th colspan="+tabCol+">";
+                html += "<th colspan=" + tabCol + ">";
 
 
                 html += leftBtn + rightBtn;
@@ -808,7 +808,7 @@
             if (ftype == 1) {
 
 
-                if (uiContralType == 0 ) {
+                if (uiContralType == 0) {
                     title = '字段String属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }
@@ -818,7 +818,7 @@
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
-                if (uiContralType == 8) {   
+                if (uiContralType == 8) {
                     title = '手写签名版';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }
@@ -836,7 +836,7 @@
 
                     if (imgEn.RetrieveFromDBSources() == 0) {
                         var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
-                        
+
                         imgEn.CopyJSON(mapAttr);
                         imgEn.MyPK = mypk;
                         imgEn.Insert();
@@ -1035,11 +1035,11 @@
         function EditSubFlow(mypk) {
 
             //alert(mypk);
-          //  if (mypk == null || mypk == "undefined")
-                mypk = GetQueryString("FK_Node");
+            //  if (mypk == null || mypk == "undefined")
+            mypk = GetQueryString("FK_Node");
 
             // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-                var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
 
             OpenEasyUiDialog(url, "eudlgframe", '组件', 700, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1259,7 +1259,7 @@
             alert += "\t\n2.在创建一个框架后，在框架属性里设置。";
             alert += "\t\n3.请输入框架ID,要求是字母数字下划线，非中文等特殊字符。";
 
-            var val = prompt('新建框架:'+alert, 'Frame1');
+            var val = prompt('新建框架:' + alert, 'Frame1');
 
             if (val == null) {
                 return;

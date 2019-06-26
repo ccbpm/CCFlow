@@ -2222,6 +2222,28 @@ var WebUser = function () {
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
     }
 
+    /*
+    try {
+    if (typeof (eval(webUser)) == "undefined") {
+    console.log("已声明变量,但未初始化");
+    // return false;
+    } else {
+    console.log("已声明变量,且已经初始化");
+    return true;
+    }
+    } catch (e) {
+    console.log("未声明变量");
+    }
+
+    if (webUser != undefined) {
+    var self = this;
+    $.each(jsonString, function (n, o) {
+    self[n] = o;
+    });
+    return;
+    }*/
+
+
     var jsonString = {};
 
     $.ajax({

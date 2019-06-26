@@ -298,18 +298,26 @@ namespace BP.WF
             bool isMeet = false;
             foreach (TransferCustom item in ens)
             {
-                if (item.FK_Node == currNodeID && item.IsEnable==true)
+                if (item.FK_Node == currNodeID)
                 {
                     isMeet = true;
                     continue;
                 }
 
-                if (isMeet == true)
+                if (isMeet == true && item.IsEnable == true)
                     return item;
             }
 
             if (currNodeID.ToString().EndsWith("01") == true)
-                return (TransferCustom)ens[0];
+            {
+                foreach (TransferCustom item in ens)
+                {
+                    if(item.IsEnable == true)
+                        return (TransferCustom)item;
+                }
+
+            }
+                
             return null;
             // return null;
         }

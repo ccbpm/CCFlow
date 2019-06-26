@@ -1751,6 +1751,14 @@ namespace BP.WF.Template
             //更新缓存数据。
             Flow fl = new Flow(this.No);
             fl.RetrieveFromDBSources();
+            #region StartFlows的清缓存
+            if (fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart)
+            {
+                //清空WF_Emp 的StartFlows
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+            }
+            #endregion StartFlows的清缓存
+
             fl.Copy(this);
 
             #region 检查数据完整性 - 同步业务表数据。
@@ -1827,12 +1835,7 @@ namespace BP.WF.Template
             }
             #endregion 检查数据完整性. - 同步业务表数据。
 
-            #region StartFlows的清缓存
-            if(fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart){
-                //清空WF_Emp 的StartFlows
-                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-            }
-            #endregion StartFlows的清缓存
+           
 
             return base.beforeUpdate();
         }

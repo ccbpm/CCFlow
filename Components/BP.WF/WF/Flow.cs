@@ -532,6 +532,20 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.FlowNoteExp, value);
             }
         }
+        /// <summary>
+        /// 是否可以在手机里启用
+        /// </summary>
+        public bool IsStartInMobile
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsStartInMobile);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.IsStartInMobile, value);
+            }
+        }
         #endregion 业务处理
 
         #region 创建新工作.

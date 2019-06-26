@@ -6,6 +6,7 @@ using BP.En;
 using BP.WF.Template;
 using BP.Web;
 using BP.Port;
+using BP.Sys;
 
 namespace BP.WF
 {
@@ -73,29 +74,87 @@ namespace BP.WF
                 {
                     string sql = "SELECT No, Name FROM Port_Emp WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    if (dt.Rows.Count != 1)
+                    if (dt.Rows.Count ==0)
                         continue;
+                    foreach(DataRow dr in dt.Rows){
+                        string no = dr[0].ToString();
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
 
-                    string no = dt.Rows[0][0].ToString();
-                    string name = dt.Rows[0][1].ToString();
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
 
-                    // sa.Delete(SelectAccperAttr.FK_Node,item.NodeID, SelectAccperAttr.WorkID, workid); //删除已经存在的数据.
-                    sa.FK_Emp = no;
-                    sa.EmpName = name;
-                    sa.FK_Node = item.NodeID;
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
 
-                    sa.WorkID = workid;
-                    sa.Info = "无";
-                    sa.AccType = 0;
-                    sa.ResetPK();
-                    if (sa.IsExits)
-                        continue;
-
-                    //计算接受任务时间与应该完成任务时间.
-                    InitDT(sa, item);
-
-                    sa.Insert();
+                        sa.Insert();
+                    }
                     continue;
+                }
+
+                //按照绑定的部门计算
+                if (item.HisDeliveryWay == DeliveryWay.ByDept)
+                {
+                    string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.Add("WorkID", currWorkNode.HisWork.OID);
+                    ps.SQL = "SELECT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND AccType=0 ORDER BY IDX";
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                    {
+                        if (item.HisFlow.HisFlowAppType == FlowAppType.Normal)
+                        {
+                            ps = new Paras();
+                            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+                            {
+                                ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                            }
+                            else if (BP.WF.Glo.OSModel == OSModel.OneMore)
+                            {
+                                ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                            }
+
+                            ps.Add("FK_Node", item.NodeID);
+                            dt = DBAccess.RunSQLReturnTable(ps);
+                            if (dt.Rows.Count == 0)
+                                continue;
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                string no = dr[0].ToString();
+                                string name = dr[1].ToString();
+                                sa = new SelectAccper();
+                                sa.FK_Emp = no;
+                                sa.EmpName = name;
+                                sa.FK_Node = item.NodeID;
+
+                                sa.WorkID = workid;
+                                sa.Info = "无";
+                                sa.AccType = 0;
+                                sa.ResetPK();
+                                if (sa.IsExits)
+                                    continue;
+
+                                //计算接受任务时间与应该完成任务时间.
+                                InitDT(sa, item);
+
+                                sa.Insert();
+                            }
+
+                        }
+
+                        continue;
+                    }
+
+                    continue;
+                   
                 }
 
                 //处理与指定节点相同的人员.

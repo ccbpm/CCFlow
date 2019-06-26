@@ -2,25 +2,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>驰骋工作流</title>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+      <link href="../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
+      <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+       <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+       <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
+    <style type="text/css">
+        .ccflow-input-span-container
+        {
+            border:0;
+        }
+        th
+        {
+            border-width: 1px;
+            border-color: #C2D5E3;
+            border-style: solid;
+            line-height: 25px;
+            color: #0a0a0a;
+            white-space: nowrap;
+            padding: 5px 2px;
+            background-color: #e0ecff;
+            font-size: 14px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: bolder;
+        }
+    </style>
     <script type="text/javascript" language="javascript">
+        var currSelectNode = "";
         $(function () {
 
             var html = "<table style='width:100%;' >";
             html += "<tr>";
-            html += "<th>步骤</th>";
-            html += "<th>节点</th>";
-            html += "<th>处理人</th>";
-            html += "<th>操作</th>";
+            html += "<th width='5%'>步骤</th>";
+            html += "<th width='*'>节点</th>";
+            html += "<th width='65%'>处理人</th>";
+            html += "<th width='100px'>作</th>";
             html += "</tr>";
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnJSON("TransferCustom_Init");
@@ -36,8 +65,8 @@
 
                 html += "<tr>";
                 html += "<td>" + gwl.FK_Node + " </td>";
-                html += "<td>" + gwl.NodeName + " </td>";
-                html += "<td>" + gwl.FK_EmpT + " </td>";
+                html += "<td>" + gwl.FK_NodeText + " </td>";
+                html += "<td>" + gwl.FK_EmpText + " </td>";
                 html += "<td>无</td>";
                 html += "</tr>";
             }
@@ -52,7 +81,10 @@
                 html += "<tr>";
                 html += "<td>" + tc.FK_Node + " </td>";
                 html += "<td>" + tc.NodeName + " </td>";
-                html += "<td>" + tc.WorkerName + " </td>";
+                html += "<td >";
+                //处理接收人的事件
+                html += "<div id='" + tc.FK_Node + "_mtags' style='width:99%'  class='mtags'></div>";
+                html += " </td>";
                 html += "<td>[<a href=\"javascript:DoUp('" + tc.MyPK + "');\">上移</a>][<a href=\"javascript:DoDown('" + tc.MyPK + "');\">下移</a>][<a href=\"javascript:Remove('" + tc.MyPK + "');\">排除</a>]</td>";
                 html += "</tr>";
             }
@@ -73,10 +105,103 @@
             }
 
             $("#docs").html(html);
+            var initJsonData = [];
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+
+            if (dept == null || dept == '' || dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+
+            if (dept == undefined) {
+                dept = "0";
+            }
+
+            for (var i = 0; i < tcs.length; i++) {
+                initJsonData = [];
+                var tc = tcs[i];
+                var workers = tc.Worker.split(',');
+                var workerNames = tc.WorkerName.split(',');
+                var FK_Node = tc.FK_Node;
+                $.each(workers, function (k, o) {
+                    if (o != null && o != "")
+                        initJsonData.push({
+                            "No": o,
+                            "Name": workerNames[k],
+                            "MyPK": tc.MyPK
+                        });
+                });
+                var mtags = $("#" + tc.FK_Node + "_mtags");
+                mtags.mtags({
+                    "fit": true,
+                    "onUnselect": function (record) {
+                        RemoveEmp(record.MyPK, record.No, record.Name);
+                    }
+                });
+
+                if (initJsonData.length != 0)
+                    mtags.mtags("loadData", initJsonData);
+              
+            }
+
+            $.each($(".mtags"), function (i, mtags) {
+                var w = window.parent.document.body.clientWidth - 300;
+                var h = window.parent.document.body.clientHeight - 40;
+                $(mtags).bind("click", function () {
+                    currSelectNode = $(mtags).attr("id").replace("_mtags", "");
+                    var url = "./SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + currSelectNode + "&s=" + Math.random();
+                    $('#iframeSelectEmpsForm').attr('src', url);
+                    $('#SelectEmpsModal').modal().show();
+                });
+
+            });
 
         })
 
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
 
+            $('#SelectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+            var val = frames["iframeSelectEmpsForm"].window.returnVal;
+            var mypk = currSelectNode+"_"+GetQueryString("WorkID");
+            var en = new Entity("BP.WF.TransferCustom", mypk);
+            en.Worker = en.Worker + "," + val.No+",";
+            en.WorkerName = en.WorkerName + "," + val.Name+",";
+            en.Update();
+            InitMtags($("#" + en.FK_Node + "_mtags"),en.MyPK, en.Worker, en.WorkerName);
+           
+        }
+
+        //初始化接收人员列表
+        function InitMtags(mtags,MyPK, worker, workerName) {
+            var workers = worker.split(',');
+            var workerNames = workerName.split(',');
+            var initJsonData = [];
+            $.each(workers, function (k, o) {
+                if (o != null && o != "")
+                    initJsonData.push({
+                        "No": o,
+                        "Name": workerNames[k],
+                        "MyPK":MyPK
+                    });
+            });
+            mtags.mtags("loadData", initJsonData);
+        }
+
+        //删除人员
+        function RemoveEmp(mypk, empNo, empName) {
+            var en = new Entity("BP.WF.TransferCustom", mypk);
+            en.Worker = en.Worker.replace(empNo+",","");
+            en.WorkerName = en.WorkerName.replace(empName + ",", "");
+            en.Update();
+            InitMtags($("#" + en.FK_Node + "_mtags"),mypk, en.Worker, en.WorkerName);
+        }
         function DoUp(myPK) {
 
             var en = new Entity("BP.WF.TransferCustom", myPK);
@@ -119,14 +244,9 @@
                 流转设置</caption>
             <tr>
                 <td>
-                    <div id="docs" name="docs">
+                    <div id="docs" name="docs" style="width:100%">
                     </div>
                 </td>
-            </tr>
-            <tr>
-                <th colspan="1">
-                    可选节点
-                </th>
             </tr>
             <tr>
                 <td colspan="4">
@@ -137,5 +257,18 @@
         </table>
     </center>
     </form>
+    <div class="modal fade" id="SelectEmpsModal">
+         <div class="modal-dialog">
+             <div class="modal-content" style="border-radius:0px;width:700px;">
+                  <div class="modal-header">
+                    <button type="button" class="close" style="color:#0000007a;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                         <h4 class="modal-title">接受人</h4>
+                  </div>
+                  <div class="modal-body">
+                      <iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>
+                  </div>
+           </div><!-- /.modal-content -->'
+        </div><!-- /.modal-dialog -->'
+   </div>
 </body>
 </html>

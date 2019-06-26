@@ -145,13 +145,11 @@ namespace BP.WF.Template
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "发起限制规则:如果当前为子流程，仅仅只能被调用1次，不能被重复调用。", 
                     true, true, true);
 
-
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "发起限制规则:指定的流程启动后，才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowStart, "指定的流程启动后，才能启动该子流程，多个子流程用逗号分开. 001,002");
-
 
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "发起限制规则:指定的流程结束后，才能启动该子流程(请在文本框配置子流程).",
@@ -159,16 +157,12 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
 
-
-
                 //map.AddDDLSysEnum(SubFlowHandAttr.YGWorkWay, 1, "工作方式", true, true, SubFlowHandAttr.YGWorkWay,
                 //"@0=停止当前节点等待手工启动子流程运行完毕后该节点自动向下运行@1=启动手工启动子流程运行到下一步骤上去");
-
-            //    map.AddDDLSysEnum(SubFlowHandAttr.ExpType, 3, "表达式类型", true, true, SubFlowHandAttr.ExpType,
-              //     "@3=按照SQL计算@4=按照参数计算");
-
-               // map.AddTBString(SubFlowHandAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
-                 //
+                // map.AddDDLSysEnum(SubFlowHandAttr.ExpType, 3, "表达式类型", true, true, SubFlowHandAttr.ExpType,
+                //  "@3=按照SQL计算@4=按照参数计算");
+                // map.AddTBString(SubFlowHandAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+                //
 
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
                 this._enMap = map;

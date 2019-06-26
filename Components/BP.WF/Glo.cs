@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190626;
+        public static int Ver = 20190627;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -269,6 +269,17 @@ namespace BP.WF
 
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
+
+            //检查子流程表.
+            if (BP.DA.DBAccess.IsExitsObject("WF_NodeSubFlow") == true)
+            {
+                if (BP.DA.DBAccess.IsExitsTableCol("WF_NodeSubFlow", "OID") == true)
+                {
+                    DBAccess.RunSQL("DROP TABLE WF_NodeSubFlow");
+                    SubFlowHand sub = new SubFlowHand();
+                    sub.CheckPhysicsTable();
+                }
+            }
 
             //检查表.
             BP.Sys.GloVar gv = new GloVar();

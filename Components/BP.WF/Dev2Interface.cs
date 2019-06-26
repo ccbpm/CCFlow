@@ -90,7 +90,6 @@ namespace BP.WF
                         {
                             ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
                         }
-
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
                         break;
                     case Port.AuthorWay.SpecFlows:
@@ -221,7 +220,7 @@ namespace BP.WF
         {
             get
             {
-                string sql = "select  COUNT(WorkID) AS Num from WF_GenerWorkFlow where WFState=4 and  WorkID in (SELECT distinct WorkID FROM WF_HungUp WHERE Rec='" + BP.Web.WebUser.No + "')";
+                string sql = "SELECT  COUNT(WorkID) AS Num from WF_GenerWorkFlow where WFState=4 and  WorkID in (SELECT distinct WorkID FROM WF_HungUp WHERE Rec='" + BP.Web.WebUser.No + "')";
                 return BP.DA.DBAccess.RunSQLReturnValInt(sql);
             }
         }

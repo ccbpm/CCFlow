@@ -10,51 +10,30 @@ namespace BP.WF.Template
     /// <summary>
     /// 手工启动子流程属性
     /// </summary>
-    public class SubFlowHandAttr : BP.En.EntityOIDNameAttr
+    public class SubFlowHandAttr : SubFlowYanXuAttr
     {
-        #region 基本属性
         /// <summary>
-        /// 标题
+        /// 如果当前为子流程，仅仅只能被调用1次，不能被重复调用。
         /// </summary>
-        public const string FK_Flow = "FK_Flow";
+        public const string StartOnceOnly = "StartOnceOnly";
         /// <summary>
-        /// 顺序号
+        /// 指定的流程启动后，才能启动该子流程.
         /// </summary>
-        public const string Idx = "Idx";
+        public const string SpecFlowStart = "SpecFlowStart";
+        public const string IsEnableSpecFlowStart = "IsEnableSpecFlowStart";
+        
         /// <summary>
-        /// 显示在那里？
+        /// 指定的子流程结束后，才能启动该子流程.
         /// </summary>
-        public const string YGWorkWay = "YGWorkWay";
-        /// <summary>
-        /// 节点ID
-        /// </summary>
-        public const string FK_Node = "FK_Node";
-        /// <summary>
-        /// 表达式类型
-        /// </summary>
-        public const string ExpType = "ExpType";
-        /// <summary>
-        /// 条件表达式
-        /// </summary>
-        public const string CondExp = "CondExp";
-        /// <summary>
-        /// 越轨子流程退回类型
-        /// </summary>
-        public const string YBFlowReturnRole = "YBFlowReturnRole";
-        /// <summary>
-        /// 要退回的节点
-        /// </summary>
-        public const string ReturnToNode = "ReturnToNode";
-        /// <summary>
-        /// 子流程类型
-        /// </summary>
-        public const string SubFlowType = "SubFlowType";
-        #endregion
+        public const string SpecFlowOver = "SpecFlowOver";
+        public const string IsEnableSpecFlowOver = "IsEnableSpecFlowOver";
+
+
     }
     /// <summary>
     /// 手工启动子流程.
     /// </summary>
-    public class SubFlowHand : EntityOID
+    public class SubFlowHand : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -152,30 +131,44 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_NodeSubFlow", "手动启动子流程");
 
-                map.AddTBIntPKOID();                 
+                map.AddMyPK();
+
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
 
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 
-                map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, false, 0, 10, 150, true);
-                map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, false, 0, 200, 150, true);
+
+                map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
+                map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+
+                map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "发起限制规则:如果当前为子流程，仅仅只能被调用1次，不能被重复调用。", 
+                    true, true, true);
+
+
+                //启动限制规则.
+                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "发起限制规则:指定的流程启动后，才能启动该子流程(请在文本框配置子流程).",
+                 true, true, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
+                map.SetHelperAlert(SubFlowHandAttr.SpecFlowStart, "指定的流程启动后，才能启动该子流程，多个子流程用逗号分开. 001,002");
+
+
+                //启动限制规则.
+                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "发起限制规则:指定的流程结束后，才能启动该子流程(请在文本框配置子流程).",
+                 true, true, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
+                map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
+
+
 
                 //map.AddDDLSysEnum(SubFlowHandAttr.YGWorkWay, 1, "工作方式", true, true, SubFlowHandAttr.YGWorkWay,
                 //"@0=停止当前节点等待手工启动子流程运行完毕后该节点自动向下运行@1=启动手工启动子流程运行到下一步骤上去");
 
-                map.AddDDLSysEnum(SubFlowHandAttr.ExpType, 3, "表达式类型", true, true, SubFlowHandAttr.ExpType,
-                   "@3=按照SQL计算@4=按照参数计算");
+            //    map.AddDDLSysEnum(SubFlowHandAttr.ExpType, 3, "表达式类型", true, true, SubFlowHandAttr.ExpType,
+              //     "@3=按照SQL计算@4=按照参数计算");
 
-                map.AddTBString(SubFlowHandAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
-
-                //@du.
-                map.AddDDLSysEnum(SubFlowHandAttr.YBFlowReturnRole, 0, "退回方式", true, true, SubFlowHandAttr.YBFlowReturnRole,
-                  "@0=不能退回@1=退回到父流程的开始节点@2=退回到父流程的任何节点@3=退回父流程的启动节点@4=可退回到指定的节点");
-
-               // map.AddTBString(SubFlowHandAttr.ReturnToNode, null, "要退回的节点", true, false, 0, 200, 150, true);
-                map.AddDDLSQL(SubFlowHandAttr.ReturnToNode, "0", "要退回的节点",
-                    "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node; )",true);
+               // map.AddTBString(SubFlowHandAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+                 //
 
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
                 this._enMap = map;
@@ -183,11 +176,17 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        protected override bool beforeInsert()
+        {
+            this.MyPK = this.FK_Node + "_" + this.FK_Flow + "_0";
+            return base.beforeInsert();
+        }
     }
     /// <summary>
     /// 手工启动子流程集合
     /// </summary>
-    public class SubFlowHands : EntitiesOID
+    public class SubFlowHands : EntitiesMyPK
     {
         #region 方法
         /// <summary>

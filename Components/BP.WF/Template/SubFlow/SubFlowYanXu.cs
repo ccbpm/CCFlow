@@ -76,7 +76,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 延续子流程.
     /// </summary>
-    public class SubFlowYanXu : EntityOID
+    public class SubFlowYanXu : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -105,7 +105,7 @@ namespace BP.WF.Template
             {
                 SetValByKey(SubFlowYanXuAttr.FK_Flow, value);
             }
-        }
+        }   
         /// <summary>
         /// 流程名称
         /// </summary>
@@ -174,7 +174,8 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_NodeSubFlow", "延续子流程");
 
-                map.AddTBIntPKOID();
+                map.AddMyPK();
+
                 map.AddTBInt(SubFlowYanXuAttr.FK_Node, 0, "节点", false, true);
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowType, 2, "子流程类型", true, false, SubFlowYanXuAttr.SubFlowType,
@@ -182,6 +183,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+
                 map.AddDDLSysEnum(SubFlowYanXuAttr.ExpType, 3, "表达式类型", true, true, SubFlowYanXuAttr.ExpType,
                    "@3=按照SQL计算@4=按照参数计算");
 
@@ -201,6 +203,16 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 设置主键
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeInsert()
+        {
+            this.MyPK = this.FK_Node + "_" + this.FK_Flow + "_2";
+            return base.beforeInsert();
+        }
 
         #region 移动.
         /// <summary>
@@ -227,7 +239,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 延续子流程集合
     /// </summary>
-    public class SubFlowYanXus : EntitiesOID
+    public class SubFlowYanXus : EntitiesMyPK
     {
         #region 方法
         /// <summary>

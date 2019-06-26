@@ -588,12 +588,26 @@ namespace BP.WF.Template
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
-                RefMethod rm = new RefMethod();
-                rm.Title = "设置子流程";
-                rm.ClassMethodName = this.ToString() + ".DoSubFlow";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
 
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "手动启动子流程"; 
+                rm.ClassMethodName = this.ToString() + ".DoSubFlowHand";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "自动触发子流程"; 
+                rm.ClassMethodName = this.ToString() + ".DoSubFlowAuto";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "延续子流程";  
+                rm.ClassMethodName = this.ToString() + ".DoSubFlowYanXu";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -601,10 +615,32 @@ namespace BP.WF.Template
         }
         #endregion
 
-        public string DoSubFlow()
+        #region 子流程。
+        /// <summary>
+        /// 自动触发
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlowAuto()
         {
-            return  "../../Admin/AttrNode/FrmNodeComponent/FrmSubFlow.htm?NodeID=" + this.NodeID;
+            return "../../Admin/AttrNode/SubFlow/SubFlowAuto.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
         }
+        /// <summary>
+        /// 手动启动子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlowHand()
+        {
+            return "../../Admin/AttrNode/SubFlow/SubFlowHand.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
+        }
+        /// <summary>
+        /// 延续子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlowYanXu()
+        {
+            return "../../Admin/AttrNode/SubFlow/SubFlowYanXu.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
+        }
+        #endregion 子流程。
 
         #region 重写方法.
         protected override bool beforeUpdateInsertAction()

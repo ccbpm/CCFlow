@@ -195,7 +195,10 @@ function GenerFrm() {
                 //Handler 获取外部数据源
                 if (srcType == 5) {
                     var selectStatement = sfTable.SelectStatement;
-                    selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    if(plant == "CCFLow")
+                        selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    else
+                        selectStatement = basePath + "/DataUser/SFTableHandler" + selectStatement;
                     operdata = DBAccess.RunDBSrc(selectStatement, 1);
                 }
                 //JavaScript获取外部数据源

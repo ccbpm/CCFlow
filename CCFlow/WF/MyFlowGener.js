@@ -1401,7 +1401,10 @@ function GenerWorkNode() {
                 //Handler 获取外部数据源
                 if (srcType == 5) {
                     var selectStatement = sfTable.SelectStatement;
-                    selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    if(plant=='CCFlow')
+                        selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    else
+                        selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
                     operdata = DBAccess.RunDBSrc(selectStatement, 1);
                 }
                 //JavaScript获取外部数据源
@@ -1794,6 +1797,17 @@ function InitToolBar() {
         });
     }
 
+    //流转自定义
+    if ($('[name=TransferCustom]').length > 0) {
+        $('[name=TransferCustom]').attr('onclick', '');
+        $('[name=TransferCustom]').unbind('click');
+        $('[name=TransferCustom]').bind('click', function () {
+            initModal("TransferCustom");
+            $('#returnWorkModal').modal().show();
+        });
+    }
+
+
     if ($('[name=Shift]').length > 0) {
 
         $('[name=Shift]').attr('onclick', '');
@@ -1953,6 +1967,19 @@ function initModal(modalType, toNode) {
             case "returnBack":
                 $('#modalHeader').text("提示信息");
                 modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                break;
+            case "TransferCustom":
+                $('#modalHeader').text("流转自定义");
+                //设置弹出页面的宽度高度
+                var w = document.body.clientWidth - 300;
+                var h = document.body.clientHeight - 40;
+                $("#returnWorkModal .modal-dialog").css("width", w + "px");
+                $("#returnWorkModal .modal-dialog").css("height", h + "px");
+
+                $("#returnWorkModal .modal-content").css("width", w + "px");
+                $("#returnWorkModal .modal-content").css("height", h + "px");
+                $("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
+                modalIframeSrc = "./WorkOpt/TransferCustom.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             case "accpter":
                 $('#modalHeader').text("工作移交");

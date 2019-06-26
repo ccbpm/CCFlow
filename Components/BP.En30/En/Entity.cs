@@ -120,9 +120,9 @@ namespace BP.En
             Hashtable ht = this.Row;
             //如果不包含参数字段.
             if (isInParaFields == false)
-                   return BP.Tools.Json.ToJsonEntityModel(ht);
+                return BP.Tools.Json.ToJsonEntityModel(ht);
 
-            
+
 
             if (ht.ContainsKey("AtPara") == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
@@ -814,15 +814,17 @@ namespace BP.En
             {
                 idx++;
                 myNo = dr[pk].ToString();
-                if (myNo == pkval)
+
+                if (myNo.Equals(pkval) == true)
                     isMeet = true;
 
                 if (isMeet == false)
                     beforeNo = myNo;
-                DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'  AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKey2 + "='" + gVal2 + "') ");
+
+                DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'");
             }
-            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'  AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKey2 + "='" + gVal2 + "')");
-            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'  AND   (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKey2 + "='" + gVal2 + "')");
+            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'");
+            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
         }
 
         protected void DoOrderDown(string idxAttr)

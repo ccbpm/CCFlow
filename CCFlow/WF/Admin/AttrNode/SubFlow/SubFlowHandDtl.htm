@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>延续子流程</title>
+    <title>手动子流程</title>
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -32,16 +32,14 @@
             var dt = new Entities("BP.WF.Flows");
             dt.RetrieveAll("FlowSort");
 
-            var yanXus = new Entities("BP.WF.Template.SubFlowYanXus");
-            yanXus.Retrieve("FK_Node", nodeID, "SubFlowType", 2);
+            var Hands = new Entities("BP.WF.Template.SubFlowHands");
+            Hands.Retrieve("FK_Node", nodeID, "SubFlowType", 0);
 
 
             var html = "";
             for (var i = 0; i < dt.length; i++) {
 
                 var en = dt[i];
-
-                //console.log(en);
 
                 html += "<tr>";
 
@@ -50,18 +48,18 @@
                 html += "<td>" + en.Name + "</td>";
 
                 var isHave = false;
-                for (var myidx = 0; myidx < yanXus.length; myidx++) {
+                for (var myidx = 0; myidx < Hands.length; myidx++) {
 
-                    var yanXu = yanXus[myidx];
-                    if (yanXu.FK_Flow == en.No) {
+                    var Hand = Hands[myidx];
+                    if (Hand.FK_Flow == en.No) {
                         isHave = true;
 
-                        if (yanXu.FlowName != en.Name) {
+                        if (Hand.FlowName != en.Name) {
 
-                            var yanXuEn = new Entity("BP.WF.Template.SubFlowYanXu", yanXu);
-                            yanXuEn.FlowName = en.Name;
-                            yanXuEn.Update();
-                            //yanXu.Update();
+                            var HandEn = new Entity("BP.WF.Template.SubFlowHand", Hand);
+                            HandEn.FlowName = en.Name;
+                            HandEn.Update();
+                            //Hand.Update();
                         }
                         break;
                     }
@@ -87,7 +85,7 @@
 
             var nodeID = GetQueryString("FK_Node");
 
-            var ens = new Entities("BP.WF.Template.SubFlowYanXus");
+            var ens = new Entities("BP.WF.Template.SubFlowHands");
             ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo);
 
             if (ens.length == 1) {
@@ -95,16 +93,16 @@
                 return;
             }
 
-            var en = new Entity("BP.WF.Template.SubFlowYanXu");
+            var en = new Entity("BP.WF.Template.SubFlowHand");
             console.log(en);
 
             en.FK_Flow = flowNo;
             en.FK_Node = nodeID;
+            en.SubFlowType = 0;
             en.FlowName = name;
-            en.SubFlowType = 2;
             var myen = en.Insert();
 
-            window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowYanXu&PKVal=' + myen.MyPK;
+            window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=' + myen.MyPK;
 
             //alert('当前流程已经加入了延续流程中.');
         }

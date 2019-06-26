@@ -1,11 +1,12 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
+    <title></title>
     <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -13,11 +14,11 @@
     <script src="../../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
-    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
-    <script  type="text/javascript">
+    <script type="text/javascript">
         var nodeID = 0;
         $(function () {
             InitBar(FormType.SDKForm);
@@ -37,6 +38,11 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormType.SDKForm;
             node.FormUrl = document.getElementById("TB_FormURL").value;
+
+            if (node.FormUrl == "") {
+                alert('必须输入url');
+                return;
+            }
             node.Update();
 
             //更新表单类型.
@@ -51,25 +57,31 @@
         
     </script>
 </head>
-<body >
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>设置</legend>请输入SDK表单的URL:<br />
+        <input type="text" value="" id="TB_FormURL" name="TB_FormURL" style="width: 90%;
+            height: 20px;" />
 
-<div id="bar"> </div>
-<fieldset>
-    <legend>设置</legend>
-    请输入SDK表单的URL:<br />
-    <input type="text" value="" id="TB_FormURL" name="TB_FormURL" style="width:90%;Height:20px;" />
-</fieldset>
-<fieldset>
-<legend>说明</legend>
-<ul>
- <li>SDK表单就是ccbpm把界面的展现完全交给了开发人员处理,开发人员只要设计一个表单,增加一个发送按钮,调用ccbpm的发送API就可以完成</li>
- <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.aspx </li>
- <li>例如:/SDKFlowDemo/QingJia/S1_TianxieShenqingDan.jsp , /SDKFlowDemo/QingJia/S1_TianxieShenqingDan.aspx</li>
- <li>ccbpm团队为您提供了一个demo流程 \\流程树\\SDK流程\\ 该目录下有很多SDK模式的流程供您参考。</li>
-</ul>
-</fieldset>
+            <br>
+            比如您输入:/XXX/Abc.htm 系统就会自动把系统变量带入到您的 <font color=green>url: /XXX/Abc.htm?WorkID=1223&FK_Node=105&FK_Flow=001&UserNo=zhangsan&SID=xcwwxccsdsdsd</font>
+    </fieldset>
+    <fieldset>
+        <legend>说明</legend>
+        <ul>
+            <li>SDK表单就是ccbpm把界面的展现完全交给了开发人员处理,开发人员只要设计一个表单,增加一个发送按钮,调用ccbpm的发送API就可以完成</li>
+            <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.htm </li>
+            <li>例如:/SDKFlowDemo/QingJia/S1_TianxieShenqingDan.jsp , /SDKFlowDemo/QingJia/S1_TianxieShenqingDan.htm</li>
+            <li>ccbpm团队为您提供了一个demo流程 \\流程树\\SDK流程\\ 该目录下有很多SDK模式的流程供您参考。</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>运行效果图</legend>
+        <img src="SDKFrm.png" />
+    </fieldset>
 
-    <img src="SDKFrm.png" />
 
 </body>
 </html>

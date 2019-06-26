@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>延续子流程</title>
+    <title>手动子流程</title>
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -32,8 +32,8 @@
 
             //求出来已经设置的延续子流程.
             var nodeID = GetQueryString("FK_Node");
-            var ens = new Entities("BP.WF.Template.SubFlowYanXus");
-            ens.Retrieve("FK_Node", nodeID,"SubFlowType",2, "Idx");
+            var ens = new Entities("BP.WF.Template.SubFlowHands");
+            ens.Retrieve("FK_Node", nodeID, "SubFlowType", 0, "Idx");
             //console.log(ens);
 
             var html = "";
@@ -59,12 +59,12 @@
         });
 
         function DoUp(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowYanXu", mypk);
+            var en = new Entity("BP.WF.Template.SubFlowHand", mypk);
             en.DoMethodReturnString("DoUp");
             window.location.href = window.location.href;
         }
         function DoDown(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowYanXu", mypk);
+            var en = new Entity("BP.WF.Template.SubFlowHand", mypk);
             en.DoMethodReturnString("DoDown");
             window.location.href = window.location.href;
         }
@@ -73,13 +73,13 @@
         function AddGroup() {
             var webUser = new WebUser();
 
-            var url = "SubFlowYanXuDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
+            var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
             OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
         }
         //查询集团的流程.
         function AddOrg() {
             var webUser = new WebUser();
-            var url = "SubFlowYanXuDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
+            var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
             OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
         }
 
@@ -89,7 +89,7 @@
             if (confirm('您确定要删除吗？') == false)
                 return;
 
-            var en = new Entity("BP.WF.Template.SubFlowYanXu", pk);
+            var en = new Entity("BP.WF.Template.SubFlowHand", pk);
             en.Delete();
             window.location.href = window.location.href;
         }
@@ -97,11 +97,9 @@
         //编辑.
         function Edit(pk) {
 
-            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowYanXu&PKVal=" + pk;
+            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
 
-           // OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
             OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
-
             //window.location.href = url;
 
         }
@@ -114,7 +112,7 @@
 <body>
     <table id="Table1" style="width: 100%">
         <caption>
-            延续子流程</caption>
+            手动子流程</caption>
         <tr>
             <th>
                 序

@@ -28,7 +28,6 @@ namespace BP.WF.Template
         public const string SpecFlowOver = "SpecFlowOver";
         public const string IsEnableSpecFlowOver = "IsEnableSpecFlowOver";
 
-
     }
     /// <summary>
     /// 手工启动子流程.

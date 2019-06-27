@@ -68,7 +68,7 @@
             //实体参数.
             var ensName = GetQueryString("EnsName");
             mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "DtlImp_" + ensName;
+            mapExt.MyPK = "DtlImp_" + ensName + "_Table" ;
             var i = mapExt.RetrieveFromDBSources();
 
             if (i == 0) {

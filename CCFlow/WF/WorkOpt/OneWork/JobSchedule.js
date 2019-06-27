@@ -125,10 +125,13 @@ function GenerMNode(tracks, nodeID, gwf) {
         if (tk.FK_Node != nodeID)
             continue;
         debugger
-        if (tk.IsPass == 1)
-            info += "<li><font color=blue><b>" + tk.EmpName + "</b></font></li>";
+        if (tk.IsPass == 1) {
+            var emp = new Entity("BP.Port.Emp", tk.EmpNo);
+
+            info += "<ol><font color=blue><b>" + emp.FK_DeptText + " " + tk.EmpName + "</b></font> " + tk.RDT.substring(5, 16) + "</ol>";
+        }
         else
-            info += "<li>" + tk.EmpName + "</li>";
+            info += "<ol>" + tk.EmpName + "</ol>";
     }
     info += "</ul>";
 

@@ -6,13 +6,12 @@ $(function () {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddPara("WorkID", workid);
-
     var ds = handler.DoMethodReturnJSON("JobSchedule_Init");
 
     var gwf = ds["WF_GenerWorkFlow"][0]; //工作记录.
     var nodes = ds["WF_Node"]; //节点.
     var dirs = ds["WF_Direction"]; //连接线.
-    var tracks = ds["Track"]; //历史记录.
+    var tracks = ds["Track"]; //历史记录. 
 
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
@@ -127,11 +126,13 @@ function GenerMNode(tracks, nodeID, gwf) {
         debugger
         if (tk.IsPass == 1) {
             var emp = new Entity("BP.Port.Emp", tk.EmpNo);
-
             info += "<ol><font color=blue><b>" + emp.FK_DeptText + " " + tk.EmpName + "</b></font> " + tk.RDT.substring(5, 16) + "</ol>";
         }
-        else
-            info += "<ol>" + tk.EmpName + "</ol>";
+        else {
+
+            var emp = new Entity("BP.Port.Emp", tk.EmpNo);
+            info += "<ol>" + emp.FK_DeptText + " " + tk.EmpName + "</ol>";
+        }
     }
     info += "</ul>";
 

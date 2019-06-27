@@ -49,6 +49,8 @@ function InitPage() {
     // handler.AddPara("FK_Flow",);
     var data = handler.DoMethodReturnString("WorkCheck_Init");
 
+    // console.log(data);
+
     if (data.indexOf('err@') != -1) {
         alert(data);
         return;

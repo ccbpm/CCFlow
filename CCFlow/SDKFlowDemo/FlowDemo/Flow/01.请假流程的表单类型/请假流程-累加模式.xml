@@ -1,0 +1,5282 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <WF_Flow>
+    <No>003</No>
+    <Name>请假流程-累加模式</Name>
+    <FK_FlowSort>100</FK_FlowSort>
+    <FK_FlowSortText>日常办公类</FK_FlowSortText>
+    <SysType />
+    <FlowRunWay>0</FlowRunWay>
+    <RunObj />
+    <Note />
+    <RunSQL />
+    <NumOfBill>0</NumOfBill>
+    <NumOfDtl>0</NumOfDtl>
+    <FlowAppType>0</FlowAppType>
+    <ChartType>1</ChartType>
+    <IsCanStart>1</IsCanStart>
+    <IsStartInMobile>1</IsStartInMobile>
+    <AvgDay>0</AvgDay>
+    <IsFullSA>0</IsFullSA>
+    <IsMD5>0</IsMD5>
+    <Idx>0</Idx>
+    <TimelineRole>0</TimelineRole>
+    <Paras>@StartNodeX=200@StartNodeY=50@EndNodeX=200@EndNodeY=350</Paras>
+    <PTable />
+    <Draft>0</Draft>
+    <DataStoreModel>1</DataStoreModel>
+    <TitleRole />
+    <FlowMark />
+    <FlowEventEntity />
+    <HistoryFields />
+    <IsGuestFlow>0</IsGuestFlow>
+    <BillNoFormat />
+    <FlowNoteExp />
+    <DRCtrlType>0</DRCtrlType>
+    <HostRun />
+    <StartLimitRole>0</StartLimitRole>
+    <StartLimitPara />
+    <StartLimitAlert />
+    <StartLimitWhen>0</StartLimitWhen>
+    <StartGuideWay>0</StartGuideWay>
+    <StartGuideLink />
+    <StartGuideLab />
+    <StartGuidePara1 />
+    <StartGuidePara2 />
+    <StartGuidePara3 />
+    <IsResetData>0</IsResetData>
+    <IsLoadPriData>0</IsLoadPriData>
+    <IsDBTemplate>0</IsDBTemplate>
+    <IsBatchStart>0</IsBatchStart>
+    <BatchStartFields />
+    <IsAutoSendSubFlowOver>0</IsAutoSendSubFlowOver>
+    <Ver>2019-06-27 20:22:28</Ver>
+    <FlowDeleteRole>0</FlowDeleteRole>
+    <AtPara />
+    <DTSWay>0</DTSWay>
+    <DTSDBSrc />
+    <DTSBTable />
+    <DTSBTablePK />
+    <DTSTime>0</DTSTime>
+    <DTSSpecNodes />
+    <DTSField>0</DTSField>
+    <DTSFields />
+  </WF_Flow>
+  <WF_Node>
+    <NodeID>301</NodeID>
+    <Name>填写请假申请单</Name>
+    <Tip />
+    <Step>1</Step>
+    <ICON>前台</ICON>
+    <NodeWorkType>1</NodeWorkType>
+    <SubThreadType>0</SubThreadType>
+    <FK_Flow>003</FK_Flow>
+    <IsGuestNode>0</IsGuestNode>
+    <FlowName>请假流程-累加模式</FlowName>
+    <FrmAttr />
+    <IsBUnit>0</IsBUnit>
+    <FWCSta>0</FWCSta>
+    <FWC_H>0</FWC_H>
+    <FWCOrderModel>0</FWCOrderModel>
+    <TimeLimit>2</TimeLimit>
+    <TWay>0</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>0</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+    <DoOutTime />
+    <FWCNodeName />
+    <Doc />
+    <IsTask>1</IsTask>
+    <ReturnRole>0</ReturnRole>
+    <ReturnReasonsItems />
+    <ReturnAlert />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnField />
+    <DeliveryWay>4</DeliveryWay>
+    <IsExpSender>1</IsExpSender>
+    <CancelRole>0</CancelRole>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <WhenNoWorker>0</WhenNoWorker>
+    <DeliveryParas />
+    <NodeFrmID>ND301</NodeFrmID>
+    <CCRole>0</CCRole>
+    <CCWriteTo>0</CCWriteTo>
+    <DelEnable>1</DelEnable>
+    <SaveModel>0</SaveModel>
+    <IsCanDelFlow>0</IsCanDelFlow>
+    <ThreadKillRole>0</ThreadKillRole>
+    <TodolistModel>0</TodolistModel>
+    <TeamLeaderConfirmRole>0</TeamLeaderConfirmRole>
+    <TeamLeaderConfirmDoc />
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <IsBackTracking>1</IsBackTracking>
+    <IsRM>1</IsRM>
+    <IsHandOver>0</IsHandOver>
+    <PassRate>100</PassRate>
+    <RunModel>0</RunModel>
+    <BlockModel>0</BlockModel>
+    <BlockExp />
+    <BlockAlert />
+    <WhoExeIt>0</WhoExeIt>
+    <ReadReceipts>0</ReadReceipts>
+    <CondModel>2</CondModel>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <SFActiveFlows />
+    <BatchRole>0</BatchRole>
+    <BatchListCount>12</BatchListCount>
+    <BatchParas />
+    <PrintDocEnable>0</PrintDocEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <FormType>10</FormType>
+    <FormUrl>http://</FormUrl>
+    <TurnToDeal>0</TurnToDeal>
+    <TurnToDealDoc />
+    <NodePosType>0</NodePosType>
+    <IsCCFlow>0</IsCCFlow>
+    <HisStas />
+    <HisDeptStrs />
+    <HisToNDs>@302</HisToNDs>
+    <HisBillIDs />
+    <HisSubFlows />
+    <PTable />
+    <GroupStaNDs>@301@302@303@304</GroupStaNDs>
+    <X>80</X>
+    <Y>90</Y>
+    <FocusField>请假原因:@QingJiaYuanYin</FocusField>
+    <JumpToNodes />
+    <RefOneFrmTreeType />
+    <DoOutTimeCond />
+    <AtPara />
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartParas />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <SelfParas />
+  </WF_Node>
+  <WF_Node>
+    <NodeID>302</NodeID>
+    <Name>部门经理审批</Name>
+    <Tip />
+    <Step>2</Step>
+    <ICON>审核</ICON>
+    <NodeWorkType>0</NodeWorkType>
+    <SubThreadType>0</SubThreadType>
+    <FK_Flow>003</FK_Flow>
+    <IsGuestNode>0</IsGuestNode>
+    <FlowName>请假流程-累加模式</FlowName>
+    <FrmAttr />
+    <IsBUnit>0</IsBUnit>
+    <FWCSta>0</FWCSta>
+    <FWC_H>0</FWC_H>
+    <FWCOrderModel>0</FWCOrderModel>
+    <TimeLimit>1</TimeLimit>
+    <TWay>1</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+    <DoOutTime />
+    <FWCNodeName />
+    <Doc />
+    <IsTask>1</IsTask>
+    <ReturnRole>1</ReturnRole>
+    <ReturnReasonsItems />
+    <ReturnAlert />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnField />
+    <DeliveryWay>4</DeliveryWay>
+    <IsExpSender>1</IsExpSender>
+    <CancelRole>0</CancelRole>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <WhenNoWorker>0</WhenNoWorker>
+    <DeliveryParas />
+    <NodeFrmID>ND302</NodeFrmID>
+    <CCRole>0</CCRole>
+    <CCWriteTo>0</CCWriteTo>
+    <DelEnable>0</DelEnable>
+    <SaveModel>0</SaveModel>
+    <IsCanDelFlow>0</IsCanDelFlow>
+    <ThreadKillRole>0</ThreadKillRole>
+    <TodolistModel>0</TodolistModel>
+    <TeamLeaderConfirmRole>0</TeamLeaderConfirmRole>
+    <TeamLeaderConfirmDoc />
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <IsBackTracking>1</IsBackTracking>
+    <IsRM>1</IsRM>
+    <IsHandOver>0</IsHandOver>
+    <PassRate>100</PassRate>
+    <RunModel>0</RunModel>
+    <BlockModel>0</BlockModel>
+    <BlockExp />
+    <BlockAlert />
+    <WhoExeIt>0</WhoExeIt>
+    <ReadReceipts>0</ReadReceipts>
+    <CondModel>2</CondModel>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <SFActiveFlows />
+    <BatchRole>0</BatchRole>
+    <BatchListCount>12</BatchListCount>
+    <BatchParas />
+    <PrintDocEnable>0</PrintDocEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <FormType>10</FormType>
+    <FormUrl>http://</FormUrl>
+    <TurnToDeal>0</TurnToDeal>
+    <TurnToDealDoc />
+    <NodePosType>1</NodePosType>
+    <IsCCFlow>0</IsCCFlow>
+    <HisStas />
+    <HisDeptStrs />
+    <HisToNDs>@303</HisToNDs>
+    <HisBillIDs />
+    <HisSubFlows />
+    <PTable />
+    <GroupStaNDs>@301@302@303@304</GroupStaNDs>
+    <X>257</X>
+    <Y>189</Y>
+    <FocusField>审核意见:@BMJLSP_Note</FocusField>
+    <JumpToNodes />
+    <RefOneFrmTreeType />
+    <DoOutTimeCond />
+    <AtPara />
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartParas />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <SelfParas />
+  </WF_Node>
+  <WF_Node>
+    <NodeID>303</NodeID>
+    <Name>总经理审批</Name>
+    <Tip />
+    <Step>3</Step>
+    <ICON>审核.png</ICON>
+    <NodeWorkType>0</NodeWorkType>
+    <SubThreadType>0</SubThreadType>
+    <FK_Flow>003</FK_Flow>
+    <IsGuestNode>0</IsGuestNode>
+    <FlowName>请假流程-累加模式</FlowName>
+    <FrmAttr />
+    <IsBUnit>0</IsBUnit>
+    <FWCSta>0</FWCSta>
+    <FWC_H>0</FWC_H>
+    <FWCOrderModel>0</FWCOrderModel>
+    <TimeLimit>1</TimeLimit>
+    <TWay>1</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+    <DoOutTime />
+    <FWCNodeName />
+    <Doc />
+    <IsTask>1</IsTask>
+    <ReturnRole>1</ReturnRole>
+    <ReturnReasonsItems />
+    <ReturnAlert />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnField />
+    <DeliveryWay>4</DeliveryWay>
+    <IsExpSender>1</IsExpSender>
+    <CancelRole>0</CancelRole>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <WhenNoWorker>0</WhenNoWorker>
+    <DeliveryParas />
+    <NodeFrmID>ND303</NodeFrmID>
+    <CCRole>0</CCRole>
+    <CCWriteTo>0</CCWriteTo>
+    <DelEnable>0</DelEnable>
+    <SaveModel>0</SaveModel>
+    <IsCanDelFlow>0</IsCanDelFlow>
+    <ThreadKillRole>0</ThreadKillRole>
+    <TodolistModel>0</TodolistModel>
+    <TeamLeaderConfirmRole>0</TeamLeaderConfirmRole>
+    <TeamLeaderConfirmDoc />
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <IsBackTracking>1</IsBackTracking>
+    <IsRM>1</IsRM>
+    <IsHandOver>0</IsHandOver>
+    <PassRate>100</PassRate>
+    <RunModel>0</RunModel>
+    <BlockModel>0</BlockModel>
+    <BlockExp />
+    <BlockAlert />
+    <WhoExeIt>0</WhoExeIt>
+    <ReadReceipts>0</ReadReceipts>
+    <CondModel>0</CondModel>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <SFActiveFlows />
+    <BatchRole>0</BatchRole>
+    <BatchListCount>12</BatchListCount>
+    <BatchParas />
+    <PrintDocEnable>0</PrintDocEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <FormType>10</FormType>
+    <FormUrl>http://</FormUrl>
+    <TurnToDeal>0</TurnToDeal>
+    <TurnToDealDoc />
+    <NodePosType>1</NodePosType>
+    <IsCCFlow>0</IsCCFlow>
+    <HisStas />
+    <HisDeptStrs />
+    <HisToNDs>@304</HisToNDs>
+    <HisBillIDs />
+    <HisSubFlows />
+    <PTable />
+    <GroupStaNDs>@301@302@303@304</GroupStaNDs>
+    <X>426</X>
+    <Y>91</Y>
+    <FocusField>审核意见:@ZJLSP_Note</FocusField>
+    <JumpToNodes />
+    <RefOneFrmTreeType />
+    <DoOutTimeCond />
+    <AtPara />
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartParas />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <SelfParas />
+  </WF_Node>
+  <WF_Node>
+    <NodeID>304</NodeID>
+    <Name>反馈给申请人</Name>
+    <Tip />
+    <Step>4</Step>
+    <ICON>审核.png</ICON>
+    <NodeWorkType>0</NodeWorkType>
+    <SubThreadType>0</SubThreadType>
+    <FK_Flow>003</FK_Flow>
+    <IsGuestNode>0</IsGuestNode>
+    <FlowName>请假流程-累加模式</FlowName>
+    <FrmAttr />
+    <IsBUnit>0</IsBUnit>
+    <FWCSta>0</FWCSta>
+    <FWC_H>0</FWC_H>
+    <FWCOrderModel>0</FWCOrderModel>
+    <TimeLimit>1</TimeLimit>
+    <TWay>1</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+    <DoOutTime />
+    <FWCNodeName />
+    <Doc />
+    <IsTask>1</IsTask>
+    <ReturnRole>1</ReturnRole>
+    <ReturnReasonsItems />
+    <ReturnAlert />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnField />
+    <DeliveryWay>7</DeliveryWay>
+    <IsExpSender>1</IsExpSender>
+    <CancelRole>0</CancelRole>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <WhenNoWorker>0</WhenNoWorker>
+    <DeliveryParas />
+    <NodeFrmID>ND304</NodeFrmID>
+    <CCRole>0</CCRole>
+    <CCWriteTo>0</CCWriteTo>
+    <DelEnable>0</DelEnable>
+    <SaveModel>0</SaveModel>
+    <IsCanDelFlow>0</IsCanDelFlow>
+    <ThreadKillRole>0</ThreadKillRole>
+    <TodolistModel>0</TodolistModel>
+    <TeamLeaderConfirmRole>0</TeamLeaderConfirmRole>
+    <TeamLeaderConfirmDoc />
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <IsBackTracking>1</IsBackTracking>
+    <IsRM>1</IsRM>
+    <IsHandOver>0</IsHandOver>
+    <PassRate>100</PassRate>
+    <RunModel>0</RunModel>
+    <BlockModel>0</BlockModel>
+    <BlockExp />
+    <BlockAlert />
+    <WhoExeIt>0</WhoExeIt>
+    <ReadReceipts>0</ReadReceipts>
+    <CondModel>0</CondModel>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <SFActiveFlows />
+    <BatchRole>0</BatchRole>
+    <BatchListCount>12</BatchListCount>
+    <BatchParas />
+    <PrintDocEnable>0</PrintDocEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <FormType>10</FormType>
+    <FormUrl>http://</FormUrl>
+    <TurnToDeal>0</TurnToDeal>
+    <TurnToDealDoc />
+    <NodePosType>2</NodePosType>
+    <IsCCFlow>0</IsCCFlow>
+    <HisStas />
+    <HisDeptStrs />
+    <HisToNDs />
+    <HisBillIDs />
+    <HisSubFlows />
+    <PTable />
+    <GroupStaNDs>@301@302@303@304</GroupStaNDs>
+    <X>583</X>
+    <Y>300</Y>
+    <FocusField />
+    <JumpToNodes />
+    <RefOneFrmTreeType />
+    <DoOutTimeCond />
+    <AtPara />
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartParas />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <SelfParas />
+  </WF_Node>
+  <WF_NodeExt>
+    <NodeID>301</NodeID>
+    <Step>1</Step>
+    <FK_Flow>003</FK_Flow>
+    <FlowName>请假流程-累加模式</FlowName>
+    <Name>填写请假申请单</Name>
+    <Tip />
+    <WhoExeIt>0</WhoExeIt>
+    <WhoExeItText>操作员执行</WhoExeItText>
+    <ReadReceipts>0</ReadReceipts>
+    <ReadReceiptsText>不回执</ReadReceiptsText>
+    <CondModel>2</CondModel>
+    <CondModelText>发送按钮旁下拉框选择</CondModelText>
+    <CancelRole>0</CancelRole>
+    <CancelRoleText>上一步可以撤销</CancelRoleText>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <IsTask>1</IsTask>
+    <IsExpSender>1</IsExpSender>
+    <IsRM>1</IsRM>
+    <IsGuestNode>0</IsGuestNode>
+    <DTFrom>2019-06-27 19:55</DTFrom>
+    <DTTo>2019-06-27 19:55</DTTo>
+    <IsBUnit>0</IsBUnit>
+    <FocusField>请假原因:@QingJiaYuanYin</FocusField>
+    <NodeAppType>0</NodeAppType>
+    <FWCSta>0</FWCSta>
+    <SelfParas />
+    <RunModel>0</RunModel>
+    <RunModelText>普通</RunModelText>
+    <SubThreadType>0</SubThreadType>
+    <SubThreadTypeText>同表单</SubThreadTypeText>
+    <PassRate>100</PassRate>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartWayText>不启动</SubFlowStartWayText>
+    <SubFlowStartParas />
+    <ThreadIsCanDel>0</ThreadIsCanDel>
+    <ThreadIsCanShift>0</ThreadIsCanShift>
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <WhenNoWorker>0</WhenNoWorker>
+    <SendLab>发送</SendLab>
+    <SendJS />
+    <SaveLab>保存</SaveLab>
+    <SaveEnable>1</SaveEnable>
+    <ThreadLab>子线程</ThreadLab>
+    <ThreadEnable>0</ThreadEnable>
+    <ThreadKillRole>0</ThreadKillRole>
+    <ThreadKillRoleText>不能删除</ThreadKillRoleText>
+    <JumpWayLab>跳转</JumpWayLab>
+    <JumpWay>0</JumpWay>
+    <JumpWayText>不能跳转</JumpWayText>
+    <JumpToNodes />
+    <ReturnLab>退回</ReturnLab>
+    <ReturnRole>0</ReturnRole>
+    <ReturnRoleText>不能退回</ReturnRoleText>
+    <ReturnAlert />
+    <IsBackTracking>1</IsBackTracking>
+    <ReturnField />
+    <ReturnReasonsItems />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnOneNodeRoleText>不启用</ReturnOneNodeRoleText>
+    <CCLab>抄送</CCLab>
+    <CCRole>0</CCRole>
+    <CCRoleText>不能抄送</CCRoleText>
+    <CCWriteTo>0</CCWriteTo>
+    <CCWriteToText>写入抄送列表</CCWriteToText>
+    <DoOutTime />
+    <DoOutTimeCond />
+    <ShiftLab>移交</ShiftLab>
+    <ShiftEnable>0</ShiftEnable>
+    <DelLab>删除</DelLab>
+    <DelEnable>1</DelEnable>
+    <DelEnableText>逻辑删除</DelEnableText>
+    <EndFlowLab>结束流程</EndFlowLab>
+    <EndFlowEnable>0</EndFlowEnable>
+    <ShowParentFormLab>查看父流程</ShowParentFormLab>
+    <ShowParentFormEnable>0</ShowParentFormEnable>
+    <OfficeBtnLab>打开公文</OfficeBtnLab>
+    <OfficeBtnEnable>0</OfficeBtnEnable>
+    <PrintHtmlLab>打印Html</PrintHtmlLab>
+    <PrintHtmlEnable>0</PrintHtmlEnable>
+    <PrintPDFLab>打印pdf</PrintPDFLab>
+    <PrintPDFEnable>0</PrintPDFEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <PrintPDFModleText>全部打印</PrintPDFModleText>
+    <PrintZipLab>打包下载</PrintZipLab>
+    <PrintZipEnable>0</PrintZipEnable>
+    <PrintDocLab>打印单据</PrintDocLab>
+    <PrintDocEnable>0</PrintDocEnable>
+    <TrackLab>轨迹</TrackLab>
+    <TrackEnable>1</TrackEnable>
+    <HungLab>挂起</HungLab>
+    <HungEnable>0</HungEnable>
+    <SearchLab>查询</SearchLab>
+    <SearchEnable>0</SearchEnable>
+    <WorkCheckLab>审核</WorkCheckLab>
+    <WorkCheckEnable>0</WorkCheckEnable>
+    <HuiQianLab>会签</HuiQianLab>
+    <HuiQianRole>0</HuiQianRole>
+    <HuiQianRoleText>不启用</HuiQianRoleText>
+    <TCLab>流转自定义</TCLab>
+    <TCEnable>0</TCEnable>
+    <WebOffice>公文</WebOffice>
+    <WebOfficeEnable>0</WebOfficeEnable>
+    <PRILab>重要性</PRILab>
+    <PRIEnable>0</PRIEnable>
+    <AllotLab>分配</AllotLab>
+    <AllotEnable>0</AllotEnable>
+    <FocusLab>关注</FocusLab>
+    <FocusEnable>0</FocusEnable>
+    <ConfirmLab>确认</ConfirmLab>
+    <ConfirmEnable>0</ConfirmEnable>
+    <ListLab>列表</ListLab>
+    <ListEnable>1</ListEnable>
+    <BatchLab>批量审核</BatchLab>
+    <BatchEnable>0</BatchEnable>
+    <TimeLimit>2</TimeLimit>
+    <TWay>0</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>0</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+  </WF_NodeExt>
+  <WF_NodeExt>
+    <NodeID>302</NodeID>
+    <Step>2</Step>
+    <FK_Flow>003</FK_Flow>
+    <FlowName>请假流程-累加模式</FlowName>
+    <Name>部门经理审批</Name>
+    <Tip />
+    <WhoExeIt>0</WhoExeIt>
+    <WhoExeItText>操作员执行</WhoExeItText>
+    <ReadReceipts>0</ReadReceipts>
+    <ReadReceiptsText>不回执</ReadReceiptsText>
+    <CondModel>2</CondModel>
+    <CondModelText>发送按钮旁下拉框选择</CondModelText>
+    <CancelRole>0</CancelRole>
+    <CancelRoleText>上一步可以撤销</CancelRoleText>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <IsTask>1</IsTask>
+    <IsExpSender>1</IsExpSender>
+    <IsRM>1</IsRM>
+    <IsGuestNode>0</IsGuestNode>
+    <DTFrom>2019-06-27 19:55</DTFrom>
+    <DTTo>2019-06-27 19:55</DTTo>
+    <IsBUnit>0</IsBUnit>
+    <FocusField>审核意见:@BMJLSP_Note</FocusField>
+    <NodeAppType>0</NodeAppType>
+    <FWCSta>0</FWCSta>
+    <SelfParas />
+    <RunModel>0</RunModel>
+    <RunModelText>普通</RunModelText>
+    <SubThreadType>0</SubThreadType>
+    <SubThreadTypeText>同表单</SubThreadTypeText>
+    <PassRate>100</PassRate>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartWayText>不启动</SubFlowStartWayText>
+    <SubFlowStartParas />
+    <ThreadIsCanDel>0</ThreadIsCanDel>
+    <ThreadIsCanShift>0</ThreadIsCanShift>
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <WhenNoWorker>0</WhenNoWorker>
+    <SendLab>发送</SendLab>
+    <SendJS />
+    <SaveLab>保存</SaveLab>
+    <SaveEnable>1</SaveEnable>
+    <ThreadLab>子线程</ThreadLab>
+    <ThreadEnable>0</ThreadEnable>
+    <ThreadKillRole>0</ThreadKillRole>
+    <ThreadKillRoleText>不能删除</ThreadKillRoleText>
+    <JumpWayLab>跳转</JumpWayLab>
+    <JumpWay>0</JumpWay>
+    <JumpWayText>不能跳转</JumpWayText>
+    <JumpToNodes />
+    <ReturnLab>退回</ReturnLab>
+    <ReturnRole>1</ReturnRole>
+    <ReturnRoleText>只能退回上一个节点</ReturnRoleText>
+    <ReturnAlert />
+    <IsBackTracking>1</IsBackTracking>
+    <ReturnField />
+    <ReturnReasonsItems />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnOneNodeRoleText>不启用</ReturnOneNodeRoleText>
+    <CCLab>抄送</CCLab>
+    <CCRole>0</CCRole>
+    <CCRoleText>不能抄送</CCRoleText>
+    <CCWriteTo>0</CCWriteTo>
+    <CCWriteToText>写入抄送列表</CCWriteToText>
+    <DoOutTime />
+    <DoOutTimeCond />
+    <ShiftLab>移交</ShiftLab>
+    <ShiftEnable>0</ShiftEnable>
+    <DelLab>删除</DelLab>
+    <DelEnable>0</DelEnable>
+    <DelEnableText>不能删除</DelEnableText>
+    <EndFlowLab>结束流程</EndFlowLab>
+    <EndFlowEnable>0</EndFlowEnable>
+    <ShowParentFormLab>查看父流程</ShowParentFormLab>
+    <ShowParentFormEnable>0</ShowParentFormEnable>
+    <OfficeBtnLab>打开公文</OfficeBtnLab>
+    <OfficeBtnEnable>0</OfficeBtnEnable>
+    <PrintHtmlLab>打印Html</PrintHtmlLab>
+    <PrintHtmlEnable>0</PrintHtmlEnable>
+    <PrintPDFLab>打印pdf</PrintPDFLab>
+    <PrintPDFEnable>0</PrintPDFEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <PrintPDFModleText>全部打印</PrintPDFModleText>
+    <PrintZipLab>打包下载</PrintZipLab>
+    <PrintZipEnable>0</PrintZipEnable>
+    <PrintDocLab>打印单据</PrintDocLab>
+    <PrintDocEnable>0</PrintDocEnable>
+    <TrackLab>轨迹</TrackLab>
+    <TrackEnable>1</TrackEnable>
+    <HungLab>挂起</HungLab>
+    <HungEnable>0</HungEnable>
+    <SearchLab>查询</SearchLab>
+    <SearchEnable>0</SearchEnable>
+    <WorkCheckLab>审核</WorkCheckLab>
+    <WorkCheckEnable>0</WorkCheckEnable>
+    <HuiQianLab>会签</HuiQianLab>
+    <HuiQianRole>0</HuiQianRole>
+    <HuiQianRoleText>不启用</HuiQianRoleText>
+    <TCLab>流转自定义</TCLab>
+    <TCEnable>0</TCEnable>
+    <WebOffice>公文</WebOffice>
+    <WebOfficeEnable>0</WebOfficeEnable>
+    <PRILab>重要性</PRILab>
+    <PRIEnable>0</PRIEnable>
+    <AllotLab>分配</AllotLab>
+    <AllotEnable>0</AllotEnable>
+    <FocusLab>关注</FocusLab>
+    <FocusEnable>0</FocusEnable>
+    <ConfirmLab>确认</ConfirmLab>
+    <ConfirmEnable>0</ConfirmEnable>
+    <ListLab>列表</ListLab>
+    <ListEnable>1</ListEnable>
+    <BatchLab>批量审核</BatchLab>
+    <BatchEnable>0</BatchEnable>
+    <TimeLimit>1</TimeLimit>
+    <TWay>1</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+  </WF_NodeExt>
+  <WF_NodeExt>
+    <NodeID>303</NodeID>
+    <Step>3</Step>
+    <FK_Flow>003</FK_Flow>
+    <FlowName>请假流程-累加模式</FlowName>
+    <Name>总经理审批</Name>
+    <Tip />
+    <WhoExeIt>0</WhoExeIt>
+    <WhoExeItText>操作员执行</WhoExeItText>
+    <ReadReceipts>0</ReadReceipts>
+    <ReadReceiptsText>不回执</ReadReceiptsText>
+    <CondModel>0</CondModel>
+    <CondModelText>由连接线条件控制</CondModelText>
+    <CancelRole>0</CancelRole>
+    <CancelRoleText>上一步可以撤销</CancelRoleText>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <IsTask>1</IsTask>
+    <IsExpSender>1</IsExpSender>
+    <IsRM>1</IsRM>
+    <IsGuestNode>0</IsGuestNode>
+    <DTFrom>2019-06-27 19:56</DTFrom>
+    <DTTo>2019-06-27 19:56</DTTo>
+    <IsBUnit>0</IsBUnit>
+    <FocusField>审核意见:@ZJLSP_Note</FocusField>
+    <NodeAppType>0</NodeAppType>
+    <FWCSta>0</FWCSta>
+    <SelfParas />
+    <RunModel>0</RunModel>
+    <RunModelText>普通</RunModelText>
+    <SubThreadType>0</SubThreadType>
+    <SubThreadTypeText>同表单</SubThreadTypeText>
+    <PassRate>100</PassRate>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartWayText>不启动</SubFlowStartWayText>
+    <SubFlowStartParas />
+    <ThreadIsCanDel>0</ThreadIsCanDel>
+    <ThreadIsCanShift>0</ThreadIsCanShift>
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <WhenNoWorker>0</WhenNoWorker>
+    <SendLab>发送</SendLab>
+    <SendJS />
+    <SaveLab>保存</SaveLab>
+    <SaveEnable>1</SaveEnable>
+    <ThreadLab>子线程</ThreadLab>
+    <ThreadEnable>0</ThreadEnable>
+    <ThreadKillRole>0</ThreadKillRole>
+    <ThreadKillRoleText>不能删除</ThreadKillRoleText>
+    <JumpWayLab>跳转</JumpWayLab>
+    <JumpWay>0</JumpWay>
+    <JumpWayText>不能跳转</JumpWayText>
+    <JumpToNodes />
+    <ReturnLab>退回</ReturnLab>
+    <ReturnRole>1</ReturnRole>
+    <ReturnRoleText>只能退回上一个节点</ReturnRoleText>
+    <ReturnAlert />
+    <IsBackTracking>1</IsBackTracking>
+    <ReturnField />
+    <ReturnReasonsItems />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnOneNodeRoleText>不启用</ReturnOneNodeRoleText>
+    <CCLab>抄送</CCLab>
+    <CCRole>0</CCRole>
+    <CCRoleText>不能抄送</CCRoleText>
+    <CCWriteTo>0</CCWriteTo>
+    <CCWriteToText>写入抄送列表</CCWriteToText>
+    <DoOutTime />
+    <DoOutTimeCond />
+    <ShiftLab>移交</ShiftLab>
+    <ShiftEnable>0</ShiftEnable>
+    <DelLab>删除</DelLab>
+    <DelEnable>0</DelEnable>
+    <DelEnableText>不能删除</DelEnableText>
+    <EndFlowLab>结束流程</EndFlowLab>
+    <EndFlowEnable>0</EndFlowEnable>
+    <ShowParentFormLab>查看父流程</ShowParentFormLab>
+    <ShowParentFormEnable>0</ShowParentFormEnable>
+    <OfficeBtnLab>打开公文</OfficeBtnLab>
+    <OfficeBtnEnable>0</OfficeBtnEnable>
+    <PrintHtmlLab>打印Html</PrintHtmlLab>
+    <PrintHtmlEnable>0</PrintHtmlEnable>
+    <PrintPDFLab>打印pdf</PrintPDFLab>
+    <PrintPDFEnable>0</PrintPDFEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <PrintPDFModleText>全部打印</PrintPDFModleText>
+    <PrintZipLab>打包下载</PrintZipLab>
+    <PrintZipEnable>0</PrintZipEnable>
+    <PrintDocLab>打印单据</PrintDocLab>
+    <PrintDocEnable>0</PrintDocEnable>
+    <TrackLab>轨迹</TrackLab>
+    <TrackEnable>1</TrackEnable>
+    <HungLab>挂起</HungLab>
+    <HungEnable>0</HungEnable>
+    <SearchLab>查询</SearchLab>
+    <SearchEnable>0</SearchEnable>
+    <WorkCheckLab>审核</WorkCheckLab>
+    <WorkCheckEnable>0</WorkCheckEnable>
+    <HuiQianLab>会签</HuiQianLab>
+    <HuiQianRole>0</HuiQianRole>
+    <HuiQianRoleText>不启用</HuiQianRoleText>
+    <TCLab>流转自定义</TCLab>
+    <TCEnable>0</TCEnable>
+    <WebOffice>公文</WebOffice>
+    <WebOfficeEnable>0</WebOfficeEnable>
+    <PRILab>重要性</PRILab>
+    <PRIEnable>0</PRIEnable>
+    <AllotLab>分配</AllotLab>
+    <AllotEnable>0</AllotEnable>
+    <FocusLab>关注</FocusLab>
+    <FocusEnable>0</FocusEnable>
+    <ConfirmLab>确认</ConfirmLab>
+    <ConfirmEnable>0</ConfirmEnable>
+    <ListLab>列表</ListLab>
+    <ListEnable>1</ListEnable>
+    <BatchLab>批量审核</BatchLab>
+    <BatchEnable>0</BatchEnable>
+    <TimeLimit>1</TimeLimit>
+    <TWay>1</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+  </WF_NodeExt>
+  <WF_NodeExt>
+    <NodeID>304</NodeID>
+    <Step>4</Step>
+    <FK_Flow>003</FK_Flow>
+    <FlowName>请假流程-累加模式</FlowName>
+    <Name>反馈给申请人</Name>
+    <Tip />
+    <WhoExeIt>0</WhoExeIt>
+    <WhoExeItText>操作员执行</WhoExeItText>
+    <ReadReceipts>0</ReadReceipts>
+    <ReadReceiptsText>不回执</ReadReceiptsText>
+    <CondModel>0</CondModel>
+    <CondModelText>由连接线条件控制</CondModelText>
+    <CancelRole>0</CancelRole>
+    <CancelRoleText>上一步可以撤销</CancelRoleText>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <IsTask>1</IsTask>
+    <IsExpSender>1</IsExpSender>
+    <IsRM>1</IsRM>
+    <IsGuestNode>0</IsGuestNode>
+    <DTFrom>2019-06-27 19:56</DTFrom>
+    <DTTo>2019-06-27 19:56</DTTo>
+    <IsBUnit>0</IsBUnit>
+    <FocusField />
+    <NodeAppType>0</NodeAppType>
+    <FWCSta>0</FWCSta>
+    <SelfParas />
+    <RunModel>0</RunModel>
+    <RunModelText>普通</RunModelText>
+    <SubThreadType>0</SubThreadType>
+    <SubThreadTypeText>同表单</SubThreadTypeText>
+    <PassRate>100</PassRate>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartWayText>不启动</SubFlowStartWayText>
+    <SubFlowStartParas />
+    <ThreadIsCanDel>0</ThreadIsCanDel>
+    <ThreadIsCanShift>0</ThreadIsCanShift>
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <WhenNoWorker>0</WhenNoWorker>
+    <SendLab>发送</SendLab>
+    <SendJS />
+    <SaveLab>保存</SaveLab>
+    <SaveEnable>1</SaveEnable>
+    <ThreadLab>子线程</ThreadLab>
+    <ThreadEnable>0</ThreadEnable>
+    <ThreadKillRole>0</ThreadKillRole>
+    <ThreadKillRoleText>不能删除</ThreadKillRoleText>
+    <JumpWayLab>跳转</JumpWayLab>
+    <JumpWay>0</JumpWay>
+    <JumpWayText>不能跳转</JumpWayText>
+    <JumpToNodes />
+    <ReturnLab>退回</ReturnLab>
+    <ReturnRole>1</ReturnRole>
+    <ReturnRoleText>只能退回上一个节点</ReturnRoleText>
+    <ReturnAlert />
+    <IsBackTracking>1</IsBackTracking>
+    <ReturnField />
+    <ReturnReasonsItems />
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnOneNodeRoleText>不启用</ReturnOneNodeRoleText>
+    <CCLab>抄送</CCLab>
+    <CCRole>0</CCRole>
+    <CCRoleText>不能抄送</CCRoleText>
+    <CCWriteTo>0</CCWriteTo>
+    <CCWriteToText>写入抄送列表</CCWriteToText>
+    <DoOutTime />
+    <DoOutTimeCond />
+    <ShiftLab>移交</ShiftLab>
+    <ShiftEnable>0</ShiftEnable>
+    <DelLab>删除</DelLab>
+    <DelEnable>0</DelEnable>
+    <DelEnableText>不能删除</DelEnableText>
+    <EndFlowLab>结束流程</EndFlowLab>
+    <EndFlowEnable>0</EndFlowEnable>
+    <ShowParentFormLab>查看父流程</ShowParentFormLab>
+    <ShowParentFormEnable>0</ShowParentFormEnable>
+    <OfficeBtnLab>打开公文</OfficeBtnLab>
+    <OfficeBtnEnable>0</OfficeBtnEnable>
+    <PrintHtmlLab>打印Html</PrintHtmlLab>
+    <PrintHtmlEnable>0</PrintHtmlEnable>
+    <PrintPDFLab>打印pdf</PrintPDFLab>
+    <PrintPDFEnable>0</PrintPDFEnable>
+    <PrintPDFModle>0</PrintPDFModle>
+    <PrintPDFModleText>全部打印</PrintPDFModleText>
+    <PrintZipLab>打包下载</PrintZipLab>
+    <PrintZipEnable>0</PrintZipEnable>
+    <PrintDocLab>打印单据</PrintDocLab>
+    <PrintDocEnable>0</PrintDocEnable>
+    <TrackLab>轨迹</TrackLab>
+    <TrackEnable>1</TrackEnable>
+    <HungLab>挂起</HungLab>
+    <HungEnable>0</HungEnable>
+    <SearchLab>查询</SearchLab>
+    <SearchEnable>0</SearchEnable>
+    <WorkCheckLab>审核</WorkCheckLab>
+    <WorkCheckEnable>0</WorkCheckEnable>
+    <HuiQianLab>会签</HuiQianLab>
+    <HuiQianRole>0</HuiQianRole>
+    <HuiQianRoleText>不启用</HuiQianRoleText>
+    <TCLab>流转自定义</TCLab>
+    <TCEnable>0</TCEnable>
+    <WebOffice>公文</WebOffice>
+    <WebOfficeEnable>0</WebOfficeEnable>
+    <PRILab>重要性</PRILab>
+    <PRIEnable>0</PRIEnable>
+    <AllotLab>分配</AllotLab>
+    <AllotEnable>0</AllotEnable>
+    <FocusLab>关注</FocusLab>
+    <FocusEnable>0</FocusEnable>
+    <ConfirmLab>确认</ConfirmLab>
+    <ConfirmEnable>0</ConfirmEnable>
+    <ListLab>列表</ListLab>
+    <ListEnable>1</ListEnable>
+    <BatchLab>批量审核</BatchLab>
+    <BatchEnable>0</BatchEnable>
+    <TimeLimit>1</TimeLimit>
+    <TWay>1</TWay>
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WarningDay>1</WarningDay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+  </WF_NodeExt>
+  <WF_Selector>
+    <NodeID>301</NodeID>
+    <Name>填写请假申请单</Name>
+    <SelectorModel>5</SelectorModel>
+    <SelectorModelText>使用通用人员选择器</SelectorModelText>
+    <FK_SQLTemplate />
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
+    <IsSimpleSelector>0</IsSimpleSelector>
+    <IsEnableDeptRange>0</IsEnableDeptRange>
+    <IsEnableStaRange>0</IsEnableStaRange>
+    <SelectorP1 />
+    <SelectorP2 />
+    <SelectorP3 />
+    <SelectorP4 />
+  </WF_Selector>
+  <WF_Selector>
+    <NodeID>302</NodeID>
+    <Name>部门经理审批</Name>
+    <SelectorModel>5</SelectorModel>
+    <SelectorModelText>使用通用人员选择器</SelectorModelText>
+    <FK_SQLTemplate />
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
+    <IsSimpleSelector>0</IsSimpleSelector>
+    <IsEnableDeptRange>0</IsEnableDeptRange>
+    <IsEnableStaRange>0</IsEnableStaRange>
+    <SelectorP1 />
+    <SelectorP2 />
+    <SelectorP3 />
+    <SelectorP4 />
+  </WF_Selector>
+  <WF_Selector>
+    <NodeID>303</NodeID>
+    <Name>总经理审批</Name>
+    <SelectorModel>5</SelectorModel>
+    <SelectorModelText>使用通用人员选择器</SelectorModelText>
+    <FK_SQLTemplate />
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
+    <IsSimpleSelector>0</IsSimpleSelector>
+    <IsEnableDeptRange>0</IsEnableDeptRange>
+    <IsEnableStaRange>0</IsEnableStaRange>
+    <SelectorP1 />
+    <SelectorP2 />
+    <SelectorP3 />
+    <SelectorP4 />
+  </WF_Selector>
+  <WF_Selector>
+    <NodeID>304</NodeID>
+    <Name>反馈给申请人</Name>
+    <SelectorModel>5</SelectorModel>
+    <SelectorModelText>使用通用人员选择器</SelectorModelText>
+    <FK_SQLTemplate />
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
+    <IsSimpleSelector>0</IsSimpleSelector>
+    <IsEnableDeptRange>0</IsEnableDeptRange>
+    <IsEnableStaRange>0</IsEnableStaRange>
+    <SelectorP1 />
+    <SelectorP2 />
+    <SelectorP3 />
+    <SelectorP4 />
+  </WF_Selector>
+  <WF_FrmNode>
+    <MyPK>ND301_302_003</MyPK>
+    <FK_Frm>ND301</FK_Frm>
+    <FK_Node>302</FK_Node>
+    <FK_Flow>003</FK_Flow>
+    <FrmType>0</FrmType>
+    <IsPrint>0</IsPrint>
+    <IsEnableLoadData>0</IsEnableLoadData>
+    <IsDefaultOpen>0</IsDefaultOpen>
+    <IsCloseEtcFrm>0</IsCloseEtcFrm>
+    <IsEnableFWC>0</IsEnableFWC>
+    <Idx>0</Idx>
+    <FrmSln>1</FrmSln>
+    <WhoIsPK>0</WhoIsPK>
+    <Is1ToN>0</Is1ToN>
+    <HuiZong />
+    <FrmEnableRole>0</FrmEnableRole>
+    <TempleteFile />
+    <IsEnable>1</IsEnable>
+    <GuanJianZiDuan />
+  </WF_FrmNode>
+  <WF_FrmNode>
+    <MyPK>ND303_302_003</MyPK>
+    <FK_Frm>ND303</FK_Frm>
+    <FK_Node>302</FK_Node>
+    <FK_Flow>003</FK_Flow>
+    <FrmType>0</FrmType>
+    <IsPrint>0</IsPrint>
+    <IsEnableLoadData>0</IsEnableLoadData>
+    <IsDefaultOpen>0</IsDefaultOpen>
+    <IsCloseEtcFrm>0</IsCloseEtcFrm>
+    <IsEnableFWC>0</IsEnableFWC>
+    <Idx>0</Idx>
+    <FrmSln>1</FrmSln>
+    <WhoIsPK>0</WhoIsPK>
+    <Is1ToN>0</Is1ToN>
+    <HuiZong />
+    <FrmEnableRole>0</FrmEnableRole>
+    <TempleteFile />
+    <IsEnable>1</IsEnable>
+    <GuanJianZiDuan />
+  </WF_FrmNode>
+  <WF_FrmNode>
+    <MyPK>ND304_302_003</MyPK>
+    <FK_Frm>ND304</FK_Frm>
+    <FK_Node>302</FK_Node>
+    <FK_Flow>003</FK_Flow>
+    <FrmType>0</FrmType>
+    <IsPrint>0</IsPrint>
+    <IsEnableLoadData>0</IsEnableLoadData>
+    <IsDefaultOpen>0</IsDefaultOpen>
+    <IsCloseEtcFrm>0</IsCloseEtcFrm>
+    <IsEnableFWC>0</IsEnableFWC>
+    <Idx>0</Idx>
+    <FrmSln>1</FrmSln>
+    <WhoIsPK>0</WhoIsPK>
+    <Is1ToN>0</Is1ToN>
+    <HuiZong />
+    <FrmEnableRole>0</FrmEnableRole>
+    <TempleteFile />
+    <IsEnable>1</IsEnable>
+    <GuanJianZiDuan />
+  </WF_FrmNode>
+  <WF_Direction>
+    <MyPK>003_301_302</MyPK>
+    <FK_Flow>003</FK_Flow>
+    <Node>301</Node>
+    <ToNode>302</ToNode>
+    <IsCanBack>0</IsCanBack>
+  </WF_Direction>
+  <WF_Direction>
+    <MyPK>003_302_303</MyPK>
+    <FK_Flow>003</FK_Flow>
+    <Node>302</Node>
+    <ToNode>303</ToNode>
+    <IsCanBack>0</IsCanBack>
+  </WF_Direction>
+  <WF_Direction>
+    <MyPK>003_303_304</MyPK>
+    <FK_Flow>003</FK_Flow>
+    <Node>303</Node>
+    <ToNode>304</ToNode>
+    <IsCanBack>0</IsCanBack>
+  </WF_Direction>
+  <Sys_MapData>
+    <No>ND301</No>
+    <Name>填写请假申请单</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>ND3Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
+    <Dtls />
+    <FrmW>1000</FrmW>
+    <FrmH>2000</FrmH>
+    <TableCol>0</TableCol>
+    <Tag />
+    <FK_FrmSort />
+    <FK_FormTree />
+    <FrmType>10</FrmType>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2019-06-27 20:41:20</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
+  </Sys_MapData>
+  <Sys_MapData>
+    <No>ND302</No>
+    <Name>部门经理审批</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>ND3Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>0</TableCol>
+    <Tag />
+    <FK_FrmSort />
+    <FK_FormTree />
+    <FrmType>10</FrmType>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2019-06-27 20:41:31</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
+  </Sys_MapData>
+  <Sys_MapData>
+    <No>ND303</No>
+    <Name>总经理审批</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>ND3Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>0</TableCol>
+    <Tag />
+    <FK_FrmSort />
+    <FK_FormTree />
+    <FrmType>10</FrmType>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2019-06-27 20:41:21</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
+  </Sys_MapData>
+  <Sys_MapData>
+    <No>ND304</No>
+    <Name>反馈给申请人</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>ND3Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>0</TableCol>
+    <Tag />
+    <FK_FrmSort />
+    <FK_FormTree />
+    <FrmType>10</FrmType>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2019-06-27 20:41:21</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
+  </Sys_MapData>
+  <Sys_MapData>
+    <No>ND3Rpt</No>
+    <Name>请假流程-累加模式</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>ND3Rpt</PTable>
+    <PTableModel>0</PTableModel>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>0</TableCol>
+    <Tag />
+    <FK_FrmSort />
+    <FK_FormTree />
+    <FrmType>1</FrmType>
+    <FrmTypeText>自由表单</FrmTypeText>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2019-06-27 20:42:02</Ver>
+    <FlowCtrls />
+    <AtPara>@IsHaveCA=0</AtPara>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>ND301_CDT</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>CDT</KeyOfEn>
+    <Name>发起时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1001</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_Dao</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>Dao</KeyOfEn>
+    <Name>到</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>423</X>
+    <Y>130</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1008</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_Emps</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>Emps</KeyOfEn>
+    <Name>Emps</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>8000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1003</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_FID</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1000</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_FK_Dept</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>操作员部门</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <LGTypeText>外键</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey>BP.Port.Depts</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1004</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_FK_NY</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>FK_NY</KeyOfEn>
+    <Name>年月</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>7</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1005</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_MyNum</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>MyNum</KeyOfEn>
+    <Name>个数</Name>
+    <DefVal>1</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1006</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_OID</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>2</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_QingJiaRiJiCong</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>QingJiaRiJiCong</KeyOfEn>
+    <Name>请假日期从</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>183</X>
+    <Y>134</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1007</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_QingJiaTianShu</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>QingJiaTianShu</KeyOfEn>
+    <Name>请假天数</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>66</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>640</X>
+    <Y>130</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1009</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_QingJiaYuanYin</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>QingJiaYuanYin</KeyOfEn>
+    <Name>请假原因</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>624</UIWidth>
+    <UIHeight>123</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>89</X>
+    <Y>201</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1011</Idx>
+    <AtPara>@IsRichText=0@FontSize=12@IsSupperText=0</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_RDT</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_Rec</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1002</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_ShenQingRen</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>ShenQingRen</KeyOfEn>
+    <Name>申请人</Name>
+    <DefVal>@WebUser.Name</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>192</X>
+    <Y>49</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara>@IsRichText=0@FontSize=12@IsSupperText=0</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_ShenQingRenBuMen</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>ShenQingRenBuMen</KeyOfEn>
+    <Name>申请人部门</Name>
+    <DefVal>@WebUser.FK_DeptName</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>452</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>191</X>
+    <Y>87</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>3</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara>@FontSize=12@IsRichText=0@IsSupperText=0</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_ShenQingRiJi</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>ShenQingRiJi</KeyOfEn>
+    <Name>申请日期</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>417</X>
+    <Y>49</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND301_Title</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn>Title</KeyOfEn>
+    <Name>标题</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>251</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>200</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>171.2</X>
+    <Y>68.4</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_BMJLSP_Checker</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>BMJLSP_Checker</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>1</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_BMJLSP_Note</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>BMJLSP_Note</KeyOfEn>
+    <Name>审核意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>69</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_BMJLSP_RDT</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>BMJLSP_RDT</KeyOfEn>
+    <Name>审核日期</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_CDT</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>CDT</KeyOfEn>
+    <Name>完成时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>4</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_Emps</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>Emps</KeyOfEn>
+    <Name>Emps</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>8000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>6</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_FID</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_FK_Dept</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>操作员部门</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>7</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_OID</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>WorkID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>2</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_RDT</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND302_Rec</MyPK>
+    <FK_MapData>ND302</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>记录人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>5</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_CDT</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>CDT</KeyOfEn>
+    <Name>完成时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>4</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_Emps</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>Emps</KeyOfEn>
+    <Name>Emps</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>8000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>6</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_FID</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_FK_Dept</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>操作员部门</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>7</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_OID</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>WorkID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>2</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_RDT</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_Rec</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>记录人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>5</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_ZJLSP_Checker</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>ZJLSP_Checker</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>1</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_ZJLSP_Note</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>ZJLSP_Note</KeyOfEn>
+    <Name>审核意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>69</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND303_ZJLSP_RDT</MyPK>
+    <FK_MapData>ND303</FK_MapData>
+    <KeyOfEn>ZJLSP_RDT</KeyOfEn>
+    <Name>审核日期</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_CDT</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>CDT</KeyOfEn>
+    <Name>完成时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>4</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_Emps</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>Emps</KeyOfEn>
+    <Name>Emps</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>8000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>6</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_FID</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_FK_Dept</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>操作员部门</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>7</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_OID</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>WorkID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>2</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_RDT</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND304_Rec</MyPK>
+    <FK_MapData>ND304</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>记录人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>176</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>5</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_AtPara</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>AtPara</KeyOfEn>
+    <Name>参数</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_BillNo</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>BillNo</KeyOfEn>
+    <Name>单据编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_BMJLSP_Checker</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>BMJLSP_Checker</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>1</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_BMJLSP_Note</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>BMJLSP_Note</KeyOfEn>
+    <Name>审核意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>69</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_BMJLSP_RDT</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>BMJLSP_RDT</KeyOfEn>
+    <Name>审核日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>160</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_CDT</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>CDT</KeyOfEn>
+    <Name>活动时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1001</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_Dao</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>Dao</KeyOfEn>
+    <Name>到</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>423</X>
+    <Y>130</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1008</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_Emps</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>Emps</KeyOfEn>
+    <Name>参与者</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>8000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1003</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FID</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1000</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FK_Dept</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>操作员部门</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey>BP.Port.Depts</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1004</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FK_NY</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FK_NY</KeyOfEn>
+    <Name>年月</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>7</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1005</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowDaySpan</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowDaySpan</KeyOfEn>
+    <Name>跨度(天)</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowEmps</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowEmps</KeyOfEn>
+    <Name>参与人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>1000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowEnder</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowEnder</KeyOfEn>
+    <Name>结束人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowEnderRDT</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowEnderRDT</KeyOfEn>
+    <Name>结束时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowEndNode</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowEndNode</KeyOfEn>
+    <Name>结束节点</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowNote</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowNote</KeyOfEn>
+    <Name>流程信息</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowStarter</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowStarter</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_FlowStartRDT</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>FlowStartRDT</KeyOfEn>
+    <Name>发起时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_GUID</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>GUID</KeyOfEn>
+    <Name>GUID</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_MyNum</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>MyNum</KeyOfEn>
+    <Name>个数</Name>
+    <DefVal>1</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1006</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_OID</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>2</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_PEmp</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>PEmp</KeyOfEn>
+    <Name>调起子流程的人员</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_PFlowNo</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>PFlowNo</KeyOfEn>
+    <Name>父流程编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>3</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_PNodeID</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>PNodeID</KeyOfEn>
+    <Name>父流程启动的节点</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_PrjName</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>PrjName</KeyOfEn>
+    <Name>项目名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_PrjNo</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>PrjNo</KeyOfEn>
+    <Name>项目编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-100</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_PWorkID</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>PWorkID</KeyOfEn>
+    <Name>父流程WorkID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-101</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_QingJiaRiJiCong</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>QingJiaRiJiCong</KeyOfEn>
+    <Name>请假日期从</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>183</X>
+    <Y>134</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1007</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_QingJiaTianShu</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>QingJiaTianShu</KeyOfEn>
+    <Name>请假天数</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>66</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>640</X>
+    <Y>130</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1009</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_QingJiaYuanYin</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>QingJiaYuanYin</KeyOfEn>
+    <Name>请假原因</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>624</UIWidth>
+    <UIHeight>123</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>89</X>
+    <Y>201</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>194</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1011</Idx>
+    <AtPara>@IsRichText=0@FontSize=12@IsSupperText=0</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_RDT</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_Rec</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1002</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_ShenQingRen</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>ShenQingRen</KeyOfEn>
+    <Name>申请人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara>@IsRichText=0@FontSize=12@IsSupperText=0</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_ShenQingRenBuMen</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>ShenQingRenBuMen</KeyOfEn>
+    <Name>申请人部门</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>3</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara>@FontSize=12@IsRichText=0@IsSupperText=0</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_ShenQingRiJi</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>ShenQingRiJi</KeyOfEn>
+    <Name>申请日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_Title</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>Title</KeyOfEn>
+    <Name>标题</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>251</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>200</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>171.2</X>
+    <Y>68.4</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>158</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_WFSta</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>WFSta</KeyOfEn>
+    <Name>状态</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>1000</MaxLen>
+    <UIBindKey>WFSta</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>1</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_WFState</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>WFState</KeyOfEn>
+    <Name>流程状态</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>1000</MaxLen>
+    <UIBindKey>WFState</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>168</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>-1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_ZJLSP_Checker</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>ZJLSP_Checker</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>1</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_ZJLSP_Note</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>ZJLSP_Note</KeyOfEn>
+    <Name>审核意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>69</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND3Rpt_ZJLSP_RDT</MyPK>
+    <FK_MapData>ND3Rpt</FK_MapData>
+    <KeyOfEn>ZJLSP_RDT</KeyOfEn>
+    <Name>审核日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>174</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_GroupField>
+    <OID>160</OID>
+    <Lab>部门经理审批</Lab>
+    <FrmID>ND302</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>168</OID>
+    <Lab>流程信息</Lab>
+    <FrmID>ND3Rpt</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>2</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>174</OID>
+    <Lab>总经理审批</Lab>
+    <FrmID>ND303</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>176</OID>
+    <Lab>反馈给申请人</Lab>
+    <FrmID>ND304</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>194</OID>
+    <Lab>填写请假申请单</Lab>
+    <FrmID>ND301</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_FrmLine>
+    <MyPK>1621702c-50ae-48b7-b62e-29556005fb03</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>40.91</Y1>
+    <X2>717.91</X2>
+    <Y2>40.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>2f0d40d2-060c-4505-98d6-569c4d0fa35a</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>82.82</X1>
+    <Y1>338.82</Y1>
+    <X2>721</X2>
+    <Y2>338.82</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>940c8302-f7fe-4520-969b-2e390b4804b9</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>339</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ac447cf0-fe98-4287-82f0-f7ddcd9cb1cd</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>c728fbe5-438c-4cc2-b1c7-66998bbb40bb</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>165.91</Y1>
+    <X2>717.91</X2>
+    <Y2>165.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>e83f3266-6986-4448-9f6c-4c7ac05639bc</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>338</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ebb928ae-af12-48ee-ac40-8900ffcf6e40</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>235bcabb-e8c6-46ba-8362-a55b047f63fb</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>填写xxxx申请单</Text>
+    <X>86.77</X>
+    <Y>5.27</Y>
+    <FontSize>23</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:23;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>34a5f896-d33c-4963-98d0-01a47ce04514</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
+    <X>604.175</X>
+    <Y>348</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>4f7ceece-6e15-4d34-8b37-8ea5349eb4f8</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>请假原因</Text>
+    <X>94</X>
+    <Y>176.5</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>61b85df7-37a0-4afb-aba5-383d500f432c</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>申请人</Text>
+    <X>90.5</X>
+    <Y>52.5</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>7a5a9b92-969b-4b11-9deb-da6a6defd6b1</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>申请日期</Text>
+    <X>330</X>
+    <Y>51.5</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>a6876dcb-3fe5-48d7-9110-0272de0ae762</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>请假日期从</Text>
+    <X>93.5</X>
+    <Y>134.5</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>b26ecbf4-0a20-444e-a551-fb4438c88699</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>到</Text>
+    <X>361.5</X>
+    <Y>135.015</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>e0ee8799-e1f7-4ddb-bb7f-4c1fc58d7861</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>请假天数</Text>
+    <X>563</X>
+    <Y>136.5</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>e765741c-cb09-472d-990d-95490dc67827</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <Text>申请人部门</Text>
+    <X>89.5</X>
+    <Y>88.5</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>font-size:14;font-family:"Portable User Interface";font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmImg>
+    <MyPK>Img_1_ND301</MyPK>
+    <FK_MapData>ND301</FK_MapData>
+    <KeyOfEn />
+    <ImgAppType>0</ImgAppType>
+    <X>579.26</X>
+    <Y>-2.55</Y>
+    <H>40</H>
+    <W>137</W>
+    <ImgURL />
+    <ImgPath />
+    <LinkURL>http://ccflow.org</LinkURL>
+    <LinkTarget>_blank</LinkTarget>
+    <GUID />
+    <Tag0 />
+    <ImgSrcType>0</ImgSrcType>
+    <IsEdit>1</IsEdit>
+    <Name />
+    <EnPK />
+    <ColSpan>0</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>0</GroupID>
+    <GroupIDText>0</GroupIDText>
+  </Sys_FrmImg>
+</NewDataSet>

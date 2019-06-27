@@ -58,7 +58,10 @@
                     }
                 }
 
-                html += "<textarea id='TB_" + mapDtl.No + "' >" + sqlVal + "</textarea>";
+                html += "<textarea id='TB_" + mapDtl.No + "' style='width:95%;' >" + sqlVal + "</textarea>";
+
+                //    html += "<br>填充方式:<select id='DDL_" + mapDtl.No + "' ><option value='0' >每次打开的时候填充</option></select>";
+                //   html += "<option value='0' >每次打开的时候填充</option></select>";
             }
 
             $("#dtls").html(html);
@@ -99,8 +102,8 @@
     </script>
     <base target="_self" />
 </head>
-<body class="easyui-layout" style='overflow:auto'>
-    <form method="post" action="" id="form1" >
+<body class="easyui-layout" style='overflow: auto'>
+    <form method="post" action="" id="form1">
     <div id="mainPanel" class="mainPanel">
         <table class='Table' cellspacing='0' cellpadding='0' border='0' style='width: 100%'>
             <tr>
@@ -112,7 +115,7 @@
             </tr>
             <tr>
                 <td>
-                    <textarea name="TB_Tag" rows="7" cols="70" id="TB_Tag" style="width: 99%;">
+                    <textarea name="TB_Tag" rows="7" cols="70" id="TB_Tag" style="width: 95%;">
 </textarea>
                     <br />
                     说明:填充主表的sql,表达式里支持@变量与约定的公用变量。
@@ -121,7 +124,7 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="width: 95%;">
                     <div id="dtls">
                     </div>
                 </td>

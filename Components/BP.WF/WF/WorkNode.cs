@@ -4664,7 +4664,7 @@ namespace BP.WF
                     }
                     foreach (MapAttr mapAttr in mapAttrs)
                     {
-                        if (mapAttr.UIIsInput == false && mapAttr.UIIsEnable == true)
+                        if (mapAttr.UIIsInput == false)
                             continue;
 
                         string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();

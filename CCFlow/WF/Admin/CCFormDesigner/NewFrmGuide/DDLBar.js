@@ -3,14 +3,14 @@ function InitBar(optionKey) {
 
     /*
     FrmType_CH_0	傻瓜表单	FrmType	0	CH
-FrmType_CH_1	自由表单	FrmType	1	CH
-FrmType_CH_11	累加表单	FrmType	11	CH
-FrmType_CH_3	嵌入式表单	FrmType	3	CH
-FrmType_CH_4	Word表单	FrmType	4	CH
-FrmType_CH_5	在线编辑模式Excel表单	FrmType	5	CH
-FrmType_CH_6	VSTO模式Excel表单	FrmType	6	CH
-FrmType_CH_7	实体类组件	FrmType	7	CH
-    */
+    FrmType_CH_1	自由表单	FrmType	1	CH
+    FrmType_CH_11	累加表单	FrmType	11	CH
+    FrmType_CH_3	嵌入式表单	FrmType	3	CH
+    FrmType_CH_4	Word表单	FrmType	4	CH
+    FrmType_CH_5	在线编辑模式Excel表单	FrmType	5	CH
+    FrmType_CH_6	VSTO模式Excel表单	FrmType	6	CH
+    FrmType_CH_7	实体类组件	FrmType	7	CH
+        */
 
     var html = "选择要创建表单类型:";
     html += "<select id='changBar' onchange='changeOption()'>";
@@ -51,8 +51,8 @@ FrmType_CH_7	实体类组件	FrmType	7	CH
     html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;Word表单</option>";
     html += "</select >";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
+    html += "<input  id='Btn_Save' type=button onclick='Save()' value='创建' />";
+    html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='创建并关闭' />";
 
     html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
@@ -132,4 +132,5 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
             window.location.href = window.location.href;
         }
     });
+
 }

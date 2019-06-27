@@ -28,7 +28,33 @@
 
             //获取节点属性.
             var frmSort = GetQueryString("FK_FrmSort");
+           
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
+            var frmType = GetQueryString("FrmType");
+            if (frmType == null || frmType == "")
+                frmType = '1';
+
+            //创建表单类型.
+//            GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
+
+            //创建数据源.
+//            GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            var data = handler.DoMethodReturnString("NewFrmGuide_Init");
+            $("#Msg").html("");
+
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            var tables = data["Tables"];
+            GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
+            return;
         });
 
         function SetDDLEnable(ctrl, val) {
@@ -37,43 +63,199 @@
             else
                 $("#" + ctrl).removeAttr("disabled");
         }
+        //全拼、简拼
+        function GenerPinYin() {
+
+            //是否是全拼.
+            var isQuanPin = 0;
+            if (document.getElementById("RB_ZZMM_0").checked == true)
+                isQuanPin = 1;
+
+            // var name = $('#TB_Nam').val();
+            var name = document.getElementById("TB_Name").value;
+            if (name == "")
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("IsQuanPin", isQuanPin);
+            handler.AddPara("TB_Name", encodeURIComponent(name));
+            var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
+
+            $("#Msg").html("");
+
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            $('#TB_No').val("CCFrm_" + data);
+            var frmType = $("#DDL_FrmType").val();
+            if (frmType != "3" && frmType != "7")
+                $('#TB_PTable').val("CCFrm_" + data);
+            return;
+        }
 
         function Save() {
 
-            //更新节点表单类型.
-            var frmSort = GetQueryString("FK_FrmSort");
-            var node = new Entity("BP.WF.Node", frmSort);
-            node.FormType = FormType.FoolForm;
-            var frmValue = $("input[name='RefFrm']:checked").val();
+            $("#Msg").html("正在创建,请稍后......");
+            var FormType = $("#changBar").val();
+            var name = document.getElementById("TB_Name").value;
+            var no = document.getElementById("TB_No").value;
+            var pTable = document.getElementById("TB_PTable").value;
 
-            if (frmValue == "0") {
-                node.NodeFrmID = "";
-            }
-            if (frmValue == "1") {
-                node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
-            }
-
-            //上一个节点表单.
-            if (frmValue == "2") {
-                node.NodeFrmID = "Pri";
+            if (name == "" || no == "" || pTable == "") {
+                $("#Msg").html("");
+                alert('@请输入必填的字段.');
+                return;
             }
 
-            node.Update();
 
-            //更新表单类型.
-            var frmID = "ND" + frmSort;
-            var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = FormType.FoolForm;
-            mapData.Update();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            
+            handler.AddPara("DDL_FrmType", FormType);
+            handler.AddFormData();
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("NewFrmGuide_Create");
 
-            alert("保存成功.");
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            $("#Msg").html("<font color=green>" + data + "</font>");
+            data = data.replace('url@', '');
+
+            try {
+
+                //表单库增加表单节点
+                if (typeof window.parent.AppendFrmToFormTree != "undefined") {
+                    // var sort = $("#HD_FK_FormTree").val();
+                    var sort = GetQueryString("FK_FrmSort"); // $("#HD_FK_FormTree").val();
+                    window.parent.AppendFrmToFormTree(sort, no, name);
+                }
+
+                if (typeof window.parent.TabCloseByTitle != "undefined") {
+                    //需要延时关闭，不可立即关闭。
+                    setTimeout("window.parent.TabCloseByTitle('新建表单')", 1000);
+                }
+
+            } catch (e) {
+
+            }
+
+            //切换页面
+            window.location.href = data;
+            return;
+        }
+
+        //选择一个表.
+        function DDL_PTable_Change(ddl) {
+            var aa = document.getElementById(ddl);
+            document.getElementById("TB_PTable").value = aa.value;
         }
     </script>
 </head>
 <body>
     <div id="bar">
     </div>
-
+    <form id="cc">
+    <table style="width: 95%;">
+      
+        <tr>
+            <td class="Idx">
+                1
+            </td>
+            <td>
+                表单名称
+            </td>
+            <td>
+                <input type="text" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" style="width: 100%;" />
+            </td>
+            <td>
+                表单的名称，允许重复，允许多个表单映射到一张表上。
+            </td>
+        </tr>
+        <tr>
+            <td class="Idx">
+                2
+            </td>
+            <td>
+                表单编号(必须是字母或者下划线组合)
+            </td>
+            <td>
+                <input type="text" id="TB_No" name="TB_No" style="width: 100%;" />
+            </td>
+            <td>
+                <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked="true" onclick="GenerPinYin()" /><label
+                    for="RB_ZZMM_0" onclick="GenerPinYin()">全拼</label>
+                <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label
+                    for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
+            </td>
+        </tr>
+        <tr id="Idx_6">
+            <td class="Idx">
+                3
+            </td>
+            <td>
+                <div>
+                    数据表存储类型</div>
+            </td>
+            <td>
+                <select id="DDL_PTableModel" name="DDL_PTableModel">
+                    <option value="0">自定存储表 </option>
+                    <option value="1">从数据库中指定，可以修改数据库结构。 </option>
+                    <option value="2">从数据库中指定，不允许修改数据库结构。 </option>
+                </select>
+            </td>
+            <td>
+                <div>
+                    确定后，不允许修改。</div>
+            </td>
+        </tr>
+        <tr id="Idx_7">
+            <td class="Idx" id="idx_td_7">
+                4
+            </td>
+            <td>
+                <div id="PTableName">
+                    自定义存储表
+                </div>
+            </td>
+            <td>
+                <input type="text" id="TB_PTable" name="TB_PTable" style="width: 100%;" />
+            </td>
+            <td>
+                <div id="PTableDesc">
+                    数据要存储到那个表里？
+                </div>
+            </td>
+        </tr>
+        <tr id="Idx_8">
+            <td class="Idx">
+                5
+            </td>
+            <td>
+                <div id="Div1">
+                    本机已存在的表
+                </div>
+            </td>
+            <td>
+                <select id="DDL_PTable" name="DDL_PTable" onchange="DDL_PTable_Change(this.id)">
+                </select>
+            </td>
+            <td>
+                <div id="Div2">
+                    请选择系统存在的表，对后两项有效？
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+    <div id="Msg">
+    </div>
+   <!-- <input type="hidden" id="HD_FK_FormTree" name="HD_FK_FormTree" />-->
+    
+    </form>
 
     <fieldset>
         <legend>说明</legend>

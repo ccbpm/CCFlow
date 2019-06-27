@@ -2838,6 +2838,10 @@ namespace BP.WF
             // 填充从表.
             foreach (MapDtl dtl in dtls)
             {
+                //如果有数据，就不要填充了.
+
+
+
                 string[] sqls = item.Tag1.Split('*');
                 foreach (string mysql in sqls)
                 {
@@ -2968,7 +2972,6 @@ namespace BP.WF
             int result = DBAccess.RunSQLReturnValInt(sql, -1);
             if (result <= 0)
                 return false;
-
             return true;
         }
         /// <summary>

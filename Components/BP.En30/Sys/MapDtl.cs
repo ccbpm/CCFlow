@@ -1743,7 +1743,9 @@ namespace BP.Sys
             if (fk_mapdata == null)
                 return;
 
-            this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata, MapDtlAttr.FK_Node, 0, MapDtlAttr.No);
+            //zhoupeng 注销掉，为了这样多的过滤条件？
+           // this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata, MapDtlAttr.FK_Node, 0, MapDtlAttr.No);
+            this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

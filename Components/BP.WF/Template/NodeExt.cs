@@ -355,7 +355,7 @@ namespace BP.WF.Template
                 map.AddTBInt("FWCSta", 0, "节点状态", false, false);
 
 
-                map.AddTBString(NodeAttr.SelfParas, null, "自定义参数", true, false, 0, 500, 10, true);
+                map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
                 #endregion  基础属性
 
                 #region 分合流子线程属性
@@ -846,7 +846,7 @@ namespace BP.WF.Template
 
                 #region 实验中的功能
                 rm = new RefMethod();
-                rm.Title = "自定义参数";
+                rm.Title = "自定义属性";
                 rm.ClassMethodName = this.ToString() + ".DoSelfParas()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";

@@ -51,7 +51,7 @@ namespace BP.WF.HttpHandler
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
             {
-                #region 
+                #region  
                 if (this.FK_MapData.Contains("BP.") == true)
                 {
                     /*如果是类的实体.*/

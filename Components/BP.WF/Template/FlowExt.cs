@@ -389,8 +389,8 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsFullSA, false, "是否自动计算未来的处理人？", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsFullSA, "http://ccbpm.mydoc.io/?v=5404&t=17034");
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
-                    FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+                //map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
+                // FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
                 map.AddBoolean(FlowAttr.IsGuestFlow, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
                 map.SetHelperUrl(FlowAttr.IsGuestFlow, "http://ccbpm.mydoc.io/?v=5404&t=17039");
@@ -659,6 +659,14 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "流程属性自定义";
+                rm.ClassMethodName = this.ToString() + ".DoFlowAttrExt()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "开发接口";
+                map.AddRefMethod(rm);
+
                 #endregion 开发接口.
 
                 #region 流程运行维护.
@@ -847,7 +855,6 @@ namespace BP.WF.Template
                 #endregion 流程监控.
 
                 #region 实验中的功能
-
                 rm = new RefMethod();
                 rm.Title = "数据订阅-实验中";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/RptOrder.png";
@@ -1095,11 +1102,18 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/APICodeFEE.htm?FK_Flow=" + this.No;
         }
+        /// <summary>
+        /// 流程属性自定义
+        /// </summary>
+        /// <returns></returns>
+        public string DoFlowAttrExt()
+        {
+            return "../../../DataUser/OverrideFiles/FlowAttrExt.htm?FK_Flow=" + this.No;
+        }
         public string DoVer()
         {
             return "../../Admin/AttrFlow/Ver.htm?FK_Flow=" + this.No;
         }
-
         /// <summary>
         /// 时限规则
         /// </summary>

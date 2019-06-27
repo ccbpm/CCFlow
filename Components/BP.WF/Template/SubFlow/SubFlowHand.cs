@@ -141,6 +141,9 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
+                FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "发起限制规则:如果当前为子流程，仅仅只能被调用1次，不能被重复调用。", 
                     true, true, true);
 

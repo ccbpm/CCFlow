@@ -1312,21 +1312,26 @@ namespace BP.WF.HttpHandler
 
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
+                    string lgType = dr["LGType"].ToString();
+                    string uiBindKey = dr["UIBindKey"].ToString();
+
                     string uiVisible = dr["UIVisible"].ToString();
                     if (uiVisible.Equals("0") == true)
                         continue;
 
-                    string lgType = dr["LGType"].ToString();
-                    string uiBindKey = dr["UIBindKey"].ToString();
-                    string ctrlType = dr["UIContralType"].ToString();
-                    if (DataType.IsNullOrEmpty(uiBindKey) == false && ctrlType.Equals("1") == true)
-                    {
-                        /*如果是外部数据源的情况. */
-                    }
-                    else if (lgType.Equals("2") == false)
-                    {
-                        continue;
-                    }
+                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                        continue; //为空就continue.
+
+                    if (lgType.Equals("1") == true)
+                        continue; //枚举值就continue;
+
+                    string uiIsEnable = dr["UIIsEnable"].ToString();
+                    if (uiIsEnable.Equals("0") == true && lgType.Equals("1") == true)
+                        continue; //如果是外键，并且是不可以编辑的状态.
+
+                    if (uiIsEnable.Equals("1") == true && lgType.Equals("0") == true)
+                        continue; //如果是外部数据源，并且是不可以编辑的状态.
+
 
                     // 检查是否有下拉框自动填充。
                     string keyOfEn = dr["KeyOfEn"].ToString();

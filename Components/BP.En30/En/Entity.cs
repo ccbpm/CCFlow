@@ -3019,6 +3019,10 @@ namespace BP.En
                                 }
                             }
                         }
+                        else if (FType.ToLower().Contains("text"))
+                        {
+
+                        }
                         else
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";

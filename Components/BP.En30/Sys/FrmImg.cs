@@ -121,6 +121,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 对应字段名称
+        /// </summary>
+        public string KeyOfEn
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.KeyOfEn);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.KeyOfEn, value);
+            }
+        }
+        /// <summary>
         /// 英文名称
         /// </summary>
         public string EnPK
@@ -388,6 +402,13 @@ namespace BP.Sys
             }
         }
         #endregion
+
+        protected override bool beforeInsert()
+        {
+            if(DataType.IsNullOrEmpty(this.KeyOfEn) == false)
+                this.MyPK = this.FK_MapData + "_" + this.KeyOfEn ;
+            return base.beforeInsert();
+        }
 
         /// <summary>
         /// 是否存在相同的数据?

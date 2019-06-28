@@ -2224,8 +2224,9 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
-                            //en.MyPK = "Img_" + idx + "_" + fk_mapdata;
-                            //  en.MyPK = DBAccess.GenerGUID();
+                            if(DataType.IsNullOrEmpty(en.KeyOfEn) == true)
+                                en.MyPK = DBAccess.GenerGUID();
+                           
                             en.Insert();
                         }
                         break;

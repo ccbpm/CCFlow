@@ -1248,7 +1248,7 @@ namespace BP.Sys
             BP.DA.CashFrmTemplate.Remove(frmID);
             MapData mapdata = new MapData(frmID);
             mapdata.CleanObject();
-            return ;
+            return;
         }
         /// <summary>
         /// 获得表单信息.
@@ -1266,7 +1266,7 @@ namespace BP.Sys
             //创建实体对象.
             MapData md = new MapData(frmID);
 
-            if (DataType.IsNullOrEmpty(md.Name) == true && frmName !=null )
+            if (DataType.IsNullOrEmpty(md.Name) == true && frmName != null)
                 md.Name = frmName;
 
             //加入主表信息.
@@ -1409,7 +1409,7 @@ namespace BP.Sys
             //Sys_FrmLab.
             FrmImgs frmImgs = new FrmImgs();
             frmImgs.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
-           // DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
+            // DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
             ds.Tables.Add(frmImgs.ToDataTableField("Sys_FrmImg"));
 
             //Sys_FrmRB.
@@ -1714,7 +1714,7 @@ namespace BP.Sys
 
             if (removeSpecialSymbols)
                 name = DataType.ParseStringForName(name, maxLen);
-             
+
 
             try
             {

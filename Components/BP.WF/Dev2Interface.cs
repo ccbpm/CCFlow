@@ -8229,7 +8229,6 @@ namespace BP.WF
                 }
             }
         }
-
         /// <summary>
         /// 保存参数，向工作流引擎传入的参数变量.
         /// </summary>

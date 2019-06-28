@@ -337,7 +337,7 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.CancelDisWhenRead, false, "对方已经打开就不能撤销", true, true);
 
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17904");
-                map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true,false);
+                map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true, false);
                 map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
                 map.AddBoolean(NodeAttr.IsGuestNode, false, "是否打开即审批?", true, true, true);
 
@@ -488,7 +488,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ShowParentFormLab, "查看父流程", "查看父流程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
-                
+
 
                 // add 2019.1.9 for 东孚.
                 map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
@@ -767,7 +767,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 表单设置.
 
-
                 #region 考核属性.
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
                 //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
@@ -791,7 +790,6 @@ namespace BP.WF.Template
                 map.AddTBInt(NodeAttr.OutTimeDeal, 0, "超时处理方式", false, false);
 
                 #endregion 考核属性.
-
 
                 #region 父子流程.
                 rm = new RefMethod();
@@ -846,8 +844,15 @@ namespace BP.WF.Template
 
                 #region 实验中的功能
                 rm = new RefMethod();
-                rm.Title = "自定义属性";
+                rm.Title = "自定义属性(通用)";
                 rm.ClassMethodName = this.ToString() + ".DoSelfParas()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                rm.Visable = false;
+                map.AddRefMethod(rm);
+                rm = new RefMethod();
+                rm.Title = "自定义属性(自定义)";
+                rm.ClassMethodName = this.ToString() + ".DoNodeAttrExt()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
                 rm.Visable = false;
@@ -962,7 +967,7 @@ namespace BP.WF.Template
             return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
         }
 
-     
+
         /// <summary>
         /// 接受人规则
         /// </summary>
@@ -1030,13 +1035,22 @@ namespace BP.WF.Template
 
         #region 实验中的功能.
         /// <summary>
-        /// 自定义参数
+        /// 自定义参数（通用）
         /// </summary>
         /// <returns></returns>
         public string DoSelfParas()
         {
             return "../../Admin/AttrNode/SelfParas.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
+        /// <summary>
+        /// 自定义参数（自定义）
+        /// </summary>
+        /// <returns></returns>
+        public string DoNodeAttrExt()
+        {
+            return "../../../DataUser/OverrideFiles/NodeAttrExt.htm?FK_Flow=" + this.NodeID;
+        }
+
         /// <summary>
         /// 设置节点类型
         /// </summary>

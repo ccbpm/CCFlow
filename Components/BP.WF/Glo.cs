@@ -531,10 +531,10 @@ namespace BP.WF
                     //将需要改成大字段的项内容copy到大字段中
                     DBAccess.RunSQL("UPDate WF_EMP set startFlows_temp=STARTFLOWS");
                     //删除原有字段
-                     DBAccess.RunSQL("ALTER TABLE  WF_EMP drop column STARTFLOWS");
+                    DBAccess.RunSQL("ALTER TABLE  WF_EMP drop column STARTFLOWS");
                     //将大字段名改成原字段名
-                     DBAccess.RunSQL("ALTER TABLE  WF_EMP rename column startFlows_temp to STARTFLOWS");
-                    
+                    DBAccess.RunSQL("ALTER TABLE  WF_EMP rename column startFlows_temp to STARTFLOWS");
+
                 }
                 if (dbtype == DBType.MySQL)
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
@@ -549,9 +549,9 @@ namespace BP.WF
 
                 if (dbtype == DBType.PostgreSQL)
                 {
-                  //  DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows type text");
+                    //  DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows type text");
                 }
-                    
+
 
                 #endregion 更新wf_emp 的字段类型.
 
@@ -2210,13 +2210,13 @@ namespace BP.WF
                 str += GERptAttr.Title + ",";
                 str += GERptAttr.WFSta + ",";
                 str += GERptAttr.WFState + ",";
-  				str += "Rec,";
+                str += "Rec,";
                 str += "CDT,";
                 return str;
                 // return typeof(GERptAttr).GetFields().Select(o => o.Name).ToList();
             }
         }
-     
+
 
 
         #region 与流程事件实体相关.
@@ -4790,7 +4790,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, '('+pWorkID + ',' + pkval+')');
+                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, '(' + pWorkID + ',' + pkval + ')');
                         //qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, "=", pWorkID, "RefPKVal1");
                         //qo.addOr();
                         //qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, "=", pkval, "");

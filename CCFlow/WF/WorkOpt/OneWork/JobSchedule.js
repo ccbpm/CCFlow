@@ -1,13 +1,11 @@
-﻿
-var step = 0;
+﻿var step = 0;
 $(function () {
 
     var workid = GetQueryString("WorkID");
-
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddPara("WorkID", workid);
     var ds = handler.DoMethodReturnJSON("JobSchedule_Init");
-
+    // console.log(ds);
     var gwf = ds["WF_GenerWorkFlow"][0]; //工作记录.
     var nodes = ds["WF_Node"]; //节点.
     var dirs = ds["WF_Direction"]; //连接线.
@@ -21,10 +19,10 @@ $(function () {
     var nds = "";
     for (var i = 0; i < tracks.length; i++) {
         var tk = tracks[i];
-        if (nds.indexOf(tk.FK_Node) == -1)
-            nds += "," + tk.FK_Node;
-        else
+        if (nds.indexOf(tk.FK_Node) != -1)
             continue;
+
+        nds += "," + tk.FK_Node;
     }
 
     //把节点转化为数组.
@@ -263,6 +261,4 @@ function GetNextNodeIDExpSpecNode_del(nodeID, specToNode, dirs) {
         }
     }
     return 0;
-}
-      
-      
+} 

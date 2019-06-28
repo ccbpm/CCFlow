@@ -109,7 +109,6 @@ function InitPage() {
             if (msg == null || msg == undefined || msg == "")
                 msg = "同意";
 
-
             while (msg.indexOf('<BR>') >= 0) {
                 msg = msg.replace('<BR>', '\t\n');
             }
@@ -117,7 +116,6 @@ function InitPage() {
             html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
             html += msg;
             html += "</textarea>";
-
 
             //加入常用短语.
             html += "<br>";

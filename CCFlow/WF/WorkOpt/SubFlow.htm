@@ -72,30 +72,36 @@
             var flowNo = GetQueryString("FK_Flow");
             var nodeID = GetQueryString("FK_Node");
 
+            var subFlows = new Entities("BP.WF.Template.SubFlowHands");
+            subFlows.Retrieve("FK_Node", nodeID, "Idx");
+
+            //要兼容旧版本.
+            if (subFlows.length == 0 && sf.SFDefInfo != "") {
+
+                for (var idx = 0; idx < strs.length; idx++) {
+                    var flowNo = strs[idx];
+                    if (flowNo == null || flowNo == "")
+                        continue;
+
+                    var en = new Entity("BP.WF.Template.SubFlowHand");
+                    en.FK_Node = nodeID;
+                    en.FK_Flow = flowNo;
+                    en.SetPKVal(flowNo + "_" + nodeID + "_0");
+                    en.Insert();
+                }
+            }
+
 
             //遍历子流程.
-            for (var i = 0; i < strs.length; i++) {
+            for (var i = 0; i < subFlows.length; i++) {
 
-                str = strs[i];
-                if (str == null || str == "")
-                    continue;
-                if (str.length != 3)
-                    continue;
-
-                //输出标题.
-                var fl = new Entity("BP.WF.Flow");
-                fl.SetPKVal(str);
-                var val = fl.RetrieveFromDBSources();
-                if (val == 0)
-                    continue;
-
+                var subFlow = subFlows[i];
 
                 if (sf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View")
-                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + fl.No + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.FlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.FK_Flow + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
 
                 if (sf.SFSta == FrmSubFlowSta.Readonly || GetQueryString("DoType") == "View")
-                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
-
+                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.FlowName + "</div></style>";
 
                 html += "<tr>";
                 html += "<td class='TRSum' colspan=7 >" + tdHtml + "</td>";
@@ -104,10 +110,9 @@
                 //该流程的子流程信息.
                 var gwfs = new Entities("BP.WF.GenerWorkFlows");
                 if (sf.SFShowCtrl == SFShowCtrl.All)
-                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", str); //流程.          
+                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.FK_Flow); //流程.          
                 else
-                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", str, "Starter", webUser.No); //流程.
-
+                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.FK_Flow, "Starter", webUser.No); //流程.
 
                 for (var j = 0; j < gwfs.length; j++) {
 

@@ -989,7 +989,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
                 dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
                 dt.Columns["TSPAN"].ColumnName = "TSpan";
-                dt.Columns["TOTOSTA"].ColumnName = "TodoSta";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
                 dt.Columns["DEPTNAME"].ColumnName = "DeptName";
                 dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
@@ -1017,7 +1017,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["FK_NY"].ColumnName = "FK_NY";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
-                dt.Columns["FK_FKLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
                 dt.Columns["EMPS"].ColumnName = "Emps";
                 dt.Columns["DOMAIN"].ColumnName = "Domain";

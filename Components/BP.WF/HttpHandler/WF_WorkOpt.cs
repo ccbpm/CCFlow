@@ -119,10 +119,9 @@ namespace BP.WF.HttpHandler
             if (billTemplateNo == null)
                 billTemplateNo = this.GetRequestVal("FK_Bill");
 
-
             BillTemplate func = new BillTemplate(billTemplateNo);
 
-            //如果不是 BillTemplateExcel 打印
+            //如果不是 BillTemplateExcel 打印.
             if (func.TemplateFileModel == TemplateFileModel.VSTOForExcel)
                 return "url@httpccword://-fromccflow,App=BillTemplateExcel,TemplateNo=" + func.No + ",WorkID=" + this.WorkID + ",FK_Flow=" + this.FK_Flow + ",FK_Node=" + this.FK_Node + ",UserNo=" + BP.Web.WebUser.No + ",SID=" + BP.Web.WebUser.SID;
 
@@ -134,9 +133,7 @@ namespace BP.WF.HttpHandler
 
             string ccformId = this.GetRequestVal("CCFormID");
             if (DataType.IsNullOrEmpty(ccformId) == false)
-            {
                 return PrintDoc_FormDoneIt(nd, this.WorkID, this.FID, ccformId, func);
-            }
 
             Work wk = nd.HisWork;
             wk.OID = this.WorkID;
@@ -296,7 +293,11 @@ namespace BP.WF.HttpHandler
 
                 //在线WebOffice打开
                 if (func.BillOpenModel == BillOpenModel.WebOffice)
-                    return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
+                {
+                    return "err@【/WF/WebOffice/PrintOffice.aspx】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
+                    //  return "err@该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
+                    //return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
+                }
                 return billUrl;
             }
             catch (Exception ex)
@@ -516,7 +517,11 @@ namespace BP.WF.HttpHandler
 
                 //在线WebOffice打开
                 if (func.BillOpenModel == BillOpenModel.WebOffice)
-                    return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
+                {
+                    //return "err@该部分的代码还没有重构.";
+                    return "err@【/WF/WebOffice/PrintOffice.aspx】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
+                    //return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
+                }
                 return billUrl;
             }
             catch (Exception ex)
@@ -1296,7 +1301,6 @@ namespace BP.WF.HttpHandler
             if (Web.WebUser.No == null)
                 return "err@登录信息丢失,请重新登录.";
 
-
             #region 定义变量.
             FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
             FrmWorkCheck frmWorkCheck = null;
@@ -1447,7 +1451,6 @@ namespace BP.WF.HttpHandler
                     {
                         tk.Row["T_CheckIndex"] = noneEmpIdx++;
                     }
-
                     switch (tk.HisActionType)
                     {
                         case ActionType.WorkCheck:
@@ -1652,7 +1655,7 @@ namespace BP.WF.HttpHandler
 
                 }
 
-#warning 处理审核信息,删除掉他
+#warning 处理审核信息,删除掉他.
                 if (tkDoc != null && 1 == 2)
                 {
                     //判断可编辑审核信息是否处于最后一条，不处于最后一条，则将其移到最后一条
@@ -1755,7 +1758,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            #region 显示有审核组件，但还未审核的节点.  包括退回后的.
+            #region 显示有审核组件，但还未审核的节点. 包括退回后的.
             if (tks == null)
                 tks = wc.HisWorkChecks;
 

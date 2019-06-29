@@ -2271,7 +2271,6 @@ namespace BP.WF
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FK_Flow='" + flowNo + "' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
-
         }
         /// <summary>
         /// 获取已经完成
@@ -6208,6 +6207,7 @@ namespace BP.WF
             dtHistory.Columns.Add("NodeName"); //名称.
             dtHistory.Columns.Add("EmpNo");  //人员编号.
             dtHistory.Columns.Add("EmpName"); //名称
+            dtHistory.Columns.Add("DeptName"); //部门名称
             dtHistory.Columns.Add("RDT"); //记录日期.
             dtHistory.Columns.Add("SDT"); //应完成日期(可以不用.)
             dtHistory.Columns.Add("IsPass"); //是否通过?
@@ -6216,7 +6216,7 @@ namespace BP.WF
             if (gwf.WFState == WFState.Complete)
             {
                 //历史执行人. 
-                sql = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workID + " AND (ActionType=1 OR ActionType=0)  ORDER BY RDT DESC";
+                sql = "SELECT C.Name AS DeptName,  A.* FROM ND" + int.Parse(gwf.FK_Flow) + "Track A, Port_Emp B, Port_Dept C WHERE A.WorkID=" + workID + " AND (A.ActionType=1 OR A.ActionType=0) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ORDER BY A.RDT DESC";
                 DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 foreach (DataRow drTrack in dtTrack.Rows)
@@ -6227,6 +6227,7 @@ namespace BP.WF
                     dr["NodeName"] = drTrack["NDFromT"];
                     dr["EmpNo"] = drTrack["EmpFrom"];
                     dr["EmpName"] = drTrack["EmpFromT"];
+                    dr["DeptName"] = drTrack["DeptName"]; //部门名称.
                     dr["RDT"] = drTrack["RDT"];
                     dr["SDT"] = "";
                     dr["IsPass"] = 1; // gwl.IsPassInt; //是否通过.
@@ -6243,8 +6244,11 @@ namespace BP.WF
                     dr["NodeName"] = gwl.FK_NodeText;
                     dr["EmpNo"] = gwl.FK_Emp;
                     dr["EmpName"] = gwl.FK_EmpText;
+                    dr["DeptName"] = gwl.FK_DeptT; //部门名称.
+
                     dr["RDT"] = gwl.RDT;
                     dr["SDT"] = gwl.SDT;
+
                     dr["IsPass"] = gwl.IsPassInt; //是否通过.
                     dtHistory.Rows.Add(dr);
                 }
@@ -6279,9 +6283,7 @@ namespace BP.WF
         public static bool Flow_AuthorSave(string Author, int AuthorWay, string AuthorFlows = null, string AuthorDate = null, string AuthorToDate = null)
         {
             if (WebUser.No == null)
-            {
                 throw new Exception("@ 非法用户，请执行登录后再试。");
-            }
 
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
             emp.Author = Author;
@@ -9724,6 +9726,7 @@ namespace BP.WF
         }
         #endregion ccform 接口
 
+        #region 页面.
         /// <summary>
         /// 附件上传接口
         /// </summary>
@@ -10051,9 +10054,18 @@ namespace BP.WF
             }
             #endregion 保存到数据库.
 
-
             return "";
         }
+        /// <summary>
+        /// sdk表单加载初始化信息
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <returns>请参考相关的文档,或者baidu ccbpm sdk表单 SDK_Page_Init</returns>
+        public static string SDK_Page_Init(Int64 workid)
+        {
+            return BP.WF.AppClass.SDK_Page_Init(workid);
+        }
+        #endregion 页面.
 
         #region 与工作处理器相关的接口
         /// <summary>

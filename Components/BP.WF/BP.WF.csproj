@@ -161,6 +161,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppClass.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />

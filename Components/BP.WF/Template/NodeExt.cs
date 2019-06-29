@@ -848,14 +848,15 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSelfParas()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
-                rm.Visable = false;
+                //rm.Visable = false;
                 map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "自定义属性(自定义)";
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrExt()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
-                rm.Visable = false;
+                //rm.Visable = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -864,9 +865,8 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoNodeAppType()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
-                rm.Visable = false;
+                //rm.Visable = false;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "批量设置节点属性";

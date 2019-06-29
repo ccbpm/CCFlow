@@ -776,7 +776,7 @@ namespace BP.WF.HttpHandler
                 dtM.Columns.Add("No");
                 dtM.Columns.Add("Title");
                 dtM.Columns.Add("Tip");
-                dtM.Columns.Add("Visable");
+                dtM.Columns.Add("Visable", System.Type.GetType("System.Boolean"));
 
                 dtM.Columns.Add("Url");
                 dtM.Columns.Add("Target");

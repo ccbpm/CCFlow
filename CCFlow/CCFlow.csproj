@@ -653,6 +653,10 @@
     <Content Include="WF\Admin\AttrNode\SelfParas.htm" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowHand.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowHandDtl.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowYanXu.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowYanXuDtl.htm" />
     <Content Include="WF\Admin\AttrNode\TodolistModel.htm" />
     <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
@@ -1280,6 +1284,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\FullData\Dtls.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FullData\Main.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Glo.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\GroupFieldIdx.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\HidAttr.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\DDLCtrlFull.png" />
@@ -1343,12 +1348,16 @@
     <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\0.None.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\1.BranchesAndLeaf.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Pop\1.BranchesAndLeaf.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\10.BindSFTable.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\2.BranchesAndLeafLazyLoad.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\3.Branches.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Pop\3.Branches.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\4.BranchesLazyLoad.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\5.GroupList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Pop\5.GroupList.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\6.TableList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Pop\6.TableList.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\7.TableSearch.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\8.SelfUrl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\9.BindEnum.htm" />
@@ -7509,6 +7518,10 @@
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="DataUser\Temp\" />
+    <Folder Include="WF\Data\Multilingual\" />
+    <Folder Include="WF\Scripts\bootstrap\bootstrap-table\.github\" />
+    <Folder Include="WF\Scripts\bootstrap\bootstrap-table\docs\" />
+    <Folder Include="WF\Scripts\jqGrid\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

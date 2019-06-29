@@ -848,7 +848,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSelfParas()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
-                //rm.Visable = false;
+                rm.Visable = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

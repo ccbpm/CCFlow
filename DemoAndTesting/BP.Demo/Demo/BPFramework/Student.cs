@@ -260,7 +260,8 @@ namespace BP.Demo.BPFramework
         /// 学生
         /// </summary>
         /// <param name="no"></param>
-        public Student(string no):base(no)
+        public Student(string no)
+            : base(no)
         {
         }
         #endregion
@@ -289,7 +290,6 @@ namespace BP.Demo.BPFramework
                 //map.AddTBStringDoc(StudentAttr.PWD, null, "密码", true, false);
                 map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 50);
 
-
                 map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
                 map.AddTBInt(StudentAttr.Age, 18, "年龄", true, false);
 
@@ -308,7 +308,7 @@ namespace BP.Demo.BPFramework
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
 
                 //增加checkbox属性.
-                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true,true);
+                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true, true);
                 map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true, true);
                 map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
                 map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
@@ -332,7 +332,7 @@ namespace BP.Demo.BPFramework
                 //设置查询条件。
                 map.AddSearchAttr(StudentAttr.XB);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
-               // map.AddSearchAttr(StudentAttr.ZZMM);
+                // map.AddSearchAttr(StudentAttr.ZZMM);
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
@@ -348,7 +348,7 @@ namespace BP.Demo.BPFramework
                 rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
                 rm.GroupName = "功能执行测试";
-              //  rm.IsCanBatch = false; //是否可以批处理？
+                //  rm.IsCanBatch = false; //是否可以批处理？
                 map.AddRefMethod(rm);
 
                 //不带有参数的方法.
@@ -406,7 +406,7 @@ namespace BP.Demo.BPFramework
 
             return base.beforeUpdateInsertAction();
         }
-          
+
         #endregion 重写基类方法
 
         #region 方法
@@ -420,12 +420,12 @@ namespace BP.Demo.BPFramework
             en.HisGEEntity = stu; //当前的实体.
 
             //增加从表.
-            BP.Demo.Resumes dtls=new Resumes();
-            dtls.Retrieve(ResumeAttr.RefPK,stu.No);
+            BP.Demo.Resumes dtls = new Resumes();
+            dtls.Retrieve(ResumeAttr.RefPK, stu.No);
             en.AddDtlEns(dtls);
 
-            string saveTo=BP.Sys.SystemConfig.PathOfTemp; // \\DataUser\\Temp\\
-            string billFileName = this.No+"StuTest.doc";
+            string saveTo = BP.Sys.SystemConfig.PathOfTemp; // \\DataUser\\Temp\\
+            string billFileName = this.No + "StuTest.doc";
 
             //要生成的数据.
             en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName, false);
@@ -437,7 +437,7 @@ namespace BP.Demo.BPFramework
         }
         public string DoStartFlow()
         {
-            return "/WF/MyFlow.htm?FK_Flow=001&FK_Studept="+this.No+"&StuName="+this.Name;
+            return "/WF/MyFlow.htm?FK_Flow=001&FK_Studept=" + this.No + "&StuName=" + this.Name;
         }
         /// <summary>
         /// 带有参数的方法:缴纳班费
@@ -448,7 +448,7 @@ namespace BP.Demo.BPFramework
         {
 
 
-            return "学号:"+this.No+",姓名:"+this.Name+",缴纳了:"+jine+"元,说明:"+note;
+            return "学号:" + this.No + ",姓名:" + this.Name + ",缴纳了:" + jine + "元,说明:" + note;
         }
         /// <summary>
         /// 无参数的方法:注销学籍
@@ -508,7 +508,7 @@ namespace BP.Demo.BPFramework
         {
             return "EnsMothed@执行成功.";
         }
-        public string EnsMothedParas(string para1,string para2)
+        public string EnsMothedParas(string para1, string para2)
         {
             return "EnsMothedParas@执行成功." + para1 + " - " + para2;
         }

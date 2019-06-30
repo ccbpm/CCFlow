@@ -1,6 +1,6 @@
 @echo off 
 echo 正在关闭未关闭的IE进程，请稍等...... 
-taskkill /f /im iexplore.exe 
+taskkill /f /im iexplore.exe  
 
 echo -------------开始运行指定的网页页面---------- 
 ::echo.&pause 

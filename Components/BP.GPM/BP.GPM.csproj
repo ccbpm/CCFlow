@@ -41,6 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
@@ -57,6 +60,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dev2Interface.cs" />
+    <Compile Include="AD\Dept.cs" />
+    <Compile Include="AD\Emp.cs" />
+    <Compile Include="AD\Glo.cs" />
+    <Compile Include="AD\Sync.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GPM\StationExt.cs" />
     <Compile Include="GPM\AppSort.cs" />

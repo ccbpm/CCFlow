@@ -126,12 +126,11 @@
         function Designer(mypk, fk_mapData) {
 
             var mapdata = new Entity("BP.Sys.MapData", fk_mapData);
-
             var url = "";
             if (mapdata.FrmType == 1) {
-                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData;
+                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData+"&FK_Node="+GetQueryString("FK_Node");
             } else {
-                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData;
+                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node");
             }
 
             WinOpen(url);

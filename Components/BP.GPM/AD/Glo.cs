@@ -52,19 +52,14 @@ namespace BP.GPM.AD
             get
             {
                 DirectoryEntry domain = new DirectoryEntry();
-                try
-                {
-                    domain.Path = string.Format("LDAP://{0}", Glo.ADPath);
-                    domain.Username = Glo.ADUser;
-                    domain.Password = Glo.ADPassword;
-                    domain.AuthenticationType = AuthenticationTypes.Secure;
-                    domain.RefreshCache();
-                    return domain;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("err@连接根目录AD错误，请检查用户名密码地址是否正确，错误技术信息:"+ex.Message);
-                }
+
+                domain.Path = Glo.ADPath;
+                domain.Username = Glo.ADUser;
+                domain.Password = Glo.ADPassword;
+                domain.AuthenticationType = AuthenticationTypes.Secure;
+                domain.RefreshCache();
+                return domain;
+
             }
         }
         #endregion 公共变量.
@@ -133,13 +128,13 @@ namespace BP.GPM.AD
         #endregion
 
         #region 登录校验相关.
-         [DllImport("advapi32.DLL", SetLastError = true)]
-        public static extern int LogonUser11(string lpszUsername, string lpszDomain, string lpszPassword, 
-             int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
-         
+        [DllImport("advapi32.DLL", SetLastError = true)]
+        public static extern int LogonUser11(string lpszUsername, string lpszDomain, string lpszPassword,
+            int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
+
 
         [DllImport("advapi32.dll", CharSet = CharSet.Auto)]
-        private static extern int LogonUser(String lpszUserName,String lpszDomain,String lpszPassword,int dwLogonType,int dwLogonProvider,
+        private static extern int LogonUser(String lpszUserName, String lpszDomain, String lpszPassword, int dwLogonType, int dwLogonProvider,
                                           ref IntPtr phToken);
         [DllImport("advapi32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true)]
         private extern static int DuplicateToken(IntPtr hToken,
@@ -147,7 +142,7 @@ namespace BP.GPM.AD
                                           ref IntPtr hNewToken);
         private const int LOGON32_LOGON_INTERACTIVE = 2;
         private const int LOGON32_PROVIDER_DEFAULT = 0;
-        private static WindowsImpersonationContext impersonationContext=null;
+        private static WindowsImpersonationContext impersonationContext = null;
         /// <summary>
         /// 执行登录
         /// </summary>

@@ -62,6 +62,8 @@ namespace BP.GPM.AD
             DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry,
                 "(objectclass=organizationalUnit)"); //查询组织单位.
 
+            ///DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
+
             DirectoryEntry root = mySearcher.SearchRoot;   //查找根OU
 
             //同步数据.

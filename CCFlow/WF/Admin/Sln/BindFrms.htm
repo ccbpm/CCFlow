@@ -128,9 +128,9 @@
             var mapdata = new Entity("BP.Sys.MapData", fk_mapData);
             var url = "";
             if (mapdata.FrmType == 1) {
-                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData+"&FK_Node="+GetQueryString("FK_Node");
+                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData+"&FK_Node="+GetQueryString("FK_Node")+"&IsFirst=1";
             } else {
-                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node");
+                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node") + "&IsFirst=1";
             }
 
             WinOpen(url);

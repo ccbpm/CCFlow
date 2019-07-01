@@ -143,7 +143,7 @@ namespace BP.WF
                 /* 求出来走过的表单集合 */
                 string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track A, WF_Node B ";
                 sql += " WHERE A.NDFrom=B.NodeID  ";
-                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
+                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
                 sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
                 sql += "  AND NDFrom!=" + this.NodeID + " "; //排除当前的表单.
 

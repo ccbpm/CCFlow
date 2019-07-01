@@ -648,9 +648,9 @@ namespace BP.WF.HttpHandler
                     if (fn.WhoIsPK == WhoIsPK.PPPWorkID)
                     {
                         //根据PWorkID 获取PPPWorkID
-                        string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID="+this.PWorkID+")";
+                        string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
                         string pppworkID = DBAccess.RunSQLReturnString(sql);
-                        if (DataType.IsNullOrEmpty(pppworkID) == true || pppworkID=="0")
+                        if (DataType.IsNullOrEmpty(pppworkID) == true || pppworkID == "0")
                             throw new Exception("err@不存在太爷孙流程关系，请联系管理员检查流程设计是否正确");
 
                         Int64 PPPWorkID = Int64.Parse(pppworkID);
@@ -658,7 +658,7 @@ namespace BP.WF.HttpHandler
                         paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + PPPWorkID);
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + PPPWorkID);
                     }
-                         
+
 
                     if (fn.WhoIsPK == WhoIsPK.PPWorkID)
                     {
@@ -675,7 +675,7 @@ namespace BP.WF.HttpHandler
                             throw new Exception("err@不存在爷孙流程关系，请联系管理员检查流程设计是否正确");
                         }
                     }
-                         
+
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                     {
                         paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + this.PWorkID);
@@ -1356,7 +1356,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
-                     
+
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
                     else
@@ -4353,9 +4353,9 @@ namespace BP.WF.HttpHandler
 
             BillTemplates templates = new BillTemplates();
             int iHave = templates.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.BillOpenModel, (int)BillOpenModel.WebOffice);
-           
-                return "url@../WebOffice/PrintOffice.htm?MyPK=" + bill.MyPK;
-            
+
+            return "url@../WebOffice/PrintOffice.htm?MyPK=" + bill.MyPK;
+
 
         }
         #endregion 打印.
@@ -4467,7 +4467,7 @@ namespace BP.WF.HttpHandler
             if (sln.FrmSln == 2)
             {
                 BP.Sys.FrmAttachment athDescNode = new BP.Sys.FrmAttachment();
-                athDescNode.MyPK = this.FK_FrmAttachment+ "_" + this.FK_Node;
+                athDescNode.MyPK = this.FK_FrmAttachment + "_" + this.FK_Node;
                 if (athDescNode.RetrieveFromDBSources() == 0)
                 {
                     //没有设定附件权限，保持原来的附件权限模式
@@ -4584,7 +4584,7 @@ namespace BP.WF.HttpHandler
                         if (fn.WhoIsPK == WhoIsPK.PWorkID)
                             athDesc.HisCtrlWay = AthCtrlWay.PWorkID;
 
-                       
+
                     }
 
                     if (fn.FrmSln == FrmSln.Readonly)

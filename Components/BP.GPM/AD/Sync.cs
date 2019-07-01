@@ -20,8 +20,14 @@ using BP.Sys;
 
 namespace BP.GPM.AD
 {
+    /// <summary>
+    /// 同步AD.
+    /// </summary>
     public class Sync : Method
     {
+        /// <summary>
+        /// 同步
+        /// </summary>
         public Sync()
         {
             this.Title = "同步AD数据到组织结构.";
@@ -30,6 +36,9 @@ namespace BP.GPM.AD
         public override void Init()
         {
         }
+        /// <summary>
+        /// 是否可以处理？
+        /// </summary>
         public override bool IsCanDo
         {
             get
@@ -185,7 +194,6 @@ namespace BP.GPM.AD
         /// 组织单位
         /// </summary>
         OU = 1,
-
         /// <summary>
         /// 用户
         /// </summary>

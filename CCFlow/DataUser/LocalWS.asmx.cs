@@ -65,9 +65,9 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
         /// <returns>返回我可以发起的流程列表.</returns>
-        public string DB_StarFlows(string userNo, string sysNo = null)
+        public string DB_StarFlows(string userNo, string domain = null)
         {
-            DataTable dt= BP.WF.Dev2Interface.DB_StarFlows(userNo);
+            DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo, domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -76,13 +76,13 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">子系统编号</param>
         /// <returns>我发起的流程列表.</returns>
-        public string DB_MyStartFlowInstance(string userNo, string sysNo = null, int pageSize=0, int pageIdx=0)
+        public string DB_MyStartFlowInstance(string userNo, string domain = null, int pageSize = 0, int pageIdx = 0)
         {
             string sql = "";
             if (userNo == null)
                 sql = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + userNo + "'";
             else
-                sql = "SELECT * FROM WF_GenerWorkFlow WHERE Domain='" + sysNo + "' AND Starter='" + userNo + "'";
+                sql = "SELECT * FROM WF_GenerWorkFlow WHERE Domain='" + domain + "' AND Starter='" + userNo + "'";
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
@@ -216,6 +216,17 @@ namespace CCFlow.DataUser
         {
             GenerWorkFlow gwf=new GenerWorkFlow(workid);
             return BP.WF.Dev2Interface.Node_ReturnWork(gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, returnToNodeID, returnMsg);
+        }
+        /// <summary>
+        /// 写入审核信息
+        /// </summary>
+        /// <param name="workid">workID</param>
+        /// <param name="msg">审核信息</param>
+        [WebMethod]
+        public void Node_WriteWorkCheck(Int64 workid, string msg)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+              BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, msg,"审核");
         }
         /// <summary>
         /// 是否可以查看该工作

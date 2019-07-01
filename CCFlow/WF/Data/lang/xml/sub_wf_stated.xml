@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<language>
+  <item
+    key="test11"
+    zh-cn="你好{0}, 欢迎来到{1}."
+    zh-tw="妳好{0}, 歡迎來到{1}."
+    zh-hk="妳好{0}, 歡迎來到{1}."
+    en-us="Hi {0}, welcome to {1}."
+    ja-jp="こんにちは{0}, ようこそ{1}."
+    ko-kr="안녕하세요 {0}, 오신 것을 환영합니다{1}."
+    /> 
+ 
+</language>

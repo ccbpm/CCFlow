@@ -59,12 +59,14 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-            DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry,
-                "(objectclass=organizationalUnit)"); //查询组织单位.
+            // DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry,"(objectclass=organizationalUnit)"); //查询组织单位.
+            DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry, "(objectclass=organizationalUnit)"); //查询组织单位.
 
             ///DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
 
             DirectoryEntry root = mySearcher.SearchRoot;   //查找根OU
+            // DirectoryEntry root = Glo.RootDirectoryEntry;   //查找根OU
+
 
             //同步数据.
             SyncRootOU(root);
@@ -107,6 +109,7 @@ namespace BP.GPM.AD
         #endregion
 
         #region## 同步根组织单位
+        string rootDeptNo = "";
         /// <summary>
         /// 功能: 同步根组织单位
         /// 创建人:Wilson
@@ -115,6 +118,46 @@ namespace BP.GPM.AD
         /// <param name="entry"></param>
         private void SyncRootOU(DirectoryEntry entry)
         {
+            //组织解构,更新跟目录的.
+            if (entry.Name.IndexOf("OU=") == 0)
+            {
+                BP.GPM.AD.Dept dept = new Dept();
+                dept.Name = entry.Name.Replace("OU=", "");
+
+                byte[] bGUID = entry.Properties["objectGUID"][0] as byte[];
+                rootDeptNo = BitConverter.ToString(bGUID);
+                dept.No = rootDeptNo;
+                dept.ParentNo = "0";
+                dept.Insert();
+
+                foreach (DirectoryEntry item in entry.Children)
+                {
+                    SyncRootOU(item, dept.ParentNo);
+                }
+                return;
+            }
+
+
+            //用户.
+            if (entry.Name.IndexOf("CN=") == 0)
+            {
+                BP.GPM.AD.Emp emp = new Emp();
+                emp.Name = entry.Name.Replace("CN=", "");
+
+                byte[] bGUID = entry.Properties["objectGUID"][0] as byte[];
+                string id = BitConverter.ToString(bGUID);
+
+                emp.No = id;
+                emp.FK_Dept = "0";
+                emp.Insert();
+
+                foreach (DirectoryEntry item in entry.Children)
+                {
+                  //  SyncRootOU(item, dept.ParentNo);
+                }
+                return;
+            }
+
             if (entry.Properties.Contains("ou") && entry.Properties.Contains("objectGUID"))
             {
                 string rootOuName = entry.Properties["ou"][0].ToString();
@@ -127,6 +170,11 @@ namespace BP.GPM.AD
 
                 SyncSubOU(entry, id);
             }
+        }
+
+        public void SyncRootOU(DirectoryEntry en, string parentEn)
+        {
+
         }
         #endregion
 

@@ -3094,6 +3094,104 @@ namespace BP.WF
 
         }
         /// <summary>
+        /// 表达式替换
+        /// </summary>
+        /// <param name="exp"></param>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        public static string DealExp(string exp, Entity en)
+        {
+            //替换字符
+            exp = exp.Replace("~", "'");
+
+            if (exp.Contains("@") == false)
+                return exp;
+
+            //首先替换加; 的。
+            exp = exp.Replace("@WebUser.No;", WebUser.No);
+            exp = exp.Replace("@WebUser.Name;", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+
+            // 替换没有 ; 的 .
+            exp = exp.Replace("@WebUser.No", WebUser.No);
+            exp = exp.Replace("@WebUser.Name", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+            if (exp.Contains("@") == false)
+                return exp;
+
+            //增加对新规则的支持. @MyField; 格式.
+            if (en != null)
+            {
+                Attrs attrs = en.EnMap.Attrs;
+                Row row = en.Row;
+                //特殊判断.
+                if (row.ContainsKey("OID") == true)
+                    exp = exp.Replace("@WorkID", row["OID"].ToString());
+
+                if (exp.Contains("@") == false)
+                    return exp;
+
+                foreach (string key in row.Keys)
+                {
+                    //值为空或者null不替换
+                    if (row[key] == null || row[key].Equals("") == true)
+                        continue;
+
+                    if (exp.Contains("@" + key))
+                    {
+                        Attr attr = attrs.GetAttrByKeyOfEn(key);
+                        //是枚举或者外键替换成文本
+                        if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum
+                            || attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
+                        {
+                            exp = exp.Replace("@" + key, row[key+"Text"].ToString());
+                        }
+                        else
+                        {
+                            if(attr.MyDataType == DataType.AppString  && attr.UIContralType ==  UIContralType.DDL && attr.MyFieldType ==FieldType.Normal)
+                                 exp = exp.Replace("@" + key, row[key+"T"].ToString());
+                            else
+                                exp = exp.Replace("@" + key, row[key].ToString());
+;
+                        }
+
+                        
+                    }
+
+                    //不包含@则返回SQL语句
+                    if (exp.Contains("@") == false)
+                        return exp;
+                }
+
+            }
+          
+            if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
+            {
+                /*如果是bs*/
+                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
+                }
+                /*如果是bs*/
+                foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
+                }
+
+            }
+
+            exp = exp.Replace("~", "'");
+            return exp;
+        }
+        //
+        /// <summary>
         /// 处理表达式
         /// </summary>
         /// <param name="exp">表达式</param>

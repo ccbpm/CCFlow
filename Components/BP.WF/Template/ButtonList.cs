@@ -250,6 +250,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string PrintPDFModle = "PrintPDFModle";
         /// <summary>
+        /// 水印设置规则
+        /// </summary>
+        public const string ShuiYinModle = "ShuiYinModle";
+        /// <summary>
         /// 打包下载
         /// </summary>
         public const string PrintZipLab = "PrintZipLab";

@@ -1914,11 +1914,21 @@ namespace BP.WF
                     if (rdt.Length > 10)
                         rdt = rdt.Substring(0, 10);
                 }
-                string words = Glo.PrintBackgroundWord;
+                //先判断节点中水印的设置
+                string words = "";
+                Node nd = null;
+                if (gwf != null)
+                {
+                    nd = new Node(gwf.FK_Node);
+                    if (nd.NodeID != 0)
+                        words = nd.ShuiYinModle;
+                }
+                if(DataType.IsNullOrEmpty(words) == true)
+                    words = Glo.PrintBackgroundWord;
                 words = words.Replace("@RDT", rdt);
 
                 if (words.Contains("@") == true)
-                    words = Glo.DealExp(words, en, null);
+                    words = Glo.DealExp(words, en);
 
                 string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
                 WaterImageManage wim = new WaterImageManage();
@@ -1936,8 +1946,7 @@ namespace BP.WF
                 {
                     if (gwf != null)
                     {
-                        Node nd = new Node(gwf.FK_Node);
-
+                         
                         if (nd.HisFormType == NodeFormType.FreeForm)
                             mapData.HisFrmType = FrmType.FreeFrm;
                         else if (nd.HisFormType == NodeFormType.FoolForm)
@@ -1982,7 +1991,7 @@ namespace BP.WF
                     {
                         if (SystemConfig.CustomerNo == "TianYe" && gwf.NodeName.Contains("反馈") == true)
                         {
-                            Node nd = new Node(gwf.FK_Node);
+                            nd = new Node(gwf.FK_Node);
                             if (nd.IsEndNode == true)
                             {
                                 //让流程自动结束.

@@ -972,58 +972,6 @@ namespace BP.WF
             }
             return dt;
         }
-        /// <summary>
-        /// 获取指定人员能够发起流程的集合
-        /// 说明:利用此接口可以生成用户的发起的流程列表.
-        /// </summary>
-        /// <param name="userNo">操作员编号</param>
-        /// <returns>Datatable类型的数据集合,数据结构与表WF_Flow大致相同.
-        /// 如何使用该方法形成发起工作列表,请参考:\WF\UC\Start.ascx</returns>
-        public static DataTable DB_GenerCanStartFlowsOfDataTable_DEL(string userNo)
-        {
-            string sql = "";
-            sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
-            Flows fls = new Flows();
-            BP.En.QueryObject qo = new BP.En.QueryObject(fls);
-            qo.AddWhereInSQL("No", sql);
-            qo.addAnd();
-            qo.AddWhere(FlowAttr.IsCanStart, true);
-
-            if (WebUser.IsAuthorize)
-            {
-                /*如果是授权状态 */
-                qo.addAnd();
-                WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
-                qo.AddWhereIn("No", wfEmp.AuthorFlows);
-            }
-            qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
-
-            DataTable dt = qo.DoQueryToTable();
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
-                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
-                dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
-                dt.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
-            }
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-            {
-                dt.Columns["no"].ColumnName = "No";
-                dt.Columns["name"].ColumnName = "Name";
-                dt.Columns["isbatchstart"].ColumnName = "IsBatchStart";
-                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
-                dt.Columns["fk_flowsorttext"].ColumnName = "FK_FlowSortText";
-                dt.Columns["isstartinmobile"].ColumnName = "IsStartInMobile";
-            }
-
-            return dt;
-
-
-            //  throw new Exception("@未判断的类型。");
-
-        }
         public static DataTable DB_GenerCanStartFlowsTree(string userNo)
         {
             //发起.

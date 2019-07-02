@@ -59,29 +59,25 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-             DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry,"(objectclass=organizationalUnit)"); //查询组织单位.
-            // DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry, "(objectclass=organizationalUnit)"); //查询组织单位.
-
-            ///DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
-
+            DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry, "(objectclass=organizationalUnit)"); //查询组织单位.
             DirectoryEntry root = mySearcher.SearchRoot;   //查找根OU.
 
-            //DirectoryEntry root = Glo.RootDirectoryEntry.Parent;   //查找根OU
+            DirectoryEntry rootAdmin = mySearcher.SearchRoot;   //查找根OU.
 
-            //同步数据.
-            SyncRootOU(root);
+
+            //DirectoryEntry root = Glo.RootDirectoryEntry.Parent;   //查找根OU.
 
             string msg = "";
-            if (list.Count == 0)
-                return "err@没有获得ad的任何数据，无法同步。";
 
             msg += "@开始删除AD_Dept, AD_Emp数据。";
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
 
-            BP.GPM.AD.Dept dept = new Dept();
-            BP.GPM.AD.Emp emp = new Emp();
+
+            //同步数据.
+            SyncRootOU(root);
+
 
             return "同步成功";
         }
@@ -97,9 +93,21 @@ namespace BP.GPM.AD
         /// <param name="entry"></param>
         private void SyncRootOU(DirectoryEntry entry)
         {
-               //更目录.
+            //更目录.
             if (entry.Name.IndexOf("DC=dev") == 0)
             {
+                BP.GPM.AD.Dept dept = new Dept();
+                dept.No = entry.Guid.ToString();
+                dept.Name = SystemConfig.CustomerShortName;
+                if (dept.Name == "")
+                    dept.Name = SystemConfig.CustomerName;
+
+                if (dept.Name == "")
+                    dept.Name = "总部";
+
+
+                dept.ParentNo = "0";
+                dept.Insert();
                 foreach (DirectoryEntry item in entry.Children)
                 {
                     SyncRootOU(item);
@@ -129,15 +137,23 @@ namespace BP.GPM.AD
             {
                 BP.GPM.AD.Emp emp = new Emp();
 
-                emp.Name = entry.Name.Replace("CN=", "");
+                string name = entry.Name.Replace("CN=", "");
 
-                emp.No = entry.Guid.ToString();
+                emp.Name = name;
+                emp.No = name;
+                if (emp.IsExits == true)
+                    return;
+
                 emp.FK_Dept = entry.Parent.Guid.ToString();
+
+                if (emp.No.Length > 20)
+                    return;
+
                 emp.Insert();
 
                 foreach (DirectoryEntry item in entry.Children)
                 {
-                     SyncRootOU(item);
+                    SyncRootOU(item);
                 }
                 return;
             }

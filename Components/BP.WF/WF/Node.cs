@@ -1992,6 +1992,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 是否打开即审批
+        /// </summary>
+        public bool IsOpenOver
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsOpenOver);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.IsOpenOver, value);
+            }
+        }
+        /// <summary>
         /// 是否可以删除
         /// </summary>
         public bool IsCanDelFlow
@@ -2608,6 +2622,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 1, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
                 map.AddTBInt(NodeAttr.IsRM, 1, "是否启用投递路径自动记忆功能?", true, true);
+                map.AddTBInt(NodeAttr.IsOpenOver, 0, "是否打开即审批?", true, true);
                 map.AddBoolean(NodeAttr.IsHandOver, false, "是否可以移交", true, true);
                 map.AddTBDecimal(NodeAttr.PassRate, 100, "通过率", true, true);
                 map.AddTBInt(NodeAttr.RunModel, 0, "运行模式(对普通节点有效)", true, true);
@@ -3210,6 +3225,13 @@ namespace BP.WF
             md.Delete();
 
             md.Name = this.Name;
+
+            if (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FoolTruck)
+                 md.HisFrmType = FrmType.FoolForm;
+
+            if (this.HisFormType == NodeFormType.FreeForm)
+                md.HisFrmType = FrmType.FreeFrm;
+
             if (this.HisFlow.HisDataStoreModel == DataStoreModel.SpecTable)
                 md.PTable = this.HisFlow.PTable;
             md.Insert();

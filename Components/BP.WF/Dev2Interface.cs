@@ -6153,6 +6153,7 @@ namespace BP.WF
             dtHistory.TableName = "Track";
             dtHistory.Columns.Add("FK_Node"); //节点ID.
             dtHistory.Columns.Add("NodeName"); //名称.
+            dtHistory.Columns.Add("RunModel"); //节点类型.
             dtHistory.Columns.Add("EmpNo");  //人员编号.
             dtHistory.Columns.Add("EmpName"); //名称
             dtHistory.Columns.Add("DeptName"); //部门名称
@@ -6214,6 +6215,18 @@ namespace BP.WF
                 dtHistory.Rows.Add(dr);
             }
 
+            // 给 dtHistory runModel 赋值.
+            foreach (NodeSimple nd in nds)
+            {
+
+                int runMode = nd.GetValIntByKey(NodeAttr.RunModel);
+
+                foreach (DataRow dr in dtHistory.Rows)
+                {
+                    if (int.Parse(dr["FK_Node"].ToString()) == nd.NodeID)
+                        dr["RunModel"] = runMode;
+                }
+            }
             ds.Tables.Add(dtHistory);
             #endregion 运动轨迹
 

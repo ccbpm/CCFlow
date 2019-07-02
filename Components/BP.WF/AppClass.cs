@@ -35,7 +35,42 @@ namespace BP.WF
             //把以后的为未完成的节点放入到track里面.
             for (int i = 0; i < 100; i++)
             {
-                int nextNode = GetNextNodeID(currNode, dirs);
+
+                #region 判断当前节点的类型.
+                // 如果是 =0 就说明有分支，有分支就判断当前节点是否是分河流。
+                RunModel model = 0;
+                foreach (DataRow dr in nodes.Rows)
+                {
+                    if (int.Parse(dr["NodeID"].ToString()) == currNode)
+                    {
+                        model = (RunModel)int.Parse(dr["RunModel"].ToString());
+                    }
+                }
+
+                // 分合流.
+                if (model == RunModel.FL || model == RunModel.FHL)
+                {
+
+                    Node nd = new Node(currNode);
+                    Nodes tonds = nd.HisToNodes;
+
+                    foreach (Node tond in tonds)
+                    {
+                        DataRow mydr = tracks.NewRow();
+                        mydr["NodeName"] = tond.Name;
+                        mydr["FK_Node"] = tond.NodeID; // nd["NodeID"].ToString();
+                        mydr["RunModel"] = (int)tond.HisRunModel;
+                        tracks.Rows.Add(mydr);
+
+                        //设置当前节点.
+                      //  currNode = tond.HisToNodes[0].GetValIntByKey("NodeID");
+                        currNode = tond.NodeID;
+                    }
+                }
+                #endregion 判断当前节点的类型.
+
+
+                int nextNode = GetNextNodeID(currNode, dirs, nodes);
                 if (nextNode == 0)
                     break;
 
@@ -46,6 +81,7 @@ namespace BP.WF
                         DataRow mydr = tracks.NewRow();
                         mydr["NodeName"] = nd["Name"].ToString();
                         mydr["FK_Node"] = nd["NodeID"].ToString();
+                        mydr["RunModel"] = nd["RunModel"].ToString();
                         tracks.Rows.Add(mydr);
                         break;
                     }
@@ -55,7 +91,7 @@ namespace BP.WF
             return BP.Tools.Json.ToJson(tracks);
         }
         //根据当前节点获得下一个节点.
-        private static int GetNextNodeID(int nodeID, DataTable dirs)
+        private static int GetNextNodeID(int nodeID, DataTable dirs, DataTable nds)
         {
             int toNodeID = 0;
             foreach (DataRow dir in dirs.Rows)
@@ -78,6 +114,9 @@ namespace BP.WF
             //两次去的不一致，就有分支，有分支就reutrn 0 .
             if (toNodeID2 == toNodeID)
                 return toNodeID;
+
+         
+
             return 0;
         }
         #endregion 进度条.

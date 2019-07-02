@@ -70,6 +70,8 @@ namespace BP.GPM.AD
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
+            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Station");
+
 
             //同步数据.
             SyncRootOU(root);
@@ -96,6 +98,21 @@ namespace BP.GPM.AD
         }
         #endregion
 
+        public string GetValFromDirectoryEntryByKey(DirectoryEntry en, string key, string isNullAsVal = "")
+        {
+            if (en.Properties.Contains(key) == false)
+                return isNullAsVal;
+
+
+            PropertyValueCollection valueCollection = en.Properties[key];
+
+            if (valueCollection.Value == null)
+                return isNullAsVal;
+
+            
+            return valueCollection.Value.ToString();
+        }
+
         #region## 同步根组织单位
         string rootDeptNo = "";
         /// <summary>
@@ -106,19 +123,17 @@ namespace BP.GPM.AD
         /// <param name="entry"></param>
         private void SyncRootOU(DirectoryEntry entry)
         {
-            msg += "<br>开始同步:" + entry.Name;
+            msg += "<hr>开始同步:" + entry.Name;
 
             string myInfo="";
             foreach (string elmentName in entry.Properties.PropertyNames)
             {
                 PropertyValueCollection valueCollection = entry.Properties[elmentName];
-                for (int i = 0; i < valueCollection.Count; i++)
-                {
-                    myInfo += "<br>" + elmentName + "=" + valueCollection[i].ToString() + "\r\n";
-                }
+
+                myInfo += "<br>KEY=" + elmentName + ",   " + valueCollection.Value; // +valueCollection[i].ToString();
+                 
             }
             msg += " 属性：" + myInfo;
-
 
             //更目录.
             if (entry.Name.IndexOf("DC=") == 0)
@@ -144,8 +159,10 @@ namespace BP.GPM.AD
             //组织解构,更新跟目录的.
             if (entry.Name.IndexOf("OU=") == 0)
             {
+
                 BP.GPM.AD.Dept dept = new Dept();
-                dept.Name = entry.Name.Replace("OU=", "");
+                dept.Name = entry.Name.Replace("OU=", ""); 
+
 
                 dept.No = entry.Guid.ToString();
                 dept.ParentNo = entry.Parent.Guid.ToString();
@@ -161,21 +178,49 @@ namespace BP.GPM.AD
             //用户.
             if (entry.Name.IndexOf("CN=") == 0)
             {
-                BP.GPM.AD.Emp emp = new Emp();
 
                 string name = entry.Name.Replace("CN=", "");
 
-                emp.Name = name;
-                emp.No = name;
-                if (emp.IsExits == true)
+                string objectCategory = this.GetValFromDirectoryEntryByKey(entry, "objectCategory");
+
+                if (objectCategory.Contains("CN=Group") == true)
+                {
+
+                    //判断是 group 还是 user.
+                    BP.GPM.Station station  =new Station(); 
+                    // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
+                    station.No = this.GetValFromDirectoryEntryByKey(entry, "cn");
+                    station.Name = this.GetValFromDirectoryEntryByKey(entry, "displayName");
+                    if (station.IsExits == true)
+                        return;
+
+                   // station.FK_Dept = entry.Parent.Guid.ToString();
+                    if (station.No.Length > 20)
+                        return;
+
+                    station.Insert();
                     return;
+                }
+                else
+                {
 
-                emp.FK_Dept = entry.Parent.Guid.ToString();
+                    //判断是 group 还是 user.
+                    BP.GPM.AD.Emp emp = new Emp();
+                    // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
+                    emp.No = this.GetValFromDirectoryEntryByKey(entry, "cn");
+                    emp.Name = this.GetValFromDirectoryEntryByKey(entry, "displayName");
 
-                if (emp.No.Length > 20)
+                    if (emp.IsExits == true)
+                        return;
+
+                    emp.FK_Dept = entry.Parent.Guid.ToString();
+
+                    if (emp.No.Length > 20)
+                        return;
+
+                    emp.Insert();
                     return;
-
-                emp.Insert();
+                }
 
                 return;
 

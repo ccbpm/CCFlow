@@ -696,6 +696,9 @@ namespace BP.WF.Template
                 throw new Exception("@流程编号为空");
 
             this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
+            //获取表单的类型
+            MapData mapData = new MapData(this.FK_Frm);
+            this.HisFrmType = mapData.HisFrmType;
             return base.beforeUpdateInsertAction();
         }
         #endregion 方法.

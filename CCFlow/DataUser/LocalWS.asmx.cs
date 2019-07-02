@@ -40,7 +40,7 @@ namespace CCFlow.DataUser
         public string DB_Todolist(string userNo, string sysNo = null)
         {
             string sql = "";
-            if (userNo == null)
+            if (sysNo == null)
                 sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp='" + userNo + "'";
             else
                 sql = "SELECT * FROM WF_EmpWorks WHERE Domain='" + sysNo + "' AND FK_Emp='" + userNo + "'";
@@ -79,7 +79,7 @@ namespace CCFlow.DataUser
         public string DB_MyStartFlowInstance(string userNo, string domain = null, int pageSize = 0, int pageIdx = 0)
         {
             string sql = "";
-            if (userNo == null)
+            if (domain == null)
                 sql = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + userNo + "'";
             else
                 sql = "SELECT * FROM WF_GenerWorkFlow WHERE Domain='" + domain + "' AND Starter='" + userNo + "'";

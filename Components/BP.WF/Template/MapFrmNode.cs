@@ -284,7 +284,13 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+                rm = new RefMethod();
+                rm.Title = "模板打印";
+                rm.ClassMethodName = this.ToString() + ".DoBill";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
 
+                map.AddRefMethod(rm);
 
 
 
@@ -373,6 +379,17 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+       
+        /// <summary>
+        /// 单据打印
+        /// </summary>
+        /// <returns></returns>
+        public string DoBill()
+        {
+            return "../../Admin/AttrNode/Bill.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+        }
+
 
         protected override bool beforeUpdate()
         {

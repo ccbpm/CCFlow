@@ -90,6 +90,10 @@ namespace BP.WF.Template
         /// 是否启用投递路径自动记忆功能?
         /// </summary>
         public const string IsRM = "IsRM";
+        /// <summary>
+        /// 是否打开即审批
+        /// </summary>
+        public const string IsOpenOver = "IsOpenOver";
         public const string FormType = "FormType";
         public const string FormUrl = "FormUrl";
         /// <summary>

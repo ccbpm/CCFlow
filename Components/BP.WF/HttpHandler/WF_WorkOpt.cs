@@ -3249,9 +3249,12 @@ namespace BP.WF.HttpHandler
 
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
+            //当前运行到的节点
+            Node currNode = new Node(gwf.FK_Node);
+
             //所有的节点s.
             Nodes nds = new Nodes(this.FK_Flow);
-            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
+            //ds.Tables.Add(nds.ToDataTableField("WF_Node"));
 
             //工作人员列表.已经走完的节点与人员.
             GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
@@ -3261,6 +3264,17 @@ namespace BP.WF.HttpHandler
             TransferCustoms tcs = new TransferCustoms(this.WorkID);
             if (tcs.Count == 0)
             {
+                #region 执行计算未来处理人.
+
+                Work wk = currNode.HisWork;
+                wk.OID = this.WorkID;
+                wk.Retrieve();
+                WorkNode wn = new WorkNode(wk, currNode);
+                wn.HisFlow.IsFullSA = true;
+                //执行计算未来处理人.
+                FullSA fsa = new FullSA(wn);
+                #endregion 执行计算未来处理人.
+
                 foreach (Node nd in nds)
                 {
                     var gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, nd.NodeID);
@@ -3272,16 +3286,7 @@ namespace BP.WF.HttpHandler
                         tc.FK_Node = nd.NodeID;
                         tc.NodeName = nd.Name;
 
-
                         #region 计算出来当前节点的工作人员.
-                        Work wk = nd.HisWork;
-                        wk.OID = this.WorkID;
-                        wk.Retrieve();
-                        WorkNode wn = new WorkNode(wk, nd);
-                        wn.HisFlow.IsFullSA = true;
-
-                        //执行计算未来处理人.
-                        FullSA fsa = new FullSA(wn);
                         SelectAccpers sas = new SelectAccpers();
                         sas.Retrieve(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, nd.NodeID);
 
@@ -3301,6 +3306,7 @@ namespace BP.WF.HttpHandler
                         tc.Insert();
                     }
                 }
+                tcs = new TransferCustoms(this.WorkID);
             }
 
             ds.Tables.Add(tcs.ToDataTableField("WF_TransferCustoms"));

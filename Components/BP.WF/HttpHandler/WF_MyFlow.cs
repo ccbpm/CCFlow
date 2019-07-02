@@ -279,6 +279,9 @@ namespace BP.WF.HttpHandler
             if (isCC != null && isCC == "1")
                 return "url@WFRpt.htm?1=2" + this.RequestParasOfAll;
 
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            bool IsExistGWF = false;
+
             if (this.WorkID != 0)
             {
                 //判断是否有执行该工作的权限.
@@ -288,20 +291,55 @@ namespace BP.WF.HttpHandler
                     GenerWorkFlow mygwf = new GenerWorkFlow(this.WorkID);
                     return "err@您[" + WebUser.No + "," + WebUser.Name + "]不能执行当前工作, 当前工作已经运转到[" + mygwf.NodeName + "],处理人[" + mygwf.TodoEmps + "]。";
                 }
-            }
 
-            GenerWorkFlow gwf = new GenerWorkFlow();
-
-            //当前工作.
-            Work currWK = this.currND.HisWork;
-            if (this.WorkID != 0)
-            {
                 gwf = new GenerWorkFlow();
                 gwf.WorkID = this.WorkID;
                 if (gwf.RetrieveFromDBSources() == 0)
                     return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
+                IsExistGWF = true;
             }
 
+           
+
+            //判断当前节点是否是打开即阅读
+            if (IsExistGWF == true)
+            {
+                //获取当前节点信息
+                Node nd = new Node(gwf.FK_Node);
+                if (nd != null && nd.IsOpenOver == true)
+                {
+                    //如果是结束节点执行流程结束功能
+                    if (nd.IsStartNode == false)
+                    {
+                        //如果启用审核组件
+                        if (nd.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                        {
+                            //判断一下审核意见是否有默认值
+                            FrmWorkCheck workCheck = new FrmWorkCheck("ND"+nd.NodeID);
+                            string msg = "同意";
+                            if(workCheck.FWCIsFullInfo == true)
+                                msg =  workCheck.FWCDefInfo;
+                            BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, nd.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel);
+                        }
+
+                        BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow,gwf.WorkID);
+                        if(nd.HisFormType != NodeFormType.SheetTree && nd.HisFormType!=NodeFormType.SheetAutoTree)
+                            //跳转到查看页面
+                            return "url@" + "./CCForm/Frm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "FK_MapData=ND" + gwf.FK_Node+"&IsReadonly=1";
+                        else
+                            //跳转到查看页面
+                            return "url@./MyFlowTreeReadonly.htm?WorkID=" + gwf.WorkID + "&FID=" + gwf.FID + "&OID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + gwf.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+
+                    }
+
+                    
+                }
+                
+            }
+
+            //当前工作.
+            Work currWK = this.currND.HisWork;
+           
             #region 判断前置导航.
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
             {
@@ -324,14 +362,6 @@ namespace BP.WF.HttpHandler
             {
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
                     WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null);
-
-                /*
-                Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
-                if (this.PWorkID != 0)
-                {
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, workid, this.PFlowNo, this.PWorkID, this.PNodeID, WebUser.No);
-                }
-                */
 
                 string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
                 if (DataType.IsNullOrEmpty(hostRun) == false)
@@ -366,9 +396,6 @@ namespace BP.WF.HttpHandler
                         break;
                 }
             }
-
-            //string appPath = BP.WF.Glo.CCFlowAppPath; //this.Request.ApplicationPath;
-            //this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
             #endregion 判断前置导航
 
             #region 前置导航数据拷贝到第一节点
@@ -436,7 +463,7 @@ namespace BP.WF.HttpHandler
 
                 #region 开始组合url.
                 string toUrl = "";
-                //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+           
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
@@ -938,7 +965,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*流转自定义..*/
                     string ur3 = "./WorkOpt/TransferCustom.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" />";
+                    toolbar += "<input type=button name='TransferCustom'  value='" + btnLab.TCLab + "' enable=true onclick=\"TransferCustom('" + ur3 + "'); \" />";
                 }
 
                 if (btnLab.JumpWayEnable && 1 == 2)

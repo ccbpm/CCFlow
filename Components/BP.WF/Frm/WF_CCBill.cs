@@ -284,7 +284,7 @@ namespace BP.Frm
 
         public string MyBill_Deletes()
         {
-            return BP.Frm.Dev2Interface.MyBill_DeleteDicts(this.FrmID, this.GetRequestVal("workid"));
+            return BP.Frm.Dev2Interface.MyBill_DeleteDicts(this.FrmID, this.GetRequestVal("WorkIDs"));
         }
         #endregion 单据处理.
 

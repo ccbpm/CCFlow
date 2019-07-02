@@ -2108,7 +2108,7 @@ var HttpHandler = (function () {
                     var param = o.split("=");
                     if (param.length == 2 && validate(param[1])) {
                         (function (key, value) {
-                            self.AddPara(key, value);
+                            self.AddPara(key, decodeURIComponent(value, true));
                         })(param[0], param[1]);
                     }
                 });

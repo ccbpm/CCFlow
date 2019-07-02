@@ -103,7 +103,7 @@ namespace BP.GPM.AD
                 map.Java_SetEnType(EnType.Admin);
 
                 map.EnDesc = "部门"; //  实体的描述.
-                map.Java_SetDepositaryOfEntity(Depositary.Application); //实体map的存放位置.
+                map.Java_SetDepositaryOfEntity(Depositary.None); //实体map的存放位置.
                 map.Java_SetDepositaryOfMap(Depositary.Application);    // Map 的存放位置.
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, true, 1, 50, 20);

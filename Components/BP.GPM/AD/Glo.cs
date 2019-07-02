@@ -56,7 +56,9 @@ namespace BP.GPM.AD
                 domain.Path = Glo.ADPath;
                 domain.Username = Glo.ADUser;
                 domain.Password = Glo.ADPassword;
+
                 //domain.AuthenticationType = AuthenticationTypes.ReadonlyServer;
+
                 domain.RefreshCache();
                 return domain;
 

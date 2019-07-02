@@ -51,6 +51,8 @@ namespace BP.GPM.AD
 
         #region## 同步
         private List<AdModel> list = new List<AdModel>();
+
+        string msg = "";
         /// <summary>
         /// 功能:
         /// 创建人:Wilson
@@ -61,12 +63,10 @@ namespace BP.GPM.AD
         {
             DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry, "(objectclass=organizationalUnit)"); //查询组织单位.
             DirectoryEntry root = mySearcher.SearchRoot;   //查找根OU.
-
             DirectoryEntry rootAdmin = mySearcher.SearchRoot;   //查找根OU.
 
-            string msg = "";
-
             msg += "@开始删除AD_Dept, AD_Emp数据。";
+
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
@@ -74,8 +74,8 @@ namespace BP.GPM.AD
             //同步数据.
             SyncRootOU(root);
 
-            //增加admin用户.
 
+            //增加admin用户.
             BP.GPM.AD.Dept dept = new Dept();
             dept.Retrieve(BP.GPM.AD.DeptAttr.ParentNo, "0");
 
@@ -92,8 +92,7 @@ namespace BP.GPM.AD
                 emp.FK_Dept = dept.No;
                 emp.Update();
             }
-
-            return "同步成功";
+            return msg;
         }
         #endregion
 
@@ -107,8 +106,22 @@ namespace BP.GPM.AD
         /// <param name="entry"></param>
         private void SyncRootOU(DirectoryEntry entry)
         {
+            msg += "<br>开始同步:" + entry.Name;
+
+            string myInfo="";
+            foreach (string elmentName in entry.Properties.PropertyNames)
+            {
+                PropertyValueCollection valueCollection = entry.Properties[elmentName];
+                for (int i = 0; i < valueCollection.Count; i++)
+                {
+                    myInfo += "<br>" + elmentName + "=" + valueCollection[i].ToString() + "\r\n";
+                }
+            }
+            msg += " 属性：" + myInfo;
+
+
             //更目录.
-            if (entry.Name.IndexOf("DC=dev") == 0)
+            if (entry.Name.IndexOf("DC=") == 0)
             {
                 BP.GPM.AD.Dept dept = new Dept();
                 dept.No = entry.Guid.ToString();
@@ -145,7 +158,6 @@ namespace BP.GPM.AD
                 return;
             }
 
-
             //用户.
             if (entry.Name.IndexOf("CN=") == 0)
             {
@@ -164,6 +176,10 @@ namespace BP.GPM.AD
                     return;
 
                 emp.Insert();
+
+                return;
+
+
 
                 foreach (DirectoryEntry item in entry.Children)
                 {

@@ -99,7 +99,7 @@ namespace BP.GPM.AD
 
                 Map map = new Map();
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //连接到的那个数据库上. (默认的是: AppCenterDSN )
-                map.PhysicsTable = "AD_Dept";
+                map.PhysicsTable = "Port_Dept";
                 map.Java_SetEnType(EnType.Admin);
 
                 map.EnDesc = "部门"; //  实体的描述.

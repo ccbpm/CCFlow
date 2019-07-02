@@ -2,7 +2,6 @@
 using System.Data;
 using BP.DA;
 using BP.En;
-using BP.Port;
 
 namespace BP.GPM.AD
 {
@@ -245,7 +244,7 @@ namespace BP.GPM.AD
 
                 #region 基本属性
                 map.EnDBUrl =new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
-                map.PhysicsTable = "Domain_Emp"; // 要物理表。
+                map.PhysicsTable = "Port_Emp"; // 要物理表。
                 map.Java_SetDepositaryOfMap(Depositary.Application);    //实体map的存放位置.
                 map.Java_SetDepositaryOfEntity(Depositary.Application); //实体存放位置
                 map.EnDesc = "用户"; // "用户"; // 实体的描述.
@@ -268,8 +267,6 @@ namespace BP.GPM.AD
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
-
-                map.AddSearchAttr(EmpAttr.SignType);
 
                 this._enMap = map;
                 return this._enMap;

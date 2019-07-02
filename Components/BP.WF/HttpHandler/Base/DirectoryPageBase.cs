@@ -52,7 +52,7 @@ namespace BP.WF.HttpHandler
                 return "";
                 //throw new Exception("@获取Form参数错误,参数集合不包含[" + key + "]");
             }
-            val = HttpUtility.UrlDecode(val);
+            
             val = val.Replace("'", "~");
             return val;
         }

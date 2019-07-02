@@ -64,16 +64,12 @@ namespace BP.GPM.AD
 
             DirectoryEntry rootAdmin = mySearcher.SearchRoot;   //查找根OU.
 
-
-            //DirectoryEntry root = Glo.RootDirectoryEntry.Parent;   //查找根OU.
-
             string msg = "";
 
             msg += "@开始删除AD_Dept, AD_Emp数据。";
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
-
 
             //同步数据.
             SyncRootOU(root);

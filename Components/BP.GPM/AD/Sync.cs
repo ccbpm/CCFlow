@@ -74,6 +74,24 @@ namespace BP.GPM.AD
             //同步数据.
             SyncRootOU(root);
 
+            //增加admin用户.
+
+            BP.GPM.AD.Dept dept = new Dept();
+            dept.Retrieve(BP.GPM.AD.DeptAttr.ParentNo, "0");
+
+            BP.GPM.AD.Emp emp = new Emp();
+            emp.No = "admin";
+            emp.Name = "admin";
+            if (emp.RetrieveFromDBSources() == 0)
+            {
+                emp.FK_Dept = dept.No;
+                emp.Insert();
+            }
+            else
+            {
+                emp.FK_Dept = dept.No;
+                emp.Update();
+            }
 
             return "同步成功";
         }

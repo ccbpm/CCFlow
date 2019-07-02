@@ -72,7 +72,6 @@ namespace BP.GPM.AD
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Station");
 
-
             //同步数据.
             SyncRootOU(root);
 
@@ -94,9 +93,85 @@ namespace BP.GPM.AD
                 emp.FK_Dept = dept.No;
                 emp.Update();
             }
+
+            // 同步岗位》
+
+            SyncStatioins();
+
             return msg;
         }
         #endregion
+
+        public void SyncStatioins()
+        {
+
+            DirectorySearcher ds = new DirectorySearcher();
+            ds.SearchRoot = Glo.RootDirectoryEntry;
+            ds.SearchScope=  SearchScope.Subtree; //搜索全部对象.
+            ds.Filter = ("(objectClass=group)");
+
+            //ds.Filter = "(&(objectClass=group)(cn=" + "YBS" + "))";  //YBS组名
+            //ds.Filter = ("(objectCategory=YBS)(objectClass=user)") ;
+            //. Find("ybs", "Group")) 
+
+            DBAccess.RunSQL("DELETE FROM Port_Station ");
+            DBAccess.RunSQL("DELETE FROM Port_DeptEmpStation ");
+
+
+            foreach (SearchResult result in ds.FindAll())
+            {
+
+                //DirectoryEntry deGroup=result.GetDirectoryEntry();
+                // string name = result.GetDirectoryEntry().Name.ToString();
+
+                DirectoryEntry deGroup = new DirectoryEntry(result.Path, Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
+
+                Station sta = new Station();
+                sta.No = deGroup.Guid.ToString();
+                sta.Name = deGroup.Name;
+                sta.Insert();
+
+
+                System.DirectoryServices.PropertyCollection pcoll = deGroup.Properties;
+                int n = pcoll["member"].Count;
+                for (int l = 0; l < n; l++)
+                {
+
+                    DirectoryEntry deUser = new DirectoryEntry(Glo.ADPath + "/" + pcoll["member"][l].ToString(),
+                        Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
+                   
+                    BP.GPM.DeptEmpStation des = new DeptEmpStation();
+                    des.FK_Dept = deUser.Parent.Guid.ToString();
+                    des.FK_Emp = deUser.Name;
+                    des.FK_Station =deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
+                    des.Insert();
+
+                   // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
+                    //  Page.Response.Write(sss);
+                }
+            }
+
+        }
+
+         public string GetProperty(DirectoryEntry oDE, string PropertyName)
+        {
+            try
+            {
+                if (oDE.Properties.Contains(PropertyName))
+                {
+                    return oDE.Properties[PropertyName][0].ToString();
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            catch (Exception ee)
+            {
+                throw ee;
+            }
+        } 
+
 
         public string GetValFromDirectoryEntryByKey(DirectoryEntry en, string key, string isNullAsVal = "")
         {
@@ -115,6 +190,9 @@ namespace BP.GPM.AD
 
         #region## 同步根组织单位
         string rootDeptNo = "";
+        int idxDept = 0;
+        int idxStation = 0;
+        int idxEmp = 0;
         /// <summary>
         /// 功能: 同步根组织单位
         /// 创建人:Wilson
@@ -126,13 +204,11 @@ namespace BP.GPM.AD
             msg += "<hr>开始同步:" + entry.Name;
 
             string myInfo="";
-            foreach (string elmentName in entry.Properties.PropertyNames)
-            {
-                PropertyValueCollection valueCollection = entry.Properties[elmentName];
-
-                myInfo += "<br>KEY=" + elmentName + ",   " + valueCollection.Value; // +valueCollection[i].ToString();
-                 
-            }
+            //foreach (string elmentName in entry.Properties.PropertyNames)
+            //{
+            //    PropertyValueCollection valueCollection = entry.Properties[elmentName];
+            //    myInfo += "<br>KEY=" + elmentName + ",   " + valueCollection.Value; // +valueCollection[i].ToString();
+            //}
             msg += " 属性：" + myInfo;
 
             //更目录.
@@ -147,9 +223,13 @@ namespace BP.GPM.AD
                 if (dept.Name == "")
                     dept.Name = "总部";
 
-
                 dept.ParentNo = "0";
+                if (dept.IsExits == true)
+                    return;
+
+                dept.Idx = idxDept++;
                 dept.Insert();
+
                 foreach (DirectoryEntry item in entry.Children)
                 {
                     SyncRootOU(item);
@@ -166,6 +246,7 @@ namespace BP.GPM.AD
 
                 dept.No = entry.Guid.ToString();
                 dept.ParentNo = entry.Parent.Guid.ToString();
+                dept.Idx = idxDept++;
                 dept.Insert();
 
                 foreach (DirectoryEntry item in entry.Children)
@@ -178,9 +259,7 @@ namespace BP.GPM.AD
             //用户.
             if (entry.Name.IndexOf("CN=") == 0)
             {
-
                 string name = entry.Name.Replace("CN=", "");
-
                 string objectCategory = this.GetValFromDirectoryEntryByKey(entry, "objectCategory");
 
                 if (objectCategory.Contains("CN=Group") == true)
@@ -189,25 +268,18 @@ namespace BP.GPM.AD
                     //判断是 group 还是 user.
                     BP.GPM.Station station  =new Station(); 
                     // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
-                    station.No = this.GetValFromDirectoryEntryByKey(entry, "cn");
-                    station.Name = this.GetValFromDirectoryEntryByKey(entry, "displayName");
-                    if (station.IsExits == true)
-                        return;
-
-                   // station.FK_Dept = entry.Parent.Guid.ToString();
-                    if (station.No.Length > 20)
-                        return;
-
+                    station.No = entry.Guid.ToString();
+                    station.Name = name;// this.GetValFromDirectoryEntryByKey(entry, "cn"); 
+                   // station.Idx = idxStation++;
                     station.Insert();
                     return;
                 }
                 else
                 {
-
                     //判断是 group 还是 user.
                     BP.GPM.AD.Emp emp = new Emp();
                     // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
-                    emp.No = this.GetValFromDirectoryEntryByKey(entry, "cn");
+                    emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
                     emp.Name = this.GetValFromDirectoryEntryByKey(entry, "displayName");
 
                     if (emp.IsExits == true)
@@ -218,33 +290,11 @@ namespace BP.GPM.AD
                     if (emp.No.Length > 20)
                         return;
 
+                     emp.Idx = idxEmp++;
                     emp.Insert();
                     return;
                 }
-
-                return;
-
-
-
-                foreach (DirectoryEntry item in entry.Children)
-                {
-                    SyncRootOU(item);
-                }
-                return;
             }
-
-            //if (entry.Properties.Contains("ou") && entry.Properties.Contains("objectGUID"))
-            //{
-            //    string rootOuName = entry.Properties["ou"][0].ToString();
-
-            //    byte[] bGUID = entry.Properties["objectGUID"][0] as byte[];
-
-            //    string id = BitConverter.ToString(bGUID);
-
-            //    list.Add(new AdModel(id, rootOuName, (int)TypeEnum.OU, "0"));
-
-            //    SyncSubOU(entry, id);
-            //}
         }
 
         public void SyncRootOU(DirectoryEntry en, string parentEn)

@@ -27,7 +27,7 @@ function GenerFreeFrm(mapData, frmData) {
         var label = figure_Template_Label(frmLab);
         $('#CCForm').append(label);
     }
-   
+
     //循环FrmBtn
     for (var i in frmData.Sys_FrmBtn) {
         var frmBtn = frmData.Sys_FrmBtn[i];
@@ -76,24 +76,24 @@ function GenerFreeFrm(mapData, frmData) {
             // 从表id.列.[Sum|Avg|Max|Min] -> CCFrm_CongBiaoCeShiDtl1.ShanJia.Avg
             var docs = o.Doc.split("\.");
             //判断是否显示大写
-                var tag3 = o.Tag3;
-                var DaXieAttrOfOper = "";
-                if (tag3 == 1)
-                    DaXieAttrOfOper = o.Tag4;
+            var tag3 = o.Tag3;
+            var DaXieAttrOfOper = "";
+            if (tag3 == 1)
+                DaXieAttrOfOper = o.Tag4;
 
-                if (docs.length == 3) {
-                    var ext = {
-                        "DtlNo": docs[0],
-                        "FK_MapData": o.FK_MapData,
-                        "AttrOfOper": o.AttrOfOper,
-                        "DaXieAttrOfOper": DaXieAttrOfOper,
-                        "Doc": o.Doc,
-                        "DtlColumn": docs[1],
-                        "exp": docs[2],
-                        "Tag":o.Tag,
-                        "Tag1":o.Tag1
-                    };
-           
+            if (docs.length == 3) {
+                var ext = {
+                    "DtlNo": docs[0],
+                    "FK_MapData": o.FK_MapData,
+                    "AttrOfOper": o.AttrOfOper,
+                    "DaXieAttrOfOper": DaXieAttrOfOper,
+                    "Doc": o.Doc,
+                    "DtlColumn": docs[1],
+                    "exp": docs[2],
+                    "Tag": o.Tag,
+                    "Tag1": o.Tag1
+                };
+
                 if (!$.isArray(detailExt[ext.DtlNo])) {
                     detailExt[ext.DtlNo] = [];
                 }
@@ -132,7 +132,7 @@ function GenerFreeFrm(mapData, frmData) {
         if (wf_FrmNodeComponent != null) {
 
             $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent, mapData));
-            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent, mapData,frmData));
+            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent, mapData, frmData));
             $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent, mapData));
             $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent, mapData));
         }
@@ -161,15 +161,15 @@ function figure_Template_FigureFlowChart(wf_node, mapData) {
     src += '&FID=' + pageData.FID;
     var eleHtml = '<div id="divtrack' + wf_node.NodeID + '">' + "<iframe id='track" + wf_node.NodeID + "' style='width:" + w + "px;height=" + h + "px;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
+    eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
 
     return eleHtml;
 }
 
 //审核组件
-function figure_Template_FigureFrmCheck(wf_node, mapData,frmData) {
+function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
 
-   
+
 
     var sta = wf_node.FWCSta;
     if (sta == 0 || sta == undefined)
@@ -231,7 +231,7 @@ function figure_Template_FigureFrmCheck(wf_node, mapData,frmData) {
     paras += "&WorkID=" + pageData["OID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
- 
+
     //  paras += '&WorkID=' + pageData.WorkID;
     if (sta == 2)//只读
     {
@@ -246,7 +246,7 @@ function figure_Template_FigureFrmCheck(wf_node, mapData,frmData) {
     var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
 
     eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
+    eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
     return eleHtml;
 }
 
@@ -387,7 +387,7 @@ function figure_Template_Dtl(frmDtl, ext) {
     }
     var src = "";
 
-   // alert(pageData);
+    // alert(pageData);
     //alert(pageData.IsReadonly);
 
     if (frmDtl.ListShowModel == "0") {
@@ -401,7 +401,7 @@ function figure_Template_Dtl(frmDtl, ext) {
             dtlUrl = '../CCForm/' + dtlUrl;
         }
 
-       
+
 
         if (pageData.IsReadonly == "1") {
             src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
@@ -410,10 +410,10 @@ function figure_Template_Dtl(frmDtl, ext) {
         }
 
     } else if (frmDtl.ListShowModel == "1") {
-        if (pageData.IsReadonly =="1") {
-            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs+"&m="+Math.random();
+        if (pageData.IsReadonly == "1") {
+            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
         } else {
-            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs+"&m="+ Math.random();
+            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs + "&m=" + Math.random();
         }
     }
 
@@ -474,66 +474,66 @@ function figure_Template_IFrame(fram) {
     var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
     //获取框架的类型 0 自定义URL 1 地图开发 2流程轨迹表 3流程轨迹图
     var urlType = fram.UrlSrcType;
-     var url = "";
-     if (urlType == 0) {
-         url = fram.URL;
-         if (url.indexOf('?') == -1)
-             url += "?1=2";
+    var url = "";
+    if (urlType == 0) {
+        url = fram.URL;
+        if (url.indexOf('?') == -1)
+            url += "?1=2";
 
-         if (url.indexOf("@basePath") == 0)
-             url = url.replace("@basePath", basePath);
+        if (url.indexOf("@basePath") == 0)
+            url = url.replace("@basePath", basePath);
 
-         //1.处理URL需要的参数
-         var pageParams = getQueryString();
-         $.each(pageParams, function (i, pageParam) {
-             var pageParamArr = pageParam.split('=');
-             url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
-         });
+        //1.处理URL需要的参数
+        var pageParams = getQueryString();
+        $.each(pageParams, function (i, pageParam) {
+            var pageParamArr = pageParam.split('=');
+            url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+        });
 
-         var src = url.replace(new RegExp(/(：)/g), ':');
-         if (src.indexOf("?") > 0) {
-             var params = getQueryStringFromUrl(src);
-             if (params != null && params.length > 0) {
-                 $.each(params, function (i, param) {
-                     if (param.indexOf('@') != -1) {//是需要替换的参数
-                         paramArr = param.split('=');
-                         if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
-                             if (paramArr[1].indexOf('@WebUser.') == 0)
-                                 url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
-                             else
-                                 url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr(1)]);
-                         }
-                     }
-                 });
-             }
-         }
-
-
-         //1.拼接参数
-         var paras = this.pageData;
-         var strs = "";
-         for (var str in paras) {
-             if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-                 continue
-             else
-                 strs += "&" + str + "=" + paras[str];
-         }
+        var src = url.replace(new RegExp(/(：)/g), ':');
+        if (src.indexOf("?") > 0) {
+            var params = getQueryStringFromUrl(src);
+            if (params != null && params.length > 0) {
+                $.each(params, function (i, param) {
+                    if (param.indexOf('@') != -1) {//是需要替换的参数
+                        paramArr = param.split('=');
+                        if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                            if (paramArr[1].indexOf('@WebUser.') == 0)
+                                url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+                            else
+                                url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr(1)]);
+                        }
+                    }
+                });
+            }
+        }
 
 
+        //1.拼接参数
+        var paras = this.pageData;
+        var strs = "";
+        for (var str in paras) {
+            if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+                continue
+            else
+                strs += "&" + str + "=" + paras[str];
+        }
 
 
-         url = url + strs + "&IsReadonly=0";
 
-         //4.追加GenerWorkFlow AtPara中的参数
-         var gwf = frmData.WF_GenerWorkFlow[0];
-         if (gwf != null) {
-             var atPara = gwf.AtPara;
-             if (atPara != null && atPara != "") {
-                 atPara = atPara.replace(/@/g, '&');
-                 url = url + atPara;
-             }
-         }
-     }
+
+        url = url + strs + "&IsReadonly=0";
+
+        //4.追加GenerWorkFlow AtPara中的参数
+        var gwf = frmData.WF_GenerWorkFlow[0];
+        if (gwf != null) {
+            var atPara = gwf.AtPara;
+            if (atPara != null && atPara != "") {
+                atPara = atPara.replace(/@/g, '&');
+                url = url + atPara;
+            }
+        }
+    }
     if (urlType == 2) //轨迹表
         url = "../WorkOpt/OneWork/Table.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
     if (urlType == 3)//轨迹图
@@ -566,16 +566,16 @@ function figure_MapAttr_Template(mapAttr) {
 
 
     if (mapAttr.IsSigan == "4") {
-        eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
+        eleHtml.css('position', 'absolute').css('top', mapAttr.Y + 'px').css('left', mapAttr.X + 'px');
         eleHtml.css('z-index', '999');
         return eleHtml;
     }
     if (mapAttr.MyDataType != 4) {
-        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 6px");
+        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 6px").css("display", "inline");
     }
 
 
-    eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
+    eleHtml.css('position', 'absolute').css('top', mapAttr.Y + 'px').css('left', mapAttr.X + 'px');
 
     return eleHtml;
 }
@@ -605,14 +605,14 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             var sfTable = new Entity("BP.Sys.SFTable");
             sfTable.SetPKVal(uiBindKey);
             var count = sfTable.RetrieveFromDBSources();
-            if (count!=0 && sfTable.CodeStruct == "1") {
+            if (count != 0 && sfTable.CodeStruct == "1") {
                 return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
-                
+
             }
         }
 
         eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + enableAttr + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-       
+
         return eleHtml;
     }
 
@@ -797,7 +797,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //checkbox 类型.
     if (mapAttr.MyDataType == 4) { // AppBoolean = 7
 
-       
+
         eleHtml += "<div class='checkbox' ><label style='width:100%;' > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  name='CB_" + mapAttr.KeyOfEn + "'/>";
         eleHtml += mapAttr.Name + '</label></div>';
         return eleHtml;
@@ -883,17 +883,13 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
 //升级表单元素 初始化Label
 function figure_Template_Label(frmLab) {
 
-//    var eleHtml = "<div id=u2 style='position:absolute;left:" + frmLab.X + "px;top:" + frmLab.Y + "px;text-align:left;' >";
-//    eleHtml += "<span style='color:" + frmLab.FontColorHtml + ";font-family: " + frmLab.FontName + ";font-size: " + frmLab.FontSize + "px;' >" + frmLab.Text + "</span>";
-//    eleHtml += "</div>";
-//    eleHtml = $(eleHtml);
-//    return eleHtml;
-
-    eleHtml = "<label></label>";
+    var eleHtml = "<label></label>";
     eleHtml = $(eleHtml);
     var text = frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y + 'px').css('left', frmLab.X + 'px').css('font-size', frmLab.FontSize)
+        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
+    // eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;
 }
@@ -905,7 +901,7 @@ function figure_Template_Label_old(frmLab) {
     eleHtml = $(eleHtml);
     var text = frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize+'px')
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize + 'px')
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;
@@ -917,7 +913,7 @@ function figure_Template_Btn(frmBtn) {
     var btnId = frmBtn.BtnID;
     if (btnId == null || btnId == "")
         btnId = frmBtn.MyPK;
-    var btnHtml = $("<input id='"+btnId+"' type='button' value='' >");
+    var btnHtml = $("<input id='" + btnId + "' type='button' value='' >");
     btnHtml.val(frmBtn.Text).width(frmBtn.W).height(frmBtn.H).addClass('btn');
     var doc = frmBtn.EventContext;
     doc = doc.replace("~", "'");
@@ -956,7 +952,7 @@ function figure_Template_Btn(frmBtn) {
     }
     eleHtml.append(btnHtml);
     //别的一些属性先不加
-    eleHtml.css('position', 'absolute').css('top', frmBtn.Y).css('left', frmBtn.X).width(frmBtn.W).height(frmBtn.H);
+    eleHtml.css('position', 'absolute').css('top', frmBtn.Y + 'px').css('left', frmBtn.X + 'px').width(frmBtn.W).height(frmBtn.H);
     return eleHtml;
 }
 
@@ -969,8 +965,8 @@ function figure_Template_Rb(frmRb) {
     childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
     childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
-//    if (frmRb.UIIsEnable == false)
-//        childRbEle.attr('disabled', 'disabled');
+    //    if (frmRb.UIIsEnable == false)
+    //        childRbEle.attr('disabled', 'disabled');
 
     var defVal = ConvertDefVal(frmData, '', frmRb.KeyOfEn);
     if (defVal == frmRb.IntKey) {
@@ -978,7 +974,7 @@ function figure_Template_Rb(frmRb) {
     }
 
     eleHtml.append(childRbEle).append(childLabEle);
-    eleHtml.css('position', 'absolute').css('top', frmRb.Y).css('left', frmRb.X);
+    eleHtml.css('position', 'absolute').css('top', frmRb.Y + 'px').css('left', frmRb.X + 'px');
     return eleHtml;
 }
 
@@ -1016,8 +1012,8 @@ function figure_Template_HyperLink(frmLin) {
     a.attr('href', url).attr('target', frmLin.Target).html(frmLin.Text);
     eleHtml.append(a);
     eleHtml.css('position', 'absolute')
-        .css('top', frmLin.Y)
-        .css('left', frmLin.X)
+        .css('top', frmLin.Y + 'px')
+        .css('left', frmLin.X + 'px')
         .css('color', frmLin.FontColr)
         .css('fontsize', frmLin.FontSize)
         .css('font-family', frmLin.FontName);
@@ -1062,7 +1058,7 @@ function figure_Template_Image(frmImage) {
         }
 
         eleHtml.attr("id", frmImage.MyPK);
-        eleHtml.css('position', 'absolute').css('top', frmImage.Y).css('left', frmImage.X).css('width', frmImage.W).css('height', frmImage.H); ;
+        eleHtml.css('position', 'absolute').css('top', frmImage.Y + 'px').css('left', frmImage.X + 'px').css('width', frmImage.W).css('height', frmImage.H); ;
     } else if (frmImage.ImgAppType == 3)//二维码  手机
     {
 
@@ -1082,24 +1078,24 @@ function figure_Template_ImageAth(frmImageAth) {
 
 
     //判断权限
-    var WhoIsPK={OID:0,FID:1,PWorkID:2,CWorkID:3};
+    var WhoIsPK = { OID: 0, FID: 1, PWorkID: 2, CWorkID: 3 };
     var fn = new Entity("BP.WF.Template.FrmNode");
     fn.SetPKVal(pageData.FK_MapData + "_" + pageData.FK_Node + "_" + pageData.FK_Flow);
     var count = fn.RetrieveFromDBSources();
 
     var refpkVal = pageData.OID;
     if (count != 0) {
-        if(fn.WhoIsPK == WhoIsPK.FID || fn.WhoIsPK == WhoIsPK.PWorkID)
+        if (fn.WhoIsPK == WhoIsPK.FID || fn.WhoIsPK == WhoIsPK.PWorkID)
             refpkVal = pageData.FID
         var node = frmData.WF_Node[0];
         if ((node.FormType == 5 || node.FormType == 10) && fn.FrmSln == 2) {
-           var imgAth = new Entity("BP.Sys.FrmUI.ExtImgAth");
-           imgAth.SetPKVal(frmImageAth.MyPK + "_" + pageData.FK_Node);
+            var imgAth = new Entity("BP.Sys.FrmUI.ExtImgAth");
+            imgAth.SetPKVal(frmImageAth.MyPK + "_" + pageData.FK_Node);
             count = imgAth.RetrieveFromDBSources();
-           if(count !=0)
-            isEdit = ImgAth.IsEdit;
+            if (count != 0)
+                isEdit = ImgAth.IsEdit;
 
-          }  
+        }
     }
     var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
     //获取数据
@@ -1107,13 +1103,13 @@ function figure_Template_ImageAth(frmImageAth) {
         imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.CtrlID + "_" + refpkVal + ".png";
     else
         imgSrc = basePath + "/DataUser/ImgAth/Data/" + pageData.FK_MapData + "_" + frmImageAth.CtrlID + "_" + refpkVal + ".png";
-//    if (frmData.Sys_FrmImgAthDB) {
-//        $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
-//            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
-//                
-//            }
-//        });
-//    }
+    //    if (frmData.Sys_FrmImgAthDB) {
+    //        $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
+    //            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
+    //                
+    //            }
+    //        });
+    //    }
     //设计属性
     img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
     img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Admin/CCFormDesigner/Controls/DataView/AthImg.png'");
@@ -1135,7 +1131,7 @@ function figure_Template_ImageAth(frmImageAth) {
     } else {
         eleHtml.append(img);
     }
-    eleHtml.css('position', 'absolute').css('top', frmImageAth.Y).css('left', frmImageAth.X);
+    eleHtml.css('position', 'absolute').css('top', frmImageAth.Y + 'px').css('left', frmImageAth.X + 'px');
     return eleHtml;
 }
 
@@ -1170,9 +1166,9 @@ function figure_Template_Attachment(frmAttachment) {
     }
 
     if (pageData.IsReadonly == "1")
-        src = src+"?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = src + "?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
     else
-        src = src+"?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = src + "?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
 
     var fid = GetQueryString("FID");
     var pWorkID = GetQueryString("PWorkID");
@@ -1182,7 +1178,7 @@ function figure_Template_Attachment(frmAttachment) {
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', ath.Y).css('left', ath.X).css('width', ath.W).css('height', ath.H);
+    eleHtml.css('position', 'absolute').css('top', ath.Y + 'px').css('left', ath.X + 'px').css('width', ath.W).css('height', ath.H);
 
     return eleHtml;
 }
@@ -1190,7 +1186,7 @@ function figure_Template_Attachment(frmAttachment) {
 function connector_Template_Line(frmLine) {
     var eleHtml = '';
     eleHtml = '<table><tr><td></td></tr></table>';
-    eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1).css('left', frmLine.X1);
+    eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1 + 'px').css('left', frmLine.X1 + 'px');
     eleHtml.find('td').css('padding', '0px')
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
         eleHtml.find('td').css('padding', '0px')

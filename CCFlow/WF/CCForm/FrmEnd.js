@@ -288,10 +288,10 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             }
         }
-        if (mapAttr == null) {
-            mapExt.Delete("MyPK", mapExt.MyPK);
-            break;
-        }
+//        if (mapAttr == null) {
+//            mapExt.Delete("MyPK", mapExt.MyPK);
+//            break;
+//        }
             mapAttr = new Entity("BP.Sys.MapAttr", mapAttr.MyPK);
 
         //判断MapAttr属性是否可编辑不可以编辑返回

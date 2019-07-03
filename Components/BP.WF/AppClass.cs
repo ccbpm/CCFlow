@@ -31,7 +31,6 @@ namespace BP.WF
             if (wfState == 3)
                 return BP.Tools.Json.ToJson(tracks); //如果流程结束了，所有的数据都在tracks里面.
 
-
             //把以后的为未完成的节点放入到track里面.
             for (int i = 0; i < 100; i++)
             {
@@ -69,8 +68,7 @@ namespace BP.WF
                 }
                 #endregion 判断当前节点的类型.
 
-
-                int nextNode = GetNextNodeID(currNode, dirs, nodes);
+                int nextNode = GetNextNodeID(currNode, dirs);
                 if (nextNode == 0)
                     break;
 
@@ -91,7 +89,7 @@ namespace BP.WF
             return BP.Tools.Json.ToJson(tracks);
         }
         //根据当前节点获得下一个节点.
-        private static int GetNextNodeID(int nodeID, DataTable dirs, DataTable nds)
+        private static int GetNextNodeID(int nodeID, DataTable dirs)
         {
             int toNodeID = 0;
             foreach (DataRow dir in dirs.Rows)

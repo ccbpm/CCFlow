@@ -107,7 +107,7 @@ namespace BP.GPM.AD
 
             DirectorySearcher ds = new DirectorySearcher();
             ds.SearchRoot = Glo.RootDirectoryEntry;
-            ds.SearchScope=  SearchScope.Subtree; //搜索全部对象.
+            ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
             ds.Filter = ("(objectClass=group)");
 
             //ds.Filter = "(&(objectClass=group)(cn=" + "YBS" + "))";  //YBS组名
@@ -121,16 +121,12 @@ namespace BP.GPM.AD
             foreach (SearchResult result in ds.FindAll())
             {
 
-                //DirectoryEntry deGroup=result.GetDirectoryEntry();
-                // string name = result.GetDirectoryEntry().Name.ToString();
-
                 DirectoryEntry deGroup = new DirectoryEntry(result.Path, Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
 
                 Station sta = new Station();
                 sta.No = deGroup.Guid.ToString();
                 sta.Name = deGroup.Name;
-                sta.Insert();
-
+                sta.DirectInsert();
 
                 System.DirectoryServices.PropertyCollection pcoll = deGroup.Properties;
                 int n = pcoll["member"].Count;
@@ -139,21 +135,29 @@ namespace BP.GPM.AD
 
                     DirectoryEntry deUser = new DirectoryEntry(Glo.ADPath + "/" + pcoll["member"][l].ToString(),
                         Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
-                   
+
                     BP.GPM.DeptEmpStation des = new DeptEmpStation();
+
                     des.FK_Dept = deUser.Parent.Guid.ToString();
-                    des.FK_Emp = deUser.Name;
-                    des.FK_Station =deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
+                    des.FK_Station = deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
+
+                    string name = deUser.Name;
+                    name = name.Replace("CN=", "");
+
+                    des.FK_Emp = name;
+                    if (name.Length > 25)
+                        continue;
+
                     des.Insert();
 
-                   // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
+                    // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
                     //  Page.Response.Write(sss);
                 }
             }
 
         }
 
-         public string GetProperty(DirectoryEntry oDE, string PropertyName)
+        public string GetProperty(DirectoryEntry oDE, string PropertyName)
         {
             try
             {
@@ -170,7 +174,7 @@ namespace BP.GPM.AD
             {
                 throw ee;
             }
-        } 
+        }
 
 
         public string GetValFromDirectoryEntryByKey(DirectoryEntry en, string key, string isNullAsVal = "")
@@ -184,7 +188,7 @@ namespace BP.GPM.AD
             if (valueCollection.Value == null)
                 return isNullAsVal;
 
-            
+
             return valueCollection.Value.ToString();
         }
 
@@ -203,7 +207,7 @@ namespace BP.GPM.AD
         {
             msg += "<hr>开始同步:" + entry.Name;
 
-            string myInfo="";
+            string myInfo = "";
             //foreach (string elmentName in entry.Properties.PropertyNames)
             //{
             //    PropertyValueCollection valueCollection = entry.Properties[elmentName];
@@ -241,7 +245,7 @@ namespace BP.GPM.AD
             {
 
                 BP.GPM.AD.Dept dept = new Dept();
-                dept.Name = entry.Name.Replace("OU=", ""); 
+                dept.Name = entry.Name.Replace("OU=", "");
 
 
                 dept.No = entry.Guid.ToString();
@@ -266,11 +270,11 @@ namespace BP.GPM.AD
                 {
 
                     //判断是 group 还是 user.
-                    BP.GPM.Station station  =new Station(); 
+                    BP.GPM.Station station = new Station();
                     // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
                     station.No = entry.Guid.ToString();
                     station.Name = name;// this.GetValFromDirectoryEntryByKey(entry, "cn"); 
-                   // station.Idx = idxStation++;
+                    // station.Idx = idxStation++;
                     station.Insert();
                     return;
                 }
@@ -290,7 +294,7 @@ namespace BP.GPM.AD
                     if (emp.No.Length > 20)
                         return;
 
-                     emp.Idx = idxEmp++;
+                    emp.Idx = idxEmp++;
                     emp.Insert();
                     return;
                 }

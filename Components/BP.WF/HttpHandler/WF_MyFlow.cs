@@ -752,7 +752,7 @@ namespace BP.WF.HttpHandler
         {
         }
         /// <summary>
-        /// 删除流程.
+        /// 结束流程.
         /// </summary>
         /// <returns></returns>
         public string MyFlow_StopFlow()

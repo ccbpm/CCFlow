@@ -150,10 +150,10 @@ namespace BP.WF.HttpHandler
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
             ht.Add("Todolist_Complete", BP.WF.Dev2Interface.Todolist_Complete);
-            ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
+            //ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
             ht.Add("Todolist_CCWorks", BP.WF.Dev2Interface.Todolist_CCWorks);
-            ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
-            ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
+            //ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
+            //ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
 
             ht.Add("Todolist_HuiQian", BP.WF.Dev2Interface.Todolist_HuiQian); //会签数量.
 

@@ -199,7 +199,7 @@ function figure_MapAttr_Template(mapAttr) {
         return eleHtml;
     }
     if (mapAttr.MyDataType != 4) {
-        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("padding", "0px 12px");
+        eleHtml.children(0).css('width', W).css('height', mapAttr.UIHeight).css("display", "inline");
     }
     
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
@@ -785,7 +785,7 @@ function connector_Template_Line(frmLine) {
         eleHtml.find('td').css('padding', '0px')
         .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
     .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
-        .css("background", frmLine.BorderColor);
+        .css("background", frmLine.BorderColor).css("border-color",frmLine.BorderColor == 'Black'?"":frmLine.BorderColor);
     }
 
     return eleHtml;
@@ -814,16 +814,16 @@ function figure_Template_Dtl(frmDtl) {
 
         //表格模式
         if (pageData.IsReadonly) {
-            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
-            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData +"&IsReadonly=0&" + urlParam + "&Version=1";
         }
     } else if (frmDtl.ListShowModel == "1") {
         //卡片模式
         if (pageData.IsReadonly) {
-            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
-            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
     }
 

@@ -277,8 +277,10 @@ function AfterBindEn_DealMapExt(frmData) {
 
         //一起转成entity.
         var mapExt = new Entity("BP.Sys.MapExt", mapExt.MyPK);
-       
-        
+
+        if (mapExt.ExtType == 'PageLoadFull' || mapExt.ExtType == 'StartFlow') {
+            continue;
+        }
 
         var mapAttr = null;
 
@@ -288,10 +290,10 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             }
         }
-//        if (mapAttr == null) {
-//            mapExt.Delete("MyPK", mapExt.MyPK);
-//            break;
-//        }
+        if (mapAttr == null) {
+            mapExt.Delete("MyPK", mapExt.MyPK);
+            break;
+        }
             mapAttr = new Entity("BP.Sys.MapAttr", mapAttr.MyPK);
 
         //判断MapAttr属性是否可编辑不可以编辑返回

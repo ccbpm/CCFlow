@@ -44,6 +44,13 @@ namespace BP.GPM.AD
                 return Sys.SystemConfig.AppSettings["ADPassword"];
             }
         }
+        public static string ADRoot
+        {
+            get
+            {
+                return Sys.SystemConfig.AppSettings["ADRoot"];
+            }
+        }
         /// <summary>
         /// 跟目录(主域)
         /// </summary>

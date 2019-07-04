@@ -52,6 +52,8 @@ namespace BP.GPM.AD
         #region## 同步
         private List<AdModel> list = new List<AdModel>();
 
+        DirectoryEntry rootDE = null;
+
         string msg = "";
         /// <summary>
         /// 功能:
@@ -61,38 +63,36 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-            DirectorySearcher mySearcher = new DirectorySearcher(Glo.RootDirectoryEntry, "(objectclass=organizationalUnit)"); //查询组织单位.
-            DirectoryEntry root = mySearcher.SearchRoot;   //查找根OU.
-            DirectoryEntry rootAdmin = mySearcher.SearchRoot;   //查找根OU.
-
-            msg += "@开始删除AD_Dept, AD_Emp数据。";
 
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
+
+            //同步并获取根目录.
+            rootDE = SyncDeptRoot();
+
+            //同步所有的部门.
+            SyncDept(rootDE); //同步跟目录 PartentNo=0;
+
+            //同步所有的人员.
+            SyncEmps(); 
+
+            //同步岗位.
+            SyncStatioins();
+            return "执行成功."; 
+
+ 
+         
+
+
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Station");
 
+
             //同步数据.
-            SyncRootOU(root);
+            // SyncDeptOfRoot(root);
 
 
-            //增加admin用户.
-            BP.GPM.AD.Dept dept = new Dept();
-            dept.Retrieve(BP.GPM.AD.DeptAttr.ParentNo, "0");
-
-            BP.GPM.AD.Emp emp = new Emp();
-            emp.No = "admin";
-            emp.Name = "admin";
-            if (emp.RetrieveFromDBSources() == 0)
-            {
-                emp.FK_Dept = dept.No;
-                emp.Insert();
-            }
-            else
-            {
-                emp.FK_Dept = dept.No;
-                emp.Update();
-            }
+          
 
             // 同步岗位》
 
@@ -100,13 +100,120 @@ namespace BP.GPM.AD
 
             return msg;
         }
+
+        /// <summary>
+        /// 同步根目录
+        /// </summary>
+        /// <param name="root"></param>
+        public void SyncDept(DirectoryEntry root)
+        {
+            DirectorySearcher search = new DirectorySearcher(root); //查询组织单位.
+            search.Filter = "(objectclass=organizationalUnit)";
+            search.SearchScope = SearchScope.Subtree;
+            SearchResultCollection results = search.FindAll();
+
+            foreach (SearchResult result in results)
+            {
+                DirectoryEntry entry = result.GetDirectoryEntry();
+
+                string name = entry.Name.Replace("OU=", "");
+                if (name == Glo.ADRoot)
+                    continue;
+
+                BP.GPM.AD.Dept dept = new Dept();
+                dept.Name = name;
+                dept.No = entry.Guid.ToString();
+                dept.ParentNo = entry.Parent.Guid.ToString();
+                dept.Idx = idxDept++;
+                dept.Insert();
+            }
+            search.Dispose();
+        }
+        public DirectoryEntry SyncDeptRoot()
+        {
+            DirectorySearcher search = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
+            search.Filter = "(OU=" + Glo.ADRoot + ")";
+            search.SearchScope = SearchScope.Subtree;
+
+            SearchResultCollection results = search.FindAll();
+
+            foreach (SearchResult result in results)
+            {
+                DirectoryEntry entry = result.GetDirectoryEntry();
+
+                BP.GPM.AD.Dept dept = new Dept();
+                dept.Name = entry.Name.Replace("OU=", "");
+                dept.No = entry.Guid.ToString();
+                dept.ParentNo = "0";
+                dept.Idx = idxDept++;
+                dept.Insert();
+                return entry;
+            }
+
+            search.Dispose();
+            return null;
+        }
         #endregion
 
-        public void SyncStatioins()
+        public void SyncEmps()
         {
+            DBAccess.RunSQL("DELETE FROM Port_Emp");
 
             DirectorySearcher ds = new DirectorySearcher();
-            ds.SearchRoot = Glo.RootDirectoryEntry;
+            ds.SearchRoot = rootDE;
+            ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
+            //ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
+            ds.Filter = "(objectClass=user)";
+
+            foreach (SearchResult result in ds.FindAll())
+            {
+
+                DirectoryEntry entity = result.GetDirectoryEntry(); 
+                string name = entity.Name.Replace("CN=", "");
+                //判断是 group 还是 user.
+                BP.GPM.AD.Emp emp = new Emp();
+                // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
+                //emp.c = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
+                emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
+                
+                emp.Name = this.GetValFromDirectoryEntryByKey(entity, "displayName");
+                if (emp.IsExits == true)
+                    continue;
+
+                emp.FK_Dept = entity.Parent.Guid.ToString();
+
+                if (emp.No.Length > 20)
+                    return;
+
+                emp.Idx = idxEmp++;
+                emp.Insert();
+            }
+
+            //增加 admin 
+            BP.GPM.AD.Dept dept = new Dept();
+            dept.Retrieve(BP.GPM.AD.DeptAttr.ParentNo, "0");
+
+            BP.GPM.AD.Emp empAdmin = new Emp();
+            empAdmin.No = "admin";
+            empAdmin.Name = "admin";
+            if (empAdmin.RetrieveFromDBSources() == 0)
+            {
+                empAdmin.FK_Dept = dept.No;
+                empAdmin.Insert();
+            }
+            else
+            {
+                empAdmin.FK_Dept = dept.No;
+                empAdmin.Update();
+            }
+        }
+        /// <summary>
+        /// 同步岗位
+        /// </summary>
+        public void SyncStatioins()
+        {
+            DirectorySearcher ds = new DirectorySearcher();
+            ds.SearchRoot = rootDE;
             ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
             ds.Filter = ("(objectClass=group)");
 
@@ -120,8 +227,7 @@ namespace BP.GPM.AD
 
             foreach (SearchResult result in ds.FindAll())
             {
-
-                DirectoryEntry deGroup = new DirectoryEntry(result.Path, Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
+                DirectoryEntry deGroup = result.GetDirectoryEntry(); // new DirectoryEntry(result.Path, Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
 
                 Station sta = new Station();
                 sta.No = deGroup.Guid.ToString();

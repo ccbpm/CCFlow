@@ -60,7 +60,7 @@ namespace BP.GPM.AD
             {
                 DirectoryEntry domain = new DirectoryEntry();
 
-                domain.Path = Glo.ADPath;
+                domain.Path = Glo.ADRoot;
                 domain.Username = Glo.ADUser;
                 domain.Password = Glo.ADPassword;
 

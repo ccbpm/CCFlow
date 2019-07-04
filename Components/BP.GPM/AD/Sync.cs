@@ -54,6 +54,8 @@ namespace BP.GPM.AD
 
         DirectoryEntry rootDE = null;
 
+        string rootPath = "";
+
         string msg = "";
         /// <summary>
         /// 功能:
@@ -64,17 +66,17 @@ namespace BP.GPM.AD
         public override object Do()
         {
 
-            //删除现有的数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
-
+          
             //同步并获取根目录.
-            rootDE = SyncDeptRoot();
+             SyncDeptRoot();
+
+             //同步所有的人员.
+             SyncEmps(); 
+
 
             //同步所有的部门.
-            SyncDept(rootDE); //同步跟目录 PartentNo=0;
+            SyncDept(this.rootDE); //同步跟目录 PartentNo=0;
 
-            //同步所有的人员.
-            SyncEmps(); 
 
             //同步岗位.
             SyncStatioins();
@@ -129,29 +131,44 @@ namespace BP.GPM.AD
             }
             search.Dispose();
         }
-        public DirectoryEntry SyncDeptRoot()
+        public void SyncDeptRoot()
         {
+            //删除现有的数据.
+            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
+
+            rootDE = Glo.RootDirectoryEntry;
+
+            BP.GPM.AD.Dept dept = new Dept();
+            dept.Name = rootDE.Name.Replace("OU=", "");
+            dept.No = rootDE.Guid.ToString();
+            dept.ParentNo = "0";
+            dept.Idx = idxDept++;
+            dept.Insert();
+            this.rootPath = rootDE.Path;
+        }
+        public void SyncDeptRoot_del()
+        {
+            //删除现有的数据.
+            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
+
             DirectorySearcher search = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
             search.Filter = "(OU=" + Glo.ADRoot + ")";
             search.SearchScope = SearchScope.Subtree;
 
-            SearchResultCollection results = search.FindAll();
-
-            foreach (SearchResult result in results)
-            {
-                DirectoryEntry entry = result.GetDirectoryEntry();
+            SearchResult result = search.FindOne();
+             
+                rootDE  = result.GetDirectoryEntry();
 
                 BP.GPM.AD.Dept dept = new Dept();
-                dept.Name = entry.Name.Replace("OU=", "");
-                dept.No = entry.Guid.ToString();
+                dept.Name = rootDE.Name.Replace("OU=", "");
+                dept.No = rootDE.Guid.ToString();
                 dept.ParentNo = "0";
                 dept.Idx = idxDept++;
                 dept.Insert();
-                return entry;
-            }
 
+                this.rootPath = rootDE.Path;
+              
             search.Dispose();
-            return null;
         }
         #endregion
 
@@ -159,16 +176,26 @@ namespace BP.GPM.AD
         {
             DBAccess.RunSQL("DELETE FROM Port_Emp");
 
-            DirectorySearcher ds = new DirectorySearcher();
-            ds.SearchRoot = rootDE;
+            // 
+            DirectoryEntry deRoot = new DirectoryEntry(Glo.ADRoot, Glo.ADUser, Glo.ADPassword);
+            DirectorySearcher ds = new DirectorySearcher(deRoot);
             ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
-            //ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
-            ds.Filter = "(objectClass=user)";
 
-            foreach (SearchResult result in ds.FindAll())
+            //  ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
+             ds.Filter = "(objectClass=user)";
+            // sss
+            SearchResultCollection rss= ds.FindAll();
+            if (rss.Count == 0)
+                return;
+
+            foreach (SearchResult result in rss)
             {
+                DirectoryEntry entity = result.GetDirectoryEntry();
+                if (entity.Name.Contains("CN=") == false)
+                    continue;
 
-                DirectoryEntry entity = result.GetDirectoryEntry(); 
+               // entity.
+
                 string name = entity.Name.Replace("CN=", "");
                 //判断是 group 还是 user.
                 BP.GPM.AD.Emp emp = new Emp();
@@ -250,7 +277,9 @@ namespace BP.GPM.AD
                     string name = deUser.Name;
                     name = name.Replace("CN=", "");
 
-                    des.FK_Emp = name;
+                //    emp.No =;
+
+                    des.FK_Emp = this.GetValFromDirectoryEntryByKey(deUser, "sAMAccountName");
                     if (name.Length > 25)
                         continue;
 

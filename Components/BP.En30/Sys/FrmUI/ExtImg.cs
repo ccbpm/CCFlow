@@ -41,6 +41,18 @@ namespace BP.Sys.FrmUI
             this.MyPK = mypk;
             this.Retrieve();
         }
+
+        public string KeyOfEn
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.KeyOfEn);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.KeyOfEn, value);
+            }
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -111,16 +123,19 @@ namespace BP.Sys.FrmUI
             imgAth.Update();
 
             //同步更新MapAttr 
-            MapAttrString attr = new MapAttrString(this.MyPK);
-            attr.SetValByKey(MapAttrAttr.ColSpan, this.GetValStrByKey(MapAttrAttr.ColSpan));
-            attr.SetValByKey(MapAttrAttr.TextColSpan, this.GetValStrByKey(MapAttrAttr.TextColSpan));
-            attr.SetValByKey(MapAttrAttr.RowSpan, this.GetValStrByKey(MapAttrAttr.RowSpan));
+            if (DataType.IsNullOrEmpty(this.KeyOfEn) == false)
+            {
+                MapAttrString attr = new MapAttrString(this.MyPK);
+                attr.SetValByKey(MapAttrAttr.ColSpan, this.GetValStrByKey(MapAttrAttr.ColSpan));
+                attr.SetValByKey(MapAttrAttr.TextColSpan, this.GetValStrByKey(MapAttrAttr.TextColSpan));
+                attr.SetValByKey(MapAttrAttr.RowSpan, this.GetValStrByKey(MapAttrAttr.RowSpan));
 
-            attr.SetValByKey(MapAttrAttr.Name, this.GetValStrByKey(FrmImgAttr.Name)); //名称.
+                attr.SetValByKey(MapAttrAttr.Name, this.GetValStrByKey(FrmImgAttr.Name)); //名称.
 
-            attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); //名称.
-            attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); //名称.
-            attr.Update();
+                attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); //名称.
+                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); //名称.
+                attr.Update();
+            }
 
             base.afterInsertUpdateAction();
         }

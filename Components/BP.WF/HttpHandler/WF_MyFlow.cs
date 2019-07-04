@@ -367,6 +367,8 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(hostRun) == false)
                     hostRun += "/WF/";
 
+                this.WorkID = workid;
+
                 switch (this.currFlow.StartGuideWay)
                 {
                     case StartGuideWay.None:

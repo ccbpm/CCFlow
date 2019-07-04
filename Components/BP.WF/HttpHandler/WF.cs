@@ -873,19 +873,30 @@ namespace BP.WF.HttpHandler
             {
                 return Start_InitTianYe();
             }
-
-            BP.WF.Port.WFEmp em = new WFEmp();
-            em.No = BP.Web.WebUser.No;
-            if (em.RetrieveFromDBSources() == 0)
+            string json = "";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                em.FK_Dept = BP.Web.WebUser.FK_Dept;
-                em.Name = Web.WebUser.Name;
-                em.Insert();
+                string sql = "SELECT StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
+                json = DBAccess.RunSQLReturnString(sql);
+                if (DataType.IsNullOrEmpty(json) == false)
+                    return json;
             }
-            string json = em.StartFlows;
-            if (DataType.IsNullOrEmpty(json) == false)
+            else
             {
-                return json;
+
+                BP.WF.Port.WFEmp em = new WFEmp();
+                em.No = BP.Web.WebUser.No;
+                if (em.RetrieveFromDBSources() == 0)
+                {
+                    em.FK_Dept = BP.Web.WebUser.FK_Dept;
+                    em.Name = Web.WebUser.Name;
+                    em.Insert();
+                }
+                 json = em.StartFlows;
+                if (DataType.IsNullOrEmpty(json) == false)
+                {
+                    return json;
+                }
             }
 
             //定义容器.
@@ -1255,7 +1266,7 @@ namespace BP.WF.HttpHandler
                     md.Update();
                 }
             }
-            else
+            else if (nd.HisFormType == NodeFormType.FoolForm)
             {
                 nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
                 MapData md = new MapData(nd.NodeFrmID);

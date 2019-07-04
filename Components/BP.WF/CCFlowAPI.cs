@@ -536,7 +536,7 @@ namespace BP.WF
                         dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
 
                         #region 增加到达延续子流程节点。
-                        SubFlowYanXus ygflows = new SubFlowYanXus(fk_node);
+                        SubFlowYanXus ygflows = new SubFlowYanXus(fk_node,2);
 
                         foreach (SubFlowYanXu item in ygflows)
                         {

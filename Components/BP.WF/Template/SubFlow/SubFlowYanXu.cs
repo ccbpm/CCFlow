@@ -265,9 +265,9 @@ namespace BP.WF.Template
         /// 延续子流程集合.
         /// </summary>
         /// <param name="fk_node"></param>
-        public SubFlowYanXus(int fk_node)
+        public SubFlowYanXus(int fk_node,int subFlowType)
         {
-            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node);
+            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node, SubFlowYanXuAttr.SubFlowType, subFlowType);
         }
         #endregion
 

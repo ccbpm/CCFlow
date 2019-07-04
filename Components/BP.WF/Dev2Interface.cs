@@ -8823,6 +8823,7 @@ namespace BP.WF
             sa.ResetPK();
             sa.FK_Emp = emp.No;
             sa.EmpName = emp.Name;
+            sa.DeptName = emp.FK_DeptText;
             sa.FK_Node = toNodeID;
             sa.WorkID = workID;
             if (sa.IsExits == false)
@@ -9029,7 +9030,7 @@ namespace BP.WF
             DBAccess.RunSQL("UPDATE " + fl.PTable + " SET WFState=" + (int)WFState.Askfor + " WHERE OID=" + workid);
 
             //设置成工作未读。
-            BP.WF.Dev2Interface.Node_SetWorkUnRead(workid);
+            BP.WF.Dev2Interface.Node_SetWorkUnRead(workid, askForEmp);
 
             string msg = "您的工作已经提交给(" + askForEmp + " " + emp.Name + ")加签了。";
 

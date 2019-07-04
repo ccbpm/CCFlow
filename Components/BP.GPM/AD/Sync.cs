@@ -65,25 +65,18 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-
-          
             //同步并获取根目录.
              SyncDeptRoot();
 
              //同步所有的人员.
              SyncEmps(); 
 
-
             //同步所有的部门.
             SyncDept(this.rootDE); //同步跟目录 PartentNo=0;
-
 
             //同步岗位.
             SyncStatioins();
             return "执行成功."; 
-
- 
-         
 
 
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
@@ -119,7 +112,7 @@ namespace BP.GPM.AD
                 DirectoryEntry entry = result.GetDirectoryEntry();
 
                 string name = entry.Name.Replace("OU=", "");
-                if (name == Glo.ADRoot)
+                if (   Glo.ADAppRoot.Contains("="+name+",")==true)
                     continue;
 
                 BP.GPM.AD.Dept dept = new Dept();
@@ -136,7 +129,7 @@ namespace BP.GPM.AD
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
 
-            rootDE = Glo.RootDirectoryEntry;
+            DirectoryEntry rootDE = Glo.DirectoryEntryAppRoot;
 
             BP.GPM.AD.Dept dept = new Dept();
             dept.Name = rootDE.Name.Replace("OU=", "");
@@ -151,24 +144,24 @@ namespace BP.GPM.AD
             //删除现有的数据.
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
 
-            DirectorySearcher search = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
-            search.Filter = "(OU=" + Glo.ADRoot + ")";
-            search.SearchScope = SearchScope.Subtree;
+            //DirectorySearcher search = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
+            //search.Filter = "(OU=" + Glo.ADRoot + ")";
+            //search.SearchScope = SearchScope.Subtree;
 
-            SearchResult result = search.FindOne();
+            //SearchResult result = search.FindOne();
              
-                rootDE  = result.GetDirectoryEntry();
+            //    rootDE  = result.GetDirectoryEntry();
 
-                BP.GPM.AD.Dept dept = new Dept();
-                dept.Name = rootDE.Name.Replace("OU=", "");
-                dept.No = rootDE.Guid.ToString();
-                dept.ParentNo = "0";
-                dept.Idx = idxDept++;
-                dept.Insert();
+            //    BP.GPM.AD.Dept dept = new Dept();
+            //    dept.Name = rootDE.Name.Replace("OU=", "");
+            //    dept.No = rootDE.Guid.ToString();
+            //    dept.ParentNo = "0";
+            //    dept.Idx = idxDept++;
+            //    dept.Insert();
 
-                this.rootPath = rootDE.Path;
+            //    this.rootPath = rootDE.Path;
               
-            search.Dispose();
+            //search.Dispose();
         }
         #endregion
 
@@ -176,9 +169,11 @@ namespace BP.GPM.AD
         {
             DBAccess.RunSQL("DELETE FROM Port_Emp");
 
-            // 
-            DirectoryEntry deRoot = new DirectoryEntry(Glo.ADRoot, Glo.ADUser, Glo.ADPassword);
-            DirectorySearcher ds = new DirectorySearcher(deRoot);
+
+            DirectoryEntry de = new DirectoryEntry("LDAP://10.74.18.5/OU=China,DC=starbucks,DC=net",Glo.ADUser, Glo.ADPassword);
+
+            DirectorySearcher ds = new DirectorySearcher(de);
+
             ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
 
             //  ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
@@ -266,7 +261,7 @@ namespace BP.GPM.AD
                 for (int l = 0; l < n; l++)
                 {
 
-                    DirectoryEntry deUser = new DirectoryEntry(Glo.ADPath + "/" + pcoll["member"][l].ToString(),
+                    DirectoryEntry deUser = new DirectoryEntry(Glo.ADBasePath + "/" + pcoll["member"][l].ToString(),
                         Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
 
                     BP.GPM.DeptEmpStation des = new DeptEmpStation();

@@ -23,11 +23,11 @@ namespace BP.GPM.AD
     public class Glo
     {
         #region 公共变量.
-        public static string ADPath
+        public static string ADBasePath
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADPath"];
+                return Sys.SystemConfig.AppSettings["ADBasePath"];
             }
         }
         public static string ADUser
@@ -44,23 +44,23 @@ namespace BP.GPM.AD
                 return Sys.SystemConfig.AppSettings["ADPassword"];
             }
         }
-        public static string ADRoot
+        public static string ADAppRoot
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADRoot"];
+                return Sys.SystemConfig.AppSettings["ADAppRoot"];
             }
         }
         /// <summary>
         /// 跟目录(主域)
         /// </summary>
-        public static DirectoryEntry RootDirectoryEntry
+        public static DirectoryEntry DirectoryEntryBasePath
         {
             get
             {
                 DirectoryEntry domain = new DirectoryEntry();
 
-                domain.Path = Glo.ADRoot;
+                domain.Path = Glo.ADBasePath;
                 domain.Username = Glo.ADUser;
                 domain.Password = Glo.ADPassword;
 
@@ -71,58 +71,28 @@ namespace BP.GPM.AD
 
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static DirectoryEntry DirectoryEntryAppRoot
+        {
+            get
+            {
+                DirectorySearcher search = new DirectorySearcher(Glo.DirectoryEntryBasePath); //查询组织单位.
+                search.Filter = "(OU=" + Glo.ADAppRoot + ")";
+                search.SearchScope = SearchScope.Subtree;
+
+                SearchResult result = search.FindOne();
+                DirectoryEntry de = result.GetDirectoryEntry();
+                search.Dispose();
+
+                return de;
+            }
+        }
         #endregion 公共变量.
 
         #region 相关方法.
-        /// <summary>
-        /// 根据查询字符串取得 DirectoryEntry 对象实例
-        /// </summary>
-        /// <param name="filterString"></param>
-        /// <returns>如果找到该对象，则返回用户的 DirectoryEntry 对象；否则返回 null</returns>
-        public static DirectoryEntry FindObject(string filterString)
-        {
-            DirectoryEntry dirEntry = RootDirectoryEntry;
-            DirectorySearcher deSearch = new DirectorySearcher(dirEntry);
-            deSearch.SearchScope = SearchScope.Subtree;
-            deSearch.Filter = filterString;
-            try
-            {
-                SearchResult result = deSearch.FindOne();
-                dirEntry = result.GetDirectoryEntry();
-                return dirEntry;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        /// <summary>
-        /// 根据查询字符串取得所有的 DirectoryEntry 对象实例
-        /// </summary>
-        /// <param name="rootDirEntry"></param>
-        /// <param name="filterString">查询字符串</param>
-        /// <returns>所有的 DirectoryEntry 对象</returns>
-        public static DirectoryEntry[] FindObjects(string filterString)
-        {
-            DirectorySearcher deSearch = new DirectorySearcher(Glo.RootDirectoryEntry);
-            deSearch.Filter = filterString;
-            deSearch.SearchScope = SearchScope.Subtree;
-            try
-            {
-                SearchResultCollection results = deSearch.FindAll();
-                int i = 0, count = results.Count;
-                DirectoryEntry[] resultDirs = new DirectoryEntry[count];
-                foreach (SearchResult e in results)
-                {
-                    resultDirs[i++] = e.GetDirectoryEntry();
-                }
-                return resultDirs;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+         
         public static string GetPropertyValue(DirectoryEntry de, string propertyName)
         {
             if (de.Properties.Contains(propertyName))

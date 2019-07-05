@@ -52,7 +52,16 @@ namespace BP.GPM.AD
         #region## 同步
         private List<AdModel> list = new List<AdModel>();
 
-        DirectoryEntry rootDE = null;
+       private DirectoryEntry _DirectoryEntry = null;
+       public  DirectoryEntry DirectoryEntrBasePath
+        {
+            get
+            {
+                if (_DirectoryEntry == null)
+                    _DirectoryEntry = new DirectoryEntry(Glo.ADBasePath, Glo.ADUser, Glo.ADPassword);
+                return _DirectoryEntry;
+            }
+        }
 
         string rootPath = "";
 
@@ -66,16 +75,16 @@ namespace BP.GPM.AD
         public override object Do()
         {
             //同步并获取根目录.
-             SyncDeptRoot();
+          //   SyncDeptRoot();
 
              //同步所有的人员.
              SyncEmps(); 
 
             //同步所有的部门.
-            SyncDept(this.rootDE); //同步跟目录 PartentNo=0;
+          //  SyncDept(this.DirectoryEntrBasePath ); //同步跟目录 PartentNo=0;
 
             //同步岗位.
-            SyncStatioins();
+           // SyncStatioins();
             return "执行成功."; 
 
 
@@ -235,7 +244,8 @@ namespace BP.GPM.AD
         public void SyncStatioins()
         {
             DirectorySearcher ds = new DirectorySearcher();
-            ds.SearchRoot = rootDE;
+            ds.SearchRoot =Glo.DirectoryEntryAppRoot;
+
             ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
             ds.Filter = ("(objectClass=group)");
 

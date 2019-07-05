@@ -66,7 +66,7 @@ namespace BP.GPM.AD
 
                 //domain.AuthenticationType = AuthenticationTypes.ReadonlyServer;
 
-                domain.RefreshCache();
+               // domain.RefreshCache();
                 return domain;
 
             }

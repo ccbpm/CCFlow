@@ -322,6 +322,7 @@
     <Compile Include="Template\SubFlow\SubFlowYanXu.cs" />
     <Compile Include="Template\MapFrmNode.cs" />
     <Compile Include="Template\SubFlow\SubFlowHand.cs" />
+    <Compile Include="Template\SubFlow\SubFlowAuto.cs" />
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>

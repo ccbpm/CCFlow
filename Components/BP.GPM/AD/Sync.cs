@@ -173,6 +173,7 @@ namespace BP.GPM.AD
             //    this.rootPath = rootDE.Path;
             //search.Dispose();
         }
+        string err = "";
         #endregion
 
         public void SyncEmps()
@@ -275,16 +276,23 @@ namespace BP.GPM.AD
                 for (int l = 0; l < n; l++)
                 {
 
-                    DirectoryEntry deUser = new DirectoryEntry(Glo.ADBasePath + "/" + pcoll["member"][l].ToString(),
-                        Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
-
-                    des.FK_Dept = deUser.Parent.Guid.ToString();
-                    des.FK_Station = deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
-                    des.FK_Emp = this.GetValFromDirectoryEntryByKey(deUser, "sAMAccountName");
-                    if (des.FK_Emp.Length > 20)
+                    try
+                    {
+                        DirectoryEntry deUser = new DirectoryEntry(Glo.ADBasePath + "/" + pcoll["member"][l].ToString(),
+                            Glo.ADUser, Glo.ADPassword);
+                        des.FK_Dept = deUser.Parent.Guid.ToString();
+                        des.FK_Station = deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
+                        des.FK_Emp = this.GetValFromDirectoryEntryByKey(deUser, "sAMAccountName");
+                        if (des.FK_Emp.Length > 20)
+                            continue;
+                    }
+                    catch (Exception ex)
+                    {
+                        err += "err@SyncStatioins 错误:" + ex.Message;
                         continue;
+                    }
 
-                    des.Insert();
+                        des.Insert();
                     // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
                     //  Page.Response.Write(sss);
                 }

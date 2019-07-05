@@ -10,54 +10,9 @@ namespace BP.WF.Template
     /// <summary>
     /// 自动触发子流程属性
     /// </summary>
-    public class SubFlowAutoAttr : BP.En.EntityOIDNameAttr
+    public class SubFlowAutoAttr : SubFlowAttr
     {
-        #region 基本属性
-        /// <summary>
-        /// 标题
-        /// </summary>
-        public const string FK_Flow = "FK_Flow";
-        /// <summary>
-        /// 流程名称
-        /// </summary>
-        public const string FlowName = "FlowName";
-        /// <summary>
-        /// 顺序号
-        /// </summary>
-        public const string Idx = "Idx";
-        /// <summary>
-        /// 显示在那里？
-        /// </summary>
-        public const string YGWorkWay = "YGWorkWay";
-        /// <summary>
-        /// 节点ID
-        /// </summary>
-        public const string FK_Node = "FK_Node";
-        /// <summary>
-        /// 表达式类型
-        /// </summary>
-        public const string ExpType = "ExpType";
-        /// <summary>
-        /// 条件表达式
-        /// </summary>
-        public const string CondExp = "CondExp";
-        /// <summary>
-        /// 越轨子流程退回类型
-        /// </summary>
-        public const string YBFlowReturnRole = "YBFlowReturnRole";
-        /// <summary>
-        /// 要退回的节点
-        /// </summary>
-        public const string ReturnToNode = "ReturnToNode";
-        /// <summary>
-        /// 子流程类型
-        /// </summary>
-        public const string SubFlowType = "SubFlowType";
-        /// <summary>
-        /// 子流程模式
-        /// </summary>
-        public const string SubFlowModel = "SubFlowModel";
-        #endregion
+        
     }
     /// <summary>
     /// 自动触发子流程.
@@ -141,6 +96,26 @@ namespace BP.WF.Template
                 SetValByKey(SubFlowAutoAttr.FK_Node, value);
             }
         }
+        /// <summary>
+        /// 运行类型
+        /// </summary>
+        public SubFlowModel HisSubFlowModel
+        {
+            get
+            {
+                return (SubFlowModel)this.GetValIntByKey(SubFlowAutoAttr.SubFlowModel);
+            }
+        }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public SubFlowType HisSubFlowType
+        {
+            get
+            {
+                return (SubFlowType)this.GetValIntByKey(SubFlowAutoAttr.SubFlowType);
+            }
+        }   
         #endregion
 
         #region 构造函数
@@ -251,13 +226,14 @@ namespace BP.WF.Template
         public SubFlowAutos()
         {
         }
-        /// <summary>
+         /// <summary>
         /// 自动触发子流程集合.
         /// </summary>
-        /// <param name="fk_node"></param>
-        public SubFlowAutos(int fk_node,int subFlowType)
+        /// <param name="fk_node">节点</param>
+        public SubFlowAutos(int fk_node)
         {
-            this.Retrieve(SubFlowAutoAttr.FK_Node, fk_node, SubFlowAutoAttr.SubFlowType, subFlowType);
+            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node, 
+                SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.AutoSubFlow);
         }
         #endregion
 

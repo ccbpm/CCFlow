@@ -4840,7 +4840,7 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="msg">流程结束原因</param>
         /// <returns>返回成功执行信息</returns>
-        public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg)
+        public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg, int stopFlowType=1)
         {
             WorkFlow wf = new WorkFlow(flowNo, workID);
 
@@ -4848,34 +4848,7 @@ namespace BP.WF
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
             rpt.OID = workID;
             rpt.RetrieveFromDBSources();
-            return wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt);
-        }
-        /// <summary>
-        /// 执行流程结束:强制的流程结束.
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="flowNo">当前节点编号</param>
-        /// <param name="workID">工作ID</param>
-        /// <param name="fid">工作ID</param>
-        /// <param name="msg">强制流程结束的原因</param>
-        /// <returns>执行强制结束流程</returns>
-        public static string Flow_DoFlowOverByCoercion(string flowNo, int nodeid, Int64 workID, Int64 fid, string msg)
-        {
-            WorkFlow wf = new WorkFlow(flowNo, workID);
-            Node currND = new Node(nodeid);
-
-            Flow fl = new Flow(flowNo);
-            GERpt rpt = fl.HisGERpt;
-            rpt.OID = workID;
-            rpt.RetrieveFromDBSources();
-
-            string s = wf.DoFlowOver(ActionType.FlowOverByCoercion, msg, currND, rpt);
-            if (DataType.IsNullOrEmpty(s))
-            {
-                s = "流程已经成功结束.";
-            }
-
-            return s;
+            return wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt, stopFlowType);
         }
         /// <summary>
         /// 获得执行下一步骤的节点ID，这个功能是在流程未发送前可以预先知道

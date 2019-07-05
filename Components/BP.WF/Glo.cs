@@ -5280,13 +5280,10 @@ namespace BP.WF
                     //  string title = dt.Rows[0]["Title"].ToString();
                     string starter = dt.Rows[0]["Starter"].ToString();
                     string rdt = dt.Rows[0]["RDT"].ToString();
-
                     return false;
-
                     //throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
                 }
             }
-
             return true;
         }
 

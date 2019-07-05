@@ -10,23 +10,9 @@ namespace BP.WF.Template
     /// <summary>
     /// 手工启动子流程属性
     /// </summary>
-    public class SubFlowHandAttr : SubFlowYanXuAttr
+    public class SubFlowHandAttr : SubFlowAttr
     {
-        /// <summary>
-        /// 如果当前为子流程，仅仅只能被调用1次，不能被重复调用。
-        /// </summary>
-        public const string StartOnceOnly = "StartOnceOnly";
-        /// <summary>
-        /// 指定的流程启动后，才能启动该子流程.
-        /// </summary>
-        public const string SpecFlowStart = "SpecFlowStart";
-        public const string IsEnableSpecFlowStart = "IsEnableSpecFlowStart";
-        
-        /// <summary>
-        /// 指定的子流程结束后，才能启动该子流程.
-        /// </summary>
-        public const string SpecFlowOver = "SpecFlowOver";
-        public const string IsEnableSpecFlowOver = "IsEnableSpecFlowOver";
+      
 
     }
     /// <summary>
@@ -212,7 +198,8 @@ namespace BP.WF.Template
         /// <param name="fk_node"></param>
         public SubFlowHands(int fk_node)
         {
-            this.Retrieve(SubFlowHandAttr.FK_Node, fk_node);
+            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node, 
+                SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.HandSubFlow);
         }
         #endregion
 

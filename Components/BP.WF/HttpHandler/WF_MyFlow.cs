@@ -299,8 +299,6 @@ namespace BP.WF.HttpHandler
                 IsExistGWF = true;
             }
 
-           
-
             //判断当前节点是否是打开即阅读
             if (IsExistGWF == true)
             {
@@ -315,31 +313,31 @@ namespace BP.WF.HttpHandler
                         if (nd.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                         {
                             //判断一下审核意见是否有默认值
-                            FrmWorkCheck workCheck = new FrmWorkCheck("ND"+nd.NodeID);
+                            FrmWorkCheck workCheck = new FrmWorkCheck("ND" + nd.NodeID);
                             string msg = "同意";
-                            if(workCheck.FWCIsFullInfo == true)
-                                msg =  workCheck.FWCDefInfo;
+                            if (workCheck.FWCIsFullInfo == true)
+                                msg = workCheck.FWCDefInfo;
                             BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, nd.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel);
                         }
 
-                        BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow,gwf.WorkID);
-                        if(nd.HisFormType != NodeFormType.SheetTree && nd.HisFormType!=NodeFormType.SheetAutoTree)
+                        BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, gwf.WorkID);
+                        if (nd.HisFormType != NodeFormType.SheetTree && nd.HisFormType != NodeFormType.SheetAutoTree)
                             //跳转到查看页面
-                            return "url@" + "./CCForm/Frm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "FK_MapData=ND" + gwf.FK_Node+"&IsReadonly=1";
+                            return "url@" + "./CCForm/Frm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "FK_MapData=ND" + gwf.FK_Node + "&IsReadonly=1";
                         else
                             //跳转到查看页面
                             return "url@./MyFlowTreeReadonly.htm?WorkID=" + gwf.WorkID + "&FID=" + gwf.FID + "&OID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + gwf.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
 
                     }
 
-                    
+
                 }
-                
+
             }
 
             //当前工作.
             Work currWK = this.currND.HisWork;
-           
+
             #region 判断前置导航.
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
             {
@@ -465,7 +463,7 @@ namespace BP.WF.HttpHandler
 
                 #region 开始组合url.
                 string toUrl = "";
-           
+
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
@@ -955,7 +953,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button  value='" + btnLab.ThreadLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
                 }
 
-                if (btnLab.ShowParentFormEnable && this.PWorkID!=0)
+                if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
                 {
                     /*如果要查看父流程.*/
                     GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
@@ -1377,9 +1375,9 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.PrintDocEnable)
                 {
-                        string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                        toolbar += "<a data-role='button' type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" ></a>";
-                    
+                    string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" ></a>";
+
                 }
 
                 if (btnLab.TrackEnable)

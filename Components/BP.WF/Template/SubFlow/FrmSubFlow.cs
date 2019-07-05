@@ -9,6 +9,38 @@ using BP.Sys;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// 子流程模式
+    /// </summary>
+    public enum SubFlowModel
+    {
+        /// <summary>
+        /// 下级
+        /// </summary>
+        SubLevel,
+        /// <summary>
+        /// 同级
+        /// </summary>
+        SameLevel
+    }
+    /// <summary>
+    /// 子流程类型
+    /// </summary>
+    public enum SubFlowType
+    {
+        /// <summary>
+        /// 手动的子流程
+        /// </summary>
+        HandSubFlow = 0,
+        /// <summary>
+        /// 自动触发的子流程
+        /// </summary>
+        AutoSubFlow = 1,
+        /// <summary>
+        /// 延续子流程
+        /// </summary>
+        YanXuFlow = 2
+    }
+    /// <summary>
     /// 父子流程控件状态
     /// </summary>
     public enum FrmSubFlowSta
@@ -561,7 +593,7 @@ namespace BP.WF.Template
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程状态",
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "组件状态",
                    true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
 
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFShowModel, (int)FrmWorkShowModel.Free, "显示方式",
@@ -587,8 +619,6 @@ namespace BP.WF.Template
 
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
-
-
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "手动启动子流程"; 

@@ -1995,7 +1995,7 @@ namespace BP.WF
                             if (nd.IsEndNode == true)
                             {
                                 //让流程自动结束.
-                                BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, workid, "打印并自动结束");
+                                BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, workid, "打印并自动结束",0);
                             }
                         }
                     }

@@ -1196,7 +1196,7 @@ namespace BP.WF
         /// <param name="at"></param>
         /// <param name="stopMsg"></param>
         /// <returns></returns>
-        public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt)
+        public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt, int stopFlowType=0)
         {
             if (null == currNode)
                 return "err@当前节点为空..";
@@ -1307,6 +1307,7 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.Emps += emps;
             gwf.WFState = WFState.Complete;
+            gwf.SetPara("StopFlowType", stopFlowType); //结束流程类型.
             gwf.Update();
 
 

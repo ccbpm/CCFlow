@@ -2678,21 +2678,18 @@ namespace BP.WF
             nes.RetrieveInSQL(NodeEmpAttr.FK_Node, sqlin);
             ds.Tables.Add(nes.ToDataTableField("WF_NodeEmp"));
 
-
             // 抄送人员。
             CCEmps ces = new CCEmps();
             ces.RetrieveInSQL(CCEmpAttr.FK_Node, sqlin);
             ds.Tables.Add(ces.ToDataTableField("WF_CCEmp"));
-
 
             // 抄送部门。
             CCDepts cdds = new CCDepts();
             cdds.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
             ds.Tables.Add(cdds.ToDataTableField("WF_CCDept"));
 
-
-            // 延续子流程。
-            SubFlowYanXus fls = new Template.SubFlowYanXus();
+            //子流程。
+            SubFlows fls = new SubFlows();
             fls.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
             ds.Tables.Add(fls.ToDataTableField("WF_NodeSubFlow"));
 

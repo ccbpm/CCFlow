@@ -74,6 +74,36 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.SubThreadType, (int)value);
             }
         }
+        /// <summary>
+        /// 手工启动的子流程个数
+        /// </summary>
+        public int SubFlowHandNum
+        {
+            get
+            {
+                return this.GetParaInt("SubFlowHandNum");
+            }
+        }
+        /// <summary>
+        /// 自动启动的子流程个数
+        /// </summary>
+        public int SubFlowAutoNum
+        {
+            get
+            {
+                return this.GetParaInt("SubFlowAutoNum");
+            }
+        }
+        /// <summary>
+        /// 延续子流程个数
+        /// </summary>
+        public int SubFlowYanXuNum
+        {
+            get
+            {
+                return this.GetParaInt("SubFlowYanXuNum");
+            }
+        }
         #endregion
 
         #region 外键属性.

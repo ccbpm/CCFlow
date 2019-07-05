@@ -84,7 +84,7 @@ namespace BP.GPM.AD
             SyncDept(Glo.DirectoryEntryAppRoot); //同步跟目录 PartentNo=0;
 
             //同步岗位.
-            SyncStatioins();
+           // SyncStatioins();
             return "执行成功.";
 
 
@@ -127,6 +127,7 @@ namespace BP.GPM.AD
                 BP.GPM.AD.Dept dept = new Dept();
                 dept.Name = name;
                 dept.No = entry.Guid.ToString();
+                dept.NameOfPath = entry.Path;
                 if (dept.IsExits == true)
                     continue;
 
@@ -188,8 +189,8 @@ namespace BP.GPM.AD
             ds.Filter = "(objectClass=user)";
             // sss
             SearchResultCollection rss = ds.FindAll();
-            if (rss.Count == 0)
-                return;
+            //if (rss.Count == 0)
+               // return;
 
             BP.GPM.AD.Emp emp = new Emp();
 

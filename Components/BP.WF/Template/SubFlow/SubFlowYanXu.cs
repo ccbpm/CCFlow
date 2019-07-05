@@ -8,6 +8,20 @@ using BP.Port;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// 子流程模式
+    /// </summary>
+    public enum SubFlowModel
+    {
+        /// <summary>
+        /// 下级
+        /// </summary>
+        SubLevel,
+        /// <summary>
+        /// 同级
+        /// </summary>
+        SameLevel
+    }
+    /// <summary>
     /// 子流程类型
     /// </summary>
     public enum SubFlowType
@@ -71,6 +85,10 @@ namespace BP.WF.Template
         /// 子流程类型
         /// </summary>
         public const string SubFlowType = "SubFlowType";
+        /// <summary>
+        /// 子流程模式
+        /// </summary>
+        public const string SubFlowModel = "SubFlowModel";
         #endregion
     }
     /// <summary>
@@ -180,6 +198,10 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowType, 2, "子流程类型", true, false, SubFlowYanXuAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
+
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, false, SubFlowYanXuAttr.SubFlowModel,
+                "@0=下级子流程@1=同级子流程");
+                
 
                 map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);

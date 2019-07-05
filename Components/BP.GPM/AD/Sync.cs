@@ -74,8 +74,6 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-            //同步所有的人员.
-            SyncEmps();
 
             //同步并获取根目录.
             SyncDeptRoot();
@@ -83,8 +81,11 @@ namespace BP.GPM.AD
             //同步所有的部门.
             SyncDept(Glo.DirectoryEntryAppRoot); //同步跟目录 PartentNo=0;
 
+            //同步所有的人员.
+            SyncEmps();
+
             //同步岗位.
-           // SyncStatioins();
+            // SyncStatioins();
             return "执行成功.";
 
 
@@ -149,6 +150,7 @@ namespace BP.GPM.AD
             dept.No = rootDE.Guid.ToString();
             dept.ParentNo = "0";
             dept.Idx = idxDept++;
+            dept.NameOfPath = rootDE.Path;
             dept.Insert();
             this.rootPath = rootDE.Path;
         }
@@ -181,45 +183,53 @@ namespace BP.GPM.AD
         {
             DBAccess.RunSQL("DELETE FROM Port_Emp");
 
-            DirectorySearcher ds = new DirectorySearcher(Glo.DirectoryEntryAppRoot);
+            Depts depts = new Depts();
+            depts.RetrieveAll();
 
-            ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
-
-            //  ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
-            ds.Filter = "(objectClass=user)";
-            // sss
-            SearchResultCollection rss = ds.FindAll();
-            //if (rss.Count == 0)
-               // return;
-
-            BP.GPM.AD.Emp emp = new Emp();
-
-            foreach (SearchResult result in rss)
+            foreach (Dept mydept in depts)
             {
-                DirectoryEntry entity = result.GetDirectoryEntry();
-                if (entity.Name.Contains("CN=") == false)
+                DirectoryEntry deptDE = new DirectoryEntry(mydept.NameOfPath, Glo.ADUser, Glo.ADPassword);
+
+                DirectorySearcher ds = new DirectorySearcher(deptDE);
+                ds.SearchScope = SearchScope.OneLevel; //搜索当前..
+
+                //  ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
+                ds.Filter = "(objectClass=user)";
+                // sss
+                SearchResultCollection rss = ds.FindAll();
+                if (rss.Count == 0)
                     continue;
 
-                // entity.
+                BP.GPM.AD.Emp emp = new Emp();
 
-                string name = entity.Name.Replace("CN=", "");
-                //判断是 group 还是 user.
-                // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
-                //emp.c = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
+                foreach (SearchResult result in rss)
+                {
+                    DirectoryEntry entity = result.GetDirectoryEntry();
+                    if (entity.Name.Contains("CN=") == false)
+                        continue;
+                    string name = entity.Name.Replace("CN=", "");
+                    //判断是 group 还是 user.
+                    // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
+                    //emp.c = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
 
-                emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
-                emp.Name = this.GetValFromDirectoryEntryByKey(entity, "displayName");
-                if (emp.IsExits == true)
-                    continue;
+                    emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
+                    emp.Name = this.GetValFromDirectoryEntryByKey(entity, "displayName");
+                    if (emp.IsExits == true)
+                        continue;
 
-                emp.FK_Dept = entity.Parent.Guid.ToString();
+                    emp.FK_Dept = entity.Parent.Guid.ToString();
 
-                if (emp.No.Length > 20)
-                    return;
+                    if (emp.No.Length > 20)
+                        continue;
 
-                emp.Idx = idxEmp++;
-                emp.Insert();
+                    emp.Idx = idxEmp++;
+                    emp.Insert();
+                }
+
+                //断开.
+                ds.Dispose();
             }
+
 
             //增加 admin 
             BP.GPM.AD.Dept dept = new Dept();
@@ -293,7 +303,7 @@ namespace BP.GPM.AD
                         continue;
                     }
 
-                        des.Insert();
+                    des.Insert();
                     // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
                     //  Page.Response.Write(sss);
                 }

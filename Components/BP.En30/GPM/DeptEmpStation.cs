@@ -117,7 +117,10 @@ namespace BP.GPM
                 Map map = new Map("Port_DeptEmpStation");
                 map.EnDesc = "部门岗位人员对应";
 
-                map.AddMyPK();
+              //  map.AddMyPK();
+
+                map.AddTBStringPK("MyPK", null, "主键MyPK", false, true, 1, 150, 10);
+
 
                 map.AddTBString(DeptEmpStationAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpStationAttr.FK_Station, null, "岗位", false, false, 1, 50, 1);

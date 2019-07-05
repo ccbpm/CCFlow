@@ -454,17 +454,15 @@ namespace CCFlow.WF.CCForm
                 System.IO.Directory.Delete(tempPath, true);
 
                 //显示出下载超链接
-                //BP.Web.Controls.BPHyperLink hLink = (BP.Web.Controls.BPHyperLink)this.Pub1.FindControl("H_LINK_Btn");
-                
+                //BP.Web.Controls.BPHyperLink hLink = (BP.Web.Controls.BPHyperLink)this.Pub1.FindControl("H_LINK_Btn");                
                 //BP.PubClass.DownloadFile(zipFile, this.WorkID + ".zip");
+
             }
             catch (Exception ex)
             {
                 //this.Alert(ex.Message);
             }
         }
-      
-
 
 
         private string GetRealPath(string fileFullName)

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>手动子流程</title>
+    <title>自动触发子流程</title>
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -30,10 +30,10 @@
 
             $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            //求出来已经设置的延续子流程.
+            //求出来已经设置的自动触发子流程.
             var nodeID = GetQueryString("FK_Node");
-            var ens = new Entities("BP.WF.Template.SubFlowHands");
-            ens.Retrieve("FK_Node", nodeID, "SubFlowType", 0, "Idx");
+            var ens = new Entities("BP.WF.Template.SubFlowAutos");
+            ens.Retrieve("FK_Node", nodeID, "SubFlowType", 1, "Idx");
             //console.log(ens);
 
             var html = "";
@@ -45,6 +45,7 @@
                 html += "<td>" + en.FlowName + "</td>";
                 html += "<td>" + en.SubFlowModelText + "</td>";
 
+                //  html += "<td>" + en.YGWorkWayText + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
                 html += "<td><a href=\"javascript:Delete('" + en.MyPK + "');\" >删除</a></td>";
                 html += "<td>";
@@ -60,12 +61,12 @@
         });
 
         function DoUp(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowHand", mypk);
+            var en = new Entity("BP.WF.Template.SubFlowAuto", mypk);
             en.DoMethodReturnString("DoUp");
             window.location.href = window.location.href;
         }
         function DoDown(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowHand", mypk);
+            var en = new Entity("BP.WF.Template.SubFlowAuto", mypk);
             en.DoMethodReturnString("DoDown");
             window.location.href = window.location.href;
         }
@@ -74,13 +75,13 @@
         function AddGroup() {
             var webUser = new WebUser();
 
-            var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
+            var url = "SubFlowAutoDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
             OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
         }
         //查询集团的流程.
         function AddOrg() {
             var webUser = new WebUser();
-            var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
+            var url = "SubFlowAutoDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
             OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
         }
 
@@ -90,7 +91,7 @@
             if (confirm('您确定要删除吗？') == false)
                 return;
 
-            var en = new Entity("BP.WF.Template.SubFlowHand", pk);
+            var en = new Entity("BP.WF.Template.SubFlowAuto", pk);
             en.Delete();
             window.location.href = window.location.href;
         }
@@ -98,9 +99,11 @@
         //编辑.
         function Edit(pk) {
 
-            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
+            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=" + pk;
 
-            OpenEasyUiDialogExt(url, '编辑', 600, 400, true);
+            // OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
+
             //window.location.href = url;
 
         }
@@ -113,7 +116,7 @@
 <body>
     <table id="Table1" style="width: 100%">
         <caption>
-            手动子流程</caption>
+            自动触发子流程</caption>
         <tr>
             <th>
                 序
@@ -124,13 +127,12 @@
             <th>
                 流程名称
             </th>
-              <th>
-                模式
+            <th>
+                运行模式
             </th>
             <th>
                 编辑
             </th>
-           
             <th>
                 删除
             </th>

@@ -96,6 +96,23 @@ function GenerFoolFrm(mapData, frmData) {
             continue;
         }
 
+        //父子流程
+        if (gf.CtrlType == 'SubFlow' && node.SFSta != 0) {
+            html += "<tr>";
+            html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "  <td colspan='" + tableCol + "' class='FDesc'>";
+
+            html += Ele_SubFlow(node);
+
+            html += "  </td>";
+            html += "</tr>";
+
+            continue;
+        }
+
         //框架类的控件.
         if (gf.CtrlType == 'Frame') {
 
@@ -113,6 +130,7 @@ function GenerFoolFrm(mapData, frmData) {
 
             continue;
         }
+
 
         //审核组件,有节点信息,并且当前节点状态不是禁用的,就可以显示.
         if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
@@ -174,6 +192,37 @@ function GenerFoolFrm(mapData, frmData) {
         $("#Lab_" + keyOfEn).html("<div style='text-align:left'>" + $("#Lab_" + keyOfEn).text() + "</div>");
     });
 
+}
+
+//子流程
+function Ele_SubFlow(wf_node) {
+    //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
+    var sta = wf_node.SFSta;
+    var h = wf_node.SF_H + 1300;
+
+    if (sta == 0)
+        return $('');
+
+    var src = "../WorkOpt/SubFlow.htm?s=2";
+    var fwcOnload = "";
+    var paras = '';
+
+    paras += "&FID=" + GetQueryString("FID");
+    paras += "&OID=" + GetQueryString("WorkID"); 
+    paras += '&FK_Flow=' + pageData.FK_Flow;
+    paras += '&FK_Node=' + pageData.FK_Node;
+    paras += '&WorkID=' + GetQueryString("WorkID"); ;
+    if (sta == 2)//只读
+    {
+        src += "&DoType=View";
+    }
+    src += "&r=q" + paras;
+
+    if (h == 0)
+        h = 400;
+    var eleHtml = "<iframe id=FSF" + wf_node.NodeID + " style='width:100%;height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+
+    return eleHtml;
 }
 
 

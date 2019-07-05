@@ -33,7 +33,7 @@
             //求出来已经设置的延续子流程.
             var nodeID = GetQueryString("FK_Node");
             var ens = new Entities("BP.WF.Template.SubFlowYanXus");
-            ens.Retrieve("FK_Node", nodeID,"SubFlowType",2, "Idx");
+            ens.Retrieve("FK_Node", nodeID, "SubFlowType", 2, "Idx");
             //console.log(ens);
 
             var html = "";
@@ -43,6 +43,8 @@
                 html += "<td class=Idx>" + (i + 1) + "</td>";
                 html += "<td>" + en.FK_Flow + "</td>";
                 html += "<td>" + en.FlowName + "</td>";
+                html += "<td>" + en.SubFlowModelText + "</td>";
+
                 //  html += "<td>" + en.YGWorkWayText + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
                 html += "<td><a href=\"javascript:Delete('" + en.MyPK + "');\" >删除</a></td>";
@@ -99,7 +101,7 @@
 
             var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowYanXu&PKVal=" + pk;
 
-           // OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            // OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
             OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
 
             //window.location.href = url;
@@ -124,6 +126,9 @@
             </th>
             <th>
                 流程名称
+            </th>
+            <th>
+                运行模式
             </th>
             <th>
                 编辑

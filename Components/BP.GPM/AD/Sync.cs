@@ -52,8 +52,8 @@ namespace BP.GPM.AD
         #region## 同步
         private List<AdModel> list = new List<AdModel>();
 
-       private DirectoryEntry _DirectoryEntry = null;
-       public  DirectoryEntry DirectoryEntrBasePath
+        private DirectoryEntry _DirectoryEntry = null;
+        public DirectoryEntry DirectoryEntrBasePath
         {
             get
             {
@@ -74,18 +74,19 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-            //同步并获取根目录.
-          //   SyncDeptRoot();
 
-             //同步所有的人员.
-             SyncEmps(); 
+            //同步所有的人员.
+            SyncEmps();
+
+            //同步并获取根目录.
+            SyncDeptRoot();
 
             //同步所有的部门.
-          //  SyncDept(this.DirectoryEntrBasePath ); //同步跟目录 PartentNo=0;
+            SyncDept(this.DirectoryEntrBasePath); //同步跟目录 PartentNo=0;
 
             //同步岗位.
-           // SyncStatioins();
-            return "执行成功."; 
+            SyncStatioins();
+            return "执行成功.";
 
 
             BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
@@ -96,7 +97,7 @@ namespace BP.GPM.AD
             // SyncDeptOfRoot(root);
 
 
-          
+
 
             // 同步岗位》
 
@@ -121,12 +122,15 @@ namespace BP.GPM.AD
                 DirectoryEntry entry = result.GetDirectoryEntry();
 
                 string name = entry.Name.Replace("OU=", "");
-                if (   Glo.ADAppRoot.Contains("="+name+",")==true)
+                if (Glo.ADPath.Contains("=" + name + ",") == true)
                     continue;
 
                 BP.GPM.AD.Dept dept = new Dept();
                 dept.Name = name;
                 dept.No = entry.Guid.ToString();
+                if (dept.IsExits == true)
+                    continue;
+
                 dept.ParentNo = entry.Parent.Guid.ToString();
                 dept.Idx = idxDept++;
                 dept.Insert();
@@ -158,7 +162,7 @@ namespace BP.GPM.AD
             //search.SearchScope = SearchScope.Subtree;
 
             //SearchResult result = search.FindOne();
-             
+
             //    rootDE  = result.GetDirectoryEntry();
 
             //    BP.GPM.AD.Dept dept = new Dept();
@@ -167,9 +171,7 @@ namespace BP.GPM.AD
             //    dept.ParentNo = "0";
             //    dept.Idx = idxDept++;
             //    dept.Insert();
-
             //    this.rootPath = rootDE.Path;
-              
             //search.Dispose();
         }
         #endregion
@@ -178,17 +180,14 @@ namespace BP.GPM.AD
         {
             DBAccess.RunSQL("DELETE FROM Port_Emp");
 
-
-            DirectoryEntry de = new DirectoryEntry("LDAP://10.74.18.5/OU=China,DC=starbucks,DC=net",Glo.ADUser, Glo.ADPassword);
-
-            DirectorySearcher ds = new DirectorySearcher(de);
+            DirectorySearcher ds = new DirectorySearcher(Glo.DirectoryEntryAppRoot);
 
             ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
 
             //  ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
-             ds.Filter = "(objectClass=user)";
+            ds.Filter = "(objectClass=user)";
             // sss
-            SearchResultCollection rss= ds.FindAll();
+            SearchResultCollection rss = ds.FindAll();
             if (rss.Count == 0)
                 return;
 
@@ -198,7 +197,7 @@ namespace BP.GPM.AD
                 if (entity.Name.Contains("CN=") == false)
                     continue;
 
-               // entity.
+                // entity.
 
                 string name = entity.Name.Replace("CN=", "");
                 //判断是 group 还是 user.
@@ -206,7 +205,7 @@ namespace BP.GPM.AD
                 // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
                 //emp.c = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
                 emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
-                
+
                 emp.Name = this.GetValFromDirectoryEntryByKey(entity, "displayName");
                 if (emp.IsExits == true)
                     continue;
@@ -244,7 +243,7 @@ namespace BP.GPM.AD
         public void SyncStatioins()
         {
             DirectorySearcher ds = new DirectorySearcher();
-            ds.SearchRoot =Glo.DirectoryEntryAppRoot;
+            ds.SearchRoot = Glo.DirectoryEntryAppRoot;
 
             ds.SearchScope = SearchScope.Subtree; //搜索全部对象.
             ds.Filter = ("(objectClass=group)");
@@ -282,7 +281,7 @@ namespace BP.GPM.AD
                     string name = deUser.Name;
                     name = name.Replace("CN=", "");
 
-                //    emp.No =;
+                    //    emp.No =;
 
                     des.FK_Emp = this.GetValFromDirectoryEntryByKey(deUser, "sAMAccountName");
                     if (name.Length > 25)

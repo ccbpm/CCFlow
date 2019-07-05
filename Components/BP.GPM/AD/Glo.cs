@@ -44,11 +44,11 @@ namespace BP.GPM.AD
                 return Sys.SystemConfig.AppSettings["ADPassword"];
             }
         }
-        public static string ADAppRoot
+        public static string ADPath
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADAppRoot"];
+                return Sys.SystemConfig.AppSettings["ADPath"];
             }
         }
         /// <summary>
@@ -79,10 +79,12 @@ namespace BP.GPM.AD
             get
             {
                 DirectorySearcher search = new DirectorySearcher(Glo.DirectoryEntryBasePath); //查询组织单位.
-                search.Filter = "(OU=" + Glo.ADAppRoot + ")";
+                search.Filter = "(OU=" + Glo.ADPath + ")";
                 search.SearchScope = SearchScope.Subtree;
 
                 SearchResult result = search.FindOne();
+                if (result == null)
+                    throw new Exception("err@您配置的:ADAppRoot无效,正确的配置方法比如:chichengsoft 没有找到该节点." + Glo.ADPath);
                 DirectoryEntry de = result.GetDirectoryEntry();
                 search.Dispose();
 

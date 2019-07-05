@@ -82,7 +82,7 @@ namespace BP.GPM.AD
             SyncDeptRoot();
 
             //同步所有的部门.
-            SyncDept(this.DirectoryEntrBasePath); //同步跟目录 PartentNo=0;
+            SyncDept(Glo.DirectoryEntryAppRoot); //同步跟目录 PartentNo=0;
 
             //同步岗位.
             SyncStatioins();
@@ -191,6 +191,8 @@ namespace BP.GPM.AD
             if (rss.Count == 0)
                 return;
 
+            BP.GPM.AD.Emp emp = new Emp();
+
             foreach (SearchResult result in rss)
             {
                 DirectoryEntry entity = result.GetDirectoryEntry();
@@ -201,11 +203,10 @@ namespace BP.GPM.AD
 
                 string name = entity.Name.Replace("CN=", "");
                 //判断是 group 还是 user.
-                BP.GPM.AD.Emp emp = new Emp();
                 // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
                 //emp.c = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
-                emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
 
+                emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
                 emp.Name = this.GetValFromDirectoryEntryByKey(entity, "displayName");
                 if (emp.IsExits == true)
                     continue;
@@ -255,14 +256,17 @@ namespace BP.GPM.AD
             DBAccess.RunSQL("DELETE FROM Port_Station ");
             DBAccess.RunSQL("DELETE FROM Port_DeptEmpStation ");
 
-
+            Station sta = new Station();
             foreach (SearchResult result in ds.FindAll())
             {
                 DirectoryEntry deGroup = result.GetDirectoryEntry(); // new DirectoryEntry(result.Path, Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
 
-                Station sta = new Station();
                 sta.No = deGroup.Guid.ToString();
-                sta.Name = deGroup.Name;
+
+                string name = deGroup.Name;
+                name = name.Replace("CN=", "");
+                sta.Name = name;
+                sta.FK_StationType = "01";
                 sta.DirectInsert();
 
                 System.DirectoryServices.PropertyCollection pcoll = deGroup.Properties;
@@ -278,9 +282,6 @@ namespace BP.GPM.AD
                     des.FK_Dept = deUser.Parent.Guid.ToString();
                     des.FK_Station = deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
 
-                    string name = deUser.Name;
-                    name = name.Replace("CN=", "");
-
                     //    emp.No =;
 
                     des.FK_Emp = this.GetValFromDirectoryEntryByKey(deUser, "sAMAccountName");
@@ -292,6 +293,17 @@ namespace BP.GPM.AD
                     // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
                     //  Page.Response.Write(sss);
                 }
+            }
+
+            //岗位类型.
+            StationTypes typs = new StationTypes();
+            typs.RetrieveAll();
+            if (typs.Count == 0)
+            {
+                StationType st = new StationType();
+                st.Name = "未分组";
+                st.No = "01";
+                st.Insert();
             }
 
         }

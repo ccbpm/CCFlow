@@ -452,7 +452,7 @@
                     var flowNo = GetQueryString("FK_Flow");
                     var nodeID = GetQueryString("FK_Node");
 
-                    var src = "../../WorkOpt/SubFlow.htm?WorkID=0@FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+                    var src = "../../WorkOpt/SubFlow.htm?WorkID=0&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
 
                     var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
 

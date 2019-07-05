@@ -74,7 +74,6 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-
             //同步所有的人员.
             SyncEmps();
 
@@ -257,6 +256,8 @@ namespace BP.GPM.AD
             DBAccess.RunSQL("DELETE FROM Port_DeptEmpStation ");
 
             Station sta = new Station();
+            BP.GPM.DeptEmpStation des = new DeptEmpStation();
+
             foreach (SearchResult result in ds.FindAll())
             {
                 DirectoryEntry deGroup = result.GetDirectoryEntry(); // new DirectoryEntry(result.Path, Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
@@ -277,19 +278,13 @@ namespace BP.GPM.AD
                     DirectoryEntry deUser = new DirectoryEntry(Glo.ADBasePath + "/" + pcoll["member"][l].ToString(),
                         Glo.ADUser, Glo.ADPassword, AuthenticationTypes.Secure);
 
-                    BP.GPM.DeptEmpStation des = new DeptEmpStation();
-
                     des.FK_Dept = deUser.Parent.Guid.ToString();
                     des.FK_Station = deGroup.Guid.ToString(); //  result.GetDirectoryEntry()
-
-                    //    emp.No =;
-
                     des.FK_Emp = this.GetValFromDirectoryEntryByKey(deUser, "sAMAccountName");
-                    if (name.Length > 25)
+                    if (des.FK_Emp.Length > 20)
                         continue;
 
                     des.Insert();
-
                     // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
                     //  Page.Response.Write(sss);
                 }

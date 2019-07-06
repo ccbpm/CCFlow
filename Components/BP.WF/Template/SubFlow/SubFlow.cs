@@ -30,6 +30,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string YGWorkWay = "YGWorkWay";
         /// <summary>
+        /// 主流程编号
+        /// </summary>
+        public const string MainFlowNo = "MainFlowNo";
+        /// <summary>
         /// 节点ID
         /// </summary>
         public const string FK_Node = "FK_Node";
@@ -41,6 +45,7 @@ namespace BP.WF.Template
         /// 条件表达式
         /// </summary>
         public const string CondExp = "CondExp";
+
         /// <summary>
         /// 越轨子流程退回类型
         /// </summary>
@@ -84,6 +89,12 @@ namespace BP.WF.Template
         /// </summary>
         public const string SpecFlowOver = "SpecFlowOver";
         #endregion
+
+        /// <summary>
+        /// 自动启动子流程：发送规则.
+        /// </summary>
+        public const string SendModel = "SendModel";
+
     }
     /// <summary>
     /// 子流程.
@@ -105,39 +116,90 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 流程编号
+        /// 子流程编号
         /// </summary>
         public string FK_Flow
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(SubFlowAttr.FK_Flow, value);
+                SetValByKey(SubFlowYanXuAttr.FK_Flow, value);
             }
-        }   
+        }
+        /// <summary>
+        /// 流程名称
+        /// </summary>
+        public string FlowName
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
+            }
+        }
+        /// <summary>
+        /// 条件表达式.
+        /// </summary>
+        public string CondExp
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowYanXuAttr.CondExp);
+            }
+            set
+            {
+                SetValByKey(SubFlowYanXuAttr.CondExp, value);
+            }
+        }
+        /// <summary>
+        /// 表达式类型
+        /// </summary>
+        public ConnDataFrom ExpType
+        {
+            get
+            {
+                return (ConnDataFrom)this.GetValIntByKey(SubFlowYanXuAttr.ExpType);
+            }
+            set
+            {
+                SetValByKey(SubFlowYanXuAttr.ExpType, (int)value);
+            }
+        }
+        /// <summary>
+        /// 主流程编号
+        /// </summary>
+        public string MainFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowYanXuAttr.MainFlowNo);
+            }
+            set
+            {
+                SetValByKey(SubFlowYanXuAttr.MainFlowNo, value);
+            }
+        }
+        /// <summary>
+        /// 主流程NodeID
+        /// </summary>
         public string FK_Node
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAttr.FK_Node);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Node);
             }
             set
             {
-                SetValByKey(SubFlowAttr.FK_Node, value);
+                SetValByKey(SubFlowYanXuAttr.FK_Node, value);
             }
         }
-        public string SubFlowType
+        public int SubFlowType
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAttr.SubFlowType);
-            }
-            set
-            {
-                SetValByKey(SubFlowAttr.SubFlowType, value);
+                return this.GetValIntByKey(SubFlowYanXuAttr.SubFlowType);
             }
         }
         #endregion
@@ -161,21 +223,24 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBInt(SubFlowAttr.FK_Node, 0, "节点", false, true);
+                map.AddTBString(SubFlowAttr.MainFlowNo, null, "主流程编号", true, false, 0, 10, 150, true);
+                map.AddTBInt(SubFlowAttr.FK_Node, 0, "主流程节点", false, true);
 
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);
-                map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程类型", false, true);
+                map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程模式", false, true);
                   
                 map.AddTBString(SubFlowAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
-                map.AddTBInt(SubFlowAttr.ExpType, 0, "子流程类型", false, true);
+                map.AddTBInt(SubFlowAttr.ExpType, 0, "表达式类型", false, true);
                 map.AddTBString(SubFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
 
                 map.AddTBInt(SubFlowAttr.YBFlowReturnRole, 0, "退回方式", false, true);
 
                 map.AddTBString(SubFlowAttr.ReturnToNode, null, "要退回的节点", true, true, 0, 200, 150, false);
-                  
+
+                map.AddTBInt(SubFlowAttr.SendModel, 0, "自动触发的子流程发送方式", false, true);
+
                 map.AddTBInt(SubFlowAttr.Idx, 0, "顺序", true, false);
                 this._enMap = map;
                 return this._enMap;

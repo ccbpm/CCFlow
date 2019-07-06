@@ -85,15 +85,11 @@ namespace BP.WF.Template
                 SetValByKey(SubFlowAutoAttr.ExpType, (int)value);
             }
         }
-        public string FK_Node
+        public int FK_Node
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAutoAttr.FK_Node);
-            }
-            set
-            {
-                SetValByKey(SubFlowAutoAttr.FK_Node, value);
+                return this.GetValIntByKey(SubFlowAutoAttr.FK_Node);
             }
         }
         /// <summary>
@@ -115,7 +111,74 @@ namespace BP.WF.Template
             {
                 return (SubFlowType)this.GetValIntByKey(SubFlowAutoAttr.SubFlowType);
             }
-        }   
+        }
+        /// <summary>
+        /// 仅仅发起一次.
+        /// </summary>
+        public bool StartOnceOnly
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowAutoAttr.StartOnceOnly);
+            }
+        }
+        /// <summary>
+        /// 指定的流程启动后,才能启动该子流程(请在文本框配置子流程).
+        /// </summary>
+        public bool IsEnableSpecFlowStart
+        {
+            get
+            {
+                var val= this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
+                if (val == false)
+                    return false;
+
+                if (this.SpecFlowStart.Length > 2)
+                    return true;
+                return false;
+            }
+        }
+        public string SpecFlowStart
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.SpecFlowStart);
+            }
+        }
+
+        /// <summary>
+        /// 指定的流程结束后,才能启动该子流程(请在文本框配置子流程).
+        /// </summary>
+        public bool IsEnableSpecFlowOver
+        {
+            get
+            {
+                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowOver);
+                if (val == false)
+                    return false;
+
+                if (this.SpecFlowOver.Length > 2)
+                    return true;
+                return false;
+            }
+        }
+        public string SpecFlowOver
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.SpecFlowOver);
+            }
+        }
+        /// <summary>
+        /// 自动发起的子流程发送方式
+        /// </summary>
+        public int SendModel
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAutoAttr.SendModel);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -135,34 +198,46 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_NodeSubFlow", "自动触发子流程");
 
+
                 map.AddMyPK();
 
-                map.AddTBInt(SubFlowAutoAttr.FK_Node, 0, "节点", false, true);
+                map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
+                map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
+                "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 
-                map.AddDDLSysEnum(SubFlowAutoAttr.SubFlowType, 2, "子流程类型", true, false, SubFlowAutoAttr.SubFlowType,
-                "@0=手动启动子流程@1=触发启动子流程@2=自动触发子流程");
+                map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
+                map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
-                map.AddDDLSysEnum(SubFlowAutoAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowAutoAttr.SubFlowModel,
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
-                
 
-                map.AddTBString(SubFlowAutoAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
-                map.AddTBString(SubFlowAutoAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "结束规则", true, true,
+                FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
-                map.AddDDLSysEnum(SubFlowAutoAttr.ExpType, 3, "表达式类型", true, true, SubFlowAutoAttr.ExpType,
-                   "@3=按照SQL计算@4=按照参数计算");
+                map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次.",true, true, true);
 
-                map.AddTBString(SubFlowAutoAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+                //启动限制规则.
+                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).",
+                 true, true, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
+                map.SetHelperAlert(SubFlowHandAttr.SpecFlowStart, "指定的流程启动后，才能启动该子流程，多个子流程用逗号分开. 001,002");
 
-                //@du.
-                map.AddDDLSysEnum(SubFlowAutoAttr.YBFlowReturnRole, 0, "退回方式", true, true, SubFlowAutoAttr.YBFlowReturnRole,
-                  "@0=不能退回@1=退回到父流程的开始节点@2=退回到父流程的任何节点@3=退回父流程的启动节点@4=可退回到指定的节点");
+                //启动限制规则.
+                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "指定的流程结束后,才能启动该子流程(请在文本框配置子流程).",
+                 true, true, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
+                map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
 
-                // map.AddTBString(SubFlowAutoAttr.ReturnToNode, null, "要退回的节点", true, false, 0, 200, 150, true);
-                map.AddDDLSQL(SubFlowAutoAttr.ReturnToNode, "0", "要退回的节点",
-                    "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node; )", true);
 
-                map.AddTBInt(SubFlowAutoAttr.Idx, 0, "显示顺序", true, false);
+                //自动发送方式.
+                map.AddDDLSysEnum(SubFlowHandAttr.SendModel, 0, "自动发送方式", true, true, SubFlowHandAttr.SendModel,
+                    "@0=给当前人员设置开始节点待办@1=发送到下一个节点");
+                map.SetHelperAlert(SubFlowHandAttr.SendModel,
+                    "如果您选择了[发送到下一个节点]该流程的下一个节点的接受人规则必须是自动计算的,而不能手工选择.");
+
+
+                map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -179,6 +254,25 @@ namespace BP.WF.Template
             return base.beforeInsert();
         }
 
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (this.SendModel == 1)
+            {
+                //设置的发送到，发送到下一个节点上.
+
+                Node nd = new Node(int.Parse(this.FK_Flow + "01"));
+
+                Nodes tonds = nd.HisToNodes;
+                foreach (Node item in tonds)
+                {
+                    if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                        throw new Exception("err@【自动发送方式】设置错误，您选择了[发送到下一个节点]但是该节点的接收人规则为由上一步发送人员选择，这是不符合规则的。");
+                }
+            }
+
+            return base.beforeUpdateInsertAction();
+        }
+
         #region 移动.
         /// <summary>
         /// 上移
@@ -186,7 +280,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoUp()
         {
-            this.DoOrderUp(SubFlowAutoAttr.FK_Node, this.FK_Node, SubFlowAutoAttr.SubFlowType, "2", SubFlowAutoAttr.Idx);
+            this.DoOrderUp(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "1", SubFlowAutoAttr.Idx);
             return "执行成功";
         }
         /// <summary>
@@ -195,7 +289,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDown()
         {
-            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node, SubFlowAutoAttr.SubFlowType, "2", SubFlowAutoAttr.Idx);
+            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "2", SubFlowAutoAttr.Idx);
             return "执行成功";
         }
         #endregion 移动.
@@ -232,8 +326,8 @@ namespace BP.WF.Template
         /// <param name="fk_node">节点</param>
         public SubFlowAutos(int fk_node)
         {
-            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node, 
-                SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.AutoSubFlow);
+            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node,
+                SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.AutoSubFlow, SubFlowYanXuAttr.Idx);
         }
         #endregion
 

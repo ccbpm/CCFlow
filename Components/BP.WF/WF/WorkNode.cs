@@ -6888,11 +6888,11 @@ namespace BP.WF
                 #region 计算未来处理人.
                 if (this.town == null)
                 {
-                //    FullSA fsa1 = new FullSA(this);
+                    //    FullSA fsa1 = new FullSA(this);
                 }
                 else
                 {
-                  //  FullSA fsa = new FullSA(this.town);
+                    //  FullSA fsa = new FullSA(this.town);
                 }
 
                 #endregion 计算未来处理人.
@@ -6934,16 +6934,64 @@ namespace BP.WF
             if (this.HisNode.SubFlowAutoNum == 0)
                 return;
 
-            SubFlowAutos subs = new SubFlowAutos();
-            subs.Retrieve(SubFlowAutoAttr.FK_Node, this.HisNode.NodeID,
-                SubFlowAutoAttr.SubFlowType, (int)SubFlowType.AutoSubFlow);
+            SubFlowAutos subs = new SubFlowAutos(this.HisNode.NodeID);
 
             foreach (SubFlowAuto sub in subs)
             {
-                #warning 没有判断，增加设置自动触发子流程的条件.
                 //启动下级子流程.
                 if (sub.HisSubFlowModel == SubFlowModel.SubLevel)
                 {
+                    #region 判断启动权限.
+                    if (sub.StartOnceOnly == true)
+                    {
+                        /* 如果仅仅被启动一次.*/
+                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + sub.FK_Flow + "'";
+                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                            continue; //已经启动了，就不启动了。
+                    }
+
+                    //指定的流程启动后,才能启动该子流程。
+                    if (sub.IsEnableSpecFlowStart == true)
+                    {
+                        string[] fls = sub.SpecFlowStart.Split(',');
+                        bool isHave = false;
+                        foreach (string fl in fls)
+                        {
+                            if (DataType.IsNullOrEmpty(fl) == true)
+                                continue;
+
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + fl + "'";
+                            if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                            {
+                                isHave = true;
+                                break; //还没有启动过.
+                            }
+                        }
+                        if (isHave == true)
+                            continue; //就不能启动该子流程.
+                    }
+
+                    if (sub.IsEnableSpecFlowOver == true)
+                    {
+                        string[] fls = sub.SpecFlowOver.Split(',');
+                        bool isHave = false;
+                        foreach (string fl in fls)
+                        {
+                            if (DataType.IsNullOrEmpty(fl) == true)
+                                continue;
+
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + fl + "' AND WFState=3";
+                            if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                            {
+                                isHave = true;
+                                break; //还没有启动过.
+                            }
+                        }
+                        if (isHave == true)
+                            continue; //就不能启动该子流程.
+                    }
+                    #endregion
+
                     SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(sub.FK_Flow, this.rptGe.Row, null, 0, null, this.WorkID, this.HisFlow.No);
                     this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
                     //string msg= BP.WF.Glo.multilingual("@子流程({0})已经启动,发送给:{1}, 发送到:{2}.", "WorkNode", "sub_wf_started_1", fl.Name, sendObjs.VarAcceptersName, sendObjs.VarToNodeName);
@@ -6951,6 +6999,57 @@ namespace BP.WF
 
                 if (sub.HisSubFlowModel == SubFlowModel.SameLevel)
                 {
+                    #region 判断启动权限.
+                    if (sub.StartOnceOnly == true)
+                    {
+                        /* 如果仅仅被启动一次.*/
+                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + sub.FK_Flow + "'";
+                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                            continue; //已经启动了，就不启动了。
+                    }
+
+                    //指定的流程启动后,才能启动该子流程。
+                    if (sub.IsEnableSpecFlowStart == true)
+                    {
+                        string[] fls = sub.SpecFlowStart.Split(',');
+                        bool isHave = false;
+                        foreach (string fl in fls)
+                        {
+                            if (DataType.IsNullOrEmpty(fl) == true)
+                                continue;
+
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + fl + "'";
+                            if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                            {
+                                isHave = true;
+                                break; //还没有启动过.
+                            }
+                        }
+                        if (isHave == true)
+                            continue; //就不能启动该子流程.
+                    }
+
+                    if (sub.IsEnableSpecFlowOver == true)
+                    {
+                        string[] fls = sub.SpecFlowOver.Split(',');
+                        bool isHave = false;
+                        foreach (string fl in fls)
+                        {
+                            if (DataType.IsNullOrEmpty(fl) == true)
+                                continue;
+
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + fl + "' AND WFState=3";
+                            if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                            {
+                                isHave = true;
+                                break; //还没有启动过.
+                            }
+                        }
+                        if (isHave == true)
+                            continue; //就不能启动该子流程.
+                    }
+                    #endregion
+
                     GERpt rpt = new GERpt("ND" + int.Parse(this.HisGenerWorkFlow.PFlowNo) + "Rpt", this.HisGenerWorkFlow.PWorkID);
                     SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(sub.FK_Flow, rpt.Row, null, 0, null, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
                     this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());

@@ -12,7 +12,7 @@ namespace BP.WF.Template
     /// </summary>
     public class SubFlowHandAttr : SubFlowAttr
     {
-      
+
 
     }
     /// <summary>
@@ -30,7 +30,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
-                uac.IsInsert=false;
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -119,40 +119,32 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
-
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
-
-                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
-                "@0=下级子流程@1=同级子流程");
 
                 map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
+                "@0=下级子流程@1=同级子流程");
+
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "结束规则", true, true,
                 FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
-                map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "发起限制规则:如果当前为子流程，仅仅只能被调用1次，不能被重复调用。", 
+                map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "发起限制规则:如果当前为子流程,仅能被调用1次.",
                     true, true, true);
 
                 //启动限制规则.
-                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "发起限制规则:指定的流程启动后，才能启动该子流程(请在文本框配置子流程).",
+                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowStart, "指定的流程启动后，才能启动该子流程，多个子流程用逗号分开. 001,002");
 
                 //启动限制规则.
-                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "发起限制规则:指定的流程结束后，才能启动该子流程(请在文本框配置子流程).",
+                map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "指定的流程结束后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
-
-                //map.AddDDLSysEnum(SubFlowHandAttr.YGWorkWay, 1, "工作方式", true, true, SubFlowHandAttr.YGWorkWay,
-                //"@0=停止当前节点等待手工启动子流程运行完毕后该节点自动向下运行@1=启动手工启动子流程运行到下一步骤上去");
-                // map.AddDDLSysEnum(SubFlowHandAttr.ExpType, 3, "表达式类型", true, true, SubFlowHandAttr.ExpType,
-                //  "@3=按照SQL计算@4=按照参数计算");
-                // map.AddTBString(SubFlowHandAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
-                //
 
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
                 this._enMap = map;
@@ -193,17 +185,17 @@ namespace BP.WF.Template
         {
         }
         /// <summary>
-        /// 手工启动子流程集合.
+        /// 手工启动子流程集合
         /// </summary>
-        /// <param name="fk_node"></param>
+        /// <param name="fk_node">节点ID</param>
         public SubFlowHands(int fk_node)
         {
-            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node, 
-                SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.HandSubFlow);
+            this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node,
+                SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.HandSubFlow, SubFlowYanXuAttr.Idx);
         }
         #endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   
+        #region 为了适应自动翻译成java的需要,把实体转换成List
         /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>

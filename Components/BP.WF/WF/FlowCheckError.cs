@@ -138,7 +138,9 @@ namespace BP.WF
                 CheckModel_FormFields();
 
                 //检查越轨流程,子流程发起.
-                CheckMode_SubFlowYanXus();
+                CheckModel_SubFlowYanXus();
+
+
 
                 //检查报表.
                 this.DoCheck_CheckRpt(this.nds);
@@ -466,12 +468,13 @@ namespace BP.WF
         /// <summary>
         /// 检查越轨流程,子流程发起.
         /// </summary>
-        public void CheckMode_SubFlowYanXus()
+        public void CheckModel_SubFlowYanXus()
         {
             string msg = "";
-            SubFlowYanXus ygflows = new SubFlowYanXus();
-            ygflows.Retrieve(SubFlowYanXuAttr.FK_Flow, this.flow.No);
-            foreach (SubFlowYanXu flow in ygflows)
+            SubFlowYanXus yanxuFlows = new SubFlowYanXus();
+            yanxuFlows.Retrieve(SubFlowYanXuAttr.FK_Flow, this.flow.No);
+
+            foreach (SubFlowYanXu flow in yanxuFlows)
             {
                 Flow fl = new Flow(flow.FK_Flow);
 

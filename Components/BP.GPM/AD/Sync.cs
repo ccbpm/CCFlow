@@ -74,7 +74,6 @@ namespace BP.GPM.AD
         /// <param name="entryOU"></param>
         public override object Do()
         {
-
             //同步并获取根目录.
             SyncDeptRoot();
 
@@ -162,11 +161,8 @@ namespace BP.GPM.AD
             //DirectorySearcher search = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
             //search.Filter = "(OU=" + Glo.ADRoot + ")";
             //search.SearchScope = SearchScope.Subtree;
-
             //SearchResult result = search.FindOne();
-
             //    rootDE  = result.GetDirectoryEntry();
-
             //    BP.GPM.AD.Dept dept = new Dept();
             //    dept.Name = rootDE.Name.Replace("OU=", "");
             //    dept.No = rootDE.Guid.ToString();
@@ -188,6 +184,7 @@ namespace BP.GPM.AD
 
             foreach (Dept mydept in depts)
             {
+
                 DirectoryEntry deptDE = new DirectoryEntry(mydept.NameOfPath, Glo.ADUser, Glo.ADPassword);
 
                 DirectorySearcher ds = new DirectorySearcher(deptDE);
@@ -197,6 +194,9 @@ namespace BP.GPM.AD
                 ds.Filter = "(objectClass=user)";
                 // sss
                 SearchResultCollection rss = ds.FindAll();
+
+                DBAccess.RunSQL("DELETE FROM Port_Emp WHERE FK_Dept='" + mydept.No + "'");
+
                 if (rss.Count == 0)
                     continue;
 
@@ -207,7 +207,9 @@ namespace BP.GPM.AD
                     DirectoryEntry entity = result.GetDirectoryEntry();
                     if (entity.Name.Contains("CN=") == false)
                         continue;
+
                     string name = entity.Name.Replace("CN=", "");
+
                     //判断是 group 还是 user.
                     // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
                     //emp.c = name;// this.GetValFromDirectoryEntryByKey(entry, "cn");
@@ -217,8 +219,7 @@ namespace BP.GPM.AD
                     if (emp.IsExits == true)
                         continue;
 
-                    emp.FK_Dept = entity.Parent.Guid.ToString();
-
+                    emp.FK_Dept = mydept.No; // entity.Parent.Guid.ToString();
                     if (emp.No.Length > 20)
                         continue;
 
@@ -286,7 +287,6 @@ namespace BP.GPM.AD
                 int n = pcoll["member"].Count;
                 for (int l = 0; l < n; l++)
                 {
-
                     try
                     {
                         DirectoryEntry deUser = new DirectoryEntry(Glo.ADBasePath + "/" + pcoll["member"][l].ToString(),
@@ -302,10 +302,7 @@ namespace BP.GPM.AD
                         err += "err@SyncStatioins 错误:" + ex.Message;
                         continue;
                     }
-
                     des.Insert();
-                    // string sss = deUser.Name.ToString() + GetProperty(deUser, "mail");
-                    //  Page.Response.Write(sss);
                 }
             }
 

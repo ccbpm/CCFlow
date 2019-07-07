@@ -449,7 +449,7 @@ namespace BP.WF
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
                     SysEnums enums = new SysEnums();
                     enums.RetrieveInSQL(SysEnumAttr.EnumKey,
-                            "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData in(" + myFrmIDs + ")");
+                            "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData in(" + myFrmIDs + ")", SysEnumAttr.IntKey);
 
                     // 加入最新的枚举.
                     myds.Tables.Add(enums.ToDataTableField("Sys_Enum"));

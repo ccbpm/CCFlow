@@ -34,6 +34,11 @@
             var nodeID = GetQueryString("FK_Node");
             var ens = new Entities("BP.WF.Template.SubFlowAutos");
             ens.Retrieve("FK_Node", nodeID, "SubFlowType", 1, "Idx");
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.SetPara("SubFlowAutoNum", ens.length);
+            node.Update();
+
             //console.log(ens);
 
             var html = "";
@@ -44,6 +49,7 @@
                 html += "<td>" + en.FK_Flow + "</td>";
                 html += "<td>" + en.FlowName + "</td>";
                 html += "<td>" + en.SubFlowModelText + "</td>";
+                html += "<td>" + en.SendModelText + "</td>";
 
                 //  html += "<td>" + en.YGWorkWayText + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
@@ -129,6 +135,9 @@
             </th>
             <th>
                 运行模式
+            </th>
+               <th>
+                发送模式
             </th>
             <th>
                 编辑

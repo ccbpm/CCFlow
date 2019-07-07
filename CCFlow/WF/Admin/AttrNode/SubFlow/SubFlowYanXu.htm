@@ -34,6 +34,11 @@
             var nodeID = GetQueryString("FK_Node");
             var ens = new Entities("BP.WF.Template.SubFlowYanXus");
             ens.Retrieve("FK_Node", nodeID, "SubFlowType", 2, "Idx");
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.SetPara("SubFlowYanXuNum", ens.length);
+            node.Update();
+
             //console.log(ens);
 
             var html = "";

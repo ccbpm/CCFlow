@@ -43,10 +43,10 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.Name','登陆人员�
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_Dept','登陆人员部门编号','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_DeptName','登陆人员部门名称','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_DeptFullName','登陆人员部门全称','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年mm月dd日','当前日期(yyyy年MM月dd日)','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年mm月dd日HH时mm分','当前日期(yyyy年MM月dd日HH时mm分)','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年mm月dd日','当前日期(yy年MM月dd日)','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年mm月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年MM月dd日','当前日期(yyyy年MM月dd日)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年MM月dd日HH时mm分','当前日期(yyyy年MM月dd日HH时mm分)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日','当前日期(yy年MM月dd日)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
@@ -113,4 +113,12 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Frm.FrmBill','@No=基础信息,
 DELETE FROM Sys_EnCfg WHERE No='BP.Frm.FrmDict';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Frm.FrmDict','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
  
+ ----2019.06.03
+ update Sys_MapAttr set ColSpan =0 ,TextColSpan = 2 where UIContralType=9 and ColSpan = 1;
 
+ --2019.5.23
+DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
+INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_0','由连接线条件控制','CondModel',0,'CH');
+INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_1','按照用户选择计算','CondModel',1,'CH');
+INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_2','发送按钮旁下拉框选择','CondModel',2,'CH');
+ 

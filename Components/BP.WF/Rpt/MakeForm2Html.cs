@@ -413,7 +413,12 @@ namespace BP.WF
                 switch (attr.LGType)
                 {
                     case FieldTypeS.Normal:  // 输出普通类型字段.
-                        
+                        if (attr.IsSigan == true)
+                        {
+                            text = en.GetValStrByKey(attr.KeyOfEn);
+                            text = SignPic(text);
+                            break;
+                        }
                         if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
                         {
                             if (attrs.Contains(attr.KeyOfEn + "Text") == true)
@@ -2049,7 +2054,37 @@ namespace BP.WF
                 throw ex;
             }
         }
+        /// <summary>
+        /// 签名
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <returns></returns>
+        private static string SignPic(string userNo)
+        {
+
+            if (string.IsNullOrWhiteSpace(userNo))
+            {
+                return userNo;
+            }
+            //如果文件存在
+            String path = SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".jpg";
+            
+            if (File.Exists(path) == false)
+            {
+                path = SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".JPG";
+                if (File.Exists(path) == true)
+                    return "<img src='" + path + "' style='border:0px;width:100px;height:30px;'/>";
+                else
+                    return userNo;
+            }
+            else
+            {
+                return "<img src='" + path + "' style='border:0px;width:100px;height:30px;'/>";
+            }
+   
+        }
         
     }
+   
 }
                 #endregion 

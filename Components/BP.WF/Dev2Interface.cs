@@ -5065,10 +5065,10 @@ namespace BP.WF
                 return true;
 
             //当前节点所有配置的子流程.
-            SubFlows subflows = new SubFlows(pNodeID);
+            SubFlowHands subflows = new SubFlowHands(pNodeID);
 
             //当前的子流程.
-            foreach (SubFlow item in subflows)
+            foreach (SubFlowHand item in subflows)
             {
                 if (item.FK_Flow.Equals(flowNo)==false)
                     continue;

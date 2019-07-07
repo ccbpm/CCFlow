@@ -1580,6 +1580,31 @@ namespace BP.WF
                 s1 = (FlowSort)fs.DoCreateSubNode();
                 s1.Name = "人力资源类";
                 s1.Update();
+
+
+                //创建一个空白的流程，不然，整个结构就出问题。
+                BP.Sys.FrmTrees frmTrees = new FrmTrees();
+                frmTrees.RetrieveAll();
+                frmTrees.Delete();
+
+                FrmTree ftree = new FrmTree();
+                ftree.Name = "表单树";
+                ftree.No = "1";
+                ftree.ParentNo = "0";
+                ftree.Insert();
+
+                FrmTree subFrmTree = (FrmTree)ftree.DoCreateSubNode();
+                subFrmTree.Name = "流程独立表单";
+                subFrmTree.Update();
+
+                subFrmTree = (FrmTree)ftree.DoCreateSubNode();
+                subFrmTree.Name = "常用信息管理";
+                subFrmTree.Update();
+
+                subFrmTree = (FrmTree)ftree.DoCreateSubNode();
+                subFrmTree.Name = "常用单据";
+                subFrmTree.Update();
+
             }
             #endregion 装载demo.flow
 

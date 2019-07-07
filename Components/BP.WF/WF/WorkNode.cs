@@ -6992,12 +6992,50 @@ namespace BP.WF
                     }
                     #endregion
 
-                    SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(sub.FK_Flow, this.rptGe.Row, null, 0, null, this.WorkID, this.HisFlow.No);
-                    this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
-                    //string msg= BP.WF.Glo.multilingual("@子流程({0})已经启动,发送给:{1}, 发送到:{2}.", "WorkNode", "sub_wf_started_1", fl.Name, sendObjs.VarAcceptersName, sendObjs.VarToNodeName);
+                    #region 检查sendModel.
+                    // 设置开始节点待办.
+                    if (sub.SendModel == 0)
+                    {
+                        //创建workid.
+                        Int64 subWorkID=BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+
+
+                        //执行保存.
+                        BP.WF.Dev2Interface.Node_SaveWork(sub.FK_Flow, int.Parse(sub.FK_Flow + "01"), subWorkID, this.rptGe.Row);
+
+
+                        //为开始节点设置待办.
+                        BP.WF.Dev2Interface.Node_AddTodolist(subWorkID,WebUser.No);
+
+
+                        //设置父子关系.
+                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
+
+
+                        //写入消息.
+                        this.addMsg("SubFlow" + sub.FK_Flow, "流程[" + sub.FlowName + "]启动成功.");
+                    }
+
+                    //发送到下一个环节去.
+                    if (sub.SendModel == 1)
+                    {
+                        //创建workid.
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+
+                        //设置父子关系.
+                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
+
+                        //执行发送到下一个环节..
+                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.FK_Flow, subWorkID, this.rptGe.Row, null);
+
+                        this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
+                    }
+                    #endregion 检查sendModel.
+
                 }
 
-                if (sub.HisSubFlowModel == SubFlowModel.SameLevel)
+                //如果要自动启动平级的子流程，就需要判断当前是是否是子流程，如果不是子流程，就不能启动。
+                if (sub.HisSubFlowModel == SubFlowModel.SameLevel && this.HisGenerWorkFlow.PWorkID!=0)
                 {
                     #region 判断启动权限.
                     if (sub.StartOnceOnly == true)
@@ -7050,11 +7088,49 @@ namespace BP.WF
                     }
                     #endregion
 
-                    GERpt rpt = new GERpt("ND" + int.Parse(this.HisGenerWorkFlow.PFlowNo) + "Rpt", this.HisGenerWorkFlow.PWorkID);
-                    SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(sub.FK_Flow, rpt.Row, null, 0, null, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
-                    this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
+
+                    #region 检查sendModel.
+                    // 设置开始节点待办.
+                    if (sub.SendModel == 0)
+                    {
+                        //创建workid.
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+
+                        //执行保存.
+                        BP.WF.Dev2Interface.Node_SaveWork(sub.FK_Flow, int.Parse(sub.FK_Flow + "01"), subWorkID, this.rptGe.Row);
+
+                        //为开始节点设置待办.
+                        BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
+
+                        //设置父子关系.
+                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
+
+                        //写入消息.
+                        this.addMsg("SubFlow" + sub.FK_Flow, "流程[" + sub.FlowName + "]启动成功.");
+                    }
+
+                    //发送到下一个环节去.
+                    if (sub.SendModel == 1)
+                    {
+                        //创建workid.
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+
+                        //设置父子关系.
+                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
+
+                        //执行发送到下一个环节..
+                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.FK_Flow, subWorkID, this.rptGe.Row, null);
+
+                        this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
+                    }
+                    #endregion 检查sendModel.
+                   
+
                 }
             }
+
+            return;
+
 
             string msg = "";
             if (this.HisNode.SFActiveFlows.Length > 2)

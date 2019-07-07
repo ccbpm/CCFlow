@@ -327,12 +327,8 @@ namespace BP.WF.HttpHandler
                         else
                             //跳转到查看页面
                             return "url@./MyFlowTreeReadonly.htm?WorkID=" + gwf.WorkID + "&FID=" + gwf.FID + "&OID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + gwf.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
-
                     }
-
-
                 }
-
             }
 
             //当前工作.
@@ -446,7 +442,6 @@ namespace BP.WF.HttpHandler
                         gwf.PFlowNo = this.PFlowNo;
                     gwf.Update();
                 }
-
 
                 if (this.currND.IsStartNode)
                 {

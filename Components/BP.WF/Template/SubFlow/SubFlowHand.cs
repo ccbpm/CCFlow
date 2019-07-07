@@ -35,6 +35,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 主流程编号
+        /// </summary>
+        public string MainFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.MainFlowNo);
+            }
+            set
+            {
+                SetValByKey(SubFlowAutoAttr.MainFlowNo, value);
+            }
+        }   
+        /// <summary>
         /// 流程编号
         /// </summary>
         public string FK_Flow
@@ -55,7 +69,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValRefTextByKey(SubFlowHandAttr.FK_Flow);
+                return this.GetValRefTextByKey(SubFlowHandAttr.FlowName);
             }
         }
         /// <summary>
@@ -139,12 +153,14 @@ namespace BP.WF.Template
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowStart, "指定的流程启动后，才能启动该子流程，多个子流程用逗号分开. 001,002");
+                map.AddTBString(SubFlowHandAttr.SpecFlowStartNote, null, "备注", true, false, 0, 500, 150, true);
 
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "指定的流程结束后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
+                map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
 
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
                 this._enMap = map;

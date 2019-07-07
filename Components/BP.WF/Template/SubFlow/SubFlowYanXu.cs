@@ -34,6 +34,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 主流程编号
+        /// </summary>
+        public string MainFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.MainFlowNo);
+            }
+            set
+            {
+                SetValByKey(SubFlowAutoAttr.MainFlowNo, value);
+            }
+        }   
+        /// <summary>
         /// 流程编号
         /// </summary>
         public string FK_Flow
@@ -54,7 +68,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FlowName);
             }
         }
         /// <summary>

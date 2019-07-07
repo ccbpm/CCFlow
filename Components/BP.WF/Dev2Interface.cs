@@ -4546,9 +4546,7 @@ namespace BP.WF
             GenerWorkFlow pgwf = new GenerWorkFlow(parentWorkID);
 
             if (parentEmpNo == null)
-            {
                 parentEmpNo = WebUser.No;
-            }
 
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
@@ -5062,7 +5060,74 @@ namespace BP.WF
                 return true;
             #endregion 判断开始节点是否可以发起.
 
-            #region 检查流程发起限制规则.
+            #region 检查流程发起限制规则. 为周大福项目增加判断.
+            if (pNodeID==0)
+                return true;
+
+            //当前节点所有配置的子流程.
+            SubFlows subflows = new SubFlows(pNodeID);
+
+            //当前的子流程.
+            foreach (SubFlow item in subflows)
+            {
+                if (item.FK_Flow.Equals(flowNo)==false)
+                    continue;
+
+                if (item.StartOnceOnly == true)
+                {
+                    string sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + flowNo + "' AND WFState >=2 ";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    if (dt.Rows.Count == 0)
+                    {
+                       // return true; //没有人发起，他可以发起。
+                    }
+                    else
+                    {
+                        throw new Exception("该流程只能允许发起一次.");
+                    }
+                }
+
+                if (item.IsEnableSpecFlowStart == true)
+                {
+                    //指定的流程发起之后，才能启动该流程。
+                    string[] fls = item.SpecFlowStart.Split(',');
+                    foreach (string flStr in fls)
+                    {
+                        if (DataType.IsNullOrEmpty(flStr) == true)
+                            continue;
+
+                        string sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + flStr + "' AND WFState >=2 ";
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 0)
+                        {
+                            BP.WF.Flow myflow = new Flow(flStr);
+                            throw new Exception("流程:[" + myflow.Name + "]没有发起,您不能启动["+item.FlowName+"]。");
+                        }
+                    }
+                }
+
+                if (item.IsEnableSpecFlowOver == true)
+                {
+                    //指定的流程发起之后，才能启动该流程。
+                    string[] fls = item.SpecFlowStart.Split(',');
+                    foreach (string flStr in fls)
+                    {
+                        if (DataType.IsNullOrEmpty(flStr) == true)
+                            continue;
+
+                        string sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + flStr + "' AND WFState =3 ";
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 0)
+                        {
+                            BP.WF.Flow myflow = new Flow(flStr);
+                            throw new Exception("流程:[" + myflow.Name + "]没有完成或者发起,您不能启动[" + item.FlowName + "]。");
+                        }
+                    }
+                }
+            }
+            #endregion 检查流程发起限制规则.
+
+            #region 判断流程属性的规则.
             Flow fl = new Flow(flowNo);
             if (fl.StartLimitRole == StartLimitRole.None)
                 return true;
@@ -5080,7 +5145,7 @@ namespace BP.WF
 
                 throw new Exception("该流程只能允许发起一个子流程.");
             }
-            #endregion 检查流程发起限制规则.
+            #endregion 判断流程属性的规则.
 
             return true;
         }
@@ -6708,9 +6773,7 @@ namespace BP.WF
             //}
             //#endregion 复制独立表单数据.
         }
-        //public static string Node_IsCanCreateBlankWork(string flowNo, string userNo, string pflowNo, int pNodeID, Int64 pWorkID)
-        //{
-        //}
+     
         /// <summary>
         /// 创建一个空白的WorkID
         /// </summary>
@@ -6934,6 +6997,12 @@ namespace BP.WF
                 tempStrs += "," + emp + ",";
             }
             #endregion 增加待办人员.
+
+            if (gwf.WFState == WFState.Blank)
+            {
+                gwf.WFState = WFState.Runing;
+                gwf.Update();
+            }
         }
         /// <summary>
         /// 创建开始节点工作

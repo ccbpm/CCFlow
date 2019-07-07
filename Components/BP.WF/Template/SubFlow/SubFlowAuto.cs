@@ -12,7 +12,7 @@ namespace BP.WF.Template
     /// </summary>
     public class SubFlowAutoAttr : SubFlowAttr
     {
-        
+
     }
     /// <summary>
     /// 自动触发子流程.
@@ -34,6 +34,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 主流程编号
+        /// </summary>
+        public string MainFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.MainFlowNo);
+            }
+            set
+            {
+                SetValByKey(SubFlowAutoAttr.MainFlowNo, value);
+            }
+        }
+        /// <summary>
         /// 流程编号
         /// </summary>
         public string FK_Flow
@@ -46,7 +60,7 @@ namespace BP.WF.Template
             {
                 SetValByKey(SubFlowAutoAttr.FK_Flow, value);
             }
-        }   
+        }
         /// <summary>
         /// 流程名称
         /// </summary>
@@ -54,7 +68,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAutoAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowAutoAttr.FlowName);
             }
         }
         /// <summary>
@@ -129,7 +143,7 @@ namespace BP.WF.Template
         {
             get
             {
-                var val= this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
+                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
                 if (val == false)
                     return false;
 
@@ -145,7 +159,6 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(SubFlowAutoAttr.SpecFlowStart);
             }
         }
-
         /// <summary>
         /// 指定的流程结束后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
@@ -214,27 +227,27 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "结束规则", true, true,
                 FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
-                map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次.",true, true, true);
+                map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次.", true, true, true);
 
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowStart, "指定的流程启动后，才能启动该子流程，多个子流程用逗号分开. 001,002");
+                map.AddTBString(SubFlowHandAttr.SpecFlowStartNote, null, "备注", true, false, 0, 500, 150, true);
 
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowOver, false, "指定的流程结束后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
-
+                map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
 
                 //自动发送方式.
                 map.AddDDLSysEnum(SubFlowHandAttr.SendModel, 0, "自动发送方式", true, true, SubFlowHandAttr.SendModel,
                     "@0=给当前人员设置开始节点待办@1=发送到下一个节点");
                 map.SetHelperAlert(SubFlowHandAttr.SendModel,
                     "如果您选择了[发送到下一个节点]该流程的下一个节点的接受人规则必须是自动计算的,而不能手工选择.");
-
 
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
 
@@ -320,7 +333,7 @@ namespace BP.WF.Template
         public SubFlowAutos()
         {
         }
-         /// <summary>
+        /// <summary>
         /// 自动触发子流程集合.
         /// </summary>
         /// <param name="fk_node">节点</param>

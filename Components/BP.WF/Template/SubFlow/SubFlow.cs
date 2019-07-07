@@ -69,17 +69,18 @@ namespace BP.WF.Template
         /// 如果当前为子流程，仅仅只能被调用1次，不能被重复调用。
         /// </summary>
         public const string StartOnceOnly = "StartOnceOnly";
-
         /// <summary>
         /// 是否启动
         /// </summary>
         public const string IsEnableSpecFlowStart = "IsEnableSpecFlowStart";
-
         /// <summary>
         /// 指定的流程启动后，才能启动该子流程.
         /// </summary>
         public const string SpecFlowStart = "SpecFlowStart";
-      
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public const string SpecFlowStartNote = "SpecFlowStartNote";
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -88,6 +89,10 @@ namespace BP.WF.Template
         /// 指定的子流程结束后，才能启动该子流程.
         /// </summary>
         public const string SpecFlowOver = "SpecFlowOver";
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public const string SpecFlowOverNote = "SpecFlowOverNote";
         #endregion
 
         /// <summary>
@@ -136,7 +141,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FlowName);
             }
         }
         /// <summary>
@@ -195,11 +200,78 @@ namespace BP.WF.Template
                 SetValByKey(SubFlowYanXuAttr.FK_Node, value);
             }
         }
-        public int SubFlowType
+        public SubFlowType SubFlowType
         {
             get
             {
-                return this.GetValIntByKey(SubFlowYanXuAttr.SubFlowType);
+                return (SubFlowType)this.GetValIntByKey(SubFlowYanXuAttr.SubFlowType);
+            }
+        }
+        /// <summary>
+        /// 指定的流程启动后,才能启动该子流程(请在文本框配置子流程).
+        /// </summary>
+        public bool IsEnableSpecFlowStart
+        {
+            get
+            {
+                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
+                if (val == false)
+                    return false;
+
+                if (this.SpecFlowStart.Length > 2)
+                    return true;
+                return false;
+            }
+        }
+        /// <summary>
+        /// 仅仅可以启动一次?
+        /// </summary>
+        public bool StartOnceOnly
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowYanXuAttr.StartOnceOnly);
+            }
+        }
+
+        /// <summary>
+        /// 指定的流程结束后,才能启动该子流程(请在文本框配置子流程).
+        /// </summary>
+        public bool IsEnableSpecFlowOver
+        {
+            get
+            {
+                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowOver);
+                if (val == false)
+                    return false;
+
+                if (this.SpecFlowOver.Length > 2)
+                    return true;
+                return false;
+            }
+        }
+        public string SpecFlowOver
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowYanXuAttr.SpecFlowOver);
+            }
+        }
+        public string SpecFlowStart
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowYanXuAttr.SpecFlowStart);
+            }
+        }
+        /// <summary>
+        /// 自动发起的子流程发送方式
+        /// </summary>
+        public int SendModel
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAutoAttr.SendModel);
             }
         }
         #endregion
@@ -231,6 +303,20 @@ namespace BP.WF.Template
                   
                 map.AddTBString(SubFlowAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+
+                //启动限制规则0.
+                map.AddTBInt(SubFlowAttr.StartOnceOnly, 0, "仅能被调用1次", false, true);
+
+                //启动限制规则1.
+                map.AddTBInt(SubFlowAttr.IsEnableSpecFlowStart, 0, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).", false, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowStart, null, "子流程编号", true, false, 0, 200, 150, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowStartNote, null, "备注", true, false, 0, 500, 150, true);
+
+                //启动限制规则2.
+                map.AddTBInt(SubFlowHandAttr.IsEnableSpecFlowOver, 0, "指定的流程结束后,才能启动该子流程(请在文本框配置子流程).", true, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
+                map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
+
 
                 map.AddTBInt(SubFlowAttr.ExpType, 0, "表达式类型", false, true);
                 map.AddTBString(SubFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);

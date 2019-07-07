@@ -141,7 +141,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 自定义方案
         /// </summary>
-        Self    
+        Self
     }
 
     /// <summary>
@@ -191,7 +191,7 @@ namespace BP.WF.Template
     public class FrmNode : EntityMyPK
     {
         #region 关于节点与office表单的toolbar权限控制方案.
-        
+
         #endregion 关于节点与office表单的toolbar权限控制方案.
 
         #region 基本属性
@@ -202,7 +202,7 @@ namespace BP.WF.Template
                 switch (this.HisFrmType)
                 {
                     case FrmType.FoolForm:
-                        return Glo.CCFlowAppPath +"/WF/CCForm/FrmFix";
+                        return Glo.CCFlowAppPath + "/WF/CCForm/FrmFix";
                     case FrmType.FreeFrm:
                         return Glo.CCFlowAppPath + "/WF/CCForm/Frm";
                     default:
@@ -249,7 +249,7 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.FrmType, (int)value);
             }
         }
-          /// <summary>
+        /// <summary>
         /// 表单类型
         /// </summary>
         public string HisFrmTypeText
@@ -380,7 +380,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string str= this.GetValStringByKey(FrmNodeAttr.TempleteFile);
+                string str = this.GetValStringByKey(FrmNodeAttr.TempleteFile);
                 if (DataType.IsNullOrEmpty(str))
                     return this.FK_Frm + ".xls";
                 return str;
@@ -401,7 +401,7 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(FrmNodeAttr.IsEnable,value);
+                this.SetValByKey(FrmNodeAttr.IsEnable, value);
             }
         }
         /// <summary>
@@ -415,7 +415,7 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(FrmNodeAttr.GuanJianZiDuan,value);
+                this.SetValByKey(FrmNodeAttr.GuanJianZiDuan, value);
             }
         }
         /// <summary>
@@ -615,7 +615,7 @@ namespace BP.WF.Template
                 this.IsPrint = false;
                 //不可以编辑.
                 this.FrmSln = Template.FrmSln.Default;
-               // this.IsEdit = false;
+                // this.IsEdit = false;
                 return;
                 throw new Exception("@表单关联信息已被删除。");
             }
@@ -640,7 +640,7 @@ namespace BP.WF.Template
                 map.AddTBString(FrmNodeAttr.FrmType, "0", "表单类型", true, true, 1, 20, 20);
 
                 //菜单在本节点的权限控制.
-               // map.AddTBInt(FrmNodeAttr.IsEdit, 1, "是否可以更新", true, false);
+                // map.AddTBInt(FrmNodeAttr.IsEdit, 1, "是否可以更新", true, false);
                 map.AddTBInt(FrmNodeAttr.IsPrint, 0, "是否可以打印", true, false);
                 map.AddTBInt(FrmNodeAttr.IsEnableLoadData, 0, "是否启用装载填充事件", true, false);
                 map.AddTBInt(FrmNodeAttr.IsDefaultOpen, 0, "是否默认打开", true, false);
@@ -660,14 +660,14 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则", true, false);
                 map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, true, 0, 900, 20);
 
-                
+
                 //模版文件，对于office表单有效.
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, true, 0, 500, 20);
 
                 //是否显示
-                map.AddTBInt(FrmNodeAttr.IsEnable,1,"是否显示",true,false);
+                map.AddTBInt(FrmNodeAttr.IsEnable, 1, "是否显示", true, false);
 
-                map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,0,20,20);
+                map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
 
                 this._enMap = map;
                 return this._enMap;
@@ -696,9 +696,15 @@ namespace BP.WF.Template
                 throw new Exception("@流程编号为空");
 
             this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
+
             //获取表单的类型
             MapData mapData = new MapData(this.FK_Frm);
-            this.HisFrmType = mapData.HisFrmType;
+            mapData.No = this.FK_Frm;
+            if (mapData.RetrieveFromDBSources() == 1)
+                this.HisFrmType = mapData.HisFrmType;
+            else
+                this.HisFrmType = FrmType.FoolForm;
+
             return base.beforeUpdateInsertAction();
         }
         #endregion 方法.

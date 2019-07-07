@@ -382,7 +382,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
     var elemHtml = "";
     if (mapAttr.UIContralType == "1") {
         var ses = new Entities("BP.Sys.SysEnums");
-        ses.Retrieve("EnumKey", mapAttr.UIBindKey)
+        ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey")
         var operations = '';
         $.each(ses, function (i, obj) {
             operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";

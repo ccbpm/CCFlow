@@ -280,22 +280,20 @@ namespace BP.WF.HttpHandler
 
             string path = "/DataUser/Siganture/" + no + ".jpg";
             //如果文件存在
-            if (File.Exists(this.context.Server.MapPath(path)))
+
+            if (File.Exists(this.context.Server.MapPath(path))  == false)
             {
                 path = "/DataUser/Siganture/" + no + ".JPG";
-                if (File.Exists(this.context.Server.MapPath(path)))
+                if (File.Exists(this.context.Server.MapPath(path)) == true)
                 {
                     return "";
                 }
 
-                return "";
-            }
-            else
-            {
                 //如果不存在，就返回名称
                 BP.Port.Emp emp = new BP.Port.Emp(no);
                 return emp.Name;
             }
+            return "";
         }
         /// <summary>
         /// 执行的方法.

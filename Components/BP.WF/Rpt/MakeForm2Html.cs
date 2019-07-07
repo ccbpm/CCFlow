@@ -1965,7 +1965,7 @@ namespace BP.WF
                     {
                         docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFree.htm");
                         sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo, nodeID, basePath);
-                        docs = docs.Replace("@Width", (mapData.FrmW.ToString() + 288) + "px");
+                        docs = docs.Replace("@Width", (mapData.FrmW*1.5).ToString() + "px");
                     }
                 }
 

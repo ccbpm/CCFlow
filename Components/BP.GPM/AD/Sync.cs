@@ -68,8 +68,6 @@ namespace BP.GPM.AD
         string msg = "";
         /// <summary>
         /// 功能:
-        /// 创建人:Wilson
-        /// 创建时间:2012-12-15
         /// </summary>
         /// <param name="entryOU"></param>
         public override object Do()
@@ -84,27 +82,9 @@ namespace BP.GPM.AD
             SyncEmps();
 
             //同步岗位.
-            // SyncStatioins();
+             SyncStatioins();
             return "执行成功.";
-
-
-            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Emp");
-            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Station");
-
-
-            //同步数据.
-            // SyncDeptOfRoot(root);
-
-
-
-
-            // 同步岗位》
-
-            SyncStatioins();
-
-            return msg;
         }
-
         /// <summary>
         /// 同步根目录
         /// </summary>

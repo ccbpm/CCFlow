@@ -66,7 +66,7 @@ namespace BP.GPM.AD
 
                 //domain.AuthenticationType = AuthenticationTypes.ReadonlyServer;
 
-               // domain.RefreshCache();
+                // domain.RefreshCache();
                 return domain;
 
             }
@@ -94,7 +94,7 @@ namespace BP.GPM.AD
         #endregion 公共变量.
 
         #region 相关方法.
-         
+
         public static string GetPropertyValue(DirectoryEntry de, string propertyName)
         {
             if (de.Properties.Contains(propertyName))
@@ -132,27 +132,15 @@ namespace BP.GPM.AD
         /// <param name="pass"></param>
         public static bool CheckLogin(string domain, string userNo, string pass)
         {
-            WindowsIdentity tempWindowsIdentity;
-            IntPtr token = IntPtr.Zero;
-            IntPtr tokenDuplicate = IntPtr.Zero;
 
-            if (LogonUser(userNo, domain, pass, LOGON32_LOGON_INTERACTIVE,
-            LOGON32_PROVIDER_DEFAULT, ref token) != 0)
-            {
-                if (DuplicateToken(token, 2, ref tokenDuplicate) != 0)
-                {
-                    tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
-                    impersonationContext = tempWindowsIdentity.Impersonate();
-                    if (impersonationContext != null)
-                        return true;
-                    else
-                        return false;
-                }
-                else
-                    return false;
-            }
-            else
+            DirectoryEntry entry = new DirectoryEntry(BP.GPM.AD.Glo.ADBasePath, userNo, pass);
+            DirectorySearcher search = new DirectorySearcher(entry); //创建DirectoryEntry对象的搜索对象
+            search.Filter = "(SAMAccountName=" + userNo + ")";  //过滤条件为登录帐号＝user
+            SearchResult result = search.FindOne(); //查找第一个
+            if (null == result)   //没找到
                 return false;
+            return true;
+              
         }
         #endregion 登录校验相关.
 

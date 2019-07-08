@@ -795,7 +795,7 @@ namespace BP.Sys
                         if (dt.Rows.Count >= 1)
                         {
                             strs += "'ssss'";
-                            obj.RetrieveIn("EnumKey", strs);
+                            obj.RetrieveInOrderBy("EnumKey", strs, SysEnumAttr.IntKey);
                         }
 
 

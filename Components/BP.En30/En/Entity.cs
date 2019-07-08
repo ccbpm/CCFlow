@@ -5062,6 +5062,27 @@ namespace BP.En
             qo.AddWhere(this.GetNewEntity.PK, " IN ", pks);
             return qo.DoQuery();
         }
+       /// <summary>
+        /// 按照IDs查询并且排序
+        /// 比如: FrmID  IN  '001','002' 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="vals"></param>
+        /// <returns></returns>
+	public int RetrieveInOrderBy(String key, String vals,String orderByKey){
+		QueryObject qo = new QueryObject(this);
+        if (vals.Contains("(") == false)
+            qo.AddWhere(key, " IN ", "(" + vals + ")");
+        else
+            qo.AddWhere(key, " IN ", vals);
+
+        return qo.DoQuery();
+        
+        if(DataType.IsNullOrEmpty(orderByKey) == false)
+        	qo.addOrderBy(orderByKey);
+
+        return qo.DoQuery();
+	}
         /// <summary>
         /// 按照IDs查询
         /// 比如: FrmID  IN  '001','002' 

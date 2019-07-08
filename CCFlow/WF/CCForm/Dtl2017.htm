@@ -441,7 +441,10 @@
                         //Handler 获取外部数据源
                         if (srcType == 5) {
                             var selectStatement = sfTable.SelectStatement;
-                            selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                            if (plant == 'CCFlow')
+                                selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                            else
+                                selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
                             operdata = DBAccess.RunDBSrc(selectStatement, 1);
                         }
                         //JavaScript获取外部数据源
@@ -1699,45 +1702,45 @@
                             popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                         }
                         switch (popWorkModelStr) {
-                            /// <summary>     
-                            /// 自定义URL     
-                            /// </summary>     
-                            //SelfUrl =1,     
+                            /// <summary>       
+                            /// 自定义URL       
+                            /// </summary>       
+                            //SelfUrl =1,       
                             case "1":
                                 icon = "glyphicon glyphicon-th";
                                 break;
-                            /// <summary>     
-                            /// 表格模式     
-                            /// </summary>     
-                            // TableOnly,     
+                            /// <summary>       
+                            /// 表格模式       
+                            /// </summary>       
+                            // TableOnly,       
                             case "2":
                                 icon = "glyphicon glyphicon-list";
                                 break;
-                            /// <summary>     
-                            /// 表格分页模式     
-                            /// </summary>     
-                            //TablePage,     
+                            /// <summary>       
+                            /// 表格分页模式       
+                            /// </summary>       
+                            //TablePage,       
                             case "3":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary>     
-                            /// 分组模式     
-                            /// </summary>     
-                            // Group,     
+                            /// <summary>       
+                            /// 分组模式       
+                            /// </summary>       
+                            // Group,       
                             case "4":
                                 icon = "glyphicon glyphicon-list-alt";
                                 break;
-                            /// <summary>     
-                            /// 树展现模式     
-                            /// </summary>     
-                            // Tree,     
+                            /// <summary>       
+                            /// 树展现模式       
+                            /// </summary>       
+                            // Tree,       
                             case "5":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
-                            /// <summary>     
-                            /// 双实体树     
-                            /// </summary>     
-                            // TreeDouble     
+                            /// <summary>       
+                            /// 双实体树       
+                            /// </summary>       
+                            // TreeDouble       
                             case "6":
                                 icon = "glyphicon glyphicon-tree-deciduous";
                                 break;
@@ -1939,7 +1942,7 @@
                                 mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex + 1, mapExt.Doc.length))
 
                                 for (var m = 0; m < mapExtDocArr1.length; m++) {
-                                    var extDocObj1 = mapExtDocArr1[m].replace('@', '');
+                                    var extDocObj1 = mapExtDocArr1[m].replace('@', '').replace('(', '').replace(')', '');
                                     //将extDocObj1转换成KeyOfEn
                                     var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) {
                                         return val.Name == extDocObj1 || val.KeyOfEn == extDocObj1;
@@ -1950,66 +1953,51 @@
                                     } else {
                                         extDocObj1 = extObjAr[0].KeyOfEn;
                                         $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
-
-                                        if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
-                                            $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
-                                            $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-                                                //替换 
-                                                var mapExt = $(obj.target).data().mapExt;
-                                                var mapExtDoc = mapExt.Doc;
-                                                var evelStr = mapExt.Doc;
-                                                var tmpResult = 1;
-                                                var tr = $(obj.target).parent().parent();
-                                                var attrOfOperEle = $(obj.target).parent().parent().find('[name=TB_' + mapExt.AttrOfOper + "]");
-                                                for (var m = 0; m < workNodeData.Sys_MapAttr.length; m++) {
-                                                    var mapAttr = workNodeData.Sys_MapAttr[m];
-                                                    var hasKeyOfEn = true;
-                                                    while (hasKeyOfEn) {
-                                                        var mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.KeyOfEn);
-                                                        var tranValue = mapAttr.KeyOfEn;
-                                                        if (mapExdDocKeyOfEnIndex == -1) {
-                                                            mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.Name);
-                                                            tranValue = mapAttr.Name;
-                                                        }
-                                                        //判断参数后面是否是一个运算操作符
-                                                        var optionVal = mapExtDoc.substring(mapExdDocKeyOfEnIndex + tranValue.length + 1, mapExdDocKeyOfEnIndex + tranValue.length + 2);
-
-                                                        if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
-                                                            mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val().replace(/,/g,'').replace(/￥/g,''))");
-                                                        } else {
-                                                            hasKeyOfEn = false;
-                                                        }
-                                                    }
+                                        var targetObj = $(tr).find('[name=TB_' + extDocObj1 + ']');
+                                        if (targetObj.length == 0) {
+                                            targetObj = $(tr).find('[name=DDL_' + extDocObj1 + ']');
+                                            if (targetObj.length == 0) {
+                                                targetObj = $(tr).find('[name=RB_' + extDocObj1 + ']')
+                                                if (targetObj.length > 0) {
+                                                    targetObj.data().mapExt = mapExt;
+                                                    targetObj.bind('click', function (obj) {
+                                                        AutoFull(tr, obj, "RB_");
+                                                    });
                                                 }
-
-                                                tmpResult = eval(mapExtDoc);
-
-                                                //修改值
-                                                tmpResult = formatNumber(tmpResult, 2, ',');
-                                                attrOfOperEle.val(tmpResult);
-                                                attrOfOperEle.trigger("change"); // 触发合计计算
-
-
-                                                $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
-                                            });
-
-                                            /**
-                                            * 页面初始化后触第一个计算元素的onblur事件, 让表格行统计生效
-                                            */
-                                            if (m == 0) {	// 每一行第一列触发一次
-                                                //$(tr).find('[name=TB_' + extDocObj1 + ']').trigger("blur");
-                                                /**
-                                                * 该动作与<body onblur="SaveAll(this)">有冲突, 即:
-                                                *   页面初始化InitPage()调用到AfterBindEn_DealMapExt()并运行到这里
-                                                *   当input触发onblur事件后, body的onblur事件就被触发, 并调用SaveAll()方法
-                                                *   SaveAll()方法又调用AjaxServiceGener()方法
-                                                *   AjaxServiceGener()方法提交到后台返回后再次调用了InitPage()方法, 形成死循环
-                                                * 
-                                                * 暂时将SaveAll()禁用
-                                                * 或将blur事件改为onchange事件
-                                                */
+                                            } else {
+                                                targetObj.data().mapExt = mapExt;
+                                                targetObj.bind('change', function (obj) {
+                                                    AutoFull(tr, obj, "DDL_");
+                                                });
                                             }
+
+                                        } else {
+                                            obj.data().mapExt = mapExt;
+                                            obj.bind('blur', function (obj) {
+                                                AutoFull(tr, obj, "TB_");
+                                            });
                                         }
+
+
+
+
+                                        /**
+                                        * 页面初始化后触第一个计算元素的onblur事件, 让表格行统计生效
+                                        */
+                                        if (m == 0) {	// 每一行第一列触发一次
+                                            //$(tr).find('[name=TB_' + extDocObj1 + ']').trigger("blur");
+                                            /**
+                                            * 该动作与<body onblur="SaveAll(this)">有冲突, 即:
+                                            *   页面初始化InitPage()调用到AfterBindEn_DealMapExt()并运行到这里
+                                            *   当input触发onblur事件后, body的onblur事件就被触发, 并调用SaveAll()方法
+                                            *   SaveAll()方法又调用AjaxServiceGener()方法
+                                            *   AjaxServiceGener()方法提交到后台返回后再次调用了InitPage()方法, 形成死循环
+                                            * 
+                                            * 暂时将SaveAll()禁用
+                                            * 或将blur事件改为onchange事件
+                                            */
+                                        }
+
                                     }
                                 }
                             }
@@ -2058,6 +2046,47 @@
                         break;
                 }
             }
+        }
+
+        function AutoFull(tr, obj, dataType) {
+            //替换 
+            var mapExt = $(obj.target).data().mapExt;
+            var mapExtDoc = mapExt.Doc;
+            var evelStr = mapExt.Doc;
+            var tmpResult = 1;
+            var tr = $(obj.target).parent().parent();
+            var attrOfOperEle = $(obj.target).parent().parent().find('[name=TB_' + mapExt.AttrOfOper + "]");
+            for (var m = 0; m < workNodeData.Sys_MapAttr.length; m++) {
+                var mapAttr = workNodeData.Sys_MapAttr[m];
+                var hasKeyOfEn = true;
+                while (hasKeyOfEn) {
+                    var mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.KeyOfEn);
+                    var tranValue = mapAttr.KeyOfEn;
+                    if (mapExdDocKeyOfEnIndex == -1) {
+                        mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.Name);
+                        tranValue = mapAttr.Name;
+                    }
+                    //判断参数后面是否是一个运算操作符
+                    var optionVal = mapExtDoc.substring(mapExdDocKeyOfEnIndex + tranValue.length + 1, mapExdDocKeyOfEnIndex + tranValue.length + 2);
+
+                    if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
+                        mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=" + dataType + mapAttr.KeyOfEn + "]').val().replace(/,/g,'').replace(/￥/g,''))");
+                    } else {
+                        hasKeyOfEn = false;
+                    }
+                }
+            }
+
+            tmpResult = eval(mapExtDoc);
+
+            //修改值
+            tmpResult = formatNumber(tmpResult, 2, ',');
+            attrOfOperEle.val(tmpResult);
+            attrOfOperEle.trigger("change"); // 触发合计计算
+
+
+            $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
+
         }
         //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
         function GepParaByName(name, atPara) {

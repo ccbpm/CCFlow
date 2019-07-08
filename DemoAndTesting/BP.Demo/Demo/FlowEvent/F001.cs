@@ -29,6 +29,27 @@ namespace BP.Demo.FlowEvent
         #endregion 属性.
 
         #region 构造.
+        public override string CreateWorkID()
+        {
+            return base.CreateWorkID();
+
+            ////首先删除数据.
+            //string dtlID = "ND101Dtl1";
+            //DBAccess.RunSQL("DELETE FROM ND101Dtl1 WHERE RefPK='"+this.WorkID+"'");
+            ////创建entity.
+            //GEDtl dtl = new GEDtl("ND101Dtl1");
+
+            ////获得枚举值.
+            //SysEnums ses = new SysEnums("ABC");
+            ////遍历枚举把他们按照行插入到数据库.
+            //foreach (SysEnum item in ses)
+            //{
+            //    //dtl.OID = DBAccess.GenerOID("ND101Dtl1");
+            //    dtl.RefPK = this.WorkID.ToString();
+            //    //dtl.SetValByKey("SSss", "2001-12-01");
+            //    dtl.InsertAsNew();
+            //}
+        }
         /// <summary>
         /// 报销流程事件
         /// </summary>

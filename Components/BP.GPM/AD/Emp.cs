@@ -44,6 +44,10 @@ namespace BP.GPM.AD
         /// 签字类型
         /// </summary>
         public const string SignType = "SignType";
+        /// <summary>
+        /// 部门经理
+        /// </summary>
+        public const string Manager = "Manager";
     }
     /// <summary>
     /// 操作员 的摘要说明。
@@ -253,6 +257,7 @@ namespace BP.GPM.AD
                 #endregion
 
                 #region 字段
+
                 /*关于字段属性的增加 */
                 map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 90);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 130);
@@ -264,6 +269,11 @@ namespace BP.GPM.AD
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
+
+
+                map.AddTBString(EmpAttr.Manager, null, "Manager", true, false, 0, 500, 132, true);
+                map.AddTBString("mobile", null, "mobile", true, false, 0, 500, 132, true);
+
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段

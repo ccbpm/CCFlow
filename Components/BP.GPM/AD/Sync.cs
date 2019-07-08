@@ -169,14 +169,10 @@ namespace BP.GPM.AD
 
                 DirectorySearcher ds = new DirectorySearcher(deptDE);
                 ds.SearchScope = SearchScope.OneLevel; //搜索当前..
-
-                //  ds.Filter = ("(&(objectCategory=person)(objectClass=user))");
                 ds.Filter = "(objectClass=user)";
-                // sss
+
                 SearchResultCollection rss = ds.FindAll();
-
                 DBAccess.RunSQL("DELETE FROM Port_Emp WHERE FK_Dept='" + mydept.No + "'");
-
                 if (rss.Count == 0)
                     continue;
 
@@ -196,6 +192,10 @@ namespace BP.GPM.AD
 
                     emp.No = this.GetValFromDirectoryEntryByKey(entity, "sAMAccountName");
                     emp.Name = this.GetValFromDirectoryEntryByKey(entity, "displayName");
+
+                    emp.SetValByKey("Manager", this.GetValFromDirectoryEntryByKey(entity, "Manager"));
+                    emp.SetValByKey("mobile", this.GetValFromDirectoryEntryByKey(entity, "mobile"));
+
                     if (emp.IsExits == true)
                         continue;
 
@@ -206,7 +206,6 @@ namespace BP.GPM.AD
                     emp.Idx = idxEmp++;
                     emp.Insert();
                 }
-
                 //断开.
                 ds.Dispose();
             }
@@ -243,7 +242,7 @@ namespace BP.GPM.AD
 
             //ds.Filter = "(&(objectClass=group)(cn=" + "YBS" + "))";  //YBS组名
             //ds.Filter = ("(objectCategory=YBS)(objectClass=user)") ;
-            //. Find("ybs", "Group")) 
+            //. Find("ybs", "Group")) ;
 
             DBAccess.RunSQL("DELETE FROM Port_Station ");
             DBAccess.RunSQL("DELETE FROM Port_DeptEmpStation ");

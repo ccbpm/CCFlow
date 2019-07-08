@@ -204,7 +204,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.StackTrace;
+                return "err@" + ex.Message;
             }
         }
         /// <summary>

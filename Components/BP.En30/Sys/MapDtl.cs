@@ -1580,14 +1580,21 @@ namespace BP.Sys
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
                     athDesc.DirectInsert();
+                    //增加分组
+                    GroupField group = new GroupField();
+                    group.Lab = athDesc.Name;
+                    group.FrmID = this.FK_MapData;
+                    group.CtrlType = "Ath";
+                    group.CtrlID = athDesc.MyPK;
+                    group.Idx = 10;
+                    group.Insert();
                 }
             }
             
         }
         protected override bool beforeInsert()
         {
-            this.InitExtMembers();
-
+           
             GroupField gf = new GroupField();
             if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
             {
@@ -1614,6 +1621,8 @@ namespace BP.Sys
         }
         protected override bool beforeUpdateInsertAction()
         {
+            this.InitExtMembers();
+
             BP.Sys.MapData md = new BP.Sys.MapData();
             md.No = this.No;
             if (md.RetrieveFromDBSources() == 0)

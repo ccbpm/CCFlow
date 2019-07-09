@@ -644,13 +644,13 @@ namespace BP.WF
         /// <returns></returns>
         private string ExeReturn5_2()
         {
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.FID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
             string info = "@工作已经成功的退回到（" + ReturnToNode.Name + "）退回给：";
 
             //查询退回到的工作人员列表.
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
                 GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
             string toEmp = "";

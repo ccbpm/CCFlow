@@ -1453,6 +1453,14 @@ namespace BP.WF.Template
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
                     athDesc.DirectInsert();
+                    //增加分组
+                    GroupField group = new GroupField();
+                    group.Lab = athDesc.Name;
+                    group.FrmID = this.FK_MapData;
+                    group.CtrlType = "Ath";
+                    group.CtrlID = athDesc.MyPK;
+                    group.Idx = 10;
+                    group.Insert();
                 }
 
                 //判断是否有隐藏的AthNum 字段
@@ -1493,6 +1501,24 @@ namespace BP.WF.Template
             //判断是否启用多附件
             if (this.IsEnableAthM == true)
             {
+                BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
+                athDesc.MyPK = this.No + "_AthMDtl";
+                if (athDesc.RetrieveFromDBSources() == 0)
+                {
+                    athDesc.FK_MapData = this.No;
+                    athDesc.NoOfObj = "AthMDtl";
+                    athDesc.Name = this.Name;
+                    athDesc.DirectInsert();
+                    //增加分组
+                    GroupField group = new GroupField();
+                    group.Lab = athDesc.Name;
+                    group.FrmID = this.FK_MapData;
+                    group.CtrlType = "Ath";
+                    group.CtrlID = athDesc.MyPK;
+                    group.Idx = 10;
+                    group.Insert();
+                }
+
                 //判断是否有隐藏的AthNum 字段
                 MapAttr attr = new MapAttr();
                 attr.MyPK = this.No + "_AthNum";
@@ -1508,6 +1534,7 @@ namespace BP.WF.Template
                     attr.UIVisible = false;
                     attr.UIIsEnable = false;
                     attr.DirectInsert();
+                   
                 }
             }
 

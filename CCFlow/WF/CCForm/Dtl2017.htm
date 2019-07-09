@@ -1972,8 +1972,8 @@
                                             }
 
                                         } else {
-                                            obj.data().mapExt = mapExt;
-                                            obj.bind('blur', function (obj) {
+                                            targetObj.data().mapExt = mapExt;
+                                            targetObj.bind('blur', function (obj) {
                                                 AutoFull(tr, obj, "TB_");
                                             });
                                         }

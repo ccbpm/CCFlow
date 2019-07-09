@@ -51,10 +51,9 @@
                 return;
 
             //授权的情况下.
-            if (webUser.IsAuthorize == "1") 
-            {
+            if (webUser.IsAuthorize == "1") {
                 window.location.href = "AuthorTodolist.htm";
-            return;
+                return;
             }
 
 
@@ -200,20 +199,18 @@
                     var workID = work.WorkID;
                     var pWorkID = work.PWorkID;
                     var paras = work.AtPara;
+                    if (paras == null)
+                        paras = "";
 
-                    if (paras) {
+                    paras = paras.replace("'", "\\'");
+                    while (true) {
+                        paras = paras.replace('@', '&');
 
-                        paras = paras.replace("'", "\\'");
-
-                        while (true) {
-                            paras = paras.replace('@', '&');
-
-                            if (paras.indexOf('@') < 0) {
-                                break;
-                            }
+                        if (paras.indexOf('@') < 0) {
+                            break;
                         }
-                        paras = "1" + paras;
                     }
+                    paras = "1" + paras;
 
                     num++;
 
@@ -236,7 +233,7 @@
                             url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
                     } else {
                         var batchUrl = './WFRpt.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID + '&WorkID=' + workID + '&FID=' + fid;
-                         url = "<a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a>";
+                        url = "<a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a>";
                     }
 
                     listbox += "<td>" + url + "</td>"; //标题
@@ -293,7 +290,7 @@
             $('#Table1').html(listbox);
             $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
-            if (webUser.IsAuthorize=="0")
+            if (webUser.IsAuthorize == "0")
                 $("#Table2").append(", <a href='AuthorList.htm' >查看授权待办</a>");
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");

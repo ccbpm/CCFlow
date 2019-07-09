@@ -8305,6 +8305,7 @@ namespace BP.WF
             this.rptGe.Copy(this.HisWork);
             this.rptGe.DirectUpdate();
             #endregion 复制主表数据.
+
             #endregion 处理合流节点表单数据
 
             //设置当前子线程已经通过.
@@ -8361,6 +8362,8 @@ namespace BP.WF
             this.HisGenerWorkFlow.FK_Node = nd.NodeID;
             this.HisGenerWorkFlow.NodeName = nd.Name;
 
+            // 产生合流汇总从表数据.
+            this.GenerHieLiuHuiZhongDtlData_2013(nd);
 
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, emps, SendReturnMsgType.SystemMsg);
 

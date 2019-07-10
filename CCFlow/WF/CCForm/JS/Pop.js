@@ -32,7 +32,7 @@ function SelfUrl_Done(mapExt) {
              if (iframe) {
                  var val = iframe.contentWindow.Btn_OK();
                  $("#TB _" + mapExt.AttrOfOper).val(val);
-                 FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                 FullIt(val, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
              }
 
          }, null, function () {

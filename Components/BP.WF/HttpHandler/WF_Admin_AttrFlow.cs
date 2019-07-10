@@ -637,5 +637,120 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 修改node Icon.
+
+        /// <summary>
+        /// 流程时限消息设置
+        /// </summary>
+        /// <returns></returns>
+        public string PushMsgEntity_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //流程上的字段
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
+            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow)+"rpt", "LGType", 0, "MyDataType", 1);
+            ds.Tables.Add(attrs.ToDataTableField("FrmFields"));
+
+            //节点 
+            BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
+            ds.Tables.Add(nds.ToDataTableField("Nodes"));
+
+            //mypk
+            BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
+            msg.MyPK = this.MyPK;
+            msg.RetrieveFromDBSources();
+            ds.Tables.Add(msg.ToDataTableField("PushMsgEntity"));
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+
+        /// <summary>
+        /// 流程时限消息设置
+        /// </summary>
+        /// <returns></returns>
+        public string PushMsg_Save()
+        {
+            BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
+            msg.MyPK = this.MyPK;
+            msg.RetrieveFromDBSources();
+
+            msg.FK_Event = this.FK_Event;  //流程时限规则
+            msg.FK_Flow = this.FK_Flow;
+
+            BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
+
+            #region 求出来选择的节点.
+            string nodesOfSMS = "";
+            string nodesOfEmail = "";
+            foreach (BP.WF.Node mynd in nds)
+            {
+                foreach (string key in HttpContext.Current.Request.Params.AllKeys)
+                {
+                    if (key.Contains("CB_Station_" + mynd.NodeID)
+                        && nodesOfSMS.Contains(mynd.NodeID + "") == false)
+                        nodesOfSMS += mynd.NodeID + ",";
+
+                    if (key.Contains("CB_SMS_" + mynd.NodeID)
+                        && nodesOfSMS.Contains(mynd.NodeID + "") == false)
+                        nodesOfSMS += mynd.NodeID + ",";
+
+                    if (key.Contains("CB_Email_" + mynd.NodeID)
+                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
+                        nodesOfEmail += mynd.NodeID + ",";
+                }
+            }
+
+            //节点.
+            msg.MailNodes = nodesOfEmail;
+            msg.SMSNodes = nodesOfSMS;
+            #endregion 求出来选择的节点.
+
+            #region 短信保存.
+            //短消息发送设备
+            msg.SMSPushModel = this.GetRequestVal("PushModel");
+
+            //短信推送方式。
+            msg.SMSPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_SMS"].ToString().Replace("RB_SMS_", ""));
+
+            //短信手机字段.
+            msg.SMSField = HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
+            //替换变量
+            string smsstr = HttpContext.Current.Request["TB_SMS"].ToString();
+            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
+            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
+
+            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+            // smsstr = smsstr.Replace("@RDT",);
+            //短信内容模版.
+            msg.SMSDoc_Real = smsstr;
+            #endregion 短信保存.
+
+            #region 邮件保存.
+            //邮件.
+            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
+
+            //邮件标题与内容.
+            msg.MailTitle_Real = HttpContext.Current.Request["TB_Email_Title"].ToString();
+            msg.MailDoc_Real = HttpContext.Current.Request["TB_Email_Doc"].ToString();
+
+            //邮件地址.
+            msg.MailAddress = HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
+
+            #endregion 邮件保存.
+
+            //保存.
+            if (DataType.IsNullOrEmpty(msg.MyPK) == true)
+            {
+                msg.MyPK = BP.DA.DBAccess.GenerGUID();
+                msg.Insert();
+            }
+            else
+            {
+                msg.Update();
+            }
+
+            return "保存成功..";
+        }
     }
 }

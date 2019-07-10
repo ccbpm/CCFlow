@@ -190,6 +190,24 @@ namespace BP.Sys
         /// 节点打开后.
         /// </summary>
         public const string WhenReadWork = "WhenReadWork";
+        /// <summary>
+        /// 节点预警
+        /// </summary>
+        public const string NodeWarning = "NodeWarning";
+        /// <summary>
+        /// 节点逾期
+        /// </summary>
+        public const string NodeOverDue = "NodeOverDue";
+        /// <summary>
+        /// 流程预警
+        /// </summary>
+        public const string FlowWarning = "FlowWarning";
+        /// <summary>
+        /// 流程逾期
+        /// </summary>
+        public const string FlowOverDue = "FlowOverDue";
+
+
         #endregion 节点事件
 
         #region 流程事件

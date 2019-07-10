@@ -433,14 +433,9 @@ namespace BP.WF
             this.HisWorkerLists.Clear();
 
             #region 限期时间  town.HisNode.TSpan-1
-            // 2008-01-22 之前的东西。
-            //int i = town.HisNode.TSpan;
-            //dtOfShould = DataType.AddDays(dtOfShould, i);
-            //if (town.HisNode.WarningHour > 0)
-            //    dtOfWarning = DataType.AddDays(dtOfWarning, i - town.HisNode.WarningHour);
-            // edit at 2008-01-22 , 处理预警日期的问题。
 
             DateTime dtOfShould = DateTime.Now;
+           
             if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByFlow)
             {
                 /*如果整体流程是按流程设置计算。*/
@@ -454,8 +449,14 @@ namespace BP.WF
                 {
                     int day = 0;
                     int hh = 0;
-                    //增加天数. 考虑到了节假日.                
-                    dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
+                    //增加天数. 考虑到了节假日. 
+                    //判断是修改了节点期限的天数
+                    int timeLimit = this.town.HisNode.TimeLimit;
+                    int paraLimit = this._HisGenerWorkFlow.GetParaInt("CH"+this.town.HisNode.NodeID);
+                    if (paraLimit != 0)
+                        timeLimit = paraLimit;
+
+                    dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, timeLimit,
                         this.town.HisNode.TimeLimitHH, this.town.HisNode.TimeLimitMM, this.town.HisNode.TWay);
                 }
             }
@@ -484,6 +485,8 @@ namespace BP.WF
                 default:
                     this.HisGenerWorkFlow.FK_Node = town.HisNode.NodeID;
                     this.HisGenerWorkFlow.SDTOfNode = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                    //this.HisGenerWorkFlow.SDTOfFlow = dtOfFlow.ToString(DataType.SysDataTimeFormat);
+                    //this.HisGenerWorkFlow.SDTOfFlowWarning = dtOfFlowWarning.ToString(DataType.SysDataTimeFormat);
                     this.HisGenerWorkFlow.TodoEmpsNum = dt.Rows.Count;
                     break;
             }
@@ -2289,7 +2292,7 @@ namespace BP.WF
 
             // 下一个节点应完成时间。
             if (this.HisWork.EnMap.Attrs.Contains(WorkSysFieldAttr.SysSDTOfNode))
-                this.HisGenerWorkFlow.SDTOfFlow = this.HisWork.GetValStrByKey(WorkSysFieldAttr.SysSDTOfNode);
+                this.HisGenerWorkFlow.SDTOfNode = this.HisWork.GetValStrByKey(WorkSysFieldAttr.SysSDTOfNode);
 
             //执行更新。
             if (this.IsStopFlow == false)
@@ -4412,7 +4415,11 @@ namespace BP.WF
         /// </summary>
         public SendReturnObjs NodeSend()
         {
-            return NodeSend(null, null);
+            SendReturnObjs sendObj = NodeSend(null, null);
+
+            
+
+            return sendObj;
         }
 
         /// <summary>
@@ -6786,6 +6793,8 @@ namespace BP.WF
                 }
                 #endregion
 
+
+
                 #region 设置流程的标记.
                 if (this.HisNode.IsStartNode)
                 {
@@ -7648,22 +7657,25 @@ namespace BP.WF
             /* 如果两个表一致就返回..*/
             // 把当前的工作人员增加里面去.
             string str = rptGe.GetValStrByKey(GERptAttr.FlowEmps);
+            if(DataType.IsNullOrEmpty(str) == true)
+                str ="@";
+
             if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
             {
-                if (str.Contains("@" + this.Execer) == false)
-                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + "@" + this.Execer);
+                if (str.Contains("@" + this.Execer+"@") == false)
+                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + this.Execer+"@");
             }
 
             if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
             {
-                if (str.Contains("@" + WebUser.Name) == false)
-                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + "@" + this.ExecerName);
+                if (str.Contains("@" + WebUser.Name + "@") == false)
+                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + this.ExecerName + "@");
             }
 
             if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
             {
                 if (str.Contains("@" + this.Execer + "," + this.ExecerName) == false)
-                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + "@" + this.Execer + "," + this.ExecerName);
+                    rptGe.SetValByKey(GERptAttr.FlowEmps, str  + this.Execer + "," + this.ExecerName + "@");
             }
 
             rptGe.FlowEnder = this.Execer;
@@ -8054,7 +8066,7 @@ namespace BP.WF
             if (emps.Contains("@" + WebUser.No + "@") == false)
             {
                 emps = emps + WebUser.No + "@";
-                flowEmps = flowEmps + WebUser.Name + "," + WebUser.No + "@";
+                flowEmps = flowEmps + WebUser.No + "," + WebUser.Name + "@";
             }
             // 给他们赋值.
             this.rptGe.FlowEmps = flowEmps;

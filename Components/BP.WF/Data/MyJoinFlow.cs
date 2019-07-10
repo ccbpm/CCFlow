@@ -728,10 +728,6 @@ namespace BP.WF.Data
                 map.AddTBString(MyFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 50);
                 map.AddTBString(MyFlowAttr.StarterName, null, "发起人", true, false, 0, 30, 40);
 
-                //map.AddDDLEntities(MyFlowAttr.FK_Dept, null, "发起人部门", new BP.Port.Depts(), false);
-                //map.AddTBString(MyFlowAttr.Starter, null, "发起人编号", true, false, 0, 30, 10);
-                //map.AddTBString(MyFlowAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
-                //map.AddTBString(MyFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
 
                 map.AddTBDateTime(MyFlowAttr.RDT, "发起日期", true, true);
                 map.AddDDLSysEnum(MyFlowAttr.WFSta, 0, "状态", true, false, MyFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
@@ -741,6 +737,7 @@ namespace BP.WF.Data
 
                 map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 10, true);
                 map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfNode, "节点应完成时间", true, true);
 
                 //隐藏字段.
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
@@ -748,10 +745,20 @@ namespace BP.WF.Data
 
                 map.AddTBMyNum();
 
+                map.DTSearchKey = MyFlowAttr.RDT;
+                map.DTSearchLable = "发起日期";
+                map.DTSearchWay = DTSearchWay.ByDate;
+
+                map.DTSearchKey = GenerWorkFlowAttr.SDTOfNode;
+                map.DTSearchLable = "节点应完成时间";
+                map.DTSearchWay = DTSearchWay.ByDate;
+             
+
              //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyFlowAttr.WFSta);
                 map.AddSearchAttr(MyFlowAttr.TSpan);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
+                //map.IsShowSearchKey = false;
 
                 //增加隐藏的查询条件. 我参与的流程.
                 AttrOfSearch search = new AttrOfSearch(MyFlowAttr.Emps, "人员",

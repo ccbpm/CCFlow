@@ -175,6 +175,7 @@ namespace BP.WF.HttpHandler
             #region 求出来选择的节点.
             string nodesOfSMS = "";
             string nodesOfEmail = "";
+
             foreach (BP.WF.Node mynd in nds)
             {
                 foreach (string key in HttpContext.Current.Request.Params.AllKeys)
@@ -189,6 +190,8 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            
+
             //节点.
             msg.MailNodes = nodesOfEmail;
             msg.SMSNodes = nodesOfSMS;
@@ -197,6 +200,9 @@ namespace BP.WF.HttpHandler
             #region 短信保存.
             //短信推送方式。
             msg.SMSPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_SMS"].ToString().Replace("RB_SMS_", ""));
+
+            //短消息发送设备
+            msg.SMSPushModel = this.GetRequestVal("PushModel");
 
             //短信手机字段.
             msg.SMSField = HttpContext.Current.Request["DDL_SMS_Fields"].ToString();

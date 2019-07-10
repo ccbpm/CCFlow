@@ -17,6 +17,10 @@ namespace BP.WF.Template
         /// 前置导航的父子流程关系
         /// </summary>
         public const string ParentSubFlowGuide = "ParentSubFlowGuide";
+        /// <summary>
+        /// 流程时限设置
+        /// </summary>
+        public const string DeadLineRole = "DeadLineRole";
     }
     /// <summary>
     /// 配件属性

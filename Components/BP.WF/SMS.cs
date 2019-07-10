@@ -575,8 +575,6 @@ namespace BP.WF
                 if (this.HisEmailSta == MsgSta.UnRun)
                 {
                     /*发送邮件*/
-                    //soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                    //soap.SendToEmail(this.MyPK, WebUser.No, this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail);
                     if (DataType.IsNullOrEmpty(this.Email) == true)
                         return;
 
@@ -606,30 +604,38 @@ namespace BP.WF
                 if (this.HisMobileSta == MsgSta.UnRun)
                 {
                     string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara + "@Sender=" + this.Sender + "@SenderName=" + BP.Web.WebUser.Name;
-                    switch (BP.WF.Glo.ShortMessageWriteTo)
-                    {
-                        case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
-                            break;
-                        case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
-                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                    string pushModel = this.GetParaString("PushModel");
 
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
-                            //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, "17699430990", this.MobileInfo, tag, this.Title, this.OpenURL);
-                            break;
-                        case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
-                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
-                            break;
-                        case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信. 3
-                            //写入微信.
-                            BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
-                            break;
-                        case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
-                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo, this.MobileInfo, tag);
-                            break;
-                        default:
-                            break;
+                    if (DataType.IsNullOrEmpty(pushModel) == true)
+                        pushModel = BP.WF.Glo.ShortMessageWriteTo.ToString();
+                    string [] pushModels = pushModel.Split(',');
+                    foreach (string model in pushModels)
+                    {
+
+                        switch ((ShortMessageWriteTo)Int32.Parse(model))
+                        {
+                            case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
+                                break;
+                            case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
+                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+
+                                soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
+                                break;
+                            case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
+                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                                soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                                break;
+                            case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信. 3
+                                //写入微信.
+                                BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
+                                break;
+                            case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
+                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                                soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo, this.MobileInfo, tag);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }

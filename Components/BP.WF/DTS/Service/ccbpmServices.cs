@@ -80,11 +80,62 @@ namespace BP.WF.DTS
             //特殊处理天津的需求.
             if (SystemConfig.CustomerNo == "")
                 DoTianJinSpecFunc();
-
-
-            #region 找到要逾期的数据.
-            DataTable generTab = null;
+            # region  流程逾期
+            //判断是否有流程逾期的消息设置
+            DataTable dt = null;
             string sql = "SELECT a.FK_Flow,a.WorkID,a.Title,a.FK_Node,a.SDTOfNode,a.Starter,a.TodoEmps ";
+            sql += "FROM WF_GenerWorkFlow a, WF_Node b";
+            sql += " WHERE a.SDTOfFlow<='" + DataType.CurrentDataTime + "' ";
+            sql += " AND WFState=2 and b.OutTimeDeal!=0";
+            sql += " AND a.FK_Node=b.NodeID";
+            dt = DBAccess.RunSQLReturnTable(sql);
+            // 遍历循环,逾期表进行处理.
+            foreach(DataRow dr in dt.Rows){
+                string fk_flow = dr["FK_Flow"] + "";
+                int fk_node = int.Parse(dr["FK_Node"] + "");
+                long workid = long.Parse(dr["WorkID"] + "");
+                string title = dr["Title"] + "";
+                //判断流程是否设置逾期消息
+                PushMsg pushMsg = new PushMsg();
+                int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListOfNode.FlowOverDue);
+                if (count != 0)
+                {
+                    Node node = new Node(fk_node);
+                    pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                }
+                continue;
+            }
+            #endregion 流程逾期
+
+            # region  流程预警 
+            sql = "SELECT a.FK_Flow,a.WorkID,a.Title,a.FK_Node,a.SDTOfNode,a.Starter,a.TodoEmps ";
+            sql += "FROM WF_GenerWorkFlow a, WF_Node b";
+            sql += " WHERE a.SDTOfFlowWarning<='" + DataType.CurrentDataTime + "' ";
+            sql += " AND WFState=2 and b.OutTimeDeal!=0";
+            sql += " AND a.FK_Node=b.NodeID";
+            dt = DBAccess.RunSQLReturnTable(sql);
+            // 遍历循环,预警表进行处理.
+            foreach (DataRow dr in dt.Rows)
+            {
+                string fk_flow = dr["FK_Flow"] + "";
+                int fk_node = int.Parse(dr["FK_Node"] + "");
+                long workid = long.Parse(dr["WorkID"] + "");
+                string title = dr["Title"] + "";
+                //判断流程是否设置逾期消息
+                PushMsg pushMsg = new PushMsg();
+                int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListOfNode.FlowWarning);
+                if (count != 0)
+                {
+                    Node node = new Node(fk_node);
+                    pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                }
+                continue;
+            }
+            # endregion  流程预警
+
+            #region 找到要节点逾期的数据.
+            DataTable generTab = null;
+            sql = "SELECT a.FK_Flow,a.WorkID,a.Title,a.FK_Node,a.SDTOfNode,a.Starter,a.TodoEmps ";
             sql += "FROM WF_GenerWorkFlow a, WF_Node b";
             sql += " WHERE a.SDTOfNode<='" + DataType.CurrentDataTime + "' ";
             sql += " AND WFState=2 and b.OutTimeDeal!=0";
@@ -129,6 +180,14 @@ namespace BP.WF.DTS
                     Node node = new Node(fk_node);
                     if (node.IsStartNode)
                         continue;
+                    #region 启动逾期消息设置
+                    PushMsg pushMsg = new PushMsg();
+                    int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.NodeOverDue);
+                    if (count != 0)
+                    {
+                        pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                    }
+                    #endregion 启动逾期消息设置
 
                     //获得该节点的处理内容.
                     string doOutTime = node.GetValStrByKey(NodeAttr.DoOutTime);
@@ -139,9 +198,7 @@ namespace BP.WF.DTS
                         case OutTimeDeal.AutoJumpToSpecNode: //跳转到指定的节点.
                             try
                             {
-                                //if (doOutTime.Contains(",") == false)
-                                //    throw new Exception("@系统设置错误，不符合设置规范,格式为: NodeID,EmpNo  现在设置的为:"+doOutTime);
-
+                               
                                 int jumpNode = int.Parse(doOutTime);
                                 Node jumpToNode = new Node(jumpNode);
 
@@ -152,7 +209,6 @@ namespace BP.WF.DTS
                                 //执行发送.
                                 info = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, jumpToNode.NodeID, null).ToMsgOfText();
 
-                                // info = BP.WF.Dev2Interface.Flow_Schedule(workid, jumpToNode.NodeID, emp.No);
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动跳转'," + info;
 

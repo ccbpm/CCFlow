@@ -432,11 +432,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 考核 是否可用
         /// </summary>
-        public bool CHEnable
+        public int CHRole
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.CHEnable);
+                return this.GetValIntByKey(BtnAttr.CHRole);
             }
         }
         /// <summary>

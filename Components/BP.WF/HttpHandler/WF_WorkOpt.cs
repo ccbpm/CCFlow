@@ -49,9 +49,10 @@ namespace BP.WF.HttpHandler
         {
             string sourceType = this.GetRequestVal("SourceType");
             string FK_MapData = "";
+            Node nd = null;
             if (this.FK_Node != 0 && this.FK_Node != 9999)
             {
-                Node nd = new Node(this.FK_Node);
+                nd = new Node(this.FK_Node);
 
                 if (nd.HisFormType == NodeFormType.SheetTree)
                 {
@@ -91,6 +92,9 @@ namespace BP.WF.HttpHandler
 
                 //单据的打印
                 if (DataType.IsNullOrEmpty(sourceType) == false && sourceType.Equals("Bill"))
+                    return PrintDoc_FormDoneIt(null, this.WorkID, this.FID, FK_MapData, templete);
+
+                if (nd!=null && nd.HisFormType == NodeFormType.RefOneFrmTree)
                     return PrintDoc_FormDoneIt(null, this.WorkID, this.FID, FK_MapData, templete);
 
                 return PrintDoc_DoneIt(templete.No);
@@ -3315,6 +3319,152 @@ namespace BP.WF.HttpHandler
         }
         #endregion 自定义.
 
+        #region 时限初始化数据
+        public string CH_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //获取处理信息的列表
+            GenerWorkerLists gwls = new GenerWorkerLists();
+            gwls.Retrieve(GenerWorkerListAttr.FK_Flow, this.FK_Flow,GenerWorkerListAttr.WorkID,this.WorkID, GenerWorkerListAttr.RDT);
+            DataTable dt = gwls.ToDataTableField("WF_GenerWorkerList");
+            ds.Tables.Add(dt);
+
+            //获取流程节点信息的列表
+            Nodes nds = new Nodes(this.FK_Flow);
+            dt = nds.ToDataTableField("WF_Node");
+            ds.Tables.Add(dt);
+
+            //获取当前节点信息
+            Node nd = new Node(this.FK_Node);
+            ds.Tables.Add(nd.ToDataTableField("WF_CurrNode"));
+
+            //获取流程信息
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
+
+            #region 获取剩余天数
+            Part part = new Part();
+            part.MyPK = nd.FK_Flow + "_0_DeadLineRole";
+            int count = part.RetrieveFromDBSources();
+            int day = 0; //含假期的天数
+            DateTime dateT = DateTime.Now;
+            if (count > 0)
+            {
+                //判断是否包含假期
+                if (int.Parse(part.Tag4) == 0)
+                {
+                    string holidays = BP.Sys.GloVar.Holidays;
+                    while (true)
+                    {
+                        if (dateT.CompareTo(DataType.ParseSysDate2DateTime(gwf.SDTOfFlow))>= 0)
+                            break;
+
+                        if (holidays.Contains(dateT.ToString("MM-dd")))
+                        {
+                            dateT = dateT.AddDays(1);
+                            day++;
+                            continue;
+                        }
+                        dateT = dateT.AddDays(1);
+                    }
+
+                }
+
+            }
+            string spanTime = GetSpanTime(DateTime.Now,DataType.ParseSysDate2DateTime(gwf.SDTOfFlow), day);
+            dt = new DataTable();
+            dt.TableName = "SpanTime";
+            dt.Columns.Add("SpanTime");
+            DataRow dr = dt.NewRow();
+            dr["SpanTime"] = spanTime;
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+            #endregion 获取剩余天数
+           
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 时限初始化数据
+
+        #region 节点时限重新设置
+        public string CH_Save()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            //获取流程应完成时间
+            string sdtOfFow = this.GetRequestVal("GWF");
+            if (DataType.IsNullOrEmpty(sdtOfFow) == false && gwf.SDTOfFlow != sdtOfFow)
+            {
+                //修改预警时间
+                float Minutes=0;
+                Part part = new Part();
+                part.MyPK = this.FK_Flow+ "_0_DeadLineRole";
+                int count = part.RetrieveFromDBSources();
+                if (count != 0)
+                {
+                    int tag1 = int.Parse(part.Tag1);
+                    int tag2 = int.Parse(part.Tag2);
+                    int tag7 = int.Parse(part.Tag7);
+                    switch (tag7)
+                    {
+                        case 0: tag7 = 12; break;
+                        case 1: tag7 = 24; break;
+                        case 2: tag7 = 48; break;
+                        case 3: tag7 = 72; break;
+                        default: break;
+                    }
+                    var span = DataType.ParseSysDate2DateTime(sdtOfFow) - DateTime.Now;
+                    int days = span.Days-1;
+                    int hours = span.Hours;
+                    int minutes = span.Minutes;
+                    DateTime dtOfFlowWarning = Glo.AddDayHoursSpan(DateTime.Now, (days * 24 + hours - tag7) / 24, (days * 24 + hours - tag7) % 24, 0, (TWay)int.Parse(part.Tag4));
+                    gwf.SDTOfFlowWarning = dtOfFlowWarning.ToString(DataType.SysDataTimeFormat);
+                }
+                //修改预警
+                gwf.SDTOfFlow = sdtOfFow;
+                
+            }
+            //获取节点的时限设置
+            Nodes nds = new Nodes(this.FK_Flow);
+            foreach (Node nd in nds)
+            {
+                string ndCH  = this.GetRequestVal("CH_"+nd.NodeID);
+                if (DataType.IsNullOrEmpty(ndCH) == false
+                    && nd.TimeLimit != Int32.Parse(ndCH))
+                    //保存时限设置
+                    gwf.SetPara("CH" + nd.NodeID, ndCH);
+
+            }
+            gwf.Update();
+            return "保存成功";
+        }
+        #endregion 节点时限重新设置
+
+        private static string GetSpanTime(DateTime t1, DateTime t2,int day)
+        {
+            var span = t2 - t1;
+            var days = span.Days;
+            var hours = span.Hours;
+            var minutes = span.Minutes;
+
+            if (days == 0 && hours == 0 && minutes == 0)
+                minutes = span.Seconds > 0 ? 1 : 0;
+
+            var spanStr = string.Empty;
+
+            if (days > 0)
+                spanStr += (days-day)+ "天";
+
+            if (hours > 0)
+                spanStr += hours + "时";
+
+            if (minutes > 0)
+                spanStr += minutes + "分";
+
+            if (spanStr.Length == 0)
+                spanStr = "0分";
+
+            return spanStr;
+        }
 
     }
 }

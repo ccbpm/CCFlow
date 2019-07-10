@@ -582,8 +582,8 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.
-                //map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                //map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
+                map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true,BtnAttr.CHRole,@"0=禁用@1=启用@2=只读");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
@@ -604,8 +604,6 @@ namespace BP.WF.Template
                 // 批量审核
                 map.AddTBString(BtnAttr.BatchLab, "批量审核", "批量审核标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
-
-
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
@@ -770,17 +768,9 @@ namespace BP.WF.Template
                 #endregion 表单设置.
 
                 #region 考核属性.
-                map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
-                //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
-                map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
-
+               
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
-                map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
-
-                map.AddTBFloat(NodeAttr.WarningDay, 1, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-                //  map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
-                //  map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
-
+                map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.WAlertWay, 0, "预警提醒方式", false, false); //"限期(天)"
 
@@ -788,7 +778,7 @@ namespace BP.WF.Template
                 map.AddTBInt(NodeAttr.CHWay, 0, "考核方式", false, false); //"限期(天)"
 
                 //考核相关.
-                map.AddTBInt(NodeAttr.IsEval, 0, "是否工作质量考核", true, true);
+                map.AddTBInt(NodeAttr.IsEval, 0, "是否工作质量考核", false, false);
                 map.AddTBInt(NodeAttr.OutTimeDeal, 0, "超时处理方式", false, false);
 
                 #endregion 考核属性.

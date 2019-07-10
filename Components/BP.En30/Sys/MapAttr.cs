@@ -1150,8 +1150,8 @@ namespace BP.Sys
         {
             get
             {
-                if (this.UIIsEnable)
-                    return SignType.None;
+                //if (this.UIIsEnable)
+                //    return SignType.None;
                 return (SignType)this.GetValIntByKey(MapAttrAttr.IsSigan);
             }
             set

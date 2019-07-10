@@ -66,7 +66,7 @@ namespace BP.GPM
         {
             get
             {
-                return "<a href='/WF/Todolist.htm' target=_self >更多(" + BP.WF.Dev2Interface.Todolist_EmpWorks + ")</a>";
+                return "<a href='/WF/Todolist.htm' target=_self >更多</a>";
             }
         }
         /// <summary>

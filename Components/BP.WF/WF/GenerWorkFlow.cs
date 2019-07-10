@@ -194,6 +194,10 @@ namespace BP.WF
         /// </summary>
         public const string SDTOfFlow = "SDTOfFlow";
         /// <summary>
+        /// 流程预警时间
+        /// </summary>
+        public const string SDTOfFlowWarning = "SDTOfFlowWarning";
+        /// <summary>
         /// 节点应完成时间
         /// </summary>
         public const string SDTOfNode = "SDTOfNode";
@@ -638,6 +642,20 @@ namespace BP.WF
             set
             {
                 SetValByKey(GenerWorkFlowAttr.SDTOfFlow, value);
+            }
+        }
+        /// <summary>
+        /// 流程预警时间时间
+        /// </summary>
+        public string SDTOfFlowWarning
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.SDTOfFlowWarning);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.SDTOfFlowWarning, value);
             }
         }
 		/// <summary>
@@ -1220,6 +1238,7 @@ namespace BP.WF
 
                 map.AddTBDateTime(GenerWorkFlowAttr.SDTOfNode, "节点应完成时间", true, true);
                 map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow, "流程应完成时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, "流程预警时间", true, true);
 
                 //父子流程信息.
                 map.AddTBString(GenerWorkFlowAttr.PFlowNo, null, "父流程编号", true, false, 0, 3, 10);

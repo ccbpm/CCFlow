@@ -161,7 +161,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppClass.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />
@@ -393,6 +392,7 @@
     <Compile Include="WeiXin\WeiXin.cs" />
     <Compile Include="WeiXin\WeiXinMessage.cs" />
     <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
+    <Compile Include="WF\AppClass.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

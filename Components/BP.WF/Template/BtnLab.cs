@@ -547,11 +547,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 考核 是否可用
         /// </summary>
-        public bool CHEnable
+        public int CHRole
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.CHEnable);
+                return this.GetValIntByKey(BtnAttr.CHRole);
             }
         }
         /// <summary>
@@ -1196,7 +1196,7 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true, BtnAttr.CHRole, @"0=禁用@1=启用@2=只读");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);

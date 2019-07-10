@@ -1073,7 +1073,7 @@ namespace BP.WF.HttpHandler
                 //    toolbar += "<input type=button name='SubFlow'  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                 //}
 
-                if (btnLab.CHEnable == true)
+                if (btnLab.CHRole !=0)
                 {
                     /* 节点时限设置 */
                     string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -1425,7 +1425,7 @@ namespace BP.WF.HttpHandler
                 //    toolbar += "<a data-role='button' type=button name='SubFlow'  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" ></a>";
                 //}
 
-                if (btnLab.CHEnable == true)
+                if (btnLab.CHRole !=0)
                 {
                     /* 节点时限设置 */
                     string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

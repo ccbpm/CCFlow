@@ -113,6 +113,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string SMSPushWay = "SMSPushWay";
         /// <summary>
+        /// 短消息发送设置
+        /// </summary>
+        public const string SMSPushModel = "SMSPushModel";
+        /// <summary>
         /// 邮件字段
         /// </summary>
         public const string MailAddress = "MailAddress";
@@ -460,6 +464,17 @@ namespace BP.WF.Template
                 this.SetValByKey(PushMsgAttr.SMSNodes, value);
             }
         }
+        public string SMSPushModel
+        {
+            get
+            {
+                return this.GetValStringByKey(PushMsgAttr.SMSPushModel);
+            }
+            set
+            {
+                this.SetValByKey(PushMsgAttr.SMSPushModel, value);
+            }
+        }
         /// <summary>
         /// 短信提醒方式
         /// </summary>
@@ -615,7 +630,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(PushMsgAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
                 map.AddTBInt(PushMsgAttr.FK_Node, 0, "节点", true, false);
-                map.AddTBString(PushMsgAttr.FK_Event, null, "事件类型", true, false, 0, 15, 10);
+                map.AddTBString(PushMsgAttr.FK_Event, null, "事件类型", true, false, 0, 20, 10);
 
                 #region 将要删除.
                 map.AddDDLSysEnum(PushMsgAttr.PushWay, 0, "推送方式", true, false, PushMsgAttr.PushWay,
@@ -625,12 +640,15 @@ namespace BP.WF.Template
                 map.AddTBString(PushMsgAttr.Tag, null, "Tag", true, false, 0, 500, 10);
                 #endregion 将要删除.
 
-                #region 短信.
-                map.AddTBInt(PushMsgAttr.SMSPushWay, 0, "短信发送方式", true, true);
-                map.AddTBString(PushMsgAttr.SMSField, null, "短信字段", true, false, 0, 100, 10);
-                map.AddTBStringDoc(PushMsgAttr.SMSDoc, null, "短信内容模版", true, false, true);
+                #region 短消息.
+                map.AddTBInt(PushMsgAttr.SMSPushWay, 0, "短消息发送方式", true, true);
+                map.AddTBString(PushMsgAttr.SMSField, null, "短消息字段", true, false, 0, 100, 10);
+                map.AddTBStringDoc(PushMsgAttr.SMSDoc, null, "短消息内容模版", true, false, true);
                 map.AddTBString(PushMsgAttr.SMSNodes, null, "SMS节点s", true, false, 0, 100, 10);
-                #endregion 短信.
+
+                //@0=站内消息@1=短信@2=钉钉@3=微信@4=即时通
+                map.AddTBString(PushMsgAttr.SMSPushModel, null, "短消息发送设置", true, false, 0, 10, 10);
+                #endregion 短消息.
 
                 #region 邮件.
                 map.AddTBInt(PushMsgAttr.MailPushWay, 0, "邮件发送方式", true, true);
@@ -833,7 +851,8 @@ namespace BP.WF.Template
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
             #region WorkArrive-工作到达. - 邮件处理.
-            if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+            if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
+                || this.FK_Event == BP.Sys.EventListOfNode.NodeWarning || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
             {
                 if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
                 {
@@ -934,8 +953,10 @@ namespace BP.WF.Template
 
 
 
-            #region SendSuccess - 流程结束. - 邮件处理.
-            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter)
+            #region SendSuccess - 流程结束/预警/逾期. - 邮件处理.
+            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter
+                || this.FK_Event == BP.Sys.EventListOfNode.FlowWarning
+                || this.FK_Event == BP.Sys.EventListOfNode.FlowOverDue)
             {
                 /*发送成功事件.*/
                 if (this.MailPushWay == 1)
@@ -993,7 +1014,7 @@ namespace BP.WF.Template
         /// <param name="objs"></param>
         /// <param name="r">处理好的变量集合</param>
         /// <returns></returns>
-        private string SendShortMessageToSpecNodes(string title, string openWorkURl, Entity en, Node currNode, Int64 workid, SendReturnObjs objs, Row r, string SendToEmpIDs)
+        private string SendShortMessageToSpecNodes(string title, string openWorkURL, Entity en, Node currNode, Int64 workid, SendReturnObjs objs, Row r, string SendToEmpIDs)
         {
             if (this.SMSPushWay == 0)
                 return "";
@@ -1004,7 +1025,7 @@ namespace BP.WF.Template
             #region  生成短信内容
             smsDocTmp = this.SMSDoc.Clone() as string;
             smsDocTmp = smsDocTmp.Replace("{Title}", title);
-            smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURl);
+            smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURL);
             smsDocTmp = smsDocTmp.Replace("@WebUser.No", WebUser.No);
             smsDocTmp = smsDocTmp.Replace("@WebUser.Name", WebUser.Name);
             smsDocTmp = smsDocTmp.Replace("@WorkID", en.PKVal.ToString());
@@ -1070,12 +1091,12 @@ namespace BP.WF.Template
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                         string mailDocReal = smsDocTmp.Clone() as string;
                         mailDocReal = mailDocReal.Replace("{EmpStr}", empName);
-                        openWorkURl = openWorkURl.Replace("{EmpStr}", empName);
+                        openWorkURL = openWorkURL.Replace("{EmpStr}", empName);
 
                         string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
 
                         //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, WebUser.No, null, empNo, paras, title, openWorkURl);
+                        BP.WF.Dev2Interface.Port_SendSMS(tel, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, WebUser.No, null, empNo, paras, title, openWorkURL, this.SMSPushModel);
 
                         //处理短消息.
                         toEmpIDs += empName + ",";
@@ -1088,7 +1109,9 @@ namespace BP.WF.Template
             //求发送给的人员ID.
             #region WorkArrive - 工作到达事件.
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
-                || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+                || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
+                || this.FK_Event == BP.Sys.EventListOfNode.NodeWarning 
+                || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
             {
                 if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
                 {
@@ -1120,13 +1143,13 @@ namespace BP.WF.Template
 
                             string smsDocTmpReal = smsDocTmp.Clone() as string;
                             smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", emp);
-                            openWorkURl = openWorkURl.Replace("{EmpStr}", emp);
+                            openWorkURL = openWorkURL.Replace("{EmpStr}", emp);
                             BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
 
                             string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
                             //发送短信.
-                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null, title, openWorkURl);
+                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null, title, openWorkURL, this.SMSPushModel);
                         }
                         //return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
                         return "@已向:{" + toEmpIDs + "}发送提醒消息.";
@@ -1140,7 +1163,7 @@ namespace BP.WF.Template
 
                     //发送短信.
                     string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
-                    BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURl);
+                    BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
                     return "@已向:{" + tel + "}发送提醒消息.";
                     //  return "@已向:{" + tel + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
 
@@ -1164,28 +1187,31 @@ namespace BP.WF.Template
 
                     if (DataType.IsNullOrEmpty(toEmpIDs) == false)
                     {
-                        string[] emps = toEmpIDs.Split(',');
+                        #warning 人员是（zhangyifan,张一凡） 获取结果有问题
+                        string[] emps = toEmpIDs.Split(';');
                         foreach (string empID in emps)
                         {
                             if (DataType.IsNullOrEmpty(empID))
                                 continue;
-
-                            if (hasSendEmps.Contains("," + empID + ",") == true)
+                            string[] empIDs = empID.Split(',');
+                            if (DataType.IsNullOrEmpty(empIDs[0]))
                                 continue;
 
-                            hasSendEmps += empID + ",";
+                            if (hasSendEmps.Contains("," + empIDs[0] + ",") == true)
+                                continue;
+
+                            hasSendEmps += empIDs[0] + ",";
 
                             string smsDocTmpReal = smsDocTmp.Clone() as string;
-                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
-                            openWorkURl = openWorkURl.Replace("{EmpStr}", empID);
+                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empIDs[0]);
+                            openWorkURL = openWorkURL.Replace("{EmpStr}", empIDs[0]);
 
-                            // BP.WF.Port.WFEmp empEn = new Port.WFEmp(empID);
-                            BP.GPM.Emp empEn = new BP.GPM.Emp(empID);
+                            BP.GPM.Emp empEn = new BP.GPM.Emp(empIDs[0]);
                              
                             string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
                             //发送短信.
-                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURl);
+                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
                         }
                         return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                     }
@@ -1201,15 +1227,17 @@ namespace BP.WF.Template
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
                         //发送短信.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURl);
+                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
                         return "@已向:{" + tel + "}发送提醒手机短信.";
                     }
                 }
             }
             #endregion SendSuccess - 发送成功事件
 
-            #region FlowOverAfter - 流程结束后的事件
-            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter)
+            #region FlowOverAfter -  流程结束/预警/逾期  短信息事件
+            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter
+                || this.FK_Event ==BP.Sys.EventListOfNode.FlowWarning
+                || this.FK_Event == BP.Sys.EventListOfNode.FlowOverDue)
             {
                 /*发送成功事件.*/
                 if (this.SMSPushWay == 1)
@@ -1229,7 +1257,7 @@ namespace BP.WF.Template
 
                             string smsDocTmpReal = smsDocTmp.Clone() as string;
                             smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
-                            openWorkURl = openWorkURl.Replace("{EmpStr}", empID);
+                            openWorkURL = openWorkURL.Replace("{EmpStr}", empID);
 
                             BP.WF.Port.WFEmp empEn = new Port.WFEmp();
                             empEn.No = empID;
@@ -1238,7 +1266,7 @@ namespace BP.WF.Template
                             string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 
                             //发送短信.
-                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURl);
+                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
                         }
                         return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                     }
@@ -1252,7 +1280,7 @@ namespace BP.WF.Template
                     {
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
                         //发送短信.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURl);
+                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
                         return "@已向:{" + tel + "}发送提醒消息.";
                     }
                 }

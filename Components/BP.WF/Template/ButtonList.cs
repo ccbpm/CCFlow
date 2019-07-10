@@ -197,11 +197,11 @@ namespace BP.WF.Template
         /// </summary>
         public const string WebOfficeEnable = "WebOfficeEnable";
         /// <summary>
-        /// 是否启用-节点时限
+        /// 节点时限规则
         /// </summary>
-        public const string CHEnable = "CHEnable";
+        public const string CHRole = "CHRole";
         /// <summary>
-        /// lab
+        /// 节点时限lab
         /// </summary>
         public const string CHLab = "CHLab";
         /// <summary>
@@ -278,6 +278,7 @@ namespace BP.WF.Template
         /// 是否启用选择接受人
         /// </summary>
         public const string SelectAccepterEnable = "SelectAccepterEnable";
+
 
        
 

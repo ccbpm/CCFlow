@@ -1262,7 +1262,8 @@ namespace BP.WF.HttpHandler
                     return "err@错误:" + msg;
 
                 //重设默认值.
-                en.ResetDefaultVal();
+                if (this.GetRequestValBoolen("IsReadonly") == false)
+                    en.ResetDefaultVal();
 
                 #endregion 附加参数数据.
 

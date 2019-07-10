@@ -2598,6 +2598,9 @@ namespace BP.WF
                 #endregion 审核组件.
 
                 #region 考核属性.
+                map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
+                map.AddTBInt(BtnAttr.CHRole, 0, "时限规则",true,false);
+
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
               //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.

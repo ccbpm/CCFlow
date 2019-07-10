@@ -2064,7 +2064,7 @@ namespace BP.WF
 
             if (string.IsNullOrWhiteSpace(userNo))
             {
-                return userNo;
+                return "";
             }
             //如果文件存在
             String path = SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".jpg";
@@ -2075,7 +2075,10 @@ namespace BP.WF
                 if (File.Exists(path) == true)
                     return "<img src='" + path + "' style='border:0px;width:100px;height:30px;'/>";
                 else
-                    return userNo;
+                {
+                    Emp emp = new Emp(userNo);
+                    return emp.Name;
+                }
             }
             else
             {

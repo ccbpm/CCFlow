@@ -208,10 +208,10 @@ function Ele_SubFlow(wf_node) {
     var paras = '';
 
     paras += "&FID=" + GetQueryString("FID");
-    paras += "&OID=" + GetQueryString("WorkID"); 
+    paras += "&OID=" + GetQueryString("OID"); 
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + GetQueryString("WorkID"); ;
+    paras += '&WorkID=' + GetQueryString("OID"); ;
     if (sta == 2)//只读
     {
         src += "&DoType=View";
@@ -504,10 +504,11 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 //复位右侧信息
                 if (ruRowSpan == rRowSpan) {
                     ruRowSpan = 0;
+                    luRowSpan = 0;
                     rRowSpan = 0;
                     IsShowRight = true;
                     if (rowSpan == 1)
-                      luColSpan = 0;
+                        luColSpan = 0;
                     ruColSpan = 0;
                 }
 
@@ -549,6 +550,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 //复位左侧信息
                 if (luRowSpan == lRowSpan) {
                     luRowSpan = 0;
+                    ruRowSpan = 0;
                     lRowSpan = 0;
                     IsShowLeft = true;
                     ruColSpan = 0;
@@ -628,6 +630,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             //复位右侧信息
             if (ruRowSpan == rRowSpan) {
                 ruRowSpan = 0;
+                luRowSpan = 0;
                 rRowSpan = 0;
                 IsShowRight = true;
                 if (rowSpan == 1)
@@ -681,6 +684,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             //复位左侧信息
             if (luRowSpan == lRowSpan) {
                 luRowSpan = 0;
+                ruRowSpan = 0;
                 lRowSpan = 0;
                 IsShowLeft = true;
                 ruColSpan = 0;
@@ -838,7 +842,7 @@ function InitMapAttrOfCtrl(mapAttr) {
             eleHtml = "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
             for (var i = 0; i < dbs.length; i++) {
                 var db = dbs[i];
-                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + mypk + "','" + pageData.OID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
             }
             eleHtml += "</div>";
             return eleHtml;
@@ -857,7 +861,7 @@ function InitMapAttrOfCtrl(mapAttr) {
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + defValue + "' type=hidden />";
                 //是否签过
                 var sealData = new Entities("BP.Tools.WFSealDatas");
-                sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+                sealData.Retrieve("OID", GetQueryString("OID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
 
                 if (sealData.length > 0) {
                     eleHtml += "<img src='../../DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
@@ -1351,7 +1355,7 @@ function Ele_Attachment(workNode, gf) {
     var eleHtml = '';
     var nodeID = GetQueryString("FK_Node");
     var url = "";
-    url += "&WorkID=" + GetQueryString("WorkID");
+    url += "&WorkID=" + GetQueryString("OID");
     url += "&FK_Node=" + GetQueryString("FK_Node");
     url += "&FK_Flow=" + GetQueryString("FK_Flow");
     url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.
@@ -1416,7 +1420,7 @@ function Ele_Dtl(frmDtl) {
 
     var refPK = GetQueryString('OID');
     if (refPK == null)
-        refPK = GetQueryString('WorkID');
+        refPK = GetQueryString('OID');
 
     var isReadonly = GetQueryString("IsReadonly");
     if (isReadonly == "null" || isReadonly == "0" || isReadonly == null || isReadonly == undefined)
@@ -1468,12 +1472,12 @@ function Ath_Init(mypk, FK_MapData) {
 
     var noOfObj = mypk.replace(FK_MapData + "_", "");
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-    handler.AddPara("WorkID", pageData.WorkID);
+    handler.AddPara("WorkID", pageData.OID);
     handler.AddPara("FID", pageData.FID);
     handler.AddPara("FK_Node", nodeID);
     handler.AddPara("FK_Flow", pageData.FK_Flow);
     handler.AddPara("IsStartNode", IsStartNode);
-    handler.AddPara("PKVal", pageData.WorkID);
+    handler.AddPara("PKVal", pageData.OID);
     handler.AddPara("Ath", noOfObj);
     handler.AddPara("FK_MapData", FK_MapData);
     handler.AddPara("FromFrm", FK_MapData);
@@ -1524,7 +1528,7 @@ function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
 
         for (var i = 0; i < dbs.length; i++) {
             var db = dbs[i];
-            eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + athMyPK + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+            eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + athMyPK + "','" + pageData.OID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
         }
         $("#athModel_" + keyOfEn).html(eleHtml);
     }, null, "black", true);
@@ -1581,7 +1585,7 @@ function GetLab(frmData, attr) {
         var eleHtml = '';
         var nodeID = pageData.FK_Node;
         var url = "";
-        url += "&WorkID=" + pageData.WorkID;
+        url += "&WorkID=" + pageData.OID;
         url += "&FK_Node=" + nodeID;
         url += "&FK_Flow=" + pageData.FK_Flow;
         var no = nodeID.toString().substring(nodeID.toString().length - 2);
@@ -1596,10 +1600,10 @@ function GetLab(frmData, attr) {
         var src = "";
 
         //这里的连接要取 FK_MapData的值.
-        src = "../CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FromFrm=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
+        src = "../CCForm/Ath.htm?PKVal=" + pageData.OID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FromFrm=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         //自定义表单模式.
         if (ath.AthRunModel == 2) {
-            src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
+            src = "../../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.OID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         }
         lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='../Img/Tree/Dir.gif'></image></a></div></label>";
         return lab;

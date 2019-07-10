@@ -636,7 +636,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     var data = frmData[mapAttr.KeyOfEn];
     if (data == undefined)
         data = frmData[mapAttr.UIBindKey];
-    if (data == undefined) {
+    if (data == undefined ) {
         //枚举类型的.
         if (mapAttr.LGType == 1) {
             var enums = frmData.Sys_Enum;

@@ -157,7 +157,7 @@ function figure_Template_FigureFlowChart(wf_node, mapData) {
     var src = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;
-    src += '&WorkID=' + pageData.WorkID;
+    src += '&WorkID=' + pageData.OID;
     src += '&FID=' + pageData.FID;
     var eleHtml = '<div id="divtrack' + wf_node.NodeID + '">' + "<iframe id='track" + wf_node.NodeID + "' style='width:" + w + "px;height=" + h + "px;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
@@ -304,10 +304,10 @@ function figure_Template_FigureThreadDtl(wf_node, mapData) {
     var paras = '';
 
     paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
+    paras += "&OID=" + pageData.OID;
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
+    paras += '&WorkID=' + pageData.OID;
 
     if (sta == 2) //只读
     {
@@ -345,10 +345,10 @@ function figure_Template_FigureSubFlowDtl(wf_node, mapData) {
     var paras = '';
 
     paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
+    paras += "&OID=" + pageData.OID;
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
+    paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
     {
         src += "&DoType=View";
@@ -673,7 +673,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
                 //是否签过
                 var sealData = new Entities("BP.Tools.WFSealDatas");
-                sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+                sealData.Retrieve("OID", GetQueryString("OID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
 
                 if (sealData.length > 0) {
 
@@ -701,7 +701,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.DefVal + "' type=hidden />";
                 //是否签过
                 var sealData = new Entities("BP.Tools.WFSealDatas");
-                sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", mapAttr.DefVal);
+                sealData.Retrieve("OID", GetQueryString("OID"), "FK_Node", GetQueryString("FK_Node"), "SealData", mapAttr.DefVal);
 
                 if (sealData.length > 0) {
                     eleHtml += "<img src='/DataUser/Siganture/" + mapAttr.DefVal + ".jpg' style='border:0px;'  id='Img" + mapAttr.KeyOfEn + "' />" + html;
@@ -931,7 +931,7 @@ function figure_Template_Btn(frmBtn) {
         });
         var OID = GetQueryString("OID");
         if (OID == undefined || OID == "");
-        OID = GetQueryString("WorkID");
+        OID = GetQueryString("OID");
         var FK_Node = GetQueryString("FK_Node");
         var FK_Flow = GetQueryString("FK_Flow");
         var webUser = new WebUser();
@@ -993,7 +993,7 @@ function figure_Template_HyperLink(frmLin) {
 
     var OID = GetQueryString("OID");
     if (OID == undefined || OID == "");
-    OID = GetQueryString("WorkID");
+    OID = GetQueryString("OID");
     var FK_Node = GetQueryString("FK_Node");
     var FK_Flow = GetQueryString("FK_Flow");
     var webUser = new WebUser();
@@ -1025,26 +1025,29 @@ function figure_Template_HyperLink(frmLin) {
 function figure_Template_Image(frmImage) {
     var eleHtml = '';
     var imgSrc = "";
-    if (frmImage.ImgAppType == 0) {//图片类型
+    if (frmImage.ImgAppType == 0) { //图片类型
         //数据来源为本地.
+        var imgSrc = '';
         if (frmImage.ImgSrcType == 0) {
-            if (frmImage.ImgPath.indexOf(";") < 0)
-                imgSrc = frmImage.ImgPath;
+            //替换参数
+            var frmPath = frmImage.ImgPath;
+            frmPath = frmPath.replace('＠', '@');
+            frmPath = frmPath.replace('@basePath', basePath);
+            frmPath = frmPath.replace('@basePath', basePath);
+            imgSrc = DealJsonExp(frmData.MainTable[0], frmPath);
         }
+
         //数据来源为指定路径.
         if (frmImage.ImgSrcType == 1) {
-            //图片路径不为默认值
-            imgSrc = frmImage.ImgURL;
-            if (imgSrc.indexOf("@") == 0) {
-                /*如果有变量 此处可能已经处理过    和周总商量*/
-                //imgSrc = BP.WF.Glo.DealExp(imgSrc, en, "");
-                imgSrc = imgSrc;
-            }
-
+            var url = frmImage.ImgURL;
+            url = url.replace('＠', '@');
+            url = url.replace('@basePath', basePath);
+            imgSrc = DealJsonExp(frmData.MainTable[0], url);
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
-        if (imgSrc == "")//|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
+        if (imgSrc == "" || imgSrc == null)
             imgSrc = "../../DataUser/ICON/CCFlow/LogBig.png";
+
         eleHtml = $('<div></div>');
         var a = $("<a></a>");
         var img = $("<img/>")

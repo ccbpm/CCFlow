@@ -69,7 +69,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValRefTextByKey(SubFlowHandAttr.FlowName);
+                return this.GetValStringByKey(SubFlowHandAttr.FlowName);
             }
         }
         /// <summary>

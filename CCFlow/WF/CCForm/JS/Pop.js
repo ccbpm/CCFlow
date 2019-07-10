@@ -26,19 +26,20 @@ function SelfUrl_Done(mapExt) {
     if (url.indexOf('?') == -1)
         url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
     var title = mapExt.GetPara("Title");
+    
         OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W,
          "icon-edit", true, function () {
              var iframe = document.getElementById("eudlgframe");
              if (iframe) {
                  var val = iframe.contentWindow.Btn_OK();
-                 $("#TB _" + mapExt.AttrOfOper).val(val);
+                 $("#TB_" + mapExt.AttrOfOper).val(val);
                  FullIt(val, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
              }
 
          }, null, function () {
-            
+
          });
-      
+    
 }
 //***************************************树干叶子模式*****************************************************************
 function PopBranchesAndLeaf(mapExt, val) {

@@ -3863,7 +3863,7 @@ namespace BP.WF
         /// <param name="sendEmpNo">发送给人员.</param>
         /// <param name="atParas">参数.</param>
         public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
-            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null)
+            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null,string pushModel=null)
         {
             //if (DataType.IsNullOrEmpty(tel))
             //    return;
@@ -3913,6 +3913,7 @@ namespace BP.WF
             sms.AtPara = atParas;
 
             sms.SetPara("OpenUrl", opnUrl);
+            sms.SetPara("PushModel", pushModel);
 
             // 先保留本机一份.
             sms.Insert();
@@ -5109,7 +5110,7 @@ namespace BP.WF
                 if (item.IsEnableSpecFlowOver == true)
                 {
                     //指定的流程发起之后，才能启动该流程。
-                    string[] fls = item.SpecFlowStart.Split(',');
+                    string[] fls = item.SpecFlowOver.Split(',');
                     foreach (string flStr in fls)
                     {
                         if (DataType.IsNullOrEmpty(flStr) == true)
@@ -5120,7 +5121,7 @@ namespace BP.WF
                         if (dt.Rows.Count == 0)
                         {
                             BP.WF.Flow myflow = new Flow(flStr);
-                            throw new Exception("流程:[" + myflow.Name + "]没有完成或者发起,您不能启动[" + item.FlowName + "]。");
+                            throw new Exception("流程:[" + myflow.Name + "]没有完成,您不能启动[" + item.FlowName + "]。");
                         }
                     }
                 }
@@ -7426,6 +7427,46 @@ namespace BP.WF
                     DBAccess.RunSQL(ps);
                 }
             }
+            else
+            {
+                //判断流程是否启动流程时限
+                if (nd.IsStartNode
+                     && wn.HisGenerWorkFlow.WFState != WFState.ReturnSta)
+                {
+                    DateTime dtOfFlow = DateTime.Now;
+                    DateTime dtOfFlowWarning = DateTime.Now;
+                    Part part = new Part();
+                    part.MyPK = nd.FK_Flow+ "_0_DeadLineRole";
+                    int count = part.RetrieveFromDBSources();
+                    if (count != 0)
+                    {
+                        int tag1 = int.Parse(part.Tag1);
+                        int tag2 = int.Parse(part.Tag2);
+                        int tag7 = int.Parse(part.Tag7);
+                        switch (tag7)
+                        {
+                            case 0: tag7 = 12; break;
+                            case 1: tag7 = 24; break;
+                            case 2: tag7 = 48; break;
+                            case 3: tag7 = 72; break;
+                            default: break;
+                        }
+                        //获取时限时间
+                        dtOfFlow = Glo.AddDayHoursSpan(DateTime.Now, tag1,
+                            tag2, int.Parse(part.Tag3), (TWay)int.Parse(part.Tag4));
+                        //计算警告日期.  时限时间-预警时间
+                        dtOfFlowWarning = Glo.AddDayHoursSpan(DateTime.Now, (tag1 * 24 + tag2 - tag7) / 24, (tag1 * 24 + tag2 - tag7) % 24, int.Parse(part.Tag3), (TWay)int.Parse(part.Tag4));
+                        string dbstr = SystemConfig.AppCenterDBVarStr;
+                        Paras ps = new Paras();
+                        ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfFlow=" + dbstr + "SDTOfFlow,SDTOfFlowWarning=" + dbstr + "SDTOfFlowWarning WHERE WorkID=" + dbstr + "WorkID";
+                        ps.Add(GenerWorkFlowAttr.SDTOfFlow, dtOfFlow.ToString(DataType.SysDataTimeFormat));
+                        ps.Add(GenerWorkFlowAttr.SDTOfFlowWarning, dtOfFlowWarning.ToString(DataType.SysDataTimeFormat));
+                        ps.Add(GenerWorkerListAttr.WorkID, workID);
+                        DBAccess.RunSQL(ps);
+                       
+                    }
+                }
+            }
             #endregion 更新发送参数.
 
             return objs;
@@ -8411,17 +8452,17 @@ namespace BP.WF
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                         {
-                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No + "," + WebUser.Name);
+                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No + "," + WebUser.Name+"@");
                         }
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
                         {
-                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No);
+                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No+"@");
                         }
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
                         {
-                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.Name);
+                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.Name+"@");
                         }
 
                         rptGe.SetValByKey(GERptAttr.FlowStarter, WebUser.No);

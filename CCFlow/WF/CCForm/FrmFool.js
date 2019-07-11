@@ -848,6 +848,35 @@ function InitMapAttrOfCtrl(mapAttr) {
             return eleHtml;
         }
 
+        //签字板
+        if (mapAttr.UIContralType == "8") {
+            //查找默认值
+            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            if (val.indexOf("../../") == -1)
+                val = val.replace("../", "../../");
+            //如果是图片签名，并且可以编辑
+            var ondblclick = ""
+            if (mapAttr.UIIsEnable == 1) {
+                ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
+            }
+
+            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+            eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            return eleHtml;
+        }
+
+        //进度条
+        if (mapAttr.UIContralType == "50") {
+
+            var url = '../WorkOpt/OneWork/JobSchedule.js';
+            $.getScript(url, function () {
+
+
+            });
+            return "<div id='JobSchedule' >JobSchedule</div>";
+        }
+
+
     }
 
     //添加文本框 ，日期控件等

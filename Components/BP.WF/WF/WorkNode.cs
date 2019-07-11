@@ -6404,6 +6404,10 @@ namespace BP.WF
                     this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                      * */
 
+                    #region 执行 自动 启动子流程.
+                    CallAutoSubFlow();
+                    #endregion 执行启动子流程.
+
                     //调用发送成功事件.
                     string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
                         this.HisNode, this.rptGe, null, this.HisMsgObjs);

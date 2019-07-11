@@ -232,7 +232,7 @@ namespace BP.WF.HttpHandler
 
             // 把流程信息放入.
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            DataTable dtFlow = fl.ToDataTableField(this.FK_Flow);
+            DataTable dtFlow = fl.ToDataTableField("Flow");
             ds.Tables.Add(dtFlow);
 
             return BP.Tools.Json.DataSetToJson(ds, false);

@@ -717,13 +717,13 @@ namespace BP.WF
                         rpt.FlowStarter = emp.No;
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
-                            rpt.FlowEmps = "@" + emp.Name;
+                            rpt.FlowEmps = "@" + emp.Name+"@";
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                            rpt.FlowEmps = "@" + emp.No;
+                            rpt.FlowEmps = "@" + emp.No + "@";
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                            rpt.FlowEmps = "@" + emp.No + "," + emp.Name;
+                            rpt.FlowEmps = "@" + emp.No + "," + emp.Name + "@";
 
                         rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
                         rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
@@ -752,13 +752,13 @@ namespace BP.WF
 
                         rpt.FlowEndNode = this.StartNodeID;
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
-                            rpt.FlowEmps = "@" + emp.Name;
+                            rpt.FlowEmps = "@" + emp.Name + "@";
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                            rpt.FlowEmps = "@" + emp.No;
+                            rpt.FlowEmps = "@" + emp.No + "@";
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                            rpt.FlowEmps = "@" + emp.No + "," + emp.Name;
+                            rpt.FlowEmps = "@" + emp.No + "," + emp.Name + "@";
 
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         rpt.FK_Dept = emp.FK_Dept;
@@ -1019,13 +1019,13 @@ namespace BP.WF
                     rpt.SetValByKey(GERptAttr.FK_NY, DataType.CurrentYearMonth);
 
                     if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
-                        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.Name);
+                        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.Name + "@");
 
                     if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No);
+                        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "@");
 
                     if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "," + emp.Name);
+                        rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "," + emp.Name + "@");
 
                 }
 
@@ -1581,13 +1581,13 @@ namespace BP.WF
             upVal = upVal.Substring(0, upVal.Length - 1);
 
             //查询对应的业务表中是否存在这条记录
-            sql = "SELECT * FROM " + this.DTSBTable.ToUpper() + " WHERE " + DTSBTablePK + "='" + lcDt.Rows[0][lcArr[0].ToString()] + "'";
+            sql = "SELECT * FROM " + this.DTSBTable.ToUpper() + " WHERE " + DTSBTablePK + "='" + lcDt.Rows[0][DTSBTablePK] + "'";
             DataTable dt = src.RunSQLReturnTable(sql);
             //如果存在，执行更新，如果不存在，执行插入
             if (dt.Rows.Count > 0)
             {
 
-                sql = "UPDATE " + this.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + DTSBTablePK + "='" + lcDt.Rows[0][lcArr[0].ToString()] + "'";
+                sql = "UPDATE " + this.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + DTSBTablePK + "='" + lcDt.Rows[0][DTSBTablePK] + "'";
             }
             else
                 sql = "INSERT INTO " + this.DTSBTable.ToUpper() + "(" + dtsArray[1] + ") VALUES(" + values + ")";
@@ -3105,7 +3105,7 @@ namespace BP.WF
                 rpt.SetValByKey("OID", oid);
                 Work startWork = null;
                 Work endWK = null;
-                string flowEmps = "";
+                string flowEmps = "@";
                 foreach (Node nd in nds)
                 {
                     try
@@ -3121,10 +3121,30 @@ namespace BP.WF
 
                         try
                         {
-                            if (flowEmps.Contains("@" + wk.Rec + ","))
-                                continue;
+                            if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
+                            {
+                                if (flowEmps.Contains("@" + wk.RecOfEmp.Name + "@"))
+                                    continue;
+                                flowEmps +=  wk.RecOfEmp.Name + "@";
+                            }
 
-                            flowEmps += "@" + wk.Rec + "," + wk.RecOfEmp.Name;
+                            if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
+                            {
+                                if (flowEmps.Contains("@" + wk.Rec + "@"))
+                                    continue;
+                                flowEmps +=  wk.Rec + "@";
+                            }
+
+                            if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
+                            {
+                                if (flowEmps.Contains("@" + wk.Rec + ","))
+                                    continue;
+                                flowEmps += wk.Rec + "," + wk.RecOfEmp.Name;
+                            }
+
+                            
+
+                           
                         }
                         catch
                         {
@@ -6480,16 +6500,24 @@ namespace BP.WF
         /// <returns></returns>
         public string VerSetCurrentVer()
         {
-            string sql = "SELECT FK_FlowSort FROM WF_Flow WHERE PTable='" + this.PTable + "' AND FK_FlowSort!='' ";
-            string flowSort = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            if (DataType.IsNullOrEmpty(flowSort) == true)
+            string sql = "SELECT FK_FlowSort,No FROM WF_Flow WHERE PTable='" + this.PTable + "' AND FK_FlowSort!='' ";
+            DataTable dt  = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
                 return "err@没有找到主版本,请联系管理员.";
-
+            string flowSort = dt.Rows[0][0].ToString();
+            string oldFlowNo = dt.Rows[0][1].ToString();
             sql = "UPDATE WF_Flow SET FK_FlowSort='',IsCanStart=0 WHERE PTable='" + this.PTable + "' ";
             DBAccess.RunSQL(sql);
 
             sql = "UPDATE WF_Flow SET FK_FlowSort='" + flowSort + "', IsCanStart=1 WHERE No='" + this.No + "' ";
             DBAccess.RunSQL(sql);
+
+            //清缓存
+            BP.DA.Cash2019.DeleteRow("BP.WF.Flow", oldFlowNo);
+            BP.DA.Cash2019.DeleteRow("BP.WF.Flow", this.No);
+            Flow flow = new Flow(oldFlowNo);
+            flow = new Flow(this.No);
+		
 
             return "info@设置成功.";
         }

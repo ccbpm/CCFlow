@@ -42,8 +42,11 @@
             $("#P2").val(flow.PTable);
             $("#P3").val(flow.PTable);
 
+            $("#RB_DTSWay_" + flow.DTSWay).attr("Checked", true);
+            $("#RB_DTSField" + flow.DTSField).attr("Checked", true);
+
             //绑定表.
-            GenerBindDDL("DDL_Table", tables, "No", "Name", null);
+            GenerBindDDL("DDL_Table", tables, "No", "Name", flow.DTSBTable);
 
 
             $("#Msg").html("");
@@ -72,8 +75,7 @@
                 $("#Msg").html("<font color=red>" + data + "</font>");
                 return;
             }
-
-            alert(data);
+            alert("保存成功")
             window.location.href = window.location.href;
             //$("#Msg").html("<font color=green>" + data + "</font>");
             return;

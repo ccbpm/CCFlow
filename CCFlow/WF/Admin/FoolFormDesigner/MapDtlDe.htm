@@ -59,7 +59,10 @@
 
 		        var nameLink = "";
 		        if (lgType == 0) {
-		            nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "',null,'"+attr.FK_MapData+"',"+uiContralType+")\" > " + name + "</a>";
+		            if (attr.MyDataType == "1" && attr.UIContralType == 1)
+		                nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
+                     else 
+		                nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "',null,'"+attr.FK_MapData+"',"+uiContralType+")\" > " + name + "</a>";
 		        }
 
 		        if (lgType == 1) {

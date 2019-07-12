@@ -462,9 +462,9 @@ namespace BP.WF.HttpHandler
                 if (item.No.Equals("Frm") && (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
                 {
                     if (nd.FormUrl.Contains("?"))
-                        url = "@url=&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
-
-                    url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                        url = "@url=" + nd.FormUrl+"&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                    else
+                        url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
                 }
                 re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\",\"IsDefault\":\"{3}\"", item.No, item.Name, url, item.IsDefault) + "},";
             }

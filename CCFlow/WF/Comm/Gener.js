@@ -2352,7 +2352,7 @@ function DealExp(expStr, webUser) {
     expStr = expStr.replace('@WebUser.No', webUser.No);
     expStr = expStr.replace('@WebUser.Name', webUser.Name);
     expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-    expStr = expStr.replace('@WebUser.DeptName', webUser.DeptName);
+    expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
 
     if (expStr.indexOf('@') == -1)
@@ -2410,7 +2410,7 @@ function DealJsonExp(json, expStr, webUser) {
     expStr = expStr.replace('@WebUser.No', webUser.No);
     expStr = expStr.replace('@WebUser.Name', webUser.Name);
     expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-    expStr = expStr.replace('@WebUser.DeptName', webUser.DeptName);
+    expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
 
     if (expStr.indexOf('@') == -1)

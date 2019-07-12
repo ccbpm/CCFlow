@@ -8099,8 +8099,9 @@ namespace BP.WF
 
             exp = exp.Replace("@WebUser.No", BP.Web.WebUser.No);
             exp = exp.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
             exp = exp.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            
 
             if (exp.Contains("@") == true)
                 exp = Glo.DealExp(exp, this.HisWork, null);

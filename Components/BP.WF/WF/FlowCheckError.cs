@@ -277,8 +277,9 @@ namespace BP.WF
 
                         sql = sql.Replace("@WebUser.No", "'ss'");
                         sql = sql.Replace("@WebUser.Name", "'ss'");
-                        sql = sql.Replace("@WebUser.FK_Dept", "'ss'");
                         sql = sql.Replace("@WebUser.FK_DeptName", "'ss'");
+                        sql = sql.Replace("@WebUser.FK_Dept", "'ss'");
+                       
 
                         sql = sql.Replace("''''", "''"); //出现双引号的问题.
 

@@ -1163,8 +1163,9 @@ namespace BP.WF
             	//替换系统参数
             	url = url.Replace("@WebUser.No", WebUser.No);
             	url = url.Replace("@WebUser.Name;", WebUser.Name);
+                url = url.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
             	url = url.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
-            	url = url.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+            	
             	//替换参数
             	if (url.IndexOf("?") > 0){
             		//获取url中的参数
@@ -1858,8 +1859,9 @@ namespace BP.WF
             	    //替换系统参数
             	    url = url.Replace("@WebUser.No", WebUser.No);
             	    url = url.Replace("@WebUser.Name;", WebUser.Name);
+                    url = url.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
             	    url = url.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
-            	    url = url.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+            	    
             	    //替换参数
             	    if (url.IndexOf("?") > 0){
             		    //获取url中的参数

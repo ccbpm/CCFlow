@@ -2756,8 +2756,9 @@ namespace BP.WF
                     //替换变量
                     sql = sql.Replace("@WebUser.No", WebUser.No);
                     sql = sql.Replace("@WebUser.Name", WebUser.Name);
-                    sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
                     sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+                    sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                   
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
@@ -3135,8 +3136,9 @@ namespace BP.WF
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
             exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            
 
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
@@ -3234,8 +3236,9 @@ namespace BP.WF
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
             exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            
 
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);

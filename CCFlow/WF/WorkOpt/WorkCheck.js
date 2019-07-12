@@ -35,22 +35,9 @@ $(function () {
 
 function InitPage() {
 
-    //            var param = {
-    //                DoType: "WorkCheck_Init",
-    //                FK_Flow: fk_flow,
-    //                FK_Node: nodeid,
-    //                WorkID: workid,
-    //                FID: fid,
-    //                IsReadonly: isReadonly
-    //            };
-
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddUrlData();
-    // handler.AddPara("FK_Flow",);
     var data = handler.DoMethodReturnString("WorkCheck_Init");
-
-    // console.log(data);
-
     if (data.indexOf('err@') != -1) {
         alert(data);
         return;
@@ -80,6 +67,11 @@ function InitPage() {
             return true;
         }
 
+        var fwcs = new Entities("BP.WF.Template.FrmWorkChecks");
+        fwcs.Retrieve("NodeID", this.NodeID);
+
+        if (fwcs[0].FWCSta == 2)
+            return true;
 
         //自由模式
         html += "<tr>";
@@ -264,7 +256,12 @@ function InitPage() {
     $("textarea").trigger("keydown");
 
     if ($("#uploaddiv").length > 0) {
-        AddUploadify("uploaddiv");
+         var explorer = window.navigator.userAgent;
+        var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+        if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
+                AddUploadify("uploaddiv");
+        else
+            AddUploafFileHtm("uploaddiv");
     }
 
 }
@@ -351,8 +348,17 @@ function TBHelp(enName) {
     }
 }
 
-function AthDown(fk_ath, pkVal, delPKVal, fk_node, fk_flow, ath) {
-    window.location.href = '../CCForm/AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + fk_node + '&FK_Flow=' + fk_flow + '&FK_MapData=ND' + fk_node + '&Ath=' + ath;
+function AthDown(fk_ath, pkVal, delPKVal, fk_mapData, fk_flow, ath) {
+    if (plant == "CCFlow")
+        window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
+    else {
+        var currentPath = window.document.location.href;
+        var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+        Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + fk_node + '&FK_Flow=' + fk_flow + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
+        window.location.href = Url;
+    }
+    
+    
 }
 
 function AthOpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
@@ -380,7 +386,19 @@ function UploadFileChange(ctrl) {
 
 function GetUserSiganture(userNo, userName) {
     var func = " oncontextmenu='return false;' ondragstart='return false;'  onselectstart='return false;' onselect='document.selection.empty();'";
-    return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/UnName.JPG'\" />";
+    //先判断，是否存在签名图片
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+    handler.AddPara('No', userNo);
+    data = handler.DoMethodReturnString("HasSealPic");
+
+    //如果不存在，就显示当前人的姓名
+    if (data.length > 0) {
+        return userName;
+    }
+    else {
+        return "<img src='../../DataUser/Siganture/" + userNo + ".png?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.png'\" />";
+    }
+
 }
 
 function GetUserSmallIcon(userNo, userName) {
@@ -420,7 +438,7 @@ function GetAthHtml(ath) {
         html += "<img alt='删除' align='middle' src='../Img/Btn/Delete.gif' onclick=\"DelWorkCheckAth('" + ath.MyPK + "')\" />&nbsp;&nbsp;";
     }
 
-    html += "<a style='color:Blue; font-size:14;' href=\"" + ath.Href + "\">" + ath.FileName;
+    html += "<a style='color:Blue; font-size:14;' href='javaScript:void(0)' onclick=\"AthDown('" + ath.FK_FrmAttachment + "','" + GetQueryString("WorkID") + "','" + ath.MyPK + "', '" + ath.FK_MapData + "')\">" + ath.FileName;
     html += "&nbsp;&nbsp;<img src='../Img/FileType/" + ath.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" /></a>";
     html += "&nbsp;&nbsp;</div>";
 
@@ -435,10 +453,19 @@ function AddUploadify(divid) {
                              + "</div>";
 
         $("#" + divid).append(html);
+        var url = "";
+        if (plant == 'CCFlow')
+            url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=ND' + nodeid + '_FrmWorkCheck&DoType=MoreAttach&EnsName=' + (enName ? enName : '') + '&FK_Flow=' + fk_flow + '&PKVal=' + workid + "&FK_Node=" + GetQueryString("FK_Node");
+        else {
+            var currentPath = window.document.location.href;
+            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+            url = path + "WF/Ath/AttachmentUpload.do?FK_FrmAttachment=ND" + nodeid + "_FrmWorkCheck&FK_Flow=" + fk_flow + "&PKVal=" + workid+"&FK_Node="+GetQueryString("FK_Node");
+        }
+
 
         $('#file_upload').uploadify({
             'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf',
-            'uploader': '../CCForm/Handler.ashx?AttachPK=' + nodeid + '_FrmWorkCheck&WorkID=' + workid + '&showType=MoreAttach&FK_Node=' + nodeid + '&EnsName=' + (enName ? enName : '') + '&FK_Flow=' + fk_flow + '&PKVal=' + workid,
+            'uploader':url,
             'auto': true,
             'fileTypeDesc': '请选择上传文件',
             'buttonText': '上传附件',
@@ -460,6 +487,96 @@ function AddUploadify(divid) {
     }
 }
 
+function AddUploafFileHtm(divid) {
+ if ($("#file_upload").length == 0) {
+    var html ="<div id='s' style='float:right;margin-right:10px;margin-top:5px;' >"
+        + "<label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' onchange='UploadChange();' ><span>文件上传</span></label>"
+        + "</div>";
+
+    $("#" + divid).append(html);
+   }
+}
+
+function UploadChange() {
+        var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
+        if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+            alert("请选择上传的文件.");
+            return;
+        }
+        var fileName = fileObj.name;
+
+//            
+//        if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
+//            alert("上传附件类型不正确，只能上传" + realFileExts);
+//            return;
+//        }
+
+        //form表单序列话
+        var parasData = $("form").serialize();
+        //form表单序列化时调用了encodeURLComponent方法将数据编码了
+        parasData = decodeURIComponent(parasData, true);
+        parasData = decodeURIComponent(parasData, true);
+        parasData = parasData.replace(/&/g, '@');
+        parasData = parasData.replace(/TB_/g, '');
+        parasData = parasData.replace(/RB_/g, '');
+        parasData = parasData.replace(/CB_/g, '');
+        parasData = parasData.replace(/DDL_/g, '');
+
+        var formData = new FormData();
+        var name = $("input").val();
+        formData.append("file", fileObj);
+        formData.append("name", name);
+        var AttachPK = "ND"+ GetQueryString("FK_Node")+ "_FrmWorkCheck" ;
+        var Url = "";
+        var doMethod = "MoreAttach";
+        var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
+
+        if (plant == 'CCFlow')
+            Url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_FrmAttachment=" + AttachPK + "&WorkID=" + workid + "&PKVal=" + workid + "&AttachPK=" + AttachPK + "&FK_Node=" + GetQueryString("FK_Node") + "&parasData=" + parasData + "&t=" + new Date().getTime();
+        else {
+            var currentPath = window.document.location.href;
+            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+            Url = path + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + AttachPK + "&PKVal=" + workid + "&AttachPK=" + AttachPK + "&parasData=" + parasData;
+        }
+
+        Url += "&FID=" + GetQueryString("FID");
+        Url += "&FK_Node=" + GetQueryString("FK_Node");
+        Url += "&PWorkID=" + GetQueryString("PWorkID");
+        Url += "&FK_MapData=" + GetQueryString("FK_MapData");
+        //获取分组
+        var sort = $("#Sort").val();
+        if (sort != null && sort != "" && sort != undefined)
+            Url += "&Sort=" + sort;
+
+
+        $.ajax({
+            url: Url,
+            type: 'POST',
+            data: formData,
+            async: false,
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            beforeSend: function () {
+                console.log("正在进行，请稍候");
+            },
+            success: function (responseStr) {
+                GetNewUploadedAths(fileObj)
+            },
+            error: function (responseStr) {
+                if (responseStr.indexOf('err@') != -1)
+                    alert(responseStr);
+            }
+        });
+
+        window.location.href = window.location.href;
+    }
+
 function GetNewUploadedAths(files) {
     var param = {
         showType: "WorkCheck_GetNewUploadedAths",
@@ -469,41 +586,46 @@ function GetNewUploadedAths(files) {
         FK_Node: nodeid,
         WorkID: workid
     };
-
+    var Names ="|";
     for (var field in files) {
-        param.Names += files[field].name + "|";
+        Names += files[field].name + "|";
     }
 
-    Handler_AjaxQueryData(param, function (data) {
-        if (data.indexOf('err@') != -1) {
-            alert(data);
-            return;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+    handler.AddPara("Names", Names);
+    handler.AddPara("AttachPK", "ND"+nodeid + "_FrmWorkCheck");
+    handler.AddPara("FK_Flow", fk_flow);
+    handler.AddPara("FK_Node", nodeid);
+    handler.AddPara("WorkID", workid);
+    var data = handler.DoMethodReturnString("WorkCheck_GetNewUploadedAths");
+    if (data.indexOf('err@') != -1) {
+        alert(data);
+        return;
+    }
+    var naths = eval('(' + data + ')');
+    aths = aths.concat(naths);
+
+    if ($("#aths_" + nodeid).length == 0) {
+        if ($("#WorkCheck_Doc").length > 0) {
+            var tdid = "id='aths_" + nodeid + "'";
+            var html = "<tr><td " + tdid + " style='word-wrap: break-word;'>";
+            html += "<b>附件：</b>&nbsp;";
+            html += "</td></tr>";
+
+            $("#WorkCheck_Doc").parent("tr").after(html);
         }
+    }
 
-        var naths = eval('(' + data + ')');
-        aths = aths.concat(naths);
+    if (wcDesc.FWCShowModel != 0) {
+        $("#tdnode_" + nodeid).attr("rowspan", "3");
+    }
 
-        if ($("#aths_" + nodeid).length == 0) {
-            if ($("#WorkCheck_Doc").length > 0) {
-                var tdid = "id='aths_" + nodeid + "'";
-                var html = "<tr><td " + tdid + " style='word-wrap: break-word;'>";
-                html += "<b>附件：</b>&nbsp;";
-                html += "</td></tr>";
+    $("#aths_" + nodeid).parent().removeAttr("style");
 
-                $("#WorkCheck_Doc").parent("tr").after(html);
-            }
-        }
-
-        if (wcDesc.FWCShowModel != 0) {
-            $("#tdnode_" + nodeid).attr("rowspan", "3");
-        }
-
-        $("#aths_" + nodeid).parent().removeAttr("style");
-
-        $.each(naths, function () {
-            $("#aths_" + nodeid).append(GetAthHtml(this));
-        });
-    }, this);
+    $.each(naths, function () {
+        $("#aths_" + nodeid).append(GetAthHtml(this));
+    });
+    
 }
 
 //执行保存

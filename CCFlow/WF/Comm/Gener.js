@@ -2351,10 +2351,9 @@ function DealExp(expStr, webUser) {
     //替换表达式常用的用户信息
     expStr = expStr.replace('@WebUser.No', webUser.No);
     expStr = expStr.replace('@WebUser.Name', webUser.Name);
-    expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-    expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
-
+    expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
+    expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
     if (expStr.indexOf('@') == -1)
         return expStr;
 
@@ -2409,10 +2408,11 @@ function DealJsonExp(json, expStr, webUser) {
     //替换表达式常用的用户信息
     expStr = expStr.replace('@WebUser.No', webUser.No);
     expStr = expStr.replace('@WebUser.Name', webUser.Name);
+    expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+    expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
     expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-    expStr = expStr.replace('@WebUser.DeptName', webUser.FK_DeptName);
-    expStr = expStr.replace("@WebUser.DeptOfFullName", webUser.FK_DeptNameOfFull);
-
+   
+   
     if (expStr.indexOf('@') == -1)
         return expStr;
 

@@ -299,7 +299,7 @@ namespace BP.WF.Template
 
                     //就要到轨迹表里查,因为有可能是跳过的节点.
                     ps = new Paras();
-                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5) AND NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID";
+                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5) AND NDFrom=" + dbStr + "NDFrom AND (WorkID=" + dbStr + "WorkID OR Fid="+ dbStr + "WorkID)";
                     ps.Add("ActionType1", (int)ActionType.Skip);
                     ps.Add("ActionType2", (int)ActionType.Forward);
                     ps.Add("ActionType3", (int)ActionType.ForwardFL);
@@ -307,6 +307,7 @@ namespace BP.WF.Template
                     ps.Add("ActionType5", (int)ActionType.Start);
 
                     ps.Add("NDFrom", int.Parse(nd));
+                    ps.Add("WorkID", this.WorkID);
                     ps.Add("WorkID", this.WorkID);
                     dt_ND = DBAccess.RunSQLReturnTable(ps);
                     if (dt_ND.Rows.Count != 0)
@@ -366,9 +367,9 @@ namespace BP.WF.Template
                         ps.Add("NDFrom", nd.NodeID);
 
                         if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
-                            ps.Add("OID", gwf.PFID);
+                            ps.Add("WorkID", gwf.PFID);
                         else
-                            ps.Add("OID", gwf.PWorkID);
+                            ps.Add("WorkID", gwf.PWorkID);
 
                         dt_PWork = DBAccess.RunSQLReturnTable(ps);
                         if (dt_PWork.Rows.Count != 0)

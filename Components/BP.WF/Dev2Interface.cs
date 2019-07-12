@@ -941,7 +941,7 @@ namespace BP.WF
         {
             string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,A.IsStartInMobile, A.Idx";
             sql += " FROM WF_Flow A, V_FlowStarterBPM B, WF_FlowSort C  ";
-            sql += " WHERE A.No=B.FK_Flow AND A.FK_FlowSort=C.No  AND FK_Emp='" + WebUser.No + "' ";
+            sql += " WHERE A.No=B.FK_Flow AND A.IsCanStart=1 AND A.FK_FlowSort=C.No  AND FK_Emp='" + WebUser.No + "' ";
             if (DataType.IsNullOrEmpty(domain) == false)
                 sql += " AND C.Domain='" + domain + "'";
 

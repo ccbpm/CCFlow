@@ -1353,10 +1353,26 @@ namespace BP.WF.HttpHandler
             DataTable athDt = new DataTable("Aths");
             athDt.Columns.Add("NodeID", typeof(int));
             athDt.Columns.Add("MyPK", typeof(string));
-            athDt.Columns.Add("Href", typeof(string));
+            athDt.Columns.Add("FK_FrmAttachment", typeof(string));
+            athDt.Columns.Add("FK_MapData", typeof(string));
             athDt.Columns.Add("FileName", typeof(string));
             athDt.Columns.Add("FileExts", typeof(string));
             athDt.Columns.Add("CanDelete", typeof(bool));
+            //当前节点的流程数据
+            FrmAttachmentDBs frmathdbs = new FrmAttachmentDBs();
+            frmathdbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + this.FK_Node + "_FrmWorkCheck", FrmAttachmentDBAttr.RefPKVal, this.WorkID, FrmAttachmentDBAttr.RDT);
+            foreach (FrmAttachmentDB athDB in frmathdbs)
+            {
+                row = athDt.NewRow();
+                row["NodeID"] = this.FK_Node;
+                row["MyPK"] = athDB.MyPK;
+                row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
+                row["FK_MapData"] = athDB.FK_MapData;
+                row["FileName"] = athDB.FileName;
+                row["FileExts"] = athDB.FileExts;
+                row["CanDelete"] =athDB.Rec == WebUser.No && isReadonly == false;
+                athDt.Rows.Add(row);
+            }
             ds.Tables.Add(athDt);
 
             if (this.FID != 0)
@@ -1584,7 +1600,7 @@ namespace BP.WF.HttpHandler
                     #region //审核组件附件数据
                     athDBs = new FrmAttachmentDBs();
                     QueryObject obj_Ath = new QueryObject(athDBs);
-                    obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, tk.NDFrom + "_FrmWorkCheck");
+                    obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND"+tk.NDFrom + "_FrmWorkCheck");
                     obj_Ath.addAnd();
                     obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
                     obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
@@ -1595,7 +1611,8 @@ namespace BP.WF.HttpHandler
                         row = athDt.NewRow();
                         row["NodeID"] = tk.NDFrom;
                         row["MyPK"] = athDB.MyPK;
-                        row["Href"] = GetFileAction(athDB);
+                        row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
+                        row["FK_MapData"] = athDB.FK_MapData;
                         row["FileName"] = athDB.FileName;
                         row["FileExts"] = athDB.FileExts;
                         row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && isReadonly == false;
@@ -1848,14 +1865,15 @@ namespace BP.WF.HttpHandler
             DataTable athDt = new DataTable("Aths");
             athDt.Columns.Add("NodeID", typeof(int));
             athDt.Columns.Add("MyPK", typeof(string));
-            athDt.Columns.Add("Href", typeof(string));
+            athDt.Columns.Add("FK_FrmAttachment", typeof(string));
+            athDt.Columns.Add("FK_MapData", typeof(string));
             athDt.Columns.Add("FileName", typeof(string));
             athDt.Columns.Add("FileExts", typeof(string));
             athDt.Columns.Add("CanDelete", typeof(string));
 
             FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
             QueryObject obj_Ath = new QueryObject(athDBs);
-            obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_Node + "_FrmWorkCheck");
+            obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND"+this.FK_Node + "_FrmWorkCheck");
             obj_Ath.addAnd();
             obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
             obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
@@ -1870,7 +1888,8 @@ namespace BP.WF.HttpHandler
 
                 row["NodeID"] = this.FK_Node;
                 row["MyPK"] = athDB.MyPK;
-                row["Href"] = GetFileAction(athDB);
+                row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
+                row["FK_MapData"] = athDB.FK_MapData;
                 row["FileName"] = athDB.FileName;
                 row["FileExts"] = athDB.FileExts;
                 row["CanDelete"] = athDB.Rec == WebUser.No;

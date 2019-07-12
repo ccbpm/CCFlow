@@ -1293,15 +1293,15 @@ namespace BP.WF.Template
 
             #region 创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
-            workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
+            workCheckAth.MyPK = "ND"+this.NodeID + "_FrmWorkCheck";
             //不包含审核组件
             if (workCheckAth.RetrieveFromDBSources() == 0)
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
-                workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
-                workCheckAth.FK_MapData = this.NodeID.ToString();
-                workCheckAth.NoOfObj = this.NodeID + "_FrmWorkCheck";
+                workCheckAth.MyPK = "ND"+this.NodeID + "_FrmWorkCheck";
+                workCheckAth.FK_MapData = "ND"+this.NodeID.ToString();
+                workCheckAth.NoOfObj = "FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.

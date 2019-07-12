@@ -740,9 +740,9 @@ namespace BP.WF.Template
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
-                workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
-                workCheckAth.FK_MapData = this.NodeID.ToString();
-                workCheckAth.NoOfObj = this.NodeID + "_FrmWorkCheck";
+                workCheckAth.MyPK = "ND"+this.NodeID + "_FrmWorkCheck";
+                workCheckAth.FK_MapData = "ND"+this.NodeID.ToString();
+                workCheckAth.NoOfObj = "FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.

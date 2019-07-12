@@ -690,15 +690,15 @@ namespace BP.WF
             }
             //创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
-            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, this.NodeID + "_FrmWorkCheck");
+            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, "ND"+this.NodeID + "_FrmWorkCheck");
             //不包含审核组件
             if (isHave == false)
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
-                workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
-                workCheckAth.FK_MapData = this.NodeID.ToString();
-                workCheckAth.NoOfObj = this.NodeID + "_FrmWorkCheck";
+                workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
+                workCheckAth.FK_MapData = "ND" + this.NodeID.ToString();
+                workCheckAth.NoOfObj =  "FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.

@@ -397,11 +397,11 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsVisable, true);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsVisable, true);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsVisable, value);
+                this.SetValByKey(FrmAttachmentAttr.IsVisable, value);
             }
         }
         /// <summary>

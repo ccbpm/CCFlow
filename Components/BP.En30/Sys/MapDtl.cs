@@ -473,18 +473,17 @@ namespace BP.Sys
         {
             get
             {
-                string s = this.GetParaString(MapDtlAttr.LinkUrl);
+                string s = this.GetValStrByKey(MapDtlAttr.LinkUrl);
                 if (DataType.IsNullOrEmpty(s))
                     return "http://ccport.org";
-
-                s = s.Replace("*", "@");
                 return s;
             }
             set
             {
-                string val = value;
-                val = val.Replace("@", "*");
-                this.SetPara(MapDtlAttr.LinkUrl, val);
+                this.SetValByKey(MapDtlAttr.LinkUrl, value);
+                //string val = value;
+                //val = val.Replace("@", "*");
+                //this.SetPara(MapDtlAttr.LinkUrl, val);
             }
         }
         public string LinkTarget
@@ -1342,6 +1341,12 @@ namespace BP.Sys
 
                 //MTR 多表头列.
                 map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
+                #region 超链接.
+                map.AddBoolean(MapDtlAttr.IsEnableLink, false, "是否启用超链接", true, true);
+                map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
+                map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
+                map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
+                #endregion 超链接.
 
                 //SQL过滤表达式.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);

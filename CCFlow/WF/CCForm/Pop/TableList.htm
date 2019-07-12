@@ -136,8 +136,8 @@
             dbSrc = dbSrc.replace('@WebUser.No', webUser.No);
             dbSrc = dbSrc.replace('@WebUser.Name', webUser.Name);
             dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-            dbSrc = dbSrc.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
-            dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
+            dbSrc = dbSrc.replace('@WebUser.DeptName', webUser.FK_DeptName);
+            dbSrc = dbSrc.replace("@WebUser.DeptOfFullName", webUser.FK_DeptNameOfFull);
             //SQL语句中含有@符号，替换父窗体表单字段值
             if (dbSrc.indexOf("@") != -1) {
                 var reg = new RegExp("(\~(.+?)\~)");

@@ -197,6 +197,23 @@
             return;
         }
 
+        function OpenLink(index) {
+            //获取当前行的数据
+            var en = $(index).parent().parent().data().data;
+            var linkUrl = sys_MapDtl.LinkUrl;
+            linkUrl = DealJsonExp(en, linkUrl);
+            linkUrl = linkUrl.replace("@WorkID", GetQueryString("RefPKVal"));
+            linkUrl = linkUrl.replace("@FK_Node",GetQueryString("FK_Node"));
+            linkUrl = linkUrl.replace("@FK_Flow", GetQueryString("FK_Flow"));
+            if (sys_MapDtl.LinkTarget == "_self")
+                window.location.href = linkUrl;
+            else if (sys_MapDtl.LinkTarget == "_blank")
+                window.open(linkUrl);
+            else
+                parent.OpenEasyUiDialogExt(linkUrl, sys_MapDtl.LinkLabel, 800, 500, false);    
+
+        }
+
         //打开附件.
         function Ath(index) {
             var dtlOID = $(index).parent().parent().data().data.OID;
@@ -520,6 +537,24 @@
 
                 }
 
+                //超链接
+                if (sys_MapDtl.IsEnableLink == 1) {
+                    var linkTh = $('<th style="width:50px;">超链接</th>');
+                    var target = sys_MapDtl.LinkTarget;
+                    var LinkLabel = sys_MapDtl.LinkLabel;
+                    var linkThData;
+                    linkThData = {
+                        custom: true,
+                        customcontent: 1,
+                        customcontent1: "a@href='javaScript:void(0);' onclick='OpenLink(this)' titile='超链接' target='" + target + "'@" + LinkLabel,
+                        coltype: 'Operation1'
+
+                    };
+
+                    linkTh.data(linkThData);
+                    threadTr.append(linkTh);
+                   
+                }
 
                 //添加删除,保存列
                 var delTh = "";

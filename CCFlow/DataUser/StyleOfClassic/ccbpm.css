@@ -32,7 +32,11 @@ input:hover[type="button"]
     border-radius: 3px;
      border:1px solid #1d7dd4;
 }
-
+.form-control[disabled],
+    fieldset[disabled] {
+    background-color: white;
+    opacity: 0;
+}
 
 
 /*文本框只读风格.*/

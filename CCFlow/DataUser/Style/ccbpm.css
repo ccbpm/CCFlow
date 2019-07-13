@@ -1,4 +1,4 @@
-/*  Table ·ç¸ñ   */
+ï»¿/*  Table é£æ ¼   */
 body
 {
     color: #333333;
@@ -16,7 +16,11 @@ body
     margin: 8px 10px 25px 10px;
     padding-bottom: 5px;
 }
-
+.form-control[disabled],
+    fieldset[disabled] {
+    background-color: white;
+    opacity: 0;
+}
 .form-unit {
     font-size: 15px;
     font-style: oblique;
@@ -26,7 +30,7 @@ body
     padding-bottom: 5px;
 }
 
-/* °´Å¥·ç¸ñ */
+/* æŒ‰é’®é£æ ¼ */
 input[type="button"], input[type="submit"], input[type="file"]
 {
     border: 0; /*background: #4D77A7;*/
@@ -51,7 +55,7 @@ input:hover[type="button"]
 }
 
 
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*æ–‡æœ¬æ¡†åªè¯»é£æ ¼.*/
 input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
@@ -65,7 +69,7 @@ input[type=text]:disabled
      color: #666; 
      cursor: no-drop;
 }
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*æ–‡æœ¬æ¡†åªè¯»é£æ ¼.*/
 textarea[disabled], input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
@@ -73,7 +77,7 @@ textarea[disabled], input[type=text]:disabled
     color: #009999;*/
     width:100%;
     padding-left:10px;
-    border: none !important;
+     border: none !important;
      background: none; 
      text-align: left; 
      color: #666; 
@@ -86,7 +90,7 @@ input[type=checkbox]:disabled
         width:20px;
 }
 
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*æ–‡æœ¬æ¡†åªè¯»é£æ ¼.*/
 select[disabled], input[type=text]:disabled
 {
    /**border: 1px solid #DDD;
@@ -104,7 +108,7 @@ select[disabled], input[type=text]:disabled
       -webkit-appearance:none;   
 }
   
-/*  table ÀàĞÍ·ç¸ñ */
+/*  table ç±»å‹é£æ ¼ */
 table
 {
     border: 0px outset #C0C0C0;
@@ -113,9 +117,9 @@ table
     border-collapse: collapse;
 }
 
-/*  Ê±Ñ§ÒµÌí¼Ó ¿ªÊ¼Î»ÖÃ */
+/*  æ—¶å­¦ä¸šæ·»åŠ  å¼€å§‹ä½ç½® */
 
-/*À©Õ¹Ó¦ÓÃÃ÷Ï¸±íÓë¶à¸½¼ş.*/
+/*æ‰©å±•åº”ç”¨æ˜ç»†è¡¨ä¸å¤šé™„ä»¶.*/
 .TitleExt
 {
     background-color: #f4f4f4;
@@ -145,7 +149,7 @@ th
     font-weight: bolder;
 }
  
- /*  idx ±í¸ñ×ó²àµÄĞòºÅÁĞ .*/
+ /*  idx è¡¨æ ¼å·¦ä¾§çš„åºå·åˆ— .*/
 .Idx
 {
     font-size: 12px;
@@ -249,7 +253,7 @@ caption
 }
 
 
-/** ÆäËü  */
+/** å…¶å®ƒ  */
 .ToolBar
 {
     background-color: #d8edff;
@@ -290,7 +294,7 @@ caption
 }
  
 
-/* ÔÚÊäÈëĞÅÏ¢×Ö¶ÎÃû³Æ£¬µ¥Ôª¸ñÊ½µÄ·ç¸ñ */
+/* åœ¨è¾“å…¥ä¿¡æ¯å­—æ®µåç§°ï¼Œå•å…ƒæ ¼å¼çš„é£æ ¼ */
 .FContext
 {
     padding-left: 4px;
@@ -520,7 +524,7 @@ display:none;
 
 }
 
-        /*ÌáÊ¾¿òµÄCSS ÉèÖÃ*/
+        /*æç¤ºæ¡†çš„CSS è®¾ç½®*/
 .popover-title {
     background: #213b5d !important;
     color: white;
@@ -551,7 +555,7 @@ display:none;
 
 #header {
     height: 50px;
-    font: bold 16px "Î¢ÈíÑÅºÚ";
+    font: bold 16px "å¾®è½¯é›…é»‘";
     background:rgb(157, 159, 175);
     color: #fff;
     text-align: left;
@@ -621,7 +625,7 @@ display:none;
 cursor:pointer;
 }
 
-/*radioºó±ß¸ú×ÅµÄ±êÇ©*/
+/*radioåè¾¹è·Ÿç€çš„æ ‡ç­¾*/
 .labRb {
 cursor:pointer;
 }
@@ -639,7 +643,7 @@ cursor:pointer;
     cursor: pointer;
 }
 
-/*POP´°ÖĞµÄµÄÊ÷*/
+/*POPçª—ä¸­çš„çš„æ ‘*/
 .tree-demo {
 text-align:left;
 }
@@ -697,7 +701,7 @@ border:none;
 
 .returnTackHeader {
     height: 50px;
-    font: bold 16px "Î¢ÈíÑÅºÚ";
+    font: bold 16px "å¾®è½¯é›…é»‘";
     background: rgb(157, 159, 175) !important;
     color: #fff;
     text-align: left;
@@ -754,7 +758,7 @@ body table tr td label{
   white-space: normal;
 }
 
-/*·ÖÒ³±í¸ñ*/
+/*åˆ†é¡µè¡¨æ ¼*/
 .tabPdiv {
 overflow:auto;
 }
@@ -768,7 +772,7 @@ select {
 }
 
 
-/*ÈÃ±í¸ñÏÔÊ¾ ...*/
+/*è®©è¡¨æ ¼æ˜¾ç¤º ...*/
 body table tr td {
   text-overflow: ellipsis;
   /* for IE */
@@ -789,7 +793,7 @@ body table tr td {
 
 
 
-/*ÑîÓñ»Û  --ÁÙÊ±Ôö¼Ó  ´¦Àíµ¯´°·µ»ØÖµµÃ±íµ¥²¼¾ÖÂÒµôµÄÎÊÌâ*/
+/*æ¨ç‰æ…§  --ä¸´æ—¶å¢åŠ   å¤„ç†å¼¹çª—è¿”å›å€¼å¾—è¡¨å•å¸ƒå±€ä¹±æ‰çš„é—®é¢˜*/
 
 .FContext div[id*=_mtags],.FContext div[id*=_mtags] .main-container {
     width: 100% !important;

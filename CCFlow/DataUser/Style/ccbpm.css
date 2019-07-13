@@ -17,9 +17,9 @@ body
     padding-bottom: 5px;
 }
 .form-control[disabled],
+.form-control[readonly],
     fieldset[disabled] {
     background-color: white;
-    opacity: 0;
 }
 .form-unit {
     font-size: 15px;

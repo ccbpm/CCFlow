@@ -33,9 +33,9 @@ input:hover[type="button"]
      border:1px solid #1d7dd4;
 }
 .form-control[disabled],
+.form-control[readonly],
     fieldset[disabled] {
     background-color: white;
-    opacity: 0;
 }
 
 

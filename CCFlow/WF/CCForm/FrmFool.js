@@ -77,7 +77,7 @@ function GenerFoolFrm(mapData, frmData) {
             ath.MyPK = gf.CtrlID;
             if (ath.RetrieveFromDBSources() == 0)
                 continue;
-            if (ath.IsVisable == "0")
+            if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
                 continue;
 
             html += "<tr>";
@@ -784,10 +784,13 @@ function InitMapAttrOfCtrl(mapAttr) {
 
             //获取上传附件列表的信息及权限信息
             var nodeID = pageData.FK_Node;
-            var no = nodeID.toString().substring(nodeID.toString().length - 2);
+
             var IsStartNode = 0;
-            if (no == "01")
-                IsStartNode = 1;
+            if (nodeID != null) {
+                var no = nodeID.substring(nodeID.length - 2);
+                if (no == "01")
+                    IsStartNode = 1;
+            }
 
             //创建附件描述信息.
             var mypk = mapAttr.MyPK;
@@ -1494,10 +1497,12 @@ function InitRBShowContent(frmData, mapAttr, defValue, RBShowModel, enableAttr) 
 }
 function Ath_Init(mypk, FK_MapData) {
     var nodeID = pageData.FK_Node;
-    var no = nodeID.toString().substring(nodeID.toString().length - 2);
     var IsStartNode = 0;
-    if (no == "01")
-        IsStartNode = 1;
+    if (nodeID != null) {
+        var no = nodeID.substring(nodeID.length - 2);
+        if (no == "01")
+            IsStartNode = 1;
+    }
 
     var noOfObj = mypk.replace(FK_MapData + "_", "");
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
@@ -1617,14 +1622,19 @@ function GetLab(frmData, attr) {
         url += "&WorkID=" + pageData.OID;
         url += "&FK_Node=" + nodeID;
         url += "&FK_Flow=" + pageData.FK_Flow;
-        var no = nodeID.toString().substring(nodeID.toString().length - 2);
-        var IsStartNode = 0;
-        if (no == "01")
-            url += "&IsStartNode=" + 1; //是否是开始节点
-
         var isReadonly = false;
-        if (attr.FK_MapData.indexOf(nodeID) == -1)
-            isReadonly = true;
+        if (nodeID == null)
+            isReadonly = false;
+        else {
+            var no = nodeID.substring(nodeID.length - 2);
+            var IsStartNode = 0;
+            if (no == "01")
+                url += "&IsStartNode=" + 1; //是否是开始节点
+
+           
+            if (attr.FK_MapData.indexOf(nodeID) == -1)
+                isReadonly = true;
+        }
         var noOfObj = mypk.replace(attr.FK_MapData + "_", "");
         var src = "";
 

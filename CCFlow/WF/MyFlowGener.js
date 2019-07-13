@@ -1895,6 +1895,20 @@ function InitToolBar() {
         });
     }
 
+    if ($('[name=CH]').length > 0) {
+
+        $('[name=CH]').attr('onclick', '');
+        $('[name=CH]').unbind('click');
+        $('[name=CH]').bind('click', function () { initModal("CH"); $('#returnWorkModal').modal().show(); });
+    }
+
+    if ($('[name=Note]').length > 0) {
+
+        $('[name=Note]').attr('onclick', '');
+        $('[name=Note]').unbind('click');
+        $('[name=Note').bind('click', function () { initModal("Note"); $('#returnWorkModal').modal().show(); });
+    }
+
 
 }
 
@@ -2038,6 +2052,13 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("历史发起记录&模版");
                 modalIframeSrc = "./WorkOpt/DBTemplate.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
+            case "CH":
+                $('#modalHeader').text("节点时限");
+                modalIframeSrc = "./WorkOpt/CH.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+            case "Note":
+                $('#modalHeader').text("备注");
+                modalIframeSrc = "./WorkOpt/Note.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+            
             default:
                 break;
         }

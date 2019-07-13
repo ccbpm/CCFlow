@@ -3458,6 +3458,51 @@ namespace BP.WF.HttpHandler
         }
         #endregion 节点时限重新设置
 
+        #region 节点备注的设置
+        public string Note_Init()
+        {
+            Paras ps = new Paras();
+            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
+            ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            ps.Add("WorkID", this.WorkID);
+
+            //转化成json
+            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+        }
+
+        /// <summary>
+        /// 保存备注.
+        /// </summary>
+        /// <returns></returns>
+        public string Note_Save()
+        {
+            string msg = this.GetRequestVal("Msg");
+            //增加track
+            Node nd = new Node(this.FK_Node);
+            Glo.AddToTrack(ActionType.FlowBBS, this.FK_Flow, this.WorkID, this.FID, nd.NodeID, nd.Name,  WebUser.No, WebUser.Name,nd.NodeID, nd.Name, WebUser.No, WebUser.Name, msg, null);
+           
+            //发送消息
+            string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID, "");
+            string[] emps = empsStrs.Split('@');
+            //标题
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            string title = "流程名称为"+gwf.FlowName+"标题为"+gwf.Title+"在节点增加备注说明"+msg;
+           
+            foreach (string emp in emps)
+            {
+                if (DataType.IsNullOrEmpty(emp))
+                    continue;
+                //获得当前人的邮件.
+                BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
+
+                BP.WF.Dev2Interface.Port_SendMsg(empEn.No, title,msg, null,"NoteMessage",this.FK_Flow,this.FK_Node,this.WorkID,this.FID);
+
+            }
+            return "保存成功";
+        }
+
+        #endregion 节点备注的设置
+
         private static string GetSpanTime(DateTime t1, DateTime t2,int day)
         {
             var span = t2 - t1;

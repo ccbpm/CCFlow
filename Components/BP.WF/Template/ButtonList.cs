@@ -279,7 +279,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string SelectAccepterEnable = "SelectAccepterEnable";
 
-
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public const string NoteLab = "NoteLab";
+        /// <summary>
+        //备注是否可用
+        /// </summary>
+        public const string NoteEnable = "NoteEnable";
        
 
 

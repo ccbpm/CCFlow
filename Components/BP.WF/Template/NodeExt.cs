@@ -605,6 +605,10 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.BatchLab, "批量审核", "批量审核标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
 
+                //备注 流程不流转，设置备注信息提醒已处理人员当前流程运行情况
+                map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.NoteEnable, false, "是否启用", true, true);
+
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
 
@@ -1292,6 +1296,7 @@ namespace BP.WF.Template
 
 
             #region 创建审核组件附件
+            
             FrmAttachment workCheckAth = new FrmAttachment();
             workCheckAth.MyPK = "ND"+this.NodeID + "_FrmWorkCheck";
             //不包含审核组件

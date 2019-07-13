@@ -1080,6 +1080,13 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                 }
 
+                if (btnLab.NoteEnable == true)
+                {
+                    /* 备注设置 */
+                    toolbar += "<input type=button name='Note'  value='" + btnLab.NoteLab + "' enable=true  />";
+                }
+
+
                 if (btnLab.PRIEnable == true)
                 {
                     /* 优先级设置 */
@@ -1431,6 +1438,8 @@ namespace BP.WF.HttpHandler
                     string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<a data-role='button' type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinShowModalDialog('" + urlr3 + "'); \" ></a>";
                 }
+
+                
 
                 if (btnLab.PRIEnable == true)
                 {

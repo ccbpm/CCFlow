@@ -188,7 +188,7 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.'
 
             sms.AtPara = paras;
-            sms.afterInsert();
+            sms.Insert();
         }
         #endregion 新方法
 

@@ -1058,6 +1058,28 @@ namespace BP.WF.Template
             }
         }
 
+
+        /// <summary>
+        /// 备注标签
+        /// </summary>
+        public string NoteLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.NoteLab);
+            }
+        }
+        /// <summary>
+        ///备注标签
+        /// </summary>
+        public bool NoteEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.NoteEnable);
+            }
+        }
+
         #endregion
 
         #region 构造方法
@@ -1226,6 +1248,10 @@ namespace BP.WF.Template
                 // add 2019.3.10 增加List.
                 map.AddTBString(BtnAttr.ListLab, "列表", "列表按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ListEnable, true, "是否启用", true, true);
+
+                //备注 流程不流转，设置备注信息提醒已处理人员当前流程运行情况
+                map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.NoteEnable, false, "是否启用", true, true);
 
 
                 #region 公文按钮

@@ -64,6 +64,8 @@ function GenerFreeFrm(mapData, frmData) {
     //循环 附件
     for (var i in frmData.Sys_FrmAttachment) {
         var frmAttachment = frmData.Sys_FrmAttachment[i];
+        if (frmAttachment.IsVisable == 0)
+            continue;
         var createdFigure = figure_Template_Attachment(frmAttachment);
         $('#CCForm').append(createdFigure);
     }

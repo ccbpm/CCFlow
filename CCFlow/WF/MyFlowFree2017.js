@@ -66,6 +66,8 @@ function GenerFreeFrm(wn) {
     //循环 附件
     for (var i in flowData.Sys_FrmAttachment) {
         var frmAttachment = flowData.Sys_FrmAttachment[i];
+        if (frmAttachment.IsVisable == 0)
+            continue;
         var createdFigure = figure_Template_Attachment(frmAttachment);
         $('#CCForm').append(createdFigure);
     }
@@ -334,7 +336,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             if (mapAttr.IsSigan == "1") {
                 var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-                handler.AddPara('no', val);
+                handler.AddPara('No', val);
                 data = handler.DoMethodReturnString("HasSealPic");
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
                 if (data.length > 0) {
@@ -641,33 +643,34 @@ function figure_Template_HyperLink(frmLin) {
 //初始化 IMAGE  只初始化了图片类型
 function figure_Template_Image(frmImage) {
     var eleHtml = '';
-    if (frmImage.ImgAppType == 0) {//图片类型
+     //解析图片
+    if (frmImage.ImgAppType == 0) { //图片类型
         //数据来源为本地.
         var imgSrc = '';
         if (frmImage.ImgSrcType == 0) {
-            if (frmImage.ImgPath && frmImage.ImgPath.indexOf(";") < 0)
-                imgSrc = frmImage.ImgPath;
-            else
-                imgSrc = frmImage.ImgPath;
-
+            //替换参数
+            var frmPath = frmImage.ImgPath;
+            frmPath = frmPath.replace('＠', '@');
+            frmPath = frmPath.replace('@basePath', basePath);
+            frmPath = frmPath.replace('@basePath', basePath);
+            imgSrc = DealJsonExp(flowData.MainTable[0], frmPath);
         }
+
         //数据来源为指定路径.
         if (frmImage.ImgSrcType == 1) {
-            //图片路径不为默认值
-            if (frmImage.ImgURL && frmImage.ImgURL.indexOf(";") < 0)
-                imgSrc = frmImage.ImgURL;
-            else
-                imgSrc = frmImage.ImgURL;
-
+            var url = frmImage.ImgURL;
+            url = url.replace('＠', '@');
+            url = url.replace('@basePath', basePath);
+            imgSrc = DealJsonExp(flowData.MainTable[0], url);
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
-        if (imgSrc == "" || imgSrc == null)  //|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
+        if (imgSrc == "" || imgSrc == null)
             imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
 
         eleHtml = $('<div></div>');
         var a = $("<a></a>");
         var img = $("<img/>")
-        // img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H);
+
         img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='../DataUser/ICON/CCFlow/LogBig.png'");
 
         if (frmImage.LinkURL != undefined && frmImage.LinkURL != '') {
@@ -713,14 +716,7 @@ function figure_Template_ImageAth(frmImageAth) {
     var img = $("<img class='pimg'/>");
 
     var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
-//    //获取数据
-//    if (flowData.Sys_FrmImgAthDB) {
-//        $.each(flowData.Sys_FrmImgAthDB, function (i, obj) {
-//            if (obj.MyPK == (frmImageAth.MyPK + '_' + pageData.WorkID)) {
-//                imgSrc = basePath + obj.FileFullName;
-//            }
-//        });
-    //    }
+
     //获取数据
     if (frmImageAth.FK_MapData.indexOf("ND") != -1)
         imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.CtrlID + "_" + pageData.WorkID + ".png";

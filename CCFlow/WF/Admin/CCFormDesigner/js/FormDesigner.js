@@ -736,6 +736,8 @@ function Conver_CCForm_V1ToV2() {
     //循环 附件
     for (var i in flow_Data.Sys_FrmAttachment) {
         var frmAttachment = flow_Data.Sys_FrmAttachment[i];
+        if (frmAttachment.IsVisable == 0)
+            continue;
         var createdFigure = figure_Template_Attachment(frmAttachment);
         //move it into position
         //createdFigure.transform(Matrix.translationMatrix(frmAttachment.X - createdFigure.rotationCoords[0].x, frmAttachment.Y - createdFigure.rotationCoords[0].y))

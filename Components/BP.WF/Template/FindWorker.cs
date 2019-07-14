@@ -546,14 +546,11 @@ namespace BP.WF.Template
                 if (flowAppType == FlowAppType.Normal)
                 {
                     ps = new Paras();
-                    if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                    {
-                        ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
-                    }
-                    else if (BP.WF.Glo.OSModel == OSModel.OneMore)
-                    {
-                        ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
-                    }
+
+                    string mysql = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    mysql += " UNION ";
+                    mysql += "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    ps.SQL = mysql;
 
                     ps.Add("FK_Node", town.HisNode.NodeID);
                     dt = DBAccess.RunSQLReturnTable(ps);
@@ -1125,7 +1122,8 @@ namespace BP.WF.Template
             else
             {
                 sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Dept C  WHERE A.FK_Dept=C.No AND A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND C.ParentNo=" + dbStr + "FK_Dept";
-
+                //sql += " UNION ";
+                // sql += "";
                 ps.SQL = sql;
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.Add("FK_Dept", deptNo);

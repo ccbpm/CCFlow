@@ -8373,7 +8373,6 @@ namespace BP.WF
                 ps.Add("FK_Node", nd.NodeID);
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
-
             }
 
             this.HisGenerWorkFlow.FK_Node = nd.NodeID;

@@ -8242,9 +8242,7 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
             if (gwf.RetrieveFromDBSources() == 0)
-            {
                 throw new Exception("@工作丢失..");
-            }
 
             if (gwf.WFState == WFState.Blank)
             {
@@ -8274,6 +8272,10 @@ namespace BP.WF
                     gwl.Insert();
                 }
             }
+
+            Flow fl = new Flow(fk_flow);
+            string sql = "UPDATE "+fl.PTable+" SET WFStarter=1, FlowStater='"+WebUser.No+"' WHERE OID="+workID;
+            DBAccess.RunSQL(sql);
         }
         /// <summary>
         /// 保存参数，向工作流引擎传入的参数变量.

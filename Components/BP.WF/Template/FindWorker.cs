@@ -299,12 +299,13 @@ namespace BP.WF.Template
 
                     //就要到轨迹表里查,因为有可能是跳过的节点.
                     ps = new Paras();
-                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5) AND NDFrom=" + dbStr + "NDFrom AND (WorkID=" + dbStr + "WorkID OR Fid="+ dbStr + "WorkID)";
+                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5 OR ActionType=" + dbStr + "ActionType6) AND NDFrom=" + dbStr + "NDFrom AND (WorkID=" + dbStr + "WorkID OR Fid=" + dbStr + "WorkID)";
                     ps.Add("ActionType1", (int)ActionType.Skip);
                     ps.Add("ActionType2", (int)ActionType.Forward);
                     ps.Add("ActionType3", (int)ActionType.ForwardFL);
                     ps.Add("ActionType4", (int)ActionType.ForwardHL);
                     ps.Add("ActionType5", (int)ActionType.Start);
+                    ps.Add("ActionType6", (int)ActionType.SubThreadForward);
 
                     ps.Add("NDFrom", int.Parse(nd));
                     ps.Add("WorkID", this.WorkID);

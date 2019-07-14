@@ -40,6 +40,10 @@
                 var checkFlag = false;
                 var mynd = nodes[i];
                 var nodeID = mynd.NodeID;
+
+                if (nodeID == nd.NodeID)
+                    continue;
+
                 var nodeName = mynd.Name;
                 //判定是否是改选择方式
                 if (nd.DeliveryWay == DeliveryWay.BySpecNodeEmp) {
@@ -61,7 +65,7 @@
                 } else {
                     setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
                 }
-                setHtml += "<label for='RB_NodeNo_" + i + "' >名称:" + nodeName + "</label>";
+                setHtml += "<label for='RB_NodeNo_" + i + "' >" + nodeName + "</label>";
 
                 setHtml += "</td>";
                 setHtml += "<td>" + nodeID + "</td>";

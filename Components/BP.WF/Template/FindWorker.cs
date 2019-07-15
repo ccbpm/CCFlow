@@ -276,12 +276,15 @@ namespace BP.WF.Template
                         throw new Exception("流程设计错误:您设置的节点(" + town.HisNode.Name + ")的接收方式为按指定的节点岗位投递，但是您没有在访问规则设置中设置节点编号。");
 
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsEnable=1 ";
+                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE (WorkID=" + dbStr + "OID OR WorkID=" + dbStr + "FID) AND FK_Node=" + dbStr + "FK_Node AND IsEnable=1 ";
                     ps.Add("FK_Node", int.Parse(nd));
+
                     if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
-                        ps.Add("OID", this.currWn.HisWork.FID);
+                        ps.Add("FID", this.currWn.HisWork.FID);
                     else
-                        ps.Add("OID", this.WorkID);
+                        ps.Add("FID", this.WorkID);
+
+                    ps.Add("OID", this.WorkID);
 
                     DataTable dt_ND = DBAccess.RunSQLReturnTable(ps);
                     //添加到结果表
@@ -299,17 +302,24 @@ namespace BP.WF.Template
 
                     //就要到轨迹表里查,因为有可能是跳过的节点.
                     ps = new Paras();
-                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5 OR ActionType=" + dbStr + "ActionType6) AND NDFrom=" + dbStr + "NDFrom AND (WorkID=" + dbStr + "WorkID OR Fid=" + dbStr + "WorkID)";
+                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE"
+                        + " (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3"
+                        + "  OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5 OR ActionType=" + dbStr + "ActionType6)"
+                        + "   AND NDFrom=" + dbStr + "NDFrom AND (WorkID=" + dbStr + "WorkID OR WorkID=" + dbStr + "FID)";
                     ps.Add("ActionType1", (int)ActionType.Skip);
                     ps.Add("ActionType2", (int)ActionType.Forward);
                     ps.Add("ActionType3", (int)ActionType.ForwardFL);
                     ps.Add("ActionType4", (int)ActionType.ForwardHL);
-                    ps.Add("ActionType5", (int)ActionType.Start);
-                    ps.Add("ActionType6", (int)ActionType.SubThreadForward);
-
+                    ps.Add("ActionType5", (int)ActionType.SubThreadForward);
+                    ps.Add("ActionType6", (int)ActionType.Start);
                     ps.Add("NDFrom", int.Parse(nd));
+                    if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        ps.Add("FID", this.currWn.HisWork.FID);
+                    else
+                        ps.Add("FID", this.WorkID);
                     ps.Add("WorkID", this.WorkID);
-                    ps.Add("WorkID", this.WorkID);
+
+
                     dt_ND = DBAccess.RunSQLReturnTable(ps);
                     if (dt_ND.Rows.Count != 0)
                     {
@@ -319,7 +329,35 @@ namespace BP.WF.Template
                             dr[0] = row[0].ToString();
                             dt.Rows.Add(dr);
                         }
+                        continue;
                     }
+
+                    //从Selector中查找
+                    ps = new Paras();
+                    ps.SQL = "SELECT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID OR WorkID=" + dbStr + "FID)";
+                    ps.Add("FK_Node", int.Parse(nd));
+                    ps.Add("WorkID", this.WorkID);
+                    if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        ps.Add("FID", this.currWn.HisWork.FID);
+                    else
+                        ps.Add("FID", this.WorkID);
+
+
+                    dt_ND = DBAccess.RunSQLReturnTable(ps);
+                    //添加到结果表
+                    if (dt_ND.Rows.Count != 0)
+                    {
+                        foreach (DataRow row in dt_ND.Rows)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr[0] = row[0].ToString();
+                            dt.Rows.Add(dr);
+                        }
+                        //此节点已找到数据则不向下找，继续下个节点
+                        continue;
+                    }
+
+
                 }
 
                 //本流程里没有有可能该节点是配置的父流程节点,也就是说子流程的一个节点与父流程指定的节点的工作人员一致.

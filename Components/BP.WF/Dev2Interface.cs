@@ -8899,21 +8899,28 @@ namespace BP.WF
                 sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
             }
 
-            //@shilianyu.
-            Emp emp = new Emp();
-            emp.No = fk_emp;
-            if (emp.RetrieveFromDBSources() == 0)
-                return;
 
-            sa.ResetPK();
-            sa.FK_Emp = emp.No;
-            sa.EmpName = emp.Name;
-            sa.DeptName = emp.FK_DeptText;
-            sa.FK_Node = toNodeID;
-            sa.WorkID = workID;
-            if (sa.IsExits == false)
+            string[] emps = fk_emp.Split(',');
+            foreach (string empNo in emps)
             {
-                sa.Insert();
+                if (DataType.IsNullOrEmpty(empNo) == true)
+                    continue;
+                Emp emp = new Emp();
+                emp.No = empNo;
+                if (emp.RetrieveFromDBSources() == 0)
+                    return;
+
+                
+                sa.FK_Emp = emp.No;
+                sa.EmpName = emp.Name;
+                sa.DeptName = emp.FK_DeptText;
+                sa.FK_Node = toNodeID;
+                sa.WorkID = workID;
+                sa.ResetPK();
+                if (sa.IsExits == false)
+                {
+                    sa.Insert();
+                }
             }
         }
         /// <summary>

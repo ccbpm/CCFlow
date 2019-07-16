@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>节点时限设置</title>
+    <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <style type="text/css">
+       .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th ,.table>colgroup+thead>tr:first-child>th
+       {
+           border: 1px solid rgb(221, 221, 221);
+       }
+    </style>
+    <script type="text/javascript">
+        var currtab = GetQueryString("CurrTab");
+        var fk_node = GetQueryString("FK_Node");
+        var fk_flow = GetQueryString("FK_Flow");
+        var workid = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
+
+        $(function () {
+            InitPage();
+        });
+
+        //初始化数据
+        function InitPage() {
+            
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CH_Init");
+            if (data.indexOf("err@") == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+            var nds = data["WF_Node"];
+            var gwls = data["WF_GenerWorkerList"];
+            var node = data.WF_CurrNode[0];
+            //流程时限属性
+            var gwf = new Entity("BP.WF.GenerWorkFlow");
+            gwf.CopyJSON(data.WF_GenerWorkFlow[0]);
+
+
+            //判断是否可以修改时限
+            var chRole = node.CHRole;
+            var _Html = "";
+            var Idx = 0;
+            var limintT;
+            for (var i = 0; i < nds.length; i++) {
+                var nd = nds[i];
+                limintT = nd.TimeLimit;
+                var paraCH = gwf.GetPara("CH" + nd.NodeID);
+                if (paraCH != null && paraCH != undefined)
+                    limintT = paraCH;
+
+                //根据节点获取GenerWorkerList对应的数据
+                var gwl = GetEntityByNode(gwls,nd.NodeID);
+                _Html += "<tr>";
+                Idx = i + 1;
+                _Html += "<td>" + Idx + "</td>";
+                if (gwl != null) { // 已经运行的节点或者运行到的节点
+                    _Html += "<td style='text-align: center'>" + gwl.FK_NodeText + "</td>";
+                    _Html += "<td style='text-align: center'>" + gwl.FK_EmpText + "</td>";
+                    _Html += "<td style='text-align: center'>" + gwl.RDT + "</td>";
+                    _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
+                    _Html += "<td style='text-align: center'>" + gwl.CDT + "</td>";
+
+                    if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
+
+                        _Html += "<td style='text-align: center'>无</td>";
+                        _Html += "<td style='text-align: center'>正常</td>";
+                        _Html += "<td style='text-align: center'>无</td>";
+                    } else {
+                        //耗时
+                        var rdt = new Date(Date.parse(gwl.RDT.replace(/-/g, "/")));
+                        var cdt = new Date(Date.parse(gwl.CDT.replace(/-/g, "/")));
+
+                        _Html += "<td style='text-align: center'>" + GetSpanTime(rdt, cdt) + "</td>";
+                        //状态
+                        if (gwl.CDT <= gwl.SDT)
+                            _Html += "<td style='text-align: center'>正常</td>";
+                        else
+                            _Html += "<td style='text-align: center'><label style='color:red'>逾期</label></td>";
+                        //时限
+
+                        _Html += "<td style='text-align: center'>" + limintT + "</td>";
+                    }
+                    _Html += "</tr>";
+
+                } else { //未运行到的节点
+                    if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
+                        _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
+                        _Html += "<td style='text-align: center'>" + new WebUser().Name + "</td>";
+                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
+                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
+                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
+                        _Html += "<td style='text-align: center'>无</td>";
+                        _Html += "<td style='text-align: center'>正常</td>";
+                        _Html += "<td style='text-align: center'>无</td>";
+                    } else {
+                        _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        if (chRole == 1)
+                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + limintT + "' class='form-control'/></td>";
+                        else
+                            _Html += "<td style='text-align: center'>" + limintT + "</td>";
+                        _Html += "</tr>";
+                    }
+                }
+
+            }
+
+            $("#CHTbody").html(_Html);
+
+            
+            _Html = "<tr>";
+            _Html += "<td>" + gwf.RDT + "</td>";
+            _Html += "<td>" + gwf.SDTOfFlow + "</td>";
+             var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
+            if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
+                _Html += "<td>逾期</td>";
+                _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
+            } else {
+                _Html += "<td>正常</td>";
+                var spanTime = data.SpanTime[0].SpanTime;
+                _Html += "<td>" + spanTime + "</td>";
+            }
+            if (chRole == 1)
+                _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
+
+            //可调整时限增加保存按钮
+            if (chRole == 1)
+                $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
+            
+            $("#FlowCH").html(_Html);
+
+        }
+
+        //保存设置的时限
+        function Save() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddFormData();
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CH_Save");
+            if (data.indexOf("err@") == 0) {
+                alert(data);
+                return;
+            }
+            alert("保存成功");
+            window.location.href = window.location.href;
+
+        }
+
+        //根据NodeID获取单实体
+        function GetEntityByNode(gwls, nodeID) {
+            for (var idx = 0; idx < gwls.length; idx++) {
+                if (gwls[idx].FK_Node == nodeID)
+                    return gwls[idx];
+            }
+            return null;
+        }
+
+        //剩余多少天
+        function GetOverSpanTime(date1, date2) {
+            //获取当前日期
+            var currDate = new Date();
+            if (currDate > date2)
+                return "0天";
+            return GetSpanTime(currDate, date2);
+
+        }
+        function GetSpanTime(date1, date2) {
+            ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
+            var date3 = date2.getTime() - date1.getTime();  //时间差秒
+            var str = '';
+            //计算出相差天数
+            var days = Math.floor(date3 / (24 * 3600 * 1000));
+            if (days > 0) {
+                str += days + '天';
+            }
+
+            //计算出小时数
+            var leave1 = date3 % (24 * 3600 * 1000);   //计算天数后剩余的毫秒数
+            var hours = Math.floor(leave1 / (3600 * 1000));
+            if (hours > 0) {
+                str += hours + '小时';
+            }
+
+            //计算相差分钟数
+            var leave2 = leave1 % (3600 * 1000);         //计算小时数后剩余的毫秒数
+            var minutes = Math.floor(leave2 / (60 * 1000));
+            if (minutes > 0) {
+                str += minutes + '分';
+            }
+
+            if (str.length == 0) {
+                var leave3 = leave2 % (60 * 1000);
+                var seconds = Math.floor(leave3 / 1000);
+
+                str += seconds + '秒';
+
+                if (seconds == NaN)
+                    return date1 + "," + date2;
+                return str;
+            }
+
+            return str;
+        }
+
+        //时间格式
+        Date.prototype.format = function (format) {
+            var date = {
+                "M+": this.getMonth() + 1,
+                "d+": this.getDate(),
+                "h+": this.getHours(),
+                "m+": this.getMinutes(),
+                "s+": this.getSeconds(),
+                "q+": Math.floor((this.getMonth() + 3) / 3),
+                "S+": this.getMilliseconds()
+            };
+            if (/(y+)/i.test(format)) {
+                format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+            }
+            for (var k in date) {
+                if (new RegExp("(" + k + ")").test(format)) {
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+                }
+            }
+            return format;
+        }
+
+    </script>
+
+</head>
+<body>
+    <div style="padding:12px">
+        <form id="cc">
+           <div style="height:80%">
+                <table class="table table-hover" style="width:100%">
+                    <caption>节点时限 </caption>
+                    <thead>
+                        <tr>
+                            <th style='background-color:#F2F2F2;width:10px'>#</th>
+                            <th style='background-color:#F2F2F2;;text-align:center'>节点</th>
+                            <th style='background-color:#F2F2F2;;text-align:center'>处理人</th>
+                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>接收时间</th >
+                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>应该完成时间</th>
+                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>实际完成时间</th>
+                            <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
+                            <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
+                            <th style='background-color:#F2F2F2;width:100px;text-align:center'>时限时间</th>
+                       
+                        </tr>
+                    </thead>
+                    <tbody id="CHTbody">
+                
+                    </tbody>
+                
+                </table>
+            </div>
+            <table class="table">
+                <caption>流程时限 </caption>
+                <thead>
+                    <tr>
+                        <th style='background-color:#F2F2F2;'>开始日期</th>
+                        <th style='background-color:#F2F2F2;'>应完成日期</th>
+                        <th style='background-color:#F2F2F2;width:150px'>剩余时间</th >
+                        <th style='background-color:#F2F2F2;width:150px'>状态</th>
+                        <th style='background-color:#F2F2F2;width:150px'>调整时间</th>
+                        
+                    </tr>
+                </thead>
+                 <tbody id="FlowCH">
+                
+                </tbody>
+               
+           </table>
+        </form>
+
+       <div id="bottomBar"></div>
+      
+    </div>
+    
+</body>
+</html>

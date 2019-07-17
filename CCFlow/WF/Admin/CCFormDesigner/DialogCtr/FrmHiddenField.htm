@@ -72,15 +72,16 @@
         function LoadGridData(pageNumber, pageSize) {
             this.pageNumber = pageNumber;
             this.pageSize = pageSize;
-
-            var params = {
-                action: "Hiddenfielddata",
-                pageNumber: pageNumber,
-                FK_MapData: FK_MapData,
-                pageSize: pageSize
-            };
-
-            ajaxService(params, LoadDataGridCallBack, this);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
+            handler.AddPara("pageNumber", pageNumber);
+            handler.AddPara("pageSize", pageSize);
+            handler.AddPara("FK_MapData", FK_MapData);
+            var data = handler.DoMethodReturnString("Hiddenfielddata");
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+            LoadDataGridCallBack(data);
         }
         var FK_MapData = "";
 
@@ -91,20 +92,10 @@
         });
 
         //加载grid后回调函数
-        function LoadDataGridCallBack(js, scorp) {
-
-            if (js.indexOf('err@') != -1) {
-                alert(js);
-                return;
-            }
+        function LoadDataGridCallBack(js) {
 
             $("#pageloading").hide();
-
-            //系统错误
-            if (js.status && js.status == 500) {
-                $("body").html("<b>访问页面出错，请联系管理员。<b>");
-                return;
-            }
+           
             var pushData = eval('(' + js + ')');
 
             $('#newsGrid').datagrid({
@@ -121,8 +112,8 @@
                 rownumbers: true,
                 pagination: false,
                 fitColumns: true,
-                pageNumber: scorp.pageNumber,
-                pageSize: scorp.pageSize,
+                pageNumber: 1,
+                pageSize: 1000,
                 pageList: [100, 200, 300, 400],
                 loadMsg: '数据加载中......'
 

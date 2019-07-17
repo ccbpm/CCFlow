@@ -486,7 +486,7 @@ function Save(scope) {
     $.each(params.split("&"), function (i, o) {
         var param = o.split("=");
         if (param.length == 2 && validate(param[1])) {
-            handler.AddPara(param[0], decodeURIComponent(param[1], true));
+            handler.AddPara(param[0], param[1]);
         } else {
             handler.AddPara(param[0], "");
         }

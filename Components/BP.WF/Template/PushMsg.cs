@@ -1206,7 +1206,11 @@ namespace BP.WF.Template
                             smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empIDs[0]);
                             openWorkURL = openWorkURL.Replace("{EmpStr}", empIDs[0]);
 
-                            BP.GPM.Emp empEn = new BP.GPM.Emp(empIDs[0]);
+                            string myEmpID = empIDs[0];
+                            BP.GPM.Emp empEn = new BP.GPM.Emp();
+                            empEn.No = myEmpID;
+                            if (empEn.RetrieveFromDBSources() == 0)
+                                continue;
                              
                             string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
 

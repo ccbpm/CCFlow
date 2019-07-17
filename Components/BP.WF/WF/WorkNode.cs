@@ -6934,7 +6934,7 @@ namespace BP.WF
                 this.WhenTranscactionRollbackError(ex);
                 DBAccess.DoTransactionRollback();
 
-                throw new Exception(ex.Message);
+                throw new Exception(ex.Message+"技术信息:"+ex.StackTrace);
                 //  throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
             }
         }
@@ -8331,6 +8331,16 @@ namespace BP.WF
             ps.Add("WorkID", this.WorkID);
             ps.Add("FID", this.HisWork.FID);
             DBAccess.RunSQL(ps);
+
+            if (this.HisNode.TodolistModel == WF.TodolistModel.QiangBan)
+            {
+                ps = new Paras();
+                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND FK_Emp!="+dbStr+"FK_Emp ";
+                ps.Add("WorkID", this.WorkID);
+                ps.Add("FID", this.HisWork.FID);
+                ps.Add("FK_Emp", WebUser.No);
+                DBAccess.RunSQL(ps);
+            }
 
 
             string info = "";

@@ -3008,116 +3008,125 @@ namespace BP.WF
         /// <returns>是否成立</returns>
         public static bool CondExpPara(string exp, Hashtable ht, Int64 myWorkID)
         {
-            string[] strs = exp.Trim().Split(' ');
-            string key = strs[0].Trim();
-            string oper = strs[1].Trim();
-            string val = strs[2].Trim();
-            val = val.Replace("'", "");
-            val = val.Replace("%", "");
-            val = val.Replace("~", "");
-
-            string valPara = null;
-            if (ht.ContainsKey(key) == false)
+            try
             {
+                string[] strs = exp.Trim().Split(' ');
 
-                bool isHave = false;
-                if (myWorkID != 0)
+                string key = strs[0].Trim();
+                string oper = strs[1].Trim();
+                string val = strs[2].Trim();
+
+                val = val.Replace("'", "");
+                val = val.Replace("%", "");
+                val = val.Replace("~", "");
+
+                string valPara = null;
+                if (ht.ContainsKey(key) == false)
                 {
-                    //把外部传来的参数传入到 rptGE 让其做方向条件的判断.
-                    GenerWorkFlow gwf = new GenerWorkFlow(myWorkID);
-                    AtPara at = gwf.atPara;
-                    foreach (string str in at.HisHT.Keys)
-                    {
-                        if (key.Equals(str) == false)
-                            continue;
 
-                        valPara = at.GetValStrByKey(key);
-                        isHave = true;
-                        break;
+                    bool isHave = false;
+                    if (myWorkID != 0)
+                    {
+                        //把外部传来的参数传入到 rptGE 让其做方向条件的判断.
+                        GenerWorkFlow gwf = new GenerWorkFlow(myWorkID);
+                        AtPara at = gwf.atPara;
+                        foreach (string str in at.HisHT.Keys)
+                        {
+                            if (key.Equals(str) == false)
+                                continue;
+
+                            valPara = at.GetValStrByKey(key);
+                            isHave = true;
+                            break;
+                        }
+                    }
+
+                    if (isHave == false)
+                    {
+                        try
+                        {
+                            /*如果不包含指定的关键的key, 就到公共变量里去找. */
+                            if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
+                                throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
+                            valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
+                        }
+                        catch
+                        {
+                            //有可能是常量. 
+                            valPara = key;
+                        }
                     }
                 }
-
-                if (isHave == false)
+                else
                 {
-                    try
-                    {
-                        /*如果不包含指定的关键的key, 就到公共变量里去找. */
-                        if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
-                            throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
-                        valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
-                    }
-                    catch
-                    {
-                        //有可能是常量. 
-                        valPara = key;
-                    }
+                    valPara = ht[key].ToString().Trim();
                 }
-            }
-            else
-            {
-                valPara = ht[key].ToString().Trim();
-            }
 
-            #region 开始执行判断.
-            if (oper == "=")
-            {
-                if (valPara == val)
-                    return true;
-                else
-                    return false;
-            }
+                #region 开始执行判断.
+                if (oper == "=")
+                {
+                    if (valPara == val)
+                        return true;
+                    else
+                        return false;
+                }
 
-            if (oper.ToUpper() == "LIKE")
-            {
-                if (valPara.Contains(val))
-                    return true;
-                else
-                    return false;
-            }
+                if (oper.ToUpper() == "LIKE")
+                {
+                    if (valPara.Contains(val))
+                        return true;
+                    else
+                        return false;
+                }
 
 
-            if (DataType.IsNumStr(valPara) == false)
-                throw new Exception("err@表达式错误:[" + exp + "]没有找到参数[" + valPara + "]的值，导致无法计算。");
+                if (DataType.IsNumStr(valPara) == false)
+                    throw new Exception("err@表达式错误:[" + exp + "]没有找到参数[" + valPara + "]的值，导致无法计算。");
 
-            if (oper == ">")
-            {
-                if (float.Parse(valPara) > float.Parse(val))
-                    return true;
-                else
-                    return false;
-            }
-            if (oper == ">=")
-            {
-                if (float.Parse(valPara) >= float.Parse(val))
-                    return true;
-                else
-                    return false;
-            }
-            if (oper == "<")
-            {
-                if (float.Parse(valPara) < float.Parse(val))
-                    return true;
-                else
-                    return false;
-            }
-            if (oper == "<=")
-            {
-                if (float.Parse(valPara) <= float.Parse(val))
-                    return true;
-                else
-                    return false;
-            }
+                if (oper == ">")
+                {
+                    if (float.Parse(valPara) > float.Parse(val))
+                        return true;
+                    else
+                        return false;
+                }
+                if (oper == ">=")
+                {
+                    if (float.Parse(valPara) >= float.Parse(val))
+                        return true;
+                    else
+                        return false;
+                }
+                if (oper == "<")
+                {
+                    if (float.Parse(valPara) < float.Parse(val))
+                        return true;
+                    else
+                        return false;
+                }
+                if (oper == "<=")
+                {
+                    if (float.Parse(valPara) <= float.Parse(val))
+                        return true;
+                    else
+                        return false;
+                }
 
-            if (oper == "!=")
-            {
-                if (float.Parse(valPara) != float.Parse(val))
-                    return true;
-                else
-                    return false;
-            }
-            throw new Exception("@参数格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
-            #endregion 开始执行判断.
+                if (oper == "!=")
+                {
+                    if (float.Parse(valPara) != float.Parse(val))
+                        return true;
+                    else
+                        return false;
+                }
+                throw new Exception("@参数格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
+                #endregion 开始执行判断.
 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("计算参数的时候出现错误:"+ex.Message);
+            }
         }
         /// <summary>
         /// 表达式替换

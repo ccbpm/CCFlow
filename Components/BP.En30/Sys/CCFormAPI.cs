@@ -876,7 +876,7 @@ namespace BP.Sys
                     || shape == FrmEle.HandSiganture)
                 {
                     BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
-                    attrPKs = attrPKs.Replace(ctrlID + "@", "@");
+                    attrPKs = attrPKs.Replace("@"+ctrlID + "@", "@");
                     continue;
                 }
 
@@ -894,7 +894,7 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveDtl(fk_mapdata, ctrlID, x, y, height, width);
-                    dtlPKs = dtlPKs.Replace(ctrlID + "@", "@");
+                    dtlPKs = dtlPKs.Replace("@"+ctrlID + "@", "@");
                     continue;
                 }
                 #endregion 数据类控件.
@@ -904,14 +904,14 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveAthMulti(fk_mapdata, ctrlID, x, y, height, width);
-                    athMultis = athMultis.Replace(ctrlID + "@", "@");
+                    athMultis = athMultis.Replace("@"+ctrlID + "@", "@");
                     continue;
                 }
                 if (shape == "AthImg")
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveAthImg(fk_mapdata, ctrlID, x, y, height, width);
-                    athImgs = athImgs.Replace(ctrlID + "@", "@");
+                    athImgs = athImgs.Replace("@"+ctrlID + "@", "@");
                     continue;
                 }
 
@@ -922,7 +922,7 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    eleIDs = eleIDs.Replace(ctrlID + "@", "@");
+                    eleIDs = eleIDs.Replace("@"+ctrlID + "@", "@");
                     continue;
                 }
 
@@ -930,7 +930,7 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveMapFrame(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    frameIDs = frameIDs.Replace(ctrlID + "@", "@");
+                    frameIDs = frameIDs.Replace("@"+ctrlID + "@", "@");
                     continue;
                 }
 
@@ -948,7 +948,7 @@ namespace BP.Sys
                     if (str == null)
                         continue;
 
-                    attrPKs = attrPKs.Replace(str + "@", "@");
+                    attrPKs = attrPKs.Replace("@"+str + "@", "@");
                     continue;
                 }
 

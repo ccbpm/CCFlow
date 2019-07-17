@@ -5,7 +5,6 @@ using System.Data;
 using System.Text;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using BP.DA;
 
 
@@ -107,96 +106,7 @@ namespace BP.Tools
                 strJson = "[" + strJson + "]";
             }
             DataTable dtt = (DataTable)JsonConvert.DeserializeObject<DataTable>(strJson);
-            
             return dtt;
-
-            //转换json格式
-            
-            //把 *  和# 先替换成别的符号
-            string str1 = "@@@~~~+++";
-            string str2 = "+++---$$$";
-            strJson = strJson.Replace(str1, "");
-            strJson = strJson.Replace(str2, "");
-
-            //strJson = strJson.Replace("*", str1);
-            //strJson = strJson.Replace("#", str2);
-
-            strJson = strJson.Replace(",\"", "*\"").Replace("\":", "\"#").ToString();
-
-
-            //取出表名  
-            var rg = new Regex(@"(?<={)[^:]+(?=:\[)", RegexOptions.IgnoreCase);
-            string strName = rg.Match(strJson).Value;
-            DataTable tb = null;
-            //去除表名  
-            try
-            {
-                strJson = strJson.Substring(strJson.IndexOf("[") + 1);
-                strJson = strJson.Substring(0, strJson.IndexOf("]"));
-            }
-            catch (Exception ex)
-            {
-
-            }
-            //获取数据  
-            rg = new Regex(@"(?<={)[^}]+(?=})");
-            MatchCollection mc = rg.Matches(strJson);
-            for (int i = 0; i < mc.Count; i++)
-            {
-                string strRow = mc[i].Value;
-                string[] strRows = strRow.Split('*');
-                //创建表  
-                if (tb == null)
-                {
-                    tb = new DataTable();
-                    tb.TableName = strName;
-                    foreach (string str in strRows)
-                    {
-                        if (str.Contains("#"))
-                        {
-                            var dc = new DataColumn();
-                            string[] strCell = str.Split('#');
-                            string columnName = string.Empty;
-                            if (strCell[0].Substring(0, 1) == "\"")
-                            {
-                                int a = strCell[0].Length;
-                                columnName = strCell[0].Substring(1, a - 2);
-                            }
-                            else
-                            {
-                                columnName = strCell[0];
-                            }
-                            columnName = columnName.Replace(str1, "*").Replace(str1, "#");
-                            dc.ColumnName = columnName;
-
-                            tb.Columns.Add(dc);
-                        }
-                        else
-                        {
-                            var dc = new DataColumn();
-                            dc.ColumnName = "无" + i;
-                            tb.Columns.Add(dc);
-                        }
-                    }
-                    tb.AcceptChanges();
-                }
-                //增加内容  
-                DataRow dr = tb.NewRow();
-                string content = string.Empty;
-                for (int r = 0; r < strRows.Length; r++)
-                {
-                    if (strRows[r].Contains("#"))
-                    {
-                        content = strRows[r].Split('#')[1].Trim().Replace("，", ",").Replace("：", ":").Replace("\"", "");
-                        content = content.Replace(str1, "*").Replace(str1, "#");
-
-                        dr[r] = content;
-                    }
-                }
-                tb.Rows.Add(dr);
-                tb.AcceptChanges();
-            }
-            return tb;
         }
         /// <summary>
         /// 把dataset转成json 不区分大小写.
@@ -376,32 +286,7 @@ namespace BP.Tools
             string json = JsonConvert.SerializeObject(jsonObject, Formatting.Indented);
 
             return json;
-
-            string jsonString = "{";
-            PropertyInfo[] propertyInfo = jsonObject.GetType().GetProperties();
-            for (int i = 0; i < propertyInfo.Length; i++)
-            {
-                object objectValue = propertyInfo[i].GetGetMethod().Invoke(jsonObject, null);
-                string value = string.Empty;
-                if (objectValue is DateTime || objectValue is Guid || objectValue is TimeSpan)
-                {
-                    value = "'" + objectValue.ToString() + "'";
-                }
-                else if (objectValue is string)
-                {
-                    value = "'" + ToJson(objectValue.ToString()) + "'";
-                }
-                else if (objectValue is IEnumerable)
-                {
-                    value = ToJson((IEnumerable)objectValue);
-                }
-                else
-                {
-                    value = ToJson(objectValue.ToString());
-                }
-                jsonString += "\"" + ToJson(propertyInfo[i].Name) + "\":" + value + ",";
-            }
-            return Json.DeleteLast(jsonString) + "}";
+             
         }
         /// <summary>
         /// 对象集合转换Json
@@ -412,13 +297,7 @@ namespace BP.Tools
         {
             string jsonStr = JsonConvert.SerializeObject(array);
             return jsonStr;
-
-            string jsonString = "[";
-            foreach (object item in array)
-            {
-                jsonString += Json.ToJson(item) + ",";
-            }
-            return Json.DeleteLast(jsonString) + "]";
+             
         }
         
         /// <summary>
@@ -430,13 +309,7 @@ namespace BP.Tools
         {
             string jsonStr = JsonConvert.SerializeObject(array);
             return jsonStr;
-
-            string jsonString = "[";
-            foreach (object item in array)
-            {
-                jsonString = ToJson(item.ToString()) + ",";
-            }
-            return Json.DeleteLast(jsonString) + "]";
+             
         }
         /// <summary>
         /// 删除结尾字符

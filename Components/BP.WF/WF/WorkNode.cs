@@ -435,7 +435,7 @@ namespace BP.WF
             #region 限期时间  town.HisNode.TSpan-1
 
             DateTime dtOfShould = DateTime.Now;
-           
+
             if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByFlow)
             {
                 /*如果整体流程是按流程设置计算。*/
@@ -452,7 +452,7 @@ namespace BP.WF
                     //增加天数. 考虑到了节假日. 
                     //判断是修改了节点期限的天数
                     int timeLimit = this.town.HisNode.TimeLimit;
-                    int paraLimit = this._HisGenerWorkFlow.GetParaInt("CH"+this.town.HisNode.NodeID);
+                    int paraLimit = this._HisGenerWorkFlow.GetParaInt("CH" + this.town.HisNode.NodeID);
                     if (paraLimit != 0)
                         timeLimit = paraLimit;
 
@@ -4417,7 +4417,7 @@ namespace BP.WF
         {
             SendReturnObjs sendObj = NodeSend(null, null);
 
-            
+
 
             return sendObj;
         }
@@ -4698,7 +4698,11 @@ namespace BP.WF
                     if (attr.UIIsInput == false)
                         continue;
 
-                    string str = row[attr.KeyOfEn] as string;
+                    var val = row[attr.KeyOfEn];
+                    string str =null;
+                    if (val != null)
+                        str = val.ToString();
+                 
 
                     /*如果是检查不能为空 */
                     if (DataType.IsNullOrEmpty(str) == true)
@@ -7010,7 +7014,7 @@ namespace BP.WF
                     if (sub.SendModel == 0)
                     {
                         //创建workid.
-                        Int64 subWorkID=BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
 
 
                         //执行保存.
@@ -7018,7 +7022,7 @@ namespace BP.WF
 
 
                         //为开始节点设置待办.
-                        BP.WF.Dev2Interface.Node_AddTodolist(subWorkID,WebUser.No);
+                        BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
 
 
                         //设置父子关系.
@@ -7048,7 +7052,7 @@ namespace BP.WF
                 }
 
                 //如果要自动启动平级的子流程，就需要判断当前是是否是子流程，如果不是子流程，就不能启动。
-                if (sub.HisSubFlowModel == SubFlowModel.SameLevel && this.HisGenerWorkFlow.PWorkID!=0)
+                if (sub.HisSubFlowModel == SubFlowModel.SameLevel && this.HisGenerWorkFlow.PWorkID != 0)
                 {
                     #region 判断启动权限.
                     if (sub.StartOnceOnly == true)
@@ -7137,7 +7141,7 @@ namespace BP.WF
                         this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
                     }
                     #endregion 检查sendModel.
-                   
+
 
                 }
             }
@@ -7661,13 +7665,13 @@ namespace BP.WF
             /* 如果两个表一致就返回..*/
             // 把当前的工作人员增加里面去.
             string str = rptGe.GetValStrByKey(GERptAttr.FlowEmps);
-            if(DataType.IsNullOrEmpty(str) == true)
-                str ="@";
+            if (DataType.IsNullOrEmpty(str) == true)
+                str = "@";
 
             if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
             {
-                if (str.Contains("@" + this.Execer+"@") == false)
-                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + this.Execer+"@");
+                if (str.Contains("@" + this.Execer + "@") == false)
+                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + this.Execer + "@");
             }
 
             if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
@@ -7679,7 +7683,7 @@ namespace BP.WF
             if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
             {
                 if (str.Contains("@" + this.Execer + "," + this.ExecerName) == false)
-                    rptGe.SetValByKey(GERptAttr.FlowEmps, str  + this.Execer + "," + this.ExecerName + "@");
+                    rptGe.SetValByKey(GERptAttr.FlowEmps, str + this.Execer + "," + this.ExecerName + "@");
             }
 
             rptGe.FlowEnder = this.Execer;
@@ -8101,7 +8105,7 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-            
+
 
             if (exp.Contains("@") == true)
                 exp = Glo.DealExp(exp, this.HisWork, null);

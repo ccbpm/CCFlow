@@ -546,7 +546,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeEmp b WHERE a.No=b.FK_Emp AND b.FK_Node=" + nodeID + " ORDER BY A.Idx ";
+            sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeEmp b WHERE a.No=b.FK_Emp AND b.FK_Node=" + nodeID + " ";
 
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";

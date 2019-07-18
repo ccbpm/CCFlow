@@ -42,7 +42,7 @@ $(function () {
             $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
-  
+
     function movetb() {
         var move;
         $("#nav").css("top", top);
@@ -124,7 +124,7 @@ function SetHegiht() {
 }
 
 //从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法. // IsSave 弹出页面关闭时是否要删除从表
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node, FID,IsSave,H) {
+function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node, FID, IsSave, H) {
     // model=1 自由表单, model=2傻瓜表单.
     var pathName = document.location.pathname;
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
@@ -135,7 +135,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node
         H = 600;
     if (H > 1000)
         H = 1000;
-    
+
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal + "&FK_MapData=" + FK_MapData + "&FK_Node=" + FK_Node + "&FID=" + FID + "&IsSave=" + IsSave;
     if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
         OpenBootStrapModal(url, "editSubGrid", '编辑', 1000, H, "icon-property", false, function () { }, null, function () {
@@ -195,7 +195,7 @@ function GenerFrm() {
                 //Handler 获取外部数据源
                 if (srcType == 5) {
                     var selectStatement = sfTable.SelectStatement;
-                    if(plant == "CCFLow")
+                    if (plant == "CCFLow")
                         selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
                     else
                         selectStatement = basePath + "/DataUser/SFTableHandler" + selectStatement;
@@ -305,7 +305,7 @@ function GenerFrm() {
         }
     })
 
-          
+
 
     //设置默认值
     for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
@@ -347,7 +347,7 @@ function GenerFrm() {
             if (mapAttr.MyDataType == 8) {
                 if (!/\./.test(defValue))
                     defValue += '.00';
-              
+
                 //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
                 var attrdefVal = mapAttr.DefVal;
                 var bit;
@@ -357,23 +357,23 @@ function GenerFrm() {
                     bit = 2;
                 if (bit == 2)
                     defValue = formatNumber(defValue, 2, ",");
-               
+
             }
             $('#TB_' + mapAttr.KeyOfEn).val(defValue);
         }
 
         if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
             // 判断下拉框是否有对应option, 若没有则追加
-            if (defValue!="" && $("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+            if (defValue != "" && $("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
                 var mainTable = frmData.MainTable[0];
                 var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                 if (selectText == null || selectText == undefined || selectText == "")
                     selectText = mainTable[mapAttr.KeyOfEn + "T"];
 
                 if (selectText != null && selectText != undefined && selectText != "")
-                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                    $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
             }
-            if(defValue!="")
+            if (defValue != "")
                 $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
         }
 
@@ -394,7 +394,7 @@ function GenerFrm() {
     }
 
     //处理下拉框级联等扩展信息
-    if(pageData.IsReadonly != "1")
+    if (pageData.IsReadonly != "1")
         AfterBindEn_DealMapExt(frmData);
 
     //ShowNoticeInfo();
@@ -473,7 +473,7 @@ function Save(scope) {
     if (CheckBlanks() == false) {
         //alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
         //return false;
-      
+
     }
     if (CheckReg() == false) {
         alert("发送错误:请检查字段边框变红颜色的是否填写完整？");
@@ -486,7 +486,7 @@ function Save(scope) {
     $.each(params.split("&"), function (i, o) {
         var param = o.split("=");
         if (param.length == 2 && validate(param[1])) {
-            handler.AddPara(param[0], param[1]);
+            handler.AddPara(param[0], decodeURIComponent(param[1], true));
         } else {
             handler.AddPara(param[0], "");
         }
@@ -535,7 +535,7 @@ function initPageParam() {
     pageData.DoType1 = GetQueryString("DoType")//View
     pageData.FK_MapData = GetQueryString("FK_MapData")//View
 
-   
+
 }
 //将获取过来的URL参数转成URL中的参数形式  &
 function pageParamToUrl() {
@@ -636,7 +636,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     var data = frmData[mapAttr.KeyOfEn];
     if (data == undefined)
         data = frmData[mapAttr.UIBindKey];
-    if (data == undefined ) {
+    if (data == undefined) {
         //枚举类型的.
         if (mapAttr.LGType == 1) {
             var enums = frmData.Sys_Enum;
@@ -663,7 +663,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
 //填充默认数据
 function ConvertDefVal(frmData, defVal, keyOfEn) {
     //计算URL传过来的表单参数@TXB_Title=事件测试
-    
+
     var result = defVal;
 
     //通过MAINTABLE返回的参数
@@ -711,7 +711,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         formArrResult.push(ele);
     });
 
-   
+
 
     //获取树形结构的表单值
     var combotrees = $(".easyui-combotree");
@@ -747,12 +747,12 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框     
+            //下拉框      
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //文本区域     
+            //文本区域      
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;

@@ -1062,7 +1062,7 @@ namespace BP.WF.HttpHandler
                     if(attr.Key.Equals("OID"))
                         continue;
 
-                    if (attr.Key.Equals("WorlID"))
+                    if (attr.Key.Equals("WorkID"))
                         continue;
 
                     if (attr.Key.Equals("MyNum"))
@@ -1105,7 +1105,7 @@ namespace BP.WF.HttpHandler
                         if (attr.Key == "MyNum")
                             continue;
 
-                        if (attr.Key == "WorlID")
+                        if (attr.Key == "WorkID")
 
                             continue;
 

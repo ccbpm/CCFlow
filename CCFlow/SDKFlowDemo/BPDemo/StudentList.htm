@@ -42,10 +42,10 @@
         });
         function InitPage() {
 
-            var hanler = new HttpHandler("BP.Demo.HttpHandlerDemoPage");
-            hanler.AddPara("PageIdx", pageIdx);
+            var handler = new HttpHandler("BP.Demo.HttpHandlerDemoPage");
+            handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("PageSize", pageSize);
-            var ens = hanler.DoMethodReturnJSON("StudentList_Init");
+            var ens = handler.DoMethodReturnJSON("StudentList_Init");
             $("#Table1").html("");
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];

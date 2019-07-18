@@ -63,6 +63,15 @@ namespace BP.WF
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No, nd.Name);
 
+                if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
+                    && (nd.HisFormType== NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm))
+                {
+                    String name = new MapData("ND" + fk_node).Name;
+                    if (DataType.IsNullOrEmpty(name) == true)
+                        name = nd.Name;
+                    myds.Tables["Sys_MapData"].Rows[0]["Name"]= name;
+                }
+
                 //移除MapAttr
                 myds.Tables.Remove("Sys_MapAttr"); //移除.
 

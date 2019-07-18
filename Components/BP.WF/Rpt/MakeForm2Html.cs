@@ -855,9 +855,12 @@ namespace BP.WF
         foreach (GroupField gf in gfs)
         {
             //输出标题.
-            sb.Append(" <tr>");
-            sb.Append("  <th colspan=4><b>" + gf.Lab + "</b></th>");
-            sb.Append(" </tr>");
+            if (gf.CtrlType != "Ath")
+            {
+                sb.Append(" <tr>");
+                sb.Append("  <th colspan=4><b>" + gf.Lab + "</b></th>");
+                sb.Append(" </tr>");
+            }
 
             //#region 输出字段.
             if (gf.CtrlID == "" && gf.CtrlType == "")
@@ -950,7 +953,10 @@ namespace BP.WF
                     {
                         isDropTR = true;
                         html += " <tr>";
-                        html += " <td ColSpan=4 style='width:100%' >" + attr.Name + "</br>";
+                        html += " <td ColSpan=4 class='FDesc' >" + attr.Name + "</td>";
+                        html += " </tr>";
+                        html += " <tr>";
+                        html += " <td ColSpan=4>";
                         html += text;
                         html += " </td>";
                         html += " </tr>";
@@ -1052,99 +1058,99 @@ namespace BP.WF
             //#region 如果是附件.
             if (gf.CtrlType == "Ath")
             {
-                FrmAttachments aths = new FrmAttachments(frmID);
-           
+                FrmAttachment ath = new FrmAttachment(gf.CtrlID);
+                if (ath.IsVisable == false)
+                    continue;
 
-                foreach (FrmAttachment ath in aths)
-                {
-                    if (ath.MyPK != gf.CtrlID)
-                        continue;
+                sb.Append(" <tr>");
+                sb.Append("  <th colspan=4><b>" + gf.Lab + "</b></th>");
+                sb.Append(" </tr>");
 
-                     FrmAttachmentDBs athDBs = BP.WF.Glo.GenerFrmAttachmentDBs(ath,workid.ToString(), ath.MyPK);
+                FrmAttachmentDBs athDBs = BP.WF.Glo.GenerFrmAttachmentDBs(ath,workid.ToString(), ath.MyPK);
                   
 
-                    if (ath.UploadType == AttachmentUploadType.Single)
+                if (ath.UploadType == AttachmentUploadType.Single)
+                {
+                    /* 单个文件 */
+                    sb.Append("<tr><td colspan=4>单附件没有转化:" + ath.MyPK + "</td></td>");
+                    continue;
+                }
+
+                if (ath.UploadType == AttachmentUploadType.Multi)
+                {
+                    sb.Append("<tr><td valign=top colspan=4 >");
+                    sb.Append("<ul>");
+
+                    //判断是否有这个目录.
+                    if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
+                            System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+
+                        foreach (FrmAttachmentDB item in athDBs)
                     {
-                        /* 单个文件 */
-                        sb.Append("<tr><td colspan=4>单附件没有转化:" + ath.MyPK + "</td></td>");
-                        continue;
-                    }
-
-                    if (ath.UploadType == AttachmentUploadType.Multi)
-                    {
-                        sb.Append("<tr><td valign=top colspan=4 >");
-                        sb.Append("<ul>");
-
-                        //判断是否有这个目录.
-                        if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
-                                System.IO.Directory.CreateDirectory(path + "\\pdf\\");
-
-                         foreach (FrmAttachmentDB item in athDBs)
+                        String fileTo = path + "\\pdf\\" + item.FileName;
+                        //加密信息
+                        bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                        bool isEncrypt = item.GetParaBoolen("IsEncrypt");
+                        //#region 从ftp服务器上下载.
+                        if (ath.AthSaveWay == AthSaveWay.FTPServer)
                         {
-                            String fileTo = path + "\\pdf\\" + item.FileName;
-                            //加密信息
-                            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
-                            bool isEncrypt = item.GetParaBoolen("IsEncrypt");
-                            //#region 从ftp服务器上下载.
-                            if (ath.AthSaveWay == AthSaveWay.FTPServer)
+                            try
                             {
-                                try
-                                {
-                                    if (System.IO.File.Exists(fileTo) == true)
-                                    	System.IO.File.Delete(fileTo);//rn "err@删除已经存在的文件错误,请检查iis的权限:" + ex.getMessage();
+                                if (System.IO.File.Exists(fileTo) == true)
+                                    System.IO.File.Delete(fileTo);//rn "err@删除已经存在的文件错误,请检查iis的权限:" + ex.getMessage();
 
-                                    	//把文件copy到,                                  
-                                        String file = item.GenerTempFile(ath.AthSaveWay);
+                                    //把文件copy到,                                  
+                                    String file = item.GenerTempFile(ath.AthSaveWay);
                                        
-                                        String fileTempDecryPath = file;
-                                        if (fileEncrypt == true && isEncrypt == true)
-                                        {
-                                            fileTempDecryPath = file + ".tmp";
-                                            BP.Tools.EncHelper.DecryptDES(file, fileTempDecryPath);
+                                    String fileTempDecryPath = file;
+                                    if (fileEncrypt == true && isEncrypt == true)
+                                    {
+                                        fileTempDecryPath = file + ".tmp";
+                                        BP.Tools.EncHelper.DecryptDES(file, fileTempDecryPath);
 
-                                        }
-                                        System.IO.File.Copy(fileTempDecryPath, fileTo, true);
-
-                                    sb.Append("<li><a href='" + SystemConfig.GetValByKey("HostURL","") + "/DataUser/InstancePacketOfData/"+FK_Node+"/"+workid+"/"+"pdf/"+item.FileName + "'>" + item.FileName + "</a></li>");
-                                }
-                             catch(Exception ex )
-                                {
-                                    sb.Append("<li>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</li>");
-                                }
-                            }
-                            //#endregion 从ftp服务器上下载.
-
-
-                            //#region 从iis服务器上下载.
-                            if (ath.AthSaveWay == AthSaveWay.IISServer)
-                            {
-                                try
-                                {
-                                
-                                	 String fileTempDecryPath = item.FileFullName;
-                                     if (fileEncrypt == true && isEncrypt == true)
-                                     {
-                                         fileTempDecryPath = item.FileFullName + ".tmp";
-                                         BP.Tools.EncHelper.DecryptDES(item.FileFullName, fileTempDecryPath);
-
-                                     }
-                                     
-                                    //把文件copy到,
+                                    }
                                     System.IO.File.Copy(fileTempDecryPath, fileTo, true);
 
-                                    sb.Append("<li><a href='" + SystemConfig.GetValByKey("HostURL","") + "/DataUser/InstancePacketOfData/"+frmID+"/"+workid+"/"+"pdf/"+item.FileName + "'>" + item.FileName + "</a></li>");
-                                }
-                                catch (Exception ex)
-                                {
-                                    sb.Append("<li>" + item.FileName + "(<font color=red>文件未从web下载成功{" + ex.Message + "}</font>)</li>");
-                                }
+                                sb.Append("<li><a href='" + SystemConfig.GetValByKey("HostURL","") + "/DataUser/InstancePacketOfData/"+FK_Node+"/"+workid+"/"+"pdf/"+item.FileName + "'>" + item.FileName + "</a></li>");
                             }
-                           
+                            catch(Exception ex )
+                            {
+                                sb.Append("<li>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</li>");
+                            }
                         }
-                        sb.Append("</ul>");
-                        sb.Append("</td></tr>");
+                        //#endregion 从ftp服务器上下载.
+
+
+                        //#region 从iis服务器上下载.
+                        if (ath.AthSaveWay == AthSaveWay.IISServer)
+                        {
+                            try
+                            {
+                                
+                                	String fileTempDecryPath = item.FileFullName;
+                                    if (fileEncrypt == true && isEncrypt == true)
+                                    {
+                                        fileTempDecryPath = item.FileFullName + ".tmp";
+                                        BP.Tools.EncHelper.DecryptDES(item.FileFullName, fileTempDecryPath);
+
+                                    }
+                                     
+                                //把文件copy到,
+                                System.IO.File.Copy(fileTempDecryPath, fileTo, true);
+
+                                sb.Append("<li><a href='" + SystemConfig.GetValByKey("HostURL","") + "/DataUser/InstancePacketOfData/"+frmID+"/"+workid+"/"+"pdf/"+item.FileName + "'>" + item.FileName + "</a></li>");
+                            }
+                            catch (Exception ex)
+                            {
+                                sb.Append("<li>" + item.FileName + "(<font color=red>文件未从web下载成功{" + ex.Message + "}</font>)</li>");
+                            }
+                        }
+                           
                     }
+                    sb.Append("</ul>");
+                    sb.Append("</td></tr>");
                 }
+                
             }
             //#endregion 如果是附件.
             
@@ -1319,7 +1325,7 @@ namespace BP.WF
     	//存放信息地址
     	string hostURL = SystemConfig.GetValByKey("HostURL","");
 		string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND"+node.NodeID + "\\" + workid;
-		string frmID = "ND"+node.NodeID;
+        string frmID = node.NodeFrmID;
 		
 		 //处理正确的文件名.
          if (fileNameFormat == null)
@@ -1337,14 +1343,16 @@ namespace BP.WF
         
          Hashtable ht = new Hashtable();
 		
-    	if((int)node.HisFormType == (int)NodeFormType.FoolForm || (int)node.HisFormType == (int)NodeFormType.FreeForm){
-    		resultMsg = setPDFPath(frmID,workid,flowNo,gwf );
+    	if((int)node.HisFormType == (int)NodeFormType.FoolForm || (int)node.HisFormType == (int)NodeFormType.FreeForm
+            || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree)
+        {
+    		resultMsg = setPDFPath("ND"+node.NodeID,workid,flowNo,gwf );
     		if(resultMsg.IndexOf("err@")!=-1)
     			return resultMsg;
     		
     		string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND"+node.NodeID + "\\" + workid + "\\index.htm";
     			
-    		resultMsg = MakeHtmlDocument(frmID,  workid,  flowNo , fileNameFormat , urlIsHostUrl,path,billUrl,frmID,basePath);
+    		resultMsg = MakeHtmlDocument(frmID,  workid,  flowNo , fileNameFormat , urlIsHostUrl,path,billUrl,"ND"+node.NodeID,basePath);
     		
     		if(resultMsg.IndexOf("err@")!=-1)
     			return resultMsg;
@@ -1365,9 +1373,9 @@ namespace BP.WF
             {
                 Html2Pdf(pdfFileExe, billUrl, pdfFile);
 	                if (urlIsHostUrl == false)
-	                	ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS","../../DataUser/") + "InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                        ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
 	                else
-	                	ht.Add("pdf", SystemConfig.GetValByKey("HostURL","") + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
+                        ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
 
             }catch (Exception ex){
                 /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
@@ -1375,7 +1383,7 @@ namespace BP.WF
                 pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
                 
                 Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS","") + "/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
             }
             
             //生成压缩文件
@@ -1388,7 +1396,7 @@ namespace BP.WF
             {
                 (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".zip");
+                ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".zip");
             }
             catch (Exception ex)
             {
@@ -1852,6 +1860,7 @@ namespace BP.WF
 
                 //#region 定义变量做准备.
                 //生成表单信息.
+                Node nd = new Node(nodeID);
                 MapData mapData = new MapData(frmID);
             
                if(mapData.HisFrmType == FrmType.Url){
@@ -1923,7 +1932,7 @@ namespace BP.WF
                 }
                 //先判断节点中水印的设置
                 string words = "";
-                Node nd = null;
+               
                 if (gwf != null)
                 {
                     nd = new Node(gwf.FK_Node);

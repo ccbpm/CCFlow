@@ -64,7 +64,7 @@ namespace BP.Demo
         {
             Students ens = new Students();
             QueryObject qo = new QueryObject(ens);
-            qo.DoQuery(StudentAttr.No, 12, this.PageIdx);
+            qo.DoQuery(StudentAttr.No, this.PageSize, this.PageIdx);
             return ens.ToJson();
         }
         public string StudentList_PageBar()

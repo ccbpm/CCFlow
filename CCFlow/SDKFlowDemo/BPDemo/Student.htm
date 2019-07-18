@@ -17,8 +17,12 @@
 
             //创建实体.
             var no = GetQueryString("No");
-            var en = new Entity("BP.Demo.BPFramework.Student", no);
-            //console.log(en);
+
+            var en = new Entity("BP.Demo.BPFramework.Student");
+            if (no != null) {
+                en.SetPKVal(no);
+                en.RetrieveFromDBSources();
+            }
 
             //增加的节点值 
             GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
@@ -29,19 +33,45 @@
 
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(en);
+
             //设置信息为空.
             $("#Msg").html("");
         });
 
         function Save() {
+
             //创建实体.
             var no = GetQueryString("No");
-            var en = new Entity("BP.Demo.BPFramework.Student", no);
-            en.CopyForm();
-            en.SetPKVal(no);
-            en.Update();
+            var en = new Entity("BP.Demo.BPFramework.Student");
 
-            window.location.href = window.location.href;
+            if (no == null) {
+
+                en.CopyForm();
+
+                if (en.IsExits() == true) {
+                    alert("编号:" + en.No + "已经存在.");
+                    return;
+                }
+                en.Insert();
+                window.location.href = "Student.htm?No=" + en.No;
+            }
+
+            if (no != null) {
+
+                en.SetPKVal(no);
+                en.RetrieveFromDBSources();
+                en.CopyForm();
+                en.Save();
+                window.location.href = window.location.href;
+            }
+        }
+
+        function New() {
+            window.location.href = 'Student.htm';
+        }
+
+        function ToList() {
+            window.location.href = 'StudentList.htm';
         }
 
     </script>
@@ -85,6 +115,14 @@
         </tr>
         <tr>
             <td>
+                Email
+            </td>
+            <td colspan="3">
+                <input type="text" value="" style="width: 100%;" id="TB_Email" name="TB_Email" />
+            </td>
+        </tr>
+        <tr>
+            <td>
                 checkbok类型
             </td>
             <td colspan="3">
@@ -121,8 +159,10 @@
             </td>
         </tr>
     </table>
-    <input type="button" value="保存" onclick="Save();" />
-    <div is="Msg">
+    <input type="button" value="返回列表" onclick="ToList();" id="Btn_ToList" name="Btn_ToList" />
+    <input type="button" value="新建" onclick="New();" id="Button1" name="Btn_New" />
+    <input type="button" value="保存" onclick="Save();" id="Btn_Save" name="Btn_Save" />
+    <div id="Msg">
     </div>
 </body>
 </html>

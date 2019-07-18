@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>输出Table演示</title><title>驰骋工作流</title>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var pageIdx = GetQueryString("PageIdx");
+            if (pageIdx == null)
+                pageIdx = 1;
+
+            var hanler = new HttpHandler("BP.Demo.HttpHandlerDemoPage");
+            hanler.AddPara("PageIdx", pageIdx);
+            var ens = hanler.DoMethodReturnJSON("StudentList_Init");
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var html = "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td><label><input type=checkbox id='CB_" + en.No + "' name='" + en.No + "'/>" + en.No + "-" + en.Name + "</label></td>";
+                html += "<td>" + en.Name + "</td>";
+                html += "<td>" + en.Email + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.No + "');\" ><img src='../../WF/Img/Btn/Delete.png' />删除</a></td>";
+                html += "<td><a href=\"javascript:Edit('" + en.No + "');\" ><img src='../../WF/Img/Btn/Edit.gif' />修改</a></td>";
+                html += "</tr>";
+                $("#Table1").append(html);
+            }
+
+
+            //输出分页.
+            var hanler = new HttpHandler("BP.Demo.HttpHandlerDemoPage");
+            hanler.AddPara("PageIdx", pageIdx);
+            var ht = hanler.DoMethodReturnJSON("StudentList_PageBar");
+
+
+
+        });
+
+        //分页功能
+        function Paginator(pageCount, currentPage) {
+            var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
+            var options = {
+                bootstrapMajorVersion: 3, //版本
+                currentPage: currentPage, //当前页数
+                totalPages: pageCount, //总页数
+                shouldShowPage: true, //是否显示该按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first":
+                            return "首页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "末页";
+                        case "page":
+                            return page;
+                    }
+                }, //点击事件，用于通过Ajax来刷新整个list列表
+                onPageClicked: function (event, originalEvent, type, page) {
+                    pageIdx = page;
+                    InitData();
+                    $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
+                            "页,总共" + total + "条记录。</li>");
+                }
+            };
+            $('#page_nav').bootstrapPaginator(options);
+            $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
+                            "页,总共" + total + "条记录。</li>");
+
+        }
+
+        ///编辑.
+        function Edit(no) {
+            var url = 'Student.htm?No=' + no;
+            WinOpen(url);
+        }
+
+        //删除.
+        function Del(no) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var en = new Entity("BP.Demo.BPFramework.Student", no);
+
+            alert("删除成功");
+            window.location.href = window.location.href;
+        }
+
+        function DelAll() {
+            if (window.confirm('您确定要删除选择的数据吗？') == false)
+                return;
+        }
+
+        //选择与取消选择.
+        function CheckAll(checked) {
+
+            //获取type=checkbox的复选框 遍历输出复选框
+            var checkeds = $("input[type='checkbox']");
+            for (var i = 0; i < checkeds.length; i++) {
+                checkeds[i].checked = checked;
+            }
+        }
+
+        function New() {
+            var url = 'Student.htm';
+            WinOpen(url);
+        }
+    </script>
+</head>
+<body>
+    <table id="Table1">
+        <caption>
+            列表输出演示... <a href="javascript:New()">新建</a></caption>
+        <tr>
+            <th>
+                序
+            </th>
+            <th>
+                <label>
+                    <input type="checkbox" id="SelectAll" onclick="CheckAll(this.checked);">选择要操作的字段</label>
+            </th>
+            <th>
+                名称
+            </th>
+             <th>
+                邮件
+            </th>
+            <th>
+                类型
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </table>
+    <input type="button" value="批量删除" onclick="DelAll();" />
+</body>
+</html>

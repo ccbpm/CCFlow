@@ -30,7 +30,7 @@
         var NumKey = this.GetQueryString("NumKey");
         var fk_flow = GetQueryString("FK_Flow");
         var groupType = GetQueryString("GroupType");
-        var rptNo = "ND" + fk_flow + "Rpt" + groupType;
+        var rptNo = "ND" + parseInt(fk_flow) + "Rpt" + groupType;
 
         var ur;
         var searchAttrs;

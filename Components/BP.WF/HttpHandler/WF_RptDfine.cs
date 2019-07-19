@@ -1029,7 +1029,7 @@ namespace BP.WF.HttpHandler
 
                 if (paras[0].Equals("Group_Number"))
                 {
-                    groupKey += " count(*) " + paras[0] + ",";
+                    groupKey += " count(*) \"" + paras[0] + "\",";
                 }
                 else
                 {
@@ -1037,18 +1037,18 @@ namespace BP.WF.HttpHandler
                     {
                         case "SUM":
                             if (dataType == 2)
-                                groupKey += " SUM(" + paras[0] + ")" + paras[0] + ",";
+                                groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
+                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
                             break;
                         case "AVG":
-                            groupKey += " round (AVG(" + paras[0] + "), 4)  " + paras[0] + ",";
+                            groupKey += " round (AVG(" + paras[0] + "), 4)  \"" + paras[0] + "\",";
                             break;
                         case "AMOUNT":
                             if (dataType == 2)
-                                groupKey += " SUM(" + paras[0] + ")" + paras[0] + ",";
+                                groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) " + paras[0] + ",";
+                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
                             break;
                         default:
                             throw new Exception("没有判断的情况.");
@@ -1083,7 +1083,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (key.Contains("=") == true)
                         continue;
-                    selectSQL += key + ",";
+                    selectSQL += key + " \"" + key + "\",";
                     groupBy += key + ",";
                     // 加入组里面。
                     AttrsOfGroup.Add(GetAttrByKey(attrs,key), false, false);

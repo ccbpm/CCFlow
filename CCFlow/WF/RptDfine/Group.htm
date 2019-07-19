@@ -124,7 +124,7 @@
 
                 html += md.T_DateLabel;
 
-                if (mapBase.RptDTSearchWay == "1") {
+                if (md.RptDTSearchWay == "1") {
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + md.T_DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />";
                     html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + md.T_DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />&nbsp;&nbsp;&nbsp;&nbsp;";
                 } else {

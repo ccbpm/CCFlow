@@ -1258,6 +1258,12 @@
 
             var url = "";
 
+            //检查单据的数据库表字段是否完整
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018")
+            handler.AddPara("EnsName", node.id);
+            handler.DoMethodReturnString("CheckBillFrm");
+            
+
             //单据模式.
             if (en.EntityType == 1)
                 url = '../../CCBill/SearchBill.htm?FrmID=' + node.id;
@@ -1820,8 +1826,8 @@
     <div id="mFormSrc" class="easyui-menu" style="width: 120px;">
         <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-add'">
             新建下级目录</div>
-        <div onclick="newFrm()" data-options="iconCls:'icon-new'">
-            新建表单</div>
+       <!-- <div onclick="newFrm()" data-options="iconCls:'icon-new'">
+            新建表单</div>-->
         <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">

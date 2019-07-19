@@ -19,7 +19,7 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
             html += "<img src='../../Img/FileType/" + sf.MyFileExt.substr(1) + ".gif' border=0 />" + sf.MyFileName + sf.MyFileExt;
             html += "</td>";
             html += "<td width='25%'>";
-            html += "<a href='javaScript:void(0)' onclick='downLoadFile(\"" + sf.OID + "\")'>下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+            html += "<a href='javaScript:void(0)' onclick='downLoadFileM(\"" + sf.OID + "\")'>下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
             if (mapData.GetPara("IsDelete") == 1)
                 html += "<a href='javaScript:void(0)' onclick='deleteFile(\"" + sf.OID + "\",this)'>删除</a>";
             html += "</td>";
@@ -51,7 +51,7 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
         else
             html += "<td colspan=3>";
         var count = 0;
-        html += "<table border='0'width='99%' id='Table_"+attrFile.FileNo+"'>";
+        html += "<table border='0'width='99%' id='Table_" + attrFile.FileNo + "'>";
         for (var k = 0; k < FileManagers.length; k++) {
             var sf = FileManagers[k];
             if (sf.AttrFileNo != attrFile.FileNo)
@@ -97,7 +97,7 @@ function ActiveUploadFile(upfileNo, upfileName) {
     $("#File_Upload").click();
 }
 
-function downLoadFile(OID) {
+function downLoadFileM(OID) {
     if (plant == "CCFlow")
         window.location.href = '../../CCForm/DownFile.aspx?DoType=EntityMutliFile_Load&OID=' + OID;
     else {
@@ -108,7 +108,7 @@ function downLoadFile(OID) {
     }
 }
 
-function deleteFile(OID,td) {
+function deleteFile(OID, td) {
     //需要删除文件
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
     handler.AddPara("OID", OID);
@@ -118,7 +118,7 @@ function deleteFile(OID,td) {
         return;
     }
     //处理显示问题，删除一行
-     $(td).parent().parent().remove();    
+    $(td).parent().parent().remove();
 
 }
 
@@ -127,7 +127,7 @@ function tableAddTr(fileManager) {
     var tb;
     if (fileManager.AttrFileNo == "")
         tb = $("#TableFile");
-     else
+    else
         tb = $("#Table_" + fileManager.AttrFileNo);
     var html = "";
     html += "<tr>";
@@ -135,7 +135,7 @@ function tableAddTr(fileManager) {
     html += "<img src='../../Img/FileType/" + fileManager.MyFileExt.substr(1) + ".gif' border=0 />" + fileManager.MyFileName + fileManager.MyFileExt;
     html += "</td>";
     html += "<td>";
-    html += "<a href='javaScript:void(0)' onclick='downLoadFile(\"" + fileManager.OID + "\")'>下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+    html += "<a href='javaScript:void(0)' onclick='downLoadFileM(\"" + fileManager.OID + "\")'>下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
     if (mapData.GetPara("IsDelete") == 1)
         html += "<a href='javaScript:void(0)' onclick='deleteFile(\"" + fileManager.OID + "\",this)'>删除</a>";
     html += "</td>";
@@ -172,7 +172,7 @@ function MultiUploadFile() {
     queryString += "&FileNo=" + fileNo + "&FileName=" + encodeURI(fileName);
 
     //URL 路径
-    var URL = basePath+"/WF/Comm/Handler.ashx?DoType=EntityMultiAth_Upload";
+    var URL = basePath + "/WF/Comm/Handler.ashx?DoType=EntityMultiAth_Upload";
     if (plant != "CCFlow") {
         var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
@@ -201,8 +201,8 @@ function MultiUploadFile() {
             console.log("正在进行，请稍候");
         },
         success: function (responseStr) {
-            if(responseStr.indexOf('err@')==0)
-            return;
+            if (responseStr.indexOf('err@') == 0)
+                return;
             responseStr = JSON.parse(responseStr);
             tableAddTr(responseStr);
         },

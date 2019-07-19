@@ -101,10 +101,10 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
                     {
                         string val = this.GetValFromFrmByKey("CB_" + attr.Key + "_" + pkval, "-1");
-                        if (val == "-1")
+                        if (val == "0")
                             item.SetValByKey(attr.Key, 0);
                         else
                             item.SetValByKey(attr.Key, 1);

@@ -271,6 +271,10 @@ namespace BP.WF.HttpHandler
             }
 
             vals = ur.GetVals();
+            md.SetPara("RptDTSearchWay", (int)md.RptDTSearchWay);
+            md.SetPara("RptDTSearchKey", md.RptDTSearchKey);
+            md.SetPara("RptIsSearchKey", md.RptIsSearchKey);
+
             md.SetPara("T_SearchKey", ur.SearchKey);
 
             if (md.RptDTSearchWay != DTSearchWay.None)
@@ -689,6 +693,9 @@ namespace BP.WF.HttpHandler
           
 
             vals = ur.GetVals();
+            md.SetPara("RptDTSearchWay", (int)md.RptDTSearchWay);
+            md.SetPara("RptDTSearchKey", md.RptDTSearchKey);
+            md.SetPara("RptIsSearchKey", md.RptIsSearchKey);
             md.SetPara("T_SearchKey", ur.SearchKey);
 
             if (md.RptDTSearchWay != DTSearchWay.None)
@@ -994,6 +1001,9 @@ namespace BP.WF.HttpHandler
             MapData md = new MapData(rptNo);
             MapAttrs attrs = new MapAttrs(rptNo);
             GEEntitys ges = new GEEntitys(rptNo);
+            GEEntity en = new GEEntity(rptNo);
+            Map map = en.EnMapInTime;
+
 
 
             UserRegedit groupUr = new UserRegedit(WebUser.No,rptNo+"_GroupAttrs");

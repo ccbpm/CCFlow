@@ -452,9 +452,9 @@ namespace BP.WF.Rpt
             md.PTable = fl.PTable;
             md.Update();
 
-            string keys_old = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
+            string keys = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
 
-            string keys = ",OID,Title,WFSta,";
+            //string keys = ",OID,Title,WFSta,";
 
             //查询出来所有的字段.
             MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");

@@ -224,5 +224,11 @@ namespace BP.WF.HttpHandler
                 return "@err:" + ex.Message;
             }
         }
+
+        public void CheckBillFrm()
+        {
+            GEEntity en = new GEEntity(this.EnsName);
+            en.CheckPhysicsTable();
+        }
     }
 }

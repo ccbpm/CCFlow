@@ -67,6 +67,7 @@
         });
 
         function InitToolbar() {
+
             //判断是否有WorkID.
             var workID = GetQueryString("WorkID");
             if (workID == null || workID == undefined)
@@ -82,11 +83,18 @@
             }
 
             var toolBar = "";
+            var generBill = new Entity("BP.Frm.GenerBill");
+            generBill.SetPKVal(workID);
+            if (generBill.RetrieveFromDBSources() == 0)
+                return;
+         
 
             //获得单据模版信息.
             var frmID = GetQueryString("FrmID");
             var frmBill = new Entity("BP.Frm.FrmBill", frmID);
-            var generBill = new Entity("BP.Frm.GenerBill", workID);
+
+            //if (generBill.ret
+            //var i = generBill.ret
 
             var html = "<table style='width:100%;padding:15px;'>";
             html += "<tr>";
@@ -94,6 +102,12 @@
             html += "<td>" + frmBill.Name + "</td>";
             html += "</tr>";
             html += "</table>";
+
+            if (i == 0) {
+                $("#toolbar").html(html);
+                return;
+            }
+
             //$("#Title").html(html);
 
             //当前是归档状态.
@@ -110,8 +124,6 @@
             if (frmBill.BtnPrintRTF == "") frmBill.BtnPrintRTF = "打印rtf";
             if (frmBill.BtnPrintCCWord == "") frmBill.BtnPrintCCWord = "打印CCWord";
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
-
-
 
             //是初始化状态.
             if (generBill.BillState == 0)
@@ -351,7 +363,7 @@
                                 break;
                         }
                         break;
-                    //下拉框               
+                    //下拉框                  
                     case "SELECT":
                         formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                         var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -362,7 +374,7 @@
                         }
                         break;
 
-                    //文本区域                       
+                    //文本区域                          
                     case "TEXTAREA":
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
@@ -561,7 +573,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人                      
+                    //发送选择接收节点和接收人                         
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()

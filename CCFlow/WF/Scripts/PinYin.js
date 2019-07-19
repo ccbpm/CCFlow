@@ -7,6 +7,7 @@ function ParsePinYin(str, model, textBoxId) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
         handler.AddPara("name", str);
         handler.AddPara("flag", model);
+
         data = handler.DoMethodReturnString("ParseStringToPinyin");
     }
 

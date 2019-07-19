@@ -60,6 +60,7 @@
             var sqlVal = document.getElementById("TB_Docs").value;
             var note = document.getElementById("TB_Note").value;
 
+
             if (sqlVal == "") {
                 alert('请输入参数.');
                 return;
@@ -68,6 +69,12 @@
                 alert('请输入备注说明.');
                 return;
             }
+
+            if (sqlVal.indexOf(' ') == -1) {
+                alert("表达式："+sqlVal+" 不符合要求，必须中间用空格。比如：1 = 1 ，请参考帮助文件。");
+                return;
+            }
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
             handler.AddFormData();
@@ -148,6 +155,7 @@
         <tr>
             <td style="width: 20%;">
                 备注(不为空):
+                <br /> 
             </td>
             <td>
                 <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
@@ -170,6 +178,7 @@
             <li>Way = '1'</li>
             <li>Way != '1'</li>
             <li>Name LIKE %li%</li>
+            <li>如果要设置为恒等：1 = 1 设置为恒等，条件始终成立。</li>
         </ul>
     </div>
     </form>

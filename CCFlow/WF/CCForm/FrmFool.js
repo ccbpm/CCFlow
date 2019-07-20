@@ -1452,7 +1452,7 @@ function Ele_Dtl(frmDtl) {
 
     var refPK = GetQueryString('OID');
     if (refPK == null)
-        refPK = GetQueryString('OID');
+        refPK = GetQueryString('WorkID');
 
     var isReadonly = GetQueryString("IsReadonly");
     if (isReadonly == "null" || isReadonly == "0" || isReadonly == null || isReadonly == undefined)

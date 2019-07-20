@@ -86,7 +86,46 @@ namespace BP.WF
                 }
                 currNode = nextNode;
             }
-            return BP.Tools.Json.ToJson(tracks);
+
+           
+           //去掉重复的节点.
+            DataTable dtNew = new DataTable();
+            dtNew.TableName = "Track";
+            dtNew.Columns.Add("FK_Node"); //节点ID.
+            dtNew.Columns.Add("NodeName"); //名称.
+            dtNew.Columns.Add("RunModel"); //节点类型.
+            dtNew.Columns.Add("EmpNo");  //人员编号.
+            dtNew.Columns.Add("EmpName"); //名称
+            dtNew.Columns.Add("DeptName"); //部门名称
+            dtNew.Columns.Add("RDT"); //记录日期.
+            dtNew.Columns.Add("SDT"); //应完成日期(可以不用.)
+            dtNew.Columns.Add("IsPass"); //是否通过?
+
+            string strs = "";
+            foreach (DataRow dr in tracks.Rows)
+            {
+                string nodeID = dr["FK_Node"].ToString();
+                string isPass = dr["IsPass"].ToString();
+                if (strs.Contains("," + nodeID) == true )
+                    continue;
+
+                strs += "," + nodeID + ",";
+
+                DataRow drNew = dtNew.NewRow();
+                drNew["FK_Node"] = dr["FK_Node"];
+                drNew["NodeName"] = dr["NodeName"];
+                drNew["RunModel"] = dr["RunModel"];
+                drNew["EmpNo"] = dr["EmpNo"];
+                drNew["EmpName"] = dr["EmpName"];
+                drNew["DeptName"] = dr["DeptName"];
+                drNew["RDT"] = dr["RDT"];
+                drNew["SDT"] = dr["SDT"];
+                drNew["IsPass"] = dr["IsPass"];
+
+                dtNew.Rows.Add(drNew);
+            }
+
+            return BP.Tools.Json.ToJson(dtNew);
         }
         //根据当前节点获得下一个节点.
         private static int GetNextNodeID(int nodeID, DataTable dirs)

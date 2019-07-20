@@ -276,37 +276,28 @@ namespace BP.WF.Template
                         throw new Exception("流程设计错误:您设置的节点(" + town.HisNode.Name + ")的接收方式为按指定的节点岗位投递，但是您没有在访问规则设置中设置节点编号。");
 
                     ps = new Paras();
-                    ps.SQL = "SELECT DISTINCT(FK_Emp) FROM WF_GenerWorkerList WHERE (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND FK_Node=" + dbStr + "FK_Node AND IsEnable=1 ";
-                    ps.Add("FK_Node", int.Parse(nd));
-
+                    string workSQL = "";
+                    //获取指定节点的信息
                     Node specNode = new Node(nd);
-                    if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                    //指定节点是子线程
+                    if(specNode.HisRunModel == RunModel.SubThread)
                     {
-                        if (specNode.HisRunModel == RunModel.SubThread)
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", this.currWn.HisWork.FID);
-                        }
+                        if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                            workSQL = "FID="+ this.currWn.HisWork.FID ;
                         else
-                        {
-                            ps.Add("WorkID", this.currWn.HisWork.FID);
-                            ps.Add("FID", 0);
-                        }
+                            workSQL = "FID=" + this.WorkID;
                     }
                     else
                     {
-                        if (specNode.HisRunModel == RunModel.SubThread)
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", this.WorkID);
-                        }
+                        if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                            workSQL = "WorkID=" + this.currWn.HisWork.FID;
                         else
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", 0);
-                        }
+                            workSQL = "WorkID=" + this.WorkID;
+
                     }
-				
+
+                    ps.SQL = "SELECT DISTINCT(FK_Emp) FROM WF_GenerWorkerList WHERE "+ workSQL+" AND FK_Node=" + dbStr + "FK_Node AND IsEnable=1 ";
+                    ps.Add("FK_Node", int.Parse(nd));
 
                     DataTable dt_ND = DBAccess.RunSQLReturnTable(ps);
                     //添加到结果表
@@ -327,7 +318,7 @@ namespace BP.WF.Template
                     ps.SQL = "SELECT DISTINCT(" + TrackAttr.EmpFrom + ") FROM ND" + int.Parse(fl.No) + "Track WHERE"
                         + " (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3"
                         + "  OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5 OR ActionType=" + dbStr + "ActionType6)"
-                        + "   AND NDFrom=" + dbStr + "NDFrom AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID)";
+                        + "   AND NDFrom=" + dbStr + "NDFrom AND "+ workSQL;
                     ps.Add("ActionType1", (int)ActionType.Skip);
                     ps.Add("ActionType2", (int)ActionType.Forward);
                     ps.Add("ActionType3", (int)ActionType.ForwardFL);
@@ -335,33 +326,7 @@ namespace BP.WF.Template
                     ps.Add("ActionType5", (int)ActionType.SubThreadForward);
                     ps.Add("ActionType6", (int)ActionType.Start);
                     ps.Add("NDFrom", int.Parse(nd));
-                    if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
-                    {
-                        if (specNode.HisRunModel == RunModel.SubThread)
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", this.currWn.HisWork.FID);
-                        }
-                        else
-                        {
-                            ps.Add("WorkID", this.currWn.HisWork.FID);
-                            ps.Add("FID", 0);
-                        }
-                    }
-                    else
-                    {
-                        if (specNode.HisRunModel == RunModel.SubThread)
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", this.WorkID);
-                        }
-                        else
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", 0);
-                        }
-                    }
-
+                   
                     dt_ND = DBAccess.RunSQLReturnTable(ps);
                     if (dt_ND.Rows.Count != 0)
                     {
@@ -376,36 +341,8 @@ namespace BP.WF.Template
 
                     //从Selector中查找
                     ps = new Paras();
-                    ps.SQL = "SELECT DISTINCT(FK_Emp) FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID)";
+                    ps.SQL = "SELECT DISTINCT(FK_Emp) FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND "+workSQL;
                     ps.Add("FK_Node", int.Parse(nd));
-                    ps.Add("WorkID", this.WorkID);
-                    if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
-                    {
-                        if (specNode.HisRunModel == RunModel.SubThread)
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", this.currWn.HisWork.FID);
-                        }
-                        else
-                        {
-                            ps.Add("WorkID", this.currWn.HisWork.FID);
-                            ps.Add("FID", 0);
-                        }
-                    }
-                    else
-                    {
-                        if (specNode.HisRunModel == RunModel.SubThread)
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", this.WorkID);
-                        }
-                        else
-                        {
-                            ps.Add("WorkID", this.WorkID);
-                            ps.Add("FID", 0);
-                        }
-                    }
-
 
 
                     dt_ND = DBAccess.RunSQLReturnTable(ps);
@@ -1117,17 +1054,7 @@ namespace BP.WF.Template
             return mydt;
             #endregion  按照岗位来执行。
         }
-        /// <summary>
-        /// 递归出来子部门下有该岗位的人员
-        /// </summary>
-        /// <param name="subDepts"></param>
-        /// <param name="empNo"></param>
-        /// <returns></returns>
-        public DataTable Func_GenerWorkerList_DiGui_ByDepts(BP.Port.Dept subDept, string empNo)
-        {
-            DataTable dt = Func_GenerWorkerList_SpecDept_SameLevel(subDept.No, empNo);
-            return dt;
-        }
+    
         /// <summary>
         /// 获得指定部门下是否有该岗位的人员.
         /// </summary>

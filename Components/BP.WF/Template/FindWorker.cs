@@ -1048,7 +1048,7 @@ namespace BP.WF.Template
              * */
             string nowDeptID = empDept.Clone() as string;
 
-            //找本部门的父级
+            //第1步:直线父级寻找.
             while (true)
             {
                 BP.Port.Dept myDept = new BP.Port.Dept(nowDeptID);
@@ -1060,13 +1060,14 @@ namespace BP.WF.Template
                 }
 
                 //检查指定的父部门下面是否有该人员.
-                DataTable mydtTemp = this.Func_GenerWorkerList_DiGui(nowDeptID, empNo);
-                if (mydtTemp != null)
+                DataTable mydtTemp = this.Func_GenerWorkerList_SpecDept(nowDeptID, empNo);
+                if (mydtTemp.Rows.Count!=0)
                     return mydtTemp;
+
                 continue;
             }
 
-            //找父级的子部门
+            //第2步：父级的子级.
             nowDeptID = empDept.Clone() as string;
             while (true)
             {
@@ -1079,28 +1080,27 @@ namespace BP.WF.Template
                 }
 
                 //该部门下的所有子部门是否有人员.
-                DataTable mydtTemp = Func_GenerWorkerList_DiGui_SameLevel(nowDeptID, empNo);
-                if (mydtTemp != null)
+                DataTable mydtTemp = Func_GenerWorkerList_SpecDept_SameLevel(nowDeptID, empNo);
+                if (mydtTemp.Rows.Count!=0)
                     return mydtTemp;
-
                 continue; 
             }
 
             /*如果向上找没有找到，就考虑从本级部门上向下找。只找一级下级的平级 */
             nowDeptID = empDept.Clone() as string;
-            BP.Port.Dept subDept = new BP.Port.Dept(nowDeptID);
 
             //递归出来子部门下有该岗位的人员
-            DataTable mydt = Func_GenerWorkerList_DiGui_ByDepts(subDept, empNo);
+            DataTable mydt = Func_GenerWorkerList_SpecDept_SameLevel(nowDeptID, empNo);
 
             if ((mydt == null ||mydt.Rows.Count==0) && this.town.HisNode.HisWhenNoWorker == false)
             {
                 //如果递归没有找到人,就全局搜索岗位.
-                sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                sql = "SELECT A.FK_Emp FROM  Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.SQL = sql;
                 dt = DBAccess.RunSQLReturnTable(ps);
+
                 if (dt.Rows.Count > 0)
                     return dt;
                 if (this.town.HisNode.HisWhenNoWorker == false)
@@ -1125,17 +1125,16 @@ namespace BP.WF.Template
         /// <returns></returns>
         public DataTable Func_GenerWorkerList_DiGui_ByDepts(BP.Port.Dept subDept, string empNo)
         {
-            DataTable dt = Func_GenerWorkerList_DiGui_SameLevel(subDept.No, empNo);
+            DataTable dt = Func_GenerWorkerList_SpecDept_SameLevel(subDept.No, empNo);
             return dt;
-
         }
         /// <summary>
-        /// 根据部门获取下一步的操作员
+        /// 获得指定部门下是否有该岗位的人员.
         /// </summary>
-        /// <param name="deptNo"></param>
-        /// <param name="emp1"></param>
+        /// <param name="deptNo">部门编号</param>
+        /// <param name="empNo">人员编号</param>
         /// <returns></returns>
-        public DataTable Func_GenerWorkerList_DiGui(string deptNo, string empNo)
+        public DataTable Func_GenerWorkerList_SpecDept(string deptNo, string empNo)
         {
             string sql;
 
@@ -1159,7 +1158,6 @@ namespace BP.WF.Template
                 ps.Add("FK_Dept", deptNo);
             }
 
-
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             return dt;
         }
@@ -1169,7 +1167,7 @@ namespace BP.WF.Template
         /// <param name="deptNo"></param>
         /// <param name="emp1"></param>
         /// <returns></returns>
-        public DataTable Func_GenerWorkerList_DiGui_SameLevel(string deptNo, string empNo)
+        public DataTable Func_GenerWorkerList_SpecDept_SameLevel(string deptNo, string empNo)
         {
             string sql;
 
@@ -1191,7 +1189,6 @@ namespace BP.WF.Template
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.Add("FK_Dept", deptNo);
             }
-
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             return dt;

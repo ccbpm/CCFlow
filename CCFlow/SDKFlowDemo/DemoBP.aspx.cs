@@ -19,6 +19,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     /// </summary>
     public void ccbpmDemo()
     {
+        
         // 让用户登录.
         BP.WF.Dev2Interface.Port_Login("liyan");
 
@@ -285,8 +286,6 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         stu.Name = "周朋";
         stu.Addr = "shandong.jinan";
         stu.Tel = "186601434343";
-
-
         if (stu.IsExits == true)
             stu.Update();
         else

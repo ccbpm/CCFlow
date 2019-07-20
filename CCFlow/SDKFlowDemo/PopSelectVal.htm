@@ -5,7 +5,6 @@
     <script src="../WF/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
-
     <script type="text/javascript">
 
         window.onload =
@@ -18,8 +17,8 @@
 		    var html = "<ul>";
 		    for (var i = 0; i < emps.length; i++) {
 
-              var emp=emps[i];
-              html += "<li> <input type=checkbox value='" + emp.No + "' id='CB_" + emp.No + "' /><label for='CB_"+emp.No+"'>"+emp.Name+"</label> </li>";
+		        var emp = emps[i];
+		        html += "<li> <input type=checkbox value='" + emp.No + "' id='CB_" + emp.No + "' /><label for='CB_" + emp.No + "'>" + emp.Name + "</label> </li>";
 		    }
 		    html += "</ul>";
 
@@ -28,16 +27,14 @@
 		}
 
         //约定的方法名，不能变化.
-		function Btn_OK() {
+        function Btn_OK() {
             var val = "我选择返回的值";
             return val;
-		}
+        }
     </script>
-     
 </head>
 <body>
-
-<div id="Msg" name="Msg" > </div>
-
+    <div id="Msg" name="Msg">
+    </div>
 </body>
 </html>

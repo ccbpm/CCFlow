@@ -6201,10 +6201,13 @@ namespace BP.WF
             dtHistory.Columns.Add("IsPass"); //是否通过?
              
             //执行人.
-            if (gwf.WFState == WFState.Complete)
+            if (gwf.WFState == WFState.Complete || 1==1)
             {
                 //历史执行人. 
-                sql = "SELECT C.Name AS DeptName,  A.* FROM ND" + int.Parse(gwf.FK_Flow) + "Track A, Port_Emp B, Port_Dept C WHERE A.WorkID=" + workID + " AND (A.ActionType=1 OR A.ActionType=0) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ORDER BY A.RDT DESC";
+                sql = "SELECT C.Name AS DeptName,  A.* FROM ND" + int.Parse(gwf.FK_Flow) + "Track A, Port_Emp B, Port_Dept C  ";
+                sql += " WHERE (A.WorkID=" + workID + " OR A.FID="+workID+") AND (A.ActionType=1 OR A.ActionType=0  OR A.ActionType=6  OR A.ActionType=7) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ";
+                sql += " ORDER BY A.RDT DESC ";
+
                 DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 foreach (DataRow drTrack in dtTrack.Rows)

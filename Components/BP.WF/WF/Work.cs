@@ -532,7 +532,7 @@ namespace BP.WF
             this.AutoFull();
 
             // 执行保存前的事件。
-            this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.HisNode, this.HisNode.HisWork, null);
+            this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.HisNode, this.HisNode.HisWork, "@WorkID=" + this.OID + "@FID=" + this.FID);
         }
         /// <summary>
         /// 直接的保存

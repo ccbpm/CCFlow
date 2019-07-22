@@ -2584,7 +2584,17 @@ namespace BP.WF
                     gwf.WorkID = wk.OID;
                     if (gwf.IsExits == false)
                     {
+                        //干流、子线程关联字段
                         gwf.FID = this.WorkID;
+
+                        //父流程关联字段
+                        gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
+                        gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
+                        gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
+
+                        //工程类项目关联字段
+                        gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
+                        gwf.PrjName = this.HisGenerWorkFlow.PrjName;
 
                         //#warning 需要修改成标题生成规则。
                         //#warning 让子流程的Titlte与父流程的一样.
@@ -3204,7 +3214,18 @@ namespace BP.WF
                     gwf.FK_Flow = toNode.FK_Flow;
                     gwf.FlowName = toNode.FlowName;
 
+                    //干流、子线程关联字段
                     gwf.FID = this.WorkID;
+
+                    //父流程关联字段
+                    gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
+                    gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
+                    gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
+
+                    //工程类项目关联字段
+                    gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
+                    gwf.PrjName = this.HisGenerWorkFlow.PrjName;
+
                     gwf.FK_FlowSort = toNode.HisFlow.FK_FlowSort;
                     gwf.NodeName = toNode.Name;
                     gwf.FK_Dept = wl.FK_Dept;
@@ -4638,16 +4659,34 @@ namespace BP.WF
                     if (item.HisFrmType != FrmType.FoolForm && item.HisFrmType != FrmType.FreeFrm)
                         continue;
 
+                    if (item.FrmSln == FrmSln.Readonly)
+                        continue;
+
                     MapData md = new MapData();
                     md.No = item.FK_Frm;
                     md.Retrieve();
                     if (md.HisFrmType != FrmType.FoolForm && md.HisFrmType != FrmType.FreeFrm)
                         continue;
 
+                    //判断WhoIsPK
+                    long pkVal = this.WorkID;
+                    if (item.WhoIsPK == WhoIsPK.FID)
+                        pkVal = this.HisGenerWorkFlow.FID;
+                    if (item.WhoIsPK == WhoIsPK.PWorkID)
+                        pkVal = this.HisGenerWorkFlow.PWorkID;
+                    if(item.WhoIsPK == WhoIsPK.PPWorkID)
+                    {
+                        GenerWorkFlow gwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
+                        if(gwf!=null && gwf.PWorkID!=0)
+                            pkVal = gwf.PWorkID;
+                    }
+
+                   
+
                     MapAttrs mapAttrs = md.MapAttrs;
                     //主表实体.
                     GEEntity en = new GEEntity(item.FK_Frm);
-                    en.OID = this.WorkID;
+                    en.OID = pkVal;
                     int i = en.RetrieveFromDBSources();
                     if (i == 0)
                         continue;

@@ -155,10 +155,9 @@
             var webUser = new WebUser();
             dbSrc = dbSrc.replace('@WebUser.No', webUser.No);
             dbSrc = dbSrc.replace('@WebUser.Name', webUser.Name);
-            dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-            dbSrc = dbSrc.replace('@WebUser.DeptName', webUser.DeptName);
             dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
-           
+           dbSrc = dbSrc.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
+            dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
             data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
 
             $("#jsonDataTable").html("");

@@ -101,10 +101,10 @@
             var webUser = new WebUser();
             dbSrc = dbSrc.replace('@WebUser.No', webUser.No);
             dbSrc = dbSrc.replace('@WebUser.Name', webUser.Name);
-            dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-            dbSrc = dbSrc.replace('@WebUser.DeptName', webUser.DeptName);
             dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
-
+            dbSrc = dbSrc.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
+            dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+            
             //处理SQL 替换URL中的参数
             var refPK = this.GetQueryString("RefPK");
             if(refPK =="" || refPK == undefined){

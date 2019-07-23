@@ -212,3 +212,56 @@ function MultiUploadFile() {
     });
 
 }
+
+//树形结构
+function findChildren(jsonArray, parentNo) {
+    var appendToTree = function (treeToAppend, o) {
+        $.each(treeToAppend, function (i, child) {
+            if (o.id == child.ParentNo)
+                o.children.push({
+                    "id": child.No,
+                    "text": child.Name,
+                    "children": []
+                });
+        });
+
+        $.each(o.children, function (i, o) {
+            appendToTree(jsonArray, o);
+        });
+
+    };
+
+    var jsonTree = [];
+    var jsonchildTree = [];
+    if (jsonArray.length > 0 && typeof parentNo !== "undefined") {
+        $.each(jsonArray, function (i, o) {
+            if (o.ParentNo == parentNo) {
+                jsonchildTree.push(o);
+                jsonTree.push({
+                    "id": o.No,
+                    "text": o.Name,
+                    "children": []
+                });
+            }
+        });
+
+        $.each(jsonTree, function (i, o) {
+            appendToTree(jsonArray, o);
+        });
+
+    }
+
+    function _(treeArray) {
+        $.each(treeArray, function (i, o) {
+            if ($.isArray(o.children)) {
+                if (o.children.length == 0) {
+                    o.children = undefined;
+                } else {
+                    _(o.children);
+                }
+            }
+        });
+    }
+    _(jsonTree);
+    return jsonTree;
+}

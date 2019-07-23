@@ -1435,6 +1435,18 @@ var Entity = (function () {
                     }
                 }
             });
+            //获取树形结构的表单值
+            var combotrees = $(".easyui-combotree");
+            $.each(combotrees, function (i, combotree) {
+                var name = $(combotree).attr('id');
+                var tree = $('#' + name).combotree('tree');
+                //获取当前选中的节点
+                var data = tree.tree('getSelected');
+                if (data != null) {
+                    self[name.replace("DDL_", "")] = data.id;
+                    self[name.replace("DDL_", "") + "T"] = data.text;
+                }
+            });
             // 参数属性
             $("[name^=TBPara_],[name^=CBPara_],[name^=RBPara_],[name^=DDLPara_]").each(function (i, o) {
                 var target = $(this);

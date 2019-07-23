@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>ccform正在加载请稍候...</title>
-   
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/gray/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
     <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/easyUI/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
@@ -21,14 +21,14 @@
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
-      <!-- 位置必须放在 jquery 之后. -->
+    <!-- 位置必须放在 jquery 之后. -->
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../Gener.js"></script>
 
     <!--UEditor-->
     <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css"
-        rel="stylesheet" />
+          rel="stylesheet" />
     <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
@@ -45,6 +45,19 @@
     <script src="../../CCForm/JS/MultipleChoiceSearch.js?ver=1" type="text/javascript"></script>
     <script src="../../CCForm/JS/MultipleChoiceSmall.js?ver=1" type="text/javascript"></script>
     <script src="EnOnly.js" type="text/javascript"></script>
+    <style type="text/css">
+        .textbox-addon {
+            position: absolute;
+        }
+
+        .textbox-text {
+            margin: 0px 26px 0px 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            height: 28px !important;
+            line-height: 28px !important;
+        }
+    </style>
     <!--杨玉慧 -->
     <script type="text/javascript">
 
@@ -172,7 +185,7 @@
 
 
             //原有的。
-            //为 DISABLED 的 TEXTAREA 加TITLE 
+            //为 DISABLED 的 TEXTAREA 加TITLE
             var disabledTextAreas = $('#divCCForm textarea:disabled');
             $.each(disabledTextAreas, function (i, obj) {
                 $(obj).attr('title', $(obj).val());
@@ -207,24 +220,45 @@
                 }
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-                    // 判断下拉框是否有对应option, 若没有则追加
-                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
 
-                        var mainTable = frmData.MainTable[0];
-                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+                        var uiBindKey = mapAttr.UIBindKey;
 
-                        if (selectText == null || selectText == "")
-                            selectText = defValue;
+                        if (uiBindKey.indexOf("Dept") != -1) {
+                            var webUser = new WebUser();
+                            var ens = new Entities(uiBindKey);
+                            ens.RetrieveAll();
+                            var pushData;
+                            if (webUser.No == "admin")
+                                pushData = findChildren(ens, "0");
+                            else
+                                pushData = findChildren(ens, webUser.FK_Dept);
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
+                            if (mapAttr.UIIsEnable == 0)
+                                $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
-                        if (defValue == null || defValue == "") {
-
-                        } else {
-                            $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
                         }
                     } else {
-                        //设置选择的值
-                        $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+                        // 判断下拉框是否有对应option, 若没有则追加
+                        if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
 
+                            var mainTable = frmData.MainTable[0];
+                            var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+
+                            if (selectText == null || selectText == "")
+                                selectText = defValue;
+
+                            if (defValue == null || defValue == "") {
+
+                            } else {
+                                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                            }
+                        } else {
+                            //设置选择的值
+                            $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+
+                        }
                     }
                     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
                         if ($("#TB_" + mapAttr.KeyOfEn + "Text").length == 1) {
@@ -292,7 +326,7 @@
             var html = "-";
             var fileName = $("#TB_MyFileName").val();
             if (fileName != null && fileName != "" && fileName != undefined && fileName != "null") {
-                html = "<a href='#' onclick='downLoadFile()' target='_self'>" + $("#TB_MyFileName").val()+"." + $("#TB_MyFileExt").val() + "</a>";
+                html = "<a href='#' onclick='downLoadFile()' target='_self'>" + $("#TB_MyFileName").val() + "." + $("#TB_MyFileExt").val() + "</a>";
             }
             $("#FileInfo").html(html);
 
@@ -582,6 +616,11 @@
                     enableAttr = "";
                 else
                     enableAttr = "disabled='disabled'";
+
+                //判断外键是否为树形结构
+                var uiBindKey = mapAttr.UIBindKey;
+                if (uiBindKey.indexOf("Dept") != -1)
+                    return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:100%'></select>";
 
                 return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
@@ -885,7 +924,7 @@
                 if (entityAthType == 1 || entityAthType == 2)
                     uploadFile(en.GetPKVal());
 
-                
+
                 url = url.replace("#", "");
                 url = replaceParamVal(url, "PKVal", en.GetPKVal());
                 url = replaceParamVal(url, "tabIndex", index);
@@ -929,7 +968,7 @@
                 url += "&tabIndex=" + index;
 
 
-            window.location.href = url; ; //刷新.
+            window.location.href = url;; //刷新.
         }
 
 
@@ -1048,7 +1087,7 @@
             Accordion.prototype.dropdown = function (e) {
                 var $el = e.data.el;
                 $this = $(this),
-			$next = $this.next();
+                    $next = $this.next();
 
                 $next.slideToggle();
                 $this.parent().toggleClass('open');
@@ -1078,22 +1117,22 @@
             $("#eudlg").dialog("close");
 
         }
-    </script>
+
+/**/</script>
     <style type="text/css">
-        .panel-body
-        {
+        .panel-body {
             padding: 0px;
         }
-        .tabs
-        {
+
+        .tabs {
             border-width: 1px 0 1px 0;
         }
-        .btn-default
-        {
+
+        .btn-default {
             border: 0px;
         }
-        .btn
-        {
+
+        .btn {
             background: white !important;
             color: #337ab7 !important;
         }
@@ -1103,12 +1142,12 @@
     <div class="easyui-layout" data-options="region:'center'" border="false">
         <div class="easyui-layout" data-options="fit:true">
             <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false"
-                style="height: 30px; padding: 2px; background-color: #d3d3d34a">
+                 style="height: 30px; padding: 2px; background-color: #d3d3d34a">
                 <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'"
-                    onclick="New()">新建</a> <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton"
-                        data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
+                   onclick="New()">新建</a> <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton"
+                                             data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
                 <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'"
-                    onclick="Delete()">删除</a>
+                   onclick="Delete()">删除</a>
             </div>
             <div data-options="region:'center',noheader:true,border:false" style="margin: 0px">
                 <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin: 0px;

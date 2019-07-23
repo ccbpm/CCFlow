@@ -24,6 +24,15 @@
             var ens = new Entities("BP.GPM.DeptEmps");
             ens.Retrieve("FK_Emp", empNo);
 
+            if (ens.length == 0) {
+                var deptEmp = new Entity("BP.GPM.DeptEmp");
+                deptEmp.FK_Dept = emp.FK_Dept;
+                deptEmp.FK_Emp = emp.No;
+                deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
+                deptEmp.Insert();
+                ens.Retrieve("FK_Emp", empNo);
+            }
+
             var html = "<table border=0 style='width:100%;'>";
 
             html += "<caption >姓名:" + emp.Name + ", 主要部门:" + emp.FK_DeptText + " <a href='javascript:AddDept()'>增加部门</a></caption>";
@@ -48,13 +57,12 @@
 
                 if (emp.FK_Dept == dept.No) {
                     html += "<td><font color=green><b>" + dept.Name + "</b></font></td>";
-                    html += "<td> - </td>";
+                    html += "<td> 主部门 </td>";
                 }
                 else {
                     html += "<td>" + dept.Name + "</td>";
-                    html += "<td><a href=\"javascript:SetMainDept('"+dept.No+"','"+empNo+"')\">设置主部门</a></td>";
+                    html += "<td><a href=\"javascript:SetMainDept('" + dept.No + "','" + empNo + "')\">设置主部门</a></td>";
                 }
-
 
 
                 //求岗位集合.
@@ -77,10 +85,10 @@
                     html += "<td><a href=\"javascript:AddStation('" + dept.No + "','" + empNo + "')\">" + staNames + "</a></td>";
                 }
 
-                if (emp.FK_Dept == dept.No) 
-                html += "<td> - </td>";
+                if (emp.FK_Dept == dept.No)
+                    html += "<td> <a href='javascript:EditMainDept()'>修改主部门</a> </td>";
                 else
-                html += "<td><a href=\"javascript:Del('" + en.MyPK + "')\" ><img src='../WF/Img/Btn/Delete.png' ></a></td>";
+                    html += "<td><a href=\"javascript:Del('" + en.MyPK + "')\" ><img src='../WF/Img/Btn/Delete.png' ></a></td>";
 
 
                 html += "</tr>";
@@ -91,6 +99,16 @@
             $("#Msg").html(html);
 
         });
+
+        //修改主部门.
+        function EditMainDept() {
+
+            var empNo = GetQueryString("FK_Emp");
+
+            window.location.href = "EmpDeptMainDept.htm?FK_Emp=" + empNo;
+
+
+        }
 
         //设置主部门
         function SetMainDept(deptNo,empNo) {

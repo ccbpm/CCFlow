@@ -17,26 +17,25 @@
 
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("OP_GetStatus");
-
             data = JSON.parse(data);
 
-            // var html = addFlowOverByCoercion(data.CanFlowOverByCoercion);
+            var html = "";
 
-            var html = ""; // addFlowOverByCoercion(data.CanFlowOverByCoercion);
+            //打包下载.
+            if (data.CanPackUp == 1) 
+                html += PackUp();
 
-            //html += addTackBack(data.CanTackBack, data.TackBackFromNode, data.TackBackToNode);
-            //html += addHurry(data.CanHurry);
-            // html += addUnSend(data.CanUnSend);
-            //html += addRollBack(data.CanRollBack);
-            //html += addUnHungUp(data.CanUnHungUp);
-
-            html += addPackUp(data.CanPackUp, data.PrintType);
-
-            html += addFlowOverByCoercion(data.CanFlowOverByCoercion);
-
+           //是否可以删除流程.
+           if (data.IsCanDelete==1) 
+               html += DeleteFlow();
+ 
             //增加回滚.
             if (data.Rollback == "1")
                 html += Rollback();
+
+            //增加撤销.
+            if (data.CanUnSend == "1")
+                html += UnSend();
 
             $("#ccop").append(html);
 
@@ -46,7 +45,7 @@
             window.location.href = "../Rollback.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow");
         }
 
-        //删除流程
+        //回滚流程
         function Rollback() {
 
             var html = addBlockBegin("回滚流程");
@@ -60,7 +59,7 @@
         }
 
         //删除流程
-        function addFlowOverByCoercion(isCan) {
+        function DeleteFlow(isCan) {
 
             if (typeof isCan == "undefined") {
                 return "";
@@ -77,12 +76,12 @@
             }
 
             html += addBlockEnd();
-
             return html;
         }
 
         //取回审批
-        function addTackBack(isCan, fromNode, toNode) {
+        function TackBack(isCan, fromNode, toNode) {
+
             if (typeof isCan == "undefined") {
                 return "";
             }
@@ -98,59 +97,33 @@
             }
 
             html += addBlockEnd();
-
             return html;
         }
 
         //催办
-        function addHurry(isCan) {
-            if (typeof isCan == "undefined") {
-                return "";
-            }
+        function addHurry() {
 
             var html = addBlockBegin("工作催办");
             html += "您没有此权限。";
             html += addBlockEnd();
-
             return html;
         }
 
         //撤销发送
-        function addUnSend(isCan) {
-            if (typeof isCan == "undefined") {
-                return "";
-            }
+        function addUnSend() {
 
             var html = addBlockBegin("撤销发送");
-
-            if (isCan) {
-                html += "功能执行:<a href =\"javascript:UnSend('" + fk_flow + "','" + workid + "','" + fid + "')\" >撤销发送</a>。";
-            }
-            else {
-                html += "您没有此权限。";
-            }
-
+            html += "功能执行:<a href =\"javascript:UnSend('" + fk_flow + "','" + workid + "','" + fid + "')\" >撤销发送</a>。";
             html += addBlockEnd();
-
             return html;
         }
 
-        //恢复使用流程
-        function addRollBack(isCan) {
-            if (typeof isCan == "undefined") {
-                return "";
-            }
+        //恢复使用流程.
+        function addRollBack() {
 
             var html = addBlockBegin("恢复启用流程数据到结束节点");
-
-            if (isCan) {
-                html += "功能执行:<a href=\"javascript:DoFunc('OP_ComeBack','" + workid + "','" + fk_flow + "','" + fk_node + "')\" >点击执行恢复流程</a>。";
-                html += "<br />说明：如果被成功恢复，ccflow就会把待办工作发送给最后一个结束流程的工作人员。";
-            }
-            else {
-                html += "您没有此权限。";
-            }
-
+            html += "功能执行:<a href=\"javascript:DoFunc('OP_ComeBack','" + workid + "','" + fk_flow + "','" + fk_node + "')\" >点击执行恢复流程</a>。";
+            html += "<br />说明：如果被成功恢复，ccflow就会把待办工作发送给最后一个结束流程的工作人员。";
             html += addBlockEnd();
 
             return html;
@@ -158,20 +131,12 @@
 
 
         //撤销挂起
-        function addUnHungUp(isCan) {
-            if (typeof isCan == "undefined") {
-                return "";
-            }
+        function addUnHungUp() {
 
             var html = addBlockBegin("取消挂起");
 
-            if (isCan) {
-                html += "功能执行:<a href=\"javascript:DoFunc('OP_UnHungUp','" + workid + "','" + fk_flow + "','" + fk_node + "')\" >点击执行取消挂起流程</a>。";
-                html += "<br />说明：解除流程挂起的状态。";
-            }
-            else {
-                html += "您没有此权限，或者当前不是挂起的状态。";
-            }
+            html += "功能执行:<a href=\"javascript:DoFunc('OP_UnHungUp','" + workid + "','" + fk_flow + "','" + fk_node + "')\" >点击执行取消挂起流程</a>。";
+            html += "<br />说明：解除流程挂起的状态。";
 
             html += addBlockEnd();
 
@@ -179,14 +144,7 @@
         }
 
         ///增加打印.
-        function addPackUp(isCan,printType) {
-
-            if (typeof isCan == "undefined") {
-                return "";
-            }
-            
-            if (isCan == false || isCan == "false")
-                return "";
+        function PackUp() {
 
             var fk_node = GetQueryString("FK_Node");
             if (fk_node == null)
@@ -195,26 +153,15 @@
             //如果printType是undefined或者null 就执行打包下载
             if (printType == null || printType == undefined) {
                 var html = addBlockBegin("打印/打包下载");
-                if (isCan) {
-                    html += "功能执行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "' >执行打印</a>。";
-                    html += "<br />说明：把表单输出到html,pdf,zip文件里，执行下载或打印.";
-                }
-                else {
-                    html += "您没有此权限。";
-                }
+                html += "功能执行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "' >执行打印</a>。";
+                html += "<br />说明：把表单输出到html,pdf,zip文件里，执行下载或打印.";
             } else {
                 var html = addBlockBegin("RTF/Word下载");
-                if (isCan) {
-                    html += "功能执行:<a href='javaScript:void(0)' onclick='WinOpen(\"../PrintDoc.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "\")' >执行打印</a>。";
-                    html += "<br />说明：把表单输出到Word文件里，执行下载或打印.";
-                }
-                else {
-                    html += "您没有此权限。";
-                }
+                html += "功能执行:<a href='javaScript:void(0)' onclick='WinOpen(\"../PrintDoc.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "\")' >执行打印</a>。";
+                html += "<br />说明：把表单输出到Word文件里，执行下载或打印.";
             }
 
             html += addBlockEnd();
-
             return html;
         }
 

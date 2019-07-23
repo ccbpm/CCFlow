@@ -758,10 +758,7 @@ namespace BP.WF.Template
 
                 gwf.SDTOfNode = dttime.ToString("yyyy-MM-dd HH:mm:ss");
                 gwf.SDTOfFlow = dttime.ToString("yyyy-MM-dd HH:mm:ss");
-                if (isHaveGener)
-                    gwf.Update();
-                else
-                    gwf.Insert(); /*插入流程引擎数据.*/
+              
 
                 #endregion 创建流程引擎主表数据
 
@@ -775,6 +772,8 @@ namespace BP.WF.Template
                 string starter = "";
                 bool isMeetSpecNode = false;
                 GenerWorkerList currWl = new GenerWorkerList();
+                string todoEmps="";
+                int num = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     int ndFrom = int.Parse(dr["NDFrom"].ToString());
@@ -808,6 +807,10 @@ namespace BP.WF.Template
                     gwl.FK_DeptT = emp.FK_DeptText;
 
 
+                    todoEmps += emp.No + "," + emp.Name + ";";
+                    num++; 
+
+
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
                     //gwl.WarningHour = nd.WarningHour;
@@ -815,6 +818,16 @@ namespace BP.WF.Template
                     gwl.WhoExeIt = nd.WhoExeIt;
                     gwl.Insert();
                 }
+
+                //设置当前处理人员.
+                gwf.SetValByKey(GenerWorkFlowAttr.TodoEmps,  todoEmps);
+                gwf.TodoEmpsNum = num;
+
+                if (isHaveGener)
+                    gwf.Update();
+                else
+                    gwf.Insert(); /*插入流程引擎数据.*/
+
 
                 #region 加入退回信息, 让接受人能够看到退回原因.
                 ReturnWork rw = new ReturnWork();

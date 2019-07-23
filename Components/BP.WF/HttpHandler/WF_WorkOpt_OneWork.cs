@@ -292,47 +292,43 @@ namespace BP.WF.HttpHandler
         public string OP_GetStatus()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-
             Hashtable ht = new Hashtable();
 
-            string json = "{";
-            bool isCan;
+            bool CanPackUp = true; //是否可以打包下载.
 
             #region 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
-            bool CanPackUp = true;
             if (SystemConfig.CustomerNo == "TianYe" && WebUser.No != "admin")
                 CanPackUp = IsCanPrintSpecForTianYe(gwf);
             #endregion 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
-
-            ht.Add("CanPackUp", CanPackUp.ToString().ToLower());
+            if (CanPackUp == true)
+                ht.Add("CanPackUp", 1);
+            else
+                ht.Add("CanPackUp", 0);
 
             //是否可以打印.
             switch (gwf.WFState)
             {
                 case WFState.Runing: /* 运行时*/
                     /*删除流程.*/
-                    isCan = BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No);
-
-                    ht.Add("CanFlowOverByCoercion", isCan.ToString().ToLower());
+                    if (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No) == true)
+                        ht.Add("IsCanDelete", 1);
+                    else
+                        ht.Add("IsCanDelete", 0);
 
                     /*取回审批*/
-                    isCan = false;
                     string para = "";
                     string sql = "SELECT NodeID FROM WF_Node WHERE CheckNodes LIKE '%" + gwf.FK_Node + "%'";
                     int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
-
                     if (myNode != 0)
                     {
                         GetTask gt = new GetTask(myNode);
                         if (gt.Can_I_Do_It())
                         {
-                            isCan = true;
-
                             ht.Add("TackBackFromNode", gwf.FK_Node);
                             ht.Add("TackBackToNode", myNode);
+                            ht.Add("CanTackBack", 1);
                         }
                     }
-                    ht.Add("CanTackBack", isCan.ToString().ToLower());
 
                     /*撤销发送*/
                     GenerWorkerLists workerlists = new GenerWorkerLists();
@@ -344,25 +340,29 @@ namespace BP.WF.HttpHandler
                     info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
                     info.addAnd();
                     info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-                    isCan = info.DoQuery() > 0;
-                    ht.Add("CanUnSend", isCan.ToString().ToLower());
+
+                    if (info.DoQuery() > 0)
+                        ht.Add("CanUnSend", 1);
+                    else
+                        ht.Add("CanUnSend", 0);
+
                     break;
                 case WFState.Complete: // 完成.
                 case WFState.Delete:   // 逻辑删除..
                     /*恢复使用流程*/
-                    isCan = WebUser.No == "admin";
-                    ht.Add("CanRollBack", isCan.ToString().ToLower());
-
-                    ht.Add("Rollback", "1");
-
+                    if (WebUser.No == "admin")
+                        ht.Add("CanRollBack", 1);
+                    else
+                        ht.Add("CanRollBack", 0);
 
                     //判断是否可以打印.
                     break;
                 case WFState.HungUp: // 挂起.
                     /*撤销挂起*/
-                    isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No);
-
-                    ht.Add("CanUnHungUp", isCan.ToString().ToLower());
+                    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No) == false)
+                        ht.Add("CanUnHungUp", 0);
+                    else
+                        ht.Add("CanUnHungUp", 1);
                     break;
                 default:
                     break;
@@ -402,7 +402,6 @@ namespace BP.WF.HttpHandler
                         return true;
                 }
             }
-
             return false;
         }
 
@@ -462,7 +461,7 @@ namespace BP.WF.HttpHandler
                 if (item.No.Equals("Frm") && (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
                 {
                     if (nd.FormUrl.Contains("?"))
-                        url = "@url=" + nd.FormUrl+"&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                        url = "@url=" + nd.FormUrl + "&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
                     else
                         url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
                 }

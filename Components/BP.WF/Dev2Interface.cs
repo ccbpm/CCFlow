@@ -6064,6 +6064,7 @@ namespace BP.WF
             string[] strs = toEmpIDs.Split(',');
 
             string todoEmps = "";
+            int num = 0;
             foreach (string empID in strs)
             {
                 if (DataType.IsNullOrEmpty(empID) == true)
@@ -6072,13 +6073,17 @@ namespace BP.WF
                 }
 
                 BP.Port.Emp emp = new Emp(empID);
-                todoEmps += emp.No + "," + emp.Name;
+                todoEmps += emp.No + "," + emp.Name+";";
+                num++;
 
                 emps.AddEntity(emp);
             }
 
+            //设置人员.
+            gwf.SetValByKey(GenerWorkFlowAttr.TodoEmps, todoEmps);
+            gwf.TodoEmpsNum = num;
 
-            gwf.TodoEmps = todoEmps;
+
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.WFState = WFState.Runing;
 

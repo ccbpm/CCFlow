@@ -35,7 +35,7 @@
 
             //增加撤销.
             if (data.CanUnSend == "1")
-                html += UnSend();
+                html += addUnSend();
 
             $("#ccop").append(html);
 
@@ -151,6 +151,7 @@
                 fk_node = GetQueryString("NodeID");
 
             //如果printType是undefined或者null 就执行打包下载
+            var printType;
             if (printType == null || printType == undefined) {
                 var html = addBlockBegin("打印/打包下载");
                 html += "功能执行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "' >执行打印</a>。";

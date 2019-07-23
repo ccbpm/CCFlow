@@ -314,6 +314,7 @@
                         realVal = decodeURI(param[1]);
                         $('#TB_' + param[0]).val(realVal);
                         $('#DDL_' + param[0]).val(realVal);
+                        $('#DDL_' +  param[0]).combotree('setValue', realVal);
                         if (realVal == "1") {
                             var obj = document.getElementById("CB_" + param[0])
                             if (obj != null)

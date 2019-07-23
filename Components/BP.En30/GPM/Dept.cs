@@ -119,7 +119,6 @@ namespace BP.GPM
                 //顺序号.
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 
-
                 RefMethod rm = new RefMethod();
                 rm.Title = "重置该部门一下的部门路径";
                 rm.ClassMethodName = this.ToString() + ".DoResetPathName";

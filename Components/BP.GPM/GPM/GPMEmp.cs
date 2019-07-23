@@ -218,7 +218,7 @@ namespace BP.GPM
                 map.AddTBStringPK(EmpAttr.No, null, "登陆账号", true, false, 1, 50, 100);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 100);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), true);
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), false);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);

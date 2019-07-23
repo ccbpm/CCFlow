@@ -271,7 +271,7 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 130);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), true);
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), true);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
@@ -315,10 +315,23 @@ namespace BP.GPM
                 rm.HisAttrs.AddTBString("pass2", null, "再次输入", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "修改主部门";
+                rm.ClassMethodName = this.ToString() + ".DoEditMainDept";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefAttrKey = EmpAttr.FK_Dept;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
+
+        public string DoEditMainDept()
+        {
+            return "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
+        }
+        
 
         public string DoEmpDepts()
         {

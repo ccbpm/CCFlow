@@ -58,7 +58,7 @@
             handler.AddUrlData();
             var ens = handler.DoMethodReturnJSON("Rollback_Init");
 
-            for (var i = 0; i < length; i++) {
+            for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
                 html += "<tr>";
@@ -97,7 +97,7 @@
     </script>
 </head>
 <body>
-    <div id="dosc">
+    <div id="docs">
     </div>
 </body>
 </html>

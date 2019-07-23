@@ -285,7 +285,7 @@ FigureCreateCommand.prototype = {
 
             //如果为隐藏字段
             if (frmVal.IsHidenField == true) {
-                HidenFieldFun(frmVal);
+                HidenFieldFun(frmVal,x,y);
             } else {
 
                 //根据信息创建不同类型的数字控件
@@ -557,7 +557,7 @@ FigureCreateCommand.prototype = {
         return false;
     },
     /**创建隐藏字段**/
-    HidenFieldCreate: function (frmVal) {
+    HidenFieldCreate: function (frmVal,x,y) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
         handler.AddPara("FrmID", CCForm_FK_MapData);
         handler.AddPara("KeyOfEn",  frmVal.KeyOfEn);

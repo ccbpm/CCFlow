@@ -1361,6 +1361,15 @@ namespace BP.WF.Template
             fl.RetrieveFromDBSources();
             fl.Update();
 
+            //如果是组长会签模式，通用选择器只能单项选择
+            if(this.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+            {
+                Selector selector = new Selector(this.NodeID);          
+                selector.IsSimpleSelector = true;
+                selector.Update();
+
+            }
+
             base.afterInsertUpdateAction();
         }
         #endregion

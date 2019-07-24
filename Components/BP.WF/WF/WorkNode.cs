@@ -7027,6 +7027,7 @@ namespace BP.WF
                             continue; //就不能启动该子流程.
                     }
 
+                    //指定的流程结束后,才能启动该子流程。
                     if (sub.IsEnableSpecFlowOver == true)
                     {
                         string[] fls = sub.SpecFlowOver.Split(',');
@@ -7046,11 +7047,27 @@ namespace BP.WF
                         if (isHave == true)
                             continue; //就不能启动该子流程.
                     }
-                    #endregion
 
-                    #region 检查sendModel.
-                    // 设置开始节点待办.
-                    if (sub.SendModel == 0)
+                    if (sub.IsEnableSQL == true )
+                    {
+                        string sql = sub.SpecSQL;
+                        if (DataType.IsNullOrEmpty(sql) == true)
+                            continue;
+
+                        sql = BP.WF.Glo.DealExp(sql, this.rptGe);
+                        if (DBAccess.RunSQLReturnValInt(sql) == 0) //不能执行子流程
+                            continue;
+                    }
+
+                    //按指定子流程节点
+                    if (sub.IsEnableSameLevelNode == true)
+                        throw new Exception("配置错误，按指定平级子流程节点只使用触发平级子流程，不能触发下级子流程");
+
+                        #endregion
+
+                        #region 检查sendModel.
+                        // 设置开始节点待办.
+                        if (sub.SendModel == 0)
                     {
                         //创建workid.
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
@@ -7141,6 +7158,59 @@ namespace BP.WF
                         }
                         if (isHave == true)
                             continue; //就不能启动该子流程.
+                    }
+                    //按指定的SQL配置，如果结果值是>=1就执行
+                    if (sub.IsEnableSQL == true)
+                    {
+                        string sql = sub.SpecSQL;
+                        if (DataType.IsNullOrEmpty(sql) == true)
+                            continue;
+
+                        sql = BP.WF.Glo.DealExp(sql, this.rptGe);
+                        if (DBAccess.RunSQLReturnValInt(sql) == 0) //不能执行子流程
+                            continue;
+                    }
+
+                    //按指定子流程节点
+                    if (sub.IsEnableSameLevelNode == true)
+                    {
+                        string levelNodes = sub.SameLevelNode;
+                        if (DataType.IsNullOrEmpty(levelNodes) == true)
+                            continue;
+
+                        string[] nodes = levelNodes.Split(';');
+                        bool isHave = false;
+                        foreach (string val in nodes)
+                        {
+                            string[] flowNode = val.Split(',');
+                            if (flowNode.Length != 2)
+                            {
+                                isHave = true;
+                                break; //不能启动.
+                            }
+
+
+                            GenerWorkFlow gwfSub = new GenerWorkFlow();
+                           int count =  gwfSub.Retrieve(GenerWorkFlowAttr.PWorkID, this.HisGenerWorkFlow.PWorkID, GenerWorkFlowAttr.FK_Flow, flowNode[0]);
+                            if (count == 0)
+                            {
+                                isHave = true;
+                                break; //不能启动.
+                            }
+                            if (gwfSub.WFSta != WFSta.Complete)
+                            {
+                                string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkerList WHERE WorkID=" + gwfSub.WorkID + " AND FK_Flow='" + flowNode[0] + "' AND FK_Node=" + int.Parse(flowNode[1]) + " AND IsEnable=1 AND IsPass=1";
+                                if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                                {
+                                    isHave = true;
+                                    break; //不能启动.
+                                }
+                            }
+
+                        }
+                        if (isHave == true)
+                            continue;
+
                     }
                     #endregion
 

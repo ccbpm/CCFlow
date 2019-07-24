@@ -259,8 +259,6 @@ namespace BP.DTS
                 //    return DBAccessOfMSSQL2.RunSQL(table);
 				case DBUrlType.DBAccessOfODBC:
 					return DBAccessOfODBC.RunSQL(table);
-				case DBUrlType.DBAccessOfOLE:
-					return DBAccessOfOLE.RunSQL(table);
                 //case DBUrlType.DBAccessOfOracle1:
                 //    return DBAccessOfOracle1.RunSQLTRUNCATETable(table);
                 //case DBUrlType.DBAccessOfOracle2:
@@ -918,15 +916,6 @@ namespace BP.DTS
 					case DA.DBUrlType.AppCenterDSN:
 						DBAccess.RunSQL(UPDATEsql);
 						break;
-                    //case DA.DBUrlType.DBAccessOfMSSQL:
-                    //    DBAccess.RunSQL(UPDATEsql);						
-                    //    break;
-					case DA.DBUrlType.DBAccessOfOLE:
-						DBAccessOfOLE.RunSQL(UPDATEsql);
-						break;
-                    //case DA.DBUrlType.DBAccessOfOracle:
-                    //    DBAccessOfOracle.RunSQL(UPDATEsql);
-                    //    break;
 					case DA.DBUrlType.DBAccessOfODBC:
 						DBAccessOfODBC.RunSQL(UPDATEsql);
 						break;

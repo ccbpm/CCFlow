@@ -22,7 +22,6 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Data.OracleClient;
 using System.EnterpriseServices;
-using System.Data.OleDb;
 using System.Web;
 using System.Data.Odbc;
 using System.IO;
@@ -583,128 +582,6 @@ namespace BP.DA
 
         #endregion
 
-        #region 关于运行存储过程
-
-        #region 执行存储过程返回影响个数
-        public static int RunSP(string spName, string paraKey, object paraVal)
-        {
-            Paras pas = new Paras();
-            pas.Add(paraKey, paraVal);
-            return DBAccess.RunSP(spName, pas);
-        }
-        /// <summary>
-        /// 运行存储过程
-        /// </summary>
-        /// <param name="spName">名称</param>
-        /// <returns>返回影响的行数</returns>
-        public static int RunSP(string spName)
-        {
-            int i = 0;
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                case DBType.Access:
-                    return DBProcedure.RunSP(spName, (SqlConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Oracle:
-                    return DBProcedure.RunSP(spName, (OracleConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Informix:
-                    return DBProcedure.RunSP(spName, (IfxConnection)DBAccess.GetAppCenterDBConn);
-                default:
-                    throw new Exception("Error: " + BP.Sys.SystemConfig.AppCenterDBType);
-            }
-        }
-        public static int RunSPReturnInt(string spName)
-        {
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                    return DBProcedure.RunSP(spName, (SqlConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.MySQL:
-                    return DBProcedure.RunSP(spName, (MySqlConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Informix:
-                    return DBProcedure.RunSP(spName, (IfxConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Access:
-                case DBType.Oracle:
-                    return DBProcedure.RunSP(spName, (OracleConnection)DBAccess.GetAppCenterDBConn);
-                default:
-                    throw new Exception("Error: " + BP.Sys.SystemConfig.AppCenterDBType);
-            }
-        }
-
-        /// <summary>
-        /// 运行存储过程
-        /// </summary>
-        /// <param name="spName">名称</param>
-        /// <param name="paras">参数</param>
-        /// <returns>返回影响的行数</returns>
-        public static int RunSP(string spName, Paras paras)
-        {
-            int i = 0;
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                    return DBProcedure.RunSP(spName, paras, (SqlConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.MySQL:
-                case DBType.Access:
-                    // return DBProcedure.RunSP(spName, paras, new MySqlConnection(SystemConfig.AppCenterDSN));
-                    throw new Exception("@没有实现...");
-                case DBType.Oracle:
-                    return DBProcedure.RunSP(spName, paras, (OracleConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Informix:
-                    return DBProcedure.RunSP(spName, paras, (IfxConnection)DBAccess.GetAppCenterDBConn);
-                default:
-                    throw new Exception("Error " + BP.Sys.SystemConfig.AppCenterDBType);
-            }
-        }
-        #endregion
-
-        #region 运行存储过程返回 DataTable
-        /// <summary>
-        /// 运行存储过程
-        /// </summary>
-        /// <param name="spName">名称</param>
-        /// <returns>DataTable</returns>
-        public static DataTable RunSPReTable(string spName)
-        {
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                case DBType.Access:
-                    return DBProcedure.RunSPReturnDataTable(spName, (SqlConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Oracle:
-                    return DBProcedure.RunSPReturnDataTable(spName, (OracleConnection)DBAccess.GetAppCenterDBConn);
-                case DBType.Informix:
-                    return DBProcedure.RunSPReturnDataTable(spName, (IfxConnection)DBAccess.GetAppCenterDBConn);
-                default:
-                    throw new Exception("Error " + BP.Sys.SystemConfig.AppCenterDBType);
-
-            }
-        }
-        /// <summary>
-        /// 运行存储过程
-        /// </summary>
-        /// <param name="spName">名称</param>
-        /// <param name="paras">参数</param>
-        /// <returns>DataTable</returns>
-        public static DataTable RunSPReTable(string spName, Paras paras)
-        {
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                    return DBProcedure.RunSPReturnDataTable(spName, paras, new SqlConnection(SystemConfig.AppCenterDSN));
-                case DBType.Oracle:
-                    return DBProcedure.RunSPReturnDataTable(spName, paras, new OracleConnection(SystemConfig.AppCenterDSN));
-                case DBType.Informix:
-                    return DBProcedure.RunSPReturnDataTable(spName, paras, new IfxConnection(SystemConfig.AppCenterDSN));
-                case DBType.Access:
-                default:
-                    throw new Exception("Error " + BP.Sys.SystemConfig.AppCenterDBType);
-            }
-        }
-        #endregion
-
-        #endregion
-
         //构造函数
         static DBAccess()
         {
@@ -1150,41 +1027,6 @@ namespace BP.DA
 
             /* return RunSQL("TRUNCATE TABLE " + table);*/
 
-        }
-
-        public static int RunSQL(string sql, OleDbConnection conn, string dsn)
-        {
-            return RunSQL(sql, conn, CommandType.Text, dsn);
-        }
-        public static int RunSQL(string sql, OleDbConnection conn, CommandType sqlType, string dsn, params object[] pars)
-        {
-            try
-            {
-                if (conn == null)
-                    conn = new OleDbConnection(dsn);
-
-                if (conn.State != System.Data.ConnectionState.Open)
-                {
-                    conn.ConnectionString = dsn;
-                    conn.Open();
-                }
-
-                OleDbCommand cmd = new OleDbCommand(sql, conn);
-                cmd.CommandType = sqlType;
-                int i = cmd.ExecuteNonQuery();
-
-                //cmd.ExecuteReader();
-
-                cmd.Dispose();
-                conn.Close();
-
-                //lock_SQL_RunSQL = false;
-                return i;
-            }
-            catch (System.Exception ex)
-            {
-                throw new Exception(ex.Message + sql);
-            }
         }
         #endregion
 
@@ -1781,9 +1623,6 @@ namespace BP.DA
                     case DBType.Informix:
                         result = RunSQL_201205_Informix(sql, paras);
                         break;
-                    case DBType.Access:
-                        result = RunSQL_200705_OLE(sql, paras);
-                        break;
                     default:
                         throw new Exception("err@RunSQL发现未知的数据库连接类型！");
                 }
@@ -2083,47 +1922,7 @@ namespace BP.DA
                 conn.Close();
             }
         }
-        private static int RunSQL_200705_OLE(string sql, Paras para)
-        {
-            OleDbConnection conn = new OleDbConnection(SystemConfig.AppCenterDSN); // connofora.Conn;
-            try
-            {
-                if (conn == null)
-                    conn = new OleDbConnection(SystemConfig.AppCenterDSN);
-
-                if (conn.State != System.Data.ConnectionState.Open)
-                    conn.Open();
-
-                OleDbCommand cmd = new OleDbCommand(sql, conn);
-                cmd.CommandType = CommandType.Text;
-
-                foreach (Para mypara in para)
-                {
-                    OleDbParameter oraP = new OleDbParameter(mypara.ParaName, mypara.val);
-                    cmd.Parameters.Add(oraP);
-                }
-
-                int i = cmd.ExecuteNonQuery();
-                conn.Close();
-                return i;
-            }
-            catch (System.Exception ex)
-            {
-                conn.Close();
-                string msg = "RunSQL_200705_OLE   SQL=" + sql + ex.Message;
-                Log.DebugWriteError(msg);
-                throw new Exception(msg);
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
-        private static int RunSQL_200705_OLE(string sql)
-        {
-            Paras ps = new Paras();
-            return RunSQL_200705_OLE(sql, ps);
-        }
+       
         /// <summary>
         /// 运行sql
         /// </summary>
@@ -2308,77 +2107,6 @@ namespace BP.DA
         }
         #endregion
 
-        #region OleDbConnection
-        /// <summary>
-        /// 锁
-        /// </summary>
-        private static bool lock_oleSQL_ReturnTable = false;
-        /// <summary>
-        /// 运行sql 返回Table
-        /// </summary>
-        /// <param name="oleSQL">oleSQL</param>
-        /// <param name="oleconn">连接</param>
-        /// <param name="sqlType">类型</param>
-        /// <param name="pars">参数</param>
-        /// <returns>执行SQL返回的DataTable</returns>
-        public static DataTable RunSQLReturnTable(string oleSQL, OleDbConnection oleconn, CommandType sqlType, params object[] pars)
-        {
-#if DEBUG
-            Debug.WriteLine(oleSQL);
-#endif
-
-
-            while (lock_oleSQL_ReturnTable)
-            {
-                ;
-            }  //如果是锁定状态，就等待
-            lock_oleSQL_ReturnTable = true; //锁定
-            string msg = "step1";
-            try
-            {
-                OleDbDataAdapter msAda = new OleDbDataAdapter(oleSQL, oleconn);
-                msg += "2";
-                msAda.SelectCommand.CommandType = sqlType;
-                foreach (object par in pars)
-                {
-                    msAda.SelectCommand.Parameters.AddWithValue("par", par);
-                }
-                DataTable mstb = new DataTable("mstb");
-                msg += "3";
-                msAda.Fill(mstb);
-                msg += "4";
-                // peng add 2004-07-19 .
-                msAda.Dispose();
-                msg += "5";
-                if (SystemConfig.IsBSsystem_Test == false)
-                {
-                    msg += "6";
-                    oleconn.Close();
-                }
-                msg += "7";
-                lock_oleSQL_ReturnTable = false;//返回前一定要开锁
-                return mstb;
-            }
-            catch (System.Exception ex)
-            {
-                lock_oleSQL_ReturnTable = false;//返回前一定要开锁
-                throw new Exception("[RunSQLReturnTable on OleDbConnection] error  请把错误交给 peng . step = " + msg + "<BR>" + oleSQL + " ex=" + ex.Message);
-            }
-            finally
-            {
-                oleconn.Close();
-            }
-        }
-        /// <summary>
-        /// 运行sql 返回Table
-        /// </summary>
-        /// <param name="oleSQL">要运行的sql</param>
-        /// <param name="sqlconn">OleDbConnection</param>
-        /// <returns>DataTable</returns>
-        public static DataTable RunSQLReturnTable(string oleSQL, OleDbConnection sqlconn)
-        {
-            return RunSQLReturnTable(oleSQL, sqlconn, CommandType.Text);
-        }
         #endregion
 
         #region OracleConnection
@@ -2716,56 +2444,6 @@ namespace BP.DA
         {
             return RunSQLReturnTable_201205_Informix(selectSQL, new Paras());
         }
-        /// <summary>
-        /// RunSQLReturnTable_200705_SQL
-        /// </summary>
-        /// <param name="selectSQL">要执行的sql</param>
-        /// <returns>返回table</returns>
-        private static DataTable RunSQLReturnTable_200705_OLE(string selectSQL, Paras paras)
-        {
-            OleDbConnection conn = new OleDbConnection(SystemConfig.AppCenterDSN);
-            try
-            {
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
-
-                OleDbDataAdapter ada = new OleDbDataAdapter(selectSQL, conn);
-                ada.SelectCommand.CommandType = CommandType.Text;
-
-                // 加入参数
-                foreach (Para para in paras)
-                {
-                    OleDbParameter myParameter = new OleDbParameter(para.ParaName, para.DATypeOfOra);
-                    myParameter.Size = para.Size;
-                    myParameter.Value = para.val;
-                    ada.SelectCommand.Parameters.Add(myParameter);
-                }
-
-                DataTable oratb = new DataTable("otb");
-                ada.Fill(oratb);
-                ada.Dispose();
-
-                conn.Close();
-
-                return oratb;
-            }
-            catch (System.Exception ex)
-            {
-                conn.Close();
-                string msg = "@RunSQLReturnTable_200705_OLE with paras) Error sql=" + selectSQL + " @Messages：" + ex.Message;
-                msg += "@Para Num= " + paras.Count;
-                foreach (Para pa in paras)
-                {
-                    msg += "@" + pa.ParaName + "=" + pa.val + " type=" + pa.DAType.ToString();
-                }
-                Log.DebugWriteError(msg);
-                throw new Exception(msg);
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
         #endregion
 
         #endregion
@@ -2976,9 +2654,6 @@ namespace BP.DA
                     case DBType.MySQL:
                         dt = RunSQLReturnTable_200705_MySQL(sql, paras);
                         break;
-                    case DBType.Access:
-                        dt = RunSQLReturnTable_200705_OLE(sql, paras);
-                        break;
                     default:
                         throw new Exception("err@RunSQLReturnTable发现未知的数据库连接类型！");
                 }
@@ -3003,7 +2678,6 @@ namespace BP.DA
 
             return dt;
         }
-        #endregion
 
 
 
@@ -3149,17 +2823,6 @@ namespace BP.DA
                 return isNullAsVal;
             }
         }
-        /// <summary>
-        /// 查询单个值的方法
-        /// </summary>
-        /// <param name="sql">sql</param>
-        /// <param name="conn">OleDbConnection</param>
-        /// <returns>object</returns>
-        public static object RunSQLReturnVal(string sql, OleDbConnection conn, string dsn)
-        {
-            return RunSQLReturnVal(sql, conn, CommandType.Text, dsn);
-        }
-
         public static string RunSQLReturnString(string sql, Paras ps)
         {
             if (ps == null)
@@ -3217,44 +2880,6 @@ namespace BP.DA
         public static string RunSQLReturnString(Paras ps)
         {
             return RunSQLReturnString(ps.SQL, ps);
-        }
-        /// <summary>
-        /// 查询单个值的方法
-        /// </summary>
-        /// <param name="sql">sql</param>
-        /// <param name="conn">OleDbConnection</param>
-        /// <param name="sqlType">CommandType</param>
-        /// <param name="pars">pars</param>
-        /// <returns>object</returns>
-        public static object RunSQLReturnVal(string sql, OleDbConnection conn, CommandType sqlType, params object[] pars)
-        {
-
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-            OleDbConnection tmpconn = new OleDbConnection(conn.ConnectionString);
-            OleDbCommand cmd = new OleDbCommand(sql, tmpconn);
-            object val = null;
-            try
-            {
-                tmpconn.Open();
-                cmd.CommandType = sqlType;
-                foreach (object par in pars)
-                {
-                    cmd.Parameters.AddWithValue("par", par);
-                }
-                val = cmd.ExecuteScalar();
-            }
-            catch (System.Exception ex)
-            {
-                cmd.Cancel();
-                tmpconn.Close();
-                cmd.Dispose();
-                tmpconn.Dispose();
-                throw new Exception(ex.Message + " [RunSQLReturnVal on OleDbConnection] " + sql);
-            }
-            tmpconn.Close();
-            return val;
         }
         #endregion
 
@@ -3359,9 +2984,6 @@ namespace BP.DA
                 case DBType.Informix:
                     dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, paras);
                     break;
-                case DBType.Access:
-                    dt = DBAccess.RunSQLReturnTable_200705_OLE(sql, paras);
-                    break;
                 default:
                     throw new Exception("@没有判断的数据库类型");
             }
@@ -3394,9 +3016,6 @@ namespace BP.DA
                     break;
                 case DBType.MySQL:
                     dt = DBAccess.RunSQLReturnTable_200705_MySQL(sql, new Paras());
-                    break;
-                case DBType.Access:
-                    dt = DBAccess.RunSQLReturnTable_200705_OLE(sql, new Paras());
                     break;
                 default:
                     throw new Exception("@没有判断的数据库类型");
@@ -4002,198 +3621,5 @@ namespace BP.DA
 
     }
     #endregion
-
-    /// <summary>
-    /// 关于OLE 的连接
-    /// </summary>
-    public class DBAccessOfOLE
-    {
-        /// <summary>
-        /// 检查是不是存在
-        /// </summary>
-        /// <param name="selectSQL"></param>
-        /// <returns>检查是不是存在</returns>
-        public static bool IsExits(string selectSQL)
-        {
-            if (RunSQLReturnVal(selectSQL) == null)
-                return false;
-            return true;
-        }
-
-        #region 取得连接对象 ，CS、BS共用属性【关键属性】
-        public static OleDbConnection GetSingleConn
-        {
-            get
-            {
-                if (SystemConfig.IsBSsystem_Test)
-                {
-                    OleDbConnection conn = HttpContext.Current.Session["DBAccessOfOLE"] as OleDbConnection;
-                    if (conn == null)
-                    {
-                        conn = new OleDbConnection(SystemConfig.DBAccessOfOLE);
-                        HttpContext.Current.Session["DBAccessOfOLE"] = conn;
-                    }
-                    return conn;
-                }
-                else
-                {
-                    OleDbConnection conn = SystemConfig.CS_DBConnctionDic["DBAccessOfOLE"] as OleDbConnection;
-                    if (conn == null)
-                    {
-                        conn = new OleDbConnection(SystemConfig.DBAccessOfOLE);
-                        SystemConfig.CS_DBConnctionDic["DBAccessOfOLE"] = conn;
-                    }
-                    return conn;
-                }
-            }
-        }
-        #endregion 取得连接对象 ，CS、BS共用属性
-
-        #region 重载 RunSQLReturnTable
-
-        #region 使用本地的连接
-        public static int RunSQLReturnCOUNT(string sql)
-        {
-            return RunSQLReturnTable(sql).Rows.Count;
-            //return RunSQLReturnVal( sql ,sql, sql );
-        }
-        /// <summary>
-        /// 运行查询语句返回Table
-        /// </summary>
-        /// <param name="sql">select sql</param>
-        /// <returns>DataTable</returns>
-        public static DataTable RunSQLReturnTable(string sql)
-        {
-            return RunSQLReturnTable(sql, GetSingleConn, CommandType.Text);
-        }
-        /// <summary>
-        /// 运行查询语句返回Table
-        /// </summary>
-        /// <param name="sql">select sql</param>
-        /// <param name="sqlType">CommandType</param>
-        /// <param name="pars">pareas</param>
-        /// <returns>DataTable</returns>
-        public static DataTable RunSQLReturnTable(string sql, CommandType sqlType, params object[] pars)
-        {
-            return RunSQLReturnTable(sql, GetSingleConn, sqlType, pars);
-        }
-        #endregion
-
-        #region 使用指定的连接
-        public static DataTable RunSQLReturnTable(string sql, OleDbConnection conn)
-        {
-            return RunSQLReturnTable(sql, conn, CommandType.Text);
-        }
-        public static DataTable RunSQLReturnTable(string sql, OleDbConnection conn, CommandType sqlType, params object[] pars)
-        {
-            try
-            {
-                OleDbDataAdapter ada = new OleDbDataAdapter(sql, conn);
-                ada.SelectCommand.CommandType = sqlType;
-                foreach (object par in pars)
-                {
-                    ada.SelectCommand.Parameters.AddWithValue("par", par);
-                }
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
-                DataTable dt = new DataTable("tb");
-                ada.Fill(dt);
-                ada.Dispose();
-                return dt;
-            }
-            catch (System.Exception ex)
-            {
-                throw new Exception(ex.Message + sql);
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region 重载 RunSQL
-
-        #region 使用本地的连接
-        public static int RunSQL(string sql)
-        {
-            return RunSQL(sql, GetSingleConn, CommandType.Text);
-        }
-        public static int RunSQL(string sql, CommandType sqlType, params object[] pars)
-        {
-            return RunSQL(sql, GetSingleConn, sqlType, pars);
-        }
-        #endregion 使用本地的连接
-
-        #region 使用指定的连接
-        public static int RunSQL(string sql, OleDbConnection conn)
-        {
-            return RunSQL(sql, conn, CommandType.Text);
-        }
-        public static int RunSQL(string sql, OleDbConnection conn, CommandType sqlType, params object[] pars)
-        {
-            Debug.WriteLine(sql);
-            try
-            {
-                OleDbCommand cmd = new OleDbCommand(sql, conn);
-                cmd.CommandType = sqlType;
-                foreach (object par in pars)
-                {
-                    cmd.Parameters.AddWithValue("par", par);
-                }
-
-                if (conn.State != System.Data.ConnectionState.Open)
-                    conn.Open();
-                return cmd.ExecuteNonQuery();
-            }
-            catch (System.Exception ex)
-            {
-                throw new Exception(ex.Message + sql);
-            }
-        }
-
-        #endregion 使用指定的连接
-
-        #endregion
-
-        #region 执行SQL ，返回首行首列
-        public static object RunSQLReturnVal(string sql)
-        {
-            return RunSQLReturnVal(sql, GetSingleConn, CommandType.Text);
-        }
-        public static object RunSQLReturnVal(string sql, CommandType sqlType, params object[] pars)
-        {
-            return RunSQLReturnVal(sql, GetSingleConn, sqlType, pars);
-        }
-
-        public static object RunSQLReturnVal(string sql, OleDbConnection conn)
-        {
-            return RunSQLReturnVal(sql, conn, CommandType.Text);
-        }
-        public static object RunSQLReturnVal(string sql, OleDbConnection conn, CommandType sqlType, params object[] pars)
-        {
-            Debug.WriteLine(sql);
-            OleDbConnection tmpconn = new OleDbConnection(conn.ConnectionString);
-            OleDbCommand cmd = new OleDbCommand(sql, tmpconn);
-            object val = null;
-            try
-            {
-                cmd.CommandType = sqlType;
-                foreach (object par in pars)
-                {
-                    cmd.Parameters.AddWithValue("par", par);
-                }
-                tmpconn.Open();
-                val = cmd.ExecuteScalar();
-            }
-            catch (System.Exception ex)
-            {
-                cmd.Cancel();
-                tmpconn.Close();
-                throw new Exception(ex.Message + sql);
-            }
-            tmpconn.Close();
-            return val;
-        }
-        #endregion 执行SQL ，返回首行首列
-    }
-
+ 
 }

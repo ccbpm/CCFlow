@@ -1265,8 +1265,6 @@ namespace BP.En
                         //    return DBAccessOfMSSQL1.IsExits(selectSQL);
                         //case DBUrlType.DBAccessOfMSSQL2:
                         //    return DBAccessOfMSSQL2.IsExits(selectSQL);
-                        case DBUrlType.DBAccessOfOLE:
-                            return DBAccessOfOLE.IsExits(selectSQL);
                         //case DBUrlType.DBAccessOfOracle1:
                         //    return DBAccessOfOracle1.IsExits(selectSQL);
                         //case DBUrlType.DBAccessOfOracle2:

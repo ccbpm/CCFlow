@@ -74,6 +74,7 @@
     <Compile Include="GPM\GroupMenu.cs" />
     <Compile Include="GPM\StationMenu.cs" />
     <Compile Include="GPM\PerSetting.cs" />
+    <Compile Include="InterfaceFunction\InterfaceFunction.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
     <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />

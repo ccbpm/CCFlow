@@ -305,9 +305,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\DBAccess.cs" />
-    <Compile Include="DA\DBProcedure.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DA\DBUrl.cs">
       <SubType>Code</SubType>
     </Compile>

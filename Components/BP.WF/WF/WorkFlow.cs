@@ -1366,50 +1366,7 @@ namespace BP.WF
                 return int.Parse(this.HisFlow.No + "01");
             }
         }
-        /// <summary>
-        ///  抄送到
-        /// </summary>
-        /// <param name="dt"></param>
-        public string CCTo(DataTable dt)
-        {
-            if (dt.Rows.Count == 0)
-                return "";
-
-            string emps = "";
-            string empsExt = "";
-
-            string ip = "127.0.0.1";
-            System.Net.IPAddress[] addressList = System.Net.Dns.GetHostByName(System.Net.Dns.GetHostName()).AddressList;
-            if (addressList.Length > 1)
-                ip = addressList[1].ToString();
-            else
-                ip = addressList[0].ToString();
-
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                string no = dr[0].ToString();
-                string name = dr[1].ToString();
-
-                emps += BP.WF.Glo.DealUserInfoShowModel(no, name);
-            }
-
-            Paras pss = new Paras();
-            pss.Add("Sender", BP.Web.WebUser.No);
-            pss.Add("Receivers", emps);
-            pss.Add("Title", "工作流抄送：工作名称:" + this.HisFlow.Name + "，最后处理人：" + BP.Web.WebUser.Name);
-            pss.Add("Context", "工作轨迹 http://" + ip + "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=0");
-
-            try
-            {
-                DBAccess.RunSP("CCstaff", pss);
-                return "@" + empsExt;
-            }
-            catch (Exception ex)
-            {
-                return "@抄送出现错误，没有把该流程的信息抄送到(" + empsExt + ")请联系管理员检查系统异常" + ex.Message;
-            }
-        }
+       
         /// <summary>
         /// 执行冻结
         /// </summary>

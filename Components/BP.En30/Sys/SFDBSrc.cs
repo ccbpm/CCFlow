@@ -1327,8 +1327,7 @@ namespace BP.Sys
         {
             if (conn is System.Data.SqlClient.SqlConnection)
                 return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType);
-            if (conn is System.Data.OleDb.OleDbConnection)
-                return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.OleDb.OleDbConnection)conn, cmdType);
+             
             if (conn is System.Data.OracleClient.OracleConnection)
                 return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);
             if (conn is MySqlConnection)

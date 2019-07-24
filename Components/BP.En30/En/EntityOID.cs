@@ -129,16 +129,6 @@ namespace BP.En
                     {
                         case DBUrlType.AppCenterDSN:
                             return DBAccess.IsExits(selectSQL, ens);
-                        //case DBUrlType.DBAccessOfMSSQL1:
-                        //    return DBAccessOfMSSQL1.IsExits(selectSQL);
-                        //case DBUrlType.DBAccessOfMSSQL2:
-                        //    return DBAccessOfMSSQL2.IsExits(selectSQL);
-                        case DBUrlType.DBAccessOfOLE:
-                            return DBAccessOfOLE.IsExits(selectSQL);
-                        //case DBUrlType.DBAccessOfOracle1:
-                        //    return DBAccessOfOracle1.IsExits(selectSQL);
-                        //case DBUrlType.DBAccessOfOracle2:
-                        //    return DBAccessOfOracle2.IsExits(selectSQL);
                         default:
                             throw new Exception("没有设计到。" + this.EnMap.EnDBUrl.DBType);
                     }

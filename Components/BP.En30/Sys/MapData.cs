@@ -149,6 +149,10 @@ namespace BP.Sys
         /// </summary>
         public const string FrmType = "FrmType";
         /// <summary>
+        /// 单据模板
+        /// </summary>
+        public const string FrmModel = "FrmModel";
+        /// <summary>
         /// Url(对于嵌入式表单有效)
         /// </summary>
         public const string Url = "Url";
@@ -2055,11 +2059,8 @@ namespace BP.Sys
                 {
                     case "Sys_MapDtl":
 
-                        // int dtlIdx = 0;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            //   dtlIdx++;
-                            // string generFrmDtlID = fk_mapdata + "Dtl" + dtlIdx;
 
                             MapDtl dtl = new MapDtl();
                             foreach (DataColumn dc in dt.Columns)
@@ -2287,7 +2288,7 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
-                            en.MyPK = "Ath_" + idx + "_" + fk_mapdata;
+                            en.MyPK = fk_mapdata + "_" + en.GetValByKey("NoOfObj");
 
 
                             try

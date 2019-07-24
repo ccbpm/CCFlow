@@ -93,7 +93,6 @@
             handler.AddPara("TB_No", userNo);
             handler.AddPara("TB_PW", userPass);
 
-
             var data = handler.DoMethodReturnString("Login_Submit");
 
             if (data.indexOf('err@') == 0) {

@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
+    <Compile Include="InterfaceFunction\InterfaceFunction.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
@@ -525,6 +526,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

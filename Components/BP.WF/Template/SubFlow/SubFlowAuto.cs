@@ -183,6 +183,59 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 按SQL配置
+        /// </summary>
+        public bool IsEnableSQL
+        {
+            get
+            {
+                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSQL);
+                if (val == false)
+                    return false;
+
+                if (this.SpecSQL.Length > 2)
+                    return true;
+                return false;
+
+            }
+        }
+
+        public string SpecSQL
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.SpecSQL);
+            }
+        }
+
+        /// <summary>
+        /// 指定平级子流程节点结束后启动子流程
+        /// </summary>
+        public bool IsEnableSameLevelNode
+        {
+            get
+            {
+                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSameLevelNode);
+                if (val == false)
+                    return false;
+
+                if (this.SameLevelNode.Length > 2)
+                    return true;
+                return false;
+
+            }
+        }
+
+        public string SameLevelNode
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.SameLevelNode);
+            }
+        }
+
+
+        /// <summary>
         /// 自动发起的子流程发送方式
         /// </summary>
         public int SendModel
@@ -242,6 +295,17 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
                 map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
+
+                //启动限制规则
+                map.AddBoolean(SubFlowHandAttr.IsEnableSQL, false, "按照指定的SQL配置.",
+                 true, true, true);
+                map.AddTBString(SubFlowHandAttr.SpecSQL, null, "SQL语句", true, false, 0, 500, 150, true);
+
+                //启动限制规则
+                map.AddBoolean(SubFlowHandAttr.IsEnableSameLevelNode, false, "按照指定平级子流程节点完成后启动.",
+                 true, true, true);
+                map.AddTBString(SubFlowHandAttr.SameLevelNode, null, "平级子流程节点", true, false, 0, 500, 150, true);
+                map.SetHelperAlert(SubFlowHandAttr.SameLevelNode, "按照指定平级子流程节点完成后启动，才能启动该子流程，多个平级子流程节点用逗号分开. 001,102;002,206");
 
                 //自动发送方式.
                 map.AddDDLSysEnum(SubFlowHandAttr.SendModel, 0, "自动发送方式", true, true, SubFlowHandAttr.SendModel,

@@ -93,6 +93,23 @@ namespace BP.WF.Template
         /// 备注
         /// </summary>
         public const string SpecFlowOverNote = "SpecFlowOverNote";
+        /// <summary>
+        /// 是否启用按指定的SQL启动
+        /// </summary>
+        public const string IsEnableSQL = "IsEnableSQL";
+        /// <summary>
+        /// SQL语句
+        /// </summary>
+        public const string SpecSQL = "SpecSQL";
+        /// <summary>
+        /// 是否启动按指定平级子流程节点
+        /// </summary>
+        public const string IsEnableSameLevelNode = "IsEnableSameLevelNode";
+        /// <summary>
+        /// 平级子流程节点
+        /// </summary>
+        public const string SameLevelNode = "SameLevelNode";
+
         #endregion
 
         /// <summary>

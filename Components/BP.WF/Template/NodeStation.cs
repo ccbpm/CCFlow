@@ -96,19 +96,12 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_NodeStation", "节点岗位");
 
-                map.AddTBIntPK(NodeStationAttr.FK_Node, 0,"节点", false,false);
+                map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
 
-                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                {
-                    map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作岗位",
-                        new BP.Port.Stations(), true);
-                }
-                else
-                {
- // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
-                    map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作岗位",
-                       new BP.GPM.Stations(), true);
-                }
+                // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
+                map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作岗位",
+                   new BP.GPM.Stations(), true);
+
                 this._enMap = map;
                 return this._enMap;
             }

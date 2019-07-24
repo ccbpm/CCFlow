@@ -34,6 +34,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_AppClassic()
         {
+
         }
 
 

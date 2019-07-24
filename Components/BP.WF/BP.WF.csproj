@@ -266,6 +266,7 @@
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
+    <Compile Include="InterfaceFunction\InterfaceFunction.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\AdminEmp.cs" />
     <Compile Include="Port\Dept.cs" />

@@ -271,6 +271,7 @@ namespace BP.WF.Port.SubInc
                 rm = new RefMethod();
                 rm.Title = "设置加密密码";
                 rm.HisAttrs.AddTBString("FrmID", null, "输入密码", true, false, 0, 100, 100);
+                //rm.HisAttrs.AddTBString("FrmwID", null, "ewww", true, false, 0, 100, 100);
                 rm.Warning = "您确定要执行设置改密码吗？";
                 rm.ClassMethodName = this.ToString() + ".DoSetPassword";
                 map.AddRefMethod(rm);

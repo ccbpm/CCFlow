@@ -1,8 +1,5 @@
 ﻿using System;
-
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using System.Drawing;
 using System.Data;
 using System.ServiceModel;
@@ -12,7 +9,6 @@ using System.Text;
 using System.Collections;
 using System.Threading;
 using System.Diagnostics;
-using Microsoft.Win32;
 using BP.Sys;
 using BP.DA;
 using BP.En;
@@ -1699,11 +1695,10 @@ namespace BP.WF
         {
             filelist2.Add(Directorypath + "\\" + temp.Name);
         }
-        mergePDFFiles(filelist2, outpath);
-        //DeleteAllPdf(Directorypath);
+
+        //接口的方法.
+        InterfaceFunction.MakeForm2Html_mergePDFFiles(filelist2, outpath);
     }
-
-
     /// <summary>
     /// 冒泡排序
     /// </summary>
@@ -1723,35 +1718,7 @@ namespace BP.WF
             }
         }
     }
-
-
-    /// <summary>
-    /// 合成pdf文件
-    /// </summary>
-    /// <param name="fileList">文件名list</param>
-    /// <param name="outMergeFile">输出路径</param>
-    public static void mergePDFFiles(List<string> fileList, string outMergeFile)
-    {
-        PdfReader reader;
-        //iTextSharp.text.Rectangle rec = new iTextSharp.text.Rectangle(1403, 991);
-        Document document = new Document();
-        PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(outMergeFile, FileMode.Create));
-        document.Open();
-        PdfContentByte cb = writer.DirectContent;
-        PdfImportedPage newPage;
-        for (int i = 0; i < fileList.Count; i++)
-        {
-            reader = new PdfReader(fileList[i]);
-            int iPageNum = reader.NumberOfPages;
-            for (int j = 1; j <= iPageNum; j++)
-            {
-                document.NewPage();
-                newPage = writer.GetImportedPage(reader, j);
-                cb.AddTemplate(newPage, 0, 0);
-            }
-        }
-        document.Close();
-    }
+   
 
         //前期文件的准备
     private static string setPDFPath(string frmID,long workid,string flowNo,GenerWorkFlow gwf ) 

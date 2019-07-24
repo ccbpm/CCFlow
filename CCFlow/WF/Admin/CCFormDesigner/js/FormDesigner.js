@@ -662,10 +662,8 @@ function Conver_CCForm_V1ToV2() {
         var frmLab = flow_Data.Sys_FrmLab[i];
 
         var createdFigure = figure_Template_Label(frmLab);
-        //move it into position
-        //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
+     
         createdFigure.style.lineWidth = defaultLineWidth;
-        //add to STACK
         STACK.figureAdd(createdFigure);
     }
 

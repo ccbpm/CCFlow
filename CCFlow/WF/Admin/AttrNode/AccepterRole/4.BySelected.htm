@@ -16,6 +16,7 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <script  type="text/javascript">
+        var nodeExt;
         //初始化
         $(function () {
             InitBar(DeliveryWay.BySelected);
@@ -33,6 +34,10 @@
             if (node.IsEnableStaRange == 1) {
                 $("#CB_IsEnableStaRange").attr("checked", 'checked');
             }
+
+            nodeExt = new Entity("BP.WF.Template.NodeExt", nodeID);
+            if (nodeExt.HuiQianRole == 4) //组长模式
+                $("#CB_IsSimpleSelector").attr("checked", 'checked');
         });
 
         //弹出新窗体
@@ -42,6 +47,15 @@
             var nodeID = GetQueryString("FK_Node");
             url += '&NodeID=' + nodeID;
             OpenEasyUiDialogExt(url, '选择器', 950, 500, false);
+        }
+
+        function IsChange(obj) {
+            if (obj.checked == false) {
+                if (nodeExt.HuiQianRole == 4) {
+                    obj.checked = true;
+                    alert("该节点会签模式为组长模式，只能单项选择");
+                }
+            }
         }
 
         //弹出新窗体
@@ -83,7 +97,7 @@
       <label> <input type="checkbox" id="CB_IsAutoLoadEmps" name="CB_IsAutoLoadEmps" /> 是否自动加载上一次选择的人员？</label>
     </li>
        <li>
-      <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector" /> 是否单项选择(只能选择一个人)？</label>
+      <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector"  onclick="IsChange(this)"/> 是否单项选择(只能选择一个人)？</label>
     </li>
 
        <li>

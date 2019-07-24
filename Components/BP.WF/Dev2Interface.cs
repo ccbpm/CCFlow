@@ -4805,17 +4805,51 @@ namespace BP.WF
             pas.Add("NDTo", FK_Node);
             return BP.DA.DBAccess.RunSQLReturnTable(pas);
         }
+     
         /// <summary>
         /// 执行冻结
         /// </summary>
         /// <param name="flowNo">流程编号</param>
-        /// <param name="workid">workid</param>
-        /// <param name="msg">冻结原因</param>
-        public static string Flow_DoFix(string flowNo, Int64 workid, string msg)
+        /// <param name="workid">工作ID</param>
+        /// <param name="isFixSubFlows">是否冻结子流程？</param>
+        /// <param name="msg">冻结原因.</param>
+        /// <returns>冻结的信息.</returns>
+        public static string Flow_DoFix(string flowNo, Int64 workid, bool isFixSubFlows, string msg)
         {
-            // 执行冻结.
-            WorkFlow wf = new WorkFlow(flowNo, workid);
-            return wf.DoFix(msg);
+            string info = "";
+            try
+            {
+                // 执行冻结.
+                WorkFlow wf = new WorkFlow(flowNo, workid);
+                 info= wf.DoFix(msg);
+            }
+            catch (Exception ex)
+            {
+                info += ex.Message;
+            }
+
+            if (isFixSubFlows == false)
+                return info;
+
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workid);
+
+
+            foreach (GenerWorkFlow item in gwfs)
+            {
+                try
+                {
+                    // 执行冻结.
+                    WorkFlow wf = new WorkFlow(flowNo, workid);
+                   info+=  wf.DoFix(msg);
+                }
+                catch (Exception ex)
+                {
+                    info += "err@"+ex.Message;
+                }
+            }
+
+            return info;
         }
         /// <summary>
         /// 执行解除冻结

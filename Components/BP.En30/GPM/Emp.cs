@@ -319,7 +319,7 @@ namespace BP.GPM
                 rm.Title = "修改主部门";
                 rm.ClassMethodName = this.ToString() + ".DoEditMainDept";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.RefAttrKey = EmpAttr.FK_Dept;
+              //  rm.RefAttrKey = EmpAttr.FK_Dept;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;

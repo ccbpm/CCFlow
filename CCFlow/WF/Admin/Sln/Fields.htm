@@ -66,7 +66,7 @@
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
+                    //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
                     html += "</tr>";
 
                     $("#Table1 tr:last").after(html);
@@ -177,15 +177,15 @@
                 else
                     ff.IsWriteToFlowTable = 0;
 
-                if ($('#' + ff.KeyOfEn + "_IsWriteToGenerWorkFlow").is(':checked'))
-                    ff.IsWriteToGenerWorkFlow = 1;
-                else
-                    ff.IsWriteToGenerWorkFlow = 0;
+                //if ($('#' + ff.KeyOfEn + "_IsWriteToGenerWorkFlow").is(':checked'))
+                //    ff.IsWriteToGenerWorkFlow = 1;
+                //else
+                //    ff.IsWriteToGenerWorkFlow = 0;
 
                 //判断变化的是否需要保存.
                 var isNeedSave = false;
-                if (ff.IsWriteToGenerWorkFlow == 1)
-                    isNeedSave = true;
+                //if (ff.IsWriteToGenerWorkFlow == 1)
+                //    isNeedSave = true;
 
                 if (ff.IsWriteToFlowTable == 1)
                     isNeedSave = true;
@@ -291,35 +291,32 @@
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label
-                    for="KeyOfEn_UIIsEnable">
+                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label for="KeyOfEn_UIIsEnable">
                     可用
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label
-                    for="KeyOfEn_IsSigan">
+                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label for="KeyOfEn_IsSigan">
                     签名
                 </label>
             </th>
             <th>
-                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label
-                    for="KeyOfEn_IsNotNull">
+                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label for="KeyOfEn_IsNotNull">
                     必填
                 </label>
             </th>
             <th>
                 <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
-                    type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
-                        写入流程数据表
-                    </label>
+                       type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
+                    写入流程数据表
+                </label>
             </th>
-            <th>
+            <!--<th>
                 <input onclick="CheckAll('IsWriteToGenerWorkFlow');" id='KeyOfEn_IsWriteToGenerWorkFlow'
                     type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
                         写入流程注册表
                     </label>
-            </th>
+            </th>-->
         </tr>
     </table>
     <button onclick='Save();' type='button'>

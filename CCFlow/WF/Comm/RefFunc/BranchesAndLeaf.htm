@@ -442,8 +442,13 @@
 		        }
 		        return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
 		    }
-		   
+
 		    function removeRecord(No) {
+
+		        if (window.confirm('您确认要删除吗？') == false)
+		            return;
+
+
 		        $("#selectGrid").bootstrapTable("uncheckBy", {
 		            field: "No",
 		            values: [No]

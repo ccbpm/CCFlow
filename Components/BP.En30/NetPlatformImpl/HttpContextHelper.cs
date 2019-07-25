@@ -108,6 +108,16 @@ namespace BP.Web
             return Request.Params[key];
         }
 
+        public static List<string> RequestQueryStringKeys
+        {
+            get
+            {
+                List<string> keys = new List<string>();
+                keys.AddRange(Request.QueryString.AllKeys);
+                return keys;
+            }
+        }
+
         public static System.Collections.Specialized.NameObjectCollectionBase.KeysCollection RequestParamKeys
         {
             get
@@ -185,6 +195,19 @@ namespace BP.Web
             {
                 return Session.SessionID;
             }
+        }
+        public static int RequestFilesCount
+        {
+            get
+            {
+                return Current.Request.Files.Count;
+            }
+
+        }
+        public static HttpPostedFile RequestFiles(int key)
+        {
+            return Current.Request.Files[key];
+
         }
 
         public static string UserAgent

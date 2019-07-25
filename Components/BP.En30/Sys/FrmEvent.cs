@@ -960,9 +960,7 @@ namespace BP.Sys
                 if (System.Web.HttpContext.Current != null)
                 {
                     /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
-                    //string url = BP.Sys.Glo.Request.RawUrl;
-                    //2019-07-25 zyt改造
-                    string url = HttpContextHelper.RequestRawUrl;
+                    string url = BP.Sys.Glo.Request.RawUrl;
                     if (url.IndexOf('?') != -1)
                         url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
@@ -993,9 +991,8 @@ namespace BP.Sys
                 if (SystemConfig.IsBSsystem)
                 {
                     /*是bs系统，并且是url参数执行类型.*/
-                    //string url = BP.Sys.Glo.Request.RawUrl;
-                    //2019-07-25 zyt改造
-                    string url = HttpContextHelper.RequestRawUrl;
+                    string url = BP.Sys.Glo.Request.RawUrl;
+
                     if (url.IndexOf('?') != -1)
                         url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
@@ -1024,13 +1021,11 @@ namespace BP.Sys
                     if (SystemConfig.IsBSsystem)
                     {
                         /*在cs模式下自动获取*/
-                        //string host = BP.Sys.Glo.Request.Url.Host;
-                        //2019-07-25 zyt改造
-                        string host = HttpContextHelper.RequestUrlHost;
+                        string host = BP.Sys.Glo.Request.Url.Host;
                         if (doc.Contains("@AppPath"))
-                            doc = doc.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);
+                            doc = doc.Replace("@AppPath", "http://" + host + BP.Sys.Glo.Request.ApplicationPath);
                         else
-                            doc = "http://" + HttpContextHelper.RequestUrlAuthority + doc;
+                            doc = "http://" + BP.Sys.Glo.Request.Url.Authority + doc;
                     }
 
                     if (SystemConfig.IsBSsystem == false)
@@ -1084,13 +1079,11 @@ namespace BP.Sys
                     {
                         if (SystemConfig.IsBSsystem)
                         {
-                            //string host = BP.Sys.Glo.Request.Url.Host;
-                            //2019-07-25 zyt改造
-                            string host = HttpContextHelper.RequestUrlHost;
+                            string host = BP.Sys.Glo.Request.Url.Host;
                             if (myURL.Contains("@AppPath"))
-                                myURL = myURL.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);
+                                myURL = myURL.Replace("@AppPath", "http://" + host + BP.Sys.Glo.Request.ApplicationPath);
                             else
-                                myURL = "http://" + HttpContextHelper.RequestUrlAuthority + myURL;
+                                myURL = "http://" + BP.Sys.Glo.Request.Url.Authority + myURL;
                         }
                         else
                         {
@@ -1201,10 +1194,9 @@ namespace BP.Sys
                         if (SystemConfig.IsBSsystem == true)
                         {
                             /*如果是bs系统, 就加入外部url的变量.*/
-                            //RequestQueryString
-                            foreach (string key in HttpContextHelper.RequestParamKeys)
+                            foreach (string key in BP.Sys.Glo.Request.QueryString)
                             {
-                                string val = HttpContextHelper.RequestQueryString(key);
+                                string val = BP.Sys.Glo.Request.QueryString[key];
                                 try
                                 {
                                     r.Add(key, val);

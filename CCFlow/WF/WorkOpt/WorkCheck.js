@@ -396,7 +396,7 @@ function GetUserSiganture(userNo, userName) {
         return userName;
     }
     else {
-        return "<img src='../../DataUser/Siganture/" + userNo + ".png?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.png'\" />";
+        return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.jpg'\" />";
     }
 
 }

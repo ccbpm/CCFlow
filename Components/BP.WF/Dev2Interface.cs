@@ -1345,11 +1345,11 @@ namespace BP.WF
         /// </summary>
         /// <param name="fk_node">节点编号</param>
         /// <returns>共享工作列表</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0,string showWhat = null)
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0, string showWhat = null)
         {
             if (DataType.IsNullOrEmpty(userNo) == true)
                 throw new Exception("err@登录信息丢失.");
-            string wfStateSql ="";
+            string wfStateSql = "";
             if (DataType.IsNullOrEmpty(showWhat) == true)
                 wfStateSql = " A.WFState!=" + (int)WFState.Batch;
             else
@@ -1379,7 +1379,7 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND "+wfStateSql + " ORDER BY  ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND " + wfStateSql + " ORDER BY  ADT DESC ";
                         }
                         else
                         {
@@ -3863,7 +3863,7 @@ namespace BP.WF
         /// <param name="sendEmpNo">发送给人员.</param>
         /// <param name="atParas">参数.</param>
         public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
-            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null,string pushModel=null)
+            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null, string pushModel = null)
         {
             //if (DataType.IsNullOrEmpty(tel))
             //    return;
@@ -4873,7 +4873,7 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="msg">流程结束原因</param>
         /// <returns>返回成功执行信息</returns>
-        public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg, int stopFlowType=1)
+        public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg, int stopFlowType = 1)
         {
             WorkFlow wf = new WorkFlow(flowNo, workID);
 
@@ -5096,7 +5096,7 @@ namespace BP.WF
             #endregion 判断开始节点是否可以发起.
 
             #region 检查流程发起限制规则. 为周大福项目增加判断.
-            if (pNodeID==0)
+            if (pNodeID == 0)
                 return true;
 
             //当前节点所有配置的子流程.
@@ -5105,7 +5105,7 @@ namespace BP.WF
             //当前的子流程.
             foreach (SubFlowHand item in subflows)
             {
-                if (item.FK_Flow.Equals(flowNo)==false)
+                if (item.FK_Flow.Equals(flowNo) == false)
                     continue;
 
                 if (item.StartOnceOnly == true)
@@ -5114,7 +5114,7 @@ namespace BP.WF
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
                     {
-                       // return true; //没有人发起，他可以发起。
+                        // return true; //没有人发起，他可以发起。
                     }
                     else
                     {
@@ -5136,7 +5136,7 @@ namespace BP.WF
                         if (dt.Rows.Count == 0)
                         {
                             BP.WF.Flow myflow = new Flow(flStr);
-                            throw new Exception("流程:[" + myflow.Name + "]没有发起,您不能启动["+item.FlowName+"]。");
+                            throw new Exception("流程:[" + myflow.Name + "]没有发起,您不能启动[" + item.FlowName + "]。");
                         }
                     }
                 }
@@ -6238,7 +6238,7 @@ namespace BP.WF
             dtHistory.Columns.Add("RDT"); //记录日期.
             dtHistory.Columns.Add("SDT"); //应完成日期(可以不用.)
             dtHistory.Columns.Add("IsPass"); //是否通过?
-             
+
             //执行人.
             if (gwf.WFState == WFState.Complete || 1==1)
             {
@@ -6816,7 +6816,7 @@ namespace BP.WF
             //}
             //#endregion 复制独立表单数据.
         }
-     
+
         /// <summary>
         /// 创建一个空白的WorkID
         /// </summary>
@@ -7478,7 +7478,7 @@ namespace BP.WF
                     DateTime dtOfFlow = DateTime.Now;
                     DateTime dtOfFlowWarning = DateTime.Now;
                     Part part = new Part();
-                    part.MyPK = nd.FK_Flow+ "_0_DeadLineRole";
+                    part.MyPK = nd.FK_Flow + "_0_DeadLineRole";
                     int count = part.RetrieveFromDBSources();
                     if (count != 0)
                     {
@@ -7505,7 +7505,7 @@ namespace BP.WF
                         ps.Add(GenerWorkFlowAttr.SDTOfFlowWarning, dtOfFlowWarning.ToString(DataType.SysDataTimeFormat));
                         ps.Add(GenerWorkerListAttr.WorkID, workID);
                         DBAccess.RunSQL(ps);
-                       
+
                     }
                 }
             }
@@ -8316,7 +8316,8 @@ namespace BP.WF
             }
 
             Flow fl = new Flow(fk_flow);
-            string sql = "UPDATE "+fl.PTable+" SET WFStarter=1, FlowStater='"+WebUser.No+"' WHERE OID="+workID;
+            //string sql = "UPDATE "+fl.PTable+" SET WFStarter=1, FlowStater='"+WebUser.No+"' WHERE OID="+workID;
+            string sql = "UPDATE " + fl.PTable + " SET  FlowStarter='" + WebUser.No + "' WHERE OID=" + workID;
             DBAccess.RunSQL(sql);
         }
         /// <summary>
@@ -8496,17 +8497,17 @@ namespace BP.WF
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                         {
-                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No + "," + WebUser.Name+"@");
+                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No + "," + WebUser.Name + "@");
                         }
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
                         {
-                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No+"@");
+                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.No + "@");
                         }
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
                         {
-                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.Name+"@");
+                            rptGe.SetValByKey(GERptAttr.FlowEmps, "@" + WebUser.Name + "@");
                         }
 
                         rptGe.SetValByKey(GERptAttr.FlowStarter, WebUser.No);
@@ -8952,7 +8953,7 @@ namespace BP.WF
                 if (emp.RetrieveFromDBSources() == 0)
                     return;
 
-                
+
                 sa.FK_Emp = emp.No;
                 sa.EmpName = emp.Name;
                 sa.DeptName = emp.FK_DeptText;

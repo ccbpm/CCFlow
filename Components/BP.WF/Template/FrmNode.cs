@@ -698,7 +698,7 @@ namespace BP.WF.Template
             this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
 
             //获取表单的类型
-            MapData mapData = new MapData(this.FK_Frm);
+            MapData mapData = new MapData();
             mapData.No = this.FK_Frm;
             if (mapData.RetrieveFromDBSources() == 1)
                 this.HisFrmType = mapData.HisFrmType;

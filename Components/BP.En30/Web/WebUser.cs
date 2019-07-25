@@ -230,8 +230,7 @@ namespace BP.Web
         /// <returns></returns>
         public static string GetSessionByKey(string key, string isNullAsVal)
         {
-            //2019-07-25 zyt改造
-            if (IsBSMode && HttpContextHelper.Current != null && HttpContextHelper.Current.Session != null)
+            if (IsBSMode && System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
             {
                 string str = System.Web.HttpContext.Current.Session[key] as string;
                 if (DataType.IsNullOrEmpty(str))

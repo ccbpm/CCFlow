@@ -233,7 +233,7 @@ namespace BP.Web
             //2019-07-25 zyt改造
             if (IsBSMode && HttpContextHelper.Current != null && HttpContextHelper.Current.Session != null)
             {
-                string str = System.Web.HttpContext.Current.Session[key] as string;
+                string str = HttpContextHelper.SessionGetString(key);
                 if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
@@ -273,11 +273,11 @@ namespace BP.Web
         {
             if (val == null)
                 return;
-
+            //2019-07-25 zyt改造
             if (IsBSMode == true
                 && System.Web.HttpContext.Current != null
                 && System.Web.HttpContext.Current.Session != null)
-                System.Web.HttpContext.Current.Session[key] = val;
+                HttpContextHelper.SessionSet(key, val);
             else
                 BP.Port.Current.SetSession(key, val);
         }
@@ -587,7 +587,9 @@ namespace BP.Web
             try
             {
                 //先从session里面取.
-                string v = System.Web.HttpContext.Current.Session[valKey] as string;
+                //string v = System.Web.HttpContext.Current.Session[valKey] as string;
+                //2019-07-25 zyt改造
+                string v = HttpContextHelper.SessionGet<string>(valKey);
                 if (DataType.IsNullOrEmpty(v) == false)
                     return v;
             }
@@ -641,8 +643,8 @@ namespace BP.Web
             AtPara ap = new AtPara(keyVals);
             foreach (string key in ap.HisHT.Keys)
                 cookie.Values.Add(key, HttpUtility.UrlEncode(ap.GetValStrByKey(key)));
-
-            System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+            //2019-07-25 zyt改造
+            HttpContextHelper.ResponseCookieAdd(cookie);
         }
         /// <summary>
         /// 是否是操作员？

@@ -171,6 +171,15 @@ namespace BP.Web
         {
             return (T)Session[key];
         }
+        public static string RequestCookieGet(string key, string cookieName)
+        {
+            HttpCookie cookie = Request.Cookies.Get(cookieName);
+
+            if (cookie == null)
+                return null;
+
+            return cookie[key];
+        }
 
     }
 }

@@ -1202,9 +1202,9 @@ namespace BP.Sys
                         {
                             /*如果是bs系统, 就加入外部url的变量.*/
                             //RequestQueryString
-                            foreach (string key in HttpContextHelper.RequestQueryString)
+                            foreach (string key in HttpContextHelper.RequestParamKeys)
                             {
-                                string val = BP.Sys.Glo.Request.QueryString[key];
+                                string val = HttpContextHelper.RequestQueryString(key);
                                 try
                                 {
                                     r.Add(key, val);

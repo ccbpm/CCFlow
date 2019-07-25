@@ -58,16 +58,35 @@ namespace BP.Web
         {
             Response.Write(content);
         }
-        public static void ResponseCookieAdd(Dictionary<string, string> ht, DateTime? expires = null, string cookieName = null)
+        /// <summary>
+        /// 添加cookie
+        /// </summary>
+        /// <param name="cookieValues">Dictionary</param>
+        /// <param name="expires"></param>
+        /// <param name="cookieName">.net core 中无需传此参数，传了也会被忽略。.net framework中，此参数必填</param>
+        public static void ResponseCookieAdd(Dictionary<string, string> cookieValues, DateTime? expires = null, string cookieName = null)
         {
             HttpCookie cookie = new HttpCookie(cookieName);
 
             if (expires != null)
                 cookie.Expires = expires.Value;
 
-            foreach (var d in ht)
+            foreach (var d in cookieValues)
                 cookie.Values.Add(d.Key, d.Value);
 
+            Response.Cookies.Add(cookie);
+        }
+
+        /// <summary>
+        /// 删除指定的键值的cookie。
+        /// </summary>
+        /// <param name="cookieKeys"></param>
+        /// <param name="cookieName">.net core中无需此参数，传了也会被忽略。net framework中，此参数必填</param>
+        public static void ResponseCookieDelete(IEnumerable<string> cookieKeys, string cookieName)
+        {
+            HttpCookie cookie = new HttpCookie(cookieName);
+            foreach (var key in cookieKeys)
+                cookie.Values.Add(key, String.Empty);
             Response.Cookies.Add(cookie);
         }
 
@@ -114,12 +133,10 @@ namespace BP.Web
                 return Request.Url.Authority;
             }
         }
-        public static System.Collections.Specialized.NameValueCollection RequestQueryString
+        public static string RequestQueryString(string key)
         {
-            get
-            {
-                return Request.QueryString;
-            }
+                return Request.QueryString[key];
+      
         }
 
     }

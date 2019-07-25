@@ -71,5 +71,13 @@ namespace BP.Web
                 return Request.Params.Keys;
             }
         }
+
+        public static string RequestRawUrl
+        {
+            get
+            {
+                return Request.RawUrl;
+            }
+        }
     }
 }

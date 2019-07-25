@@ -187,9 +187,6 @@
     </Compile>
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
-    <Compile Include="NetPlatformImpl\DA.cs" />
-    <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
-    <Compile Include="NetPlatformImpl\Sys.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>

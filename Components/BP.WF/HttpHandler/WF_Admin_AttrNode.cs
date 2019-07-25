@@ -85,12 +85,12 @@ namespace BP.WF.HttpHandler
         public string Bill_Save()
         {
             BillTemplate bt = new BillTemplate();
-            if (HttpContextHelper.RequestFilesCount == 0)
+            if (HttpContext.Current.Request.Files.Count == 0)
                 return "err@请上传模版.";
 
             //上传附件
             string filepath = "";
-            HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            HttpPostedFile file = HttpContext.Current.Request.Files[0];
             string fileName = file.FileName;
             fileName = fileName.ToLower();
 

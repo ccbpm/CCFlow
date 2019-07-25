@@ -308,7 +308,7 @@
 
             data = data.replace('@', '<br/>@');
             data = data.replace(/null/g, '');
-            data += " <center><input id='CloseBtn' type='button' value='    关    闭(5秒)    ' onclick='CloseAll();'  /></center>";
+            data += " <center><input id='CloseBtn' type='button' value='    关    闭(30秒)    ' onclick='CloseAll();'  /></center>";
             $(".Msg").show();
             $(".Msg").html(data);
 
@@ -332,7 +332,7 @@
             if (ctrl != null)
                 ctrl.style.display = "none";
         }
-        var num = 5;
+        var num = 30;
         function clock() {
             if ($("#CloseBtn").length == 0)
                 return;

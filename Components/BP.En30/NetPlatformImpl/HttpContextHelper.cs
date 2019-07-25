@@ -142,6 +142,35 @@ namespace BP.Web
                 return Request.QueryString[key];
       
         }
+        public static string SessionGetString(string key)
+        {
+            return Session[key] as string;
+        }
+
+        /// <summary>
+        /// 将键值对添加到Session中
+        /// </summary>
+        /// <typeparam name="T"></太阳peparam>
+        /// <param name="session"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void SessionSet<T>(string key, T value)
+        {
+            Session[key] = value;
+        }
+
+        /// <summary>
+        /// 根据键，获取Session中值
+        /// 注意：使用的JsonConvert进行的序列化，因此其中不包括类型信息。若子类型B的对象b，用其父类型A进行Get，那么会丢失子类型部分的数据。
+        /// </summary>
+        /// <typeparam name="T"></太阳peparam>
+        /// <param name="session"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static T SessionGet<T>(string key)
+        {
+            return (T)Session[key];
+        }
 
     }
 }

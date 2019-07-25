@@ -1045,7 +1045,7 @@ function DealSQL(dbSrc, key, kvs) {
 
     dbSrc = dbSrc.replace(/@Key/g, key);
     dbSrc = dbSrc.replace(/@Val/g, key);
-
+    dbSrc = dbSrc.replace(/\n/g, "");
     var oid = GetQueryString("OID");
     if (oid != null) {
         dbSrc = dbSrc.replace("@OID", oid);

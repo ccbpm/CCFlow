@@ -10,19 +10,19 @@ using System.Data.Odbc;
 using System.Data.OleDb;
 using System.IO;
 using System.Text;
+using BP.En30.ccportal;
 
 namespace BP.NetPlatformImpl
 {
     public class DA_DataType
     {
-#if DEBUG
-        static TimeSpan ts = new TimeSpan(0, 10, 0);
-#else
-       static TimeSpan ts = new TimeSpan(0, 1, 0);
-#endif
-
-        public static BP.En30.ccportal.PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
+        public static PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
         {
+#if DEBUG
+             TimeSpan ts = new TimeSpan(0, 10, 0);
+#else
+            TimeSpan ts = new TimeSpan(0, 1, 0);
+#endif
             var basicBinding = new BasicHttpBinding()
             {
                 //CloseTimeout = ts,

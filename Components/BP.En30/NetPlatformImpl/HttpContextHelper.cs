@@ -79,5 +79,12 @@ namespace BP.Web
                 return Request.RawUrl;
             }
         }
+        public static string RequestUrlHost
+        {
+            get
+            {
+                return Request.Url.Host;
+            }
+        }
     }
 }

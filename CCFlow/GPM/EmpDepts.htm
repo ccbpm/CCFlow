@@ -104,8 +104,8 @@
         function EditMainDept() {
 
             var empNo = GetQueryString("FK_Emp");
-
-            window.location.href = "EmpDeptMainDept.htm?FK_Emp=" + empNo;
+            var emp = new Entity("BP.Port.Emp", empNo);
+            window.location.href = "EmpDeptMainDept.htm?FK_Emp=" + empNo + "&FK_DEPT=" + emp.FK_Dept;
 
 
         }

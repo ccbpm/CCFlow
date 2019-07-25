@@ -1382,7 +1382,6 @@ namespace BP.WF
 
             ///* 获取它的工作者，向他们发送消息。*/
             //GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
-
             //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             //string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             //string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "冻结" + fixMsg;
@@ -1391,14 +1390,13 @@ namespace BP.WF
             //{
             //    if (wl.IsEnable == false)
             //        continue; //不发送给禁用的人。
-
             //    emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
-
             //    //写入消息。
             //    BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, title, mailDoc, "Fix" + wl.WorkID, BP.Sys.SMSMsgType.Etc, wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
             //}
 
             /* 执行 WF_GenerWorkFlow 冻结. */
+
             int sta = (int)WFState.Fix;
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
@@ -1406,6 +1404,13 @@ namespace BP.WF
             ps.Add(GenerWorkFlowAttr.WFState, sta);
             ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
             DBAccess.RunSQL(ps);
+
+            ps = new Paras();
+            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=" + dbstr + "IsPass WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            ps.Add(GenerWorkerListAttr.IsPass, 9);
+            ps.Add(GenerWorkerListAttr.WorkID, this.WorkID);
+            DBAccess.RunSQL(ps);
+
 
             // 更新流程报表的状态。 
             ps = new Paras();
@@ -1415,8 +1420,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             // 记录日志..
-            WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
-
+            //WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
             //wn.AddToTrack(ActionType.Info, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, fixMsg,);
 
             return "已经成功执行冻结";

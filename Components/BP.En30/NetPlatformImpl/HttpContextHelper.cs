@@ -58,6 +58,19 @@ namespace BP.Web
         {
             Response.Write(content);
         }
+        public static void ResponseCookieAdd(Dictionary<string, string> ht, DateTime? expires = null, string cookieName = null)
+        {
+            HttpCookie cookie = new HttpCookie(cookieName);
+
+            if (expires != null)
+                cookie.Expires = expires.Value;
+
+            foreach (var d in ht)
+                cookie.Values.Add(d.Key, d.Value);
+
+            Response.Cookies.Add(cookie);
+        }
+
 
         public static string RequestParams(string key)
         {
@@ -86,5 +99,28 @@ namespace BP.Web
                 return Request.Url.Host;
             }
         }
+        public static string RequestApplicationPath
+        {
+            get
+            {
+                return Request.ApplicationPath;
+            }
+        }
+
+        public static string RequestUrlAuthority
+        {
+            get
+            {
+                return Request.Url.Authority;
+            }
+        }
+        public static System.Collections.Specialized.NameValueCollection RequestQueryString
+        {
+            get
+            {
+                return Request.QueryString;
+            }
+        }
+
     }
 }

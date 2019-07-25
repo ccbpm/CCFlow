@@ -230,10 +230,9 @@ namespace BP.Web
         /// <returns></returns>
         public static string GetSessionByKey(string key, string isNullAsVal)
         {
-            //2019-07-25 zyt改造
-            if (IsBSMode && HttpContextHelper.Current != null && HttpContextHelper.Current.Session != null)
+            if (IsBSMode && System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
             {
-                string str = HttpContextHelper.SessionGetString(key);
+                string str = System.Web.HttpContext.Current.Session[key] as string;
                 if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
@@ -273,11 +272,11 @@ namespace BP.Web
         {
             if (val == null)
                 return;
-            //2019-07-25 zyt改造
+
             if (IsBSMode == true
                 && System.Web.HttpContext.Current != null
                 && System.Web.HttpContext.Current.Session != null)
-                HttpContextHelper.SessionSet(key, val);
+                System.Web.HttpContext.Current.Session[key] = val;
             else
                 BP.Port.Current.SetSession(key, val);
         }
@@ -500,7 +499,7 @@ namespace BP.Web
         /// <summary>
         /// 所在的集团编号
         /// </summary>
-        public static string GroupNo
+        public static string GroupNo111
         {
             get
             {
@@ -587,9 +586,7 @@ namespace BP.Web
             try
             {
                 //先从session里面取.
-                //string v = System.Web.HttpContext.Current.Session[valKey] as string;
-                //2019-07-25 zyt改造
-                string v = HttpContextHelper.SessionGet<string>(valKey);
+                string v = System.Web.HttpContext.Current.Session[valKey] as string;
                 if (DataType.IsNullOrEmpty(v) == false)
                     return v;
             }
@@ -643,8 +640,8 @@ namespace BP.Web
             AtPara ap = new AtPara(keyVals);
             foreach (string key in ap.HisHT.Keys)
                 cookie.Values.Add(key, HttpUtility.UrlEncode(ap.GetValStrByKey(key)));
-            //2019-07-25 zyt改造
-            HttpContextHelper.ResponseCookieAdd(cookie);
+
+            System.Web.HttpContext.Current.Response.AppendCookie(cookie);
         }
         /// <summary>
         /// 是否是操作员？

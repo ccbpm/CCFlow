@@ -196,6 +196,19 @@ namespace BP.Web
                 return Session.SessionID;
             }
         }
+        public static int RequestFilesCount
+        {
+            get
+            {
+                return Current.Request.Files.Count;
+            }
+
+        }
+        public static HttpPostedFile RequestFiles(int key)
+        {
+            return Current.Request.Files[key];
+
+        }
 
 
     }

@@ -108,6 +108,16 @@ namespace BP.Web
             return Request.Params[key];
         }
 
+        public static List<string> RequestQueryStringKeys
+        {
+            get
+            {
+                List<string> keys = new List<string>();
+                keys.AddRange(Request.QueryString.AllKeys);
+                return keys;
+            }
+        }
+
         public static System.Collections.Specialized.NameObjectCollectionBase.KeysCollection RequestParamKeys
         {
             get

@@ -31,6 +31,10 @@ namespace BP.Web
                 return Current.Session;
             }
         }
+        public static void SessionClear()
+        {
+            Session.Clear();
+        }
 
         /// <summary>
         /// 获取当前的 Request

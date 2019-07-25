@@ -179,6 +179,13 @@ namespace BP.Web
         {
             return (T)Session[key];
         }
+        public static string CurrentSessionID
+        {
+            get
+            {
+                return Session.SessionID;
+            }
+        }
 
 
     }

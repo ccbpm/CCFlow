@@ -428,7 +428,7 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
                 map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 4000, 20);
 
-                map.AddTBStringDoc(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true);
+                //map.AddTBStringDoc(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true);
 
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 

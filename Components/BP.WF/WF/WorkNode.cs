@@ -7940,6 +7940,19 @@ namespace BP.WF
                         }
 
                     }
+                    else
+                    {
+                        //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                        if(this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                        {
+                            //获取审核组件信息
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID;
+                            if (at != ActionType.TeampUp)
+                                t.Msg += DBAccess.RunSQLReturnStringIsNull(sql,"");
+                            else
+                                t.Msg+= "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -8052,6 +8065,19 @@ namespace BP.WF
                             para[2] = this.HisNode.FocusField;
                             para[3] = t.Msg;
                             Log.DebugWriteError(BP.WF.Glo.multilingual("@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}.", "WorkNode", "delete_focus_field", para));
+                        }
+                    }
+                    else
+                    {
+                        //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                        if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                        {
+                            //获取审核组件信息
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID;
+                            if (at != ActionType.TeampUp)
+                                t.Msg += DBAccess.RunSQLReturnStringIsNull(sql, "");
+                            else
+                                t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
                         }
                     }
                     break;

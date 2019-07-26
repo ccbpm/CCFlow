@@ -79,5 +79,16 @@ namespace BP.NetPlatformImpl
                 throw new NotImplementedException(ex.Message);
             }
         }
+        public static long GetFileLength(HttpPostedFile file)
+        {
+            try
+            {
+                return file.ContentLength;
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
     }
 }

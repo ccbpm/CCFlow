@@ -48,7 +48,7 @@
 
             for (var i = 0; i < ens.length; i++) {
 
-                var en = new Entity("BP.Sys.MapExt", ens[i].MyPK);
+                var en = ens[i].MyPK;
 
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
@@ -158,7 +158,8 @@
                     <li><a href="javascript:BindFunctionEntity('dblclick');">ondblclick - 双击</a> </li>
                     <li><a href="javascript:BindFunctionEntity('keypress');">onkeypress - 按下键盘</a> </li>
                     <li><a href="javascript:BindFunctionEntity('keyup');">onkeyup - 按上键盘</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('input');">oninput - readonly值改变</a> </li>
+                    <li><a href="javascript:BindFunctionEntity('input');">oninput - readonly值改变</a>
+                    </li>
                 </ul>
             </div>
         </fieldset>

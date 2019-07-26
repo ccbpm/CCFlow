@@ -66,6 +66,12 @@ namespace BP.Web
         {
             Response.BinaryWrite(fileData);
         }
+        public static void ResponseWriteFile(string file)
+
+        {
+            Response.WriteFile(file);
+
+        }
         public static void ResponseWriteHeader(string key, string stringvalues)
         {
             Response.AddHeader(key, stringvalues);
@@ -217,6 +223,11 @@ namespace BP.Web
             return Current.Request.Files[key];
 
         }
+        public static string UrlDecode(string Url)
+        {
+            return Current.Server.UrlDecode(Url);
+        }
+
 
         public static string UserAgent
         {

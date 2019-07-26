@@ -778,6 +778,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 审核组件版本
+        /// </summary>
+        public int FWCVer
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmWorkCheckAttr.FWCVer, 0);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCVer, value);
+            }
+        }
+        /// <summary>
         /// 内部编号
         /// </summary>
         public string No
@@ -2595,6 +2609,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
                 map.AddTBFloat(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
                 map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
+                map.AddTBInt(FrmWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 #endregion 审核组件.
 
                 #region 考核属性.

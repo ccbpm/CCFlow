@@ -5456,6 +5456,7 @@ namespace BP.WF
                                 nd.SetValByKey(dc.ColumnName, val);
                                 cc.SetValByKey(dc.ColumnName, val);
                                 fwc.SetValByKey(dc.ColumnName, val);
+                                
                             }
 
                             nd.FK_Flow = fl.No;
@@ -5473,6 +5474,7 @@ namespace BP.WF
 
                                 //把抄送的信息也导入里面去.
                                 cc.DirectUpdate();
+                                fwc.FWCVer = 1;
                                 fwc.DirectUpdate();
                                 DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "'");
                             }
@@ -6108,7 +6110,7 @@ namespace BP.WF
                     nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
                 }
             }
-
+            nd.FWCVer = 1;
             nd.Insert();
             nd.CreateMap();
 

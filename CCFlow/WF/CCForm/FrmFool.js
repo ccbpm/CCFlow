@@ -279,8 +279,13 @@ function Ele_FrmCheck(wf_node) {
     if (sta == 2)//只读
         isReadonly = "1";
 
+    var src = "";
 
-    var src = "../WorkOpt/WorkCheck.htm?s=2";
+    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+        src = "../WorkOpt/WorkCheck.htm?s=2";
+    else
+        src = "../WorkOpt/WorkCheck2019.htm?s=2";
+
     var fwcOnload = "";
     var paras = '';
 

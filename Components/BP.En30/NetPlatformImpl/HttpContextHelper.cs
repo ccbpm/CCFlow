@@ -62,6 +62,14 @@ namespace BP.Web
         {
             Response.Write(content);
         }
+        public static void ResponseWriteFile(byte[] fileData)
+        {
+            Response.BinaryWrite(fileData);
+        }
+        public static void ResponseWriteHeader(string key, string stringvalues)
+        {
+            Response.AddHeader(key, stringvalues);
+        }
         /// <summary>
         /// 添加cookie
         /// </summary>

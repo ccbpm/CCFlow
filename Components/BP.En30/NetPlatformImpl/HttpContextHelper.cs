@@ -229,6 +229,13 @@ namespace BP.Web
         }
 
 
+        public static string UserAgent
+        {
+            get
+            {
+                return BP.Sys.Glo.Request.UserAgent;
+            }
+        }
 
     }
 }

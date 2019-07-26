@@ -3812,6 +3812,16 @@ namespace BP.WF.HttpHandler
 
             //工作人员列表.已经走完的节点与人员.
             GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
+            GenerWorkerList gwln = (GenerWorkerList)gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, this.FK_Node);
+            if(gwln == null)
+            {
+                gwln = new GenerWorkerList();
+                gwln.FK_Node = currNode.NodeID;
+                gwln.FK_NodeText = currNode.Name;
+                gwln.FK_Emp = WebUser.No;
+                gwln.FK_EmpText = WebUser.Name;
+                gwls.AddEntity(gwln);
+            }
             ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
 
             //设置的手工运行的流转信息.
@@ -3831,9 +3841,14 @@ namespace BP.WF.HttpHandler
 
                 foreach (Node nd in nds)
                 {
+                    if (nd.NodeID == this.FK_Node)
+                        continue;
+                   
+
                     var gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, nd.NodeID);
                     if (gwl == null)
                     {
+                        
                         /*说明没有 */
                         TransferCustom tc = new TransferCustom();
                         tc.WorkID = this.WorkID;
@@ -3862,7 +3877,7 @@ namespace BP.WF.HttpHandler
                 }
                 tcs = new TransferCustoms(this.WorkID);
             }
-
+            
             ds.Tables.Add(tcs.ToDataTableField("WF_TransferCustoms"));
 
             return BP.Tools.Json.ToJson(ds);

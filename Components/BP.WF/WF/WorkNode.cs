@@ -7946,7 +7946,7 @@ namespace BP.WF
                         if(this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                         {
                             //获取审核组件信息
-                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID;
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
                             if (at != ActionType.TeampUp)
                                 t.Msg += DBAccess.RunSQLReturnStringIsNull(sql,"");
                             else
@@ -8073,7 +8073,7 @@ namespace BP.WF
                         if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                         {
                             //获取审核组件信息
-                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID;
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'"; ;
                             if (at != ActionType.TeampUp)
                                 t.Msg += DBAccess.RunSQLReturnStringIsNull(sql, "");
                             else

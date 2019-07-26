@@ -4729,7 +4729,7 @@ namespace BP.WF
                 }
 
                 if (!err.Equals(""))
-                    throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
+                    throw new Exception(BP.WF.Glo.multilingual("err@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
 
                 return true;
             }
@@ -4886,7 +4886,7 @@ namespace BP.WF
                 #endregion 检查图片附件的必填，added by liuxc,2016-11-1
 
                 if (err != "")
-                    throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
+                    throw new Exception(BP.WF.Glo.multilingual("err@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
 
                 CheckFrmIsFullCheckNote();
             }
@@ -4992,7 +4992,7 @@ namespace BP.WF
                 }
             }
             if (err != "")
-                throw new Exception(BP.WF.Glo.multilingual("@在提交前检查到如下必输字段填写不完整({0}).", "WorkNode", "not_found_value", err));
+                throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整({0}).", "WorkNode", "not_found_value", err));
 
             return true;
         }

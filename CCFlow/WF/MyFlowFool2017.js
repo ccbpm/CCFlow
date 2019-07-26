@@ -75,7 +75,7 @@ function GenerFoolFrm(wn) {
             ath.MyPK = gf.CtrlID;
             if (ath.RetrieveFromDBSources() == 0)
                 continue;
-            if (ath.IsVisable == "0")
+            if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
                 continue;
             html += "<tr>";
             html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
@@ -376,6 +376,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 //复位右侧信息
                 if (ruRowSpan == rRowSpan) {
                     ruRowSpan = 0;
+                    luRowSpan = 0;
                     rRowSpan = 0;
                     IsShowRight = true;
                     if (rowSpan == 1)
@@ -421,6 +422,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 //复位左侧信息
                 if (luRowSpan == lRowSpan) {
                     luRowSpan = 0;
+                    ruRowSpan = 0;
                     lRowSpan = 0;
                     IsShowLeft = true;
                     ruColSpan = 0;
@@ -501,6 +503,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             //复位右侧信息
             if (ruRowSpan == rRowSpan) {
                 ruRowSpan = 0;
+                luRowSpan = 0;
                 rRowSpan = 0;
                 IsShowRight = true;
                 if (rowSpan == 1)
@@ -554,6 +557,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             //复位左侧信息
             if (luRowSpan == lRowSpan) {
                 luRowSpan = 0;
+                ruRowSpan = 0;
                 lRowSpan = 0;
                 IsShowLeft = true;
                 ruColSpan = 0;
@@ -1163,7 +1167,11 @@ function Ele_FrmCheck(wf_node) {
     var sta = wf_node.FWCSta;
 
     var h = wf_node.FWC_H + 1300;
-    var src = "./WorkOpt/WorkCheck.htm?s=2";
+    var src = "";
+    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+        src = "./WorkOpt/WorkCheck.htm?s=2";
+    else
+        src = "./WorkOpt/WorkCheck2019.htm?s=2";
     var fwcOnload = "";
     var paras = '';
 
@@ -1505,7 +1513,7 @@ function GetLab(flowData, attr) {
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab = " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
-        lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='padding-bottom: 10px;'>" + attr.Name + "</label>";
+        lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' >" + attr.Name + "</label>";
 
         return lab;
     }

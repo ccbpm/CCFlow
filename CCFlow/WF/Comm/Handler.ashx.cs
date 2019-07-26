@@ -21,8 +21,9 @@ namespace CCFlow.WF.Comm
         /// </summary>
         public override Type CtrlType
         {
-            get {
-                return typeof(BP.WF.HttpHandler.WF_Comm); 
+            get
+            {
+                return typeof(BP.WF.HttpHandler.WF_Comm);
             }
         }
     }

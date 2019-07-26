@@ -1714,7 +1714,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示.
-                if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && ex.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
+                if (ex.Message.Contains("提交前检查到如下必填字段填写不完整") == true || ex.Message.Contains("您没有上传附件") == true || ex.Message.Contains("您没有上传图片附件") == true)
                 {
                     return "err@" + ex.Message.Replace("@@", "@").Replace("@", "<BR>@");
                 }

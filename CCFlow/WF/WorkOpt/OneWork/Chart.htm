@@ -94,7 +94,6 @@
             handler.AddPara("FK_Flow", fk_Flow);
             handler.AddPara("WorkID", work_ID);
             handler.AddPara("FID", fid);
-
             var data = handler.DoMethodReturnString("Chart_Init");
 
             if (data.indexOf('err@') == 0) {

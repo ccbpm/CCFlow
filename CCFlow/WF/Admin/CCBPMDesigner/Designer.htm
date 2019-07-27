@@ -6,8 +6,6 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="Public/Designer2018.js" type="text/javascript"></script>
     <!--JL.plus-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -999,7 +997,7 @@
             //更新名称与显示
             $("#lab_span_" + activeId).text(text);
         }
-        //获得流程数据.
+        //获得流程数据并转化为指定格式的json.
         function GenerDrowFlowData() {
 
             flowNo = GetQueryString("FK_Flow");
@@ -1047,6 +1045,7 @@
                 } else {
                     /* 如果是其他的情况,就要考虑分合流 */
                 }
+
 
                 strs += "'style':'width:auto;minWidth:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 

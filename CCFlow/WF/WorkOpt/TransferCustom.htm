@@ -9,19 +9,20 @@
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
-      <link href="../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
-      <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-       <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
-       <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
     <style type="text/css">
         .ccflow-input-span-container
         {
-            border:0;
+            border: 0;
         }
         th
         {
@@ -144,7 +145,6 @@
 
                 if (initJsonData.length != 0)
                     mtags.mtags("loadData", initJsonData);
-              
             }
 
             $.each($(".mtags"), function (i, mtags) {
@@ -169,17 +169,17 @@
                 return;
             }
             var val = frames["iframeSelectEmpsForm"].window.returnVal;
-            var mypk = currSelectNode+"_"+GetQueryString("WorkID");
+            var mypk = currSelectNode + "_" + GetQueryString("WorkID");
             var en = new Entity("BP.WF.TransferCustom", mypk);
-            en.Worker = en.Worker + "," + val.No+",";
-            en.WorkerName = en.WorkerName + "," + val.Name+",";
+            en.Worker = en.Worker + "," + val.No + ",";
+            en.WorkerName = en.WorkerName + "," + val.Name + ",";
             en.Update();
-            InitMtags($("#" + en.FK_Node + "_mtags"),en.MyPK, en.Worker, en.WorkerName);
-           
+            InitMtags($("#" + en.FK_Node + "_mtags"), en.MyPK, en.Worker, en.WorkerName);
+
         }
 
         //初始化接收人员列表
-        function InitMtags(mtags,MyPK, worker, workerName) {
+        function InitMtags(mtags, MyPK, worker, workerName) {
             var workers = worker.split(',');
             var workerNames = workerName.split(',');
             var initJsonData = [];
@@ -188,7 +188,7 @@
                     initJsonData.push({
                         "No": o,
                         "Name": workerNames[k],
-                        "MyPK":MyPK
+                        "MyPK": MyPK
                     });
             });
             mtags.mtags("loadData", initJsonData);
@@ -197,10 +197,10 @@
         //删除人员
         function RemoveEmp(mypk, empNo, empName) {
             var en = new Entity("BP.WF.TransferCustom", mypk);
-            en.Worker = en.Worker.replace(empNo+",","");
+            en.Worker = en.Worker.replace(empNo + ",", "");
             en.WorkerName = en.WorkerName.replace(empName + ",", "");
             en.Update();
-            InitMtags($("#" + en.FK_Node + "_mtags"),mypk, en.Worker, en.WorkerName);
+            InitMtags($("#" + en.FK_Node + "_mtags"), mypk, en.Worker, en.WorkerName);
         }
         function DoUp(myPK) {
 
@@ -244,31 +244,39 @@
                 流转设置</caption>
             <tr>
                 <td>
-                    <div id="docs" name="docs" style="width:100%">
+                    <div id="docs" name="docs" style="width: 100%">
                     </div>
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <input type="button" value="返回" onclick="Back()" />
-                   <!-- <input type="button" value="保存为手动运行模式" onclick="SaveAsHand()" />-->
+                    <!-- <input type="button" value="保存为手动运行模式" onclick="SaveAsHand()" />-->
                 </td>
             </tr>
         </table>
     </center>
     </form>
     <div class="modal fade" id="SelectEmpsModal">
-         <div class="modal-dialog">
-             <div class="modal-content" style="border-radius:0px;width:700px;">
-                  <div class="modal-header">
-                    <button type="button" class="close" style="color:#0000007a;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>
-                         <h4 class="modal-title">接受人</h4>
-                  </div>
-                  <div class="modal-body">
-                      <iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>
-                  </div>
-           </div><!-- /.modal-content -->'
-        </div><!-- /.modal-dialog -->'
-   </div>
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 0px; width: 700px;">
+                <div class="modal-header">
+                    <button type="button" class="close" style="color: #0000007a; opacity: 1;" data-dismiss="modal"
+                        aria-hidden="true">
+                        &times;</button>
+                    <h4 class="modal-title">
+                        接受人</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
+                        name="iframeSelectEmpsForm"></iframe>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            '
+        </div>
+        <!-- /.modal-dialog -->
+        '
+    </div>
 </body>
 </html>

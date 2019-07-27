@@ -43,7 +43,7 @@
 	        var nodeDepts = new Entities("BP.WF.Template.NodeDepts");
 	        nodeDepts.Retrieve("FK_Node", nodeID);
 
-	        var nodeDept = new Entity("P.WF.Template.NodeDept");
+	        var nodeDept = new Entity("BP.WF.Template.NodeDept");
 
 	        $.each(nodeDepts, function (i, o) {
 

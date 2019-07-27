@@ -2326,10 +2326,10 @@ namespace BP.WF
 
             // 初试化他们的工作人员．
             current_gwls = this.Func_GenerWorkerLists(town);
-            if(town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && current_gwls.Count > 1)
+            if (town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && current_gwls.Count > 1)
             {
                 throw new Exception(BP.WF.Glo.multilingual("@接收人出错! 详情:{0}.", "WorkNode", "error_sendToemps_data", "@节点" + town.HisNode.NodeID + "是组长会签模式，接受人只能选择一人"));
-                
+
             }
 
             if (town.HisNode.TodolistModel == TodolistModel.Order && current_gwls.Count > 1)
@@ -4443,9 +4443,6 @@ namespace BP.WF
         public SendReturnObjs NodeSend()
         {
             SendReturnObjs sendObj = NodeSend(null, null);
-
-
-
             return sendObj;
         }
 
@@ -4680,14 +4677,14 @@ namespace BP.WF
                         pkVal = this.HisGenerWorkFlow.FID;
                     if (item.WhoIsPK == WhoIsPK.PWorkID)
                         pkVal = this.HisGenerWorkFlow.PWorkID;
-                    if(item.WhoIsPK == WhoIsPK.PPWorkID)
+                    if (item.WhoIsPK == WhoIsPK.PPWorkID)
                     {
                         GenerWorkFlow gwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
-                        if(gwf!=null && gwf.PWorkID!=0)
+                        if (gwf != null && gwf.PWorkID != 0)
                             pkVal = gwf.PWorkID;
                     }
 
-                   
+
 
                     MapAttrs mapAttrs = md.MapAttrs;
                     //主表实体.
@@ -4744,10 +4741,10 @@ namespace BP.WF
                         continue;
 
                     var val = row[attr.KeyOfEn];
-                    string str =null;
+                    string str = null;
                     if (val != null)
                         str = val.ToString();
-                 
+
 
                     /*如果是检查不能为空 */
                     if (DataType.IsNullOrEmpty(str) == true)
@@ -6846,8 +6843,6 @@ namespace BP.WF
                 }
                 #endregion
 
-
-
                 #region 设置流程的标记.
                 if (this.HisNode.IsStartNode)
                 {
@@ -6983,8 +6978,12 @@ namespace BP.WF
                 this.WhenTranscactionRollbackError(ex);
                 DBAccess.DoTransactionRollback();
 
-                throw new Exception(ex.Message+"技术信息:"+ex.StackTrace);
-                //  throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
+                BP.DA.Log.DebugWriteError(ex.StackTrace);
+
+                throw new Exception(ex.Message);
+
+
+                //throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
             }
         }
         /// <summary>
@@ -7054,7 +7053,7 @@ namespace BP.WF
                             continue; //就不能启动该子流程.
                     }
 
-                    if (sub.IsEnableSQL == true )
+                    if (sub.IsEnableSQL == true)
                     {
                         string sql = sub.SpecSQL;
                         if (DataType.IsNullOrEmpty(sql) == true)
@@ -7069,11 +7068,11 @@ namespace BP.WF
                     if (sub.IsEnableSameLevelNode == true)
                         throw new Exception("配置错误，按指定平级子流程节点只使用触发平级子流程，不能触发下级子流程");
 
-                        #endregion
+                    #endregion
 
-                        #region 检查sendModel.
-                        // 设置开始节点待办.
-                        if (sub.SendModel == 0)
+                    #region 检查sendModel.
+                    // 设置开始节点待办.
+                    if (sub.SendModel == 0)
                     {
                         //创建workid.
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
@@ -7197,7 +7196,7 @@ namespace BP.WF
 
 
                             GenerWorkFlow gwfSub = new GenerWorkFlow();
-                           int count =  gwfSub.Retrieve(GenerWorkFlowAttr.PWorkID, this.HisGenerWorkFlow.PWorkID, GenerWorkFlowAttr.FK_Flow, flowNode[0]);
+                            int count = gwfSub.Retrieve(GenerWorkFlowAttr.PWorkID, this.HisGenerWorkFlow.PWorkID, GenerWorkFlowAttr.FK_Flow, flowNode[0]);
                             if (count == 0)
                             {
                                 isHave = true;
@@ -8480,7 +8479,7 @@ namespace BP.WF
             if (this.HisNode.TodolistModel == WF.TodolistModel.QiangBan)
             {
                 ps = new Paras();
-                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND FK_Emp!="+dbStr+"FK_Emp ";
+                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND FK_Emp!=" + dbStr + "FK_Emp ";
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.HisWork.FID);
                 ps.Add("FK_Emp", WebUser.No);

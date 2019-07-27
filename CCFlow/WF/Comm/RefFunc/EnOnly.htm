@@ -221,24 +221,27 @@
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
 
-                    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
-                        var uiBindKey = mapAttr.UIBindKey;
+                   
+                    var uiBindKey = mapAttr.UIBindKey;
 
-                        if (uiBindKey.indexOf("Dept") != -1) {
-                            var webUser = new WebUser();
-                            var ens = new Entities(uiBindKey);
-                            ens.RetrieveAll();
-                            var pushData;
-                            if (webUser.No == "admin")
-                                pushData = findChildren(ens, "0");
-                            else
-                                pushData = findChildren(ens, webUser.FK_Dept);
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
-                            if (mapAttr.UIIsEnable == 0)
-                                $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
+                    if (uiBindKey.indexOf("Dept") != -1) {
+                        var webUser = new WebUser();
+                        var ens = new Entities(uiBindKey);
+                        ens.RetrieveAll();
+                        var pushData;
+                        if (webUser.No == "admin")
+                            pushData = findChildren(ens, "0");
+                        else
+                            pushData = findChildren(ens, webUser.FK_Dept);
+                        $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
+                        if (mapAttr.UIIsEnable == 0)
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-                        }
+                        $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
+                        var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue).target;
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+
+                        //$('#DDL_' + mapAttr.KeyOfEn).combotree('select', defValue);
                     } else {
                         // 判断下拉框是否有对应option, 若没有则追加
                         if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
@@ -314,7 +317,8 @@
                         realVal = decodeURI(param[1]);
                         $('#TB_' + param[0]).val(realVal);
                         $('#DDL_' + param[0]).val(realVal);
-                        $('#DDL_' +  param[0]).combotree('setValue', realVal);
+                        $('#DDL_' + param[0]).combotree('setValue', realVal);
+                        $('#DDL_' + param[0]).combotree('select', realVal);
                         if (realVal == "1") {
                             var obj = document.getElementById("CB_" + param[0])
                             if (obj != null)

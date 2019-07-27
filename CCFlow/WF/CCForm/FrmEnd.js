@@ -324,7 +324,7 @@ function AfterBindEn_DealMapExt(frmData) {
         var DDLFull = mapAttr.GetPara("IsFullData");
         if (DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
             //枚举类型
-            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 3) {
                 var ddlOper = $('input:radio[name="RB_' + mapExt.AttrOfOper + '"]');
                 if (ddlOper.length == 0)
                     continue;

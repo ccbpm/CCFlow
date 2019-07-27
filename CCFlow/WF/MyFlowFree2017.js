@@ -905,7 +905,11 @@ function figure_Template_FigureFrmCheck(wf_node) {
     if (sta == 0)
         return $('');
 
-    var src = "./WorkOpt/WorkCheck.htm?s=2";
+    var src = "";
+    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+        src = "./WorkOpt/WorkCheck.htm?s=2";
+    else
+        src = "./WorkOpt/WorkCheck2019.htm?s=2";
     var fwcOnload = "";
     var paras = '';
 

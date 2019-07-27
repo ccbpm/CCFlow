@@ -594,6 +594,35 @@ namespace CCFlow.WF.CCForm
 
         }
         /// <summary>
+        /// 保存一个文件
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="sid">SID</param>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="pkValue">主键</param>
+        /// <param name="byt">文件流.</param>
+        [WebMethod]
+        public void SaveFrmAth(string userNo, string sid, string frmID, int nodeID, Int64 workID, byte[] byt, string fileName)
+        {
+            MapData md = new MapData(frmID);
+            FrmAttachments aths = new FrmAttachments(frmID);
+            if (aths.Count == 0)
+            {
+                BP.Sys.CCFormAPI.CreateOrSaveAthMulti(md.No, "Ath", "附件", 100, 100);
+                aths = new FrmAttachments(frmID);
+            }
+            FrmAttachment ath = aths[0] as FrmAttachment;
+
+            //把文件写入.
+            string myfileName = BP.Sys.SystemConfig.PathOfTemp + fileName;
+            if (System.IO.File.Exists(myfileName) == true)
+                System.IO.File.Delete(myfileName);
+            BP.DA.DataType.WriteFile(myfileName, byt);
+
+            //增加附件.
+            BP.WF.Dev2Interface.CCForm_AddAth(nodeID, workID, ath.NoOfObj, frmID, BP.Sys.SystemConfig.PathOfTemp, fileName);
+        }
+        /// <summary>
         /// 级联接口
         /// </summary>
         /// <param name="userNo">用户</param>

@@ -872,30 +872,21 @@ namespace BP.WF.HttpHandler
                 return Start_InitTianYe();
             }
             string json = "";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                string sql = "SELECT StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
-                json = DBAccess.RunSQLReturnString(sql);
-                if (DataType.IsNullOrEmpty(json) == false)
-                    return json;
-            }
-            else
-            {
 
-                BP.WF.Port.WFEmp em = new WFEmp();
-                em.No = BP.Web.WebUser.No;
-                if (em.RetrieveFromDBSources() == 0)
-                {
-                    em.FK_Dept = BP.Web.WebUser.FK_Dept;
-                    em.Name = Web.WebUser.Name;
-                    em.Insert();
-                }
-                 json = em.StartFlows;
-                if (DataType.IsNullOrEmpty(json) == false)
-                {
-                    return json;
-                }
+            BP.WF.Port.WFEmp em = new WFEmp();
+            em.No = BP.Web.WebUser.No;
+            if (em.RetrieveFromDBSources() == 0)
+            {
+                em.FK_Dept = BP.Web.WebUser.FK_Dept;
+                em.Name = Web.WebUser.Name;
+                em.Insert();
             }
+
+            string sql = "SELECT StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
+            json = DBAccess.RunSQLReturnString(sql);
+            if (DataType.IsNullOrEmpty(json) == false)
+                return json;
+           
 
             //定义容器.
             DataSet ds = new DataSet();

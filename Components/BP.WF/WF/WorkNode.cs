@@ -4729,7 +4729,7 @@ namespace BP.WF
                 }
 
                 if (!err.Equals(""))
-                    throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
+                    throw new Exception(BP.WF.Glo.multilingual("err@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
 
                 return true;
             }
@@ -4886,7 +4886,7 @@ namespace BP.WF
                 #endregion 检查图片附件的必填，added by liuxc,2016-11-1
 
                 if (err != "")
-                    throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
+                    throw new Exception(BP.WF.Glo.multilingual("err@提交前检查到如下必填字段填写不完整:{0}.", "WorkNode", "detected_error", err));
 
                 CheckFrmIsFullCheckNote();
             }
@@ -4992,7 +4992,7 @@ namespace BP.WF
                 }
             }
             if (err != "")
-                throw new Exception(BP.WF.Glo.multilingual("@在提交前检查到如下必输字段填写不完整({0}).", "WorkNode", "not_found_value", err));
+                throw new Exception(BP.WF.Glo.multilingual("@提交前检查到如下必填字段填写不完整({0}).", "WorkNode", "not_found_value", err));
 
             return true;
         }
@@ -7940,6 +7940,19 @@ namespace BP.WF
                         }
 
                     }
+                    else
+                    {
+                        //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                        if(this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                        {
+                            //获取审核组件信息
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
+                            if (at != ActionType.TeampUp)
+                                t.Msg += DBAccess.RunSQLReturnStringIsNull(sql,"");
+                            else
+                                t.Msg+= "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -8052,6 +8065,19 @@ namespace BP.WF
                             para[2] = this.HisNode.FocusField;
                             para[3] = t.Msg;
                             Log.DebugWriteError(BP.WF.Glo.multilingual("@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}.", "WorkNode", "delete_focus_field", para));
+                        }
+                    }
+                    else
+                    {
+                        //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                        if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                        {
+                            //获取审核组件信息
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'"; ;
+                            if (at != ActionType.TeampUp)
+                                t.Msg += DBAccess.RunSQLReturnStringIsNull(sql, "");
+                            else
+                                t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
                         }
                     }
                     break;

@@ -251,7 +251,14 @@ namespace BP.Web
             {
                 return Current.Request.Files.Count;
             }
-
+        }
+        public static long RequestFileLength(int key)
+        {
+            return Current.Request.Files[key].ContentLength;
+        }
+        public static long RequestFileLength(HttpPostedFile file)
+        {
+            return file.ContentLength;
         }
         public static HttpPostedFile RequestFiles(int key)
         {
@@ -264,6 +271,40 @@ namespace BP.Web
         public static Stream RequestFileStream(int key)
         {
             return Current.Request.Files[key].InputStream;
+        }
+        /// <summary>
+        /// 文件上传
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void UploadFile(string filePath)
+        {
+            try
+            {
+                var filelist = HttpContextHelper.Current.Request.Files;
+                if (filelist == null || filelist.Count == 0)
+                {
+                    throw new NotImplementedException("没有上传文件");
+                }
+                HttpPostedFile f = filelist[0];
+                // 写入文件
+                f.SaveAs(filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+        public static void UploadFile(HttpPostedFile file, string filePath)
+        {
+            try
+            {
+                // 写入文件
+                file.SaveAs(filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
         }
         public static string UrlDecode(string Url)
         {

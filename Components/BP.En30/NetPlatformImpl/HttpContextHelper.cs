@@ -80,7 +80,7 @@ namespace BP.Web
             Response.AddHeader("Content-Disposition", contentDisposition);
 
             // 在Response的Header中设置下载文件的大小，这样客户端浏览器才能正确显示下载的进度
-            Response.AddHeader("Content-Length", fileData.Length);
+            Response.AddHeader("Content-Length", fileData.Length.ToString());
 
             Response.BinaryWrite(fileData);
             Response.End();
@@ -256,7 +256,14 @@ namespace BP.Web
         public static HttpPostedFile RequestFiles(int key)
         {
             return Current.Request.Files[key];
-
+        }
+        public static HttpFileCollection RequestFiles()
+        {
+            return Current.Request.Files;
+        }
+        public static Stream RequestFileStream(int key)
+        {
+            return Current.Request.Files[key].InputStream;
         }
         public static string UrlDecode(string Url)
         {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.SessionState;
 using System.Linq;
+using System.IO;
 
 namespace BP.Web
 {
@@ -62,20 +63,51 @@ namespace BP.Web
         {
             Response.Write(content);
         }
-        public static void ResponseWriteFile(byte[] fileData)
+
+        /// <summary>
+        /// 向Response中写入文件数据
+        /// </summary>
+        /// <param name="fileData">文件数据，字节流</param>
+        /// <param name="fileName">客户端显示的文件名</param>
+        public static void ResponseWriteFile(byte[] fileData, string fileName)
         {
+            Response.ContentType = "application/octet-stream;charset=utf8";
+
+            // 在Response的Header中设置下载文件的文件名，这样客户端浏览器才能正确显示下载的文件名
+            // 注意这里要用HttpUtility.UrlEncode编码文件名，否则有些浏览器可能会显示乱码文件名
+            var contentDisposition = "attachment;" + "filename=" + HttpUtility.UrlEncode(fileName, Encoding.UTF8);
+            // Response.Headers.Add("Content-Disposition", contentDisposition); IIS 7之前的版本可能不支持此写法
+            Response.AddHeader("Content-Disposition", contentDisposition);
+
             Response.BinaryWrite(fileData);
+            Response.End();
+            Response.Close();
         }
-        public static void ResponseWriteFile(string file)
 
+        /// <summary>
+        /// 向Response中写入文件
+        /// </summary>
+        /// <param name="filePath">文件的完整路径，含文件名</param>
+        /// <param name="clientFileName">客户端显示的文件名。若为空，自动从filePath参数中提取文件名。</param>
+        public static void ResponseWriteFile(string filePath, string clientFileName = null)
         {
-            Response.WriteFile(file);
+            if (String.IsNullOrEmpty(clientFileName))
+                clientFileName = Path.GetFileName(filePath);
 
+            Response.AppendHeader("Content-Disposition", "attachment;filename=" + clientFileName);
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = "application/octet-stream;charset=utf8";
+
+            Response.WriteFile(filePath);
+            Response.End();
+            Response.Close();
         }
+
         public static void ResponseWriteHeader(string key, string stringvalues)
         {
             Response.AddHeader(key, stringvalues);
         }
+
         /// <summary>
         /// 添加cookie
         /// </summary>

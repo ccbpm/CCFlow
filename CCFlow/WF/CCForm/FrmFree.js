@@ -219,9 +219,9 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
 
     var src = "";
     if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "../WorkOpt/WorkCheck.htm?s=2";
+        src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
     else
-        src = "../WorkOpt/WorkCheck2019.htm?s=2";
+        src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
     var fwcOnload = "";
     var paras = '';
 

@@ -31,13 +31,8 @@
 
 	        //跟节点编号.
 	        var rootNo = "0";
-	        if (rootNo == "@WebUser.FK_Dept") {
-	            var webUser = new WebUser();
-	            rootNo = webUser.FK_Dept;
-	        }
-
-	        if (rootNo == "")
-	            rootNo = "0";
+	        var webUser = new WebUser();
+	        rootNo = webUser.FK_Dept;
 
 	        //多对多实体.
 	        var nodeDepts = new Entities("BP.WF.Template.NodeDepts");

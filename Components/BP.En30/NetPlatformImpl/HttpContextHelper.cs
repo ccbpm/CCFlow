@@ -64,6 +64,30 @@ namespace BP.Web
             Response.Write(content);
         }
 
+        public static void ResponseWriteString(string content, Encoding encoding)
+        {
+            Response.ContentType = "text/html";
+            Response.ContentEncoding = encoding;
+            Response.Write(content);
+            Response.End();
+        }
+
+        public static void ResponseWriteJson(string json, Encoding encoding)
+        {
+            Response.ContentType = "application/json";
+            Response.ContentEncoding = encoding;
+            Response.Write(json);
+            Response.End();
+        }
+
+        public static void ResponseWriteScript(string script, Encoding encoding)
+        {
+            Response.ContentType = "application/javascript";
+            Response.ContentEncoding = encoding;
+            Response.Write(script);
+            Response.End();
+        }
+
         /// <summary>
         /// 向Response中写入文件数据
         /// </summary>

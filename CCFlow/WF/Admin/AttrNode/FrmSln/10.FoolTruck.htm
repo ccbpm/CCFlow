@@ -198,8 +198,9 @@
             //更新表单类型.
             var frmID = "ND" + nodeID;
             var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = FormType.FoolTruck;
+            mapData.FrmType = 0; //  FormType.FoolTruck;
             mapData.Update();
+
 
             //执行流程检查.
             var flow = new Entity("BP.WF.Flow", node.FK_Flow);
@@ -228,7 +229,7 @@
 
                 var node = new Entity("BP.WF.Node", jsNode);
 
-                node.FormType = FormType.FoolTruck;
+                node.FormType = 0; //设置为傻瓜表单.  FormType.FoolTruck;
                 node.NodeFrmID = "ND" + node.NodeID;
                 node.Update();
 

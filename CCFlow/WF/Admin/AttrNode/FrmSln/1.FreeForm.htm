@@ -96,6 +96,10 @@
             mapData.FrmType = FormType.FreeForm;
             mapData.Update();
 
+
+            //设置显示的主表单,在完成的流程轨迹里可以看到该表单.
+            SetNDxxRpt_FrmType(node.FK_Flow, 1);
+
             alert("保存成功.");
         }
 

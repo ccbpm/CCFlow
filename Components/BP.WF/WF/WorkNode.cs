@@ -4785,7 +4785,7 @@ namespace BP.WF
                             {
                                 //未阅读不让其发送.
                                 if (ath.ReadRole == 1)
-                                    throw new Exception(BP.WF.Glo.multilingual("@您还有如下文件没有阅读:{0}.", "WorkNode", "you_have_document_not_read", errFileUnRead));
+                                    throw new Exception("err" + BP.WF.Glo.multilingual("@您还有如下文件没有阅读:{0}.", "WorkNode", "you_have_document_not_read", errFileUnRead));
 
                                 //未阅读记录日志并让其发送.
                                 if (ath.ReadRole == 2)

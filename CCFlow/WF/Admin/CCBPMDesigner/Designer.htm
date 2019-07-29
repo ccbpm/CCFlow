@@ -76,7 +76,7 @@
     </div>
     <!-- Modal -->
     <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
@@ -98,7 +98,7 @@
     </div>
     <!-- 修改节点名称 -->
     <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
@@ -120,7 +120,7 @@
     </div>
     <!-- 修改标签名称 -->
     <div id="alertModal3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
@@ -142,13 +142,14 @@
     </div>
     <!-- 点击线的提示 -->
     <div id="LineModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
             </button>
             <h3>
-                修改方向</h3>
+                修改方向
+            </h3>
         </div>
         <div class="modal-body">
             <p>
@@ -166,7 +167,7 @@
     </div>
     <!-- attributeModal -->
     <div id="attributeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="width: 800px; margin-left: -350px">
+         aria-hidden="true" style="width: 800px; margin-left: -350px">
         <div class="modal-body" style="max-height: 500px;">
             <!-- body -->
         </div>
@@ -176,15 +177,13 @@
     </div>
     <!--contextmenu div-->
     <style type="text/css">
-        #mainul
-        {
+        #mainul {
             padding: 1px 0px !important;
         }
-        
-        #mainul li
-        {
-            padding: 1px 2px !important;
-        }
+
+            #mainul li {
+                padding: 1px 2px !important;
+            }
     </style>
     <div id="processMenu" style="display: none;">
         <ul id="mainul">
@@ -215,8 +214,8 @@
             <li id="cmNewNode"><i class="icon-plus"></i>&nbsp;<span class="_label">新建节点</span></li>
             <li id="cmNewLabel"><i class="icon-plus"></i>&nbsp;<span class="_label">添加标签</span></li>
             <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
-			<li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
-			<li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
+            <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
+            <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
             <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
             <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
         </ul>
@@ -234,41 +233,36 @@
     <script type="text/javascript" src="Public/js/jquery-1.7.2.min.js?2025"></script>
     <script type="text/javascript" src="Public/css/bootstrap/js/bootstrap.min.js?2025"></script>
     <script type="text/javascript" src="Public/js/jquery-ui/jquery-ui-1.9.2-min.js?2025"></script>
-    <script type="text/javascript" src="Public/js/jsPlumb/jquery.jsPlumb-1.3.16-all-min.js?2025"></script>
+    <!--	<script type="text/javascript" src="Public/js/jsPlumb/jquery.jsPlumb-1.3.16-all-min.js?2025"></script>-->
+    <script type="text/javascript" src="Public/js/jsPlumb/bak/jquery.jsPlumb-1.4.0-all.js?2025"></script>
     <script type="text/javascript" src="Public/js/jquery.contextmenu.r2.js?2025"></script>
     <!--select 2-->
     <script type="text/javascript" src="Public/js/jquery.multiselect2side/js/jquery.multiselect2side.js?2025"></script>
     <!--flowdesign-->
     <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
     <style>
-        li
-        {
+        li {
             list-style: none;
         }
-        
-        #processMenu3 li
-        {
+
+        #processMenu3 li {
             padding: 0px 0px 1px 5px;
         }
-        
-        #processMenu3 li:hover
-        {
-            background-color: #2980b9;
-            cursor: pointer;
-        }
+
+            #processMenu3 li:hover {
+                background-color: #2980b9;
+                cursor: pointer;
+            }
         /****给弹出框URL写的样式*/
-        .ui-icon-closethick
-        {
+        .ui-icon-closethick {
             background-position: 0;
         }
-        
-        .ui-widget-header .ui-icon
-        {
+
+        .ui-widget-header .ui-icon {
             top: 30% !important;
         }
-        
-        .ui-dialog .ui-dialog-titlebar-close
-        {
+
+        .ui-dialog .ui-dialog-titlebar-close {
             background-image: url(Public/css/images/ui-icons_444444_256x240.png);
             background-repeat: no-repeat;
             background-position: 1px;
@@ -372,11 +366,11 @@
         */
         function superDialog(URL, viewField, hidField, isOnly, dialogWidth, dialogHeight) {
             dialogWidth || (dialogWidth = 620)
-				, dialogHeight || (dialogHeight = 520)
-				, loc_x = 500
-				, loc_y = 40
-				, window._viewField = viewField
-				, window._hidField = hidField;
+                , dialogHeight || (dialogHeight = 520)
+                , loc_x = 500
+                , loc_y = 40
+                , window._viewField = viewField
+                , window._hidField = hidField;
             // loc_x = document.body.scrollLeft+event.clientX-event.offsetX;
             //loc_y = document.body.scrollTop+event.clientY-event.offsetY;
             if (window.ActiveXObject) { //IE
@@ -459,186 +453,186 @@
             var _canvas = $("#flowdesign_canvas").Flowdesign({
                 "processData": processData,
                 "labNoteData": labNoteData
-				, mtAfterDrop: function (params) {
-				    //alert("连接：" + params.sourceId + " -> " + params.targetId);
-				}
+                , mtAfterDrop: function (params) {
+                    //alert("连接：" + params.sourceId + " -> " + params.targetId);
+                }
                 /*画面右键*/
-				, canvasMenus: {
-				    "cmNewNode": function (t) {
-				        $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
-				        $(".mymask").show();
+                , canvasMenus: {
+                    "cmNewNode": function (t) {
+                        $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
+                        $(".mymask").show();
 
-				        //获取坐标
-				        var mLeft = $("#jqContextMenu").css("left").replace('px', '');
-				        var mTop = $("#jqContextMenu").css("top").replace('px', '');
+                        //获取坐标
+                        var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+                        var mTop = $("#jqContextMenu").css("top").replace('px', '');
 
 
-				        //创建一个节点
-				        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
-				        hander.AddPara("X", mLeft);
-				        hander.AddPara("Y", mTop);
-				        hander.AddPara("FK_Flow", flowNo);
+                        //创建一个节点
+                        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                        hander.AddPara("X", mLeft);
+                        hander.AddPara("Y", mTop);
+                        hander.AddPara("FK_Flow", flowNo);
 
-				        var data = hander.DoMethodReturnString("CreateNode");
-				        if (data.indexOf('err@') == 0) {
-				            alert(data);
-				            return;
-				        }
+                        var data = hander.DoMethodReturnString("CreateNode");
+                        if (data.indexOf('err@') == 0) {
+                            alert(data);
+                            return;
+                        }
 
-				        //添加节点样式与坐标
-				        data = JSON.parse(data);
-				        var strs = "";
-				        strs += "{'id':'" + data.NodeID + "',";
-				        strs += "'flow_id':'" + flowNo + "',";
-				        strs += "'process_name':'" + data.Name + "',";
-				        strs += "'process_to':0,";
-				        strs += "'icon':'icon-ok',";
-				        strs += "'style':'width:auto;height:41px;line-height:41px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
-				        strs += "}";
-				        strs = eval("(" + strs + ")");
+                        //添加节点样式与坐标
+                        data = JSON.parse(data);
+                        var strs = "";
+                        strs += "{'id':'" + data.NodeID + "',";
+                        strs += "'flow_id':'" + flowNo + "',";
+                        strs += "'process_name':'" + data.Name + "',";
+                        strs += "'process_to':0,";
+                        strs += "'icon':'icon-ok',";
+                        strs += "'style':'width:auto;height:41px;line-height:41px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                        strs += "}";
+                        strs = eval("(" + strs + ")");
 
-				        if (_canvas.addProcess(strs) == false) //添加
-				        {
-				            alert("添加失败");
-				            return;
-				        }
-				        $(".mymask").hide();
-				    },
-				    "cmSave": function (t) {
-				        var processInfo = _canvas.getProcessInfo(); //连接信息
+                        if (_canvas.addProcess(strs) == false) //添加
+                        {
+                            alert("添加失败");
+                            return;
+                        }
+                        $(".mymask").hide();
+                    },
+                    "cmSave": function (t) {
+                        var processInfo = _canvas.getProcessInfo(); //连接信息
 
-				        /*重要提示 start*/
-				        alert("这里使用ajax提交，请参考官网示例，可使用Fiddler软件抓包获取返回格式cc");
-				        /*重要提示 end */
+                        /*重要提示 start*/
+                        alert("这里使用ajax提交，请参考官网示例，可使用Fiddler软件抓包获取返回格式cc");
+                        /*重要提示 end */
 
-				        //                                      var url = "/index.php?s=/Flowdesign/save_canvas.html";
-				        //                                      $.post(url, { "flow_id": the_flow_id, "process_info": processInfo }, function (data) {
-				        //                                          mAlert(data.msg);
-				        //                                      }, 'json');
-				    },
-				    //刷新
-				    //添加标签
-				    "cmNewLabel": function (t) {
-				        var mLeft = $("#jqContextMenu").css("left").replace('px', '');
-				        var mTop = $("#jqContextMenu").css("top").replace('px', '');
+                        //                                      var url = "/index.php?s=/Flowdesign/save_canvas.html";
+                        //                                      $.post(url, { "flow_id": the_flow_id, "process_info": processInfo }, function (data) {
+                        //                                          mAlert(data.msg);
+                        //                                      }, 'json');
+                    },
+                    //刷新
+                    //添加标签
+                    "cmNewLabel": function (t) {
+                        var mLeft = $("#jqContextMenu").css("left").replace('px', '');
+                        var mTop = $("#jqContextMenu").css("top").replace('px', '');
 
-				        //创建一个标签
-				        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
-				        hander.AddPara("X", mLeft);
-				        hander.AddPara("Y", mTop);
-				        hander.AddPara("FK_Flow", flowNo);
-				        hander.AddPara("LabName", "请输入标签");
+                        //创建一个标签
+                        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                        hander.AddPara("X", mLeft);
+                        hander.AddPara("Y", mTop);
+                        hander.AddPara("FK_Flow", flowNo);
+                        hander.AddPara("LabName", "请输入标签");
 
-				        var data = hander.DoMethodReturnString("CreatLabNote");
-				        if (data.indexOf('err@') == 0) {
-				            alert(data);
-				            return;
-				        }
+                        var data = hander.DoMethodReturnString("CreatLabNote");
+                        if (data.indexOf('err@') == 0) {
+                            alert(data);
+                            return;
+                        }
 
-				        //添加标签样式与坐标
-				        data = JSON.parse(data);
-				        var strs = "";
-				        strs += "{'id':'" + data.MyPK + "',";
-				        strs += "'flow_id':'" + data.FK_Flow + "',";
-				        strs += "'process_name':'请输入标签',";
-				        strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
-				        strs += "}";
-				        strs = eval("(" + strs + ")");
+                        //添加标签样式与坐标
+                        data = JSON.parse(data);
+                        var strs = "";
+                        strs += "{'id':'" + data.MyPK + "',";
+                        strs += "'flow_id':'" + data.FK_Flow + "',";
+                        strs += "'process_name':'请输入标签',";
+                        strs += "'style':'width:auto;height:30px;line-height:30px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                        strs += "}";
+                        strs = eval("(" + strs + ")");
 
-				        if (_canvas.addLabProcess(strs) == false) //添加
-				        {
-				            alert("添加失败");
-				            return;
-				        }
-				    },
-				    "cmPaste": function (t) {
-				        var pasteId = _canvas.paste(); //右键当前的ID
-				        if (pasteId <= 0) {
-				            alert("你未复制任何步骤");
-				            return;
-				        }
-				        alert("粘贴:" + pasteId);
-				    },
-				    "cmHelp": function (t) {
+                        if (_canvas.addLabProcess(strs) == false) //添加
+                        {
+                            alert("添加失败");
+                            return;
+                        }
+                    },
+                    "cmPaste": function (t) {
+                        var pasteId = _canvas.paste(); //右键当前的ID
+                        if (pasteId <= 0) {
+                            alert("你未复制任何步骤");
+                            return;
+                        }
+                        alert("粘贴:" + pasteId);
+                    },
+                    "cmHelp": function (t) {
 
-				        Help();
-				    }
-				}
+                        Help();
+                    }
+                }
                 /*步骤右键*/
-				, processMenus: {
+                , processMenus: {
 
 
-				    "pmBegin": function (t) {
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        alert("设为第一步:" + activeId);
-				    },
-				    "pmAddson": function (t)//添加子步骤
-				    {
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				    },
-				    "pmCopy": function (t) {
-				        //var activeId = _canvas.getActiveId();//右键当前的ID
-				        _canvas.copy(); //右键当前的ID
-				        alert("复制成功");
-				    },
-				    "pmDelete": function (t) {
+                    "pmBegin": function (t) {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        alert("设为第一步:" + activeId);
+                    },
+                    "pmAddson": function (t)//添加子步骤
+                    {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                    },
+                    "pmCopy": function (t) {
+                        //var activeId = _canvas.getActiveId();//右键当前的ID
+                        _canvas.copy(); //右键当前的ID
+                        alert("复制成功");
+                    },
+                    "pmDelete": function (t) {
 
-				        var activeId = _canvas.getActiveId(); //右键当前的ID.
-				        var str = activeId.substring(activeId.length - 2);
-				        if (str == "01") {
-				            /*如果是开始节点. */
-				            alert('开始节点不允许删除.');
-				            return;
-				        }
+                        var activeId = _canvas.getActiveId(); //右键当前的ID.
+                        var str = activeId.substring(activeId.length - 2);
+                        if (str == "01") {
+                            /*如果是开始节点. */
+                            alert('开始节点不允许删除.');
+                            return;
+                        }
 
-				        if (confirm("你确定删除节点吗？如果当前节点有待办或者有数据，系统将拒绝删除。") == false)
-				            return;
+                        if (confirm("你确定删除节点吗？如果当前节点有待办或者有数据，系统将拒绝删除。") == false)
+                            return;
 
-				        //节点.
-				        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
-				        hander.AddPara("FK_Node", activeId);
-				        var data = hander.DoMethodReturnString("DeleteNode");
-				        if (data.indexOf('err@') == 0) {
-				            alert(data); //删除失败的情况.
-				            return;
-				        }
-				        _canvas.delProcess(activeId);
+                        //节点.
+                        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                        hander.AddPara("FK_Node", activeId);
+                        var data = hander.DoMethodReturnString("DeleteNode");
+                        if (data.indexOf('err@') == 0) {
+                            alert(data); //删除失败的情况.
+                            return;
+                        }
+                        _canvas.delProcess(activeId);
 
-				    },
-				    "pmAttribute": function (t) {
-				        //节点属性.
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeAttr(activeId);
-				    },
-				    "pmAttributeOld": function (t) {
-				        //节点属性.
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeAttrOld(activeId);
-				    },
-				    "pmFrmSln": function (t) {
-				        //表单方案.
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeFrmSln(activeId); //表单方案.
-				    },
-				    "pmFrmD": function (t) {
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeFrmD(activeId);
-				    },
-				    "pmFrmFool": function (t) {
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeFrmFool(activeId);
-				    },
-				    "pmFrmFree": function (t) {
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeFrmFree(activeId); cAlert
-				    },
-				    "pmNodeAccepterRole": function (t) {
+                    },
+                    "pmAttribute": function (t) {
+                        //节点属性.
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeAttr(activeId);
+                    },
+                    "pmAttributeOld": function (t) {
+                        //节点属性.
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeAttrOld(activeId);
+                    },
+                    "pmFrmSln": function (t) {
+                        //表单方案.
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeFrmSln(activeId); //表单方案.
+                    },
+                    "pmFrmD": function (t) {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeFrmD(activeId);
+                    },
+                    "pmFrmFool": function (t) {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeFrmFool(activeId);
+                    },
+                    "pmFrmFree": function (t) {
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeFrmFree(activeId); cAlert
+                    },
+                    "pmNodeAccepterRole": function (t) {
 
-				        var activeId = _canvas.getActiveId(); //右键当前的ID
-				        NodeAccepterRole(activeId);
+                        var activeId = _canvas.getActiveId(); //右键当前的ID
+                        NodeAccepterRole(activeId);
 
-				    }
-				},
+                    }
+                },
                 canvasLabMenu: {
                     "clmDelete": function (t) {
                         var activeId = _canvas.getActiveId(); //右键当前的ID.
@@ -669,33 +663,33 @@
                         labAlert(xiuNodename);
                     }
                 }
-				, fnRepeat: function () {
-				    //alert("步骤连接重复1");//可使用 jquery ui 或其它方式提示
-				    mAlert("步骤连接重复了，请重新连接");
+                , fnRepeat: function () {
+                    //alert("步骤连接重复1");//可使用 jquery ui 或其它方式提示
+                    mAlert("步骤连接重复了，请重新连接");
 
-				}
-				, fnClick: function () {
-				    //点击修改名称方法
-				    var activeId = _canvas.getActiveId(); //右键当前的ID
-				    var windowtext = $("#window" + activeId).text();
-				    var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
-				    var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(\"" + activeId + "\")");
+                }
+                , fnClick: function () {
+                    //点击修改名称方法
+                    var activeId = _canvas.getActiveId(); //右键当前的ID
+                    var windowtext = $("#window" + activeId).text();
+                    var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                    var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(\"" + activeId + "\")");
 
-				    windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
+                    windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
 
 
-				    var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
-				    var spanaa = $("#window" + activeId + " span").html();
+                    var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
+                    var spanaa = $("#window" + activeId + " span").html();
 
-				    cAlert(xiuNodename);
+                    cAlert(xiuNodename);
 
-				}
-				, fnDbClick: function () {
-				    //和 pmAttribute 一样
-				    var activeId = _canvas.getActiveId(); //右键当前的ID
-				    NodeAttr(activeId);
+                }
+                , fnDbClick: function () {
+                    //和 pmAttribute 一样
+                    var activeId = _canvas.getActiveId(); //右键当前的ID
+                    NodeAttr(activeId);
 
-				}
+                }
             });
 
             /*保存*/
@@ -773,9 +767,9 @@
                         continue;
 
                     if (nodeID == undefined
-						|| nodeID == null
-						|| nodeID == "undefined"
-						|| nodeID == 'undefined') {
+                        || nodeID == null
+                        || nodeID == "undefined"
+                        || nodeID == 'undefined') {
                         continue;
                     }
 
@@ -784,9 +778,9 @@
                         var toNodeID = toNodes[i];
 
                         if (toNodeID == undefined
-							|| toNodeID == null
-							|| toNodeID == "undefined"
-							|| toNodeID == 'undefined') {
+                            || toNodeID == null
+                            || toNodeID == "undefined"
+                            || toNodeID == 'undefined') {
 
                             var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
                             alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');
@@ -890,9 +884,9 @@
                         continue;
 
                     if (nodeID == undefined
-						|| nodeID == null
-						|| nodeID == "undefined"
-						|| nodeID == 'undefined') {
+                        || nodeID == null
+                        || nodeID == "undefined"
+                        || nodeID == 'undefined') {
                         continue;
                     }
 
@@ -901,9 +895,9 @@
                         var toNodeID = toNodes[i];
 
                         if (toNodeID == undefined
-							|| toNodeID == null
-							|| toNodeID == "undefined"
-							|| toNodeID == 'undefined') {
+                            || toNodeID == null
+                            || toNodeID == "undefined"
+                            || toNodeID == 'undefined') {
 
                             var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
                             alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');

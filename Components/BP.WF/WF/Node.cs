@@ -1202,6 +1202,21 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsGuestNode, value);
             }
         }
+
+        /// <summary>
+        /// 是否启用子流程运行当前节点，主流程自动运行到下一节点
+        /// </summary>
+        public bool IsToParentNextNode
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsToParentNextNode);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.IsToParentNextNode, value);
+            }
+        }
         /// <summary>
         /// 是否是开始节点
         /// </summary>
@@ -2597,6 +2612,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
 
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
+                map.AddTBInt(NodeAttr.IsToParentNextNode, 0, "子流程运行到该节点时，让父流程自动运行到下一步", false, false);
 
                 //map.AddTBString(NodeAttr.FK_FlowSort, null, "FK_FlowSort", false, true, 0, 4, 10);
                 //map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);

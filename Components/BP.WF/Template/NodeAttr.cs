@@ -379,6 +379,10 @@ namespace BP.WF.Template
         /// 自定义参数字段
         /// </summary>
         public const string SelfParas = "SelfParas";
+        /// <summary>
+        /// 子流程运行到该节点时，让父流程自动运行到下一步
+        /// </summary>
+        public const string IsToParentNextNode = "IsToParentNextNode";
         #endregion
 
         #region 父子流程

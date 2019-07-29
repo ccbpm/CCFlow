@@ -4377,6 +4377,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 是否启用子流程运行结束后，主流程自动运行到下一节点
+        /// </summary>
+        public bool IsToParentNextNode
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsToParentNextNode);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.IsToParentNextNode, value);
+            }
+        }
+        /// <summary>
         /// 节点
         /// </summary>
         private Nodes _HisNodes = null;
@@ -4554,7 +4568,7 @@ namespace BP.WF
 
                 //运行主机. 这个流程运行在那个子系统的主机上.
                 map.AddTBString(FlowAttr.HostRun, null, "运行主机(IP+端口)", true, false, 0, 40, 10, true);
-
+                map.AddTBInt(FlowAttr.IsToParentNextNode, 0, "子流程运行到该节点时，让父流程自动运行到下一步", false, false);
 
                 #region 流程启动限制
                 map.AddTBInt(FlowAttr.StartLimitRole, 0, "启动限制规则", true, false);

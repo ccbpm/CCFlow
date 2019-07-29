@@ -564,7 +564,17 @@ namespace BP.WF
         /// <summary>
         /// 按照表达式阻塞，表达式类似方向条件的表达式.
         /// </summary>
-        ByExp
+        ByExp,
+        /// <summary>
+        /// 为父流程时，指定的子流程未运行到指定节点，则阻塞
+        /// </summary>
+        SpecSubFlowNode,
+        /// <summary>
+        /// 为平级子流程时，指定的子流程未运行到指定节点，则阻塞
+        /// </summary>
+        TB_SameLevelSubFlow
+
+
     }
     /// <summary>
     /// 节点工作批处理

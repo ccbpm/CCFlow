@@ -2298,6 +2298,8 @@ namespace BP.WF
             if (this.IsStopFlow == false)
                 this.HisGenerWorkFlow.Update();
 
+          
+
             return BP.WF.Glo.multilingual("@流程已经完成.", "WorkNode", "workflow_completed");
         }
         #endregion 附属功能
@@ -5494,7 +5496,7 @@ namespace BP.WF
                 GenerWorkFlows gwls = new GenerWorkFlows();
                 if (this.HisNode.HisRunModel == RunModel.SubThread)
                 {
-                    /*如果是子线程,仅仅检查自己子线程上发起的workid.*/
+                    /*如果是子流程,仅仅检查自己子流程上发起的workid.*/
                     QueryObject qo = new QueryObject(gwls);
                     qo.AddWhere(GenerWorkFlowAttr.PWorkID, this.WorkID);
                     qo.addAnd();
@@ -5625,7 +5627,9 @@ namespace BP.WF
                     string sub_wf_step = BP.WF.Glo.multilingual(",运行到节点:", "WorkNode", "current_step");
 
                     foreach (GenerWorkFlow gwf in gwls)
-                        err += sub_wf_id + gwf.WorkID + sub_wf_name + gwf.FlowName + sub_wf_title + gwf.Title + sub_wf_operator + gwf.TodoEmps + sub_wf_step + gwf.NodeName;
+                        err += BP.WF.Glo.multilingual("@子流程ID:{0}", "WorkNode", "sub_workflow_id", gwf.WorkID.ToString()) + "\n" + BP.WF.Glo.multilingual(",子流程名称:{0}", "WorkNode", "sub_workflow_title", gwf.FlowName)
+                                                   + "\n" + BP.WF.Glo.multilingual(",子流程标题:{0}", "WorkNode", "sub_workflow_title", gwf.Title) + "\n" + BP.WF.Glo.multilingual(",当前执行人:{0}", "WorkNode", "current_operator", gwf.TodoEmps)
+                                                   + "\n" + BP.WF.Glo.multilingual(",运行到节点:{0}", "WorkNode", "current_step", gwf.NodeName);
                 }
 
                 if (DataType.IsNullOrEmpty(err) == true)
@@ -5747,6 +5751,179 @@ namespace BP.WF
                 throw new Exception(BP.WF.Glo.multilingual("@阻塞模式参数配置格式错误:{0}.", "WorkNode", "error_in_param_setting", expression1));
                 #endregion 开始执行判断.
             }
+
+            //为父流程时，指定的子流程未运行到指定节点，则阻塞
+            if (this.HisNode.BlockModel == BlockModel.SpecSubFlowNode)
+            {
+                /*如果按照特定的格式判断阻塞*/
+                string exp = this.HisNode.BlockExp;
+                if (exp.Contains("@") == false)
+                    throw new Exception(BP.WF.Glo.multilingual("@设置错误，该节点的阻塞配置格式({0})错误，请参考帮助来解决。", "WorkNode", "error_in_param_setting", exp));
+
+
+                string[] strs = exp.Split('@');
+                string err = "";
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    if (str.Contains("=") == false)
+                        throw new Exception(BP.WF.Glo.multilingual("@阻塞设置的格式不正确:{0}.", "WorkNode", "error_in_param_setting", str));
+
+
+                    string[] nodeFlow = str.Split('=');
+                    int nodeid = int.Parse(nodeFlow[0]); //启动子流程的节点.
+                    int subFlowNode = int.Parse(nodeFlow[1]); //子流程的节点
+                    Node subNode = new Node(subFlowNode);
+                    GenerWorkFlows gwfs = new GenerWorkFlows();
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+
+                    if (this.HisNode.HisRunModel == RunModel.SubThread)
+                    {
+                        /* 如果是子线程，就不需要管，主干节点的问题。*/
+                        QueryObject qo = new QueryObject(gwfs);
+                        qo.AddWhere(GenerWorkFlowAttr.PWorkID, this.WorkID);
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.PNodeID, nodeid);
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.PFlowNo, this.HisFlow.No);
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.FK_Flow, subNode.FK_Flow);
+                        qo.DoQuery();
+                        //该子流程已经运行
+                        if (gwfs.Count != 0)
+                        {
+                            GenerWorkFlow gwf= (GenerWorkFlow)gwfs[0];
+                            if (gwf.WFState==WFState.Complete) //子流程结束
+                                continue;
+
+                            //判断是否运行到指定的节点
+                            long workId = gwf.WorkID;
+                            gwls.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID, GenerWorkerListAttr.FK_Node, subFlowNode,GenerWorkerListAttr.IsPass,1);
+                            if (gwls.Count != 0)
+                                continue;
+                        }
+
+                    }
+                    else
+                    {
+                        /* 非子线程，就需要考虑，从该节点上，发起的子线程的 ，主干节点的问题。*/
+                        QueryObject qo = new QueryObject(gwfs);
+
+                        qo.addLeftBracket();
+                        qo.AddWhere(GenerWorkFlowAttr.PFID, this.WorkID);
+                        qo.addOr();
+                        qo.AddWhere(GenerWorkFlowAttr.PWorkID, this.WorkID);
+                        qo.addRightBracket();
+
+                        qo.addAnd();
+
+                        qo.addLeftBracket();
+                        qo.AddWhere(GenerWorkFlowAttr.PNodeID, nodeid);
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.PFlowNo, this.HisFlow.No);
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.FK_Flow, subNode.FK_Flow);
+                        qo.addRightBracket();
+
+                        qo.DoQuery();
+                        //该子流程已经运行
+                        if (gwfs.Count != 0)
+                        {
+                            GenerWorkFlow gwf = (GenerWorkFlow)gwfs[0];
+                            if (gwf.WFState == WFState.Complete) //子流程结束
+                                continue;
+
+                            //判断是否运行到指定的节点
+                            long workId = gwf.WorkID;
+                            gwls.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID, GenerWorkerListAttr.FK_Node, subFlowNode, GenerWorkerListAttr.IsPass, 1);
+                            if (gwls.Count != 0)
+                                continue;
+                        }
+                    }
+
+                    err += BP.WF.Glo.multilingual("@如下子流程没有完成，你不能向下发送。@---------------------------------", "WorkNode", "cannot_send_to_next_1");
+                    string sub_wf_id = BP.WF.Glo.multilingual("@子流程ID:", "WorkNode", "sub_workflow_id");
+                    string sub_wf_name = BP.WF.Glo.multilingual(",子流程名称:", "WorkNode", "sub_workflow_title");
+                    string sub_wf_title = BP.WF.Glo.multilingual(",子流程标题:", "WorkNode", "sub_workflow_title");
+                    string sub_wf_operator = BP.WF.Glo.multilingual(",当前执行人:", "WorkNode", "current_operator");
+                    string sub_wf_step = BP.WF.Glo.multilingual(",运行到节点:", "WorkNode", "current_step");
+
+                    foreach (GenerWorkFlow gwf in gwfs)
+                        err += BP.WF.Glo.multilingual("@子流程ID:{0}", "WorkNode", "sub_workflow_id", gwf.WorkID.ToString()) + "\n" + BP.WF.Glo.multilingual(",子流程名称:{0}", "WorkNode", "sub_workflow_title", gwf.FlowName)
+                                                   + "\n" + BP.WF.Glo.multilingual(",子流程标题:{0}", "WorkNode", "sub_workflow_title", gwf.Title) + "\n" + BP.WF.Glo.multilingual(",当前执行人:{0}", "WorkNode", "current_operator", gwf.TodoEmps)
+                                                   + "\n" + BP.WF.Glo.multilingual(",运行到节点:{0}", "WorkNode", "current_step", gwf.NodeName);
+                }
+
+                if (DataType.IsNullOrEmpty(err) == true)
+                    return;
+
+                err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
+                throw new Exception(err);
+            }
+
+            //为平级流程时，指定的子流程未运行到指定节点，则阻塞
+            if (this.HisNode.BlockModel == BlockModel.TB_SameLevelSubFlow)
+            {
+                /*如果按照特定的格式判断阻塞*/
+                string exp = this.HisNode.BlockExp;
+               
+                string[] strs = exp.Split(',');
+                string err = "";
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    int nodeid = int.Parse(str); //平级子流程的节点
+                    Node subNode = new Node(nodeid);
+                    GenerWorkFlows gwfs = new GenerWorkFlows();
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+
+                   
+                    QueryObject qo = new QueryObject(gwfs);
+                    qo.AddWhere(GenerWorkFlowAttr.PWorkID, this.HisGenerWorkFlow.PWorkID);
+                    qo.addAnd();
+                    qo.AddWhere(GenerWorkFlowAttr.PNodeID, nodeid);
+                    qo.addAnd();
+                    qo.AddWhere(GenerWorkFlowAttr.PFlowNo, this.HisGenerWorkFlow.PFlowNo);
+                    qo.addAnd();
+                    qo.AddWhere(GenerWorkFlowAttr.FK_Flow, subNode.FK_Flow);
+                    qo.DoQuery();
+                    //该子流程已经运行
+                    if (gwfs.Count != 0)
+                    {
+                        GenerWorkFlow gwf = (GenerWorkFlow)gwfs[0];
+                        if (gwf.WFState == WFState.Complete) //子流程结束
+                            continue;
+
+                        //判断是否运行到指定的节点
+                        long workId = gwf.WorkID;
+                        gwls.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID, GenerWorkerListAttr.FK_Node, nodeid, GenerWorkerListAttr.IsPass, 1);
+                        if (gwls.Count != 0)
+                            continue;
+                    }
+                    err += BP.WF.Glo.multilingual("@如下子流程没有完成，你不能向下发送。@---------------------------------", "WorkNode", "cannot_send_to_next_1");
+                    string sub_wf_id = BP.WF.Glo.multilingual("@子流程ID:", "WorkNode", "sub_workflow_id");
+                    string sub_wf_name = BP.WF.Glo.multilingual(",子流程名称:", "WorkNode", "sub_workflow_title");
+                    string sub_wf_title = BP.WF.Glo.multilingual(",子流程标题:", "WorkNode", "sub_workflow_title");
+                    string sub_wf_operator = BP.WF.Glo.multilingual(",当前执行人:", "WorkNode", "current_operator");
+                    string sub_wf_step = BP.WF.Glo.multilingual(",运行到节点:", "WorkNode", "current_step");
+
+                    foreach (GenerWorkFlow gwf in gwfs)
+                        err += BP.WF.Glo.multilingual("@子流程ID:{0}", "WorkNode", "sub_workflow_id", gwf.WorkID.ToString()) + "\n" + BP.WF.Glo.multilingual(",子流程名称:{0}", "WorkNode", "sub_workflow_title", gwf.FlowName)
+                                                  + "\n" + BP.WF.Glo.multilingual(",子流程标题:{0}", "WorkNode", "sub_workflow_title", gwf.Title) + "\n" + BP.WF.Glo.multilingual(",当前执行人:{0}", "WorkNode", "current_operator", gwf.TodoEmps)
+                                                  + "\n" + BP.WF.Glo.multilingual(",运行到节点:{0}", "WorkNode", "current_step", gwf.NodeName);
+                }
+
+                if (DataType.IsNullOrEmpty(err) == true)
+                    return;
+
+                err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
+                throw new Exception(err);
+            }
+
 
             throw new Exception("@该阻塞模式没有实现...");
         }
@@ -5993,6 +6170,18 @@ namespace BP.WF
 
                 //执行考核
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
+
+                //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
+                if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisFlow.IsToParentNextNode == true)
+                {
+                    //主流程自动运行到一下节点
+                   SendReturnObjs returnObjs =   BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
+
+                    sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                    this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+                }
+
                 return this.HisMsgObjs;
             }
 
@@ -6501,6 +6690,15 @@ namespace BP.WF
                         }
                     }
 
+                    //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
+                    if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisFlow.IsToParentNextNode == true)
+                    {
+                        //主流程自动运行到一下节点
+                        SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
+                        sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                        this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                    }
+
                     return HisMsgObjs;
                 }
 
@@ -6522,6 +6720,14 @@ namespace BP.WF
                     this.rptGe.WFState = WFState.Complete;
                     this.Func_DoSetThisWorkOver();
                     this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+                    //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
+                    if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisFlow.IsToParentNextNode == true)
+                    {
+                        //主流程自动运行到一下节点
+                        SendReturnObjs returnObjs =  BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo,this.HisGenerWorkFlow.PWorkID);
+                        string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                        this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                    }
                 }
                 else
                 {
@@ -6530,6 +6736,15 @@ namespace BP.WF
                         BP.DA.DBAccess.RunSQL("UPDATE WF_ReturnWork SET IsBackTracking=0 WHERE WorkID=" + this.WorkID);
 
                     this.Func_DoSetThisWorkOver();
+
+                    //判断当前流程是子流程，并且启用运行到该节点时主流程自动运行到下一个节点@yuan
+                    if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisNode.IsToParentNextNode == true)
+                    {
+                        SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
+                        string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" +returnObjs.VarAcceptersName+"\n @下一步["+ returnObjs.VarCurrNodeName + "]启动";
+                        this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                    }
+
                     if (town != null && town.HisNode.HisBatchRole == BatchRole.Group)
                     {
                         this.HisGenerWorkFlow.WFState = WFState.Batch;

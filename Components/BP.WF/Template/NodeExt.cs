@@ -356,6 +356,8 @@ namespace BP.WF.Template
 
 
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
+
+                map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true);
                 #endregion  基础属性
 
                 #region 分合流子线程属性

@@ -275,6 +275,10 @@ namespace BP.WF.Template
         /// 删除规则
         /// </summary>
         public const string FlowDeleteRole = "FlowDeleteRole";
+        /// <summary>
+        /// 子流程结束时，让父流程自动运行到下一步
+        /// </summary>
+        public const string IsToParentNextNode = "IsToParentNextNode";
         #endregion 父子流程
 
         #region 数据同步方式.

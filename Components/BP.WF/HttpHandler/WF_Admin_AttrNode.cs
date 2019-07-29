@@ -1541,6 +1541,17 @@ namespace BP.WF.HttpHandler
                 nd.BlockExp = this.GetRequestVal("TB_Exp");
             }
 
+            if (nd.BlockModel == BP.WF.BlockModel.SpecSubFlowNode)
+            {
+                nd.BlockModel = BP.WF.BlockModel.SpecSubFlowNode;
+                nd.BlockExp = this.GetRequestVal("TB_SpecSubFlowNode");
+            }
+            if (nd.BlockModel == BP.WF.BlockModel.TB_SameLevelSubFlow)
+            {
+                nd.BlockModel = BP.WF.BlockModel.TB_SameLevelSubFlow;
+                nd.BlockExp = this.GetRequestVal("TB_TB_SameLevelSubFlow");
+            }
+
             nd.BlockAlert = this.GetRequestVal("TB_Alert");
             nd.Update();
 

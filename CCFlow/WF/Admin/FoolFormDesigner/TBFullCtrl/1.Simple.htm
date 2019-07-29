@@ -16,7 +16,7 @@
             InitBar("Simple");
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") ;
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn")+"_FullData" ;
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             //批量为复制.
@@ -50,13 +50,13 @@
             en.Update();
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn")+"_FullData";
             var n = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
 
-            mapExt.ExtType = "TBFullCtrl";
+            mapExt.ExtType = "FullData";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
             var sql = $("#TB_Doc").val();

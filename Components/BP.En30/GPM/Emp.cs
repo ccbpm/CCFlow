@@ -386,6 +386,21 @@ namespace BP.GPM
 
             return base.beforeUpdateInsertAction();
         }
+        /// <summary>
+        /// 保存后修改WF_Emp中的邮箱
+        /// </summary>
+        protected override void afterInsertUpdateAction()
+        {
+            string sql = "Select Count(*) From WF_Emp Where No='" + this.No + "'";
+            int count = DBAccess.RunSQLReturnValInt(sql);
+            if (count == 0)
+                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('"+this.No+"','"+this.Name+"','"+this.Email+"')";
+            else
+                sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
+            DBAccess.RunSQL(sql);
+
+             base.afterInsertUpdateAction();
+        }
         public static string GenerPinYin(string no,string name)
         {
             //增加拼音，以方便查找.

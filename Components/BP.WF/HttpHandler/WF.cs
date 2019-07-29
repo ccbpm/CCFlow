@@ -750,6 +750,7 @@ namespace BP.WF.HttpHandler
             {
                 em.FK_Dept = BP.Web.WebUser.FK_Dept;
                 em.Name = Web.WebUser.Name;
+                em.Email = new BP.GPM.Emp(WebUser.No).Email;
                 em.Insert();
             }
             string json = em.StartFlows;

@@ -45,6 +45,12 @@
                 case "4":
                     $("#TB_Exp").val(node.BlockExp);
                     break;
+                 case "5":
+                    $("#TB_SpecSubFlowNode").val(node.BlockExp);
+                    break;
+                 case "6":
+                    $("#TB_TB_SameLevelSubFlow").val(node.BlockExp);
+                    break;
                 default:
                     break;
             }
@@ -83,8 +89,7 @@
             <td valign="top">
                 <fieldset>
                     <legend>
-                        <input type="radio" id="RB_BlockModel_0" value="0" name="RB_BlockModel" runat="server" /><label
-                            for="RB_BlockModel_0">不阻塞</label>
+                        <input type="radio" id="RB_BlockModel_0" value="0" name="RB_BlockModel" runat="server" /><label for="RB_BlockModel_0">不阻塞</label>
                     </legend>
                     <ul style="color: Gray;">
                         <li>默认模式，不阻塞。</li>
@@ -93,17 +98,18 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <input type="radio" id="RB_BlockModel_1" value="1" runat="server" name="RB_BlockModel" /><label
-                            for="RB_BlockModel_1">当前节点有未完成的子流程时</label></legend>
+                        <input type="radio" id="RB_BlockModel_1" value="1" runat="server" name="RB_BlockModel" /><label for="RB_BlockModel_1">当前节点有未完成的子流程时</label>
+                    </legend>
                     <ul style="color: Gray;">
                         <li>当前节点吊起了子流程，并且有未完成的子流程时就不能向下运动。</li>
                     </ul>
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <input type="radio" id="RB_BlockModel_2" value="2" runat="" name="RB_BlockModel" /><label
-                            for="RB_BlockModel_2">按约定格式阻塞未完成子流程</label></legend><a href="javascript:ShowHidden('flows')">
-                                请设置表达式:</a>
+                        <input type="radio" id="RB_BlockModel_2" value="2" runat="" name="RB_BlockModel" /><label for="RB_BlockModel_2">按约定格式阻塞未完成子流程</label>
+                    </legend><a href="javascript:ShowHidden('flows')">
+                        请设置表达式:
+                    </a>
                     <div id="flows" style="color: Gray; display: none">
                         <ul>
                             <li>当该节点向下运动时，要检查指定的历史节点曾经启动的指定的子流程全部完成，作为条件。</li>
@@ -115,9 +121,40 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <input type="radio" id="RB_BlockModel_3" value="3" runat="server" name="RB_BlockModel" /><label
-                            for="RB_BlockModel_3">按照SQL阻塞</label></legend><a href="javascript:ShowHidden('sql')">
-                                请输入SQL:</a>
+                        <input type="radio" id="RB_BlockModel_5" value="5" runat="" name="RB_BlockModel" /><label for="RB_BlockModel_5">是否启用为父流程时，子流程未运行到指定的节点</label>
+                    </legend><a href="javascript:ShowHidden('SpecSubFlow')">
+                        请设置表达式:
+                    </a>
+                    <div id="SpecSubFlow" style="color: Gray; display: none">
+                        <ul>
+                            <li>当该节点向下运动时，要检查指定的子流程是否运行过指定的节点，作为条件。</li>
+                            <li>例如：在D节点上，要检查启动的子流程是否全部运行到指定的节点，如果完成就不阻塞。</li>
+                            <li>配置格式：@指定的节点1=子流程节点编号1@指定的节点n=子流程节点编号n。。</li>
+                        </ul>
+                    </div>
+                    <input type="text" id="TB_SpecSubFlowNode" name="TB_SpecSubFlowNode" runat="server" style="width: 95%" />
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input type="radio" id="RB_BlockModel_6" value="6" runat="" name="RB_BlockModel" /><label for="RB_BlockModel_6">是否启用为平级子流程时，子流程未运行到指定的节点</label>
+                    </legend><a href="javascript:ShowHidden('SameLevelSubFlow')">
+                        请设置表达式:
+                    </a>
+                    <div id="SameLevelSubFlow" style="color: Gray; display: none">
+                        <ul>
+                            <li>当该节点向下运动时，要检查指定平级子流程是否运行过指定的节点，作为条件。</li>
+                            <li>例如：在D节点上，要检查启动的平级子流程是否全部运行到指定的节点，如果完成就不阻塞。</li>
+                            <li>配置格式：402，503。</li>
+                        </ul>
+                    </div>
+                    <input type="text" id="TB_SameLevelSubFlow" name="TB_SameLevelSubFlow" runat="server" style="width: 95%" />
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input type="radio" id="RB_BlockModel_3" value="3" runat="server" name="RB_BlockModel" /><label for="RB_BlockModel_3">按照SQL阻塞</label>
+                    </legend><a href="javascript:ShowHidden('sql')">
+                        请输入SQL:
+                    </a>
                     <div id="sql" style="color: Gray; display: none">
                         <ul>
                             <li>配置一个SQL，该SQL返回一行一列的数值类型的值。</li>
@@ -126,13 +163,14 @@
                         </ul>
                     </div>
                     <input type="text" id="TB_SQL" name="TB_SQL" runat="server" textmode="MultiLine"
-                        rows="1" style="width: 95%" />
+                           rows="1" style="width: 95%" />
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <input type="radio" id="RB_BlockModel_4" value="4" runat="server" name="RB_BlockModel" /><label
-                            for="RB_BlockModel_4">按照表达式阻塞</label></legend><a href="javascript:ShowHidden('exp')">
-                                请输入表达式:</a>
+                        <input type="radio" id="RB_BlockModel_4" value="4" runat="server" name="RB_BlockModel" /><label for="RB_BlockModel_4">按照表达式阻塞</label>
+                    </legend><a href="javascript:ShowHidden('exp')">
+                        请输入表达式:
+                    </a>
                     <div id="exp" style="color: Gray; display: none">
                         <ul>
                             <li>配置一个表达式, 比如: @MyFieldName = 1 该表达式成立的时候，系统就不能向下发送。 </li>

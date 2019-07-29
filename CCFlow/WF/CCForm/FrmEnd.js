@@ -310,7 +310,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
         //处理文本自动填充
         var TBModel = mapAttr.GetPara("TBFullCtrl");
-        if (TBModel != "" && TBModel != "None" && (mapExt.ExtType == "TBFullCtrl")) {
+        if (TBModel != "" && TBModel != "None" && (mapExt.ExtType == "FullData")) {
             var tbAuto = $("#TB_" + mapExt.AttrOfOper);
             if (tbAuto == null)
                 continue;

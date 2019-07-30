@@ -1330,7 +1330,7 @@ namespace BP.WF.HttpHandler
                     if (uiIsEnable.Equals("0") == true && lgType.Equals("1") == true)
                         continue; //如果是外键，并且是不可以编辑的状态.
 
-                    if (uiIsEnable.Equals("1") == true && lgType.Equals("0") == true)
+                    if (uiIsEnable.Equals("0") == true && lgType.Equals("0") == true)
                         continue; //如果是外部数据源，并且是不可以编辑的状态.
 
 

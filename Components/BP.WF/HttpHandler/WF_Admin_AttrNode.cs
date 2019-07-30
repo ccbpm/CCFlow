@@ -205,29 +205,22 @@ namespace BP.WF.HttpHandler
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
             //短信手机字段.
-            msg.SMSField = HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
-            //替换变量
-            string smsstr = HttpContext.Current.Request["TB_SMS"].ToString();
-            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
-            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
-            // smsstr = smsstr.Replace("@RDT",);
+            msg.SMSField = this.GetRequestVal("DDL_SMS_Fields");
             //短信内容模版.
-            msg.SMSDoc_Real = smsstr;
+            msg.SMSDoc_Real = this.GetRequestVal("TB_SMS");
+ 
             #endregion 短信保存.
 
             #region 邮件保存.
             //邮件.
-            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
+            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); 
 
             //邮件标题与内容.
-            msg.MailTitle_Real = HttpContext.Current.Request["TB_Email_Title"].ToString();
-            msg.MailDoc_Real = HttpContext.Current.Request["TB_Email_Doc"].ToString();
+            msg.MailTitle_Real = this.GetRequestVal("TB_Email_Title"); 
+            msg.MailDoc_Real = this.GetRequestVal("TB_Email_Doc");
 
             //邮件地址.
-            msg.MailAddress = HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
+            msg.MailAddress = this.GetRequestVal("DDL_Email_Fields"); 
 
             #endregion 邮件保存.
 

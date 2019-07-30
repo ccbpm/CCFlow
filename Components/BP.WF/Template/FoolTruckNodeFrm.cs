@@ -139,7 +139,6 @@ namespace BP.WF.Template
                 sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
                 sql += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
                 DBAccess.RunSQLs(sql);
-               
             }
             return base.beforeUpdate();
         }

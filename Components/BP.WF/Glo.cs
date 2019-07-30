@@ -84,7 +84,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string multilingual(string defaultMsg, string className, string key, string[] paramList)
         {
-            if (BP.Web.WebUser.SysLang.Equals("zh-cn"))
+            if (BP.Web.WebUser.SysLang.Equals("zh-cn") || BP.Web.WebUser.SysLang.Equals("CH"))
                 return String.Format(defaultMsg, paramList);
 
 
@@ -527,7 +527,7 @@ namespace BP.WF
 
                 if (dbtype == DBType.Oracle)
                 {
-                    DBAccess.RunSQL("ALTER TABLE  WF_EMP add startFlows_temp BLOB");
+                    DBAccess.RunSQL("ALTER TABLE  WF_EMP add startFlows_temp CLOB");
                     //将需要改成大字段的项内容copy到大字段中
                     DBAccess.RunSQL("UPDate WF_EMP set startFlows_temp=STARTFLOWS");
                     //删除原有字段
@@ -3781,6 +3781,7 @@ namespace BP.WF
                     emp.No = BP.Web.WebUser.No;
                     emp.Name = BP.Web.WebUser.Name;
                     emp.FK_Dept = BP.Web.WebUser.FK_Dept;
+                    emp.Email = new BP.GPM.Emp(WebUser.No).Email;
                     emp.Insert();
                     DBAccess.RunSQL(p);
                 }

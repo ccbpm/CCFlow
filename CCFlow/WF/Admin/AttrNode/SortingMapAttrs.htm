@@ -246,23 +246,24 @@
                     //分组的下移、上移按钮
                     var btnDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
                     var btnUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+                    if (dtGroups[i].CtrlType != "Ath") {
+                        if (dtGroups.length == 1) {
+                        }
+                        else if (i == 0) {//如果是第一个，只显示下移
+                            tr += btnDown;
+                        }
+                        else if (dtGroups[i].Idx == dtGroups.length) { //如果是最后一个，只显示上移
+                            tr += btnUp;
+                        }
+                        else {
+                            tr += btnUp;
+                            tr += btnDown;
+                        }
 
-                    if (dtGroups.length == 1) {
+                        tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
+                        tr += "</td></tr>";
+                        $("#t1").append(tr);
                     }
-                    else if (i == 0) {//如果是第一个，只显示下移
-                        tr += btnDown;
-                    }
-                    else if (dtGroups[i].Idx == dtGroups.length) { //如果是最后一个，只显示上移
-                        tr += btnUp;
-                    }
-                    else {
-                        tr += btnUp;
-                        tr += btnDown;
-                    }
-
-                    tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
-                    tr += "</td></tr>";
-                    $("#t1").append(tr);
 
                     //1.1.1-02、当前分组每个字段一行（循环）
                     var rows_Attrs = $.grep(data.dtAttrs, function (item) {
@@ -305,6 +306,25 @@
                             //TODO 做好筛选条件
                             return item.MyPK == dtGroups[i].CtrlID;
                         });
+                        if (groupOfAthMents[0].IsVisable == "0" || groupOfAthMents[0].IsVisable == false) {
+                            continue;
+                        }
+                         if (dtGroups.length == 1) {
+                        }
+                        else if (i == 0) {//如果是第一个，只显示下移
+                            tr += btnDown;
+                        }
+                        else if (dtGroups[i].Idx == dtGroups.length) { //如果是最后一个，只显示上移
+                            tr += btnUp;
+                        }
+                        else {
+                            tr += btnUp;
+                            tr += btnDown;
+                        }
+
+                        tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
+                        tr += "</td></tr>";
+                        $("#t1").append(tr);
                         //重新生成多附件表头
                         var table = "";
                         table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";

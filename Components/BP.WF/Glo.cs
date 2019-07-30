@@ -249,7 +249,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190701;
+        public static int Ver = 20190702;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -320,6 +320,38 @@ namespace BP.WF
             //MapData md = new MapData();
             //md.FormJson = "";
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
+
+            #region 枚举值
+            SysEnumMains enumMains = new SysEnumMains();
+            enumMains.RetrieveAll();
+            foreach(SysEnumMain enumMain in enumMains)
+            {
+                SysEnums ens = new SysEnums();
+                ens.Delete(SysEnumAttr.EnumKey, enumMain.No);
+
+                //保存数据
+                string cfgVal = enumMain.CfgVal;
+                string[] strs = cfgVal.Split('@');
+                foreach (string s in strs)
+                {
+                    if (s == "" || s == null)
+                        continue;
+
+                    string[] vk = s.Split('=');
+                    SysEnum se = new SysEnum();
+                    se.IntKey = int.Parse(vk[0]);
+                    string[] kvsValues = new string[vk.Length - 1];
+                    for (int i = 0; i < kvsValues.Length; i++)
+                    {
+                        kvsValues[i] = vk[i + 1];
+                    }
+                    se.Lab = string.Join("=", kvsValues);
+                    se.EnumKey = enumMain.No;
+                    se.Lang = BP.Web.WebUser.SysLang;
+                    se.Insert();
+                }
+            }
+            #endregion
 
             #region 升级填充数据.
             //pop自动填充

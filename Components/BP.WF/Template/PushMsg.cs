@@ -931,8 +931,18 @@ namespace BP.WF.Template
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
 
+                        string mail = empEn.Email;
+                        if (DataType.IsNullOrEmpty(mail) == true)
+                        {
+                            BP.GPM.Emp empGPM = new GPM.Emp(emp);
+                            mail = empGPM.Email;
+                            empEn.Email = mail;
+                            empEn.Update();
+                        }
+
                         //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp, paras);
+                        BP.WF.Dev2Interface.Port_SendEmail(mail, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp, paras);
+
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒信息.";
                 }

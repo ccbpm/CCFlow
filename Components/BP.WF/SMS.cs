@@ -519,7 +519,7 @@ namespace BP.WF
             if (emailPassword == null)
                 emailPassword = "ccbpm123";
 
-            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, emailPassword, System.Text.Encoding.UTF8);
+            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, "ccflow工作流系统", System.Text.Encoding.UTF8);
 
             myEmail.To.Add(mail);
             myEmail.Subject = mailTitle;

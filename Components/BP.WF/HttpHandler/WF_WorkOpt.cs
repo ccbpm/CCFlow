@@ -4023,6 +4023,9 @@ namespace BP.WF.HttpHandler
         public string Note_Save()
         {
             string msg = this.GetRequestVal("Msg");
+            //需要删除track表中的数据是否存在备注
+            string sql = "DELETE From ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + WorkID + " AND NDFrom=" + this.FK_Node + " AND EmpFrom='" + WebUser.No+"' And ActionType="+ (int)ActionType.FlowBBS;
+            DBAccess.RunSQL(sql);
             //增加track
             Node nd = new Node(this.FK_Node);
             Glo.AddToTrack(ActionType.FlowBBS, this.FK_Flow, this.WorkID, this.FID, nd.NodeID, nd.Name,  WebUser.No, WebUser.Name,nd.NodeID, nd.Name, WebUser.No, WebUser.Name, msg, null);

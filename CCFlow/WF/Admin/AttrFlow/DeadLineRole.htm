@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>考核规则</title>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            //获取流程编码.
+            var flowNo = GetQueryString("FK_Flow");
+
+
+            //时限规则存储表 WF_Part
+            var part = new Entity("BP.WF.Template.Part");
+            part.SetPKVal(flowNo+"_0_DeadLineRole");
+            var count = part.RetrieveFromDBSources();
+
+
+            //调用公共类库的方法.
+            GenerBindEnumKey("DDL_Tag4", "TWay", "1");
+
+            //执行.
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", flowNo);
+
+//            GenerBindDDL("DDL_Tag5", nodes, "NodeID", "Name");
+//            GenerBindDDL("DDL_Tag6", nodes, "NodeID", "Name");
+
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(part);
+
+            var str = $("#TB_Tag1").val();
+            if (str == null || str == "")
+                $("#TB_Tag1").val(0);
+
+            str = $("#TB_Tag2").val();
+            if (str == null || str == "")
+                $("#TB_Tag2").val(0);
+
+            str = $("#TB_Tag3").val();
+            if (str == null || str == "")
+                $("#TB_Tag3").val(0);
+
+        });
+
+        function Save() {
+
+            //获取流程编码.
+            var flowNo = GetQueryString("FK_Flow");
+
+            //执行查询.
+            var part = new Entity("BP.WF.Template.Part");
+            part.SetPKVal(flowNo + "_0_DeadLineRole");
+            var count = part.RetrieveFromDBSources();
+
+            part.CopyForm(); //复制表单数据.
+            part.MyPK = flowNo + "_0_DeadLineRole";
+            part.FK_Flow = flowNo;
+            part.FK_Node = 0;
+            part.PartType = "DeadLineRole";
+            if (count == 0)
+                part.Insert();
+            else
+                part.Update();
+
+            window.location.href = window.location.href;
+            return;
+        }
+    </script>
+</head>
+<body>
+
+<form id="cc">
+<table style="width:100%;">
+ <caption>设置时限规则</caption>
+<tr>
+<td> 
+<fieldset>
+<legend> <input type=radio value="0"  id="RB_Tag0_0" name="RB_Tag0" checked='checked' > <label for="RB_Tag0_0">不设置 </label> </legend>
+<ul >
+<li style=" color:Gray">默认为不设置时限规则，整个流程没有时间限制。</li>
+</ul>
+</fieldset>
+
+<fieldset>
+<legend><input type="radio" value="1"  id="RB_Tag0_1" name="RB_Tag0" > <label for="RB_Tag0_1">设置时限规则</label></legend>
+
+<table style=" width:100%;">
+<tr>
+<td nowarp=true> 限期完成时限：</td>
+<td> <input type=text id="TB_Tag1" name="TB_Tag1" style="width:30px;" />天,</td>
+<td><input type=text id="TB_Tag2" name="TB_Tag2" style="width:30px;" />小时,</td>
+<td style=" color:Gray"><input type=text id="TB_Tag3" name="TB_Tag3" style="width:30px;" />分钟</td>
+</tr>
+<!--
+<tr>
+<td>预警：</td>
+<td>  <input type=text id="TB_WarningDay" name="TB_WarningDay" /> 天,</td>
+<td> 天数 </td>
+<td style=" color:Gray">天数</td>
+</tr>
+-->
+<tr>
+<td>节假日</td>
+<td> 
+<select name="DDL_Tag4" id="DDL_Tag4" > </select> 
+</td>
+
+<td colspan="2"  >
+<a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');" > 节假日维护</a>
+
+</td>
+</tr>
+<!--<tr>
+<td>时限规则的开始节点</td>
+<td> 
+<select name="DDL_Tag5" id="DDL_Tag5" > </select> 
+</td>
+<td>时限规则的结束节点</td>
+<td> 
+<select name="DDL_Tag6" id="DDL_Tag6" > </select> 
+</td>
+</tr>-->
+<tr>
+<tr>
+<td>预警设置</td>
+<td> 
+<select name="DDL_Tag7" id="DDL_Tag7" > 
+<option value="0">12小时</option>
+<option value="1">24小时</option>
+<option value="2">48小时</option>
+<option value="3">72小时</option>
+</select> 
+</td>
+<td colspan="2">说明：临超期多久时间触发预警</td>
+</tr>
+
+<td colspan="4"  >
+ 说明: WF_CH 这个表用于存储时效考核数据,您可以仔细研究该表的结构并做想用的考核数据的使用.
+</td>
+</tr>
+时限设置规则
+
+
+
+</table>
+</fieldset>
+  
+
+<input type="button"  value="保存" onclick="Save()" />
+</td>
+ 
+</tr>
+</table>
+ 
+</form>
+
+</body>
+</html>

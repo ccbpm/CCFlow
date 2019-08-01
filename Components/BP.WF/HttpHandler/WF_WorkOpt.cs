@@ -2081,6 +2081,7 @@ namespace BP.WF.HttpHandler
                         case ActionType.TeampUp:
                         case ActionType.Return:
                         case ActionType.StartChildenFlow:
+                        case ActionType.FlowOver:
                             row = tkDt.NewRow();
                             row["NodeID"] = tk.NDFrom;
                             row["NodeName"] = tk.NDFromT;
@@ -2090,17 +2091,17 @@ namespace BP.WF.HttpHandler
                             {
                                 //@yuan 修改测试
                                 isDoc = true;
-                                row["IsDoc"] = false;
+                             
                             }
-                            else
-                                row["IsDoc"] = false;
+                          
+                           row["IsDoc"] = false;
 
                             row["ParentNode"] = 0;
                             row["RDT"] = DataType.IsNullOrEmpty(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && DataType.IsNullOrEmpty(tk.Msg) ? "" : tk.RDT;
                             row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                             row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
-                            if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                        /*    if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                                 wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                                 (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)
                                                 && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
@@ -2132,6 +2133,10 @@ namespace BP.WF.HttpHandler
                                 {
                                     row["Msg"] = tk.MsgHtml;
                                 }
+                            }*/
+                            if(gwf.WFState == WFState.Complete)
+                            {
+                                row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                             }
                             else
                             {

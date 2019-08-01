@@ -87,7 +87,8 @@
 
                     var en = new Entity("BP.WF.Template.SubFlowHand");
                     en.FK_Node = nodeID;
-                    en.FK_Flow = flowNo;
+                    en.SubFlowNo = flowNo;
+                     
                     en.SetPKVal(flowNo + "_" + nodeID + "_0");
                     en.Insert();
                 }
@@ -102,7 +103,7 @@
                 if (sf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View") {
 
                     if (subFlow.SubFlowModel == 0 || subFlow.SubFlowModel == null) { //下级子流程.
-                        tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.FlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.FK_Flow + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                        tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
                     }
 
                     if (subFlow.SubFlowModel == 1) { //平级子流程.
@@ -112,15 +113,15 @@
 
                         //如果当前的流程不是子流程，就不处理.
                         if (gwf.PWorkID == 0) {
-                            tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.FlowName + "</div> <div style='float:right'>为子流程的时候才能启动(" + subFlow.FlowName + ")]</style>";
+                            tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>为子流程的时候才能启动(" + subFlow.SubFlowName + ")]</style>";
                         } else {
-                            tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.FlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.FK_Flow + "&PWorkID=" + gwf.PWorkID + "&PNodeID=" + gwf.PNodeID + "&PFlowNo=" + gwf.PFlowNo + "&PFID=" + gwf.PFID + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                            tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + gwf.PWorkID + "&PNodeID=" + gwf.PNodeID + "&PFlowNo=" + gwf.PFlowNo + "&PFID=" + gwf.PFID + "')\"  >" + sf.SFCaption + "</a>]</style>";
                         }
                     }
                 }
 
                 if (sf.SFSta == FrmSubFlowSta.Readonly || GetQueryString("DoType") == "View")
-                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.FlowName + "</div></style>";
+                    tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div></style>";
 
                 html += "<tr>";
                 html += "<td class='TRSum' colspan=7 >" + tdHtml + "</td>";
@@ -129,9 +130,9 @@
                 //该流程的子流程信息.
                 var gwfs = new Entities("BP.WF.GenerWorkFlows");
                 if (sf.SFShowCtrl == SFShowCtrl.All)
-                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.FK_Flow); //流程.          
+                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.SubFlowNo); //流程.          
                 else
-                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.FK_Flow, "Starter", webUser.No); //流程.
+                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.SubFlowNo, "Starter", webUser.No); //流程.
 
                 for (var j = 0; j < gwfs.length; j++) {
 

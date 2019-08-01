@@ -50,15 +50,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string SubFlowNo
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAutoAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowAttr.SubFlowNo);
             }
             set
             {
-                SetValByKey(SubFlowAutoAttr.FK_Flow, value);
+                SetValByKey(SubFlowAutoAttr.SubFlowNo, value);
             }
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAutoAttr.FlowName);
+                return this.GetValStringByKey(SubFlowAutoAttr.SubFlowName);
             }
         }
         /// <summary>
@@ -271,8 +271,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 
-                map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
-                map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+                map.AddTBString(SubFlowYanXuAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
+                map.AddTBString(SubFlowYanXuAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
@@ -327,7 +327,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.FK_Flow + "_1";
+            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_1";
             return base.beforeInsert();
         }
 
@@ -337,7 +337,7 @@ namespace BP.WF.Template
             {
                 //设置的发送到，发送到下一个节点上.
 
-                Node nd = new Node(int.Parse(this.FK_Flow + "01"));
+                Node nd = new Node(int.Parse(this.SubFlowNo + "01"));
 
                 Nodes tonds = nd.HisToNodes;
                 foreach (Node item in tonds)

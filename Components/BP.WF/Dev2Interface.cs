@@ -3799,9 +3799,7 @@ namespace BP.WF
             string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras = null)
         {
             if (DataType.IsNullOrEmpty(mailAddress))
-            {
                 return;
-            }
 
             SMS sms = new SMS();
             if (DataType.IsNullOrEmpty(msgPK) == false)
@@ -5105,7 +5103,7 @@ namespace BP.WF
             //当前的子流程.
             foreach (SubFlowHand item in subflows)
             {
-                if (item.FK_Flow.Equals(flowNo) == false)
+                if (item.SubFlowNo.Equals(flowNo) == false)
                     continue;
 
                 if (item.StartOnceOnly == true)
@@ -5136,7 +5134,7 @@ namespace BP.WF
                         if (dt.Rows.Count == 0)
                         {
                             BP.WF.Flow myflow = new Flow(flStr);
-                            throw new Exception("流程:[" + myflow.Name + "]没有发起,您不能启动[" + item.FlowName + "]。");
+                            throw new Exception("流程:[" + myflow.Name + "]没有发起,您不能启动[" + item.SubFlowName + "]。");
                         }
                     }
                 }
@@ -5155,7 +5153,7 @@ namespace BP.WF
                         if (dt.Rows.Count == 0)
                         {
                             BP.WF.Flow myflow = new Flow(flStr);
-                            throw new Exception("流程:[" + myflow.Name + "]没有完成,您不能启动[" + item.FlowName + "]。");
+                            throw new Exception("流程:[" + myflow.Name + "]没有完成,您不能启动[" + item.SubFlowName + "]。");
                         }
                     }
                 }

@@ -190,8 +190,6 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            
-
             //节点.
             msg.MailNodes = nodesOfEmail;
             msg.SMSNodes = nodesOfSMS;
@@ -199,7 +197,7 @@ namespace BP.WF.HttpHandler
 
             #region 短信保存.
             //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_SMS"].ToString().Replace("RB_SMS_", ""));
+            msg.SMSPushWay = Convert.ToInt32(this.GetRequestVal("RB_SMS").Replace("RB_SMS_", ""));
 
             //短消息发送设备
             msg.SMSPushModel = this.GetRequestVal("PushModel");
@@ -213,7 +211,7 @@ namespace BP.WF.HttpHandler
 
             #region 邮件保存.
             //邮件.
-            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); 
+            msg.MailPushWay = Convert.ToInt32(this.GetRequestVal("RB_Email").Replace("RB_Email_", "")); 
 
             //邮件标题与内容.
             msg.MailTitle_Real = this.GetRequestVal("TB_Email_Title"); 

@@ -16,11 +16,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 标题
         /// </summary>
-        public const string FK_Flow = "FK_Flow";
+        public const string SubFlowNo = "SubFlowNo";
         /// <summary>
         /// 流程名称
         /// </summary>
-        public const string FlowName = "FlowName";
+        public const string SubFlowName = "SubFlowName";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -140,25 +140,25 @@ namespace BP.WF.Template
         /// <summary>
         /// 子流程编号
         /// </summary>
-        public string FK_Flow
+        public string SubFlowNo
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.SubFlowNo);
             }
             set
             {
-                SetValByKey(SubFlowYanXuAttr.FK_Flow, value);
+                SetValByKey(SubFlowYanXuAttr.SubFlowNo, value);
             }
         }
         /// <summary>
         /// 流程名称
         /// </summary>
-        public string FlowName
+        public string SubFlowName
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FlowName);
+                return this.GetValStringByKey(SubFlowYanXuAttr.SubFlowName);
             }
         }
         /// <summary>
@@ -318,8 +318,8 @@ namespace BP.WF.Template
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);
                 map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程模式", false, true);
                   
-                map.AddTBString(SubFlowAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
-                map.AddTBString(SubFlowAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+                map.AddTBString(SubFlowAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
+                map.AddTBString(SubFlowAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
                 //启动限制规则0.
                 map.AddTBInt(SubFlowAttr.StartOnceOnly, 0, "仅能被调用1次", false, true);
@@ -357,7 +357,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.FK_Flow + "_"+this.SubFlowType;
+            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_" + this.SubFlowType;
             return base.beforeInsert();
         }
     }

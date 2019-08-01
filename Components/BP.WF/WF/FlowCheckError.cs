@@ -473,11 +473,11 @@ namespace BP.WF
         {
             string msg = "";
             SubFlowYanXus yanxuFlows = new SubFlowYanXus();
-            yanxuFlows.Retrieve(SubFlowYanXuAttr.FK_Flow, this.flow.No);
+            yanxuFlows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.flow.No);
 
             foreach (SubFlowYanXu flow in yanxuFlows)
             {
-                Flow fl = new Flow(flow.FK_Flow);
+                Flow fl = new Flow(flow.SubFlowNo);
 
                 /* 如果当前为子流程的时候，允许节点自动运行下一步骤，就要确定下一步骤的节点，必须有确定的可以计算的接收人. */
                 if (fl.SubFlowOver == SubFlowOver.SendParentFlowToNextStep)

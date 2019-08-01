@@ -2214,10 +2214,10 @@ namespace BP.WF
 
                 #region 检查越轨流程,子流程发起。
                 SubFlowYanXus ygflows = new SubFlowYanXus();
-                ygflows.Retrieve(SubFlowYanXuAttr.FK_Flow, this.No);
+                ygflows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.No);
                 foreach (SubFlowYanXu flow in ygflows)
                 {
-                    Flow fl = new Flow(flow.FK_Flow);
+                    Flow fl = new Flow(flow.SubFlowNo);
 
                     /* 如果当前为子流程的时候，允许节点自动运行下一步骤，就要确定下一步骤的节点，必须有确定的可以计算的接收人. */
                     if (fl.SubFlowOver == SubFlowOver.SendParentFlowToNextStep)

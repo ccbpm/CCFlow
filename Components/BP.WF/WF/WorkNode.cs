@@ -1129,7 +1129,7 @@ namespace BP.WF
                             isPass = BP.WF.Glo.CondExpSQL(item.CondExp, this.rptGe.Row, this.WorkID);
 
                         if (isPass == true)
-                            return new Node(int.Parse(item.FK_Flow + "01"));
+                            return new Node(int.Parse(item.SubFlowNo + "01"));
                     }
                 }
             }
@@ -7221,7 +7221,7 @@ namespace BP.WF
                     if (sub.StartOnceOnly == true)
                     {
                         /* 如果仅仅被启动一次.*/
-                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + sub.FK_Flow + "'";
+                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + sub.SubFlowNo + "'";
                         if (DBAccess.RunSQLReturnValInt(sql) > 0)
                             continue; //已经启动了，就不启动了。
                     }
@@ -7290,11 +7290,11 @@ namespace BP.WF
                     if (sub.SendModel == 0)
                     {
                         //创建workid.
-                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
 
                         //执行保存.
-                        BP.WF.Dev2Interface.Node_SaveWork(sub.FK_Flow, int.Parse(sub.FK_Flow + "01"), subWorkID, this.rptGe.Row);
+                        BP.WF.Dev2Interface.Node_SaveWork(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID, this.rptGe.Row);
 
 
                         //为开始节点设置待办.
@@ -7302,26 +7302,26 @@ namespace BP.WF
 
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
 
 
                         //写入消息.
-                        this.addMsg("SubFlow" + sub.FK_Flow, "流程[" + sub.FlowName + "]启动成功.");
+                        this.addMsg("SubFlow" + sub.SubFlowNo, "流程[" + sub.FlowName + "]启动成功.");
                     }
 
                     //发送到下一个环节去.
                     if (sub.SendModel == 1)
                     {
                         //创建workid.
-                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
 
                         //执行发送到下一个环节..
-                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.FK_Flow, subWorkID, this.rptGe.Row, null);
+                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.SubFlowNo, subWorkID, this.rptGe.Row, null);
 
-                        this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
+                        this.addMsg("SubFlow" + sub.SubFlowNo, sendObjs.ToMsgOfHtml());
                     }
                     #endregion 检查sendModel.
 
@@ -7334,7 +7334,7 @@ namespace BP.WF
                     if (sub.StartOnceOnly == true)
                     {
                         /* 如果仅仅被启动一次.*/
-                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + sub.FK_Flow + "'";
+                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + sub.SubFlowNo + "'";
                         if (DBAccess.RunSQLReturnValInt(sql) > 0)
                             continue; //已经启动了，就不启动了。
                     }
@@ -7440,34 +7440,34 @@ namespace BP.WF
                     if (sub.SendModel == 0)
                     {
                         //创建workid.
-                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //执行保存.
-                        BP.WF.Dev2Interface.Node_SaveWork(sub.FK_Flow, int.Parse(sub.FK_Flow + "01"), subWorkID, this.rptGe.Row);
+                        BP.WF.Dev2Interface.Node_SaveWork(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID, this.rptGe.Row);
 
                         //为开始节点设置待办.
                         BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
 
                         //写入消息.
-                        this.addMsg("SubFlow" + sub.FK_Flow, "流程[" + sub.FlowName + "]启动成功.");
+                        this.addMsg("SubFlow" + sub.SubFlowNo, "流程[" + sub.FlowName + "]启动成功.");
                     }
 
                     //发送到下一个环节去.
                     if (sub.SendModel == 1)
                     {
                         //创建workid.
-                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.FK_Flow, WebUser.No);
+                        Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.FK_Flow, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
 
                         //执行发送到下一个环节..
-                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.FK_Flow, subWorkID, this.rptGe.Row, null);
+                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.SubFlowNo, subWorkID, this.rptGe.Row, null);
 
-                        this.addMsg("SubFlow" + sub.FK_Flow, sendObjs.ToMsgOfHtml());
+                        this.addMsg("SubFlow" + sub.SubFlowNo, sendObjs.ToMsgOfHtml());
                     }
                     #endregion 检查sendModel.
 

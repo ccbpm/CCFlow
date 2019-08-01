@@ -551,8 +551,8 @@ namespace BP.WF
                             foreach (SubFlowYanXu item in ygflows)
                             {
                                 DataRow dr = dtToNDs.NewRow();
-                                dr["No"] = item.FK_Flow + "01";
-                                dr["Name"] = "启动:" + item.FlowName;
+                                dr["No"] = item.SubFlowNo + "01";
+                                dr["Name"] = "启动:" + item.SubFlowName;
                                 dr["IsSelectEmps"] = "1";
                                 dr["IsSelected"] = "0";
                                 dtToNDs.Rows.Add(dr);

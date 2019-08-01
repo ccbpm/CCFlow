@@ -50,25 +50,25 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string SubFlowNo
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
+                return this.GetValStringByKey(SubFlowYanXuAttr.SubFlowNo);
             }
             set
             {
-                SetValByKey(SubFlowYanXuAttr.FK_Flow, value);
+                SetValByKey(SubFlowYanXuAttr.SubFlowNo, value);
             }
         }   
         /// <summary>
         /// 流程名称
         /// </summary>
-        public string FlowName
+        public string SubFlowName
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FlowName);
+                return this.GetValStringByKey(SubFlowYanXuAttr.SubFlowName);
             }
         }
         /// <summary>
@@ -138,10 +138,10 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, false, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
-                
 
-                map.AddTBString(SubFlowYanXuAttr.FK_Flow, null, "子流程编号", true, true, 0, 10, 150, false);
-                map.AddTBString(SubFlowYanXuAttr.FlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+
+                map.AddTBString(SubFlowYanXuAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
+                map.AddTBString(SubFlowYanXuAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.ExpType, 3, "表达式类型", true, true, SubFlowYanXuAttr.ExpType,
                    "@3=按照SQL计算@4=按照参数计算");
@@ -169,7 +169,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.FK_Flow + "_2";
+            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_2";
             return base.beforeInsert();
         }
 

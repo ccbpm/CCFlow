@@ -45,7 +45,10 @@ namespace BP.WF.Template
         /// 条件表达式
         /// </summary>
         public const string CondExp = "CondExp";
-
+        /// <summary>
+        /// 调用时间
+        /// </summary>
+        public const string InvokeTime = "InvokeTime";
         /// <summary>
         /// 越轨子流程退回类型
         /// </summary>

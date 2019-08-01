@@ -95,13 +95,11 @@
         //页面启动函数.
         $(function () {
 
-            //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
-            //            handler.AddUrlData();
-            //            mapData = handler.DoMethodReturnJSON("FormDesigner_InitMapData");
-
             var frmID = GetQueryString("FK_MapData");
 
             mapData = new Entity("BP.Sys.MapData", frmID);
+            //清空mapData的缓存
+            mapData.DoMethodReturnString("ClearCash");
 
             document.title = mapData.Name + " - CCForm H5表单设计.";
 

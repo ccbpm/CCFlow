@@ -38,8 +38,9 @@
 
             //增加处理.
             for (var i = 0; i < attrs.length; i++) {
-
                 var item = attrs[i];
+                if (item.UIVisible == false)
+                    continue;
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + i + "</td>";
                 if (node.BatchParas.indexOf(item.KeyOfEn) > -1) {
@@ -88,7 +89,7 @@
 <form id="cc">
  
  <table style="width: 70%;">
-        <caption>批量发起规则设置</caption>
+        <caption>批处理规则设置</caption>
         <tr>
             <td colspan="1">规则设置：</td>
             <td colspan="2"> 
@@ -112,7 +113,7 @@
             </tr>
         <tr>
             <td class="Sum" colspan="4">
-                批量发起字段(需要填写的字段.)
+                批量发起字段(需要显示的字段.)
             </td>
         </tr>
 

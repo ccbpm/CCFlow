@@ -47,7 +47,7 @@
 
             for (var i = 0; i < ens.length; i++) {
 
-                var en = ens[i]; 
+                var en = new Entity("BP.WF.Template.PushMsg", ens[i].MyPK);
 
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
@@ -72,7 +72,9 @@
                 "ReturnAfter": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人"],
                 "UndoneAfter": ["不发送", "撤销工作后通知的节点接受人", "向指定的字段发送", "其他节点的处理人"],
                 "FlowOverAfter": ["不发送", "流程结束通知的所有流程的参与人", "向指定的字段发送", "其他节点的处理人"],
-                "AfterFlowDel": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人"]
+                "AfterFlowDel": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人"],
+                "NodeWarning": ["不发送",  "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
+                "NodeOverDue": ["不发送",  "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"]
             };
 
             return ret[EventListOfNode][PushWay];
@@ -143,6 +145,8 @@
                     <li><a href="javascript:PushMessageEntity('UndoneAfter');">当节点撤销发送后</a> </li>
                     <li><a href="javascript:PushMessageEntity('FlowOverAfter');">流程结束后</a> </li>
                     <li><a href="javascript:PushMessageEntity('AfterFlowDel');">流程删除后</a> </li>
+                    <li><a href="javascript:PushMessageEntity('NodeWarning');">节点处理预警</a> </li>
+                    <li><a href="javascript:PushMessageEntity('NodeOverDue');">节点处理逾期</a> </li>
                 </ul>
             </div>
             <input type="button" value="我需要帮助" onclick="Help()" />

@@ -383,6 +383,7 @@
                         en.Name = name;
                         en.UploadType = 1; //多附件.
                         en.IsVisable = 0; //让其不可见. 
+                        en.CtrlWay = 4; // 按流程WorkID计算
                         en.Insert(); //插入到数据库.
                         window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
                     }

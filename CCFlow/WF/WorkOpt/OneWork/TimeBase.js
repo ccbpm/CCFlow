@@ -93,16 +93,18 @@ function InitPage() {
             doc += "<p><span>退回意见如下</span>  </p>";
         }
 
+        var isHaveCheck = false;
         if (at == ActionType.Forward || at == ActionType.FlowOver) {
             doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
             //  doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDFrom + "')\">表单</a></span></p>";
 
             //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
-            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
 
+            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
                 var checkTrack = tracks[myIdx];
                 if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    doc += "<p><span>审批意见：</span><font color=green>" + checkTrack.Msg + "</font> </p>";
+                    isHaveCheck = true;
+                    doc += "<p><span>审批意见：</span><font color=green>" + track.Msg + "</font> </p>";
                 }
             }
         }
@@ -114,7 +116,7 @@ function InitPage() {
 
                 var checkTrack = tracks[myIdx];
                 if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    doc += "<p><span>会签意见：</span><font color=green>" + checkTrack.Msg.replace('null', '') + "</font> </p>";
+                    doc += "<p><span>会签意见：</span><font color=green>" + track.Msg.replace('null', '') + "</font> </p>";
                 }
             }
         }
@@ -128,7 +130,7 @@ function InitPage() {
         if (msg == "0")
             msg = "";
 
-        if (msg != "") {
+        if (msg != "" && isHaveCheck==false) {
 
             while (msg.indexOf('\t\n') >= 0) {
                 msg = msg.replace('\t\n', '<br>');

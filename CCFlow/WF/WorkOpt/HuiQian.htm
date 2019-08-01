@@ -182,9 +182,6 @@
 
         function DeleteIt(empNo, row) {
 
-            //            if (window.confirm('您确定要移除[' + empNo + ']') == false)
-            //                return;
-
             //执行数据初始化工作.
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             hand.AddUrlData();
@@ -227,20 +224,10 @@
             }
 
             window.location.href = window.location.href;
-
-            //            var gwls = JSON.parse(data);
-            //            BindTable(gwls);
-            //            return;
-            //            $(".foot").hide();
         }
 
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
-
-            // var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-            // window.location.href = url;
-            // return;
-
             var toNode = GetQueryString("ToNode");
             if (toNode == undefined || toNode == "undefined")
                 toNode = "0";
@@ -512,26 +499,6 @@
             <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
     </div>
     <br />
-    <!--
 
-<section style="display: none;">
-    <div>
-        请选择要会签的人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
-    </div>
-    <div>
-        会签原因:
-        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br/>
-    </div>
-    <div style="margin: 20px auto;">
-        <h5> 会签模式:</h5>
-        <input type="radio" value="0" name="RB_Model" checked=checked checked=checked id="RB_Model_0"/> <label for="RB_Model_0">会签后直接发送给下一步处理人</label>
-        <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">会签后发送给我由我发送给下一步处理人</label>
-    </div>
-    <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-        <input type=button value="确定" onclick="DoHuiQian();"/>
-        <input type="button" id="" value="关闭" onclick="Close();"/>
-    </div>
-</section>-->
 </body>
 </html>

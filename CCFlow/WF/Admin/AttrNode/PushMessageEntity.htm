@@ -102,6 +102,18 @@
                         }
                     }
                 }
+
+                // 短消息发送形式
+                var smsPushModel = en.SMSPushModel;
+                if (smsPushModel != "") {
+                    var pushModels = smsPushModel.split(",");
+                    for (i = 0, len = pushModels.length; i < len; i++) {
+                        if (pushModels[i] != "") {
+                            document.getElementById("CB_SMSPushModel_" + pushModels[i]).checked = true;
+                        }
+                    }
+                }
+            
             }
             else {
                 $("#DDL_SMS_Fields option:first").attr("selected", "selected");
@@ -117,19 +129,27 @@
                 "ReturnAfter": "发送给被退回的节点处理人",
                 "UndoneAfter": "撤销工作后通知的节点接受人",
                 "FlowOverAfter": "流程结束通知的所有流程的参与人",
-                "AfterFlowDel": "流程删除后通知所有流程的参与人"
+                "AfterFlowDel": "流程删除后通知所有流程的参与人",
+                "NodeWarning": "发送给当前节点的所有处理人",
+                "NodeOverDue": "发送给当前节点的所有处理人"
             };
             return ret[EventListOfNode];
 
         }
 
         function Save() {
-
+            //获取短消息发送设置
+            var pushModels = document.getElementsByName('CB_SMSPushModel'); 
+            var pushModel=''; 
+            for(var i=0; i<pushModels.length; i++){ 
+                if(pushModels[i].checked) 
+                   pushModel+=pushModels[i].value+','; //如果选中，将value添加到变量s中 
+            } 
             //初始化 01 02 03
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddUrlData();
             handler.AddFormData();
-
+            handler.AddPara("PushModel", pushModel);
             var data = handler.DoMethodReturnString("PushMsg_Save");
             if (data.indexOf('err@') >= 0) {
                 alert(data);
@@ -163,7 +183,7 @@
             <tr>
                 <td>
                     <fieldset>
-                        <legend>启用短信设置</legend>
+                        <legend>启用短消息设置</legend>
                         <table style="width: 100%;">
                             <tr>
                                 <td colspan="2">
@@ -196,9 +216,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>
+                                    <label>发送形式</label>
+                                </td>
+                                <td>
+                                   <label><input id='CB_SMSPushModel_0' type='checkbox' name='CB_SMSPushModel'  value='0' />站内消息</label> 
+                                   <label><input id='CB_SMSPushModel_1' type='checkbox' name='CB_SMSPushModel'  value='1' />短信</label> 
+                                   <label><input id='CB_SMSPushModel_4' type='checkbox' name='CB_SMSPushModel'  value='2' />钉钉</label> 
+                                   <label><input id='CB_SMSPushModel_3' type='checkbox' name='CB_SMSPushModel'  value='3' />微信</label> 
+                                   <label><input id='CB_SMSPushModel_2' type='checkbox' name='CB_SMSPushModel'  value='4' />即时通</label> 
+                                </td>
+                            </tr>
+                            <tr>
                                 <td colspan="2">
                                     <fieldset style="border: 0px;">
-                                        <legend><a href="javascript:ShowHidden('sms')">短信发送内容模版:</a></legend>
+                                        <legend><a href="javascript:ShowHidden('sms')">短消息发送内容模版:</a></legend>
                                         <div id="sms" style="display: none; color: Gray">
                                             <ul>
                                                 <li>cc会根据不同的事件设置不同的信息模版。</li>

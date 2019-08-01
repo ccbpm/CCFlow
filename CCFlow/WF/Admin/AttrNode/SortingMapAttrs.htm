@@ -104,7 +104,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddPara("FK_MapData", FK_MapData);
-            handler.AddPara("attrs", arr.join(','));
+            handler.AddPara("attrs", ","+arr.join(',')+",");
             var data = handler.DoMethodReturnString("SortingMapAttrs_From_Save");
 
             if (data.indexOf('err') >= 0) {
@@ -306,8 +306,15 @@
                             //TODO 做好筛选条件
                             return item.MyPK == dtGroups[i].CtrlID;
                         });
-                        if (groupOfAthMents[0].IsVisable == "0" || groupOfAthMents[0].IsVisable == false) {
+                        if (groupOfAthMents.length == 0)
                             continue;
+                        if (groupOfAthMents[0].IsVisable == "0" || groupOfAthMents[0].IsVisable == false) {
+                            //如果是字段附件就显示
+                            var athAttr = new Entity("BP.Sys.MapAttr");
+                            athAttr.SetPKVal(groupOfAthMents[0].MyPK)
+                            var count = athAttr.RetrieveFromDBSources();
+                            if(count == 0)
+                                continue;
                         }
                          if (dtGroups.length == 1) {
                         }
@@ -335,7 +342,12 @@
                             table += "<td style='text-align:center'>1</td>";
                             table += "<td nowrap=''>" + item.MyPK + "</td>";
                             table += "<td nowrap=''>" + item.Name + "</td>";
-                            table += "<td nowrap=''>&nbsp;</td>";
+                           //是否显示checkbox
+                        var cbox = "";
+                        if (GetPara(item.AtPara,"IsShowMobile") == "1")
+                            table += "<td nowrap=''><label><input type='checkbox' name='CB_" + item.MyPK + "' value='"+item.MyPK +"' checked=true />是否显示</label></td>";
+                        else
+                            table += "<td nowrap=''><label><input type='checkbox' name='CB_" + item.MyPK + "'  value='"+item.MyPK +"' />是否显示</label></td>";
                             table += "<td valign='top' nowrap=''>&nbsp;";
                             table += "</td>";
                             table += "</tr>";

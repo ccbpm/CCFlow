@@ -301,7 +301,9 @@
             data = data.replace("'./WorkOpt/", "");
             data = data.replace("'./WorkOpt/", "");
 
-
+            data = data.replace('<br/>', '');
+            data = data.replace('<br/>', '');
+             data = data.replace('<br/>', '');
             data = data.replace('@', '<br/>@');
             data = data.replace(/@/g, '<br/>&nbsp;@');
 

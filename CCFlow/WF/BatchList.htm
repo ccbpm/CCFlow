@@ -41,7 +41,7 @@
             var tbody = ""; //内容显示
 
             thead += "<th>序号</th>";
-            thead += "<th><input type='checkbox' onclick='CheckAll()'/>选择</th>";
+            thead += "<th><input type='checkbox' onclick='CheckAll(this)'/>选择</th>";
             thead += "<th>标题</th>";
             thead += "<th>发起人</th>";
             thead += "<th>接收日期</th>";
@@ -130,6 +130,17 @@
 
         }
 
+        //选中/取消所有列表
+        function CheckAll(obj) {
+            if (obj.checked == true)
+                $.each($("input[type='checkbox']"), function (i, o) {
+                    o.checked = true;
+                });
+            else
+                $.each($("input[type='checkbox']"), function (i, o) {
+                    o.checked = false;
+                });
+        }
         function Btn_Send(label) {
             if (window.confirm('您确定要执行本次批处理发送操作吗？') == false)
                 return;
@@ -467,13 +478,13 @@
     </div>
     <div class="modal fade" id="batchModal" data-backdrop="static">
         <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:0px;width:500px;text-align:center;">
+            <div class="modal-content" style="border-radius:0px;width:700px; height:600px;text-align:center;">
                 <div class="modal-header">
                     <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: white; opacity: 1; display: none;">  ×</button>
                     <h4 class="modal-title" id="modalHeader">批量处理</h4>
                 </div>
                  <div class="modal-body" style="text-align: left; word-wrap: break-word;">
-                    <div style="width:100%; border: 0px; height: 600px;overflow-y:scroll" id="msgContent" name="iframePopModalForm">
+                    <div style="width:100%; border: 0px; height: 500px;overflow-y:scroll" id="msgContent" name="iframePopModalForm">
                     </div>
                     <div style="text-align: right;">
                         <button type="button" id="BatchOK" class="btn" data-dismiss="modal">

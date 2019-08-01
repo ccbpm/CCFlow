@@ -4415,10 +4415,7 @@ namespace BP.WF
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
-                //BP.Sys.FrmWorkCheck fwc = new FrmWorkCheck(nodeFrom);
-                //return fwc.FWCDefInfo;
                 return isNullAsVal;
-
             }
             string checkinfo = dt.Rows[0][0].ToString();
             if (DataType.IsNullOrEmpty(checkinfo))

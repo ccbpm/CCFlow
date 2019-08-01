@@ -1080,7 +1080,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                 }
 
-                if (btnLab.NoteEnable == true)
+                if (btnLab.NoteEnable !=0)
                 {
                     /* 备注设置 */
                     toolbar += "<input type=button name='Note'  value='" + btnLab.NoteLab + "' enable=true  />";

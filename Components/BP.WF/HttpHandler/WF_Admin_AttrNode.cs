@@ -759,11 +759,21 @@ namespace BP.WF.HttpHandler
                 foreach (MapAttr attr in attrs)
                 {
                     att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
-                    if (atts.Contains(attr.KeyOfEn))
+                    if (atts.Contains(","+attr.KeyOfEn+","))
+                    {
                         att.IsEnableInAPP = true;
+                    }
                     else
                         att.IsEnableInAPP = false;
                     att.Update();
+
+                    if (atts.Contains("," + FK_MapData + "_" + attr.KeyOfEn + ",") == true)
+                    {
+                        FrmAttachment ath = new FrmAttachment(FK_MapData + "_" + attr.KeyOfEn);
+                        ath.SetPara("IsShowMobile", 1);
+                        ath.Update();
+                        
+                    }
                 }
                 return "保存成功！";
             }

@@ -1072,11 +1072,11 @@ namespace BP.WF.Template
         /// <summary>
         ///备注标签
         /// </summary>
-        public bool NoteEnable
+        public int NoteEnable
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.NoteEnable);
+                return this.GetValIntByKey(BtnAttr.NoteEnable);
             }
         }
 
@@ -1251,7 +1251,7 @@ namespace BP.WF.Template
 
                 //备注 流程不流转，设置备注信息提醒已处理人员当前流程运行情况
                 map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.NoteEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.NoteEnable, 0, "启用规则", true, true, BtnAttr.NoteEnable, @"0=禁用@1=启用@2=只读");
 
 
                 #region 公文按钮

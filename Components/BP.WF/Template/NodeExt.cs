@@ -609,9 +609,8 @@ namespace BP.WF.Template
 
                 //备注 流程不流转，设置备注信息提醒已处理人员当前流程运行情况
                 map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.NoteEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.NoteEnable, 0, "启用规则", true, true, BtnAttr.NoteEnable, @"0=禁用@1=启用@2=只读");
 
-                //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态
 
                 //节点工具栏,主从表映射.

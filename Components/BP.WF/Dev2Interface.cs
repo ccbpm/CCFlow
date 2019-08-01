@@ -3835,6 +3835,7 @@ namespace BP.WF
             //邮件标题.
             sms.Title = emilTitle;
             sms.DocOfEmail = emailBody;
+           
 
             //手机状态禁用.
             sms.HisMobileSta = MsgSta.Disable;

@@ -295,7 +295,7 @@ namespace BP.WF
                      {
                          PushMsg pm = new PushMsg();
                          pm.FK_Event = EventListOfNode.SendSuccess;
-                         pm.MailPushWay = 1; /*默认: 让其使用消息提醒.*/
+                         pm.MailPushWay = 1; /*默认: 让其使用mail提醒.*/
                          pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
                          obj.AddEntity(pm);
                      }
@@ -304,7 +304,7 @@ namespace BP.WF
                      {
                          PushMsg pm = new PushMsg();
                          pm.FK_Event = EventListOfNode.ReturnAfter;
-                         pm.MailPushWay = 1; /*默认: 让其使用消息提醒.*/
+                         pm.MailPushWay = 1; /*默认: 让其使用mail提醒.*/
                          pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
                          obj.AddEntity(pm);
                      }

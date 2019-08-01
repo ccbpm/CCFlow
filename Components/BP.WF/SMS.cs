@@ -396,6 +396,7 @@ namespace BP.WF
                 string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
                 if (DataType.IsNullOrEmpty(doc))
                     return this.Title;
+
                 return doc.Replace('~', '\'');
             }
             set
@@ -519,11 +520,15 @@ namespace BP.WF
             if (emailPassword == null)
                 emailPassword = "ccbpm123";
 
-            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, "ccflow工作流系统", System.Text.Encoding.UTF8);
+            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, "ccbpm", System.Text.Encoding.UTF8);
 
             myEmail.To.Add(mail);
             myEmail.Subject = mailTitle;
             myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
+
+           myEmail.IsBodyHtml=true;
+
+           mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
 
             myEmail.Body = mailDoc;
             myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码

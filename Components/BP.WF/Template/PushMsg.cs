@@ -384,14 +384,21 @@ namespace BP.WF.Template
                     case EventListOfNode.WorkArrive:
                         str += "\t\n您好:";
                         str += "\t\n    有新工作{{Title}}需要您处理, 点击这里打开工作报告{Url} .";
+                        str += "\t\n ";
+                        str += "\t\n ";
                         str += "\t\n致! ";
                         str += "\t\n    @WebUser.No, @WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
                     case EventListOfNode.SendSuccess:
-                        str += "\t\n您好:";
-                        str += "\t\n    有新工作{{Title}}需要您处理, 点击这里打开工作{Url} .";
-                        str += "\t\n致! ";
+
+                        str += "\t\nHi,您好您有新工作.";
+                        str += "\t\n    标题:{{Title}} .";
+                        str += "\t\n    单号:{{BillNo}} .";
+                        str += "\t\n    详细信息:请打开工作{Url} ";
+                        str += "\t\n ";
+                        str += "\t\n ";
+                        str += "\t\n 致!! ";
                         str += "\t\n    @WebUser.No, @WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
@@ -400,20 +407,29 @@ namespace BP.WF.Template
                         str += "\t\n    工作{{Title}}被退回来了, 点击这里打开工作报告{Url} .";
                         str += "\t\n    退回意见: \t\n ";
                         str += "\t\n    {  @ReturnMsg }";
+                        str += "\t\n ";
+                        str += "\t\n ";
+                        str += "\t\n ";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
                     case EventListOfNode.ShitAfter:
-                        str += "\t\n您好:";
+                        str += "\t\n 您好:";
                         str += "\t\n    移交给您的工作{{Title}}, 点击这里打开工作{Url} .";
                         str += "\t\n 致! ";
+                        str += "\t\n ";
+                        str += "\t\n ";
+                        str += "\t\n ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
                     case EventListOfNode.UndoneAfter:
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作{{Title}}, 点击这里打开工作报告{Url} .";
+                        str += "\t\n ";
+                        str += "\t\n ";
+                        str += "\t\n ";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
@@ -421,6 +437,9 @@ namespace BP.WF.Template
                     case EventListOfNode.AskerReAfter: //加签.
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作{{Title}}, 点击这里打开报告{Url} .";
+                        str += "\t\n ";
+                        str += "\t\n ";
+                        str += "\t\n ";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";

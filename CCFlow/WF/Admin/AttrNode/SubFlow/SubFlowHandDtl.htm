@@ -96,10 +96,10 @@
             var en = new Entity("BP.WF.Template.SubFlowHand");
             console.log(en);
 
-            en.FK_Flow = flowNo;
+            en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
             en.SubFlowType = 0;
-            en.FlowName = name;
+            en.SubFlowName = name;
             var myen = en.Insert();
 
             window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=' + myen.MyPK;

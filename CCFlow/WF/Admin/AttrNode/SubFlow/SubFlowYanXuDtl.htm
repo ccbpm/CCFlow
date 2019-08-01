@@ -98,9 +98,9 @@
             var en = new Entity("BP.WF.Template.SubFlowYanXu");
             console.log(en);
 
-            en.FK_Flow = flowNo;
+            en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
-            en.FlowName = name;
+            en.SubFlowName = name;
             en.SubFlowType = 2;
             var myen = en.Insert();
 

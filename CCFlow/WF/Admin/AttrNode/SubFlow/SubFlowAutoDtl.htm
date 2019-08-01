@@ -88,7 +88,7 @@
             var nodeID = GetQueryString("FK_Node");
 
             var ens = new Entities("BP.WF.Template.SubFlowAutos");
-            ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo, "SubFlowType", 1);
+            ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo, "SubFlowType", 1);
 
             if (ens.length == 1) {
                 alert("该流程已经存在");
@@ -98,9 +98,9 @@
             var en = new Entity("BP.WF.Template.SubFlowAuto");
             console.log(en);
 
-            en.FK_Flow = flowNo;
+            en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
-            en.FlowName = name;
+            en.SubFlowName = name;
             en.SubFlowType = 1;
             var myen = en.Insert();
 

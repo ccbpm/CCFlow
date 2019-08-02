@@ -866,6 +866,7 @@ namespace BP.WF.Template
                 }
                 return "@已向:{" + msg + "}发送提醒消息.";
 
+
             }
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
@@ -1246,7 +1247,8 @@ namespace BP.WF.Template
                             //发送短信.
                             Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
                         }
-                        return "@已向:{" + toEmpIDs + "}发送提醒消息.";
+                        return "";
+                        //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
                     }
                 }
 
@@ -1301,7 +1303,10 @@ namespace BP.WF.Template
                             //发送短信.
                             Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
                         }
-                        return "@已向:{" + toEmpIDs + "}发送提醒消息.";
+
+                        return "";
+                        //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
+
                     }
                 }
 

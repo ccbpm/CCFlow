@@ -349,8 +349,8 @@ var clipboardBuffer = [];
 **/
 function getCanvas() {
     var canvas = document.getElementById("a");
-    if (canvas.getAttribute("Height") != "4000") {
-        canvas.setAttribute('Height', '4000');
+    if (canvas.getAttribute("Height") != "8000") {
+        canvas.setAttribute('Height', '8000');
     }
     return canvas;
 }

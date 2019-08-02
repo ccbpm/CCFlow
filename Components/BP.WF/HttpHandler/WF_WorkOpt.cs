@@ -1494,6 +1494,11 @@ namespace BP.WF.HttpHandler
                     if (nodes.Contains(tk.NDFrom + ",") == false)
                         continue;
 
+
+                    if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow && tk.HisActionType != ActionType.Return)
+                        continue;
+
+
                     //退回
                     if (tk.HisActionType== ActionType.Return)
                     {

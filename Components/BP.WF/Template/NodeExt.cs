@@ -141,6 +141,18 @@ namespace BP.WF.Template
             }
         }
 
+        public FWCAth FWCAth
+        {
+            get
+            {
+                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+            }
+        }
+
         /// <summary>
         /// 超时处理内容
         /// </summary>
@@ -353,6 +365,7 @@ namespace BP.WF.Template
                 //节点业务类型.
                 map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
                 map.AddTBInt("FWCSta", 0, "节点状态", false, false);
+                map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
 
 
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
@@ -1297,35 +1310,37 @@ namespace BP.WF.Template
 
 
             #region 创建审核组件附件
-            
-            FrmAttachment workCheckAth = new FrmAttachment();
-            workCheckAth.MyPK = "ND"+this.NodeID + "_FrmWorkCheck";
-            //不包含审核组件
-            if (workCheckAth.RetrieveFromDBSources() == 0)
+            if (this.FWCAth == FWCAth.MinAth)
             {
-                workCheckAth = new FrmAttachment();
-                /*如果没有查询到它,就有可能是没有创建.*/
-                workCheckAth.MyPK = "ND"+this.NodeID + "_FrmWorkCheck";
-                workCheckAth.FK_MapData = "ND"+this.NodeID.ToString();
-                workCheckAth.NoOfObj = "FrmWorkCheck";
-                workCheckAth.Exts = "*.*";
+                FrmAttachment workCheckAth = new FrmAttachment();
+                workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
+                //不包含审核组件
+                if (workCheckAth.RetrieveFromDBSources() == 0)
+                {
+                    workCheckAth = new FrmAttachment();
+                    /*如果没有查询到它,就有可能是没有创建.*/
+                    workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
+                    workCheckAth.FK_MapData = "ND" + this.NodeID.ToString();
+                    workCheckAth.NoOfObj = "FrmWorkCheck";
+                    workCheckAth.Exts = "*.*";
 
-                //存储路径.
-                workCheckAth.SaveTo = "/DataUser/UploadFile/";
-                workCheckAth.IsNote = false; //不显示note字段.
-                workCheckAth.IsVisable = false; // 让其在form 上不可见.
+                    //存储路径.
+                    workCheckAth.SaveTo = "/DataUser/UploadFile/";
+                    workCheckAth.IsNote = false; //不显示note字段.
+                    workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
-                //位置.
-                workCheckAth.X = (float)94.09;
-                workCheckAth.Y = (float)333.18;
-                workCheckAth.W = (float)626.36;
-                workCheckAth.H = (float)150;
+                    //位置.
+                    workCheckAth.X = (float)94.09;
+                    workCheckAth.Y = (float)333.18;
+                    workCheckAth.W = (float)626.36;
+                    workCheckAth.H = (float)150;
 
-                //多附件.
-                workCheckAth.UploadType = AttachmentUploadType.Multi;
-                workCheckAth.Name = "审核组件";
-                workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
-                workCheckAth.Insert();
+                    //多附件.
+                    workCheckAth.UploadType = AttachmentUploadType.Multi;
+                    workCheckAth.Name = "审核组件";
+                    workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
+                    workCheckAth.Insert();
+                }
             }
             #endregion 创建审核组件附件
 

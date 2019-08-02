@@ -500,6 +500,19 @@ namespace BP.WF
                 return NodePosType.End;
             return NodePosType.Mid;
         }
+
+        public FWCAth FWCAth
+        {
+            get
+            {
+                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+            }
+        }
+
         /// <summary>
         /// 检查流程，修复必要的计算字段信息.
         /// </summary>
@@ -692,7 +705,7 @@ namespace BP.WF
             FrmAttachment workCheckAth = new FrmAttachment();
             bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, "ND"+this.NodeID + "_FrmWorkCheck");
             //不包含审核组件
-            if (isHave == false)
+            if (isHave == false && this.FWCAth ==FWCAth.MinAth)
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
@@ -715,7 +728,7 @@ namespace BP.WF
                 //多附件.
                 workCheckAth.UploadType = AttachmentUploadType.Multi;
                 workCheckAth.Name = "审核组件";
-                workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
+                workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
                 workCheckAth.Insert();
             }
             return base.beforeUpdate();
@@ -2626,6 +2639,7 @@ namespace BP.WF
                 map.AddTBFloat(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
                 map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
                 map.AddTBInt(FrmWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
+                map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
                 #endregion 审核组件.
 
                 #region 考核属性.

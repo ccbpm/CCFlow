@@ -772,6 +772,30 @@ function valitationAfter(o, validateType) {
 //    }
 }
 
+
+
+function addplaceholder(obj, bit) {
+	if (obj.value <= 0) {
+		//obj.value = 0;
+		//return;
+		switch (bit) {
+			case 0:
+				obj.value = '0';
+				break;
+			default:
+				obj.value = '0.00';
+		}
+
+	}
+
+}
+function removeplaceholder(obj, bit) {
+	if (obj.value == 0) {
+
+		return obj.value = '';
+	}
+
+}
 /**
  * 输入验证firfox, ff浏览器不支持execCommand()
  */

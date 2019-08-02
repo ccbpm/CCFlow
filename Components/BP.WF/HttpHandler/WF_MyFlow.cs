@@ -1824,8 +1824,66 @@ namespace BP.WF.HttpHandler
 
         public string SaveFlow_ToDraftRole()
         {
-            #region 为开始工作创建待办.
+            
             Node nd = new Node(this.FK_Node);
+            Work wk = nd.HisWork;
+            if (this.WorkID != 0)
+            {
+                wk.OID = this.WorkID;
+                wk.RetrieveFromDBSources();
+            }
+
+            //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
+            if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
+            {
+                FrmNodes nds = new FrmNodes(this.FK_Flow, this.FK_Node);
+                foreach (FrmNode item in nds)
+                {
+                    GEEntity en = null;
+                    try
+                    {
+                        en = new GEEntity(item.FK_Frm);
+                        en.PKVal = this.WorkID;
+                        if (en.RetrieveFromDBSources() == 0)
+                        {
+                            continue;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+
+                    Attrs frmAttrs = en.EnMap.Attrs;
+                    Attrs wkAttrs = wk.EnMap.Attrs;
+                    foreach (Attr wkattr in wkAttrs)
+                    {
+                        if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
+                            || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
+                            || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
+                            || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
+                            || wkattr.Key.Equals(Data.GERptAttr.FlowStarter) || wkattr.Key.Equals(Data.GERptAttr.FlowStartRDT) || wkattr.Key.Equals(Data.GERptAttr.WFState))
+                        {
+                            continue;
+                        }
+
+                        foreach (Attr attr in frmAttrs)
+                        {
+                            if (wkattr.Key.Equals(attr.Key))
+                            {
+                                wk.SetValByKey(wkattr.Key, en.GetValStrByKey(attr.Key));
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                }
+                wk.Update();
+            }
+
+            #region 为开始工作创建待办.
             if (nd.IsStartNode == true)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow();
@@ -1839,14 +1897,7 @@ namespace BP.WF.HttpHandler
                     wfState = WFState.Draft;
                 if (fl.DraftRole == DraftRole.SaveToTodolist)
                     wfState = WFState.Runing;
-                Work wk = nd.HisWork;
-                if (this.WorkID != 0)
-                {
-                    wk.OID = this.WorkID;
-                    wk.RetrieveFromDBSources();
-                }
-                wk.ResetDefaultVal();
-
+              
                 //设置标题.
                 string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 

@@ -6640,7 +6640,8 @@ namespace BP.WF
                      * */
 
                     #region 执行 自动 启动子流程.
-                    CallAutoSubFlow();
+                    CallAutoSubFlow(this.HisNode,0); //启动本节点上的.
+                  
                     #endregion 执行启动子流程.
 
                     //调用发送成功事件.
@@ -6959,8 +6960,10 @@ namespace BP.WF
                 #endregion 处理主要业务逻辑.
 
                 #region 执行 自动 启动子流程.
-                CallAutoSubFlow();
+                CallAutoSubFlow(this.HisNode, 0); //启动本节点上的.
+                CallAutoSubFlow(this.town.HisNode, 1);
                 #endregion 执行启动子流程.
+
 
                 #region 处理流程数据与业务表的数据同步.
                 if (this.HisFlow.DTSWay != FlowDTSWay.None)
@@ -7204,16 +7207,19 @@ namespace BP.WF
         /// <summary>
         /// 自动启动子流程
         /// </summary>
-        public void CallAutoSubFlow()
+        public void CallAutoSubFlow(Node nd, int invokeTime)
         {
             //自动发起流程的数量.
-            if (this.HisNode.SubFlowAutoNum == 0)
+            if (nd.SubFlowAutoNum == 0)
                 return;
 
-            SubFlowAutos subs = new SubFlowAutos(this.HisNode.NodeID);
+            SubFlowAutos subs = new SubFlowAutos(nd.NodeID);
 
             foreach (SubFlowAuto sub in subs)
             {
+                if (sub.InvokeTime != invokeTime)
+                    continue;
+
                 //启动下级子流程.
                 if (sub.HisSubFlowModel == SubFlowModel.SubLevel)
                 {
@@ -7302,7 +7308,7 @@ namespace BP.WF
 
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, WebUser.No,nd.NodeID);
 
 
                         //写入消息.
@@ -7434,7 +7440,6 @@ namespace BP.WF
                     }
                     #endregion
 
-
                     #region 检查sendModel.
                     // 设置开始节点待办.
                     if (sub.SendModel == 0)
@@ -7471,74 +7476,10 @@ namespace BP.WF
                     }
                     #endregion 检查sendModel.
 
-
                 }
             }
 
             return;
-
-
-            string msg = "";
-            if (this.HisNode.SFActiveFlows.Length > 2)
-            {
-                string[] fls = this.HisNode.SFActiveFlows.Split(',');
-                foreach (string flowNo in fls)
-                {
-                    if (DataType.IsNullOrEmpty(flowNo) == true)
-                        continue;
-
-                    //检查是否有发起限制子流程的条件.
-                    Flow fl = new Flow(flowNo);
-
-                    #region 检查流程启动条件.
-                    bool isPass = false;
-                    //检查是否有
-                    Conds cds = new Conds();
-                    cds.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.NodeID, int.Parse(flowNo));
-                    foreach (Cond cd in cds)
-                    {
-                        cd.WorkID = this.HisWork.OID;
-                        cd.NodeID = this.HisNode.NodeID;
-                    }
-
-                    if (cds.Count == 0)
-                        isPass = true;
-                    else
-                        isPass = cds.IsPass;
-
-                    if (isPass == false)
-                    {
-                        msg += BP.WF.Glo.multilingual("@不符合子流程[{0}]启动条件.", "WorkNode", "not_match_sub_wf", fl.Name);
-                        continue;
-                    }
-                    #endregion 检查流程启动条件.
-
-                    #region 启动子流程.
-                    //组织从表数据，把它copy到子流程里面.
-                    DataSet dsDtl = new DataSet();
-                    MapDtls dtls = new MapDtls();
-                    dtls.Retrieve(MapDtlAttr.FK_MapData, this.HisWork.ClassID);
-                    foreach (MapDtl dtl in dtls)
-                    {
-                        string sqlDtl = "SELECT * FROM " + dtl.PTable + " WHERE RefPK='" + this.WorkID + "'";
-
-                        DataTable dtDtl = DBAccess.RunSQLReturnTable(sqlDtl);
-
-                        dtDtl.TableName = dtl.No.Replace("ND" + this.HisNode.NodeID, "ND" + int.Parse(fl.No + "01"));
-
-                        dsDtl.Tables.Add(dtDtl);
-                    }
-
-                    SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(fl.No, this.HisWork.Row, dsDtl, 0, null, this.WorkID, this.HisFlow.No);
-                    msg += BP.WF.Glo.multilingual("@子流程({0})已经启动,发送给:{1}, 发送到:{2}.", "WorkNode", "sub_wf_started_1", fl.Name, sendObjs.VarAcceptersName, sendObjs.VarToNodeName);
-
-                    #endregion 启动子流程.
-
-                }
-                if (msg != "")
-                    this.addMsg(SendReturnMsgFlag.MsgOfText, msg);
-
-            }
         }
         /// <summary>
         /// 处理事件

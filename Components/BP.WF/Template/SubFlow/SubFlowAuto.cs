@@ -107,6 +107,17 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 调用时间 0=工作发送时, 1=工作到达时.
+        /// </summary>
+        public int InvokeTime
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAutoAttr.InvokeTime);
+            }
+        }
+        
+        /// <summary>
         /// 运行类型
         /// </summary>
         public SubFlowModel HisSubFlowModel
@@ -280,7 +291,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "结束规则", true, true,
                 FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
-                map.AddDDLSysEnum(SubFlowAttr.InvokeTime, 0, "调用时间", true, true, SubFlowAttr.InvokeTime, "@0=发送时@1=工作到达时");
+                map.AddDDLSysEnum(SubFlowAttr.InvokeTime, 0, "调用时间", true, true, SubFlowAttr.InvokeTime,
+                    "@0=发送时@1=工作到达时");
 
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次.", true, true, true);
 

@@ -4518,29 +4518,21 @@ namespace BP.WF
             ps.Add("BillNo", newBillNo);
             ps.Add("OID", workID);
             BP.DA.DBAccess.RunSQL(ps);
-        }
-        /// <summary>
-        /// 设置父流程信息
-        /// </summary>
-        /// <param name="subFlowNo"></param>
-        /// <param name="subFlowWorkID"></param>
-        /// <param name="pflowNo"></param>
-        /// <param name="parentWorkID"></param>
-        /// <param name="pNodeID"></param>
-        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, string pflowNo, Int64 parentWorkID, int pNodeID, string parentEmpNo)
-        {
-            SetParentInfo(subFlowNo, subFlowWorkID, parentWorkID);
-        }
+        } 
         /// <summary>
         /// 设置父流程信息 
         /// </summary>
         /// <param name="subFlowNo">子流程编号</param>
         /// <param name="subFlowWorkID">子流程workid</param>
         /// <param name="parentWorkID">父流程WorkID</param>
-        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, Int64 parentWorkID, string parentEmpNo = null)
+        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, Int64 parentWorkID, string parentEmpNo = null, int parentNodeID=0)
         {
             //创建父流程.
             GenerWorkFlow pgwf = new GenerWorkFlow(parentWorkID);
+
+            if (parentNodeID != 0)
+                pgwf.FK_Node = parentNodeID;
+
 
             if (parentEmpNo == null)
                 parentEmpNo = WebUser.No;

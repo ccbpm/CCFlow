@@ -36,15 +36,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string MainFlowNo
+        public string FK_Flow
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAutoAttr.MainFlowNo);
+                return this.GetValStringByKey(SubFlowAutoAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(SubFlowAutoAttr.MainFlowNo, value);
+                SetValByKey(SubFlowAutoAttr.FK_Flow, value);
             }
         }
         /// <summary>
@@ -278,6 +278,10 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
+
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 100, true);
+
+
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
@@ -360,6 +364,10 @@ namespace BP.WF.Template
                         throw new Exception("err@【自动发送方式】设置错误，您选择了[发送到下一个节点]但是该节点的接收人规则为由上一步发送人员选择，这是不符合规则的。");
                 }
             }
+
+            //设置主流程ID.
+            Node myNd = new Node(this.FK_Node);
+            this.FK_Flow = myNd.FK_Flow;
 
             return base.beforeUpdateInsertAction();
         }

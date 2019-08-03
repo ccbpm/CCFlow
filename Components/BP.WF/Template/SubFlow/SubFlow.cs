@@ -32,7 +32,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public const string MainFlowNo = "MainFlowNo";
+        public const string FK_Flow = "FK_Flow";
         /// <summary>
         /// 节点ID
         /// </summary>
@@ -195,15 +195,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string MainFlowNo
+        public string FK_Flow
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.MainFlowNo);
+                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(SubFlowYanXuAttr.MainFlowNo, value);
+                SetValByKey(SubFlowYanXuAttr.FK_Flow, value);
             }
         }
         /// <summary>
@@ -315,7 +315,7 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(SubFlowAttr.MainFlowNo, null, "主流程编号", true, false, 0, 10, 150, true);
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 150, true);
                 map.AddTBInt(SubFlowAttr.FK_Node, 0, "主流程节点", false, true);
 
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);

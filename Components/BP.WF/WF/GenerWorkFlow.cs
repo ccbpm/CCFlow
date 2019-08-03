@@ -1332,6 +1332,15 @@ namespace BP.WF
 		#endregion 
 
 		#region 执行诊断
+        /// <summary>
+        /// 生成父子流程的甘特图
+        /// </summary>
+        /// <returns></returns>
+        public string GenerGantt()
+        {
+            return BP.WF.Glo.GenerGanttDataOfSubFlows(this.WorkID);
+        }
+
         public string DoRpt()
         {
             return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;

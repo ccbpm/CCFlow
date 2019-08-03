@@ -29,6 +29,216 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        public static string GenerGanttDataOfSubFlows(Int64 workID)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            //增加子流程数据.
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            gwfs.Retrieve("PWorkID", workID);
+
+            string json = "[";
+
+            json += " { id:'" + gwf.FK_Flow + "', name:'" + gwf.FlowName + "',";
+
+            json += " series:[";
+            json += "{ name: \"计划时间\", start:  " + ToData(gwf.SDTOfFlow) + ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
+            json += "{ name: \"实际工作时间\", start: " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
+            json += "]";
+             
+                json += "},";
+
+            //获得节点.
+            Nodes nds = new Nodes(gwf.FK_Flow);
+            nds.Retrieve("FK_Flow", gwf.FK_Flow, "Step");
+
+            SubFlows subs = new SubFlows();
+            subs.Retrieve(SubFlowAttr.FK_Flow, gwf.FK_Flow);
+             
+
+
+            //增加子流成.
+            int idx = 0;
+            foreach (GenerWorkFlow subGWF in gwfs)
+            {
+                idx++;
+
+                json += " { id:'" + subGWF.FK_Flow + "', name:'" + subGWF.FlowName + "',";
+
+                json += " series:[";
+                json += "{ name: \"实际工作时间\", start:  " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " }";
+                json += "]";
+
+                if (idx == gwfs.Count)
+                {
+                    json += "}";
+                    json += "]";
+                    return json;
+                }
+                else
+                {
+                    json += "},";
+                }
+            }
+
+            json += "]";
+
+            return json;
+        }
+
+        /// <summary>
+        /// 生成甘特图
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        public static string GenerGanttDataOfSubFlowsV20(Int64 workID)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            //增加子流程数据.
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            gwfs.Retrieve("PWorkID", workID);
+
+            string json = "[";
+
+            json += " { id:'" + gwf.FK_Flow + "', name:'" + gwf.FlowName + "',";
+
+            json += " series:[";
+            json += "{ name: \"计划时间\", start:  "+ ToData(gwf.SDTOfFlow)+ ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
+            json += "{ name: \"实际工作时间\", start: "+ ToData(gwf.RDT)+ ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
+            json += "]";
+
+            if (gwfs.Count == 0)
+            {
+                json += "}";
+                json += "]";
+                return json;
+            }else
+            {
+                json += "},";
+            }
+
+            //增加子流成.
+            int idx = 0;
+            foreach (GenerWorkFlow subGWF in gwfs)
+            {
+                idx++;
+
+                json += " { id:'" + subGWF.FK_Flow + "', name:'" + subGWF.FlowName + "',";
+
+                json += " series:[";
+                json += "{ name: \"实际工作时间\", start:  " + ToData( gwf.RDT )+ ", end: " + ToData(gwf.SendDT) + " }";
+                json += "]";
+
+                if (idx==gwfs.Count)
+                {
+                    json += "}";
+                    json += "]";
+                    return json;
+                }
+                else
+                {
+                    json += "},";
+                }                 
+            }
+
+            json += "]";
+
+            return json;             
+        }
+
+        public static string ToData(string dtStr)
+        {
+
+            DateTime dt = BP.DA.DataType.ParseSysDate2DateTime(dtStr);
+
+            return  "'"+dt.ToString("yyyy-MM-dd")+"'";
+             
+        }
+        /// <summary>
+        /// 生成甘特图
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerGanttDataOfSubFlowsV1(Int64 workID)
+        {
+            //定义解构.
+            DataTable dtFlows = new DataTable();
+            dtFlows.Columns.Add("id");
+            dtFlows.Columns.Add("name");
+
+            DataTable dtSeries = new DataTable();
+            dtSeries.TableName = "series";
+            dtSeries.Columns.Add("name");
+            dtSeries.Columns.Add("start");
+            dtSeries.Columns.Add("end");
+            dtSeries.Columns.Add("color");
+            dtSeries.Columns.Add("RefPK");
+
+            //增加主流程数据.
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            DataRow dr = dtFlows.NewRow();
+            dr["id"] = gwf.FK_Flow;
+            dr["name"] = gwf.FlowName;
+            dtFlows.Rows.Add(dr);
+
+            DataRow drItem = dtSeries.NewRow();
+            drItem["name"] = "项目计划日期";
+            drItem["start"] = gwf.RDT;
+            drItem["end"] = gwf.SDTOfFlow;
+            drItem["color"] = "#f0f0f0";
+            drItem["RefPK"] = gwf.FK_Flow;
+            dtSeries.Rows.Add(drItem);
+
+            drItem = dtSeries.NewRow();
+            drItem["name"] = "项目启动日期";
+            drItem["start"] = gwf.RDT;
+            drItem["end"] = gwf.SDTOfFlow;
+            drItem["color"] = "#f0f0f0";
+            drItem["RefPK"] = gwf.FK_Flow;
+            dtSeries.Rows.Add(drItem);
+
+             
+            //增加子流程数据.
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            gwfs.Retrieve("PWorkID", workID);
+
+            foreach (GenerWorkFlow subFlow in gwfs)
+            {
+                dr = dtFlows.NewRow();
+                dr["id"] = subFlow.FK_Flow;
+                dr["name"] = subFlow.FlowName;
+                dtFlows.Rows.Add(dr);
+                 
+
+                drItem = dtSeries.NewRow();
+                drItem["name"] = "启动日期";
+                drItem["start"] = subFlow.RDT;
+                drItem["end"] = subFlow.SDTOfFlow;
+                drItem["color"] = "#f0f0f0";
+                drItem["RefPK"] = subFlow.FK_Flow;
+                dtSeries.Rows.Add(drItem);
+            }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dtFlows);
+            ds.Tables.Add(dtSeries);
+
+            return ToJsonOfGantt(ds);
+        }
+        public static string ToJsonOfGantt(DataSet ds)
+        {
+            string json = "[";
+
+            DataTable dtFlows = ds.Tables[0];
+            DataTable dtSeries = ds.Tables[1];
+
+           
+
+
+            json += "]";
+
+            return "";
+
+        }
+
         #region 多语言处理.
         private static Hashtable _Multilingual_Cache = null;
         public static DataTable getMultilingual_DT(string className)

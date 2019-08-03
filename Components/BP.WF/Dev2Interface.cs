@@ -9347,6 +9347,8 @@ namespace BP.WF
                 info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
 
                 info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+
+                //BP.WF.Dev2Interface.Port_SendMsg(emp.No,gwf.Title,"工作移交","Shif")
                 return info;
             }
 
@@ -9358,7 +9360,6 @@ namespace BP.WF
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
             gwls.Delete(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
-
 
             foreach (GenerWorkerList item in gwls)
             {

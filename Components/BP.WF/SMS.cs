@@ -534,7 +534,7 @@ namespace BP.WF
             myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
             myEmail.IsBodyHtml = true;//是否是HTML邮件
 
-            myEmail.Priority = MailPriority.High;//邮件优先级
+            myEmail.Priority = MailPriority.High; // 邮件优先级
 
             SmtpClient client = new SmtpClient();
 

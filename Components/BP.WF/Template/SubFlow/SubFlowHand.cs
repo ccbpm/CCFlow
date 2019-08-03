@@ -37,15 +37,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string MainFlowNo
+        public string FK_Flow
         {
             get
             {
-                return this.GetValStringByKey(SubFlowAutoAttr.MainFlowNo);
+                return this.GetValStringByKey(SubFlowAutoAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(SubFlowAutoAttr.MainFlowNo, value);
+                SetValByKey(SubFlowAutoAttr.FK_Flow, value);
             }
         }   
         /// <summary>
@@ -197,6 +197,9 @@ namespace BP.WF.Template
                 Map map = new Map("WF_NodeSubFlow", "手动启动子流程");
 
                 map.AddMyPK();
+
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 100, true);
+
 
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,

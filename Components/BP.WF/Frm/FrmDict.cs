@@ -276,7 +276,6 @@ namespace BP.Frm
                 map.AddTBString(FrmDictAttr.Tag2, null, "Tag2", false, false, 0, 500, 20);
                 #endregion 扩展参数.
 
-
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
@@ -348,6 +347,14 @@ namespace BP.Frm
                 rm = new RefMethod();
                 rm.Title = "创建规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCreateRole";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "权限规则";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "编辑规则"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoSaveRole";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "权限规则";
@@ -610,6 +617,10 @@ namespace BP.Frm
         #endregion 报表定义.
 
         #region 权限控制.
+        public string DoSaveRole()
+        {
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
         public string DoCreateRole()
         {
             return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";

@@ -21,6 +21,7 @@ using BP.WF.Rpt;
 using BP.WF.Data;
 using BP.WF.Template;
 
+
 namespace BP.WF
 {
     /// <summary>
@@ -1319,6 +1320,40 @@ namespace BP.WF
 
             BP.Sys.FrmRB myrb = new BP.Sys.FrmRB();
             myrb.CheckPhysicsTable();
+
+            BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp();
+            wfemp.CheckPhysicsTable();
+
+            if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+            {
+                string sql = "";
+                //增加StartFlows这个字段
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        sql = "ALTER TABLE WF_Emp ADD StartFlows Text DEFAULT  NULL";
+                        break;
+                    case DBType.Oracle:
+                        sql = "ALTER TABLE  WF_EMP add StartFlows BLOB";
+                        break;
+                    case DBType.MySQL:
+                        sql = "ALTER TABLE WF_Emp ADD StartFlows TEXT COMMENT '可以发起的流程'";
+                        break;
+                    case DBType.Informix:
+                        sql = "ALTER TABLE WF_Emp ADD StartFlows VARCHAR(4000) DEFAULT  NULL";
+                        break;
+                    case DBType.PostgreSQL:
+                        sql = "ALTER TABLE WF_Emp ADD StartFlows Text DEFAULT  NULL";
+                        break;
+                    default:
+                        throw new Exception("@没有涉及到的数据库类型");
+                }
+                DBAccess.RunSQL(sql);
+
+            }
+           
+
+
             #endregion 首先创建Port类型的表.
 
 

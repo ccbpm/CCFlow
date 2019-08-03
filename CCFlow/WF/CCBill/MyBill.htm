@@ -488,7 +488,7 @@
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyBill_CreateBlankWorkID");
+            var data = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
             window.location.href = 'MyBill.htm?FrmID=' + GetQueryString("FrmID") + "&WorkID=" + data;
 
         }

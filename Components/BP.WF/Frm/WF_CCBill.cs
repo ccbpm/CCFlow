@@ -577,7 +577,10 @@ namespace BP.Frm
             ur.SetPara("RecCount", qo.GetCount());
             ur.Save();
 
-            qo.DoQuery("OID", this.PageSize, this.PageIdx);
+            if(DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
+                qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);
+            else
+                qo.DoQuery("OID", this.PageSize, this.PageIdx);
 
             DataTable mydt = rpts.ToDataTableField();
             mydt.TableName = "DT";

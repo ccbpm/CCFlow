@@ -1025,7 +1025,7 @@ namespace BP.En
         /// <returns>查询结果</returns>
         public int DoQuery(string pk, int pageSize, int pageIdx, string orderBy, string orderWay)
         {
-            if (orderWay.ToLower().Trim() == "up")
+            if (orderWay.ToLower().Trim() == "up" || orderWay.ToLower().Trim() == "asc")
                 return DoQuery(pk, pageSize, pageIdx, orderBy, false);
             else
                 return DoQuery(pk, pageSize, pageIdx, orderBy, true);

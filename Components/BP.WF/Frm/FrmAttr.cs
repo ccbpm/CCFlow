@@ -28,6 +28,10 @@ namespace BP.Frm
         /// </summary>
         public const string TitleRole = "TitleRole";
         /// <summary>
+        /// 排序字段
+        /// </summary>
+        public const string SortColumns = "SortColumns";
+        /// <summary>
         /// 关联单据
         /// </summary>
         public const string RefBill = "RefBill";

@@ -22,7 +22,7 @@
 
                 var mapAttr = mapAttrs[i];
                 if (topFields.indexOf(mapAttr.KeyOfEn + ",") == -1)
-                    continue;
+                   continue;
 
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
                 var html = "";
@@ -33,12 +33,22 @@
                 html += "<td> <input value='" + mapAttr.Name + "' type=text style='width:100%;'  id='TB_" + mapAttr.KeyOfEn + "' /></td>";
                 html += "<td> <input value='" + mapAttr.UIWidth + "' type=text style='width:40px;'  id='TBW_" + mapAttr.KeyOfEn + "' /></td>";
 
-                if (mapAttrEn.GetPara("SearchVisable") != "1")
-                    mapAttrEn.Update();
+                //if (mapAttrEn.GetPara("SearchVisable") != "1")
+                //    mapAttrEn.Update();
 
-                html += "<td>显示</td>";
+                html += "<td>普通</td>";
 
-                html += "<td></td>";
+                if (mapAttrEn.GetPara("SearchVisable") == "1")
+                    html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
+                else if (mapAttrEn.GetPara("SearchVisable") == "0") {
+                    html += "<td style='text-align:right' ><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
+                } else {
+                    if (mapAttr.UIVisible == 1) {
+                        html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
+                    } else {
+                        html += "<td style='text-align:right' ><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
+                    }
+                }
                 html += "<td></td>";
 
                 html += "</tr>";
@@ -81,8 +91,15 @@
 
                 if (mapAttrEn.GetPara("SearchVisable") == "1")
                     html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
-                else
+               else if (mapAttrEn.GetPara("SearchVisable") == "0") {
                     html += "<td style='text-align:right' ><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
+                } else {
+                    if (mapAttr.UIVisible == 1) {
+                        html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
+                    } else {
+                        html += "<td style='text-align:right' ><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
+                    }
+                }
 
                 html += "<td><a href=\"javascript:Up('" + mapAttr.MyPK + "')\">上移</a> - <a href=\"javascript:Down('" + mapAttr.MyPK + "')\">下移</a></td>";
                 html += "</tr>";

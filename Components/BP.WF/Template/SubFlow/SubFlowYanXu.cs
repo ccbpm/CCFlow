@@ -132,8 +132,7 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 100, true);
-
-
+                 
                 map.AddTBInt(SubFlowYanXuAttr.FK_Node, 0, "节点", false, true);
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowType, 2, "子流程类型", true, false, SubFlowYanXuAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");

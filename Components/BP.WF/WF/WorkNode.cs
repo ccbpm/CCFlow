@@ -7308,7 +7308,7 @@ namespace BP.WF
 
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, WebUser.No,nd.NodeID);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.FK_Flow,this.HisGenerWorkFlow.WorkID, nd.NodeID,WebUser.No);
 
 
                         //写入消息.

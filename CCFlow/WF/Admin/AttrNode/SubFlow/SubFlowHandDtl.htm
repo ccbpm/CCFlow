@@ -86,7 +86,7 @@
             var nodeID = GetQueryString("FK_Node");
 
             var ens = new Entities("BP.WF.Template.SubFlowHands");
-            ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo,"SubFlowType", 0);
+            ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo,"SubFlowType", 0);
 
             if (ens.length == 1) {
                 alert("该流程已经存在");

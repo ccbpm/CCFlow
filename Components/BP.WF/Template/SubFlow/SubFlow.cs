@@ -209,11 +209,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 主流程NodeID
         /// </summary>
-        public string FK_Node
+        public int FK_Node
         {
             get
             {
-                return this.GetValStringByKey(SubFlowYanXuAttr.FK_Node);
+                return this.GetValIntByKey(SubFlowYanXuAttr.FK_Node);
             }
             set
             {

@@ -9,6 +9,7 @@ using BP.WF.Template;
 
 namespace BP.WF
 {
+    
     /// <summary>
     /// 流程运行类型
     /// </summary>
@@ -941,6 +942,16 @@ namespace BP.WF
                 GenerWorkFlows ens = new GenerWorkFlows();
                 ens.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
                 return ens;
+            }
+        }
+        /// <summary>
+        /// 0=待办中,1=预警中,2=逾期中,3=按期完成,4=逾期完成
+        /// </summary>
+        public int TodoSta
+        {
+            get
+            {
+                return this.GetValIntByKey(GenerWorkFlowAttr.TodoSta);
             }
         }
         #endregion 扩展属性

@@ -32,20 +32,19 @@ namespace BP.WF
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
             //增加子流程数据.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve("PWorkID", workID);
 
             string json = "[";
 
-            json += " { id:'" + gwf.FK_Flow + "', name:'" + gwf.FlowName + "',";
-
-            json += " series:[";
-            json += "{ name: \"计划时间\", start:  " + ToData(gwf.SDTOfFlow) + ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
-            json += "{ name: \"实际工作时间\", start: " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
-            json += "]";
-             
-                json += "},";
+            //json += " { id:'" + gwf.FK_Flow + "', name:'" + gwf.FlowName + "',";
+            //json += " series:[";
+            //json += "{ name: \"计划时间\", start:  " + ToData(gwf.SDTOfFlow) + ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
+            //json += "{ name: \"实际工作时间\", start: " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
+            //json += "]";
+            //json += "},";
 
             //获得节点.
             Nodes nds = new Nodes(gwf.FK_Flow);
@@ -53,31 +52,89 @@ namespace BP.WF
 
             SubFlows subs = new SubFlows();
             subs.Retrieve(SubFlowAttr.FK_Flow, gwf.FK_Flow);
-             
 
-
-            //增加子流成.
-            int idx = 0;
-            foreach (GenerWorkFlow subGWF in gwfs)
+            int idxNode = 0;
+            foreach (Node nd in nds)
             {
-                idx++;
+                idxNode++;
 
-                json += " { id:'" + subGWF.FK_Flow + "', name:'" + subGWF.FlowName + "',";
+                //里程碑.
+                json += " { id:'" + nd.NodeID + "', name:'" + nd.Name + "', ";
 
-                json += " series:[";
-                json += "{ name: \"实际工作时间\", start:  " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " }";
-                json += "]";
 
-                if (idx == gwfs.Count)
+                string series = "";
+                foreach (SubFlow sub in subs)
                 {
-                    json += "}";
-                    json += "]";
-                    return json;
+                    if (sub.FK_Node != nd.NodeID)
+                        continue;
+
+                    //增加子流成.
+                    int idx = 0;
+                    string dtlsSubFlow = "";
+                    foreach (GenerWorkFlow subGWF in gwfs)
+                    {
+                        if (subGWF.FK_Flow != sub.SubFlowNo)
+                            continue;
+
+                        dtlsSubFlow += "{ ";
+                        dtlsSubFlow += " name: '" + subGWF.FlowName + "', ";
+                        dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ", ";
+                        dtlsSubFlow += " end: " + ToData(gwf.SendDT) + ",  ";
+
+                        if (gwf.TodoSta==0)
+                            dtlsSubFlow += " color: '#f0f0f0'  "; //正常
+                        if (gwf.TodoSta == 1)
+                            dtlsSubFlow += " color: 'yellow'  "; //预警中.
+
+                        if (gwf.TodoSta == 2)
+                            dtlsSubFlow += " color: '#e0e0e0'  "; //正常完成.
+
+                        if (gwf.TodoSta == 3)
+                            dtlsSubFlow += " color: 'red'  "; //逾期完成.
+                         
+
+                        //if (gwf.WFState== WFState.ReturnSta)
+
+                        dtlsSubFlow += "},";
+                    }
+
+                    if (DataType.IsNullOrEmpty(dtlsSubFlow) == false)
+                        dtlsSubFlow = dtlsSubFlow.Substring(0, dtlsSubFlow.Length - 1);
+
+                    //如果没有启动子流程，就需要显示空白的。
+                    if (DataType.IsNullOrEmpty(dtlsSubFlow) == true)
+                    {
+                        dtlsSubFlow += "{ ";
+                        dtlsSubFlow += " name: '" + sub.SubFlowNo + " - " + sub.SubFlowName + "', ";
+                        dtlsSubFlow += " start:  " + ToData(DataType.CurrentData) + ", ";
+
+                        dtlsSubFlow += " end:  " + ToData("2019-09-01") + ", ";
+                        dtlsSubFlow += " color: 'yellow' ";
+
+                        dtlsSubFlow += "}";
+                    }
+
+                    //从表.
+                    series += dtlsSubFlow +"," ;
+                     
                 }
+
+                if (DataType.IsNullOrEmpty(series) == false)
+                    series = series.Substring(0, series.Length - 1);
+
+
+                if (DataType.IsNullOrEmpty(series))
+                    json += " series:[]";
                 else
                 {
-                    json += "},";
+                    json += " series:["+ series + "]";
                 }
+
+             
+                if (idxNode == nds.Count)
+                    json += "}";
+                else
+                    json += "},";
             }
 
             json += "]";

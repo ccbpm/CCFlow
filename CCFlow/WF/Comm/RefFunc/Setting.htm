@@ -1,0 +1,184 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>设置隐藏与显示</title>
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
+    <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <!--<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <!-- 位置必须放在 jquery 之后. -->
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Gener.js"></script>
+    <style type="text/css">
+        .textbox-addon
+        {
+            position: absolute;
+        }
+        
+        .textbox-text
+        {
+            margin: 0px 26px 0px 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            height: 28px !important;
+            line-height: 28px !important;
+        }
+        .style1
+        {
+            width: 326px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var frmData;
+        var mapData;
+        var mainData;
+        var dtM; //方法集合.
+        var pkVal = "";
+        var webUser = new WebUser();
+        $(function () {
+
+            debugger
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            var enName = GetQueryString("EnName");
+            httpHandler.AddUrlData();
+            var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#docs").html(data);
+                return;
+            }
+
+            //解析json.
+            frmData = JSON.parse(data);
+            mapData = frmData["Sys_MapData"][0];
+            mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
+            mainData = frmData["MainData"];
+            dtM = frmData["dtM"];
+            document.title = mapData.Name;
+
+            $("#docs").html("该功能用于显示或者屏蔽部分字段，功能。");
+
+        })
+
+        //字段.
+        function Fields() {
+
+            //获得字段列表.
+            var Sys_MapAttr = frmData["Sys_MapAttr"];
+            alert(Sys_MapAttr);
+
+        }
+        function Fields() {
+            //获得字段列表.
+            var Sys_MapAttr = frmData["Sys_MapAttr"];
+
+            var mypk = webUser.No + "_Fields_" + GetQueryString("EnName");
+            var cfgEn = new Entity("BP.Sys.UserRegedit");
+            cfgEn.SetPKVal(mypk);
+            cfgEn.RetrieveFromDBSources();
+
+          //  alert(cfgEn.Vals);
+
+            var html = "";
+            html += "<table>";
+            html += "<caption>字段</caption>";
+            html += "<tr>";
+            html += "<th>序</th>";
+            html += "<th>字段名</th>";
+            html += "<th>中文名</th>";
+            html += "</tr>";
+            for (var i = 0; i < Sys_MapAttr.length; i++) {
+                var mapAttr = Sys_MapAttr[i];
+
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td>" + mapAttr.KeyOfEn + "</td>";
+                //html += "<td>" + mapAttr.Name + "</td>";
+
+                var checked = "";
+                if (cfgEn.Vals.indexOf(',' + mapAttr.KeyOfEn) >= 0)
+                    checked = " checked=true ";
+
+                html += "<td><label><input type=checkbox " + checked + " name='" + mapAttr.KeyOfEn + "' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
+                html += "<tr>";
+            }
+
+            html += "</table>";
+            html += "<input type=button onclick='SaveFields();' value='保存' />";
+
+            $("#docs").html(html);
+        }
+
+        function SaveFields() {
+
+            var Sys_MapAttr = frmData["Sys_MapAttr"];
+
+            var keys = "";
+            for (var i = 0; i < Sys_MapAttr.length; i++) {
+                var mapAttr = Sys_MapAttr[i];
+
+                var boolen = $('input:radio[name=' + mapAttr.KeyOfEn + ']:checked').val();
+                if (boolen == false)
+                    continue;
+
+                keys += "," + mapAttr.KeyOfEn;
+            }
+
+          //  alert(keys);
+
+
+            var mypk = webUser.No + "_Fields_" + GetQueryString("EnName");
+            var en = new Entity("BP.Sys.UserRegedit");
+            en.SetPKVal(mypk);
+            en.RetrieveFromDBSources();
+
+            en.FK_Emp = webUser.No;
+            en.CfgKey = 'Fields';
+            en.FK_MapData = GetQueryString("EnName");
+
+            en.Vals = keys;
+            en.Save();
+
+            alert('保存成功.');
+        }
+
+        /**/</script>
+</head>
+<body>
+    <table style="width: 100%;">
+        <caption>
+            设置隐藏与显示</caption>
+        <tr>
+            <td class="style1" valign="top">
+                <fieldset>
+                    <legend>设置内容</legend>
+                    <ul>
+                        <li><a href="javascript:Fields()">字段</a></li>
+                        <li><a href="javascript:Tabs()">字段Tab页面</a></li>
+                        <li><a href="javascript:Funcs()">功能</a></li>
+                        <li><a href="javascript:GroupFields()">分组功能</a></li>
+                    </ul>
+                </fieldset>
+            </td>
+            <td valign="top">
+                <div id="docs">
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

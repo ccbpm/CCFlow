@@ -67,6 +67,7 @@
         var dtM; //方法集合.
         var isReadonly = GetQueryString("isReadonly");
         var pkVal = "";
+        var webUser = new WebUser();
         $(function () {
             pkVal = GetPKVal();
             //新增时En.htm页面隐藏
@@ -104,6 +105,11 @@
 
         })
 
+        ///设置.
+        function Setting() {
+            var url = "Setting.htm?EnName=" + GetQueryString("EnName");
+            WinOpen(url, "xxs");
+        }
 
 
         //设置按钮
@@ -130,6 +136,10 @@
                     if (pkVal != null)
                         $("#Btn_Delete").show();
                 }
+            }
+
+            if (webUser.No == 'admin') {
+                $("#Btn_Setting").show();
             }
 
         }
@@ -1153,6 +1163,12 @@
                                              data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
                 <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'"
                    onclick="Delete()">删除</a>
+
+                                   <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'"
+                   onclick="Setting()">设置</a>
+
+
+
             </div>
             <div data-options="region:'center',noheader:true,border:false" style="margin: 0px">
                 <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin: 0px;

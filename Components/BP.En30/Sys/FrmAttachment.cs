@@ -285,8 +285,18 @@ namespace BP.Sys
         /// 2=每个类别下不能为空.
         /// </summary>
         public const string UploadFileNumCheck = "UploadFileNumCheck";
-
+        /// <summary>
+        /// 上传最小数量
+        /// </summary>
         public const string NumOfUpload = "NumOfUpload";
+        /// <summary>
+        /// 上传最大数量
+        /// </summary>
+        public const string TopNumOfUpload = "TopNumOfUpload";
+             /// <summary>
+        /// 附件最大限制
+        /// </summary>
+        public const string FileMaxSize = "FileMaxSize";
         /// <summary>
         /// 是否可见？
         /// </summary>
@@ -427,7 +437,7 @@ namespace BP.Sys
         }
 
         /// <summary>
-        /// 节点编号
+        /// 最低上传数量
         /// </summary>
         public int NumOfUpload
         {
@@ -440,7 +450,34 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.NumOfUpload, value);
             }
         }
-
+        /// <summary>
+        /// 最大上传数量
+        /// </summary>
+        public int TopNumOfUpload
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.TopNumOfUpload);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.TopNumOfUpload, value);
+            }
+        }
+        /// <summary>
+        /// 附件最大限制
+        /// </summary>
+        public int FileMaxSize
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.FileMaxSize);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.FileMaxSize, value);
+            }
+        }
         /// <summary>
         /// 上传校验
         /// 0=不校验.
@@ -1244,7 +1281,9 @@ namespace BP.Sys
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 200, 20);
-                map.AddTBInt(FrmAttachmentAttr.NumOfUpload, 0, "最低上传数量", true, false);
+                map.AddTBInt(FrmAttachmentAttr.NumOfUpload, 0, "最小上传数量", true, false);
+                map.AddTBInt(FrmAttachmentAttr.TopNumOfUpload, 0, "最大上传数量", true, false);
+                map.AddTBInt(FrmAttachmentAttr.FileMaxSize, 0, "附件最大限制(KB)", true, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, false);
 
                 //map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,

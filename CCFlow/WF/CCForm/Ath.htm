@@ -35,7 +35,9 @@
         }
     </style>
     <script language="javascript" type="text/javascript">
-        var numOfUpload = 0;  //要求上传的数量.
+        var numOfUpload = 0;  //要求上传的最小数量.
+        var topNumOfUpload = 0;  //要求上传的最大数量.
+        var fileMaxSize = 0;  //要求上传的最大附件大小.
         var numOfAths = 0;    //附件数量.
         function CanEditor(fileType) {
 
@@ -98,6 +100,7 @@
                 alert("您至少要上传[" + numOfUpload + "]个附件.");
                 return false;
             }
+            
             return true;
         }
 
@@ -161,6 +164,8 @@
 
             //用于必须上传的校验.
             numOfUpload = athDesc.NumOfUpload; //最低上传的数量.
+            topNumOfUpload = athDesc.TopNumOfUpload; //最大上传的数量.
+            fileMaxSize = athDesc.FileMaxSize; //最大上传的附件大小.
             numOfAths = dbs.length; //现有的数量.
 
             var mapAttrs = null;
@@ -263,15 +268,6 @@
 
         });
 
-
-        //检查上传附件的数量,如果不符合最低要求alert错误，并且返回false.
-        function CheckNumOfUpload() {
-            if (numOfUpload > numOfAths) {
-                alert('您至少需要上传["+numOfUpload+"]个附件');
-                return false;
-            }
-            return true;
-        }
 
         //Table模式
         var columnNum = 6;
@@ -606,7 +602,7 @@
                         realFileExts = "*.*";
 
                     if (athDesc.IsExpCol == 1)
-                        html += " <label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' accept='" + realFileExts + "' ><span>文件上传</span></label>";
+                        html += " <label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' accept='" + realFileExts + "'><span>文件上传</span></label>";
                     else
                         html += " <label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'><span>文件上传</span> </label>";
 
@@ -641,7 +637,7 @@
             }
         }
         function SaveUpload() {
-
+            
             //必填项和正则表达式检查
             var formCheckResult = true;
 
@@ -674,7 +670,17 @@
                 return;
             }
             var fileName = fileObj.name;
-
+            //判断附件上传大小的限制
+            var fileSize = fileObj.size;
+            if (fileSize > fileMaxSize * 1024) {
+                alert("附件大小超过了" + fileMaxSize + "KB的限制！");
+                return;
+            }  
+            //判断附件上传最大数量
+            if (topNumOfUpload <= numOfAths) {
+                alert("您最多上传[" + topNumOfUpload + "]个附件");
+                return;
+            }
             
             if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
                 alert("上传附件类型不正确，只能上传" + realFileExts);

@@ -40,14 +40,11 @@ namespace BP.WF
             if (workID == 0)
                 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, null, null, userNo, null);
 
-            Node nd = new Node(fk_node);
+            Node nd = new Node(fk_node);        
             try
             {
                 nd.WorkID = workID; //为获取表单ID提供参数.
-                MapData md = new MapData();
-                md.No = nd.NodeFrmID;
-                if (md.RetrieveFromDBSources() == 0)
-                    throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
+                MapData md = new MapData(nd.NodeFrmID);
 
                 Work wk = nd.HisWork;
                 wk.OID = workID;
@@ -66,9 +63,10 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
                     && (nd.HisFormType== NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm))
                 {
-                    String name = new MapData("ND" + fk_node).Name;
-                    if (DataType.IsNullOrEmpty(name) == true)
+                    string name  =  md.Name;
+                    if (DataType.IsNullOrEmpty(md.Name) == true)
                         name = nd.Name;
+
                     myds.Tables["Sys_MapData"].Rows[0]["Name"]= name;
                 }
 
@@ -77,9 +75,8 @@ namespace BP.WF
 
                 //获取表单的mapAttr
                 //求出集合.
-                MapAttrs mattrs = new MapAttrs(md.No);
-                if (fk_node != null)
-                {
+                MapAttrs mattrs = md.MapAttrs; // new MapAttrs(md.No);
+                
                     /*处理表单权限控制方案*/
                     FrmNode frmNode = new FrmNode();
                     int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
@@ -103,7 +100,7 @@ namespace BP.WF
                             }
                         }
                     }
-                }
+                 
 
                 DataTable Sys_MapAttr = mattrs.ToDataTableField("Sys_MapAttr");
                 myds.Tables.Add(Sys_MapAttr);

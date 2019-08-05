@@ -805,7 +805,7 @@ namespace BP.Sys.FrmUI
                 //附件是否显示
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否显示附件分组", true, true, true);
 
-                map.AddDDLSysEnum(FrmAttachmentAttr.FileType, 0, "附件类型", true, true, FrmAttachmentAttr.FileType, "@0=普通话附件@1=图片文件");
+                map.AddDDLSysEnum(FrmAttachmentAttr.FileType, 0, "附件类型", true, true, FrmAttachmentAttr.FileType, "@0=普通附件@1=图片文件");
 
                 #endregion 基本属性。
 

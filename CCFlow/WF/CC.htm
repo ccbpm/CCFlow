@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -24,7 +24,7 @@
                         <th>
                             节点
                         </th>
-                         <th>
+                        <th>
                             状态
                         </th>
                         <th>
@@ -41,8 +41,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="Rows">
-                </tbody>
+                <tbody id="Rows"></tbody>
             </table>
         </div>
     </div>
@@ -50,7 +49,7 @@
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
-      <script src="Comm/Gener.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         //打开默认窗口
@@ -88,8 +87,21 @@
                 row += "<tr>";
                 row += "<td>" + i + "</td>";
                 row += "<td>" + data[i].FlowName + "</td>";
-                row += "<td>" + data[i].FlowName + "</td>";
                 row += "<td>" + data[i].NodeName + "</td>";
+
+                var sta = ""; 
+                switch (data[i].WFSta) {
+                    case 0:
+                        sta="运行中"
+                        break;
+                    case 1:
+                        sta="已完成"
+                        break;
+                    default:
+                        sta = "其他";
+                        break;
+                }
+                row += "<td>" + sta + "</td>";
                 row += "<td>" + data[i].Rec + "</td>";
                 row += "<td><a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a></td>";
                 row += "<td>" + data[i].Doc + "</td>";

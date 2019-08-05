@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
@@ -27,6 +27,8 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,6 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>
@@ -7509,9 +7513,7 @@
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />
@@ -7528,19 +7530,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Components\BP.En30\BP.En30.csproj">
-      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
+      <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
     <ProjectReference Include="..\Components\BP.GPM\BP.GPM.csproj">
-      <Project>{3AE8C44B-7DBA-4312-A775-57172697FAA7}</Project>
+      <Project>{507a6498-9001-4674-a90a-719f3818940a}</Project>
       <Name>BP.GPM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Components\BP.StarBucks\BP.StarBucks.csproj">
+      <Project>{522ae7ca-6e0f-4ea9-a822-20ba4834ba38}</Project>
+      <Name>BP.StarBucks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Components\BP.WF\BP.WF.csproj">
-      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
+      <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
     <ProjectReference Include="..\DemoAndTesting\BP.Demo\BP.Demo.csproj">
-      <Project>{8E48D1DF-CEED-4F0C-B863-3359B2A99134}</Project>
+      <Project>{8e48d1df-ceed-4f0c-b863-3359b2a99134}</Project>
       <Name>BP.Demo</Name>
     </ProjectReference>
   </ItemGroup>

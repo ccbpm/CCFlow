@@ -779,7 +779,7 @@ namespace BP.WF
             }
             else
             {
-                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.WorkID=A.WorkID";
+                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.WorkID=A.WorkID";
                 ps.Add("FK_Emp", FK_Emp);
             }
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -796,6 +796,7 @@ namespace BP.WF
                 dt.Columns["REC"].ColumnName = "REC";
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
             }
 
             return dt;

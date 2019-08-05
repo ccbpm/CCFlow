@@ -149,6 +149,10 @@ namespace BP.Sys
         /// </summary>
         public const string FrmType = "FrmType";
         /// <summary>
+        /// 表单展示方式
+        /// </summary>
+        public const string FrmShowType = "FrmShowType";
+        /// <summary>
         /// 单据模板
         /// </summary>
         public const string FrmModel = "FrmModel";
@@ -1441,6 +1445,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.TableCol,value);
             }
         }
+
         #endregion
 
         #region 构造方法
@@ -1628,6 +1633,8 @@ namespace BP.Sys
 
                 // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapDataAttr.FrmType);
+
+                map.AddTBInt(MapDataAttr.FrmShowType, 0, "表单展示方式", true, true);
 
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);

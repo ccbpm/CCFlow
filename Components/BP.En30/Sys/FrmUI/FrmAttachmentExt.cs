@@ -47,6 +47,20 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
+        /// 附件类型
+        /// </summary>
+        public int FileType
+        {
+            get
+            {
+                return this.GetParaInt(FrmAttachmentAttr.FileType);
+            }
+            set
+            {
+                this.SetPara(FrmAttachmentAttr.FileType, value);
+            }
+        }
+        /// <summary>
         /// 使用上传附件的 - 控件类型
         /// 0=批量.
         /// 1=单个。
@@ -790,6 +804,9 @@ namespace BP.Sys.FrmUI
 
                 //附件是否显示
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否显示附件分组", true, true, true);
+
+                map.AddDDLSysEnum(FrmAttachmentAttr.FileType, 0, "附件类型", true, true, FrmAttachmentAttr.FileType, "@0=普通话附件@1=图片文件");
+
                 #endregion 基本属性。
 
                 #region 权限控制。

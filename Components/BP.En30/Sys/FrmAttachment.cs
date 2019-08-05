@@ -292,6 +292,11 @@ namespace BP.Sys
         /// </summary>
         public const string IsVisable = "IsVisable";
 
+       /// <summary>
+       /// 附件类型 0 普通附件 1 图片附件
+       /// </summary>
+        public const string FileType = "FileType";
+
         /// <summary>
         /// 附件删除方式
         /// </summary>
@@ -1255,9 +1260,9 @@ namespace BP.Sys
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否可见", false, false);
-              //  map.AddTBInt(FrmAttachmentAttr.IsDelete, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
+                //  map.AddTBInt(FrmAttachmentAttr.IsDelete, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
+                map.AddTBInt(FrmAttachmentAttr.FileType, 0, "附件类型", false,false);
 
-                
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", false, false);

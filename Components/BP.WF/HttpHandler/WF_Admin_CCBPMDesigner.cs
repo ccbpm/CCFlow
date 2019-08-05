@@ -229,8 +229,8 @@ namespace BP.WF.HttpHandler
                     DBAccess.RunSQL(sql);
                 }
 
-                Flow fl = new Flow(this.FK_Flow);
-                fl.DoCheck();
+                //Flow fl = new Flow(this.FK_Flow);
+                //fl.DoCheck();
 
                 return "保存成功.";
             }

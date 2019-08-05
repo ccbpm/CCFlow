@@ -195,10 +195,9 @@ namespace BP.WF.HttpHandler
 			try
 			{
 				{
-					DateTime beforDT = System.DateTime.Now;
 					StringBuilder sBuilder = new StringBuilder();
 
-					////保存节点位置. @101,2,30@102,3,1
+					//保存节点位置. @101,2,30@102,3,1
 					string[] nodes = this.GetRequestVal("Nodes").Split('@');
 					foreach (string item in nodes)
 					{
@@ -236,9 +235,6 @@ namespace BP.WF.HttpHandler
 					}
 
 					DBAccess.RunSQL(sBuilder.ToString());
-
-					DateTime afterDT = System.DateTime.Now;
-					TimeSpan ts = afterDT.Subtract(beforDT);
 
 					return "保存成功.";
 				}

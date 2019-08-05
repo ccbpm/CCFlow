@@ -117,6 +117,11 @@ namespace BP.En
         /// <returns>返回该实体的单个json</returns>
         public string ToJson(bool isInParaFields = true)
         {
+
+            if (this.EnMap.DepositaryOfEntity == Depositary.Application)
+                return ToJson_App(isInParaFields);
+             
+            
             Hashtable ht = this.Row;
             //如果不包含参数字段.
             if (isInParaFields == false)
@@ -147,6 +152,55 @@ namespace BP.En
             }
 
             return BP.Tools.Json.ToJson(ht);
+          
+        }
+        private string ToJson_App(bool isInParaFields)
+        {
+            string keyJson = "json" + isInParaFields;
+            string json = this.GetRefObject(keyJson) as string;
+            if (json != null)
+                return json;
+
+
+            Hashtable ht = this.Row;
+            //如果不包含参数字段.
+            if (isInParaFields == false)
+            {
+                json = BP.Tools.Json.ToJsonEntityModel(ht);
+
+                this.SetRefObject(keyJson, json);
+                return json;
+            }
+
+            if (ht.ContainsKey("AtPara") == false)
+            {
+                json = BP.Tools.Json.ToJsonEntityModel(ht);
+                this.SetRefObject(keyJson, json);
+                return json;
+            }
+
+            try
+            {
+                /*如果包含这个字段  @FK_BanJi=01 */
+                AtPara ap = this.atPara;
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    if (ht.ContainsKey(key) == true)
+                        continue;
+                    ht.Add(key, ap.HisHT[key]);
+                }
+
+                //把参数属性移除.
+                ht.Remove("_ATObj_");
+            }
+            catch (Exception ex)
+            {
+                Log.DebugWriteWarning("@ ToJson " + ex.Message);
+            }
+
+            json = BP.Tools.Json.ToJson(ht);
+            this.SetRefObject(keyJson, json);
+            return json;
         }
 
         /// <summary>
@@ -241,7 +295,17 @@ namespace BP.En
         }
         public DataTable ToDataTableField(string tableName = "Main")
         {
-            DataTable dt = this.ToEmptyTableField(this);
+
+            DataTable dt = null;
+            dt = this.GetRefObject("myDT") as DataTable;
+            if (dt != null)
+            {
+                dt.TableName = tableName;
+                return dt;
+            }
+
+            
+            dt = this.ToEmptyTableField(this);
             dt.TableName = tableName;
 
             //增加参数列.
@@ -297,6 +361,9 @@ namespace BP.En
             }
 
             dt.Rows.Add(dr);
+
+
+            this.SetRefObject("myDT", dt);
             return dt;
         }
         #endregion

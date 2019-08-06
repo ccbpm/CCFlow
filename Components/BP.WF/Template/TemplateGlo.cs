@@ -58,10 +58,10 @@ namespace BP.WF.Template
         /// <param name="x">位置x</param>
         /// <param name="y">位置y</param>
         /// <returns>新的节点ID</returns>
-        public static int NewNode(string flowNo, int x, int y)
+        public static int NewNode(string flowNo, int x, int y,string icon=null)
         {
             BP.WF.Flow fl = new WF.Flow(flowNo);
-            BP.WF.Node nd = fl.DoNewNode(x, y);
+            BP.WF.Node nd = fl.DoNewNode(x, y, icon);
             return nd.NodeID;
         }
         /// <summary>

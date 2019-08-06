@@ -63,6 +63,7 @@ namespace BP.WF.HttpHandler
                 string FK_Flow = this.GetRequestVal("FK_Flow");
                 string x = this.GetRequestVal("X");
                 string y = this.GetRequestVal("Y");
+                string icon = this.GetRequestVal("icon");
                 int iX = 20;
                 int iY = 20;
                 
@@ -72,7 +73,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(y)==false) 
                     iY = (int)double.Parse(y);
 
-                int nodeId = BP.WF.Template.TemplateGlo.NewNode(FK_Flow, iX, iY);
+                int nodeId = BP.WF.Template.TemplateGlo.NewNode(FK_Flow, iX, iY,icon);
 
                 BP.WF.Node node = new BP.WF.Node(nodeId);
                 node.Update();

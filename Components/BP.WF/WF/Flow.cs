@@ -6081,7 +6081,7 @@ namespace BP.WF
             infoErr = "@执行期间出现如下非致命的错误：\t\r" + infoErr + "@ " + infoTable;
             throw new Exception(infoErr);
         }
-        public Node DoNewNode(int x, int y)
+        public Node DoNewNode(int x, int y,string icon=null)
         {
             Node nd = new Node();
             int idx = this.HisNodes.Count;
@@ -6104,6 +6104,7 @@ namespace BP.WF
             nd.FlowName = this.Name;
             nd.X = x;
             nd.Y = y;
+            nd.ICON = icon;
             nd.Step = idx;
 
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.

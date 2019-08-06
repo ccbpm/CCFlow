@@ -1424,7 +1424,7 @@ namespace BP.WF
                 #endregion
 
                 #region 密码加密
-                if (SystemConfig.IsEnablePasswordEncryption == true)
+                if (SystemConfig.IsEnablePasswordEncryption == true && BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
                 {
                     BP.Port.Emps emps = new BP.Port.Emps();
                     emps.RetrieveAllFromDBSource();

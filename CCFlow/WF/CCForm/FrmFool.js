@@ -244,7 +244,7 @@ function Set_Frm_Enable(frmData) {
                     /*启用了显示与隐藏.*/
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);
                     //初始化页面的值
-                    var nowKey = ddl.val();
+                    var nowKey =mapAttr.DefVal;//ddl.val();
 
 
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
@@ -1106,6 +1106,8 @@ function cleanAll() {
 }
 //启用了显示与隐藏.
 function setEnable(FK_MapData, KeyOfEn, selectVal) {
+	if(selectVal==undefined)
+		return;
     var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
     var frmRB = new Entity("BP.Sys.FrmRB", pkval);
 

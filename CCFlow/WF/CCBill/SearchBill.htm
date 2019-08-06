@@ -225,7 +225,6 @@
                     html += "<tr>";
                     W = 130;
                 }
-                debugger;
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
                 html += "<td align='left'><select class='form-control' style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
             }
@@ -528,7 +527,21 @@
                 align: 'center',
                 formatter: function (value, row, index) {
                     var _Html = "";
-                    _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
+                    //删除规则
+                    var deleteWay = frmBill.GetPara("DeleteMyDept");
+                    var starter = row["Starter"];
+                    var IsDelete = false;
+                    if (deleteWay == "1") { //可以删除我本部门人员编辑创建的数据
+                        var depts = new Entities("BP.GPM.DeptEmps");
+                        depts.Retrieve("FK_Dept", webUser.FK_Dept, "FK_Emp", starter);
+                        if (depts.length >0)
+                            IsDelete = true;
+                    }
+                    if (deleteWay != "1" && webUser.No == starter) //只能删除自己创建的   
+                        IsDelete = true;
+
+                    if (IsDelete == true)
+                        _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
                     _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
                     _Html +='<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"]+ ',\''+frmID+'\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
                     return _Html;

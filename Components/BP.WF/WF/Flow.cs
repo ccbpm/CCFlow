@@ -717,7 +717,7 @@ namespace BP.WF
                         rpt.FlowStarter = emp.No;
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
-                            rpt.FlowEmps = "@" + emp.Name+"@";
+                            rpt.FlowEmps = "@" + emp.Name + "@";
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                             rpt.FlowEmps = "@" + emp.No + "@";
@@ -806,14 +806,14 @@ namespace BP.WF
                 // 处理传递过来的参数。
                 int i = 0;
 
-                string expKeys="OID,DoType,HttpHandlerName,DoMethod,t,";
+                string expKeys = "OID,DoType,HttpHandlerName,DoMethod,t,";
                 foreach (string k in paras.Keys)
                 {
-                    if (expKeys.IndexOf(","+k+",")!=-1)
+                    if (expKeys.IndexOf("," + k + ",") != -1)
                         continue;
 
-                    var str= paras[k] as string;
-                    if (DataType.IsNullOrEmpty(str)==true)
+                    var str = paras[k] as string;
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
                     i++;
                     wk.SetValByKey(k, str);
@@ -1074,9 +1074,11 @@ namespace BP.WF
                                 dtlData.Copy(geDtlFromData);
                                 dtlData.RefPK = wk.OID.ToString();
                                 dtlData.FID = wk.OID;
-                                if (this.No.Equals(PFlowNo) == false && (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow)){
-                                     dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
-                                }else
+                                if (this.No.Equals(PFlowNo) == false && (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow))
+                                {
+                                    dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
+                                }
+                                else
                                 {
                                     dtlData.InsertAsNew();
                                     if (dbs != null && dbs.Count != 0)
@@ -1232,7 +1234,9 @@ namespace BP.WF
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
             wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
 
-            wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
+            if (this.BillNoFormat != "")
+                wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
+
             wk.FID = 0;
             wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
             if (wk.IsExits == false)
@@ -1802,10 +1806,11 @@ namespace BP.WF
             //清空流程中的缓存
             //获取改流程中的节点数据
             Nodes nds = new Nodes(this.No);
-            foreach(Node nd in nds){
+            foreach (Node nd in nds)
+            {
                 //判断表单的类型
-                if(nd.HisFormType  == NodeFormType.FoolForm || nd.HisFormType  == NodeFormType.FreeForm)
-                    BP.Sys.CCFormAPI.AfterFrmEditAction("ND"+nd.NodeID);
+                if (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm)
+                    BP.Sys.CCFormAPI.AfterFrmEditAction("ND" + nd.NodeID);
             }
 
             return "清除成功.";
@@ -2066,7 +2071,7 @@ namespace BP.WF
                                     sql = sql.Replace("@WebUser.Name", "ss");
                                     sql = sql.Replace("@WebUser.FK_DeptName", "ss");
                                     sql = sql.Replace("@WebUser.FK_Dept", "ss");
-                                   
+
 
                                     sql = sql.Replace("''''", "''"); //出现双引号的问题.
 
@@ -3126,14 +3131,14 @@ namespace BP.WF
                             {
                                 if (flowEmps.Contains("@" + wk.RecOfEmp.Name + "@"))
                                     continue;
-                                flowEmps +=  wk.RecOfEmp.Name + "@";
+                                flowEmps += wk.RecOfEmp.Name + "@";
                             }
 
                             if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
                             {
                                 if (flowEmps.Contains("@" + wk.Rec + "@"))
                                     continue;
-                                flowEmps +=  wk.Rec + "@";
+                                flowEmps += wk.Rec + "@";
                             }
 
                             if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
@@ -3143,9 +3148,9 @@ namespace BP.WF
                                 flowEmps += wk.Rec + "," + wk.RecOfEmp.Name;
                             }
 
-                            
 
-                           
+
+
                         }
                         catch
                         {
@@ -5470,7 +5475,7 @@ namespace BP.WF
                                 nd.SetValByKey(dc.ColumnName, val);
                                 cc.SetValByKey(dc.ColumnName, val);
                                 fwc.SetValByKey(dc.ColumnName, val);
-                                
+
                             }
 
                             nd.FK_Flow = fl.No;
@@ -6081,7 +6086,7 @@ namespace BP.WF
             infoErr = "@执行期间出现如下非致命的错误：\t\r" + infoErr + "@ " + infoTable;
             throw new Exception(infoErr);
         }
-        public Node DoNewNode(int x, int y,string icon=null)
+        public Node DoNewNode(int x, int y, string icon = null)
         {
             Node nd = new Node();
             int idx = this.HisNodes.Count;
@@ -6457,7 +6462,7 @@ namespace BP.WF
 
             // 执行录制的sql scripts.
             DBAccess.RunSQLs(sql);
-           
+
             //清空WF_Emp中的StartFlow 
             DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
 
@@ -6519,7 +6524,7 @@ namespace BP.WF
         public string VerSetCurrentVer()
         {
             string sql = "SELECT FK_FlowSort,No FROM WF_Flow WHERE PTable='" + this.PTable + "' AND FK_FlowSort!='' ";
-            DataTable dt  = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 return "err@没有找到主版本,请联系管理员.";
             string flowSort = dt.Rows[0][0].ToString();
@@ -6535,7 +6540,7 @@ namespace BP.WF
             BP.DA.Cash2019.DeleteRow("BP.WF.Flow", this.No);
             Flow flow = new Flow(oldFlowNo);
             flow = new Flow(this.No);
-		
+
 
             return "info@设置成功.";
         }

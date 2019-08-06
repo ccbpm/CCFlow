@@ -1482,6 +1482,14 @@ namespace BP.DA
           //  String presult = p.matcher(sql).replaceAll("$1");
           //  return presult;
         }
+        public static void RunSP(string sql, Paras ps)
+        {
+
+        }
+        public static void RunSP(string sql)
+        {
+
+        }
         /// <summary>
         /// 运行SQLs
         /// </summary>

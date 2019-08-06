@@ -5608,14 +5608,14 @@ namespace BP.WF
                         qo.AddWhere(GenerWorkFlowAttr.PNodeID, nodeid);
                         qo.addAnd();
                         qo.AddWhere(GenerWorkFlowAttr.PFlowNo, this.HisFlow.No);
-                        qo.addAnd();
-                        qo.AddWhere(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
+                        //qo.addAnd();
+                        //qo.AddWhere(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
                         qo.addAnd();
                         qo.AddWhere(GenerWorkFlowAttr.FK_Flow, subFlowNo);
                         qo.addRightBracket();
 
                         qo.DoQuery();
-                        if (gwls.Count == 0)
+                        if (gwls.Count != 0 && (gwls[0]as GenerWorkFlow).WFSta == WFSta.Complete)
                             continue;
                     }
 

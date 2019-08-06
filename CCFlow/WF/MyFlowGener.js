@@ -421,8 +421,8 @@ function CheckMinMaxLength() {
     return true;
 }
 
-//保存
-function Save() {
+//保存 0单保存 1发送的保存
+function Save(saveType) {
     //保存前事件
     if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
         if (beforeSave() == false)
@@ -475,6 +475,7 @@ if (flowData) {
             handler.AddPara("FK_Flow", pageData.FK_Flow);
             handler.AddPara("FK_Node", pageData.FK_Node);
             handler.AddPara("WorkID", pageData.WorkID);
+            handler.AddPara("SaveType", saveType);
             handler.DoMethodReturnString("SaveFlow_ToDraftRole");
         }
         setToobarEnable();
@@ -872,7 +873,7 @@ function Send(isHuiQian) {
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
 
-            Save(); //执行保存.
+            Save(1); //执行保存.
 
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
@@ -888,7 +889,7 @@ function Send(isHuiQian) {
 
             if (isHuiQian == true) {
 
-                Save(); //执行保存.
+                Save(1); //执行保存.
                 initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
                 return false;

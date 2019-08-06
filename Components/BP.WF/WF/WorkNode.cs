@@ -8106,6 +8106,18 @@ namespace BP.WF
                                 t.Msg += DBAccess.RunSQLReturnStringIsNull(sql,"");
                             else
                                 t.Msg+= "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+
+                            //把审核组件的立场信息保存在track表中
+                            string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
+                            string[] strs = checkTag.Split('@');
+                            foreach (string str in strs)
+                            {
+                                if (str.Contains("FWCView") == true)
+                                {
+                                    t.Tag = t.Tag + "@" + str;
+                                    break;
+                                }
+                            }
                         }
                     }
                     break;
@@ -8233,6 +8245,18 @@ namespace BP.WF
                                 t.Msg += DBAccess.RunSQLReturnStringIsNull(sql, "");
                             else
                                 t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                            //把审核组件的立场信息保存在track表中
+                            string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
+                            string[] strs = checkTag.Split('@');
+                            foreach(string str in strs)
+                            {
+                                if (str.Contains("FWCView") == true)
+                                {
+                                    t.Tag = t.Tag + "@" + str;
+                                    break;
+                                }
+                            }
+
                         }
                     }
                     break;

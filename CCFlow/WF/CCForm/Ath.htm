@@ -10,6 +10,7 @@
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
     <script src="Ath.js" type="text/javascript"></script>
+
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script src="../Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js" type="text/javascript"></script>
@@ -18,21 +19,62 @@
     <link href='../Scripts/Jquery-plug/fileupload/uploadify.css' rel='stylesheet' type='text/css' />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
-        type="text/javascript"></script>
+            type="text/javascript"></script>
     <!-- 导入可以扩展的按钮事件. -->
     <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
+
     <style type="text/css">
-        .table > thead > tr > td, .table > tbody > tr > td
-        {
+        .table > thead > tr > td, .table > tbody > tr > td {
             border: 1px solid #ddd;
         }
-        .table > thead > tr > th
-        {
+
+        .table > thead > tr > th {
             border-bottom: 1px solid #ddd;
         }
+        .image-item {
+            width: 75px !important;
+            height: 75px;
+            background-image: url(./ImgAth/css/images/iconfont-tianjia.png);
+            background-size: 100% 100%;
+            display: inline-block;
+            position: relative;
+            border-radius: 5px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: solid 1px #e8e8e8;
+            float:left;
+        }
+        .image-item input[type="file"] {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 0;
+        }
+        .image-item .image-close {
+            position: absolute;
+            display: inline-block;
+            right: -6px;
+            top: -6px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 12px;
+            background-color: #FF5053;
+            color: #f3f3f3;
+            border: solid 1px #FF5053;
+            font-size: 9px;
+            font-weight: 200;
+            z-index: 1;
+        }
+
     </style>
     <script language="javascript" type="text/javascript">
         var numOfUpload = 0;  //要求上传的最小数量.
@@ -170,25 +212,26 @@
 
             var mapAttrs = null;
 
-            if (athDesc.IsExpCol != 0) {
-                mapAttrs = new Entities("BP.Sys.MapAttrs");
-                // ND26501_Ath1
-                var extMapData = GetQueryString("FK_MapData") + "_"+athDesc.NoOfObj;
-                mapAttrs.Retrieve("FK_MapData", extMapData);
-
-                //  alert(extMapData);
-                //  alert(mapAttrs.length);
+            //如果是图片附件
+            if (athDesc.FileType == 1) {
+                FileShowPic(athDesc, dbs);
             }
+            else {//普通附件
+                if (athDesc.IsExpCol != 0) { //是个启用扩展字段
+                    mapAttrs = new Entities("BP.Sys.MapAttrs");
+                    var extMapData = GetQueryString("FK_MapData") + "_" + athDesc.NoOfObj;
+                    mapAttrs.Retrieve("FK_MapData", extMapData);
+                }
 
 
-            //表格方式
-            if (fileShowWay == FileShowWay.Table)
-                FileShowWayTable(athDesc, dbs, mapAttrs);
-
+                //表格方式
+                if (fileShowWay == FileShowWay.Table)
+                    FileShowWayTable(athDesc, dbs, mapAttrs);
+            }
             //文件上传
             var url = "";
             if (plant == 'CCFlow')
-                url = basePath+'/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&DoType=MoreAttach&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
+                url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&DoType=MoreAttach&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
             else {
                 var currentPath = window.document.location.href;
                 var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
@@ -442,10 +485,10 @@
                     html += "<td class='Idx' nowrap>" + i + "</td>";
                     if (fileSorts.length > 1)
                         html += "<td>" + sort + "</td>";
-                   if (athDesc.IsUpload == true && IsReadonly != "1")
-                       html += "<td style='width:100px;color:red'>请上传附件..</td>";
-                   else
-                       html += "<td style='width:100px;color:red'></td>";
+                    if (athDesc.IsUpload == true && IsReadonly != "1")
+                        html += "<td style='width:100px;color:red'>请上传附件..</td>";
+                    else
+                        html += "<td style='width:100px;color:red'></td>";
                     html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";
                     html += "<td>&nbsp&nbsp</td>";
@@ -476,7 +519,7 @@
             }
             if ((i == 0 && (athDesc.Sort == null || athDesc.Sort.indexOf(",") == -1)) || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
                 html += "<tr>";
-                html += "<td class='Idx' nowrap>*</td>"; ;
+                html += "<td class='Idx' nowrap>*</td>";;
 
                 if (athDesc.IsUpload == true)
                     html += "<td style='width:100px'> </td>";
@@ -542,7 +585,7 @@
                 }
 
                 if (realFileExts == null || realFileExts == "" || realFileExts == "."
-                || realFileExts == undefined || realFileExts == '') {
+                    || realFileExts == undefined || realFileExts == '') {
                     realFileExts = "*.*";
                 }
 
@@ -577,8 +620,8 @@
                         html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
 
                 } else {
-                    realFileExts = realFileExts.replace(/;/g,',');
-                    realFileExts =replaceAll(realFileExts,'[*]','');
+                    realFileExts = realFileExts.replace(/;/g, ',');
+                    realFileExts = replaceAll(realFileExts, '[*]', '');
                     html += "<div id='s' style='text-align:right;float:left;display:inline;' >";
                     // 让石家庄客户，来完善附件类别支持sql.
                     if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
@@ -681,8 +724,8 @@
                 alert("您最多上传[" + topNumOfUpload + "]个附件");
                 return;
             }
-            
-            if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
+
+            if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.')).toLowerCase()) == -1) {
                 alert("上传附件类型不正确，只能上传" + realFileExts);
                 return;
             }
@@ -789,22 +832,22 @@
             }
         }
 
-       
+
     </script>
 </head>
 <body>
     <form id="Ath_Form">
-    <div id="Msg">
-    </div>
-    <div style="width: 99%">
-        <table id="ShowTable" class="table">
-        </table>
-    </div>
-    <div id="bar" style="display: none; position: fixed; bottom: 0px; right: 0px;">
-        <button class="btn btn-info" id="btn_Colse" style="border: 0; background: #2884fa;
+        <div id="Msg"></div>
+        <div style="width: 99%">
+            <table id="ShowTable" class="table"></table>
+        </div>
+        <div style="width: 99%" id="FilePic">cccc</div>
+        <div id="bar" style="display: none; position: fixed; bottom: 0px; right: 0px;">
+            <button class="btn btn-info" id="btn_Colse" style="border: 0; background: #2884fa;
             color: #FFF; font-size: 12px; padding: 6px 10px; border-radius: 15px; margin: 5px;">
-            关闭</button>
-    </div>
+                关闭
+            </button>
+        </div>
     </form>
     <iframe width='0' height='0' frameborder='0' name="hrong" style="display: none">
     </iframe>

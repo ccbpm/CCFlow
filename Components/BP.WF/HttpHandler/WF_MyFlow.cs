@@ -1888,7 +1888,7 @@ namespace BP.WF.HttpHandler
             {
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 Flow fl = new Flow(this.FK_Flow);
-                if (fl.DraftRole == DraftRole.None)
+                if (fl.DraftRole == DraftRole.None && this.GetRequestValInt("SaveType")!=1)
                     return "保存成功";
 
                 //规则设置为写入待办，将状态置为运行中，其他设置为草稿.

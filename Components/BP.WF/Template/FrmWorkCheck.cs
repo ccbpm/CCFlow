@@ -209,6 +209,10 @@ namespace BP.WF.Template
         /// 审核意见版本号控制
         /// </summary>
         public const string FWCVer = "FWCVer";
+        /// <summary>
+        /// 审核意见立场 不同意、不通过、同意、赞成
+        /// </summary>
+        public const string FWCView = "FWCView";
     }
     /// <summary>
     /// 审核组件
@@ -599,6 +603,18 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmWorkCheckAttr.FWCVer,value);
             }
         }
+        public string FWCView
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmWorkCheckAttr.FWCView);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCView, value);
+            }
+        }
+
         #endregion
 
         #region 构造方法
@@ -740,6 +756,7 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, FrmWorkCheckAttr.FWCVer,
                 "@0=2018@1=2019");
+                map.AddTBString(FrmWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 

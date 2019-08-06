@@ -3961,7 +3961,7 @@ namespace BP.WF
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
         public static void WriteTrack(string flowNo, int nodeFromID, string nodeFromName, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
-            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null)
+            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null,string fwcView=null)
         {
             if (at == ActionType.CallChildenFlow)
             {
@@ -4039,6 +4039,10 @@ namespace BP.WF
             {
                 t.Tag = tag;
             }
+            if(fwcView != null)
+            {
+                t.Tag = t.Tag + fwcView;
+            }
 
             try
             {
@@ -4095,7 +4099,7 @@ namespace BP.WF
         /// <param name="FID">FID</param>
         /// <param name="msg">审核信息</param>
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
-        public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)
+        public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName,string fwcView =null)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
@@ -4128,7 +4132,7 @@ namespace BP.WF
                 DBAccess.RunSQL(ps);
 
                 //写入日志.
-                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName,null,null,null,null,null,fwcView);
                 return;
             }
 
@@ -4152,7 +4156,7 @@ namespace BP.WF
             if (num == 0)
             {
                 //如果没有更新到，就写入.
-                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null,null,null,null,fwcView);
             }
         }
 
@@ -4426,6 +4430,25 @@ namespace BP.WF
 
             return checkinfo;
         }
+
+        public static string GetCheckTag(string flowNo, Int64 workId, int nodeFrom,string empFrom)
+        {
+            string table = "ND" + int.Parse(flowNo) + "Track";
+            string sql = "SELECT Tag FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + empFrom + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+            {
+                return "";
+            }
+            string checkinfo = dt.Rows[0][0].ToString();
+            if (DataType.IsNullOrEmpty(checkinfo))
+            {
+                return "";
+            }
+
+            return checkinfo;
+        }
+
         /// <summary>
         /// 获取队列节点Track 表中的审核的信息(队列节点中处理人 共享同一处理意见)
         /// </summary>

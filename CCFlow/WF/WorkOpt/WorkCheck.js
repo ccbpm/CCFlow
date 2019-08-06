@@ -121,6 +121,37 @@ function InitPage() {
             html += "</select><font color=Gray>内容不要超过2000字</font>";
             html += "</div>";
             html += "</td>";
+
+            //加入立场判断
+            if (wcDesc.FWCView != null && wcDesc.FWCView != "" && wcDesc.FWCView != undefined) {
+                var fwcView = "";
+                if (this.Tag.indexOf("@FWCView") != -1) {
+                    var arr = this.Tag.split("@");
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].indexOf("FWCView") == -1)
+                            continue;
+                        else {
+                            fwcView = arr[i].replace("FWCView=", "");
+                            break;
+                        }
+                    }
+                }
+
+                var str = wcDesc.FWCView.split(",");
+                html += "<br>";
+                html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                var idx = 0;
+                for (var i = 0; i < str.length; i++) {
+                    if (str[i] == "")
+                        continue;
+                    var check = "";
+                    if (fwcView != "" && idx == parseInt(fwcView))
+                        check = "checked = checked";
+                    else if (fwcView == "" && idx == 0)
+                        check = "checked = checked";
+                    html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
+                    idx++;
+                }
         }
         else {
 
@@ -128,7 +159,37 @@ function InitPage() {
 
             var returnMsg = this.ActionType == 2 ? "退回原因：" : "";
             html += '<font color=green>' + returnMsg + this.Msg + '</font>';
+            //加入立场判断
+            if (this.FWCView != null && this.FWCView != "" && this.FWCView!=undefined) {
+                var fwcView = "";
+                if (this.Tag.indexOf("@FWCView") != -1) {
+                    var arr = this.Tag.split("@");
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].indexOf("FWCView") == -1)
+                            continue;
+                        else {
+                            fwcView = arr[i].replace("FWCView=", "");
+                            break;
+                        }
+                    }
+                }
 
+                var str = this.FWCView.split(",");
+                html += "<br>";
+                html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                var idx = 0;
+                for (var i = 0; i < str.length; i++) {
+                    if (str[i] == "")
+                        continue;
+                    var check = "";
+                    if (fwcView != "" && idx == parseInt(fwcView))
+                        check = "checked = checked";
+                    else if (fwcView == "" && idx == 0)
+                        check = "checked = checked";
+                    html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "' disabled/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
+                    idx++;
+                }
+            }
 
 
             html += '</td>';
@@ -278,7 +339,7 @@ function SetDocVal() {
 
 }
 function setIframeHeight() {
-    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height());
+    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
 }
 
 function SaveWorkCheck() {

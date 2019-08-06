@@ -1347,6 +1347,8 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
             tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
             tkDt.Columns.Add("ActionType", typeof(int));
+            tkDt.Columns.Add("Tag", typeof(string));
+            tkDt.Columns.Add("FWCView", typeof(string));
 
             //流程附件.
             DataTable athDt = new DataTable("Aths");
@@ -1542,6 +1544,7 @@ namespace BP.WF.HttpHandler
                     row["NodeID"] = tk.NDFrom;
 
                     row["NodeName"] = tk.NDFromT;
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
 
                     // zhoupeng 增加了判断，在会签的时候最后会签人发送前不能填写意见.
                     if (tk.NDFrom == this.FK_Node && tk.EmpFrom == BP.Web.WebUser.No && isCanDo && isDoc == false)
@@ -1599,6 +1602,8 @@ namespace BP.WF.HttpHandler
                     row["EmpFrom"] = tk.EmpFrom;
                     row["EmpFromT"] = tk.EmpFromT;
                     row["ActionType"] = tk.HisActionType;
+                    row["Tag"] = tk.Tag;
+                    row["FWCView"] = fwc.FWCView;
                     tkDt.Rows.Add(row);
 
                     #region //审核组件附件数据
@@ -1655,7 +1660,7 @@ namespace BP.WF.HttpHandler
                                     // 发起多个子流程时，发起人只显示一次
                                     if (mysubtk.NDFrom == int.Parse(fk_flow + "01") && biaoji == 1)
                                         continue;
-
+                                    FrmWorkCheck subFrmCheck = new FrmWorkCheck("ND"+mysubtk.NDFrom);
                                     row = tkDt.NewRow();
                                     row["NodeID"] = mysubtk.NDFrom;
                                     row["NodeName"] = string.Format("(子流程){0}", mysubtk.NDFromT);
@@ -1668,6 +1673,8 @@ namespace BP.WF.HttpHandler
                                     row["T_NodeIndex"] = idx++;
                                     row["T_CheckIndex"] = noneEmpIdx++;
                                     row["ActionType"] = mysubtk.HisActionType;
+                                    row["Tag"] = mysubtk.Tag;
+                                    row["FWCView"] = subFrmCheck.FWCView;
                                     tkDt.Rows.Add(row);
 
                                     if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
@@ -1762,6 +1769,7 @@ namespace BP.WF.HttpHandler
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
+                        row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No); 
                         tkDt.Rows.Add(row);
                     }
                 }
@@ -1780,6 +1788,7 @@ namespace BP.WF.HttpHandler
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
+                    row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
                     tkDt.Rows.Add(row);
                 }
             }
@@ -1901,6 +1910,8 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
             tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
             tkDt.Columns.Add("ActionType", typeof(int));
+            tkDt.Columns.Add("Tag", typeof(string));
+            tkDt.Columns.Add("FWCView", typeof(string));
 
             //流程附件.
             DataTable athDt = new DataTable("Aths");
@@ -2072,7 +2083,7 @@ namespace BP.WF.HttpHandler
                     //if (tk.NDFrom == this.FK_Node&& checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0 && (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12))
                     //    continue;
 
-
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
 
                     //历史审核信息现在存放在流程前进的节点中
                     switch (tk.HisActionType)
@@ -2151,6 +2162,8 @@ namespace BP.WF.HttpHandler
                             row["EmpFrom"] = tk.EmpFrom;
                             row["EmpFromT"] = tk.EmpFromT;
                             row["ActionType"] = tk.HisActionType;
+                            row["Tag"] = tk.Tag;
+                            row["FWCView"] = fwc.FWCView;
                             tkDt.Rows.Add(row);
 
                             #region //审核组件附件数据
@@ -2220,6 +2233,7 @@ namespace BP.WF.HttpHandler
                                             row["T_NodeIndex"] = idx++;
                                             row["T_CheckIndex"] = noneEmpIdx++;
                                             row["ActionType"] = mysubtk.HisActionType;
+                                            row["Tag"] = mysubtk.Tag;
                                             tkDt.Rows.Add(row);
 
                                             if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
@@ -2304,6 +2318,7 @@ namespace BP.WF.HttpHandler
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
+                        row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node,WebUser.No);
                         tkDt.Rows.Add(row);
                     }
                 }
@@ -2322,6 +2337,7 @@ namespace BP.WF.HttpHandler
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
+                    row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
                     tkDt.Rows.Add(row);
                 }
             }
@@ -2487,6 +2503,9 @@ namespace BP.WF.HttpHandler
             string dotype = GetRequestVal("ShowType");
             string doc = GetRequestVal("Doc");
             bool isCC = GetRequestVal("IsCC") == "1";
+            string fwcView = null;
+            if (DataType.IsNullOrEmpty(GetRequestVal("FWCView")) == false)
+                fwcView = "@FWCView=" + GetRequestValInt("FWCView");
             //查看时取消保存
             if (dotype != null && dotype == "View")
                 return "";
@@ -2561,7 +2580,7 @@ namespace BP.WF.HttpHandler
                     DBAccess.RunSQL(sql);
                 }
 
-                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel, fwcView);
             }
 
             if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件

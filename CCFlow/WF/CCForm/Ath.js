@@ -12,103 +12,6 @@ function Down2018(fk_ath, pkVal, delPKVal) {
     
 }
 
-//点击文件名称执行的下载.
-function Down2017(mypk) {
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-    handler.AddPara("MyPK", mypk);
-    var data = handler.DoMethodReturnString("AttachmentUpload_Down");
-    if (data.indexOf('err@') == 0) {
-        alert(data); //如果是异常，就提提示.
-        return;
-    }
-
-    if (data.indexOf('url@') == 0) {
-
-        data = data.replace('url@', ''); //如果返回url，就直接转向.
-
-        var i = data.indexOf('\DataUser');
-        var str = '/' + data.substring(i);
-        str = str.replace('\\\\', '\\');
-        if (plant != 'CCFlow') {
-            var currentPath = window.document.location.href;
-            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-            str = path + str;
-        }
-        var a = document.getElementById("downPdf");
-        a.href = str;
-        a.download = "11.txt";
-        a.click();
-
-        return;
-    }
-    if (data.indexOf("fromdb") > -1) {
-        url = Handler + "?DoType=AttachmentDownFromByte&MyPK=" + mypk + "&m=" + Math.random();
-        $('<form action="' + url + '" method="post"></form>').appendTo('body').submit().remove();
-    }
-    return;
-
-
-}
-
-
-function sa() {
-
-    if (window.frames["hrong"].document.readyState != "complete")
-
-        setTimeout("sa()", 100);
-
-    else
-
-        window.frames["hrong"].document.execCommand('SaveAs');
-
-}
-
-/* 一下的方法从网上找到的，都不适用 . */
-
-function Down3(str) {
-
-    var a;
-    a = window.open(str, "_blank", "width=0, height=0,status=0");
-    a.document.execCommand("SaveAs");
-    a.close();
-}
-
-function Down2(imgURL) {
-
-    var oPop = window.open(imgURL, "", "width=1, height=1, top=5000, left=5000");
-
-    for (; oPop.document.readyState != "complete"; ) {
-        if (oPop.document.readyState == "complete")
-            break;
-    }
-
-    oPop.document.execCommand("SaveAs");
-    oPop.close();
-
-}
-
-function Down(url) {
-
-    var $eleForm = $("<form method='get'></form>");
-
-    $eleForm.attr("action", url);
-
-    $(document.body).append($eleForm);
-
-    //提交表单，实现下载
-    $eleForm.submit();
-}
-
-function downloadFile(url) {
-    try {
-        var elemIF = document.createElement("iframe");
-        elemIF.src = url;
-        elemIF.style.display = "none";
-        document.body.appendChild(elemIF);
-    } catch (e) {
-
-    }
-}
 
 function DownZip() {
 
@@ -153,6 +56,97 @@ function Del(fk_ath, pkVal, delPKVal) {
     var data = handler.DoMethodReturnString("AttachmentUpload_Del");
 
     window.location.href = window.location.href;
+}
+
+//附件图片显示
+function FileShowPic(athDesc, dbs) {
+    realFileExts = "*.gif,*.jpg,*.jepg,*.jpeg,*.bmp,*.png,*.tif,*.gsp";
+    var _Html = "";
+    var outerdiv = $("#outerdiv", parent.document);
+    var innerdiv = $("#innerdiv", parent.document);
+    var bigimg = $("#bigimg", parent.document);
+    for (var i = 0; i < dbs.length; i++) {
+        var db = dbs[i];
+        var url = GetFileStream(db.MyPK, db.FK_FrmAttachment);
+        _Html += "<div id='" + db.MyPK + "' class='image-item' style='background-image: url(&quot;" + url + "&quot;);'>";
+        if ((athDesc.DeleteWay == AthDeleteWay.DelAll) || ((athDesc.DeleteWay == AthDeleteWay.DelSelf) && (db.Rec == WebUser.No)))
+            _Html += "<div class='image-close' onclick='Del(\"" + db.FK_FrmAttachment + "\",\"" + PKVal + "\",\"" + db.MyPK + "\")'>X</div>";
+        _Html += "<div style ='width: 100%; height: 100%;' class='athImg' ></div>"; 
+        _Html += "<div class='image-name' id = 'name-0-0' > ";
+        if (athDesc.IsDownload == 0)
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' >" + db.FileName + "</p>";
+        else
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' ><a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">" + db.FileName.split(".")[0]+"</a></p>";
+        _Html += "</div>";
+        _Html += "</div>";
+    }
+    //可以上传附件，增加上传附件按钮
+    if (athDesc.IsUpload == true && IsReadonly != "1") {
+        _Html += "<div class='image-item space'><input type='file' id='file' onchange='UploadChange();'></div>";
+    }
+    $("#FilePic").html(_Html);
+    
+    $(".athImg").on("click", function () {
+        var _this = $(this); //将当前的pimg元素作为_this传入函数  
+        var src = _this.parent().css("background-image").replace("url(\"", "").replace("\")", "")
+        imgShow(outerdiv, innerdiv, bigimg, src);
+    });
+}
+
+function imgShow(outerdiv, innerdiv, bigimg, src) {
+    //var src = _this.attr("src"); //获取当前点击的pimg元素中的src属性  
+    bigimg.attr("src", src); //设置#bigimg元素的src属性  
+
+    /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+    $("<img/>").attr("src", src).load(function () {
+        var windowW = $(window).width(); //获取当前窗口宽度  
+        var windowH = $(window).height(); //获取当前窗口高度  
+        var realWidth = this.width; //获取图片真实宽度  
+        var realHeight = this.height; //获取图片真实高度  
+        var imgWidth, imgHeight;
+        var scale = 0.8; //缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+
+        if (realHeight > windowH * scale) {//判断图片高度  
+            imgHeight = windowH * scale; //如大于窗口高度，图片高度进行缩放  
+            imgWidth = imgHeight / realHeight * realWidth; //等比例缩放宽度  
+            if (imgWidth > windowW * scale) {//如宽度扔大于窗口宽度  
+                imgWidth = windowW * scale; //再对宽度进行缩放  
+            }
+        } else if (realWidth > windowW * scale) {//如图片高度合适，判断图片宽度  
+            imgWidth = windowW * scale; //如大于窗口宽度，图片宽度进行缩放  
+            imgHeight = imgWidth / realWidth * realHeight; //等比例缩放高度  
+        } if (realHeight > windowH * scale) {
+            imgWidth = windowH * scale;
+            imgHeight = windowH * scale;
+        } else {//如果图片真实高度和宽度都符合要求，高宽不变  
+            imgWidth = realWidth;
+            imgHeight = realHeight;
+        }
+        bigimg.css("width", imgWidth); //以最终的宽度对图片缩放  
+
+        var w = (windowW - imgWidth) / 2; //计算图片与窗口左边距  
+        var h = (windowH - imgHeight) / 2; //计算图片与窗口上边距  
+        innerdiv.css({ "top": h, "left": w }); //设置#innerdiv的top和left属性  
+        outerdiv.fadeIn("fast"); //淡入显示#outerdiv及.pimg  
+    });
+
+    outerdiv.click(function () {//再次点击淡出消失弹出层  
+        $(this).fadeOut("fast");
+    });
+}  
+
+//文件下载
+function GetFileStream(mypk,FK_FrmAttachment) {
+    if (plant == "CCFlow") {
+        var Url = './DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
+    } else {
+        //按照数据流模式下载。
+        var currentPath = window.document.location.href;
+        var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
+        var Url = path + "WF/Ath/downLoad.do?MyPK=" + mypk + "&FK_FrmAttachment=" + FK_FrmAttachment;
+    }
+
+    return Url;
 }
 
 
@@ -485,15 +479,7 @@ function checkBlanks() {
 
     //2.对 UMEditor 中的必填项检查
     if (document.activeEditor != null && document.activeEditor.$body != null) {
-        /* #warning 这个地方有问题.*/
 
-        //        var ele = document.activeEditor.$body;
-        //        if (ele != null && document.activeEditor.getPlainTxt().trim() === "") {
-        //            checkBlankResult = false;
-        //            ele.addClass('errorInput');
-        //        } else {
-        //            ele.removeClass('errorInput');
-        //        }
     }
 
     return checkBlankResult;

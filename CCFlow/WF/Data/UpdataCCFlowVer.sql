@@ -2,6 +2,8 @@
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
 update sys_groupfield set frmID=enName where frmid is  null;
 
+UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS NULL ) AND MyDataType=7;
+
 UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';
 
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';

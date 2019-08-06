@@ -1338,6 +1338,7 @@
                 $(currForm.target).parent().insertAfter(next);
             });
         }
+       
 
         //删除流程树表单
         function deleteCCFormTreeMapData() {
@@ -1376,9 +1377,23 @@
                 return;
             }
 
-            // window.p
-            //   if ( window.config()
-            // addTab("DesignerFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
+            //     console.log(node);
+
+            var frmID = window.prompt('新的表单ID', node.id);
+            var frmName = window.prompt('新的表单名称', node.text);
+
+            var mapdata = new Entity("BP.Sys.MapData", node.id);
+
+            var data = mapdata.DoMethodReturnString("DoCopy", frmID, frmName);
+
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+
+            //设计表单.
+            addTab("DesignerFrm" + frmID, "设计表单-" + frmName, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID);
+
         }
 
 
@@ -1880,8 +1895,11 @@
             上移</div>
         <div onclick="moveDownCCFormTree()" data-options="iconCls:'icon-down'">
             下移</div>
-        <div onclick="deleteCCFormTreeMapData()" data-options="iconCls:'icon-delete'">
+        <div onclick="deleteCCFormTreeMapData()" data-options="iconCls:'icon-Delete'">
             删除</div>
+
+              <div onclick="CopyFrm()" data-options="iconCls:'icon-Copy'">
+            复制</div>
         <!--<div class="menu-sep"></div>
         <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">刷新</div>-->
     </div>

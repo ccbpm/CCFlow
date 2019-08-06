@@ -799,7 +799,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
-            res.Retrieve("ForCtrl", "TBFloat");
+            res.Retrieve("ForCtrl", "TBNum");
 
             DataTable myDT = res.ToDataTable();
             myDT.TableName = "RE";

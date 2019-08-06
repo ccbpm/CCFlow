@@ -1131,11 +1131,14 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
+             
+
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDate)
             {
+                
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 attr.UIVisible = true;
@@ -1146,6 +1149,13 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.TB;
                 attr.MyDataType = DataType.AppDate;
                 attr.Insert();
+
+                BP.Sys.FrmUI.MapAttrDT dt = new Sys.FrmUI.MapAttrDT();
+                dt.MyPK  = attr.MyPK;
+                dt.RetrieveFromDBSources();
+                dt.Format = 0;
+                dt.Update();
+                 
 
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
@@ -1162,6 +1172,12 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.TB;
                 attr.MyDataType = DataType.AppDateTime;
                 attr.Insert();
+
+                BP.Sys.FrmUI.MapAttrDT dt = new Sys.FrmUI.MapAttrDT();
+                dt.MyPK = attr.MyPK;
+                dt.RetrieveFromDBSources();
+                dt.Format = 1;
+                dt.Update();
 
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }

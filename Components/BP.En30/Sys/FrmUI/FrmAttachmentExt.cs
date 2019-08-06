@@ -781,8 +781,8 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(FrmAttachmentAttr.NumOfUpload, 0, "最小上传数量", true, false);
                 map.SetHelperAlert("NumOfUpload", "如果为0则标识必须上传. \t\n用户上传的附件数量低于指定的数量就不让保存.");
                
-                map.AddTBInt(FrmAttachmentAttr.TopNumOfUpload, 0, "最大上传数量", true, false);
-                map.AddTBInt(FrmAttachmentAttr.FileMaxSize, 0, "附件最大限制(KB)", true, false);
+                map.AddTBInt(FrmAttachmentAttr.TopNumOfUpload, 99, "最大上传数量", true, false);
+                map.AddTBInt(FrmAttachmentAttr.FileMaxSize, 10240, "附件最大限制(KB)", true, false);
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,
                   "@0=不用校验@1=不能为空@2=每个类别下不能为空");
 

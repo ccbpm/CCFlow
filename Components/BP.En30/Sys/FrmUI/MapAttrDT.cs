@@ -70,7 +70,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.MyDataType, value);
             }
         }
-        public int Formate
+        public int Format
         {
             get
             {
@@ -134,7 +134,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
-                map.AddDDLSysEnum(MapAttrAttr.IsSupperText, 6, "格式", true, true, MapAttrAttr.IsSupperText,
+                map.AddDDLSysEnum(MapAttrAttr.IsSupperText, 2, "格式", true, true, MapAttrAttr.IsSupperText,
                     "@0=yyyy-MM-dd@1=yyyy-MM-dd HH:mm@2=yyyy-MM-dd HH:mm:ss@3=yyyy-MM@4=HH:mm@5=HH:mm:ss");
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
@@ -193,19 +193,20 @@ namespace BP.Sys.FrmUI
 
         protected override bool beforeInsert()
         {
-            if (this.Formate == 0 || this.MyDataType == 7)
-                this.Formate = 1;
+            if (this.Format == 0 && this.MyDataType == 7)
+                this.Format = 1;
+
             return base.beforeInsert();
         }
 
         protected override bool beforeUpdateInsertAction()
         {
-            if (this.Formate == 0 || this.MyDataType == 7)
-                this.Formate = 1;
+            //if (this.Format == 0 && this.MyDataType == 7)
+            //    this.Format = 1;
 
             //设置时间类型.
-            int frmate =  this.Formate;
-            if (frmate == 0 || frmate == 3)
+            int format =  this.Format;
+            if (format == 0 || format == 3)
                 this.MyDataType = 6;
             else
                 this.MyDataType = 7;

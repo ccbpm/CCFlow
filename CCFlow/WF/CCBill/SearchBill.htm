@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>单据列表</title>
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
           type="text/css" />
     <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
           media="all" />
+    <!--增加bootstrap的图标-->
+    <!--<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />-->
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -346,7 +350,7 @@
         }
 
 
-        function SearchData(orderBy,orderWay) {
+        function SearchData(orderBy, orderWay) {
             //创建处理器.
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData()
@@ -416,7 +420,7 @@
                 field: '',
                 align: 'center',
                 width: 25,
-                
+
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
@@ -446,7 +450,7 @@
                         title: title,
                         width: attr.Width,
                         fixed: false,
-                        sortable:sortable,
+                        sortable: sortable,
                         formatter: function (value, row, index) {
                             return GetBillState(value);
                         }
@@ -460,7 +464,7 @@
                         title: title,
                         width: attr.Width,
                         fixed: false,
-                        sortable:sortable,
+                        sortable: sortable,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
                             return "<a href=\"javascript:OpenIt('" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "','" + row.BillState + "',)\"><img src=" + icon + " border=0 width='14px;' />" + value + "</a>";
@@ -482,7 +486,7 @@
                         title: title,
                         fixed: false,
                         width: width,
-                        sortable:sortable,
+                        sortable: sortable,
                         cellStyle: {
                             css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
                         }
@@ -495,7 +499,7 @@
                         title: title,
                         width: attr.Width,
                         fixed: false,
-                        sortable:sortable,
+                        sortable: sortable,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
                             if (value == "1") return "是";
@@ -512,10 +516,24 @@
                     title: title,
                     width: attr.Width,
                     fixed: false,
-                    sortable:sortable
+                    sortable: sortable
 
                 });
             }
+            //加入操作下载文件
+            columns.push({
+                field: 'oper',
+                title: '操作',
+                width: 80,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var _Html = "";
+                    _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
+                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
+                    _Html +='<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"]+ ',\''+frmID+'\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
+                    return _Html;
+                }
+            });
             //var url = "../";
             $('#dg').html("");
             $('#dg').bootstrapTable({
@@ -560,21 +578,21 @@
 
             });
             $("#dg").colResizable({
-                liveDrag:true, 
-                gripInnerHtml:"<div class='grip'></div>", 
-                draggingClass:"dragging", 
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
                 resizeMode: 'fit',
                 //拖动事件
                 onDrag: function () {
                     $('#dg').bootstrapTable("resetView")
                 }
             });
-           
+
             firstLoadTable = true;
 
         }
 
-        
+
         function customSort(sortName, sortOrder, data) {
             var order = sortOrder === 'desc' ? -1 : 1
             data.sort(function (a, b) {
@@ -650,25 +668,6 @@
             alert('尚未实现');
         }
 
-        function GenerOper(workID, BillState, frmID, nodeID, fid, isCanDo) {
-
-            if (BillState == 3)
-                return "";
-
-            if (BillState == 2 && isCanDo == true)
-                return "";
-
-            if (BillState == 3)
-                return "<a href=''>轨迹</a>";
-
-            if (BillState == 2)
-                return "<a href=\"javascript:UnSend('" + frmID + "','" + nodeID + "','" + workID + "','" + fid + "');\" >撤销</a>";
-
-            var url = "WFRpt.htm?WorkID=" + workID + "&FrmID=" + frmID;
-
-            return "<a href=\"javascript:WinOpen('" + url + "');\" >轨迹</a>";
-        }
-
         function New() {
 
             var frmID = GetQueryString("FrmID");
@@ -682,18 +681,20 @@
 
         }
 
-        function Delete() {
+        function Delete(workid) {
+            if (workid == null || workid == undefined || workid == "") {
 
-            if (confirm("您确定要删除吗？") == false)
-                return;
-            //删除选中的行
-            var selectRow = $('#dg').bootstrapTable('getSelections');
+                if (confirm("您确定要删除吗？") == false)
+                    return;
+                //删除选中的行
+                var selectRow = $('#dg').bootstrapTable('getSelections');
 
-            if (selectRow.length == 0) {
-                alert("没有选择行，不能删除");
-                return;
+                if (selectRow.length == 0) {
+                    alert("没有选择行，不能删除");
+                    return;
+                }
+                workid = selectRow["WorkID"];
             }
-            var workid = selectRow["WorkID"];
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
@@ -776,86 +777,20 @@
 
             return;
 
-
         }
 
-        function SearchKey() {
-
-            var val = $("#TB_Key").val();
-            if (val == null || val == undefined || val == "") {
-                alert("请输入关键字,单据编号，标题。。。");
-                return;
-            }
-
+        //复制一条数据 //创建新的workid 复制从表、附件
+        function CopyBill(workid, frmID) {
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
-            handler.AddPara("TB_KWds", val);
-
-            var data = handler.DoMethodReturnString("Search_Init");
-            if (data.indexOf('err@') == 0) {
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("MyBill_Copy");
+            if (data.indexOf("err@") != -1) {
                 alert(data);
                 return;
             }
+            window.location.href = window.location.href;
 
-            //转化成json.
-            data = JSON.parse(data);
-            if (data.length <= 0) {
-                alert('未查询出来数据');
-                return;
-            }
-
-            var tableHtml = "";
-            tableHtml += "<tr>";
-            tableHtml += "<th>Idx</th>";
-            tableHtml += "<th>标题</th>";
-            tableHtml += "<th>制单日期</th>";
-            tableHtml += "<th>单据编号</th>";
-            tableHtml += "<th>操作员</th>";
-            tableHtml += "<th width='90'>编辑日期</th>";
-            tableHtml += "<th width='60'>状态</th>";
-            tableHtml += "<th width='50'>操作</th>";
-            tableHtml += "</tr>";
-
-            var user = new WebUser();
-            var userNo = user.No;
-            htmlboxs = "";
-            data.forEach(function (en, index) {
-
-                var tr = "";
-
-                //是否可以执行当前工作?
-                var isCanDo = false;
-                if (en.TodoEmps.indexOf(webUser.No) != -1)
-                    isCanDo = true;
-
-                //图片.
-                var icon = GenerICON(isCanDo, en.BillState);
-
-                // 获得颜色.
-                var color = GenerColor(en.BillState, isCanDo);
-
-                var todoEmpsName = en.TodoEmps;
-                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
-
-                htmlboxs += "<tr>";
-                htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
-
-                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.WorkID + "','" + en.FrmID + "')\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
-                htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
-                if (en.TDTime == null)
-                    htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-                else
-                    htmlboxs += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
-
-                htmlboxs += "<td><font color='" + color + "'>" + GetBillState(en.BillState, isCanDo) + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.BillState, en.FrmID, en.FK_Node, en.FID, isCanDo) + "</font></td>";
-                htmlboxs += "</tr>";
-
-            });
-
-            $("#Table2").html(tableHtml);
-            $("#Table1").html(htmlboxs);
         }
 
         ///导入.

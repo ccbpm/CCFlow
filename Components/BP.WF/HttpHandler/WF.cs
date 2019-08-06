@@ -59,7 +59,7 @@ namespace BP.WF.HttpHandler
 
 
             //加入WF_Node.
-            DataTable WF_Node = nd.ToDataTableField("WF_Node");
+            DataTable WF_Node = nd.ToDataTableField("WF_Node").Copy();
             myds.Tables.Add(WF_Node);
 
 
@@ -99,8 +99,7 @@ namespace BP.WF.HttpHandler
                 fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
                 fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
             }
-
-            myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+            myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent").Copy());
             #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
             #region 增加附件信息.
@@ -154,7 +153,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //增加一个数据源.
-                myds.Tables.Add(dbs.ToDataTableField("Sys_FrmAttachmentDB"));
+                myds.Tables.Add(dbs.ToDataTableField("Sys_FrmAttachmentDB").Copy());
             }
             #endregion
 

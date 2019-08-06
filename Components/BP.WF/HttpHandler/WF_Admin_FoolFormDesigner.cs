@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
             MapData md = new MapData(this.FK_MapData);
             //清缓存
             md.ClearCash();
-            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData").Copy());
 
 
             // 字段属性.
@@ -136,7 +136,7 @@ namespace BP.WF.HttpHandler
                 {
                     FrmNodeComponent fnc = new FrmNodeComponent(int.Parse(nodeStr));
                     //   var f = fnc.GetValFloatByKey("FWC_H");
-                    ds.Tables.Add(fnc.ToDataTableField("WF_Node"));
+                    ds.Tables.Add(fnc.ToDataTableField("WF_Node").Copy());
                 }
             }
 

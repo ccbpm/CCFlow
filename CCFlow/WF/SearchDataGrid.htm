@@ -119,7 +119,7 @@
 
             var _tspan = GetQueryString("TSpan");
             if (_tspan == undefined || _tspan == null || _tspan == "" || _tspan == "null") {
-                _tspan = "0";
+                _tspan = "-1";
             }
 
             var _flowNo = GetQueryString("FK_Flow");
@@ -128,7 +128,7 @@
             }
 
             if (_flowNo == "" && _tspan == "")
-                _tspan = "0";
+                _tspan = "-1";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
             handler.AddPara("TSpan", _tspan);

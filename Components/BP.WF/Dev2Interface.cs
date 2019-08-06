@@ -4854,14 +4854,13 @@ namespace BP.WF
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workid);
 
-
             foreach (GenerWorkFlow item in gwfs)
             {
                 try
                 {
                     // 执行冻结.
                     WorkFlow wf = new WorkFlow(flowNo, workid);
-                   info+=  wf.DoFix(msg);
+                    info+=  wf.DoFix(msg);
                 }
                 catch (Exception ex)
                 {

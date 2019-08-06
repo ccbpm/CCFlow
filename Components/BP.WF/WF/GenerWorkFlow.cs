@@ -1352,6 +1352,16 @@ namespace BP.WF
             return BP.WF.Glo.GenerGanttDataOfSubFlows(this.WorkID);
         }
 
+        /// <summary>
+        /// 终止流程
+        /// </summary>
+        /// <param name="msg">终止的信息</param>
+        /// <returns>终止结果</returns>
+        public string DoFix(string msg)
+        {
+           return BP.WF.Dev2Interface.Flow_DoFix(this.FK_Flow, this.WorkID, true, msg);
+        }
+
         public string DoRpt()
         {
             return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;

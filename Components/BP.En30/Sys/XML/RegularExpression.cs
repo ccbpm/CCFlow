@@ -83,7 +83,7 @@ namespace BP.Sys.XML
 	{
 		#region 构造
 		/// <summary>
-		/// 考核率的数据元素
+        /// 正则表达模版
 		/// </summary>
         public RegularExpressions() { }
 		#endregion

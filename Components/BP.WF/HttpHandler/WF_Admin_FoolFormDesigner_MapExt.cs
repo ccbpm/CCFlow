@@ -771,7 +771,35 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
-            res.RetrieveAll();
+            res.Retrieve("ForCtrl", "TB");
+
+            DataTable myDT = res.ToDataTable();
+            myDT.TableName = "RE";
+            ds.Tables.Add(myDT);
+
+
+            BP.Sys.XML.RegularExpressionDtls dtls = new BP.Sys.XML.RegularExpressionDtls();
+            dtls.RetrieveAll();
+            DataTable myDTDtls = dtls.ToDataTable();
+            myDTDtls.TableName = "REDtl";
+            ds.Tables.Add(myDTDtls);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        public string RegularExpressionNum_Init()
+        {
+            DataSet ds = new DataSet();
+
+            Paras ps = new Paras();
+            ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
+            ps.Add("AttrOfOper", this.KeyOfEn);
+            ps.Add("FK_MapData", this.FK_MapData);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
+            res.Retrieve("ForCtrl", "TBFloat");
 
             DataTable myDT = res.ToDataTable();
             myDT.TableName = "RE";

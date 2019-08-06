@@ -10,6 +10,7 @@ using BP.Web;
 using BP.En;
 using BP.WF.Template;
 using BP.WF.Data;
+using BP.Sys;
 
 namespace BP.Frm
 {
@@ -211,7 +212,121 @@ namespace BP.Frm
             DBAccess.RunSQLs(sql);
             return "删除成功.";
         }
- 
+        /// <summary>
+        /// 复制单据数据
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        public static string MyBill_Copy(string frmID, Int64 workID)
+        {
+            //获取单据的属性
+            FrmBill fb = new FrmBill(frmID);
+
+            GenerBill gb = new GenerBill();
+            gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
+            gb.BillState = BillState.None; //初始化状态.
+            gb.Starter = BP.Web.WebUser.No;
+            gb.StarterName = BP.Web.WebUser.Name;
+            gb.FrmName = fb.Name; //单据名称.
+            gb.FrmID = fb.No; //单据ID
+
+            gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
+            gb.RDT = BP.DA.DataType.CurrentDataTime;
+            gb.NDStep = 1;
+            gb.NDStepName = "启动";
+
+            //创建rpt.
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID, workID);
+
+            //设置标题.
+            gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+            gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+           
+            gb.DirectInsert(); //执行插入.
+
+            //更新基础的数据到表单表.
+            rpt.SetValByKey("BillState", (int)gb.BillState);
+            rpt.SetValByKey("Starter", gb.Starter);
+            rpt.SetValByKey("StarterName", gb.StarterName);
+            rpt.SetValByKey("RDT", gb.RDT);
+            rpt.SetValByKey("Title", gb.Title);
+            rpt.SetValByKey("BillNo", gb.BillNo);
+            rpt.OID = gb.WorkID;
+            rpt.InsertAsOID(gb.WorkID);
+            #region 复制其他数据.
+
+            //复制明细。
+            MapDtls dtls = new MapDtls(frmID);
+            if (dtls.Count > 0)
+            { 
+                foreach (MapDtl dtl in dtls)
+                {
+                    if (dtl.IsCopyNDData == false)
+                        continue;
+
+                    //new 一个实例.
+                    GEDtl dtlData = new GEDtl(dtl.No);
+
+                    GEDtls dtlsFromData = new GEDtls(dtl.No);
+                    dtlsFromData.Retrieve(GEDtlAttr.RefPK, workID);
+                    foreach (GEDtl geDtlFromData in dtlsFromData)
+                    {
+                        //是否启用多附件
+                        FrmAttachmentDBs dbs = null;
+                        if (dtl.IsEnableAthM == true)
+                        {
+                            //根据从表的OID 获取附件信息
+                            dbs = new FrmAttachmentDBs();
+                            dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, geDtlFromData.OID);
+                        }
+
+                        dtlData.Copy(geDtlFromData);
+                        dtlData.RefPK = rpt.OID.ToString();
+                        dtlData.InsertAsNew();
+                        if (dbs != null && dbs.Count != 0)
+                        {
+                            //复制附件信息
+                            FrmAttachmentDB newDB = new FrmAttachmentDB();
+                            foreach (FrmAttachmentDB db in dbs)
+                            {
+                                newDB.Copy(db);
+                                newDB.RefPKVal = dtlData.OID.ToString();
+                                newDB.FID = dtlData.OID;
+                                newDB.MyPK = BP.DA.DBAccess.GenerGUID();
+                                newDB.Insert();
+                            }
+                        }
+                            
+                    }
+                }
+               
+            }
+
+            //获取附件组件、
+            FrmAttachments athDecs = new FrmAttachments(frmID);
+            //复制附件数据。
+            if (athDecs.Count > 0)
+            {
+                foreach(FrmAttachment athDec in athDecs)
+                {
+                    FrmAttachmentDBs aths = new FrmAttachmentDBs();
+                    aths.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDec.MyPK,FrmAttachmentDBAttr.RefPKVal, workID);
+                    foreach (FrmAttachmentDB athDB in aths)
+                    {
+                        FrmAttachmentDB athDB_N = new FrmAttachmentDB();
+                        athDB_N.Copy(athDB);
+                        athDB_N.RefPKVal = rpt.OID.ToString();
+                        athDB_N.MyPK= BP.DA.DBAccess.GenerGUID();
+                        athDB_N.Insert();
+                    }
+                }
+            }
+            #endregion 复制表单其他数据.
+
+            return "复制成功.";
+        }
+
         /// <summary>
         /// 获得发起列表
         /// </summary>

@@ -286,6 +286,14 @@ namespace BP.Frm
         {
             return BP.Frm.Dev2Interface.MyBill_DeleteDicts(this.FrmID, this.GetRequestVal("WorkIDs"));
         }
+        /// <summary>
+        /// 复制单据数据
+        /// </summary>
+        /// <returns></returns>
+        public string MyBill_Copy()
+        {
+            return BP.Frm.Dev2Interface.MyBill_Copy(this.FrmID, this.WorkID);
+        }
         #endregion 单据处理.
 
         #region 获取查询条件

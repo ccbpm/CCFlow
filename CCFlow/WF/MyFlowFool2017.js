@@ -919,8 +919,16 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     //日期类型.
     if (mapAttr.MyDataType == 6) {
         var enableAttr = '';
+        var frmDate = mapAttr.IsSupperText;//获取日期格式
+        var dateFmt = '';
+        if (frmDate == 0) {
+            dateFmt = "yyyy-MM-dd";
+        } else if (frmDate == 3) {
+            dateFmt = "yyyy-MM";
+        }
+
         if (mapAttr.UIIsEnable == 1)
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
         else
             enableAttr = "disabled='disabled'";
 
@@ -931,8 +939,19 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     if (mapAttr.MyDataType == 7) {
 
         var enableAttr = '';
+        var frmDate = mapAttr.IsSupperText; //获取日期格式
+        var dateFmt = '';
+        if (frmDate == 1) {
+            dateFmt = "yyyy-MM-dd HH:mm";
+        } else if (frmDate == 2) {
+            dateFmt = "yyyy-MM-dd HH:mm:ss";
+        } else if (frmDate == 4) {
+            dateFmt = "HH:mm";
+        } else if (frmDate == 5) {
+            dateFmt = "HH:mm:ss";
+        }
         if (mapAttr.UIIsEnable == 1)
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
         else
             enableAttr = "disabled='disabled'";
 
@@ -1001,7 +1020,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         //alert(defValue);
 
-		return "<input  onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);' value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);' value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "limitLength(this," + bit + ");valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     //AppMoney  AppRate
@@ -1014,8 +1033,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             bit = 2;
 
-		return "<input value='" + defValue + "' style='text-align:right;' class='form-control' onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");' onkeyup=" + '"' +
-			"valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' +
+        return "<input value='" + defValue + "' style='text-align:right;' class='form-control' onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");numberFormat (this, " + bit + ") ' onkeyup=" + '"' +
+			"limitLength(this," + bit + ");" + '"' +
 			" onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' +
 			" maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
 

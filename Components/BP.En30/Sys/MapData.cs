@@ -1595,7 +1595,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单注册表");
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                //map.Java_SetDepositaryOfEntity(Depositary.None);  会出错如果放入到内存.
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("4");

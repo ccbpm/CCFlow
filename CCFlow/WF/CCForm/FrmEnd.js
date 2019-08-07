@@ -453,7 +453,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 } else {
                     tb.addClass("CheckRegInput");
                     tb.data(mapExt)
-                    tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
+                    tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "','" + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + "','" + mapExt.Tag1 + "')");
 
                 }
                 break;

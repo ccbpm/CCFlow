@@ -36,15 +36,7 @@ namespace BP.WF
             //增加子流程数据.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve("PWorkID", workID);
-
             string json = "[";
-
-            //json += " { id:'" + gwf.FK_Flow + "', name:'" + gwf.FlowName + "',";
-            //json += " series:[";
-            //json += "{ name: \"计划时间\", start:  " + ToData(gwf.SDTOfFlow) + ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
-            //json += "{ name: \"实际工作时间\", start: " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
-            //json += "]";
-            //json += "},";
 
             //获得节点.
             Nodes nds = new Nodes(gwf.FK_Flow);
@@ -60,7 +52,6 @@ namespace BP.WF
 
                 //里程碑.
                 json += " { id:'" + nd.NodeID + "', name:'" + nd.Name + "', ";
-
 
                 string series = "";
                 foreach (SubFlow sub in subs)
@@ -80,20 +71,8 @@ namespace BP.WF
                         dtlsSubFlow += " name: '" + subGWF.FlowName + "', ";
                         dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ", ";
                         dtlsSubFlow += " end: " + ToData(gwf.SendDT) + ",  ";
-
-                        if (gwf.TodoSta==0)
-                            dtlsSubFlow += " color: '#f0f0f0'  "; //正常
-                        if (gwf.TodoSta == 1)
-                            dtlsSubFlow += " color: 'yellow'  "; //预警中.
-
-                        if (gwf.TodoSta == 2)
-                            dtlsSubFlow += " color: '#e0e0e0'  "; //正常完成.
-
-                        if (gwf.TodoSta == 3)
-                            dtlsSubFlow += " color: 'red'  "; //逾期完成.
-                         
-
-                        //if (gwf.WFState== WFState.ReturnSta)
+                        dtlsSubFlow += " TodoSta: " + gwf.TodoSta + ", ";
+                        dtlsSubFlow += " color: '#f0f0f0' ";
 
                         dtlsSubFlow += "},";
                     }
@@ -107,10 +86,9 @@ namespace BP.WF
                         dtlsSubFlow += "{ ";
                         dtlsSubFlow += " name: '" + sub.SubFlowNo + " - " + sub.SubFlowName + "', ";
                         dtlsSubFlow += " start:  " + ToData(DataType.CurrentData) + ", ";
-
-                        dtlsSubFlow += " end:  " + ToData("2019-09-01") + ", ";
-                        dtlsSubFlow += " color: 'yellow' ";
-
+                        dtlsSubFlow += " end:  " + ToData(DataType.CurrentData) + ", ";
+                        dtlsSubFlow += " TodoSta: -1, ";
+                        dtlsSubFlow += " color: 'blue' ";
                         dtlsSubFlow += "}";
                     }
 

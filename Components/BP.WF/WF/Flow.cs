@@ -1234,7 +1234,7 @@ namespace BP.WF
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
             wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
 
-            if (this.BillNoFormat != "")
+            if (rpt.EnMap.Attrs.Contains("BillNo") ==true)
                 wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
 
             wk.FID = 0;

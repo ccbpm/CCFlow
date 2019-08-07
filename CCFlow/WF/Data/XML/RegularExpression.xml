@@ -58,7 +58,7 @@
 
 
   <Item No="BaiFenBi" Name="输入必须是百分比" Note="0.2 显示 20% 。"  ForCtrl="TBNum" />
-  <Dtl ItemNo="BaiFenBi"  ForEvent="onblur"  Exp="/^[\u4e00-\u9fa5]/" Msg="输入有效的数字." />
-  <Dtl ItemNo="BaiFenBi"  ForEvent="onsubmit"  Exp="/^[\u4e00-\u9fa5]/" Msg="输入有效的数字1-100." />
+  <Dtl ItemNo="BaiFenBi"  ForEvent="onblur"  Exp="/^(\\d|[1-9]\\d|100)$/" Msg="输入有效的数字0-100." />
+  <Dtl ItemNo="BaiFenBi"  ForEvent="onsubmit"  Exp="/^(\\d|[1-9]\\d|100)$/" Msg="输入有效的数字0-100." />
 
 </NewDataSet>

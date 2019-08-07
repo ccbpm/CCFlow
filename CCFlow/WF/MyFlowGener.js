@@ -924,12 +924,21 @@ function execSend(toNodeID) {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     $.each(dataStrs.split("&"), function (i, o) {
-        var param = o.split("=");
-        if (param.length == 2 && validate(param[1])) {
-            handler.AddPara(param[0], param[1]);
+        //计算出等号的INDEX
+        var indexOfEqual = o.indexOf('=');
+        var objectKey = o.substr(0, indexOfEqual);
+        var objectValue = o.substr(indexOfEqual + 1);
+        if (validate(objectValue)) {
+            handler.AddPara(objectKey, objectValue);
         } else {
-            handler.AddPara(param[0], "");
+            handler.AddPara(objectKey, "");
         }
+//        var param = o.split("=");
+//        if (param.length == 2 && validate(param[1])) {
+//            handler.AddPara(param[0], param[1]);
+//        } else {
+//            handler.AddPara(param[0], "");
+//        }
     });
     //handler.AddUrlData(dataStrs);
 

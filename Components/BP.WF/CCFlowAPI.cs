@@ -77,29 +77,29 @@ namespace BP.WF
                 //求出集合.
                 MapAttrs mattrs = md.MapAttrs; // new MapAttrs(md.No);
                 
-                    /*处理表单权限控制方案*/
-                    FrmNode frmNode = new FrmNode();
-                    int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
-                    if (count != 0 && frmNode.FrmSln != 0)
+                /*处理表单权限控制方案*/
+                FrmNode frmNode = new FrmNode();
+                int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
+                if (count != 0 && frmNode.FrmSln != 0)
+                {
+                    FrmFields fls = new FrmFields(md.No, frmNode.FK_Node);
+                    foreach (FrmField item in fls)
                     {
-                        FrmFields fls = new FrmFields(md.No, frmNode.FK_Node);
-                        foreach (FrmField item in fls)
+                        foreach (MapAttr attr in mattrs)
                         {
-                            foreach (MapAttr attr in mattrs)
-                            {
-                                if (attr.KeyOfEn != item.KeyOfEn)
-                                    continue;
+                            if (attr.KeyOfEn != item.KeyOfEn)
+                                continue;
 
-                                if (item.IsSigan)
-                                    item.UIIsEnable = false;
+                            if (item.IsSigan)
+                                item.UIIsEnable = false;
 
-                                attr.UIIsEnable = item.UIIsEnable;
-                                attr.UIVisible = item.UIVisible;
-                                attr.IsSigan = item.IsSigan;
-                                attr.DefValReal = item.DefVal;
-                            }
+                            attr.UIIsEnable = item.UIIsEnable;
+                            attr.UIVisible = item.UIVisible;
+                            attr.IsSigan = item.IsSigan;
+                            attr.DefValReal = item.DefVal;
                         }
                     }
+                }
                  
 
                 DataTable Sys_MapAttr = mattrs.ToDataTableField("Sys_MapAttr");
@@ -198,16 +198,6 @@ namespace BP.WF
 
                             //执行更新,就自动生成那个丢失的字段分组.
                             refFnc.Update();
-
-                            /*
-                            //丢失了就插入新的.
-                            BP.Sys.GroupField gfEn = new GroupField();
-                            gfEn.FrmID = nd.NodeFrmID;
-                            gfEn.CtrlType = "FWC";
-                            gfEn.CtrlID = "FWCND" + nd.NodeID;
-                            gfEn.Idx = 100;
-                            gfEn.Lab = "审核信息";
-                            gfEn.Insert(); */
                         }
 
                     }
@@ -216,11 +206,14 @@ namespace BP.WF
                 }
 
                 #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
-                if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
+                if (nd.NodeFrmID == "ND" + nd.NodeID || (nd.HisFormType == NodeFormType.RefOneFrmTree && count != 0))
                 {
-                    //   Work wk1 = nd.HisWork;
-
-                    if (nd.FormType == NodeFormType.FoolForm)
+                    bool isHaveFWC = false;
+                    //绑定表单库中的表单
+                    if (count!=0 && frmNode.IsEnableFWC == true &&  nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                        isHaveFWC = true;
+                 
+                    if (nd.FormType == NodeFormType.FoolForm || isHaveFWC == true)
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];

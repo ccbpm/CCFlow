@@ -57,12 +57,22 @@
             */
             gwls = new Entities("BP.WF.GenerWorkerLists");
             if (notChecked.size() != 0) {
+
+                var todoEmps = "";
                 $.each(notChecked, function () {
                     gwls.Retrieve("WorkID", workID, "FK_Node", nodeID, "FK_Emp", $(this).attr('id'));
                     var newgwl = new Entity("BP.WF.GenerWorkerList", gwls[0]);
                     newgwl.IsEnable = "0";
                     newgwl.Update();
+
+                    todoEmps += newgwl.FK_Emp + "," + newgwl.FK_EmpText + ";";
                 });
+
+
+                var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+                gwf.TodoEmps = todoEmps;
+                gwf.Update();
+
             }
 
 

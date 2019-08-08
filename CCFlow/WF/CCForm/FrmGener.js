@@ -270,18 +270,22 @@ function GenerFrm() {
     //根据表单类型不同生成表单.
 
     var isTest = GetQueryString("IsTest");
-
+    var isFloolFrm = false;
     if (isTest == "1") {
 
         var frmType = GetQueryString("FrmType");
         if (frmType == 'FreeFrm')
             GenerFreeFrm(mapData, frmData); //自由表单.
-        else
+        else {
             GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+            isFloolFrm = true;
+        }
 
     } else {
-        if (mapData.FrmType == 0)
+        if (mapData.FrmType == 0) {
             GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+            isFloolFrm = true;
+        }
         else
             GenerFreeFrm(mapData, frmData); //自由表单.
     }
@@ -397,7 +401,10 @@ function GenerFrm() {
     if (pageData.IsReadonly != "1")
         AfterBindEn_DealMapExt(frmData);
 
-    //ShowNoticeInfo();
+    if (pageData.IsReadonly == "0" && isFloolFrm == true)
+        //表单联动设置
+        Set_Frm_Enable(frmData);
+
 
     ShowTextBoxNoticeInfo();
 

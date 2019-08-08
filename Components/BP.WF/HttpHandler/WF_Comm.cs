@@ -715,7 +715,7 @@ namespace BP.WF.HttpHandler
             object[] myparas = new object[0];
 
             if (DataType.IsNullOrEmpty(paras) == false)
-                myparas = paras.Split(',');
+                myparas = paras.Split('~');
 
             string result = mp.Invoke(en, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;

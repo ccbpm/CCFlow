@@ -7308,7 +7308,7 @@ namespace BP.WF
 
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.FK_Flow,this.HisGenerWorkFlow.WorkID, nd.NodeID,WebUser.No);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID,WebUser.No, nd.NodeID);
 
 
                         //写入消息.
@@ -7322,7 +7322,7 @@ namespace BP.WF
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, this.HisGenerWorkFlow.FK_Flow);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID);
 
                         //执行发送到下一个环节..
                         SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.SubFlowNo, subWorkID, this.rptGe.Row, null);
@@ -7454,7 +7454,7 @@ namespace BP.WF
                         BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID);
 
                         //写入消息.
                         this.addMsg("SubFlow" + sub.SubFlowNo, "流程[" + sub.FlowName + "]启动成功.");
@@ -7467,7 +7467,7 @@ namespace BP.WF
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.PFlowNo);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No,nd.NodeID);
 
                         //执行发送到下一个环节..
                         SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.SubFlowNo, subWorkID, this.rptGe.Row, null);

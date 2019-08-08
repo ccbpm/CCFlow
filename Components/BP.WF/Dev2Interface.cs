@@ -4543,28 +4543,21 @@ namespace BP.WF
             ps.Add("OID", workID);
             BP.DA.DBAccess.RunSQL(ps);
         }
-        /// <summary>
-        /// 设置父流程信息
-        /// </summary>
-        /// <param name="subFlowNo"></param>
-        /// <param name="subFlowWorkID"></param>
-        /// <param name="pflowNo"></param>
-        /// <param name="parentWorkID"></param>
-        /// <param name="pNodeID"></param>
-        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, string pflowNo, Int64 parentWorkID, int pNodeID, string parentEmpNo)
-        {
-            SetParentInfo(subFlowNo, subFlowWorkID, parentWorkID);
-        }
+   
         /// <summary>
         /// 设置父流程信息 
         /// </summary>
         /// <param name="subFlowNo">子流程编号</param>
         /// <param name="subFlowWorkID">子流程workid</param>
         /// <param name="parentWorkID">父流程WorkID</param>
-        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, Int64 parentWorkID, string parentEmpNo = null)
+        public static void SetParentInfo(string subFlowNo, Int64 subFlowWorkID, Int64 parentWorkID, string parentEmpNo = null, int parentNodeID = 0)
         {
             //创建父流程.
             GenerWorkFlow pgwf = new GenerWorkFlow(parentWorkID);
+
+            if (parentNodeID != 0)
+                pgwf.FK_Node = parentNodeID;
+
 
             if (parentEmpNo == null)
                 parentEmpNo = WebUser.No;
@@ -6273,7 +6266,7 @@ namespace BP.WF
                 //历史执行人. 
                 sql = "SELECT C.Name AS DeptName,  A.* FROM ND" + int.Parse(gwf.FK_Flow) + "Track A, Port_Emp B, Port_Dept C  ";
                 sql += " WHERE (A.WorkID=" + workID + " OR A.FID="+workID+") AND (A.ActionType=1 OR A.ActionType=0  OR A.ActionType=6  OR A.ActionType=7) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ";
-                sql += " ORDER BY A.RDT ";
+                sql += " ORDER BY A.RDT DESC ";
 
                 DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
 

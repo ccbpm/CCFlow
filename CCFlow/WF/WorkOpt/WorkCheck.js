@@ -152,6 +152,7 @@ function InitPage() {
                     html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
                     idx++;
                 }
+            }
         }
         else {
 

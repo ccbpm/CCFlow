@@ -1716,7 +1716,7 @@ namespace BP.WF.HttpHandler
                 #endregion 给字段赋值
 
                 //获取审核意见的值
-
+                
                 string checkNote = this.GetValFromFrmByKey("TB_" + workid + "_WorkCheck_Doc", null);
                 if (DataType.IsNullOrEmpty(checkNote) == false)
                 {

@@ -1,4 +1,5 @@
-﻿
+﻿import { unbind } from "./FusionCharts/fusioncharts";
+
 //检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
     //首位可以是字母以及下划线。 
@@ -1270,19 +1271,18 @@ var Entity = (function () {
                 }
             });
             return result;
-        },
-
+        },   //一个参数直接传递,  多个参数，参数之间使用 ~隔开， 比如: zhangsna~123~1~山东济南.
         DoMethodReturnString: function (methodName, myparams) {
+
             var params = {};
             if (myparams == null || myparams == undefined)
                 myparams = "";
-            arguments["paras"] = myparams;
 
+            arguments["paras"] = myparams;
             /*$.each(arguments, function (i, o) {
             if (i > 0)
             params.push(o);
             });*/
-
 
             var pkavl = this.GetPKVal();
             if (pkavl == null || pkavl == "") {

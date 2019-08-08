@@ -1306,8 +1306,12 @@ namespace BP.WF.HttpHandler
             if (Web.WebUser.No == null)
                 return "err@登录信息丢失,请重新登录.";
 
-            #region 定义变量.
-            FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
+			//表单库审核组件流程编号为null的异常处理
+			if (string.IsNullOrWhiteSpace(this.FK_Flow))
+				return null;
+
+			#region 定义变量.
+			FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
             FrmWorkCheck frmWorkCheck = null;
             FrmAttachmentDBs athDBs = null;
             Nodes nds = new Nodes(this.FK_Flow);

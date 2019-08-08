@@ -580,10 +580,14 @@ namespace BP.Frm
             #endregion 外键或者枚举的查询
 
             #endregion 查询语句
-
+            qo.addAnd();
+            qo.AddWhere("BillState","!=",0);
             //获得行数.
             ur.SetPara("RecCount", qo.GetCount());
             ur.Save();
+
+           
+
 
             if(DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
                 qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);

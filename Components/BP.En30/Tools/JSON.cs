@@ -273,7 +273,15 @@ namespace BP.Tools
             string strs = "{";
             foreach (string key in ht.Keys)
             {
-                strs += "\"" + key + "\":\"" + ht[key] + "\",";
+                var val = ht[key];
+
+                if (val.GetType()==typeof(int)
+                    || val.GetType() == typeof(decimal)
+                    || val.GetType() == typeof(float))
+                strs += "\"" + key + "\":" + ht[key] + ",";
+                else
+                    strs += "\"" + key + "\":\"" + ht[key] + "\",";
+
             }
             strs += "\"EndJSON\":\"0\"";
             strs += "}";

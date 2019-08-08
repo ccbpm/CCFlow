@@ -122,8 +122,6 @@ namespace BP.En
             if (isInParaFields == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
 
-
-
             if (ht.ContainsKey("AtPara") == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
 

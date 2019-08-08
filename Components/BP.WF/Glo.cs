@@ -38,6 +38,26 @@ namespace BP.WF
             gwfs.Retrieve("PWorkID", workID);
             string json = "[";
 
+
+            //主流程的计划完成日期，与实际完成日期的两个时间段.
+            json += " { id:'001', name:'总体计划', ";
+            json += "series:[{ ";
+            json += " name: '项目计划', ";
+            json += " start:  " + ToData(gwf.RDT) + ", ";
+            json += " end: " + ToData(gwf.SDTOfFlow) + ",";
+            json += " TodoSta: " + gwf.TodoSta + ", ";
+            json += " color: '#f0f0f0' ";
+            json += "},";
+
+            json += "{ name: '实际执行', ";
+            json += " start:  " + ToData(gwf.RDT) + ",";
+            json += " end: " + ToData(gwf.SendDT) + ",";
+            json += " TodoSta: " + gwf.TodoSta + ",";
+            json += " color: '#f0f0f0' ";
+            json += "}]";
+            json += "},";
+
+
             //获得节点.
             Nodes nds = new Nodes(gwf.FK_Flow);
             nds.Retrieve("FK_Flow", gwf.FK_Flow, "Step");

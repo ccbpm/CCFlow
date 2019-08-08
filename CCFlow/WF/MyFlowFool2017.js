@@ -9,6 +9,8 @@ function GenerFoolFrm(wn) {
     var h = flowData.Sys_MapData[0].FrmH;
     var w = flowData.Sys_MapData[0].FrmW;
     var frmShowType = flowData.Sys_MapData[0].FrmShowType; //0 普通方式 1 页签方式
+    if (frmShowType == null || FrmShowType == undefined || FrmShowType == "")
+        frmShowType = 0;
     var node = flowData.WF_Node[0];
     var tableCol = flowData.Sys_MapData[0].TableCol;
     if (tableCol == 0)

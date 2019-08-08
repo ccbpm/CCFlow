@@ -410,6 +410,9 @@
                 if (attr.UIContralType == 0)
                     lab = "<label for='TB_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
 
+                if (attr.MyDataType == 4)
+                    lab = "<label for='CB_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
+
                 if (attr.UIContralType == 1)
                     lab = "<label for='DDL_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'  style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
 

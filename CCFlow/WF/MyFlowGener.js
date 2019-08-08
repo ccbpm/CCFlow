@@ -699,10 +699,10 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
                     case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
+                        formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
                         break;
                     case "TEXT": //文本框
-                        formArrResult.push(name + '=' + $(disabledEle).val());
+                        formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
                         break;
                     case "RADIO": //单选钮
                         name = $(disabledEle).attr('name');
@@ -715,7 +715,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 break;
             //下拉框            
             case "SELECT":
-                formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).children('option:checked').val()));
                 var tbID = name.replace("DDL_", "TB_") + 'T';
                 if ($("#" + tbID).length == 1) {
                     var index = isExistArray(formArrResult, tbID);
@@ -726,7 +726,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
             //文本区域                    
             case "TEXTAREA":
-                formArrResult.push(name + '=' + $(disabledEle).val());
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
                 break;
         }
     });

@@ -8102,10 +8102,7 @@ namespace BP.WF
                         {
                             //获取审核组件信息
                             string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
-                            if (at != ActionType.TeampUp)
-                                t.Msg += DBAccess.RunSQLReturnStringIsNull(sql,"");
-                            else
-                                t.Msg+= "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                             t.Msg+= "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
 
                             //把审核组件的立场信息保存在track表中
                             string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
@@ -8240,11 +8237,8 @@ namespace BP.WF
                         if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                         {
                             //获取审核组件信息
-                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'"; ;
-                            if (at != ActionType.TeampUp)
-                                t.Msg += DBAccess.RunSQLReturnStringIsNull(sql, "");
-                            else
-                                t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";                    
+                             t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
                             //把审核组件的立场信息保存在track表中
                             string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
                             string[] strs = checkTag.Split('@');

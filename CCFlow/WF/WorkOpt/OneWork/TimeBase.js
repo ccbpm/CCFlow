@@ -104,6 +104,9 @@ function InitPage() {
                 var checkTrack = tracks[myIdx];
                 if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
                     isHaveCheck = true;
+                    var val = track.Msg.split("WorkCheck@");
+                    if (val.length == 2)
+                        track.Msg = val[1];
                     doc += "<p><span>审批意见：</span><font color=green>" + track.Msg + "</font> </p>";
                 }
             }
@@ -116,6 +119,9 @@ function InitPage() {
 
                 var checkTrack = tracks[myIdx];
                 if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                    var val = track.Msg.replace('null', '').split("WorkCheck@");
+                    if (val.length == 2)
+                        track.Msg = val[1];
                     doc += "<p><span>会签意见：</span><font color=green>" + track.Msg.replace('null', '') + "</font> </p>";
                 }
             }

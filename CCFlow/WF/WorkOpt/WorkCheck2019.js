@@ -85,24 +85,10 @@ function InitPage() {
         html += "</td>";
         html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
 
-        //显示历史信息
-        // if (wcDesc.FWCListEnable == true) {
-
-
-
-
-        //}
 
         //当前节点审核意见可编辑
         if (this.IsDoc == "1" && isReadonly == false) {
-            //html += "<tr>";
-            //html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
 
-            //var nodeName = this.NodeName;
-            //nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
-            //html += nodeName;
-            //html += "</td>";
-            //html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
 
             if (wcDesc.FWCAth == 1) {
                 html += "<div style='float:right' id='uploaddiv' onmouseover='UploadFileChange(this)'></div>";
@@ -170,11 +156,11 @@ function InitPage() {
 
         } else {
             var returnMsg = this.ActionType == 2 ? "退回原因：" : "";
-            if(this.ActionType ==28){
-                var val = this.Msg.split("WorkCheck@");
-                if(val.length==2)
-                    this.Msg = val[1];
-            }
+            var val = this.Msg.split("WorkCheck@");
+            if(val.length==2)
+                this.Msg = val[1];
+
+           
             html += '<font color=green>' + returnMsg + this.Msg + '</font>';
             //加入立场判断
             if (this.FWCView != null && this.FWCView != "" && this.FWCView != undefined) {

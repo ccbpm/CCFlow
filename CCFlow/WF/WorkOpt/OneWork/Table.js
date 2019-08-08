@@ -100,7 +100,10 @@ function InitPage() {
 
                 var checkTrack = tracks[myIdx];
                 if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    Msg = checkTrack.Msg;
+                    var val = track.Msg.replace('null', '').split("WorkCheck@");
+                    if (val.length == 2)
+                        track.Msg = val[1];
+                    Msg = track.Msg;
                 }
             }
         }
@@ -111,7 +114,10 @@ function InitPage() {
 
                 var checkTrack = tracks[myIdx];
                 if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    Msg = checkTrack.Msg;
+                    var val = track.Msg.replace('null', '').split("WorkCheck@");
+                    if (val.length == 2)
+                        track.Msg = val[1];
+                    Msg = track.Msg;
                 }
             }
         }

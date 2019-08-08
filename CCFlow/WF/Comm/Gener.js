@@ -1,6 +1,4 @@
-﻿import { unbind } from "./FusionCharts/fusioncharts";
-
-//检查字段,从表名,附件ID,输入是否合法.
+﻿//检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
     //首位可以是字母以及下划线。 
     //首位之后可以是字母，数字以及下划线。下划线后不能接下划线

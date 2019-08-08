@@ -5633,6 +5633,17 @@ namespace BP.WF
             return true;
         }
         /// <summary>
+        /// 设置流程应完成日期.
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="sdt">应完成日期</param>
+        public static void Flow_SetSDTOfFlow(Int64 workid, string sdt)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            gwf.SDTOfFlow = sdt;
+            gwf.Update();
+        }
+        /// <summary>
         /// 设置流程标题
         /// </summary>
         /// <param name="flowNo">流程编号</param>

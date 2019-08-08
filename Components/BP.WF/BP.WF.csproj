@@ -79,6 +79,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -103,6 +104,7 @@
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FtpSupport, Version=1.0.1817.24824, Culture=neutral">
@@ -609,12 +611,12 @@
   <ItemGroup>
     <None Include="Service References\CCInterface\configuration91.svcinfo" />
     <None Include="Service References\CCInterface\configuration.svcinfo" />
-    <None Include="Service References\CCInterface\PortalInterface.wsdl" />
+    <None Include="Service References\CCInterface\PortalInterface11.wsdl" />
     <None Include="Service References\CCInterface\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\CCInterface\PortalInterface.disco" />
+    <None Include="Service References\CCInterface\PortalInterface11.disco" />
     <Content Include="Service References\CloudWS\configuration.svcinfo" />
     <Content Include="Service References\CloudWS\configuration91.svcinfo" />
     <Content Include="Service References\CloudWS\Reference.svcmap">

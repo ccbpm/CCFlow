@@ -511,6 +511,7 @@ namespace BP.WF
         public static bool SendEmailNow(string mail, string mailTitle, string mailDoc)
         {
             System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
+
             //邮件地址.
             string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
             if (emailAddr == null)
@@ -520,20 +521,22 @@ namespace BP.WF
             if (emailPassword == null)
                 emailPassword = "ccbpm123";
 
-            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, "ccbpm", System.Text.Encoding.UTF8);
+            string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+
+
+            myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
             myEmail.To.Add(mail);
             myEmail.Subject = mailTitle;
             myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
 
-           myEmail.IsBodyHtml=true;
+            myEmail.IsBodyHtml = true;
 
-           mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
+            mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
 
             myEmail.Body = mailDoc;
             myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
             myEmail.IsBodyHtml = true;//是否是HTML邮件
-
             myEmail.Priority = MailPriority.High; // 邮件优先级
 
             SmtpClient client = new SmtpClient();
@@ -558,16 +561,9 @@ namespace BP.WF
             else
                 client.EnableSsl = false; //经过ssl加密.
 
-            try
-            {
-                object userState = myEmail;
-                client.SendAsync(myEmail, userState);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            object userState = myEmail;
+            client.SendAsync(myEmail, userState);
+            return true;
         }
         /// <summary>
         /// 插入之后执行的方法.
@@ -613,10 +609,9 @@ namespace BP.WF
 
                     if (DataType.IsNullOrEmpty(pushModel) == true)
                         pushModel = BP.WF.Glo.ShortMessageWriteTo.ToString();
-                    string [] pushModels = pushModel.Split(',');
+                    string[] pushModels = pushModel.Split(',');
                     foreach (string model in pushModels)
                     {
-
                         switch ((ShortMessageWriteTo)Int32.Parse(model))
                         {
                             case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
@@ -624,7 +619,7 @@ namespace BP.WF
                             case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
                                 soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                                soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
+                                //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
                                 break;
                             case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
                                 soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

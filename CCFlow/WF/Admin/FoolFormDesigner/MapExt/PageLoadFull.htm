@@ -29,9 +29,10 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
             mapExt.RetrieveFromDBSources();
-
+            var tag = mapExt.Tag;
+            tag = tag.replace(/~/g, "'");
             //给主键赋值.
-            $("#TB_Tag").val(mapExt.Tag);
+            $("#TB_Tag").val(tag);
 
             //求从表个数
             var mapDtls = new Entities("BP.Sys.MapDtls");

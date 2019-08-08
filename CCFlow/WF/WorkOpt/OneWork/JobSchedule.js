@@ -1,4 +1,5 @@
-﻿var step = 0;
+﻿
+var step = 0;
 $(function () {
 
     var workid = GetQueryString("WorkID");
@@ -14,12 +15,16 @@ $(function () {
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
 
+    //debugger;
+
     var step = 0;
     //循环历史记录, 生成唯一的节点连续字符串比如 101,102,103
     var nds = "";
     for (var i = 0; i < tracks.length; i++) {
         var tk = tracks[i];
         if (nds.indexOf(tk.FK_Node) != -1)
+            continue;
+        if (tk.ActionType == 2)
             continue;
 
         nds += "," + tk.FK_Node;
@@ -115,21 +120,22 @@ function GenerMNode(tracks, nodeID, gwf) {
 
     step = step + 1;
     var info = "<ul>";
+
+    var emps = "";
     for (var i = 0; i < tracks.length; i++) {
 
         var tk = tracks[i];
+      //  debugger
+        if (tk.FK_Node != nodeID) continue;
+        if (emps.indexOf(tk.EmpNo + ',') >= 0) continue; //已经出现的，就不处理了.
 
-        if (tk.FK_Node != nodeID)
-            continue;
-        debugger
+        emps += tk.EmpNo + ",";
+
         if (tk.IsPass == 1) {
-            var emp = new Entity("BP.Port.Emp", tk.EmpNo);
-            info += "<ol><font color=blue><b>" + emp.FK_DeptText + " " + tk.EmpName + "</b></font> " + tk.RDT.substring(5, 16) + "</ol>";
+            info += "<ol><font color=blue><b>" + tk.DeptName + " " + tk.EmpName + "</b></font> " + tk.RDT.substring(5, 16) + "</ol>";
         }
         else {
-
-            var emp = new Entity("BP.Port.Emp", tk.EmpNo);
-            info += "<ol>" + emp.FK_DeptText + " " + tk.EmpName + "</ol>";
+            info += "<ol>" + tk.DeptName + " " + tk.EmpName + "</ol>";
         }
     }
     info += "</ul>";
@@ -153,6 +159,8 @@ function GenerSingerNode(tracks, nodeID, gwf) {
         if (tk.FK_Node != nodeID)
             continue;
 
+    
+
         var html = "";
         var doc = "";
         doc += "<br>" + tk.EmpName;
@@ -175,7 +183,7 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
     var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
 
 
-    debugger;
+  //  debugger;
 
     var barUrlLeft = "";
     var barUrlRight = "";

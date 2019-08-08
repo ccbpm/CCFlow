@@ -401,7 +401,7 @@ function GenerFrm() {
     if (pageData.IsReadonly != "1")
         AfterBindEn_DealMapExt(frmData);
 
-    if (pageData.IsReadonly == "0" && isFloolFrm == true)
+    if (isFloolFrm == true)
         //表单联动设置
         Set_Frm_Enable(frmData);
 

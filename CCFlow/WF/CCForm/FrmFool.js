@@ -1604,10 +1604,13 @@ function GetLab(frmData, attr) {
     }
     //文本框，下拉框，单选按钮
     if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 8) {
-        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
+        lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
+//        if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
+//            lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
+//        }
         return lab;
     }
     //附件控件

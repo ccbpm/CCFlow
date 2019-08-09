@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>流程应完成日期计算规则</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .input
+        {
+            width: 95%;
+            height: 20px;
+        }
+    </style>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <!-- ccbpm -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        //全局变量
+        var FK_Flow; 	//流程id
+        var _StartLimitRole; //限制规则枚举（JSON)
+
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+
+        });
+
+        function InitPage() {
+
+            var fk_flow = GetQueryString("FK_Flow");
+
+            var data = new Entity("BP.WF.Flow", fk_flow);
+
+            var _StartLimitRole = data.StartLimitRole;
+
+            //批量赋值.
+            GenerFullAllCtrlsVal(data);
+
+            if (_StartLimitRole == 1) {
+                $("#RB_ByTime").attr("checked", true);
+                $("#TB_ByTimePara").val(dat.StartLimitPara);
+                $("#DDL_ByTime").val(0);
+            }
+
+            var dat = data;
+            $("#TB_Alert").val(dat.StartLimitAlert); //限制提示信息
+            switch (dat.StartLimitRole) {
+                case "0": //不限制 None
+                    $("#RB_None").attr("checked", true);
+                    //$("input[name=xzgz][value=RB_None]").attr("checked", true); 
+                    $("#TB_ByTimePara").val(dat.StartLimitPara); //for test
+                    break;
+                case "1": //天
+                    $("#RB_ByTime").attr("checked", true);
+                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+                    $("#DDL_ByTime").val(0);
+                    break;
+                case "2": //周
+                    $("#RB_ByTime").attr("checked", true);
+                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+                    $("#DDL_ByTime").val(1);
+                    break;
+                case "3": //月份
+                    $("#RB_ByTime").attr("checked", true);
+                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+                    $("#DDL_ByTime").val(2);
+                    break;
+                case "4": 	//月份？
+                    $("#RB_ByTime").attr("checked", true);
+                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+                    $("#DDL_ByTime").val(3);
+                    break;
+                case "5": //年度
+                    $("#RB_ByTime").attr("checked", true);
+                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+                    $("#DDL_ByTime").val(4);
+                    break;
+                case "6": 		//发起的列不能重复,(多个列可以用逗号分开)
+                    $("#RB_ColNotExit").attr("checked", true);
+                    $("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
+                    break;
+                case "7": 	//<=0
+                    $("#RB_SQL").attr("checked", true);
+                    $("#TB_SQL_Para").val(dat.StartLimitPara);
+                    $("#DDL_SQL").val(0);
+                    break;
+                case "8": //>0
+                    $("#RB_SQL").attr("checked", true);
+                    $("#TB_SQL_Para").val(dat.StartLimitPara);
+                    $("#DDL_SQL").val(1);
+                    break;
+                case "9": 	//为子流程时仅仅只能被调用1此
+                    $("#RB_OnlyOneSubFlow").attr("checked", true);
+                    break;
+                default:
+                    alert('没有判断的类型.');
+                    break;
+            }
+            $("#Msg").html("");
+
+        }
+
+        function Save(parameters) {
+            //debugger;
+            //获取控件值
+            var startLimitRole = "", startLimitPara = "";
+            var xzgz = $("input[name=xzgz]:checked")[0].id; //$("input[type=radio][name=xzgz]:checked")[0].id
+            alert(xzgz);
+            switch (xzgz) {
+                case "RB_None":
+                    startLimitRole = "0";
+                    break;
+                case "RB_ByTime":
+                    var DDL_ByTime = parseInt($("#DDL_ByTime").val());
+                    switch (DDL_ByTime) {
+                        case 0:
+                            startLimitRole = "1";
+                            break;
+                        case 1:
+                            startLimitRole = "2";
+                            break;
+                        case 2:
+                            startLimitRole = "3";
+                            break;
+                        case 3:
+                            startLimitRole = "4";
+                            break;
+                        case 4:
+                            startLimitRole = "5";
+                            break;
+                    }
+                    startLimitPara = $("#TB_ByTimePara").val();
+                    break;
+                case "RB_OnlyOneSubFlow":
+                    startLimitRole = "9";
+                    break;
+                case "RB_ColNotExit":
+                    startLimitRole = "6";
+                    startLimitPara = $("#TB_ColNotExit_Fields").val();
+                    break;
+                case "RB_SQL":
+                    var DDL_SQL = $("#DDL_SQL").val();
+                    startLimitRole = DDL_SQL == 0 ? "7" : "8";
+                    startLimitPara = $("#TB_SQL_Para").val();
+                    break;
+                default:
+                    break;
+            }
+
+            //            //第2代技术.
+            //		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+            //		    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            //		    handler.AddPara("StartLimitRole", startLimitRole);
+            //		    handler.AddPara("StartLimitPara", startLimitPara);
+            //		    handler.AddPara("StartLimitAlert", $("#TB_Alert").val());
+            //		    var data = handler.DoMethodReturnString("Limit_Save");
+
+            //		    if (data.indexOf("err@") == 0) {
+            //		        alert(data);
+            //		        return;
+            //		    }
+            //		    alert(data);
+
+            //第3代技术.
+            var flow = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
+            flow.StartLimitRole = startLimitRole;
+            flow.StartLimitPara = startLimitPara;
+            flow.StartLimitAlert = $("#TB_Alert").val();
+            flow.Update();
+            window.location.href = window.location.href;
+        }
+
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
+    </script>
+</head>
+<body>
+    <table style="width: 100%">
+        <caption>
+            流程应完成日期计算规则
+        </caption>
+        <tr>
+            <td valign="top">
+                <fieldset>
+                    <legend>
+                        <input type="radio" name="xzgz" id="RB_None" value="RB_None">
+                        <!-- checked="checked"> -->
+                        <label for="RB_None">
+                            不使用（默认）</label>
+                    </legend>
+                    <ul style="color: Gray">
+                        <li>不使用规则。</li>
+                    </ul>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input type="radio" name="xzgz" id="RB_ByTime">
+                        <label for="RB_ByTime">
+                            按照表单的节点表单的字段计算。</label>
+                    </legend>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
+                        <label for="RB_OnlyOneSubFlow">
+                            按sql计算.</label>
+                    </legend>
+                    <input type="text" value="" id="TB_SQL" name="TB_SQL" />
+                    <br />
+                    例如: SELECT myfield FROM xxxx WHERE OID=@WorkID
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+            </td>
+        </tr>
+    </table>
+
+    <div id="Msg">
+    </div>
+
+    <fieldset>
+        <legend>帮助</legend>
+        <ul>
+            <li>流程实例表 WF_GenerWorkFlow 的 SDTOfFlow 的字段是用于标识该流程的实例应该(计划)在什么时间完成。</li>
+            <li>该功能用于设置一个流程的应用完成日期，设置到 WF_GenerWorkFlow 的SDTOfFlow 的字段里。</li>
+            <li>整体流程的应完成日期也可以称为他的计划完成日期。</li>
+            <li>如果要更改该计划完成日期可以调用事件：UPDATE WF_GenerWorkFlow SET SDTOfFlow=(SELECT MYFILE FROM XXX
+                WHERE OID=@WorkID ) WHERE WorkID=@WorkID</li>
+        </ul>
+    </fieldset>
+</body>
+</html>

@@ -47,7 +47,19 @@ namespace BP.GPM
         }
 
         #endregion
-     
+
+        #region 实现基本的方方法
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenForSysAdmin();
+                return uac;
+            }
+        }
+        #endregion
+
 		#region 构造方法
 		/// <summary>
 		/// 岗位类型

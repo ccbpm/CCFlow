@@ -64,17 +64,12 @@
             if (document.getElementById("RB_CHWayOfTimeRole_1").checked)
                 chWay = 1;
 
-            node.SetPara("CHWayOfTimeRole", chWay);
+            node.SetPara("CHWayOfTimeRole", chWay); //时间点计算规则.
+            node.SetPara("CHWayOfTimeRoleField", "xxxx"); //时间点计算日期.
 
 
             //节假日计算方式.
             node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
-
-            //是否是时效考核.
-            if (document.getElementById("CB_IsEval").checked == true)
-                node.IsEval = 1;
-            else
-                node.IsEval = 0;
 
             node.Update();
 

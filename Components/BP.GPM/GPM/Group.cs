@@ -17,6 +17,17 @@ namespace BP.GPM
     /// </summary>
     public class Group : EntityNoName
     {
+        #region 按钮权限控制
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenForAppAdmin();
+                return uac;
+            }
+        }
+        #endregion
         #region 构造方法
         /// <summary>
         /// 权限组

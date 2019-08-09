@@ -38,6 +38,17 @@ namespace BP.GPM
         }
         #endregion
 
+        #region 按钮权限控制
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenForAppAdmin();
+                return uac;
+            }
+        }
+        #endregion
         #region 构造方法
         /// <summary>
         /// 系统类别

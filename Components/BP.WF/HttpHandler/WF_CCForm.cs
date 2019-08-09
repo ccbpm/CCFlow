@@ -1280,22 +1280,22 @@ namespace BP.WF.HttpHandler
 
                         if (GetRequestValInt("IsTest") != 1)
                         {
-                            try
+                            //判断是否自定义权限.
+                            bool IsSelf = false;
+                            //单据或者是单据实体表单
+                            if (nd == null)
                             {
-                                //判断是否自定义权限.
-                                bool IsSelf = false;
-                                if ((nd.HisFormType == NodeFormType.SheetTree
-                                     || nd.HisFormType == NodeFormType.RefOneFrmTree)
-                                     && (fn.FrmSln == FrmSln.Self))
+                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, 0, this.WorkID) as GEEntity;
+                            }
+                            else
+                            {
+                                if ((nd.HisFormType == NodeFormType.SheetTree 
+                                    || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                                    && (fn.FrmSln == FrmSln.Self))
                                     IsSelf = true;
-
                                 en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, nd.NodeID, this.WorkID) as GEEntity;
-                                //en.DirectUpdate();
                             }
-                            catch (Exception ex)
-                            {
-
-                            }
+                           
                         }
 
                     }
@@ -1450,7 +1450,6 @@ namespace BP.WF.HttpHandler
                     #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
                     if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                     {
-                        //   Work wk1 = nd.HisWork;
 
                         if (md.HisFrmType == FrmType.FoolForm)
                         {

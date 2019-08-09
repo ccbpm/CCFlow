@@ -6296,7 +6296,7 @@ namespace BP.WF
             }
 
             //如果流程没有完成.
-            if (gwf.WFState != WFState.Complete)
+            if (gwf.WFState != WFState.Complete && 1==2)
             {
                 DataRow dr = dtHistory.NewRow();
                 dr["FK_Node"] = gwf.FK_Node;

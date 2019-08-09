@@ -436,7 +436,7 @@ namespace BP.WF
 
             DateTime dtOfShould = DateTime.Now;
 
-            if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByFlow)
+            if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.BySpecField)
             {
                 /*如果整体流程是按流程设置计算。*/
                 dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisGenerWorkFlow.SDTOfFlow);
@@ -1874,7 +1874,7 @@ namespace BP.WF
             #region 要计算当前人员的应完成日期
             // 计算出来 退回到节点的应完成时间. 
             DateTime dtOfShould;
-            if (this.HisFlow.HisTimelineRole == Template.TimelineRole.ByFlow)
+            if (this.HisFlow.HisTimelineRole == Template.TimelineRole.BySpecField)
             {
                 /*如果整体流程是按流程设置计算 */
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -7797,7 +7797,7 @@ namespace BP.WF
             gwf.FK_Dept = this.HisWork.RecOfEmp.FK_Dept;
             gwf.DeptName = this.HisWork.RecOfEmp.FK_DeptText;
 
-            if (this.HisFlow.HisTimelineRole == TimelineRole.ByFlow)
+            if (this.HisFlow.HisTimelineRole == TimelineRole.BySpecField)
             {
                 try
                 {

@@ -922,7 +922,7 @@ namespace BP.WF
             // 计算出来 退回到节点的应完成时间. 
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             DateTime dtOfShould;
-            if (fl.HisTimelineRole == Template.TimelineRole.ByFlow)
+            if (fl.HisTimelineRole == Template.TimelineRole.BySpecField)
             {
                 /*如果整体流程是按流程设置计算 */
                 dtOfShould = DataType.ParseSysDateTime2DateTime(gwf.SDTOfFlow);

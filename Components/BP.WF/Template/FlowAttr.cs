@@ -393,7 +393,12 @@ namespace BP.WF.Template
         /// <summary>
         /// 按流程
         /// </summary>
-        ByFlow
+        BySpecField,
+        /// <summary>
+        /// 按照sql
+        /// </summary>
+        BySQL
+
     }
     /// <summary>
     /// 流程发起导航方式

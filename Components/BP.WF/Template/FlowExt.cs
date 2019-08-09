@@ -398,6 +398,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",
                   true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 map.SetHelperUrl(FlowAttr.FlowAppType, "http://ccbpm.mydoc.io/?v=5404&t=17035");
+
                 map.AddDDLSysEnum(FlowAttr.TimelineRole, (int)TimelineRole.ByNodeSet, "时效性规则",
                  true, true, FlowAttr.TimelineRole, "@0=按节点(由节点属性来定义)@1=按发起人(开始节点SysSDTOfFlow字段计算)");
                 map.SetHelperUrl(FlowAttr.TimelineRole, "http://ccbpm.mydoc.io/?v=5404&t=17036");
@@ -524,6 +525,15 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "计划完成时间计算规则"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoSDTOfFlow";
+               // rm.Icon = "../../WF/Img/Event.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
 
                 rm = new RefMethod();
@@ -1146,7 +1156,15 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Action.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
-
+        /// <summary>
+        /// 计划玩成
+        /// </summary>
+        /// <returns></returns>
+        public string DoSDTOfFlow()
+        {
+            return "../../Admin/AttrFlow/Action.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+        }
+        
         /// <summary>
         /// 节点标签
         /// </summary>

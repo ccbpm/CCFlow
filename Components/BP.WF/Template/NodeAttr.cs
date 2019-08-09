@@ -383,6 +383,10 @@ namespace BP.WF.Template
         /// 子流程运行到该节点时，让父流程自动运行到下一步
         /// </summary>
         public const string IsToParentNextNode = "IsToParentNextNode";
+        /// <summary>
+        /// 该节点是否是游离状态
+        /// </summary>
+        public const string IsYouLiTai = "IsYouLiTai";
         #endregion
 
         #region 父子流程

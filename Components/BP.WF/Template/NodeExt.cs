@@ -247,6 +247,13 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.ReturnRole);
             }
         }
+        public bool IsYouLiTai
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsYouLiTai);
+            }
+        }
         /// <summary>
         /// 主键
         /// </summary>
@@ -257,6 +264,7 @@ namespace BP.WF.Template
                 return "NodeID";
             }
         }
+
         #endregion 属性.
 
         #region 初试化全局的 Node
@@ -353,6 +361,10 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
                 map.AddBoolean(NodeAttr.IsOpenOver, false, "已阅即完成?", true, true, true);
 
+                map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true);
+                map.AddBoolean(NodeAttr.IsYouLiTai, false, "该节点是否是游离态", true, true);
+                map.SetHelperUrl(NodeAttr.IsYouLiTai, "当节点为游离状态的时候，只有连接的节点是固定节点才可以往下运行，否则流程结束");
+
                 map.AddTBDateTime("DTFrom", "生命周期从", true, true);
                 map.AddTBDateTime("DTTo", "生命周期到", true, true);
 
@@ -370,7 +382,6 @@ namespace BP.WF.Template
 
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
 
-                map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true);
                 #endregion  基础属性
 
                 #region 分合流子线程属性
@@ -1245,6 +1256,9 @@ namespace BP.WF.Template
             Node nd = new Node(this.NodeID);
             if (nd.IsStartNode == true)
             {
+                //开始节点不能设置游离状态
+                if (this.IsYouLiTai == true)
+                    throw new Exception("当前节点是开始节点不能设置游离状态");
                 /*处理按钮的问题*/
                 //不能退回, 加签，移交，退回, 子线程.
                 //this.SetValByKey(BtnAttr.ReturnRole,(int)ReturnRole.CanNotReturn); //开始节点可以退回。
@@ -1375,6 +1389,10 @@ namespace BP.WF.Template
             Node fl = new Node();
             fl.NodeID = this.NodeID;
             fl.RetrieveFromDBSources();
+            if (this.IsYouLiTai == true)
+                fl.SetPara("IsYouLiTai", 1);
+            else
+                fl.SetPara("IsYouLiTai", 0);
             fl.Update();
 
             //如果是组长会签模式，通用选择器只能单项选择

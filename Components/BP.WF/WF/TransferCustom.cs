@@ -4,6 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.WF;
 using BP.Port;
+using BP.WF.Template;
 
 namespace BP.WF
 {
@@ -282,7 +283,8 @@ namespace BP.WF
         /// 要分析如下几种情况:
         /// 1, 当前节点不存在队列里面，就返回第一个.
         /// 2, 如果当前队列为空,就认为需要结束掉, 返回null.
-        /// 3, 如果当前节点是最后一个,就返回null,表示要结束流程.
+        /// 3, 如果当前节点是最后一个并且没有连接线连到固定节点,就返回null,表示要结束流程.
+        /// 4. 如果当前节点是最后一个且有连接线连到固定节点
         /// </summary>
         /// <param name="workid">当前工作ID</param>
         /// <param name="currNodeID">当前节点ID</param>
@@ -316,6 +318,29 @@ namespace BP.WF
                         return (TransferCustom)item;
                 }
 
+            }
+
+            //如果当前节点是最后一个自定义节点，且有连接线连到固定节点
+            if(isMeet == true)
+            {
+                //判断当前节点是否连接到固定节点
+                string sql = "SELECT AtPara FROM WF_Node WHERE NodeID In(SELECT ToNode FROM WF_Direction WHERE Node=" + currNodeID + ")";
+                Nodes nds = new Nodes();
+                nds.RetrieveInSQL(NodeAttr.NodeID,"SELECT ToNode FROM WF_Direction WHERE Node = " + currNodeID);
+                foreach(Node nd in nds)
+                {
+                    if (nd.GetParaBoolen(NodeAttr.IsYouLiTai) == true)
+                        continue;
+                   
+                    TransferCustom en = new TransferCustom();
+                    en.FK_Node = nd.NodeID;
+                    //更改流程的运行状态@yuan
+                    GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                    gwf.TransferCustomType = TransferCustomType.ByCCBPMDefine;
+                    gwf.Update();
+                    return en;
+                }
+               
             }
                 
             return null;

@@ -3843,8 +3843,8 @@ namespace BP.WF.HttpHandler
                 {
                     if (nd.NodeID == this.FK_Node)
                         continue;
-                   
-
+                    if (nd.GetParaBoolen(NodeAttr.IsYouLiTai) == false)
+                        continue;
                     var gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, nd.NodeID);
                     if (gwl == null)
                     {

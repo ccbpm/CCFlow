@@ -609,6 +609,8 @@ function CheckInput(oInput, filter) {
 }
 //正则表达式检查
 function CheckRegInput(oInput, filter, tipInfo) {
+    var mapExt = $('#' + oInput).data();
+    var filter = mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
     var oInputVal = $("[name=" + oInput + ']').val();
     var result = true;
     if (oInput != '') {

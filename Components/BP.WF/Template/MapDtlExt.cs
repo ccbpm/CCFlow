@@ -915,8 +915,8 @@ namespace BP.WF.Template
                 //map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
                 //map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
 
-                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
-                map.SetHelperAlert(MapDtlAttr.RowsOfList, "对第1个版本有效.");
+                //map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
+                //map.SetHelperAlert(MapDtlAttr.RowsOfList, "对第1个版本有效.");
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", true, true);
 

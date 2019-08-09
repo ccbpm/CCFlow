@@ -1351,7 +1351,6 @@ namespace BP.WF
         {
             return BP.WF.Glo.GenerGanttDataOfSubFlows(this.WorkID);
         }
-
         /// <summary>
         /// 终止流程
         /// </summary>

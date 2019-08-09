@@ -88,13 +88,21 @@ namespace BP.WF
                             continue;
 
                         dtlsSubFlow += "{ ";
-                        dtlsSubFlow += " name: '" + subGWF.FlowName + "', ";
-                        dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ", ";
-                        dtlsSubFlow += " end: " + ToData(gwf.SendDT) + ",  ";
+                        dtlsSubFlow += " name: '" + subGWF.FlowName + "(计划)',";
+                        dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ",";
+                        dtlsSubFlow += " end: " + ToData(gwf.SDTOfFlow) + ",";
+                        dtlsSubFlow += " TodoSta: -2, ";
+                        dtlsSubFlow += " color: 'brue' ";
+                        dtlsSubFlow += "},";
+
+                        dtlsSubFlow += "{ ";
+                        dtlsSubFlow += " name: '(实际)',";
+                        dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ",";
+                        dtlsSubFlow += " end: " + ToData(gwf.SendDT) + ",";
                         dtlsSubFlow += " TodoSta: " + gwf.TodoSta + ", ";
                         dtlsSubFlow += " color: '#f0f0f0' ";
-
                         dtlsSubFlow += "},";
+
                     }
 
                     if (DataType.IsNullOrEmpty(dtlsSubFlow) == false)

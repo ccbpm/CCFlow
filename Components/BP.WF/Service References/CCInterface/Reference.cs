@@ -18,15 +18,15 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWebServices", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag, string title = null, string openUrl = null);
+        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag, string title, string openUrl);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendWhen", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo);
+        bool SendWhen(string flowNo, int nodeID, long workid, string userNo, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/FlowOverBefore", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool FlowOverBefore(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo);
+        bool FlowOverBefore(string flowNo, int nodeID, long workid, string userNo, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToDingDing", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -148,16 +148,16 @@ namespace BP.WF.CCInterface {
                 base(binding, remoteAddress) {
         }
         
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag,string title=null,string openUrl = null) {
-            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, tag,title,openUrl);
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag, string title, string openUrl) {
+            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, tag, title, openUrl);
         }
         
-        public bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.SendWhen(msgPK, sender, sendToEmpNo, tel, msgInfo);
+        public bool SendWhen(string flowNo, int nodeID, long workid, string userNo, string userName) {
+            return base.Channel.SendWhen(flowNo, nodeID, workid, userNo, userName);
         }
         
-        public bool FlowOverBefore(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.FlowOverBefore(msgPK, sender, sendToEmpNo, tel, msgInfo);
+        public bool FlowOverBefore(string flowNo, int nodeID, long workid, string userNo, string userName) {
+            return base.Channel.FlowOverBefore(flowNo, nodeID, workid, userNo, userName);
         }
         
         public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo) {

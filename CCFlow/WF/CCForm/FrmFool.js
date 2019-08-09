@@ -1270,7 +1270,7 @@ function SetCtrlVal(key, value) {
     ctrl = $("#CB_" + key);
     if (ctrl.length > 0) {
         ctrl.val(value);
-        ctrl.attr('checked', true);
+        ctrl.prop("checked",true);
     }
 
     ctrl = $("#RB_" + key + "_" + value);
@@ -1298,7 +1298,7 @@ function CleanCtrlVal(key) {
 
     ctrl = $("#CB_" + key);
     if (ctrl.length > 0) {
-        ctrl.attr('checked', false);;
+        ctrl.attr('checked', false);
     }
 
     ctrl = $("#RB_" + key + "_" + 0);

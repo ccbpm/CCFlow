@@ -181,6 +181,8 @@
             var selectRb = $.grep(initData.Sys_FrmRB, function (value) {
                 return value.IntKey == pageData.selectIntKey;
             });
+            $(':text').val(""); //转换之前的文本框设置值清空
+            $('select').val(''); //转换之前的下拉框设置值清空
             $('#TB_Script').val(selectRb[0].Script);
             $('#TB_Tip').val(selectRb[0].Tip);
             //解析下面的元素显示与否

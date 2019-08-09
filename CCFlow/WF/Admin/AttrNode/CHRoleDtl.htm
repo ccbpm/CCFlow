@@ -72,11 +72,6 @@
             window.location.href = window.location.href;
             return;
         }
-        function SetCHRoleDtl() {
-
-            var url = "";
-            window.location.href = url;
-        }
     </script>
 </head>
 <body>
@@ -100,14 +95,46 @@
                 <fieldset>
                     <legend>
                         <input type="radio" value="1" id="RB_CHWay_1" name="RB_CHWay">
-                        <label for="RB_CHWay_1">
-                            按时效考核</label></legend>
-                    <ul  style="color: Gray">
-                        <li>按时间点计算，或者说按照设置的时间区间计算。 </li>
-                        <li>这个方式有：1. 设置天数，比如设置应该在几天几小时完成。 </li>
-                        <li>2. 设置天数，比如设置应该在几天几小时完成。 </li>
-                        <li><a href="javascript:SetCHRoleDtl();">设置时效考核的计算方式</a> </li>
-                    </ul>
+                        <label for="RB_CHWay_1">按时效考核</label></legend>
+                        <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
+                        <fieldset>
+                        <legend>按照设置的天数，小时计算. </legend>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td nowarp="true">
+                                限期完成时限：
+                            </td>
+                            <td>
+                                <input type="text" id="TB_TimeLimit" name="TB_TimeLimit" style="width: 30px;" />天,
+                            </td>
+                            <td>
+                                <input type="text" id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width: 30px;" />小时,
+                            </td>
+                            <td style="color: Gray">
+                                <input type="text" id="TBPara_TimeLimitMM" name="TBPara_TimeLimitMM" style="width: 30px;" />分钟
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                节假日
+                            </td>
+                            <td>
+                                <select name="DDL_TWay" id="DDL_TWay">
+                                </select>
+                            </td>
+                            <td colspan="2">
+                                <a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');">节假日维护</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                说明: WF_CH 这个表用于存储时效考核数据,您可以仔细研究该表的结构并做想用的考核数据的使用.
+                            </td>
+                        </tr>
+                    </table>
+                        </fieldset>
+
+                        <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
 
                 </fieldset>
                 <fieldset>

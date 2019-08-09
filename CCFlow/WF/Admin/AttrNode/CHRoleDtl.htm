@@ -25,6 +25,12 @@
             //执行.
             var node = new Entity("BP.WF.Node", nodeID);
 
+            var rpt= "ND"+node.FK_Flow+"Rpt";
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Rtrctr("FK_MapData", rpt);
+
+          
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(node);
 
@@ -52,11 +58,14 @@
 
             //考核方式.
             var chWay = 0;
-            if (document.getElementById("RB_CHWay_1").checked)
+            if (document.getElementById("RB_CHWayOfTimeRole_0").checked)
+                chWay = 0;
+
+            if (document.getElementById("RB_CHWayOfTimeRole_1").checked)
                 chWay = 1;
-            if (document.getElementById("RB_CHWay_2").checked)
-                chWay = 2;
-            node.CHWay = chWay;
+
+            node.SetPara("CHWayOfTimeRole", chWay);
+
 
             //节假日计算方式.
             node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
@@ -69,33 +78,25 @@
 
             node.Update();
 
-            window.location.href = window.location.href;
-            return;
+            Back();
+        }
+        function Back() {
+            window.location.href = "CHRole.htm?FK_Node=" + GetQueryString("FK_Node"); 
         }
     </script>
 </head>
 <body>
     <form id="cc">
     <table style="width: 100%;">
-        <caption>
-            设置考核规则</caption>
+        <caption> 设置按照时间点的考核方式</caption>
         <tr>
             <td>
+
+            
                 <fieldset>
                     <legend>
-                        <input type="radio" value="0" id="RB_CHWay_0" name="RB_CHWay">
-                        <label for="RB_CHWay_0">
-                            不考核
-                        </label>
-                    </legend>
-                    <ul>
-                        <li style="color: Gray">默认为不考核，当前节点不设置任何形式的考核。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="1" id="RB_CHWay_1" name="RB_CHWay">
-                        <label for="RB_CHWay_1">按时效考核</label></legend>
+                        <input type="radio" value="0" id="RB_CHWayOfTimeRole_0" name="RB_CHWayOfTimeRole">
+                        <label for="RB_CHWayOfTimeRole_0">按时效考核</label></legend>
                         <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
                         <fieldset>
                         <legend>按照设置的天数，小时计算. </legend>
@@ -134,32 +135,31 @@
                     </table>
                         </fieldset>
 
-                        <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
-
                 </fieldset>
+
+
                 <fieldset>
                     <legend>
-                        <input type="radio" value="2" id="RB_CHWay_2" name="RB_CHWay">
-                        <label for="RB_CHWay_2">
-                            按工作量考核
+                        <input type="radio" value="1" id="RB_CHWayOfTimeRole_1" name="RB_CHWayOfTimeRole">
+                        <label for="RB_CHWayOfTimeRole_1">
+                            按表单的表单字段计算.
                         </label>
                     </legend>
-                    <ul style="color: Gray">
-                        <li>按照处理工作的多少进行考核。</li>
-                        <li>这样的节点，一般都是多人处理的节点。</li>
+
+                    
+                    请选择日期字段: 
+                    <br />
+                    <select id="DDL_Fields" ></select>
+
+                    <ul>
+                        <li style="color: Gray"> sss</li>
                     </ul>
                 </fieldset>
-                <fieldset>
-                    <legend>是否是质量考核点？</legend>
-                    <ul style="color: Gray">
-                        <li>质量考核，是当前节点对上一步的工作进行一个工作好坏的一个考核。</li>
-                        <li>考核的方式是对上一个节点进行打分，该分值记录到WF_CHEval的表里，开发人员对WF_CHEval的数据根据用户的需求进行二次处理。</li>
-                    </ul>
-                    <input type="checkbox" id="CB_IsEval" name="CB_IsEval" value="1" />
-                    <label for="CB_IsEval">
-                        是否是质量考核点?</label>
-                </fieldset>
-                <input type="button" value="保存" onclick="Save()" />
+
+               
+                <input type="button" value="保存并返回" onclick="Save()" />
+                <input type="button" value="返回" onclick="Back()" />
+
             </td>
         </tr>
     </table>

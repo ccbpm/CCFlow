@@ -274,6 +274,11 @@ namespace BP.Tools
             foreach (string key in ht.Keys)
             {
                 var val = ht[key];
+                if (val == null)
+                {
+                    strs += "\"" + key + "\":\"\",";
+                    continue;
+                }
 
                 if (val.GetType()==typeof(int)
                     || val.GetType() == typeof(decimal)

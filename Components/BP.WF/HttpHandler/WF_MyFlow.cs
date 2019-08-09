@@ -1808,7 +1808,11 @@ namespace BP.WF.HttpHandler
                     this.WorkID, this.GetMainTableHT(), null);
 
                 if (this.PWorkID != 0)
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID);
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID,gwf.PEmp,gwf.PNodeID);
+                }
+                    
 
                 return str;
             }

@@ -2120,40 +2120,7 @@ namespace BP.WF.HttpHandler
                             row["RDT"] = DataType.IsNullOrEmpty(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && DataType.IsNullOrEmpty(tk.Msg) ? "" : tk.RDT;
                             row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                             row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
-
-                        /*    if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
-                                                wcDesc.HisFrmWorkCheckType == FWCType.Check || (
-                                                (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)
-                                                && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
-                                                || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog
-                                                && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
-                                                ))
-                            {
-                                bool isLast = true;
-                                foreach (Track tk1 in tks)
-                                {
-                                    if (tk1.HisActionType == tk.HisActionType
-                                        && tk1.NDFrom == tk.NDFrom
-                                        && tk1.RDT.CompareTo(tk.RDT) > 0)
-                                    {
-                                        isLast = false;
-                                        break;
-                                    }
-                                }
-
-                                if (isLast && isDoc == false && gwf.WFState != WFState.Complete)
-                                {
-                                    isExitTb_doc = false;
-                                    row["IsDoc"] = true;
-                                    isDoc = true;
-                                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
-                                    tkDoc = tk;
-                                }
-                                else
-                                {
-                                    row["Msg"] = tk.MsgHtml;
-                                }
-                            }*/
+                       
                             if(gwf.WFState == WFState.Complete)
                             {
                                 row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);

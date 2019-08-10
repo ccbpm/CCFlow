@@ -22,18 +22,36 @@
             //调用公共类库的方法.
             GenerBindEnumKey("DDL_TWay", "TWay", "1");
 
+
             //执行.
             var node = new Entity("BP.WF.Node", nodeID);
 
-            var rpt= "ND"+node.FK_Flow+"Rpt";
+            var FK_MapData = "ND" + nodeID;
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
-            mapAttrs.Rtrctr("FK_MapData", rpt);
-
-          
+            mapAttrs.Retrieve("FK_MapData", FK_MapData);
+            //按照时间点的考核方式
+            var CHWayOfTimeRole = node.GetPara("CHWayOfTimeRole");
+            $("input[name='RB_CHWayOfTimeRole'][value=" + CHWayOfTimeRole + "]").attr("checked", true);
+            //查询日期字段下拉框所有值
+            for (var i = 0; i < mapAttrs.length; i++) {
+                if (mapAttrs[i].MyDataType != 6 && mapAttrs[i].MyDataType != 7)
+                    continue;
+                if (mapAttrs[i].KeyOfEn == "RDT" || mapAttrs[i].KeyOfEn == "CDT" || mapAttrs[i].KeyOfEn == "FlowEnderRDT" || mapAttrs[i].KeyOfEn == "FlowStartRDT")
+                    continue;
+                $("#DDL_Fields").append("<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>");
+            }
+            //
+            var CHWayOfTimeRoleField = node.GetPara("CHWayOfTimeRoleField");
+            if (CHWayOfTimeRoleField == null || CHWayOfTimeRoleField == undefined || CHWayOfTimeRoleField == '') {
+                $("#DDL_Fields").val(0);
+            } else {
+                $("#DDL_Fields").val(CHWayOfTimeRoleField);
+            }
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(node);
 
+            //
             var str = $("#TB_TimeLimit").val();
             if (str == null || str == "")
                 $("#TB_TimeLimit").val(0);
@@ -42,9 +60,6 @@
             if (str == null || str == "")
                 $("#TBPara_TimeLimitHH").val(0);
 
-            str = $("#TBPara_TimeLimitMM").val();
-            if (str == null || str == "")
-                $("#TBPara_TimeLimitMM").val(0);
 
         });
 
@@ -56,17 +71,11 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.CopyForm(); //复制表单数据.
 
-            //考核方式.
-            var chWay = 0;
-            if (document.getElementById("RB_CHWayOfTimeRole_0").checked)
-                chWay = 0;
+            var CHWayOfTimeRole = $('input:radio[name="RB_CHWayOfTimeRole"]:checked').val();
+            node.SetPara("CHWayOfTimeRole", CHWayOfTimeRole); //时间点考核方式
 
-            if (document.getElementById("RB_CHWayOfTimeRole_1").checked)
-                chWay = 1;
-
-            node.SetPara("CHWayOfTimeRole", chWay); //时间点计算规则.
-            node.SetPara("CHWayOfTimeRoleField", "xxxx"); //时间点计算日期.
-
+            var CHWayOfTimeRoleField = $("#DDL_Fields").val();
+            node.SetPara("CHWayOfTimeRoleField", CHWayOfTimeRoleField); //按表单字段的字段
 
             //节假日计算方式.
             node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
@@ -106,9 +115,9 @@
                             <td>
                                 <input type="text" id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width: 30px;" />小时,
                             </td>
-                            <td style="color: Gray">
+                            <!--<td style="color: Gray">
                                 <input type="text" id="TBPara_TimeLimitMM" name="TBPara_TimeLimitMM" style="width: 30px;" />分钟
-                            </td>
+                            </td>-->
                         </tr>
                         <tr>
                             <td>
@@ -118,7 +127,7 @@
                                 <select name="DDL_TWay" id="DDL_TWay">
                                 </select>
                             </td>
-                            <td colspan="2">
+                            <td >
                                 <a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');">节假日维护</a>
                             </td>
                         </tr>
@@ -143,14 +152,27 @@
 
                     
                     请选择日期字段: 
-                    <br />
-                    <select id="DDL_Fields" ></select>
+                    
+                    <select id="DDL_Fields" >
+                        <option value="0">请选择</option>
+                    </select>
 
                     <ul>
-                        <li style="color: Gray"> sss</li>
+                        <li style="color: Gray"> 选择表单中的日期时间字段来计算。</li>
                     </ul>
                 </fieldset>
-
+                <fieldset>
+                    <legend>
+                        <input type="radio" value="2" id="RB_CHWayOfTimeRole_2" name="RB_CHWayOfTimeRole">
+                        <label for="RB_CHWayOfTimeRole_2">
+                            流转自定义.
+                        </label>
+                    </legend>
+                    <ul style="color: Gray">
+                        <li>启用流转自定义时间点考核，则按照流转自定义设置的时间来计算节点完成时间。</li>
+                        
+                    </ul>
+                </fieldset>
                
                 <input type="button" value="保存并返回" onclick="Save()" />
                 <input type="button" value="返回" onclick="Back()" />

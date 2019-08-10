@@ -20,25 +20,15 @@
             var nodeID = GetQueryString("FK_Node");
 
             //调用公共类库的方法.
-            GenerBindEnumKey("DDL_TWay", "TWay", "1");
+            //            GenerBindEnumKey("DDL_TWay", "TWay", "1");
 
             //执行.
             var node = new Entity("BP.WF.Node", nodeID);
 
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(node);
-
-            var str = $("#TB_TimeLimit").val();
-            if (str == null || str == "")
-                $("#TB_TimeLimit").val(0);
-
-            str = $("#TBPara_TimeLimitHH").val();
-            if (str == null || str == "")
-                $("#TBPara_TimeLimitHH").val(0);
-
-            str = $("#TBPara_TimeLimitMM").val();
-            if (str == null || str == "")
-                $("#TBPara_TimeLimitMM").val(0);
+            var chWay = node.CHWay;
+            $("input[name='RB_CHWay'][value="+chWay+"]").attr("checked", true);
 
         });
 
@@ -50,23 +40,15 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.CopyForm(); //复制表单数据.
 
-            //考核方式.
-            var chWay = 0;
-            if (document.getElementById("RB_CHWay_1").checked)
-                chWay = 1;
-            if (document.getElementById("RB_CHWay_2").checked)
-                chWay = 2;
-            node.CHWay = chWay;
-
             //节假日计算方式.
-            node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
+//            node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
 
             //是否是时效考核.
             if (document.getElementById("CB_IsEval").checked == true)
                 node.IsEval = 1;
             else
                 node.IsEval = 0;
-
+            node.CHWay = $('input:radio[name="RB_CHWay"]:checked').val();
             node.Update();
 
             window.location.href = window.location.href;
@@ -104,7 +86,8 @@
                     <ul  style="color: Gray">
                         <li>按时间点计算，或者说按照设置的时间区间计算。 </li>
                         <li>这个方式有：1. 设置天数，比如设置应该在几天几小时完成。 </li>
-                        <li>2. 设置天数，比如设置应该在几天几小时完成。 </li>
+                        <li>2. 按表单的表单字段，选择时间字段，按其设置的时间计算。 </li>
+                        <li>3. 流转自定义。 </li>
                         <li><a href="javascript:SetCHRoleDtl();">设置时效考核的计算方式</a> </li>
                     </ul>
 

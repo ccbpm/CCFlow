@@ -2065,6 +2065,7 @@ function initModal(modalType, toNode) {
             case "CH":
                 $('#modalHeader').text("节点时限");
                 modalIframeSrc = "./WorkOpt/CH.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                break;
             case "Note":
                 $('#modalHeader').text("备注");
                 modalIframeSrc = "./WorkOpt/Note.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();

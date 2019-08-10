@@ -3872,7 +3872,14 @@ namespace BP.WF.HttpHandler
                         tc.WorkerName = workerName;
                         tc.Idx = nd.Step;
                         tc.IsEnable = true;
+                        if (nd.HisCHWay == CHWay.ByTime && nd.GetParaInt("CHWayOfTimeRole") == 2)
+                        {
+                            tc.PlanDT = DateTime.Now.AddDays(1).ToString(DataType.SysDataTimeFormat);
+                        }
                         tc.Insert();
+                       
+                       
+
                     }
                 }
                 tcs = new TransferCustoms(this.WorkID);

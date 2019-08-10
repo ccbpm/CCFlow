@@ -64,8 +64,8 @@
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,24 +77,20 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\RefDLL\Office12\Microsoft.Office.Interop.Word.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\RefDLL\MySql.Data.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\RefDLL\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI">
-      <HintPath>..\RefDLL\NPOI.dll</HintPath>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OOXML">
-      <HintPath>..\RefDLL\NPOI.OOXML.dll</HintPath>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\RefDLL\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\RefDLL\NPOI.OpenXmlFormats.dll</HintPath>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -493,11 +489,6 @@
     <Content Include="GPM\themes\icons\up.gif" />
     <Content Include="GPM\themes\icons\xitong.png" />
     <Content Include="GPM\themes\icons\xitongleibie.png" />
-    <Content Include="SDKFlowDemo\Default.htm" />
-    <Content Include="SDKFlowDemo\DemoEmpSelecter.htm" />
-    <Content Include="SDKFlowDemo\readme.txt" />
-    <Content Include="SDKFlowDemo\SDK\F129\S12901.htm" />
-    <Content Include="SDKFlowDemo\UnitTesting\Testing.aspx" />
     <Content Include="Service References\CloundWS\configuration.svcinfo" />
     <Content Include="Service References\CloundWS\configuration91.svcinfo" />
     <Content Include="Service References\CloundWS\Reference.svcmap">
@@ -513,20 +504,6 @@
     <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
     <Content Include="DataUser\PortalInterface.asmx" />
     <Content Include="Global.asax" />
-    <Content Include="SDKFlowDemo\ccflow.js" />
-    <Content Include="SDKFlowDemo\CCFormTester.asmx" />
-    <Content Include="SDKFlowDemo\DemoBatchUrl.aspx" />
-    <Content Include="SDKFlowDemo\DemoBP.aspx" />
-    <Content Include="SDKFlowDemo\DemoComm.htm" />
-    <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
-    <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
-    <Content Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx" />
-    <Content Include="SDKFlowDemo\QingJia\S4_RenShi.aspx" />
-    <Content Include="SDKFlowDemo\SDK\Info.aspx" />
-    <Content Include="SDKFlowDemo\SDK\Readme.txt" />
-    <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
-    <Content Include="SDKFlowDemo\SDK\Site.Master" />
-    <Content Include="SDKFlowDemo\WinOpen.master" />
     <Content Include="DataUser\Handler.ashx" />
     <Content Include="DataUser\SFTableHandler.ashx" />
     <Content Include="WF\Admin\AttrFlow\Action.htm" />
@@ -7170,6 +7147,7 @@
     <Content Include="DataUser\OverrideFiles\Handler.ashx" />
     <None Include="DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls" />
     <None Include="DataUser\TempleteOfImp\ND7401Dtl1.xls" />
+    <None Include="packages.config" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -7396,87 +7374,6 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SDKFlowDemo\CCFormTester.asmx.cs">
-      <DependentUpon>CCFormTester.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\DemoBatchUrl.aspx.cs">
-      <DependentUpon>DemoBatchUrl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\DemoBatchUrl.aspx.designer.cs">
-      <DependentUpon>DemoBatchUrl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\DemoBP.aspx.cs">
-      <DependentUpon>DemoBP.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\DemoBP.aspx.designer.cs">
-      <DependentUpon>DemoBP.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx.cs">
-      <DependentUpon>S1_TianxieShenqingDan.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx.designer.cs">
-      <DependentUpon>S1_TianxieShenqingDan.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx.cs">
-      <DependentUpon>S2_BumenJingliShenpi.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx.designer.cs">
-      <DependentUpon>S2_BumenJingliShenpi.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx.cs">
-      <DependentUpon>S3_ZongJingLiShenpi.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx.designer.cs">
-      <DependentUpon>S3_ZongJingLiShenpi.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S4_RenShi.aspx.cs">
-      <DependentUpon>S4_RenShi.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\S4_RenShi.aspx.designer.cs">
-      <DependentUpon>S4_RenShi.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\Site1.Master.cs">
-      <DependentUpon>Site1.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\QingJia\Site1.Master.designer.cs">
-      <DependentUpon>Site1.Master</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\Info.aspx.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\Info.aspx.designer.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\SDK\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\UnitTesting\Testing.aspx.cs">
-      <DependentUpon>Testing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\UnitTesting\Testing.aspx.designer.cs">
-      <DependentUpon>Testing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-    </Compile>
     <Compile Include="Service References\CloundWS\Reference.cs" />
     <Compile Include="Service References\CloundWS\Reference1.cs">
       <AutoGen>True</AutoGen>

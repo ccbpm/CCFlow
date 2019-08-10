@@ -105,7 +105,7 @@ namespace CCFlow.Web.Comm
 
         public void SearchExp()
         {
-            BP.WF.HttpHandler.WF_Comm comm = new BP.WF.HttpHandler.WF_Comm(System.Web.HttpContext.Current);
+            BP.WF.HttpHandler.WF_Comm comm = new BP.WF.HttpHandler.WF_Comm();
             DataSet ds = comm.Search_Search();
 
             DataTable dt = ds.Tables["DT"];

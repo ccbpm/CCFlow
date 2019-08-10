@@ -12,9 +12,9 @@ using System.IO;
 using System.Text;
 using BP.En30.ccportal;
 
-namespace BP.NetPlatformImpl
+namespace BP.Difference
 {
-    public class DA_DataType
+    public class DBAccess
     {
         public static PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
         {

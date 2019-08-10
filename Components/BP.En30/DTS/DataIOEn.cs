@@ -915,10 +915,7 @@ namespace BP.DTS
 				{
 					case DA.DBUrlType.AppCenterDSN:
 						DBAccess.RunSQL(UPDATEsql);
-						break;
-					case DA.DBUrlType.DBAccessOfODBC:
-						DBAccessOfODBC.RunSQL(UPDATEsql);
-						break;
+						break;				 
 					default:
 						break;
 				}

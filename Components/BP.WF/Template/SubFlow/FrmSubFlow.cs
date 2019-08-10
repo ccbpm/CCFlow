@@ -706,6 +706,13 @@ namespace BP.WF.Template
             //}   
             return base.beforeUpdateInsertAction();
         }
+        protected override void afterUpdate()
+        {
+            //清空缓存，重新查数据
+            Node nd = new Node(this.NodeID);
+            nd.Update();
+            base.afterUpdate();
+        }
         #endregion 重写方法.
     }
     /// <summary>

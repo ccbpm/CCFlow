@@ -463,7 +463,7 @@ namespace BP.En
         public void AddWhere(string attr, int val)
         {
             this.AddWhere(attr, "=", val);
-        } 
+        }
         /// <summary>
         /// 增加条件
         /// </summary>
@@ -480,7 +480,7 @@ namespace BP.En
         {
             this.AddWhere(attr, int.Parse(val.ToString()));
         }
-     
+
         public void AddWhere(string attr, float val)
         {
             this.AddWhere(attr, "=", val);
@@ -490,13 +490,41 @@ namespace BP.En
             if (val == null)
                 throw new Exception("Attr=" + attr + ", 值是空 is null");
 
-            if (val.GetType() == typeof(int) || val.GetType() == typeof(Int32))
+            Type type = val.GetType();
+            if (type == typeof(string))
             {
-                //int i = int.Parse(val.ToString()) ;
+                this.AddWhere(attr, "=", val.ToString());
+                return;
+            }
+            else if (type == typeof(Int16))
+            {
+                this.AddWhere(attr, "=", (Int16)val);
+                return;
+            }
+            else if (type == typeof(Int32))
+            {
                 this.AddWhere(attr, "=", (Int32)val);
                 return;
             }
-            this.AddWhere(attr, "=", val.ToString());
+            else if (type == typeof(Int64))
+            {
+                this.AddWhere(attr, "=", (Int64)val);
+                return;
+            }
+            else
+            {
+                //typeof(float)  typeof(double)  没有double类型的
+                this.AddWhere(attr, "=", float.Parse(val.ToString()));
+                return;
+            }
+             
+            //if (type == typeof(int) || type == typeof(Int32) || type == typeof(Int64))
+            //{
+            //    //int i = int.Parse(val.ToString()) ;
+            //    this.AddWhere(attr, "=", (Int32)val);
+            //    return;
+            //}
+            //this.AddWhere(attr, "=", val.ToString());
         }
 
         public void addLeftBracket()

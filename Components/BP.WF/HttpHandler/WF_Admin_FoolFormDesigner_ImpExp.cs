@@ -13,14 +13,7 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_FoolFormDesigner_ImpExp : BP.WF.HttpHandler.DirectoryPageBase
     {
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_FoolFormDesigner_ImpExp(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
 
         /// <summary>
         /// 构造函数
@@ -41,7 +34,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
             System.Data.DataTable dt;
 
-            if (this.FK_Flow != null )
+            if (this.FK_Flow != null)
             {
                 //加入节点表单. 如果没有流程参数.
 
@@ -49,7 +42,7 @@ namespace BP.WF.HttpHandler
                 ps.SQL = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY NODEID ";
                 ps.Add("FK_Flow", this.FK_Flow);
                 dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                
+
                 dt.TableName = "WF_Node";
 
                 if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -136,14 +129,14 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                if (this.context.Request.Files.Count == 0)
+                if (HttpContextHelper.RequestFilesCount == 0)
                     return "err@请上传导入的模板文件.";
 
                 //创建临时文件.
-                string temp=SystemConfig.PathOfTemp+"\\"+Guid.NewGuid()+".xml";
-                this.context.Request.Files[0].SaveAs(temp);
-
-                string fk_mapData = this.FK_MapData;            
+                string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
+                //this.context.Request.Files[0].SaveAs(temp);
+                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
+                string fk_mapData = this.FK_MapData;
                 DataSet ds = new DataSet();
                 //ds.ReadXml(path);
                 ds.ReadXml(temp);
@@ -153,7 +146,7 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0)
                 {
                     Node nd = new Node(this.FK_Node);
-                    nd.RepareMap( nd.HisFlow);
+                    nd.RepareMap(nd.HisFlow);
                 }
                 //清空缓存
                 MapData mymd = new MapData(fk_mapData);
@@ -172,7 +165,7 @@ namespace BP.WF.HttpHandler
                     //读取上传的XML 文件.
                     DataSet ds = new DataSet();
                     //ds.ReadXml(path);
-                    ds.ReadXml(this.context.Request.Files[0].InputStream);
+                    ds.ReadXml(HttpContextHelper.RequestFileStream(0));//this.context.Request.Files[0].InputStream
 
                     //执行装载.
                     MapData.ImpMapData(fk_mapData, ds);
@@ -201,7 +194,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Imp_CopyFromFlow()
         {
-            string ndfrm = "ND"+int.Parse(this.FK_Flow) + "01";
+            string ndfrm = "ND" + int.Parse(this.FK_Flow) + "01";
             return Imp_CopyFrm(ndfrm);
         }
         /// <summary>
@@ -221,13 +214,13 @@ namespace BP.WF.HttpHandler
         /// <param name="isClear">是否清楚现有的元素？</param>
         /// <param name="isSetReadonly">是否设置为只读？</param>
         /// <returns>执行结果</returns>
-        public string Imp_CopyFrm(string frmID=null)
+        public string Imp_CopyFrm(string frmID = null)
         {
             try
             {
-                string fromMapData =frmID;
-                if (fromMapData==null)
-                  fromMapData = this.GetRequestVal("FromFrmID");
+                string fromMapData = frmID;
+                if (fromMapData == null)
+                    fromMapData = this.GetRequestVal("FromFrmID");
 
                 bool isClear = this.GetRequestValBoolen("IsClear");
                 bool isSetReadonly = this.GetRequestValBoolen("IsSetReadonly");
@@ -252,7 +245,7 @@ namespace BP.WF.HttpHandler
                 BP.Sys.SystemConfig.DoClearCash();
                 return "执行成功.";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -334,7 +327,7 @@ namespace BP.WF.HttpHandler
             md.RetrieveFromDBSources();
 
 
-            string msg = "导入字段信息:"; 
+            string msg = "导入字段信息:";
             bool isLeft = true;
             float maxEnd = md.MaxEnd; //底部.
             for (int i = 0; i < fields.Length; i++)
@@ -412,16 +405,16 @@ namespace BP.WF.HttpHandler
                 }
                 isLeft = !isLeft;
             }
-            
+
             //重新设置.
             md.ResetMaxMinXY();
 
             return msg;
 
-        } 
+        }
         #endregion
 
         #endregion
-     
+
     }
 }

@@ -19,14 +19,6 @@ namespace BP.WF.HttpHandler
     public class CCMobile_MyFlow : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public CCMobile_MyFlow(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public CCMobile_MyFlow()
@@ -38,7 +30,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GenerWorkNode()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.GenerWorkNode();
              
         }
@@ -48,42 +40,42 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBar()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.InitToolBarForMobile();
         }
         public string MyFlow_Init()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.MyFlow_Init();
         }
         public string MyFlow_StopFlow()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.MyFlow_StopFlow();
         }
         public string Save()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.Save();
         }
         public string Send()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.Send();
         }
         public string StartGuide_Init()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.StartGuide_Init();
         }
         public string FrmGener_Init()
         {
-            WF_CCForm ccfrm = new WF_CCForm(this.context);
+            WF_CCForm ccfrm = new WF_CCForm();
             return ccfrm.FrmGener_Init();
         }
         public string FrmGener_Save()
         {
-            WF_CCForm ccfrm = new WF_CCForm(this.context);
+            WF_CCForm ccfrm = new WF_CCForm();
             return ccfrm.FrmGener_Save();
         }
 
@@ -95,7 +87,7 @@ namespace BP.WF.HttpHandler
 
         public string AttachmentUpload_Down()
         {
-            WF_CCForm ccform = new WF_CCForm(this.context);
+            WF_CCForm ccform = new WF_CCForm();
             return ccform.AttachmentUpload_Down();
         }
       

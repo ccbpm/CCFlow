@@ -87,15 +87,6 @@ namespace BP.WF.HttpHandler
         #endregion 属性.
 
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_RptDfine(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_RptDfine()
@@ -215,7 +206,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -347,8 +338,8 @@ namespace BP.WF.HttpHandler
 
             foreach (string ctrl in ctrls)
             {
-                //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示
-                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(context.Request.QueryString[ctrl]))
+                //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示context.Request.QueryString[ctrl]
+                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
                     continue;
 
                 ar = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
@@ -859,8 +850,8 @@ namespace BP.WF.HttpHandler
 
             foreach (string ctrl in ctrls)
             {
-                //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示
-                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(context.Request.QueryString[ctrl]))
+                //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示context.Request.QueryString[ctrl]
+                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
                     continue;
 
                 ar = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
@@ -1432,7 +1423,7 @@ namespace BP.WF.HttpHandler
             //查询结果
             QueryObject qo = new QueryObject(ges);
 
-            string[] strs = this.context.Request.Form.ToString().Split('&');
+            var strs = HttpContextHelper.RequestParamKeys;// this.context.Request.Form.ToString().Split('&');
             foreach (string str in strs)
             {
                 if (str.IndexOf("FK_Flow") != -1 || str.IndexOf("SearchType") != -1)
@@ -1560,7 +1551,8 @@ namespace BP.WF.HttpHandler
             //查询结果
             QueryObject qo = new QueryObject(ges);
 
-            string[] strs = this.context.Request.Form.ToString().Split('&');
+            //string[] strs = this.context.Request.Form.ToString().Split('&');
+            var strs = HttpContextHelper.RequestParamKeys;
             foreach (string str in strs)
             {
                 if (str.IndexOf("FK_Flow") != -1 || str.IndexOf("SearchType") != -1)
@@ -1771,13 +1763,13 @@ namespace BP.WF.HttpHandler
             #region Url传参条件
             foreach (Attr attr in attrs)
             {
-                if (DataType.IsNullOrEmpty(context.Request.QueryString[attr.Key]))
+                if (DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(attr.Key)))
                     continue;
 
                 qo.addAnd();
                 qo.addLeftBracket();
 
-                val = context.Request.QueryString[attr.Key];
+                val = HttpContextHelper.RequestParams(attr.Key);
 
                 switch (attr.MyDataType)
                 {

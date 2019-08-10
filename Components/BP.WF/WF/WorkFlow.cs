@@ -1850,7 +1850,7 @@ namespace BP.WF
                 if (_VirPath == null)
                 {
                     if (BP.Sys.SystemConfig.IsBSsystem)
-                        _VirPath = BP.Sys.Glo.Request.ApplicationPath;
+                        _VirPath = HttpContextHelper.RequestApplicationPath; // _VirPath = BP.Sys.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";
                 }

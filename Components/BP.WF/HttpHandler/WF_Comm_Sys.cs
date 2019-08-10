@@ -13,8 +13,8 @@ using BP.WF.Template;
 using System.Collections;
 using System.Net;
 using System.Xml.Schema;
-using System.Web.Services.Description;
 using System.IO;
+using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -154,7 +154,7 @@ namespace BP.WF.HttpHandler
         public string ImpData_Done()
         {
 
-            HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles(); //context.Request.Files;
             if (files.Count == 0)
                 return "err@请选择要导入的数据信息。";
 
@@ -171,8 +171,8 @@ namespace BP.WF.HttpHandler
 
             //文件存放路径
             string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
-            files[0].SaveAs(filePath);
-
+            //files[0].SaveAs(filePath);
+            HttpContextHelper.UploadFile(files[0], filePath);
             //从excel里面获得数据表.
             DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath);
 
@@ -380,14 +380,7 @@ namespace BP.WF.HttpHandler
             return errInfo;
         }
 
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Comm_Sys(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -703,7 +696,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -801,7 +794,7 @@ namespace BP.WF.HttpHandler
         //javaScript 脚本上传
         public string javaScriptImp_Done()
         {
-            HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
             if (files.Count == 0)
                 return "err@请选择要上传的流程模版。";
             string fileName = files[0].FileName;
@@ -811,14 +804,15 @@ namespace BP.WF.HttpHandler
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);
 
-            files[0].SaveAs(savePath);
-
+            //files[0].SaveAs(savePath);
+            HttpContextHelper.UploadFile(files[0], savePath);
             return "脚本" + fileName + "导入成功";
         }
 
         public string RichUploadFile()
         {
-            HttpFileCollection files = context.Request.Files;
+            //HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();
             if (files.Count == 0)
                 return "err@请选择要上传的图片。";
             //获取文件存放目录
@@ -834,8 +828,8 @@ namespace BP.WF.HttpHandler
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);
 
-            files[0].SaveAs(savePath);
-
+            //files[0].SaveAs(savePath);
+            HttpContextHelper.UploadFile(files[0], savePath);
             return savePath;
         }
 

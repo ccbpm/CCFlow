@@ -17,15 +17,6 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_AttrFlow : BP.WF.HttpHandler.DirectoryPageBase
     {
-
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_AttrFlow(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
          /// <summary>
         /// 构造函数
         /// </summary>
@@ -543,7 +534,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
                 en.Retrieve();
 
-                en = BP.Sys.PubClass.CopyFromRequestByPost(en, context.Request) as BP.WF.Template.TruckViewPower;
+                en = BP.Sys.PubClass.CopyFromRequestByPost(en) as BP.WF.Template.TruckViewPower;
                 en.Save();  //执行保存.
                 return "保存成功";
             }
@@ -562,16 +553,17 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Imp_Done()
         {
-            HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
             if (files.Count == 0)
-                return "err@请选择要上传的流程模版。";
+            return "err@请选择要上传的流程模版。";
 
             //设置文件名
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
             string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
-            files[0].SaveAs(filePath);
+            //files[0].SaveAs(filePath);
+            HttpContextHelper.UploadFile(files[0], filePath);
 
             string flowNo = this.FK_Flow;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
@@ -684,7 +676,7 @@ namespace BP.WF.HttpHandler
             string nodesOfEmail = "";
             foreach (BP.WF.Node mynd in nds)
             {
-                foreach (string key in HttpContext.Current.Request.Params.AllKeys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (key.Contains("CB_Station_" + mynd.NodeID)
                         && nodesOfSMS.Contains(mynd.NodeID + "") == false)
@@ -710,12 +702,12 @@ namespace BP.WF.HttpHandler
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
             //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_SMS"].ToString().Replace("RB_SMS_", ""));
+            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
 
             //短信手机字段.
-            msg.SMSField = HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
+            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");
             //替换变量
-            string smsstr = HttpContext.Current.Request["TB_SMS"].ToString();
+            string smsstr = HttpContextHelper.RequestParams("TB_SMS");
             //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
             //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -728,14 +720,15 @@ namespace BP.WF.HttpHandler
 
             #region 邮件保存.
             //邮件.
-            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
-
+            //msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
+            //2019-07-25 zyt改造
+            msg.MailPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_Email").Replace("RB_Email_", ""));
             //邮件标题与内容.
-            msg.MailTitle_Real = HttpContext.Current.Request["TB_Email_Title"].ToString();
-            msg.MailDoc_Real = HttpContext.Current.Request["TB_Email_Doc"].ToString();
+            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_Email_Title");
+            msg.MailDoc_Real = HttpContextHelper.RequestParams("TB_Email_Doc");
 
             //邮件地址.
-            msg.MailAddress = HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
+            msg.MailAddress = HttpContextHelper.RequestParams("DDL_Email_Fields");
 
             #endregion 邮件保存.
 

@@ -13,6 +13,7 @@ using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
 using BP.WF.HttpHandler;
+using BP.NetPlatformImpl;
 
 namespace BP.Frm
 {
@@ -22,14 +23,6 @@ namespace BP.Frm
     public class WF_CCBill : DirectoryPageBase
     {
         #region 构造方法.
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_CCBill(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -192,7 +185,7 @@ namespace BP.Frm
         {
             //执行保存.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
-            rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GEEntity;
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
 
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
@@ -216,7 +209,7 @@ namespace BP.Frm
           //  throw new Exception("dddssds");
             //执行保存.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
-            rpt = BP.Sys.PubClass.CopyFromRequest(rpt, context.Request) as GEEntity;
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
 
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
@@ -234,7 +227,7 @@ namespace BP.Frm
         private Hashtable GetMainTableHT()
         {
             Hashtable htMain = new Hashtable();
-            foreach (string key in this.context.Request.Form.Keys)
+            foreach (string key in HttpContextHelper.RequestParamKeys)
             {
                 if (key == null)
                     continue;
@@ -242,7 +235,7 @@ namespace BP.Frm
                 if (key.Contains("TB_"))
                 {
 
-                    string val = context.Request.Form[key];
+                    string val = HttpContextHelper.RequestParams(key);
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                     {
                         val = HttpUtility.UrlDecode(val, Encoding.UTF8);
@@ -253,19 +246,19 @@ namespace BP.Frm
 
                 if (key.Contains("DDL_"))
                 {
-                    htMain.Add(key.Replace("DDL_", ""), context.Request.Form[key]);
+                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
                     continue;
                 }
 
                 if (key.Contains("CB_"))
                 {
-                    htMain.Add(key.Replace("CB_", ""), context.Request.Form[key]);
+                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
                     continue;
                 }
 
                 if (key.Contains("RB_"))
                 {
-                    htMain.Add(key.Replace("RB_", ""), context.Request.Form[key]);
+                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
                     continue;
                 }
             }
@@ -325,7 +318,7 @@ namespace BP.Frm
             foreach (string ctrl in ctrls)
             {
                 //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示
-                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(context.Request.QueryString[ctrl]))
+                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
                     continue;
 
                 mapattr = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
@@ -900,14 +893,14 @@ namespace BP.Frm
         #region 单据导入
         public string ImpData_Done()
         {
-            HttpFileCollection files = context.Request.Files;
-            if (files.Count == 0)
+            HttpFileCollection files = HttpContextHelper.RequestFiles();
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要导入的数据信息。";
 
             string errInfo = "";
 
             string ext = ".xls";
-            string fileName = System.IO.Path.GetFileName(files[0].FileName);
+            string fileName = System.IO.Path.GetFileName(HttpContextHelper.RequestFiles(0).FileName);
             if (fileName.Contains(".xlsx"))
                 ext = ".xlsx";
 
@@ -917,7 +910,7 @@ namespace BP.Frm
 
             //文件存放路径
             string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
-            files[0].SaveAs(filePath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
             DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath);
@@ -1137,7 +1130,7 @@ namespace BP.Frm
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 

@@ -19,14 +19,7 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_CommEntity : DirectoryPageBase
     {
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_CommEntity(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
         /// <summary>
         /// 构造函数
         /// </summary>

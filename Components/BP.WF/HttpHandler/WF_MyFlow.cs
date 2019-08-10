@@ -176,7 +176,7 @@ namespace BP.WF.HttpHandler
         //杨玉慧
         public string DoType1
         {
-            get { return this.context.Request.Params["DoType1"]; }
+            get { return HttpContextHelper.RequestParams("DoType1"); }
         }
         #endregion
 
@@ -235,12 +235,12 @@ namespace BP.WF.HttpHandler
 
                 if (sql.Contains("@") == true)
                 {
-                    foreach (string key in HttpContext.Current.Request.QueryString.Keys)
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
                     {
                         sql = sql.Replace("@" + key, this.GetRequestVal(key));
                     }
 
-                    foreach (string key in HttpContext.Current.Request.Form.Keys)
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
                     {
                         sql = sql.Replace("@" + key, this.GetRequestVal(key));
                     }
@@ -492,11 +492,11 @@ namespace BP.WF.HttpHandler
 
                     toUrl += "&" + str;
                 }
-                foreach (string key in context.Request.Form.Keys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (toUrl.Contains(key + "=") == true)
                         continue;
-                    toUrl += "&" + key + "=" + context.Request.Form[key];
+                    toUrl += "&" + key + "=" + HttpContextHelper.RequestParams(key);
                 }
 
                 #endregion 开始组合url.
@@ -718,7 +718,7 @@ namespace BP.WF.HttpHandler
             else
                 url += "?" + urlExt;
 
-            foreach (string str in context.Request.Form.AllKeys)
+            foreach (string str in HttpContextHelper.RequestParamKeys)
             {
                 if (DataType.IsNullOrEmpty(str) == true)
                     continue;
@@ -730,14 +730,6 @@ namespace BP.WF.HttpHandler
             url = url.Replace("?&", "?");
             url = url.Replace("&&", "&");
             return url;
-        }
-        /// <summary>
-        /// 初始化函数
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_MyFlow(HttpContext mycontext)
-        {
-            this.context = mycontext;
         }
 
         /// <summary>
@@ -1543,7 +1535,7 @@ namespace BP.WF.HttpHandler
         private Hashtable GetMainTableHT()
         {
             Hashtable htMain = new Hashtable();
-            foreach (string key in this.context.Request.Form.Keys)
+            foreach (string key in HttpContextHelper.RequestParamKeys)
             {
                 if (key == null)
                     continue;
@@ -1551,7 +1543,7 @@ namespace BP.WF.HttpHandler
                 if (key.Contains("TB_"))
                 {
 
-                    string val = context.Request.Form[key];
+                    string val = HttpContextHelper.RequestParams(key);
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                     {
                         val = HttpUtility.UrlDecode(val, Encoding.UTF8);
@@ -1562,19 +1554,19 @@ namespace BP.WF.HttpHandler
 
                 if (key.Contains("DDL_"))
                 {
-                    htMain.Add(key.Replace("DDL_", ""), context.Request.Form[key]);
+                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
                     continue;
                 }
 
                 if (key.Contains("CB_"))
                 {
-                    htMain.Add(key.Replace("CB_", ""), context.Request.Form[key]);
+                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
                     continue;
                 }
 
                 if (key.Contains("RB_"))
                 {
-                    htMain.Add(key.Replace("RB_", ""), context.Request.Form[key]);
+                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
                     continue;
                 }
             }
@@ -1999,7 +1991,7 @@ namespace BP.WF.HttpHandler
             mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
 
 
-            string frms = this.context.Request["Frms"];
+            string frms = HttpContextHelper.RequestParams("Frms");
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (DataType.IsNullOrEmpty(frms) == true)
             {

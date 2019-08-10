@@ -34,18 +34,10 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public CCMobile_RptSearch(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -60,7 +52,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string KeySearch_OpenFrm()
         {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
             return search.KeySearch_OpenFrm();
         }
         /// <summary>
@@ -69,7 +61,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string KeySearch_Query()
         {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.

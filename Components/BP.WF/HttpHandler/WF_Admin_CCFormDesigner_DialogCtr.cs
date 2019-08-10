@@ -17,15 +17,6 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_CCFormDesigner_DialogCtr : DirectoryPageBase
     {
         /// <summary>
-        /// 初始化函数
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_CCFormDesigner_DialogCtr(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_CCFormDesigner_DialogCtr()

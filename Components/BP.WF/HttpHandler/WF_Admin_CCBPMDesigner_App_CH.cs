@@ -19,14 +19,6 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_CCBPMDesigner_App_CH : DirectoryPageBase
     {
         /// <summary>
-        /// 初始化函数
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_CCBPMDesigner_App_CH(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_CCBPMDesigner_App_CH()

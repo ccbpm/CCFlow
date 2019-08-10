@@ -20,14 +20,6 @@ namespace BP.WF.HttpHandler
     public class CCMobile_CCForm : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public CCMobile_CCForm(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public CCMobile_CCForm()
@@ -35,13 +27,13 @@ namespace BP.WF.HttpHandler
         }
         public string HandlerMapExt()
         {
-            WF_CCForm en = new WF_CCForm(this.context);
+            WF_CCForm en = new WF_CCForm();
             return en.HandlerMapExt();
         }
 
         public string AttachmentUpload_Down()
         {
-            WF_CCForm ccform = new WF_CCForm(this.context);
+            WF_CCForm ccform = new WF_CCForm();
             return ccform.AttachmentUpload_Down();
         }
         /// <summary>
@@ -50,13 +42,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Frm_Init()
         {
-            WF_CCForm ccform = new WF_CCForm(this.context);
+            WF_CCForm ccform = new WF_CCForm();
             return ccform.Frm_Init();
         }
 
         public string Dtl_Init()
         {
-            WF_CCForm ccform = new WF_CCForm(this.context);
+            WF_CCForm ccform = new WF_CCForm();
             return ccform.Dtl_Init();
         }
 
@@ -183,9 +175,10 @@ namespace BP.WF.HttpHandler
             en.PKVal = PKVal;
             en.Retrieve();
 
-            for (int i = 0; i < context.Request.Files.Count; i++)
+            var files = HttpContextHelper.RequestFiles();
+            for (int i = 0; i < files.Count; i++)
             {
-                HttpPostedFile file = context.Request.Files[i];
+                var file = files[i];
 
                 #region 文件上传的iis服务器上 or db数据库里.
                 if (athDesc.AthSaveWay == AthSaveWay.IISServer)
@@ -219,7 +212,7 @@ namespace BP.WF.HttpHandler
                     savePath = savePath.Replace("\\\\", "\\");
                     try
                     {
-                        savePath = context.Server.MapPath("~/" + savePath);
+                        savePath = HttpContextHelper.PhysicalApplicationPath + savePath;
                     }
                     catch (Exception)
                     {
@@ -232,7 +225,7 @@ namespace BP.WF.HttpHandler
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + context.Server.MapPath("~/" + savePath) + "===" + savePath + "@技术问题:" + ex.Message);
+                        throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + HttpContextHelper.PhysicalApplicationPath + savePath + "===" + savePath + "@技术问题:" + ex.Message);
                     }
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");
@@ -248,7 +241,7 @@ namespace BP.WF.HttpHandler
                     realSaveTo = realSaveTo.Replace("'", "-");
                     realSaveTo = realSaveTo.Replace("*", "-");
 
-                    file.SaveAs(realSaveTo);
+                    HttpContextHelper.UploadFile(file, realSaveTo);
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
@@ -331,12 +324,12 @@ namespace BP.WF.HttpHandler
                     string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
                     try
                     {
-                        file.SaveAs(temp);
+                        HttpContextHelper.UploadFile(file, temp);
                     }
                     catch (Exception ex)
                     {
                         System.IO.File.Delete(temp);
-                        file.SaveAs(temp);
+                        HttpContextHelper.UploadFile(file, temp);
                     }
 
                     //  fu.SaveAs(temp);

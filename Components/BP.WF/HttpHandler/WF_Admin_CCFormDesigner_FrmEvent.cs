@@ -16,15 +16,7 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_CCFormDesigner_FrmEvent : BP.WF.HttpHandler.DirectoryPageBase
     {
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_CCFormDesigner_FrmEvent(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        
+       
         /// <summary>
         /// 构造函数
         /// </summary>

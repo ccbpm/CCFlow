@@ -484,7 +484,7 @@ namespace BP.WF
         /// <returns></returns>
         public string DoOpen()
         {
-            string path = BP.Sys.Glo.Request.MapPath(this.Url);
+            string path = HttpContextHelper.PhysicalApplicationPath + (this.Url);
             return path; 
         }
         /// <summary>
@@ -493,7 +493,7 @@ namespace BP.WF
         /// <returns></returns>
         public string DoOpenPDF()
         {
-            string path = BP.Sys.Glo.Request.MapPath(this.Url);
+            string path = HttpContextHelper.PhysicalApplicationPath + (this.Url);
             return path;
         }
     }

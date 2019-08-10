@@ -4,6 +4,7 @@ using BP.DA;
 using BP.Sys;
 using BP.En;
 using BP.WF.Data;
+using BP.Web;
 
 namespace BP.WF.Template
 {
@@ -784,12 +785,13 @@ namespace BP.WF.Template
                     sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
                     //获取参数值
-                    System.Collections.Specialized.NameValueCollection urlParams = System.Web.HttpContext.Current.Request.Form;
-                    foreach (string key in urlParams.Keys)
+                    //System.Collections.Specialized.NameValueCollection urlParams = HttpContextHelper.RequestParams; // System.Web.HttpContext.Current.Request.Form;
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
                     {
                         //循环使用数组
                         if (DataType.IsNullOrEmpty(key) == false && sql.Contains(key) == true)
-                            sql = sql.Replace("@" + key, urlParams[key]);
+                            sql = sql.Replace("@" + key, HttpContextHelper.RequestParams(key));
+                        //sql = sql.Replace("@" + key, urlParams[key]);
                     }
 
                     if (en.IsOIDEntity == true)
@@ -893,7 +895,7 @@ namespace BP.WF.Template
                     if (SystemConfig.IsBSsystem)
                     {
                         /*是bs系统，并且是url参数执行类型.*/
-                        string myurl = BP.Sys.Glo.Request.RawUrl;
+                        string myurl =HttpContextHelper.RequestRawUrl ;// BP.Sys.Glo.Request.RawUrl;
                         if (myurl.IndexOf('?') != -1)
                             myurl = myurl.Substring(myurl.IndexOf('?'));
 
@@ -929,11 +931,11 @@ namespace BP.WF.Template
                         if (SystemConfig.IsBSsystem)
                         {
                             /*在cs模式下自动获取*/
-                            string host = BP.Sys.Glo.Request.Url.Host;
+                            string host =HttpContextHelper.RequestUrlHost ;//BP.Sys.Glo.Request.Url.Host;
                             if (url.Contains("@AppPath"))
-                                url = url.Replace("@AppPath", "http://" + host + BP.Sys.Glo.Request.ApplicationPath);
-                            else
-                                url = "http://" + BP.Sys.Glo.Request.Url.Authority + url;
+                                url = url.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Glo.Request.ApplicationPath
+                            else//BP.Sys.Glo.Request.Url.Authority
+                                url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
 
                         if (SystemConfig.IsBSsystem == false)

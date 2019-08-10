@@ -9813,7 +9813,7 @@ namespace BP.WF
 
                 string sealimg = BP.WF.Glo.CCFlowAppPath + "DataUser/Seal/" + deptno + "_" + stationno + ".jpg";
 
-                if (File.Exists(BP.Sys.Glo.Request.MapPath(sealimg)) == false)
+                if (File.Exists(HttpContextHelper.PhysicalApplicationPath + sealimg) == false)
                 {
                     return @"签章文件：" + sealimg + "不存在，请联系管理员！";
                 }
@@ -9950,7 +9950,7 @@ namespace BP.WF
 
                 try
                 {
-                    savePath = System.Web.HttpContext.Current.Server.MapPath("~/" + savePath);
+                    savePath = HttpContextHelper.PhysicalApplicationPath + savePath;
                 }
                 catch (Exception ex)
                 {
@@ -10635,7 +10635,7 @@ namespace BP.WF
                 string saveTo = fe.HandSigantureSavePath + "\\" + fe.FK_MapData + "\\" + pkval + ".jpg";
                 bitmap.Save(saveTo, ImageFormat.Jpeg);
 
-                string pathFile = BP.Sys.Glo.Request.ApplicationPath + fe.HandSiganture_UrlPath + fe.FK_MapData + "/" + pkval + ".jpg";
+                string pathFile = HttpContextHelper.RequestApplicationPath + fe.HandSiganture_UrlPath + fe.FK_MapData + "/" + pkval + ".jpg";
                 FrmEleDB ele = new FrmEleDB();
                 ele.FK_MapData = fe.FK_MapData;
                 ele.EleID = fe.EleID;
@@ -10661,7 +10661,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string UploadFile(byte[] FileByte, String fileName)
         {
-            string path = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\DataUser\\UploadFile";
+            string path = HttpContextHelper.RequestApplicationPath + "\\DataUser\\UploadFile";
             if (!System.IO.Directory.Exists(path))
             {
                 System.IO.Directory.CreateDirectory(path);

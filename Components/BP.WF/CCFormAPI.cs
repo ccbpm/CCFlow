@@ -70,9 +70,10 @@ namespace BP.WF
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                //2019-07-25 zyt改造
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                 }
             }
 
@@ -475,9 +476,9 @@ namespace BP.WF
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                 }
             }
 
@@ -782,9 +783,9 @@ namespace BP.WF
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                 }
             }
 

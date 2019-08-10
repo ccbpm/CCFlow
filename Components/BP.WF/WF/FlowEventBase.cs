@@ -495,12 +495,13 @@ namespace BP.WF
             if (SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs系统, 就加入外部url的变量.*/
-                foreach (string key in BP.Sys.Glo.Request.QueryString)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    if (key == "OID" ||key==null )
+                    if (key == "OID" || key == null)
                         continue;
 
-                    string val = BP.Sys.Glo.Request.QueryString[key];
+                    string val = HttpContextHelper.RequestParams(key); //BP.Sys.Glo.Request.QueryString[key];
+
                     try
                     {
                         r.Add(key, val);

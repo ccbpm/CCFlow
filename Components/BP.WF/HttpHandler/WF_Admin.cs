@@ -30,14 +30,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin()
@@ -72,7 +64,7 @@ namespace BP.WF.HttpHandler
             {
                 Emp emp = new Emp(this.RefNo);
                 BP.Web.WebUser.SignInOfGener(emp);
-                context.Session["FK_Flow"] = this.FK_Flow;
+                HttpContextHelper.SessionSet("FK_Flow", this.FK_Flow);
                 return "url@../MyFlow.htm?FK_Flow=" + this.FK_Flow;
             }
 

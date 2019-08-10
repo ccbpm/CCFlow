@@ -584,15 +584,15 @@ namespace BP.WF
                 paras = new Hashtable();
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
-                foreach (string k in BP.Sys.Glo.Request.QueryString.AllKeys)
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
                     if (k == "OID" || k == "WorkID" || k == null)
                         continue;
 
                     if (paras.ContainsKey(k))
-                        paras[k] = BP.Sys.Glo.Request.QueryString[k];
+                        paras[k] = HttpContextHelper.RequestParams(k);// BP.Sys.Glo.Request.QueryString[k];
                     else
-                        paras.Add(k, BP.Sys.Glo.Request.QueryString[k]);
+                        paras.Add(k, HttpContextHelper.RequestParams(k));
                 }
             }
 
@@ -1387,7 +1387,7 @@ namespace BP.WF
             }
 
             #region 判断是否有删除草稿的需求.
-            if (SystemConfig.IsBSsystem == true && isPostBack == false && nd.IsStartNode && BP.Sys.Glo.Request.QueryString["IsDeleteDraft"] == "1")
+            if (SystemConfig.IsBSsystem == true && isPostBack == false && nd.IsStartNode && HttpContextHelper.RequestParams("IsDeleteDraft") == "1")
             {
 
                 /*需要删除草稿.*/

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BP.Web;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
@@ -26,29 +27,24 @@ namespace BP.WF.HttpHandler
 
             //创建 ctrl 对象, 获得业务实体类.
             DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType, context) as DirectoryPageBase;
-            ctrl.context = mycontext;
 
             //让其支持跨域访问.
-            if (!string.IsNullOrEmpty(ctrl.context.Request.Headers["Origin"]))
+            if (!string.IsNullOrEmpty(HttpContextHelper.Request.Headers["Origin"]))
             {
                 var allAccess_Control_Allow_Origin = System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"];
 
 
                 if (!string.IsNullOrEmpty(allAccess_Control_Allow_Origin))
                 {
-                    var origin = ctrl.context.Request.Headers["Origin"];
+                    var origin = HttpContextHelper.Request.Headers["Origin"];
                     if (System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"].Contains(origin))
                     {
-                        ctrl.context.Response.Headers["Access-Control-Allow-Origin"] = origin;
-                        ctrl.context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
-                        ctrl.context.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
+                        HttpContextHelper.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                        HttpContextHelper.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                        HttpContextHelper.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
                     }
-
-
                 }
-
             }
-
 
             try
             {
@@ -56,7 +52,7 @@ namespace BP.WF.HttpHandler
                 string data = ctrl.DoMethod(ctrl, ctrl.DoType);
 
                 //返回执行的结果.
-                ctrl.context.Response.Write(data);
+                HttpContextHelper.Response.Write(data);
             }
             catch (Exception ex)
             {
@@ -79,7 +75,7 @@ namespace BP.WF.HttpHandler
                 //记录错误日志以方便分析.
                 BP.DA.Log.DebugWriteError(err);
 
-                ctrl.context.Response.Write(err);
+                HttpContextHelper.Response.Write(err);
             }
         }
 

@@ -171,14 +171,7 @@ namespace BP.WF.HttpHandler
 
 			return BP.Tools.Json.ToJson(dt);
 		}
-		/// <summary>
-		/// 初始化函数
-		/// </summary>
-		/// <param name="mycontext"></param>
-		public WF_Admin_CCBPMDesigner(HttpContext mycontext)
-		{
-			this.context = mycontext;
-		}
+
 		/// <summary>
 		/// 构造函数
 		/// </summary>
@@ -590,8 +583,8 @@ namespace BP.WF.HttpHandler
 			string userNo = this.GetRequestVal("UserNo");
 			string sid = this.GetRequestVal("SID");
 
-			if (sid != null && userNo != null)
-			{
+            if (!String.IsNullOrEmpty(sid) && !String.IsNullOrEmpty(userNo))
+            {
 				/*  */
 				try
 				{
@@ -809,9 +802,10 @@ namespace BP.WF.HttpHandler
 		public string Node_EditNodeName()
 		{
 			string FK_Node = this.GetValFromFrmByKey("NodeID");
-			string NodeName = System.Web.HttpContext.Current.Server.UrlDecode(this.GetValFromFrmByKey("NodeName"));
+            //string NodeName = System.Web.HttpContext.Current.Server.UrlDecode(this.GetValFromFrmByKey("NodeName"));
+            string NodeName = HttpContextHelper.UrlDecode(this.GetValFromFrmByKey("NodeName"));
 
-			BP.WF.Node node = new BP.WF.Node();
+            BP.WF.Node node = new BP.WF.Node();
 			node.NodeID = int.Parse(FK_Node);
 			int iResult = node.RetrieveFromDBSources();
 			if (iResult > 0)

@@ -502,11 +502,11 @@ namespace BP.WF
         {
             get
             {
-                return System.Web.HttpContext.Current.Session["CurrFlow"] as string;
+                return HttpContextHelper.SessionGet("CurrFlow") as string;
             }
             set
             {
-                System.Web.HttpContext.Current.Session["CurrFlow"] = value;
+                HttpContextHelper.SessionSet("CurrFlow", value);
             }
         }
         /// <summary>
@@ -2924,7 +2924,7 @@ namespace BP.WF
         {
             if (SystemConfig.IsBSsystem == false)
                 return false;
-            string agent = (BP.Sys.Glo.Request.UserAgent + "").ToLower().Trim();
+            string agent = (HttpContextHelper.RequestUserAgent + "").ToLower().Trim();
             if (agent == "" || agent.IndexOf("mozilla") != -1 || agent.IndexOf("opera") != -1)
                 return false;
             return true;
@@ -3547,19 +3547,19 @@ namespace BP.WF
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
-                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (string.IsNullOrEmpty(key))
                         continue;
-                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
+                    exp = exp.Replace("@" + key, HttpContextHelper.RequestParams(key));
                 }
                 /*如果是bs*/
-                foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
-                {
-                    if (string.IsNullOrEmpty(key))
-                        continue;
-                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
-                }
+                //foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                //{
+                //    if (string.IsNullOrEmpty(key))
+                //        continue;
+                //    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
+                //}
 
             }
 
@@ -3680,19 +3680,19 @@ namespace BP.WF
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
-                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (string.IsNullOrEmpty(key))
                         continue;
-                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
+                    exp = exp.Replace("@" + key, HttpContextHelper.RequestParams(key));
                 }
                 /*如果是bs*/
-                foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
-                {
-                    if (string.IsNullOrEmpty(key))
-                        continue;
-                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
-                }
+                //foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                //{
+                //    if (string.IsNullOrEmpty(key))
+                //        continue;
+                //    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
+                //}
 
             }
 
@@ -3734,8 +3734,29 @@ namespace BP.WF
                 s += wk.GetValStrByKey(attr.Key);
             }
             s += "ccflow";
-            return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(s, "MD5").ToLower();
+
+            return GetMD5Hash(s);
+            //return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(s, "MD5").ToLower();
         }
+
+        /// <summary>
+        /// 取得MD5加密串
+        /// </summary>
+        /// <param name="input">源明文字符串</param>
+        /// <returns>密文字符串</returns>
+        public static string GetMD5Hash(string input)
+        {
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] bs = System.Text.Encoding.UTF8.GetBytes(input);
+            bs = md5.ComputeHash(bs);
+            System.Text.StringBuilder s = new System.Text.StringBuilder();
+            foreach (byte b in bs)
+            {
+                s.Append(b.ToString("x2").ToLower());
+            }
+            return s.ToString();
+        }
+
         /// <summary>
         /// 装载流程数据 
         /// </summary>
@@ -4138,7 +4159,7 @@ namespace BP.WF
                 {
                     try
                     {
-                        string url = BP.Sys.Glo.Request.RawUrl;
+                        string url = HttpContextHelper.RequestRawUrl;
                         int i = url.LastIndexOf("/") + 1;
                         int i2 = url.IndexOf(".aspx") - 6;
 
@@ -4272,7 +4293,7 @@ namespace BP.WF
                 if (_IntallPath == null)
                 {
                     if (SystemConfig.IsBSsystem == true)
-                        _IntallPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                        _IntallPath = HttpContextHelper.PhysicalApplicationPath;
                 }
 
                 if (_IntallPath == null)
@@ -5466,14 +5487,14 @@ namespace BP.WF
             //    return;
             //}
 
-            System.Web.HttpContext.Current.Session["info"] = info;
-            System.Web.HttpContext.Current.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
+            HttpContextHelper.Session["info"] = info;
+            HttpContextHelper.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
         }
         public static void ToMsgErr(string info)
         {
             info = "<font color=red>" + info + "</font>";
-            System.Web.HttpContext.Current.Session["info"] = info;
-            System.Web.HttpContext.Current.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
+            HttpContextHelper.Session["info"] = info;
+            HttpContextHelper.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
         }
         /// <summary>
         /// 检查流程发起限制
@@ -5645,8 +5666,8 @@ namespace BP.WF
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
 
-                    string pflowNo = BP.Sys.Glo.Request.QueryString["PFlowNo"];
-                    string pworkid = BP.Sys.Glo.Request.QueryString["PWorkID"];
+                    string pflowNo = HttpContextHelper.RequestParams("PFlowNo");
+                    string pworkid = HttpContextHelper.RequestParams("PWorkID");
 
                     if (pworkid == null)
                         return true;

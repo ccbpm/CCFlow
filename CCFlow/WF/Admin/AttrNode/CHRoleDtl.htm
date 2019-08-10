@@ -33,7 +33,13 @@
             mapAttrs.Retrieve("FK_MapData", FK_MapData);
             //按照时间点的考核方式
             var CHWayOfTimeRole = node.GetPara("CHWayOfTimeRole");
-            $("input[name='RB_CHWayOfTimeRole'][value=" + CHWayOfTimeRole + "]").attr("checked", true);
+            if (CHWayOfTimeRole == null || CHWayOfTimeRole == undefined || CHWayOfTimeRole == '') {
+                $("input[name='RB_CHWayOfTimeRole'][value='0']").attr("checked", true);
+            
+            } else {
+                $("input[name='RB_CHWayOfTimeRole'][value=" + CHWayOfTimeRole + "]").attr("checked", true);
+            
+            }
             //查询日期字段下拉框所有值
             for (var i = 0; i < mapAttrs.length; i++) {
                 if (mapAttrs[i].MyDataType != 6 && mapAttrs[i].MyDataType != 7)
@@ -96,15 +102,13 @@
         <caption> 设置按照时间点的考核方式</caption>
         <tr>
             <td>
-
-            
                 <fieldset>
                     <legend>
                         <input type="radio" value="0" id="RB_CHWayOfTimeRole_0" name="RB_CHWayOfTimeRole">
                         <label for="RB_CHWayOfTimeRole_0">按时效考核</label></legend>
                         <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
-                        <fieldset>
-                        <legend>按照设置的天数，小时计算. </legend>
+                        
+                        
                     <table style="width: 100%;">
                         <tr>
                             <td nowarp="true">
@@ -138,7 +142,6 @@
                             </td>
                         </tr>
                     </table>
-                        </fieldset>
 
                 </fieldset>
 

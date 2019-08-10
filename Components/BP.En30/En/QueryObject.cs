@@ -463,7 +463,7 @@ namespace BP.En
         public void AddWhere(string attr, int val)
         {
             this.AddWhere(attr, "=", val);
-        }
+        } 
         /// <summary>
         /// 增加条件
         /// </summary>
@@ -478,8 +478,9 @@ namespace BP.En
         }
         public void AddWhere(string attr, Int64 val)
         {
-            this.AddWhere(attr, val.ToString());
+            this.AddWhere(attr, int.Parse(val.ToString()));
         }
+     
         public void AddWhere(string attr, float val)
         {
             this.AddWhere(attr, "=", val);

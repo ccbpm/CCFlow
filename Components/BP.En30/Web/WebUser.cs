@@ -200,8 +200,8 @@ namespace BP.Web
 
                 if (HttpContextHelper.Current.Session != null)
                 {
-                    cookieValues.Add("Token", HttpContextHelper.Current.Session.Id);
-                    cookieValues.Add("SID", HttpContextHelper.Current.Session.Id);
+                    cookieValues.Add("Token", HttpContextHelper.SessionID);
+                    cookieValues.Add("SID", HttpContextHelper.SessionID);
                 }
 
                 cookieValues.Add("Lang", lang);

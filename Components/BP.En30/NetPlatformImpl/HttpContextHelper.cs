@@ -32,6 +32,15 @@ namespace BP.Web
                 return Current.Session;
             }
         }
+
+        public static string SessionID
+        {
+            get
+            {
+                return Session.SessionID;
+            }
+        }
+
         public static void SessionClear()
         {
             Session.Clear();

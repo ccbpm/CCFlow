@@ -23,7 +23,8 @@ using System.Configuration;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.OracleClient;
+//using System.Data.OracleClient;
+using Oracle.ManagedDataAccess.Client;
 using System.IO;
 using MySql;
 using MySql.Data;
@@ -33,7 +34,6 @@ using MySql.Data.MySqlClient;
 //using IBM.Data;
 //using IBM.Data.Informix;
 using BP.DA;
-using Oracle.ManagedDataAccess.Client;
 using BP.Web;
 
 namespace BP.Sys

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BP.NetPlatformImpl
 {
-    public static class PubClass
+    public static class Sys_PubClass
     {
         public static string RequestParas
         {

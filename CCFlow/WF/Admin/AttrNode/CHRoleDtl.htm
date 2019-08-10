@@ -26,7 +26,8 @@
             //执行.
             var node = new Entity("BP.WF.Node", nodeID);
 
-            var FK_MapData = "ND" + nodeID;
+            var fk_flow = node.FK_Flow.replace(/^0+/, "")
+            var FK_MapData = "ND" + fk_flow +"Rpt";
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", FK_MapData);

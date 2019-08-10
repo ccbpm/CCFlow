@@ -113,9 +113,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string HostRun = "HostRun";
         /// <summary>
-        /// 时效性规则
+        /// 流程计划完成日期设置规则
         /// </summary>
-        public const string TimelineRole = "TimelineRole";
+        public const string SDTOfFlowRole = "SDTOfFlowRole";
+        public const string SDTOfFlowRoleSQL = "SDTOfFlowRoleSQL";
         /// <summary>
         /// 草稿
         /// </summary>
@@ -382,23 +383,30 @@ namespace BP.WF.Template
 
     }
     /// <summary>
-    /// 流程考核类型
+    /// 流程计划完成日期计算规则
     /// </summary>
-    public enum TimelineRole
+    public enum SDTOfFlowRole
     {
         /// <summary>
-        /// 按节点
+        /// 不计算
         /// </summary>
-        ByNodeSet,
+        None,
         /// <summary>
-        /// 按流程
+        /// 按照指定的字段计算
         /// </summary>
-        BySpecField,
+        BySpecDateField,
         /// <summary>
         /// 按照sql
         /// </summary>
-        BySQL
-
+        BySQL,
+        /// <summary>
+        /// 所有的节点之和.
+        /// </summary>
+        ByAllNodes,
+        /// <summary>
+        /// 按照设置的天数
+        /// </summary>
+        ByDays
     }
     /// <summary>
     /// 流程发起导航方式

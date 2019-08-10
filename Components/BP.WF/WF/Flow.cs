@@ -483,11 +483,11 @@ namespace BP.WF
         /// <summary>
         /// 时间点规则
         /// </summary>
-        public TimelineRole HisTimelineRole
+        public SDTOfFlowRole SDTOfFlowRole
         {
             get
             {
-                return (TimelineRole)this.GetValIntByKey(FlowAttr.TimelineRole);
+                return (SDTOfFlowRole)this.GetValIntByKey(FlowAttr.SDTOfFlowRole);
             }
         }
         /// <summary>
@@ -4545,7 +4545,10 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.IsFullSA, 0, "是否自动计算未来的处理人？(启用后,ccflow就会为已知道的节点填充处理人到WF_SelectAccper)", false, false);
                 map.AddTBInt(FlowAttr.IsMD5, 0, "IsMD5", false, false);
                 map.AddTBInt(FlowAttr.Idx, 0, "显示顺序号(在发起列表中)", true, false);
-                map.AddTBInt(FlowAttr.TimelineRole, 0, "时效性规则", true, false);
+
+                map.AddTBInt(FlowAttr.SDTOfFlowRole, 0, "流程计划完成日期计算规则", true, false);
+                map.AddTBString(FlowAttr.SDTOfFlowRoleSQL, null, "流程计划完成日期计算规则SQL", false, false, 0, 500, 10);
+
                 map.AddTBString(FlowAttr.Paras, null, "参数", false, false, 0, 2000, 10);
 
                 // add 2013-01-01. 

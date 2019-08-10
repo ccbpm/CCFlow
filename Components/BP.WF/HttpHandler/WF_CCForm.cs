@@ -1312,6 +1312,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
+                    
                     string lgType = dr["LGType"].ToString();
                     string uiBindKey = dr["UIBindKey"].ToString();
 

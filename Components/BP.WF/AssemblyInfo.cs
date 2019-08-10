@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("济南驰骋信息技术有限公司")]
 [assembly: AssemblyProduct("ccflow6")]
-[assembly: AssemblyCopyright("驰骋工作流2003-2018")]
+[assembly: AssemblyCopyright("驰骋工作流2003-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]	
 

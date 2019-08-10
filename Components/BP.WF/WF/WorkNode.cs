@@ -436,19 +436,11 @@ namespace BP.WF
 
             DateTime dtOfShould = DateTime.Now;
 
-            if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.BySpecField)
+            if (town.HisNode.HisCHWay == CHWay.ByTime)
             {
-                /*如果整体流程是按流程设置计算。*/
-                dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisGenerWorkFlow.SDTOfFlow);
-            }
-
-            //如果按照节点设置.
-            if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByNodeSet)
-            {
-                if (town.HisNode.HisCHWay == CHWay.ByTime)
+                //按天、小时考核
+                if (town.HisNode.GetParaInt("CHWayOfTimeRole") == 0)
                 {
-                    int day = 0;
-                    int hh = 0;
                     //增加天数. 考虑到了节假日. 
                     //判断是修改了节点期限的天数
                     int timeLimit = this.town.HisNode.TimeLimit;
@@ -459,9 +451,31 @@ namespace BP.WF
                     dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, timeLimit,
                         this.town.HisNode.TimeLimitHH, this.town.HisNode.TimeLimitMM, this.town.HisNode.TWay);
                 }
+                //按照节点字段设置
+                if (town.HisNode.GetParaInt("CHWayOfTimeRole") == 1)
+                {
+                    //获取设置的字段、
+                    string keyOfEn = town.HisNode.GetParaString("CHWayOfTimeRoleField");
+                    if (DataType.IsNullOrEmpty(keyOfEn) == true)
+                        town.HisNode.HisCHWay = CHWay.None;
+                    else
+                        dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisWork.GetValByKey(keyOfEn).ToString());
+
+                }
+
+                //流转自定义的流程并且考核规则按照流转自定义设置
+                if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet && town.HisNode.GetParaInt("CHWayOfTimeRole") == 2)
+                {
+                    //获取当前节点的流转自定义时间
+                    TransferCustom tf = new TransferCustom();
+                    tf.MyPK = town.HisNode.NodeID + "_" + this.WorkID;
+                    if (tf.RetrieveFromDBSources() != 0)
+                    {
+                        dtOfShould = DataType.ParseSysDateTime2DateTime(tf.PlanDT);
+                    }
+                }
             }
-
-
+             
             //求警告日期.
             DateTime dtOfWarning = DateTime.Now;
             if (this.town.HisNode.WarningDay == 0)
@@ -1874,18 +1888,11 @@ namespace BP.WF
             #region 要计算当前人员的应完成日期
             // 计算出来 退回到节点的应完成时间. 
             DateTime dtOfShould;
-            if (this.HisFlow.HisTimelineRole == Template.TimelineRole.BySpecField)
-            {
-                /*如果整体流程是按流程设置计算 */
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                dtOfShould = DataType.ParseSysDateTime2DateTime(gwf.SDTOfFlow);
-            }
-            else
-            {
+            
                 //增加天数. 考虑到了节假日.             
                 dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.HisNode.TimeLimit,
                     this.HisNode.TimeLimitHH, this.HisNode.TimeLimitMM, this.HisNode.TWay);
-            }
+             
             // 应完成日期.
             string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
             #endregion
@@ -7797,7 +7804,7 @@ namespace BP.WF
             gwf.FK_Dept = this.HisWork.RecOfEmp.FK_Dept;
             gwf.DeptName = this.HisWork.RecOfEmp.FK_DeptText;
 
-            if (this.HisFlow.HisTimelineRole == TimelineRole.BySpecField)
+            if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.BySpecDateField)
             {
                 try
                 {

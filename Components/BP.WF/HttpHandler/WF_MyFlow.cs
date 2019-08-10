@@ -1065,14 +1065,14 @@ namespace BP.WF.HttpHandler
                 //    toolbar += "<input type=button name='SubFlow'  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                 //}
 
-                if (btnLab.CHRole !=0)
+                if (btnLab.CHRole != 0)
                 {
                     /* 节点时限设置 */
                     string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                 }
 
-                if (btnLab.NoteEnable !=0)
+                if (btnLab.NoteEnable != 0)
                 {
                     /* 备注设置 */
                     toolbar += "<input type=button name='Note'  value='" + btnLab.NoteLab + "' enable=true  />";
@@ -1424,14 +1424,14 @@ namespace BP.WF.HttpHandler
                 //    toolbar += "<a data-role='button' type=button name='SubFlow'  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" ></a>";
                 //}
 
-                if (btnLab.CHRole !=0)
+                if (btnLab.CHRole != 0)
                 {
                     /* 节点时限设置 */
                     string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<a data-role='button' type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinShowModalDialog('" + urlr3 + "'); \" ></a>";
                 }
 
-                
+
 
                 if (btnLab.PRIEnable == true)
                 {
@@ -1802,9 +1802,9 @@ namespace BP.WF.HttpHandler
                 if (this.PWorkID != 0)
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID,gwf.PEmp,gwf.PNodeID);
+                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID, gwf.PEmp, gwf.PNodeID);
                 }
-                    
+
 
                 return str;
             }
@@ -1820,7 +1820,7 @@ namespace BP.WF.HttpHandler
 
         public string SaveFlow_ToDraftRole()
         {
-            
+
             Node nd = new Node(this.FK_Node);
             Work wk = nd.HisWork;
             if (this.WorkID != 0)
@@ -1884,7 +1884,7 @@ namespace BP.WF.HttpHandler
             {
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 Flow fl = new Flow(this.FK_Flow);
-                if (fl.DraftRole == DraftRole.None && this.GetRequestValInt("SaveType")!=1)
+                if (fl.DraftRole == DraftRole.None && this.GetRequestValInt("SaveType") != 1)
                     return "保存成功";
 
                 //规则设置为写入待办，将状态置为运行中，其他设置为草稿.
@@ -1893,7 +1893,7 @@ namespace BP.WF.HttpHandler
                     wfState = WFState.Draft;
                 if (fl.DraftRole == DraftRole.SaveToTodolist)
                     wfState = WFState.Runing;
-              
+
                 //设置标题.
                 string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 
@@ -2198,7 +2198,7 @@ namespace BP.WF.HttpHandler
                     obj.addAnd();
                     obj.AddWhere(FrmFieldAttr.FK_MapData, md.No);
                     obj.addAnd();
-                    obj.AddWhere(FrmFieldAttr.IsNotNull, "1");
+                    obj.AddWhere(FrmFieldAttr.IsNotNull, 1);
                     obj.DoQuery();
                     if (formFields != null && formFields.Count > 0)
                         IsNotNull = true;

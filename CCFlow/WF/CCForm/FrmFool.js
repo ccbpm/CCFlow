@@ -1270,7 +1270,10 @@ function SetCtrlVal(key, value) {
     ctrl = $("#CB_" + key);
     if (ctrl.length > 0) {
         ctrl.val(value);
-        ctrl.prop("checked",true);
+        if (value!=0) {
+            ctrl.prop("checked", true);
+        }
+        
     }
 
     ctrl = $("#RB_" + key + "_" + value);

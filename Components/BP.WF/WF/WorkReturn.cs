@@ -922,17 +922,11 @@ namespace BP.WF
             // 计算出来 退回到节点的应完成时间. 
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             DateTime dtOfShould;
-            if (fl.HisTimelineRole == Template.TimelineRole.BySpecField)
-            {
-                /*如果整体流程是按流程设置计算 */
-                dtOfShould = DataType.ParseSysDateTime2DateTime(gwf.SDTOfFlow);
-            }
-            else
-            {
+            
                 //增加天数. 考虑到了节假日.             
                 dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
                     this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
-            }
+             
             // 应完成日期.
             string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
 

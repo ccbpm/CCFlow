@@ -64,6 +64,7 @@
 
             //解析json.
             frmData = JSON.parse(data);
+
             mapData = frmData["Sys_MapData"][0];
             mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
             mainData = frmData["MainData"];
@@ -79,14 +80,12 @@
 
             //获得字段列表.
             var Sys_MapAttr = frmData["Sys_MapAttr"];
-            alert(Sys_MapAttr);
 
-        }
-        function Fields() {
-            //获得字段列表.
-            var Sys_MapAttr = frmData["Sys_MapAttr"];
+            var enName = GetQueryString("EnName");
 
-            var mypk = webUser.No + "_Fields_" + GetQueryString("EnName");
+            // hd 标识 hid show .
+
+            var mypk = webUser.No + "_Fields_HS_" + enName;
             var cfgEn = new Entity("BP.Sys.UserRegedit");
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
@@ -125,8 +124,23 @@
 
         function SaveFields() {
 
+
+            //获得字段列表.
             var Sys_MapAttr = frmData["Sys_MapAttr"];
 
+            var enName = GetQueryString("EnName");
+
+            // hd 标识 hid show .
+
+            var mypk = webUser.No + "_Fields_HS_" + enName;
+            var cfgEn = new Entity("BP.Sys.UserRegedit");
+            cfgEn.SetPKVal(mypk);
+            cfgEn.RetrieveFromDBSources();
+
+
+            var Sys_MapAttr = frmData["Sys_MapAttr"];
+
+            //求出来所有隐藏的字段.
             var keys = "";
             for (var i = 0; i < Sys_MapAttr.length; i++) {
                 var mapAttr = Sys_MapAttr[i];
@@ -140,20 +154,13 @@
 
           //  alert(keys);
 
-
-            var mypk = webUser.No + "_Fields_" + GetQueryString("EnName");
-            var en = new Entity("BP.Sys.UserRegedit");
-            en.SetPKVal(mypk);
-            en.RetrieveFromDBSources();
-
             en.FK_Emp = webUser.No;
-            en.CfgKey = 'Fields';
+            en.CfgKey = 'Fields_HS';
             en.FK_MapData = GetQueryString("EnName");
-
             en.Vals = keys;
             en.Save();
-
             alert('保存成功.');
+
         }
 
         /**/</script>
@@ -168,9 +175,10 @@
                     <legend>设置内容</legend>
                     <ul>
                         <li><a href="javascript:Fields()">字段</a></li>
-                        <li><a href="javascript:Tabs()">字段Tab页面</a></li>
+                        <!--<li><a href="javascript:Tabs()">字段Tab页面</a></li>-->
+                        <li><a href="javascript:GroupFields()">功能分组</a></li>
                         <li><a href="javascript:Funcs()">功能</a></li>
-                        <li><a href="javascript:GroupFields()">分组功能</a></li>
+
                     </ul>
                 </fieldset>
             </td>

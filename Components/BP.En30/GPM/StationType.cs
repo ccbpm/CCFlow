@@ -60,11 +60,11 @@ namespace BP.GPM
         }
         #endregion
 
-		#region 构造方法
-		/// <summary>
-		/// 岗位类型
-		/// </summary>
-		public StationType()
+        #region 构造方法
+        /// <summary>
+        /// 岗位类型
+        /// </summary>
+        public StationType()
         {
         }
         /// <summary>

@@ -2,6 +2,8 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Web;
+
 namespace BP.Sys
 {
     /// <summary>
@@ -235,7 +237,7 @@ namespace BP.Sys
                 string src = this.GetValStringByKey(FrmImgAttr.ImgPath);
                 if (DataType.IsNullOrEmpty(src))
                 {
-                    string appPath = BP.Sys.Glo.Request.ApplicationPath;
+                    string appPath = HttpContextHelper.RequestApplicationPath;
                     src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
@@ -252,7 +254,7 @@ namespace BP.Sys
                 string src = this.GetValStringByKey(FrmImgAttr.ImgURL);
                 if (DataType.IsNullOrEmpty(src) || src.Contains("component/Img"))
                 {
-                    string appPath = BP.Sys.Glo.Request.ApplicationPath;
+                    string appPath = HttpContextHelper.RequestApplicationPath;
                     src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;

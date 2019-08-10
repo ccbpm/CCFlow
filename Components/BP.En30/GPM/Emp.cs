@@ -319,7 +319,7 @@ namespace BP.GPM
                 rm.Title = "修改主部门";
                 rm.ClassMethodName = this.ToString() + ".DoEditMainDept";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-              //  rm.RefAttrKey = EmpAttr.FK_Dept;
+                // rm.RefAttrKey = EmpAttr.FK_Dept;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -386,6 +386,7 @@ namespace BP.GPM
 
             return base.beforeUpdateInsertAction();
         }
+
         /// <summary>
         /// 保存后修改WF_Emp中的邮箱
         /// </summary>
@@ -394,13 +395,14 @@ namespace BP.GPM
             string sql = "Select Count(*) From WF_Emp Where No='" + this.No + "'";
             int count = DBAccess.RunSQLReturnValInt(sql);
             if (count == 0)
-                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('"+this.No+"','"+this.Name+"','"+this.Email+"')";
+                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('" + this.No + "','" + this.Name + "','" + this.Email + "')";
             else
                 sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
             DBAccess.RunSQL(sql);
 
-             base.afterInsertUpdateAction();
+            base.afterInsertUpdateAction();
         }
+
         public static string GenerPinYin(string no,string name)
         {
             //增加拼音，以方便查找.

@@ -10,7 +10,7 @@ namespace BP.DA
     {
         #region 属性
         public System.Data.DbType DAType = System.Data.DbType.String;
-        public System.Data.OracleClient.OracleType DATypeOfOra
+        public Oracle.ManagedDataAccess.Client.OracleDbType DATypeOfOra
         {
             get
             {
@@ -19,17 +19,17 @@ namespace BP.DA
                     case System.Data.DbType.String:
                     case System.Data.DbType.Object:
                         if (this.IsBigText)
-                            return System.Data.OracleClient.OracleType.Clob;
+                            return Oracle.ManagedDataAccess.Client.OracleDbType.Clob;
                         else
-                            return System.Data.OracleClient.OracleType.VarChar;
+                            return Oracle.ManagedDataAccess.Client.OracleDbType.Varchar2;
                     case System.Data.DbType.Int32:
                     case System.Data.DbType.Int16:
-                        return System.Data.OracleClient.OracleType.Number;
+                        return Oracle.ManagedDataAccess.Client.OracleDbType.Int16;
                     case System.Data.DbType.Int64:
-                        return System.Data.OracleClient.OracleType.UInt32;
+                        return Oracle.ManagedDataAccess.Client.OracleDbType.Int64;
                     case System.Data.DbType.Decimal:
                     case System.Data.DbType.Double:
-                        return System.Data.OracleClient.OracleType.Double;
+                        return Oracle.ManagedDataAccess.Client.OracleDbType.Double;
                     default:
                         throw new Exception("没有涉及到的类型。typeof(obj)=" + this.DAType.ToString());
                 }
@@ -199,6 +199,13 @@ namespace BP.DA
                     p.val = obj;
                     return;
                 }
+            }
+
+            // 2019-8-8 适配pgsql数据库的新版驱动，要求数据类型一致
+            if (String.Compare("FK_Node", _name, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                this.Add(_name, Convert.ToInt32(obj));
+                return;
             }
 
             if (obj.GetType() == typeof(string))

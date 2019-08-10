@@ -321,9 +321,9 @@ namespace BP.Sys
 			if (SystemConfig.IsBSsystem == true)
 			{
 				/*如果是bs系统, 就加入外部url的变量.*/
-				foreach (string key in BP.Sys.Glo.Request.QueryString)
+				foreach (string key in HttpContextHelper.RequestParamKeys)
 				{
-					string val = BP.Sys.Glo.Request.QueryString[key];
+					string val = HttpContextHelper.RequestParams(key);
 					try
 					{
 						r.Add(key, val);

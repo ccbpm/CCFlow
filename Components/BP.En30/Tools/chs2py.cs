@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.International.Converters.PinYinConverter;
 using System.Text;
 using BP.DA;
 
@@ -139,23 +138,8 @@ namespace BP.Tools
                     StringBuilder fullSpell = new StringBuilder();
                     for (int i = 0; i < chrstr.Length; i++)
                     {
-                        bool isChineses = ChineseChar.IsValidChar(chrstr[i]);
-                        if (isChineses)
-                        {
-                            ChineseChar chineseChar = new ChineseChar(chrstr[i]);
-                            foreach (string value in chineseChar.Pinyins)
-                            {
-                                if (!DataType.IsNullOrEmpty(value))
-                                {
-                                    fullSpell.Append(value.Remove(value.Length - 1, 1));
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            fullSpell.Append(chrstr[i]);
-                        }
+                        var pinyins =NPinyin.Pinyin.GetPinyin(chrstr[i]);
+                        fullSpell.Append(pinyins);
                     }
                     return fullSpell.ToString().ToLower();
                 }

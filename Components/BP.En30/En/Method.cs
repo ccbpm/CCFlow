@@ -4,6 +4,8 @@ using BP.DA;
 using BP.Web.Controls;
 using System.Reflection;
 using BP.En;
+using BP.Web;
+
 namespace BP.En
 {
     public enum MsgShowType
@@ -34,7 +36,7 @@ namespace BP.En
         #region Http
         public string Request(string key)
         {
-            return BP.Sys.Glo.Request.QueryString[key];
+            return HttpContextHelper.RequestParams(key);
         }
         /// <summary>
         /// 获取MyPK

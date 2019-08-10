@@ -262,6 +262,17 @@ namespace BP.Web
         {
             return (T)Session[key];
         }
+
+        public static void SessionSet(string key, object value)
+        {
+            Session[key] = value;
+        }
+
+        public static object SessionGet(string key)
+        {
+            return Session[key];
+        }
+
         public static string CurrentSessionID
         {
             get
@@ -335,12 +346,24 @@ namespace BP.Web
             return Current.Server.UrlDecode(Url);
         }
 
+        /// <summary>
+        /// 需要在Startup.cs里面设置
+        /// HttpContextHelper.PhysicalApplicationPath=env.ContentRootPath
+        /// </summary>
+        public static string PhysicalApplicationPath
+        {
+            get
+            {
+                return Request.PhysicalApplicationPath;
+            }
+        }
+
 
         public static string UserAgent
         {
             get
             {
-                return BP.Sys.Glo.Request.UserAgent;
+                return Request.UserAgent;
             }
         }
 

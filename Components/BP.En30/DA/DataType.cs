@@ -10,6 +10,7 @@ using BP.Sys;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Xml;
+using BP.Web;
 
 namespace BP.DA
 {
@@ -2257,29 +2258,7 @@ namespace BP.DA
         /// <returns></returns>
         public static BP.En30.ccportal.PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
         {
-            var basicBinding = new BasicHttpBinding()
-            {
-                //CloseTimeout = ts,
-                //OpenTimeout = ts,
-                ReceiveTimeout = ts,
-                SendTimeout = ts,
-                MaxBufferSize = 2147483647,
-                MaxReceivedMessageSize = 2147483647,
-                Name = "PortalInterfaceSoapClient"
-            };
-            basicBinding.Security.Mode = BasicHttpSecurityMode.None;
-
-            //url.
-            string url = DataType.BPMHost + "/DataUser/PortalInterface.asmx";
-
-            var endPoint = new EndpointAddress(url);
-            var ctor =
-                typeof(BP.En30.ccportal.PortalInterfaceSoapClient).GetConstructor(
-                new Type[] { 
-                    typeof(Binding),
-                    typeof(EndpointAddress) 
-                });
-            return (BP.En30.ccportal.PortalInterfaceSoapClient)ctor.Invoke(new object[] { basicBinding, endPoint });
+            return NetPlatformImpl.DA_DataType.GetPortalInterfaceSoapClientInstance();
         }
         private static string _BPMHost = null;
         /// <summary>
@@ -2291,7 +2270,7 @@ namespace BP.DA
             {
                 if (_BPMHost != null)
                     return _BPMHost;
-                _BPMHost = "http://" + System.Web.HttpContext.Current.Request.Url.Authority;
+                _BPMHost = "http://" + HttpContextHelper.RequestUrlAuthority;
                 return _BPMHost;
             }
         }

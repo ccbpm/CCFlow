@@ -29,10 +29,12 @@ using MySql;
 using MySql.Data;
 using MySql.Data.Common;
 using MySql.Data.MySqlClient;
-using IBM;
-using IBM.Data;
-using IBM.Data.Informix;
+//using IBM;
+//using IBM.Data;
+//using IBM.Data.Informix;
 using BP.DA;
+using Oracle.ManagedDataAccess.Client;
+using BP.Web;
 
 namespace BP.Sys
 {
@@ -386,8 +388,8 @@ namespace BP.Sys
         {
             get
             {
-                if (SystemConfig.IsBSsystem && HttpContext.Current != null)
-                    return HttpContext.Current.Request.PhysicalApplicationPath;
+                if (SystemConfig.IsBSsystem && HttpContextHelper.Current != null)
+                    return HttpContextHelper.PhysicalApplicationPath;
                 else
                     return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             }
@@ -418,7 +420,7 @@ namespace BP.Sys
             {
                 if (BP.Sys.SystemConfig.IsBSsystem)
                 {
-                    string path1 = HttpContext.Current.Request.PhysicalApplicationPath + "\\..\\";
+                    string path1 = HttpContextHelper.PhysicalApplicationPath + "\\..\\";
                     System.IO.DirectoryInfo info1 = new DirectoryInfo(path1);
                     return info1.FullName;
                 }
@@ -502,7 +504,7 @@ namespace BP.Sys
         {
             get
             {
-                return BP.Sys.Glo.Request.ApplicationPath.Replace("/", "");
+                return HttpContextHelper.RequestApplicationPath.Replace("/", "");
             }
         }
         /// <summary>
@@ -570,7 +572,7 @@ namespace BP.Sys
         {
             get
             {
-                string url = "http://" + System.Web.HttpContext.Current.Request.Url.Authority;
+                string url = "http://" + HttpContextHelper.RequestUrlAuthority;
                 return url;
             }
         }
@@ -583,7 +585,7 @@ namespace BP.Sys
             {
                 if (SystemConfig.IsBSsystem)
                 {
-                    return BP.Sys.Glo.Request.PhysicalApplicationPath;
+                    return HttpContextHelper.PhysicalApplicationPath;
                 }
                 else
                 {
@@ -716,14 +718,14 @@ namespace BP.Sys
         /// </summary>
         public static string PageOfAfterAuthorizeLogin
         {
-            get { return BP.Sys.Glo.Request.ApplicationPath + "" + AppSettings["PageOfAfterAuthorizeLogin"]; }
+            get { return HttpContextHelper.RequestApplicationPath + "" + AppSettings["PageOfAfterAuthorizeLogin"]; }
         }
         /// <summary>
         /// 丢失session 到的路径.
         /// </summary>
         public static string PageOfLostSession
         {
-            get { return BP.Sys.Glo.Request.ApplicationPath + "" + AppSettings["PageOfLostSession"]; }
+            get { return HttpContextHelper.RequestApplicationPath + "" + AppSettings["PageOfLostSession"]; }
         }
         /// <summary>
         /// 日志路径
@@ -962,7 +964,7 @@ namespace BP.Sys
         {
             get
             {
-                return AppSettings["RunOnPlant"];
+                return AppSettings["RunOnPlant"] ?? "";
             }
         }
         public static string CustomerURL
@@ -1461,12 +1463,13 @@ namespace BP.Sys
                                 connMySQL.Open();
                             _AppCenterDBDatabase = connMySQL.Database;
                             break;
-                        case DA.DBType.Informix:
-                            IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
-                            if (connIFX.State != ConnectionState.Open)
-                                connIFX.Open();
-                            _AppCenterDBDatabase = connIFX.Database;
-                            break;
+                            //From Zhou IBM 删除
+                        //case DA.DBType.Informix:
+                        //    IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
+                        //    if (connIFX.State != ConnectionState.Open)
+                        //        connIFX.Open();
+                        //    _AppCenterDBDatabase = connIFX.Database;
+                        //    break;
                         default:
                             throw new Exception("@没有判断的数据类型.");
                             break;

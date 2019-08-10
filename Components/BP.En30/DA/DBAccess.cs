@@ -20,18 +20,17 @@ using System.Data.SqlClient;
 using System.Collections;
 using System.ComponentModel;
 using System.Collections.Specialized;
-using System.Data.OracleClient;
-using System.EnterpriseServices;
+//using System.Data.OracleClient;
+using Oracle.ManagedDataAccess.Client;
 using System.Web;
 using System.Data.Odbc;
 using System.IO;
 using MySql.Data;
 using MySql;
 using MySql.Data.MySqlClient;
-using MySql.Data.MySqlClient.Properties;
-using IBM.Data;
-using IBM.Data.Informix;
-using IBM.Data.Utilities;
+//using IBM.Data;
+//using IBM.Data.Informix;
+//using IBM.Data.Utilities;
 using BP.Sys;
 using Npgsql;
 
@@ -108,11 +107,11 @@ namespace BP.DA
                 if (cn.State == 0) cn.Open();
                 cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=:FlowJsonFile WHERE " + tablePK + " =:PKVal";
 
-                OracleParameter spFile = new OracleParameter("FlowJsonFile", OracleType.Blob);
+                OracleParameter spFile = new OracleParameter("FlowJsonFile", OracleDbType.Blob);
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
-                OracleParameter spPK = new OracleParameter("PKVal", OracleType.NVarChar);
+                OracleParameter spPK = new OracleParameter("PKVal", OracleDbType.NVarchar2);
                 spPK.Value = pkVal;
                 cm.Parameters.Add(spPK);
 
@@ -317,7 +316,7 @@ namespace BP.DA
                 {
                     dr = cm.ExecuteReader();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     if (!BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField))
                     {
@@ -476,6 +475,7 @@ namespace BP.DA
         /// </summary>
         public static void DoTransactionCommit()
         {
+            /*
             return;
 
             if (SystemConfig.AppCenterDBType != DBType.MSSQL)
@@ -485,6 +485,7 @@ namespace BP.DA
                 return;
 
             DBAccess.RunSQL("Commit TRANSACTION");
+            */
         }
         #endregion 事务处理
 
@@ -542,20 +543,20 @@ namespace BP.DA
                     case DBType.MySQL:
                         BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
                         break;
-                    case DBType.Informix:
-                        BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
-                        break;
+                    //case DBType.Informix:
+                    //    BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
+                    //    break;
                     default:
                         break;
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
 
-            return true;
+            //return true;
         }
 
         #region IO
@@ -925,8 +926,8 @@ namespace BP.DA
                         return new MySqlConnection(connstr);
                     case DBType.PostgreSQL:
                         return new Npgsql.NpgsqlConnection(connstr);
-                    case DBType.Informix:
-                        return new IfxConnection(connstr);
+                    //case DBType.Informix: net core 无法支持
+                    //    return new IfxConnection(connstr);
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBConn发现未知的数据库连接类型！");
@@ -948,8 +949,8 @@ namespace BP.DA
                         return new MySqlDataAdapter();
                     case DBType.PostgreSQL:
                         return new NpgsqlDataAdapter();
-                    case DBType.Informix:
-                        return new IfxDataAdapter();
+                    //case DBType.Informix: net core 无法支持
+                    //    return new IfxDataAdapter();
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBAdapter发现未知的数据库连接类型！");
@@ -970,8 +971,8 @@ namespace BP.DA
                         return new MySqlCommand();
                     case DBType.PostgreSQL:
                         return new NpgsqlCommand();
-                    case DBType.Informix:
-                        return new IfxCommand();
+                    //case DBType.Informix:
+                    //    return new IfxCommand();
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBCommand发现未知的数据库连接类型！");
@@ -1241,7 +1242,7 @@ namespace BP.DA
                     break;
                 default:
                     throw new Exception("err@DropTablePK不支持的数据库类型." + SystemConfig.AppCenterDBType);
-                    break;
+                    //break;
             }
             BP.DA.DBAccess.RunSQL(sql);
         }
@@ -1482,14 +1483,6 @@ namespace BP.DA
           //  String presult = p.matcher(sql).replaceAll("$1");
           //  return presult;
         }
-        public static void RunSP(string sql, Paras ps)
-        {
-
-        }
-        public static void RunSP(string sql)
-        {
-
-        }
         /// <summary>
         /// 运行SQLs
         /// </summary>
@@ -1628,9 +1621,9 @@ namespace BP.DA
                     case DBType.PostgreSQL:
                         result = RunSQL_201902_PSQL(sql, paras);
                         break;
-                    case DBType.Informix:
-                        result = RunSQL_201205_Informix(sql, paras);
-                        break;
+                    //case DBType.Informix:
+                    //    result = RunSQL_201205_Informix(sql, paras);
+                    //    break;
                     default:
                         throw new Exception("err@RunSQL发现未知的数据库连接类型！");
                 }
@@ -1869,7 +1862,7 @@ namespace BP.DA
                     OracleParameter oraP = new OracleParameter(para.ParaName, para.DATypeOfOra);
                     oraP.Size = para.Size;
 
-                    if (para.DATypeOfOra == OracleType.Clob)
+                    if (para.DATypeOfOra == OracleDbType.Clob)
                     {
                         if (DataType.IsNullOrEmpty(para.val as string) == true)
                             oraP.Value = DBNull.Value;
@@ -1931,6 +1924,7 @@ namespace BP.DA
             }
         }
        
+        /*
         /// <summary>
         /// 运行sql
         /// </summary>
@@ -1982,6 +1976,7 @@ namespace BP.DA
                 conn.Close();
             }
         }
+        */
         #endregion
 
         #endregion
@@ -2243,7 +2238,23 @@ namespace BP.DA
             {
                 foreach (Para para in paras)
                 {
-                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
+                    // 2018-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
+                    object valObj = para.val;
+
+                    if (para.DAType == DbType.Int16)
+                        valObj = Convert.ToInt16(para.val);
+                    else if (para.DAType == DbType.Int32)
+                        valObj = Convert.ToInt32(para.val);
+                    else if (para.DAType == DbType.Int64)
+                        valObj = Convert.ToInt64(para.val);
+                    else if (para.DAType == DbType.Double)
+                        valObj = Convert.ToDouble(para.val);
+                    else if (para.DAType == DbType.Decimal)
+                        valObj = Convert.ToDecimal(para.val);
+                    else if (String.Compare(para.ParaName, "FK_Node", StringComparison.OrdinalIgnoreCase) == 0)
+                        valObj = Convert.ToInt32(para.val);
+
+                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, valObj);
                     myParameter.Size = para.Size;
                     ada.SelectCommand.Parameters.Add(myParameter);
                 }
@@ -2336,6 +2347,8 @@ namespace BP.DA
             }
             return mysql;
         }
+        
+        /*
         /// <summary>
         /// RunSQLReturnTable_200705_Informix
         /// </summary>
@@ -2387,6 +2400,7 @@ namespace BP.DA
                 conn.Close();
             }
         }
+        */
         /// <summary>
         /// RunSQLReturnTable_200705_SQL
         /// </summary>
@@ -2443,6 +2457,7 @@ namespace BP.DA
                 }
             }
         }
+        /*
         /// <summary>
         /// RunSQLReturnTable_200705_SQL
         /// </summary>
@@ -2451,7 +2466,7 @@ namespace BP.DA
         private static DataTable RunSQLReturnTable_201205_Informix(string selectSQL)
         {
             return RunSQLReturnTable_201205_Informix(selectSQL, new Paras());
-        }
+        }*/
         #endregion
 
         #endregion
@@ -2653,9 +2668,9 @@ namespace BP.DA
                     case DBType.Oracle:
                         dt = RunSQLReturnTable_200705_Ora(sql, paras);
                         break;
-                    case DBType.Informix:
-                        dt = RunSQLReturnTable_201205_Informix(sql, paras);
-                        break;
+                    //case DBType.Informix:
+                    //    dt = RunSQLReturnTable_201205_Informix(sql, paras);
+                    //    break;
                     case DBType.PostgreSQL:
                         dt = RunSQLReturnTable_201902_PSQL(sql, paras);
                         break;
@@ -2684,7 +2699,7 @@ namespace BP.DA
                 dc.ColumnName = dc.ColumnName.ToUpper();
             return dt;
 
-            return dt;
+            //return dt;
         }
 
 
@@ -2989,9 +3004,9 @@ namespace BP.DA
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, paras);
                     break;
-                case DBType.Informix:
-                    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, paras);
-                    break;
+                //case DBType.Informix:
+                //    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, paras);
+                //    break;
                 default:
                     throw new Exception("@没有判断的数据库类型");
             }
@@ -3019,9 +3034,9 @@ namespace BP.DA
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, new Paras());
                     break;
-                case DBType.Informix:
-                    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, new Paras());
-                    break;
+                //case DBType.Informix:
+                //    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, new Paras());
+                //    break;
                 case DBType.MySQL:
                     dt = DBAccess.RunSQLReturnTable_200705_MySQL(sql, new Paras());
                     break;
@@ -3135,8 +3150,8 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsView(string tabelOrViewName,DBType dbType)
         {
-            if (dbType == null)
-                dbType = SystemConfig.AppCenterDBType;
+            //if (dbType == null) dbType是Enum，永远不会为null. 张磊 2019-7-24
+            //    dbType = SystemConfig.AppCenterDBType;
 
             string sql = "";
             switch (dbType)
@@ -3315,12 +3330,12 @@ namespace BP.DA
                         table = table.Split('.')[1];
                     i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) from user_tab_columns  WHERE table_name= upper(:tab) AND column_name= upper(:col) ", ps);
                     break;
-                case DBType.Informix:
-                    i = DBAccess.RunSQLReturnValInt("select count(*) from syscolumns c where tabid in (select tabid	from systables	where tabname = lower('" + table + "')) and c.colname = lower('" + col + "')", 0);
-                    break;
-                case DBType.Access:
-                    return false;
-                    break;
+                //case DBType.Informix:
+                //    i = DBAccess.RunSQLReturnValInt("select count(*) from syscolumns c where tabid in (select tabid	from systables	where tabname = lower('" + table + "')) and c.colname = lower('" + col + "')", 0);
+                //    break;
+                //case DBType.Access:
+                //    return false;
+                //    break;
                 default:
                     throw new Exception("err@IsExitsTableCol没有判断的数据库类型.");
             }
@@ -3442,6 +3457,8 @@ namespace BP.DA
         {
             get
             {
+                return new OdbcConnection(SystemConfig.AppSettings["DBAccessOfODBC"]);
+                /* 2019-7-24 张磊 
                 if (SystemConfig.IsBSsystem_Test)
                 {
                     OdbcConnection conn = HttpContext.Current.Session["DBAccessOfODBC"] as OdbcConnection;
@@ -3462,6 +3479,7 @@ namespace BP.DA
                     }
                     return conn;
                 }
+                */
             }
         }
         #endregion 取得连接对象 ，CS、BS共用属性

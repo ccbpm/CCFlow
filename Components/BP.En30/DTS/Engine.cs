@@ -7,6 +7,7 @@ using BP.En;
 using BP.DA;
 using BP.Port;
 using BP.Sys;
+using BP.Web;
 
 namespace BP.Pub
 {
@@ -1352,7 +1353,7 @@ namespace BP.Pub
                 throw new Exception("生成文档失败：单据名称[" + this.CyclostyleFilePath + "] 异常信息：" + ex.Message + " @自动修复单据信息：" + msg);
             }
             if (isOpen)
-                PubClass.Print(BP.Sys.Glo.Request.ApplicationPath + "Temp/" + file);
+                PubClass.Print(HttpContextHelper.RequestApplicationPath + "Temp/" + file);
         }
         #endregion
 

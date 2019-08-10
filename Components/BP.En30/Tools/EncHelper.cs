@@ -45,7 +45,7 @@ namespace BP.Tools
             }
             catch (Exception ex)
             {
-                HttpContext.Current.Response.Write(ex.Message.ToString());
+                HttpContextHelper.ResponseWrite(ex.Message.ToString());
                 return false;//加密失败
             }
         }
@@ -81,7 +81,7 @@ namespace BP.Tools
             }
             catch (Exception ex)
             {
-                HttpContext.Current.Response.Write(ex.Message.ToString());
+                HttpContextHelper.ResponseWrite(ex.Message.ToString());
                 return false;//加密失败
             }
         }

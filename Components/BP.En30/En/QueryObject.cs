@@ -254,7 +254,7 @@ namespace BP.En
         /// <param name="attr"></param>
         /// <param name="exp"></param>
         /// <param name="val"></param>
-        public void AddWhere(string attr, string exp, string val)
+        public void AddWhere(string attr, string exp, object val)
         {
             AddWhere(attr, exp, val, null);
         }
@@ -265,12 +265,14 @@ namespace BP.En
         /// <param name="exp">操作符号（根据不同的数据库）</param>
         /// <param name="val">值</param>
         /// <param name="paraName">参数名称，可以为null, 如果查询中有多个参数中有相同属性名的需要，分别给他们起一个参数名。</param>
-        public void AddWhere(string attr, string exp, string val, string paraName)
+        public void AddWhere(string attr, string exp, object val, string paraName)
         {
             if (val == null)
                 val = "";
 
-            if (val == "all")
+            string valStr = Convert.ToString(val);
+
+            if (valStr == "all")
             {
                 this.SQL = "( 1=1 )";
                 return;
@@ -278,7 +280,7 @@ namespace BP.En
 
             if (exp.ToLower().Contains("in"))
             {
-                this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + valStr + " )";
                 return;
             }
 
@@ -286,34 +288,34 @@ namespace BP.En
             {
                 if (attr == "FK_Dept")
                 {
-                    val = val.Replace("'", "");
-                    val = val.Replace("%", "");
+                    valStr = valStr.Replace("'", "");
+                    valStr = valStr.Replace("%", "");
 
                     switch (this.HisDBType)
                     {
                         case DBType.Oracle:
                             this.SQL = "( " + attr2Field(attr) + " " + exp + " '%'||" + this.HisVarStr + "FK_Dept||'%' )";
-                            this.MyParas.Add("FK_Dept", val);
+                            this.MyParas.Add("FK_Dept", valStr);
                             break;
                         default:
                             //this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + this.HisVarStr + "FK_Dept%' )";
-                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + val + "%' )";
+                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + valStr + "%' )";
                             //this.MyParas.Add("FK_Dept", val);
                             break;
                     }
                 }
                 else
                 {
-                    if (val.Contains(":") || val.Contains("@"))
+                    if (valStr.Contains(":") || valStr.Contains("@"))
                     {
-                        this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                        this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + valStr + " )";
                     }
                     else
                     {
-                        if (val.Contains("'") == false)
-                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + val + "' )";
+                        if (valStr.Contains("'") == false)
+                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + valStr + "' )";
                         else
-                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + valStr + " )";
                     }
                 }
                 return;
@@ -462,7 +464,7 @@ namespace BP.En
         /// <param name="val">值</param>
         public void AddWhere(string attr, int val)
         {
-            this.AddWhere(attr, "=", val);
+            this.AddWhere(attr, "=", val, null);
         }
         /// <summary>
         /// 增加条件
@@ -478,7 +480,7 @@ namespace BP.En
         }
         public void AddWhere(string attr, Int64 val)
         {
-            this.AddWhere(attr, val.ToString());
+            this.AddWhere(attr, "=", val, null);
         }
         public void AddWhere(string attr, float val)
         {
@@ -489,13 +491,12 @@ namespace BP.En
             if (val == null)
                 throw new Exception("Attr=" + attr + ", 值是空 is null");
 
-            if (val.GetType() == typeof(int) || val.GetType() == typeof(Int32))
+            if (val.GetType() == typeof(int) || val.GetType() == typeof(long))
             {
-                //int i = int.Parse(val.ToString()) ;
-                this.AddWhere(attr, "=", (Int32)val);
+                this.AddWhere(attr, "=", val);
                 return;
             }
-            this.AddWhere(attr, "=", val.ToString());
+            this.AddWhere(attr, "=", Convert.ToString(val));
         }
 
         public void addLeftBracket()

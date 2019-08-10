@@ -10,7 +10,6 @@ using System.Xml;
 using BP.DA;
 using BP.En;
 using Microsoft.CSharp;
-using System.Web.Services.Description;
 
 namespace BP.Sys
 {

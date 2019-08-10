@@ -106,9 +106,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChineseConverter">
-      <HintPath>..\..\RefDLL\ChineseConverter.dll</HintPath>
-    </Reference>
     <Reference Include="ChnCharInfo">
       <HintPath>..\..\RefDLL\ChnCharInfo.dll</HintPath>
     </Reference>
@@ -122,19 +119,19 @@
       <HintPath>..\..\RefDLL\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefDLL\Mono.Security.dll</HintPath>
+      <HintPath>..\..\packages\Npgsql.2.2.7\lib\net40\Mono.Security.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefDLL\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MySql.Data.6.9.12\lib\net40\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=2.2.7.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Npgsql.2.2.7\lib\net40\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Oracle.ManagedDataAccess.12.2.1100\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -143,13 +140,13 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices">
       <Name>System.EnterpriseServices</Name>
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -187,6 +184,10 @@
     </Compile>
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
+    <Compile Include="NetPlatformImpl\CacheHelper.cs" />
+    <Compile Include="NetPlatformImpl\DA.cs" />
+    <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
+    <Compile Include="NetPlatformImpl\Sys.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
@@ -324,6 +325,9 @@
     <Compile Include="DA\Para.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\NPinyin\Pinyin.cs" />
+    <Compile Include="Tools\NPinyin\PyCode.cs" />
+    <Compile Include="Tools\NPinyin\PyHash.cs" />
     <Compile Include="Tools\RMB.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -496,6 +500,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <None Include="Service References\ccportal\PortalInterface.wsdl" />
   </ItemGroup>

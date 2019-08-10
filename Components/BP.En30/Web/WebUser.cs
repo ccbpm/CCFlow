@@ -9,6 +9,7 @@ using BP.DA;
 using System.Configuration;
 using BP.Port;
 using BP.Sys;
+using System.Collections.Generic;
 
 namespace BP.Web
 {
@@ -76,7 +77,7 @@ namespace BP.Web
                 if (sql.Contains("UPDATE Port_Emp SET FK_Dept=") == true)
                     if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                         return;
-                 BP.DA.DBAccess.RunSQL(sql);
+                BP.DA.DBAccess.RunSQL(sql);
             }
             catch (Exception ex)
             {
@@ -94,7 +95,7 @@ namespace BP.Web
         /// <param name="IsRecSID">是否记录SID</param>
         public static void SignInOfGener(Emp em, string lang = "CH", bool isRememberMe = false, bool IsRecSID = false, string authNo = null, string authName = null)
         {
-            if (System.Web.HttpContext.Current == null)
+            if (HttpContextHelper.Current == null)
                 SystemConfig.IsBSsystem = false;
             else
                 SystemConfig.IsBSsystem = true;
@@ -183,41 +184,36 @@ namespace BP.Web
             WebUser.SysLang = lang;
             if (BP.Sys.SystemConfig.IsBSsystem)
             {
-                HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
-                if (hc != null)
-                    BP.Sys.Glo.Request.Cookies.Remove("CCS");
+                // cookie操作，为适应不同平台，统一使用HttpContextHelper
+                Dictionary<string, string> cookieValues = new Dictionary<string, string>();
 
-                HttpCookie cookie = new HttpCookie("CCS");
-                //设置Cookies有效期
-                DateTime time = DateTime.Now;
-
-                cookie.Values.Add("No", em.No);
-                cookie.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
+                cookieValues.Add("No", em.No);
+                cookieValues.Add("Name", HttpUtility.UrlEncode(em.Name));
 
                 if (isRememberMe)
-                    cookie.Values.Add("IsRememberMe", "1");
+                    cookieValues.Add("IsRememberMe", "1");
                 else
-                    cookie.Values.Add("IsRememberMe", "0");
+                    cookieValues.Add("IsRememberMe", "0");
 
-                cookie.Values.Add("FK_Dept", em.FK_Dept);
-                cookie.Values.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
+                cookieValues.Add("FK_Dept", em.FK_Dept);
+                cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
 
-                if (System.Web.HttpContext.Current.Session != null)
+                if (HttpContextHelper.Current.Session != null)
                 {
-                    cookie.Values.Add("Token", System.Web.HttpContext.Current.Session.SessionID);
-                    cookie.Values.Add("SID", System.Web.HttpContext.Current.Session.SessionID);
+                    cookieValues.Add("Token", HttpContextHelper.Current.Session.Id);
+                    cookieValues.Add("SID", HttpContextHelper.Current.Session.Id);
                 }
 
-                cookie.Values.Add("Lang", lang);
+                cookieValues.Add("Lang", lang);
                 if (authNo == null)
                     authNo = "";
-                cookie.Values.Add("Auth", authNo); //授权人.
+                cookieValues.Add("Auth", authNo); //授权人.
 
                 if (authName == null)
                     authName = "";
-                cookie.Values.Add("AuthName", authName); //授权人名称..
+                cookieValues.Add("AuthName", authName); //授权人名称..
 
-                System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+                HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
             }
         }
 
@@ -230,9 +226,10 @@ namespace BP.Web
         /// <returns></returns>
         public static string GetSessionByKey(string key, string isNullAsVal)
         {
-            if (IsBSMode && System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
+            //2019-07-25 zyt改造
+            if (IsBSMode && HttpContextHelper.Current != null && HttpContextHelper.Current.Session != null)
             {
-                string str = System.Web.HttpContext.Current.Session[key] as string;
+                string str = HttpContextHelper.SessionGetString(key);
                 if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
@@ -257,7 +254,7 @@ namespace BP.Web
         {
             get
             {
-                if (System.Web.HttpContext.Current == null)
+                if (HttpContextHelper.Current == null)
                     return false;
                 else
                     return true;
@@ -272,13 +269,13 @@ namespace BP.Web
         {
             if (val == null)
                 return;
-
+            //2019-07-25 zyt改造
             if (IsBSMode == true
-                && System.Web.HttpContext.Current != null
-                && System.Web.HttpContext.Current.Session != null)
-                System.Web.HttpContext.Current.Session[key] = val;
+                && HttpContextHelper.Current != null
+                && HttpContextHelper.Current.Session != null)
+                HttpContextHelper.SessionSet(key,val);
             else
-                BP.Port.Current.SetSession(key, val);
+                BP.Port.Current.SetSession(key,val);
         }
         /// <summary>
         /// 退回
@@ -287,55 +284,22 @@ namespace BP.Web
         {
             if (IsBSMode == false)
             {
-                try
-                {
-                    string token = WebUser.Token;
-                    //此处放到后面 杨玉慧                    
-                    //System.Web.HttpContext.Current.Response.Cookies.Clear();
-                    BP.Sys.Glo.Request.Cookies.Clear();
-                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                    cookie.Expires = DateTime.Now.AddDays(2);
-                    cookie.Values.Add("No", string.Empty);
-                    cookie.Values.Add("Name", string.Empty);
-                    // 2013.06.07 H
-                    cookie.Values.Add("Pass", string.Empty);
-                    cookie.Values.Add("IsRememberMe", "0");
-                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                    WebUser.Token = token;
-                    //杨玉慧 加上 授权人
-                    cookie.Values.Add("Auth", string.Empty); //授权人.
-                    cookie.Values.Add("AuthName", string.Empty); //授权人.
-                    BP.Sys.Glo.Request.Cookies.Add(cookie);
-                    //System.Web.HttpContext.Current.Response.Cookies.Add(cooki                    BP.Port.Current.Session.Clear();
-                }
-                catch (Exception ex)
-                {
-                }
+                HttpContextHelper.ResponseCookieDelete(new string[] {
+                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                    "CCS");
+
                 return;
             }
 
             try
             {
-                string token = WebUser.Token;
-                //杨玉慧加
-                BP.Port.Current.Session.Clear(); System.Web.HttpContext.Current.Response.Cookies.Clear();
-                BP.Sys.Glo.Request.Cookies.Clear();
+                BP.Port.Current.Session.Clear();
 
+                HttpContextHelper.ResponseCookieDelete(new string[] {
+                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                   "CCS");
 
-                System.Web.HttpContext.Current.Session.Clear();
-
-                HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                cookie.Expires = DateTime.Now.AddDays(2);
-                cookie.Values.Add("No", string.Empty);
-                cookie.Values.Add("Name", string.Empty);
-                // 2013.06.07 H
-                cookie.Values.Add("Pass", string.Empty);
-                cookie.Values.Add("IsRememberMe", "0");
-                cookie.Values.Add("Auth", string.Empty); //授权人.
-                //杨玉慧 加
-                cookie.Values.Add("AuthName", string.Empty); //授权人.                    
-                System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                WebUser.Token = token;
+                HttpContextHelper.SessionClear();
             }
             catch
             {
@@ -435,16 +399,17 @@ namespace BP.Web
             get
             {
                 return "CH";
-
+                /*
                 string no = GetSessionByKey("Lang", null);
                 if (no == null || no == "")
                 {
                     if (IsBSMode)
                     {
-                        HttpCookie hc1 = BP.Sys.Glo.Request.Cookies["CCS"];
-                        if (hc1 == null)
+                        // HttpCookie hc1 = BP.Sys.Glo.Request.Cookies["CCS"];
+                        string lang = HttpContextHelper.RequestCookieGet("Lang", "CCS");
+                        if (String.IsNullOrEmpty(lang))
                             return "CH";
-                        SetSessionByKey("Lang", hc1.Values["Lang"]);
+                        SetSessionByKey("Lang", lang);
                     }
                     else
                     {
@@ -455,7 +420,7 @@ namespace BP.Web
                 else
                 {
                     return no;
-                }
+                }*/
             }
             set
             {
@@ -586,7 +551,9 @@ namespace BP.Web
             try
             {
                 //先从session里面取.
-                string v = System.Web.HttpContext.Current.Session[valKey] as string;
+                //string v = System.Web.HttpContext.Current.Session[valKey] as string;
+                //2019-07-25 zyt改造
+                string v = HttpContextHelper.SessionGet<string>(valKey);
                 if (DataType.IsNullOrEmpty(v) == false)
                     return v;
             }
@@ -594,14 +561,10 @@ namespace BP.Web
             {
             }
 
-            string key = "CCS";
-            HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
-            if (hc == null)
-                return null;
-
             try
             {
-                string val = null;
+                string val = HttpContextHelper.RequestCookieGet(valKey, "CCS");
+                /*
                 if (isChinese)
                 {
                     val = HttpUtility.UrlDecode(hc[valKey]);
@@ -610,6 +573,7 @@ namespace BP.Web
                 }
                 else
                     val = hc.Values[valKey];
+                */
 
                 if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
@@ -630,19 +594,25 @@ namespace BP.Web
             if (BP.Sys.SystemConfig.IsBSsystem == false)
                 return;
 
+            /* 2019-7-25 张磊 如下代码没有作用，删除
             HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
             if (hc != null)
                 BP.Sys.Glo.Request.Cookies.Remove("CCS");
 
             HttpCookie cookie = new HttpCookie("CCS");
             cookie.Expires = DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute);
+            */
 
+            Dictionary<string, string> cookieValues = new Dictionary<string, string>();
             AtPara ap = new AtPara(keyVals);
             foreach (string key in ap.HisHT.Keys)
-                cookie.Values.Add(key, HttpUtility.UrlEncode(ap.GetValStrByKey(key)));
+                cookieValues.Add(key, ap.GetValStrByKey(key));
 
-            System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+            HttpContextHelper.ResponseCookieAdd(cookieValues, 
+                DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute), 
+                "CCS");
         }
+
         /// <summary>
         /// 是否是操作员？
         /// </summary>
@@ -798,10 +768,7 @@ namespace BP.Web
         #region 当前人员操作方法.
         public static void DeleteTempFileOfMy()
         {
-            HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
-            if (hc == null)
-                return;
-            string usr = hc.Values["No"];
+            string usr = HttpContextHelper.RequestCookieGet("No", "CCS"); //hc.Values["No"];
             string[] strs = System.IO.Directory.GetFileSystemEntries(SystemConfig.PathOfTemp);
             foreach (string str in strs)
             {

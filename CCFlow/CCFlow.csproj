@@ -7434,10 +7434,6 @@
       <Project>{507a6498-9001-4674-a90a-719f3818940a}</Project>
       <Name>BP.GPM</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Components\BP.StarBucks\BP.StarBucks.csproj">
-      <Project>{522ae7ca-6e0f-4ea9-a822-20ba4834ba38}</Project>
-      <Name>BP.StarBucks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Components\BP.WF\BP.WF.csproj">
       <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
       <Name>BP.WF</Name>

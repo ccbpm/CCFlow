@@ -64,8 +64,9 @@
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,17 +81,21 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    <Reference Include="NPOI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RefDLL\NPOI.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    <Reference Include="NPOI.OOXML, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RefDLL\NPOI.OOXML.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RefDLL\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RefDLL\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -489,6 +494,59 @@
     <Content Include="GPM\themes\icons\up.gif" />
     <Content Include="GPM\themes\icons\xitong.png" />
     <Content Include="GPM\themes\icons\xitongleibie.png" />
+    <Content Include="SDKFlowDemo\BPDemo\Student.htm" />
+    <Content Include="SDKFlowDemo\BPDemo\StudentList.htm" />
+    <Content Include="SDKFlowDemo\ccflow.js" />
+    <Content Include="SDKFlowDemo\CCFormTester.asmx" />
+    <Content Include="SDKFlowDemo\Default.htm" />
+    <Content Include="SDKFlowDemo\DemoBatchUrl.aspx" />
+    <Content Include="SDKFlowDemo\DemoBP.aspx" />
+    <Content Include="SDKFlowDemo\DemoComm.htm" />
+    <Content Include="SDKFlowDemo\DemoEmpSelecter.htm" />
+    <Content Include="SDKFlowDemo\FlowDemo\Flow\01.表单类型\请假流程-审核组件模式.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Flow\01.表单类型\请假流程-累加模式.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Flow\01.表单类型\请假流程-经典模式.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Flow\02.同表单分合流\月销售总结%28同表单分合流%29.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Flow\03.异表单分合流\新航线考察流程.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\01.表单基本元素\01.表单元素.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\01.表单基本元素\02.基础功能.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\02.Pop窗\Pop窗体-简单模式.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\02.Pop窗\Pop窗体-表格单选填充主表数据.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\02.Pop窗\Pop返回值-表格查询模式.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\02.Pop窗\Pop返回值2018版.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\03.多选\多选-小范围.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\03.多选\多选-搜索模式.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\03.多选\文本框内容多选.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\04.自动完成\文本框自动完成.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\04.自动完成\文本框自动完成填充下拉框.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\04.自动完成\文本框自动完成填充从表.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\05.从表功能\从表-导入导出.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\05.从表功能\从表功能展示.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\05.从表功能\自动计算-主表与从表.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\11.单元测试\01.主表保存事件.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\11.单元测试\02.主表事件测试.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\99.流程演示表单\开行考察工作单-安全保卫部.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\99.流程演示表单\开行考察工作单-配餐部.xml" />
+    <Content Include="SDKFlowDemo\FlowDemo\Form\99.流程演示表单\开行考察工作单-飞行部.xml" />
+    <Content Include="SDKFlowDemo\MutipleSelector.htm" />
+    <Content Include="SDKFlowDemo\PopSelectVal.htm" />
+    <Content Include="SDKFlowDemo\QingJia\QianRuFangShiForm.htm" />
+    <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\S4_RenShi.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\SDKQianRuFangShiForm.htm" />
+    <Content Include="SDKFlowDemo\readme.txt" />
+    <Content Include="SDKFlowDemo\SDK\F129\S12901.htm" />
+    <Content Include="SDKFlowDemo\SDK\Info.aspx" />
+    <Content Include="SDKFlowDemo\SDK\Readme.txt" />
+    <Content Include="SDKFlowDemo\TableList.htm" />
+    <Content Include="SDKFlowDemo\TestEntity.htm" />
+    <Content Include="SDKFlowDemo\TestUnit\SendWork.aspx" />
+    <Content Include="SDKFlowDemo\UnitTesting\Testing.aspx" />
+    <Content Include="SDKFlowDemo\UnitTesting\UnitTesting.htm" />
+    <Content Include="SDKFlowDemo\UnitTesting\UnitTestingDone.htm" />
+    <Content Include="SDKFlowDemo\WindowsFormsApplicationDemo.asmx" />
     <Content Include="Service References\CloundWS\configuration.svcinfo" />
     <Content Include="Service References\CloundWS\configuration91.svcinfo" />
     <Content Include="Service References\CloundWS\Reference.svcmap">
@@ -514,6 +572,7 @@
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />
+    <Content Include="WF\Admin\AttrFlow\DeadLineRole.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
@@ -523,6 +582,9 @@
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrFlow\NodesIcon.htm" />
     <Content Include="WF\Admin\AttrFlow\NodesIconSelect.htm" />
+    <Content Include="WF\Admin\AttrFlow\PushMessage.htm" />
+    <Content Include="WF\Admin\AttrFlow\PushMessageFlow.htm" />
+    <Content Include="WF\Admin\AttrFlow\SDTOfFlow.htm" />
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\StartGuide\0.None.htm" />
     <Content Include="WF\Admin\AttrFlow\StartGuide\1.BySQLOne.htm" />
@@ -577,6 +639,7 @@
     <Content Include="WF\Admin\AttrNode\CheckFrm.htm" />
     <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
     <Content Include="WF\Admin\AttrNode\CHRole.htm" />
+    <Content Include="WF\Admin\AttrNode\CHRoleDtl.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\0.FoolForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\1.FreeForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\10.FoolTruck.htm" />
@@ -609,8 +672,6 @@
     <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
     <Content Include="WF\Admin\AttrNode\NodeAppType.htm" />
     <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.htm" />
-    <Content Include="WF\Admin\AttrNode\NodeYGFlow.htm" />
-    <Content Include="WF\Admin\AttrNode\NodeYGFlowDtl.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessage.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.htm" />
     <Content Include="WF\Admin\AttrNode\SelectDept.htm" />
@@ -634,6 +695,8 @@
     <Content Include="WF\Admin\AttrNode\SelfParas.htm" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowAuto.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowAutoDtl.htm" />
     <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowHand.htm" />
     <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowHandDtl.htm" />
     <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowYanXu.htm" />
@@ -656,6 +719,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Img\bg.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\BlockModel.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\CH.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\ChromeLogo.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\Contrast.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\D3.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\DBSrc.png" />
@@ -759,6 +823,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2x2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\updateBrowser.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFlowEnum.js" />
     <Content Include="WF\Admin\CCFormDesigner\Action.htm" />
@@ -956,7 +1021,6 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Fieldset.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\FlowChart.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\FrmCheck.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\FrmTransferCustom.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\HandSiganture.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\iFrame.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Radiobutton.png" />
@@ -1114,7 +1178,6 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide0.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\0.FoolForm.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\1.FreeForm.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\2.SelfForm.htm" />
@@ -1231,9 +1294,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\DtlImp\Default.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\0.None.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\1.Simple.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\10.Text.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\2.Table.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\4.MapPin.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\5.MicHot.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\6.AthShow.htm" />
@@ -1321,6 +1382,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionNum.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrlDDL.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrlDtl.htm" />
@@ -1427,7 +1489,6 @@
     <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\AuthorList.htm" />
     <Content Include="WF\AuthorTodolist.htm" />
-    <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.htm" />
     <Content Include="WF\BatchList.htm" />
     <Content Include="WF\BatchStart.htm" />
@@ -1453,7 +1514,6 @@
     <Content Include="WF\CCBill\Img\BillState\Runing.png" />
     <Content Include="WF\CCBill\Img\BillState\Todo.png" />
     <Content Include="WF\CCBill\MyBill.htm" />
-    <Content Include="WF\CCBill\MyBill.js" />
     <Content Include="WF\CCBill\MyDict.htm" />
     <Content Include="WF\CCBill\MyFrmGener.js" />
     <Content Include="WF\CCBill\Opt\DoMethod.htm" />
@@ -1461,10 +1521,8 @@
     <Content Include="WF\CCBill\Opt\DoMethodPara.js" />
     <Content Include="WF\CCBill\Opt\Imp.htm" />
     <Content Include="WF\CCBill\Opt\RefBill.htm" />
-    <Content Include="WF\CCBill\Search.htm" />
     <Content Include="WF\CCBill\Search.js" />
     <Content Include="WF\CCBill\SearchBill.htm" />
-    <Content Include="WF\CCBill\SearchData.htm" />
     <Content Include="WF\CCBill\SearchDict.htm" />
     <Content Include="WF\CCBill\SearchEditer.htm" />
     <Content Include="WF\CCBill\Start.htm" />
@@ -1534,7 +1592,6 @@
     <Content Include="WF\CCForm\PopVal.htm" />
     <Content Include="WF\CCForm\Pop\BindEnum.htm" />
     <Content Include="WF\CCForm\Pop\BindSFTable.htm" />
-    <Content Include="WF\CCForm\Pop\Branches--old.htm" />
     <Content Include="WF\CCForm\Pop\Branches.htm" />
     <Content Include="WF\CCForm\Pop\BranchesAndLeaf.htm" />
     <Content Include="WF\CCForm\Pop\BranchesAndLeafEasyui.htm" />
@@ -1657,6 +1714,7 @@
     <Content Include="WF\Comm\RefFunc\EnOnlyBS.htm" />
     <Content Include="WF\Comm\RefFunc\EnVerDtl.htm" />
     <Content Include="WF\Comm\RefFunc\IconSelect.htm" />
+    <Content Include="WF\Comm\RefFunc\Setting.htm" />
     <Content Include="WF\Comm\Refmethod.htm" />
     <Content Include="WF\Comm\Search.htm" />
     <Content Include="WF\Comm\SearchBS.htm" />
@@ -1807,6 +1865,7 @@
     <Content Include="WF\Data\lang\lang.js" />
     <Content Include="WF\Data\lang\load.js" />
     <Content Include="WF\Data\lang\xml\Public.xml" />
+    <Content Include="WF\Data\lang\xml\sub_wf_stated.xml" />
     <Content Include="WF\Data\lang\xml\WorkNode.xml" />
     <Content Include="WF\Data\MultilingualJS\Lang.js" />
     <Content Include="WF\Data\MultilingualJS\Public.js" />
@@ -2750,6 +2809,7 @@
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\index.d.ts" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\bootstrap-table.css" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\bootstrap-table.js" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\colResizable-1.6.min.js" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\accent-neutralise\bootstrap-table-accent-neutralise.js" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\angular\bootstrap-table-angular.js" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\auto-refresh\bootstrap-table-auto-refresh.css" />
@@ -3151,6 +3211,7 @@
     <Content Include="WF\Scripts\easyUI145\themes\icons\open.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\pencil.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\print.png" />
+    <Content Include="WF\Scripts\easyUI145\themes\icons\property.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\redo.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\reload.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\reset.png" />
@@ -7031,6 +7092,7 @@
     <Content Include="WF\WorkOpt\AskForRe.htm" />
     <Content Include="WF\WorkOpt\CC.htm" />
     <Content Include="WF\WorkOpt\CCAdv.htm" />
+    <Content Include="WF\WorkOpt\CH.htm" />
     <Content Include="WF\WorkOpt\DBTemplate.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
     <Content Include="WF\WorkOpt\FHLFlow.htm" />
@@ -7039,6 +7101,7 @@
     <Content Include="WF\WorkOpt\Forward.htm" />
     <Content Include="WF\WorkOpt\HandWriting.html" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
+    <Content Include="WF\WorkOpt\Note.htm" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
     <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
     <Content Include="WF\WorkOpt\OneWork\ChartV2.htm" />
@@ -7127,6 +7190,8 @@
     <Content Include="WF\WorkOpt\WebOffice.htm" />
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
     <Content Include="WF\WorkOpt\WorkCheck.js" />
+    <Content Include="WF\WorkOpt\WorkCheck2019.htm" />
+    <Content Include="WF\WorkOpt\WorkCheck2019.js" />
     <None Include="DataUser\AppCoder\ccbpmServices.bat" />
     <None Include="DataUser\CyclostyleFile\chichengfeiyongbaoxiaodan.rtf" />
     <None Include="DataUser\CyclostyleFile\feiyongbaoxiaodan.rtf" />
@@ -7148,6 +7213,10 @@
     <None Include="DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls" />
     <None Include="DataUser\TempleteOfImp\ND7401Dtl1.xls" />
     <None Include="packages.config" />
+    <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
+    <Content Include="SDKFlowDemo\SDK\Site.Master" />
+    <Content Include="SDKFlowDemo\WindowsFormsApplicationDemo.ashx" />
+    <Content Include="SDKFlowDemo\WinOpen.master" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -7374,6 +7443,87 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SDKFlowDemo\CCFormTester.asmx.cs">
+      <DependentUpon>CCFormTester.asmx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\DemoBatchUrl.aspx.cs">
+      <DependentUpon>DemoBatchUrl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\DemoBatchUrl.aspx.designer.cs">
+      <DependentUpon>DemoBatchUrl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\DemoBP.aspx.cs">
+      <DependentUpon>DemoBP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\DemoBP.aspx.designer.cs">
+      <DependentUpon>DemoBP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx.cs">
+      <DependentUpon>S1_TianxieShenqingDan.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx.designer.cs">
+      <DependentUpon>S1_TianxieShenqingDan.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx.cs">
+      <DependentUpon>S2_BumenJingliShenpi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx.designer.cs">
+      <DependentUpon>S2_BumenJingliShenpi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx.cs">
+      <DependentUpon>S3_ZongJingLiShenpi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx.designer.cs">
+      <DependentUpon>S3_ZongJingLiShenpi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S4_RenShi.aspx.cs">
+      <DependentUpon>S4_RenShi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\S4_RenShi.aspx.designer.cs">
+      <DependentUpon>S4_RenShi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\Site1.Master.cs">
+      <DependentUpon>Site1.Master</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\QingJia\Site1.Master.designer.cs">
+      <DependentUpon>Site1.Master</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\SDK\Info.aspx.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\SDK\Info.aspx.designer.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\SDK\Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\SDK\Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\TestUnit\SendWork.aspx.cs">
+      <DependentUpon>SendWork.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\TestUnit\SendWork.aspx.designer.cs">
+      <DependentUpon>SendWork.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\UnitTesting\Testing.aspx.cs">
+      <DependentUpon>Testing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\UnitTesting\Testing.aspx.designer.cs">
+      <DependentUpon>Testing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\WindowsFormsApplicationDemo.ashx.cs">
+      <DependentUpon>WindowsFormsApplicationDemo.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\WindowsFormsApplicationDemo.asmx.cs">
+      <DependentUpon>WindowsFormsApplicationDemo.asmx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\WinOpen.master.cs">
+      <DependentUpon>WinOpen.master</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\WinOpen.master.designer.cs">
+      <DependentUpon>WinOpen.master</DependentUpon>
+    </Compile>
     <Compile Include="Service References\CloundWS\Reference.cs" />
     <Compile Include="Service References\CloundWS\Reference1.cs">
       <AutoGen>True</AutoGen>
@@ -7410,14 +7560,15 @@
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
+    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="DataUser\Temp\" />
-    <Folder Include="WF\Data\Multilingual\" />
     <Folder Include="WF\Scripts\bootstrap\bootstrap-table\.github\" />
     <Folder Include="WF\Scripts\bootstrap\bootstrap-table\docs\" />
     <Folder Include="WF\Scripts\jqGrid\" />
@@ -7433,10 +7584,6 @@
     <ProjectReference Include="..\Components\BP.GPM\BP.GPM.csproj">
       <Project>{507a6498-9001-4674-a90a-719f3818940a}</Project>
       <Name>BP.GPM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Components\BP.StarBucks\BP.StarBucks.csproj">
-      <Project>{522ae7ca-6e0f-4ea9-a822-20ba4834ba38}</Project>
-      <Name>BP.StarBucks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Components\BP.WF\BP.WF.csproj">
       <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>

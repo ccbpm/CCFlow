@@ -20,7 +20,6 @@ using System.Data.SqlClient;
 using System.Collections;
 using System.ComponentModel;
 using System.Collections.Specialized;
-//using System.Data.OracleClient;
 using Oracle.ManagedDataAccess.Client;
 using System.Web;
 using System.Data.Odbc;
@@ -28,9 +27,6 @@ using System.IO;
 using MySql.Data;
 using MySql;
 using MySql.Data.MySqlClient;
-//using IBM.Data;
-//using IBM.Data.Informix;
-//using IBM.Data.Utilities;
 using BP.Sys;
 using Npgsql;
 

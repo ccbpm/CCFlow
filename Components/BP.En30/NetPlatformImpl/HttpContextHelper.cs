@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.SessionState;
-using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -201,11 +200,11 @@ namespace BP.Web
             }
         }
 
-        public static System.Collections.Specialized.NameObjectCollectionBase.KeysCollection RequestParamKeys
+        public static string[] RequestParamKeys
         {
             get
             {
-                return Request.Params.Keys;
+                return Request.QueryString.AllKeys.Union(Request.Form.AllKeys).ToArray();
             }
         }
 

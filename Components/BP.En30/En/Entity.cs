@@ -1158,7 +1158,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("无效") || ex.Message.Contains("field list"))
+                if (ex.Message.Contains("does not exist") || ex.Message.Contains("无效")  || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
                     if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)

@@ -2015,7 +2015,7 @@ namespace BP.WF.HttpHandler
 
             #region 生成参数串.
             string paras = "";
-            foreach (string str in HttpContextHelper.RequestParamKeys)
+            foreach (string str in HttpContextHelper.RequestQueryStringKeys)
             {
                 string val = this.GetRequestVal(str);
                 if (val.IndexOf('@') != -1)

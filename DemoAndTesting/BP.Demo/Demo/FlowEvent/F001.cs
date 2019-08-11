@@ -65,7 +65,6 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SendWhen()
         {
-
             ///  throw new Exception("err@不符合流程发送条件。");
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;
@@ -74,8 +73,6 @@ namespace BP.Demo.FlowEvent
             // 当前的节点, 其他的变量请从 this.HisNode .
             int nodeID = this.HisNode.NodeID;    // int类型的ID.
             string nodeName = this.HisNode.Name; // 当前节点名称.
-
-           
 
             switch (nodeID)
             {

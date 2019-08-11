@@ -295,7 +295,7 @@ namespace BP.Demo.BPFramework
 
                 map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
                 map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
-                map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
+                map.AddTBDate(StudentAttr.RegDate, null, "注册日期", true, true);
 
                 //map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
                 //map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
@@ -332,7 +332,7 @@ namespace BP.Demo.BPFramework
                 //设置查询条件。
                 map.AddSearchAttr(StudentAttr.XB);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
-                // map.AddSearchAttr(StudentAttr.ZZMM);
+                map.AddSearchAttr(StudentAttr.ZZMM);
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
@@ -446,8 +446,6 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
-
-
             return "学号:" + this.No + ",姓名:" + this.Name + ",缴纳了:" + jine + "元,说明:" + note;
         }
         /// <summary>

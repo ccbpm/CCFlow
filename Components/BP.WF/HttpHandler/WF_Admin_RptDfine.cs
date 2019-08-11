@@ -20,7 +20,14 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_RptDfine : DirectoryPageBase
     {
-
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_RptDfine(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
 
         /// <summary>
         /// 构造函数
@@ -51,15 +58,15 @@ namespace BP.WF.HttpHandler
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
                 }
-                HttpContextHelper.ResponseWrite(msg);
+                context.Response.Write(msg);
             }
             catch (Exception ex)
             {
-                HttpContextHelper.ResponseWrite("err@" + ex.Message);
+                context.Response.Write("err@" + ex.Message);
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" +HttpContextHelper.RequestRawUrl );
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
 

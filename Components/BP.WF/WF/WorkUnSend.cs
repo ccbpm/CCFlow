@@ -33,13 +33,13 @@ namespace BP.WF
                     }
                     else
                     {
-
-                        bool b = HttpContextHelper.RequestRawUrl.ToLower().Contains("oneflow");
-                        if (b)
-                            _AppType = "WF/OneFlow";
-                        else
-                            _AppType = "WF";
-
+                       
+                            bool b = BP.Sys.Glo.Request.RawUrl.ToLower().Contains("oneflow");
+                            if (b)
+                                _AppType = "WF/OneFlow";
+                            else
+                                _AppType = "WF";
+                         
                     }
                 }
                 return _AppType;

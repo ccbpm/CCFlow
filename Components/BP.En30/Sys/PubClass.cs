@@ -6,6 +6,10 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Web;
+using System.Web.SessionState;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -1170,16 +1174,20 @@ namespace BP.Sys
         #region
         public static void To(string url)
         {
-            HttpContextHelper.Response.Redirect(url, true);
+            System.Web.HttpContext.Current.Response.Redirect(url, true);
         }
         public static void Print(string url)
         {
-            HttpContextHelper.ResponseWrite("<script language='JavaScript'> var newWindow =window.open('" + url + "','p','width=0,top=10,left=10,height=1,scrollbars=yes,resizable=yes,toolbar=yes,location=yes,menubar=yes') ; newWindow.focus(); </script> ");
+            System.Web.HttpContext.Current.Response.Write("<script language='JavaScript'> var newWindow =window.open('" + url + "','p','width=0,top=10,left=10,height=1,scrollbars=yes,resizable=yes,toolbar=yes,location=yes,menubar=yes') ; newWindow.focus(); </script> ");
         }
         public static BP.En.Entity CopyFromRequest(BP.En.Entity en)
         {
+            return CopyFromRequest(en, BP.Sys.Glo.Request);
+        }
+        public static BP.En.Entity CopyFromRequest(BP.En.Entity en, HttpRequest reqest)
+        {
             //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
-            string checkBoxIDs = HttpContextHelper.RequestParams("CheckBoxIDs");
+            string checkBoxIDs = reqest.QueryString["CheckBoxIDs"];
             if (checkBoxIDs != null)
             {
                 string[] strs = checkBoxIDs.Split(',');
@@ -1198,7 +1206,7 @@ namespace BP.Sys
             Hashtable ht = en.Row.Clone() as Hashtable;
 
             /*说明已经找到了这个字段信息。*/
-            foreach (string key in HttpContextHelper.RequestParamKeys)
+            foreach (string key in reqest.Params.Keys)
             {
                 if (key == null || key == "")
                     continue;
@@ -1216,7 +1224,7 @@ namespace BP.Sys
                 else
                     continue;
 
-                string val = HttpContextHelper.RequestParams(key);
+                string val = reqest.Params[key];
 
                 //其他的属性.
                 en.Row[attrKey] = val;
@@ -1224,10 +1232,10 @@ namespace BP.Sys
             return en;
         }
 
-        public static BP.En.Entity CopyFromRequestByPost(BP.En.Entity en)
+        public static BP.En.Entity CopyFromRequestByPost(BP.En.Entity en, HttpRequest reqest)
         {
             //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
-            string checkBoxIDs = HttpContextHelper.RequestParams("CheckBoxIDs");
+            string checkBoxIDs = reqest.QueryString["CheckBoxIDs"];
             if (checkBoxIDs != null)
             {
                 string[] strs = checkBoxIDs.Split(',');
@@ -1255,7 +1263,7 @@ namespace BP.Sys
             Hashtable ht = en.Row.Clone() as Hashtable;
 
             /*说明已经找到了这个字段信息。*/
-            foreach (string key in HttpContextHelper.RequestParamKeys)
+            foreach (string key in reqest.Form.Keys)
             {
                 if (key == null || key == "")
                     continue;
@@ -1288,7 +1296,7 @@ namespace BP.Sys
                     
                 }
 
-                string val = HttpContextHelper.RequestParams(key); // Form[key]
+                string val = reqest.Form[key];
                 if (key.IndexOf("CB_") == 0 || key.IndexOf("CBPara_") == 0)
                 {
                     en.Row[attrKey] = 1;
@@ -1316,7 +1324,8 @@ namespace BP.Sys
             else
                 pk = "_" + pk;
 
-            foreach (string myK in HttpContextHelper.RequestParamKeys)
+            HttpRequest reqest = BP.Sys.Glo.Request;
+            foreach (string myK in reqest.Params.Keys)
                 allKeys += myK + ";";
 
             Attrs attrs = map.Attrs;
@@ -1350,7 +1359,7 @@ namespace BP.Sys
                 if (allKeys.Contains(relKey + ";"))
                 {
                     /*说明已经找到了这个字段信息。*/
-                    foreach (string myK in HttpContextHelper.RequestParamKeys)
+                    foreach (string myK in BP.Sys.Glo.Request.Params.Keys)
                     {
                         if (myK == null || myK == "")
                             continue;
@@ -1359,7 +1368,7 @@ namespace BP.Sys
                         {
                             if (attr.UIContralType == UIContralType.CheckBok)
                             {
-                                string val = HttpContextHelper.RequestParams(myK);
+                                string val = BP.Sys.Glo.Request.Params[myK];
                                 if (val == "on" || val == "1" || val.Contains(",on"))
                                     en.SetValByKey(attr.Key, 1);
                                 else
@@ -1367,7 +1376,7 @@ namespace BP.Sys
                             }
                             else
                             {
-                                en.SetValByKey(attr.Key, HttpContextHelper.RequestParams(myK));
+                                en.SetValByKey(attr.Key, BP.Sys.Glo.Request.Params[myK]);
                             }
                         }
                     }
@@ -1389,10 +1398,21 @@ namespace BP.Sys
         {
             get
             {
-                return BP.NetPlatformImpl.Sys_PubClass.RequestParas;
+                string urlExt = "";
+                string rawUrl = System.Web.HttpContext.Current.Request.RawUrl;
+                rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
+                string[] paras = rawUrl.Split('&');
+                foreach (string para in paras)
+                {
+                    if (para == null
+                        || para == ""
+                        || para.Contains("=") == false)
+                        continue;
+                    urlExt += "&" + para;
+                }
+                return urlExt;
             }
         }
-
         /// <summary>
         /// 不用page 参数，show message
         /// </summary>
@@ -1405,7 +1425,7 @@ namespace BP.Sys
 
 
             string script = "<script language=JavaScript>alert('" + mess + "');</script>";
-            HttpContextHelper.ResponseWrite(script);
+            System.Web.HttpContext.Current.Response.Write(script);
 
 
 
@@ -1416,7 +1436,7 @@ namespace BP.Sys
         public static void ResponseWriteScript(string script)
         {
             script = "<script language=JavaScript> " + script + "</script>";
-            HttpContextHelper.ResponseWrite(script);
+            System.Web.HttpContext.Current.Response.Write(script);
         }
         #endregion
 

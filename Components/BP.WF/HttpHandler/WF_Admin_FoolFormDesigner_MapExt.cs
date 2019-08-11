@@ -37,7 +37,14 @@ namespace BP.WF.HttpHandler
             //找不不到标记就抛出异常.
             throw new Exception("@标记[" + this.DoType + "]，没有找到.");
         }
-
+        /// <summary>
+        /// 初始化函数
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_FoolFormDesigner_MapExt(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -1218,9 +1225,7 @@ namespace BP.WF.HttpHandler
         public string InitScript_Init()
         {
             try {
-                //2019-07-26 zyt改造
-                //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = HttpContextHelper.PhysicalApplicationPath.Replace("\\", "/");
+                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
                 if (!File.Exists(filePath)) {
@@ -1241,11 +1246,9 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                //2019-07-26 zyt改造
-                //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = HttpContextHelper.PhysicalApplicationPath.Replace("\\", "/");
+                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
-                String content = HttpContextHelper.RequestParams("JSDoc"); // this.context.Request.Params["JSDoc"];
+                String content = this.context.Request.Params["JSDoc"];
 
                 //在应用程序当前目录下的File1.txt文件中追加文件内容，如果文件不存在就创建，默认编码
                 File.WriteAllText(filePath, content);
@@ -1262,9 +1265,7 @@ namespace BP.WF.HttpHandler
         public string InitScript_Delete()
         {
             try {
-                //2019-07-26 zyt改造
-                //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = HttpContextHelper.PhysicalApplicationPath.Replace("\\", "/");
+                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
 
                 if (File.Exists(filePath))

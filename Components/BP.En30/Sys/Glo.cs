@@ -4,7 +4,6 @@ using System.Collections;
 using System.Text;
 using BP.Sys;
 using BP.DA;
-using BP.Web;
 
 namespace BP.Sys
 {
@@ -273,7 +272,7 @@ namespace BP.Sys
         {
             //为了提高运行效率，把这个地方屏蔽了。
             return;
-            /*
+
             UserLog ul = new UserLog();
             ul.MyPK = DBAccess.GenerGUID();
             ul.FK_Emp = empNo;
@@ -283,13 +282,12 @@ namespace BP.Sys
             try
             {
                 if (BP.Sys.SystemConfig.IsBSsystem)
-                    ul.IP = HttpContextHelper.Request.UserHostAddress;
+                    ul.IP = BP.Sys.Glo.Request.UserHostAddress;
             }
             catch
             {
             }
             ul.Insert();
-            */
         }
         #endregion 写入用户日志.
 
@@ -366,6 +364,16 @@ namespace BP.Sys
             en.Update();
         }
 
+        /// <summary>
+        /// 获得对象.
+        /// </summary>
+        public static System.Web.HttpRequest Request
+        {
+            get
+            {
+                return System.Web.HttpContext.Current.Request;
+            }
+        }
 
         /// <summary>
         /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者.

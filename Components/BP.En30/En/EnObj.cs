@@ -4,7 +4,6 @@ using BP.DA;
 using System.Data;
 using BP.Sys;
 using BP.En;
-using BP.Web;
 
 namespace BP.En
 {
@@ -532,11 +531,11 @@ namespace BP.En
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
-                foreach (string key in HttpContextHelper.RequestParamKeys)
+                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
                 {
                     if (string.IsNullOrEmpty(key))
                         continue;
-                    exp = exp.Replace("@" + key, HttpContextHelper.RequestParams(key));
+                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
                 }
             }
 

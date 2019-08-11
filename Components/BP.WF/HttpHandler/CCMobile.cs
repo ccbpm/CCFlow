@@ -20,6 +20,14 @@ namespace BP.WF.HttpHandler
     public class CCMobile : DirectoryPageBase
     {
         /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public CCMobile(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+        /// <summary>
         /// 构造函数
         /// </summary>
         public CCMobile()
@@ -49,7 +57,7 @@ namespace BP.WF.HttpHandler
 
         public string Login_Init()
         {
-            BP.WF.HttpHandler.WF ace = new WF();
+            BP.WF.HttpHandler.WF ace = new WF(this.context);
             return ace.Login_Init();
         }
 
@@ -98,7 +106,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQianList_Init()
         {
-            WF wf = new WF();
+            WF wf = new WF(this.context);
             return wf.HuiQianList_Init();
         }
 
@@ -109,7 +117,7 @@ namespace BP.WF.HttpHandler
 
             StringBuilder append = new StringBuilder();
             append.Append("{");
-            string userPath = HttpContextHelper.PhysicalApplicationPath + "/DataUser/UserIcon/";
+            string userPath = HttpContext.Current.Server.MapPath("/DataUser/UserIcon/");
             string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
             if (System.IO.File.Exists(userIcon))
             {
@@ -126,7 +134,7 @@ namespace BP.WF.HttpHandler
         }
         public string StartGuide_MulitSend()
         {
-            WF_MyFlow en = new WF_MyFlow();
+            WF_MyFlow en = new WF_MyFlow(this.context);
             return en.StartGuide_MulitSend();
         }
         public string Home_Init()
@@ -184,13 +192,13 @@ namespace BP.WF.HttpHandler
         }
         public string MyFlow_Init()
         {
-            BP.WF.HttpHandler.WF_MyFlow wfPage = new WF_MyFlow();
+            BP.WF.HttpHandler.WF_MyFlow wfPage = new WF_MyFlow(this.context);
             return wfPage.MyFlow_Init();
         }
         
         public string Runing_Init()
         {
-            BP.WF.HttpHandler.WF wfPage = new WF();
+            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
           return  wfPage.Runing_Init();
         }
         
@@ -240,13 +248,13 @@ namespace BP.WF.HttpHandler
 
         public string Start_Init()
         {
-            BP.WF.HttpHandler.WF wfPage = new WF();
+            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
             return wfPage.Start_Init();
         }
 
         public string HandlerMapExt()
         {
-            WF_CCForm en = new WF_CCForm();
+            WF_CCForm en = new WF_CCForm(this.context);
             return en.HandlerMapExt();
         }
 
@@ -278,7 +286,7 @@ namespace BP.WF.HttpHandler
         /// <returns>json</returns>
         public string FrmView_Init()
         {
-            BP.WF.HttpHandler.WF wf = new WF();
+            BP.WF.HttpHandler.WF wf = new WF(this.context);
             return wf.FrmView_Init();
         }
         /// <summary>
@@ -287,19 +295,19 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmView_UnSend()
         {
-            BP.WF.HttpHandler.WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
+            BP.WF.HttpHandler.WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
             return en.OP_UnSend();
         }
 
         public string AttachmentUpload_Down()
         {
-            WF_CCForm ccform = new WF_CCForm();
+            WF_CCForm ccform = new WF_CCForm(this.context);
             return ccform.AttachmentUpload_Down();
         }
 
         public string AttachmentUpload_DownByStream()
         {
-            WF_CCForm ccform = new WF_CCForm();
+            WF_CCForm ccform = new WF_CCForm(this.context);
             return ccform.AttachmentUpload_DownByStream();
         }
 
@@ -310,7 +318,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SearchKey_OpenFrm()
         {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
             return search.KeySearch_OpenFrm();
         }
         /// <summary>
@@ -319,7 +327,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SearchKey_Query()
         {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.

@@ -10,6 +10,7 @@ using System.Xml;
 using BP.DA;
 using BP.En;
 using Microsoft.CSharp;
+using System.Web.Services.Description;
 using BP.Sys;
 
 namespace BP.Sys.FrmUI

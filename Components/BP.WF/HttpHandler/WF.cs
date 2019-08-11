@@ -251,6 +251,14 @@ namespace BP.WF.HttpHandler
         #endregion
 
         /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF()
@@ -272,10 +280,10 @@ namespace BP.WF.HttpHandler
             string path = "/DataUser/Siganture/" + no + ".jpg";
             //如果文件存在
 
-            if (File.Exists(HttpContextHelper.PhysicalApplicationPath + (path)) == false)
+            if (File.Exists(this.context.Server.MapPath(path))  == false)
             {
                 path = "/DataUser/Siganture/" + no + ".JPG";
-                if (File.Exists(HttpContextHelper.PhysicalApplicationPath + (path)) == true)
+                if (File.Exists(this.context.Server.MapPath(path)) == true)
                 {
                     return "";
                 }
@@ -541,11 +549,11 @@ namespace BP.WF.HttpHandler
         {
             //获取地址
             string baseUrl = this.GetRequestVal("DirectUrl");
-            ////判断是移动端还是PC端打开的页面
-            //Regex RegexMobile = new Regex(@"(iemobile|iphone|ipod|android|nokia|sonyericsson|blackberry|samsung|sec\-|windows ce|motorola|mot\-|up.b|midp\-)",
-            //RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            //判断是移动端还是PC端打开的页面
+            Regex RegexMobile = new Regex(@"(iemobile|iphone|ipod|android|nokia|sonyericsson|blackberry|samsung|sec\-|windows ce|motorola|mot\-|up.b|midp\-)",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
             //移动端打开
-            if (HttpContextHelper.RequestIsFromMobile)
+            if (context.Request.Browser.IsMobileDevice || (!string.IsNullOrEmpty(context.Request.UserAgent) && RegexMobile.IsMatch(context.Request.UserAgent)))
             {
                 return SystemConfig.MobileURL + baseUrl;
             }
@@ -615,7 +623,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HandlerMapExt()
         {
-            WF_CCForm wf = new WF_CCForm();
+            WF_CCForm wf = new WF_CCForm(context);
             return wf.HandlerMapExt();
         }
         /// <summary>
@@ -2015,7 +2023,7 @@ namespace BP.WF.HttpHandler
 
             #region 生成参数串.
             string paras = "";
-            foreach (string str in HttpContextHelper.RequestParamKeys)
+            foreach (string str in this.context.Request.QueryString)
             {
                 string val = this.GetRequestVal(str);
                 if (val.IndexOf('@') != -1)

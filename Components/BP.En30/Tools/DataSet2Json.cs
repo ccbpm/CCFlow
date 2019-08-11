@@ -1,25 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Text;
 using System.Reflection;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
+using System.Web.Script.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using BP.DA;
-using System.Web;
-using Newtonsoft.Json;
+
 
 namespace BP.Tools
 {
     /// <summary>
     /// Summary description for FormatToJson
     /// </summary>
-    public class FormatToJson
+    public class FormatToJson : IHttpHandler
     {
         #region Json 字符串 转换为 DataTable数据集合
+        public void ProcessRequest(HttpContext context)
+        {
+        }
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
         /// <summary>
         /// 将JSON解析成DataSet只限标准的JSON数据
         /// 例如：Json＝{t1:[{name:'数据name',type:'数据type'}]} 或 Json＝{t1:[{name:'数据name',type:'数据type'}],t2:[{id:'数据id',gx:'数据gx',val:'数据val'}]}
@@ -31,10 +42,10 @@ namespace BP.Tools
             try
             {
                 DataSet ds = new DataSet();
-                //JavaScriptSerializer Serializer = new JavaScriptSerializer();
-                //object objs = Serializer.Deserialize(Json);
-                //2019/7/24 zyt改造JavaScriptSerializer To JsonConvert,Core And Fram4编译正常
-                object obj = JsonConvert.DeserializeObject(Json);
+                JavaScriptSerializer JSS = new JavaScriptSerializer();
+
+
+                object obj = JSS.DeserializeObject(Json);
                 Dictionary<string, object> datajson = (Dictionary<string, object>)obj;
 
                 foreach (var item in datajson)
@@ -80,10 +91,8 @@ namespace BP.Tools
         //反实例化json
         public static List<T> ParseListFromJson<T>(string szJson)
         {
-            //JavaScriptSerializer Serializer = new JavaScriptSerializer();
-            //List<T> objs = Serializer.Deserialize<List<T>>(szJson);
-            //2019/7/24 zyt改造JavaScriptSerializer To JsonConvert,Core And Fram4编译正常
-            List<T> objs =JsonConvert.DeserializeObject<List<T>>(szJson);
+            JavaScriptSerializer Serializer = new JavaScriptSerializer();
+            List<T> objs = Serializer.Deserialize<List<T>>(szJson);
             return objs;
         }
 
@@ -97,12 +106,9 @@ namespace BP.Tools
             DataTable dataTable = new DataTable();  //实例化  
             try
             {
-                //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
-                //javascriptserializer.maxjsonlength = int32.maxvalue; //取得最大数值  
-                //ArrayList arrayList = javaScriptSerializer.Deserialize<ArrayList>(json);
-                //2019/7/24 zyt改造JavaScriptSerializer To JsonConvert,Core And Fram4编译正常
-                ArrayList arrayList = JsonConvert.DeserializeObject<ArrayList>(json);
-
+                JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
+                javaScriptSerializer.MaxJsonLength = Int32.MaxValue; //取得最大数值  
+                ArrayList arrayList = javaScriptSerializer.Deserialize<ArrayList>(json);
                 if (arrayList.Count > 0)
                 {
                     foreach (Dictionary<string, object> dictionary in arrayList)

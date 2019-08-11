@@ -35,15 +35,15 @@ namespace BP.WF.HttpHandler
         /// <returns>返回值</returns>
         public string GetValFromFrmByKey(string key, string isNullAsVal = null)
         {
-            string val = HttpContextHelper.RequestParams(key);
+            string val = context.Request.Form[key];
             if (val == null && key.Contains("DDL_") == false)
-                val = HttpContextHelper.RequestParams("DDL_" + key);
+                val = context.Request.Form["DDL_" + key];
 
             if (val == null && key.Contains("TB_") == false)
-                val = HttpContextHelper.RequestParams("TB_" + key);
+                val = context.Request.Form["TB_" + key];
 
             if (val == null && key.Contains("CB_") == false)
-                val = HttpContextHelper.RequestParams("CB_" + key);
+                val = context.Request.Form["CB_" + key];
 
             if (val == null)
             {
@@ -110,7 +110,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetRequestVal(string key)
         {
-            string val = HttpContextHelper.RequestParams(key);
+            string val = context.Request[key];
+            if (val == null)
+                val = context.Request.QueryString[key];
+            if (val == null)
+                val = context.Request.Form[key];
 
             if (val == null)
                 return null;
@@ -208,31 +212,20 @@ namespace BP.WF.HttpHandler
             get
             {
                 string urlExt = "";
-                //string rawUrl = HttpContextHelper.RequestRawUrl;
-                //rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
-                //string[] paras = rawUrl.Split('&');
-                //foreach (string para in paras)
-                //{
-                //    if (para == null
-                //        || para == ""
-                //        || para.Contains("=") == false)
-                //        continue;
-
-                //    if (para == "1=1")
-                //        continue;
-
-                //    urlExt += "&" + para;
-                //}
-
-                // 适配framework和core（注：net core的rawurl中不含form data）
-                foreach (string key in HttpContextHelper.RequestParamKeys)
+                string rawUrl = this.context.Request.RawUrl;
+                rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
+                string[] paras = rawUrl.Split('&');
+                foreach (string para in paras)
                 {
-                    if (key != "1") // 过滤url中1=1的情形
-                    {
-                        string value = HttpContextHelper.RequestParams(key);
-                        if (!String.IsNullOrEmpty(value))
-                            urlExt += string.Format("&{0}={1}", key, value);
-                    }
+                    if (para == null
+                        || para == ""
+                        || para.Contains("=") == false)
+                        continue;
+
+                    if (para == "1=1")
+                        continue;
+
+                    urlExt += "&" + para;
                 }
                 return urlExt;
             }
@@ -245,7 +238,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 string urlExt = "";
-                string rawUrl = HttpContextHelper.RequestRawUrl;
+                string rawUrl = this.context.Request.RawUrl;
                 rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
                 string[] paras = rawUrl.Split('&');
                 foreach (string para in paras)
@@ -262,9 +255,9 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                foreach (string key in HttpContextHelper.RequestParamKeys)
+                foreach (string key in this.context.Request.Form.Keys)
                 {
-                    urlExt += "&" + key + "=" + HttpContextHelper.RequestParams(key);
+                    urlExt += "&" + key + "=" + this.context.Request.Form[key];
                 }
 
                 return urlExt;
@@ -316,7 +309,7 @@ namespace BP.WF.HttpHandler
                 if (v != null && v == "1")
                     return true;
 
-                if (HttpContextHelper.RequestRawUrl.Contains("/CCMobile/") == true)
+                if (System.Web.HttpContext.Current.Request.RawUrl.Contains("/CCMobile/") == true)
                     return true;
 
                 return false;
@@ -357,13 +350,13 @@ namespace BP.WF.HttpHandler
                 string doType = "";
 
                 doType = this.GetRequestVal("DoType");
-                if (String.IsNullOrEmpty(doType))
+                if (doType == null)
                     doType = this.GetRequestVal("Action");
 
-                if (String.IsNullOrEmpty(doType))
+                if (doType == null)
                     doType = this.GetRequestVal("action");
 
-                if (String.IsNullOrEmpty(doType))
+                if (doType == null)
                     doType = this.GetRequestVal("Method");
 
                 return doType;
@@ -790,7 +783,7 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-
+        public HttpContext context = null;
         /// <summary>
         /// 获得Int数据
         /// </summary>

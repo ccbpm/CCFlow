@@ -17,6 +17,14 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_AttrNode : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_AttrNode(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_AttrNode()
@@ -77,20 +85,17 @@ namespace BP.WF.HttpHandler
         public string Bill_Save()
         {
             BillTemplate bt = new BillTemplate();
-            if (HttpContextHelper.RequestFilesCount == 0)
+            if (HttpContext.Current.Request.Files.Count == 0)
                 return "err@请上传模版.";
 
             //上传附件
             string filepath = "";
-            //HttpPostedFile file = HttpContext.Current.Request.Files[0];
-            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
-            var file = HttpContextHelper.RequestFiles(0);
+            HttpPostedFile file = HttpContext.Current.Request.Files[0];
             string fileName = file.FileName;
             fileName = fileName.ToLower();
 
             filepath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + fileName;
-            //file.SaveAs(filepath);
-            HttpContextHelper.UploadFile(file, filepath);
+            file.SaveAs(filepath);
 
             bt.NodeID = this.FK_Node;
             bt.FK_MapData = this.FK_MapData;
@@ -134,20 +139,15 @@ namespace BP.WF.HttpHandler
         {
             BillTemplate en = new BillTemplate(this.No);
             string MyFilePath = en.TempFilePath;
-            //HttpResponse response = context.Response;
+            HttpResponse response = context.Response;
 
-            //response.Clear();
-            //response.Buffer = true;
-            //response.Charset = "utf-8";
-            //response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
-            //response.ContentEncoding = System.Text.Encoding.UTF8;
-            //response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
-            //response.End();
-
-            HttpContextHelper.ResponseWrite("Charset");
-            HttpContextHelper.ResponseWriteHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
-            HttpContextHelper.Response.ContentType = "application/octet-stream;charset=utf-8";
-            HttpContextHelper.ResponseWriteFile(MyFilePath);
+            response.Clear();
+            response.Buffer = true;
+            response.Charset = "utf-8";
+            response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            response.ContentEncoding = System.Text.Encoding.UTF8;
+            response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
+            response.End();
         }
         #endregion
 
@@ -178,7 +178,7 @@ namespace BP.WF.HttpHandler
 
             foreach (BP.WF.Node mynd in nds)
             {
-                foreach (string key in HttpContextHelper.RequestParamKeys)
+                foreach (string key in HttpContext.Current.Request.Params.AllKeys)
                 {
                     if (key.Contains("CB_SMS_" + mynd.NodeID)
                         && nodesOfSMS.Contains(mynd.NodeID + "") == false)
@@ -197,35 +197,28 @@ namespace BP.WF.HttpHandler
 
             #region 短信保存.
             //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
+            msg.SMSPushWay = Convert.ToInt32(this.GetRequestVal("RB_SMS").Replace("RB_SMS_", ""));
 
             //短消息发送设备
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
             //短信手机字段.
-            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");// HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
-            //替换变量
-            string smsstr = HttpContextHelper.RequestParams("TB_SMS");// HttpContext.Current.Request["TB_SMS"].ToString();
-            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
-            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
-            // smsstr = smsstr.Replace("@RDT",);
+            msg.SMSField = this.GetRequestVal("DDL_SMS_Fields");
             //短信内容模版.
-            msg.SMSDoc_Real = smsstr;
+            msg.SMSDoc_Real = this.GetRequestVal("TB_SMS");
+ 
             #endregion 短信保存.
 
             #region 邮件保存.
             //邮件.
-            msg.MailPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_Email").Replace("RB_Email_", "")); ;
+            msg.MailPushWay = Convert.ToInt32(this.GetRequestVal("RB_Email").Replace("RB_Email_", "")); 
 
             //邮件标题与内容.
-            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_Email_Title");// HttpContext.Current.Request["TB_Email_Title"].ToString();
-            msg.MailDoc_Real = HttpContextHelper.RequestParams("TB_Email_Doc");// HttpContext.Current.Request["TB_Email_Doc"].ToString();
+            msg.MailTitle_Real = this.GetRequestVal("TB_Email_Title"); 
+            msg.MailDoc_Real = this.GetRequestVal("TB_Email_Doc");
 
             //邮件地址.
-            msg.MailAddress = HttpContextHelper.RequestParams("DDL_Email_Fields");// HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
+            msg.MailAddress = this.GetRequestVal("DDL_Email_Fields"); 
 
             #endregion 邮件保存.
 

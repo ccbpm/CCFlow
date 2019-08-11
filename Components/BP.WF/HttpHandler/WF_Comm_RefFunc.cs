@@ -12,7 +12,14 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Comm_RefFunc : DirectoryPageBase
     {
-
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Comm_RefFunc(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
 
         /// <summary>
         /// 构造函数

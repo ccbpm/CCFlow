@@ -644,13 +644,11 @@ namespace BP.WF
                     }
 
                     // 处理传递过来的frm参数。
-                    //2019-07-25 zyt改造
-                    foreach (string k in HttpContextHelper.RequestParamKeys)
+                    foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
                     {
                         if (DataType.IsNullOrEmpty(k) == true)
                             continue;
-
-                        wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
+                        wk.SetValByKey(k, System.Web.HttpContext.Current.Request.Form[k]);
                     }
 
                     //更新到数据库里.
@@ -993,9 +991,9 @@ namespace BP.WF
                 wk.RetrieveFromDBSources();
 
                 // 处理传递过来的参数。
-                foreach (string k in HttpContextHelper.RequestParamKeys)
+                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
                 {
-                    wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
+                    wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
                 }
 
                 // 执行一次装载前填充.

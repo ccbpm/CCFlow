@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-//using System.Data.OracleClient;
-using Oracle.ManagedDataAccess.Client;
+using System.Data.OracleClient;
 using System.Collections;
 using System.IO;
 using System.Net;
-//using System.ServiceModel.Description;
+using System.ServiceModel.Description;
 using System.Text;
 using System.Xml.Schema;
 using BP.DA;
 using BP.En;
-//using IBM.Data.Informix;
+using IBM.Data.Informix;
 using MySql.Data.MySqlClient;
 
 namespace BP.Sys
@@ -287,28 +286,27 @@ namespace BP.Sys
                             cmdMySQL.Dispose();
                         throw new Exception("RunSQL 错误，SQL=" + sql);
                     }
-                    //From Zhou IBM删除
-                //case Sys.DBSrcType.Informix:
-                //    IfxConnection connIfx = new IfxConnection(this.ConnString);
-                //    IfxCommand cmdIfx = null;
-                //    try
-                //    {
-                //        connIfx.Open();
-                //        cmdIfx = new IfxCommand(sql, connIfx);
-                //        cmdIfx.CommandType = CommandType.Text;
-                //        i = cmdIfx.ExecuteNonQuery();
-                //        cmdIfx.Dispose();
-                //        connIfx.Close();
-                //        return i;
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        if (connIfx.State == ConnectionState.Open)
-                //            connIfx.Close();
-                //        if (cmdIfx != null)
-                //            cmdIfx.Dispose();
-                //        throw new Exception("RunSQL 错误，SQL=" + sql);
-                //    }
+                case Sys.DBSrcType.Informix:
+                    IfxConnection connIfx = new IfxConnection(this.ConnString);
+                    IfxCommand cmdIfx = null;
+                    try
+                    {
+                        connIfx.Open();
+                        cmdIfx = new IfxCommand(sql, connIfx);
+                        cmdIfx.CommandType = CommandType.Text;
+                        i = cmdIfx.ExecuteNonQuery();
+                        cmdIfx.Dispose();
+                        connIfx.Close();
+                        return i;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (connIfx.State == ConnectionState.Open)
+                            connIfx.Close();
+                        if (cmdIfx != null)
+                            cmdIfx.Dispose();
+                        throw new Exception("RunSQL 错误，SQL=" + sql);
+                    }
                 default:
                     throw new Exception("@没有判断的支持的数据库类型.");
             }
@@ -443,43 +441,42 @@ namespace BP.Sys
                             mysqlConn.Close();
                         throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
                     }
-                    //From Zhou IBM 删除
-                //case Sys.DBSrcType.Informix:
-                //    IfxConnection ifxConn = new IfxConnection(ConnString);
-                //    IfxDataAdapter ifxAda = null;
-                //    IfxParameter myParameterIfx = null;
+                case Sys.DBSrcType.Informix:
+                    IfxConnection ifxConn = new IfxConnection(ConnString);
+                    IfxDataAdapter ifxAda = null;
+                    IfxParameter myParameterIfx = null;
 
-                //    try
-                //    {
-                //        ifxConn.Open();
-                //        ifxAda = new IfxDataAdapter(runObj, ifxConn);
-                //        ifxAda.SelectCommand.CommandType = CommandType.Text;
+                    try
+                    {
+                        ifxConn.Open();
+                        ifxAda = new IfxDataAdapter(runObj, ifxConn);
+                        ifxAda.SelectCommand.CommandType = CommandType.Text;
 
-                //        if (ps != null)
-                //        {
-                //            // 加入参数
-                //            foreach (Para para in ps)
-                //            {
-                //                myParameterIfx = new IfxParameter(para.ParaName, para.val);
-                //                myParameterIfx.Size = para.Size;
-                //                ifxAda.SelectCommand.Parameters.Add(myParameterIfx);
-                //            }
-                //        }
+                        if (ps != null)
+                        {
+                            // 加入参数
+                            foreach (Para para in ps)
+                            {
+                                myParameterIfx = new IfxParameter(para.ParaName, para.val);
+                                myParameterIfx.Size = para.Size;
+                                ifxAda.SelectCommand.Parameters.Add(myParameterIfx);
+                            }
+                        }
 
-                //        DataTable ifxTb = new DataTable("otb");
-                //        ifxAda.Fill(ifxTb);
-                //        ifxAda.Dispose();
-                //        ifxConn.Close();
-                //        return ifxTb;
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        if (ifxAda != null)
-                //            ifxAda.Dispose();
-                //        if (ifxConn.State == ConnectionState.Open)
-                //            ifxConn.Close();
-                //        throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
-                //    }
+                        DataTable ifxTb = new DataTable("otb");
+                        ifxAda.Fill(ifxTb);
+                        ifxAda.Dispose();
+                        ifxConn.Close();
+                        return ifxTb;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ifxAda != null)
+                            ifxAda.Dispose();
+                        if (ifxConn.State == ConnectionState.Open)
+                            ifxConn.Close();
+                        throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
+                    }
                 default:
                     break;
             }
@@ -561,30 +558,29 @@ namespace BP.Sys
                             mysqlConn.Close();
                         throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
                     }
-                    //
-                //case Sys.DBSrcType.Informix:
-                //    IfxConnection ifxConn = new IfxConnection(ConnString);
-                //    IfxDataAdapter ifxAda = null;
+                case Sys.DBSrcType.Informix:
+                    IfxConnection ifxConn = new IfxConnection(ConnString);
+                    IfxDataAdapter ifxAda = null;
 
-                //    try
-                //    {
-                //        ifxConn.Open();
-                //        ifxAda = new IfxDataAdapter(sql, ifxConn);
-                //        ifxAda.SelectCommand.CommandType = CommandType.Text;
-                //        DataTable ifxTb = new DataTable("otb");
-                //        ifxAda.Fill(startRecord, recordCount, ifxTb);
-                //        ifxAda.Dispose();
-                //        ifxConn.Close();
-                //        return ifxTb;
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        if (ifxAda != null)
-                //            ifxAda.Dispose();
-                //        if (ifxConn.State == ConnectionState.Open)
-                //            ifxConn.Close();
-                //        throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
-                //    }
+                    try
+                    {
+                        ifxConn.Open();
+                        ifxAda = new IfxDataAdapter(sql, ifxConn);
+                        ifxAda.SelectCommand.CommandType = CommandType.Text;
+                        DataTable ifxTb = new DataTable("otb");
+                        ifxAda.Fill(startRecord, recordCount, ifxTb);
+                        ifxAda.Dispose();
+                        ifxConn.Close();
+                        return ifxTb;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ifxAda != null)
+                            ifxAda.Dispose();
+                        if (ifxConn.State == ConnectionState.Open)
+                            ifxConn.Close();
+                        throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    }
                 default:
                     break;
             }
@@ -827,9 +823,7 @@ namespace BP.Sys
                 try
                 {
                     //  dsn = "user id=" + this.UserID + ";data source=" + this.DBName + ";password=" + this.Password + ";Max Pool Size=200";
-                    //System.Data.OracleClient.OracleConnection conn = new System.Data.OracleClient.OracleConnection();
-                    //zyt改造OracleConnection,Core And Fram4编译正常
-                    OracleConnection conn = new OracleConnection();
+                    System.Data.OracleClient.OracleConnection conn = new System.Data.OracleClient.OracleConnection();
                     conn.ConnectionString = this.ConnString;
                     conn.Open();
                     conn.Close();
@@ -857,23 +851,22 @@ namespace BP.Sys
                     return ex.Message;
                 }
             }
-            //From Zhou IBM删除
-            //if (this.DBSrcType == Sys.DBSrcType.Informix)
-            //{
-            //    try
-            //    {
-            //        IfxConnection conn = new IfxConnection();
 
-            //        conn.ConnectionString = this.ConnString;
-            //        conn.Open();
-            //        conn.Close();
-            //        return "恭喜您，该(" + this.Name + ")连接配置成功。";
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return ex.Message;
-            //    }
-            //}
+            if (this.DBSrcType == Sys.DBSrcType.Informix)
+            {
+                try
+                {
+                    IfxConnection conn = new IfxConnection();
+                    conn.ConnectionString = this.ConnString;
+                    conn.Open();
+                    conn.Close();
+                    return "恭喜您，该(" + this.Name + ")连接配置成功。";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
 
             if (this.DBSrcType == Sys.DBSrcType.WebServices)
             {
@@ -1317,16 +1310,14 @@ namespace BP.Sys
                     conn = new System.Data.SqlClient.SqlConnection(dsn);
                     break;
                 case Sys.DBSrcType.Oracle:
-                    //conn = new System.Data.OracleClient.OracleConnection(dsn);
-                    conn = new OracleConnection(dsn);
+                    conn = new System.Data.OracleClient.OracleConnection(dsn);
                     break;
                 case Sys.DBSrcType.MySQL:
                     conn = new MySql.Data.MySqlClient.MySqlConnection(dsn);
                     break;
-                // from Zhou 删除IBM
-                //case Sys.DBSrcType.Informix:
-                //    conn = new System.Data.OleDb.OleDbConnection(dsn);
-                //    break;
+                case Sys.DBSrcType.Informix:
+                    conn = new System.Data.OleDb.OleDbConnection(dsn);
+                    break;
             }
 
             return conn;
@@ -1337,11 +1328,8 @@ namespace BP.Sys
             if (conn is System.Data.SqlClient.SqlConnection)
                 return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType);
              
-            //if (conn is System.Data.OracleClient.OracleConnection)
-            //    return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);
-            if (conn is OracleConnection)
-                return BP.DA.DBAccess.RunSQLReturnTable(sql, (OracleConnection)conn, cmdType, dsn);
-
+            if (conn is System.Data.OracleClient.OracleConnection)
+                return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);
             if (conn is MySqlConnection)
             {
                 var mySqlConn = (MySqlConnection)conn;

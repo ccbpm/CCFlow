@@ -20,6 +20,15 @@ namespace BP.WF.HttpHandler
     public class WF_RptSearch : DirectoryPageBase
     {
         /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_RptSearch(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_RptSearch()
@@ -118,7 +127,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -192,7 +201,7 @@ namespace BP.WF.HttpHandler
         //打开表单.
         public string KeySearch_OpenFrm()
         {
-           BP.WF.HttpHandler.WF wf=new WF();
+           BP.WF.HttpHandler.WF wf=new WF(this.context);
             return wf.Runing_OpenFrm();
         }
         #endregion

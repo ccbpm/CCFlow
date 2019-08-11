@@ -5,7 +5,6 @@ using System.Text;
 using BP.En;
 using BP.Pub;
 using BP.Sys;
-using BP.Web;
 
 namespace BP.DA
 {	 
@@ -465,7 +464,7 @@ namespace BP.DA
                     // return  System.Web.HttpContext.Current.Cache[key];
                     return BS_Cash[key]; //  System.Web.HttpContext.Current.Cache[key];
                 else
-                    return HttpContextHelper.SessionGet(key);
+                    return System.Web.HttpContext.Current.Session[key];
             }
             else
             {
@@ -560,7 +559,7 @@ namespace BP.DA
             {
                 try
                 {
-                    return HttpContextHelper.SessionGet(key);
+                    return System.Web.HttpContext.Current.Session[key];
                 }
                 catch
                 {
@@ -588,9 +587,9 @@ namespace BP.DA
             if (SystemConfig.IsBSsystem)
             {
                 if (where == Depositary.Application)
-                    CacheHelper.Remove(key);
+                    System.Web.HttpContext.Current.Cache.Remove(key);
                 else
-                    HttpContextHelper.Session.Remove(key);
+                    System.Web.HttpContext.Current.Session.Remove(key);
             }
             else
             {
@@ -627,7 +626,7 @@ namespace BP.DA
                 }
                 else
                 {
-                    HttpContextHelper.SessionSet(key, obj);
+                    System.Web.HttpContext.Current.Session[key] = obj;
                 }
             }
             else
@@ -650,11 +649,17 @@ namespace BP.DA
             {
                 if (where == Depositary.Application)
                 {
-                    return CacheHelper.Contains(key);
+                    if (System.Web.HttpContext.Current.Cache[key] == null)
+                        return false;
+                    else
+                        return true;
                 }
                 else
                 {
-                    return HttpContextHelper.SessionGet(key) != null;
+                    if (System.Web.HttpContext.Current.Session[key] == null)
+                        return false;
+                    else
+                        return true;
                 }
             }
             else

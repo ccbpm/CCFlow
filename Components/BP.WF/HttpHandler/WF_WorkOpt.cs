@@ -537,7 +537,14 @@ namespace BP.WF.HttpHandler
                 return "err@<font color=red>" + msgErr + "</font>" + ex.Message;
             }
         }
-
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_WorkOpt(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>

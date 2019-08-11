@@ -21,6 +21,14 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner2018 : DirectoryPageBase
     {
+        /// <summary>
+        /// 初始化函数
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_CCBPMDesigner2018(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
            /// <summary>
         /// 构造函数
         /// </summary>
@@ -112,7 +120,7 @@ namespace BP.WF.HttpHandler
         public string Node_EditNodeName()
         {
             string FK_Node = this.GetValFromFrmByKey("NodeID");
-            string NodeName = HttpContextHelper.UrlDecode(this.GetValFromFrmByKey("NodeName"));
+            string NodeName = System.Web.HttpContext.Current.Server.UrlDecode(this.GetValFromFrmByKey("NodeName"));
 
             BP.WF.Node node = new BP.WF.Node();
             node.NodeID = int.Parse(FK_Node);

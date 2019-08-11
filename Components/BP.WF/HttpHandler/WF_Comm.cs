@@ -12,7 +12,6 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -117,6 +116,15 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 部门-人员关系
+
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Comm(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -175,7 +183,7 @@ namespace BP.WF.HttpHandler
             //查询结果
             QueryObject qo = new QueryObject(ens);
 
-            string[] strs = HttpContextHelper.Request.Form.ToString().Split('&');
+            string[] strs = this.context.Request.Form.ToString().Split('&');
             foreach (string str in strs)
             {
                 if (str.IndexOf("EnsName") != -1)
@@ -290,7 +298,7 @@ namespace BP.WF.HttpHandler
 
             //查询结果
             QueryObject qo = new QueryObject(ens);
-            string[] strs = HttpContextHelper.Request.Form.ToString().Split('&');
+            string[] strs = this.context.Request.Form.ToString().Split('&');
             foreach (string str in strs)
             {
                 if (str.IndexOf("EnsName") != -1)
@@ -761,11 +769,6 @@ namespace BP.WF.HttpHandler
                     string key = strs[0];
                     string val = strs[1];
 
-                    // zl 2019-8-8 valObj 用于适配postgreSql的新版驱动，要求数据类型相匹配
-                    object valObj = val;
-                    if (String.Compare(key, "FK_Node", StringComparison.OrdinalIgnoreCase) == 0)
-                        valObj = Convert.ToInt32(val);
-
                     if (key.ToLower().Equals("orderby") == true)
                     {
                         qo.addOrderBy(val);
@@ -774,12 +777,12 @@ namespace BP.WF.HttpHandler
 
                     if (idx == 0)
                     {
-                        qo.AddWhere(key, valObj);
+                        qo.AddWhere(key, val);
                     }
                     else
                     {
                         qo.addAnd();
-                        qo.AddWhere(key, valObj);
+                        qo.AddWhere(key, val);
                     }
                     idx++;
                 }
@@ -2650,8 +2653,9 @@ namespace BP.WF.HttpHandler
             if (clsName.Contains(".HttpHandler.") == true)
             {
                 //创建类实体.
-                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType("BP.WF.HttpHandler.DirectoryPageBase")) as DirectoryPageBase;
-                //ctrl.context = this.context;
+                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType("BP.WF.HttpHandler.DirectoryPageBase"),
+                    this.context) as DirectoryPageBase;
+                ctrl.context = this.context;
 
                 try
                 {
@@ -2662,9 +2666,9 @@ namespace BP.WF.HttpHandler
                 catch (Exception ex)
                 {
                     string parasStr = "";
-                    foreach (string key in HttpContextHelper.RequestParamKeys)
+                    foreach (string key in context.Request.QueryString.Keys)
                     {
-                        parasStr += "@" + key + "=" + HttpContextHelper.RequestParams(key);
+                        parasStr += "@" + key + "=" + context.Request.QueryString[key];
                     }
                     return "err@" + ex.Message + " 参数:" + parasStr;
                 }
@@ -2787,14 +2791,14 @@ namespace BP.WF.HttpHandler
                 BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
                 if (obj == null)
                     return "err@页面处理类名[" + httpHandlerName + "],没有获取到，请检查拼写错误？";
-                //obj.context = this.context;
+                obj.context = this.context;
                 return obj.DoMethod(obj, methodName);
             }
             else
             {
-                BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type)
+                BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type, this.context)
                     as BP.WF.HttpHandler.DirectoryPageBase;
-                //en.context = this.context;
+                en.context = this.context;
                 return en.DoMethod(en, methodName);
             }
         }
@@ -2870,7 +2874,7 @@ namespace BP.WF.HttpHandler
 
         public string EntityAth_Upload()
         {
-            var files = HttpContextHelper.RequestFiles();
+            HttpFileCollection files = context.Request.Files;
             if (files.Count == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
@@ -2902,7 +2906,7 @@ namespace BP.WF.HttpHandler
             ext = ext.Replace(".", ""); //去掉点 @李国文
 
             //文件大小
-            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+            float size = files[0].ContentLength / 1024;
 
             //保存位置
             string filepath = "";
@@ -2917,14 +2921,12 @@ namespace BP.WF.HttpHandler
                 string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
                 try
                 {
-                    //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    files[0].SaveAs(temp);
                 }
                 catch (Exception ex)
                 {
                     System.IO.File.Delete(temp);
-                    //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    files[0].SaveAs(temp);
                 }
 
                 /*保存到fpt服务器上.*/
@@ -2976,8 +2978,7 @@ namespace BP.WF.HttpHandler
                     System.IO.File.Delete(filepath);
 
                 FileInfo info = new FileInfo(filepath);
-                //files[0].SaveAs(filepath);
-                HttpContextHelper.UploadFile(files[0], filepath);
+                files[0].SaveAs(filepath);
             }
 
             //需要这样写 @李国文.
@@ -2994,8 +2995,7 @@ namespace BP.WF.HttpHandler
 
         public string EntityMultiAth_Upload()
         {
-            //HttpFileCollection files = context.Request.Files;
-            var files = HttpContextHelper.RequestFiles();
+            HttpFileCollection files = context.Request.Files;
             if (files.Count == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
@@ -3026,7 +3026,7 @@ namespace BP.WF.HttpHandler
             string ext = System.IO.Path.GetExtension(files[0].FileName);
 
             //文件大小
-            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+            float size = files[0].ContentLength / 1024;
 
             //保存位置
             string filepath = "";
@@ -3040,14 +3040,12 @@ namespace BP.WF.HttpHandler
                 string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
                 try
                 {
-                    //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    files[0].SaveAs(temp);
                 }
                 catch (Exception ex)
                 {
                     System.IO.File.Delete(temp);
-                    //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    files[0].SaveAs(temp);
                 }
 
                 /*保存到fpt服务器上.*/
@@ -3096,8 +3094,7 @@ namespace BP.WF.HttpHandler
 
                 FileInfo info = new FileInfo(filepath);
 
-                //files[0].SaveAs(filepath);
-                HttpContextHelper.UploadFile(files[0], filepath);
+                files[0].SaveAs(filepath);
             }
             //保存上传的文件
             SysFileManager fileManager = new SysFileManager();

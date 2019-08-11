@@ -19,6 +19,14 @@ namespace BP.WF.HttpHandler
 
         #region 执行父类的重写方法.
         /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_CCFormDesigner(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_CCFormDesigner()

@@ -122,8 +122,6 @@ namespace BP.En
             if (isInParaFields == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
 
-
-
             if (ht.ContainsKey("AtPara") == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
 
@@ -269,6 +267,7 @@ namespace BP.En
                         dr[attr.Key] = "0";
                     continue;
                 }
+
 
                 /*如果是外键 就要去掉左右空格。
                  *  */

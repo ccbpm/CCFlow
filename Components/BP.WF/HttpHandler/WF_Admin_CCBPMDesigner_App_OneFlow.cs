@@ -18,6 +18,14 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner_App_OneFlow : DirectoryPageBase
     {
+        /// <summary>
+        /// 初始化函数
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_CCBPMDesigner_App_OneFlow(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
 
         /// <summary>
         /// 构造函数

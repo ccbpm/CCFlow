@@ -18,6 +18,15 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_Cond : DirectoryPageBase
     {
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_Cond(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+
          /// <summary>
         /// 构造函数
         /// </summary>

@@ -22,6 +22,14 @@ namespace BP.Frm
     public class WF_CCBill_Admin : DirectoryPageBase
     {
         /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_CCBill_Admin(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_CCBill_Admin()
@@ -100,7 +108,7 @@ namespace BP.Frm
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]DoMethod=[" + this.GetRequestVal("DoMethod") + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
+            throw new Exception("@标记[" + this.DoType + "]DoMethod=[" + this.GetRequestVal("DoMethod") + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
     }

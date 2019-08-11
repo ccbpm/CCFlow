@@ -19,7 +19,14 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_Sln : DirectoryPageBase
     {
-
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_Sln(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -112,7 +119,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string formNos = HttpContextHelper.RequestParams("formNos"); // this.context.Request["formNos"];
+                string formNos = this.context.Request["formNos"];
 
                 FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
                 //删除已经删除的。

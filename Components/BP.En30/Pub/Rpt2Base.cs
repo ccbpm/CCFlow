@@ -277,8 +277,8 @@ namespace BP.Pub
                     sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                     sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    foreach (string k in HttpContextHelper.RequestParamKeys)
-                        sql = sql.Replace("@" + k, HttpContextHelper.RequestParams(k));
+                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.Keys)
+                        sql = sql.Replace("@" + k, System.Web.HttpContext.Current.Request.QueryString[k]);
                     if (sql.Contains("@") == true)
                     {
                         BP.DA.AtPara ap = new BP.DA.AtPara(this.DefaultParas);

@@ -11,7 +11,6 @@ using System.Configuration;
 using BP.Port;
 using BP.Pub;
 using BP.Sys;
-using System.Collections.Generic;
 
 namespace BP.Web
 {
@@ -43,8 +42,7 @@ namespace BP.Web
         public static void SignInOfGener(string guestNo, string guestName, string deptNo, 
             string deptName,string lang, bool isRememberMe)
         {
-            //2019-07-25 zyt改造
-            if (HttpContextHelper.Current == null)
+            if (System.Web.HttpContext.Current == null)
                 SystemConfig.IsBSsystem = false;
             else
                 SystemConfig.IsBSsystem = true;
@@ -71,47 +69,43 @@ namespace BP.Web
             if (BP.Sys.SystemConfig.IsBSsystem)
             {
                 // Guest  信息.
-                /*HttpCookie cookie = new HttpCookie("CCSGuest");
+                HttpCookie cookie = new HttpCookie("CCSGuest");
                 //cookie.Expires = DateTime.Now.AddMonths(10);
                 cookie.Expires = DateTime.Now.AddDays(2);
-                cookieValues.Add("GuestNo", guestNo);
-                cookieValues.Add("GuestName", HttpUtility.UrlEncode(guestName));
-                cookieValues.Add("DeptNo", deptNo);
-                cookieValues.Add("DeptName", HttpUtility.UrlEncode(deptName));
+                cookie.Values.Add("GuestNo", guestNo);
+                cookie.Values.Add("GuestName", HttpUtility.UrlEncode(guestName));
+                cookie.Values.Add("DeptNo", deptNo);
+                cookie.Values.Add("DeptName", HttpUtility.UrlEncode(deptName));
+                System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
 
-                //System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-                HttpContextHelper.ResponseCookieAdd(cookie);
-                */
 
-                Dictionary<string, string> cookieValues = new Dictionary<string, string>();
-                // HttpCookie cookie = new HttpCookie("CCS");
-                //cookie.Expires = DateTime.Now.AddDays(2);
-
+                HttpCookie cookie2 = new HttpCookie("CCS");
+                cookie2.Expires = DateTime.Now.AddDays(2);
                 // Guest  信息.
-                cookieValues.Add("GuestNo", guestNo);
-                cookieValues.Add("GuestName", HttpUtility.UrlEncode(guestName));
+                cookie2.Values.Add("GuestNo", guestNo);
+                cookie2.Values.Add("GuestName", HttpUtility.UrlEncode(guestName));
 
-                cookieValues.Add("DeptNo", deptNo);
-                cookieValues.Add("DeptName", HttpUtility.UrlEncode(deptName));
+                cookie2.Values.Add("DeptNo", deptNo);
+                cookie2.Values.Add("DeptName", HttpUtility.UrlEncode(deptName));
 
-                cookieValues.Add("No", "Guest");
-                cookieValues.Add("Name", HttpUtility.UrlEncode(em.Name));
+                cookie2.Values.Add("No", "Guest");
+                cookie2.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
 
                 if (isRememberMe)
-                    cookieValues.Add("IsRememberMe", "1");
+                    cookie2.Values.Add("IsRememberMe", "1");
                 else
-                    cookieValues.Add("IsRememberMe", "0");
+                    cookie2.Values.Add("IsRememberMe", "0");
 
-                cookieValues.Add("FK_Dept", em.FK_Dept);
-                cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
+                cookie2.Values.Add("FK_Dept", em.FK_Dept);
+                cookie2.Values.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
 
-                cookieValues.Add("Token", HttpContextHelper.CurrentSessionID);
-                cookieValues.Add("SID", HttpContextHelper.CurrentSessionID);
+                cookie2.Values.Add("Token", System.Web.HttpContext.Current.Session.SessionID);
+                cookie2.Values.Add("SID", System.Web.HttpContext.Current.Session.SessionID);
 
-                cookieValues.Add("Lang", lang);
-                cookieValues.Add("Style", "0");
-                cookieValues.Add("Auth", ""); //授权人.
-                HttpContextHelper.ResponseCookieAdd(cookieValues, DateTime.Now.AddDays(2), "CCS");
+                cookie2.Values.Add("Lang", lang);
+                cookie2.Values.Add("Style", "0");
+                cookie2.Values.Add("Auth", ""); //授权人.
+                System.Web.HttpContext.Current.Response.AppendCookie(cookie2);
             }
         }
 
@@ -126,7 +120,7 @@ namespace BP.Web
         {
             if (IsBSMode)
             {
-                string str = HttpContextHelper.SessionGetString(key);
+                string str = System.Web.HttpContext.Current.Session[key] as string;
                 if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
@@ -142,7 +136,6 @@ namespace BP.Web
                     return (string)BP.Port.Current.Session[key];
             }
         }
-        /* 2019-7-25 张磊注释，net core中需要知道object的具体类型才行（不能被序列化的对象，无法放入session中）
         public static object GetObjByKey(string key)
         {
             if (IsBSMode)
@@ -153,7 +146,7 @@ namespace BP.Web
             {
                 return BP.Port.Current.Session[key];
             }
-        }*/
+        }
         #endregion
 
         /// <summary>
@@ -163,23 +156,20 @@ namespace BP.Web
         {
             get
             {
-                //2019-07-25 zyt改造
-                if (HttpContextHelper.Current == null)
+                if (System.Web.HttpContext.Current == null)
                     return false;
                 else
                     return true;
             }
         }
-
         public static object GetSessionByKey(string key, Object defaultObjVal)
         {
             if (IsBSMode)
             {
-                object obj = HttpContextHelper.SessionGet(key);
-                if (obj == null)
+                if (System.Web.HttpContext.Current.Session[key] == null)
                     return defaultObjVal;
                 else
-                    return obj;
+                    return System.Web.HttpContext.Current.Session[key];
             }
             else
             {
@@ -189,7 +179,6 @@ namespace BP.Web
                     return BP.Port.Current.Session[key];
             }
         }
-
         /// <summary>
         /// 设置session
         /// </summary>
@@ -200,7 +189,7 @@ namespace BP.Web
             if (val == null)
                 return;
             if (IsBSMode)
-                HttpContextHelper.SessionSet(key, val);
+                System.Web.HttpContext.Current.Session[key] = val;
             else
                 BP.Port.Current.SetSession(key, val);
         }
@@ -214,14 +203,22 @@ namespace BP.Web
                 try
                 {
                     string token = WebUser.Token;
+                    System.Web.HttpContext.Current.Response.Cookies.Clear();
+                    BP.Sys.Glo.Request.Cookies.Clear();
 
-                    HttpContextHelper.ResponseCookieDelete(new string[] {
-                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
-                    "CCS");
 
+                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
+                    cookie.Expires = DateTime.Now.AddDays(2);
+                    cookie.Values.Add("No", string.Empty);
+                    cookie.Values.Add("Name", string.Empty);
+                    // 2013.06.07 H
+                    cookie.Values.Add("Pass", string.Empty); 
+                    cookie.Values.Add("IsRememberMe", "0");
+                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                    WebUser.Token = token;
                     BP.Port.Current.Session.Clear();
 
-                    /* 2019-07-25 张磊 注释掉，CCSGuest 不再使用
+
                     // Guest  信息.
                     cookie = new HttpCookie("CCSGuest");
                     cookie.Expires = DateTime.Now.AddDays(2);
@@ -230,7 +227,7 @@ namespace BP.Web
                     cookie.Values.Add("DeptNo", string.Empty);
                     cookie.Values.Add("DeptName", string.Empty);
                     System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-                    */
+
                 }
                 catch
                 {
@@ -240,15 +237,22 @@ namespace BP.Web
             {
                 try
                 {
-                    BP.Port.Current.Session.Clear();
+                    string token = WebUser.Token;
+                    System.Web.HttpContext.Current.Response.Cookies.Clear();
+                    BP.Sys.Glo.Request.Cookies.Clear();
+                 
+                    System.Web.HttpContext.Current.Session.Clear();
 
-                    HttpContextHelper.ResponseCookieDelete(new string[] {
-                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
-                       "CCS");
+                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
+                    cookie.Expires = DateTime.Now.AddDays(2);
+                    cookie.Values.Add("No", string.Empty);
+                    cookie.Values.Add("Name", string.Empty);
+                    // 2013.06.07 H
+                    cookie.Values.Add("Pass",string.Empty);
+                    cookie.Values.Add("IsRememberMe", "0");
+                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                    WebUser.Token = token;
 
-                    HttpContextHelper.SessionClear();
-
-                    /* 2019-07-25 张磊 注释掉，CCSGuest 不再使用 
                     // Guest  信息.
                     cookie = new HttpCookie("CCSGuest");
                     cookie.Expires = DateTime.Now.AddDays(2);
@@ -257,7 +261,7 @@ namespace BP.Web
                     cookie.Values.Add("DeptNo", string.Empty);
                     cookie.Values.Add("DeptName", string.Empty);
                     System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-                    */
+
                 }
                 catch
                 {
@@ -268,16 +272,18 @@ namespace BP.Web
         {
             if (IsBSMode == false)
                 return BP.Port.Current.GetSessionStr(valKey, isNullAsVal);
-
+            string key = "CCSGuest";
+            HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
+            if (hc == null)
+                return null;
             try
             {
-                string val = HttpContextHelper.RequestCookieGet(valKey, "CCS");
-                /*
+                string val = null;
                 if (isChinese)
                     val = HttpUtility.UrlDecode(hc[valKey]);
                 else
                     val = hc.Values[valKey];
-                */
+
                 if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
                 return val;
@@ -295,20 +301,25 @@ namespace BP.Web
         {
             get
             {
-                //return GetValFromCookie("GuestNo", null, false);
+                return GetValFromCookie("GuestNo", null, false);
                 string no = null; // GetSessionByKey("No", null);
                 if (no == null || no == "")
                 {
                     if (IsBSMode == false)
                         return "admin";
 
-                    GuestUser.No = HttpContextHelper.RequestCookieGet("No", "CCS");
-                    GuestUser.Name = HttpContextHelper.RequestCookieGet("Name", "CCS");
+                    string key = "CCSGuest";
+                    HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
+                    if (hc == null)
+                        return null;
 
-                    if (String.IsNullOrEmpty(GuestUser.No))
-                        throw new Exception("@err-002 Guest 登录信息丢失。");
-
-                    return GuestUser.No;
+                    if (hc.Values["GuestNo"] != null)
+                    {
+                       GuestUser.No = hc["GuestNo"];
+                       GuestUser.Name = hc["GuestName"];
+                       return hc.Values["GuestNo"];
+                    }
+                    throw new Exception("@err-002 Guest 登录信息丢失。");
                 }
                 return no;
             }

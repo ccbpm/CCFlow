@@ -29,7 +29,14 @@ namespace BP.WF.HttpHandler
             DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(this.WorkID);
             return BP.Tools.Json.ToJson(ds);
         }
-
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_WorkOpt_OneWork(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -138,7 +145,7 @@ namespace BP.WF.HttpHandler
 
         public string TimeBase_OpenFrm()
         {
-            WF en = new WF();
+            WF en = new WF(this.context);
             return en.Runing_OpenFrm();
         }
         /// <summary>
@@ -147,7 +154,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmGuide_Init()
         {
-            WF en = new WF();
+            WF en = new WF(this.context);
             return en.Runing_OpenFrm();
         }
 
@@ -911,7 +918,7 @@ namespace BP.WF.HttpHandler
 
         public string Runing_OpenFrm()
         {
-            BP.WF.HttpHandler.WF wf = new WF();
+            BP.WF.HttpHandler.WF wf = new WF(this.context);
             return wf.Runing_OpenFrm();
         }
     }

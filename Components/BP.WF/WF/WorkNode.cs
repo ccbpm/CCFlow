@@ -7094,12 +7094,12 @@ namespace BP.WF
                     else if (SystemConfig.IsBSsystem == true)
                     {
                         /*如果是BS系统*/
-                        string pflowNo = HttpContextHelper.Request.QueryString["PFlowNo"];
+                        string pflowNo = BP.Sys.Glo.Request.QueryString["PFlowNo"];
                         if (DataType.IsNullOrEmpty(pflowNo) == false)
                         {
-                            string pWorkID = HttpContextHelper.RequestParams("PWorkID");// BP.Sys.Glo.Request.QueryString["PWorkID"];
-                            string pNodeID = HttpContextHelper.RequestParams("PNodeID");// BP.Sys.Glo.Request.QueryString["PNodeID"];
-                            string pEmp = HttpContextHelper.RequestParams("PEmp");// BP.Sys.Glo.Request.QueryString["PEmp"];
+                            string pWorkID = BP.Sys.Glo.Request.QueryString["PWorkID"];
+                            string pNodeID = BP.Sys.Glo.Request.QueryString["PNodeID"];
+                            string pEmp = BP.Sys.Glo.Request.QueryString["PEmp"];
 
                             // 设置成父流程关系.
                             BP.WF.Dev2Interface.SetParentInfo(this.HisFlow.No, this.WorkID, Int64.Parse(pWorkID));
@@ -7712,13 +7712,13 @@ namespace BP.WF
             /*如果是开始流程判断是不是被吊起的流程，如果是就要向父流程写日志。*/
             if (SystemConfig.IsBSsystem)
             {
-                string fk_nodeFrom = HttpContextHelper.RequestParams("FromNode");// BP.Sys.Glo.Request.QueryString["FromNode"];
+                string fk_nodeFrom = BP.Sys.Glo.Request.QueryString["FromNode"];
                 if (DataType.IsNullOrEmpty(fk_nodeFrom) == false)
                 {
                     Node ndFrom = new Node(int.Parse(fk_nodeFrom));
-                    string PWorkID = HttpContextHelper.RequestParams("PWorkID");
+                    string PWorkID = BP.Sys.Glo.Request.QueryString["PWorkID"];
                     if (DataType.IsNullOrEmpty(PWorkID))
-                        PWorkID = HttpContextHelper.RequestParams("PWorkID");//BP.Sys.Glo.Request.QueryString["PWorkID"];
+                        PWorkID = BP.Sys.Glo.Request.QueryString["PWorkID"];
 
                     string pTitle = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM  ND" + int.Parse(ndFrom.FK_Flow) + "01 WHERE OID=" + PWorkID, "");
 

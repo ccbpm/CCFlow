@@ -11,7 +11,6 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -20,6 +19,14 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Setting : DirectoryPageBase
     {
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Setting(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -43,7 +50,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -142,7 +149,7 @@ namespace BP.WF.HttpHandler
         }
         public string Siganture_Save()
         {
-            //HttpPostedFile f = context.Request.Files[0];
+            HttpPostedFile f = context.Request.Files[0];
             string empNo = this.GetRequestVal("EmpNo");
             if (DataType.IsNullOrEmpty(empNo) == true)
                 empNo = WebUser.No;
@@ -152,8 +159,7 @@ namespace BP.WF.HttpHandler
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
-                //f.SaveAs(tempFile);
-                HttpContextHelper.UploadFile(tempFile);
+                f.SaveAs(tempFile);
                 System.Drawing.Image img = System.Drawing.Image.FromFile(tempFile);
                 img.Dispose();
             }
@@ -177,7 +183,7 @@ namespace BP.WF.HttpHandler
         #region 头像.
         public string HeadPic_Save()
         {
-            //HttpPostedFile f = context.Request.Files[0];
+            HttpPostedFile f = context.Request.Files[0];
             string empNo = this.GetRequestVal("EmpNo");
 
             if (DataType.IsNullOrEmpty(empNo) == true)
@@ -188,8 +194,7 @@ namespace BP.WF.HttpHandler
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
-                //f.SaveAs(tempFile);
-                HttpContextHelper.UploadFile(tempFile);
+                f.SaveAs(tempFile);
                 System.Drawing.Image img = System.Drawing.Image.FromFile(tempFile);
                 img.Dispose();
             }

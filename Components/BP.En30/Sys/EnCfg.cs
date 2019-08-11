@@ -3,9 +3,6 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP;
-using BP.Web;
-using System.IO;
-
 namespace BP.Sys
 {
     /// <summary>
@@ -277,11 +274,7 @@ namespace BP.Sys
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJWebPath);
                 if (str == "" || str == null)
-                    str = Path.Combine(HttpContextHelper.RequestApplicationPath ,
-                        "DataUser/" , this.No);
-                str = str.Replace("\\", "/");
-                if (!str.EndsWith("/"))
-                    str += "/";
+                    return BP.Sys.Glo.Request.ApplicationPath + "DataUser/" + this.No + "/";
                 return str;
             }
             set

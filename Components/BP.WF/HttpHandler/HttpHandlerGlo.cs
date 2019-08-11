@@ -32,7 +32,16 @@ namespace BP.WF.HttpHandler
             if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
                 tempName = HttpUtility.UrlEncode(tempName);
 
-            HttpContextHelper.ResponseWriteFile(filepath, tempName);
+            HttpContext.Current.Response.Charset = "GB2312";
+            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
+            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
+            HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
+            //HttpContext.Current.Response.ContentType = "application/ms-msword";  //image/JPEG;text/HTML;image/GIF;application/ms-excel
+            //HttpContext.Current.EnableViewState =false;
+
+            HttpContext.Current.Response.WriteFile(filepath);
+            HttpContext.Current.Response.End();
+            HttpContext.Current.Response.Close();
         }
 
         /// <summary>
@@ -83,17 +92,45 @@ namespace BP.WF.HttpHandler
                     intSize = myStream.Read(btContent, 0, 512);
                 }
 
+                tempName = HttpUtility.UrlEncode(tempName);
+                HttpContext.Current.Response.Charset = "GB2312";
+                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=" + tempName);
+                HttpContext.Current.Response.ContentType = "application/octet-stream;charset=gb2312";
+
+                HttpContext.Current.Response.BinaryWrite(byteList.ToArray());
+                HttpContext.Current.Response.End();
+                HttpContext.Current.Response.Close();
                 myStream.Close();
-                HttpContextHelper.ResponseWriteFile(byteList.ToArray(), tempName);
             }
         }
         public static void OpenWordDoc(string filepath, string tempName)
         {
-            HttpContextHelper.ResponseWriteFile(filepath, tempName, "application/ms-msword");
+            tempName = HttpUtility.UrlEncode(tempName);
+
+            HttpContext.Current.Response.Charset = "GB2312";
+            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
+            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
+            HttpContext.Current.Response.ContentType = "application/ms-msword";  //image/JPEG;text/HTML;image/GIF;application/ms-excel
+            //HttpContext.Current.EnableViewState =false;
+            HttpContext.Current.Response.WriteFile(filepath);
+            HttpContext.Current.Response.End();
+            HttpContext.Current.Response.Close();
         }
         public static void OpenWordDocV2(string filepath, string tempName)
         {
-            HttpContextHelper.ResponseWriteFile(filepath, tempName);
+            //tempName = HttpUtility.UrlEncode(tempName);
+
+            FileInfo fileInfo = new FileInfo(filepath);
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.ClearHeaders();
+            HttpContext.Current.Response.Buffer = false;
+            HttpContext.Current.Response.ContentType = "application/octet-stream";
+            HttpContext.Current.Response.Charset = "UTF-8";
+            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + HttpUtility.UrlEncode(tempName, System.Text.Encoding.UTF8));
+            HttpContext.Current.Response.AppendHeader("Content-Length", fileInfo.Length.ToString());
+            HttpContext.Current.Response.WriteFile(fileInfo.FullName);
+            HttpContext.Current.Response.Flush();
+            HttpContext.Current.Response.End();
         }
         #endregion
     }

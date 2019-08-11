@@ -10,7 +10,7 @@ using System.Xml;
 using BP.DA;
 using BP.En;
 using Microsoft.CSharp;
-using BP.Web;
+using System.Web.Services.Description;
 
 namespace BP.Sys
 {
@@ -198,15 +198,15 @@ namespace BP.Sys
                     { }
 
                     if (pa[1].Contains("@WorkID"))
-                        pa[1] = pa[1].Replace("@WorkID", HttpContextHelper.RequestParams("WorkID") ?? "");
+                        pa[1] = pa[1].Replace("@WorkID", BP.Sys.Glo.Request["WorkID"] ?? "");
                     if (pa[1].Contains("@NodeID"))
-                        pa[1] = pa[1].Replace("@NodeID", HttpContextHelper.RequestParams("NodeID") ?? "");
+                        pa[1] = pa[1].Replace("@NodeID", BP.Sys.Glo.Request["NodeID"] ?? "");
                     if (pa[1].Contains("@FK_Node"))
-                        pa[1] = pa[1].Replace("@FK_Node", HttpContextHelper.RequestParams("FK_Node") ?? "");
+                        pa[1] = pa[1].Replace("@FK_Node", BP.Sys.Glo.Request["FK_Node"] ?? "");
                     if (pa[1].Contains("@FK_Flow"))
-                        pa[1] = pa[1].Replace("@FK_Flow", HttpContextHelper.RequestParams("FK_Flow") ?? "");
+                        pa[1] = pa[1].Replace("@FK_Flow", BP.Sys.Glo.Request["FK_Flow"] ?? "");
                     if (pa[1].Contains("@FID"))
-                        pa[1] = pa[1].Replace("@FID", HttpContextHelper.RequestParams("FID") ?? "");
+                        pa[1] = pa[1].Replace("@FID", BP.Sys.Glo.Request["FID"] ?? "");
 
                     args.Add(pa[1]);
                 }
@@ -357,7 +357,7 @@ namespace BP.Sys
                     str = "1";
                 return str.PadLeft(3, '0');
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return "";
             }
@@ -370,8 +370,7 @@ namespace BP.Sys
         /// <param name="args">把webservices里需要的参数按顺序放到这个object[]里</param>
         public object InvokeWebService(string url, string methodname, object[] args)
         {
-            return null;
-/* TODO 2019-07-25 为了合并core，注释掉
+
             //这里的namespace是需引用的webservices的命名空间，在这里是写死的，大家可以加一个参数从外面传进来。
             string @namespace = "BP.RefServices";
             try
@@ -431,7 +430,6 @@ namespace BP.Sys
             {
                 return null;
             }
-*/
         }
         #endregion
 

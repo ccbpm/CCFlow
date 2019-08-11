@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Web.Hosting;
 using BP.Web;
 
 namespace BP.WF
@@ -9,6 +10,23 @@ namespace BP.WF
     /// </summary>
     public class MsgsManager
     {
+        /// <summary> 
+        /// 删除工作by工作ID
+        /// </summary>
+        /// <param name="workId"></param>
+        public static void DeleteByWorkID(Int64 workId)
+        {
+            System.Web.HttpContext.Current.Application.Lock();
+            Msgs msgs = (Msgs)System.Web.HttpContext.Current.Application["WFMsgs"];
+            if (msgs == null)
+            {
+                msgs = new Msgs();
+                System.Web.HttpContext.Current.Application["WFMsgs"] = msgs;
+            }
+            // 清除全部的工作ID=workid 的消息。
+            msgs.ClearByWorkID(workId);
+            System.Web.HttpContext.Current.Application.UnLock();
+        }
         /// <summary>
         /// 增加信息
         /// </summary>
@@ -19,22 +37,39 @@ namespace BP.WF
         public static void AddMsgs(GenerWorkerLists wls, string flowName, string nodeName, string title)
         {
             return;
+
+            System.Web.HttpContext.Current.Application.Lock();
+            Msgs msgs = (Msgs)System.Web.HttpContext.Current.Application["WFMsgs"];
+            if (msgs == null)
+            {
+                msgs = new Msgs();
+                System.Web.HttpContext.Current.Application["WFMsgs"] = msgs;
+            }
+            // 清除全部的工作ID=workid 的消息。
+            msgs.ClearByWorkID(wls[0].GetValIntByKey("WorkID"));
+            foreach (GenerWorkerList wl in wls)
+            {
+                if (wl.FK_Emp == WebUser.No)
+                    continue;
+                //msgs.AddMsg(wl.WorkID,wl.FK_Node,wl.FK_Emp,"来自流程["+flowName+"]节点["+nodeName+"]工作节点标题为["+title+"]的消息。");
+            }
+            System.Web.HttpContext.Current.Application.UnLock();
         }
         /// <summary>
         /// sss
         /// </summary>
         /// <param name="empId"></param>
         /// <returns></returns>
-        //public static Msgs GetMsgsByEmpID_del(int empId)
-        //{
-        //    Msgs msgs = (Msgs)System.Web.HttpContext.Current.Application["WFMsgs"];
-        //    if (msgs == null)
-        //    {
-        //        msgs = new Msgs();
-        //        System.Web.HttpContext.Current.Application["WFMsgs"] = msgs;
-        //    }
-        //    return msgs.GetMsgsByEmpID_del(empId);
-        //}
+        public static Msgs GetMsgsByEmpID_del(int empId)
+        {
+            Msgs msgs = (Msgs)System.Web.HttpContext.Current.Application["WFMsgs"];
+            if (msgs == null)
+            {
+                msgs = new Msgs();
+                System.Web.HttpContext.Current.Application["WFMsgs"] = msgs;
+            }
+            return msgs.GetMsgsByEmpID_del(empId);
+        }
         /// <summary>
         /// 取出消息的个数
         /// </summary>
@@ -44,6 +79,17 @@ namespace BP.WF
         {
             string sql = "select COUNT(*) from v_wf_msg WHERE FK_Emp='" + WebUser.No + "'";
             return  BP.DA.DBAccess.RunSQLReturnValInt(sql);
+        }
+        /// <summary>
+        /// 清除信息
+        /// </summary>
+        /// <param name="empId"></param>
+        public static void ClearMsgsByEmpID_(int empId)
+        {
+            System.Web.HttpContext.Current.Application.Lock();
+            Msgs msgs = (Msgs)System.Web.HttpContext.Current.Application["WFMsgs"];
+            msgs.ClearByEmpId_del(empId);
+            System.Web.HttpContext.Current.Application.UnLock();
         }
         /// <summary>
         /// 初始化全部的消息。

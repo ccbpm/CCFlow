@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Web.Services.Description;
 using System.Xml.Schema;
 using System;
 using System.Collections.Generic;
@@ -249,8 +250,14 @@ namespace BP.WF.HttpHandler
 
             return "创建成功.";
         }
-
-
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Admin_FoolFormDesigner(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -630,7 +637,7 @@ namespace BP.WF.HttpHandler
             bool isLeft = true;
             float maxEnd = md.MaxEnd;
 
-            foreach (string name in HttpContextHelper.RequestParamKeys)
+            foreach (string name in this.context.Request.Form.Keys)
             {
                 if (name.StartsWith("HID_Idx_") == false)
                     continue;
@@ -757,7 +764,7 @@ namespace BP.WF.HttpHandler
         public string MapFrame_Save()
         {
             MapFrame mf = new MapFrame();
-            mf = BP.Sys.PubClass.CopyFromRequestByPost(mf) as MapFrame;
+            mf = BP.Sys.PubClass.CopyFromRequestByPost(mf, context.Request) as MapFrame;
             mf.FK_MapData = this.FK_MapData;
 
             mf.Save(); //执行保存.
@@ -1720,7 +1727,7 @@ namespace BP.WF.HttpHandler
                 MapDtl dtl = new MapDtl(this.FK_MapDtl);
 
                 //从request对象里复制数据,到entity.
-                BP.Sys.PubClass.CopyFromRequest(dtl);
+                BP.Sys.PubClass.CopyFromRequest(dtl, context.Request);
 
                 dtl.Update();
 
@@ -1736,29 +1743,29 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public void DownTempFrm()
         {
-            string fileFullName = HttpContextHelper.PhysicalApplicationPath + "\\Temp\\" + this.FK_MapData + ".xml";
+            string fileFullName = context.Request.PhysicalApplicationPath + "\\Temp\\" + this.FK_MapData + ".xml";
             FileInfo fileInfo = new FileInfo(fileFullName);
             if (fileInfo.Exists)
             {
                 byte[] buffer = new byte[102400];
-                HttpContextHelper.Response.Clear();
+                context.Response.Clear();
                 using (FileStream iStream = File.OpenRead(fileFullName))
                 {
                     long dataLengthToRead = iStream.Length; //获取下载的文件总大小.
 
-                    HttpContextHelper.Response.ContentType = "application/octet-stream";
-                    HttpContextHelper.Response.AddHeader("Content-Disposition", "attachment;  filename=" +
+                    context.Response.ContentType = "application/octet-stream";
+                    context.Response.AddHeader("Content-Disposition", "attachment;  filename=" +
                                        HttpUtility.UrlEncode(fileInfo.Name, System.Text.Encoding.UTF8));
-                    while (dataLengthToRead > 0 && HttpContextHelper.Response.IsClientConnected)
+                    while (dataLengthToRead > 0 && context.Response.IsClientConnected)
                     {
                         int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(102400));//'读取的大小
 
-                        HttpContextHelper.Response.OutputStream.Write(buffer, 0, lengthRead);
-                        HttpContextHelper.Response.Flush();
+                        context.Response.OutputStream.Write(buffer, 0, lengthRead);
+                        context.Response.Flush();
                         dataLengthToRead = dataLengthToRead - lengthRead;
                     }
-                    HttpContextHelper.Response.Close();
-                    HttpContextHelper.Response.End();
+                    context.Response.Close();
+                    context.Response.End();
                 }
             }
         }
@@ -1858,7 +1865,7 @@ namespace BP.WF.HttpHandler
             ath.MyPK = this.FK_MapData + "_" + this.Ath;
 
             int i = ath.RetrieveFromDBSources();
-            ath = BP.Sys.PubClass.CopyFromRequestByPost(ath) as FrmAttachment;
+            ath = BP.Sys.PubClass.CopyFromRequestByPost(ath, context.Request) as FrmAttachment;
             if (i == 0)
                 ath.Save(); //执行保存.              
             else
@@ -2122,7 +2129,80 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
         {
-            return BP.NetPlatformImpl.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
+            if (dbsrc == null || string.IsNullOrWhiteSpace(dbsrc.IP))
+                return new List<WSMethod>();
+
+            var wsurl = dbsrc.IP.ToLower();
+            if (!wsurl.EndsWith(".asmx") && !wsurl.EndsWith(".svc"))
+                throw new Exception("@失败:" + dbsrc.No + " 中WebService地址不正确。");
+
+            wsurl += wsurl.EndsWith(".asmx") ? "?wsdl" : "?singleWsdl";
+
+            #region //解析WebService所有方法列表
+            //var methods = new Dictionary<string, string>(); //名称Name，全称Text
+            List<WSMethod> mtds = new List<WSMethod>();
+            WSMethod mtd = null;
+            var wc = new WebClient();
+            var stream = wc.OpenRead(wsurl);
+            var sd = ServiceDescription.Read(stream);
+            var eles = sd.Types.Schemas[0].Elements.Values.Cast<XmlSchemaElement>();
+            var s = new StringBuilder();
+            XmlSchemaComplexType ctype = null;
+            XmlSchemaSequence seq = null;
+            XmlSchemaElement res = null;
+
+            foreach (var ele in eles)
+            {
+                if (ele == null) continue;
+
+                var resType = string.Empty;
+                var mparams = string.Empty;
+
+                //获取接口返回元素
+                res = eles.FirstOrDefault(o => o.Name == (ele.Name + "Response"));
+
+                if (res != null)
+                {
+                    mtd = new WSMethod();
+                    //1.接口名称 ele.Name
+                    mtd.No = ele.Name;
+                    mtd.ParaMS = new Dictionary<string, string>();
+                    //2.接口返回值类型
+                    ctype = res.SchemaType as XmlSchemaComplexType;
+                    seq = ctype.Particle as XmlSchemaSequence;
+
+                    if (seq != null && seq.Items.Count > 0)
+                        mtd.Return = resType = (seq.Items[0] as XmlSchemaElement).SchemaTypeName.Name;
+                    else
+                        continue;// resType = "void";   //去除不返回结果的接口
+
+                    //3.接口参数
+                    ctype = ele.SchemaType as XmlSchemaComplexType;
+                    seq = ctype.Particle as XmlSchemaSequence;
+
+                    if (seq != null && seq.Items.Count > 0)
+                    {
+                        foreach (XmlSchemaElement pe in seq.Items)
+                        {
+                            mparams += pe.SchemaTypeName.Name + " " + pe.Name + ", ";
+                            mtd.ParaMS.Add(pe.Name, pe.SchemaTypeName.Name);
+                        }
+
+                        mparams = mparams.TrimEnd(", ".ToCharArray());
+                    }
+
+                    mtd.Name = string.Format("{0} {1}({2})", resType, ele.Name, mparams);
+                    mtds.Add(mtd);
+                    //methods.Add(ele.Name, string.Format("{0} {1}({2})", resType, ele.Name, mparams));
+                }
+            }
+
+            stream.Close();
+            stream.Dispose();
+            wc.Dispose();
+            #endregion
+
+            return mtds;
         }
         #endregion
 

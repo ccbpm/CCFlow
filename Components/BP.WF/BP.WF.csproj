@@ -268,7 +268,6 @@
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
-    <Compile Include="InterfaceFunction\InterfaceFunction.cs" />
     <Compile Include="NetPlatformImpl\CCInterface.cs" />
     <Compile Include="NetPlatformImpl\Cloud.cs" />
     <Compile Include="NetPlatformImpl\WF.cs" />

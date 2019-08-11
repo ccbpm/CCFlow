@@ -22,6 +22,8 @@ using BP.WF.Data;
 using BP.WF.Template;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Net;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace BP.WF
 {
@@ -1696,9 +1698,27 @@ namespace BP.WF
             filelist2.Add(Directorypath + "\\" + temp.Name);
         }
 
-        //接口的方法.
-        InterfaceFunction.MakeForm2Html_mergePDFFiles(filelist2, outpath);
+        PdfReader reader;
+        //iTextSharp.text.Rectangle rec = new iTextSharp.text.Rectangle(1403, 991);
+        Document document = new Document();
+        PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(outpath, FileMode.Create));
+        document.Open();
+        PdfContentByte cb = writer.DirectContent;
+        PdfImportedPage newPage;
+        for (int i = 0; i < filelist2.Count; i++)
+        {
+            reader = new PdfReader(filelist2[i]);
+            int iPageNum = reader.NumberOfPages;
+            for (int j = 1; j <= iPageNum; j++)
+            {
+                document.NewPage();
+                newPage = writer.GetImportedPage(reader, j);
+                cb.AddTemplate(newPage, 0, 0);
+            }
+        }
+        document.Close();
     }
+
     /// <summary>
     /// 冒泡排序
     /// </summary>

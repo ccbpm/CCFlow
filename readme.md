@@ -1,4 +1,8 @@
-﻿## 警告：合并net core 的修改，暂未调通，请勿更新！
+﻿### 版本说明 ###
+1. 主版本 ccflow，.Net Framework 4.5.2，Visual Studio 2017/2019，本项目，分支为develop
+2. 旧版，For Vs2010，.Net Framework 4.0，Visual Studio 2010，本项目，分支为 forVS2010
+3. .NetCore版，.Net Core 3.0 Preview 5，Visual Studio 2019，参见另一个项目 [CCFlowForNetcore](https://gitee.com/opencc/CCFlowForNetcore) https://gitee.com/opencc/CCFlowForNetcore
+4. Java版，参见另一个项目 [JFlow](https://gitee.com/opencc/JFlow) https://gitee.com/opencc/JFlow
 
 ### ccbpm系统概要介绍 (在右上角点:watch,star,fork支持我们,谢谢!!!)
 01. 驰骋工作流引擎研发与2003年，具有.net与java两个版本，这两个版本代码结构，数据库结构，设计思想，功能组成， 操作手册，完全相同。 导入导出的流程模版，表单模版两个版本完全通用。
@@ -58,12 +62,10 @@
 1. D:\ccflow\Components   -- 组件目录.
 2. D:\ccflow\Components\BP.En30   -- 底层基类.
 3. D:\ccflow\Components\BP.WF  --工作流程引擎层
-4. D:\ccflow\RefDLL  -- 第三方组件中需要调用dll.
+4. D:\ccflow\RefDLL  -- 第三方组件中需要调用dll. 大部分关键组件用nuget管理
 5. D:\ccflow\Documents -  文档
 6. D:\ccflow\CCFlow  -- BS工作流程引擎前台.  
 7. D:\ccflow\DemoAndTesting  - 单元测试&Demo
- 
-
 
 ### ccflow前台目录结构.前台程序.(不建议用户修改，如果修改请提交给我们，否则您就没有办法升级.) ###
 01. D:\ccflow\CCFlow\WF\ --前台程序.
@@ -119,11 +121,12 @@
    2. 建议把ccflow放在 D:\下面,  ccflow的说明书都以此目录说明, 以方便您定位程序文件.
    3. 特别提示: 如果不放置在D:\ccflow 下，您可能会遇到dll 文件引用找不到路径的问题。
 
-3. 打开解决方案文件并编译它. CCFlow6 解决方案的位置: D:\ccflow\CCFlow6.sln, 设置 /Default.htm 为起始页.
+3. 打开解决方案文件并编译它. CCFlow6 解决方案的位置: D:\ccflow\CCFlow.sln, 设置 /Default.htm 为起始页.
 
    ETC: 如果不能正常打开请按如下步骤检查.
-   1. 您的vs是否是2010版本？
+   1. 您的vs是否是2019版本？
    2. 如果您用的vs比较高的版本，vs就会自动转换，请按照要求转换. 
+   3. 以管理员身份运行VS2019，否则无法启动调试
 
 4. 创建空白数据库.
    1. 建立数据库(不管你用的什么数据库,oracle,sqlserver,mysql,informix系列),先创建一个空白的数据库名称为: CCFlow6
@@ -150,7 +153,7 @@
 7. 发布到IIS上,建立网站应用:
 
    1. 开始->> 运行->> 输入 inetmgr 打开IIS管理器.
-   2. 确认您的机器已经安装上了.net4.0, 并且，启用了它:
+   2. 确认您的机器已经安装上了.net4.5.2, 并且，启用了它:
         
         For Win7用户: 把鼠标点在Internet信息服务(IIS)管理器的根节点，找到 IIS 分组中的 [IASPI 和CGI的限制] 图标，确认ASP.NET v4.0 相关的dll是否被允许.
         For Win2003用户: Internet 信息服务树上找到 Web服务扩展. 确认 ASP.NET v4.0.*** 是存在或者被允许? 如果没有找到 ASP.NET v4.0 则是您没有安装.net4.0 Framework, 请下载安装解决.
@@ -228,3 +231,5 @@
    2. 或者改为简单模式：请在web.config 文件中把OSModel 改为0.
 
 10. 在  oracle 的安装的时候会越到大小写敏感问题,我们需要被安装的mysql数据库不要区分大小写.
+
+11. Visual Studio 2019无法启动IIS Express的解决办法：以管理员身份打开Visual Studio 2019，然后从文件菜单打开ccflow.sln

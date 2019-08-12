@@ -208,6 +208,12 @@ namespace BP.DA
                 return;
             }
 
+            if (String.Compare("WorkID", _name, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                this.Add(_name, Convert.ToInt64(obj));
+                return;
+            }
+
             if (obj.GetType() == typeof(string))
             {
                 this.Add(_name, obj.ToString());

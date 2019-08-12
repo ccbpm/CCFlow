@@ -2249,6 +2249,8 @@ namespace BP.DA
                         valObj = Convert.ToDecimal(para.val);
                     else if (String.Compare(para.ParaName, "FK_Node", StringComparison.OrdinalIgnoreCase) == 0)
                         valObj = Convert.ToInt32(para.val);
+                    else if (String.Compare(para.ParaName, "WorkID", StringComparison.OrdinalIgnoreCase) == 0)
+                        valObj = Convert.ToInt64(para.val);
 
                     Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, valObj);
                     myParameter.Size = para.Size;

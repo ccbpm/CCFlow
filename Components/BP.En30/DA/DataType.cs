@@ -369,6 +369,7 @@ namespace BP.DA
         }
         public static string PraseGB2312_To_utf8(string text)
         {
+            /* 2019-8-12 前后端全部采用utf8，无需转码
             if (DataType.IsNullOrEmpty(text))
                 return text;
 
@@ -383,6 +384,8 @@ namespace BP.DA
             gb = System.Text.Encoding.Convert(gb2312, utf8, gb);
             //返回转换后的字符   
             return utf8.GetString(gb);
+            */
+            return text;
         }
 
         /// <summary>

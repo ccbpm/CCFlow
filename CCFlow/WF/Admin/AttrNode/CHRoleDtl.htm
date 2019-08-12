@@ -48,7 +48,7 @@
                     continue;
                 $("#DDL_Fields").append("<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>");
             }
-            //
+            //日期字段下拉框赋值
             var CHWayOfTimeRoleField = node.GetPara("CHWayOfTimeRoleField");
             if (CHWayOfTimeRoleField == null || CHWayOfTimeRoleField == undefined || CHWayOfTimeRoleField == '') {
                 $("#DDL_Fields").val(0);

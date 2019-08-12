@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Drawing;
 using System.Data;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Collections.Generic;
 using System.Text;
 using System.Collections;
-using System.Threading;
-using System.Diagnostics;
 using Microsoft.Win32;
 using BP.Sys;
 using BP.DA;
 using BP.En;
-using BP;
 using BP.Web;
-using System.Security.Cryptography;
-using System.Text;
 using BP.Port;
-using BP.WF.Rpt;
 using BP.WF.Data;
 using BP.WF.Template;
 
@@ -5487,13 +5479,13 @@ namespace BP.WF
             //    return;
             //}
 
-            HttpContextHelper.Session["info"] = info;
+            HttpContextHelper.SessionSet("info", info);
             HttpContextHelper.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
         }
         public static void ToMsgErr(string info)
         {
             info = "<font color=red>" + info + "</font>";
-            HttpContextHelper.Session["info"] = info;
+            HttpContextHelper.SessionSet("info", info);
             HttpContextHelper.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
         }
         /// <summary>

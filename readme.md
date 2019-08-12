@@ -1,8 +1,8 @@
 ﻿### 版本说明 ###
-1. 主版本 ccflow，.Net Framework 4.5.2，Visual Studio 2017/2019，本项目，分支为develop
-2. 旧版，For Vs2010，.Net Framework 4.0，Visual Studio 2010，本项目，分支为 forVS2010
-3. .NetCore版，.Net Core 3.0 Preview 5，Visual Studio 2019，参见另一个项目 [CCFlowForNetcore](https://gitee.com/opencc/CCFlowForNetcore) https://gitee.com/opencc/CCFlowForNetcore
-4. Java版，参见另一个项目 [JFlow](https://gitee.com/opencc/JFlow) https://gitee.com/opencc/JFlow
+1. 主版本 ccflow，.Net Framework 4.5.2，Visual Studio 2017/2019，本项目，分支为 [develop](https://gitee.com/opencc/ccflow/tree/develop/)
+2. 旧版，For Vs2010，.Net Framework 4.0，Visual Studio 2010，本项目，分支为 [forVS2010](https://gitee.com/opencc/ccflow/tree/forVS2010/)
+3. .NetCore版，.Net Core 3.0 Preview 5，Visual Studio 2019，参见另一个项目 [CCFlowForNetcore](https://gitee.com/opencc/CCFlowForNetcore) 
+4. Java版，参见另一个项目 [JFlow](https://gitee.com/opencc/JFlow) 
 
 ### ccbpm系统概要介绍 (在右上角点:watch,star,fork支持我们,谢谢!!!)
 01. 驰骋工作流引擎研发与2003年，具有.net与java两个版本，这两个版本代码结构，数据库结构，设计思想，功能组成， 操作手册，完全相同。 导入导出的流程模版，表单模版两个版本完全通用。

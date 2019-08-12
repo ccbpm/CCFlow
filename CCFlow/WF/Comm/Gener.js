@@ -100,7 +100,7 @@ function DearUrlParas(urlParam) {
                     var key = param[0];
                     var value = param[1];
 
-                    if (key == "DoType")
+                    if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName" )
                         return true;
 
                     if (value == "null" || typeof value == "undefined")
@@ -2100,7 +2100,10 @@ var HttpHandler = (function () {
                 if (param.length == 2 && validate(param[1])) {
 
                     (function (key, value) {
-                        if (key != 'DoType')
+
+                        if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName")
+                            return;
+
                             self.AddPara(key, value);
 
                     })(param[0], param[1]);

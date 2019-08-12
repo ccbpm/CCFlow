@@ -1,12 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using Microsoft.CSharp;
-using System.Reflection;
-using BP.NetPlatformImpl;
+﻿using System.Net;
 using BP.WF.NetPlatformImpl;
 
 namespace BP.WF

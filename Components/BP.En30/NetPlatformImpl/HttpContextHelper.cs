@@ -394,5 +394,13 @@ namespace BP.Web
            
         }
 
+        public static string RequestBrowser
+        {
+            get
+            {
+                return Request.Browser.Browser;
+            }
+        }
+
     }
 }

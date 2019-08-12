@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Web;
-using BP.WF;
 using BP.Web;
 using BP.Sys;
 using BP.DA;
-using BP.En;
-using BP.WF.Template;
-using System.Data;
-using System.Web.UI;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler

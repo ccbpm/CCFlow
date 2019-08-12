@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 
-namespace BP.NetPlatformImpl
+namespace BP.WF.NetPlatformImpl
 {
     public class WF_Glo
     {

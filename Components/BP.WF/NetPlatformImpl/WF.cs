@@ -10,7 +10,7 @@ using System.Web;
 using System.Web.Services.Description;
 using System.Xml.Schema;
 
-namespace BP.NetPlatformImpl
+namespace BP.WF.NetPlatformImpl
 {
    public class WF_Admin_FoolFormDesigner
     {

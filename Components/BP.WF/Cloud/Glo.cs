@@ -16,7 +16,7 @@ namespace BP.WF.Cloud
         public static BP.WF.CloudWS.WSSoapClient GetSoap()
         {
             // xs 2019-7-29
-            return BP.NetPlatformImpl.Cloud_Glo.GetSoap();
+            return BP.WF.NetPlatformImpl.Cloud_Glo.GetSoap();
         }
     }
 }

@@ -2122,7 +2122,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
         {
-            return BP.NetPlatformImpl.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
+            return BP.WF.NetPlatformImpl.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
         }
         #endregion
 

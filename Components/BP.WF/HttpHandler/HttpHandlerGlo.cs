@@ -1,24 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Net;
-using System.Net.Mail;
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
 using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using System.IO;
-using System.IO.Compression;
-using System.Text;
-using BP.En;
-using BP.DA;
 using BP.Sys;
 using BP.Web;
-using System.Text.RegularExpressions;
-using BP.Port;
 using System.Collections.Generic;
 
 namespace BP.WF.HttpHandler
@@ -29,7 +14,7 @@ namespace BP.WF.HttpHandler
 
         public static void DownloadFile(string filepath, string tempName)
         {
-            if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
+            if (String.Compare("firefox", HttpContextHelper.RequestBrowser, StringComparison.OrdinalIgnoreCase)!=0)
                 tempName = HttpUtility.UrlEncode(tempName);
 
             HttpContextHelper.ResponseWriteFile(filepath, tempName);

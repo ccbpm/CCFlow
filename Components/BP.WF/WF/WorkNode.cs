@@ -7094,7 +7094,7 @@ namespace BP.WF
                     else if (SystemConfig.IsBSsystem == true)
                     {
                         /*如果是BS系统*/
-                        string pflowNo = HttpContextHelper.Request.QueryString["PFlowNo"];
+                        string pflowNo = HttpContextHelper.RequestParams("PFlowNo");
                         if (DataType.IsNullOrEmpty(pflowNo) == false)
                         {
                             string pWorkID = HttpContextHelper.RequestParams("PWorkID");// BP.Sys.Glo.Request.QueryString["PWorkID"];

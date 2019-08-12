@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.Services;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
@@ -635,12 +634,12 @@ namespace BP.WF
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
-                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    foreach (string k in HttpContextHelper.RequestQueryStringKeys)
                     {
                         if (DataType.IsNullOrEmpty(k) == true)
                             continue;
 
-                        wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                        wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
                     }
 
                     // 处理传递过来的frm参数。

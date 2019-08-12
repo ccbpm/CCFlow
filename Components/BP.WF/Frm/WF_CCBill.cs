@@ -893,7 +893,7 @@ namespace BP.Frm
         #region 单据导入
         public string ImpData_Done()
         {
-            HttpFileCollection files = HttpContextHelper.RequestFiles();
+            var files = HttpContextHelper.RequestFiles();
             if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要导入的数据信息。";
 

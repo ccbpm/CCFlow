@@ -204,10 +204,10 @@ function Ele_SubFlow(wf_node) {
     var paras = '';
 
     paras += "&FID=" + GetQueryString("FID");
-    paras += "&OID=" + GetQueryString("OID");
+    paras += "&OID=" + pageData.OID;
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + GetQueryString("OID");;
+    paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
     {
         src += "&DoType=View";
@@ -894,7 +894,7 @@ function InitMapAttrOfCtrl(mapAttr) {
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  value='" + defValue + "' type=hidden />";
                 //是否签过
                 var sealData = new Entities("BP.Tools.WFSealDatas");
-                sealData.Retrieve("OID", GetQueryString("OID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+                sealData.Retrieve("OID", pageData.OID, "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
 
                 if (sealData.length > 0) {
                     eleHtml += "<img src='../../DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
@@ -1391,7 +1391,7 @@ function Ele_Attachment(workNode, gf) {
     var eleHtml = '';
     var nodeID = GetQueryString("FK_Node");
     var url = "";
-    url += "&WorkID=" + GetQueryString("OID");
+    url += "&WorkID=" + pageData.OID;
     url += "&FK_Node=" + GetQueryString("FK_Node");
     url += "&FK_Flow=" + GetQueryString("FK_Flow");
     url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.

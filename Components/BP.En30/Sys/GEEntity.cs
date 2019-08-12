@@ -153,7 +153,7 @@ namespace BP.Sys
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
-                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.OID);
+                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.OID+"'");
 
                 //求对应的Idx的，从表配置.
                 MapDtl dtlFrom = dtlsFrom[i] as MapDtl;

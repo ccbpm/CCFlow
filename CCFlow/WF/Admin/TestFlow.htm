@@ -60,7 +60,7 @@
                 //$("#demoPass").html("&nbsp;&nbsp;");
             }
 
-
+            debugger;
             handler.AddUrlData();
             var  data = handler.DoMethodReturnString(doType);
 
@@ -79,6 +79,8 @@
                 document.getElementById("Info").innerHTML = "<font color=red>"+ data+'</font>';
                 return;
             }
+
+           
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');

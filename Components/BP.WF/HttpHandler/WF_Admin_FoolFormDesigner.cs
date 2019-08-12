@@ -1737,30 +1737,8 @@ namespace BP.WF.HttpHandler
         public void DownTempFrm()
         {
             string fileFullName = HttpContextHelper.PhysicalApplicationPath + "\\Temp\\" + this.FK_MapData + ".xml";
-            FileInfo fileInfo = new FileInfo(fileFullName);
-            if (fileInfo.Exists)
-            {
-                byte[] buffer = new byte[102400];
-                HttpContextHelper.Response.Clear();
-                using (FileStream iStream = File.OpenRead(fileFullName))
-                {
-                    long dataLengthToRead = iStream.Length; //获取下载的文件总大小.
 
-                    HttpContextHelper.Response.ContentType = "application/octet-stream";
-                    HttpContextHelper.Response.AddHeader("Content-Disposition", "attachment;  filename=" +
-                                       HttpUtility.UrlEncode(fileInfo.Name, System.Text.Encoding.UTF8));
-                    while (dataLengthToRead > 0 && HttpContextHelper.Response.IsClientConnected)
-                    {
-                        int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(102400));//'读取的大小
-
-                        HttpContextHelper.Response.OutputStream.Write(buffer, 0, lengthRead);
-                        HttpContextHelper.Response.Flush();
-                        dataLengthToRead = dataLengthToRead - lengthRead;
-                    }
-                    HttpContextHelper.Response.Close();
-                    HttpContextHelper.Response.End();
-                }
-            }
+            HttpContextHelper.ResponseWriteFile(fileFullName, this.FK_MapData + ".xml");
         }
 
 

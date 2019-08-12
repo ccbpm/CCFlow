@@ -144,6 +144,19 @@ namespace BP.Web
             Response.AddHeader(key, stringvalues);
         }
 
+        public static void ResponseClear()
+        {
+            Response.Clear();
+        }
+
+        public static void ResponseAddHeader(string name, string value)
+        {
+            if (value.Count(c => Convert.ToInt32(c) > 128) > 0)
+                value = HttpUtility.UrlEncode(value, Encoding.UTF8);
+
+            Response.Headers.Add(name, value);
+        }
+
         /// <summary>
         /// 添加cookie
         /// </summary>

@@ -19,9 +19,9 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <base target="_self" />
     <script type="text/javascript">
-        //全局变量
-        var FK_Flow; 	//流程id
-        var _StartLimitRole; //限制规则枚举（JSON)
+        ////全局变量
+        //var FK_Flow; 	//流程id
+        
 
         //页面启动函数.
         $(function () {
@@ -38,151 +38,63 @@
             var fk_flow = GetQueryString("FK_Flow");
 
             var data = new Entity("BP.WF.Flow", fk_flow);
+            fk_flow = fk_flow.replace(/^0+/, "");
+            var FK_MapData = "ND" + fk_flow +"Rpt";
 
-            var _StartLimitRole = data.StartLimitRole;
-
-            //批量赋值.
-            GenerFullAllCtrlsVal(data);
-
-            if (_StartLimitRole == 1) {
-                $("#RB_ByTime").attr("checked", true);
-                $("#TB_ByTimePara").val(dat.StartLimitPara);
-                $("#DDL_ByTime").val(0);
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", FK_MapData);
+           
+             //按照时间点的考核方式
+            var SDTOfFlowRole = data.SDTOfFlowRole;
+            if (SDTOfFlowRole == null || SDTOfFlowRole == undefined || SDTOfFlowRole == '') {
+                $("input[name='RB_SDTOfFlowRole'][value='0']").attr("checked", true);
+            
+            } else {
+                $("input[name='RB_SDTOfFlowRole'][value=" + SDTOfFlowRole + "]").attr("checked", true);
+            
+            }
+            //查询日期字段下拉框所有值
+            for (var i = 0; i < mapAttrs.length; i++) {
+                if (mapAttrs[i].MyDataType != 6 && mapAttrs[i].MyDataType != 7)
+                    continue;
+                if (mapAttrs[i].KeyOfEn == "RDT" || mapAttrs[i].KeyOfEn == "CDT" || mapAttrs[i].KeyOfEn == "FlowEnderRDT" || mapAttrs[i].KeyOfEn == "FlowStartRDT")
+                    continue;
+                $("#DDL_Fields").append("<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>");
+            }
+            //日期字段下拉框赋值
+            var SDTOfFlowRole_DateField = data.GetPara("SDTOfFlowRole_DateField");
+            if (SDTOfFlowRole_DateField == null || SDTOfFlowRole_DateField == undefined || SDTOfFlowRole_DateField == '') {
+                $("#DDL_Fields").val(0);
+            } else {
+                $("#DDL_Fields").val(SDTOfFlowRole_DateField);
             }
 
-            var dat = data;
-            $("#TB_Alert").val(dat.StartLimitAlert); //限制提示信息
-            switch (dat.StartLimitRole) {
-                case "0": //不限制 None
-                    $("#RB_None").attr("checked", true);
-                    //$("input[name=xzgz][value=RB_None]").attr("checked", true); 
-                    $("#TB_ByTimePara").val(dat.StartLimitPara); //for test
-                    break;
-                case "1": //天
-                    $("#RB_ByTime").attr("checked", true);
-                    $("#TB_ByTimePara").val(dat.StartLimitPara);
-                    $("#DDL_ByTime").val(0);
-                    break;
-                case "2": //周
-                    $("#RB_ByTime").attr("checked", true);
-                    $("#TB_ByTimePara").val(dat.StartLimitPara);
-                    $("#DDL_ByTime").val(1);
-                    break;
-                case "3": //月份
-                    $("#RB_ByTime").attr("checked", true);
-                    $("#TB_ByTimePara").val(dat.StartLimitPara);
-                    $("#DDL_ByTime").val(2);
-                    break;
-                case "4": 	//月份？
-                    $("#RB_ByTime").attr("checked", true);
-                    $("#TB_ByTimePara").val(dat.StartLimitPara);
-                    $("#DDL_ByTime").val(3);
-                    break;
-                case "5": //年度
-                    $("#RB_ByTime").attr("checked", true);
-                    $("#TB_ByTimePara").val(dat.StartLimitPara);
-                    $("#DDL_ByTime").val(4);
-                    break;
-                case "6": 		//发起的列不能重复,(多个列可以用逗号分开)
-                    $("#RB_ColNotExit").attr("checked", true);
-                    $("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
-                    break;
-                case "7": 	//<=0
-                    $("#RB_SQL").attr("checked", true);
-                    $("#TB_SQL_Para").val(dat.StartLimitPara);
-                    $("#DDL_SQL").val(0);
-                    break;
-                case "8": //>0
-                    $("#RB_SQL").attr("checked", true);
-                    $("#TB_SQL_Para").val(dat.StartLimitPara);
-                    $("#DDL_SQL").val(1);
-                    break;
-                case "9": 	//为子流程时仅仅只能被调用1此
-                    $("#RB_OnlyOneSubFlow").attr("checked", true);
-                    break;
-                default:
-                    alert('没有判断的类型.');
-                    break;
-            }
+            //sql语句赋值
+
+            $("#TB_SQL").val(data.SDTOfFlowRoleSQL);
+            //天数赋值
+            var SDTOfFlowRole_Days = data.GetPara("SDTOfFlowRole_Days");
+            $("#TB_Days").val(SDTOfFlowRole_Days);
             $("#Msg").html("");
 
         }
 
-        function Save(parameters) {
-            //debugger;
-            //获取控件值
-            var startLimitRole = "", startLimitPara = "";
-            var xzgz = $("input[name=xzgz]:checked")[0].id; //$("input[type=radio][name=xzgz]:checked")[0].id
-            alert(xzgz);
-            switch (xzgz) {
-                case "RB_None":
-                    startLimitRole = "0";
-                    break;
-                case "RB_ByTime":
-                    var DDL_ByTime = parseInt($("#DDL_ByTime").val());
-                    switch (DDL_ByTime) {
-                        case 0:
-                            startLimitRole = "1";
-                            break;
-                        case 1:
-                            startLimitRole = "2";
-                            break;
-                        case 2:
-                            startLimitRole = "3";
-                            break;
-                        case 3:
-                            startLimitRole = "4";
-                            break;
-                        case 4:
-                            startLimitRole = "5";
-                            break;
-                    }
-                    startLimitPara = $("#TB_ByTimePara").val();
-                    break;
-                case "RB_OnlyOneSubFlow":
-                    startLimitRole = "9";
-                    break;
-                case "RB_ColNotExit":
-                    startLimitRole = "6";
-                    startLimitPara = $("#TB_ColNotExit_Fields").val();
-                    break;
-                case "RB_SQL":
-                    var DDL_SQL = $("#DDL_SQL").val();
-                    startLimitRole = DDL_SQL == 0 ? "7" : "8";
-                    startLimitPara = $("#TB_SQL_Para").val();
-                    break;
-                default:
-                    break;
-            }
+        function Save() {
+         
 
-            //            //第2代技术.
-            //		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
-            //		    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-            //		    handler.AddPara("StartLimitRole", startLimitRole);
-            //		    handler.AddPara("StartLimitPara", startLimitPara);
-            //		    handler.AddPara("StartLimitAlert", $("#TB_Alert").val());
-            //		    var data = handler.DoMethodReturnString("Limit_Save");
-
-            //		    if (data.indexOf("err@") == 0) {
-            //		        alert(data);
-            //		        return;
-            //		    }
-            //		    alert(data);
-
-            //第3代技术.
+            //流程应完成日期计算规则保存.
             var flow = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
-            flow.StartLimitRole = startLimitRole;
-            flow.StartLimitPara = startLimitPara;
-            flow.StartLimitAlert = $("#TB_Alert").val();
+            var SDTOfFlowRole = $('input:radio[name="RB_SDTOfFlowRole"]:checked').val();
+            flow.SDTOfFlowRole= SDTOfFlowRole
 
-            //按照表单字段计算.
-            flow.GetPara("SDTOfFlowRole_DateField");
+            var SDTOfFlowRole_DateField = $("#DDL_Fields").val();
+            flow.SetPara("SDTOfFlowRole_DateField", SDTOfFlowRole_DateField); //按表单字段的字段
 
-            flow.GetPara("SDTOfFlowRole_Days");
-
-            flow.SDTOfFlowRoleSQL = $("#TB_SQL").val();
+            var SDTOfFlowRole_Days = $("#TB_Days").val();
+            flow.SetPara("SDTOfFlowRole_Days", SDTOfFlowRole_Days); //按规定的天数
 
 
+            flow.SDTOfFlowRoleSQL = $("#TB_SQL").val();//按sql
 
             flow.Update();
             window.location.href = window.location.href;
@@ -203,10 +115,11 @@
             <td valign="top">
                 <fieldset>
                     <legend>
-                        <input type="radio" name="xzgz" id="RB_None" value="RB_None">
+                        <input type="radio" name="RB_SDTOfFlowRole" id="RB_None" value="0">
                         <!-- checked="checked"> -->
                         <label for="RB_None">
-                            不使用（默认）</label>
+                            不使用（默认）
+                        </label>
                     </legend>
                     <ul style="color: Gray">
                         <li>不使用规则。</li>
@@ -214,28 +127,31 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <input type="radio" name="xzgz" id="RB_ByTime">
-                        <label for="RB_ByTime">
-                            按照表单的节点表单的字段计算。</label>
+                        <input type="radio" name="RB_SDTOfFlowRole" id="RB_BySpecDateField" value="1">
+                        <label for="RB_BySpecDateField">
+                            按照表单的节点表单的字段计算。
+                        </label>
                     </legend>请选择一个日期类型的字段.
-                    <select id="">
+                    <select id="DDL_Fields">
+                        <option value="0">--请选择--</option>
                     </select>
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
-                        <label for="RB_OnlyOneSubFlow">
-                            按sql计算.</label>
+                        <input type="radio" name="RB_SDTOfFlowRole" id="RB_BySQL" value="2">
+                        <label for="RB_BySQL">
+                            按sql计算.
+                        </label>
                     </legend>
                     <input type="text" value="" id="TB_SQL" name="TB_SQL" style="width: 90%;" />
                     <br />
-                    例如: SELECT myfield FROM xxxx WHERE OID=@WorkID 返回值是一行，一列的strin类型的数据，比如: 2019-09-09
+                    例如: SELECT myfield FROM xxxx WHERE OID=@WorkID 返回值是一行，一列的string类型的数据，比如: 2019-09-09
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <label>
-                            <input type="radio" name="xzgz" id="Radio1">
-                            按照所有节点设置的时间之和计算。</label>
+
+                        <input type="radio" name="RB_SDTOfFlowRole" id="RB_ByAllNodes" value="3">
+                        <label for="RB_ByAllNodes">按照所有节点设置的时间之和计算。</label>
                     </legend>
                     <ul>
                         <li>一个流程有多个节点，每个节点都设置了应该完成天数。</li>
@@ -244,34 +160,41 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <label>
-                            <input type="radio" name="xzgz" id="Radio2">
-                            按照规定的天数计算。</label>
+
+                        <input type="radio" name="RB_SDTOfFlowRole" id="RB_ByDays" value="4">
+                        <label for="RB_ByDays">按照规定的天数计算。</label>
                     </legend>
                     <ul>
-                        <li>输入流程应该完成的天数:<input type="text" value="10" id="TB_Days" name="TB_Days" /></li>
+                        <li>输入流程应该完成的天数:<input type="text" value="" id="TB_Days" name="TB_Days" /></li>
                         <li>设置多少天，就按照这个流程的天数来计算，该流程的应该完成日期。</li>
                     </ul>
                 </fieldset>
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align: center;">
+            <td >
+                <fieldset>
+                    <legend>帮助</legend>
+                    <ul>
+                        <li>流程实例表 WF_GenerWorkFlow 的 SDTOfFlow 的字段是用于标识该流程的实例应该(计划)在什么时间完成。</li>
+                        <li>该功能用于设置一个流程的应用完成日期，设置到 WF_GenerWorkFlow 的SDTOfFlow 的字段里。</li>
+                        <li>整体流程的应完成日期也可以称为他的计划完成日期。</li>
+                        <li>
+                            如果要更改该计划完成日期可以调用事件：UPDATE WF_GenerWorkFlow SET SDTOfFlow=(SELECT MYFILE FROM XXX
+                            WHERE OID=@WorkID ) WHERE WorkID=@WorkID
+                        </li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="">
                 <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
             </td>
         </tr>
     </table>
     <div id="Msg">
     </div>
-    <fieldset>
-        <legend>帮助</legend>
-        <ul>
-            <li>流程实例表 WF_GenerWorkFlow 的 SDTOfFlow 的字段是用于标识该流程的实例应该(计划)在什么时间完成。</li>
-            <li>该功能用于设置一个流程的应用完成日期，设置到 WF_GenerWorkFlow 的SDTOfFlow 的字段里。</li>
-            <li>整体流程的应完成日期也可以称为他的计划完成日期。</li>
-            <li>如果要更改该计划完成日期可以调用事件：UPDATE WF_GenerWorkFlow SET SDTOfFlow=(SELECT MYFILE FROM XXX
-                WHERE OID=@WorkID ) WHERE WorkID=@WorkID</li>
-        </ul>
-    </fieldset>
+   
 </body>
 </html>

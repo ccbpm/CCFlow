@@ -270,6 +270,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
 
                 //连接目标.
                 map.AddMyPK();

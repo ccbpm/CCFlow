@@ -813,6 +813,9 @@ namespace BP.Sys
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.IndexField = FrmEventAttr.FK_MapData; 
+
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmEventAttr.FK_Event, null, "事件名称", true, true, 0, 400, 10);

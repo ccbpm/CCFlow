@@ -1272,6 +1272,8 @@ namespace BP.Sys
                 Map map = new Map("Sys_MapDtl", "明细");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapDtlAttr.FK_MapData; 
+
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "描述", true, false, 1, 200, 20);

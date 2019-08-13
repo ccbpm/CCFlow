@@ -1533,7 +1533,9 @@ namespace BP.En
                         }
                         else
                         {
+                         //   val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
                             val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
+
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)

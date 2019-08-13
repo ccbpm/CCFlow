@@ -245,6 +245,9 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
+                map.IndexField = FrmImgAthDBAttr.FK_MapData ; 
+
+
                 map.AddMyPK();
                 map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 300, 20);
                 map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 300, 20);

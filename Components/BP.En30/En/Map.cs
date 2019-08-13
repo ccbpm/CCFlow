@@ -976,6 +976,10 @@ namespace BP.En
 			}
 		}
 		public string MoveTo = null;
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IndexField = null;
 		/// <summary>
 		/// 实体描述
 		/// </summary>

@@ -415,6 +415,9 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+
+                map.IndexField = FrmAttachmentDBAttr.RefPKVal;
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmAttachmentDBAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);

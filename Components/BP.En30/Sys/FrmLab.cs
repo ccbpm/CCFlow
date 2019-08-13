@@ -267,6 +267,9 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
+                map.IndexField = FrmImgAthDBAttr.FK_MapData; 
+
+
                 map.AddMyPK();
                 map.AddTBString(FrmLabAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(FrmLabAttr.Text, "New Label", "Label", true, false, 0, 3900, 20);

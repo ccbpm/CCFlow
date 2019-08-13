@@ -263,6 +263,7 @@ namespace BP.GPM
                 map.EnDesc = "用户"; // "用户"; // 实体的描述.
                 map.Java_SetEnType(EnType.App);   //实体类型。
                 map.EnType = EnType.App;
+                map.IndexField = EmpAttr.FK_Dept;
                 #endregion
 
                 #region 字段

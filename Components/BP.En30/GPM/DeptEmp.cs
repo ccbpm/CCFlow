@@ -103,7 +103,9 @@ namespace BP.GPM
                     return this._enMap;
 
                 Map map = new Map("Port_DeptEmp");
-                map.EnDesc = "部门人员信息";  
+                map.EnDesc = "部门人员信息";
+                map.IndexField = DeptEmpAttr.FK_Dept;
+
                 
                 map.AddMyPK();
                 map.AddTBString(DeptEmpAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);

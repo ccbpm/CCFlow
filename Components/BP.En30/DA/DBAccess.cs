@@ -1322,49 +1322,61 @@ namespace BP.DA
 
 
         #region index
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk)
+        public static void CreatIndex(string table, string fields)
         {
-            string idxName = table + "ID";
+            string idxName = table + "_" + fields;
             if (BP.DA.DBAccess.IsExitsObject(idxName) == true)
                 return;
 
-            //string sql = "";
-            //try
-            //{
-            //    sql = "DROP INDEX " + table + "ID ON " + table;
-            //    DBAccess.RunSQL(mydburl, sql);
-            //}
-            //catch
-            //{
-            //}
+            string sql = "";
+            try
+            {
+                sql = "DROP INDEX " + idxName + " ON " + table;
+                DBAccess.RunSQL( sql);
+            }
+            catch
+            {
+            }
 
-            //try
-            //{
-            //    sql = "CREATE INDEX " + table + "ID ON " + table + " (" + pk + ")";
-            //    DBAccess.RunSQL(mydburl, sql);
-            //}
-            //catch
-            //{
-            //}
+            try
+            {
+                sql = "CREATE INDEX " + idxName + " ON " + table + " (" + fields + ")";
+                DBAccess.RunSQL( sql);
+            }
+            catch
+            {
+            }
         }
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2)
+        public static void CreatIndex( string table, string pk1, string pk2)
         {
 
-            //try
-            //{
-            //    DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + ")");
-            //}
-            //catch
-            //{
-            //}
+            try
+            {
+                DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + ")");
+            }
+            catch
+            {
+            }
         }
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2, string pk3)
+        public static void CreatIndex(string table, string pk1, string pk2, string pk3)
         {
-            //  DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
+            try
+            {
+                  DBAccess.RunSQL( "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
+            }
+            catch (Exception ex)
+            {
+            }
         }
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2, string pk3, string pk4)
+        public static void CreatIndex(string table, string pk1, string pk2, string pk3, string pk4)
         {
-            //DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + "," + pk4 + ")");
+            try
+            {
+                DBAccess.RunSQL( "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + "," + pk4 + ")");
+            }
+            catch (Exception ex)
+            {
+            }
         }
         #endregion
 

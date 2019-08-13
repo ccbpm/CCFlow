@@ -90,6 +90,9 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
 
+                map.IndexField = FrmTreeAttr.ParentNo; 
+
+
                 map.AddTBStringPK(FrmTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(FrmTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FrmTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);

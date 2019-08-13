@@ -140,7 +140,7 @@ namespace BP.Sys
         {
             get
             {
-                string str= SystemConfig.AppSettings["FTPUserPassword"];
+                string str = SystemConfig.AppSettings["FTPUserPassword"];
                 return BP.Sys.Glo.String_JieMi(str);
             }
         }
@@ -343,7 +343,7 @@ namespace BP.Sys
         /// 封装了AppSettings
         /// </summary>		
         private static NameValueCollection _CS_AppSettings;
-        internal static NameValueCollection CS_AppSettings
+        public static NameValueCollection CS_AppSettings
         {
             get
             {
@@ -357,8 +357,9 @@ namespace BP.Sys
             }
         }
 
-        public static void InitOptons(NameValueCollection appSetting,NameValueCollection connections) { 
-        
+        public static void InitOptons(NameValueCollection appSetting, NameValueCollection connections)
+        {
+
         }
         /// <summary>
         /// 封装了AppSettings
@@ -449,7 +450,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp +    "\\WF\\Data\\";
+                return PathOfWebApp + "\\WF\\Data\\";
             }
         }
         public static string PathOfDataUser
@@ -480,14 +481,14 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp  + "\\WF\\Data\\XML\\";
+                return PathOfWebApp + "\\WF\\Data\\XML\\";
             }
         }
         public static string PathOfAppUpdate
         {
             get
             {
-                return PathOfWebApp +  "\\WF\\Data\\AppUpdate\\";
+                return PathOfWebApp + "\\WF\\Data\\AppUpdate\\";
             }
         }
         public static string PathOfCyclostyleFile
@@ -514,7 +515,7 @@ namespace BP.Sys
         {
             get
             {
-                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"])==false)
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"]) == false)
                 {
                     return PathOfWebApp + SystemConfig.AppSettings["DataUserDirPath"];
                 }
@@ -542,7 +543,7 @@ namespace BP.Sys
         {
             get
             {
-                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"])==false)
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"]) == false)
                 {
                     return SystemConfig.AppSettings["HostURL"];
                 }
@@ -789,7 +790,7 @@ namespace BP.Sys
                     return false;
             }
         }
-        
+
         public static bool IsEnableNull
         {
             get
@@ -835,7 +836,7 @@ namespace BP.Sys
                 return false;
             }
         }
-       
+
         /// <summary>
         /// 是否启用密码加密
         /// </summary>

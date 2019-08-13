@@ -249,6 +249,7 @@ namespace BP.Port
                 map.Java_SetDepositaryOfEntity(Depositary.Application); //实体存放位置
                 map.EnDesc = "用户"; // "用户";
                 map.Java_SetEnType(EnType.App);   //实体类型。
+                map.IndexField = EmpAttr.FK_Dept;
                 #endregion
 
                 #region 字段

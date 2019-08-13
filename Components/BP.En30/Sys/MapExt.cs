@@ -805,6 +805,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
+                map.IndexField = MapDtlAttr.FK_MapData; 
+
                 map.AddMyPK();
 
                 map.AddTBString(MapExtAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);

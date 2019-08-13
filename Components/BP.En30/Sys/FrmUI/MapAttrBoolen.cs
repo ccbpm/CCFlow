@@ -107,6 +107,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
 
                 #region 基本信息.
 

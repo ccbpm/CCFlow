@@ -395,9 +395,19 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //日期类型.
     if (mapAttr.MyDataType == 6) { //AppDate
         var enableAttr = '';
-        if (mapAttr.UIIsEnable == 1) {
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+        var frmDate = mapAttr.IsSupperText;//获取日期格式
+        var dateFmt = '';
+        if (frmDate == 0) {
+            dateFmt = "yyyy-MM-dd";
+        } else if (frmDate == 3) {
+            dateFmt = "yyyy-MM";
         }
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
+        } else {
+            enableAttr = "disabled='disabled'";
+        }
+            
 
         eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
@@ -406,9 +416,23 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //日期时间类型.
     if (mapAttr.MyDataType == 7) { // AppDateTime = 7
         var enableAttr = '';
-        if (mapAttr.UIIsEnable == 1) {
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+        var frmDate = mapAttr.IsSupperText; //获取日期格式
+        var dateFmt = '';
+        if (frmDate == 1) {
+            dateFmt = "yyyy-MM-dd HH:mm";
+        } else if (frmDate == 2) {
+            dateFmt = "yyyy-MM-dd HH:mm:ss";
+        } else if (frmDate == 4) {
+            dateFmt = "HH:mm";
+        } else if (frmDate == 5) {
+            dateFmt = "HH:mm:ss";
         }
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
+        } else {
+            enableAttr = "disabled='disabled'";
+        }
+            
         eleHtml = "<input type='text' class='form-control Wdate'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }

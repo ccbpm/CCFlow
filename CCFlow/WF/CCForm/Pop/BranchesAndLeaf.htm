@@ -288,12 +288,13 @@
 		        }
 
 		        // search
-		        $("#TB_Key").on("keyup", function () {
+                $("#TB_Key").on("keyup", function () {
 
-		            var mySrc = replaceAll(searchUrl, "@Key", $(this).val());
+                    var key = replaceAll($(this).val(),"'","");
+		            var mySrc = replaceAll(searchUrl, "@Key", key);
 		            mySrc = replaceAll(mySrc, "~", "'");
 		            loadSelectGrid(mySrc, global.selectedRows, global.dbType);
-
+		           
 		        });
 
 		        // tree

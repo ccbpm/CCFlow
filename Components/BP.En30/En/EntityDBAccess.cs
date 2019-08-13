@@ -39,42 +39,6 @@ namespace BP.En
 					throw new Exception("@没有设置类型。");
 			}
 		}
-        public static int Update(Entity en)
-        {
-            try
-            {
-                switch (en.EnMap.EnDBUrl.DBUrlType)
-                {
-                    case DBUrlType.AppCenterDSN:
-                        switch (SystemConfig.AppCenterDBType)
-                        {
-                            case DBType.Oracle:
-                                return DBAccess.RunSQL(en.SQLCash.Update, SqlBuilder.GenerParas(en,null) );
-                            case DBType.Access:
-                                return DBAccess.RunSQL(SqlBuilder.UpdateOfMSAccess(en, null));
-                            default:
-                                return DBAccess.RunSQL(SqlBuilder.Update(en, null));
-                        }
-                    //case DBUrlType.DBAccessOfMSSQL1:
-                    //    return DBAccessOfMSSQL1.RunSQL(SqlBuilder.Update(en, null));
-                    //case DBUrlType.DBAccessOfMSSQL2:
-                    //    return DBAccessOfMSSQL2.RunSQL(SqlBuilder.Update(en, null));
-                    //case DBUrlType.DBAccessOfOracle1:
-                    //    return DBAccessOfOracle1.RunSQL(SqlBuilder.Update(en, null));
-                    //case DBUrlType.DBAccessOfOracle2:
-                    //    return DBAccessOfOracle2.RunSQL(SqlBuilder.Update(en, null));
-                    default:
-                        throw new Exception("@没有设置类型。");
-                }
-            }
-            catch (Exception ex)
-            {
-                if (BP.Sys.SystemConfig.IsDebug)
-                    en.CheckPhysicsTable();
-                throw ex;
-            }
-
-        }
 		/// <summary>
 		/// 更新
 		/// </summary>
@@ -98,6 +62,7 @@ namespace BP.En
                             case DBType.MSSQL:
                             case DBType.Oracle:
                             case DBType.MySQL:
+                            case DBType.PostgreSQL:
                                 return DBAccess.RunSQL(sql, paras);
                             case DBType.Informix:
                                 return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), SqlBuilder.GenerParas_Update_Informix(en, keys));

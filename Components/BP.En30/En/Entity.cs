@@ -1158,7 +1158,10 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("does not exist") || ex.Message.Contains("无效")  || ex.Message.Contains("field list"))
+                if (ex.Message.Contains("does not exist") 
+                    || ex.Message.Contains("不存在")
+                    || ex.Message.Contains("无效") 
+                    || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
                     if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
@@ -2867,6 +2870,24 @@ namespace BP.En
                 }
             }
             #endregion
+
+            #region 重命名表名字段名.
+
+            String ptable = this.EnMap.PhysicsTable;
+
+            string sql = "exec sp_rename '"+this.EnMap.PhysicsTable+ "','" + this.EnMap.PhysicsTable + "'";
+            DBAccess.RunSQL(sql);
+
+            foreach (Attr item in this.EnMap.Attrs)
+            {
+                if (item.IsRefAttr == true)
+                    continue;
+
+                sql = "exec sp_rename '" + ptable + ".[" + item.Key + "]','" + item.Key + "','column';";
+                DBAccess.RunSQL(sql);
+            }
+            #endregion 重命名表名字段名.
+
         }
         /// <summary>
         /// PostgreSQL 检查.

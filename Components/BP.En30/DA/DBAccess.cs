@@ -533,6 +533,7 @@ namespace BP.DA
                 switch (BP.Sys.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
+                    case DBType.PostgreSQL:
                         BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 ");
                         break;
                     case DBType.Oracle:
@@ -1607,11 +1608,6 @@ namespace BP.DA
             if (sql == null || sql.Trim() == "")
                 return 1;
 
-            while (lockRunSQL == true)
-            {
-            };
-            lockRunSQL = true;
-
             int result = 0;
             try
             {
@@ -1669,6 +1665,15 @@ namespace BP.DA
         /// <returns>执行的结果</returns>
         private static int RunSQL_201902_PSQL(string sql, Paras paras)
         {
+            if (1==1)
+            {
+                if (paras == null)
+                    paras = new Paras();
+
+                paras.SQL = sql;
+                BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
+            }
+
             Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
             if (conn.State != System.Data.ConnectionState.Open)
             {

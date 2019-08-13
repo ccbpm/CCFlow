@@ -496,7 +496,6 @@ namespace BP.Sys
                         continue;
                 }
 
-
                 try
                 {
                     Entity en = ens.GetNewEntity;
@@ -504,11 +503,8 @@ namespace BP.Sys
                 }
                 catch
                 {
-
                 }
-
             }
-
         }
         /// <summary>
         /// 获取datatable.

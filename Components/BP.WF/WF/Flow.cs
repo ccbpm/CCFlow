@@ -1874,7 +1874,6 @@ namespace BP.WF
             }
             #endregion 检查消息推送。
 
-
             try
             {
                 #region 对流程的设置做必要的检查.

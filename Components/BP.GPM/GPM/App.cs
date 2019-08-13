@@ -299,7 +299,6 @@ namespace BP.GPM
                 map.EnDesc = "系统";
                 map.EnType = EnType.Sys;
 
-
                 map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 100);
                 map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel, "@0=BS系统@1=CS系统");
                 map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 150, true);
@@ -352,9 +351,8 @@ namespace BP.GPM
         {
             Menu appMenu = new Menu(this.RefMenuNo);
             if (appMenu != null && appMenu.Flag.Contains("Flow"))
-            {
                 throw new Exception("@删除失败,此项为工作流菜单，不能删除。");
-            }
+
             // 删除该系统.
             Menu menu = new Menu();
             menu.Delete(MenuAttr.FK_App, this.No);

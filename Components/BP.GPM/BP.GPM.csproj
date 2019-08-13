@@ -112,17 +112,17 @@
     <Compile Include="UserData\VGPMEmpMenu.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">
-      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
+      <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
     <ProjectReference Include="..\BP.WF\BP.WF.csproj">
-      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
+      <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

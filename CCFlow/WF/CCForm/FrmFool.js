@@ -967,8 +967,15 @@ function InitMapAttrOfCtrl(mapAttr) {
     //日期类型.
     if (mapAttr.MyDataType == 6) {
         var enableAttr = '';
+        var frmDate = mapAttr.IsSupperText;//获取日期格式
+        var dateFmt = '';
+        if (frmDate == 0) {
+            dateFmt = "yyyy-MM-dd";
+        } else if (frmDate == 3) {
+            dateFmt = "yyyy-MM";
+        }
         if (mapAttr.UIIsEnable == 1)
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
         else
             enableAttr = "disabled='disabled'";
 
@@ -979,8 +986,19 @@ function InitMapAttrOfCtrl(mapAttr) {
     if (mapAttr.MyDataType == 7) {
 
         var enableAttr = '';
+        var frmDate = mapAttr.IsSupperText; //获取日期格式
+        var dateFmt = '';
+        if (frmDate == 1) {
+            dateFmt = "yyyy-MM-dd HH:mm";
+        } else if (frmDate == 2) {
+            dateFmt = "yyyy-MM-dd HH:mm:ss";
+        } else if (frmDate == 4) {
+            dateFmt = "HH:mm";
+        } else if (frmDate == 5) {
+            dateFmt = "HH:mm:ss";
+        }
         if (mapAttr.UIIsEnable == 1)
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
         else
             enableAttr = "disabled='disabled'";
 

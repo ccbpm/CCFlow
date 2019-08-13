@@ -412,7 +412,8 @@
             var data = null;
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
-            var keyWord = $("#TB_Key").val();
+            //var keyWord = $("#TB_Key").val();
+            var keyWord = replaceAll($("#TB_Key").val(),"'","");//输入时有引号的去除掉
             var dbSrc = mapExt.Tag2;
             dbSrc = dbSrc.replace(/~/g, "'");
             var reg = new RegExp("@Key", "g");

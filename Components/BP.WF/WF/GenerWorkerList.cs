@@ -618,6 +618,8 @@ namespace BP.WF
 
                 Map map = new Map("WF_GenerWorkerlist", "工作者");
 
+                map.IndexField = GenerWorkerListAttr.WorkID;
+
                 map.AddTBIntPK(GenerWorkerListAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBStringPK(GenerWorkerListAttr.FK_Emp, null, "人员", true, false, 0, 20, 100);
                 map.AddTBIntPK(GenerWorkerListAttr.FK_Node, 0, "节点ID", true, false);

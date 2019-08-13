@@ -291,6 +291,8 @@ namespace BP.WF.Template
                 
                 map.Java_SetCodeStruct("6");
 
+                map.IndexField = BillTemplateAttr.FK_MapData;
+
                 map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, false, 1, 190, 6);
                 map.AddTBString(BillTemplateAttr.Name, null, "Name", true, false, 0, 200, 20);
                 map.AddTBString(BillTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);

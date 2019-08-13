@@ -699,6 +699,8 @@ namespace BP.WF.Template
                 Map map = new Map("WF_Node", "审核组件");
                 map.Java_SetEnType(EnType.Sys);
 
+
+
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
                 map.AddTBString(FrmWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 100, 10, true);

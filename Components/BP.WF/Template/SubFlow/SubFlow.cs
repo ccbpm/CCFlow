@@ -312,8 +312,12 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_NodeSubFlow", "子流程(所有类型子流程属性)");
+                map.IndexField = SubFlowAttr.FK_Node;
+
 
                 map.AddMyPK();
+
+
 
                 map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 150, true);
                 map.AddTBInt(SubFlowAttr.FK_Node, 0, "主流程节点", false, true);

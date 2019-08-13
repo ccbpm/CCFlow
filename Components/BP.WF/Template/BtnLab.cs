@@ -1108,6 +1108,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "节点标签");
 
+
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 
                 map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);

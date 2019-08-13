@@ -1100,6 +1100,8 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("WF_Cond", "流程条件");
+                map.IndexField = CondAttr.NodeID;
+
 
                 map.AddMyPK();
 

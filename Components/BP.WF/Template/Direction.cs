@@ -124,6 +124,8 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Direction", "节点方向信息");
 
+                map.IndexField = DirectionAttr.FK_Flow;
+
                 /*
                  * MyPK 是一个复合主键 是由 Node+'_'+ToNode+'_'+DirType 组合的. 比如: 101_102_1
                  */

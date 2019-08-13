@@ -59,11 +59,11 @@ namespace BP.WF
             // 创建实体..
             #region 主表
 
-            Entity en = BP.En.ClassFactory.GetEn(enName); 
+            Entity en = BP.En.ClassFactory.GetEn(enName);
             en.PKVal = pkval;
 
-           // if (DataType.IsNullOrEmpty(pkval)==false)
-                en.Retrieve();
+            // if (DataType.IsNullOrEmpty(pkval)==false)
+            en.Retrieve();
 
 
             //设置外部传入的默认值.
@@ -635,6 +635,12 @@ namespace BP.WF
             }
             #endregion 主表的 外键表/枚举
 
+
+            string name = "";
+            foreach (DataTable item in myds.Tables)
+            {
+                name += item.TableName + ",";
+            }
             //返回生成的dataset.
             return myds;
         }
@@ -650,7 +656,7 @@ namespace BP.WF
         {
             //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
-             
+
             //实体.
             GEEntity en = new GEEntity(frmID);
             en.OID = pkval;

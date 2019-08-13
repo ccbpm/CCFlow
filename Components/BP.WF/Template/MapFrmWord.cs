@@ -141,6 +141,8 @@ namespace BP.WF.Template
 				Map map = new Map("Sys_MapData", "Word表单属性");
 				map.Java_SetEnType(EnType.Sys);
 
+
+
 				#region 基本属性.
                 map.AddTBStringPK(MapFrmWordAttr.No, null, "表单编号", true, true, 1, 190, 20);
 				map.AddTBString(MapFrmWordAttr.PTable, null, "存储表", true, false, 0, 100, 20);

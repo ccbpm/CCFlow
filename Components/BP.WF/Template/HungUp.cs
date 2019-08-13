@@ -201,6 +201,8 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_HungUp", "挂起");
                 map.Java_SetEnType(EnType.Admin);
+                map.IndexField = HungUpAttr.WorkID;
+
 
                 map.AddMyPK();
                 map.AddTBInt(HungUpAttr.FK_Node, 0, "节点ID", true, true);

@@ -250,7 +250,22 @@ namespace BP.WF
                 //return obj;
             }
         }
-
+        /// <summary>
+        /// 流程
+        /// </summary>
+        public FrmNodes HisFrmNodes
+        {
+            get
+            {
+                FrmNodes obj = this.GetRefObject("FrmNodes") as FrmNodes;
+                if (obj == null)
+                {
+                    obj = new FrmNodes(this.NodeID);
+                    this.SetRefObject("FrmNodes", obj);
+                }
+                return obj;
+            }
+        }
         /// <summary>
         /// 流程
         /// </summary>

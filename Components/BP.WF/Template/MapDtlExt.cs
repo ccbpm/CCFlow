@@ -895,6 +895,8 @@ namespace BP.WF.Template
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapDtlAttr.FK_MapData;
+
 
                 #region 基础信息.
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);

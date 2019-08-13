@@ -2459,6 +2459,8 @@ namespace BP.WF.HttpHandler
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
                 {
                     /*如果是表单树并且是，移动模式.*/
+                   
+
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);
                     qo.AddWhere(FrmNodeAttr.FK_Node, currND.NodeID);
@@ -2466,6 +2468,8 @@ namespace BP.WF.HttpHandler
                     qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)FrmEnableRole.Disable);
                     qo.addOrderBy("Idx");
                     qo.DoQuery();
+
+
                     //把节点与表单的关联管理放入到系统.
                     ds.Tables.Add(fns.ToDataTableField("FrmNodes"));
                 }

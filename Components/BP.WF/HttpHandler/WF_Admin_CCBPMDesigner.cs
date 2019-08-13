@@ -607,7 +607,7 @@ namespace BP.WF.HttpHandler
 				// 执行升级
 				string str = BP.WF.Glo.UpdataCCFlowVer();
 				if (str == null)
-					str = "ccbpm 准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
+					str = "准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
 
 				return str;
 				//Hashtable ht = new Hashtable();

@@ -240,7 +240,9 @@ function Set_Frm_Enable(frmData) {
                     /*启用了显示与隐藏.*/
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);
                     //初始化页面的值
-                    var nowKey =mapAttr.DefVal;//ddl.val();
+                    var nowKey = ddl.val();//ddl.val();
+                    if (nowKey == null || nowKey == undefined || nowKey == "")
+                        continue;
 
 
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);

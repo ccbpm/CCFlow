@@ -243,19 +243,19 @@ namespace BP.Sys.FrmUI
                 #endregion 输入多选
 
                 #region Pop 自动填充.
-                rm = new RefMethod();
-                rm.GroupName = "Pop自动填充";
-                rm.Title = "简单列表模式";
-                rm.ClassMethodName = this.ToString() + ".DoPopFullCtrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "Pop自动填充";
+                //rm.Title = "简单列表模式";
+                //rm.ClassMethodName = this.ToString() + ".DoPopFullCtrl()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "Pop自动填充";
-                rm.Title = "多条件查询列表模式";
-                rm.ClassMethodName = this.ToString() + ".DoPopFullCtrlAdv()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "Pop自动填充";
+                //rm.Title = "多条件查询列表模式";
+                //rm.ClassMethodName = this.ToString() + ".DoPopFullCtrlAdv()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
                 #endregion Pop 自动填充.
 
                 #region 高级设置.

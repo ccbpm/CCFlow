@@ -1185,6 +1185,12 @@ namespace BP.DA
             }
             #endregion 特殊字符处理.
 
+            //特殊处理. @sly. 
+            exp = exp.Replace("单价", "DanJia");
+            exp = exp.Replace("单件", "DanJian");
+
+
+
             exp = exp.Trim();
             string pinYin = "", str = null;
             char[] chars = exp.ToCharArray();

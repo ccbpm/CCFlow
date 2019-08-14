@@ -770,36 +770,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-
-                    // zl 2019-8-8 valObj 用于适配postgreSql的新版驱动，要求数据类型相匹配
-                    object valObj = val;
-                    Attr attr = en.EnMap.GetAttrByKey(key);
-                    switch(attr.MyDataType)
-                    {
-                        case DataType.AppString:
-                        case DataType.AppDateTime:
-                        case DataType.AppDate:
-                            valObj = valObj.ToString();
-                            break;
-                        case DataType.AppInt:
-                        case DataType.AppBoolean:
-                            valObj = int.Parse(valObj.ToString());
-                            break;
-                        case DataType.AppFloat:
-                            valObj = float.Parse(valObj.ToString());
-                            break;
-                        case DataType.AppDouble:
-                        
-                            valObj = int.Parse(valObj.ToString());
-                            break;
-                        case DataType.AppMoney:
-                            valObj = decimal.Parse(valObj.ToString());
-                            break;                       
-                        default:
-                            throw new Exception();
-                            break;
-                    }
-                  //  if (attr.MyDataType==)
+                    object valObj = BP.WF.Glo.GenerRealType(en.EnMap.Attrs, key, val);
 
                     if (idx == 0)
                     {
@@ -837,6 +808,8 @@ namespace BP.WF.HttpHandler
                 QueryObject qo = new QueryObject(ens);
                 string[] myparas = this.Paras.Split('@');
 
+                Attrs attrs = ens.GetNewEntity.EnMap.Attrs;
+
                 int idx = 0;
                 for (int i = 0; i < myparas.Length; i++)
                 {
@@ -855,14 +828,17 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
+                    //获得真实的数据类型.
+                    var typeVal = BP.WF.Glo.GenerRealType(attrs, key, val);
+
                     if (idx == 0)
                     {
-                        qo.AddWhere(key, oper, val);
+                        qo.AddWhere(key, oper, typeVal);
                     }
                     else
                     {
                         qo.addAnd();
-                        qo.AddWhere(key, oper, val);
+                        qo.AddWhere(key, oper, typeVal);
                     }
                     idx++;
                 }
@@ -1391,8 +1367,13 @@ namespace BP.WF.HttpHandler
                 if (attr.IsHidden)
                 {
                     qo.addAnd();
-                    qo.addLeftBracket();                    
-                    qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+                    qo.addLeftBracket();
+
+                    //获得真实的数据类型.
+                    var valType = BP.WF.Glo.GenerRealType(en.EnMap.Attrs, 
+                        attr.RefAttrKey, attr.DefaultValRun);
+
+                    qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
                     qo.addRightBracket();
                     continue;
                 }
@@ -1450,7 +1431,12 @@ namespace BP.WF.HttpHandler
                     continue;
                 qo.addAnd();
                 qo.addLeftBracket();
-                qo.AddWhere(str, ap.GetValStrByKey(str));
+
+                //获得真实的数据类型.
+                var valType = BP.WF.Glo.GenerRealType(en.EnMap.Attrs,
+                    str, ap.GetValStrByKey(str));
+
+                qo.AddWhere(str, valType);
                 qo.addRightBracket();
             }
 

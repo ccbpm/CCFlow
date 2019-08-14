@@ -2463,6 +2463,7 @@ namespace BP.WF.HttpHandler
 
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);
+
                     qo.AddWhere(FrmNodeAttr.FK_Node, currND.NodeID);
                     qo.addAnd();
                     qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)FrmEnableRole.Disable);

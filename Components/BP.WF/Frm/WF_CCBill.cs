@@ -428,9 +428,7 @@ namespace BP.Frm
             #endregion 查询显示的列
 
             #region 查询语句
-
             MapData md = new MapData(this.FrmID);
-
 
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
@@ -467,7 +465,6 @@ namespace BP.Frm
                             enumKey = "," + attr.Key + "Text,";
                             break;
                         case FieldType.FK:
-
                             continue;
                         default:
                             break;
@@ -507,7 +504,6 @@ namespace BP.Frm
                 }
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
-
             }
             else
             {
@@ -567,20 +563,22 @@ namespace BP.Frm
                     continue;
                 qo.addAnd();
                 qo.addLeftBracket();
-                qo.AddWhere(str, ap.GetValStrByKey(str));
+
+                var typeVal = BP.WF.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+
+                qo.AddWhere(str, typeVal);
+
                 qo.addRightBracket();
             }
             #endregion 外键或者枚举的查询
 
             #endregion 查询语句
+
             qo.addAnd();
             qo.AddWhere("BillState","!=",0);
             //获得行数.
             ur.SetPara("RecCount", qo.GetCount());
             ur.Save();
-
-           
-
 
             if(DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
                 qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);
@@ -878,7 +876,11 @@ namespace BP.Frm
                     continue;
                 qo.addAnd();
                 qo.addLeftBracket();
-                qo.AddWhere(str, ap.GetValStrByKey(str));
+
+                //获得真实的数据类型.
+                var typeVal = BP.WF.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+
+                qo.AddWhere(str, typeVal);
                 qo.addRightBracket();
             }
             #endregion 外键或者枚举的查询

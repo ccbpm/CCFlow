@@ -1241,7 +1241,7 @@ namespace BP.WF
                                 if (athDBs.Count > 0)
                                 {
                                     athDBs.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID,
-                                        FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                                        FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
 
                                     /*说明当前节点有附件数据*/
                                     foreach (FrmAttachmentDB athDB in athDBs)
@@ -1276,7 +1276,7 @@ namespace BP.WF
                                 if (athDBs.Count > 0)
                                 {
                                     athDBs.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID,
-                                        FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                                        FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
 
                                     /*说明当前节点有附件数据*/
                                     foreach (FrmImgAthDB athDB in athDBs)
@@ -1302,7 +1302,7 @@ namespace BP.WF
                                 if (eleDBs.Count > 0)
                                 {
                                     eleDBs.Delete(FrmEleDBAttr.FK_MapData, "ND" + nd.NodeID,
-                                        FrmEleDBAttr.RefPKVal, this.WorkID);
+                                        FrmEleDBAttr.RefPKVal, this.WorkID.ToString());
 
                                     /*说明当前节点有附件数据*/
                                     foreach (FrmEleDB eleDB in eleDBs)
@@ -3853,7 +3853,7 @@ namespace BP.WF
                 Paras ps = new Paras();
                 ps.SQL = "DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData=" + dbStr + "FK_MapData AND RefPKVal=" + dbStr + "RefPKVal";
                 ps.Add(FrmAttachmentDBAttr.FK_MapData, "ND" + toND.NodeID);
-                ps.Add(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                ps.Add(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
                 DBAccess.RunSQL(ps);
 
                 FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID,
@@ -3920,7 +3920,7 @@ namespace BP.WF
                 if (athDBs.Count > 0)
                 {
                     athDBs.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + toND.NodeID,
-                        FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                        FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
 
                     /*说明当前节点有附件数据*/
                     foreach (FrmImgAthDB athDB in athDBs)

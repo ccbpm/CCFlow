@@ -130,7 +130,7 @@ namespace BP.WF.HttpHandler
                         BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                         qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                         qo.addOr();
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
                         qo.addOrderBy("RDT");
                         qo.DoQuery();
                     }
@@ -147,7 +147,7 @@ namespace BP.WF.HttpHandler
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
                     qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
                 }

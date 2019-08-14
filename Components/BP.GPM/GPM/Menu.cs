@@ -320,10 +320,7 @@ namespace BP.GPM
             this.No = no;
             this.Retrieve();
         }
-        protected override bool beforeInsert()
-        {
-            return base.beforeInsert();
-        }
+ 
         protected override bool beforeDelete()
         {
             if (this.Flag.Contains("FlowSort") || this.Flag.Contains("Flow"))

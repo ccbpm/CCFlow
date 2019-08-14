@@ -1611,7 +1611,7 @@ namespace BP.WF.HttpHandler
                     QueryObject obj_Ath = new QueryObject(athDBs);
                     obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
                     obj_Ath.addAnd();
-                    obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                    obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString()); //@sly
                     obj_Ath.addAnd();
                     obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
                     obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
@@ -1924,7 +1924,8 @@ namespace BP.WF.HttpHandler
             athDt.Columns.Add("CanDelete", typeof(bool));
             //当前节点的流程数据
             FrmAttachmentDBs frmathdbs = new FrmAttachmentDBs();
-            frmathdbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + this.FK_Node + "_FrmWorkCheck", FrmAttachmentDBAttr.RefPKVal, this.WorkID,"Rec",WebUser.No, FrmAttachmentDBAttr.RDT);
+            frmathdbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + this.FK_Node + "_FrmWorkCheck",
+                FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString(),"Rec",WebUser.No, FrmAttachmentDBAttr.RDT);
             
             foreach (FrmAttachmentDB athDB in frmathdbs)
             {
@@ -2138,7 +2139,7 @@ namespace BP.WF.HttpHandler
                             QueryObject obj_Ath = new QueryObject(athDBs);
                             obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
                             obj_Ath.addAnd();
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                            obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
                             obj_Ath.addAnd();
                             obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
                             obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
@@ -2399,7 +2400,7 @@ namespace BP.WF.HttpHandler
             QueryObject obj_Ath = new QueryObject(athDBs);
             obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND"+this.FK_Node + "_FrmWorkCheck");
             obj_Ath.addAnd();
-            obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+            obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
             obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
             obj_Ath.DoQuery();
 

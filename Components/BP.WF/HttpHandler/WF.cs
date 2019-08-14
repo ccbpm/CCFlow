@@ -255,8 +255,8 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF()
         {
-        }
 
+        }
         protected override string DoDefaultMethod()
         {
             return base.DoDefaultMethod();

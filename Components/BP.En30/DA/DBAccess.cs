@@ -1658,12 +1658,13 @@ namespace BP.DA
             }
         }
         private static Npgsql.NpgsqlConnection _conn = null;
-        private static bool isCloseConn = false;
+        private static bool isCloseConn = true;
         private static Npgsql.NpgsqlConnection connOfPGSQL
         {
             get
             {
-                //return new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+                return new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+
                 if (_conn==null)
                 {
                     _conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
@@ -1685,7 +1686,7 @@ namespace BP.DA
                 if (paras == null)
                     paras = new Paras();
                 paras.SQL = sql;
-                BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
+               // BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
             }
 
             //Npgsql.NpgsqlConnection conn =   new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);

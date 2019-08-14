@@ -956,7 +956,6 @@ namespace BP.En
                     else
                         pks += SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
 
-                    //@sly 需要翻译.
                     if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
                     this.MyParasR.Add("R" + paraI, int.Parse( dr[0].ToString()));
                     else

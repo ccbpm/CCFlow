@@ -17,7 +17,6 @@ namespace BP.En
         /// <param name="en"></param>
         public static void FrmEvent_LoadBefore(string frmID, Entity en)
         {
-            
         }
         /// <summary>
         /// 装载填充的事件.

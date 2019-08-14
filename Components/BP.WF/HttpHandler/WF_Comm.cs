@@ -770,7 +770,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-                    object valObj = BP.WF.Glo.GenerRealType(en.EnMap.Attrs, key, val);
+                    object valObj = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs, key, val);
 
                     if (idx == 0)
                     {
@@ -829,7 +829,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //获得真实的数据类型.
-                    var typeVal = BP.WF.Glo.GenerRealType(attrs, key, val);
+                    var typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
 
                     if (idx == 0)
                     {
@@ -1370,7 +1370,7 @@ namespace BP.WF.HttpHandler
                     qo.addLeftBracket();
 
                     //获得真实的数据类型.
-                    var valType = BP.WF.Glo.GenerRealType(en.EnMap.Attrs, 
+                    var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs, 
                         attr.RefAttrKey, attr.DefaultValRun);
 
                     qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
@@ -1433,7 +1433,7 @@ namespace BP.WF.HttpHandler
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
-                var valType = BP.WF.Glo.GenerRealType(en.EnMap.Attrs,
+                var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
                     str, ap.GetValStrByKey(str));
 
                 qo.AddWhere(str, valType);

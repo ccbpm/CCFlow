@@ -218,7 +218,11 @@ namespace BP.Sys
                 BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.OID+"'");
 
                 GEDtls ensDtl = new GEDtls(dtl.No);
-                ensDtl.Retrieve(GEDtlAttr.RefPK, oidOID);
+
+             //   var typeVal = BP.Sys.Glo.GenerRealType( ensDtl.GetNewEntity.EnMap.Attrs, GEDtlAttr.RefPK, this.OID);
+
+                ensDtl.Retrieve(GEDtlAttr.RefPK, this.OID.ToString() );
+
                 foreach (GEDtl enDtl in ensDtl)
                 {
                     enDtl.RefPK = this.OID.ToString();

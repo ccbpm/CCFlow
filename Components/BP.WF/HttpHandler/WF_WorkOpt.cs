@@ -1358,7 +1358,10 @@ namespace BP.WF.HttpHandler
             athDt.Columns.Add("CanDelete", typeof(bool));
             //当前节点的流程数据
             FrmAttachmentDBs frmathdbs = new FrmAttachmentDBs();
-            frmathdbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + this.FK_Node + "_FrmWorkCheck", FrmAttachmentDBAttr.RefPKVal, this.WorkID,FrmAttachmentDBAttr.Rec,WebUser.No, FrmAttachmentDBAttr.RDT);
+            frmathdbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment,
+                "ND" + this.FK_Node + "_FrmWorkCheck", FrmAttachmentDBAttr.RefPKVal,
+                this.WorkID.ToString(),FrmAttachmentDBAttr.Rec,WebUser.No, FrmAttachmentDBAttr.RDT);
+
             foreach (FrmAttachmentDB athDB in frmathdbs)
             {
                 row = athDt.NewRow();

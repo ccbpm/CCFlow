@@ -564,7 +564,7 @@ namespace BP.Frm
                 qo.addAnd();
                 qo.addLeftBracket();
 
-                var typeVal = BP.WF.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
 
                 qo.AddWhere(str, typeVal);
 
@@ -878,7 +878,7 @@ namespace BP.Frm
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
-                var typeVal = BP.WF.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
 
                 qo.AddWhere(str, typeVal);
                 qo.addRightBracket();

@@ -21,36 +21,7 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
-        public static object GenerRealType(Attrs attrs, string key, object val)
-        {
-            Attr attr = attrs.GetAttrByKey(key);
-            switch (attr.MyDataType)
-            {
-                case DataType.AppString:
-                case DataType.AppDateTime:
-                case DataType.AppDate:
-                    val = val.ToString();
-                    break;
-                case DataType.AppInt:
-                case DataType.AppBoolean:
-                    val = int.Parse(val.ToString());
-                    break;
-                case DataType.AppFloat:
-                    val = float.Parse(val.ToString());
-                    break;
-                case DataType.AppDouble:
-
-                    val = int.Parse(val.ToString());
-                    break;
-                case DataType.AppMoney:
-                    val = decimal.Parse(val.ToString());
-                    break;
-                default:
-                    throw new Exception();
-                    break;
-            }
-            return val;
-        }
+      
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);

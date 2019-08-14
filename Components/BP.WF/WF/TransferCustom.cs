@@ -310,15 +310,15 @@ namespace BP.WF
                     return item;
             }
 
-            if (currNodeID.ToString().EndsWith("01") == true)
+            //if (currNodeID.ToString().EndsWith("01") == true)
+            //{
+            foreach (TransferCustom item in ens)
             {
-                foreach (TransferCustom item in ens)
-                {
-                    if(item.IsEnable == true)
-                        return (TransferCustom)item;
-                }
-
+                if(item.IsEnable == true)
+                    return (TransferCustom)item;
             }
+
+           // }
 
             //如果当前节点是最后一个自定义节点，且有连接线连到固定节点
             if(isMeet == true)

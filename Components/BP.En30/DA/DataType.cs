@@ -1188,8 +1188,7 @@ namespace BP.DA
             //特殊处理. @sly. 
             exp = exp.Replace("单价", "DanJia");
             exp = exp.Replace("单件", "DanJian");
-
-
+            exp = exp.Replace("单个", "DanGe");
 
             exp = exp.Trim();
             string pinYin = "", str = null;

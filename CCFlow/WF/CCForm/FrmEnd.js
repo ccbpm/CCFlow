@@ -143,7 +143,8 @@
 
                     //初始化页面的值
                     var nowKey = ddl.val();
-
+                    if (nowKey == null || nowKey == undefined || nowKey == "")
+                        continue;
 
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
@@ -159,7 +160,8 @@
                     }
 
                     var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-
+                    if (nowKey == null || nowKey == undefined || nowKey == "")
+                        continue;
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }

@@ -314,7 +314,7 @@ namespace BP.WF
             //{
             foreach (TransferCustom item in ens)
             {
-                if(item.IsEnable == true)
+                if(item.IsEnable == true && item.FK_Node != currNodeID)
                     return (TransferCustom)item;
             }
 

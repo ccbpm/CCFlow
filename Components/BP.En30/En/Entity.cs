@@ -1128,39 +1128,12 @@ namespace BP.En
                     }
                     return num;
                 }
-
-                string msg = "";
-                switch (this.PK)
-                {
-                    case "OID":
-                        msg += "[ 主键=OID 值=" + this.GetValStrByKey("OID") + " ]";
-                        break;
-                    case "No":
-                        msg += "[ 主键=No 值=" + this.GetValStrByKey("No") + " ]";
-                        break;
-                    case "MyPK":
-                        msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
-                        break;
-                    case "NodeID":
-                        msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
-                        break;
-                    case "WorkID":
-                        msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
-                        break;
-                    default:
-                        Hashtable ht = this.PKVals;
-                        foreach (string key in ht.Keys)
-                            msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
-                        break;
-                }
-                Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
-                throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("does not exist") 
+                if (ex.Message.Contains("does not exist")
                     || ex.Message.Contains("不存在")
-                    || ex.Message.Contains("无效") 
+                    || ex.Message.Contains("无效")
                     || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
@@ -1169,6 +1142,33 @@ namespace BP.En
                 }
                 throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
             }
+
+            string msg = ""; //@sly 这里需要翻译到java.
+            switch (this.PK)
+            {
+                case "OID":
+                    msg += "[ 主键=OID 值=" + this.GetValStrByKey("OID") + " ]";
+                    break;
+                case "No":
+                    msg += "[ 主键=No 值=" + this.GetValStrByKey("No") + " ]";
+                    break;
+                case "MyPK":
+                    msg += "[ 主键=MyPK 值=" + this.GetValStrByKey("MyPK") + " ]";
+                    break;
+                case "NodeID":
+                    msg += "[ 主键=NodeID 值=" + this.GetValStrByKey("NodeID") + " ]";
+                    break;
+                case "WorkID":
+                    msg += "[ 主键=WorkID 值=" + this.GetValStrByKey("WorkID") + " ]";
+                    break;
+                default:
+                    Hashtable ht = this.PKVals;
+                    foreach (string key in ht.Keys)
+                        msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
+                    break;
+            }
+            Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
+            throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
         }
         /// <summary>
         /// 判断是不是存在的方法.

@@ -747,6 +747,8 @@ namespace BP.WF.HttpHandler
                 if (this.Paras == null)
                     return "0";
 
+                Entity en = ens.GetNewEntity;
+
                 QueryObject qo = new QueryObject(ens);
                 string[] myparas = this.Paras.Split('@');
 
@@ -761,16 +763,43 @@ namespace BP.WF.HttpHandler
                     string key = strs[0];
                     string val = strs[1];
 
-                    // zl 2019-8-8 valObj 用于适配postgreSql的新版驱动，要求数据类型相匹配
-                    object valObj = val;
-                    if (String.Compare(key, "FK_Node", StringComparison.OrdinalIgnoreCase) == 0)
-                        valObj = Convert.ToInt32(val);
 
                     if (key.ToLower().Equals("orderby") == true)
                     {
                         qo.addOrderBy(val);
                         continue;
                     }
+
+
+                    // zl 2019-8-8 valObj 用于适配postgreSql的新版驱动，要求数据类型相匹配
+                    object valObj = val;
+                    Attr attr = en.EnMap.GetAttrByKey(key);
+                    switch(attr.MyDataType)
+                    {
+                        case DataType.AppString:
+                        case DataType.AppDateTime:
+                        case DataType.AppDate:
+                            valObj = valObj.ToString();
+                            break;
+                        case DataType.AppInt:
+                        case DataType.AppBoolean:
+                            valObj = int.Parse(valObj.ToString());
+                            break;
+                        case DataType.AppFloat:
+                            valObj = float.Parse(valObj.ToString());
+                            break;
+                        case DataType.AppDouble:
+                        
+                            valObj = int.Parse(valObj.ToString());
+                            break;
+                        case DataType.AppMoney:
+                            valObj = decimal.Parse(valObj.ToString());
+                            break;                       
+                        default:
+                            throw new Exception();
+                            break;
+                    }
+                  //  if (attr.MyDataType==)
 
                     if (idx == 0)
                     {

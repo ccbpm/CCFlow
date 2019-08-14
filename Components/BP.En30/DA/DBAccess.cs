@@ -2251,7 +2251,7 @@ namespace BP.DA
             {
                 foreach (Para para in paras)
                 {
-                    // 2018-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
+                    // 2019-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
                     object valObj = para.val;
 
                     if (para.DAType == DbType.Int16)

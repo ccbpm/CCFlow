@@ -1605,7 +1605,7 @@ namespace BP.DA
         /// <returns></returns>
         public static int RunSQL(string sql, Paras paras)
         {
-            if (sql == null || sql.Trim() == "")
+            if (DataType.IsNullOrEmpty(sql))
                 return 1;
 
             int result = 0;
@@ -1657,6 +1657,21 @@ namespace BP.DA
                 throw new Exception("执行sql错误:" + ex.Message + " Paras(" + paras.Count + ")=" + msg + "<hr>" + mysql);
             }
         }
+        private static Npgsql.NpgsqlConnection _conn = null;
+        private static bool isCloseConn = false;
+        private static Npgsql.NpgsqlConnection connOfPGSQL
+        {
+            get
+            {
+                //return new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+                if (_conn==null)
+                {
+                    _conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+                    return _conn;
+                }
+                return _conn;
+            }
+        }
         /// <summary>
         /// 运行sql返回结果
         /// </summary>
@@ -1669,17 +1684,19 @@ namespace BP.DA
             {
                 if (paras == null)
                     paras = new Paras();
-
                 paras.SQL = sql;
                 BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
             }
 
-            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            //Npgsql.NpgsqlConnection conn =   new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            Npgsql.NpgsqlConnection conn = DBAccess.connOfPGSQL; // new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+
             if (conn.State != System.Data.ConnectionState.Open)
             {
                 conn.ConnectionString = SystemConfig.AppCenterDSN;
                 conn.Open();
             }
+
             Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(sql, conn);
             cmd.CommandType = CommandType.Text;
 
@@ -1692,7 +1709,9 @@ namespace BP.DA
                 }
                 int i = cmd.ExecuteNonQuery();
                 cmd.Dispose();
-                conn.Close();
+
+                if (isCloseConn==true)
+                   conn.Close();
                 return i;
             }
             catch (System.Exception ex)
@@ -2239,7 +2258,7 @@ namespace BP.DA
         /// <returns>返回的数据.</returns>
         private static DataTable RunSQLReturnTable_201902_PSQL(string sql, Paras paras)
         {
-            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            Npgsql.NpgsqlConnection conn = DBAccess.connOfPGSQL; // new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
             if (conn.State != ConnectionState.Open)
                 conn.Open();
 
@@ -2253,21 +2272,7 @@ namespace BP.DA
                 {
                     // 2019-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
                     object valObj = para.val;
-
-                    if (para.DAType == DbType.Int16)
-                        valObj = Convert.ToInt16(para.val);
-                    else if (para.DAType == DbType.Int32)
-                        valObj = Convert.ToInt32(para.val);
-                    else if (para.DAType == DbType.Int64)
-                        valObj = Convert.ToInt64(para.val);
-                    else if (para.DAType == DbType.Double)
-                        valObj = Convert.ToDouble(para.val);
-                    else if (para.DAType == DbType.Decimal)
-                        valObj = Convert.ToDecimal(para.val);
-                    else if (String.Compare(para.ParaName, "FK_Node", StringComparison.OrdinalIgnoreCase) == 0)
-                        valObj = Convert.ToInt32(para.val);
-                    else if (String.Compare(para.ParaName, "WorkID", StringComparison.OrdinalIgnoreCase) == 0)
-                        valObj = Convert.ToInt64(para.val);
+                     
 
                     Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, valObj);
                     myParameter.Size = para.Size;
@@ -2280,7 +2285,10 @@ namespace BP.DA
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
                 ada.Dispose();
-                conn.Close();
+
+                if(isCloseConn==true)
+                   conn.Close();
+
                 return oratb;
             }
             catch (Exception ex)

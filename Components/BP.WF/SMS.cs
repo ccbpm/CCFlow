@@ -609,6 +609,8 @@ namespace BP.WF
 
                     if (DataType.IsNullOrEmpty(pushModel) == true)
                         pushModel = BP.WF.Glo.ShortMessageWriteTo.ToString();
+
+                    /*
                     string[] pushModels = pushModel.Split(',');
                     foreach (string model in pushModels)
                     {
@@ -618,7 +620,6 @@ namespace BP.WF
                                 break;
                             case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
                                 soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-
                                 //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
                                 break;
                             case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
@@ -636,7 +637,8 @@ namespace BP.WF
                             default:
                                 break;
                         }
-                    }
+                    }*/
+
                 }
             }
             catch (Exception ex)

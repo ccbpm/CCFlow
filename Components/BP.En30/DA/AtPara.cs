@@ -87,14 +87,10 @@ namespace BP.DA
         }
         public string GetValStrByKey(string key)
         {
-            try
-            {
-                return this.HisHT[key].ToString();
-            }
-            catch
-            {
+            string str = this.HisHT[key] as string;
+            if (str == null)
                 return "";
-            }
+            return str;
         }
         public bool GetValBoolenByKey(string key)
         {
@@ -104,17 +100,13 @@ namespace BP.DA
         }
         public bool GetValBoolenByKey(string key,bool isNullAsVal)
         {
-            try
-            {
-                int i= int.Parse(this.GetValStrByKey(key));
-                if (i <= 0)
-                    return false;
-                return true;
-            }
-            catch
-            {
+            string str = this.GetValStrByKey(key);
+            if (DataType.IsNullOrEmpty(str) == true)
                 return isNullAsVal;
-            }
+
+            if (str.Equals("0") == true)
+                return false;
+            return true;
         }
         public float GetValFloatByKey(string key, float isNullAsVal = 0)
         {
@@ -129,14 +121,12 @@ namespace BP.DA
         }
         public int GetValIntByKey(string key, int isNullAsVal=0)
         {
-            try
-            {
-                return int.Parse(this.GetValStrByKey(key));
-            }
-            catch
-            {
+            string str = this.GetValStrByKey(key);
+            if (DataType.IsNullOrEmpty(str))
                 return isNullAsVal;
-            }
+
+            return int.Parse(str);
+             
         }
         public Int64 GetValInt64ByKey(string key)
         {

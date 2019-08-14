@@ -57,7 +57,7 @@
   <Dtl ItemNo="ChineseNotNull"  ForEvent="onsubmit"  Exp="/^[\u4e00-\u9fa5]/" Msg="必填项，并且只能输入汉字" />
 
 
-  <Item No="BaiFenBi" Name="输入必须是百分比" Note="检查输入有效的百分比 。"  ForCtrl="TBNum" />
+  <Item No="BaiFenBi" Name="输入必须是百分比" Note="检查输入有效的百分比 。"  ForCtrl="TB" />
   <Dtl ItemNo="BaiFenBi"  ForEvent="onblur"  Exp="/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/" Msg="请输入有效百分数，如50.55%." />
   <Dtl ItemNo="BaiFenBi"  ForEvent="onsubmit"  Exp="/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/" Msg="请输入有效的百分数，如50.5%." />
 

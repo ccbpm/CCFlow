@@ -927,6 +927,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             dateFmt = "yyyy-MM-dd";
         } else if (frmDate == 3) {
             dateFmt = "yyyy-MM";
+        } else if (frmDate == 6){
+            dateFmt = "MM-dd";
         }
 
         if (mapAttr.UIIsEnable == 1)

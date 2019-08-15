@@ -24,21 +24,19 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../Gener.js"></script>
     <style type="text/css">
-        .textbox-addon
-        {
+        .textbox-addon {
             position: absolute;
         }
-        
-        .textbox-text
-        {
+
+        .textbox-text {
             margin: 0px 26px 0px 0px;
             padding-top: 0px;
             padding-bottom: 0px;
             height: 28px !important;
             line-height: 28px !important;
         }
-        .style1
-        {
+
+        .style1 {
             width: 326px;
         }
     </style>
@@ -49,10 +47,10 @@
         var mainData;
         var dtM; //方法集合.
         var pkVal = "";
+        var groupFuncs = [];
         var webUser = new WebUser();
         $(function () {
 
-            debugger
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             var enName = GetQueryString("EnName");
             httpHandler.AddUrlData();
@@ -69,17 +67,39 @@
             mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
             mainData = frmData["MainData"];
             dtM = frmData["dtM"];
+
+            var str = "";
+            var num = 0;
+            //循环提取功能分组
+            for (var n = 0; n < dtM.length; n++) {
+                var groupName = dtM[n].GroupName;
+                if (groupName == null) {
+                    groupName = "基本信息";
+                }
+                if (str.indexOf(',' + groupName) >= 0) {
+                    continue;
+                }
+                str += "," + groupName;
+
+                var row = {};
+                row.id = "dtM_" + num;
+                row.name = groupName;
+                groupFuncs.push(row);
+                num++;
+            }
             document.title = mapData.Name;
 
-            $("#docs").html("该功能用于显示或者屏蔽部分字段，功能。");
+            $("#docs").html("<h4>该功能用于显示或者屏蔽部分字段，功能。</h4>");
 
         })
 
-        //字段.
+        //字段查询.
         function Fields() {
 
             //获得字段列表.
             var Sys_MapAttr = frmData["Sys_MapAttr"];
+            //获取字段分组
+            var Sys_GroupField = frmData["Sys_GroupField"];
 
             var enName = GetQueryString("EnName");
 
@@ -90,43 +110,83 @@
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
 
-          //  alert(cfgEn.Vals);
+            //  alert(cfgEn.Vals);
 
             var html = "";
-            html += "<table>";
-            html += "<caption>字段</caption>";
+            html += "<table width='100%'>";
+            //html += "<caption>字段</caption>";
+            html += "<thead>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>字段名</th>";
             html += "<th>中文名</th>";
             html += "</tr>";
-            for (var i = 0; i < Sys_MapAttr.length; i++) {
-                var mapAttr = Sys_MapAttr[i];
-
-                html += "<tr>";
-                html += "<td>" + (i + 1) + "</td>";
-                html += "<td>" + mapAttr.KeyOfEn + "</td>";
-                //html += "<td>" + mapAttr.Name + "</td>";
-
+            html += "</thead>";
+            //遍历字段分组
+            for (var j = 0; j < Sys_GroupField.length; j++) {
+                var groupField = Sys_GroupField[j];
                 var checked = "";
-                if (cfgEn.Vals.indexOf(',' + mapAttr.KeyOfEn) >= 0)
+                if (cfgEn.MVals.indexOf(',' + groupField.OID) >= 0)
                     checked = " checked=true ";
-
-                html += "<td><label><input type=checkbox " + checked + " name='" + mapAttr.KeyOfEn + "' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
+                html += "<tbody>";
                 html += "<tr>";
-            }
+                html += "<td colspan = '3'><label><input type=checkbox " + checked + " name='" + groupField.OID + "' onclick='swapCheck(\"" + groupField.OID + "\")'/>" + groupField.Lab + "</label></td>";
+                html += "</tr>";
+                html += "</tbody>";
+                html += "<tbody id = '" + groupField.OID + "_All'>";
+                //遍历字段
+                for (var i = 0; i < Sys_MapAttr.length; i++) {
+                    var mapAttr = Sys_MapAttr[i];
+                    if (groupField.OID == mapAttr.GroupID) {
 
+                        html += "<tr>";
+                        html += "<td>" + (i + 1) + "</td>";
+                        html += "<td>" + mapAttr.KeyOfEn + "</td>";
+
+                        var checked = "";
+                        var cfgEnVals = cfgEn.Vals.split(",");
+                        for (var k = 0; k < cfgEnVals.length; k++) {
+                            if (cfgEnVals[k] == mapAttr.KeyOfEn) {
+                                checked = " checked=true ";
+                            }
+                        }
+
+                        html += "<td><label><input type=checkbox " + checked + " name='" + mapAttr.KeyOfEn + "' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
+                        html += "</tr>";
+
+                    }
+                }
+                html += "</tbody>";
+            }
             html += "</table>";
             html += "<input type=button onclick='SaveFields();' value='保存' />";
 
             $("#docs").html(html);
-        }
 
+
+
+
+        }
+        //复选框全选反选
+        function swapCheck(oid) {
+            if ($("input:checkbox[name='" + oid + "']").prop('checked')) {
+                $("#" + oid + "_All").find("input:checkbox").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("#" + oid + "_All").find("input:checkbox").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        };
+        //保存字段
         function SaveFields() {
 
 
             //获得字段列表.
             var Sys_MapAttr = frmData["Sys_MapAttr"];
+            //获取字段分组
+            var Sys_GroupField = frmData["Sys_GroupField"];
 
             var enName = GetQueryString("EnName");
 
@@ -137,56 +197,170 @@
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
 
+            //求出来所有隐藏的字段.
+            var Mkeys = "";
+            for (var j = 0; j < Sys_GroupField.length; j++) {
+                var groupField = Sys_GroupField[j];
 
-            var Sys_MapAttr = frmData["Sys_MapAttr"];
+                var boolen = $('input:checkbox[name=' + groupField.OID + ']').prop('checked');
+                if (boolen == false)
+                    continue;
+
+                Mkeys += "," + groupField.OID;
+            }
 
             //求出来所有隐藏的字段.
             var keys = "";
             for (var i = 0; i < Sys_MapAttr.length; i++) {
                 var mapAttr = Sys_MapAttr[i];
 
-                var boolen = $('input:radio[name=' + mapAttr.KeyOfEn + ']:checked').val();
+                var boolen = $('input:checkbox[name=' + mapAttr.KeyOfEn + ']').prop('checked');
                 if (boolen == false)
                     continue;
 
                 keys += "," + mapAttr.KeyOfEn;
             }
 
-          //  alert(keys);
+            cfgEn.FK_Emp = webUser.No;
+            cfgEn.CfgKey = 'Fields_HS';
+            cfgEn.FK_MapData = GetQueryString("EnName");
+            cfgEn.MVals = Mkeys;
+            cfgEn.Vals = keys;
+            cfgEn.Save();
+            alert('保存成功.');
 
-            en.FK_Emp = webUser.No;
-            en.CfgKey = 'Fields_HS';
-            en.FK_MapData = GetQueryString("EnName");
-            en.Vals = keys;
-            en.Save();
+        }
+        //功能查询
+        function Funcs() {
+            //获得字段列表.
+            var dtM = frmData["dtM"];
+            //获取字段分组
+            //var Sys_GroupField = frmData["Sys_GroupField"];
+
+            var enName = GetQueryString("EnName");
+
+            // HS 标识 hidden show .
+
+            var mypk = webUser.No + "_Funcs_HS_" + enName;
+            var cfgEn = new Entity("BP.Sys.UserRegedit");
+            cfgEn.SetPKVal(mypk);
+            cfgEn.RetrieveFromDBSources();
+
+            var html = "";
+            html += "<table width='100%'>";
+            html += "<thead>";
+            html += "<tr>";
+            html += "<th>序</th>";
+            html += "<th>功能名</th>";
+            html += "</tr>";
+            html += "</thead>";
+
+            //遍历功能分组
+            for (var j = 0; j < groupFuncs.length; j++) {
+                var groupFunc = groupFuncs[j];
+                var checked = "";
+                if (cfgEn.MVals.indexOf(',' + groupFunc.id) >= 0)
+                    checked = " checked=true ";
+                html += "<tbody>";
+                html += "<tr>";
+                html += "<td colspan = '2'><label><input type=checkbox " + checked + " name='" + groupFunc.id + "' onclick='swapCheck(\"" + groupFunc.id + "\")'/>" + groupFunc.name + "</label></td>";
+                html += "</tr>";
+                html += "</tbody>";
+                html += "<tbody id = '" + groupFunc.id + "_All'>";
+                //遍历功能
+                for (var i = 0; i < dtM.length; i++) {
+                    var funcs = dtM[i];
+                    if (funcs.GroupName == null) {
+                        funcs.GroupName = "基本信息";
+                    }
+                    if (groupFunc.name == funcs.GroupName) {
+
+                        html += "<tr>";
+                        html += "<td>" + (i + 1) + "</td>";
+
+                        var checked = "";
+                        var cfgEnVals = cfgEn.Vals.split(",");
+                        for (var k = 0; k < cfgEnVals.length; k++) {
+                            if (cfgEnVals[k] == funcs.No) {
+                                checked = " checked=true ";
+                            }
+                        }
+
+                        html += "<td ><label><input type=checkbox " + checked + " name='" + funcs.No + "' id='" + funcs.No + "' />" + funcs.Title + "</label></td>";
+                        html += "</tr>";
+
+                    }
+                }
+                html += "</tbody>";
+            }
+            html += "</table>";
+            html += "<input type=button onclick='SaveFuncs();' value='保存' />";
+
+            $("#docs").html(html);
+
+        }
+        //保存功能
+        function SaveFuncs() {
+
+
+            //获得功能列表.
+            var dtM = frmData["dtM"];
+
+            var enName = GetQueryString("EnName");
+
+            // HS 标识 hidden show .
+            var mypk = webUser.No + "_Funcs_HS_" + enName;
+            var cfgEn = new Entity("BP.Sys.UserRegedit");
+            cfgEn.SetPKVal(mypk);
+            cfgEn.RetrieveFromDBSources();
+
+            //求出来所有隐藏的功能分组.
+            var Mkeys = "";
+            for (var j = 0; j < groupFuncs.length; j++) {
+                var groupFunc = groupFuncs[j];
+
+                var boolen = $('input:checkbox[name=' + groupFunc.id + ']').prop('checked');
+                if (boolen == false)
+                    continue;
+
+                Mkeys += "," + groupFunc.id;
+            }
+
+            //求出来所有隐藏的功能.
+            var keys = "";
+            for (var i = 0; i < dtM.length; i++) {
+                var funcs = dtM[i];
+
+                var boolen = $('input:checkbox[name=' + funcs.No + ']').prop('checked');
+                if (boolen == false)
+                    continue;
+
+                keys += "," + funcs.No;
+            }
+
+            cfgEn.FK_Emp = webUser.No;
+            cfgEn.CfgKey = 'Funcs_HS';
+            cfgEn.FK_MapData = GetQueryString("EnName");
+            cfgEn.MVals = Mkeys;
+            cfgEn.Vals = keys;
+            cfgEn.Save();
             alert('保存成功.');
 
         }
 
-        /**/</script>
+    </script>
 </head>
-<body>
-    <table style="width: 100%;">
-        <caption>
-            设置隐藏与显示</caption>
-        <tr>
-            <td class="style1" valign="top">
-                <fieldset>
-                    <legend>设置内容</legend>
-                    <ul>
-                        <li><a href="javascript:Fields()">字段</a></li>
-                        <!--<li><a href="javascript:Tabs()">字段Tab页面</a></li>-->
-                        <li><a href="javascript:GroupFields()">功能分组</a></li>
-                        <li><a href="javascript:Funcs()">功能</a></li>
+<body class="easyui-layout">
+    <div data-options="region:'west',title:'设置内容',split:true" style="width:150px;">
+            <ul>
+                <li><a href="javascript:Fields()"><h4>字段</h4></a></li>
+                <li><a href="javascript:Funcs()"><h4>功能</h4></a></li>
 
-                    </ul>
-                </fieldset>
-            </td>
-            <td valign="top">
-                <div id="docs">
-                </div>
-            </td>
-        </tr>
-    </table>
+            </ul>
+    </div>
+    <div data-options="region:'center',title:'选择隐藏的字段&功能'" style="padding:5px;background:#eee;">
+        <div id="docs">
+        </div>
+    </div>
 </body>
 </html>

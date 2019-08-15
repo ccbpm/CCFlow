@@ -3276,7 +3276,8 @@ namespace BP.WF.HttpHandler
                     savePath = savePath.Replace("\\\\", "\\");
                     try
                     {
-                        savePath = HttpContextHelper.PhysicalApplicationPath + savePath; //context.Server.MapPath("~/" + savePath);
+                        if(savePath.Contains(HttpContextHelper.PhysicalApplicationPath) == false)
+                        savePath = HttpContextHelper.PhysicalApplicationPath + savePath;
                     }
                     catch (Exception ex)
                     {

@@ -938,6 +938,34 @@ namespace BP.Sys
 
             return base.beforeUpdate();
         }
+
+        protected override void afterInsertUpdateAction()
+        {
+            if (this.ExtType.Equals("MultipleChoiceSmall") == true)
+            {
+                //给该字段增加一个KeyOfEnT
+                string mypk = this.FK_MapData + "_" + this.AttrOfOper + "T";
+                MapAttr attrH = new MapAttr();
+                attrH.MyPK = mypk;
+                if (attrH.RetrieveFromDBSources() == 0)
+                {
+                    MapAttr attr = new MapAttr(this.FK_MapData + "_" + this.AttrOfOper);
+                    attrH.Copy(attr);
+                    attrH.KeyOfEn = attr.KeyOfEn + "T";
+                    attrH.Name = attr.Name;
+                    attrH.UIContralType = BP.En.UIContralType.TB;
+                    attrH.MinLen = 0;
+                    attrH.MaxLen = 500;
+                    attrH.MyDataType = BP.DA.DataType.AppString;
+                    attrH.UIVisible = false;
+                    attrH.UIIsEnable = true;
+                    attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
+                    attrH.Save();
+                    attr.SetPara("MultipleChoiceSmall", "1");
+                }
+            }
+            base.afterInsertUpdateAction();
+        }
         #endregion 
 
         /// <summary>

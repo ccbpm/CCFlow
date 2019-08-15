@@ -383,15 +383,10 @@ function AfterBindEn_DealMapExt(frmData) {
             case "BindFunction": //控件绑定函数
                 if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
                     if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
-                        var method = $('#TB_' + mapExt.AttrOfOper).attr("onfocus");
-                        var minDate = "";
-                        if (method.indexOf("minDate") != -1)
-                            minDate = '%y-%M-#{%d}';
-
+                        var minDate = $('#TB_' + mapExt.AttrOfOper).attr("data-info");
+                        $('#TB_' + mapExt.AttrOfOper).attr("data-funcionPK", mapExt.MyPK); // 记录绑定事件的MyPK
                         $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
-//                        var dateFmt = 'yyyy-MM-dd';
-//                        if (mapAttr.MyDataType == 7)
-//                            dateFmt = 'yyyy-MM-dd HH:mm';
+                        $('#TB_' + mapExt.AttrOfOper).unbind("focus");
                         var frmDate = mapAttr.IsSupperText; //获取日期格式
                         var dateFmt = '';
                         if (frmDate == 0) {
@@ -410,7 +405,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
                         var mapextDoc = mapExt.Doc;
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                            if (minDate == "")
+                            if (minDate == "" || minDate == undefined)
                                 WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
                                     $(this).blur(); //失去焦点 
                                     DBAccess.RunFunctionReturnStr(mapextDoc);
@@ -560,14 +555,46 @@ function AfterBindEn_DealMapExt(frmData) {
                     var tag1 = mapExt.Tag1;
                     if (tag1 == 1) {
                         $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
-                        var dateFmt = 'yyyy-MM-dd';
-                        if (mapAttr.MyDataType == 7)
-                            dateFmt = 'yyyy-MM-dd HH:mm';
+                        var frmDate = mapAttr.IsSupperText; //获取日期格式
+                        var dateFmt = '';
+                        if (frmDate == 0) {
+                            dateFmt = "yyyy-MM-dd";
+                        } else if (frmDate == 1) {
+                            dateFmt = "yyyy-MM-dd HH:mm";
+                        } else if (frmDate == 2) {
+                            dateFmt = "yyyy-MM-dd HH:mm:ss";
+                        } else if (frmDate == 3) {
+                            dateFmt = "yyyy-MM";
+                        } else if (frmDate == 4) {
+                            dateFmt = "HH:mm";
+                        } else if (frmDate == 5) {
+                            dateFmt = "HH:mm:ss";
+                        }
 
-                        var minDate = '%y-%M-#{%d}'
-                        $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                            WdatePicker({ dateFmt: dateFmt, minDate: minDate });
-                        });
+                        var minDate = '%y-%M-#{%d}';
+                        $('#TB_' + mapExt.AttrOfOper).attr("data-info", minDate); //绑定时间大小限制的记录
+                        var functionPK = $('#TB_' + mapExt.AttrOfOper).attr("data-funcionPK");
+                        if (functionPK == null || functionPK == undefined || functionPK == "") {
+                            $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                                WdatePicker({ dateFmt: dateFmt, minDate: minDate });
+                            });
+                        } else {
+                            $('#TB_' + mapExt.AttrOfOper).unbind("focus");
+                            
+                            var bindFunctionExt = new Entity("BP.Sys.MapExt", functionPK);
+                            $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+
+                                WdatePicker({
+                                    dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                        $(this).blur(); //失去焦点 
+                                        DBAccess.RunFunctionReturnStr(bindFunctionExt.Doc);
+                                    }
+                                });
+                            });
+                           
+                        }
+
+                       
                     }
 
                 }

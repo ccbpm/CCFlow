@@ -1,5 +1,13 @@
 ﻿//小范围的多选,不需要搜索.
-function MultipleChoiceSmall(mapExt, mapAttr) {
+function MultipleChoiceSmall(mapExt, mapAttr, tbID, rowIndex, OID) {
+    if (tbID == null || tbID == undefined) {
+        tbID = "TB_" + mapExt.AttrOfOper;
+    }
+    var cbxID = mapExt.AttrOfOper + "_combobox";
+    if (rowIndex != null && rowIndex != undefined)
+        cbxID = mapExt.AttrOfOper + "_combobox_" + rowIndex;
+    var tbTextID = tbID + "T";
+
     var webUser = new WebUser();
     var data = [];
     var valueField = "No";
@@ -15,8 +23,6 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
             });
             break;
         case 2:
-            valueField = "IntKey"
-            textField = "Lab";
             var enums = new Entities("BP.Sys.SysEnums");
             enums.Retrieve("EnumKey", mapExt.Tag2);
             $.each(enums, function (i, o) {
@@ -47,19 +53,19 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
         //如果是checkbox 多选.
         if (mapExt.Tag == "1" || mapExt.Tag == "2") {
-            return MakeCheckBoxsModel(mapExt, data, mapAttr);
+            return MakeCheckBoxsModel(mapExt, data, mapAttr, tbID);
         }
 
-        var tb = $("#TB_" + AttrOfOper);
-        //tb.attr("visible", true); //把他隐藏起来.
-        tb.css("visibility", "hidden");
+        var tb = $("#" + tbID);
+        var w = tb.outerWidth();
+        var h = tb.outerHeight();
+        tb.css("display", "none");
 
         var cbx = $('<input type="text" />');
-        cbx.attr("id", AttrOfOper + "_combobox");
+        cbx.attr("id", cbxID);
         cbx.attr("name", AttrOfOper + "_combobox");
         tb.before(cbx);
-        var w = tb.outerWidth() - 120;
-        var h = tb.outerHeight() + 5;
+        
         cbx.attr("class", "easyui-combobox");
         cbx.css("width", w);
         cbx.css("height", h);
@@ -71,22 +77,16 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
             "multiple": true,
             "onSelect": function (p) {
-                $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
+                $("#" + tbID).val(cbx.combobox("getValues"));
+                $("#" + tbTextID).val(cbx.combobox("getText"));
                 //保存选择的值.
-                SaveVal(FK_MapData, AttrOfOper, p.No, p.Name);
-
-                //                (function sel(n, KeyOfEn, FK_MapData) {
-                //                    //保存选择的值.
-                //                    SaveVal(FK_MapData, KeyOfEn, n);
-
-                //                })(p[valueField], AttrOfOper, FK_MapData);
             },
             "onUnselect": function (p) {
-                $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
+                $("#" + tbID).val(cbx.combobox("getValues"));
                 (function unsel(n, KeyOfEn) {
 
                     //删除选择的值.
-                    Delete(KeyOfEn, n);
+                    Delete(KeyOfEn, n,OID);
 
                 })(p[valueField], AttrOfOper);
             }
@@ -94,7 +94,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
 
         cbx.combobox("loadData", data);
-        $(".textbox-text").css("width", "100%");
+        $(".textbox-text").css("width", w);
 
         if (mapAttr != null && mapAttr.UIIsEnable != 1) {
             cbx.combobox('disable');
@@ -113,10 +113,9 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
 
 //checkbox 模式.
-function MakeCheckBoxsModel(mapExt, data, mapAttr) {
-    var textboxId = "TB_" + mapExt.AttrOfOper
-    var textbox = $("#" + textboxId);
-    textbox.css("visibility", "hidden");
+function MakeCheckBoxsModel(mapExt, data, mapAttr,tbID) {
+    var textbox = $("#" + tbID);
+    textbox.css("display", "hidden");
     var tbVal = textbox.val();
     if (tbVal == null) tbVal = "";
     for (var i = 0; i < data.length; i++) {
@@ -179,18 +178,23 @@ function changeValue(changeIdV, getNameV) {
 }
 
 //删除数据.
-function Delete(keyOfEn, val) {
-
-    var oid = (pageData.WorkID || pageData.OID || "");
+function Delete(keyOfEn, val,oid) {
+    if (oid == null || oid == undefined)
+      oid = (pageData.WorkID || pageData.OID || "");
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
     frmEleDB.Delete();
 }
 
 //设置值.
-function SaveVal(fk_mapdata, keyOfEn, val, name) {
+function SaveVal(fk_mapdata, keyOfEn, val, name,oid) {
 
-    var oid = (pageData.WorkID || pageData.OID || "");
+    if (oid == null || oid == undefined) {
+        if (GetQueryString("WorkID") == null || GetQueryString("WorkID") == undefined)
+            oid = GetQueryString("OID");
+        else
+            oid = GetQueryString("WorkID");
+    }
 
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 

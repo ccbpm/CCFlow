@@ -117,6 +117,7 @@
     function executeSql(sql, valueField, textField, key) {
         var datas = [];
         if (sql && $.trim(key) != "") {
+            key = key.replace("'", "");
             var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
             var dt = DBAccess.RunSQLReturnTable(_sql);
             if ($.isArray(dt)) {
@@ -228,7 +229,7 @@
             var text = search.val();
             var datas = [];
             var src = opts.dbSrc;
-            
+            text = text.replace("'", "");
             //增加数据源的访问.
             src = src.replace(/@Key/g, text).replace(/~/g, "'");
             var dt = DBAccess.RunDBSrc(src);

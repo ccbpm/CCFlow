@@ -405,6 +405,7 @@ namespace BP.Frm
             dt.Columns.Add("Width", typeof(int));
             dt.Columns.Add("UIContralType", typeof(int));
             dt.Columns.Add("LGType", typeof(int));
+            dt.Columns.Add("AtPara", typeof(string));
 
             //设置标题、单据号位于开始位置
 
@@ -422,6 +423,7 @@ namespace BP.Frm
                 row["Width"] = attr.UIWidthInt;
                 row["UIContralType"] = attr.UIContralType;
                 row["LGType"] = attr.LGType;
+                row["AtPara"] = attr.GetValStringByKey("AtPara");
                 dt.Rows.Add(row);
             }
             ds.Tables.Add(dt);

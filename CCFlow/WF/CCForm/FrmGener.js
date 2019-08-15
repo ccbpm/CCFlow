@@ -1271,7 +1271,7 @@ function figure_Template_Siganture(SigantureID, val, type) {
 
 //签字板
 function figure_Template_HandWrite(HandWriteID, val) {
-    var url = "HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
+    var url = basePath+ "/WF/CCForm/HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
     OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
 }
 

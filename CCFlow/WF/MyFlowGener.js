@@ -702,6 +702,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
                         break;
                     case "TEXT": //文本框
+                    case "HIDDEN":
                         formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
                         break;
                     case "RADIO": //单选钮

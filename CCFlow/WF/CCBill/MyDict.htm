@@ -25,7 +25,7 @@
     <!-- 引入用户要重写的公共js -->
     <script src="../../DataUser/JSLibData/CCBillRef.js" type="text/javascript"></script>
     <script src="MyFrmGener.js" type="text/javascript"></script>
-    <!-- 重要的表单3文件. -->
+    <!-- 重要的表单3文件. -->F
     <script type="text/javascript" src="../CCForm/FrmGener.js"></script>
     <script type="text/javascript" src="../CCForm/FrmFool.js"></script>
     <script type="text/javascript" src="../CCForm/FrmFree.js"></script>
@@ -64,6 +64,7 @@
         $(function () {
             InitToolbar();
         });
+
 
         function InitToolbar() {
 
@@ -321,6 +322,7 @@
                                 formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
                                 break;
                             case "TEXT": //文本框
+                            case "HIDDEN":
                                 formArrResult.push(name + '=' + $(disabledEle).val());
                                 break;
                             case "RADIO": //单选钮

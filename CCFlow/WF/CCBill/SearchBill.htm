@@ -469,7 +469,7 @@
                     continue;
                 }
 
-                if (attr.UIContralType == 1 || attr.UIContralType == 3) {
+                if (attr.UIContralType == 1 || attr.UIContralType == 3 || GetPara(attr.AtPara,"MultipleChoiceSmall" )=="1") {
                     if (width == null || width == "" || width == undefined)
                         width = 180;
                     if (attr.LGType == 0)
@@ -507,6 +507,7 @@
 
                 if (width == null || width == "" || width == undefined)
                     width = 100;
+                 
                 columns.push({
                     field: field,
                     title: title,

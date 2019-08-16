@@ -3,18 +3,123 @@
 <head>
     <title>我的流程</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        function WinOpenIt(url) {
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title:flow.Name,
+                area: ['96%', '90%'],
+                content: url
+            });
+        }
+
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        var webUser = new WebUser();
+        var flow = null;
+
+
+        //页面启动函数.
+        $(function () {
+
+            var flowNo= GetQueryString("FK_Flow");
+              flow = new Entity("BP.WF.Flow", flowNo);
+            $("#SearchLab").html(flow.Name);
+
+            var gwfs = new Entities("BP.WF.GenerWorkFlows");
+            gwfs.Retrieve("FK_Flow", flowNo);
+
+            var timeKey = "";
+            var searchKey = $("#TB_Key").val();
+
+            var html = '';
+            //增加处理.
+            var idx = 0;
+            for (var i = 0; i < gwfs.length; i++) {
+
+                idx++;
+                var gwf = gwfs[i];
+
+                if (gwf.Emps.indexOf(webUser.No) == -1)
+                    continue;
+
+                //if (searchKey.content)
+               
+                var paras = gwf.AtPara; //参数.
+                if (paras != '' && paras != null) {
+                    paras = paras.replace("'", "\\'");
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = "1" + paras;
+                }
+
+                html = "<tr ><td class=Idx >" + idx + "</td>";
+
+                var urlOpen = "WFRpt.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + gwf.WorkID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey;
+
+                if (gwf.WFState != 3 && gwf.TodoEmps.indexOf(webUser.No) >=0 ) {
+                    urlOpen = "MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + gwf.WorkID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey;
+                }
+
+                html += "<td>" + "<a href=\"javascript:WinOpenIt('" + urlOpen + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + gwf.Title + "</a></td>";
+
+                html += "<td>" + gwf.StarterName + "</td>";
+                html += "<td>" + gwf.RDT + "</td>";
+                html += "<td>" + gwf.NodeName + "</td>";
+                html += "<td>" + gwf.TodoEmps + "</td>";
+                html += "<td>" + gwf.NodeOfSDT + "</td>";
+                html += "<td>" + gwf.TodoEmps + "</td>";
+    
+                html += "<td>";
+                html += "<a href=\"javascript:Delete('" + flowNo + "','" + gwf.WorkID + "')\">删除</a>";
+                html += "</td>";
+                html += "</tr>";
+
+                $('#Table1').append(html);
+            }
+        });
+
+
+        function Search()
+        {
+
+        }
+
+        function Start() {
+            var url = "MyFlow.htm?FK_Flow=" + GetQueryString("FK_Flow");
+            window.open(url);
+        }
+
+   </script>
+
 </head>
 <body>
     <table class="table table-striped">
         <caption>
-            请假流程
+            <div id="SearchLab"></div>
             <input type="text" id="TB_Key" name="TB_Key" />
-            <input type="button" id="Btn_Search" name="Btn_Search" value="查询" />
-            <input type="button" id="Btn_Start" name="Btn_Start" value="发起" onclick="" />
-            <input type="button" id="Btn_Group" name="Btn_Group" value="分析" />
+            <input type="button" id="Btn_Search" name="Btn_Search" value="查询"   onclick="Search();"/>
+            <input type="button" id="Btn_Start" name="Btn_Start" value="发起" onclick="Start();" />
+            <!--<input type="button" id="Btn_Group" name="Btn_Group" value="分析" />-->
         </caption>
         <thead id="Table2">
             <tr>

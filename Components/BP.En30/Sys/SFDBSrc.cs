@@ -1142,7 +1142,7 @@ namespace BP.Sys
             {
                 allTables = DBAccess.RunSQLReturnTable(sql.ToString());
 
-                #region 把tables 的英文名称替换为中文. @sly 翻译.
+                #region 把tables 的英文名称替换为中文.
                 //把tables 的英文名称替换为中文.
                 string mapDT = "SELECT PTable,Name FROM Sys_MapData ";
                 DataTable myDT = DBAccess.RunSQLReturnTable(mapDT);

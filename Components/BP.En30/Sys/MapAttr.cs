@@ -1510,6 +1510,8 @@ namespace BP.Sys
         }
         #endregion
 
+
+
         protected override void afterInsert()
         {
             //switch (map.EnDBUrl.DBUrlType)
@@ -1537,7 +1539,14 @@ namespace BP.Sys
             base.afterInsert();
         }
 
-      
+        public string SaveBigNoteHtmlText(string text)
+        {
+            //  BP.DA.DataType.WriteFile( SystemConfig.PathOfDataUser+、、ccform\\BigNoteHtmlText\\.tm )
+           // BP.DA.DataType.re
+            return "";
+        }
+
+
         public void DoDownTabIdx()
         {
             this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.Idx);

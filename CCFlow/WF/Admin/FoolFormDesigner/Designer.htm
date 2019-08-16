@@ -108,6 +108,8 @@
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
+            if (GetQueryString("FK_Node") == "0")
+                $("#FrmNodeComponent").hide();
             //初始化groupID.
             var fk_mapData = GetQueryString("FK_MapData");
             var isF = GetQueryString("IsFirst"); //是否第一次加载?

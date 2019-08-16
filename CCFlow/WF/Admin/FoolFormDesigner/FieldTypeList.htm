@@ -156,6 +156,7 @@
             var url = "./Template/Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
             window.location.href = url;
         }
+        
     </script>
     <!--<base target="_self" /> -->
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
@@ -389,138 +390,181 @@
                     }
 
                     //超链接.
-                    function ExtLink() {
+    function ExtLink() {
 
-                        var name = window.prompt('请输入超链接名称:\t\n比如:我的连接、点击这里打开', '我的连接');
-                        if (name == null || name == undefined)
-                            return;
+        var name = window.prompt('请输入超链接名称:\t\n比如:我的连接、点击这里打开', '我的连接');
+        if (name == null || name == undefined)
+            return;
 
-                        var frmID = GetQueryString("FK_MapData");
-                        // alert(frmID + imgName);
-                        var mapAttrs = new Entities("BP.Sys.MapAttrs");
-                        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
-                        if (mapAttrs.length >= 1) {
-                            alert('名称：[' + name + "]已经存在.");
-                            ExtLink();
-                            return;
-                        }
+        var frmID = GetQueryString("FK_MapData");
+        // alert(frmID + imgName);
+        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+        if (mapAttrs.length >= 1) {
+            alert('名称：[' + name + "]已经存在.");
+            ExtLink();
+            return;
+        }
 
-                        //获得ID.
-                        var id = StrToPinYin(name);
-                        var mypk = frmID + "_" + id;
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.MyPK = mypk;
-                        if (mapAttr.IsExits == true) {
-                            alert('名称：[' + name + "]已经存在.");
-                            ExtLink();
-                            return;
-                        }
+        //获得ID.
+        var id = StrToPinYin(name);
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.MyPK = mypk;
+        if (mapAttr.IsExits == true) {
+            alert('名称：[' + name + "]已经存在.");
+            ExtLink();
+            return;
+        }
 
-                        var link = window.prompt('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
-                        if (link == null || link == undefined)
-                            return;
+        var link = window.prompt('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
+        if (link == null || link == undefined)
+            return;
 
-                        var mypk = frmID + "_" + id;
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.SetPara("Url", link.replace(/@/g, '$'));
-                        mapAttr.UIContralType = 9; //超链接.
-                        mapAttr.MyPK = mypk; 
-                        mapAttr.FK_MapData = frmID;
-                        mapAttr.KeyOfEn = id;
-                        mapAttr.Name = name;
-                        mapAttr.GroupID = groupID;
-                        mapAttr.MyDataType = 1;
-                        mapAttr.LGType = 0;
-                        mapAttr.ColSpan = 0; //
-                        mapAttr.UIWidth = 150;
-                        mapAttr.UIHeight = 170;
-                        debugger
-                        mapAttr.Tag1 = "_blank"; //打开目标.
-                        mapAttr.Tag2 = link; // 超链接地址.
-                        mapAttr.Insert(); //插入字段.
-                        mapAttr.Retrieve();
-                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
-                    }
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.SetPara("Url", link.replace(/@/g, '$'));
+        mapAttr.UIContralType = 9; //超链接.
+        mapAttr.MyPK = mypk;
+        mapAttr.FK_MapData = frmID;
+        mapAttr.KeyOfEn = id;
+        mapAttr.Name = name;
+        mapAttr.GroupID = groupID;
+        mapAttr.MyDataType = 1;
+        mapAttr.LGType = 0;
+        mapAttr.ColSpan = 0; //
+        mapAttr.UIWidth = 150;
+        mapAttr.UIHeight = 170;
+        debugger
+        mapAttr.Tag1 = "_blank"; //打开目标.
+        mapAttr.Tag2 = link; // 超链接地址.
+        mapAttr.Insert(); //插入字段.
+        mapAttr.Retrieve();
+        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
+    }
+
+    function ExtBigNoteHtmlText() {
+
+        var frmID = GetQueryString("FK_MapData");
+        var id = "BigNoteHtmlText";
+
+        var myPK =  frmID+ "_"+id;
+
+        var en =new   Entity("BP.Sys.MapAttr");
+        en.SetPKVal(myPK);
+        var num = en.RetrieveFromDBSources();
+        if (num != 0) {
+            //alert('该字段已经存在.');
+            window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
+            return;
+        }
+
+        if (window.confirm('您确认要创建吗？') == false)
+            return;
+
+        en.FK_MapData = GetQueryString("FK_MapData");
+        en.Name = "大块提示文本";
+        en.KeyOfEn = "BigNoteHtmlText";
+        en.MyPK = myPK;
+
+        en.UIContralType = 60; //大块文本.
+        en.MyPK = mypk;
+        en.FK_MapData = frmID;
+        en.KeyOfEn = id;
+        en.Name = name;
+        en.GroupID = groupID;
+        en.MyDataType = 1;
+        en.LGType = 0;
+        en.ColSpan = 4; // 
+        en.UIWidth = 0;
+        en.UIHeight = 100;
+        en.Idx = 0;
+        en.Insert(); //插入字段.
+        en.Retrieve();
+        window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
+        // window.location.href; //"../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
+    }
 
                     //手写签名版.
-                    function ExtHandWriting() {
+    function ExtHandWriting() {
 
-                        var name = window.prompt('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
-                        if (name == null || name == undefined)
-                            return;
+        var name = window.prompt('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
+        if (name == null || name == undefined)
+            return;
 
-                        var frmID = GetQueryString("FK_MapData");
-                        // alert(frmID + imgName);
-                        var mapAttrs = new Entities("BP.Sys.MapAttrs");
-                        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
-                        if (mapAttrs.length >= 1) {
-                            alert('名称：[' + name + "]已经存在.");
-                            ExtHandWriting();
-                            return;
-                        }
+        var frmID = GetQueryString("FK_MapData");
+        // alert(frmID + imgName);
+        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+        if (mapAttrs.length >= 1) {
+            alert('名称：[' + name + "]已经存在.");
+            ExtHandWriting();
+            return;
+        }
 
-                        //获得ID.
-                        var id = StrToPinYin(name);
-                        var mypk = frmID + "_" + id;
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.MyPK = mypk;
-                        if (mapAttr.IsExits == true) {
-                            alert('名称：[' + name + "]已经存在.");
-                            ExtHandWriting();
-                            return;
-                        }
+        //获得ID.
+        var id = StrToPinYin(name);
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.MyPK = mypk;
+        if (mapAttr.IsExits == true) {
+            alert('名称：[' + name + "]已经存在.");
+            ExtHandWriting();
+            return;
+        }
 
-                        var mypk = frmID + "_" + id;
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.UIContralType = 8; //手写签名版.
-                        mapAttr.MyPK = mypk;
-                        mapAttr.FK_MapData = frmID;
-                        mapAttr.KeyOfEn = id;
-                        mapAttr.Name = name;
-                        mapAttr.GroupID = groupID;
-                        mapAttr.MyDataType = 1;
-                        mapAttr.LGType = 0;
-                        mapAttr.ColSpan = 1; // 
-                        mapAttr.UIWidth = 150;
-                        mapAttr.UIHeight = 170;
-                        mapAttr.Insert(); //插入字段.
-                        mapAttr.Retrieve();
-                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
-                    }
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.UIContralType = 8; //手写签名版.
+        mapAttr.MyPK = mypk;
+        mapAttr.FK_MapData = frmID;
+        mapAttr.KeyOfEn = id;
+        mapAttr.Name = name;
+        mapAttr.GroupID = groupID;
+        mapAttr.MyDataType = 1;
+        mapAttr.LGType = 0;
+        mapAttr.ColSpan = 1; // 
+        mapAttr.UIWidth = 150;
+        mapAttr.UIHeight = 170;
+        mapAttr.Insert(); //插入字段.
+        mapAttr.Retrieve();
+        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
+    }
 
                     //流程进度图.
-                    function ExtJobSchedule() {
+    function ExtJobSchedule() {
 
-                        var name = "流程进度图";
-                        var id = "JobSchedule";
-                        var frmID = GetQueryString("FK_MapData");
+        var name = "流程进度图";
+        var id = "JobSchedule";
+        var frmID = GetQueryString("FK_MapData");
 
-                        //获得ID.
-                        var mypk = frmID + "_" + id;
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.MyPK = mypk;
-                        if (mapAttr.IsExits == true) {
-                            alert("已经存在，一个表单仅仅允许有一个流程进度图.");
-                            return;
-                        }
+        //获得ID.
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.MyPK = mypk;
+        if (mapAttr.IsExits == true) {
+            alert("已经存在，一个表单仅仅允许有一个流程进度图.");
+            return;
+        }
 
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.UIContralType = 50; //流程进度图.
-                        mapAttr.MyPK = mypk;
-                        mapAttr.FK_MapData = frmID;
-                        mapAttr.KeyOfEn = id;
-                        mapAttr.Name = name;
-                        mapAttr.GroupID = groupID;
-                        mapAttr.MyDataType = 1;
-                        mapAttr.LGType = 0;
-                        mapAttr.ColSpan = 4; // 
-                        mapAttr.UIWidth = 0;
-                        mapAttr.UIHeight = 100;
-                        mapAttr.Idx = 0;
-                        mapAttr.Insert(); //插入字段.
-                        mapAttr.Retrieve();
-                        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
-                    }
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.UIContralType = 50; //流程进度图.
+        mapAttr.MyPK = mypk;
+        mapAttr.FK_MapData = frmID;
+        mapAttr.KeyOfEn = id;
+        mapAttr.Name = name;
+        mapAttr.GroupID = groupID;
+        mapAttr.MyDataType = 1;
+        mapAttr.LGType = 0;
+        mapAttr.ColSpan = 4; // 
+        mapAttr.UIWidth = 0;
+        mapAttr.UIHeight = 100;
+        mapAttr.Idx = 0;
+        mapAttr.Insert(); //插入字段.
+        mapAttr.Retrieve();
+        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
+
+    }
                     
                 </script>
                 <ul>
@@ -566,7 +610,7 @@
                     <li><a href="javascript:ExtAth();"><b>多附件</b></a> &nbsp;&nbsp;上传多附件.</li>
                     <li><a href="javascript:ExtLink();"><b>超链接</b></a> &nbsp;&nbsp;用于解析把字段做为超链接展现.</li>
                     <li><a href="javascript:ExtHandWriting();"><b>写字板</b></a> &nbsp;&nbsp;手写签名版，画图等.</li>
-
+                    <li><a href="javascript:ExtBigNoteHtmlText();"><b>大块Html说明文字引入</b></a> &nbsp;&nbsp;大块文本文件引入,用于文字说明..</li>
                 </ul>
             </td>
         </tr>

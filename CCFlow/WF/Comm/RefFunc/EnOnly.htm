@@ -107,9 +107,9 @@
 
         ///设置.
         function Setting() {
-            var url = "Setting.htm?EnName=" + GetQueryString("EnName");
+            var url = "Setting.htm?EnName=" + GetQueryString("EnName")+"&PKVal=" + GetQueryString("PKVal");
             //WinOpen(url, "xxs");
-            OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
+            window.parent.OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

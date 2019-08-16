@@ -1278,7 +1278,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_GroupField);
 
             //加入明细表.
-            DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
+            DataTable Sys_MapDtl = md.OrigMapDtls.ToDataTableField("Sys_MapDtl");
             ds.Tables.Add(Sys_MapDtl);
 
             //加入枚举表.
@@ -1366,7 +1366,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_GroupField);
 
             //加入明细表.
-            DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
+            DataTable Sys_MapDtl = md.OrigMapDtls.ToDataTableField("Sys_MapDtl");
             ds.Tables.Add(Sys_MapDtl);
 
             //加入枚举表.

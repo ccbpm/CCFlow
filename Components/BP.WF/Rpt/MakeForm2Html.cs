@@ -495,7 +495,8 @@ namespace BP.WF
 
             #region 输出明细.
             int dtlsCount = 0;
-            MapDtls dtls = new MapDtls(frmID);
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, frmID, MapDtlAttr.FK_Node, 0);
             foreach (MapDtl dtl in dtls)
             {
                 if (dtl.IsView == false)
@@ -510,53 +511,53 @@ namespace BP.WF
 
                 MapAttrs attrsOfDtls = new MapAttrs(dtl.No);
            
-            sb.Append("<table style='wdith:100%' >");
-            sb.Append("<tr>");
-            foreach (MapAttr item in attrsOfDtls)
-            {
-                if (item.KeyOfEn == "OID")
-                    continue;
-                if (item.UIVisible == false)
-                    continue;
-
-                sb.Append("<th class='DtlTh'>" + item.Name + "</th>");
-            }
-            sb.Append("</tr>");
-            //#endregion 输出标题.
-
-
-            //#region 输出数据.
-            GEDtls gedtls = new GEDtls(dtl.No);
-            gedtls.Retrieve(GEDtlAttr.RefPK, workid);
-            foreach (GEDtl gedtl in gedtls)
-            {
+                sb.Append("<table style='wdith:100%' >");
                 sb.Append("<tr>");
-
                 foreach (MapAttr item in attrsOfDtls)
                 {
-                    if (item.KeyOfEn.Equals("OID") || item.UIVisible == false)
+                    if (item.KeyOfEn == "OID")
+                        continue;
+                    if (item.UIVisible == false)
                         continue;
 
-                    if (item.UIContralType == UIContralType.DDL)
-                    {
-                        sb.Append("<td class='DtlTd'>" + gedtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
-                        continue;
-                    }
-
-                    if (item.IsNum)
-                    {
-                        sb.Append("<td class='DtlTd' style='text-align:right' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
-                        continue;
-                    }
-
-                    sb.Append("<td class='DtlTd'>" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                    sb.Append("<th class='DtlTh'>" + item.Name + "</th>");
                 }
                 sb.Append("</tr>");
-            }
-            //#endregion 输出数据.
+                //#endregion 输出标题.
 
 
-            sb.Append("</table>");
+                //#region 输出数据.
+                GEDtls gedtls = new GEDtls(dtl.No);
+                gedtls.Retrieve(GEDtlAttr.RefPK, workid);
+                foreach (GEDtl gedtl in gedtls)
+                {
+                    sb.Append("<tr>");
+
+                    foreach (MapAttr item in attrsOfDtls)
+                    {
+                        if (item.KeyOfEn.Equals("OID") || item.UIVisible == false)
+                            continue;
+
+                        if (item.UIContralType == UIContralType.DDL)
+                        {
+                            sb.Append("<td class='DtlTd'>" + gedtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                            continue;
+                        }
+
+                        if (item.IsNum)
+                        {
+                            sb.Append("<td class='DtlTd' style='text-align:right' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                            continue;
+                        }
+
+                        sb.Append("<td class='DtlTd'>" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                    }
+                    sb.Append("</tr>");
+                }
+                //#endregion 输出数据.
+
+
+                sb.Append("</table>");
 
                 //string src = "";
                 //if (dtl.HisEditModel == EditModel.TableModel)

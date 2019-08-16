@@ -763,7 +763,24 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 从表
+        /// 从表原始属性的获取
+        /// </summary>
+        public MapDtls OrigMapDtls
+        {
+            get
+            {
+                MapDtls obj = this.GetRefObject("MapDtls") as MapDtls;
+                if (obj == null)
+                {
+                    obj = new MapDtls();
+                    obj.Retrieve(MapDtlAttr.FK_MapData, this.No,MapDtlAttr.FK_Node, 0);
+                    this.SetRefObject("MapDtls", obj);
+                }
+                return obj;
+            }
+        }
+        /// <summary>
+        /// 查询给MapData下的所有从表数据
         /// </summary>
         public MapDtls MapDtls
         {

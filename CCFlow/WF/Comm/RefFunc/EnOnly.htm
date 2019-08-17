@@ -152,7 +152,11 @@
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
             var mapAtrrs = frmData.Sys_MapAttr;
-
+             //用户设置
+            var mypk = new WebUser().No + "_Fields_HS_" + GetQueryString("EnName");
+            var userRegedit = new Entity("BP.Sys.UserRegedit");
+            userRegedit.SetPKVal(mypk);
+            var count = userRegedit.RetrieveFromDBSources();
 
             var tabIndex = GetQueryString("tabIndex");
 
@@ -164,6 +168,9 @@
 
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
+                if (count!=0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 &&  gf.OID!=mapData.GetPara("PK"))//去除基本信息
+                    continue;
+
                 var lab = gf.Lab;
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
@@ -176,7 +183,7 @@
                     html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
 
-                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
+                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID,userRegedit);
                 html += "</div>";
             }
             if (Sys_GroupFields.length > 1)
@@ -366,15 +373,16 @@
         }
 
         //解析表单字段 MapAttr.
-        function InitMapAttr(Sys_MapAttr, mainData, groupID) {
+        function InitMapAttr(Sys_MapAttr, mainData, groupID,userRegedit) {
 
             var html = "<table border='0' style='width:99%;' >";
             var isDropTR = true;
             var isExitMyNum = false;
             var fileDesc = "";
             for (var i = 0; i < Sys_MapAttr.length; i++) {
-
                 var attr = Sys_MapAttr[i];
+                if (userRegedit!= null && userRegedit!=undefined && userRegedit.Vals.indexOf("," + attr.KeyOfEn) != -1)
+                    continue;
                 if (attr.KeyOfEn == "MyFileNum") {
                     isExitMyNum = true;
                     continue;

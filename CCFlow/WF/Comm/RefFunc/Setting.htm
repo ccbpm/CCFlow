@@ -52,7 +52,6 @@
         $(function () {
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            var enName = GetQueryString("EnName");
             httpHandler.AddUrlData();
             var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
             if (data.indexOf('err@') == 0) {
@@ -82,7 +81,7 @@
                 str += "," + groupName;
 
                 var row = {};
-                row.id = "dtM_" + num;
+                row.id = "dtM_" + groupName;
                 row.name = groupName;
                 groupFuncs.push(row);
                 num++;
@@ -95,22 +94,16 @@
 
         //字段查询.
         function Fields() {
-
+            var enName = GetQueryString("EnName");
             //获得字段列表.
             var Sys_MapAttr = frmData["Sys_MapAttr"];
             //获取字段分组
             var Sys_GroupField = frmData["Sys_GroupField"];
 
-            var enName = GetQueryString("EnName");
-
-            // hd 标识 hid show .
-
-            var mypk = webUser.No + "_Fields_HS_" + enName;
+             var mypk = webUser.No + "_Fields_HS_" + enName;
             var cfgEn = new Entity("BP.Sys.UserRegedit");
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
-
-            //  alert(cfgEn.Vals);
 
             var html = "";
             html += "<table width='100%'>";
@@ -130,7 +123,7 @@
                     checked = " checked=true ";
                 html += "<tbody>";
                 html += "<tr>";
-                html += "<td colspan = '3'><label><input type=checkbox " + checked + " name='" + groupField.OID + "' onclick='swapCheck(\"" + groupField.OID + "\")'/>" + groupField.Lab + "</label></td>";
+                html += "<td colspan = '3'><label><input type=checkbox " + checked + " name='FieldGroup' id='" + groupField.OID + "' onclick='swapCheck(\"" + groupField.OID + "\")'/>" + groupField.Lab + "</label></td>";
                 html += "</tr>";
                 html += "</tbody>";
                 html += "<tbody id = '" + groupField.OID + "_All'>";
@@ -151,7 +144,7 @@
                             }
                         }
 
-                        html += "<td><label><input type=checkbox " + checked + " name='" + mapAttr.KeyOfEn + "' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
+                        html += "<td><label><input type=checkbox " + checked + " name='FieldAttr' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
                         html += "</tr>";
 
                     }
@@ -169,7 +162,8 @@
         }
         //复选框全选反选
         function swapCheck(oid) {
-            if ($("input:checkbox[name='" + oid + "']").prop('checked')) {
+            var obj = document.getElementById(oid);
+            if (obj != null && obj != undefined && obj.checked) {
                 $("#" + oid + "_All").find("input:checkbox").each(function () {
                     $(this).prop("checked", true);
                 });
@@ -181,49 +175,27 @@
         };
         //保存字段
         function SaveFields() {
-
-
-            //获得字段列表.
-            var Sys_MapAttr = frmData["Sys_MapAttr"];
-            //获取字段分组
-            var Sys_GroupField = frmData["Sys_GroupField"];
-
             var enName = GetQueryString("EnName");
-
-            // hd 标识 hid show .
-
             var mypk = webUser.No + "_Fields_HS_" + enName;
             var cfgEn = new Entity("BP.Sys.UserRegedit");
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
 
-            //求出来所有隐藏的字段.
+
+            //求出来需要所有隐藏的分组.
             var Mkeys = "";
-            for (var j = 0; j < Sys_GroupField.length; j++) {
-                var groupField = Sys_GroupField[j];
-
-                var boolen = $('input:checkbox[name=' + groupField.OID + ']').prop('checked');
-                if (boolen == false)
-                    continue;
-
-                Mkeys += "," + groupField.OID;
-            }
-
+             $.each($('input:checkbox[name=FieldGroup]:checked'),function(i,obj){
+                     Mkeys += "," + obj.id+",";
+             });
             //求出来所有隐藏的字段.
             var keys = "";
-            for (var i = 0; i < Sys_MapAttr.length; i++) {
-                var mapAttr = Sys_MapAttr[i];
-
-                var boolen = $('input:checkbox[name=' + mapAttr.KeyOfEn + ']').prop('checked');
-                if (boolen == false)
-                    continue;
-
-                keys += "," + mapAttr.KeyOfEn;
-            }
-
+             $.each($('input:checkbox[name=FieldAttr]:checked'),function(i,obj){
+                     keys += "," + obj.id+",";
+             });
+           
             cfgEn.FK_Emp = webUser.No;
             cfgEn.CfgKey = 'Fields_HS';
-            cfgEn.FK_MapData = GetQueryString("EnName");
+            cfgEn.FK_MapData = enName;
             cfgEn.MVals = Mkeys;
             cfgEn.Vals = keys;
             cfgEn.Save();
@@ -235,7 +207,7 @@
             //获得字段列表.
             var dtM = frmData["dtM"];
             //获取字段分组
-            //var Sys_GroupField = frmData["Sys_GroupField"];
+
 
             var enName = GetQueryString("EnName");
 
@@ -263,7 +235,7 @@
                     checked = " checked=true ";
                 html += "<tbody>";
                 html += "<tr>";
-                html += "<td colspan = '2'><label><input type=checkbox " + checked + " name='" + groupFunc.id + "' onclick='swapCheck(\"" + groupFunc.id + "\")'/>" + groupFunc.name + "</label></td>";
+                html += "<td colspan = '2'><label><input type=checkbox " + checked + " name='FuncGroup' id='"+groupFunc.id+"' onclick='swapCheck(\"" + groupFunc.id + "\")'/>" + groupFunc.name + "</label></td>";
                 html += "</tr>";
                 html += "</tbody>";
                 html += "<tbody id = '" + groupFunc.id + "_All'>";
@@ -286,7 +258,7 @@
                             }
                         }
 
-                        html += "<td ><label><input type=checkbox " + checked + " name='" + funcs.No + "' id='" + funcs.No + "' />" + funcs.Title + "</label></td>";
+                        html += "<td ><label><input type=checkbox " + checked + " name='FuncMethod' id='" + funcs.No + "' />" + funcs.Title + "</label></td>";
                         html += "</tr>";
 
                     }
@@ -314,29 +286,16 @@
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
 
-            //求出来所有隐藏的功能分组.
+            //求出来需要所有隐藏的功能分组.
             var Mkeys = "";
-            for (var j = 0; j < groupFuncs.length; j++) {
-                var groupFunc = groupFuncs[j];
-
-                var boolen = $('input:checkbox[name=' + groupFunc.id + ']').prop('checked');
-                if (boolen == false)
-                    continue;
-
-                Mkeys += "," + groupFunc.id;
-            }
-
-            //求出来所有隐藏的功能.
+             $.each($('input:checkbox[name=FuncGroup]:checked'),function(i,obj){
+                     Mkeys += "," + obj.id+",";
+             });
+            //求出来所有隐藏的功能
             var keys = "";
-            for (var i = 0; i < dtM.length; i++) {
-                var funcs = dtM[i];
-
-                var boolen = $('input:checkbox[name=' + funcs.No + ']').prop('checked');
-                if (boolen == false)
-                    continue;
-
-                keys += "," + funcs.No;
-            }
+             $.each($('input:checkbox[name=FuncMethod]:checked'),function(i,obj){
+                     keys += "," + obj.id+",";
+             });
 
             cfgEn.FK_Emp = webUser.No;
             cfgEn.CfgKey = 'Funcs_HS';

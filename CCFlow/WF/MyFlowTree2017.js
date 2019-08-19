@@ -3,7 +3,7 @@
 1,里面包含一些必备的数据.
 */
 var workNode = null;
-var IsReadonly = "0";
+var IsReadonly = GetQueryString("IsReadonly");
 var IsCC = "0";
 
 

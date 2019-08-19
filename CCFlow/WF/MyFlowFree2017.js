@@ -1019,7 +1019,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
+    if (sta == 2 || pageData.IsReadonly == 1)//只读
     {
         src += "&DoType=View";
     }

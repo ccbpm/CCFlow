@@ -5,6 +5,7 @@ using BP.En;
 using BP.Sys;
 using System.Collections;
 using BP.Port;
+using System.IO;
 
 namespace BP.WF.Template
 {
@@ -1044,7 +1045,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoHelpRole()
         {
-            return "../../Admin/FoolFormDesigner/HelpRole.htm?FrmID=ND" + this.NodeID;
+            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID;
         }
         #endregion
 
@@ -1269,7 +1270,32 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/Bill.htm?FK_Node=" + this.NodeID + "&NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
+        /// <summary>
+        /// 保存提示信息
+        /// </summary>
+        /// <returns></returns>
+        public string SaveBigNoteHtmlText(string text)
+        {
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.NodeID + ".htm";
 
+            BP.DA.DataType.WriteFile(file, text);
+            return "保存成功！";
+        }
+        /// <summary>
+        /// 读取提示信息
+        /// </summary>
+        /// <returns></returns>
+        public string ReadBigNoteHtmlText()
+        {
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.NodeID + ".htm";
+            string doc = "";
+            if (File.Exists(file))
+            {
+                doc = BP.DA.DataType.ReadTextFile(file);
+
+            }
+            return doc;
+        }
         protected override bool beforeUpdate()
         {
             //更新流程版本

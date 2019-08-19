@@ -287,7 +287,15 @@ namespace BP.WF.Template
         //备注是否可用
         /// </summary>
         public const string NoteEnable = "NoteEnable";
-       
+
+        /// <summary>
+        /// 帮助按钮
+        /// </summary>
+        public const string HelpLab = "HelpLab";
+        /// <summary>
+        /// 提示方式.
+        /// </summary>
+        public const string HelpRole = "HelpRole";
 
 
         #region 公文2019

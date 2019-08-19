@@ -638,6 +638,9 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.NoteEnable, 0, "启用规则", true, true, BtnAttr.NoteEnable, @"0=禁用@1=启用@2=只读");
 
+                //for 周大福.
+                map.AddTBString(BtnAttr.HelpLab, "帮助", "帮助标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.HelpRole, 0, "帮助显示规则", true, true, BtnAttr.HelpRole, @"0=禁用@1=启用@2=强制提示@3=选择性提示");
                 #endregion  功能按钮状态
 
                 //节点工具栏,主从表映射.
@@ -927,6 +930,16 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "设置提示信息";
+                rm.GroupName = "实验中的功能";
+           //     rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
+                rm.ClassMethodName = this.ToString() + ".DoHelpRole";  //要执行的方法名.
+                rm.RefAttrKey = BtnAttr.HelpRole; //帮助信息.
+                rm.RefMethodType = RefMethodType.LinkeWinOpen; // 功能类型
+                map.AddRefMethod(rm);
+
                 #endregion 实验中的功能
 
                 this._enMap = map;
@@ -1025,7 +1038,14 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID;
         }
-
+        /// <summary>
+        /// 加载提示信息
+        /// </summary>
+        /// <returns></returns>
+        public string DoHelpRole()
+        {
+            return "../../Admin/FoolFormDesigner/HelpRole.htm?FrmID=ND" + this.NodeID;
+        }
         #endregion
 
         #region 表单相关.

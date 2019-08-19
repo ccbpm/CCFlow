@@ -1239,14 +1239,6 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
                 #endregion
 
-                #region 更新表单的边界.2014-10-18
-                MapDatas mds = new MapDatas();
-                mds.RetrieveAll();
-
-                //  foreach (MapData md in mds)
-                //    md.ResetMaxMinXY(); //更新边界.
-                #endregion 更新表单的边界.
-
                 #region 升级Img
                 FrmImg img = new FrmImg();
                 img.CheckPhysicsTable();

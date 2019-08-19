@@ -2028,7 +2028,7 @@ namespace BP.En
             return this.Update(null);
         }
         /// <summary>
-        /// 仅仅更新一个属性 @shilianyu.
+        /// 仅仅更新一个属性
         /// </summary>
         /// <param name="key1">key1</param>
         /// <param name="val1">val1</param>

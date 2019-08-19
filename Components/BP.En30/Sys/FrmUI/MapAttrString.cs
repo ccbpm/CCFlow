@@ -307,7 +307,7 @@ namespace BP.Sys.FrmUI
             string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);
 
-            //删除相关的图片信息. @shilianyu.
+            //删除相关的图片信息.
             if (DBAccess.IsExitsTableCol("Sys_FrmImg", "KeyOfEn") == true)
                 sql = "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);

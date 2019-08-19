@@ -3,6 +3,7 @@ using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
+using System.IO;
 
 namespace BP.Sys
 {
@@ -1538,15 +1539,32 @@ namespace BP.Sys
             //}
             base.afterInsert();
         }
-
+        /// <summary>
+        /// 保存大块html文本
+        /// </summary>
+        /// <returns></returns>
         public string SaveBigNoteHtmlText(string text)
         {
-            //  BP.DA.DataType.WriteFile( SystemConfig.PathOfDataUser+、、ccform\\BigNoteHtmlText\\.tm )
-           // BP.DA.DataType.re
-            return "";
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\"+ this.FK_MapData + ".htm";
+
+            BP.DA.DataType.WriteFile(file, text);
+            return "保存成功！";
         }
+        /// <summary>
+        /// 读取大块html文本
+        /// </summary>
+        /// <returns></returns>
+        public string ReadBigNoteHtmlText()
+        {
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            string doc = "";
+            if (File.Exists(file))
+            {
+                doc = BP.DA.DataType.ReadTextFile(file);
 
-
+            }
+            return doc;
+        }
         public void DoDownTabIdx()
         {
             this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.Idx);

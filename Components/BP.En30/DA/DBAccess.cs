@@ -3158,7 +3158,7 @@ namespace BP.DA
                 return true;
         }
         /// <summary>
-        /// 是否是view @shilianyu.
+        /// 是否是view 
         /// </summary>
         /// <param name="tabelOrViewName"></param>
         /// <returns></returns>

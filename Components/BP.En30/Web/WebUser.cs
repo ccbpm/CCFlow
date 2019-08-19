@@ -561,21 +561,17 @@ namespace BP.Web
             {
             }
 
+
             try
             {
                 string val = HttpContextHelper.RequestCookieGet(valKey, "CCS");
-                /*
-                if (isChinese)
-                {
-                    val = HttpUtility.UrlDecode(hc[valKey]);
-                    if (val == null)
-                        val = hc.Values[valKey];
-                }
-                else
-                    val = hc.Values[valKey];
-                */
 
-                if (DataType.IsNullOrEmpty(val))
+				if (isChinese)
+					val = HttpUtility.UrlDecode(val);
+					 
+
+
+				if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
                 return val;
             }

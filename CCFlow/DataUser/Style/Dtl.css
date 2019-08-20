@@ -63,5 +63,28 @@ input[disabled],input:disabled{
 border:1px solid #DDD;
 background-color:#F9F9F9;
 color:#ACA899;
-} 
+}
+.combo {
+    border-color: #d4d4d4;
+    background-color: #ffffff;
+    height: 22px;
+}
+
+.combo-arrow {
+    background-color: #E0ECFF;
+}
+
+.textbox-text {
+    border: none !important;
+    outline: none !important;
+    height: 28px !important;
+}
+
+.combo-arrow {
+    height: 28px !important;
+}
+
+.textbox-addon-right {
+    float: right;
+}
  

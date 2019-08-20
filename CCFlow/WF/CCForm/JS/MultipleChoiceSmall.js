@@ -59,7 +59,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, tbID, rowIndex, OID) {
         var tb = $("#" + tbID);
         var w = tb.outerWidth();
         var h = tb.outerHeight();
-        tb.css("display", "none");
+        tb.hide();
 
         var cbx = $('<input type="text" />');
         cbx.attr("id", cbxID);
@@ -115,7 +115,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, tbID, rowIndex, OID) {
 //checkbox 模式.
 function MakeCheckBoxsModel(mapExt, data, mapAttr,tbID) {
     var textbox = $("#" + tbID);
-    textbox.css("display", "hidden");
+    textbox.hide();
     var tbVal = textbox.val();
     if (tbVal == null) tbVal = "";
     for (var i = 0; i < data.length; i++) {
@@ -140,7 +140,7 @@ function MakeCheckBoxsModel(mapExt, data, mapAttr,tbID) {
             enableAttr = "disabled='disabled'";
         }
 
-        var cb = $("<input " + enableAttr + " type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + textboxId + "\",\"" + name + "\")'  />");
+        var cb = $("<input " + enableAttr + " type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + tbID + "\",\"" + name + "\")'  />");
 
 
         if (tbVal.indexOf(keyValue + ',') != -1)

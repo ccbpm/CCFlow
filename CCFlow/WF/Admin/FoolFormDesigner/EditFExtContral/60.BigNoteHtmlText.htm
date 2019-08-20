@@ -44,6 +44,10 @@
             var frmID = GetQueryString("FrmID");
             //获取富文本的内容
             var html = editor.getContent();
+            if (html == "") {
+                alert("内容不能为空！");
+                return;
+            }
             var en = new Entity("BP.Sys.MapAttr", frmID + "_" + id);
             //执行保存富文本的内容
             var msg = en.DoMethodReturnString("SaveBigNoteHtmlText",html);

@@ -1274,9 +1274,9 @@ namespace BP.WF.Template
         /// 保存提示信息
         /// </summary>
         /// <returns></returns>
-        public string SaveBigNoteHtmlText(string text)
+        public string SaveHelpAlert(string text)
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.NodeID + ".htm";
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\HelpAlert\\" + this.NodeID + ".htm";
 
             BP.DA.DataType.WriteFile(file, text);
             return "保存成功！";
@@ -1285,9 +1285,9 @@ namespace BP.WF.Template
         /// 读取提示信息
         /// </summary>
         /// <returns></returns>
-        public string ReadBigNoteHtmlText()
+        public string ReadHelpAlert()
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.NodeID + ".htm";
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\HelpAlert\\" + this.NodeID + ".htm";
             string doc = "";
             if (File.Exists(file))
             {

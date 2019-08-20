@@ -33,7 +33,7 @@
             var nodeID = GetQueryString("NodeID");
 
             var en = new Entity("BP.WF.Template.NodeExt", nodeID);
-            var doc = en.DoMethodReturnString("ReadBigNoteHtmlText");
+            var doc = en.DoMethodReturnString("ReadHelpAlert");
             //初始化富文本框的内容
             editor.setContent(doc);
 
@@ -43,9 +43,13 @@
             var nodeID = GetQueryString("NodeID");
             //获取富文本的内容
             var html = editor.getContent();
+            if (html == "") {
+                alert("内容不能为空！");
+                return;
+            }
             var en = new Entity("BP.WF.Template.NodeExt", nodeID);
             //执行保存富文本的内容
-            var msg = en.DoMethodReturnString("SaveBigNoteHtmlText", html);
+            var msg = en.DoMethodReturnString("SaveHelpAlert", html);
 
             alert(msg);
             window.location.href = window.location.href;

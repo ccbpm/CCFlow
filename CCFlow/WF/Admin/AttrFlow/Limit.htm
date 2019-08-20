@@ -52,52 +52,52 @@
 
             var dat = data;
             $("#TB_Alert").val(dat.StartLimitAlert); //限制提示信息
-            switch (dat.StartLimitRole) {
-                case "0": //不限制 None
+            switch (parseInt(dat.StartLimitRole)) {
+                case 0: //不限制 None
                     $("#RB_None").attr("checked", true);
                     //$("input[name=xzgz][value=RB_None]").attr("checked", true); 
                     $("#TB_ByTimePara").val(dat.StartLimitPara); //for test
                     break;
-                case "1": //天
+                case 1: //天
                     $("#RB_ByTime").attr("checked", true);
                     $("#TB_ByTimePara").val(dat.StartLimitPara);
                     $("#DDL_ByTime").val(0);
                     break;
-                case "2": //周
+                case 2: //周
                     $("#RB_ByTime").attr("checked", true);
                     $("#TB_ByTimePara").val(dat.StartLimitPara);
                     $("#DDL_ByTime").val(1);
                     break;
-                case "3": //月份
+                case 3: //月份
                     $("#RB_ByTime").attr("checked", true);
                     $("#TB_ByTimePara").val(dat.StartLimitPara);
                     $("#DDL_ByTime").val(2);
                     break;
-                case "4": 	//月份？
+                case 4: 	//月份？
                     $("#RB_ByTime").attr("checked", true);
                     $("#TB_ByTimePara").val(dat.StartLimitPara);
                     $("#DDL_ByTime").val(3);
                     break;
-                case "5": //年度
+                case 5: //年度
                     $("#RB_ByTime").attr("checked", true);
                     $("#TB_ByTimePara").val(dat.StartLimitPara);
                     $("#DDL_ByTime").val(4);
                     break;
-                case "6": 		//发起的列不能重复,(多个列可以用逗号分开)
+                case 6: 		//发起的列不能重复,(多个列可以用逗号分开)
                     $("#RB_ColNotExit").attr("checked", true);
                     $("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
                     break;
-                case "7": 	//<=0
+                case 7: 	//<=0
                     $("#RB_SQL").attr("checked", true);
                     $("#TB_SQL_Para").val(dat.StartLimitPara);
                     $("#DDL_SQL").val(0);
                     break;
-                case "8": //>0
+                case 8: //>0
                     $("#RB_SQL").attr("checked", true);
                     $("#TB_SQL_Para").val(dat.StartLimitPara);
                     $("#DDL_SQL").val(1);
                     break;
-                case "9": 	//为子流程时仅仅只能被调用1此
+                case 9: 	//为子流程时仅仅只能被调用1此
                     $("#RB_OnlyOneSubFlow").attr("checked", true);
                     break;
                 default:

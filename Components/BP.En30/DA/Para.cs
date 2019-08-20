@@ -182,7 +182,7 @@ namespace BP.DA
 		}
         public void Add( object obj)
         {
-            this.Add("p", obj);
+           this.Add("p", obj);
         }
         public void Add(string _name, object obj)
         {
@@ -202,17 +202,16 @@ namespace BP.DA
             }
 
             // 2019-8-8 适配pgsql数据库的新版驱动，要求数据类型一致
-            if (String.Compare("FK_Node", _name, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                this.Add(_name, Convert.ToInt32(obj));
-                return;
-            }
-
-            if (String.Compare("WorkID", _name, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                this.Add(_name, Convert.ToInt64(obj));
-                return;
-            }
+            //if (String.Compare("FK_Node", _name, StringComparison.OrdinalIgnoreCase) == 0)
+            //{
+            //    this.Add(_name, Convert.ToInt32(obj));
+            //    return;
+            //}
+            //if (String.Compare("WorkID", _name, StringComparison.OrdinalIgnoreCase) == 0)
+            //{
+            //    this.Add(_name, Convert.ToInt64(obj));
+            //    return;
+            //}
 
             if (obj.GetType() == typeof(string))
             {
@@ -276,7 +275,7 @@ namespace BP.DA
 			this.Add(en);
 		}
 
-        private void Add(string _name, Int32 _val)
+        public void Add(string _name, Int32 _val)
 		{
 			Para en = new Para();
 			en.DAType=System.Data.DbType.Int32;
@@ -284,7 +283,7 @@ namespace BP.DA
 			en.ParaName = _name ;
 			this.Add(en);
 		}
-        private void Add(string _name, Int64 _val)
+        public void Add(string _name, Int64 _val)
         {
             Para en = new Para();
             en.DAType = System.Data.DbType.Int64;
@@ -292,7 +291,7 @@ namespace BP.DA
             en.ParaName = _name;
             this.Add(en);
         }
-        private void Add(string _name, float _val)
+        public void Add(string _name, float _val)
 		{
 			Para en = new Para();
 			en.DAType=System.Data.DbType.Decimal;
@@ -309,7 +308,7 @@ namespace BP.DA
             en.ParaName = _name;
             this.Add(en);
         }
-        private void Add(string _name, decimal _val)
+        public void Add(string _name, decimal _val)
 		{
 			Para en = new Para();
 			en.DAType=System.Data.DbType.Decimal;
@@ -317,7 +316,7 @@ namespace BP.DA
 			en.ParaName = _name ;
 			this.Add(en);			
 		}
-        private void Add(string _name, double _val)
+        public void Add(string _name, double _val)
         {
             Para en = new Para();
             en.DAType = System.Data.DbType.Decimal;

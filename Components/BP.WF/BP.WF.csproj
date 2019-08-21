@@ -162,10 +162,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\ZYOA\ZYOA\Default.aspx.cs">
-      <Link>Default.aspx.cs</Link>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="AppClass.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />

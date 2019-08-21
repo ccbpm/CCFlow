@@ -253,24 +253,23 @@
 	</style>
 </head>
 <body class="easyui-layout">
-        <div region="north" border="true" class="cs-north">
-            <div class="cs-north-bg">
-                <!--底部功能按钮 发送、移交-->
-                <div id="topToolBar" style="text-align: left;" class="Bar">
-                </div>
-            </div>
-            <div id="mm3" style="width: 150px;" runat="server">
+    <div region="north" border="true" class="cs-north">
+        <div class="cs-north-bg">
+            <!--底部功能按钮 发送、移交-->
+            <div id="topToolBar" style="text-align: left;" class="Bar">
             </div>
         </div>
-        <div region="west" border="true" split="true" title=" " class="cs-west">
-            <ul id="flowFormTree" class="easyui-tree" data-options="animate:true,dnd:false">
-            </ul>
+        <div id="mm3" style="width: 150px;" runat="server">
         </div>
-        <div id="mainPanle" region="center" border="true" style=" padding:0px;">
-            <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools'">
-            </div>
+    </div>
+    <div region="west" border="true" split="true" title=" " class="cs-west">
+        <ul id="flowFormTree" class="easyui-tree" data-options="animate:true,dnd:false"></ul>
+    </div>
+    <div id="mainPanle" region="center" border="true" style=" padding:0px;">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools'">
         </div>
-    
+    </div>
+
     <!--杨玉慧加 暂时解决POP窗不好用的问题-->
     <div class="modal fade" id="returnPopValModal">
         <div class="modal-dialog" style="margin-left: auto; margin-right: auto;">
@@ -281,7 +280,7 @@
                 </div>
                 <div class="modal-body">
                     <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm"
-                        name="iframePopModalForm"></iframe>
+                            name="iframePopModalForm"></iframe>
                     <div style="text-align: right;">
                         <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
                         <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
@@ -300,7 +299,8 @@
         </div>
         <h3 class="popover-title">
             <span>title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;"
-                id="span_CloseNoticeInfo">×</span></h3>
+                                    id="span_CloseNoticeInfo">×</span>
+        </h3>
         <div class="popover-content">顶部的 Popover 中的一些内容</div>
     </div>
     <div id="mm" class="easyui-menu cs-tab-menu">
@@ -315,7 +315,9 @@
             <div class="modal-content" style="border-radius: 0px;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white;
-                        opacity: 1; display: none;">×</button>
+                        opacity: 1; display: none;">
+                        ×
+                    </button>
                     <h4 class="modal-title">选择附件</h4>
                 </div>
                 <div class="modal-body">
@@ -371,6 +373,35 @@
                     </div>
                     <div style="text-align: right;">
                         <button type="button" class="btn" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <div class="modal fade" id="HelpAlterDiv">
+        <div class="modal-dialog" style="margin-left: auto; margin-right: auto; width: 800px;">
+            <div class="modal-content" style="border-radius: 0px;">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" style="color: #0000007a;
+                        border: none; background: transparent;float: right;">
+                        ×
+                    </button>
+                    <h4 class="modal-title">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div id='HelpAlter'>
+                    </div>
+                    <div style="text-align: right;">
+                        <button type="button" class="btn" data-dismiss="modal">
+                            确定
+                        </button>
                     </div>
                 </div>
             </div>

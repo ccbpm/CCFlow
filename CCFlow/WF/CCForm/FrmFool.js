@@ -320,9 +320,7 @@ function InitThreeColMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
 
         if (attr.GroupID != groupID || attr.UIVisible == 0)
             continue;
-        //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
-        lab = GetLab(frmData, attr);
-
+       
         rowSpan = attr.RowSpan;
         colSpan = attr.ColSpan;
         textColSpan = attr.TextColSpan;
@@ -330,6 +328,24 @@ function InitThreeColMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
 
         colWidth = 33 * parseInt(colSpan) + "%";
         textWidth = 33 * parseInt(textColSpan) + "%";
+
+        //大文本备注信息 独占一行
+        if (attr.UIContralType == 60) {
+            //获取文本信息
+            var filename = basePath + "/DataUser/CCForm/BigNoteHtmlText/" + attr.FK_MapData + ".htm";
+            var htmlobj = $.ajax({ url: filename, async: false });
+            var str = htmlobj.responseText;
+            //str = str.replace(/.+/g, '</br>');
+            html += "<tr>";
+            html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'>" + str + "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            UseColSpan = 0;
+            continue;
+        }
+
+        //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
+        lab = GetLab(frmData, attr);
 
         //跨列设置(显示的是文本)
         if (colSpan == 0) {
@@ -457,9 +473,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         if (attr.GroupID != groupID || attr.UIVisible == 0)
             continue;
 
-        //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
-        lab = GetLab(frmData, attr);
-
+        
         //赋值
         rowSpan = parseInt(attr.RowSpan);
         colSpan = parseInt(attr.ColSpan);
@@ -471,6 +485,24 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             colWidth = 23 * parseInt(colSpan) + "%";
             textWidth = 10 * parseInt(textColSpan) + "%";
         }
+
+        //大文本备注信息 独占一行
+        if (attr.UIContralType == 60) {
+            //获取文本信息
+            var filename = basePath + "/DataUser/CCForm/BigNoteHtmlText/" + attr.FK_MapData + ".htm";
+            var htmlobj = $.ajax({ url: filename, async: false });
+            var str = htmlobj.responseText;
+            //str = str.replace(/.+/g, '</br>');
+            html += "<tr>";
+            html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'>" + str + "</td>";
+            html += "</tr>";
+            isDropTR = true;
+            UseColSpan = 0;
+            continue;
+        }
+
+        //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
+        lab = GetLab(frmData, attr);
 
         //单元格为0的情况
         if (colSpan == 0) {

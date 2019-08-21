@@ -1163,7 +1163,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", pageParam.fk_mapdata);
             handler.AddPara("DtlNo", val);
-            handler.AddPara("FK_Node", GetQueryString("FK_Node")); //为流程用的节点ID.
+           // handler.AddPara("FK_Node", GetQueryString("FK_Node")); //从表为原始属性的时候FK_Node=0,设置从表权限的时候FK_Node为该节点的值
 
             var data = handler.DoMethodReturnString("Designer_NewMapDtl");
 

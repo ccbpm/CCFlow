@@ -1377,14 +1377,17 @@
                 return;
             }
 
-            //     console.log(node);
-
             var frmID = window.prompt('新的表单ID', node.id);
             var frmName = window.prompt('新的表单名称', node.text);
-
-            var mapdata = new Entity("BP.Sys.MapData", node.id);
-
-            var data = mapdata.DoMethodReturnString("DoCopy", frmID, frmName);
+            if (frmID == null || frmID == "") {
+                alert("表单ID不能为空");
+                return;
+            }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("FromFrmID", node.id);
+            handler.AddPara("ToFrmID", frmID)
+            handler.AddPara("ToFrmName", frmName)
+            var data = handler.DoMethodReturnString("DoCopyFrm", frmID, frmName);
 
             if (data.indexOf('err@') != -1) {
                 alert(data);

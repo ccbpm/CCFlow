@@ -198,10 +198,48 @@ window.onload = function () {
 };
 
 $(function () {
-    $('#MessageDiv').on('hide.bs.modal', function () {
-        // alert('嘿，我听说您喜欢模态框...');
+    $('#HelpAlterDiv').on('hide.bs.modal', function () {
+      
+        //保存用户的帮助指引信息操作
+        var mypk = webUser.No +"_ND"+ pageData.FK_Node +"_HelpAlert"
+        var userRegedit = new Entity("BP.Sys.UserRegedit");
+        userRegedit.SetPKVal(mypk);
+        var count = userRegedit.RetrieveFromDBSources();
+        if (count == 0) {
+            //保存数据
+            userRegedit.FK_Emp = webUser.No;
+            userRegedit.FK_MapData = "ND" + pageData.FK_Node;
+            userRegedit.Insert();
+        }
     })
 });
+
+function HelpAlter() {
+    var node = flowData.WF_Node[0];
+    //判断该节点是否启用了帮助提示 0 禁用 1 启用 2 强制提示 3 选择性提示
+    var btnLab = new Entity("BP.WF.Template.BtnLab", node.NodeID);
+    if (btnLab.HelpRole != 0) {
+        var count = 0;
+        if (btnLab.HelpRole == 3) {
+            var mypk = webUser.No + "_ND" + node.NodeID + "_HelpAlert";
+            var userRegedit = new Entity("BP.Sys.UserRegedit");
+            userRegedit.SetPKVal(mypk);
+            count = userRegedit.RetrieveFromDBSources();
+        }
+
+        if (btnLab.HelpRole == 2 || (count == 0 && btnLab.HelpRole == 3)) {
+            var filename = basePath + "/DataUser/CCForm/HelpAlert/" + node.NodeID + ".htm";
+            var htmlobj = $.ajax({ url: filename, async: false });
+            if (htmlobj.status == 404)
+                return;
+            var str = htmlobj.responseText;
+            if (str != null && str != "" && str != undefined) {
+                $('#HelpAlter').html("").append(str);
+                $('#HelpAlterDiv').modal().show();
+            }
+        }
+    }
+}
 
 function CloseOKBtn() {
     //   alert('嘿，我听说您喜欢模态框...');
@@ -1456,6 +1494,8 @@ function GenerWorkNode() {
         $('#MessageDiv').modal().show();
     }
 
+    //帮助提醒
+    HelpAlter();
     ShowNoticeInfo();
 
     ShowTextBoxNoticeInfo();

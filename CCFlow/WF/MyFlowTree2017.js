@@ -5,6 +5,7 @@
 var workNode = null;
 var IsReadonly = GetQueryString("IsReadonly");
 var IsCC = "0";
+var webUser = new WebUser();
 
 
 function GenerTreeFrm(wn) {

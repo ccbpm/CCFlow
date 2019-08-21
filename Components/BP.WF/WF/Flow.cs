@@ -3913,25 +3913,25 @@ namespace BP.WF
             if (this.FEventEntity == null)
             {
                 /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法. */
-                //if (doType == EventListOfNode.SendSuccess)
-                //{
-                //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //    soap.SendSuccess(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                //}
+                if (doType == EventListOfNode.SendSuccess)
+                {
+                    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                    soap.SendSuccess(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                }
 
-                //if (doType == EventListOfNode.SendWhen)
-                //{
-                //    /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法.*/
-                //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //    soap.SendWhen(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                //}
+                if (doType == EventListOfNode.SendWhen)
+                {
+                    /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法.*/
+                    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                    soap.SendWhen(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                }
 
-                //if (doType == EventListOfNode.FlowOverBefore)
-                //{
-                //    /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法.*/
-                //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //    soap.FlowOverBefore(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                //}
+                if (doType == EventListOfNode.FlowOverBefore)
+                {
+                    /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法.*/
+                    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                    soap.FlowOverBefore(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                }
             }
 
             if (this.FEventEntity != null)

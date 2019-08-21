@@ -23,7 +23,7 @@
 
             //打包下载.
             if (data.CanPackUp == 1) 
-                html += PackUp();
+                html += PackUp(data.PrintType);
 
            //是否可以删除流程.
            if (data.IsCanDelete==1) 
@@ -144,15 +144,14 @@
         }
 
         ///增加打印.
-        function PackUp() {
+        function PackUp(printType) {
 
             var fk_node = GetQueryString("FK_Node");
             if (fk_node == null)
                 fk_node = GetQueryString("NodeID");
 
             //如果printType是undefined或者null 就执行打包下载
-            var printType;
-            if (printType == null || printType == undefined) {
+            if (printType == null || printType == undefined || printType==0) {
                 var html = addBlockBegin("打印/打包下载");
                 html += "功能执行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "' >执行打印</a>。";
                 html += "<br />说明：把表单输出到html,pdf,zip文件里，执行下载或打印.";

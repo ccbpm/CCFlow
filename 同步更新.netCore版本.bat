@@ -6,7 +6,7 @@ ECHO     .
 ECHO     1、即将复制D:\CCFlow 下的文件到D:\CCFlowForNetcore，CCFlowForNetcore 下除NetPlatformImpl、*.NetCore.csproj外，其他所有的文件都会被删除，并用CCFlow中的替换！
 ECHO     .
 ECHO     2、请关闭所有打开的文件，关闭Visual Studio， 否则会因为文件被占用，导致文件遗漏！
-ECHO     .  editer: zhanlei 
+ECHO     .  editor: zhanglei 
 PAUSE
 
 COLOR F
@@ -34,7 +34,7 @@ xcopy /e /k /y D:\ccflow\Components\BP.En30\References      D:\CCFlowForNetcore\
 xcopy /e /k /y D:\ccflow\Components\BP.En30\Sys             D:\CCFlowForNetcore\Components\BP.En30\Sys\
 xcopy /e /k /y D:\ccflow\Components\BP.En30\Tools           D:\CCFlowForNetcore\Components\BP.En30\Tools\
 xcopy /e /k /y D:\ccflow\Components\BP.En30\Web             D:\CCFlowForNetcore\Components\BP.En30\Web\
-COPY /Y D:\ccflow\Components\BP.En30\OverrideFile.cs           D:\CCFlowForNetcore\Components\BP.En30\OverrideFile.cs
+COPY /Y D:\ccflow\Components\BP.En30\OverrideFile.cs        D:\CCFlowForNetcore\Components\BP.En30\OverrideFile.cs
 
 echo 更新BP.WF
 rd /s/q D:\CCFlowForNetcore\Components\BP.WF\Cloud
@@ -121,4 +121,3 @@ PAUSE
 :success
 ECHO 文件复制成功！
 @ECHO ON
-

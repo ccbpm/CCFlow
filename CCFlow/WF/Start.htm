@@ -13,7 +13,8 @@
         1. 该页面是一个通用的流程发起页面,具有通用的页面风格，可以与很多系统颜色搭配. 如果这个色系不符合您的需要您可以根据这个页面进行改造。
         2. 他是根据当前登录人员的权限进行显示该人员所能够发起的流程列表，什么样的岗位人员可以发起什么样的流程.
         3. Start.htm?Domain=XXX  则仅仅列出该域下的流程. Domain 就是流程树的节点属性的别名. 您可以在流程设计器的流程树，右键设置，设置一个与域编号.
-        4. Start.htm?ShowList=1  点击流程的名字的时候直接到达 List.htm?FK_Flow=002 . 
+        4. Start.htm?ShowList=1  点击流程的名字的时候直接到达 List.htm?FK_Flow=002, 否则就连接到 MyFlow.htm?FK_Flow=002上。
+        5. 两个参数可以同时使用  Start.htm?ShowList=1&Domain=XXX
         -->
 </head>
 <body class="gray-bg">

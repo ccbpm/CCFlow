@@ -1305,6 +1305,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
             sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=90 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
             Paras ps = new Paras();
+            ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
             ps.AddFK_Emp();
             DataTable dt = DBAccess.RunSQLReturnTable(ps);

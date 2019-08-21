@@ -491,6 +491,16 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 按照SQL来计算流程完成时间
+        /// </summary>
+        public string SDTOfFlowRoleSQL
+        {
+            get
+            {
+                return this.GetValStrByKey(FlowAttr.SDTOfFlowRoleSQL);
+            }
+        }
+        /// <summary>
         /// 流程部门数据查询权限控制方式
         /// </summary>
         public FlowDeptDataRightCtrlType HisFlowDeptDataRightCtrlType

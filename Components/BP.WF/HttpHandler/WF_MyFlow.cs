@@ -955,6 +955,11 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='TransferCustom'  value='" + btnLab.TCLab + "' enable=true onclick=\"TransferCustom('" + ur3 + "'); \" />";
                 }
 
+                if (btnLab.HelpRole != 0)
+                {
+                    toolbar += "<input type=button  value='" + btnLab.HelpLab + "' enable=true onclick=\"HelpAlter(); \" />";
+                }
+
                 if (btnLab.JumpWayEnable && 1 == 2)
                 {
                     /*跳转*/
@@ -1320,6 +1325,8 @@ namespace BP.WF.HttpHandler
                     string ur3 = "./WorkOpt/TransferCustom.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<a data-role='button' type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" ></a>";
                 }
+
+               
 
                 if (btnLab.JumpWayEnable)
                 {

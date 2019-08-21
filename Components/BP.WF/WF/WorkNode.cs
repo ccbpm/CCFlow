@@ -7856,11 +7856,12 @@ namespace BP.WF
             gwf.FK_Dept = this.HisWork.RecOfEmp.FK_Dept;
             gwf.DeptName = this.HisWork.RecOfEmp.FK_DeptText;
 
+            //按照指定的字段计算
             if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.BySpecDateField)
             {
                 try
                 {
-                    gwf.SDTOfFlow = this.HisWork.GetValStrByKey(WorkSysFieldAttr.SysSDTOfFlow);
+                    gwf.SDTOfFlow = this.HisWork.GetValStrByKey(this.HisFlow.GetParaString("SDTOfFlowRole_DateField"));
                 }
                 catch (Exception ex)
                 {
@@ -7876,7 +7877,55 @@ namespace BP.WF
 
                 }
             }
+            //按照指定的SQL计算
+            if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.BySQL)
+            {
+                string sql = this.HisFlow.SDTOfFlowRoleSQL;
+                //配置的SQL为空
+                if(DataType.IsNullOrEmpty(sql) == false)
+                    throw new Exception(BP.WF.Glo.multilingual("@初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "配置的SQL为空"));
+                
+                //替换SQL中的参数
+                sql = Glo.DealExp(sql, this.HisWork);
+                string sdtOfFlow = DBAccess.RunSQLReturnString(sql);
+                if (DataType.IsNullOrEmpty(sdtOfFlow) == false)
+                    gwf.SDTOfFlow = sdtOfFlow;
+                else
+                    throw new Exception(BP.WF.Glo.multilingual("@初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "根据SQL配置查询的结果为空"));
+            }
 
+            //按照所有节点之和,
+            if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.ByAllNodes)
+            {
+                //获取流程的所有节点
+                Nodes nds = new Nodes(this.HisFlow.No);
+                DateTime sdtOfFlow = DateTime.Now;
+                foreach(Node nd in nds)
+                {
+                    if (nd.IsStartNode == true)
+                        continue;
+                    if(nd.HisCHWay == CHWay.ByTime && nd.GetParaInt("CHWayOfTimeRole") == 0)
+                    {//按天、小时考核
+                     //增加天数. 考虑到了节假日. 
+                      //判断是修改了节点期限的天数
+                        int timeLimit = nd.TimeLimit;
+                        sdtOfFlow = Glo.AddDayHoursSpan(sdtOfFlow, timeLimit,
+                            nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
+                    }
+                }
+
+                gwf.SDTOfFlow = sdtOfFlow.ToString(DataType.SysDataTimeFormat);
+
+            }
+            //按照设置的天数
+            if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.ByDays)
+            {
+                //获取设置的天数
+                int day = this.HisFlow.GetParaInt("SDTOfFlowRole_Days");
+                if(day == 0)
+                    throw new Exception(BP.WF.Glo.multilingual("@初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "设置流程完成时间不能为0天"));
+                gwf.SDTOfFlow = DateTime.Now.AddDays(day).ToString(DataType.SysDataTimeFormat);
+            }
             //加入两个参数. 2013-02-17
             if (gwf.PWorkID != 0)
             {

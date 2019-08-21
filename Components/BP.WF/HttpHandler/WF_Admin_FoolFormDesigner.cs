@@ -91,7 +91,8 @@ namespace BP.WF.HttpHandler
             GroupFields gfs = new GroupFields(this.FK_MapData);
             ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
 
-            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData,this.FK_MapData,MapDtlAttr.FK_Node,0);
             ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
 
             MapFrames frms = new MapFrames(this.FK_MapData);

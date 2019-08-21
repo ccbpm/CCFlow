@@ -534,6 +534,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Frm_Init()
         {
+            bool IsMobile = GetRequestValBoolen("IsMobile");
             if (this.GetRequestVal("IsTest") != null)
             {
                 MapData mymd = new MapData(this.EnsName);
@@ -688,6 +689,9 @@ namespace BP.WF.HttpHandler
 
                     if (md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
                     {
+                        if (IsMobile == true)
+                            return "url@../FrmView.htm?1=2" + paras;
+
                         if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                             return "url@FrmGener.htm?1=2" + paras;
                         else
@@ -702,6 +706,9 @@ namespace BP.WF.HttpHandler
                             return "url@FrmVSTO.htm?1=2" + paras;
                     }
 
+                    if (IsMobile == true)
+                        return "url@../FrmView.htm?1=2" + paras;
+
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmGener.htm?1=2" + paras;
                     else
@@ -714,6 +721,8 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.FreeFrm)
             {
+                if (IsMobile == true)
+                    return "url@../FrmView.htm?1=2" + paras;
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                     return "url@FrmGener.htm?1=2" + paras;
                 else
@@ -727,6 +736,9 @@ namespace BP.WF.HttpHandler
                 else
                     return "url@FrmVSTO.htm?1=2" + paras;
             }
+
+            if (IsMobile == true)
+                return "url@../FrmView.htm?1=2" + paras;
 
             if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                 return "url@FrmGener.htm?1=2" + paras;

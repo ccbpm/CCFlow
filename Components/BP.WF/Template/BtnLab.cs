@@ -506,6 +506,22 @@ namespace BP.WF.Template
             }
         }
 
+        public int HelpRole
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.HelpRole);
+            }
+        }
+
+        public string HelpLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.HelpLab);
+            }
+        }
+
         /// <summary>
         /// 审核标签
         /// </summary>

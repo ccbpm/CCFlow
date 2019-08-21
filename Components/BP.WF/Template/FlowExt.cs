@@ -528,7 +528,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "计划完成时间计算规则"; // "调用事件接口";
+                rm.Title = "流程计划时间计算规则"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoSDTOfFlow";
                 //rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;

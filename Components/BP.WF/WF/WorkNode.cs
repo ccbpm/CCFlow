@@ -7862,6 +7862,7 @@ namespace BP.WF
                 try
                 {
                     gwf.SDTOfFlow = this.HisWork.GetValStrByKey(this.HisFlow.GetParaString("SDTOfFlowRole_DateField"));
+                    gwf.RDTOfSetting = this.HisWork.GetValStrByKey(this.HisFlow.GetParaString("SDTOfFlowRole_StartDateField"));
                 }
                 catch (Exception ex)
                 {

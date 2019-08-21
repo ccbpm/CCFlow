@@ -323,12 +323,10 @@ namespace BP.GPM.AD
             if (en.Properties.Contains(key) == false)
                 return isNullAsVal;
 
-
             PropertyValueCollection valueCollection = en.Properties[key];
 
             if (valueCollection.Value == null)
                 return isNullAsVal;
-
 
             return valueCollection.Value.ToString();
         }

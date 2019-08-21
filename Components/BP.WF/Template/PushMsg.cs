@@ -833,7 +833,7 @@ namespace BP.WF.Template
                         //获取退回原因
                         Paras ps = new Paras();
                         ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                        ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                        ps.Add(ReturnWorkAttr.WorkID,Int64.Parse( en.PKVal.ToString()));
                         DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
                         if (retunWdt.Rows.Count != 0)
                         {
@@ -879,7 +879,7 @@ namespace BP.WF.Template
                     //获取退回原因
                     Paras ps = new Paras();
                     ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                    ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                    ps.Add(ReturnWorkAttr.WorkID, Int64.Parse( en.PKVal.ToString()));
                     DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
                     if (retunWdt.Rows.Count != 0)
                     {
@@ -1097,7 +1097,7 @@ namespace BP.WF.Template
                         //获取退回原因
                         Paras ps = new Paras();
                         ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                        ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                        ps.Add(ReturnWorkAttr.WorkID, Int64.Parse( en.PKVal.ToString()));
                         DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
                         if (retunWdt.Rows.Count != 0)
                         {
@@ -1148,7 +1148,7 @@ namespace BP.WF.Template
                     //获取退回原因
                     Paras ps = new Paras();
                     ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                    ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
+                    ps.Add(ReturnWorkAttr.WorkID, Int64.Parse( en.PKVal.ToString()));
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count != 0)
                     {

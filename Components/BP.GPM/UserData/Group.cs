@@ -11,13 +11,7 @@ namespace BP.En
     /// </summary>
     public class GroupAttr : EntityTreeAttr
     {
-        /// <summary>
-        /// 序号
-        /// </summary>
-        public const string Idx = "Idx";
-
         public const string ByEmpAttr = "ByEmpAttr";
-        
     }
     /// <summary>
     /// 权限组

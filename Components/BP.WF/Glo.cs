@@ -36,17 +36,17 @@ namespace BP.WF
             json += " { id:'001', name:'总体计划', ";
             json += "series:[{ ";
             json += " name: '项目计划', ";
-            json += " start:  " + ToData(gwf.RDT) + ", ";
+            json += " start:  " + ToData(gwf.RDTOfSetting) + ", ";
             json += " end: " + ToData(gwf.SDTOfFlow) + ",";
             json += " TodoSta: " + gwf.TodoSta + ", ";
-            json += " color: '#f0f0f0' ";
+            json += " color: 'blue' ";
             json += "},";
 
             json += "{ name: '实际执行', ";
             json += " start:  " + ToData(gwf.RDT) + ",";
             json += " end: " + ToData(gwf.SendDT) + ",";
             json += " TodoSta: " + gwf.TodoSta + ",";
-            json += " color: '#f0f0f0' ";
+            json += " color: 'blue' ";
             json += "}]";
             json += "},";
 
@@ -109,7 +109,7 @@ namespace BP.WF
                         dtlsSubFlow += " start:  " + ToData(DataType.CurrentData) + ", ";
                         dtlsSubFlow += " end:  " + ToData(DataType.CurrentData) + ", ";
                         dtlsSubFlow += " TodoSta: -1, ";
-                        dtlsSubFlow += " color: 'blue' ";
+                        dtlsSubFlow += " color: '#f0f0f0' ";
                         dtlsSubFlow += "}";
                     }
 
@@ -121,14 +121,12 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(series) == false)
                     series = series.Substring(0, series.Length - 1);
 
-
                 if (DataType.IsNullOrEmpty(series))
                     json += " series:[]";
                 else
                 {
                     json += " series:["+ series + "]";
                 }
-
              
                 if (idxNode == nds.Count)
                     json += "}";
@@ -757,6 +755,11 @@ namespace BP.WF
             string msg = "";
             try
             {
+                #region 升级菜单.
+                //if (DBAccess.IsExitsTableCol("GPM_Menu","UrlExt")==false)
+                //{
+                //}
+                #endregion
 
                 #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
                 if (DBAccess.IsExitsObject("Port_Inc") == false)

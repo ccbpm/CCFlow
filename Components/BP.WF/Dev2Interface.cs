@@ -5709,7 +5709,7 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             gwf.WFState = WFState.Runing;
             gwf.TaskSta = TaskSta.None;
-            gwf.TodoEmps = toEmper;
+            gwf.TodoEmps = toEmper+","+emp.Name+";";
             gwf.FK_Node = toNodeID;
             gwf.NodeName = nd.Name;
             //gwf.StarterName =emp.Name;
@@ -9366,10 +9366,10 @@ namespace BP.WF
                 //移交后事件
                 info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
 
-                info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+                info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
 
-                //BP.WF.Dev2Interface.Port_SendMsg(emp.No,gwf.Title,"工作移交","Shif")
-                return info;
+                BP.WF.Dev2Interface.Port_SendMsg(emp.No, gwf.Title, "工作移交", "Shif");
+                return "移交成功.";
             }
 
             if (gwf.WFSta == WFSta.Complete)
@@ -9417,8 +9417,8 @@ namespace BP.WF
 
             //移交后事件
             inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
-
-            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+            //inf1o += "@移交成功..";
+            //            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
             return inf1o;
         }
         /// <summary>

@@ -89,6 +89,10 @@ namespace BP.GPM
         /// </summary>
         public const string Url = "Url";
         /// <summary>
+        /// 连接
+        /// </summary>
+        public const string UrlExt = "UrlExt";
+        /// <summary>
         /// 控制内容
         /// </summary>
         public const string CtrlObjs = "CtrlObjs";
@@ -287,6 +291,17 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.Url, value);
             }
         }
+        public string UrlExt
+        {
+            get
+            {
+                return this.GetValStringByKey(MenuAttr.UrlExt);
+            }
+            set
+            {
+                this.SetValByKey(MenuAttr.UrlExt, value);
+            }
+        }
         public bool IsCheck = false;
         /// <summary>
         /// 标记
@@ -362,6 +377,7 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 200, true);
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
                 #endregion 与树有关的必备属性.
+
                 // 类的字段属性. 
                 map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
                     "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能/界面@5=功能控制点");
@@ -370,7 +386,9 @@ namespace BP.GPM
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
                 map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 200, true);
+                map.AddTBString(MenuAttr.Url, null, "连接", false, false, 0, 3900, 200, true);
+                map.AddTBString(MenuAttr.UrlExt, null, "连接", true, false, 0, 3900, 200, true);
+
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);
                 map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
@@ -548,6 +566,8 @@ namespace BP.GPM
         protected override bool beforeUpdateInsertAction()
         {
             this.WebPath = this.WebPath.Replace("//", "/");
+
+            this.Url = this.UrlExt;
             return base.beforeUpdateInsertAction();
         }
         /// <summary>

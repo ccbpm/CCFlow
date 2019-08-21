@@ -1729,9 +1729,10 @@ namespace BP.WF.HttpHandler
                         else
                         {
                             //非主持人.
-                            if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.Name + ",") == false)
+                            string empStr = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            if (this.HisGenerWorkFlow.TodoEmps.Contains(empStr) == false)
                             {
-                                this.HisGenerWorkFlow.TodoEmps += BP.Web.WebUser.Name + ";";
+                                this.HisGenerWorkFlow.TodoEmps += empStr; // BP.Web.WebUser.No +","+BP.Web.WebUser.Name + ";";
                                 this.HisGenerWorkFlow.Update();
                             }
                         }
@@ -1740,9 +1741,10 @@ namespace BP.WF.HttpHandler
 
                     if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.HuiQianing)
                     {
-                        if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                        string empStr = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                        if (this.HisGenerWorkFlow.TodoEmps.Contains(empStr) == false)
                         {
-                            this.HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            this.HisGenerWorkFlow.TodoEmps += empStr;
                             this.HisGenerWorkFlow.Update();
                         }
                     }

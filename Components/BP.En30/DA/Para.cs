@@ -298,7 +298,7 @@ namespace BP.DA
             //   en.DAType = System.Data.DbType.Int64;
 			en.val = _val;
 			en.ParaName = _name ;
-			this.Add(en);			
+			this.Add(en);
 		}
         public void AddDBNull(string _name)
         {

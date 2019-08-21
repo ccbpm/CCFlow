@@ -523,7 +523,7 @@ namespace BP.WF.HttpHandler
                 if (func.BillOpenModel == BillOpenModel.WebOffice)
                 {
                     //return "err@该部分的代码还没有重构.";
-                    return "err@【/WF/WebOffice/PrintOffice.aspx】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
+                    return "err@【/WF/WebOffice/PrintOffice.htm】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
                     //return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
                 }
                 return billUrl;
@@ -1040,6 +1040,8 @@ namespace BP.WF.HttpHandler
             BP.Port.Emp myemp = new BP.Port.Emp(this.FK_Emp);
             string str = gwf.TodoEmps;
             str = str.Replace(myemp.Name + ";", "");
+            str = str.Replace(myemp.No +","+ myemp.Name + ";", "");
+
             gwf.TodoEmps = str;
             gwf.Update();
 
@@ -1139,8 +1141,9 @@ namespace BP.WF.HttpHandler
                 BP.WF.Dev2Interface.Port_SendMsg(emp.No,
                     "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
 
-                if (gwf.TodoEmps.Contains(emp.Name + ";") == false)
-                    gwf.TodoEmps += emp.Name + ";";
+                        string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                if (gwf.TodoEmps.Contains(empStrSepc) == false)
+                    gwf.TodoEmps += empStrSepc;
             }
 
             gwf.Update();
@@ -3747,18 +3750,20 @@ namespace BP.WF.HttpHandler
                         //如果是主持人.
                         if (HisGenerWorkFlow.HuiQianZhuChiRen == WebUser.No)
                         {
-                            if (HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                            string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            if (HisGenerWorkFlow.TodoEmps.Contains(empStrSepc) == false)
                             {
-                                HisGenerWorkFlow.TodoEmps += WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                                HisGenerWorkFlow.TodoEmps += empStrSepc;
                                 HisGenerWorkFlow.Update();
                             }
                         }
                         else
                         {
                             //非主持人.
-                            if (HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.Name + ",") == false)
+                            string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            if (HisGenerWorkFlow.TodoEmps.Contains(empStrSepc) == false)
                             {
-                                HisGenerWorkFlow.TodoEmps += BP.Web.WebUser.Name + ";";
+                                HisGenerWorkFlow.TodoEmps += empStrSepc;
                                 HisGenerWorkFlow.Update();
                             }
                         }

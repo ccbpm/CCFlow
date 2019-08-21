@@ -54,21 +54,32 @@
             
             }
             //查询日期字段下拉框所有值
+            var options = "";
             for (var i = 0; i < mapAttrs.length; i++) {
                 if (mapAttrs[i].MyDataType != 6 && mapAttrs[i].MyDataType != 7)
                     continue;
                 if (mapAttrs[i].KeyOfEn == "RDT" || mapAttrs[i].KeyOfEn == "CDT" || mapAttrs[i].KeyOfEn == "FlowEnderRDT" || mapAttrs[i].KeyOfEn == "FlowStartRDT")
                     continue;
-                $("#DDL_Fields").append("<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>");
+                options +="<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>";
             }
             //日期字段下拉框赋值
+            $("#DDL_StartFields").append(options);
+            $("#DDL_Fields").append(options);
+            //计划开始时间
+            var SDTOfFlowRole_StartDateField = data.GetPara("SDTOfFlowRole_StartDateField");
+            if (SDTOfFlowRole_StartDateField == null || SDTOfFlowRole_StartDateField == undefined || SDTOfFlowRole_StartDateField == '') {
+                $("#DDL_StartFields").val(0);
+            } else {
+                $("#DDL_StartFields").val(SDTOfFlowRole_StartDateField);
+            }
+            //流程计划完成时间
             var SDTOfFlowRole_DateField = data.GetPara("SDTOfFlowRole_DateField");
             if (SDTOfFlowRole_DateField == null || SDTOfFlowRole_DateField == undefined || SDTOfFlowRole_DateField == '') {
                 $("#DDL_Fields").val(0);
             } else {
                 $("#DDL_Fields").val(SDTOfFlowRole_DateField);
             }
-
+            
             //sql语句赋值
 
             $("#TB_SQL").val(data.SDTOfFlowRoleSQL);
@@ -89,6 +100,9 @@
 
             var SDTOfFlowRole_DateField = $("#DDL_Fields").val();
             flow.SetPara("SDTOfFlowRole_DateField", SDTOfFlowRole_DateField); //按表单字段的字段
+
+            var SDTOfFlowRole_StartDateField = $("#DDL_StartFields").val();
+            flow.SetPara("SDTOfFlowRole_StartDateField", SDTOfFlowRole_StartDateField);
 
             var SDTOfFlowRole_Days = $("#TB_Days").val();
             flow.SetPara("SDTOfFlowRole_Days", SDTOfFlowRole_Days); //按规定的天数
@@ -129,9 +143,15 @@
                     <legend>
                         <input type="radio" name="RB_SDTOfFlowRole" id="RB_BySpecDateField" value="1">
                         <label for="RB_BySpecDateField">
-                            按照表单的节点表单的字段计算。
+                            按照节点表单的日期字段计算。
                         </label>
-                    </legend>请选择一个日期类型的字段.
+                    </legend>
+                    请选择计划开始日期的字段.
+                    <select id="DDL_StartFields">
+                        <option value="0">--请选择--</option>
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    请选择计划完成日期的字段.
                     <select id="DDL_Fields">
                         <option value="0">--请选择--</option>
                     </select>

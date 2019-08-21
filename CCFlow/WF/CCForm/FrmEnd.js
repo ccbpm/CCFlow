@@ -401,6 +401,8 @@ function AfterBindEn_DealMapExt(frmData) {
                             dateFmt = "HH:mm";
                         } else if (frmDate == 5) {
                             dateFmt = "HH:mm:ss";
+                        } else if (frmDate == 6) {
+                            dateFmt = "MM-dd";
                         }
 
                         var mapextDoc = mapExt.Doc;
@@ -569,6 +571,8 @@ function AfterBindEn_DealMapExt(frmData) {
                             dateFmt = "HH:mm";
                         } else if (frmDate == 5) {
                             dateFmt = "HH:mm:ss";
+                        } else if (frmDate == 6) {
+                            dateFmt = "MM-dd";
                         }
 
                         var minDate = '%y-%M-#{%d}';

@@ -81,7 +81,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowHandNum");
+                return this.GetParaInt("SubFlowHandNum",0);
             }
         }
         /// <summary>
@@ -91,7 +91,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowAutoNum");
+                return this.GetParaInt("SubFlowAutoNum",0);
             }
         }
         /// <summary>
@@ -101,7 +101,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowYanXuNum");
+                return this.GetParaInt("SubFlowYanXuNum",0);
             }
         }
         #endregion

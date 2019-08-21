@@ -604,7 +604,7 @@ namespace BP.WF
             }
         }
 		/// <summary>
-		/// 产生时间
+		/// 实际开始时间
 		/// </summary>
 		public string  RDT
 		{
@@ -618,6 +618,23 @@ namespace BP.WF
                 this.FK_NY = value.Substring(0, 7);
             }
 		}
+        /// <summary>
+        /// 计划开始时间 @sly
+        /// </summary>
+        public string RDTOfSetting
+        {
+            get
+            {
+                string str = this.GetParaString("RDTOfSetting");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return this.RDT;
+                return str;
+            }
+            set
+            {
+                this.SetPara("RDTOfSetting", value);
+            }
+        }
         /// <summary>
         /// 节点应完成时间
         /// </summary>

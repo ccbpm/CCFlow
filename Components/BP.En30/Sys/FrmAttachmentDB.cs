@@ -498,7 +498,7 @@ namespace BP.Sys
         {
             //判断删除excel数据提取的数据
             if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
-                return true;
+                return;
 
             //是一个流程先判断流程是否结束，如果结束了，就不让删除.
          //   string nodeID = this.FK_MapData.Replace("ND", "");

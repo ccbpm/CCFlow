@@ -494,7 +494,7 @@ namespace BP.Sys
             return base.beforeInsert();
         }
 
-        protected override bool beforeDelete()
+        protected override void afterDelete()
         {
             //判断删除excel数据提取的数据
             if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
@@ -556,7 +556,7 @@ namespace BP.Sys
             }
 
 
-            return base.beforeDelete();
+             base.afterDelete();
         }
 
      

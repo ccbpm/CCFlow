@@ -298,6 +298,14 @@ namespace BP.WF.HttpHandler
             else
                 ht.Add("CanPackUp", 0);
 
+            //获取打印的方式PDF/RDF,节点打印方式
+            Node nd = new Node(this.FK_Node);
+            if (nd.HisPrintDocEnable == true)
+                ht.Add("PrintType", 1);
+            else
+                ht.Add("PrintType", 0);
+
+
             //是否可以打印.
             switch (gwf.WFState)
             {

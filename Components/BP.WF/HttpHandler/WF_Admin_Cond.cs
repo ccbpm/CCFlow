@@ -209,7 +209,9 @@ namespace BP.WF.HttpHandler
 
             //增加条件集合.
             Conds conds = new Conds();
-            conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID,  int.Parse( toNodeID));
+            conds.Retrieve(CondAttr.FK_Node, int.Parse(fk_mainNode), 
+                CondAttr.ToNodeID,  int.Parse( toNodeID));
+
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
             string noteIn = "'FID','PRI','PNodeID','PrjNo', 'PrjName', 'FK_NY','FlowDaySpan', 'MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID'";

@@ -462,7 +462,7 @@ namespace BP.GPM
                 rm.HisAttrs.AddTBString("Name", null, "单据名称", true, false, 0, 100, 400);
                 rm.HisAttrs.AddTBString("PTable", null, "存储表(为空则为编号相同)", true, false, 0, 100, 100);
                 rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "单据模式", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
-                rm.HisAttrs.AddDDLSQL("Sys_FormTree", null, "选择表单树", "SELECT No,Name FROM Sys_FormTree WHERE ParentNo='1'");
+                rm.HisAttrs.AddDDLSQL("Sys_FormTree", "", "选择表单树", "SELECT No,Name FROM Sys_FormTree WHERE ParentNo='1'");
 
                 rm.ClassMethodName = this.ToString() + ".DoAddCCBill";
                 map.AddRefMethod(rm);

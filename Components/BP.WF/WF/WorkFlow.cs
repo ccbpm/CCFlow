@@ -1233,7 +1233,7 @@ namespace BP.WF
                 i++;
                 // 查询出该明细表中的数据。
                 GEDtls dtlDatas = new GEDtls(dtl.No);
-                dtlDatas.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+                dtlDatas.Retrieve(GEDtlAttr.RefPK, this.WorkID.ToString());
 
                 GEDtl geDtl = null;
                 try

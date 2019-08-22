@@ -207,7 +207,7 @@ namespace BP.WF.HttpHandler
 
             //string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
 
-            //增加条件集合.
+            //增加条件集合.  @sly
             Conds conds = new Conds();
             conds.Retrieve(CondAttr.FK_Node, int.Parse(fk_mainNode), 
                 CondAttr.ToNodeID,  int.Parse( toNodeID));

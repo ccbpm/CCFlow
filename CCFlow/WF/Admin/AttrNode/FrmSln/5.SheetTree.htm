@@ -39,7 +39,7 @@
             var ens = new Entities("BP.WF.Template.FrmNodes");
             ens.Retrieve("FK_Node", nodeID);
 
-            var num = ens.length - 1;
+            var num = ens.length;
             if (num == -1)
                 num = 0;
 
@@ -91,7 +91,13 @@
 
             alert("保存成功.");
         }
-
+        
+        function SetNodeNote() {
+            var W = document.body.clientWidth - 400;
+            var H = document.body.clientHeight - 120;
+            var url = "NodeNote.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow;
+            OpenEasyUiDialogExt(url, '绑定列表', W, H, false, true);
+        }
 
         ///设置该流程的所有节点都是用该方案。
         function SetAllNodeFrmUseThisSln() {
@@ -173,16 +179,19 @@
     <legend>呈现风格</legend>
 
     <ul>
-    <li>
-    <input type="radio"  value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label  for="RB_tree" >表单树 </label></li>
+        <li>
+            <input type="radio" value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label for="RB_tree">表单树 </label>
+        </li>
 
-    <li>
-    <input type="radio"  value="1" id="RB_tab"  name="SheetTreeModel" /> <label  for="RB_tab" >Tab标签页 </label>
-    </li>
+        <li>
+            <input type="radio" value="1" id="RB_tab" name="SheetTreeModel" /> <label for="RB_tab">Tab标签页 </label>
+        </li>
 
-    <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
+        <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
 
-    <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
+        <li> <a href="javascript:SetNodeNote()">设置摘要字段</a></li>
+
+        <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
 
     </ul>
 </fieldset>

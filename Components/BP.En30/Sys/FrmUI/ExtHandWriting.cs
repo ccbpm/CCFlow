@@ -90,7 +90,11 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.Readonly();
                 if (BP.Web.WebUser.No == "admin")
+                {
                     uac.IsUpdate = true;
+                    uac.IsDelete = true;
+                }
+                    
                 return uac;
             }
         }

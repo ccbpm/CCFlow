@@ -281,7 +281,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组",
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData' AND (CtrlType IS NULL OR CtrlType='')  ", true);
 
 

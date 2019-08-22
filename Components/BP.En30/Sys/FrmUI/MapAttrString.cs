@@ -155,7 +155,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章");

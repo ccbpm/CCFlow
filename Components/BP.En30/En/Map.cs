@@ -1718,25 +1718,31 @@ namespace BP.En
 		{
 			AddDDLSysEnum(key, key, defaultVal, desc, isUIVisable, isUIEnable, sysEnumKey, null, false);
 		}
-		#endregion
+        #endregion
 
 
-		#region DDLSQL
-		public void AddDDLSQL(string key, string defaultVal, string desc, string sql, bool uiIsEnable = true)
+        #region DDLSQL
+        public void AddDDLSQL(string key, object defaultVal, string desc, string sql, bool uiIsEnable = true)
 		{
 			Attr attr = new Attr();
 			attr.Key = key;
 			attr.Field = key;
-			attr.DefaultVal = defaultVal;
-			attr.MyDataType = DataType.AppString;
-			attr.MyFieldType = FieldType.Normal;
+            if (typeof(int)== defaultVal.GetType())
+            { 
+			  attr.DefaultVal = defaultVal;
+			  attr.MyDataType = DataType.AppInt;
+            }else
+            {
+                attr.DefaultVal = defaultVal;
+                attr.MyDataType = DataType.AppString;
+            }
+
+            attr.MyFieldType = FieldType.Normal;
 			attr.MaxLength = 50;
 
 			attr.Desc = desc;
 			attr.UIContralType = UIContralType.DDL;
-
 			attr.UIDDLShowType = DDLShowType.BindSQL;
-
 			attr.UIBindKey = sql;
 			attr.HisFKEns = null;
 			attr.UIIsReadonly = !uiIsEnable;

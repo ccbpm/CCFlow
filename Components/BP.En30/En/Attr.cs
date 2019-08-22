@@ -1378,13 +1378,23 @@ namespace BP.En
 		}
 
         #region DDLSQL
-        public void AddDDLSQL(string key, string defaultVal, string desc, string sql, bool uiIsEnable = true)
+        public void AddDDLSQL(string key, object defaultVal, string desc, string sql, bool uiIsEnable = true)
         {
             Attr attr = new Attr();
             attr.Key = key;
             attr.Field = key;
-            attr.DefaultVal = defaultVal;
-            attr.MyDataType = DataType.AppString;
+
+            if (typeof(int)== defaultVal.GetType() )
+            { 
+                attr.DefaultVal = defaultVal;
+                attr.MyDataType = DataType.AppInt;
+            }
+            else
+            {
+                attr.DefaultVal = defaultVal;
+                attr.MyDataType = DataType.AppString;
+            }
+
             attr.MyFieldType = FieldType.Normal;
             attr.MaxLength = 50;
 

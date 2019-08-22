@@ -100,7 +100,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
 
                 //跨单元格

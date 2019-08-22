@@ -73,7 +73,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmBtnAttr.BtnID, null, "按钮ID", true, false, 0, 128, 20);
 
                 //显示的分组.
-                map.AddDDLSQL(FrmBtnAttr.GroupID, "0", "所在分组",
+                map.AddDDLSQL(FrmBtnAttr.GroupID,0, "所在分组",
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'", true);
              
                 this._enMap = map;

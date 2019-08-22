@@ -104,7 +104,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
                 //默认值.
-                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",
+                map.AddDDLSQL(MapAttrAttr.DefVal, 0, "默认值（选中）",
                     "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'", true);
 
                 //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
@@ -143,7 +143,7 @@ namespace BP.Sys.FrmUI
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
                 #endregion 傻瓜表单。

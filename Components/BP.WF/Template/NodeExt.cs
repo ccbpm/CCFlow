@@ -1277,6 +1277,10 @@ namespace BP.WF.Template
         public string SaveHelpAlert(string text)
         {
             string file = SystemConfig.PathOfDataUser + "\\CCForm\\HelpAlert\\" + this.NodeID + ".htm";
+            string folder = System.IO.Path.GetDirectoryName(file);
+            //若文件夹不存在，则创建
+            if (System.IO.Directory.Exists(folder) == false)
+                System.IO.Directory.CreateDirectory(folder);
 
             BP.DA.DataType.WriteFile(file, text);
             return "保存成功！";
@@ -1287,12 +1291,16 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string ReadHelpAlert()
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\HelpAlert\\" + this.NodeID + ".htm";
             string doc = "";
-            if (File.Exists(file))
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\HelpAlert\\" + this.NodeID + ".htm";
+            string folder = System.IO.Path.GetDirectoryName(file);
+            if (System.IO.Directory.Exists(folder) != false)
             {
-                doc = BP.DA.DataType.ReadTextFile(file);
+                if (File.Exists(file))
+                {
+                    doc = BP.DA.DataType.ReadTextFile(file);
 
+                }
             }
             return doc;
         }

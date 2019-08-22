@@ -1546,6 +1546,10 @@ namespace BP.Sys
         public string SaveBigNoteHtmlText(string text)
         {
             string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\"+ this.FK_MapData + ".htm";
+            //若文件夹不存在，则创建
+            string folder = System.IO.Path.GetDirectoryName(file);
+            if (System.IO.Directory.Exists(folder) == false)
+                System.IO.Directory.CreateDirectory(folder);
 
             BP.DA.DataType.WriteFile(file, text);
             return "保存成功！";
@@ -1556,13 +1560,17 @@ namespace BP.Sys
         /// <returns></returns>
         public string ReadBigNoteHtmlText()
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
             string doc = "";
-            if (File.Exists(file))
-            {
-                doc = BP.DA.DataType.ReadTextFile(file);
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            string folder = System.IO.Path.GetDirectoryName(file);
+            if (System.IO.Directory.Exists(folder) != false) {
+                if (File.Exists(file))
+                {
+                    doc = BP.DA.DataType.ReadTextFile(file);
 
+                }
             }
+                
             return doc;
         }
         public void DoDownTabIdx()

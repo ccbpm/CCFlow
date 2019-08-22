@@ -7167,7 +7167,7 @@ namespace BP.WF
                             string paras = "@CFlowNo=" + this.HisFlow.No + "@CWorkID=" + this.WorkID;
                             Glo.AddToTrack(ActionType.StartChildenFlow, pflowNo, Int64.Parse(pWorkID), Int64.Parse(fid.ToString()), pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
                                 pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
-                                "<a href='WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >" + BP.WF.Glo.multilingual("打开子流程", "WorkNode", "open_sub_wf") + "</a>", paras);
+                                "<a href='"+ SystemConfig.HostURLOfBS + "/WF/WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >" + BP.WF.Glo.multilingual("打开子流程", "WorkNode", "open_sub_wf") + "</a>", paras);
                         }
                     }
                 }

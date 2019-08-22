@@ -107,7 +107,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-
+            var Keys = node.GetPara("Keys");//获取的设置的摘要字段
             var flowNo = node.FK_Flow;
             var nds = new Entities("BP.WF.Nodes");
             nds.Retrieve("FK_Flow", flowNo);
@@ -116,10 +116,14 @@
 
                 var jsNode = nds[i];
 
+
                 var node = new Entity("BP.WF.Node", jsNode);
 
                 node.FormType = FormType.SheetTree;
                 node.NodeFrmID = "ND" + node.NodeID;
+                if (Keys != undefined) {
+                    node.SetPara("Keys",Keys);//赋值摘要字段
+                }
                 node.Update();
 
                 //更新表单类型.
@@ -127,6 +131,8 @@
                 var mapData = new Entity("BP.Sys.MapData", frmID);
                 mapData.FrmType = FormType.FoolForm;
                 mapData.Update();
+
+
             }
             alert('设置成功.');
             window.location.href = window.location.href;

@@ -35,6 +35,94 @@ namespace BP.WF.HttpHandler
              
         }
         /// <summary>
+        /// 绑定多表单中获取节点表单的数据
+        /// </summary>
+        /// <returns></returns>
+        public string GetNoteValue()
+        {
+            int fk_node = this.FK_Node;
+            if (fk_node == 0)
+                fk_node = int.Parse(this.FK_Flow + "01");
+            Node nd = new Node(fk_node);
+            #region  获取节点表单的数据
+            Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.RetrieveFromDBSources();
+            wk.ResetDefaultVal();
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            {
+                // 处理传递过来的参数。
+                foreach (string k in HttpContextHelper.RequestQueryStringKeys)
+                {
+                    if (DataType.IsNullOrEmpty(k) == true)
+                        continue;
+
+                    wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
+                }
+
+                // 处理传递过来的frm参数。
+                foreach (string k in HttpContextHelper.RequestParamKeys)
+                {
+                    if (DataType.IsNullOrEmpty(k) == true)
+                        continue;
+
+                    wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
+                }
+            }
+            #endregion 获取节点表单的数据
+            //节点表单字段
+            MapData md = new MapData(nd.NodeFrmID);
+            MapAttrs attrs = md.MapAttrs;
+            DataTable dt = new DataTable();
+            dt.TableName = "Node_Note";
+            dt.Columns.Add("KeyOfEn", typeof(string));
+            dt.Columns.Add("NoteVal", typeof(string));
+            string nodeNote = nd.GetParaString("NodeNote");
+           
+            foreach (MapAttr attr in attrs)
+            {
+                if (nodeNote.Contains("," + attr.KeyOfEn + ",") == false)
+                    continue;
+                string text = "";
+                switch (attr.LGType)
+                {
+                    case FieldTypeS.Normal:  // 输出普通类型字段.
+                        if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
+                        {
+
+                            if (attrs.Contains(attr.KeyOfEn + "Text") == true)
+                                text = wk.GetValRefTextByKey(attr.KeyOfEn);
+                            if (DataType.IsNullOrEmpty(text))
+                                if (attrs.Contains(attr.KeyOfEn + "T") == true)
+                                    text = wk.GetValStrByKey(attr.KeyOfEn + "T");
+                        }
+                        else
+                        {
+                            text = wk.GetValStrByKey(attr.KeyOfEn);
+                            if (attr.IsRichText == true)
+                            {
+                                text = text.Replace("white-space: nowrap;", "");
+                            }
+                        }
+
+                        break;
+                    case FieldTypeS.Enum:
+                    case FieldTypeS.FK:
+                        text = wk.GetValRefTextByKey(attr.KeyOfEn);
+                        break;
+                    default:
+                        break;
+                }
+                DataRow dr = dt.NewRow();
+                dr["KeyOfEn"] = attr.KeyOfEn;
+                dr["NoteVal"] = text;
+                dt.Rows.Add(dr);
+
+             }
+           
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
         /// 获得toolbar
         /// </summary>
         /// <returns></returns>

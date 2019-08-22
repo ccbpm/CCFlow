@@ -122,9 +122,9 @@
         function SaveFields() {
 
             //获取选中的表单字段.
-            var keys = "";
+            var keys = ",";
             $.each($('input:checkbox[name=FieldAttr]:checked'), function (i, obj) {
-                keys += "," + obj.id + ",";
+                keys +=  obj.id + ",";
             });
 
             node.SetPara("Keys",keys);

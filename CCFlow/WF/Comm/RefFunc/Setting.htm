@@ -183,14 +183,14 @@
 
 
             //求出来需要所有隐藏的分组.
-            var Mkeys = "";
+            var Mkeys = ",";
              $.each($('input:checkbox[name=FieldGroup]:checked'),function(i,obj){
-                     Mkeys += "," + obj.id+",";
+                     Mkeys += obj.id+",";
              });
             //求出来所有隐藏的字段.
-            var keys = "";
+            var keys = ",";
              $.each($('input:checkbox[name=FieldAttr]:checked'),function(i,obj){
-                     keys += "," + obj.id+",";
+                     keys +=  obj.id+",";
              });
            
             cfgEn.FK_Emp = webUser.No;
@@ -287,14 +287,14 @@
             cfgEn.RetrieveFromDBSources();
 
             //求出来需要所有隐藏的功能分组.
-            var Mkeys = "";
+            var Mkeys = ",";
              $.each($('input:checkbox[name=FuncGroup]:checked'),function(i,obj){
-                     Mkeys += "," + obj.id+",";
+                     Mkeys += obj.id+",";
              });
             //求出来所有隐藏的功能
-            var keys = "";
+            var keys = ",";
              $.each($('input:checkbox[name=FuncMethod]:checked'),function(i,obj){
-                     keys += "," + obj.id+",";
+                     keys +=obj.id+",";
              });
 
             cfgEn.FK_Emp = webUser.No;

@@ -94,7 +94,7 @@
                     html += "<td>" + mapAttr.KeyOfEn + "</td>";
                 
                     var checked = "";
-                    var Keys = node.GetPara("Keys");
+                    var Keys = node.GetPara("NodeNote");
                         if (Keys != undefined) {
                             var Vals = Keys.split(",");
                             for (var k = 0; k < Vals.length; k++) {
@@ -122,12 +122,12 @@
         function SaveFields() {
 
             //获取选中的表单字段.
-            var keys = ",";
+            var nodeNote = ",";
             $.each($('input:checkbox[name=FieldAttr]:checked'), function (i, obj) {
-                keys +=  obj.id + ",";
+                nodeNote +=  obj.id + ",";
             });
 
-            node.SetPara("Keys",keys);
+            node.SetPara("NodeNote",nodeNote);
             node.Update();
             window.location.href = window.location.href;
 

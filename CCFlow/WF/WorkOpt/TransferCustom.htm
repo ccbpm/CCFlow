@@ -240,7 +240,12 @@
             window.location.href = window.location.href;
         }
         function Remove(myPK) {
-
+             var ens = new Entities("BP.WF.TransferCustoms");
+            ens.Retrieve("WorkID", GetQueryString("WorkID"), "IsEnable", 1);
+            if (ens.length == 1) {
+                alert("流转自定义必须选择一个游离态节点，当前只有一个游离态节点不能移除");
+                return;
+            }
             var en = new Entity("BP.WF.TransferCustom", myPK);
             en.IsEnable = 0;
             en.Update();

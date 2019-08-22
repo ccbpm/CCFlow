@@ -900,6 +900,15 @@ function Send(isHuiQian) {
         return false;
     }
 
+    //如果启用了流程流转自定义，必须设置选择的游离态节点
+    if ($('[name=TransferCustom]').length > 0) {
+        var ens = new Entities("BP.WF.TransferCustoms");
+        ens.Retrieve("WorkID",  pageData.WorkID, "IsEnable", 1);
+        if (ens.length == 0) {
+            alert("该节点启用了流程流转自定义，但是没有设置流程流转的方向，请点击流转自定义按钮进行设置");
+            return false;
+        }
+    }
     window.hasClickSend = true; //标志用来刷新待办.
 
     var toNodeID = 0;

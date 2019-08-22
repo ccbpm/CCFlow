@@ -1444,8 +1444,11 @@ namespace BP.WF.Template
                 fl.SetPara("IsYouLiTai", 0);
             fl.Update();
 
+            BtnLab btnLab = new BtnLab(this.NodeID);
+            btnLab.RetrieveFromDBSources();
+            Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
             //如果是组长会签模式，通用选择器只能单项选择
-            if(this.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+            if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader)
             {
                 Selector selector = new Selector(this.NodeID);          
                 selector.IsSimpleSelector = true;

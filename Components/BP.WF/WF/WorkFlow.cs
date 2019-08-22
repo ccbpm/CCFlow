@@ -1223,31 +1223,31 @@ namespace BP.WF
             }
 
             #region 处理明细表的汇总.
-            Node currND = new Node(this.HisGenerWorkFlow.FK_Node);
+//            Node currND = new Node(this.HisGenerWorkFlow.FK_Node);
 
-            //处理明细数据的copy问题。 首先检查：当前节点（最后节点）是否有明细表。
-            MapDtls dtls = currND.MapData.MapDtls; // new MapDtls("ND" + nd.NodeID);
-            int i = 0;
-            foreach (MapDtl dtl in dtls)
-            {
-                i++;
-                // 查询出该明细表中的数据。
-                GEDtls dtlDatas = new GEDtls(dtl.No);
-                dtlDatas.Retrieve(GEDtlAttr.RefPK, this.WorkID.ToString());
+//            //处理明细数据的copy问题。 首先检查：当前节点（最后节点）是否有明细表。
+//            MapDtls dtls = currND.MapData.MapDtls; // new MapDtls("ND" + nd.NodeID);
+//            int i = 0;
+//            foreach (MapDtl dtl in dtls)
+//            {
+//                i++;
+//                // 查询出该明细表中的数据。
+//                GEDtls dtlDatas = new GEDtls(dtl.No);
+//                dtlDatas.Retrieve(GEDtlAttr.RefPK, this.WorkID.ToString());
 
-                GEDtl geDtl = null;
-                try
-                {
-                    // 创建一个Rpt对象。
-                    geDtl = new GEDtl("ND" + int.Parse(this.HisFlow.No) + "RptDtl" + i.ToString());
-                    geDtl.ResetDefaultVal();
-                }
-                catch
-                {
-#warning 此处需要修复。
-                    continue;
-                }
-            }
+//                GEDtl geDtl = null;
+//                try
+//                {
+//                    // 创建一个Rpt对象。
+//                    geDtl = new GEDtl("ND" + int.Parse(this.HisFlow.No) + "RptDtl" + i.ToString());
+//                    geDtl.ResetDefaultVal();
+//                }
+//                catch
+//                {
+//#warning 此处需要修复。
+//                    continue;
+//                }
+//            }
             this._IsComplete = 1;
             #endregion 处理明细表的汇总.
 

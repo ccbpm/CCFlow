@@ -294,6 +294,14 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(SubFlowAutoAttr.SendModel);
             }
         }
+
+        public int IsAutoSendSubFlowOver
+        {
+            get
+            {
+                return this.GetValIntByKey(FlowAttr.IsAutoSendSubFlowOver);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -324,7 +332,9 @@ namespace BP.WF.Template
 
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);
                 map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程模式", false, true);
-                  
+                map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "结束规则", false, true);
+
+
                 map.AddTBString(SubFlowAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 

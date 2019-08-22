@@ -854,7 +854,7 @@ namespace BP.WF
 
                 MapDtls dtls = wk.HisMapDtls;
                 foreach (MapDtl dtl in dtls)
-                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
+                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + oid+"'");
 
                 //删除附件数据。
                 DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + wk.NodeID + "' AND RefPKVal='" + wk.OID + "'");

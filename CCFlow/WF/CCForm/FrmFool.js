@@ -1718,18 +1718,11 @@ function GetLab(frmData, attr) {
     if (contralType == 9) {
         //URL @ 变量替换
         var url = attr.Tag2;
-        var locationsearch = url.split('?')[1]; //获取url中"?"符后的字串
-        var theRequest = new Object();
-
         //替换URL中的参数
-        var list = locationsearch.split('&');
-        for (var i = 0; i < list.length; i++) {
-            theRequest[list[i].split("=")[0]] = unescape(list[i].split("=")[1]);
-        }
-        $.each(theRequest, function (i, o) {
-            if (o.indexOf('@') == 0) {
-                url = url.replace(o, GetQueryString(i));
-            }
+        var pageParams = getQueryString();
+        $.each(pageParams, function (i, pageParam) {
+            var pageParamArr = pageParam.split('=');
+            url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
         });
 
         $.each(frmData.Sys_MapAttr, function (i, obj) {

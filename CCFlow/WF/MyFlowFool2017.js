@@ -1774,6 +1774,7 @@ function GetLab(flowData, attr) {
 		var locationsearch = url.split('?')[1]; //获取url中"?"符后的字串
 		var theRequest = new Object();
 
+        //替换URL中的参数
 		var list = locationsearch.split('&');
 		for (var i = 0; i < list.length; i++) {
 			theRequest[list[i].split("=")[0]] = unescape(list[i].split("=")[1]);
@@ -1783,29 +1784,29 @@ function GetLab(flowData, attr) {
 				url = url.replace(o, GetQueryString(i));
 			}
 		});
+        //替换表单中的参数
+        $.each(flowData.Sys_MapAttr, function (i, obj) {
+            if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
+                url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
+            }
+        });
+        var OID = GetQueryString("OID");
+        if (OID == undefined || OID == "");
+        OID = GetQueryString("WorkID");
+        var FK_Node = GetQueryString("FK_Node");
+        var FK_Flow = GetQueryString("FK_Flow");
+        var webUser = new WebUser();
+        var userNo = webUser.No;
+        var SID = webUser.SID;
+        if (SID == undefined)
+            SID = "";
+        if (url.indexOf("?") == -1)
+            url = url + "?1=1";
 
-        //$.each(flowData.Sys_MapAttr, function (i, obj) {
-        //    if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
-        //        url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
-        //    }
-        //});
-        //var OID = GetQueryString("OID");
-        //if (OID == undefined || OID == "");
-        //OID = GetQueryString("WorkID");
-        //var FK_Node = GetQueryString("FK_Node");
-        //var FK_Flow = GetQueryString("FK_Flow");
-        //var webUser = new WebUser();
-        //var userNo = webUser.No;
-        //var SID = webUser.SID;
-        //if (SID == undefined)
-        //    SID = "";
-        //if (url.indexOf("?") == -1)
-        //    url = url + "?1=1";
-
-        //if (url.indexOf("SearchBS.htm") != -1)
-        //    url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
-        //else
-        //    url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        if (url.indexOf("SearchBS.htm") != -1)
+            url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        else
+            url = url + "&UserNo=" + userNo + "&SID=" + SID;
 
         eleHtml = '<span ><a href="' + url + '" target="_blank">' + attr.Name + '</a></span>';
 

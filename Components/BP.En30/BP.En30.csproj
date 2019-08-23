@@ -108,17 +108,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="ChnCharInfo">
-      <HintPath>..\..\RefDLL\ChnCharInfo.dll</HintPath>
-    </Reference>
     <Reference Include="FtpSupport">
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>

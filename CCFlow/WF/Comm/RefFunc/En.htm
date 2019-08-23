@@ -200,8 +200,11 @@
             return html;
         }
         function OPenFun(url, warning, title, w, h, FunPara) {
+            if (title == "轨迹")
+                url = url + "&title=轨迹";
+
             if (FunPara == true || FunPara == "true")
-                OpenEasyUiDialogExt(url, title, 540, 450, false);
+                OpenEasyUiDialogExt(url, title, 1200, 800, false);
             else {
                 if (warning == "null" || warning == "")
                     warning = "确定要执行吗？";
@@ -210,7 +213,7 @@
                     warning = warning.replace(/\s+/g, "\r\n");
                 }
                 if (confirm("\"" + warning + "\"")) {
-                    OpenEasyUiDialogExt(url, title, 540, 450, false);
+                    OpenEasyUiDialogExt(url, title, 1200, 800, false);
                 }
             }
             

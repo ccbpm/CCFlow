@@ -65,8 +65,14 @@
                 $('#CCForm').html('');
 
                 data = data.replace('close@', '');
+                var title = GetQueryString("title")
+                if (title=="轨迹") {
 
-
+                    //window.open(data);
+                    window.location.href = data;
+                    window.close();
+                    return;
+                }
                 var html = "<fieldset>";
                 html += "<legend> 执行信息</legend>";
                 html += data;
@@ -76,7 +82,7 @@
                 $('#CCForm').html(html);
                 $("#Btn_Done").hide();
 
-                //window.close();
+                window.close();
                 return;
             }
 

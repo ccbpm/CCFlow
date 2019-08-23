@@ -1228,7 +1228,7 @@
             if (en.EntityType == 1)
                 url = '../../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + node.id;
 
-            if (en.EntityType == 2)
+            if (en.EntityType == 2 || en.EntityType == 3)
                 url = '../../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + node.id;
 
             //   alert(en.EntityType);
@@ -1274,6 +1274,10 @@
                     url = '../../CCBill/SearchDict.htm?FrmID=' + node.id;
                 else
                     url = '../../CCBill/SearchEditer.htm?FrmID=' + node.id;
+            }
+            //树状结构
+            if (en.EntityType == 3) {
+                 url = '../../CCBill/MyEntityTree.htm?FrmID=' + node.id;
             }
 
             OpenEasyUiDialog(url, "CCForm_Attr", '我的单据', 1100, 560, "icon-window");
@@ -1394,6 +1398,9 @@
                 return;
             }
 
+             //表单库增加表单节点
+             AppendFrmToFormTree(node.attributes.Node.ParentId, frmID, frmName);
+            
             //设计表单.
             addTab("DesignerFrm" + frmID, "设计表单-" + frmName, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID);
 

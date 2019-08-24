@@ -703,5 +703,66 @@ namespace CCFlow.WF.CCForm
             //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
             return "1.0.0.0";
         }
-    }
+		public class ReportImage
+		{
+			public string ext;
+			public string fileName;
+			public byte[] bytesData;
+			public string mypk;
+		}
+
+		[WebMethod]
+		public string GetReportImagesData(long workID, string createReportType)
+		{
+			try
+			{
+				if (string.IsNullOrWhiteSpace(createReportType))
+					return null;
+
+				string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+				BP.DA.Paras ps = new BP.DA.Paras();
+
+
+				switch (createReportType)
+				{
+					case "1":
+						ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE  RefPKVal=" + dbStr + "RefPKVal";
+						ps.Add(BP.Sys.FrmAttachmentDBAttr.RefPKVal, workID);
+						break;
+					case "2":
+						ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE " +
+								 "RefPKVal in(SELECT WorkID FROM WF_GenerWorkFlow WHERE PWORKID=" + dbStr + "PWORKID)";
+						ps.Add("PWORKID", workID);
+						break;
+					default:
+						break;
+				}
+				DataTable dt = DBAccess.RunSQLReturnTable(ps);
+
+				List<ReportImage> reImgsList = new List<ReportImage>();
+				foreach (DataRow dr in dt.Rows)
+				{
+					FileStream fs = new FileStream(dr["FileFullName"].ToString(), FileMode.Open);
+					long size = fs.Length;
+					byte[] bytes = new byte[size];
+					fs.Read(bytes, 0, bytes.Length);
+					fs.Close();
+
+					reImgsList.Add(new ReportImage
+					{
+						ext = dr["FileExts"].ToString(), //frmDB.FileExts,
+						fileName = dr["FileName"].ToString(), //frmDB.FileName,
+						bytesData = bytes,
+						mypk = dr["MyPK"].ToString() //frmDB.MyPK
+					});
+				}
+
+				return LitJson.JsonMapper.ToJson(reImgsList);
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+		}
+	}
 }

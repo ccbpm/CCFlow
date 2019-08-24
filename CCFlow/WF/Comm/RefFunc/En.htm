@@ -203,8 +203,12 @@
             if (title == "轨迹")
                 url = url + "&title=轨迹";
 
+            if (w == null || w == undefined)
+                w = document.body.clientWidth - 200;
+            if (h == null || h == undefined)
+                h = document.body.clientHeight-140;
             if (FunPara == true || FunPara == "true")
-                OpenEasyUiDialogExt(url, title, 1200, 800, false);
+                OpenEasyUiDialogExt(url, title, w, h, false);
             else {
                 if (warning == "null" || warning == "")
                     warning = "确定要执行吗？";
@@ -213,7 +217,7 @@
                     warning = warning.replace(/\s+/g, "\r\n");
                 }
                 if (confirm("\"" + warning + "\"")) {
-                    OpenEasyUiDialogExt(url, title, 1200, 800, false);
+                    OpenEasyUiDialogExt(url, title, w, h, false);
                 }
             }
             

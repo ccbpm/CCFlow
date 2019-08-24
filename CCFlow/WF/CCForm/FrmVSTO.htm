@@ -34,7 +34,10 @@
             if (GetQueryString("MyPK") != null)
                 url += ",MyPK=" + GetQueryString("MyPK");
 
-            if (GetQueryString("No") != null)
+            if (GetQueryString("CreateReportType") != null)
+                url += ",CreateReportType=" + GetQueryString("CreateReportType");
+          
+    		if (GetQueryString("No") != null)
                 url += ",No=" + GetQueryString("No");
 
             if (GetQueryString("WorkID") != null)

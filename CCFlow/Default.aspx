@@ -1,31 +1,28 @@
-﻿<%@Page Language="C#" AutoEventWireup="true" Inherits="CCFlow.Default" Codebehind="Default.aspx.cs" %>
-<html>
-	<head>
-		<title>ccbpm导航页</title>
-	    <link href="DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-        <style type="text/css">
-           body
-           {
-           }
-           li
-           {
-              font-size:14px;
-              margin:5px;
-              border-style:none;
-              color:Gray
-           }
-        </style>
-        <base target="_blank" />
-        <script type="text/javascript">
-           // var fromSortName = window.prompt('请输入表单类别', '表单类别1');
-        </script>
-	</head>
-    
-    <body >
-    <center>
-  <table style="text-align:center; border:1px; width:70%;" >
+﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="CCFlow.Default" CodeBehind="Default.aspx.cs" %>
 
-   
+<html>
+<head>
+    <title>ccbpm导航页</title>
+    <link href="DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        body {
+        }
+
+        li {
+            font-size: 14px;
+            margin: 5px;
+            border-style: none;
+            color: Gray
+        }
+    </style>
+    <base target="_blank" />
+    <script type="text/javascript">
+           // var fromSortName = window.prompt('请输入表单类别', '表单类别1');
+    </script>
+</head>
+
+<body>
+  <table style="text-align:center; border:1px; width:70%;" >
   <caption style="CaptionMsgLong"    >驰骋工作流程引擎ccbpm测试导航</caption>
   <tr>
   <th>多看文档少走弯路，学好ccflow受益一生。</th>
@@ -39,12 +36,13 @@
 
     <li> <a href="http://ccflow.org" target=_blank >ccflow 官方网站</a> |  <a href="http://bbs.ccflow.org" target=_blank >  技术论坛</a> </li>
     <li> 商务问题 QQ:<span class="style4">793719823</span> 电话:<span  class="style5">0531-82374939 , 18660153393</span>  - <a href="http://ccflow.org/CCS/Site/PG.aspx" target=_blank > 申请专业人员评估</a> </li> 
+
     </ul>
   </td>
   </tr>
 
    <tr>
-  <th>在线文档，需要高版本的IE浏览器或者谷歌火狐浏览器查看。 </th>
+    <th>在线文档，需要高版本的IE浏览器或者谷歌火狐浏览器查看。 </th>
   </tr>
 
   <tr>
@@ -52,6 +50,7 @@
     <ul>
     <li> <a href="http://ccbpm.mydoc.io/" >驰骋流程引擎文档</a></li>
     <li> <a href="http://ccform.mydoc.io/" >驰骋表单引擎文档</a></li>
+    <li> <a href="http://ccflow.ke.qq.com/" >视频教程</a></li>
     <li> <a href="http://git.oschina.net/opencc/ccflow/attach_files" target=_blank >最新文档 - 下载地址</a> </li>
     </ul>
   </td>
@@ -183,14 +182,11 @@
 
       </td>
   </tr>
-  
 
   <tr>
-  <td style=" text-align:center" >济南驰骋信息技术有限公司 @2003-2017</td>
+  <td style=" text-align:center" >济南驰骋信息技术有限公司 @2003-2019</td>
   </tr>
   </table>
-  </center>
 
-
- </body>
+</body>
 </html>

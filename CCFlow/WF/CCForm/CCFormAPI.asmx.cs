@@ -604,6 +604,7 @@ namespace CCFlow.WF.CCForm
         [WebMethod]
         public void SaveFrmAth(string userNo, string sid, string frmID, int nodeID, Int64 workID, byte[] byt, string fileName)
         {
+           BP.WF.Dev2Interface.Port_Login(userNo);
             MapData md = new MapData(frmID);
             FrmAttachments aths = new FrmAttachments(frmID);
             if (aths.Count == 0)
@@ -614,13 +615,31 @@ namespace CCFlow.WF.CCForm
             FrmAttachment ath = aths[0] as FrmAttachment;
 
             //把文件写入.
-            string myfileName = BP.Sys.SystemConfig.PathOfTemp + fileName;
-            if (System.IO.File.Exists(myfileName) == true)
-                System.IO.File.Delete(myfileName);
-            BP.DA.DataType.WriteFile(myfileName, byt);
+            string rootPath = Context.Server.MapPath("~/" + ath.SaveTo);
+            string fileName = guid + "." + System.Drawing.Imaging.ImageFormat.Jpeg.ToString();
+            string filePath = rootPath + fileName;
+            if (System.IO.File.Exists(filePath) == true)
+                System.IO.File.Delete(filePath);
+            BP.DA.DataType.WriteFile(filePath, byt);
 
-            //增加附件.
-            BP.WF.Dev2Interface.CCForm_AddAth(nodeID, workID, ath.NoOfObj, frmID, BP.Sys.SystemConfig.PathOfTemp, fileName);
+            FileInfo info = new FileInfo(filePath);
+            FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+            dbUpload.MyPK = guid;
+            dbUpload.NodeID = nodeID.ToString();
+            dbUpload.Sort = null;
+            dbUpload.FK_FrmAttachment = ath.MyPK;
+            dbUpload.FK_MapData = ath.FK_MapData;
+            dbUpload.FileExts = info.Extension;
+            dbUpload.FileFullName = filePath;
+            dbUpload.FileName = fileName;
+            dbUpload.FileSize = (float)info.Length;
+            dbUpload.RDT = DataType.CurrentDataTimess;
+            dbUpload.Rec = userNo;
+            dbUpload.RecName = BP.Web.WebUser.Name;
+            dbUpload.RefPKVal = workID.ToString();
+
+            dbUpload.UploadGUID = guid;
+            dbUpload.DirectSave();
         }
         /// <summary>
         /// 级联接口

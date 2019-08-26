@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>权限控制</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"
+          type="text/css" />
+    <script type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script type="text/javascript"
+            src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <base target="_self" />
+
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            var ens = new Entities("BP.WF.Template.PowerModels");
+            ens.Retrieve("Model", "FlowData", "FlowNo", flowNo);
+
+            var html = "";
+            html += "<table style='width:100%;'>";
+            html += "<caption>权限控制</caption>";
+            html += "<tr>";
+            html += "<th>编号</th>";
+            html += "<th>权限</th>";
+            html += "<th>岗位</th>";
+            html += "<th>人员</th>";
+            html += "</tr>";
+
+            var models = [];
+            models.push({ 'FlowDataView': '查看', });
+
+
+            for (var i = 0; i < models.length; i++) {
+                var model = models[i];
+
+                html += "<tr>";
+
+                html += "<td>" + model.NO + "</td>";
+                html += "<td>" + model.Name + "</td>";
+
+
+                html += "<td>" + item.No + "</td>";
+                html += "<td>" + item.No + "</td>";
+                html += "<td>" + item.No + "</td>";
+
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#docs").html(html);
+        }
+
+        function SaveEmp() {
+
+            var en = new Entity("BP.WF.Template.PowerModel");
+
+            var myPk = "xxx" + "_" + "ss";
+            en.SetPKVal(myPk); //设置主键.
+            en.Delete();
+
+            en.Model = "FlowData";
+            en.ModeType = 1; //
+
+            en.ModelFlag = "FlowDataView";
+            en.ModelFlagName = "查看";
+
+            en.FlowNo = GetQueryString("FK_Flow");
+            en.EmpNo = "sss";
+            en.EmpName = "xxxxx";
+
+            en.SetPKVal(myPk); //设置主键.
+            en.Insert();
+
+        }
+
+        function changeOrOpenTab(flowName, flowNo) {
+            //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
+            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
+                + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+            window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
+                "icon-flow1");
+        }
+
+        function Del(no) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var en = new Entity("BP.WF.Flow", no);
+            var data = en.DoMethodReturnString("DoDelete");
+
+            alert("删除成功");
+            window.location.href = window.location.href;
+        }
+        //创建新版本.
+        function NewVer() {
+
+            if (window.confirm('您确定要创建新版本吗？') == false)
+                return;
+
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
+
+            var flowNo = GetQueryString("FK_Flow");
+            var en = new Entity("BP.WF.Flow", flowNo);
+            var data = en.DoMethodReturnString("VerCreateNew");
+
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>版本创建成功，正在执行流程检查。。。</blue><br><br><br><br></center>");
+
+            en = new Entity("BP.WF.Flow", data);
+            en.DoMethodReturnString("DoCheck");
+
+            //alert(data);
+            // $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
+
+            window.location.href = window.location.href;
+        }
+        function SetCurrentVer(no) {
+
+            if (window.confirm('您确定要设置为当前版本？') == false)
+                return;
+
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行设置，请稍后。。</blue><br><br><br><br></center>");
+
+            var en = new Entity("BP.WF.Flow", no);
+            var data = en.DoMethodReturnString("VerSetCurrentVer");
+            en.DoMethodReturnString("DoCheck");
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+
+
+    <div id="docs"></div>
+
+    <div id="Msg"></div>
+
+
+</body>
+</html>

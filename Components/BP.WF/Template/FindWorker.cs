@@ -101,6 +101,12 @@ namespace BP.WF.Template
                 sql = sql.Replace("@FK_Node", this.town.HisNode.NodeID.ToString());
                 sql = sql.Replace("@NodeID", this.town.HisNode.NodeID.ToString());
 
+                //@sly 增加。
+                sql = sql.Replace("@WorkID", this.currWn.HisWork.OID.ToString());
+                sql = sql.Replace("@FID", this.currWn.HisWork.FID.ToString());
+
+
+
                 sql = BP.WF.Glo.DealExp(sql, this.currWn.rptGe, null);
                 if (sql.Contains("@"))
                 {

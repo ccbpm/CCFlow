@@ -551,6 +551,14 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
+                rm = new RefMethod();
+                rm.Title = "权限控制";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.ClassMethodName = this.ToString() + ".DoPowerModel()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                // rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
 
                 //rm = new RefMethod();
                 //rm.Title = "与业务表数据同步"; // "抄送规则";
@@ -1124,6 +1132,11 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Ver.htm?FK_Flow=" + this.No;
         }
+        public string DoPowerModel()
+        {
+            return "../../Admin/AttrFlow/PowerModel.htm?FK_Flow=" + this.No;
+        }
+        
         /// <summary>
         /// 时限规则
         /// </summary>

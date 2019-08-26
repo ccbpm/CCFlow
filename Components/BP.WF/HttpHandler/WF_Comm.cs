@@ -833,7 +833,6 @@ namespace BP.WF.HttpHandler
 
                     //获得真实的数据类型.
                     object typeVal = val;
-
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
 

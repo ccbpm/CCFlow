@@ -566,9 +566,16 @@ namespace BP.Frm
                 qo.addAnd();
                 qo.addLeftBracket();
 
-                var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
 
-                qo.AddWhere(str, typeVal);
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                    qo.AddWhere(str, typeVal);
+
+                }else
+                {
+                qo.AddWhere(str, ap.GetValStrByKey(str));
+                }
 
                 qo.addRightBracket();
             }
@@ -880,9 +887,15 @@ namespace BP.Frm
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
-                var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                    qo.AddWhere(str, typeVal);
+                }else
+                {
+                    qo.AddWhere(str, ap.GetValStrByKey(str));
+                }
 
-                qo.AddWhere(str, typeVal);
                 qo.addRightBracket();
             }
             #endregion 外键或者枚举的查询

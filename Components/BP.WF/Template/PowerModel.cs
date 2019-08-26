@@ -97,48 +97,6 @@ namespace BP.WF.Template
                 this.SetValByKey(PowerModelAttr.PowerFlag, value);
             }
         }
-        /// <summary>
-        ///节点
-        /// </summary>
-        public int NodeID
-        {
-            get
-            {
-                return this.GetValIntByKey(PowerModelAttr.NodeID);
-            }
-            set
-            {
-                this.SetValByKey(PowerModelAttr.NodeID, value);
-            }
-        }
-        public string EmpNo
-        {
-            get
-            {
-                string s = this.GetValStringByKey(PowerModelAttr.EmpNo);
-                if (DataType.IsNullOrEmpty(s) == true)
-                    s = "";
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(PowerModelAttr.EmpNo, value);
-            }
-        }
-        public string ModelFlagName
-        {
-            get
-            {
-                string s = this.GetValStringByKey(PowerModelAttr.ModelFlagName);
-                if (DataType.IsNullOrEmpty(s) == true)
-                    s = "";
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(PowerModelAttr.ModelFlagName, value);
-            }
-        }
         #endregion
            
 
@@ -190,9 +148,6 @@ namespace BP.WF.Template
             }
         }
         #endregion
-
-
-        
     }
     /// <summary>
     /// 权限模型
@@ -203,26 +158,6 @@ namespace BP.WF.Template
         /// 权限模型
         /// </summary>
         public PowerModels() { }
-        /// <summary>
-        /// 权限模型
-        /// </summary>
-        /// <param name="FlowNo"></param>
-        public PowerModels(string FlowNo)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhereInSQL(PowerModelAttr.NodeID, "SELECT NodeID FROM WF_Node WHERE FlowNo='" + FlowNo + "'");
-            qo.DoQuery();
-        }
-        /// <summary>
-        /// 权限模型
-        /// </summary>
-        /// <param name="nodeid">节点ID</param>
-        public PowerModels(int nodeid)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(PowerModelAttr.NodeID, nodeid);
-            qo.DoQuery();
-        }
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>

@@ -293,22 +293,22 @@ namespace CCFlow.WF.CCForm
                 return;
 
             }
-            else if (this.DoType == "DownMaterials")
-            {
-                MaterialsCtrol mc = new MaterialsCtrol();
-                mc.MyPK = this.Request.QueryString["mypk"];
-                mc.Retrieve();
+            //else if (this.DoType == "DownMaterials")
+            //{
+            //    MaterialsCtrol mc = new MaterialsCtrol();
+            //    mc.MyPK = this.Request.QueryString["mypk"];
+            //    mc.Retrieve();
 
-                Helper.FtpDownFiles(mc.FileFullName, mc.FileExts, mc.FileName);
-            }
-            else if (this.DoType == "DownJobFiles")
-            {
-                JobMgt jm = new JobMgt();
-                jm.No = this.Request.QueryString["mypk"];
-                jm.Retrieve();
+            //    Helper.FtpDownFiles(mc.FileFullName, mc.FileExts, mc.FileName);
+            //}
+            //else if (this.DoType == "DownJobFiles")
+            //{
+            //    JobMgt jm = new JobMgt();
+            //    jm.No = this.Request.QueryString["mypk"];
+            //    jm.Retrieve();
 
-                Helper.FtpDownFiles(jm.FilePath, jm.FileExts, jm.Name);
-            }
+            //    Helper.FtpDownFiles(jm.FilePath, jm.FileExts, jm.Name);
+            //}
         }
 
         //实体文件下载

@@ -321,9 +321,10 @@ namespace BP.WF.HttpHandler
                         }
 
                         BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, gwf.WorkID);
+                        Node toNode = new Node(gwf.FK_Node);
                         if (nd.HisFormType != NodeFormType.SheetTree && nd.HisFormType != NodeFormType.SheetAutoTree)
                             //跳转到查看页面
-                            return "url@" + "./CCForm/Frm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "&FK_MapData=ND" + gwf.FK_Node + "&IsReadonly=1";
+                            return "url@" + "./CCForm/Frm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "&FK_MapData=" + toNode.NodeFrmID + "&IsReadonly=1";
                         else
                             //跳转到查看页面
                             return "url@./MyFlowTreeReadonly.htm?WorkID=" + gwf.WorkID + "&FID=" + gwf.FID + "&OID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + gwf.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";

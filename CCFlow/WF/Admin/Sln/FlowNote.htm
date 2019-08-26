@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>字段权限</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <style type="text/css">
+        th, td
+        {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        var frmID;
+        var fk_flow;
+        var fk_Node;
+        $(function () {
+
+            var nodeID = GetQueryString("FK_Node");
+            var flowNo = GetQueryString("FK_Flow");
+            frmID = "ND" +  intprase( flowNo) + "Rpt";
+
+            //获得字段集合.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", frmID, "Y");
+            fieldsData = mapAttrs;
+
+            var groups = new Entities("BP.Sys.GroupFields", "FrmID", frmID);
+            for (var k = 0; k < groups.length; k++) {
+                var group = groups[k];
+                if (group.CtrlType == "Ath" || group.CtrlType == "Dtl")
+                    continue;
+
+                html = "";
+                html += "<tr>";
+                html += "<td colspan=12><font color=green><b>" + group.Lab + "</b></font></td>";
+                html += "</tr>";
+                $("#Table1 tr:last").after(html);
+
+                for (var i = 0; i < mapAttrs.length; i++) {
+                    var en = mapAttrs[i];
+                    if (en.UIVisible == 0 || en.GroupID != group.OID)
+                        continue;
+
+                    var html = "";
+                    html += "<tr >";
+                    html += "<td class=Idx>" + (i + 1) + "</td>";
+                    html += "<td>" + en.KeyOfEn + "</td>";
+                    html += "<td>" + en.Name + "</td>";
+
+                    if (en.LGType == 0) html += "<td>普通</td>";
+                    if (en.LGType == 1) html += "<td>枚举</td>";
+                    if (en.LGType == 2) html += "<td>外键</td>";
+
+                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
+
+                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
+                    html += "</tr>";
+
+                    $("#Table1 tr:last").after(html);
+                }
+            }
+
+            //获得FF集合，个性化的设置信息都在这个表里面与Sys_MapAttr无关系.
+            var ffs = new Entities("BP.WF.Template.FrmFields");
+            ffs.Retrieve("FK_MapData", frmID, "FK_Node", nodeID);
+
+            //给相关的字段赋值.
+            for (var i = 0; i < ffs.length; i++) {
+
+                var ff = ffs[i];
+
+               //  $("#" + ff.KeyOfEn + "_DefVal").val(ff.DefVal); //设置默认值.
+               //   $("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
+
+                SetCheckBox(ff, "UIVisible", ff.UIVisible, '可见');
+               // SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可用');
+               // SetCheckBox(ff, "IsSigan", ff.IsSigan, '签名');
+               // SetCheckBox(ff, "IsNotNull", ff.IsNotNull, '必填');
+              //  SetCheckBox(ff, "IsWriteToFlowTable", ff.IsWriteToFlowTable, '写入NDxxRpt');
+              //  SetCheckBox(ff, "IsWriteToGenerWorkFlow", ff.IsWriteToGenerWorkFlow, '写入WF_GernrWorkFlow');
+            }
+
+        });
+
+        function SetCheckBox(ff, key, val, label) {
+
+            //是否可用.
+            var isCheckedReal = $('#' + ff.KeyOfEn + "_" + key).is(':checked');
+            if (isCheckedReal == true)
+                isCheckedReal = 1;
+            else
+                isCheckedReal = 0;
+
+            if (val != isCheckedReal) {
+                if (val == 1)
+                    $("#" + ff.KeyOfEn + "_" + key).attr("checked", true);
+                else
+                    $("#" + ff.KeyOfEn + "_" + key).attr("checked", false);
+
+                $("#lab_" + ff.KeyOfEn + "_" + key).html("<font color=green><b>" + label + "</b></font>");
+            }
+        }
+
+        var FieldsAttrs = new Object();
+        var fieldsData = null;
+
+        //保存字段方案
+        function Save() {
+            var frmID = GetQueryString("FK_MapData");
+            var nodeID = GetQueryString("FK_Node");
+            var flowNo = GetQueryString("FK_Flow");
+
+
+            //获得字段集合.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", frmID);
+
+            //删除以前的设置..
+            var ff = new Entity("BP.WF.Template.FrmField");
+            ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
+
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var en = mapAttrs[i];
+                if (en.UIVisible == 0)
+                    continue;
+
+                ff = new Entity("BP.WF.Template.FrmField");
+                ff.SetPKVal(frmID + '_' + nodeID + '_' + en.KeyOfEn);
+
+                ff.FK_Flow = flowNo;
+                ff.FK_Node = nodeID;
+                ff.FK_MapData = frmID;
+                ff.KeyOfEn = en.KeyOfEn;
+                ff.EleType = "Field";
+                ff.Name = en.Name;
+
+                //给其他的字段赋值.
+                ff.DefVal = $("#" + en.KeyOfEn + "_DefVal").val(); //默认值.
+                ff.RegularExp = $("#" + en.KeyOfEn + "_RegularExp").val(); //表达式.
+
+                if ($('#' + ff.KeyOfEn + "_UIVisible").is(':checked'))
+                    ff.UIVisible = 1;
+                else
+                    ff.UIVisible = 0;
+
+                if ($('#' + ff.KeyOfEn + "_UIIsEnable").is(':checked'))
+                    ff.UIIsEnable = 1;
+                else
+                    ff.UIIsEnable = 0;
+
+                if ($('#' + ff.KeyOfEn + "_IsSigan").is(':checked'))
+                    ff.IsSigan = 1;
+                else
+                    ff.IsSigan = 0;
+
+                if ($('#' + ff.KeyOfEn + "_IsNotNull").is(':checked'))
+                    ff.IsNotNull = 1;
+                else
+                    ff.IsNotNull = 0;
+
+                if ($('#' + ff.KeyOfEn + "_IsWriteToFlowTable").is(':checked'))
+                    ff.IsWriteToFlowTable = 1;
+                else
+                    ff.IsWriteToFlowTable = 0;
+
+                //if ($('#' + ff.KeyOfEn + "_IsWriteToGenerWorkFlow").is(':checked'))
+                //    ff.IsWriteToGenerWorkFlow = 1;
+                //else
+                //    ff.IsWriteToGenerWorkFlow = 0;
+
+                //判断变化的是否需要保存.
+                var isNeedSave = false;
+                //if (ff.IsWriteToGenerWorkFlow == 1)
+                //    isNeedSave = true;
+
+                if (ff.IsWriteToFlowTable == 1)
+                    isNeedSave = true;
+
+                if (en.UIVisible != ff.UIVisible)
+                    isNeedSave = true;
+
+                if (en.UIIsEnable != ff.UIIsEnable)
+                    isNeedSave = true;
+
+                if (en.DefVal != ff.DefVal)
+                    isNeedSave = true;
+
+                if (en.UIIsInput != ff.IsNotNull)
+                    isNeedSave = true;
+
+                if (ff.RegularExp != "")
+                    isNeedSave = true;
+
+                if (isNeedSave == false)
+                    continue;
+
+                ff.Insert();
+            }
+
+            window.location.href = window.location.href;
+        }
+
+
+
+        function replaceTrim(val) {//去除空格
+            return val.replace(/[ ]/g, "");
+        }
+
+        function upischange(index) {
+            fieldsData[index].IsChange = true;
+        }
+        //绑定是否全选或者取消全选
+        function checkclick(o, index) {
+            upischange(index);
+            var ischeckedall = true;
+            var rowstype = o.classList;
+            $('.' + rowstype).each(function () {
+                if (this.type == 'checkbox' && !this.checked) {
+                    ischeckedall = false;
+                    return ischeckedall;
+                }
+            });
+
+            if (ischeckedall)
+                $('#KeyOfEn_' + rowstype)[0].checked = true;
+            else
+                $('#KeyOfEn_' + rowstype)[0].checked = false;
+        }
+
+        //全选或者反选
+        function CheckAll(rowstype) {
+
+            $('.' + rowstype).each(function () {
+                if (this.type == 'checkbox') {
+                    $('#KeyOfEn_' + rowstype)[0].checked ? this.checked = true : this.checked = false;
+                }
+            });
+
+            upstate(true);
+        }
+
+        function upstate(ischange) {
+            for (var i = 0; i < fieldsData.length; i++) {
+                en.IsChange = ischange;
+            }
+        }
+    </script>
+</head>
+<body>
+    <table id="Table1" style="width: 100%; padding: 2px;">
+        <caption> 设置摘要-详细信息请参考下面帮助说明 </caption>
+        <tr>
+            <th>
+                序
+            </th>
+            <th>
+                字段
+            </th>
+            <th>
+                名称
+            </th>
+            <th>
+                类型
+            </th>
+
+            <th>
+                <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
+                <label for="KeyOfEn_UIVisible">
+                    可见
+                </label>
+            </th>
+
+        </tr>
+    </table>
+    <button onclick='Save();' type='button'>
+        保存
+    </button>
+
+
+    <fieldset>
+        <label> 说明</label>
+        <ul>
+            <li>摘要字段用于显示在移动端的手机上 </li>
+            <li>可以方便的直观的看到移动端手机的整体表的信息。 </li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

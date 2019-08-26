@@ -867,6 +867,9 @@ namespace BP.WF.HttpHandler
 
             BP.WF.Port.WFEmp em = new WFEmp();
             em.No = BP.Web.WebUser.No;
+            if (DataType.IsNullOrEmpty(em.No) == true)
+                return "err@登录信息丢失,请重新登录.";
+
             if (em.RetrieveFromDBSources() == 0)
             {
                 em.FK_Dept = BP.Web.WebUser.FK_Dept;

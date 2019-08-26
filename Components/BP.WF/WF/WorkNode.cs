@@ -464,13 +464,18 @@ namespace BP.WF
                 }
 
                 //流转自定义的流程并且考核规则按照流转自定义设置
-                if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet && town.HisNode.GetParaInt("CHWayOfTimeRole") == 2)
+                if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet
+                    && town.HisNode.GetParaInt("CHWayOfTimeRole") == 2)
                 {
                     //获取当前节点的流转自定义时间
                     TransferCustom tf = new TransferCustom();
                     tf.MyPK = town.HisNode.NodeID + "_" + this.WorkID;
                     if (tf.RetrieveFromDBSources() != 0)
                     {
+                        if (DataType.IsNullOrEmpty(tf.PlanDT) == true)
+                            throw new Exception("err@在流转自定义期间，没有设置计划完成日期。");
+
+
                         dtOfShould = DataType.ParseSysDateTime2DateTime(tf.PlanDT);
                     }
                 }

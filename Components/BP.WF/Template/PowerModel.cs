@@ -23,26 +23,44 @@ namespace BP.WF.Template
         /// </summary>
         public const string NodeID = "NodeID";
         /// <summary>
+        /// 模块
+        /// </summary>
+        public const string Model = "Model";
+        /// <权限标识>
         /// 权限标记
         /// </summary>
-        public const string ModelFlag = "ModelFlag";
+        public const string PowerFlag = "PowerFlag";
+        /// <summary>
+        /// 权限标记名称
+        /// </summary>
+        public const string PowerFlagName = "PowerFlagName";
         /// <summary>
         /// 控制类型
         /// </summary>
-        public const string Model = "Model";
-        public const string ModelType = "ModelType";
+        public const string PowerCtrlType = "PowerCtrlType";
         /// <summary>
         /// 人员编号 ModelFlagName.
         /// </summary>
         public const string ModelFlagName = "ModelFlagName";
-
         /// <summary>
         /// 人员编号
         /// </summary>
         public const string EmpNo = "EmpNo";
+        /// <summary>
+        /// 人员名称
+        /// </summary>
         public const string EmpName = "EmpName";
+        /// <summary>
+        /// 岗位编号
+        /// </summary>
         public const string StaNo = "StaNo";
+        /// <summary>
+        /// 岗位名称
+        /// </summary>
         public const string StaName = "StaName";
+        /// <summary>
+        /// 表单ID
+        /// </summary>
         public const string FrmID = "FrmID";
     }
     /// <summary>
@@ -68,15 +86,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 权限标记
         /// </summary>
-        public string ModelFlag
+        public string PowerFlag
         {
             get
             {
-                return this.GetValStringByKey(PowerModelAttr.ModelFlag);
+                return this.GetValStringByKey(PowerModelAttr.PowerFlag);
             }
             set
             {
-                this.SetValByKey(PowerModelAttr.ModelFlag, value);
+                this.SetValByKey(PowerModelAttr.PowerFlag, value);
             }
         }
         /// <summary>
@@ -145,23 +163,27 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(PowerModelAttr.Model, null, "模式", true, false, 0, 100, 10);
+                //比如： FlowData , FrmData
+                map.AddTBString(PowerModelAttr.Model, null, "模块", true, false, 0, 100, 10);
 
-                map.AddDDLSysEnum(PowerModelAttr.ModelType, 0, "控制类型", true, false, PowerModelAttr.ModelType,
-                    "@0=岗位@1=工作人员");
+                //权限标记: FlowDataDelete
+                map.AddTBString(PowerModelAttr.PowerFlag, null, "权限标识", true, false, 0, 100, 10);
+                //权限名称: 流程删除
+                map.AddTBString(PowerModelAttr.PowerFlagName, null, "权限标记名称", true, false, 0, 100, 10);
 
-                map.AddTBString(PowerModelAttr.ModelFlag, null, "权限标记", true, false, 0, 100, 10);
-                map.AddTBString(PowerModelAttr.ModelFlagName, null, "权限标记名称", true, false, 0, 100, 10);
+                map.AddDDLSysEnum(PowerModelAttr.PowerCtrlType, 0, "控制类型", true, false, PowerModelAttr.PowerCtrlType,
+                    "@0=岗位@1=人员");
 
                 map.AddTBString(PowerModelAttr.EmpNo, null, "人员编号", true, false, 0, 100, 10);
                 map.AddTBString(PowerModelAttr.EmpName, null, "人员名称", true, false, 0, 100, 10);
+
                 map.AddTBString(PowerModelAttr.StaNo, null, "岗位编号", true, false, 0, 100, 10);
                 map.AddTBString(PowerModelAttr.StaName, null, "岗位名称", true, false, 0, 100, 10);
 
+                //Model标记.
                 map.AddTBString(PowerModelAttr.FlowNo, null, "流程编号", true, false, 0, 100, 10);
                 map.AddTBInt(PowerModelAttr.NodeID, 0, "节点", true, false);
                 map.AddTBString(PowerModelAttr.FrmID, null, "表单ID", true, false, 0, 100, 10);
-                 
 
                 this._enMap = map;
                 return this._enMap;

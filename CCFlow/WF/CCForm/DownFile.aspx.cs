@@ -36,7 +36,7 @@ namespace CCFlow.WF.CCForm
                 return this.Request.QueryString["DoType"];
             }
         }
-        
+
         public string DoWhat
         {
             get
@@ -58,7 +58,7 @@ namespace CCFlow.WF.CCForm
                 return this.Request.QueryString["MyPK"];
             }
         }
-        
+
         /// <summary>
         /// ath.
         /// </summary>
@@ -197,7 +197,7 @@ namespace CCFlow.WF.CCForm
                 dbAtt.MyPK = this.FK_FrmAttachment;
                 dbAtt.Retrieve();
 
-                if (dbAtt.ReadRole!=0 && this.FK_Node != 0)
+                if (dbAtt.ReadRole != 0 && this.FK_Node != 0)
                 {
                     GenerWorkerList gwf = new GenerWorkerList();
                     int count = gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
@@ -218,7 +218,7 @@ namespace CCFlow.WF.CCForm
                     //1、先解密到本地
                     string filepath = downDB.FileFullName + ".tmp";
                     string tempName = downDB.FileName;
-                   
+
                     if (fileEncrypt == true && isEncrypt == true)
                     {
                         if (File.Exists(filepath) == true)
@@ -255,7 +255,7 @@ namespace CCFlow.WF.CCForm
                     else
                         tempDescFile = tempFile;
                     BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempDescFile, downDB.FileName);
-                  
+
                 }
 
                 if (dbAtt.AthSaveWay == AthSaveWay.DB)
@@ -267,19 +267,20 @@ namespace CCFlow.WF.CCForm
                         if (File.Exists(filepath) == true)
                             File.Delete(filepath);
                         EncHelper.DecryptDES(downpath, filepath);
-                    }else
+                    }
+                    else
                         filepath = downpath;
 
                     BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(filepath, downDB.FileName);
 
                 }
-               
+
                 this.WinClose();
                 return;
             }
             else if (this.DoType == "EntityFile_Load")
             {
-                EntityFile_Load(sender,e);
+                EntityFile_Load(sender, e);
 
                 this.WinClose();
                 return;
@@ -292,7 +293,22 @@ namespace CCFlow.WF.CCForm
                 return;
 
             }
-           
+            else if (this.DoType == "DownMaterials")
+            {
+                MaterialsCtrol mc = new MaterialsCtrol();
+                mc.MyPK = this.Request.QueryString["mypk"];
+                mc.Retrieve();
+
+                Helper.FtpDownFiles(mc.FileFullName, mc.FileExts, mc.FileName);
+            }
+            else if (this.DoType == "DownJobFiles")
+            {
+                JobMgt jm = new JobMgt();
+                jm.No = this.Request.QueryString["mypk"];
+                jm.Retrieve();
+
+                Helper.FtpDownFiles(jm.FilePath, jm.FileExts, jm.Name);
+            }
         }
 
         //实体文件下载
@@ -305,9 +321,9 @@ namespace CCFlow.WF.CCForm
             en.PKVal = this.DelPKVal;
             int i = en.RetrieveFromDBSources();
             if (i == 0)
-                return ;
+                return;
             //获取使用的客户 TianYe集团保存在FTP服务器上
-            if (SystemConfig.CustomerNo.Equals("TianYe") ||SystemConfig.IsUploadFileToFTP == true)
+            if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
             {
                 string filePath = (string)en.GetValByKey("MyFilePath");
                 string fileName = (string)en.GetValByKey("MyFileName");
@@ -337,9 +353,9 @@ namespace CCFlow.WF.CCForm
             else
             {
                 HttpContext.Current.Response.Charset = "GB2312";
-                string fileName  = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileName"));
+                string fileName = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileName"));
                 string fileExt = HttpUtility.UrlEncode((string)en.GetValByKey("MyFileExt"));
-                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName+"."+fileExt);
+                HttpContext.Current.Response.AppendHeader("Content-Disposition", "filename=" + fileName + "." + fileExt);
                 HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                 HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
 
@@ -359,7 +375,7 @@ namespace CCFlow.WF.CCForm
             int i = fileManager.RetrieveFromDBSources();
             if (i == 0)
                 throw new Exception("没有找到OID=" + oid + "的文件管理数据，请联系管理员");
-           
+
             //获取使用的客户 TianYe集团保存在FTP服务器上
             if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
             {
@@ -490,7 +506,7 @@ namespace CCFlow.WF.CCForm
             return downpath;
         }
 
-        
+
     }
-   
+
 }

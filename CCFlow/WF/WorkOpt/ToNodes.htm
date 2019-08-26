@@ -95,7 +95,7 @@
                     html += "<label for='CB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\" target='_blank' href='javaScript:void(0)' onclick='SelectEmps(\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
                     }
                     html += "<br/>";
                 } else {
@@ -105,7 +105,7 @@
                     html += "<label for='RB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\" target='_blank'  href='javaScript:void(0)' onclick='SelectEmps(\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"   href='javaScript:void(0)' onclick='SelectEmps(\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
                     }
                     html += "<br/>";
                 }

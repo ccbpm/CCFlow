@@ -69,7 +69,8 @@
 
             var ret = {
                 "FlowWarning": ["不发送",  "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
-                "FlowOverDue": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"]
+                "FlowOverDue": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
+                "FlowDelete": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"]
             };
 
             return ret[EventListOfNode][PushWay];
@@ -134,6 +135,8 @@
             <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
             <div id="state" style="display: none; color: Gray">
                 <ul>
+                    <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>
+                    <li><a href="javascript:PushMessageEntity('FlowFix');">流程冻结后</a> </li>
                     <li><a href="javascript:PushMessageEntity('FlowWarning');">流程处理预警</a> </li>
                     <li><a href="javascript:PushMessageEntity('FlowOverDue');">流程处理逾期</a> </li>
                 </ul>

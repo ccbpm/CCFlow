@@ -11,8 +11,7 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <base target="_self" />
     <style type="text/css">
-        th, td
-        {
+        th, td {
             text-align: center;
         }
     </style>
@@ -120,10 +119,10 @@
 
         //保存字段方案
         function Save() {
-            var frmID = GetQueryString("FK_MapData");
-            var nodeID = GetQueryString("FK_Node");
-            var flowNo = GetQueryString("FK_Flow");
 
+            var frmID = GetQueryString("FK_MapData");
+            var nodeID = parseInt(GetQueryString("FK_Node"));
+            var flowNo = GetQueryString("FK_Flow");
 
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
@@ -258,7 +257,8 @@
                 en.IsChange = ischange;
             }
         }
-    </script>
+
+/**/</script>
 </head>
 <body>
     <table id="Table1" style="width: 100%; padding: 2px;">

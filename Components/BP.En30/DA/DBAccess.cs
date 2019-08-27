@@ -3345,7 +3345,7 @@ namespace BP.DA
                     i = DBAccess.RunSQLReturnValInt(sql);
                     break;
                 case DBType.PostgreSQL:
-                    string sql1 = "select count(*) from information_schema.columns where table_schema='table_schema' and table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
+                    string sql1 = "select count(*) from information_schema.columns where   table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
                     i = DBAccess.RunSQLReturnValInt(sql1);
                     break;
                 case DBType.Oracle:

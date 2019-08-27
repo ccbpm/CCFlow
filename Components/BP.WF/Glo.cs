@@ -514,7 +514,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190702;
+        public static int Ver = 20190825;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -767,6 +767,19 @@ namespace BP.WF
                     sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE (No='100' OR No='1060' OR No='1070') ";
                     DBAccess.RunSQL(sql);
                 }
+
+                if (DBAccess.IsExitsObject("V_MyFlowData") == false)
+                {
+                    sql = "CREATE VIEW V_MyFlowData ";
+                    sql += " AS ";
+                    sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
+                    sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=1";
+                    sql += "    UNION  ";
+                    sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
+                    sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
+                    DBAccess.RunSQL(sql);
+                }
+
                 #endregion 创建缺少的视图 Port_Inc.
 
                 #region 升级事件.

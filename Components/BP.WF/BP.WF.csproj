@@ -294,6 +294,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Template\BillTemplate2019.cs" />
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\ExtJobSchedule.cs" />
     <Compile Include="Template\FindWorkerRole.cs">
@@ -511,6 +512,7 @@
     <Compile Include="Rpt\RptEmp.cs" />
     <Compile Include="Template\WorkflowDefintionManager.cs" />
     <Compile Include="Template\PushMsg.cs" />
+    <Compile Include="WF\Auth.cs" />
     <Compile Include="WF\TransferCustom.cs" />
     <Compile Include="WF.cs" />
     <Compile Include="WFEnum.cs" />

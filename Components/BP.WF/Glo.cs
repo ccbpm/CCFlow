@@ -770,8 +770,8 @@ namespace BP.WF
 
                 if (DBAccess.IsExitsObject("V_MyFlowData") == false)
                 {
-                    BP.WF.Template.PowerModel pm = new PowerModel();
-                    pm.CheckPhysicsTable();
+                    BP.WF.Template.PowerModel pm11 = new PowerModel();
+                    pm11.CheckPhysicsTable();
 
                     sql = "CREATE VIEW V_MyFlowData ";
                     sql += " AS ";

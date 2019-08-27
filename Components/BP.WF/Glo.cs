@@ -1140,9 +1140,6 @@ namespace BP.WF
                 NodeToolbar bar = new NodeToolbar();
                 bar.CheckPhysicsTable();
 
-                BP.WF.Template.FlowFormTree tree = new BP.WF.Template.FlowFormTree();
-                tree.CheckPhysicsTable();
-
                 FrmNode nff = new FrmNode();
                 nff.CheckPhysicsTable();
 

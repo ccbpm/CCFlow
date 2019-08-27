@@ -2221,7 +2221,6 @@ namespace BP.WF.HttpHandler
                     nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
                     nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
                     appFlowFormTree.AddEntity(nodeForm);
-
                     break;
                 }
             }

@@ -1,0 +1,783 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>实体</title>
+    <!-- 目前不可以去掉. -->
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+
+
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+
+    <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
+    <!-- 引入公共的frm加载以后的业务逻辑处理.-->
+    <script src="../CCForm/FrmEnd.js" type="text/javascript"></script>
+    <!-- 引入用户要重写的公共js -->
+    <script src="../../DataUser/JSLibData/CCBillRef.js" type="text/javascript"></script>
+    <script src="MyFrmGener.js" type="text/javascript"></script>
+
+
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../Comm/CSS/layout.css" rel="stylesheet" />
+
+
+    <script src="../Scripts/zTree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="../Scripts/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
+
+    <style type="text/css">
+        #nav-top {
+            background: #fff;
+            height: 45px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tlbox {
+            float: left;
+            background: #fff;
+            width: 300px;
+        }
+
+        .user-title {
+            background: #f0f0f0;
+            height: 31px;
+            position: relative;
+        }
+
+        .user-title .main-title {
+            display: inline-block;
+            line-height: 31px;
+            /* padding: 0 20px; */
+            font-size: 14px;
+            color: #427ec3;
+        }
+
+        .content-right {
+            margin-left: 310px;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: #fff;
+        }
+
+        .ztree {
+            background: #fff;
+            height: 160px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .ztree li a.curSelectedNode {
+            border: 1px solid #2991d9 !important;
+            background-color: #daf4ff !important;
+        }
+
+
+        #rMenu li {
+            text-align:center;
+            font-size:13px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var frmBill = null;
+        var webUser = new WebUser();
+        var frmID = GetQueryString("FrmID");
+        var FK_Field;//外键字段
+        //树形结构
+        var setting = {
+            view: {
+                showIcon: false
+            },
+            check: {
+                enable: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onRightClick: zTreeOnRightClick
+            }
+        };
+
+
+
+
+        //初始化函数
+        $(function () {
+            var en = new Entity("BP.Frm.FrmDict", frmID);
+            FK_Field = en.FK_Field;
+            if (FK_Field == null || FK_Field == undefined || FK_Field == "") {
+                alert("没有指定显示树状结构的外键字段，不能展示树状结构");
+                return;
+            }
+            //获取外键对应的数据
+            var mapAttr = new Entity("BP.Sys.MapAttr", frmID + "_" + FK_Field);
+            var uiBindKey = mapAttr.UIBindKey;
+            if (uiBindKey == null || uiBindKey == undefined) {
+                alert("设定的外键字段绑定的值丢失，请联系管理员");
+                return;
+            }
+            var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+            var srcType = sfTable.SrcType;
+            var data;
+            if (srcType != null && srcType != "") {
+                //Handler 获取外部数据源
+                if (srcType == 5) {
+                    var selectStatement = sfTable.SelectStatement;
+                    if (plant == 'CCFlow')
+                        selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                    else
+                        selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
+                    data = DBAccess.RunDBSrc(selectStatement, 1);
+                    //JavaScript获取外部数据源
+                } else if (srcType == 6) {
+                    data = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                } else {
+                    data = sfTable.DoMethodReturnString("GenerHisJson");
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    data = JSON.parse(data);
+                }
+
+            }
+
+            var zNodes = [];
+            var open = false;
+            var id, name, pid;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].ParentNo == 0)
+                    open = true;
+                else
+                    open = false;
+                id = data[i].No;
+                if (id == null || id == undefined)
+                    id = data[i].BillNo;
+                pid = data[i].ParentNo;
+
+                name = data[i].Name;
+                if (name == null || name == undefined)
+                    name = data[i].Title;
+
+                zNodes.push({
+                    "id": id,
+                    "pId": pid,
+                    "name": name,
+                    "open": open,
+                    "noR":true,
+                    children: GetChildNodes(id, FK_Field),
+                    "click": "ViewEntity(" + data[i].OID + ",0)"
+
+                })
+            }
+
+
+            $("#title").html(sfTable.Name);
+
+            //初始化树形结构
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+
+
+        });
+
+        //右击操作
+        var rMenu = $("#rMenu");
+
+        function zTreeOnRightClick(event, treeId, treeNode) {
+            if (!treeNode && event.target.tagName.toLowerCase() != "button" && $(event.target).parents("a").length == 0) {
+                 $.fn.zTree.getZTreeObj("treeDemo").selectNode(treeNode);
+                showRMenu("root", event.clientX, event.clientY);
+            } else if (treeNode && !treeNode.noR) {
+                $.fn.zTree.getZTreeObj("treeDemo").selectNode(treeNode);
+                showRMenu("node", event.clientX + treeNode.name.length, event.clientY + 6);
+            }
+        }
+
+        //获取单据实体的所有数据
+        function GetChildNodes(parentNo, keyOfEn) {
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+            var data = handler.DoMethodReturnString("GetFrmEntitys");
+            if (data.indexOf("err@") != -1) {
+                alter(data);
+                return;
+            }
+            data = JSON.parse(data);
+
+            var zNodes = [];
+            var open = false;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i][keyOfEn] == parentNo) {
+                    zNodes.push({
+                        "id": data[i].BillNo,
+                        "pId": parentNo,
+                        "name": data[i].Title,
+                        "myOID": data[i].OID,
+                        "open": open,
+                        "click": "ViewEntity(" + data[i].OID + ",1)"
+                    })
+                }
+            }
+            return zNodes;
+        }
+
+        function ViewEntity(workID, type) {
+            if (type == 0) {
+                $("#addBtn").show();
+                $("#editBtn").hide();
+            }
+
+            if (type == 1) {
+                $("#addBtn").hide();
+                $("#editBtn").show();
+                $("#baseFrame").attr("src", "../CCForm/Frm.htm?FK_MapData=" + frmID + "&WorkID=" + workID + "&IsReadOnly=1");
+            }
+        }
+
+
+        function OpenSetting() {
+            var url = "../Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
+            WinOpenFull(url);
+        }
+
+        ///执行方法.
+        function Done(msg, funMyPK, methodName, afterOper, w, h) {
+
+            var isHaveAttr = false;
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                isHaveAttr = true;
+            }
+
+            //带有参数的方法.
+            if (isHaveAttr == true) {
+
+                if (w == 0) w = 560;
+                if (h == 0) h = 260;
+
+                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
+                //WinOpen(url);
+                OpenBootStrapModal(url, "MethodePara", methodName, w, h, null, false, null, null, function () {
+                    //afterOper=0 关闭提示窗口，不做任何操作
+
+                    //afterOper=1 关闭提示窗口刷新页面
+                    if (afterOper == 1)
+                        window.location.href = window.location.href;
+
+                    //afterOper=2 关闭提示窗口跳转到Search.htm
+                    if (afterOper == 2) {
+
+                        if (window.parent.location.href.indexOf("SearchDict.htm") != -1) {
+                            window.close();
+                        }
+                        else
+                            window.location.href = "./SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+                    }
+                });
+                return;
+            }
+
+            if (w == 0) w = 260;
+            if (h == 0) h = 160;
+
+            //不带有参数的方法.
+            if (msg != '' && msg.length > 5) {
+                if (window.confirm(msg) == false)
+                    return;
+            }
+            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
+            //WinOpen(url);
+            OpenBootStrapModal(url, "Methode", methodName, w, h, null, true, null, null, function () {
+
+                //afterOper=0 关闭提示窗口，不做任何操作
+
+                //afterOper=1 关闭提示窗口刷新页面
+                if (afterOper == 1)
+                    window.location.href = window.location.href;
+
+                //afterOper=2 关闭提示窗口跳转到Search.htm
+                if (afterOper == 2) {
+
+                    if (window.parent.location.href.indexOf("SearchBill") != -1) {
+                        window.close();
+                    }
+                    else
+                        window.location.href = "./SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+                }
+            });
+        }
+
+        function SaveIt() {
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+            handler.AddPara("WorkID", $("#baseFrame")[0].contentWindow.$("#TB_OID").val());
+            //组织数据.
+            var dataStrs = getFormData(true, true);
+
+            $.each(dataStrs.split("&"), function (i, o) {
+                var param = o.split("=");
+                if (param.length == 2 && validate(param[1])) {
+                    handler.AddPara(param[0], param[1]);
+                } else {
+                    handler.AddPara(param[0], "");
+                }
+            });
+
+            /*
+            //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
+            // @yuanlina.
+            */
+
+            var data = handler.DoMethodReturnString("MyDict_SaveIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+        }
+
+        //获取表单数据
+        function getFormData(isCotainTextArea, isCotainUrlParam) {
+
+            var formss = $("#baseFrame")[0].contentWindow.$('#divCCForm').serialize();
+
+            var formArr = formss.split('&');
+            var formArrResult = [];
+
+            $.each(formArr, function (i, ele) {
+                if (ele.split('=')[0].indexOf('CB_') == 0) {
+                    if ($("#baseFrame")[0].contentWindow.$('#' + ele.split('=')[0] + ':checked').length == 1) {
+                        ele = ele.split('=')[0] + '=1';
+                    } else {
+                        ele = ele.split('=')[0] + '=0';
+                    }
+
+                    formArrResult.push(ele);
+                }
+                if (ele.split('=')[0].indexOf('DDL_') == 0) {
+
+                    var ctrlID = ele.split('=')[0];
+
+                    var item = $("#baseFrame")[0].contentWindow.$("#" + ctrlID).children('option:checked').text();
+
+                    var mystr = '';
+                    mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
+                    formArrResult.push(mystr);
+                    formArrResult.push(ele);
+                }
+                if (ele.split('=')[0].indexOf('RB_') == 0) {
+                    formArrResult.push(ele);
+                }
+
+            });
+
+
+            $.each(formArr, function (i, ele) {
+                if (ele.split('=')[0].indexOf('TB_') == 0) {
+                    var index = isExistArray(formArrResult, ele.split('=')[0]);
+                    if (index == -1)
+                        formArrResult.push(ele);
+                }
+            });
+
+
+
+            //获取表单中禁用的表单元素的值
+            var disabledEles = $("#baseFrame")[0].contentWindow.$('#divCCForm :disabled');
+            $.each(disabledEles, function (i, disabledEle) {
+
+                var name = $(disabledEle).attr('id');
+
+                switch (disabledEle.tagName.toUpperCase()) {
+
+                    case "INPUT":
+                        switch (disabledEle.type.toUpperCase()) {
+                            case "CHECKBOX": //复选框
+                                formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
+                                break;
+                            case "TEXT": //文本框
+                            case "HIDDEN":
+                                formArrResult.push(name + '=' + $(disabledEle).val());
+                                break;
+                            case "RADIO": //单选钮
+                                name = $(disabledEle).attr('name');
+                                var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                                if ($.inArray(eleResult, formArrResult) == -1) {
+                                    formArrResult.push(eleResult);
+                                }
+                                break;
+                        }
+                        break;
+                    //下拉框
+                    case "SELECT":
+                        formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+                        var tbID = name.replace("DDL_", "TB_") + 'T';
+                        if ($("#" + tbID).length == 1) {
+                            var index = isExistArray(formArrResult, tbID);
+                            if (index == -1)
+                                formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
+                        }
+                        break;
+
+                    //文本区域
+                    case "TEXTAREA":
+                        formArrResult.push(name + '=' + $(disabledEle).val());
+                        break;
+                }
+            });
+
+            //获取树形结构的表单值
+            var combotrees = $("#baseFrame")[0].contentWindow.$(".easyui-combotree");
+            $.each(combotrees, function (i, combotree) {
+                var name = $(combotree).attr('id');
+                var tree = $('#' + name).combotree('tree');
+                //获取当前选中的节点
+                var data = tree.tree('getSelected');
+                if (data != null) {
+                    formArrResult.push(name + '=' + data.id);
+                    formArrResult.push(name + 'T=' + data.text);
+                }
+            });
+
+            if (!isCotainTextArea) {
+                formArrResult = $.grep(formArrResult, function (value) {
+                    return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
+                });
+            }
+
+            formss = formArrResult.join('&');
+            var dataArr = [];
+            if (formss != '')
+                dataArr.push(formss);
+            var formData = dataArr.join('&');
+
+            //为了复选框  合并一下值  复选框的值以  ，号分割
+            //用& 符号截取数据
+            var formDataArr = formData.split('&');
+
+            var formDataResultObj = {};
+            $.each(formDataArr, function (i, formDataObj) {
+                //计算出等号的INDEX
+                var indexOfEqual = formDataObj.indexOf('=');
+                var objectKey = formDataObj.substr(0, indexOfEqual);
+                var objectValue = formDataObj.substr(indexOfEqual + 1);
+                if (formDataResultObj[objectKey] == undefined) {
+                    formDataResultObj[objectKey] = objectValue;
+                } else {
+                    formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+                }
+            });
+
+            var formdataResultStr = '';
+            for (var ele in formDataResultObj) {
+                formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+            }
+
+            // 处理没有选择的文本框.
+            //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
+            var ids = GenerCheckIDs();
+
+            if (ids) {
+                var scores = ids.split(",");
+                var arrLength = scores.length;
+                var sum = 0;
+                var average = null;
+                for (var i = 0; i < arrLength; i++) {
+                    var field = scores[i];
+                    var index = formdataResultStr.indexOf(field);
+                    if (index == -1) {
+                        formdataResultStr += '&' + field + '=0';
+                    }
+                }
+            }
+
+            formdataResultStr = formdataResultStr.replace('&&', '&');
+
+            return formdataResultStr;
+        }
+        function isExistArray(arrys, no) {
+            for (var i = 0; i < arrys.length; i++) {
+                if (arrys[i].split('=')[0] == no)
+                    return i;
+            }
+            return -1;
+        }
+
+
+        function DeleteIt() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyDict_Delete");
+            alert(data);
+
+            window.location.href = 'SearchDict.htm?FrmID=' + GetQueryString("FrmID");
+            //window.close();
+
+        }
+
+        function SaveItAndClose() {
+
+            SaveIt();
+            window.close();
+        }
+
+        function NewIt() {
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
+            if (data.indexOf('err@') > 0) {
+                alert(data);
+                return;
+            }
+            window.location.href = 'MyDict.htm?FrmID=' + GetQueryString("FrmID") + "&WorkID=" + data;
+        }
+
+
+
+    </script>
+
+    <!--JS 加载-->
+    <script type="text/javascript">
+        function s(id1, id2) {
+            $("#" + id1).show();
+            $("#" + id2).hide();
+        }
+        //新增
+        var IsNewAdd = false;
+        function addEntity(type) {
+            //获取当前选中的节点
+            var url = "../CCForm/Frm.htm?FK_MapData=" + GetQueryString("FrmID");
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getSelectedNodes();
+            //新增时需要先生成WorkID
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+            var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
+
+            if (workID.indexOf('err@') != -1) {
+                alert(workID);
+                return;
+            }
+            url += "&WorkID=" + workID;
+
+            var parentNo;
+            //创建同级
+            if (type == 0) {
+                parentNo = nodes[0].pId;
+                hideRMenu();
+            }else
+               parentNo = nodes[0].id
+            
+            url += "&" + FK_Field + "=" + parentNo;
+
+            $("#baseFrame").attr("src", url);
+            IsNewAdd = true;
+
+        }
+        //修改
+        function EditEntity() {
+            hideRMenu();
+            //获取当前选中的节点
+            var url = "../CCForm/Frm.htm?FK_MapData=" + GetQueryString("FrmID");
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getSelectedNodes();
+            if (nodes.length == 0) {
+                alert("没有选择节点，不能编辑或者查看数据");
+                return;
+            }
+            setBaseFrameSrc(nodes[0].myOID, 0);
+
+            IsNewAdd = false;
+        }
+        //删除
+        function DelEntity() {
+            hideRMenu();
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getSelectedNodes();
+            if (nodes.length == 0) {
+                alert("请选择要删除的节点");
+                return;
+            }
+            var childrens = nodes[0].children;
+            if (childrens != null && childrens != undefined && childrens.length != 0) {
+                if (confirm("选择的节点是父节点，删除时需要删除对应的下级目录，你确定要删除吗？") == false)
+                    return;
+            }
+            var parentNode = nodes[0].getParentNode();
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("WorkID", nodes[0].myOID)
+            handler.DoMethodReturnString("MyEntityTree_Delete");
+            alert("删除成功");
+
+            //更新右侧的树形结构
+            treeObj.removeNode(nodes[0]);
+
+            //选择他的父节点
+            treeObj.selectNode(parentNode);
+  
+            $("#baseFrame").attr("src", "");
+          
+
+
+        }
+
+        //保存数据
+        function SaveEntity() {
+            //保存数据
+            SaveIt();
+            //初始化左侧树形数据
+            var win = $("#baseFrame")[0].contentWindow;
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getSelectedNodes();
+            if (IsNewAdd == true) {
+                var newNode = {
+                    id: win.$("#TB_OID").val(),
+                    pid: win.$("#DDL_"+FK_Field).val(),
+                    name: win.$("#TB_Title").val(),
+                    open: true,
+                    click: "ViewEntity(" + win.$("#TB_OID").val() + ")"
+                };
+
+                if (nodes.length == 0)
+                    treeObj.addNodes(null, newNode);
+                else {
+                    if (nodes[0].pId ==  win.$("#DDL_"+FK_Field).val())
+                        treeObj.addNodes(nodes[0].getParentNode(), newNode);
+                    else if(nodes[0].id ==  win.$("#DDL_"+FK_Field).val())
+                        treeObj.addNodes(nodes[0], newNode);
+                }
+
+                treeObj.selectNode(newNode);
+
+            } else {
+                nodes[0].name = win.$("#TB_Title").val();
+                treeObj.updateNode(nodes[0]);
+            }
+
+            setBaseFrameSrc(win.$("#TB_OID").val(), 1);
+
+        }
+        //取消数据
+        function CancelEntity() {
+            if (IsNewAdd == true) {
+                var win = $("#baseFrame")[0].contentWindow;
+                //删除当前的数据
+                var handler = new HttpHandler("BP.Frm.WF_CCBill");
+                handler.AddPara("FrmID", frmID);
+                handler.AddPara("WorkID", win.$("#TB_OID").val())
+                handler.DoMethodReturnString("MyBill_Delete");
+                //显示当前节点的数据
+                setBaseFrameSrc(win.$("#TB_ParentNo").val(), 1);
+            } else {
+                //显示当前节点的数据
+                var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                var nodes = treeObj.getSelectedNodes();
+                setBaseFrameSrc(nodes[0].myOID, 1);
+            }
+
+        }
+
+        function showRMenu(type, x, y) {
+            if (rMenu) rMenu.css("display", "block");
+            $("#rMenu ul").show();
+            if (type == "root") {
+                $("#m_del").hide();
+                $("#m_check").hide();
+                $("#m_unCheck").hide();
+            } else {
+                $("#m_del").show();
+                $("#m_check").show();
+                $("#m_unCheck").show();
+            }
+
+            y += document.body.scrollTop;
+            x += document.body.scrollLeft;
+            $("#rMenu").css({ "top": y + "px", "left": x + "px", "display": "block" });
+
+            $("body").bind("mousedown", onBodyMouseDown);
+        }
+        function hideRMenu() {
+            if (rMenu) $("#rMenu").css({ "display": "none" });
+            $("body").unbind("mousedown", onBodyMouseDown);
+        }
+        function onBodyMouseDown(event) {
+            if (!(event.target.id == "rMenu" || $(event.target).parents("#rMenu").length > 0)) {
+                $("#rMenu").css({ "display": "none" });
+                 $("body").unbind("mousedown", onBodyMouseDown);
+            }
+        }
+
+        function setBaseFrameSrc(workId, isReadOnly) {
+            $("#baseFrame").attr("src", "../CCForm/Frm.htm?FK_MapData=" + frmID + "&WorkID=" + workId + "&IsReadOnly=" + isReadOnly + "&t=" + new Date().getTime());
+        }
+        //高度自适应
+        $(document).ready(function () {
+            $(".ztree").css("height", document.documentElement.clientHeight - 120 + "px");   //树形菜单自适应高度
+            $(".content-right").css("height", document.documentElement.clientHeight - 80 + "px");   //右侧表单内容自适应高度
+        });
+
+/**/</script>
+</head>
+<body>
+    <div id="nav-top">
+        <div id="btn1">
+            <a href="javaScript:void(0)" id="addBtn" onclick="s('btn2', 'btn1');addEntity()" class="btn btn-default radius" target="baseFrame"><i class="icon"></i>新增</a>
+            <a href="javascript:;" id="editBtn" class="btn btn-default radius" onclick="s('btn2', 'btn1'); EditEntity();"><i class="icon"></i>修改</a>
+            <a href="javascript:;" class="btn btn-danger radius" onclick="DelEntity();"><i class="icon"></i>删除</a>
+            <a class="btn btn-default radius" href="javascript:;"><i class="icon"></i>刷新</a>
+        </div>
+        <div id="btn2" style="display:none">
+            <a href="javaScript:void(0)" id="saveBtn" onclick="s('btn1', 'btn2'); SaveEntity();" class="btn btn-default radius" target="baseFrame"><i class="icon"></i>保存</a>
+            <a href="javascript:;" class="btn btn-default radius" onclick="s('btn1', 'btn2');CancelEntity()"><i class="icon"></i>取消</a>
+        </div>
+    </div>
+
+    <div class="m10">
+        <div class="tlbox">
+            <div class="user-title"><span class="main-title" id="title"></span> </div>
+            <ul id="treeDemo" class="ztree"></ul>
+        </div>
+        <div class="content-right">
+            <iframe scrolling="auto" frameborder="0" id="baseFrame" name="baseFrame" style="width:100%;height:100%"></iframe>
+        </div>
+    </div>
+
+    <ul id="rMenu" class="dropdown-menu dropdown-context dropdown-context-up" style="display:none;border-color:#eee;background-color:#ffffff">
+        <li id="m_addLevel" onclick="s('btn2', 'btn1');addEntity(0);">新增同级</li>
+        <li class="divider"></li>
+        <li id="m_add" onclick="s('btn2', 'btn1');EditEntity();">修改</li>
+        <li class="divider"></li>
+        <li id="m_del" onclick="DelEntity();">删除</li>
+    </ul>
+
+    
+
+    <!--图片附件显示大图-->
+    <div id="outerdiv" style="position: fixed; top: 0; left: 0; background: rgba(0,0,0,0.7);
+        z-index: 2; width: 100%; height: 100%; display: none;">
+        <div id="innerdiv" style="position: absolute;">
+            <img id="bigimg" style="border: 5px solid #fff;" src="" />
+        </div>
+    </div>
+</body>
+</html>

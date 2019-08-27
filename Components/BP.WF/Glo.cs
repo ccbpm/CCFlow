@@ -768,7 +768,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
 
-                if (DBAccess.IsExitsObject("V_MyFlowData") == false)
+                if (DBAccess.IsExitsObject("V_MyFlowData") == false  && 1==2 )
                 {
                     BP.WF.Template.PowerModel pm11 = new PowerModel();
                     pm11.CheckPhysicsTable();

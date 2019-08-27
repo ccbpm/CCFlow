@@ -200,6 +200,8 @@ namespace BP.Frm
                    "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
                 map.SetHelperAlert(FrmTemplateAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
 
+                map.AddDDLSysEnum(FrmAttr.EntityShowModel, 0, "展示模式", true, true, FrmAttr.EntityShowModel, "@0=表格@1=树干模式");
+
                 map.AddTBString(FrmTemplateAttr.BillNoFormat, null, "实体编号规则", true, false, 0, 100, 20, true);
                 map.SetHelperAlert(FrmTemplateAttr.BillNoFormat, "\t\n实体编号规则: \t\n 2标识:01,02,03等, 3标识:001,002,003,等..");
                 #endregion 单据模版.

@@ -214,6 +214,20 @@ namespace BP.Frm
             return "删除成功.";
         }
         /// <summary>
+        /// 删除树形结构的实体表单
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="billNo"></param>
+        /// <returns></returns>
+        public static string MyEntityTree_Delete(string frmID, string billNo)
+        {
+            FrmBill fb = new FrmBill(frmID);
+            string sql = "DELETE FROM " + fb.PTable + " WHERE BillNo='"+ billNo + "' OR ParentNo='"+ billNo+"'";
+            DBAccess.RunSQLs(sql);
+            return "删除成功.";
+        }
+
+        /// <summary>
         /// 复制单据数据
         /// </summary>
         /// <param name="frmID"></param>

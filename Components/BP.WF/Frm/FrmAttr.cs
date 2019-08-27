@@ -163,7 +163,17 @@ namespace BP.Frm
         /// 实体编辑模式
         /// </summary>
         public const string EntityEditModel = "EntityEditModel";
-        
+
+        /// <summary>
+        /// 实体展示模式
+        /// </summary>
+        public const string EntityShowModel = "EntityShowModel";
+        /// <summary>
+        /// 树形结构外键字段
+        /// </summary>
+        public const string FK_Field = "FK_Field";
+
+
 
     }
 }

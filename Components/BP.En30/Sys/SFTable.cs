@@ -299,7 +299,8 @@ namespace BP.Sys
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                return src.RunSQLReturnTable(runObj);
+                DataTable dt = src.RunSQLReturnTable(runObj);
+                return dt;
             }
             #endregion
 

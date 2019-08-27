@@ -224,6 +224,15 @@ namespace BP.Frm
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }
+
+        public string GetFrmEntitys()
+        {
+            GEEntitys rpts = new GEEntitys(this.FrmID);
+            QueryObject qo = new QueryObject(rpts);
+            qo.AddWhere("BillState", " != ", 0);
+            qo.DoQuery();
+            return BP.Tools.Json.ToJson(rpts.ToDataTableField());
+        }
         private Hashtable GetMainTableHT()
         {
             Hashtable htMain = new Hashtable();
@@ -278,6 +287,10 @@ namespace BP.Frm
         public string MyBill_Deletes()
         {
             return BP.Frm.Dev2Interface.MyBill_DeleteDicts(this.FrmID, this.GetRequestVal("WorkIDs"));
+        }
+        public string MyEntityTree_Delete()
+        {
+            return BP.Frm.Dev2Interface.MyEntityTree_Delete(this.FrmID, this.GetRequestVal("BillNo"));
         }
         /// <summary>
         /// 复制单据数据

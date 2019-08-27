@@ -202,11 +202,18 @@ namespace BP.Frm
 
                 map.AddDDLSysEnum(FrmAttr.EntityEditModel, 0, "编辑模式", true, true, FrmAttr.EntityEditModel, "@0=表格@1=行编辑");
                 map.SetHelperAlert(FrmAttr.EntityEditModel,"用什么方式打开实体列表进行编辑0=只读查询模式SearchDict.htm,1=行编辑模式SearchEditer.htm");
+
+                map.AddDDLSysEnum(FrmAttr.EntityShowModel, 0, "展示模式", true, true, FrmAttr.EntityShowModel, "@0=表格@1=树干模式");
+
+                //外键字段
+                map.AddTBString(FrmAttr.FK_Field, null, "外键字段", true, false, 0, 200, 20, true);
+                map.SetHelperAlert(FrmAttr.FK_Field, "当为编号名称实体时选择树干模式展示需要设置树形结构的外键字段");
+
                 #endregion 外观.
 
                 #region 实体表单.
-                map.AddDDLSysEnum(FrmDictAttr.EntityType, 0, "业务类型", true, false, FrmDictAttr.EntityType,
-                   "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
+                map.AddDDLSysEnum(FrmDictAttr.EntityType, 0, "业务类型", true, true, FrmDictAttr.EntityType,
+                   "@2=编号名称实体@3=树结构实体");
                 map.SetHelperAlert(FrmDictAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
 
                 map.AddTBString(FrmDictAttr.BillNoFormat, null, "实体编号规则", true, false, 0, 100, 20, true);
@@ -587,6 +594,54 @@ namespace BP.Frm
             }
 
             #endregion 注册到外键表
+        }
+
+        protected override void afterInsertUpdateAction()
+        {
+            if (this.EntityType == EntityType.EntityTree) // 增加ParentNo
+            {
+                MapAttrs attrs = new MapAttrs(this.No);
+                if (attrs.Contains(this.No + "_ParentNo") == false)
+                {
+                    /* MyNum */
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.No;
+                    attr.HisEditType = EditType.UnDel;
+                    attr.KeyOfEn = "ParentNo"; // "FlowStartRDT";
+                    attr.Name = "上级节点编号";
+                    attr.MyDataType = DataType.AppString;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.UIIsLine = false;
+                    attr.DefVal = "0";
+                    attr.Idx = -96;
+                    attr.Insert();
+                }
+                SFTable sf = new SFTable();
+                sf.No = this.No;
+                if (sf.RetrieveFromDBSources() == 0)
+                {
+                    sf.Name = this.Name;
+                    sf.SrcType = SrcType.SQL;
+                    sf.SrcTable = this.PTable;
+                    sf.ColumnValue = "BillNo";
+                    sf.ColumnText = "Title";
+                    sf.SelectStatement = "SELECT BillNo AS No, Title as Name, ParentNo FROM " + this.PTable;
+                    sf.Insert();
+                }
+                else
+                {
+                    if(sf.SelectStatement.Contains("ParentNo") == false)
+                    {
+                        sf.SelectStatement = "SELECT BillNo AS No, Title as Name, ParentNo FROM " + this.PTable;
+                        sf.Update();
+                    }
+                }
+
+            }
+            base.afterInsertUpdateAction();
         }
 
         #region 报表定义

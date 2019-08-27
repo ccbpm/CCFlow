@@ -3522,7 +3522,10 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     Condition += aa.Condition;
-                    groupKey += " round (" + aa.Exp + ", 4)  \"" + paras[0] + "\",";
+                    if(SystemConfig.AppCenterDBType  == DBType.PostgreSQL)
+                        groupKey += " round ( cast (" + aa.Exp + " as  numeric), 4)  \"" + paras[0] + "\",";
+                    else
+                        groupKey += " round (" + aa.Exp + ", 4)  \"" + paras[0] + "\",";
                     StateNumKey += paras[0] + "=Checked@"; // 记录状态
                     continue;
                 }
@@ -3539,16 +3542,31 @@ namespace BP.WF.HttpHandler
                             if (dataType == 2)
                                 groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            {
+                                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                    groupKey += " round ( cast (SUM(" + paras[0] + ") as  numeric), 4)  \"" + paras[0] + "\",";
+                                else
+                                    groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            }
+                                
                             break;
                         case "AVG":
-                            groupKey += " round (AVG(" + paras[0] + "), 4)  \"" + paras[0] + "\",";
+                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                groupKey += " round ( cast (AVG(" + paras[0] + ") as  numeric), 4)  \"" + paras[0] + "\",";
+                            else
+                                groupKey += " round (AVG(" + paras[0] + "), 4)  \"" + paras[0] + "\",";
                             break;
                         case "AMOUNT":
                             if (dataType == 2)
                                 groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            {
+                                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                    groupKey += " round ( cast (SUM(" + paras[0] + ") as  numeric), 4)  \"" + paras[0] + "\",";
+                                else
+                                    groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            }
+                                
                             break;
                         default:
                             throw new Exception("没有判断的情况.");

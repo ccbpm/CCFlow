@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>授权详细信息-驰骋工作流程管理系统</title>
+    <title>授权详细信息</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
@@ -27,55 +27,36 @@
         var emp = null;
 
         $(function () {
+           
+            webUser = new WebUser();
 
-            BindPop();
+            var ens = new Entities("BP.WF.Auths");
+            ens.Retrieve("Auther", webUser.No);
 
-            var webUser = new WebUser();
+            var html = "<table style='width:80%;'>";
+            html += "<caption> 授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
+            html += "<tr>";
+            html += "<th>序</th>";
+            html += "<th>授权类型</th>";
+            html += "<th>授权给</th>";
+            html += "<th>流程</th>";
+            html += "<th>收回日期</th>";
+            html += "<th>状态</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
-            var emp = handler.DoMethodReturnJSON("Author_Init");
+            for (var i = 0; i < ens.length; i++) {
 
+            }
 
-            $("#TB_Author").val(emp.Author); //设置授权人.
-            $("#TB_DT").val(emp.AuthorDate); //授权到日期.
-            $("#DDL_AuthorWay").val(emp.AuthorWay); //授权方式.
+            html += "</table>";
 
-            $('#Btn_Auto').bind('click', function () { $('#selectEmpsModal').modal().show(); });
-
+            $("#docs").html(html);
         });
+         
 
-        //设置选中的人员
-        function selectEmpsWindowClose(data) {
-
-            $('#selectEmpsModal').modal('hide');
-            if (data == '取消') {
-                return;
-            }
-
-            var no = frames["iframeSelectEmpsForm"].window.returnVal.No;
-            $("#TB_Author").val(no);
-        }
-
-
-        function BindPop() {
-
-            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
-            if (dept == null || dept == '' || dept == undefined) {
-                dept = $.cookie('FK_Dept');
-            }
-            if (dept == undefined) {
-                var u = new WebUser();
-                dept = u.FK_Dept;
-            }
-            var url = "../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
-            //  url = url.replace('101', '10102');
-            url = url.replace('=101&', '=10102&');
-            $('#iframeSelectEmpsForm').attr('src', url);
-        }
-
-
-        //执行保存.
-        function Save() {
+        //执行删除.
+        function Delete() {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             handler.AddPara("Author", $("#TB_Author").val());
@@ -92,74 +73,8 @@
 </head>
 <body onkeypress="Esc()" class="gray-bg">
     <form id="cc" name="cc">
-    <table style="width: 90%; padding-left: 40px; margin-left: 40px;">
-        <caption>
-            授权详细信息
-        </caption>
-        <tr>
-            <td>
-                授权给
-            </td>
-            <td>
-                <input type="text" id="TB_Author" name="TB_Author" class="form-control" />
-            </td>
-            <td>
-                <input type="button" value="选择授权人" id="Btn_Auto" class="btn btn-default" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                收回授权日期:
-            </td>
-            <td>
-                <input name="TB_DT" type="text"  value="2099-01-01" maxlength="20"
-                    id="TB_DT" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'});" />
-            </td>
-            <td>
-                在日期范围内，可以处理授权人的数据。
-            </td>
-        </tr>
-        <tr>
-            <td>
-                授权方式:
-            </td>
-            <td>
-                <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay">
-                    <option selected="selected" value="0">不授权</option>
-                    <option value="1">全部流程授权</option>
-                    <option value="2">指定流程授权</option>
-                </select>
-            </td>
-            <td>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="button" name="Btn_Save" value="保存" id="Btn_Save" class="btn btn-info"
-                    onclick="Save();" />
-                <a class="btn btn-white" href="Default.htm">返回</a>
-            </td>
-        </tr>
-    </table>
-    <!-- 弹出窗台.. -->
-    <div class="modal fade" id="selectEmpsModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius: 0px; width: 700px;">
-                <div class="modal-header">
-                    <button type="button" class="close" style="color: white; opacity: 1;" data-dismiss="modal"
-                        aria-hidden="true">
-                        &times;</button>
-                    <h4 class="modal-title">
-                        选择授权人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
-                        name="iframeSelectEmpsForm"></iframe>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
+         <div id="docs"></div>
+
     </form>
 </body>
 </html>

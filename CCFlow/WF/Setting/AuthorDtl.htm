@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授权详细信息</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!--时间-->
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var webUser = null;
+        var emp = null;
+
+        $(function () {
+
+            BindPop();
+
+            var webUser = new WebUser();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var emp = handler.DoMethodReturnJSON("Author_Init");
+
+
+            $("#TB_Author").val(emp.Author); //设置授权人.
+            $("#TB_DT").val(emp.AuthorDate); //授权到日期.
+            $("#DDL_AuthorWay").val(emp.AuthorWay); //授权方式.
+
+            $('#Btn_Auto').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+
+        });
+
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
+
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+
+            var no = frames["iframeSelectEmpsForm"].window.returnVal.No;
+            $("#TB_Author").val(no);
+        }
+
+
+        function BindPop() {
+
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+            var url = "../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
+            //  url = url.replace('101', '10102');
+            url = url.replace('=101&', '=10102&');
+            $('#iframeSelectEmpsForm').attr('src', url);
+        }
+
+
+        //执行保存.
+        function Save() {
+
+            var en = new Entity("BP.WF.Auth");
+            en.Author = webUser.No;
+            en.TakeBackDT = $("#TB_DT").val();
+            en.TakeBackDT =$("#TB_DT").val();
+
+
+            en.FlowNo = "001";
+            en.FlowName = "xxx";
+
+            en.EmpNo = $("#TB_Author").val();
+            en.EmpName = $("#TB_Author").val();
+
+            en.Insert();
+
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            handler.AddPara("Author", );
+            handler.AddPara("AuthorDate", );
+            handler.AddPara("AuthorWay", $("#DDL_AuthorWay").val());
+            var data = handler.DoMethodReturnString("Author_Save");
+
+            alert(data);
+
+            window.location.href = 'Default.htm';
+
+        }
+
+/**/</script>
+</head>
+<body onkeypress="Esc()" class="gray-bg">
+    <form id="cc" name="cc">
+        <table style="width: 90%; padding-left: 40px; margin-left: 40px;">
+            <caption>
+                授权详细信息
+            </caption>
+            <tr>
+                <td>
+                    授权给
+                </td>
+                <td>
+                    <input type="text" id="TB_Author" name="TB_Author" class="form-control" />
+                </td>
+                <td>
+                    <input type="button" value="选择授权人" id="Btn_Auto" class="btn btn-default" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    收回授权日期:
+                </td>
+                <td>
+                    <input name="TB_DT" type="text" value="2099-01-01" maxlength="20"
+                           id="TB_DT" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'});" />
+                </td>
+                <td>
+                    在日期范围内，可以处理授权人的数据。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    授权方式:
+                </td>
+                <td>
+                    <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay">
+                        <option selected="selected" value="0">不授权</option>
+                        <option value="1">全部流程授权</option>
+                        <option value="2">指定流程授权</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>
+                    流程:
+                </td>
+                <td>
+                 <input   type="month"  id="TB_Flows" />
+                </td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <input type="button" name="Btn_Save" value="保存" id="Btn_Save" class="btn btn-info"
+                           onclick="Save();" />
+                    <a class="btn btn-white" href="Author.htm">返回</a>
+                </td>
+            </tr>
+        </table>
+        <!-- 弹出窗台.. -->
+        <div class="modal fade" id="selectEmpsModal">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius: 0px; width: 700px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" style="color: white; opacity: 1;" data-dismiss="modal"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            选择授权人
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
+                                name="iframeSelectEmpsForm"></iframe>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+    </form>
+</body>
+</html>

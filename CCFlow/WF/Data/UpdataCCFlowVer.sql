@@ -53,13 +53,13 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVa
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
  
--- 升级数据源 2016.0
+-- 升级数据源 2016.
 UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
 UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 
 --更新日期长度.
-UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6
-UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7
+UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6;
+UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7;
 
 
 -- 2016.11.18 升级维护附件属性.;

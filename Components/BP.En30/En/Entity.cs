@@ -1478,32 +1478,71 @@ namespace BP.En
         {
             Paras ps = new Paras();
             ps.Add(attr, val);
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                ps.Add(attr, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr, val));
+            }else
+            {
+                ps.Add(attr,  val);
+            }
+
             return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
         }
         public int Delete(string attr1, object val1, string attr2, object val2)
         {
             Paras ps = new Paras();
-            ps.Add(attr1, val1);
-            ps.Add(attr2, val2);
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
+                ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
+
+            }else
+            {
+                ps.Add(attr1, val1);
+                ps.Add(attr2, val2);
+            }
 
             return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2, ps);
         }
         public int Delete(string attr1, object val1, string attr2, object val2, string attr3, object val3)
         {
             Paras ps = new Paras();
-            ps.Add(attr1, val1);
-            ps.Add(attr2, val2);
-            ps.Add(attr3, val3);
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
+                ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
+                ps.Add(attr3, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
+            }
+            else
+            {
+                ps.Add(attr1, val1);
+                ps.Add(attr2, val2);
+                ps.Add(attr3, val3);
+            }
 
             return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2 + " AND " + this.EnMap.GetAttrByKey(attr3).Field + " =" + this.HisDBVarStr + attr3, ps);
         }
         public int Delete(string attr1, object val1, string attr2, object val2, string attr3, object val3, string attr4, object val4)
         {
             Paras ps = new Paras();
-            ps.Add(attr1, val1);
-            ps.Add(attr2, val2);
-            ps.Add(attr3, val3);
-            ps.Add(attr4, val4);
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
+                ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
+                ps.Add(attr3, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
+                ps.Add(attr4, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr4, val4));
+
+            }
+            else
+            {
+                ps.Add(attr1, val1);
+                ps.Add(attr2, val2);
+                ps.Add(attr3, val3);
+                ps.Add(attr4, val4);
+            }
 
             return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr1).Field + " =" + this.HisDBVarStr + attr1 + " AND " + this.EnMap.GetAttrByKey(attr2).Field + " =" + this.HisDBVarStr + attr2 + " AND " + this.EnMap.GetAttrByKey(attr3).Field + " =" + this.HisDBVarStr + attr3 + " AND " + this.EnMap.GetAttrByKey(attr4).Field + " =" + this.HisDBVarStr + attr4, ps);
         }

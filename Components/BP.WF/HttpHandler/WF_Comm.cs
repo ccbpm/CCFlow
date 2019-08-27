@@ -498,8 +498,9 @@ namespace BP.WF.HttpHandler
 
                 #region 首先判断参数删除.
                 string key1 = this.GetRequestVal("Key1");
-                string key2 = this.GetRequestVal("Key2");
                 string val1 = this.GetRequestVal("Val1");
+
+                string key2 = this.GetRequestVal("Key2");
                 string val2 = this.GetRequestVal("Val2");
 
                 if (DataType.IsNullOrEmpty(key1) == false && key1.Equals("undefined") == false)
@@ -516,7 +517,6 @@ namespace BP.WF.HttpHandler
                     return num.ToString();
                 }
                 #endregion 首先判断参数删除.
-
 
                 if (en.PKCount != 1)
                 {

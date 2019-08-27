@@ -250,6 +250,16 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        public string Watchdog_Init()
+        {
+            DataSet ds = new DataSet();
+
+            string sql = "";
+
+
+            return "";
+
+        }
         /// <summary>
         /// 构造函数
         /// </summary>

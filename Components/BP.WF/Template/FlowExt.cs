@@ -521,11 +521,19 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-                rm.Title = "流程事件&消息"; // "调用事件接口";
+                rm.Title = "流程事件"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "流程消息"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoMessage";
+                rm.Icon = "../../WF/Img/Message24.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "流程计划时间计算规则"; // "调用事件接口";
@@ -550,14 +558,14 @@ namespace BP.WF.Template
                 // rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "权限控制";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoPowerModel()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 // rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
+
 
 
                 //rm = new RefMethod();
@@ -1166,6 +1174,14 @@ namespace BP.WF.Template
         public string DoAction()
         {
             return "../../Admin/AttrFlow/Action.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+        }
+        /// <summary>
+        /// 流程事件
+        /// </summary>
+        /// <returns></returns>
+        public string DoMessage()
+        {
+            return "../../Admin/AttrFlow/PushMessage.htm?FK_Node=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 计划玩成

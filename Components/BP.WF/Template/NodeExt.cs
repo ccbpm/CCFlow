@@ -673,7 +673,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
                 rm.ClassMethodName = this.ToString() + ".DoCond";

@@ -184,6 +184,7 @@ namespace BP.WF.HttpHandler
                 string[] mykey = str.Split('=');
                 string key = mykey[0];
 
+
                 if (key == "OID" || key == "MyPK")
                     continue;
 
@@ -193,12 +194,24 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
                 bool isExist = false;
+                bool IsInt = false;
+                bool IsDouble = false;
+                bool IsFloat = false;
+                bool IsMoney = false;
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
                     if (attr.Key.Equals(key))
                     {
                         isExist = true;
-                        break;
+                        if (attr.MyDataType == DataType.AppInt)
+                            IsInt = true;
+                        if (attr.MyDataType == DataType.AppDouble)
+                            IsDouble = true;
+                        if (attr.MyDataType == DataType.AppFloat)
+                            IsFloat = true;
+                        if (attr.MyDataType == DataType.AppMoney)
+                            IsMoney = true;
+                       break;
                     }
                 }
 
@@ -241,6 +254,15 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
+                    if(IsInt == true && DataType.IsNullOrEmpty(mykey[1])==false)
+                        qo.AddWhere(mykey[0], Int32.Parse(mykey[1]));
+                    else if (IsDouble == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], double.Parse(mykey[1]));
+                    else if (IsFloat == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], float.Parse(mykey[1]));
+                    else if (IsMoney == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], decimal.Parse(mykey[1]));
+                    else
                     qo.AddWhere(mykey[0], mykey[1]);
                 }
                 qo.addAnd();
@@ -308,7 +330,29 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                if (en.EnMap.Attrs.Contains(key) == false)
+                bool isExist = false;
+                bool IsInt = false;
+                bool IsDouble = false;
+                bool IsFloat = false;
+                bool IsMoney = false;
+                foreach (Attr attr in en.EnMap.Attrs)
+                {
+                    if (attr.Key.Equals(key))
+                    {
+                        isExist = true;
+                        if (attr.MyDataType == DataType.AppInt)
+                            IsInt = true;
+                        if (attr.MyDataType == DataType.AppDouble)
+                            IsDouble = true;
+                        if (attr.MyDataType == DataType.AppFloat)
+                            IsFloat = true;
+                        if (attr.MyDataType == DataType.AppMoney)
+                            IsMoney = true;
+                        break;
+                    }
+                }
+
+                if (isExist == false)
                     continue;
 
                 if (mykey[1] == "mvals")
@@ -347,7 +391,16 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    qo.AddWhere(mykey[0], mykey[1]);
+                    if (IsInt == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], Int32.Parse(mykey[1]));
+                    else if (IsDouble == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], double.Parse(mykey[1]));
+                    else if (IsFloat == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], float.Parse(mykey[1]));
+                    else if (IsMoney == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], decimal.Parse(mykey[1]));
+                    else
+                        qo.AddWhere(mykey[0], mykey[1]);
                 }
                 qo.addAnd();
             }

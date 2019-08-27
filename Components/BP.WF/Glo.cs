@@ -770,6 +770,9 @@ namespace BP.WF
 
                 if (DBAccess.IsExitsObject("V_MyFlowData") == false)
                 {
+                    BP.WF.Template.PowerModel pm = new PowerModel();
+                    pm.CheckPhysicsTable();
+
                     sql = "CREATE VIEW V_MyFlowData ";
                     sql += " AS ";
                     sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";

@@ -1401,7 +1401,7 @@ function Ele_FrmCheck(wf_node) {
 function Ele_SubFlow(wf_node) {
     //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
-    var h = wf_node.SF_H + 1300;
+    var h = wf_node.SF_H + 100;
 
     if (sta == 0)
         return $('');
@@ -1422,7 +1422,7 @@ function Ele_SubFlow(wf_node) {
     src += "&r=q" + paras;
     if (h == 0)
         h = 400;
-    var eleHtml = "<iframe id=FSF" + wf_node.NodeID + " style='width:100%;height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+    var eleHtml = "<iframe id=FSF" + wf_node.NodeID + " style='width:100%;height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no></iframe>";
 
     return eleHtml;
 }

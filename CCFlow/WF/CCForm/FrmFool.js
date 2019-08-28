@@ -194,7 +194,7 @@ function GenerFoolFrm(mapData, frmData) {
 function Ele_SubFlow(wf_node) {
     //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
-    var h = wf_node.SF_H + 1300;
+    var h = wf_node.SF_H + 100;
 
     if (sta == 0)
         return $('');

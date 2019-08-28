@@ -22,6 +22,7 @@
     <script language="javascript" type="text/javascript">
 
         //页面启动函数.
+        var webUser = new WebUser();
         $(function () {
             document.title = window.lang.fqxlc;
             InitPage();
@@ -38,6 +39,10 @@
                 alert(data);
                 return;
             }
+
+            var sql = "SELECT * FROM WF_EMP WHERE No='" + webUser.No + "'";
+            var dt = DBAccess.RunSQLReturnJSON(sql);
+
 
             data = JSON.parse(data);
 

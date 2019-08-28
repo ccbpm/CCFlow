@@ -349,7 +349,8 @@ function InitThreeColMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             var filename = basePath + "/DataUser/CCForm/BigNoteHtmlText/" + attr.FK_MapData + ".htm";
             var htmlobj = $.ajax({ url: filename, async: false });
             var str = htmlobj.responseText;
-            //str = str.replace(/.+/g, '</br>');
+            if (htmlobj.status == 404)
+                str = filename + "这个文件不存在，请联系管理员";
             html += "<tr>";
             html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'>" + str + "</td>";
             html += "</tr>";
@@ -1399,7 +1400,6 @@ function Ele_FrmCheck(wf_node) {
 
 //子流程
 function Ele_SubFlow(wf_node) {
-    //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
     var h = wf_node.SF_H + 100;
 

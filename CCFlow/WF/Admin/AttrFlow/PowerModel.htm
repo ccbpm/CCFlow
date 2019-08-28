@@ -166,7 +166,8 @@
                 var id = $(mtags).attr("id");
                 //岗位选择事件
                 if (id.indexOf("portSta") != -1) {
-                      $(mtags).bind("dblclick", function () {
+                    $(mtags).bind("dblclick", function () {
+                        $("#title").html("选择岗位");
                         currPowerFlag = $(mtags).attr("data-power");
                         $('#iframeSelectEmpsForm').attr('src', staUrl);
                         $('#SelectEmpsModal').modal().show();                   
@@ -176,6 +177,7 @@
                 //人员选择事件
                 if (id.indexOf("portEmp") != -1) {
                     $(mtags).bind("dblclick", function () {
+                        $("#title").html("选择人员");
                         currPowerFlag = $(mtags).attr("data-power");
                         $('#iframeSelectEmpsForm').attr('src', empUrl);
                         $('#SelectEmpsModal').modal().show();                  
@@ -330,7 +332,7 @@
                             aria-hidden="true">
                         &times;
                     </button>
-                    <h4 class="modal-title">
+                    <h4 class="modal-title" id="title">
                         接受人
                     </h4>
                 </div>

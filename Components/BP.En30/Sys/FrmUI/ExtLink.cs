@@ -66,6 +66,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.Name, value);
             }
         }
+
         #endregion
 
         #region 构造方法
@@ -76,7 +77,12 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.Readonly();
                 if (BP.Web.WebUser.No == "admin")
+                {
+
                     uac.IsUpdate = true;
+                    uac.IsDelete = true;
+                }
+
                 return uac;
             }
         }

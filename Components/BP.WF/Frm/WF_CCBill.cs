@@ -956,7 +956,7 @@ namespace BP.Frm
             //获得entity.
             FrmBill bill = new FrmBill(this.FrmID);
             GEEntitys rpts = new GEEntitys(this.FrmID);
-            GERpt en = new GERpt(this.FrmID);
+            GEEntity en = new GEEntity(this.FrmID);
 
 
             string noColName = ""; //实体列的编号名称.
@@ -1070,7 +1070,6 @@ namespace BP.Frm
                     continue;
                 }
 
-
                 if (dt.Columns.Contains(item.Desc) == false)
                     continue;
 
@@ -1130,15 +1129,8 @@ namespace BP.Frm
                 en.SetValByKey(item.Key, myval);
             }
 
-            try
-            {
-                en.Save();
-                //     en.Update();
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
+            en.SetValByKey("BillState", (int)BillState.Editing);
+            en.Update();
 
             return errInfo;
         }

@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>流程监控</title>
+    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="./Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="./Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="Style/skin/js/mp.mansory.min.js"></script>
+    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="Scripts/QueryString.js"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
+
+    <!-- 处理多语言 -->
+    <script src="Data/lang/load.js" type="text/javascript"></script>
+    <script src="Data/lang/lang.js" type="text/javascript"></script>
+
+    <script language="javascript" type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+            document.title = window.lang.fqxlc;
+            InitPage();
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            $('#docs').html(window.lang.loading);
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            var data = handler.DoMethodReturnString("Watchdog_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            var left = "<ul>";
+            for (var i = 0; i < data.length; i++) {
+                var group = data[i];
+                left += "<li><a href='javascript:Show('" + group.FK_Flow + "');'>" + group.FlowName + "</a></li>";
+            }
+            left += "</ul>";
+            $('#left').html(left);
+
+            $('#docs').html("请选择流程。。。");
+
+
+            //绑定流程.
+            ShowFlows(GetQueryString("FK_Flow"));
+        }
+
+        function ShowFlows(flowNo) {
+
+            if (flowNo == null || flowNo == undefined) {
+                //输出流程.
+                $('#docs').html("欢迎使用流程监控，您所能看到的流程");
+            }
+
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>序</th>";
+            html += "<th>标题</th>";
+            html += "<th>状态</th>";
+            html += "<th>发起人</th>";
+            html += "<th>发起日期</th>";
+            html += "<th>停留节点</th>";
+            html += "<th>处理人</th>";
+            html += "</tr>";
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnJSON("Watchdog_InitFlows");
+
+            for (var i = 0; i < data.length; i++) {
+
+                var dt = data[i];
+
+                html += "<tr>";
+                html += "<th>" + (i + 1) + "</th>";
+                html += "<th><a href=\"javascript:OpenIt('" + dt.WorkID + "','" + dt.FlowNo + "')\" >" + dt.Title + "</th>";
+                html += "<th>" + dt.WFStateText + "</th>";
+                html += "<th>" + dt.StarterName + "</th>";
+                html += "<th>" + dt.RDT + "</th>";
+                html += "<th>" + dt.NodeName + "</th>";
+                html += "<th>" + dt.TodEmps + "</th>";
+                html += "</tr>";
+            }
+
+            $('#docs').html(html);
+        }
+
+        function OpenIt(workID, flowNo) {
+
+            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+            WinOpenFull(url);
+
+            //window.location.href = 'Watchdog.htm?IsRef=1';
+        }
+    </script>
+</head>
+<body>
+    <table style="width:90%;">
+        <caption>流程监控</caption>
+        <tr>
+            <td class="Sum" style="width:30%;">
+
+                <fieldset>
+                    <legend>列表</legend>
+                    <div id="left"> </div>
+                </fieldset>
+
+            </td>
+            <td>
+
+                <div id="docs"> </div>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

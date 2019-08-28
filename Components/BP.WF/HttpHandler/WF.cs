@@ -250,6 +250,8 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+
+
         /// <summary>
         /// 流程数据
         /// </summary>
@@ -1797,7 +1799,25 @@ namespace BP.WF.HttpHandler
             return "工作在完善中";
         }
 
+        /// <summary>
+        /// 授权列表
+        /// </summary>
+        /// <returns></returns>
+        public string AuthorTodolist_Init()
+        {
 
+            return "";
+        }
+
+        /// <summary>
+        /// 授权列表
+        /// </summary>
+        /// <returns></returns>
+        public string AuthorTodolist_Todolist()
+        {
+
+            return "";
+        }
 
         /// <summary>
         /// 批量删除

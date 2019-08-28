@@ -46,9 +46,10 @@ namespace BP.WF
         /// 人员名称
         /// </summary>
         public const string EmpName = "EmpName";
-
+        /// <summary>
+        /// 记录日期
+        /// </summary>
         public const string RDT = "RDT";
-
         
     }
     /// <summary>
@@ -69,6 +70,20 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(AuthAttr.FlowNo, value);
+            }
+        }
+        /// <summary>
+        /// 取回日期
+        /// </summary>
+        public string TakeBackDT
+        {
+            get
+            {
+                return this.GetValStringByKey(AuthAttr.TakeBackDT);
+            }
+            set
+            {
+                this.SetValByKey(AuthAttr.TakeBackDT, value);
             }
         }
         #endregion
@@ -94,15 +109,16 @@ namespace BP.WF
 
                 map.AddMyPK();
 
-                map.AddTBInt(AuthAttr.AuthType, 0, "类型(0=全部流程1=指定流程)", true, false);
                 map.AddTBString(AuthAttr.Auther, null, "授权人", true, false, 0, 100, 10);
+                map.AddTBInt(AuthAttr.AuthType, 0, "类型(0=全部流程1=指定流程)", true, false);
+
+                map.AddTBString(AuthAttr.EmpNo, null, "委托给人员编号", true, false, 0, 100, 10);
+                map.AddTBString(AuthAttr.EmpName, null, "委托给人员名称", true, false, 0, 100, 10);
 
                 map.AddTBString(AuthAttr.FlowNo, null, "流程编号", true, false, 0, 100, 10);
                 map.AddTBString(AuthAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
+
                 map.AddTBDate(AuthAttr.TakeBackDT, null, "取回日期", true, false);
-                 
-                map.AddTBString(AuthAttr.EmpNo, null, "人员编号", true, false, 0, 100, 10);
-                map.AddTBString(AuthAttr.EmpName, null, "人员名称", true, false, 0, 100, 10);
                 map.AddTBDate(AuthAttr.RDT, null, "记录日期", true, false);
 
                 this._enMap = map;

@@ -43,7 +43,7 @@ namespace BP.Frm
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-       
+
         /// <summary>
         /// 草稿列表
         /// </summary>
@@ -206,7 +206,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string MyDict_SaveIt()
         {
-          //  throw new Exception("dddssds");
+            //  throw new Exception("dddssds");
             //执行保存.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
@@ -400,7 +400,7 @@ namespace BP.Frm
             return BP.Tools.Json.ToJson(ds);
 
         }
-            #endregion 查询条件
+        #endregion 查询条件
 
 
         public string Search_Init()
@@ -585,9 +585,10 @@ namespace BP.Frm
                     var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
 
-                }else
+                }
+                else
                 {
-                qo.AddWhere(str, ap.GetValStrByKey(str));
+                    qo.AddWhere(str, ap.GetValStrByKey(str));
                 }
 
                 qo.addRightBracket();
@@ -597,12 +598,12 @@ namespace BP.Frm
             #endregion 查询语句
 
             qo.addAnd();
-            qo.AddWhere("BillState","!=",0);
+            qo.AddWhere("BillState", "!=", 0);
             //获得行数.
             ur.SetPara("RecCount", qo.GetCount());
             ur.Save();
 
-            if(DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
+            if (DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
                 qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);
             else
                 qo.DoQuery("OID", this.PageSize, this.PageIdx);
@@ -745,11 +746,11 @@ namespace BP.Frm
         {
             FrmBill frmBill = new FrmBill(this.FrmID);
             GEEntitys rpts = new GEEntitys(this.FrmID);
-           
+
             string name = "数据导出";
             string filename = frmBill.Name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + ".xls";
             string filePath = ExportDGToExcel(Search_Data(), rpts.GetNewEntity, null, null, filename);
-            
+
 
             return filePath;
         }
@@ -904,7 +905,8 @@ namespace BP.Frm
                 {
                     var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
-                }else
+                }
+                else
                 {
                     qo.AddWhere(str, ap.GetValStrByKey(str));
                 }
@@ -916,7 +918,7 @@ namespace BP.Frm
             #endregion 查询语句
             qo.addOrderBy("OID");
             return qo.DoQueryToTable();
-           
+
         }
         #endregion  执行导出
 
@@ -956,7 +958,7 @@ namespace BP.Frm
             GEEntitys rpts = new GEEntitys(this.FrmID);
             GERpt en = new GERpt(this.FrmID);
 
-            
+
             string noColName = ""; //实体列的编号名称.
             string nameColName = ""; //实体列的名字名称.
 
@@ -980,28 +982,26 @@ namespace BP.Frm
             if (impWay == 0)
             {
                 rpts.ClearTable();
+                GEEntity myen = new  GEEntity(this.FrmID);
+
                 foreach (DataRow dr in dt.Rows)
                 {
                     string no = dr[noColName].ToString();
                     string name = dr[nameColName].ToString();
+                    myen.OID = 0;
 
                     //判断是否是自增序列，序列的格式
                     if (!DataType.IsNullOrEmpty(codeStruct))
-                    {
                         no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
-                    }
 
-                    GERpt myen = new BP.WF.Data.GERpt(this.FrmID);
 
                     myen.SetValByKey("BillNo", no);
-
                     if (myen.Retrieve("BillNo", no) == 1)
                     {
                         errInfo += "err@编号[" + no + "][" + name + "]重复.";
                         continue;
                     }
 
-                  
                     //给实体赋值
                     errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0);
                     count++;
@@ -1023,7 +1023,7 @@ namespace BP.Frm
                     {
                         no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
                     }
-                    GERpt myen = rpts.GetNewEntity as GERpt;
+                    GEEntity myen = rpts.GetNewEntity as GEEntity;
                     myen.SetValByKey("BillNo", no);
                     if (myen.Retrieve("BillNo", no) == 1)
                     {
@@ -1033,7 +1033,7 @@ namespace BP.Frm
                         successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
                         continue;
                     }
-                    
+
 
                     //给实体赋值
                     errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0);
@@ -1046,7 +1046,7 @@ namespace BP.Frm
             return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
         }
 
-        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GERpt en, DataTable dt, int saveType)
+        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType)
         {
             if (saveType == 0)
             {
@@ -1131,8 +1131,9 @@ namespace BP.Frm
             }
 
             try
-            {   
-                    en.Update();
+            {
+                en.Save();
+                //     en.Update();
             }
             catch (Exception ex)
             {

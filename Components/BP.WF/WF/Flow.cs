@@ -3968,9 +3968,9 @@ namespace BP.WF
                     break;
             }
 
-            if (str == null)
-                str = fes.DoEventNode(doType, en, atPara);
-
+            // 2019-08-27 取消节点事件 zl
+            //if (str == null)
+            //    str = fes.DoEventNode(doType, en, atPara);
 
             #region 处理消息推送, edit  by zhoupeng for dengzhou gov project. 2016.05.01
             //有一些事件没有消息，直接 return ;

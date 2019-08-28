@@ -895,7 +895,7 @@ namespace BP.WF
             //如果事件返回的信息不是null，就终止执行。
             string msg = fl.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
                 atPara);
-            if (msg != null)
+            if (!String.IsNullOrEmpty(msg)) // 2019-08-28 zl。原来是 if(msg!=null)。返回空字符串表示执行成功，不应该终止。
                 return msg; 
 
             if (this.HisNode.FocusField != "")

@@ -875,7 +875,8 @@ namespace BP.Sys
         /// <returns>null 没有事件，其他为执行了事件。</returns>
         public string DoEventNode(string dotype, Entity en)
         {
-            return DoEventNode(dotype, en, null);
+            return null; // 2019-08-27 取消节点事件 zl
+            // return DoEventNode(dotype, en, null);
         }
         /// <summary>
         /// 执行事件
@@ -884,6 +885,11 @@ namespace BP.Sys
         /// <param name="en">数据实体</param>
         /// <param name="atPara">参数</param>
         /// <returns>null 没有事件，其他为执行了事件。</returns>
+        /// <remarks>
+        /// 不再使用节点事件 2019-08-27 zl
+        /// 原调用点有两处：（1）FrmEvent.cs 中的DoEventNode()； （2）Flow.cs中的DoFlowEventEntity()方法中，3973行 fes.DoEventNode(doType, en, atPara)。
+        /// 现在都已经取消调用
+        /// </remarks>
         public string DoEventNode(string dotype, Entity en, string atPara)
         {
             if (this.Count == 0)

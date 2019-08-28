@@ -17,32 +17,59 @@
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <!-- 处理多语言 -->
     <script src="Data/lang/load.js" type="text/javascript"></script>
     <script src="Data/lang/lang.js" type="text/javascript"></script>
     <script type="text/javascript">
         //页面启动函数.
+        var webUser = new WebUser();
         $(function () {
 
             InitLeft();
+
             InitDocs();
 
         });
 
         function InitLeft() {
 
+            var sql = "SELECT Auther,AuthName, FK_Flow,FlowName , COUNT(*) as Num   FROM V_WF_AuthTodolist ";
+            sql += "WHERE EmpNo = '" + webUser.No + "'  AND '2019-09-09' >= TakeBackDT ";
+            sql += "     GROUP BY Auther, AuthName, FK_Flow, FlowName  ";
+            var dt = DBAccess.RunSQLReturnJSON(sql);
+
+            var html = "<ul>";
+
+            for (var i = 0; i < dt.length; i++) {
+
+                var en = dt[i];
+
+                html += "<li><a href=\"javascript:InitDocs('" + en.Auther + "','" + en.FK_Flow + "');\" >" + en.AuthName + " - " + en.FlowName + " - " + en.Num + "</a></li>";
+
+            }
+            html += "</ul>";
         }
 
-        function InitDocs() {
+        function InitDocs(author, flowNo) {
+
 
         }
     </script>
 </head>
 <body>
-    <table>
+    <table style="width:100%;">
         <caption>工作委托</caption>
         <tr>
-            <td valign="top" style="width:30%"> <div id="left"></div> </td>
+            <td valign="top" class="Sum" style="width:30%">
+
+                <!--<fieldset>
+                    <legend>授权流程</legend>-->
+                <div id="left"></div>
+
+                <!--</fieldset>-->
+
+            </td>
             <td valign="top">  <div id="left"></div> </td>
         </tr>
     </table>

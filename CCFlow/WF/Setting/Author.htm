@@ -27,14 +27,15 @@
         var emp = null;
 
         $(function () {
-           
+
             webUser = new WebUser();
 
             var ens = new Entities("BP.WF.Auths");
             ens.Retrieve("Auther", webUser.No);
 
+
             var html = "<table style='width:80%;'>";
-            html += "<caption> 授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
+            html += "<caption> [" + webUser.No + "]授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>授权类型</th>";
@@ -47,13 +48,23 @@
 
             for (var i = 0; i < ens.length; i++) {
 
+                en = ens[i];
+                html += "<tr>";
+                html += "<td>(" + i + 1 + ")</td>";
+                html += "<td>" + en.AuthType + "</td>";
+                html += "<td>" + en.EmpNo + "</td>";
+                html += "<td>" + en.FlowNo + "</td>";
+                html += "<td>" + en.TakeBackDT + "</td>";
+                html += "<td>" + en.TakeBackDT + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.MyPK + "')\">删除</a></td>";
+                html += "</tr>";
             }
 
             html += "</table>";
 
             $("#docs").html(html);
         });
-         
+
 
         //执行删除.
         function Delete() {
@@ -69,11 +80,12 @@
             window.location.href = 'Default.htm';
 
         }
-    </script>
+
+/**/</script>
 </head>
 <body onkeypress="Esc()" class="gray-bg">
     <form id="cc" name="cc">
-         <div id="docs"></div>
+        <div id="docs"></div>
 
     </form>
 </body>

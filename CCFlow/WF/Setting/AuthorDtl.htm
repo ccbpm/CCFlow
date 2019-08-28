@@ -29,8 +29,7 @@
         $(function () {
 
             BindPop();
-
-            var webUser = new WebUser();
+            webUser = new WebUser();
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             var emp = handler.DoMethodReturnJSON("Author_Init");
@@ -78,29 +77,23 @@
         function Save() {
 
             var en = new Entity("BP.WF.Auth");
-            en.Author = webUser.No;
-            en.TakeBackDT = $("#TB_DT").val();
-            en.TakeBackDT =$("#TB_DT").val();
 
+            en.Auther = webUser.No;
+            en.AuthType = 0;  
+
+
+            en.TakeBackDT = $("#TB_DT").val();
+            en.TakeBackDT = $("#TB_DT").val();
 
             en.FlowNo = "001";
             en.FlowName = "xxx";
 
             en.EmpNo = $("#TB_Author").val();
             en.EmpName = $("#TB_Author").val();
-
             en.Insert();
 
+            window.location.href = 'Author.htm';
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
-            handler.AddPara("Author", );
-            handler.AddPara("AuthorDate", );
-            handler.AddPara("AuthorWay", $("#DDL_AuthorWay").val());
-            var data = handler.DoMethodReturnString("Author_Save");
-
-            alert(data);
-
-            window.location.href = 'Default.htm';
 
         }
 
@@ -154,7 +147,7 @@
                     流程:
                 </td>
                 <td>
-                 <input   type="month"  id="TB_Flows" />
+                    <input type="month" id="TB_Flows" />
                 </td>
                 <td></td>
             </tr>

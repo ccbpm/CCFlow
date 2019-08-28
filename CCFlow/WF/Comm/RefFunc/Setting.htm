@@ -88,9 +88,20 @@
             }
             document.title = mapData.Name;
 
-            $("#docs").html("<h4>该功能用于显示或者屏蔽部分字段，功能。</h4>");
+            Help();
 
         })
+
+        function Help() {
+
+            var html = "<h3>帮助说明</h3>";
+            html += "<ul>";
+            html += "<li>如果您想屏蔽部分字段与属性，可以通过该功能实习实现.</li>";
+            html += "<li>当我们不想看到自己不关心的字段，或者功能的时候，可以通过设置来实现。</li>";
+            html += "</ul>";
+
+            $("#docs").html(html);
+        }
 
         //字段查询.
         function Fields() {
@@ -100,7 +111,7 @@
             //获取字段分组
             var Sys_GroupField = frmData["Sys_GroupField"];
 
-             var mypk = webUser.No + "_Fields_HS_" + enName;
+            var mypk = webUser.No + "_Fields_HS_" + enName;
             var cfgEn = new Entity("BP.Sys.UserRegedit");
             cfgEn.SetPKVal(mypk);
             cfgEn.RetrieveFromDBSources();
@@ -184,15 +195,15 @@
 
             //求出来需要所有隐藏的分组.
             var Mkeys = ",";
-             $.each($('input:checkbox[name=FieldGroup]:checked'),function(i,obj){
-                     Mkeys += obj.id+",";
-             });
+            $.each($('input:checkbox[name=FieldGroup]:checked'), function (i, obj) {
+                Mkeys += obj.id + ",";
+            });
             //求出来所有隐藏的字段.
             var keys = ",";
-             $.each($('input:checkbox[name=FieldAttr]:checked'),function(i,obj){
-                     keys +=  obj.id+",";
-             });
-           
+            $.each($('input:checkbox[name=FieldAttr]:checked'), function (i, obj) {
+                keys += obj.id + ",";
+            });
+
             cfgEn.FK_Emp = webUser.No;
             cfgEn.CfgKey = 'Fields_HS';
             cfgEn.FK_MapData = enName;
@@ -235,7 +246,7 @@
                     checked = " checked=true ";
                 html += "<tbody>";
                 html += "<tr>";
-                html += "<td colspan = '2'><label><input type=checkbox " + checked + " name='FuncGroup' id='"+groupFunc.id+"' onclick='swapCheck(\"" + groupFunc.id + "\")'/>" + groupFunc.name + "</label></td>";
+                html += "<td colspan = '2'><label><input type=checkbox " + checked + " name='FuncGroup' id='" + groupFunc.id + "' onclick='swapCheck(\"" + groupFunc.id + "\")'/>" + groupFunc.name + "</label></td>";
                 html += "</tr>";
                 html += "</tbody>";
                 html += "<tbody id = '" + groupFunc.id + "_All'>";
@@ -288,14 +299,14 @@
 
             //求出来需要所有隐藏的功能分组.
             var Mkeys = ",";
-             $.each($('input:checkbox[name=FuncGroup]:checked'),function(i,obj){
-                     Mkeys += obj.id+",";
-             });
+            $.each($('input:checkbox[name=FuncGroup]:checked'), function (i, obj) {
+                Mkeys += obj.id + ",";
+            });
             //求出来所有隐藏的功能
             var keys = ",";
-             $.each($('input:checkbox[name=FuncMethod]:checked'),function(i,obj){
-                     keys +=obj.id+",";
-             });
+            $.each($('input:checkbox[name=FuncMethod]:checked'), function (i, obj) {
+                keys += obj.id + ",";
+            });
 
             cfgEn.FK_Emp = webUser.No;
             cfgEn.CfgKey = 'Funcs_HS';
@@ -311,13 +322,15 @@
 </head>
 <body class="easyui-layout">
     <div data-options="region:'west',title:'设置内容',split:true" style="width:150px;">
-            <ul>
-                <li><a href="javascript:Fields()"><h4>字段</h4></a></li>
-                <li><a href="javascript:Funcs()"><h4>功能</h4></a></li>
+        <ul>
+            <li><a href="javascript:Fields()">字段</a></li>
+            <li><a href="javascript:Funcs()">功能</a></li>
+            <li><a href="javascript:Help()">帮助</a></li>
 
-            </ul>
+
+        </ul>
     </div>
-    <div data-options="region:'center',title:'选择隐藏的字段&功能'" style="padding:5px;background:#eee;">
+    <div data-options="region:'center',title:'选择隐藏的字段&功能'" style="padding:5px;">
         <div id="docs">
         </div>
     </div>

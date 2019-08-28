@@ -550,7 +550,7 @@ namespace BP.Sys.FrmUI
                             sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
 
                         if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "alter table " + md.PTable + " modify " + attr.Field + " VARCHAR(" + attr.MaxLen + ")";
+                            sql = "alter table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
 
                         DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }

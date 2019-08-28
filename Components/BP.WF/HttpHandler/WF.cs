@@ -250,15 +250,28 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        /// <summary>
+        /// 流程数据
+        /// </summary>
+        /// <returns></returns>
         public string Watchdog_Init()
         {
-            DataSet ds = new DataSet();
-
-            string sql = "";
-
-
-            return "";
-
+            string sql = " SELECT FK_Flow,FlowName, COUNT(workid) as Num FROM V_MyFlowData WHERE MyEmpNo='"+WebUser.No+"' ";
+            sql += " GROUP BY  FK_Flow,FlowName ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Group";
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 流程数据初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Watchdog_InitFlows()
+        {
+            string sql = " SELECT *  FROM V_MyFlowData WHERE MyEmpNo='" + WebUser.No + "' AND FK_Flow='" + this.FK_Flow + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Flows";
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 构造函数
@@ -891,7 +904,7 @@ namespace BP.WF.HttpHandler
             json = DBAccess.RunSQLReturnString(sql);
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
-           
+
 
             //定义容器.
             DataSet ds = new DataSet();
@@ -983,7 +996,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE Emps LIKE '%@" + WebUser.No + "@%' and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -1074,7 +1087,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["deptname"].ColumnName = "DeptName";
                 dt.Columns["billno"].ColumnName = "BillNo";
             }
-   
+
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -1219,7 +1232,7 @@ namespace BP.WF.HttpHandler
 
             if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.SheetAutoTree)
             {
-                return "url@./MyFlowTreeReadonly.htm?3=4&WorkID=" + this.WorkID + "&FID=" + this.FID + "&OID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + this.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1"+ urlExt;
+                return "url@./MyFlowTreeReadonly.htm?3=4&WorkID=" + this.WorkID + "&FID=" + this.FID + "&OID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + this.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1" + urlExt;
             }
 
             Work wk = nd.HisWork;
@@ -1283,7 +1296,7 @@ namespace BP.WF.HttpHandler
 
 
             //加入是累加表单的标志，目的是让附件可以看到.
-           
+
             if (nd.HisFormType == NodeFormType.FoolTruck)
             {
                 endUrl = "&FormType=10&FromWorkOpt=" + this.GetRequestVal("FromWorkOpt");
@@ -1722,7 +1735,7 @@ namespace BP.WF.HttpHandler
                 #endregion 给字段赋值
 
                 //获取审核意见的值
-                
+
                 string checkNote = this.GetValFromFrmByKey("TB_" + workid + "_WorkCheck_Doc", null);
                 if (DataType.IsNullOrEmpty(checkNote) == false)
                 {
@@ -2123,7 +2136,7 @@ namespace BP.WF.HttpHandler
             //请求在途.
             if (this.DoWhat.Equals(DoWhatList.Runing) == true)
                 return "url@Runing.htm?FK_Flow=" + this.FK_Flow;
-      
+
 
             //请求待办。
             if (this.DoWhat.Equals(DoWhatList.EmpWorks) == true || this.DoWhat.Equals("Todolist") == true)
@@ -2183,7 +2196,7 @@ namespace BP.WF.HttpHandler
                 {
                     case SMSMsgType.SendSuccess: // 发送成功的提示.
 
-                        if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( ap.GetValInt64ByKey("WorkID"), BP.Web.WebUser.No) == true)
+                        if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(ap.GetValInt64ByKey("WorkID"), BP.Web.WebUser.No) == true)
                         {
                             return "url@MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
                         }

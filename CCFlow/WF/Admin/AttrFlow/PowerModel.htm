@@ -27,7 +27,11 @@
     <script src="../../CCForm/JS/mtags.js" type="text/javascript"></script>
     <style type="text/css">
         .ccflow-input-span-container {
-            border: 0;
+            box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
+            border:0px;
+        }
+        .ccflow-input-span-container{
+            line-height:28px;
         }
 
         th {
@@ -49,21 +53,42 @@
 
     <script type="text/javascript">
         var currSelectNode = "";
-         var models = [];
+        var models = [];
+       
         //页面启动函数.
         $(function () {
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            //定义权限控制类型
+             var itemFlowDataView = { 'PowerFlag': 'FlowDataView', 'PowerFlagName': '查看', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataPress = { 'PowerFlag': 'FlowDataPress', 'PowerFlagName': '催办', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataShift = { 'PowerFlag': 'FlowDataShift', 'PowerFlagName': '移交（特送人员）', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataAddEmps = { 'PowerFlag': 'FlowDataAddEmps', 'PowerFlagName': '增加处理人(委托)', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataRollback = { 'PowerFlag': 'FlowDataRollback', 'PowerFlagName': '回滚', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataOver = { 'PowerFlag': 'FlowDataOver', 'PowerFlagName': '结束', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataSkip = { 'PowerFlag': 'FlowDataSkip', 'PowerFlagName': '跳转', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataDelete = { 'PowerFlag': 'FlowDataDelete', 'PowerFlagName': '删除', 'PortSta': '', 'PortEmp': '' };
+            models.push(itemFlowDataView);
+            models.push(itemFlowDataPress);
+            models.push(itemFlowDataShift);
+            models.push(itemFlowDataAddEmps);
+            models.push(itemFlowDataRollback);
+            models.push(itemFlowDataOver);
+            models.push(itemFlowDataSkip);
+            models.push(itemFlowDataDelete);
+
+            //初始化页面
             InitPage();
             $("#Msg").html("");
         });
-
+        var currPowerFlag = "";
         //初始化数据.
         function InitPage() {
 
             var flowNo = GetQueryString("FK_Flow");
 
-            var ens = new Entities("BP.WF.Template.PowerModels");
-            ens.Retrieve("Model", "FlowData", "FlowNo", flowNo);
+            //获取流程中设置的权限列表
+            var powerModels = new Entities("BP.WF.Template.PowerModels");
+            powerModels.Retrieve("Model", "FlowData", "FlowNo", flowNo);
 
             var html = "";
             html += "<table style='width:100%;'>";
@@ -74,42 +99,22 @@
             html += "<th>岗位</th>";
             html += "<th>人员</th>";
             html += "</tr>";
-
-            var itemFlowDataView = { 'PowerFlag': 'FlowDataView', 'PowerFlagName': '查看', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataPress = { 'PowerFlag': 'FlowDataPress', 'PowerFlagName': '催办', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataShift = { 'PowerFlag': 'FlowDataShift', 'PowerFlagName': '移交（特送人员）', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataAddEmps = { 'PowerFlag': 'FlowDataAddEmps', 'PowerFlagName': '增加处理人(委托)', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataRollback = { 'PowerFlag': 'FlowDataRollback', 'PowerFlagName': '回滚', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataOver = { 'PowerFlag': 'FlowDataOver', 'PowerFlagName': '结束', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataSkip = { 'PowerFlag': 'FlowDataSkip', 'PowerFlagName': '跳转', 'PortSta': '', 'PortEmp': '' };
-            var itemFlowDataDelete = { 'PowerFlag': 'FlowDataDelete', 'PowerFlagName': '删除', 'PortSta': '', 'PortEmp': '' };
-
-            models.push(itemFlowDataView);
-            models.push(itemFlowDataPress);
-            models.push(itemFlowDataShift);
-            models.push(itemFlowDataAddEmps);
-            models.push(itemFlowDataRollback);
-            models.push(itemFlowDataOver);
-            models.push(itemFlowDataSkip);
-            models.push(itemFlowDataDelete);
-
             for (var i = 0; i < models.length; i++) {
                 var model = models[i];
-
                 html += "<tr>";
-
                 html += "<td>" + model.PowerFlag + "</td>";
                 html += "<td>" + model.PowerFlagName + "</td>";
-
-
-                html += "<td></td>";
-                html += "<td>1<div id='" + i + "_mtags' data-power=" + model.PowerFlag + " style='width:99%'  class='mtags'></div></td>";
+                //岗位
+                html += "<td width='40%'><div id='portSta_" +model.PowerFlag + "_mtags' data-power=" + model.PowerFlag + " style='width:100%'  class='mtags'></div></td>";
+                //人员
+                html += "<td  width='40%'><div id='portEmp_" + model.PowerFlag + "_mtags' data-power=" + model.PowerFlag + " style='width:100%'  class='mtags'></div></td>";
 
                 html += "</tr>";
             }
             html += "</table>";
             $("#docs").html(html);
 
+            //设置选择人员的路径
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
             if (dept == null || dept == '' || dept == undefined) {
                 dept = $.cookie('FK_Dept');
@@ -123,104 +128,92 @@
             if (dept == undefined) {
                 dept = "0";
             }
+            var empUrl = "../../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
+            var staUrl = "../../WorkOpt/SelectStationGroup.htm?s=" + Math.random();
+            //设置选择岗位的路径
 
-            //绑定用户事件
             for (var i = 0; i < models.length; i++) {
-                var mtags = $("#" + i + "_mtags");
+                var mtags = $("#portSta_" + models[i].PowerFlag + "_mtags");
+                 //初始化mtags  岗位
                 mtags.mtags({
-                    "fit": true
-                   
+                    "fit": true,
+                    "onUnselect": function (record) {
+                        RemoveSta(record.MyPK,record.PowerFlag);
+                    }
                 });
+                //初始化数据
+                var initJsonData = GetPowerModel(models[i].PowerFlag, 1, 0, powerModels);
+                if (initJsonData.length != 0)
+                    mtags.mtags("loadData", initJsonData);
+
+                //人员
+                mtags = $("#portEmp_" + models[i].PowerFlag + "_mtags");
+                 //初始化mtags  岗位
+                mtags.mtags({
+                    "fit": true,
+                    "onUnselect": function (record) {
+                        RemoveEmp(record.MyPK,record.PowerFlag);
+                    }
+                });
+                //初始化数据
+                initJsonData = GetPowerModel(models[i].PowerFlag, 0, 1, powerModels);
+                if (initJsonData.length != 0)
+                    mtags.mtags("loadData", initJsonData);
+
             }
             //绑定获取用户事件
             $.each($(".mtags"), function (i, mtags) {
-                var w = window.parent.document.body.clientWidth - 300;
-                var h = window.parent.document.body.clientHeight - 40;
-                $(".mtags").bind("click", function () {
-                    debugger;
-                    currSelectNode = $(mtags).attr("data-power").replace("_mtags", "");
-                    var url = "../../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + currSelectNode + "&s=" + Math.random();
-                    $('#iframeSelectEmpsForm').attr('src', url);
-                    $('#SelectEmpsModal').modal().show();                  
-                });
+                var id = $(mtags).attr("id");
+                //岗位选择事件
+                if (id.indexOf("portSta") != -1) {
+                      $(mtags).bind("dblclick", function () {
+                        currPowerFlag = $(mtags).attr("data-power");
+                        $('#iframeSelectEmpsForm').attr('src', staUrl);
+                        $('#SelectEmpsModal').modal().show();                   
+                    });
+                    
+                }
+                //人员选择事件
+                if (id.indexOf("portEmp") != -1) {
+                    $(mtags).bind("dblclick", function () {
+                        currPowerFlag = $(mtags).attr("data-power");
+                        $('#iframeSelectEmpsForm').attr('src', empUrl);
+                        $('#SelectEmpsModal').modal().show();                  
+                    });
+                }
+                
 
             });
         }
 
-        function changeOrOpenTab(flowName, flowNo) {
-            //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
-            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
-                + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
-            window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
-                "icon-flow1");
-        }
-
-        //设置选中的人员
-        function selectEmpsWindowClose(data) {
-
-            $('#SelectEmpsModal').modal('hide');
-            if (data == '取消') {
-                return;
-            }
-            var val = frames["iframeSelectEmpsForm"].window.returnVal;
-            
-            console.log(val + "_br");
-            debugger;
-           /* var mypk = currSelectNode + "_" + GetQueryString("WorkID");
-            var en = new Entity("BP.WF.TransferCustom", mypk);
-            en.Worker = en.Worker + "," + val.No + ",";
-            en.WorkerName = en.WorkerName + "," + val.Name + ",";
-            en.Update();
-            InitMtags($("#" + en.FK_Node + "_mtags"), en.MyPK, en.Worker, en.WorkerName);*/
-
-            
-            var modelType = 1;
-            var empNos = val.No;
-            if (empNos != null && !$.isEmptyObject(empNos)) {
-                var empNoArray = empNos.split(',');
-                var powerFlag = currSelectNode;
-                var flowNo = GetQueryString("FK_Flow");
-                $.each(empNoArray, function (i, empNo) {
-                    var myPk = modelType + "_" + empNo + "_" + powerFlag + "_" + flowNo;
-                    var en = new Entity("BP.WF.Template.PowerModel");
-                    en.SetPKVal(myPk); //设置主键.
-                    en.Delete();
-                    en.SetPKVal(myPk);
-                    en.Model = "FlowData";
-                    en.PowerFlag = powerFlag;
-                    debugger
-                    var model = getModelByPowerFlag(powerFlag);
-                    if (model != null) {
-                        en.PowerFlagName = model.PowerFlagName;
+        
+        //获取对应类型的数据
+        function GetPowerModel(powerFlag, portSta, portEmp, powerModels) {
+            var initJson = [];
+            for (var i = 0; i < powerModels.length; i++) {
+                var powerModel = powerModels[i];
+                //权限类型一致
+                if (powerModel.PowerFlag == powerFlag) {
+                    if (portSta == 1 && powerModel.StaNo != null && powerModel.StaNo != "") {
+                        initJson.push({
+                            "No": powerModel.StaNo,
+                            "Name": powerModel.StaName,
+                            "MyPK": powerModel.MyPK,
+                             "PowerFlag":powerModel.PowerFlag
+                        });
                     }
-                   
-                    en.FlowNo = flowNo;
-                    en.EmpNo = empNo;
-                    en.EmpName = val.Name.split(",")[i];
-                    en.NodeId = 0;
-                    en.PowerCtrlType = 1;
-                    en.Insert();
-                });
+                    if (portEmp == 1 && powerModel.EmpNo != null && powerModel.EmpNo != "") {
+                        initJson.push({
+                            "No": powerModel.EmpNo,
+                            "Name": powerModel.EmpName,
+                            "MyPK": powerModel.MyPK,
+                            "PowerFlag":powerModel.PowerFlag
+                        });
+                    }
+                        
+                }
             }
-            debugger;
-            console.log("deb-br" + currSelectNode);
-            InitMtags($("div[data-power='" + currSelectNode + "']"), val);
-            
-           /* var myPk = modelType + "_" + empNo;
-            en.SetPKVal(myPk); //设置主键.
-            en.Delete();
-
-
-            en.PowerFlag = "FlowDataView";
-            en.PowerFlagName = "查看";
-
-            en.FlowNo = GetQueryString("FK_Flow");
-            en.EmpNo = "sss";
-            en.EmpName = "xxxxx";
-
-            en.SetPKVal(myPk); //设置主键.
-            en.Insert();*/
-
+            return initJson;
         }
 
         //获取当前结点model根据powerFlag
@@ -235,34 +228,91 @@
         }
 
         //初始化接收人员列表
-        function InitMtags(mtags, emp) {
-            debugger
-            debugger
-            debugger;
-            console.log("br---" + mtags + "_" + emp.No);
-            var initJsonData = [];
-            if (emp != null) {
-                $.each(emp.No.split(","), function (k, o) {
-                    if (o != null && o != "")
-                        initJsonData.push({
-                            "No": o,
-                            "Name": emp.Name.split(',')[k],
-                            "MyPK": o
-                        });
-                });    
-            }
-            
+        function InitMtags(mtags, powerFlag,portSta,portEmp) {
+            var powerModels = new Entities("BP.WF.Template.PowerModels");
+            powerModels.Retrieve("Model", "FlowData", "FlowNo", GetQueryString("FK_Flow"));
+            var initJsonData = GetPowerModel(powerFlag, portSta, portEmp, powerModels)
             mtags.mtags("loadData", initJsonData);
         }
 
-        //删除人员
-        function RemoveEmp(mypk, empNo, empName) {
-            var en = new Entity("BP.WF.TransferCustom", mypk);
-            en.Worker = en.Worker.replace(empNo + ",", "");
-            en.WorkerName = en.WorkerName.replace(empName + ",", "");
-            en.Update();
-            InitMtags($("#" + en.FK_Node + "_mtags"), mypk, en.Worker, en.WorkerName);
+
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
+
+            $('#SelectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+            var returnVal = frames["iframeSelectEmpsForm"].window.returnVal;
+            var powerFlag = currPowerFlag;
+            var flowNo = GetQueryString("FK_Flow");
+            var myPK = currPowerFlag + "_" + returnVal.No + "_" + flowNo;
+            var en = new Entity("BP.WF.Template.PowerModel");
+            en.MyPK = myPK; //设置主键.
+            en.Model = "FlowData";
+            en.PowerFlag = powerFlag;
+            var model = getModelByPowerFlag(powerFlag);
+            if (model != null) {
+                en.PowerFlagName = model.PowerFlagName;
+            } 
+            en.FlowNo = flowNo;
+            en.EmpNo = returnVal.No;
+            en.EmpName = returnVal.Name;
+            en.NodeId = 0;
+            en.PowerCtrlType = 1;
+            en.Save();
+            InitMtags($("#portEmp_"+powerFlag+"_mtags"), powerFlag,0,1);
+
         }
+         //删除人员
+        function RemoveEmp(mypk, powerFlag) {
+            var en = new Entity("BP.WF.Template.PowerModel", mypk);
+            en.Delete();
+             InitMtags($("#portEmp_"+powerFlag+"_mtags"), powerFlag,0,1);
+          
+        }
+
+         //设置选中的岗位
+        function selectStasWindowClose(data) {
+
+            $('#SelectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+            var returnVals = frames["iframeSelectEmpsForm"].window.returnVal;
+            var powerFlag = currPowerFlag;
+            var flowNo = GetQueryString("FK_Flow");
+            for (var i = 0; i < returnVals.length; i++) {
+                var returnVal = returnVals[i];
+                var myPK = currPowerFlag + "_" + returnVal.No + "_" + flowNo;
+                var en = new Entity("BP.WF.Template.PowerModel");
+                en.MyPK = myPK; //设置主键.
+                en.Model = "FlowData";
+                en.PowerFlag = powerFlag;
+                var model = getModelByPowerFlag(powerFlag);
+                if (model != null) {
+                    en.PowerFlagName = model.PowerFlagName;
+                }
+                en.FlowNo = flowNo;
+                en.StaNo = returnVal.No;
+                en.StaName = returnVal.Name;
+                en.NodeId = 0;
+                en.PowerCtrlType = 0;
+                en.Save();
+            }
+            InitMtags($("#portSta_"+powerFlag+"_mtags"), powerFlag,1,0);
+
+        }
+         //删除岗位
+        function RemoveSta(mypk, powerFlag) {
+            var en = new Entity("BP.WF.Template.PowerModel", mypk);
+            en.Delete();
+            InitMtags($("#portSta_"+powerFlag+"_mtags"), powerFlag,1,0);
+          
+        }
+
+        
+       
     </script>
 </head>
 <body>

@@ -675,42 +675,15 @@ namespace BP.WF.Template
         #region 重写方法.
         protected override bool beforeUpdateInsertAction()
         {
-            //FrmAttachment workCheckAth = new FrmAttachment();
-            //bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, this.NodeID + "_FrmSubFlow");
-            ////不包含父子流程
-            //if (isHave == false)
-            //{
-            //    workCheckAth = new FrmAttachment();
-            //    /*如果没有查询到它,就有可能是没有创建.*/
-            //    workCheckAth.MyPK = this.NodeID + "_FrmSubFlow";
-            //    workCheckAth.FK_MapData = this.NodeID.ToString();
-            //    workCheckAth.NoOfObj = this.NodeID + "_FrmSubFlow";
-            //    workCheckAth.Exts = "*.*";
-
-            //    //存储路径.
-            //    workCheckAth.SaveTo = "/DataUser/UploadFile/";
-            //    workCheckAth.IsNote = false; //不显示note字段.
-            //    workCheckAth.IsVisable = false; // 让其在form 上不可见.
-
-            //    //位置.
-            //    workCheckAth.X = (float)94.09;
-            //    workCheckAth.Y = (float)333.18;
-            //    workCheckAth.W = (float)626.36;
-            //    workCheckAth.H = (float)150;
-
-            //    //多附件.
-            //    workCheckAth.UploadType = AttachmentUploadType.Multi;
-            //    workCheckAth.Name = "父子流程";
-            //    workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
-            //    workCheckAth.Insert();
-            //}   
             return base.beforeUpdateInsertAction();
         }
         protected override void afterUpdate()
         {
             //清空缓存，重新查数据
             Node nd = new Node(this.NodeID);
-            nd.Update();
+            nd.RetrieveFromDBSources();
+            Cash2019.UpdateRow(nd.ToString(),this.NodeID.ToString(),nd.Row);
+
             base.afterUpdate();
         }
         #endregion 重写方法.

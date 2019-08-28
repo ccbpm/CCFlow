@@ -156,15 +156,31 @@
                     row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
                 }
 
-                //当前是主持人
+                //当前是主持人这个是协作模式处理
                 if (gwl.IsPass == 100) {
                     row += "<td>主持人/未审批</td>";
+                    row += "<td></td>";
+                }
+                if (gwl.IsPass == 1001) {
+                    row += "<td>主持人/已审批</td>";
+                    row += "<td></td>";
+                }
+
+                //当前是组长模式处理，并且是主持人
+                if (gwl.IsPass == 90) {
+                    row += "<td>主持人（自己）/未审批</td>";
                     row += "<td></td>";
                 }
 
                 //当前自己
                 if (gwl.IsPass == 99) {
-                    row += "<td>您自己</td>";
+                    row += "<td>主持人（您自己）/未审批</td>";
+                    row += "<td></td>";
+                }
+
+                //当前自己
+                if (gwl.IsPass == 9901) {
+                    row += "<td>主持人（您自己）/已审批</td>";
                     row += "<td></td>";
                 }
 

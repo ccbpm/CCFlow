@@ -59,9 +59,10 @@
         $(function () {
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
             //定义权限控制类型
-             var itemFlowDataView = { 'PowerFlag': 'FlowDataView', 'PowerFlagName': '查看', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataView = { 'PowerFlag': 'FlowDataView', 'PowerFlagName': '查看', 'PortSta': '', 'PortEmp': '' };
             var itemFlowDataPress = { 'PowerFlag': 'FlowDataPress', 'PowerFlagName': '催办', 'PortSta': '', 'PortEmp': '' };
             var itemFlowDataShift = { 'PowerFlag': 'FlowDataShift', 'PowerFlagName': '移交（特送人员）', 'PortSta': '', 'PortEmp': '' };
+            var itemFlowDataUnSend = { 'PowerFlag': 'FlowDataUnSend', 'PowerFlagName': '撤销', 'PortSta': '', 'PortEmp': '' };
             var itemFlowDataAddEmps = { 'PowerFlag': 'FlowDataAddEmps', 'PowerFlagName': '增加处理人(委托)', 'PortSta': '', 'PortEmp': '' };
             var itemFlowDataRollback = { 'PowerFlag': 'FlowDataRollback', 'PowerFlagName': '回滚', 'PortSta': '', 'PortEmp': '' };
             var itemFlowDataOver = { 'PowerFlag': 'FlowDataOver', 'PowerFlagName': '结束', 'PortSta': '', 'PortEmp': '' };
@@ -70,6 +71,7 @@
             models.push(itemFlowDataView);
             models.push(itemFlowDataPress);
             models.push(itemFlowDataShift);
+             models.push(itemFlowDataUnSend);
             models.push(itemFlowDataAddEmps);
             models.push(itemFlowDataRollback);
             models.push(itemFlowDataOver);

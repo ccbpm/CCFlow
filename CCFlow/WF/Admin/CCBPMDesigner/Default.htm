@@ -1265,15 +1265,27 @@
             
 
             //单据模式.
-            if (en.EntityType == 1)
-                url = '../../CCBill/SearchBill.htm?FrmID=' + node.id;
+            if (en.EntityType == 1) {
+                 url = '../../CCBill/SearchBill.htm?FrmID=' + node.id;
+                if (en.EntityShowModel == 1)
+                     url = '../../CCBill/BillTree.htm?FrmID=' + node.id;
+            }
+               
 
             //如果是实体就判断他的编辑模式.
             if (en.EntityType == 2) {
-                if (en.EntityEditModel == 0)
-                    url = '../../CCBill/SearchDict.htm?FrmID=' + node.id;
-                else
-                    url = '../../CCBill/SearchEditer.htm?FrmID=' + node.id;
+                if (en.EntityShowModel == 0) {
+                    if (en.EntityEditModel == 0)
+                        url = '../../CCBill/SearchDict.htm?FrmID=' + node.id;
+                    else
+                        url = '../../CCBill/SearchEditer.htm?FrmID=' + node.id;
+                }
+
+                if (en.EntityShowModel == 1) {
+                    url = '../../CCBill/DictTree.htm?FrmID=' + node.id;
+                }
+                    
+                
             }
             //树状结构
             if (en.EntityType == 3) {

@@ -140,7 +140,7 @@ namespace BP.WF.Template
 
                 //Model标记.
                 map.AddTBString(PowerModelAttr.FlowNo, null, "流程编号", true, false, 0, 100, 10);
-                map.AddTBInt(PowerModelAttr.NodeID, 0, "节点", true, false);
+              //  map.AddTBInt(PowerModelAttr.NodeID, 0, "节点", true, false);
                 map.AddTBString(PowerModelAttr.FrmID, null, "表单ID", true, false, 0, 100, 10);
 
                 this._enMap = map;

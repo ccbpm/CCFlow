@@ -137,9 +137,14 @@ namespace BP.WF
 		{
 			get
 			{
-				//if (this.OID == 0)
-				return this.GetValInt64("WorkID"); /*有可能开始节点的WorkID=0*/
-				return this.OID;
+				try
+				{
+					return this.GetValInt64("WorkID"); /*有可能开始节点的WorkID=0*/
+				}
+				catch (Exception)
+				{
+					return this.OID;
+				}
 			}
 		}
 		/// <summary>

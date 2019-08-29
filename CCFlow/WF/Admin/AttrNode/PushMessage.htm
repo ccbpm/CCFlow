@@ -44,7 +44,12 @@
 
             var ens = new Entities("BP.WF.Template.PushMsgs");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
+            var emailCheck = "";
+            var ccmsg = ""
+            var sms = "";
+            var dingding = "";
+            var weixin = "";
+            var tm = "";
             for (var i = 0; i < ens.length; i++) {
 
                 var en = new Entity("BP.WF.Template.PushMsg", ens[i].MyPK);
@@ -52,12 +57,32 @@
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
                 newRow += "<td><a href='PushMessageEntity.htm?&FK_Event=" + en.FK_Event + "&MyPK=" + en.MyPK + "&FK_Node=" + en.FK_Node + "'>" + en.FK_Event + "</a></td>";
-                newRow += "<td>" + PushWayText(en.FK_Event, en.MailPushWay) + "</td>";
-                newRow += "<td>" + en.MailTitle + "</td>";
                 newRow += "<td>" + PushWayText(en.FK_Event, en.SMSPushWay) + "</td>";
+                newRow += "<td>"
+                //发送形式
+                var pushModel = en.SMSPushModel;
+                
+                if (pushModel.indexOf('Email') != -1)
+                    emailCheck = "checked=checked"
+                 if (pushModel.indexOf('CCMsg') != -1)
+                    ccmsg = "checked=checked"
+                 if (pushModel.indexOf('SMS') != -1)
+                    sms = "checked=checked"
+                 if (pushModel.indexOf('DingDing') != -1)
+                    dingding = "checked=checked"
+                if (pushModel.indexOf('WeiXin') != -1)
+                    weixin = "checked=checked"
+                if (pushModel.indexOf('TM') != -1)
+                    tm ="checked=checked"
+                newRow += "<label><input id='CB_SMSPushModel_Email' type='checkbox' name='CB_SMSPushModel' value='Email' disabled "+emailCheck+"/>邮件</label>";
+                newRow += "<label><input id='CB_SMSPushModel_CCMsg' type='checkbox' name='CB_SMSPushModel' value='CCMsg' disabled  "+ccmsg+"/>站内消息</label>";
+                newRow += "<label><input id='CB_SMSPushModel_SMS' type='checkbox' name='CB_SMSPushModel' value='SMS' disabled "+sms+"/>短信</label>";
+                newRow += "<label><input id='CB_SMSPushModel_DingDing' type='checkbox' name='CB_SMSPushModel' value='DingDing' disabled "+dingding+"/>钉钉</label>";
+                newRow += "<label><input id='CB_SMSPushModel_WeiXin' type='checkbox' name='CB_SMSPushModel' value='WeiXin' disabled "+weixin+"/>微信</label>";
+                newRow += "<label><input id='CB_SMSPushModel_TM' type='checkbox' name='CB_SMSPushModel' value='TM' disabled "+tm+"/>即时通</label>";
+                newRow += "</td>";
                 newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
-
                 newRow += "</tr>";
 
                 $("#Table1 tr:last").after(newRow);
@@ -71,6 +96,7 @@
                 "SendSuccess": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人"],
                 "ReturnAfter": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人"],
                 "UndoneAfter": ["不发送", "撤销工作后通知的节点接受人", "向指定的字段发送", "其他节点的处理人"],
+                "ShitAfter": ["不发送", "发送给被移交的节点接受人", "向指定的字段发送", "其他节点的处理人"],
                 "FlowOverAfter": ["不发送", "流程结束通知的所有流程的参与人", "向指定的字段发送", "其他节点的处理人"],
                 "AfterFlowDel": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人"],
                 "NodeWarning": ["不发送",  "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
@@ -122,13 +148,10 @@
                     消息发生事件
                 </th>
                 <th>
-                    启用邮件
+                    消息接收规则
                 </th>
                 <th>
-                    邮件标题
-                </th>
-                <th>
-                    启用短信
+                   发送形式
                 </th>
                 <th>
                     操作
@@ -143,6 +166,7 @@
                     <li><a href="javascript:PushMessageEntity('SendSuccess');">节点发送成功时</a> </li>
                     <li><a href="javascript:PushMessageEntity('ReturnAfter');">当节点退回后</a> </li>
                     <li><a href="javascript:PushMessageEntity('UndoneAfter');">当节点撤销发送后</a> </li>
+                    <li><a href="javascript:PushMessageEntity('ShitAfter');">当节点移交后</a> </li>
                     <li><a href="javascript:PushMessageEntity('FlowOverAfter');">流程结束后</a> </li>
                     <li><a href="javascript:PushMessageEntity('AfterFlowDel');">流程删除后</a> </li>
                     <li><a href="javascript:PushMessageEntity('NodeWarning');">节点处理预警</a> </li>

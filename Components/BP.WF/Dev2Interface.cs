@@ -3787,6 +3787,85 @@ namespace BP.WF
 
 
         /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="sendToEmpNo">接收人</param>
+        /// <param name="smsDoc">消息内容</param>
+        /// <param name="emailTitle">邮件标题</param>
+        /// <param name="msgType">消息类型(例如工作到达后、发送成功后)</param>
+        /// <param name="msgGroupFlag">消息分组（与消息类型有关联）</param>
+        /// <param name="sendEmpNo">发送人</param>
+        /// <param name="openUrl">连接URL</param>
+        /// <param name="pushModel">可以接受消息的类型(如邮件、短信、丁丁、微信等)</param>
+        /// <param name="msgPK">唯一标志,防止发送重复.</param>
+        /// <param name="atParas">参数.</param>
+        public static void Port_SendMessage(string sendToEmpNo, string smsDoc,string emailTitle, string msgType, string msgGroupFlag,
+            string sendEmpNo, string openUrl, string pushModel,string msgPK = null,  string atParas = null)
+        {
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sendToEmpNo);
+            SMS sms = new SMS();
+            if (DataType.IsNullOrEmpty(msgPK) == false)
+            {
+                /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
+                if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
+                {
+                    return;
+                }
+
+                sms.MyPK = msgPK;
+            }
+            else
+            {
+                sms.MyPK = DBAccess.GenerGUID();
+            }
+
+            sms.HisEmailSta = MsgSta.Disable;
+            sms.HisMobileSta = MsgSta.UnRun;
+
+            if (sendEmpNo == null)
+            {
+                sms.Sender = WebUser.No;
+            }
+            else
+            {
+                sms.Sender = sendEmpNo;
+            }
+
+            //发送给人员ID , 有可能这个人员空的.
+            sms.SendToEmpNo = sendToEmpNo;
+
+            #region 邮件信息
+            //邮件地址.
+            sms.Email = emp.Email;
+            //邮件标题.
+            sms.Title = emailTitle;
+            sms.DocOfEmail = smsDoc;
+            #endregion 邮件信息
+
+            #region 短消息信息
+            sms.Mobile = emp.Tel;
+            sms.MobileInfo = smsDoc;
+            sms.Title = emailTitle;
+            #endregion 短消息信息
+
+            // 其他属性.
+            sms.RDT = BP.DA.DataType.CurrentDataTime;
+
+            sms.MsgType = msgType; // 消息类型.
+
+            sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
+
+            sms.AtPara = atParas;
+
+            sms.SetPara("OpenUrl", openUrl);
+            sms.SetPara("PushModel", pushModel);
+
+            // 先保留本机一份.
+            sms.Insert();
+        }
+
+
+        /// <summary>
         /// 发送邮件
         /// </summary>
         /// <param name="mailAddress">邮件地址</param>
@@ -3836,7 +3915,10 @@ namespace BP.WF
             //邮件标题.
             sms.Title = emilTitle;
             sms.DocOfEmail = emailBody;
+
            
+
+
 
             //手机状态禁用.
             sms.HisMobileSta = MsgSta.Disable;

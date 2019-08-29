@@ -513,60 +513,67 @@ namespace BP.WF
 		{
 			return await Task.Run(() =>
 			{
-				System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
+				try
+				{
+					System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
 
-				//邮件地址.
-				string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
-				if (emailAddr == null)
-					emailAddr = "ccbpmtester@tom.com";
+					//邮件地址.
+					string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+					if (emailAddr == null)
+						emailAddr = "ccbpmtester@tom.com";
 
-				string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
-				if (emailPassword == null)
-					emailPassword = "ccbpm123";
+					string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+					if (emailPassword == null)
+						emailPassword = "ccbpm123";
 
-				string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+					string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
 
 
-				myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
+					myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
-				myEmail.To.Add(mail);
-				myEmail.Subject = mailTitle;
-				myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
+					myEmail.To.Add(mail);
+					myEmail.Subject = mailTitle;
+					myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
 
-				myEmail.IsBodyHtml = true;
+					myEmail.IsBodyHtml = true;
 
-				mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
+					mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
 
-				myEmail.Body = mailDoc;
-				myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
-				myEmail.IsBodyHtml = true;//是否是HTML邮件
-				myEmail.Priority = MailPriority.High; // 邮件优先级
+					myEmail.Body = mailDoc;
+					myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
+					myEmail.IsBodyHtml = true;//是否是HTML邮件
+					myEmail.Priority = MailPriority.High; // 邮件优先级
 
-				SmtpClient client = new SmtpClient();
+					SmtpClient client = new SmtpClient();
 
-				//是否启用ssl? 
-				bool isEnableSSL = false;
-				string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
-				if (emailEnableSSL == null || emailEnableSSL == "0")
-					isEnableSSL = false;
-				else
-					isEnableSSL = true;
+					//是否启用ssl? 
+					bool isEnableSSL = false;
+					string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
+					if (emailEnableSSL == null || emailEnableSSL == "0")
+						isEnableSSL = false;
+					else
+						isEnableSSL = true;
 
-				client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
+					client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
 
-				//上述写你的邮箱和密码
-				client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-				client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
+					//上述写你的邮箱和密码
+					client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
+					client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
 
-				// 经过ssl加密. 
-				if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
-					client.EnableSsl = true;  //经过ssl加密.
-				else
-					client.EnableSsl = false; //经过ssl加密.
+					// 经过ssl加密. 
+					if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
+						client.EnableSsl = true;  //经过ssl加密.
+					else
+						client.EnableSsl = false; //经过ssl加密.
 
-				object userState = myEmail;
-				client.SendAsync(myEmail, userState);
-				return true;
+					object userState = myEmail;
+					client.SendAsync(myEmail, userState);
+					return true;
+				}
+				catch (Exception)
+				{
+					return false;
+				}
 			});
 		}
 		/// <summary>

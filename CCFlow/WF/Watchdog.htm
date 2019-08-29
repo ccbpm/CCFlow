@@ -3,10 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <title>流程监控</title>
-    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <!--<link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="./Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="./Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="./Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />-->
+
+    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="Style/skin/js/mp.mansory.min.js"></script>
@@ -32,7 +39,7 @@
         function InitPage() {
 
             $('#docs').html(window.lang.loading);
-
+            debugger;
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             var data = handler.DoMethodReturnString("Watchdog_Init");
             if (data.indexOf('err@') == 0) {
@@ -40,18 +47,17 @@
                 return;
             }
 
-            var sql = "SELECT * FROM WF_EMP WHERE No='" + webUser.No + "'";
-            var dt = DBAccess.RunSQLReturnJSON(sql);
+            /* var sql = "SELECT * FROM WF_EMP WHERE No='" + webUser.No + "'";
+             var dt = DBAccess.RunSQLReturnJSON(sql);*/
 
 
             data = JSON.parse(data);
 
-            var left = "<ul>";
+            var left = "";
             for (var i = 0; i < data.length; i++) {
                 var group = data[i];
-                left += "<li><a href='javascript:Show('" + group.FK_Flow + "');'>" + group.FlowName + "</a></li>";
+                left += "<tr><td><a href='javascript:ShowFlows(\"" + group.FK_Flow + "\");'>" + group.FlowName + "（" + group.Num + "）</a></td></tr>";
             }
-            left += "</ul>";
             $('#left').html(left);
 
             $('#docs').html("请选择流程。。。");
@@ -62,14 +68,15 @@
         }
 
         function ShowFlows(flowNo) {
+            debugger;
 
             if (flowNo == null || flowNo == undefined) {
                 //输出流程.
                 $('#docs').html("欢迎使用流程监控，您所能看到的流程");
             }
 
-            var html = "<table>";
-            html += "<tr>";
+            var html = "<table class='table table-bordered table-hover'>";
+            html += "<thead><tr>";
             html += "<th>序</th>";
             html += "<th>标题</th>";
             html += "<th>状态</th>";
@@ -77,7 +84,7 @@
             html += "<th>发起日期</th>";
             html += "<th>停留节点</th>";
             html += "<th>处理人</th>";
-            html += "</tr>";
+            html += "</tr></thead>";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("FK_Flow", flowNo);
@@ -88,15 +95,17 @@
                 var dt = data[i];
 
                 html += "<tr>";
-                html += "<th>" + (i + 1) + "</th>";
-                html += "<th><a href=\"javascript:OpenIt('" + dt.WorkID + "','" + dt.FlowNo + "')\" >" + dt.Title + "</th>";
-                html += "<th>" + dt.WFStateText + "</th>";
-                html += "<th>" + dt.StarterName + "</th>";
-                html += "<th>" + dt.RDT + "</th>";
-                html += "<th>" + dt.NodeName + "</th>";
-                html += "<th>" + dt.TodEmps + "</th>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td><a href=\"javascript:OpenIt('" + dt.WorkID + "','" + dt.FlowNo + "')\" >" + dt.Title + "</td>";
+                html += "<td>" + dt.WFStateText + "</td>";
+                html += "<td>" + dt.StarterName + "</td>";
+                html += "<td>" + dt.RDT + "</td>";
+                html += "<td>" + dt.NodeName + "</td>";
+                html += "<td>" + dt.TodEmps + "</td>";
                 html += "</tr>";
             }
+            html += "</table>";
+            html += "</div></div>";
 
             $('#docs').html(html);
         }
@@ -111,24 +120,46 @@
     </script>
 </head>
 <body>
-    <table style="width:90%;">
-        <caption>流程监控</caption>
-        <tr>
-            <td class="Sum" style="width:30%;">
+    <section class="content-header" style="margin-left: 20px;">
+        <h2>
+            流程监控
+        </h2>
 
-                <fieldset>
-                    <legend>流程列表</legend>
-                    <div id="left"> </div>
-                </fieldset>
+    </section>
 
-            </td>
-            <td>
+    <div class="col-md-12">
+        <div class="box col-md-3">
 
-                <div id="docs"> </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>流程列表</th>
+                        </tr>
+                    </thead>
+                    <tbody id="left">
+                    </tbody>
 
-            </td>
-        </tr>
-    </table>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+        <div class="box col-md-9">
+            <div class="box-header">
+                <h3 class="box-title">Hover Data Table</h3>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" id="docs">
+               
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
 
 </body>
 </html>

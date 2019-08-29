@@ -96,6 +96,7 @@
             html += "<table style='width:100%;'>";
             html += "<caption>权限控制</caption>";
             html += "<tr>";
+            html += "<th>序号</th>";
             html += "<th>编号</th>";
             html += "<th>权限</th>";
             html += "<th>岗位</th>";
@@ -104,6 +105,7 @@
             for (var i = 0; i < models.length; i++) {
                 var model = models[i];
                 html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
                 html += "<td>" + model.PowerFlag + "</td>";
                 html += "<td>" + model.PowerFlagName + "</td>";
                 //岗位

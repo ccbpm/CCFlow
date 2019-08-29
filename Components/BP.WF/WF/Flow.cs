@@ -4536,9 +4536,9 @@ namespace BP.WF
                 //    false, FlowAttr.FlowRunWay,
                 //    "@0=手工启动@1=指定人员按时启动@2=数据集按时启动@3=触发式启动");
 
-                map.AddTBString(FlowAttr.RunObj, null, "运行内容", true, false, 0, 2000, 10);
+                map.AddTBString(FlowAttr.RunObj, null, "运行内容", true, false, 0, 500, 10);
                 map.AddTBString(FlowAttr.Note, null, "备注", true, false, 0, 300, 10);
-                map.AddTBString(FlowAttr.RunSQL, null, "流程结束执行后执行的SQL", true, false, 0, 2000, 10);
+                map.AddTBString(FlowAttr.RunSQL, null, "流程结束执行后执行的SQL", true, false, 0, 500, 10);
 
                 map.AddTBInt(FlowAttr.NumOfBill, 0, "是否有单据", false, false);
                 map.AddTBInt(FlowAttr.NumOfDtl, 0, "NumOfDtl", false, false);
@@ -4556,9 +4556,9 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.Idx, 0, "显示顺序号(在发起列表中)", true, false);
 
                 map.AddTBInt(FlowAttr.SDTOfFlowRole, 0, "流程计划完成日期计算规则", true, false);
-                map.AddTBString(FlowAttr.SDTOfFlowRoleSQL, null, "流程计划完成日期计算规则SQL", false, false, 0, 500, 10);
+                map.AddTBString(FlowAttr.SDTOfFlowRoleSQL, null, "流程计划完成日期计算规则SQL", false, false, 0, 200, 10);
 
-                map.AddTBString(FlowAttr.Paras, null, "参数", false, false, 0, 2000, 10);
+                map.AddTBString(FlowAttr.Paras, null, "参数", false, false, 0, 1000, 10);
 
                 // add 2013-01-01. 
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储主表", true, false, 0, 30, 10);
@@ -4578,7 +4578,7 @@ namespace BP.WF
                 map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
                 map.AddTBInt(FlowAttr.IsGuestFlow, 0, "是否是客户参与流程？", true, false);
                 map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, true);
-                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注表达式", true, false, 0, 500, 10, true);
+                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注表达式", true, false, 0, 200, 10, true);
 
                 //部门权限控制类型,此属性在报表中控制的.
                 map.AddTBInt(FlowAttr.DRCtrlType, 0, "部门查询权限控制方式", true, false);
@@ -4611,7 +4611,7 @@ namespace BP.WF
 
                 //批量发起 add 2013-12-27. 
                 map.AddTBInt(FlowAttr.IsBatchStart, 0, "是否可以批量发起", true, false);
-                map.AddTBString(FlowAttr.BatchStartFields, null, "批量发起字段(用逗号分开)", true, false, 0, 500, 10, true);
+                map.AddTBString(FlowAttr.BatchStartFields, null, "批量发起字段(用逗号分开)", true, false, 0, 300, 10, true);
 
                 // map.AddTBInt(FlowAttr.IsEnableTaskPool, 0, "是否启用共享任务池", true, false);
                 //map.AddDDLSysEnum(FlowAttr.TimelineRole, (int)TimelineRole.ByNodeSet, "时效性规则",
@@ -4636,7 +4636,7 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.DTSTime, (int)FlowDTSTime.AllNodeSend, "执行同步时间点", true, true);
                 map.AddTBString(FlowAttr.DTSSpecNodes, null, "指定的节点ID", true, false, 0, 200, 100, false);
                 map.AddTBInt(FlowAttr.DTSField, (int)DTSField.SameNames, "要同步的字段计算方式", true, true);
-                map.AddTBString(FlowAttr.DTSFields, null, "要同步的字段s,中间用逗号分开.", false, false, 0, 2000, 100, false);
+                map.AddTBString(FlowAttr.DTSFields, null, "要同步的字段s,中间用逗号分开.", false, false, 0, 900, 100, false);
                 #endregion 数据同步方案
 
                 // map.AddSearchAttr(FlowAttr.FK_FlowSort);

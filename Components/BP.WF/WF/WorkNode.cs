@@ -6609,7 +6609,7 @@ namespace BP.WF
                     if(this.HisNode.GetParaBoolen(NodeAttr.IsYouLiTai) == true)
                     {
                         // 如果没有指定要跳转到的节点，并且当前处理手工干预的运行状态.
-                        _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID);
+                        _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID, this.HisWork.HisPassedFrmIDs);
                         if(_transferCustom == null)
                         {
                             /* 表示执行到这里结束流程. */

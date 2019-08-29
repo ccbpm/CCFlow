@@ -289,7 +289,7 @@ namespace BP.WF
         /// <param name="workid">当前工作ID</param>
         /// <param name="currNodeID">当前节点ID</param>
         /// <returns>获取下一个要到达的定义路径,如果没有就返回空.</returns>
-        public static TransferCustom GetNextTransferCustom(Int64 workid, int currNodeID)
+        public static TransferCustom GetNextTransferCustom(Int64 workid, int currNodeID,string passNodes)
         {
             TransferCustoms ens = new TransferCustoms();
             ens.Retrieve(TransferCustomAttr.WorkID, workid, TransferCustomAttr.Idx);
@@ -314,7 +314,7 @@ namespace BP.WF
             //{
             foreach (TransferCustom item in ens)
             {
-                if(item.IsEnable == true && item.FK_Node != currNodeID)
+                if(item.IsEnable == true && item.FK_Node != currNodeID && passNodes.Contains("item.FK_Node") == false)
                     return (TransferCustom)item;
             }
 

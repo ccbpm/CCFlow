@@ -6650,7 +6650,7 @@ namespace BP.WF
                             if (toND.GetParaBoolen(NodeAttr.IsYouLiTai) == true)
                             {
                                 // 如果没有指定要跳转到的节点，并且当前处理手工干预的运行状态.
-                                _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID);
+                                _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID, this.HisWork.HisPassedFrmIDs);
                                 this.JumpToNode = new Node(_transferCustom.FK_Node);
                                 this.JumpToEmp = _transferCustom.Worker;
                                 this.HisGenerWorkFlow.TodolistModel = _transferCustom.TodolistModel;
@@ -6669,7 +6669,7 @@ namespace BP.WF
                                     throw new Exception("err@该流程运行是自由流程，" + this.HisNode.Name + "需要设置方向条件，或者把此节点转向的所有节点设置为游离态");
                             }
                             // 如果没有指定要跳转到的节点，并且当前处理手工干预的运行状态.
-                            _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID);
+                            _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID, this.HisWork.HisPassedFrmIDs);
                             this.JumpToNode = new Node(_transferCustom.FK_Node);
                             this.JumpToEmp = _transferCustom.Worker;
                             this.HisGenerWorkFlow.TodolistModel = _transferCustom.TodolistModel;

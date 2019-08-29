@@ -172,10 +172,14 @@ namespace BP.WF.HttpHandler
             BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
             msg.FK_Flow = nd.FK_Flow;
 
-            #region 求出来选择的节点.
-            string nodesOfSMS = "";
-            string nodesOfEmail = "";
+            //推送方式。
+            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
 
+            //表单字段作为接收人.
+            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");
+
+            #region 其他节点的处理人方式（求选择的节点）
+            string nodesOfSMS = "";
             foreach (BP.WF.Node mynd in nds)
             {
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -184,50 +188,44 @@ namespace BP.WF.HttpHandler
                         && nodesOfSMS.Contains(mynd.NodeID + "") == false)
                         nodesOfSMS += mynd.NodeID + ",";
 
-                    if (key.Contains("CB_Email_" + mynd.NodeID)
-                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
-                        nodesOfEmail += mynd.NodeID + ",";
+
                 }
             }
-
-            //节点.
-            msg.MailNodes = nodesOfEmail;
             msg.SMSNodes = nodesOfSMS;
-            #endregion 求出来选择的节点.
+            #endregion 其他节点的处理人方式（求选择的节点）
 
-            #region 短信保存.
-            //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
+            //按照SQL
+            msg.BySQL = HttpContextHelper.RequestParams("TB_SQL");
+
+            //发给指定的人员
+            msg.ByEmps = HttpContextHelper.RequestParams("TB_Emps");
 
             //短消息发送设备
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
-            //短信手机字段.
-            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");// HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
-            //替换变量
-            string smsstr = HttpContextHelper.RequestParams("TB_SMS");// HttpContext.Current.Request["TB_SMS"].ToString();
-            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
-            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
+            //邮件标题
+            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_title");
 
-            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
-            // smsstr = smsstr.Replace("@RDT",);
             //短信内容模版.
-            msg.SMSDoc_Real = smsstr;
-            #endregion 短信保存.
+            msg.SMSDoc_Real = HttpContextHelper.RequestParams("TB_SMS");
 
-            #region 邮件保存.
-            //邮件.
-            msg.MailPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_Email").Replace("RB_Email_", "")); ;
+            //节点预警
+            if(this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
+            {
+                int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
+                msg.SetPara("NoticeType", noticeType);
+                int hour = Convert.ToInt32(HttpContextHelper.RequestParams("TB_NoticeHour"));
+                msg.SetPara("NoticeHour", hour);
+            }
 
-            //邮件标题与内容.
-            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_Email_Title");// HttpContext.Current.Request["TB_Email_Title"].ToString();
-            msg.MailDoc_Real = HttpContextHelper.RequestParams("TB_Email_Doc");// HttpContext.Current.Request["TB_Email_Doc"].ToString();
-
-            //邮件地址.
-            msg.MailAddress = HttpContextHelper.RequestParams("DDL_Email_Fields");// HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
-
-            #endregion 邮件保存.
+            //节点逾期
+            if (this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+            {
+                int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
+                msg.SetPara("NoticeType", noticeType);
+                int day = Convert.ToInt32(HttpContextHelper.RequestParams("TB_NoticeDay"));
+                msg.SetPara("NoticeDay", day);
+            }
 
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)

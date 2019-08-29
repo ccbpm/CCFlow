@@ -310,8 +310,8 @@ namespace BP.WF
                     return item;
             }
 
-            Node nd = new Node(currNodeID);
-            if(nd.GetParaBoolen(NodeAttr.IsYouLiTai)==false)
+            Node node = new Node(currNodeID);
+            if(node.GetParaBoolen(NodeAttr.IsYouLiTai)==false)
             {
                 foreach (TransferCustom item in ens)
                 {

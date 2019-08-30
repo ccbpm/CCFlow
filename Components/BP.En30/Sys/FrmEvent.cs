@@ -875,8 +875,8 @@ namespace BP.Sys
         /// <returns>null 没有事件，其他为执行了事件。</returns>
         public string DoEventNode(string dotype, Entity en)
         {
-            return null; // 2019-08-27 取消节点事件 zl
-            // return DoEventNode(dotype, en, null);
+           // return null; // 2019-08-27 取消节点事件 zl 
+            return DoEventNode(dotype, en, null);
         }
         /// <summary>
         /// 执行事件

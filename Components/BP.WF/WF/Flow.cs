@@ -2014,47 +2014,23 @@ namespace BP.WF
                         case DeliveryWay.BySpecNodeEmp: /*按指定的岗位计算.*/
                         case DeliveryWay.BySpecNodeEmpStation: /*按指定的岗位计算.*/
                             if (nd.DeliveryParas.Trim().Length == 0)
-                            {
-                                msg += "@错误:您设置了该节点的访问规则是按指定的岗位计算，但是您没有设置节点编号.</font>";
-                            }
-                            else
-                            {
-                                String[] deliveryParas = nd.DeliveryParas.Split(',');
-                                foreach (String str in deliveryParas)
-                                {
-                                    if (DataType.IsNumStr(str) == false)
-                                    {
-                                        msg += "@错误:您设置指定岗位的节点编号格式不正确，目前设置的为{" + nd.DeliveryParas + "}";
-                                    }
-                                }
-
-                            }
+                                msg += "@错误:您设置了该节点的访问规则是按指定的岗位计算，但是您没有设置节点编号.";
                             break;
                         case DeliveryWay.ByDeptAndStation: /*按部门与岗位的交集计算.*/
                             string mysql = string.Empty;
                             //added by liuxc,2015.6.30.
-                            //区别集成与BPM模式
-                            if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                            {
-                                mysql =
-                                    "SELECT No FROM Port_Emp WHERE No IN (SELECT No FK_Emp FROM Port_Emp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" +
-                                    nd.NodeID + "))AND No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation +
-                                    " WHERE FK_Station IN ( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" +
-                                    nd.NodeID + " )) ORDER BY No ";
-                            }
-                            else
-                            {
-                                mysql = "SELECT pdes.FK_Emp AS No"
-                                        + " FROM   Port_DeptEmpStation pdes"
-                                        + "        INNER JOIN WF_NodeDept wnd"
-                                        + "             ON  wnd.FK_Dept = pdes.FK_Dept"
-                                        + "             AND wnd.FK_Node = " + nd.NodeID
-                                        + "        INNER JOIN WF_NodeStation wns"
-                                        + "             ON  wns.FK_Station = pdes.FK_Station"
-                                        + "             AND wnd.FK_Node =" + nd.NodeID
-                                        + " ORDER BY"
-                                        + "        pdes.FK_Emp";
-                            }
+
+                            mysql = "SELECT pdes.FK_Emp AS No"
+                                    + " FROM   Port_DeptEmpStation pdes"
+                                    + "        INNER JOIN WF_NodeDept wnd"
+                                    + "             ON  wnd.FK_Dept = pdes.FK_Dept"
+                                    + "             AND wnd.FK_Node = " + nd.NodeID
+                                    + "        INNER JOIN WF_NodeStation wns"
+                                    + "             ON  wns.FK_Station = pdes.FK_Station"
+                                    + "             AND wnd.FK_Node =" + nd.NodeID
+                                    + " ORDER BY"
+                                    + "        pdes.FK_Emp";
+
 
                             DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                             if (mydt.Rows.Count == 0)
@@ -2110,7 +2086,7 @@ namespace BP.WF
                             }
                             break;
                         case DeliveryWay.ByPreviousNodeFormEmpsField:
-                            //去rpt表中，查询是否有这个字段
+                            //去rpt表中，查询是否有这个字段.
                             string str1 = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
                             MapAttrs rptAttrs = new BP.Sys.MapAttrs();
                             rptAttrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str1 + "Rpt", MapAttrAttr.KeyOfEn);
@@ -3921,7 +3897,7 @@ namespace BP.WF
             string str = null;
             if (this.FEventEntity == null)
             {
-                /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法. */
+                /* 如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法. */
                 //if (doType == EventListOfNode.SendSuccess)
                 //{
                 //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

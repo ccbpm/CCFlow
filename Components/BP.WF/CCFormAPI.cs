@@ -335,6 +335,15 @@ namespace BP.WF
                 AtPara ap = new AtPara(atParas);
                 foreach (string key in ap.HisHT.Keys)
                 {
+                    switch(key)
+                    {
+                        case "FrmID":
+                        case "FK_MapData":
+                            continue;
+                        default:
+                            break;
+                    }
+
                     if (en.Row.ContainsKey(key) == true) //有就该变.
                         en.Row[key] = ap.GetValStrByKey(key);
                     else

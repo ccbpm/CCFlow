@@ -65,7 +65,7 @@
         </div>
         <div class="col-xs-6 col-sm-3 " style="text-align:right;vertical-align:bottom;padding-top:33px">
 
-            <button type="button" class="btn btn-primary btn-sm active" id="commit">提交</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-primary btn-sm active" id="commit" >提交</button>&nbsp;&nbsp;
             <button type="button" class="btn btn-primary btn-sm active" id="close">关闭</button>
 
         </div>
@@ -150,7 +150,9 @@
              if (addName != "") {
                   parent.document.getElementById("TB_AtPara").value = str;//地址名称@详细地址@纬度@经度
                   parent.document.getElementById("TB_" + KeyOfEn).value = addName;  //给表单地图控件赋值
-                  alert("提交成功！");
+                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.CloseBootstrapDialog();
+                }
              } else {
                  alert("地址名称不能为空!");
              }
@@ -158,8 +160,9 @@
 	     });
         //关闭
         $("#close").click(function () {
-	        var dlg =parent.document.getElementById("eudlgframe");
-            dlg.modal.hide();
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.CloseBootstrapDialog();
+            }
 	    });
         
     </script>

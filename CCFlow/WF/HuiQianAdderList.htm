@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>主持人-会签</title>
+    <title>加签待办</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
  	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
@@ -101,7 +101,8 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddJson();
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("HuiQianList_Init");
+            var data = handler.DoMethodReturnString("HuiQianAdderList_Init");
+
 
 
             if (data.indexOf('err@') == 0) {

@@ -38,6 +38,31 @@ namespace BP.DA
     /// </summary>
     public class DBAccess
     {
+        /// <summary>
+        /// 是否大小写敏感
+        /// </summary>
+        public static bool IsCaseSensitive
+        {
+            get
+            {
+                string mysql = "CREATE TABLE TEST(OID int NOT NULL )";
+                DBAccess.RunSQL(mysql);
+                if (DBAccess.IsExitsObject("test") == false)
+                {
+                    DBAccess.RunSQL("DROP TABLE TEST ");
+                    return true;
+                }
+                if (DBAccess.IsExitsTableCol("test", "oid") == false)
+                {
+                    DBAccess.RunSQL("DROP TABLE TEST ");
+                    return true;
+                }
+
+                return false;
+
+            }
+        }
+
         #region 文件存储数据库处理.
         /// <summary>
         /// 保存文件到数据库 @shilianyu

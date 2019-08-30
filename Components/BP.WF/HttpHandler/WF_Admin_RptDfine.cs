@@ -222,7 +222,12 @@ namespace BP.WF.HttpHandler
             }
 
             //选择的字段,就是报表的字段.
-            MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
+            MapAttrs mattrsOfRpt = new MapAttrs();
+            QueryObject qo = new QueryObject(mattrsOfRpt);
+            qo.AddWhere(MapAttrAttr.FK_MapData, rptNo);
+            qo.addOrderBy(MapAttrAttr.Idx);
+            qo.DoQuery();
+
             mattrsOfRpt.RemoveEn(rptNo + "_OID");
             mattrsOfRpt.RemoveEn(rptNo + "_Title");
 

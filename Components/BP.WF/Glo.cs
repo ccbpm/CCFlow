@@ -1623,11 +1623,7 @@ namespace BP.WF
                         throw new Exception("@没有涉及到的数据库类型");
                 }
                 DBAccess.RunSQL(sql);
-
             }
-           
-
-
             #endregion 首先创建Port类型的表.
 
 

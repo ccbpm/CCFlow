@@ -54,11 +54,11 @@ namespace BP.WF.HttpHandler
             //清除缓存.
             BP.Sys.SystemConfig.DoClearCash();
 
-            if ( 1==2 && BP.Web.WebUser.IsAdmin == false )
+            if (1 == 2 && BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";
 
             // 让admin 登录.
-         //   BP.WF.Dev2Interface.Port_Login("admin");
+            //   BP.WF.Dev2Interface.Port_Login("admin");
 
             if (this.RefNo != null)
             {
@@ -70,9 +70,9 @@ namespace BP.WF.HttpHandler
 
             FlowExt fl = new FlowExt(this.FK_Flow);
 
-            if (1 == 2 &&  BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
+            if (1 == 2 && BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
             {
-                string msg= "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
+                string msg = "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
                 msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";
                 return msg;
             }
@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
                 return BP.Tools.Json.ToJson(dtEmps);
             }
 
-         
+
 
             //fl.DoCheck();
 
@@ -132,8 +132,8 @@ namespace BP.WF.HttpHandler
                 {
                     case DeliveryWay.ByStation:
                     case DeliveryWay.ByStationOnly:
-                      
-                            sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+
+                        sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
                     case DeliveryWay.ByDept:
@@ -255,7 +255,7 @@ namespace BP.WF.HttpHandler
         public string TestFlow_ReturnToUser()
         {
             string userNo = this.GetRequestVal("UserNo");
-             BP.WF.Dev2Interface.Port_Login(userNo);
+            BP.WF.Dev2Interface.Port_Login(userNo);
             string sid = BP.WF.Dev2Interface.Port_GenerSID(userNo);
             string url = "../../WF/Port.htm?UserNo=" + userNo + "&SID=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
             return "url@" + url;
@@ -275,21 +275,10 @@ namespace BP.WF.HttpHandler
             if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == true)
                 return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
 
-            //检查是否区分大小写. @LQ
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            //检查是否区分大小写. 
+            if (DBAccess.IsCaseSensitive == true)
             {
-                string mysql = "CREATE TABLE TEST(OID int NOT NULL )";
-                DBAccess.RunSQL(mysql);
-                if (DBAccess.IsExitsObject("test") == false)
-                {
-                    DBAccess.RunSQL("DROP TABLE TEST ");
-                    return "err@ccbpm不支持,mysql数据库区分大小写，请修改mysql数据库的设置,让其不区分大小写. 请参考设置:https://blog.csdn.net/ccflow/article/details/100079825";
-                }
-                if (DBAccess.IsExitsTableCol("test", "oid") == false)
-                {
-                    DBAccess.RunSQL("DROP TABLE TEST ");
-                    return "err@ccbpm不支持,mysql数据库区分大小写，请修改mysql数据库的设置,让其不区分大小写. 请参考设置:https://blog.csdn.net/ccflow/article/details/100079825";
-                }
+                return "err@ccbpm不支持,数据库区分大小写，请修改数据库的设置,让其不区分大小写. mysql数据库请参考设置:https://blog.csdn.net/ccflow/article/details/100079825";
             }
 
 
@@ -381,7 +370,7 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 add = "||";
-             
+
             if (templateType == "DDLFullCtrl")
                 sql = "SELECT MyPK, '下拉框:'" + add + " a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='DDLFullCtrl'";
 

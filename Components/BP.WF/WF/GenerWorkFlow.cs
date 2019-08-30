@@ -619,7 +619,8 @@ namespace BP.WF
             }
 		}
         /// <summary>
-        /// 计划开始时间 @sly
+        /// 计划开始时间 @sly 
+        /// SDTOfFlow 就是计划完成日期.
         /// </summary>
         public string RDTOfSetting
         {
@@ -651,6 +652,7 @@ namespace BP.WF
         }
         /// <summary>
         /// 流程应完成时间
+        /// RDTOfSetting 是计划开始日期，如果为空就是发起日期.
         /// </summary>
         public string SDTOfFlow
         {
@@ -1303,10 +1305,6 @@ namespace BP.WF
 
                 map.AddTBString(GenerWorkFlowAttr.PrjNo, null, "PrjNo", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.PrjName, null, "PrjNo", true, false, 0, 100, 10);
-
-
-
-                map.AddTBMyNum();
 
 
                 RefMethod rm = new RefMethod();

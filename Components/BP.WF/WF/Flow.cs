@@ -854,7 +854,7 @@ namespace BP.WF
 
                 MapDtls dtls = wk.HisMapDtls;
                 foreach (MapDtl dtl in dtls)
-                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + oid+"'");
+                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + oid + "'");
 
                 //删除附件数据。
                 DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + wk.NodeID + "' AND RefPKVal='" + wk.OID + "'");
@@ -1244,7 +1244,7 @@ namespace BP.WF
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
             wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
 
-            if (rpt.EnMap.Attrs.Contains("BillNo") ==true)
+            if (rpt.EnMap.Attrs.Contains("BillNo") == true)
                 wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
 
             wk.FID = 0;
@@ -4650,7 +4650,6 @@ namespace BP.WF
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
-
                 //rm = new RefMethod();
                 //rm.Title = this.ToE("FlowDataOut", "数据转出定义");  //"数据转出定义";
                 ////  rm.Icon = "/WF/Img/Btn/Table.gif";
@@ -4664,7 +4663,6 @@ namespace BP.WF
                 //rm.ToolTip = "清除历史流程数据。";
                 //rm.ClassMethodName = this.ToString() + ".DoExp";
                 //map.AddRefMethod(rm);
-
                 //map.AttrsOfOneVSM.Add(new FlowStations(), new Stations(), FlowStationAttr.FK_Flow,
                 //    FlowStationAttr.FK_Station, DeptAttr.Name, DeptAttr.No, "抄送岗位");
 
@@ -6067,7 +6065,7 @@ namespace BP.WF
                     default:
                         // infoErr += "Error:" + dt.TableName;
                         break;
-                    //    throw new Exception("@unhandle named " + dt.TableName);
+                        //    throw new Exception("@unhandle named " + dt.TableName);
                 }
             }
 

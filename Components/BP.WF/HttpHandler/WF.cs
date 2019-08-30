@@ -1335,7 +1335,39 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
-            ps.AddFK_Emp();
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 获得加签人的待办
+        /// @LQ 
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQianAdderList_Init()
+        {
+            string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
+            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            sql += " AND B.AtPara LIKE '%IsHuiQian=1%' ";
+
+            Paras ps = new Paras();
+            ps.Add("FK_Emp", WebUser.No);
+            ps.SQL = sql;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {

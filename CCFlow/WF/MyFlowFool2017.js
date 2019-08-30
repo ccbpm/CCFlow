@@ -898,6 +898,23 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             return eleHtml;
         }
 
+        //地图
+        if (mapAttr.UIContralType == "4") {
+            //查找默认值
+            var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            //如果是地图，并且可以编辑
+            var eleHtml = "<div style='text-align:left;padding-left:0px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
+            if (mapAttr.UIIsEnable == 1) {
+                eleHtml += "<input type='button' name='select' value='选择' onclick='figure_Template_Map(\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.UIIsEnable + "\")'/>";
+                eleHtml += "<input type = text style='width:75%' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />";
+            } else {
+                eleHtml += "<input type='button' name='select' value='选择' onclick='figure_Template_Map(\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.UIIsEnable + "\")'/>";
+                eleHtml += "<input type = text style='width:75%' readonly='readonly' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />";
+            }
+            eleHtml += "</div>";
+            return eleHtml;
+        }
+
         //进度条
         if (mapAttr.UIContralType == "50") {
 
@@ -1713,7 +1730,7 @@ function GetLab(flowData, attr) {
         forID = "RB_" + attr.KeyOfEn;
     }
     //文本框，下拉框，单选按钮
-    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 8 || contralType == 50) {
+    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 50) {
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab = " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }

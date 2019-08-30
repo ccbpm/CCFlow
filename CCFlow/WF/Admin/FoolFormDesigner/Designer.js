@@ -428,6 +428,13 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         if (mapAttr.UIContralType == 8) {
             return "<img  src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
         }
+        if (mapAttr.UIContralType == 4) {
+            var eleHtml = "<div style='text-align:left;padding-left:0px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
+            eleHtml += "<input type='button' name='select' value='选择' />";
+            eleHtml += "<input type = text style='width:75%' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' />";
+            eleHtml += "</div>";
+            return eleHtml;
+        }
 
         //工作进度图
         if (mapAttr.UIContralType == 50) {

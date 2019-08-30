@@ -442,7 +442,7 @@
         mapAttr.Retrieve();
         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
     }
-
+    //大块文本
     function ExtBigNoteHtmlText() {
 
         var frmID = GetQueryString("FK_MapData");
@@ -483,7 +483,7 @@
         window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
         // window.location.href; //"../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
     }
-
+    
     //手写签名版.
     function ExtHandWriting() {
 
@@ -529,8 +529,68 @@
         mapAttr.Retrieve();
         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
     }
+//地图控件.
+    function ExtMap() {
 
-                    //流程进度图.
+        var name = window.prompt('请输入地图名称:\t\n比如:中国地图', '地图');
+        if (name == null || name == undefined)
+            return;
+
+        var frmID = GetQueryString("FK_MapData");
+        // alert(frmID + imgName);
+        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+        mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+        if (mapAttrs.length >= 1) {
+            alert('名称：[' + name + "]已经存在.");
+            ExtHandWriting();
+            return;
+        }
+
+        //获得ID.
+        var id = StrToPinYin(name);
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.MyPK = mypk;
+        if (mapAttr.IsExits == true) {
+            alert('名称：[' + name + "]已经存在.");
+            ExtHandWriting();
+            return;
+        }
+
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.UIContralType = 4; //地图.
+        mapAttr.MyPK = mypk;
+        mapAttr.FK_MapData = frmID;
+        mapAttr.KeyOfEn = id;
+        mapAttr.Name = name;
+        mapAttr.GroupID = groupID;
+        mapAttr.MyDataType = 1;
+        mapAttr.LGType = 0;
+        mapAttr.ColSpan = 1; // 
+        mapAttr.UIWidth = 150;
+        mapAttr.UIHeight = 170;
+        mapAttr.Insert(); //插入字段.
+
+        var mapAttr1 = new Entity("BP.Sys.MapAttr");
+        mapAttr.UIContralType = 0;
+        mapAttr1.MyPK = frmID + "_AtPara";
+        mapAttr1.FK_MapData = frmID;
+        mapAttr1.KeyOfEn = "AtPara";
+        mapAttr1.UIVisible = 0;
+        mapAttr1.Name = "AtPara";
+        mapAttr1.GroupID = groupID;
+        mapAttr1.MyDataType = 1;
+        mapAttr1.LGType = 0;
+        mapAttr1.ColSpan = 1; // 
+        mapAttr1.UIWidth = 100;
+        mapAttr1.UIHeight = 23;
+        mapAttr1.Insert(); //插入字段
+
+        mapAttr.Retrieve();
+        window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=" + mapAttr.MyPK;
+    }
+    //流程进度图.
     function ExtJobSchedule() {
 
         var name = "流程进度图";
@@ -609,6 +669,7 @@
                     <li><a href="javascript:ExtAth();"><b>多附件</b></a> &nbsp;&nbsp;上传多附件.</li>
                     <li><a href="javascript:ExtLink();"><b>超链接</b></a> &nbsp;&nbsp;用于解析把字段做为超链接展现.</li>
                     <li><a href="javascript:ExtHandWriting();"><b>写字板</b></a> &nbsp;&nbsp;手写签名版，画图等.</li>
+                    <li><a href="javascript:ExtMap();"><b>地图</b></a> &nbsp;&nbsp;用于地图应用.</li>
                     <li><a href="javascript:ExtBigNoteHtmlText();"><b>大块Html说明文字引入</b></a> &nbsp;&nbsp;大块文本文件引入,用于文字说明..</li>
                 </ul>
             </td>

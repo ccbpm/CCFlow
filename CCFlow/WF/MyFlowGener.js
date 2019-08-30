@@ -287,7 +287,39 @@ function figure_Template_HandWrite(HandWriteID, val) {
     var url = "CCForm/HandWriting.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
     OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
 }
+//地图
+function figure_Template_Map(MapID, UIIsEnable) {
+    //var mainTable = flowData.mainTable[0];
+    var mainTable = flowData.MainTable[0];
+    var AtPara = "";
+    //通过MAINTABLE返回的参数
+    for (var ele in mainTable) {
+        if ( ele=="AtPara" && mainTable != '') {
+            AtPara = mainTable[ele];
+            break;
+        }
+    }
+    
+    var url = "CCForm/Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&UIIsEnable=" + UIIsEnable + "&Paras=" + AtPara;
+    OpenBootStrapModal(url, "eudlgframe", "地图", 800, 500, null, false, function () { }, null, function () {
+        //afterOper=0 关闭提示窗口，不做任何操作
 
+        //afterOper=1 关闭提示窗口刷新页面
+        //if (afterOper == 1)
+            //window.location.href = window.location.href;
+
+        ////afterOper=2 关闭提示窗口跳转到Search.htm
+        //if (afterOper == 2) {
+
+        //    if (window.parent.location.href.indexOf("SearchBill.htm") != -1) {
+        //        window.close();
+        //    }
+        //    else
+        //        window.location.href = "./SearchBill.htm?FrmID=" + GetQueryString("FrmID");
+        //}
+    });
+    //OpenBootStrapModal(url, '地图', 800, 600, false);
+}
 function setHandWriteSrc(HandWriteID, imagePath) {
     imagePath = "../" + imagePath.substring(imagePath.indexOf("DataUser"));
     document.getElementById("Img" + HandWriteID).src = "";

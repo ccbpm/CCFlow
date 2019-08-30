@@ -31,7 +31,7 @@
         //页面启动函数.
         var webUser = new WebUser();
         $(function () {
-            document.title = window.lang.fqxlc;
+         //   document.title = window.lang.fqxlc;
             InitPage();
         });
 
@@ -46,10 +46,6 @@
                 alert(data);
                 return;
             }
-
-            /* var sql = "SELECT * FROM WF_EMP WHERE No='" + webUser.No + "'";
-             var dt = DBAccess.RunSQLReturnJSON(sql);*/
-
 
             data = JSON.parse(data);
 
@@ -120,12 +116,11 @@
     </script>
 </head>
 <body>
-    <section class="content-header" style="margin-left: 20px;">
+    <!--<section class="content-header" style="margin-left: 20px;">
         <h2>
             流程监控
         </h2>
-
-    </section>
+    </section>-->
 
     <div class="col-md-12">
         <div class="box col-md-3">
@@ -148,10 +143,10 @@
         <!-- /.box -->
 
         <div class="box col-md-9">
-            <div class="box-header">
+            <!--<div class="box-header">
                 <h3 class="box-title">Hover Data Table</h3>
+            </div>-->
 
-            </div>
             <!-- /.box-header -->
             <div class="box-body" id="docs">
                

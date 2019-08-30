@@ -3799,8 +3799,8 @@ namespace BP.WF
         /// <param name="pushModel">可以接受消息的类型(如邮件、短信、丁丁、微信等)</param>
         /// <param name="msgPK">唯一标志,防止发送重复.</param>
         /// <param name="atParas">参数.</param>
-        public static void Port_SendMessage(string sendToEmpNo, string smsDoc,string emailTitle, string msgType, string msgGroupFlag,
-            string sendEmpNo, string openUrl, string pushModel,string msgPK = null,  string atParas = null)
+        public static void Port_SendMessage(string sendToEmpNo, string smsDoc, string emailTitle, string msgType, string msgGroupFlag,
+            string sendEmpNo, string openUrl, string pushModel, string msgPK = null, string atParas = null)
         {
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sendToEmpNo);
             SMS sms = new SMS();
@@ -3916,7 +3916,7 @@ namespace BP.WF
             sms.Title = emilTitle;
             sms.DocOfEmail = emailBody;
 
-           
+
 
 
 
@@ -4043,7 +4043,7 @@ namespace BP.WF
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
         public static void WriteTrack(string flowNo, int nodeFromID, string nodeFromName, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
-            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null,string fwcView=null)
+            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null, string fwcView = null)
         {
             if (at == ActionType.CallChildenFlow)
             {
@@ -4121,7 +4121,7 @@ namespace BP.WF
             {
                 t.Tag = tag;
             }
-            if(fwcView != null)
+            if (fwcView != null)
             {
                 t.Tag = t.Tag + fwcView;
             }
@@ -4181,7 +4181,7 @@ namespace BP.WF
         /// <param name="FID">FID</param>
         /// <param name="msg">审核信息</param>
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
-        public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName,string fwcView =null)
+        public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName, string fwcView = null)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
@@ -4214,7 +4214,7 @@ namespace BP.WF
                 DBAccess.RunSQL(ps);
 
                 //写入日志.
-                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName,null,null,null,null,null,fwcView);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null, null, null, null, fwcView);
                 return;
             }
 
@@ -4238,7 +4238,7 @@ namespace BP.WF
             if (num == 0)
             {
                 //如果没有更新到，就写入.
-                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null,null,null,null,fwcView);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null, null, null, null, fwcView);
             }
         }
 
@@ -4513,7 +4513,7 @@ namespace BP.WF
             return checkinfo;
         }
 
-        public static string GetCheckTag(string flowNo, Int64 workId, int nodeFrom,string empFrom)
+        public static string GetCheckTag(string flowNo, Int64 workId, int nodeFrom, string empFrom)
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Tag FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + empFrom + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
@@ -4625,7 +4625,7 @@ namespace BP.WF
             ps.Add("OID", workID);
             BP.DA.DBAccess.RunSQL(ps);
         }
-   
+
         /// <summary>
         /// 设置父流程信息 
         /// </summary>
@@ -4900,7 +4900,7 @@ namespace BP.WF
             pas.Add("NDTo", FK_Node);
             return BP.DA.DBAccess.RunSQLReturnTable(pas);
         }
-     
+
         /// <summary>
         /// 执行冻结
         /// </summary>
@@ -4916,7 +4916,7 @@ namespace BP.WF
             {
                 // 执行冻结.
                 WorkFlow wf = new WorkFlow(flowNo, workid);
-                 info= wf.DoFix(msg);
+                info = wf.DoFix(msg);
             }
             catch (Exception ex)
             {
@@ -4935,11 +4935,11 @@ namespace BP.WF
                 {
                     // 执行冻结.
                     WorkFlow wf = new WorkFlow(flowNo, workid);
-                    info+=  wf.DoFix(msg);
+                    info += wf.DoFix(msg);
                 }
                 catch (Exception ex)
                 {
-                    info += "err@"+ex.Message;
+                    info += "err@" + ex.Message;
                 }
             }
 
@@ -5111,8 +5111,8 @@ namespace BP.WF
                             ps.Add("FK_Node", nd.NodeID);
                             ps.Add("FK_Emp", userNo);
                             num = DBAccess.RunSQLReturnValInt(ps);
-							
-							if (num == 0)
+
+                            if (num == 0)
                             {
                                 ps.Clear();
                                 ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_Emp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.No=" + dbstr + "FK_Emp";
@@ -5791,7 +5791,7 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             gwf.WFState = WFState.Runing;
             gwf.TaskSta = TaskSta.None;
-            gwf.TodoEmps = toEmper+","+emp.Name+";";
+            gwf.TodoEmps = toEmper + "," + emp.Name + ";";
             gwf.FK_Node = toNodeID;
             gwf.NodeName = nd.Name;
             //gwf.StarterName =emp.Name;
@@ -5925,7 +5925,7 @@ namespace BP.WF
             gwf.WorkID = workid;
             if (gwf.RetrieveFromDBSources() == 0)
             {
-                gwf.WFSta = WFSta.Runing;
+                //gwf.WFSta = WFSta.Runing;
                 gwf.WFState = WFState.Blank;
 
                 gwf.Starter = WebUser.No;
@@ -5963,7 +5963,7 @@ namespace BP.WF
             gwf.WorkID = workid;
             if (gwf.RetrieveFromDBSources() == 0)
             {
-                gwf.WFSta = WFSta.Runing;
+                //  gwf.WFSta = WFSta.Runing;
                 gwf.WFState = WFState.Blank;
 
                 gwf.Starter = WebUser.No;
@@ -6221,7 +6221,7 @@ namespace BP.WF
                 }
 
                 BP.Port.Emp emp = new Emp(empID);
-                todoEmps += emp.No + "," + emp.Name+";";
+                todoEmps += emp.No + "," + emp.Name + ";";
                 num++;
 
                 emps.AddEntity(emp);
@@ -6354,13 +6354,13 @@ namespace BP.WF
             dtHistory.Columns.Add("IsPass"); //是否通过?
 
             //执行人.
-           
-                //历史执行人. 
-                sql = "SELECT C.Name AS DeptName,  A.* FROM ND" + int.Parse(gwf.FK_Flow) + "Track A, Port_Emp B, Port_Dept C  ";
-                sql += " WHERE (A.WorkID=" + workID + " OR A.FID="+workID+") AND (A.ActionType=1 OR A.ActionType=0  OR A.ActionType=6  OR A.ActionType=7) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ";
-                sql += " ORDER BY A.RDT ";
 
-                DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //历史执行人. 
+            sql = "SELECT C.Name AS DeptName,  A.* FROM ND" + int.Parse(gwf.FK_Flow) + "Track A, Port_Emp B, Port_Dept C  ";
+            sql += " WHERE (A.WorkID=" + workID + " OR A.FID=" + workID + ") AND (A.ActionType=1 OR A.ActionType=0  OR A.ActionType=6  OR A.ActionType=7) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ";
+            sql += " ORDER BY A.RDT ";
+
+            DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
             foreach (DataRow drTrack in dtTrack.Rows)
             {
@@ -6378,16 +6378,16 @@ namespace BP.WF
             }
 
             //如果流程没有完成.
-            if (gwf.WFState != WFState.Complete && 1==2)
+            if (gwf.WFState != WFState.Complete && 1 == 2)
             {
                 DataRow dr = dtHistory.NewRow();
                 dr["FK_Node"] = gwf.FK_Node;
                 //dr["ActionType"] = drTrack["NDFrom"];
                 dr["NodeName"] = gwf.NodeName;
-                dr["EmpNo"] =  WebUser.No;
+                dr["EmpNo"] = WebUser.No;
                 dr["EmpName"] = WebUser.Name;
                 dr["DeptName"] = WebUser.FK_DeptName; //部门名称.
-                dr["RDT"] = DataType.CurrentData ;
+                dr["RDT"] = DataType.CurrentData;
                 dr["SDT"] = "";
                 dr["IsPass"] = 0; // gwl.IsPassInt; //是否通过.
                 dtHistory.Rows.Add(dr);
@@ -7264,7 +7264,7 @@ namespace BP.WF
             gwf.NodeName = nd.Name;
 
             //默认是空白流程
-            gwf.WFSta = WFSta.Etc;
+            //gwf.WFSta = WFSta.Etc;
             gwf.WFState = WFState.Blank;
             //保存到草稿
             if (fl.DraftRole == DraftRole.SaveToDraftList)
@@ -7274,7 +7274,7 @@ namespace BP.WF
             else if (fl.DraftRole == DraftRole.SaveToTodolist)
             {
                 //保存到待办
-                gwf.WFSta = WFSta.Runing;
+                //  gwf.WFSta = WFSta.Runing;
                 gwf.WFState = WFState.Runing;
             }
 

@@ -69,7 +69,7 @@ namespace BP.WF.DTS
                     gwf.FlowName = en.Name;
                     gwf.Title = dr[NDXRptBaseAttr.Title].ToString();
                     gwf.WFState = (WFState)int.Parse(dr[NDXRptBaseAttr.WFState].ToString());
-                    gwf.WFSta = WFSta.Complete;
+                //    gwf.WFSta = WFSta.Complete;
 
                     gwf.Starter = dr[NDXRptBaseAttr.FlowStarter].ToString();
                     gwf.StarterName = dr[NDXRptBaseAttr.FlowStarter].ToString();

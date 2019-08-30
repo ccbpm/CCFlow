@@ -885,7 +885,7 @@ namespace BP.WF
             {
                 if (value == WF.WFState.Complete)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete)
+                else if (value == WF.WFState.Delete || value == WF.WFState.Blank)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
@@ -901,10 +901,6 @@ namespace BP.WF
             get
             {
                 return (WFSta)this.GetValIntByKey(GenerWorkFlowAttr.WFSta);
-            }
-            set
-            {
-                SetValByKey(GenerWorkFlowAttr.WFSta, (int)value);
             }
         }
         /// <summary>

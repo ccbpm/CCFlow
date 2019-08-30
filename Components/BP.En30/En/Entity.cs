@@ -1481,9 +1481,10 @@ namespace BP.En
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 ps.Add(attr, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr, val));
-            }else
+            }
+            else
             {
-                ps.Add(attr,  val);
+                ps.Add(attr, val);
             }
 
             return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
@@ -1497,7 +1498,8 @@ namespace BP.En
                 ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
                 ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
 
-            }else
+            }
+            else
             {
                 ps.Add(attr1, val1);
                 ps.Add(attr2, val2);
@@ -2579,20 +2581,20 @@ namespace BP.En
                 int pkconut = this.PKCount;
                 if (pkconut == 1)
                 {
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, this.PKField);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, this.PKField);
                 }
                 else if (pkconut == 2)
                 {
                     string pk0 = this.PKs[0];
                     string pk1 = this.PKs[1];
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, pk0, pk1);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, pk0, pk1);
                 }
                 else if (pkconut == 3)
                 {
                     string pk0 = this.PKs[0];
                     string pk1 = this.PKs[1];
                     string pk2 = this.PKs[2];
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, pk0, pk1, pk2);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, pk0, pk1, pk2);
                 }
                 else if (pkconut == 4)
                 {
@@ -2600,7 +2602,7 @@ namespace BP.En
                     string pk1 = this.PKs[1];
                     string pk2 = this.PKs[2];
                     string pk3 = this.PKs[3];
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, pk0, pk1, pk2, pk3);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, pk0, pk1, pk2, pk3);
                 }
                 #endregion
             }
@@ -2612,7 +2614,7 @@ namespace BP.En
                 if (pkconut == 1)
                 {
                     DBAccess.CreatePK(this.EnMap.PhysicsTable, this.PKField, this.EnMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, this.PKField);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, this.PKField);
                 }
                 else if (pkconut == 2)
                 {
@@ -2620,7 +2622,7 @@ namespace BP.En
                     string pk0 = this.PKs[0];
                     string pk1 = this.PKs[1];
                     DBAccess.CreatePK(this.EnMap.PhysicsTable, pk0, pk1, this.EnMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, pk0, pk1);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, pk0, pk1);
                 }
                 else if (pkconut == 3)
                 {
@@ -2628,7 +2630,7 @@ namespace BP.En
                     string pk1 = this.PKs[1];
                     string pk2 = this.PKs[2];
                     DBAccess.CreatePK(this.EnMap.PhysicsTable, pk0, pk1, pk2, this.EnMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex( this.EnMap.PhysicsTable, pk0, pk1, pk2);
+                    DBAccess.CreatIndex(this.EnMap.PhysicsTable, pk0, pk1, pk2);
                 }
             }
             #endregion
@@ -2890,14 +2892,14 @@ namespace BP.En
                 if (pkconut == 1)
                 {
                     DBAccess.CreatePK(this._enMap.PhysicsTable, this.PKField, this._enMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex( this._enMap.PhysicsTable, this.PKField);
+                    DBAccess.CreatIndex(this._enMap.PhysicsTable, this.PKField);
                 }
                 else if (pkconut == 2)
                 {
                     string pk0 = this.PKs[0];
                     string pk1 = this.PKs[1];
                     DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, this._enMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex(  this._enMap.PhysicsTable, pk0, pk1);
+                    DBAccess.CreatIndex(this._enMap.PhysicsTable, pk0, pk1);
                 }
                 else if (pkconut == 3)
                 {
@@ -2905,7 +2907,7 @@ namespace BP.En
                     string pk1 = this.PKs[1];
                     string pk2 = this.PKs[2];
                     DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, pk2, this._enMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex(  this._enMap.PhysicsTable, pk0, pk1, pk2);
+                    DBAccess.CreatIndex(this._enMap.PhysicsTable, pk0, pk1, pk2);
                 }
             }
             #endregion
@@ -2914,7 +2916,7 @@ namespace BP.En
 
             String ptable = this.EnMap.PhysicsTable;
 
-            string sql = "exec sp_rename '"+this.EnMap.PhysicsTable+ "','" + this.EnMap.PhysicsTable + "'";
+            string sql = "exec sp_rename '" + this.EnMap.PhysicsTable + "','" + this.EnMap.PhysicsTable + "'";
             DBAccess.RunSQL(sql);
 
             foreach (Attr item in this.EnMap.Attrs)
@@ -3196,14 +3198,14 @@ namespace BP.En
                 if (pkconut == 1)
                 {
                     DBAccess.CreatePK(this._enMap.PhysicsTable, this.PKField, this._enMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex(  this._enMap.PhysicsTable, this.PKField);
+                    DBAccess.CreatIndex(this._enMap.PhysicsTable, this.PKField);
                 }
                 else if (pkconut == 2)
                 {
                     string pk0 = this.PKs[0];
                     string pk1 = this.PKs[1];
                     DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, this._enMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex(  this._enMap.PhysicsTable, pk0, pk1);
+                    DBAccess.CreatIndex(this._enMap.PhysicsTable, pk0, pk1);
                 }
                 else if (pkconut == 3)
                 {
@@ -3211,7 +3213,7 @@ namespace BP.En
                     string pk1 = this.PKs[1];
                     string pk2 = this.PKs[2];
                     DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, pk2, this._enMap.EnDBUrl.DBType);
-                    DBAccess.CreatIndex(  this._enMap.PhysicsTable, pk0, pk1, pk2);
+                    DBAccess.CreatIndex(this._enMap.PhysicsTable, pk0, pk1, pk2);
                 }
             }
             #endregion
@@ -3219,27 +3221,27 @@ namespace BP.En
             #region 创建索引.
             if (this._enMap.IndexField != null)
             {
-                DBAccess.CreatIndex( this._enMap.PhysicsTable, this._enMap.IndexField);
+                DBAccess.CreatIndex(this._enMap.PhysicsTable, this._enMap.IndexField);
             }
 
-                int pkconut22 = this.PKCount;
-                if (pkconut22 == 1)
-                {
-                    DBAccess.CreatIndex(this._enMap.PhysicsTable, this.PKField);
-                }
-                else if (pkconut22 == 2)
-                {
-                    string pk0 = this.PKs[0];
-                    string pk1 = this.PKs[1];
-                    DBAccess.CreatIndex( this._enMap.PhysicsTable, pk0, pk1);
-                }
-                else if (pkconut22 == 3)
-                {
-                    string pk0 = this.PKs[0];
-                    string pk1 = this.PKs[1];
-                    string pk2 = this.PKs[2];
-                    DBAccess.CreatIndex( this._enMap.PhysicsTable, pk0, pk1, pk2);
-                }
+            int pkconut22 = this.PKCount;
+            if (pkconut22 == 1)
+            {
+                DBAccess.CreatIndex(this._enMap.PhysicsTable, this.PKField);
+            }
+            else if (pkconut22 == 2)
+            {
+                string pk0 = this.PKs[0];
+                string pk1 = this.PKs[1];
+                DBAccess.CreatIndex(this._enMap.PhysicsTable, pk0, pk1);
+            }
+            else if (pkconut22 == 3)
+            {
+                string pk0 = this.PKs[0];
+                string pk1 = this.PKs[1];
+                string pk2 = this.PKs[2];
+                DBAccess.CreatIndex(this._enMap.PhysicsTable, pk0, pk1, pk2);
+            }
             #endregion
         }
         /// <summary>
@@ -5146,27 +5148,28 @@ namespace BP.En
             qo.AddWhere(this.GetNewEntity.PK, " IN ", pks);
             return qo.DoQuery();
         }
-       /// <summary>
+        /// <summary>
         /// 按照IDs查询并且排序
         /// 比如: FrmID  IN  '001','002' 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="vals"></param>
         /// <returns></returns>
-	public int RetrieveInOrderBy(String key, String vals,String orderByKey){
-		QueryObject qo = new QueryObject(this);
-        if (vals.Contains("(") == false)
-            qo.AddWhere(key, " IN ", "(" + vals + ")");
-        else
-            qo.AddWhere(key, " IN ", vals);
+        public int RetrieveInOrderBy(String key, String vals, String orderByKey)
+        {
+            QueryObject qo = new QueryObject(this);
+            if (vals.Contains("(") == false)
+                qo.AddWhere(key, " IN ", "(" + vals + ")");
+            else
+                qo.AddWhere(key, " IN ", vals);
 
-        return qo.DoQuery();
-        
-        if(DataType.IsNullOrEmpty(orderByKey) == false)
-        	qo.addOrderBy(orderByKey);
+            return qo.DoQuery();
 
-        return qo.DoQuery();
-	}
+            if (DataType.IsNullOrEmpty(orderByKey) == false)
+                qo.addOrderBy(orderByKey);
+
+            return qo.DoQuery();
+        }
         /// <summary>
         /// 按照IDs查询
         /// 比如: FrmID  IN  '001','002' 
@@ -5221,83 +5224,91 @@ namespace BP.En
                 qo.AddWhere(key, 0);
             return qo.DoQuery();
         }
-        public virtual int Retrieve(string key, object val)
+        public virtual int Retrieve(string key, object val, string orderby = null)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+            else
+                qo.AddWhere(key, val);
+
+            if (orderby != null)
+                qo.addOrderBy(orderby); //这个排序方式不要变化，否则会影响其他的地方。
             return qo.DoQuery();
         }
-        public virtual int Retrieve(string key, object val, string orderby)
+        public virtual int Retrieve(string key, object val, string key2, object val2, string ordery = null)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            //qo.addOrderByDesc(orderby);
-            qo.addOrderBy(orderby); //这个排序方式不要变化，否则会影响其他的地方。
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+                qo.addAnd();
+                qo.AddWhere(key2, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
+            }
+            else
+            {
+                qo.AddWhere(key, val);
+                qo.addAnd();
+                qo.AddWhere(key2, val2);
+            }
+            if (ordery != null)
+                qo.addOrderBy(ordery);
             return qo.DoQuery();
         }
 
-        public virtual int Retrieve(string key, object val, string key2, object val2)
+        public int Retrieve(string key, object val, string key2, object val2, string key3, object val3, string key4, object val4, string orderBy = null)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            qo.addAnd();
-            qo.AddWhere(key2, val2);
-            return qo.DoQuery();
-        }
-        public virtual int Retrieve(string key, object val, string key2, object val2, string ordery)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            qo.addAnd();
-            qo.AddWhere(key2, val2);
-            qo.addOrderBy(ordery);
-            return qo.DoQuery();
-        }
-        public virtual int Retrieve(string key, object val, string key2, object val2, string key3, object val3)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            qo.addAnd();
-            qo.AddWhere(key2, val2);
-            qo.addAnd();
-            qo.AddWhere(key3, val3);
-            return qo.DoQuery();
-        }
 
-        public virtual int Retrieve(string key, object val, string key2, object val2, string key3, object val3, string key4, object val4)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            qo.addAnd();
-            qo.AddWhere(key2, val2);
-            qo.addAnd();
-            qo.AddWhere(key3, val3);
-            qo.addAnd();
-            qo.AddWhere(key4, val4);
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+                qo.addAnd();
+                qo.AddWhere(key2, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
+                qo.addAnd();
+                qo.AddWhere(key3, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key3, val3));
+                qo.addAnd();
+                qo.AddWhere(key4, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key4, val4));
+            }
+            else
+            {
+                qo.AddWhere(key, val);
+                qo.addAnd();
+                qo.AddWhere(key2, val2);
+                qo.addAnd();
+                qo.AddWhere(key3, val3);
+                qo.addAnd();
+                qo.AddWhere(key4, val4);
+            }
+
+            if (orderBy != null)
+                qo.addOrderBy(orderBy);
             return qo.DoQuery();
         }
-        public int Retrieve(string key, object val, string key2, object val2, string key3, object val3, string key4, object val4, string orderBy)
+        public int Retrieve(string key, object val, string key2, object val2, string key3, object val3, string orderBy = null)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            qo.addAnd();
-            qo.AddWhere(key2, val2);
-            qo.addAnd();
-            qo.AddWhere(key3, val3);
-            qo.addAnd();
-            qo.AddWhere(key4, val4);
-            qo.addOrderBy(orderBy);
-            return qo.DoQuery();
-        }
-        public int Retrieve(string key, object val, string key2, object val2, string key3, object val3, string orderBy)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(key, val);
-            qo.addAnd();
-            qo.AddWhere(key2, val2);
-            qo.addAnd();
-            qo.AddWhere(key3, val3);
-            qo.addOrderBy(orderBy);
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+                qo.addAnd();
+                qo.AddWhere(key2, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
+                qo.addAnd();
+                qo.AddWhere(key3, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key3, val3));
+            }
+            else
+            {
+                qo.AddWhere(key, val);
+                qo.addAnd();
+                qo.AddWhere(key2, val2);
+                qo.addAnd();
+                qo.AddWhere(key3, val3);
+            }
+            if (orderBy != null)
+                qo.addOrderBy(orderBy);
             return qo.DoQuery();
         }
         /// <summary>

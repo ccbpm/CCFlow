@@ -145,7 +145,6 @@
 
                         html += "<tr>";
                         html += "<td>" + (i + 1) + "</td>";
-                        html += "<td>" + mapAttr.KeyOfEn + "</td>";
 
                         var checked = "";
                         var cfgEnVals = cfgEn.Vals.split(",");
@@ -156,6 +155,8 @@
                         }
 
                         html += "<td><label><input type=checkbox " + checked + " name='FieldAttr' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
+                        html += "<td>" + mapAttr.KeyOfEn + "</td>";
+
                         html += "</tr>";
 
                     }
@@ -245,7 +246,7 @@
                 if (cfgEn.MVals.indexOf(',' + groupFunc.id) >= 0)
                     checked = " checked=true ";
                 html += "<tbody>";
-                html += "<tr>";
+                html += "<tr class='Sum' >";
                 html += "<td colspan = '2'><label><input type=checkbox " + checked + " name='FuncGroup' id='" + groupFunc.id + "' onclick='swapCheck(\"" + groupFunc.id + "\")'/>" + groupFunc.name + "</label></td>";
                 html += "</tr>";
                 html += "</tbody>";
@@ -323,11 +324,9 @@
 <body class="easyui-layout">
     <div data-options="region:'west',title:'设置内容',split:true" style="width:150px;">
         <ul>
-            <li><a href="javascript:Fields()">字段</a></li>
-            <li><a href="javascript:Funcs()">功能</a></li>
-            <li><a href="javascript:Help()">帮助</a></li>
-
-
+            <li><a href="javascript:Help()"><img src="../../Img/Btn/Help.gif" /> 帮助</a></li>
+            <li><a href="javascript:Fields()">字段设置</a></li>
+            <li><a href="javascript:Funcs()">功能设置</a></li>
         </ul>
     </div>
     <div data-options="region:'center',title:'选择隐藏的字段&功能'" style="padding:5px;">

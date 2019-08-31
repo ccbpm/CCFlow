@@ -300,7 +300,20 @@ function GenerFrm() {
         $(obj).attr('title', $(obj).val());
     })
 
-
+    //星级评分事件
+    var scoreDiv = $(".score-star");
+    $.each(scoreDiv, function (idex, item) {
+        var divId = $(item).attr("id");
+        var KeyOfEn = divId.substring(3);//获取字段值
+        $("#Star_" + KeyOfEn + " img").click(function () {
+            var index = $(this).index() + 1;
+            $("#Star_" + KeyOfEn + " img:lt(" + index + ")").attr("src", "../Style/Img/star_2.png");
+            $("#SP_" + KeyOfEn + " strong").html(index + "  分");
+            $("#TB_" + KeyOfEn).val(index);//给评分的隐藏input赋值
+            index = index - 1;
+            $("#Star_" + KeyOfEn + " img:gt(" + index + ")").attr("src", "../Style/Img/star_1.png");
+        });
+    });
     //根据NAME 设置ID的值
     var inputs = $('[name]');
     $.each(inputs, function (i, obj) {
@@ -1275,7 +1288,23 @@ function figure_Template_HandWrite(HandWriteID, val) {
     var url = basePath+ "/WF/CCForm/HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
     OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
 }
+//地图
+function figure_Template_Map(MapID, UIIsEnable) {
+    var mainTable = frmData.MainTable[0];
+    var AtPara = "";
+    //通过MAINTABLE返回的参数
+    for (var ele in mainTable) {
+        if (ele == "AtPara" && mainTable != '') {
+            AtPara = mainTable[ele];
+            break;
+        }
+    }
 
+    var url = basePath + "/WF/CCForm/Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&UIIsEnable=" + UIIsEnable + "&Paras=" + AtPara;
+    OpenBootStrapModal(url, "eudlgframe", "地图", 800, 500, null, false, function () { }, null, function () {
+
+    });
+}
 function setHandWriteSrc(HandWriteID, imagePath) {
     imagePath = "../../" + imagePath.substring(imagePath.indexOf("DataUser"));
     document.getElementById("Img" + HandWriteID).src = "";

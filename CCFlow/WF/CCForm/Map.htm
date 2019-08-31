@@ -19,7 +19,7 @@
     <style>
 
         #container {
-            width: 750px;
+            width: 760px;
             height: 400px;
         }
 
@@ -150,7 +150,7 @@
              if (addName != "") {
                   parent.document.getElementById("TB_AtPara").value = str;//地址名称@详细地址@纬度@经度
                   parent.document.getElementById("TB_" + KeyOfEn).value = addName;  //给表单地图控件赋值
-                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                 if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
                     window.parent.CloseBootstrapDialog();
                 }
              } else {
@@ -160,7 +160,7 @@
 	     });
         //关闭
         $("#close").click(function () {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+            if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
                 window.parent.CloseBootstrapDialog();
             }
 	    });

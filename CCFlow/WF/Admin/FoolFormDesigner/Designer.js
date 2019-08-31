@@ -435,7 +435,19 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             eleHtml += "</div>";
             return eleHtml;
         }
+        if (mapAttr.UIContralType == 101) {
+            var eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
+            eleHtml += "<span class='simplestar'>";
 
+            var num = mapAttr.Tag2;
+            for (var i = 0; i < num; i++) {
+
+                eleHtml += "<img src='../../Style/Img/star_2.png' />";
+            }
+            eleHtml += "&nbsp;&nbsp;<span class='score-tips' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + num + "  分</strong></span>";
+            eleHtml += "</span></div>";
+            return eleHtml;
+        }
         //工作进度图
         if (mapAttr.UIContralType == 50) {
             return "<img  src='./Img/JobSchedule.png'  style='border:0px;height:" + mapAttr.UIHeight + "px;width:100%;' id='Img" + mapAttr.KeyOfEn + "' />";

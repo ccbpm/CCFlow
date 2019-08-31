@@ -898,7 +898,44 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             return eleHtml;
         }
 
-        //地图
+        //评分控件
+        if (mapAttr.UIContralType == "101") {
+            //查找默认值
+            var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            if (val == "" || val == undefined || val == null) {
+                val = 0;
+            }
+            //如果编辑
+            var eleHtml = "<div class='score-star' style='text-align:left;padding-left:3px;height:30px;margin-top:10px' data-type='1' id='SC_" + mapAttr.KeyOfEn + "' >";
+            if (mapAttr.UIIsEnable == 1) {
+                eleHtml += "<span class='score-simplestar' id='Star_" + mapAttr.KeyOfEn +"'>";
+                var num = mapAttr.Tag2;
+                for (var i = 0; i < val; i++) {
+
+                    eleHtml += "<img src='Style/Img/star_2.png' />";
+                }
+                for (var j = 0; j < num-val; j++) {
+
+                    eleHtml += "<img src='Style/Img/star_1.png' />";
+                }
+            } else {
+                eleHtml += "<span class='score-simplestar' id='Star_" + mapAttr.KeyOfEn +"'>>";
+                var num = mapAttr.Tag2;
+                for (var i = 0; i < val; i++) {
+
+                    eleHtml += "<img src='Style/Img/star_2.png' />";
+                }
+                for (var j = 0; j < num - val; j++) {
+
+                    eleHtml += "<img src='Style/Img/star_1.png' />";
+                }
+            }
+            eleHtml += "&nbsp;&nbsp;<span class='score-tips' id='SP_" + mapAttr.KeyOfEn + "' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + val + "  分</strong></span>";
+            eleHtml += "<input id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden /></span>";
+            eleHtml += "</div>";
+            return eleHtml;
+        }
+        //  地图
         if (mapAttr.UIContralType == "4") {
             //查找默认值
             var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
@@ -906,10 +943,10 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             var eleHtml = "<div style='text-align:left;padding-left:0px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
             if (mapAttr.UIIsEnable == 1) {
                 eleHtml += "<input type='button' name='select' value='选择' onclick='figure_Template_Map(\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.UIIsEnable + "\")'/>";
-                eleHtml += "<input type = text style='width:75%' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />";
+                eleHtml += "<input type = text style='width:75%' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />";
             } else {
                 eleHtml += "<input type='button' name='select' value='选择' onclick='figure_Template_Map(\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.UIIsEnable + "\")'/>";
-                eleHtml += "<input type = text style='width:75%' readonly='readonly' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />";
+                eleHtml += "<input type = text style='width:75%' readonly='readonly' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />";
             }
             eleHtml += "</div>";
             return eleHtml;
@@ -1730,7 +1767,7 @@ function GetLab(flowData, attr) {
         forID = "RB_" + attr.KeyOfEn;
     }
     //文本框，下拉框，单选按钮
-    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 50) {
+    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 50 || contralType == 101) {
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab = " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }

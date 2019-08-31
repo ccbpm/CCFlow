@@ -289,7 +289,6 @@ function figure_Template_HandWrite(HandWriteID, val) {
 }
 //地图
 function figure_Template_Map(MapID, UIIsEnable) {
-    //var mainTable = flowData.mainTable[0];
     var mainTable = flowData.MainTable[0];
     var AtPara = "";
     //通过MAINTABLE返回的参数
@@ -302,23 +301,8 @@ function figure_Template_Map(MapID, UIIsEnable) {
     
     var url = "CCForm/Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&UIIsEnable=" + UIIsEnable + "&Paras=" + AtPara;
     OpenBootStrapModal(url, "eudlgframe", "地图", 800, 500, null, false, function () { }, null, function () {
-        //afterOper=0 关闭提示窗口，不做任何操作
 
-        //afterOper=1 关闭提示窗口刷新页面
-        //if (afterOper == 1)
-            //window.location.href = window.location.href;
-
-        ////afterOper=2 关闭提示窗口跳转到Search.htm
-        //if (afterOper == 2) {
-
-        //    if (window.parent.location.href.indexOf("SearchBill.htm") != -1) {
-        //        window.close();
-        //    }
-        //    else
-        //        window.location.href = "./SearchBill.htm?FrmID=" + GetQueryString("FrmID");
-        //}
     });
-    //OpenBootStrapModal(url, '地图', 800, 600, false);
 }
 function setHandWriteSrc(HandWriteID, imagePath) {
     imagePath = "../" + imagePath.substring(imagePath.indexOf("DataUser"));
@@ -1691,6 +1675,22 @@ function GenerWorkNode() {
     catch (err) {
 
     }
+    //星级评分事件
+    var scoreDiv = $(".score-star");
+    $.each(scoreDiv, function (idex, item) {
+        var divId = $(item).attr("id");
+        var KeyOfEn = divId.substring(3);//获取字段值
+        $("#Star_" + KeyOfEn +" img").click(function () {
+            var index = $(this).index() + 1;
+            $("#Star_" + KeyOfEn +" img:lt(" + index + ")").attr("src", "Style/Img/star_2.png");
+            $("#SP_" + KeyOfEn + " strong").html(index + "  分");
+            $("#TB_" + KeyOfEn).val(index);//给评分的隐藏input赋值
+            index = index - 1;
+            $("#Star_" + KeyOfEn +" img:gt(" + index + ")").attr("src", "Style/Img/star_1.png");
+        });
+    });
+   
+
 
     $(".pimg").on("dblclick", function () {
         var _this = $(this); //将当前的pimg元素作为_this传入函数  

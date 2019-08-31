@@ -7305,7 +7305,7 @@ namespace BP.WF
             if (htWork != null && htWork.ContainsKey("SDTOfFlow") == true)
             {
                 /*流程应完成时间*/
-                gwf.SDTOfNode = htWork["SDTOfFlow"].ToString();
+                gwf.SDTOfFlow = htWork["SDTOfFlow"].ToString();
             }
 
             gwf.PWorkID = parentWorkID;

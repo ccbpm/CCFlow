@@ -65,7 +65,7 @@
     modalContent.append(modalHead);
 
     //body块
-    var modalBody = $("<div class='modal-body' style='margin:5px;padding:0px;'></div>");
+    var modalBody = $("<div class='modal-body' style='margin:5px;padding:0px;text-align:center'></div>");
     var iframeWidth = dlgWidth - 45;
 
     var iFrame = $("<iframe></iframe>");

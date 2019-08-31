@@ -160,7 +160,6 @@
 
             var tabIndex = GetQueryString("tabIndex");
 
-
             var tableWidth = 800; //  w - 40;
             var html = "";
             if (Sys_GroupFields.length > 1)
@@ -243,11 +242,16 @@
 
                    
                     var uiBindKey = mapAttr.UIBindKey;
+                     
+                    if (uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
 
-                    if (uiBindKey.indexOf("Dept") != -1) {
                         var webUser = new WebUser();
+
+                     //   alert(uiBindKey);
+
                         var ens = new Entities(uiBindKey);
                         ens.RetrieveAll();
+
                         var pushData;
                         if (webUser.No == "admin")
                             pushData = findChildren(ens, "0");

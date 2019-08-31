@@ -59,7 +59,7 @@
             var limintT;
             for (var i = 0; i < nds.length; i++) {
                 var nd = nds[i];
-                limintT = nd.TimeLimit;
+                sdtOfNode = nd.SDTOfNode;
                 var paraCH = gwf.GetPara("CH" + nd.NodeID);
                 if (paraCH != null && paraCH != undefined)
                     limintT = paraCH;
@@ -94,7 +94,7 @@
                             _Html += "<td style='text-align: center'><label style='color:red'>逾期</label></td>";
                         //时限
 
-                        _Html += "<td style='text-align: center'>" + limintT + "</td>";
+                        _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                     }
                     _Html += "</tr>";
 
@@ -112,14 +112,14 @@
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>"+sdtOfNode+"</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         if (chRole == 1)
-                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + limintT + "' class='form-control'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate'/></td>";
                         else
-                            _Html += "<td style='text-align: center'>" + limintT + "</td>";
+                            _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "</tr>";
                     }
                 }
@@ -258,14 +258,14 @@
                     <thead>
                         <tr>
                             <th style='background-color:#F2F2F2;width:10px'>#</th>
-                            <th style='background-color:#F2F2F2;;text-align:center'>节点</th>
-                            <th style='background-color:#F2F2F2;;text-align:center'>处理人</th>
+                            <th style='background-color:#F2F2F2;text-align:center;width:10%'>节点</th>
+                            <th style='background-color:#F2F2F2;text-align:center;width:10%'>处理人</th>
                             <th style='background-color:#F2F2F2;width:150px;text-align:center'>接收时间</th >
                             <th style='background-color:#F2F2F2;width:150px;text-align:center'>应该完成时间</th>
                             <th style='background-color:#F2F2F2;width:150px;text-align:center'>实际完成时间</th>
                             <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
                             <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
-                            <th style='background-color:#F2F2F2;width:100px;text-align:center'>时限时间</th>
+                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>调整应完成时间</th>
                        
                         </tr>
                     </thead>

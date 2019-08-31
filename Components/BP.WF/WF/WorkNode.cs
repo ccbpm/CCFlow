@@ -438,47 +438,50 @@ namespace BP.WF
 
             if (town.HisNode.HisCHWay == CHWay.ByTime)
             {
-                //按天、小时考核
-                if (town.HisNode.GetParaInt("CHWayOfTimeRole") == 0)
+                string sdtOdNode = this._HisGenerWorkFlow.GetParaString("CH" + this.town.HisNode.NodeID);
+                if (DataType.IsNullOrEmpty(sdtOdNode) == false)
+                    dtOfShould = DateTime.Parse(sdtOdNode);
+                else
                 {
-                    //增加天数. 考虑到了节假日. 
-                    //判断是修改了节点期限的天数
-                    int timeLimit = this.town.HisNode.TimeLimit;
-                    int paraLimit = this._HisGenerWorkFlow.GetParaInt("CH" + this.town.HisNode.NodeID);
-                    if (paraLimit != 0)
-                        timeLimit = paraLimit;
-
-                    dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, timeLimit,
-                        this.town.HisNode.TimeLimitHH, this.town.HisNode.TimeLimitMM, this.town.HisNode.TWay);
-                }
-                //按照节点字段设置
-                if (town.HisNode.GetParaInt("CHWayOfTimeRole") == 1)
-                {
-                    //获取设置的字段、
-                    string keyOfEn = town.HisNode.GetParaString("CHWayOfTimeRoleField");
-                    if (DataType.IsNullOrEmpty(keyOfEn) == true)
-                        town.HisNode.HisCHWay = CHWay.None;
-                    else
-                        dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisWork.GetValByKey(keyOfEn).ToString());
-
-                }
-
-                //流转自定义的流程并且考核规则按照流转自定义设置
-                if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet
-                    && town.HisNode.GetParaInt("CHWayOfTimeRole") == 2)
-                {
-                    //获取当前节点的流转自定义时间
-                    TransferCustom tf = new TransferCustom();
-                    tf.MyPK = town.HisNode.NodeID + "_" + this.WorkID;
-                    if (tf.RetrieveFromDBSources() != 0)
+                    //按天、小时考核
+                    if (town.HisNode.GetParaInt("CHWayOfTimeRole") == 0)
                     {
-                        if (DataType.IsNullOrEmpty(tf.PlanDT) == true)
-                            throw new Exception("err@在流转自定义期间，没有设置计划完成日期。");
+                        //增加天数. 考虑到了节假日. 
+                        //判断是修改了节点期限的天数
+                        int timeLimit = this.town.HisNode.TimeLimit;
+                        dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, timeLimit,
+                        this.town.HisNode.TimeLimitHH, this.town.HisNode.TimeLimitMM, this.town.HisNode.TWay);
+                    }
+                    //按照节点字段设置
+                    if (town.HisNode.GetParaInt("CHWayOfTimeRole") == 1)
+                    {
+                        //获取设置的字段、
+                        string keyOfEn = town.HisNode.GetParaString("CHWayOfTimeRoleField");
+                        if (DataType.IsNullOrEmpty(keyOfEn) == true)
+                            town.HisNode.HisCHWay = CHWay.None;
+                        else
+                            dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisWork.GetValByKey(keyOfEn).ToString());
 
-
-                        dtOfShould = DataType.ParseSysDateTime2DateTime(tf.PlanDT);
                     }
                 }
+
+                
+                //流转自定义的流程并且考核规则按照流转自定义设置
+                //if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet
+                //    && town.HisNode.GetParaInt("CHWayOfTimeRole") == 2)
+                //{
+                //    //获取当前节点的流转自定义时间
+                //    TransferCustom tf = new TransferCustom();
+                //    tf.MyPK = town.HisNode.NodeID + "_" + this.WorkID;
+                //    if (tf.RetrieveFromDBSources() != 0)
+                //    {
+                //        if (DataType.IsNullOrEmpty(tf.PlanDT) == true)
+                //            throw new Exception("err@在流转自定义期间，没有设置计划完成日期。");
+
+
+                //        dtOfShould = DataType.ParseSysDateTime2DateTime(tf.PlanDT);
+                //    }
+                //}
             }
              
             //求警告日期.
@@ -504,6 +507,7 @@ namespace BP.WF
                 default:
                     this.HisGenerWorkFlow.FK_Node = town.HisNode.NodeID;
                     this.HisGenerWorkFlow.SDTOfNode = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                    this.HisGenerWorkFlow.SetPara("CH" + this.town.HisNode.NodeID, this.HisGenerWorkFlow.SDTOfNode);
                     //this.HisGenerWorkFlow.SDTOfFlow = dtOfFlow.ToString(DataType.SysDataTimeFormat);
                     //this.HisGenerWorkFlow.SDTOfFlowWarning = dtOfFlowWarning.ToString(DataType.SysDataTimeFormat);
                     this.HisGenerWorkFlow.TodoEmpsNum = dt.Rows.Count;

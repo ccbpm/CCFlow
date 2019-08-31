@@ -80,7 +80,8 @@
             html += "<th>发起日期</th>";
             html += "<th>停留节点</th>";
             html += "<th>处理人</th>";
-            html += "<th>节点应完成日期</th>";
+            html += "<th>应完成日期</th>";
+            html += "<th>状态</th>";
             html += "</tr></thead>";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
@@ -94,12 +95,13 @@
                 html += "<tr>";
                 html += "<td>" + (i + 1) + "</td>";
                 html += "<td><a href=\"javascript:OpenIt('" + dt.WorkID + "','" + dt.FK_Flow + "','" + dt.FK_Node + "')\" >" + dt.Title + "</td>";
-                html += "<td>" + GetStateText(dt.WFState) + "</td>";
+                html += "<td>" + GenerFlowState(dt.WFState) + "</td>";
                 html += "<td>" + dt.StarterName + "</td>";
                 html += "<td>" + dt.RDT + "</td>";
                 html += "<td>" + dt.NodeName + "</td>";
                 html += "<td>" + dt.TodoEmps + "</td>";
                 html += "<td>" + dt.SDTOfNode + "</td>";
+                html += "<td>" + GenerNodeTimeState(dt.SDTOfNode) + "</td>";
                 html += "</tr>";
             }
             html += "</table>";
@@ -107,16 +109,25 @@
 
             $('#docs').html(html);
         }
-        function GetStateText(sta) {
+        function GenerFlowState(sta) {
 
-            if (sta == 2)
-                return "运行中";
+            if (sta == 2) return "运行中";
+            if (sta == 3) return "已完成";
+            if (sta == 5) return "退回";
+            if (sta == 7) return "删除";
+            if (sta == 8) return "加签";
+            if (sta == 9) return "冻结";
+            if (sta == 4) return "挂起";
 
-            if (sta == 3)
-                return "已完成";
-            if (sta == 5)
-                return "退回";
+            return "其他" + sta;
+        }
+        function GenerNodeTimeState(dt) {
 
+            return "<font color=red>逾期</font>";
+
+            if (sta == 2) return "运行中";
+            if (sta == 3) return "已完成";
+            if (sta == 5) return "退回";
             return "其他" + sta;
         }
 
@@ -170,7 +181,7 @@
                         <li>1. 该功能是流程监控，就是非流程的参与人可以对指定的流程进行，查看、删除、移交、回滚、调整等操作。 </li>
                         <li>2. 您所看到的流程，就是系统管理员分配给您可以监控的流程. </li>
                         <li>3. 如果你可不到您需要的流程，请与管理员联系设置,设置路径：流程属性-》基本信息=》权限控制 </li>
-                        <li>4. 当您打开一个工作的时候，在右边tab标签页里可以对该流程进行，相关的权限操作。 </li>
+                        <li>4. 当您打开一个工作的时候，在右边tab标签页的【操作】里可以对该流程进行，相关的权限操作。 </li>
                     </ul>
                 </fieldset>
             </div>

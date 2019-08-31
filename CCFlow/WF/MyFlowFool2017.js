@@ -909,26 +909,17 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             var eleHtml = "<div class='score-star' style='text-align:left;padding-left:3px;height:30px;margin-top:10px' data-type='1' id='SC_" + mapAttr.KeyOfEn + "' >";
             if (mapAttr.UIIsEnable == 1) {
                 eleHtml += "<span class='score-simplestar' id='Star_" + mapAttr.KeyOfEn +"'>";
-                var num = mapAttr.Tag2;
-                for (var i = 0; i < val; i++) {
-
-                    eleHtml += "<img src='Style/Img/star_2.png' />";
-                }
-                for (var j = 0; j < num-val; j++) {
-
-                    eleHtml += "<img src='Style/Img/star_1.png' />";
-                }
             } else {
                 eleHtml += "<span class='score-simplestar'>";
-                var num = mapAttr.Tag2;
-                for (var i = 0; i < val; i++) {
+            }
+            var num = mapAttr.Tag2;
+            for (var i = 0; i < val; i++) {
 
-                    eleHtml += "<img src='Style/Img/star_2.png' />";
-                }
-                for (var j = 0; j < num - val; j++) {
+                eleHtml += "<img src='Style/Img/star_2.png' />";
+            }
+            for (var j = 0; j < num - val; j++) {
 
-                    eleHtml += "<img src='Style/Img/star_1.png' />";
-                }
+                eleHtml += "<img src='Style/Img/star_1.png' />";
             }
             eleHtml += "&nbsp;&nbsp;<span class='score-tips' id='SP_" + mapAttr.KeyOfEn + "' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + val + "  分</strong></span>";
             eleHtml += "<input id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden /></span>";

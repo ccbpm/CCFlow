@@ -31,7 +31,7 @@
         //页面启动函数.
         var webUser = new WebUser();
         $(function () {
-         //   document.title = window.lang.fqxlc;
+            //   document.title = window.lang.fqxlc;
             InitPage();
         });
 
@@ -64,11 +64,11 @@
 
         function ShowFlows(flowNo) {
 
-            debugger;
-
-            if (flowNo == null || flowNo == undefined) {
-                //输出流程.
-                $('#docs').html("欢迎使用流程监控，您所能看到的流程");
+            $("#Help").hide();
+            $('#docs').html("");
+            if (flowNo == null || flowNo == 'null' || flowNo == undefined) {
+                $("#Help").show();
+                return;
             }
 
             var html = "<table class='table table-bordered table-hover'>";
@@ -80,6 +80,7 @@
             html += "<th>发起日期</th>";
             html += "<th>停留节点</th>";
             html += "<th>处理人</th>";
+            html += "<th>节点应完成日期</th>";
             html += "</tr></thead>";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
@@ -92,12 +93,13 @@
 
                 html += "<tr>";
                 html += "<td>" + (i + 1) + "</td>";
-                html += "<td><a href=\"javascript:OpenIt('" + dt.WorkID + "','" + dt.FlowNo + "')\" >" + dt.Title + "</td>";
-                html += "<td>" + dt.WFStateText + "</td>";
+                html += "<td><a href=\"javascript:OpenIt('" + dt.WorkID + "','" + dt.FK_Flow + "','" + dt.FK_Node + "')\" >" + dt.Title + "</td>";
+                html += "<td>" + GetStateText(dt.WFState) + "</td>";
                 html += "<td>" + dt.StarterName + "</td>";
                 html += "<td>" + dt.RDT + "</td>";
                 html += "<td>" + dt.NodeName + "</td>";
-                html += "<td>" + dt.TodEmps + "</td>";
+                html += "<td>" + dt.TodoEmps + "</td>";
+                html += "<td>" + dt.SDTOfNode + "</td>";
                 html += "</tr>";
             }
             html += "</table>";
@@ -105,10 +107,22 @@
 
             $('#docs').html(html);
         }
+        function GetStateText(sta) {
 
-        function OpenIt(workID, flowNo) {
+            if (sta == 2)
+                return "运行中";
 
-            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+            if (sta == 3)
+                return "已完成";
+            if (sta == 5)
+                return "退回";
+
+            return "其他" + sta;
+        }
+
+        function OpenIt(workID, flowNo, nodeID) {
+
+            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
             WinOpenFull(url);
 
             //window.location.href = 'Watchdog.htm?IsRef=1';
@@ -133,8 +147,7 @@
                             <th>流程列表</th>
                         </tr>
                     </thead>
-                    <tbody id="left">
-                    </tbody>
+                    <tbody id="left"></tbody>
 
                 </table>
             </div>
@@ -146,11 +159,22 @@
             <!--<div class="box-header">
                 <h3 class="box-title">Hover Data Table</h3>
             </div>-->
-
             <!-- /.box-header -->
             <div class="box-body" id="docs">
-               
             </div>
+
+            <div id="Help" style=" vertical-align:middle; text-align:center">
+                <fieldset style=" text-align:left">
+                    <legend> 帮助 </legend>
+                    <ul>
+                        <li>1. 该功能是流程监控，就是非流程的参与人可以对指定的流程进行，查看、删除、移交、回滚、调整等操作。 </li>
+                        <li>2. 您所看到的流程，就是系统管理员分配给您可以监控的流程. </li>
+                        <li>3. 如果你可不到您需要的流程，请与管理员联系设置,设置路径：流程属性-》基本信息=》权限控制 </li>
+                        <li>4. 当您打开一个工作的时候，在右边tab标签页里可以对该流程进行，相关的权限操作。 </li>
+                    </ul>
+                </fieldset>
+            </div>
+
             <!-- /.box-body -->
         </div>
         <!-- /.box -->

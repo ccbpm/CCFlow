@@ -136,10 +136,10 @@
                 var hour = GetPara(en.AtPara, "NoticeHour");
                 $("#TB_NoticeHour").val(hour);
             } else if (fk_event == "NodeOverDue") {
-                 var noticeType = GetPara(en.AtPara, "NoticeType");
+                var noticeType = GetPara(en.AtPara, "NoticeType");
                 document.getElementById("RB_NoticeType_" + noticeType).checked = true;
 
-                 var day = GetPara(en.AtPara, "NoticeDay");
+                var day = GetPara(en.AtPara, "NoticeDay");
                 $("#TB_NoticeDay").val(day);
             }
 
@@ -153,7 +153,7 @@
                 "SendSuccess": "发送给下一个节点的所有接受人",
                 "ReturnAfter": "发送给被退回的节点处理人",
                 "UndoneAfter": "撤销工作后通知的节点接受人",
-                "ShitAfter"  : "发送给被移交的节点接受人",
+                "ShitAfter": "发送给被移交的节点接受人",
                 "FlowOverAfter": "流程结束通知的所有流程的参与人",
                 "AfterFlowDel": "流程删除后通知所有流程的参与人",
                 "NodeWarning": "发送给当前节点的所有处理人",
@@ -192,7 +192,7 @@
             window.location.href = url;
         }
 
-</script>
+    </script>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form id="cc">
@@ -262,7 +262,8 @@
                     <label><input id='CB_SMSPushModel_SMS' type='checkbox' name='CB_SMSPushModel' value='SMS' />短信</label>
                     <label><input id='CB_SMSPushModel_DingDing' type='checkbox' name='CB_SMSPushModel' value='DingDing' />钉钉</label>
                     <label><input id='CB_SMSPushModel_WeiXin' type='checkbox' name='CB_SMSPushModel' value='WeiXin' />微信</label>
-                    <label><input id='CB_SMSPushModel_TM' type='checkbox' name='CB_SMSPushModel' value='TM' />即时通</label>
+                    <label><input id='CB_SMSPushModel_WS' type='checkbox' name='CB_SMSPushModel' value='WS' />WebServices </label>
+                    <a href="javascript:alert('1. for: .net ccbpm会把信息写入到 \datauser\PortalInterface.asmx \t\n2. for java:请参考 java相关代码. ');"><img src="../../Img/Btn/Help.gif" />设置帮助</a>
                 </td>
             </tr>
             <tr id="NodeWarn">

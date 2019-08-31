@@ -546,6 +546,8 @@ namespace BP.WF
                 }
             }
 
+        
+
             //检查表.
             BP.Sys.GloVar gv = new GloVar();
             gv.CheckPhysicsTable();
@@ -617,6 +619,39 @@ namespace BP.WF
                 }
             }
             #endregion
+
+            #region 升级视图. 解决厦门信息港的 - 流程监控与授权.
+            if (DBAccess.IsExitsObject("V_MyFlowData") == false && 1 == 2)
+            {
+                BP.WF.Template.PowerModel pm11 = new PowerModel();
+                pm11.CheckPhysicsTable();
+
+                sql = "CREATE VIEW V_MyFlowData ";
+                sql += " AS ";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=1";
+                sql += "    UNION  ";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
+                DBAccess.RunSQL(sql);
+            }
+
+            if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false && 1 == 2)
+            {
+                BP.WF.Template.PowerModel pm11 = new PowerModel();
+                pm11.CheckPhysicsTable();
+
+                sql = "CREATE VIEW V_MyFlowData ";
+                sql += " AS ";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=1";
+                sql += "    UNION  ";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
+                DBAccess.RunSQL(sql);
+            }
+            #endregion 升级视图.
+
 
             #region 升级填充数据.
             //pop自动填充
@@ -768,20 +803,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
 
-                if (DBAccess.IsExitsObject("V_MyFlowData") == false  && 1==2 )
-                {
-                    BP.WF.Template.PowerModel pm11 = new PowerModel();
-                    pm11.CheckPhysicsTable();
-
-                    sql = "CREATE VIEW V_MyFlowData ";
-                    sql += " AS ";
-                    sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
-                    sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=1";
-                    sql += "    UNION  ";
-                    sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
-                    sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
-                    DBAccess.RunSQL(sql);
-                }
+           
 
                 #endregion 创建缺少的视图 Port_Inc.
 

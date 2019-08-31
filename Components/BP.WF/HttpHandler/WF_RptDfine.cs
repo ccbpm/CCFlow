@@ -31,12 +31,12 @@ namespace BP.WF.HttpHandler
             {
                 string val = this.GetRequestVal("SearchType");
 
-                if(val==null || val.Equals(""))
+                if (val == null || val.Equals(""))
                     val = this.GetRequestVal("GroupType");
                 return val;
             }
-           
-           
+
+
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
         public string GroupType
         {
             get
-            { 
+            {
                 return this.GetRequestVal("GroupType");
             }
         }
@@ -124,7 +124,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-        
+
         #region 功能列表
         /// <summary>
         /// 功能列表
@@ -138,6 +138,7 @@ namespace BP.WF.HttpHandler
 
             RptDfine rd = new RptDfine(this.FK_Flow);
             Paras ps = new Paras();
+
             #region 增加本部门发起流程的查询.
             if (rd.MyDeptRole == 0)
             {
@@ -179,7 +180,7 @@ namespace BP.WF.HttpHandler
             else
             {
                 string data = fl.GetParaString("AdvSearchRight");
-                data=","+data+",";
+                data = "," + data + ",";
                 if (data.Contains(BP.Web.WebUser.No + ",") == true)
                 {
                     ht.Add("Adminer", "高级查询");
@@ -236,7 +237,7 @@ namespace BP.WF.HttpHandler
                 if (this.SearchType == "MyJoin")
                     rd.DoReset(this.SearchType, "我审批的流程");
 
-                if(this.SearchType =="MyDept")
+                if (this.SearchType == "MyDept")
                     rd.DoReset(this.SearchType, "本部门发起的流程");
 
                 if (this.SearchType == "Adminer")
@@ -257,7 +258,7 @@ namespace BP.WF.HttpHandler
                 ur.MyPK = WebUser.No + rptNo + cfgfix;
                 ur.FK_Emp = WebUser.No;
                 ur.CfgKey = rptNo + cfgfix;
-              
+
                 ur.Insert();
             }
 
@@ -287,7 +288,7 @@ namespace BP.WF.HttpHandler
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
             string tmpDir = BP.Sys.SystemConfig.PathOfDataUser + @"TempleteExpEns\" + rptNo;
-            if(System.IO.Directory.Exists(tmpDir))
+            if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
                     md.SetPara("T_RptExportToTmp", "1");
@@ -472,7 +473,7 @@ namespace BP.WF.HttpHandler
 
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
 
-            qo.AddWhere( " AND  WFState > 1 ");
+            qo.AddWhere(" AND  WFState > 1 ");
             qo.AddWhere(" AND FID = 0 ");
 
             md.SetPara("T_total", qo.GetCount());
@@ -484,7 +485,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
-        
+
         public string FlowSearch_Done()
         {
             string vals = this.GetRequestVal("vals");
@@ -530,7 +531,7 @@ namespace BP.WF.HttpHandler
                     return "err@" + this.SearchType + "标记错误.";
             }
 
- 
+
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
 
@@ -553,7 +554,7 @@ namespace BP.WF.HttpHandler
             string dtFrom = GetRequestVal("dtFrom");
             string dtTo = GetRequestVal("dtTo");
             string mvals = GetRequestVal("mvals");
-  
+
 
             string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
             UserRegedit ur = new UserRegedit();
@@ -567,7 +568,7 @@ namespace BP.WF.HttpHandler
             ur.MVals = mvals;
             ur.Update();
 
-           
+
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
 
@@ -603,10 +604,11 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
             qo.addOrderByDesc("OID");
             Attrs attrsa = new Attrs();
-            foreach(MapAttr attr in attrs){
+            foreach (MapAttr attr in attrs)
+            {
                 attrsa.Add(attr.HisAttr);
             }
-            
+
             string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, title, attrsa);
 
 
@@ -680,8 +682,8 @@ namespace BP.WF.HttpHandler
 
                 groupUr.Insert();
             }
-           
-          
+
+
 
             vals = ur.GetVals();
             md.SetPara("RptDTSearchWay", (int)md.RptDTSearchWay);
@@ -720,7 +722,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Field", typeof(string));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Checked", typeof(string));
-           
+
 
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
@@ -741,7 +743,7 @@ namespace BP.WF.HttpHandler
                         dr["Checked"] = "true";
 
                     dt.Rows.Add(dr);
-                } 
+                }
             }
             ds.Tables.Add(dt);
             #endregion
@@ -884,7 +886,7 @@ namespace BP.WF.HttpHandler
 
                         switch (ar.LGType)
                         {
-                            
+
                             case FieldTypeS.FK:
                                 Entities ens = ar.HisAttr.HisFKEns;
                                 ens.RetrieveAll();
@@ -934,7 +936,7 @@ namespace BP.WF.HttpHandler
                                     }
                                 }
                                 break;
-                           
+
                             case FieldTypeS.Enum:
                                 dtNoName = GetNoNameDataTable(ar.KeyOfEn);
                                 dtNoName.Rows.Add("all", "全部");
@@ -953,7 +955,7 @@ namespace BP.WF.HttpHandler
                                 break;
                         }
                         break;
-                   
+
                     default:
                         break;
                 }
@@ -970,9 +972,9 @@ namespace BP.WF.HttpHandler
 
         public string FlowGropu_Done()
         {
-            
+
             if (!this.GroupType.Equals("My") && this.GroupType.Equals("MyJoin") && this.GroupType.Equals("MyDept") && this.GroupType.Equals("Adminer"))
-                 return "info@<img src='../Img/Pub/warning.gif' /><b><font color=red>"+ this.GroupType + "标记错误.</font></b>";
+                return "info@<img src='../Img/Pub/warning.gif' /><b><font color=red>" + this.GroupType + "标记错误.</font></b>";
             DataSet ds = new DataSet();
             ds = FlowGroupDoneSet();
             if (ds == null)
@@ -997,7 +999,7 @@ namespace BP.WF.HttpHandler
 
 
 
-            UserRegedit groupUr = new UserRegedit(WebUser.No,rptNo+"_GroupAttrs");
+            UserRegedit groupUr = new UserRegedit(WebUser.No, rptNo + "_GroupAttrs");
             //分组的参数
             string groupVals = groupUr.Vals;
             //查询条件
@@ -1023,7 +1025,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    Attr attr = GetAttrByKey(attrs,paras[0]);
+                    Attr attr = GetAttrByKey(attrs, paras[0]);
                     AttrsOfNum.Add(attr);
                     dataType = attr.MyDataType;
                 }
@@ -1087,7 +1089,7 @@ namespace BP.WF.HttpHandler
                     selectSQL += key + " \"" + key + "\",";
                     groupBy += key + ",";
                     // 加入组里面。
-                    AttrsOfGroup.Add(GetAttrByKey(attrs,key), false, false);
+                    AttrsOfGroup.Add(GetAttrByKey(attrs, key), false, false);
 
                 }
             }
@@ -1102,7 +1104,7 @@ namespace BP.WF.HttpHandler
                     groupBy += "FK_NY,";
                     SelectedGroupKey += "@FK_NY";
                     // 加入组里面。
-                    AttrsOfGroup.Add(GetAttrByKey(attrs,"FK_NY"), false, false);
+                    AttrsOfGroup.Add(GetAttrByKey(attrs, "FK_NY"), false, false);
                 }
             }
 
@@ -1111,7 +1113,7 @@ namespace BP.WF.HttpHandler
             if (groupBy.Equals(" GROUP BY"))
                 return null;
 
-                
+
 
             string orderByReq = this.GetRequestVal("OrderBy");
 
@@ -1154,189 +1156,189 @@ namespace BP.WF.HttpHandler
 
             DataTable dt2 = qo.DoGroupQueryToTable(selectSQL + groupKey, groupBy, orderby);
 
-             DataTable dt1 = dt2.Clone();
+            DataTable dt1 = dt2.Clone();
 
-             dt1.Columns.Add("IDX", typeof(int));
+            dt1.Columns.Add("IDX", typeof(int));
 
-             #region 对他进行分页面
+            #region 对他进行分页面
 
-             int myIdx = 0;
-             foreach (DataRow dr in dt2.Rows)
-             {
-                 myIdx++;
-                 DataRow mydr = dt1.NewRow();
-                 mydr["IDX"] = myIdx;
-                 foreach (DataColumn dc in dt2.Columns)
-                 {
-                     mydr[dc.ColumnName] = dr[dc.ColumnName];
-                 }
-                 dt1.Rows.Add(mydr);
-             }
-             #endregion
+            int myIdx = 0;
+            foreach (DataRow dr in dt2.Rows)
+            {
+                myIdx++;
+                DataRow mydr = dt1.NewRow();
+                mydr["IDX"] = myIdx;
+                foreach (DataColumn dc in dt2.Columns)
+                {
+                    mydr[dc.ColumnName] = dr[dc.ColumnName];
+                }
+                dt1.Rows.Add(mydr);
+            }
+            #endregion
 
-             #region 处理 Int 类型的分组列。
-             DataTable dt = dt1.Clone();
-             dt.TableName = "GroupSearch";
-             dt.Rows.Clear();
-             foreach (Attr attr in AttrsOfGroup)
-             {
-                 dt.Columns[attr.Key].DataType = typeof(string);
-             }
-             foreach (DataRow dr in dt1.Rows)
-             {
-                 dt.ImportRow(dr);
-             }
-             #endregion
+            #region 处理 Int 类型的分组列。
+            DataTable dt = dt1.Clone();
+            dt.TableName = "GroupSearch";
+            dt.Rows.Clear();
+            foreach (Attr attr in AttrsOfGroup)
+            {
+                dt.Columns[attr.Key].DataType = typeof(string);
+            }
+            foreach (DataRow dr in dt1.Rows)
+            {
+                dt.ImportRow(dr);
+            }
+            #endregion
 
-             // 处理这个物理表 , 如果有累计字段, 就扩展它的列。
-             if (isHaveLJ)
-             {
-                 // 首先扩充列.
-                 foreach (Attr attr in AttrsOfNum)
-                 {
-                     if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") == -1)
-                         continue;
+            // 处理这个物理表 , 如果有累计字段, 就扩展它的列。
+            if (isHaveLJ)
+            {
+                // 首先扩充列.
+                foreach (Attr attr in AttrsOfNum)
+                {
+                    if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") == -1)
+                        continue;
 
-                     switch (attr.MyDataType)
-                     {
-                         case DataType.AppInt:
-                             dt.Columns.Add(attr.Key + "Amount", typeof(int));
-                             break;
-                         default:
-                             dt.Columns.Add(attr.Key + "Amount", typeof(decimal));
-                             break;
-                     }
-                 }
+                    switch (attr.MyDataType)
+                    {
+                        case DataType.AppInt:
+                            dt.Columns.Add(attr.Key + "Amount", typeof(int));
+                            break;
+                        default:
+                            dt.Columns.Add(attr.Key + "Amount", typeof(decimal));
+                            break;
+                    }
+                }
 
-                 string sql = "";
-                 string whereOFLJ = "";
-                 AtPara ap = new AtPara(ur.Vals);
-                 /// #region 获得查询数据.
-                 foreach (string str in ap.HisHT.Keys)
-                 {
-                     Object val = ap.GetValStrByKey(str);
-                     if (val.Equals("all"))
-                     {
-                         continue;
-                     }
-                     if (str != "FK_NY")
-                         whereOFLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                string sql = "";
+                string whereOFLJ = "";
+                AtPara ap = new AtPara(ur.Vals);
+                /// #region 获得查询数据.
+                foreach (string str in ap.HisHT.Keys)
+                {
+                    Object val = ap.GetValStrByKey(str);
+                    if (val.Equals("all"))
+                    {
+                        continue;
+                    }
+                    if (str != "FK_NY")
+                        whereOFLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
 
-                 }
+                }
 
-                 // 添加累计汇总数据.
-                 foreach (DataRow dr in dt.Rows)
-                 {
-                     foreach (Attr attr in AttrsOfNum)
-                     {
-                         if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") == -1)
-                             continue;
+                // 添加累计汇总数据.
+                foreach (DataRow dr in dt.Rows)
+                {
+                    foreach (Attr attr in AttrsOfNum)
+                    {
+                        if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") == -1)
+                            continue;
 
-                         //形成查询sql.
-                         if (whereOFLJ.Length > 0)
-                             sql = "SELECT SUM(" + attr.Key + ") FROM " + ges.GetNewEntity.EnMap.PhysicsTable + whereOFLJ + " AND ";
-                         else
-                             sql = "SELECT SUM(" + attr.Key + ") FROM " + ges.GetNewEntity.EnMap.PhysicsTable + " WHERE ";
+                        //形成查询sql.
+                        if (whereOFLJ.Length > 0)
+                            sql = "SELECT SUM(" + attr.Key + ") FROM " + ges.GetNewEntity.EnMap.PhysicsTable + whereOFLJ + " AND ";
+                        else
+                            sql = "SELECT SUM(" + attr.Key + ") FROM " + ges.GetNewEntity.EnMap.PhysicsTable + " WHERE ";
 
-                         foreach (Attr attr1 in AttrsOfGroup)
-                         {
-                             switch (attr1.Key)
-                             {
-                                 case "FK_NY":
-                                     sql += " FK_NY <= '" + dr["FK_NY"] + "' AND FK_ND='" + dr["FK_NY"].ToString().Substring(0, 4) + "' AND ";
-                                     break;
-                                 case "FK_Dept":
-                                     sql += attr1.Key + "='" + dr[attr1.Key] + "' AND ";
-                                     break;
-                                 case "FK_SJ":
-                                 case "FK_XJ":
-                                     sql += attr1.Key + " LIKE '" + dr[attr1.Key] + "%' AND ";
-                                     break;
-                                 default:
-                                     sql += attr1.Key + "='" + dr[attr1.Key] + "' AND ";
-                                     break;
-                             }
-                         }
+                        foreach (Attr attr1 in AttrsOfGroup)
+                        {
+                            switch (attr1.Key)
+                            {
+                                case "FK_NY":
+                                    sql += " FK_NY <= '" + dr["FK_NY"] + "' AND FK_ND='" + dr["FK_NY"].ToString().Substring(0, 4) + "' AND ";
+                                    break;
+                                case "FK_Dept":
+                                    sql += attr1.Key + "='" + dr[attr1.Key] + "' AND ";
+                                    break;
+                                case "FK_SJ":
+                                case "FK_XJ":
+                                    sql += attr1.Key + " LIKE '" + dr[attr1.Key] + "%' AND ";
+                                    break;
+                                default:
+                                    sql += attr1.Key + "='" + dr[attr1.Key] + "' AND ";
+                                    break;
+                            }
+                        }
 
-                         sql = sql.Substring(0, sql.Length - "AND ".Length);
-                         if (attr.MyDataType == DataType.AppInt)
-                             dr[attr.Key + "Amount"] = DBAccess.RunSQLReturnValInt(sql, 0);
-                         else
-                             dr[attr.Key + "Amount"] = DBAccess.RunSQLReturnValDecimal(sql, 0, 2);
-                     }
-                 }
-             }
+                        sql = sql.Substring(0, sql.Length - "AND ".Length);
+                        if (attr.MyDataType == DataType.AppInt)
+                            dr[attr.Key + "Amount"] = DBAccess.RunSQLReturnValInt(sql, 0);
+                        else
+                            dr[attr.Key + "Amount"] = DBAccess.RunSQLReturnValDecimal(sql, 0, 2);
+                    }
+                }
+            }
 
-             // 为表扩充外键
-             foreach (Attr attr in AttrsOfGroup)
-             {
-                 dt.Columns.Add(attr.Key + "T", typeof(string));
-             }
-             foreach (Attr attr in AttrsOfGroup)
-             {
-                 if (attr.UIBindKey.IndexOf(".") == -1)
-                 {
-                     /* 说明它是枚举类型 */
-                     SysEnums ses = new SysEnums(attr.UIBindKey);
-                     foreach (DataRow dr in dt.Rows)
-                     {
-                         int val = 0;
-                         try
-                         {
-                             val = int.Parse(dr[attr.Key].ToString());
-                         }
-                         catch
-                         {
-                             dr[attr.Key + "T"] = " ";
-                             continue;
-                         }
+            // 为表扩充外键
+            foreach (Attr attr in AttrsOfGroup)
+            {
+                dt.Columns.Add(attr.Key + "T", typeof(string));
+            }
+            foreach (Attr attr in AttrsOfGroup)
+            {
+                if (attr.UIBindKey.IndexOf(".") == -1)
+                {
+                    /* 说明它是枚举类型 */
+                    SysEnums ses = new SysEnums(attr.UIBindKey);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        int val = 0;
+                        try
+                        {
+                            val = int.Parse(dr[attr.Key].ToString());
+                        }
+                        catch
+                        {
+                            dr[attr.Key + "T"] = " ";
+                            continue;
+                        }
 
-                         foreach (SysEnum se in ses)
-                         {
-                             if (se.IntKey == val)
-                                 dr[attr.Key + "T"] = se.Lab;
-                         }
-                     }
-                     continue;
-                 }
-                 foreach (DataRow dr in dt.Rows)
-                 {
-                     Entity myen = attr.HisFKEn;
-                     string val = dr[attr.Key].ToString();
-                     myen.SetValByKey(attr.UIRefKeyValue, val);
-                     try
-                     {
-                         myen.Retrieve();
-                         dr[attr.Key + "T"] = myen.GetValStrByKey(attr.UIRefKeyText);
-                     }
-                     catch
-                     {
-                         if (val == null || val.Length <= 1)
-                         {
-                             dr[attr.Key + "T"] = val;
-                         }
-                         else if (val.Substring(0, 2) == "63")
-                         {
-                             try
-                             {
-                                 BP.Port.Dept Dept = new BP.Port.Dept(val);
-                                 dr[attr.Key + "T"] = Dept.Name;
-                             }
-                             catch
-                             {
-                                 dr[attr.Key + "T"] = val;
-                             }
-                         }
-                         else
-                         {
-                             dr[attr.Key + "T"] = val;
-                         }
-                     }
-                 }
-             }
-             ds.Tables.Add(dt);
-             ds.Tables.Add(AttrsOfNum.ToMapAttrs.ToDataTableField("AttrsOfNum"));
-             ds.Tables.Add(AttrsOfGroup.ToMapAttrs.ToDataTableField("AttrsOfGroup"));
+                        foreach (SysEnum se in ses)
+                        {
+                            if (se.IntKey == val)
+                                dr[attr.Key + "T"] = se.Lab;
+                        }
+                    }
+                    continue;
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    Entity myen = attr.HisFKEn;
+                    string val = dr[attr.Key].ToString();
+                    myen.SetValByKey(attr.UIRefKeyValue, val);
+                    try
+                    {
+                        myen.Retrieve();
+                        dr[attr.Key + "T"] = myen.GetValStrByKey(attr.UIRefKeyText);
+                    }
+                    catch
+                    {
+                        if (val == null || val.Length <= 1)
+                        {
+                            dr[attr.Key + "T"] = val;
+                        }
+                        else if (val.Substring(0, 2) == "63")
+                        {
+                            try
+                            {
+                                BP.Port.Dept Dept = new BP.Port.Dept(val);
+                                dr[attr.Key + "T"] = Dept.Name;
+                            }
+                            catch
+                            {
+                                dr[attr.Key + "T"] = val;
+                            }
+                        }
+                        else
+                        {
+                            dr[attr.Key + "T"] = val;
+                        }
+                    }
+                }
+            }
+            ds.Tables.Add(dt);
+            ds.Tables.Add(AttrsOfNum.ToMapAttrs.ToDataTableField("AttrsOfNum"));
+            ds.Tables.Add(AttrsOfGroup.ToMapAttrs.ToDataTableField("AttrsOfGroup"));
 
 
             return ds;
@@ -1352,16 +1354,16 @@ namespace BP.WF.HttpHandler
             var desc = "";
 
             if (this.GroupType.Equals("My"))
-                desc="我发起的流程";
-            else if (this.GroupType.Equals("MyJoin")) 
-                 desc="我审批的流程";
-            else if(this.GroupType.Equals("MyDept"))
-                 desc="本部门发起的流程";
-            else if( this.GroupType.Equals("Adminer"))
-                 desc="高级查询";
+                desc = "我发起的流程";
+            else if (this.GroupType.Equals("MyJoin"))
+                desc = "我审批的流程";
+            else if (this.GroupType.Equals("MyDept"))
+                desc = "本部门发起的流程";
+            else if (this.GroupType.Equals("Adminer"))
+                desc = "高级查询";
             else
                 return "info@<img src='../Img/Pub/warning.gif' /><b><font color=red>" + this.GroupType + "标记错误.</font></b>";
-            
+
             DataSet ds = new DataSet();
             ds = FlowGroupDoneSet();
             if (ds == null)
@@ -1370,9 +1372,9 @@ namespace BP.WF.HttpHandler
             //获取注册信息表
             UserRegedit ur = new UserRegedit(WebUser.No, rptNo + "_GroupAttrs");
 
-       
 
-            string filePath = ExportGroupExcel(ds,desc , ur.Vals);
+
+            string filePath = ExportGroupExcel(ds, desc, ur.Vals);
 
 
             return filePath;
@@ -1547,7 +1549,7 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
 
-           
+
             //查询结果
             QueryObject qo = new QueryObject(ges);
 
@@ -1652,10 +1654,10 @@ namespace BP.WF.HttpHandler
             Attrs newAttrs = new Attrs();
             foreach (MapAttr attr in attrs)
             {
-                if(attr.KeyOfEn.ToUpper().Equals("OID"))
+                if (attr.KeyOfEn.ToUpper().Equals("OID"))
                     continue;
-               
-                    newAttrs.Add(attr.HisAttr);
+
+                newAttrs.Add(attr.HisAttr);
             }
 
             string filePath = ExportDGToExcel(dt, ges.GetNewEntity, rptNo, newAttrs);
@@ -1669,7 +1671,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="key">key</param>
         /// <returns>attr</returns>
-        public Attr GetAttrByKey(MapAttrs mapAttrs,string key)
+        public Attr GetAttrByKey(MapAttrs mapAttrs, string key)
         {
             foreach (MapAttr attr in mapAttrs)
             {
@@ -1679,7 +1681,7 @@ namespace BP.WF.HttpHandler
                 }
             }
             return null;
-           
+
         }
 
         /// <summary>

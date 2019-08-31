@@ -600,8 +600,8 @@ namespace BP.En
                 string sql = null;
                 if (attr == null)
                     attr = this.EnMap.GetAttrByKey(attrKey);
-                if (attr.UIIsReadonly == false)
-                    throw new Exception("@需要自动生成编号的列(" + attr.Key + ")必须为只读。");
+            //    if (attr.UIIsReadonly == false)
+              //      throw new Exception("@需要自动生成编号的列(" + attr.Key + ")必须为只读。");
 
                 string field = this.EnMap.GetFieldByKey(attrKey);
                 switch (this.EnMap.EnDBUrl.DBType)

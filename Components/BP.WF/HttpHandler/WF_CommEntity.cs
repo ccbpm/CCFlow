@@ -642,6 +642,8 @@ namespace BP.WF.HttpHandler
                 RefMethods rms = map.HisRefMethods;
                 foreach (RefMethod item in rms)
                 {
+                    item.HisEn = en;
+                    //item.HisAttrs = en.EnMap.Attrs;B
                     string myurl = "";
                     if (item.RefMethodType != RefMethodType.Func)
                     {

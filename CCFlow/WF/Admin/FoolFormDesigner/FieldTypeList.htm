@@ -475,7 +475,6 @@
 
         var mypk = frmID + "_" + id;
         var mapAttr = new Entity("BP.Sys.MapAttr");
-        //mapAttr.SetPara("Url", link.replace(/@/g, '$'));
         mapAttr.UIContralType = 101; //评分控件.
         mapAttr.MyPK = mypk;
         mapAttr.FK_MapData = frmID;
@@ -487,8 +486,7 @@
         mapAttr.ColSpan = 1; //
         mapAttr.UIWidth = 150;
         mapAttr.UIHeight = 170;
-        //mapAttr.Tag1 = "_blank"; //打开目标.
-        mapAttr.Tag2 = score; // 超链接地址.
+        mapAttr.Tag2 = score; // 总分
         mapAttr.Insert(); //插入字段.
         mapAttr.Retrieve();
         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&MyPK=" + mapAttr.MyPK;
@@ -580,7 +578,7 @@
         mapAttr.Retrieve();
         window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
     }
-//地图控件.
+    //地图控件.
     function ExtMap() {
 
         var name = window.prompt('请输入地图名称:\t\n比如:中国地图', '地图');
@@ -618,8 +616,8 @@
         mapAttr.MyDataType = 1;
         mapAttr.LGType = 0;
         mapAttr.ColSpan = 1; // 
-        mapAttr.UIWidth = 150;
-        mapAttr.UIHeight = 170;
+        mapAttr.UIWidth = 800;//宽度
+        mapAttr.UIHeight = 500;//高度
         mapAttr.Insert(); //插入字段.
 
         var mapAttr1 = new Entity("BP.Sys.MapAttr");

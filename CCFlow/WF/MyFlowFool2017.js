@@ -919,7 +919,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
                     eleHtml += "<img src='Style/Img/star_1.png' />";
                 }
             } else {
-                eleHtml += "<span class='score-simplestar' id='Star_" + mapAttr.KeyOfEn +"'>>";
+                eleHtml += "<span class='score-simplestar'>";
                 var num = mapAttr.Tag2;
                 for (var i = 0; i < val; i++) {
 

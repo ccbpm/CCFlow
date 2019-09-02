@@ -20,6 +20,9 @@
        {
            border: 1px solid rgb(221, 221, 221);
        }
+       body{
+           font-size:12px;
+       }
     </style>
     <script type="text/javascript">
         var currtab = GetQueryString("CurrTab");
@@ -56,14 +59,13 @@
             var chRole = node.CHRole;
             var _Html = "";
             var Idx = 0;
+            var plantStartDt; // 计划开始时间
+            var sdtOfNode; //计划完成时间
             var limintT;
             for (var i = 0; i < nds.length; i++) {
                 var nd = nds[i];
                 sdtOfNode = nd.SDTOfNode;
-                var paraCH = gwf.GetPara("CH" + nd.NodeID);
-                if (paraCH != null && paraCH != undefined)
-                    limintT = paraCH;
-
+                plantStartDt = nd.PlantStartDt;
                 //根据节点获取GenerWorkerList对应的数据
                 var gwl = GetEntityByNode(gwls,nd.NodeID);
                 _Html += "<tr>";
@@ -72,12 +74,15 @@
                 if (gwl != null) { // 已经运行的节点或者运行到的节点
                     _Html += "<td style='text-align: center'>" + gwl.FK_NodeText + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.FK_EmpText + "</td>";
+                    if (plantStartDt == null || plantStartDt == undefined || plantStartDt == "")
+                        plantStartDt = gwl.RDT;
+                    _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.RDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.CDT + "</td>";
 
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
-
+              
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
                         _Html += "<td style='text-align: center'>无</td>";
@@ -102,6 +107,7 @@
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>" + new WebUser().Name + "</td>";
+                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
@@ -112,12 +118,16 @@
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
+                        if (chRole == 1)
+                            _Html += "<td style='text-align: center'><input type='text' id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm:ss\"})'  class='form-control Wdate'/></td>";
+                        else
+                            _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
                         _Html += "<td style='text-align: center'>"+sdtOfNode+"</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         if (chRole == 1)
-                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm:ss\"})'  class='form-control Wdate'/></td>";
                         else
                             _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "</tr>";
@@ -260,13 +270,14 @@
                             <th style='background-color:#F2F2F2;width:10px'>#</th>
                             <th style='background-color:#F2F2F2;text-align:center;width:10%'>节点</th>
                             <th style='background-color:#F2F2F2;text-align:center;width:10%'>处理人</th>
-                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>接收时间</th >
+                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>计划开始时间</th>
+                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>接收时间</th>
                             <th style='background-color:#F2F2F2;width:150px;text-align:center'>应该完成时间</th>
                             <th style='background-color:#F2F2F2;width:150px;text-align:center'>实际完成时间</th>
                             <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
                             <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
                             <th style='background-color:#F2F2F2;width:160px;text-align:center'>调整应完成时间</th>
-                       
+
                         </tr>
                     </thead>
                     <tbody id="CHTbody">

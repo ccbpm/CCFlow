@@ -311,7 +311,7 @@ namespace BP.WF.HttpHandler
             foreach (Entity dt in dtls)
             {
                 string pkval = dt.PKVal.ToString();
-                string ext = dt.GetValByKey("MyFileExt").ToString();
+                string ext =  string.IsNullOrWhiteSpace(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString(); 
                 if (DataType.IsNullOrEmpty(ext) == true)
                     continue;
                 myFilePath = myFilePath + "\\" + pkval + "." + ext;

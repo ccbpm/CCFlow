@@ -18,7 +18,7 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWebServices", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag, string title, string openUrl);
+        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo,  string title, string openUrl);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendWhen", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -30,11 +30,11 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToDingDing", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo);
+        bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWeiXin", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo);
+        bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToEmail", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -42,7 +42,7 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToCCIM", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo, string tag);
+        bool SendToCCIM(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Print", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -148,8 +148,8 @@ namespace BP.WF.CCInterface {
                 base(binding, remoteAddress) {
         }
         
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag, string title, string openUrl) {
-            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, tag, title, openUrl);
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl) {
+            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, title, openUrl);
         }
         
         public bool SendWhen(string flowNo, int nodeID, long workid, string userNo, string userName) {
@@ -160,20 +160,20 @@ namespace BP.WF.CCInterface {
             return base.Channel.FlowOverBefore(flowNo, nodeID, workid, userNo, userName);
         }
         
-        public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.SendToDingDing(mypk, sender, sendToEmpNo, tel, msgInfo);
+        public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl) {
+            return base.Channel.SendToDingDing(mypk, sender, sendToEmpNo, tel, msgInfo, title, openUrl);
         }
         
-        public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.SendToWeiXin(mypk, sender, sendToEmpNo, tel, msgInfo);
+        public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl) {
+            return base.Channel.SendToWeiXin(mypk, sender, sendToEmpNo, tel, msgInfo, title, openUrl);
         }
         
         public bool SendToEmail(string mypk, string sender, string sendToEmpNo, string email, string title, string maildoc) {
             return base.Channel.SendToEmail(mypk, sender, sendToEmpNo, email, title, maildoc);
         }
         
-        public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo, string tag) {
-            return base.Channel.SendToCCIM(mypk, userNo, msg, sourceUserNo, tag);
+        public bool SendToCCIM(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl) {
+            return base.Channel.SendToCCIM(mypk, sender, sendToEmpNo, tel, msgInfo, title, openUrl);
         }
         
         public void Print(string billFilePath) {

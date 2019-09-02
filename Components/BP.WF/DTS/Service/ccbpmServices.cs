@@ -131,16 +131,81 @@ namespace BP.WF.DTS
                 }
                 continue;
             }
-            # endregion  流程预警
+            #endregion  流程预警
+            DataTable generTab = null;
+
+            #region 节点预警
+            sql = "SELECT a.FK_Flow,a.WorkID,a.Title,a.FK_Node,a.SDTOfNode,a.Starter,a.TodoEmps ";
+            sql += "FROM WF_GenerWorkFlow a, WF_Node b";
+            sql += " WHERE a.SDTOfNode>='" + DataType.CurrentDataTime + "' ";
+            sql += " AND WFState=2 and b.OutTimeDeal!=0";
+            sql += " AND a.FK_Node=b.NodeID";
+            generTab = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow row in generTab.Rows)
+            {
+                string fk_flow = row["FK_Flow"] + "";
+                int fk_node = int.Parse(row["FK_Node"] + "");
+                long workid = long.Parse(row["WorkID"] + "");
+                string title = row["Title"] + "";
+                string compleateTime = row["SDTOfNode"] + "";
+                string starter = row["Starter"] + "";
+                Node node = new Node(fk_node);
+                if (node.IsStartNode)
+                    continue;
+                PushMsgs pushMsgs = new PushMsgs();
+                int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.NodeWarning);
+                int maxHour = 0;
+                int minHour = 0;
+                if (count != 0)
+                {
+                    foreach (PushMsg pushMsg in pushMsgs)
+                    {
+                        if (pushMsg.GetParaInt("NoticeType") == 0)
+                        {
+                            pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                            continue;
+                        }
+                        else
+                        {
+                            if (pushMsg.GetParaInt("NoticeHour") > maxHour)
+                                maxHour = pushMsg.GetParaInt("NoticeHour");
+                            if (pushMsg.GetParaInt("NoticeHour") < minHour)
+                                minHour = pushMsg.GetParaInt("NoticeHour");
+                        }
+                    }
+
+                    //计算当天时间和节点应完成日期的时间差
+                    int hours = DataType.SpanHours(compleateTime,DataType.CurrentData);
+                    int noticeHour = 0;
+                    if (hours > minHour)//如果小于最新提醒天数则不发消息
+                    {
+                        foreach (PushMsg pushMsg in pushMsgs)
+                        {
+                            if (pushMsg.GetParaInt("NoticeType") == 1)
+                            {
+                                noticeHour = pushMsg.GetParaInt("NoticeHour");
+                                if (noticeHour == hours)
+                                {
+                                    pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            #endregion  节点预警
 
             #region 找到要节点逾期的数据.
-            DataTable generTab = null;
+
             sql = "SELECT a.FK_Flow,a.WorkID,a.Title,a.FK_Node,a.SDTOfNode,a.Starter,a.TodoEmps ";
             sql += "FROM WF_GenerWorkFlow a, WF_Node b";
             sql += " WHERE a.SDTOfNode<='" + DataType.CurrentDataTime + "' ";
             sql += " AND WFState=2 and b.OutTimeDeal!=0";
             sql += " AND a.FK_Node=b.NodeID";
             generTab = DBAccess.RunSQLReturnTable(sql);
+
             #endregion 找到要逾期的数据.
 
             // 遍历循环,逾期表进行处理.
@@ -181,11 +246,47 @@ namespace BP.WF.DTS
                     if (node.IsStartNode)
                         continue;
                     #region 启动逾期消息设置
-                    PushMsg pushMsg = new PushMsg();
-                    int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.NodeOverDue);
+                    PushMsgs pushMsgs = new PushMsgs();
+                    int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.NodeOverDue);
+                    int maxDay = 0;
+                    int minDay = 0;
                     if (count != 0)
                     {
-                        pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                        foreach(PushMsg pushMsg in pushMsgs)
+                        {
+                            if (pushMsg.GetParaInt("NoticeType") == 0)
+                            {
+                                pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                                continue;
+                            }
+                            else
+                            {
+                                if (pushMsg.GetParaInt("NoticeDay") > maxDay)
+                                    maxDay = pushMsg.GetParaInt("NoticeDay");
+                                if (pushMsg.GetParaInt("NoticeDay") < minDay)
+                                    minDay = pushMsg.GetParaInt("NoticeDay");
+                            }
+                        }
+
+                        //计算当天时间和节点应完成日期的时间差
+                        int days = DataType.SpanDays(DataType.CurrentData, compleateTime);
+                        int noticeDay = 0;
+                        if (days > minDay)//如果小于最新提醒天数则不发消息
+                        {
+                            foreach (PushMsg pushMsg in pushMsgs)
+                            {
+                                if (pushMsg.GetParaInt("NoticeType") == 1)
+                                {
+                                    noticeDay = pushMsg.GetParaInt("NoticeDay");
+                                    if (noticeDay == days || days > maxDay)
+                                    {
+                                        pushMsg.DoSendMessage(node, node.HisWork, null, null, null, null);
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+
                     }
                     #endregion 启动逾期消息设置
 

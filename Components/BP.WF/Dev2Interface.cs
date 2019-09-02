@@ -7305,7 +7305,7 @@ namespace BP.WF
             if (htWork != null && htWork.ContainsKey("SDTOfFlow") == true)
             {
                 /*流程应完成时间*/
-                gwf.SDTOfFlow = htWork["SDTOfFlow"].ToString();
+                gwf.SDTOfNode = htWork["SDTOfFlow"].ToString();
             }
 
             gwf.PWorkID = parentWorkID;
@@ -8763,28 +8763,8 @@ namespace BP.WF
                         gwf.RDT = DataType.CurrentDataTime;
                         gwf.Insert();
 
-                        // 产生工作列表.
-                        GenerWorkerList gwl = new GenerWorkerList();
-                        gwl.WorkID = workID;
-                        gwl.FK_Emp = WebUser.No;
-                        gwl.FK_EmpText = WebUser.Name;
-
-                        gwl.FK_Node = fk_node;
-                        gwl.FK_NodeText = nd.Name;
-                        gwl.FID = 0;
-
-                        gwl.FK_Flow = fk_flow;
-                        gwl.FK_Dept = WebUser.FK_Dept;
-                        gwl.FK_DeptT = WebUser.FK_DeptName;
-
-                        gwl.SDT = "无";
-                        gwl.DTOfWarning = DataType.CurrentDataTime;
-                        gwl.IsEnable = true;
-
-                        gwl.IsPass = false;
-                        //  gwl.Sender = WebUser.No;
-                        gwl.PRI = gwf.PRI;
-                        gwl.Insert();
+                        //@sly 这里在代码移动到下面了.
+                      
                     }
                     else
                     {
@@ -8794,6 +8774,30 @@ namespace BP.WF
                             gwf.DirectUpdate();
                         }
                     }
+
+                    // 产生工作列表. @sly
+                    GenerWorkerList gwl = new GenerWorkerList();
+                    gwl.WorkID = workID;
+                    gwl.FK_Emp = WebUser.No;
+                    gwl.FK_EmpText = WebUser.Name;
+
+                    gwl.FK_Node = fk_node;
+                    gwl.FK_NodeText = nd.Name;
+                    gwl.FID = 0;
+
+                    gwl.FK_Flow = fk_flow;
+                    gwl.FK_Dept = WebUser.FK_Dept;
+                    gwl.FK_DeptT = WebUser.FK_DeptName;
+
+                    gwl.SDT = "无";
+                    gwl.DTOfWarning = DataType.CurrentDataTime;
+                    gwl.IsEnable = true;
+
+                    gwl.IsPass = false;
+                    //  gwl.Sender = WebUser.No;
+                    gwl.PRI = gwf.PRI;
+                    gwl.Save();
+
                 }
                 #endregion 为开始工作创建待办
 

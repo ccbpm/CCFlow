@@ -405,6 +405,14 @@ namespace BP.Sys
             en.Update();
         }
 
+        public static System.Web.HttpRequest Request
+        {
+            get
+            {
+                return System.Web.HttpContext.Current.Request;
+            }
+        }
+
 
         /// <summary>
         /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者.

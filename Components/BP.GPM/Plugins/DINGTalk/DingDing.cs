@@ -329,7 +329,7 @@ namespace BP.EAI.Plugins
                     #region 处理部门名称全程
                     //OrgInit_NameOfPath nameOfPath = new OrgInit_NameOfPath();
                     //if (nameOfPath.IsCanDo)
-                    //    nameOfPath.Do();
+//nameOfPath.Do();
                     #endregion
 
                     return true;

@@ -335,7 +335,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 3, 3, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17023");
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
 
-                map.AddTBString(NodeAttr.Name, null, "名称", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
+                map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 
                 map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt,

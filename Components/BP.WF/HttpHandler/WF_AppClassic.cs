@@ -122,7 +122,7 @@ namespace BP.WF.HttpHandler
                 BP.Port.Emp emp = new Emp(userNo);
 
                 BP.WF.Dev2Interface.Port_Login(emp.No);
-                return "登录成功.";
+                return ".";
             }
             catch (Exception ex)
             {
@@ -194,7 +194,7 @@ namespace BP.WF.HttpHandler
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
-                return "登录成功.";
+                return "";
             }
             catch (Exception ex)
             {

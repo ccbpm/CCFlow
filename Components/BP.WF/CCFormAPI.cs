@@ -597,9 +597,13 @@ namespace BP.WF
             mes = md.MapExts;
             foreach (DataRow dr in dtMapAttr.Rows)
             {
-                string uiBindKey = dr["UIBindKey"].ToString();
+                string uiBindKey = dr["UIBindKey"] as string;
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    continue;
+
                 string myPK = dr["MyPK"].ToString();
                 string lgType = dr["LGType"].ToString();
+
                 if (lgType.Equals("1"))
                 {
                     // 如果是枚举值, 判断是否存在., 

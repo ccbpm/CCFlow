@@ -534,7 +534,7 @@ namespace BP.DA
         /// 运行一个sql返回该table的第1列，组成一个查询的where in 字符串.
         /// </summary>
         /// <param name="sql"></param>
-        /// <returns></returns>
+        /// <returns></returns>i
         public static string GenerWhereInPKsString(string sql)
         {
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);

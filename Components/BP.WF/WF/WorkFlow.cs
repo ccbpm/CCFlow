@@ -451,12 +451,28 @@ namespace BP.WF
             //检查流程是否完成，如果没有完成就调用workflow流程删除.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
+
+            string toEmps = gwf.Emps.Replace('@',',');//流程的所有处理人
             if (gwf.RetrieveFromDBSources() != 0)
             {
                 if (gwf.WFState != WFState.Complete)
                 {
                     WorkFlow wf = new WorkFlow(flowNo, workid);
+                    //发送退回消息 @yuanlina
+                    PushMsgs pms1 = new PushMsgs();
+                    pms1.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.AfterFlowDel);
+                    Node node = new Node(gwf.FK_Node);
+                    foreach (PushMsg pm in pms1)
+                    {
+                        Work work = node.HisWork;
+                        work.OID = gwf.WorkID;
+                        work.NodeID = node.NodeID;
+                        work.SetValByKey("FK_Dept", BP.Web.WebUser.FK_Dept);
+                        pm.DoSendMessage(node, work, null, null, null, toEmps);
+                    }
+
                     wf.DoDeleteWorkFlowByReal(isDelSubFlow);
+                   
                     return;
                 }
             }
@@ -465,15 +481,15 @@ namespace BP.WF
             FrmNodes fns = new FrmNodes();
             fns.Retrieve(FrmNodeAttr.FK_Flow, flowNo);
             string strs = "";
-            foreach (FrmNode nd in fns)
+            foreach (FrmNode frmNode in fns)
             {
-                if (strs.Contains("@" + nd.FK_Frm) == true)
+                if (strs.Contains("@" + frmNode.FK_Frm) == true)
                     continue;
 
-                strs += "@" + nd.FK_Frm + "@";
+                strs += "@" + frmNode.FK_Frm + "@";
                 try
                 {
-                    MapData md = new MapData(nd.FK_Frm);
+                    MapData md = new MapData(frmNode.FK_Frm);
                     DBAccess.RunSQL("DELETE FROM " + md.PTable + " WHERE OID=" + workid);
                 }
                 catch
@@ -499,20 +515,34 @@ namespace BP.WF
             // 删除退回.
             DBAccess.RunSQL("DELETE FROM WF_ReturnWork WHERE WorkID=" + workid);
 
+            //发送退回消息 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.AfterFlowDel);
+            Node pnd = new Node(gwf.FK_Node);
+            foreach (PushMsg pm in pms)
+            {
+                Work work = pnd.HisWork;
+                work.OID = gwf.WorkID;
+                work.NodeID = pnd.NodeID;
+                work.SetValByKey("FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                pm.DoSendMessage(pnd, work, null, null, null, toEmps);
+            }
+
             //删除它的工作.
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
 
             //删除所有节点上的数据.
-            Nodes nds = new Nodes(flowNo); // this.HisFlow.HisNodes;
-            foreach (Node nd in nds)
+            Nodes nodes = new Nodes(flowNo); // this.HisFlow.HisNodes;
+            foreach (Node node in nodes)
             {
                 try
                 {
-                    if (DBAccess.IsExitsObject("ND" + nd.NodeID) == false)
+                    if (DBAccess.IsExitsObject("ND" + node.NodeID) == false)
                         continue;
 
-                    DBAccess.RunSQL("DELETE FROM ND" + nd.NodeID + " WHERE OID=" + workid + " OR FID=" + workid);
+                    DBAccess.RunSQL("DELETE FROM ND" + node.NodeID + " WHERE OID=" + workid + " OR FID=" + workid);
                 }
                 catch (Exception ex)
                 {
@@ -524,6 +554,7 @@ namespace BP.WF
             {
                 Log.DebugWriteInfo(msg);
             }
+            
             #endregion 正常的删除信息.
         }
         /// <summary>

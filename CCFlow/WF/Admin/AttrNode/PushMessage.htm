@@ -44,14 +44,14 @@
 
             var ens = new Entities("BP.WF.Template.PushMsgs");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-            var emailCheck = "";
-            var ccmsg = ""
-            var sms = "";
-            var dingding = "";
-            var weixin = "";
-            var tm = "";
+            
             for (var i = 0; i < ens.length; i++) {
-
+                var emailCheck = "";
+                var ccmsg = ""
+                var sms = "";
+                var dingding = "";
+                var weixin = "";
+                var tm = "";
                 var en = new Entity("BP.WF.Template.PushMsg", ens[i].MyPK);
 
                 var newRow = "";
@@ -72,14 +72,14 @@
                     dingding = "checked=checked"
                 if (pushModel.indexOf('WeiXin') != -1)
                     weixin = "checked=checked"
-                if (pushModel.indexOf('TM') != -1)
+                if (pushModel.indexOf('WS') != -1)
                     tm ="checked=checked"
                 newRow += "<label><input id='CB_SMSPushModel_Email' type='checkbox' name='CB_SMSPushModel' value='Email' disabled "+emailCheck+"/>邮件</label>";
                 newRow += "<label><input id='CB_SMSPushModel_CCMsg' type='checkbox' name='CB_SMSPushModel' value='CCMsg' disabled  "+ccmsg+"/>站内消息</label>";
                 newRow += "<label><input id='CB_SMSPushModel_SMS' type='checkbox' name='CB_SMSPushModel' value='SMS' disabled "+sms+"/>短信</label>";
                 newRow += "<label><input id='CB_SMSPushModel_DingDing' type='checkbox' name='CB_SMSPushModel' value='DingDing' disabled "+dingding+"/>钉钉</label>";
                 newRow += "<label><input id='CB_SMSPushModel_WeiXin' type='checkbox' name='CB_SMSPushModel' value='WeiXin' disabled "+weixin+"/>微信</label>";
-                newRow += "<label><input id='CB_SMSPushModel_TM' type='checkbox' name='CB_SMSPushModel' value='TM' disabled "+tm+"/>即时通</label>";
+                newRow += "<label><input id='CB_SMSPushModel_WS' type='checkbox' name='CB_SMSPushModel' value='WS' disabled "+tm+"/>WebServices</label>";
                 newRow += "</td>";
                 newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";

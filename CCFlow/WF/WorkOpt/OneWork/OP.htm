@@ -37,6 +37,15 @@
             if (data.CanUnSend == "1")
                 html += addUnSend();
 
+            //增加催办.
+            if (data.CanFlowPress == "1")
+                html += addHurry();
+
+            //增加流程结束.
+            if (data.CanFlowOver == "1")
+                html += addFlowOver();
+
+
             $("#ccop").append(html);
 
         });
@@ -104,11 +113,52 @@
         function addHurry() {
 
             var html = addBlockBegin("工作催办");
-            html += "您没有此权限。";
+             html += "功能执行:<a href =\"javascript:Press('" + fk_flow + "','" + workid + "','" + fid + "')\" >工作催办</a>。";
+            html += addBlockEnd();
+            return html;
+        }
+         //催办.
+        function Press(fk_flow, workid, fid) {
+
+            var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+            if (msg == null)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
+            handler.AddPara("Msg", msg);
+            var data = handler.DoMethodReturnString("Runing_Press");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data);
+            return;
+        }
+
+        //流程结束
+        function addFlowOver() {
+
+            var html = addBlockBegin("流程结束");
+            html += "功能执行:<a href =\"javascript:FlowOver('" + fk_flow + "','" + workid + "','" + fid + "')\" >流程结束</a>。";
             html += addBlockEnd();
             return html;
         }
 
+        function FlowOver(fk_flow,workid,fid) {
+            if (confirm('您确定要结束流程操作吗 ?') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("MyFlow_StopFlow");
+            alert(data);
+        }
         //撤销发送
         function addUnSend() {
 

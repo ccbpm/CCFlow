@@ -3819,7 +3819,7 @@ namespace BP.WF
                 sms.MyPK = DBAccess.GenerGUID();
             }
 
-            sms.HisEmailSta = MsgSta.Disable;
+            sms.HisEmailSta = MsgSta.UnRun;
             sms.HisMobileSta = MsgSta.UnRun;
 
             if (sendEmpNo == null)
@@ -3875,64 +3875,64 @@ namespace BP.WF
         /// <param name="msgGroupFlag">分组标记</param>
         /// <param name="sender">发送人</param>
         /// <param name="msgPK">消息唯一标记，防止发送重复.</param>
-        public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
-            string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras = null)
-        {
-            if (DataType.IsNullOrEmpty(mailAddress))
-                return;
+        //public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
+        //    string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras = null)
+        //{
+        //    if (DataType.IsNullOrEmpty(mailAddress))
+        //        return;
 
-            SMS sms = new SMS();
-            if (DataType.IsNullOrEmpty(msgPK) == false)
-            {
-                /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
-                if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
-                {
-                    return;
-                }
+        //    SMS sms = new SMS();
+        //    if (DataType.IsNullOrEmpty(msgPK) == false)
+        //    {
+        //        /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
+        //        if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
+        //        {
+        //            return;
+        //        }
 
-                sms.MyPK = msgPK;
-            }
-            else
-            {
-                sms.MyPK = DBAccess.GenerGUID();
-            }
+        //        sms.MyPK = msgPK;
+        //    }
+        //    else
+        //    {
+        //        sms.MyPK = DBAccess.GenerGUID();
+        //    }
 
-            sms.HisEmailSta = MsgSta.UnRun;
-            if (sender == null)
-            {
-                sms.Sender = WebUser.No;
-            }
-            else
-            {
-                sms.Sender = sender;
-            }
+        //    sms.HisEmailSta = MsgSta.UnRun;
+        //    if (sender == null)
+        //    {
+        //        sms.Sender = WebUser.No;
+        //    }
+        //    else
+        //    {
+        //        sms.Sender = sender;
+        //    }
 
-            sms.SendToEmpNo = sendToEmpNo;
+        //    sms.SendToEmpNo = sendToEmpNo;
 
-            //邮件地址.
-            sms.Email = mailAddress;
+        //    //邮件地址.
+        //    sms.Email = mailAddress;
 
-            //邮件标题.
-            sms.Title = emilTitle;
-            sms.DocOfEmail = emailBody;
-
-
+        //    //邮件标题.
+        //    sms.Title = emilTitle;
+        //    sms.DocOfEmail = emailBody;
 
 
 
-            //手机状态禁用.
-            sms.HisMobileSta = MsgSta.Disable;
 
-            // 其他属性.
-            sms.RDT = BP.DA.DataType.CurrentDataTime;
 
-            //消息参数.
-            sms.AtPara = paras;
+        //    //手机状态禁用.
+        //    sms.HisMobileSta = MsgSta.Disable;
 
-            sms.MsgFlag = msgGroupFlag; // 消息标志.
-            sms.MsgType = msgType;   // 消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...).
-            sms.Insert();
-        }
+        //    // 其他属性.
+        //    sms.RDT = BP.DA.DataType.CurrentDataTime;
+
+        //    //消息参数.
+        //    sms.AtPara = paras;
+
+        //    sms.MsgFlag = msgGroupFlag; // 消息标志.
+        //    sms.MsgType = msgType;   // 消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...).
+        //    sms.Insert();
+        //}
         /// <summary>
         /// 发送短信
         /// </summary>
@@ -3944,62 +3944,62 @@ namespace BP.WF
         /// <param name="msgPK">唯一标志,防止发送重复.</param>
         /// <param name="sendEmpNo">发送给人员.</param>
         /// <param name="atParas">参数.</param>
-        public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
-            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null, string pushModel = null)
-        {
-            //if (DataType.IsNullOrEmpty(tel))
-            //    return;
+        //public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
+        //    string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null, string pushModel = null)
+        //{
+        //    //if (DataType.IsNullOrEmpty(tel))
+        //    //    return;
 
-            SMS sms = new SMS();
-            if (DataType.IsNullOrEmpty(msgPK) == false)
-            {
-                /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
-                if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
-                {
-                    return;
-                }
+        //    SMS sms = new SMS();
+        //    if (DataType.IsNullOrEmpty(msgPK) == false)
+        //    {
+        //        /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
+        //        if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
+        //        {
+        //            return;
+        //        }
 
-                sms.MyPK = msgPK;
-            }
-            else
-            {
-                sms.MyPK = DBAccess.GenerGUID();
-            }
+        //        sms.MyPK = msgPK;
+        //    }
+        //    else
+        //    {
+        //        sms.MyPK = DBAccess.GenerGUID();
+        //    }
 
-            sms.HisEmailSta = MsgSta.Disable;
-            sms.HisMobileSta = MsgSta.UnRun;
+        //    sms.HisEmailSta = MsgSta.Disable;
+        //    sms.HisMobileSta = MsgSta.UnRun;
 
-            if (sender == null)
-            {
-                sms.Sender = WebUser.No;
-            }
-            else
-            {
-                sms.Sender = sender;
-            }
+        //    if (sender == null)
+        //    {
+        //        sms.Sender = WebUser.No;
+        //    }
+        //    else
+        //    {
+        //        sms.Sender = sender;
+        //    }
 
-            //发送给人员ID , 有可能这个人员空的.
-            sms.SendToEmpNo = sendToEmpNo;
+        //    //发送给人员ID , 有可能这个人员空的.
+        //    sms.SendToEmpNo = sendToEmpNo;
 
-            sms.Mobile = tel;
-            sms.MobileInfo = smsDoc;
-            sms.Title = title;
+        //    sms.Mobile = tel;
+        //    sms.MobileInfo = smsDoc;
+        //    sms.Title = title;
 
-            // 其他属性.
-            sms.RDT = BP.DA.DataType.CurrentDataTime;
+        //    // 其他属性.
+        //    sms.RDT = BP.DA.DataType.CurrentDataTime;
 
-            sms.MsgType = msgType; // 消息类型.
+        //    sms.MsgType = msgType; // 消息类型.
 
-            sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
+        //    sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
 
-            sms.AtPara = atParas;
+        //    sms.AtPara = atParas;
 
-            sms.SetPara("OpenUrl", opnUrl);
-            sms.SetPara("PushModel", pushModel);
+        //    sms.SetPara("OpenUrl", opnUrl);
+        //    sms.SetPara("PushModel", pushModel);
 
-            // 先保留本机一份.
-            sms.Insert();
-        }
+        //    // 先保留本机一份.
+        //    sms.Insert();
+        //}
         /// <summary>
         /// 获取最新的消息
         /// </summary>
@@ -9427,7 +9427,8 @@ namespace BP.WF
             //人员.
             Emp emp = new Emp(toEmp);
             Node nd = new Node(gwf.FK_Node);
-
+            Work work = nd.HisWork;
+            work.OID = workID;
             if (nd.TodolistModel == TodolistModel.Order
                 || nd.TodolistModel == TodolistModel.Teamup
                 || nd.TodolistModel == TodolistModel.TeamupGroupLeader)
@@ -9449,12 +9450,20 @@ namespace BP.WF
 
                 string info = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
 
-                //移交后事件
-                info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
+                //移交后事件 @yuanlina
+                string atPara1 = "@SendToEmpIDs=" + emp.No;
+                info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, work, atPara1);
 
                 info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
 
-                BP.WF.Dev2Interface.Port_SendMsg(emp.No, gwf.Title, "工作移交", "Shif");
+                //处理移交后发送的消息事件 @yuanlina
+                PushMsgs pms1 = new PushMsgs();
+                pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID,PushMsgAttr.FK_Event, EventListOfNode.ShitAfter);
+                foreach (PushMsg pm in pms1)
+                {
+                    pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.No);
+                }
+
                 return "移交成功.";
             }
 
@@ -9496,15 +9505,13 @@ namespace BP.WF
             Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
                 WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
-            //发送邮件.
-            BP.WF.Dev2Interface.Port_SendMsg(emp.No, WebUser.Name + "向您移交了工作" + gwf.Title, "移交信息:" + msg, "SF" + workID + "_" + sf.FK_Node, BP.WF.SMSMsgType.Shift, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
 
             string inf1o = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
+            //移交后事件 @yuanlina
+            string atPara = "@SendToEmpIDs=" + emp.No;
+            inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, work, atPara);
 
-            //移交后事件
-            inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
-            //inf1o += "@移交成功..";
-            //            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+            
             return inf1o;
         }
         /// <summary>

@@ -943,6 +943,13 @@ namespace BP.DA
                 return 0;
             }
         }
+
+        public static int SpanHours(string fromday,string today)
+        {
+            var span = DateTime.Parse(today) - DateTime.Parse(fromday);
+            var days = span.Days;
+            return days;
+        }
         /// <summary>
         /// 返回 QuarterFrom - QuarterTo 的季度.
         /// </summary>

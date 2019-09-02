@@ -428,14 +428,14 @@ namespace BP.WF
                 {
                     //获取当前节点的子线程
                     string truckTable = "ND" + int.Parse(nd.FK_Flow) + "Track";
-                    string threadSQL = "SELECT FK_Node,WorkID FROM WF_GenerWorkFlow  WHERE FID=" + this.WorkID + " AND FK_Node"
+                    string threadSQL = "SELECT FK_Node,WorkID,Emps FROM WF_GenerWorkFlow  WHERE FID=" + this.WorkID + " AND FK_Node"
                             + " IN(SELECT DISTINCT(NDTo) FROM " + truckTable + "  WHERE ActionType=" + (int)ActionType.ForwardFL + " AND WorkID=" + this.WorkID + " AND NDFrom='" + nd.NodeID + "'"
                             + "  ) ";
                     DataTable dt = DBAccess.RunSQLReturnTable(threadSQL);
                     if (dt == null || dt.Rows.Count == 0)
                         throw new Exception("err@流程运行错误：当不存在子线程时,改过程应该处于待办状态");
 
-
+                    string toEmps="";
                     foreach (DataRow dr in dt.Rows)
                     {
                         Node threadnd = new Node(dr["FK_Node"].ToString());
@@ -445,9 +445,14 @@ namespace BP.WF
                         BP.WF.Dev2Interface.Node_FHL_KillSubFlow(threadnd.FK_Flow, this.WorkID, long.Parse(dr["WorkID"].ToString())); //杀掉子线程.
 
                         // 调用撤消发送前事件。
-                        nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, nd.HisWork, null);
-                    }
+                        Work work = nd.HisWork;
+                        work.OID = this.WorkID;
+                        work.NodeID = nd.NodeID;
+                        nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, work, null);
 
+                        toEmps += dr["Emps"].ToString().Replace('@',',');
+                        
+                    }
                     return "撤销成功";
 
                 }
@@ -677,6 +682,20 @@ namespace BP.WF
             }
             #endregion 如果当前是协作组长模式
 
+            //记录撤销前的处理人
+            string todoEmps = gwf.TodoEmps;
+            if (DataType.IsNullOrEmpty(todoEmps) == false)
+            {
+                string[] strs = todoEmps.Split(';');
+                todoEmps = "";
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+                    todoEmps += str.Split(',')[0];
+                }
+            }
+
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 
             // 调用撤消发送前事件。
@@ -808,9 +827,9 @@ namespace BP.WF
                 }
             }
             #endregion
-
+            string atPara = "@ToNode=" + cancelToNodeID+ "@SendToEmpIDs="+ todoEmps;
             //调用撤消发送后事件。
-            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, atPara);
 
             if (wnOfCancelTo.HisNode.IsStartNode)
             {

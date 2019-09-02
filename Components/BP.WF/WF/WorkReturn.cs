@@ -306,23 +306,13 @@ namespace BP.WF
             if (IsBackTrack == false)
             {
                 /*如果退回不需要原路返回，就删除中间点的数据。*/
-#warning 没有考虑两种流程数据存储模式。
+                #warning 没有考虑两种流程数据存储模式。
                 //DeleteToNodesData(this.ReturnToNode.HisToNodes);
             }
-
-            // 向他发送消息。
-            if (Glo.IsEnableSysMessage == true)
-            {
-                //   WF.Port.WFEmp wfemp = new Port.WFEmp(wnOfBackTo.HisWork.Rec);
-                string title = string.Format("工作退回：流程:{0}.工作:{1},退回人:{2},需您处理",
-                    this.HisNode.FlowName, this.ReturnToNode.Name, WebUser.Name);
-
-                BP.WF.Dev2Interface.Port_SendMsg(returnToEmp.No, title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
-            }
-
+            Work work = this.HisWork;
+            work.OID = this.WorkID;
             //退回后事件
-            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, this.HisWork,
-                atPara);
+            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, work,atPara);
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
             // 返回退回信息.
@@ -351,14 +341,14 @@ namespace BP.WF
             gwfP.FK_Node = this.ReturnToNode.NodeID;
             gwfP.NodeName = this.ReturnToNode.Name;
 
-            //int toNodeID = this.ReturnToNode;
-
+           
             //启用待办.
             GenerWorkerList gwl = new GenerWorkerList();
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, gwfP.WorkID);
 
             string toEmps = "";
+            string returnEmps = "";
             foreach (GenerWorkerList item in gwls)
             {
                 item.IsPassInt = 0;
@@ -366,6 +356,7 @@ namespace BP.WF
                 gwl = item;
 
                 toEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
+                returnEmps += item.FK_Emp + ",";
             }
 
             gwfP.TodoEmps = toEmps;
@@ -398,6 +389,17 @@ namespace BP.WF
 
             //设置当前为未读的状态.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(gwfP.WorkID);
+
+            //退回后发送的消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            Work work = this.HisWork;
+            work.OID = gwfP.WorkID;
+            work.NodeID = this.HisNode.NodeID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.ReturnToNode, work, null, null, null, returnEmps);
+            }
 
             //返回退回信息.
             return "成功的退回到[" + gwfP.FlowName + " - " + this.ReturnToNode.Name + "],退回给[" + toEmps + "].";
@@ -609,6 +611,7 @@ namespace BP.WF
             gwf.Update();
 
             //更新退回到的人员信息可见.
+            string returnEmp = "";
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
             foreach (GenerWorkerList item in gwls)
@@ -616,6 +619,7 @@ namespace BP.WF
                 item.IsPassInt = 0;
                 item.Update();
                 this.ReturnToEmp = item.FK_Emp + "," + item.FK_EmpText;
+                returnEmp += item.FK_Emp + ",";
             }
 
             // 去掉合流节点工作人员的待办.
@@ -635,6 +639,13 @@ namespace BP.WF
             {
                 item.IsPassInt = -2;
                 item.Update();
+            }
+            //退回消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.UndoneAfter);
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.HisNode, this.HisNode.HisWork, null, null, null, returnEmp);
             }
             return "成功的把信息退回到：" + this.ReturnToNode.Name + " , 退回给:(" + this.ReturnToEmp + ")";
         }
@@ -724,8 +735,6 @@ namespace BP.WF
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
-            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
-
             gwf.WFState = WFState.ReturnSta;
             gwf.FK_Node = this.ReturnToNode.NodeID;
             gwf.NodeName = this.ReturnToNode.Name;
@@ -756,6 +765,16 @@ namespace BP.WF
             //设置当前的工作数据为退回状态,让其不能看到待办, 这个是约定的值.
             currWorker.IsPassInt = (int)WFState.ReturnSta;
             currWorker.Update();
+
+            //退回消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            Work work = this.HisNode.HisWork;
+            work.OID = this.WorkID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.HisNode, work, null, null, null, toEmp);
+            }
 
             // 返回退回信息.
             return info;
@@ -811,7 +830,6 @@ namespace BP.WF
             // 加入track.
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
-            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
 
             gwf.WFState = WFState.ReturnSta;
             gwf.Sender = WebUser.No;
@@ -828,6 +846,15 @@ namespace BP.WF
 
             gwf.Update();
 
+            //退回消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            Work work = this.HisNode.HisWork;
+            work.OID = this.WorkID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.HisNode, work, null, null, null, toEmp);
+            }
             // 返回退回信息.
             return info;
         }
@@ -954,9 +981,11 @@ namespace BP.WF
 
             //更新当前待办人员.
             string toDoEmps = "";
+            string returnEmps = "";
             foreach (GenerWorkerList item in gwls)
             {
                 toDoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
+                returnEmps += item.FK_Emp + ",";
             }
 
             //增加参与的人员

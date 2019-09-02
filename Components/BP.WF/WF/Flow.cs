@@ -3889,7 +3889,7 @@ namespace BP.WF
         /// <param name="atPara">参数</param>
         /// <param name="objs">发送对象，可选</param>
         /// <returns>执行结果</returns>
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, int toNode = 0, string toEmps = null)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, int toNodeID = 0, string toEmps = null)
         {
             if (currNode == null)
                 return null;
@@ -3922,7 +3922,7 @@ namespace BP.WF
             if (this.FEventEntity != null)
             {
                 this.FEventEntity.SendReturnObjs = objs;
-                str = this.FEventEntity.DoIt(doType, currNode, en, atPara, toNode, toEmps);
+                str = this.FEventEntity.DoIt(doType, currNode, en, atPara, toNodeID, toEmps);
             }
 
             FrmEvents fes = currNode.FrmEvents;
@@ -3966,13 +3966,24 @@ namespace BP.WF
 
             //执行消息的发送.
             PushMsgs pms = currNode.HisPushMsgs;
+            if(doType == EventListOfNode.UndoneAfter)
+            {
+                AtPara ap = new AtPara(atPara);
+                if (toNodeID == 0)
+                    toNodeID = ap.GetValIntByKey("ToNode");
+                if (toNodeID == 0)
+                    return str;
+
+                Node toNode = new Node(toNodeID);
+                pms = toNode.HisPushMsgs;
+            }
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)
             {
                 if (item.FK_Event != doType)
                     continue;
 
-                if (item.SMSPushWay == 0 && item.MailPushWay == 0)
+                if (item.SMSPushWay == 0)
                     continue; /* 如果都没有消息设置，就放过.*/
 
                 //执行发送消息.

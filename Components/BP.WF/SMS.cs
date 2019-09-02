@@ -151,8 +151,13 @@ namespace BP.WF
 		/// 打开的连接
 		/// </summary>
 		public const string OpenUrl = "OpenUrl";
+        /// <summary>
+        /// 接受消息的工具 丁丁、微信
+        /// </summary>
+        public const string PushModel = "PushModel";
 
-	}
+
+    }
 	/// <summary>
 	/// 消息
 	/// </summary> 
@@ -440,11 +445,19 @@ namespace BP.WF
 		}
 		#endregion
 
-		#region 构造函数
-		/// <summary>
-		/// UI界面上的访问控制
-		/// </summary>
-		public override UAC HisUAC
+        public string PushModel
+        {
+            get
+            {
+                return this.GetParaString(SMSAttr.PushModel);
+            }
+        }
+
+        #region 构造函数
+        /// <summary>
+        /// UI界面上的访问控制
+        /// </summary>
+        public override UAC HisUAC
 		{
 			get
 			{
@@ -584,73 +597,73 @@ namespace BP.WF
 			try
 			{
 				CCInterface.PortalInterfaceSoapClient soap = null;
-				if (this.HisEmailSta == MsgSta.UnRun)
-				{
-					/*发送邮件*/
-					if (DataType.IsNullOrEmpty(this.Email) == true)
-						return;
+                if (this.HisEmailSta != MsgSta.UnRun)
+                    return;
 
-					string emailStrs = this.Email;
-					emailStrs = emailStrs.Replace(",", ";");
-					emailStrs = emailStrs.Replace("，", ";");
+                #region 发送邮件
+                if (this.PushModel.Contains("Email") == true && DataType.IsNullOrEmpty(this.Email) == false)
+                {
+                    string emailStrs = this.Email;
+                    emailStrs = emailStrs.Replace(",", ";");
+                    emailStrs = emailStrs.Replace("，", ";");
 
-					//包含多个邮箱
-					if (emailStrs.Contains(";") == true)
-					{
-						string[] emails = emailStrs.Split(';');
-						foreach (string email in emails)
-						{
-							if (DataType.IsNullOrEmpty(email) == true)
-								continue;
-
-							SendEmailNowAsync(email, this.Title, this.DocOfEmail);
-						}
-					}
-					else
-					{   //单个邮箱
-						SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
-					}
-					return;
-				}
-
-				if (this.HisMobileSta == MsgSta.UnRun)
-				{
-					string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara + "@Sender=" + this.Sender + "@SenderName=" + BP.Web.WebUser.Name;
-					string pushModel = this.GetParaString("PushModel");
-
-					if (DataType.IsNullOrEmpty(pushModel) == true)
-						pushModel = BP.WF.Glo.ShortMessageWriteTo.ToString();
-
-					/*
-                    string[] pushModels = pushModel.Split(',');
-                    foreach (string model in pushModels)
+                    //包含多个邮箱
+                    if (emailStrs.Contains(";") == true)
                     {
-                        switch ((ShortMessageWriteTo)Int32.Parse(model))
+                        string[] emails = emailStrs.Split(';');
+                        foreach (string email in emails)
                         {
-                            case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
-                                break;
-                            case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
-                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                                //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
-                                break;
-                            case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
-                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                                soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
-                                break;
-                            case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信. 3
-                                //写入微信.
-                                BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
-                                break;
-                            case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
-                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                                soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo, this.MobileInfo, tag);
-                                break;
-                            default:
-                                break;
-                        }
-                    }*/
+                            if (DataType.IsNullOrEmpty(email) == true)
+                                continue;
 
-				}
+                            SendEmailNowAsync(email, this.Title, this.DocOfEmail);
+                        }
+                    }
+                    else
+                    {   //单个邮箱
+                        SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
+                    }
+                   
+                }
+                #endregion 发送邮件
+
+                #region 发送短消息 调用接口
+                //发送短消息的前提必须是手机号不能为空
+                if (DataType.IsNullOrEmpty(this.Mobile) == true)
+                    return;
+                    //throw new Exception("发送短消息时接收人的手机号不能为空,否则接受不到消息");
+
+                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                //站内消息
+                if (this.PushModel.Contains("CCMsg") == true)
+                {
+
+                }
+                //短信
+                if (this.PushModel.Contains("SMS") == true)
+                {
+                   soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,this.Title, this.OpenURL);
+                }
+                //钉钉
+                if (this.PushModel.Contains("DingDing") == true)
+                {
+                    
+                    soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
+                }
+                //微信
+                if (this.PushModel.Contains("WeiXin") == true)
+                {
+                    BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
+                }
+                //WebService
+                if (this.PushModel.Contains("WebService") == true)
+                {
+                    soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
+                }
+
+                #endregion 发送短消息 调用接口
+
+                
 			}
 			catch (Exception ex)
 			{

@@ -45,6 +45,15 @@ namespace BP.DA
         {
             get
             {
+                if(DBAccess.IsExitsObject("TEST") == true)
+                {
+                    DBAccess.RunSQL("DROP TABLE TEST ");
+                }
+                if(DBAccess.IsExitsObject("test") == true)
+                {
+                    DBAccess.RunSQL("DROP table test ");
+                }
+
                 string mysql = "CREATE TABLE TEST(OID int NOT NULL )";
                 DBAccess.RunSQL(mysql);
                 if (DBAccess.IsExitsObject("test") == false)

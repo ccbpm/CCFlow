@@ -914,7 +914,7 @@ namespace BP.En
                 }
             }
             sql = sql.Substring(0, sql.Length - 1);
-            sql += ")";
+            sql += ") default charset=utf8 ";
 
             return sql;
         }

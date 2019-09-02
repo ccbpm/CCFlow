@@ -279,12 +279,18 @@ namespace BP.En
                 }
                 else
                 {
-
+                    //@sly 
                     var obj = this.GetValByKey(attr.Key);
                     if (obj == null && attr.IsNum)
-                        obj = 0;
+                    {
+                        dr[attr.Key] = 0;
+                        continue;
+                    }
 
-                    dr[attr.Key] = obj;
+                    if (attr.IsNum == true && DataType.IsNumStr(obj.ToString() ) == false)
+                        dr[attr.Key] = 0;
+                    else
+                        dr[attr.Key] = obj;
                 }
             }
 

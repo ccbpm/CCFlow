@@ -101,7 +101,7 @@
                 html += "<td>" + dt.NodeName + "</td>";
                 html += "<td>" + dt.TodoEmps + "</td>";
                 html += "<td>" + dt.SDTOfNode + "</td>";
-                html += "<td>" + GenerNodeTimeState(dt.SDTOfNode) + "</td>";
+                html += "<td>" + GenerNodeTimeState(dt) + "</td>";
                 html += "</tr>";
             }
             html += "</table>";
@@ -122,13 +122,31 @@
             return "其他" + sta;
         }
         function GenerNodeTimeState(dt) {
+            var nodeID = dt.FK_Node;
+            //获取当前时间
+            var cdt = getNowFormatDate();
+            //开始节点撤销回来后，就是逾期状态.
+            var len = nodeID.toString().length;
+            var entStr = nodeID.toString().substr(len - 2);
 
-            return "<font color=red>逾期</font>";
+            //判断期限是否少于三天，加警告颜色
+            var date = new Date();
+            var edt = dt.SDTOfNode.replace(/\-/g, "/");
+            edt = new Date(Date.parse(edt.replace(/-/g, "/")));
+            passTime = GetSpanTime(date, edt);
+            //判断流程是否逾期
+            if (cdt > dt.SDTOfNode && dt.WFState == 2 && entStr != "01" && dt.RDT != dt.SDTOfNode) {
+                return "<font color=red>逾期</font>";
+            }
+            else {
+                if (passTime >= 0 && passTime < 2 * 24 * 3600 * 1000 && dt.WFState!=3) {
+                    return "<font color='#ffac38'>预警</font>";
+                } else {
+                    return "<font color=green>正常</font>";
+                }
 
-            if (sta == 2) return "运行中";
-            if (sta == 3) return "已完成";
-            if (sta == 5) return "退回";
-            return "其他" + sta;
+            }
+
         }
 
         function OpenIt(workID, flowNo, nodeID) {
@@ -137,6 +155,31 @@
             WinOpenFull(url);
 
             //window.location.href = 'Watchdog.htm?IsRef=1';
+        }
+        //获取当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            //当前时间=年份-月份-日 小时：分钟
+            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes();
+
+            return cdt;
+        }
+        function GetSpanTime(date1, date2) {
+            ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
+            var date3 = date2.getTime() - date1.getTime();  //时间差秒
+
+            return date3;
         }
     </script>
 </head>

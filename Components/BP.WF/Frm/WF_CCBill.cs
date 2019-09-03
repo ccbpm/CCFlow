@@ -279,6 +279,7 @@ namespace BP.Frm
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }
+        //删除单据
         public string MyBill_Delete()
         {
             return BP.Frm.Dev2Interface.MyBill_Delete(this.FrmID, this.WorkID);
@@ -288,6 +289,13 @@ namespace BP.Frm
         {
             return BP.Frm.Dev2Interface.MyBill_DeleteDicts(this.FrmID, this.GetRequestVal("WorkIDs"));
         }
+
+        //删除实体
+        public string MyDict_Delete()
+        {
+            return BP.Frm.Dev2Interface.MyDict_Delete(this.FrmID, this.WorkID);
+        }
+
         public string MyEntityTree_Delete()
         {
             return BP.Frm.Dev2Interface.MyEntityTree_Delete(this.FrmID, this.GetRequestVal("BillNo"));

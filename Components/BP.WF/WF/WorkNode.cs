@@ -7331,6 +7331,16 @@ namespace BP.WF
                             continue; //已经启动了，就不启动了。
                     }
 
+                    if (sub.CompleteReStart == true)
+                    {
+                        /* 该子流程启动的流程运行结束后才可以启动.*/
+                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + sub.SubFlowNo + "' AND WFSta !="+(int)WFSta.Complete;
+                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                            continue; //已经启动的流程运行没有结束了，就不启动了。
+                    }
+
+
+
                     //指定的流程启动后,才能启动该子流程。
                     if (sub.IsEnableSpecFlowStart == true)
                     {
@@ -7443,6 +7453,15 @@ namespace BP.WF
                         if (DBAccess.RunSQLReturnValInt(sql) > 0)
                             continue; //已经启动了，就不启动了。
                     }
+
+                    if (sub.CompleteReStart == true)
+                    {
+                        /* 该子流程启动的流程运行结束后才可以启动.*/
+                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + sub.SubFlowNo + "' AND WFSta !=" + (int)WFSta.Complete;
+                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                            continue; //已经启动的流程运行没有结束了，就不启动了。
+                    }
+
 
                     //指定的流程启动后,才能启动该子流程。
                     if (sub.IsEnableSpecFlowStart == true)

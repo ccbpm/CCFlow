@@ -96,6 +96,17 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(SubFlowYanXuAttr.StartOnceOnly);
             }
         }
+
+        /// <summary>
+        /// 该流程启动的子流程运行结束后才可以再次启动
+        /// </summary>
+        public bool CompleteReStart
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowAutoAttr.CompleteReStart);
+            }
+        }
         /// <summary>
         /// 表达式类型
         /// </summary>
@@ -217,6 +228,8 @@ namespace BP.WF.Template
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次(不能被重复调用).",
                     true, true, true);
 
+                map.AddBoolean(SubFlowHandAttr.CompleteReStart, false, "该子流程运行结束后才可以重新发起.",
+                    true, true, true);
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);

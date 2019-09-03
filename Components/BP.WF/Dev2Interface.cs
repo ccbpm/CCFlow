@@ -5225,6 +5225,21 @@ namespace BP.WF
                     }
                 }
 
+                if (item.CompleteReStart == true)
+                {
+                    string sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + flowNo + "' AND WFState != 3";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    if (dt.Rows.Count == 0)
+                    {
+                        // return true; //没有人发起，他可以发起。
+                    }
+                    else
+                    {
+                        throw new Exception("该流程已经启动还没有运行结束，不能再次启动.");
+                    }
+                }
+
+
                 if (item.IsEnableSpecFlowStart == true)
                 {
                     //指定的流程发起之后，才能启动该流程。

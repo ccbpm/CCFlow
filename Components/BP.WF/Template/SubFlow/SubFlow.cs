@@ -73,6 +73,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string StartOnceOnly = "StartOnceOnly";
         /// <summary>
+        /// 如果当前为子流程，只有该流程结束后才可以重新启用
+        /// </summary>
+        public const string CompleteReStart = "CompleteReStart";
+        /// <summary>
         /// 是否启动
         /// </summary>
         public const string IsEnableSpecFlowStart = "IsEnableSpecFlowStart";

@@ -567,8 +567,8 @@ namespace BP.WF.Template
                 //map.SetHelperUrl(BtnAttr.SearchLab, this[SYS_CCFLOW, "查询"]); //增加帮助
                 map.SetHelperUrl(BtnAttr.SearchLab, "http://ccbpm.mydoc.io/?v=5404&t=24373");
 
-                map.AddTBString(BtnAttr.WorkCheckLab, "审核", "审核按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.WorkCheckEnable, false, "是否启用", true, true);
+                //map.AddTBString(BtnAttr.WorkCheckLab, "审核", "审核按钮标签", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.WorkCheckEnable, false, "是否启用", true, true);
 
                 //map.AddTBString(BtnAttr.BatchLab, "批处理", "批处理按钮标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);

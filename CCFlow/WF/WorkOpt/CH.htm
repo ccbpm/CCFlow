@@ -23,6 +23,29 @@
        body{
            font-size:12px;
        }
+       /*滚动条*/
+::-webkit-scrollbar-thumb {
+    background-color: #b5b5b5;
+    height: 50px;
+    -webkit-border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #585858;
+        height: 50px;
+        -webkit-border-radius: 4px
+    }
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track-piece {
+    background-color: #fff;
+    -webkit-border-radius: 4px
+}
+
     </style>
     <script type="text/javascript">
         var currtab = GetQueryString("CurrTab");
@@ -80,12 +103,10 @@
                     _Html += "<td style='text-align: center'>" + gwl.RDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.CDT + "</td>";
-
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
               
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
-                        _Html += "<td style='text-align: center'>无</td>";
                     } else {
                         //耗时
                         var rdt = new Date(Date.parse(gwl.RDT.replace(/-/g, "/")));
@@ -97,9 +118,7 @@
                             _Html += "<td style='text-align: center'>正常</td>";
                         else
                             _Html += "<td style='text-align: center'><label style='color:red'>逾期</label></td>";
-                        //时限
 
-                        _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                     }
                     _Html += "</tr>";
 
@@ -107,13 +126,12 @@
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>" + new WebUser().Name + "</td>";
-                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
-                        _Html += "<td style='text-align: center'>无</td>";
+
                     } else {
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
@@ -123,14 +141,14 @@
                         else
                             _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>"+sdtOfNode+"</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
                         if (chRole == 1)
                             _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm:ss\"})'  class='form-control Wdate'/></td>";
                         else
                             _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'>___</td>";
+                       
                         _Html += "</tr>";
                     }
                 }
@@ -271,13 +289,12 @@
                             <th style='background-color:#F2F2F2;width:10px'>#</th>
                             <th style='background-color:#F2F2F2;text-align:center;width:10%'>节点</th>
                             <th style='background-color:#F2F2F2;text-align:center;width:10%'>处理人</th>
-                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>计划开始时间</th>
-                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>接收时间</th>
-                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>应该完成时间</th>
-                            <th style='background-color:#F2F2F2;width:150px;text-align:center'>实际完成时间</th>
+                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划开始时间</th>
+                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>任务到达时间</th>
+                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划完成时间</th>
+                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>实际完成时间</th>
                             <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
                             <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
-                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>调整应完成时间</th>
 
                         </tr>
                     </thead>

@@ -1721,23 +1721,24 @@ var Entities = (function () {
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
-            //            var params = [];
-            //            $.each(arguments, function (i, o) {
-            //                if (i > 0)
-            //                    params.push(o);
-            //            });
+            var params = "";
+            $.each(arguments, function (i, o) {
+                if (i != 0)
+                    params += o + "~";
+            });
+
+            params = params.substr(0, params.length - 1);
 
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                data: arguments,
                 xhrFields: {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params+ "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     string = data;

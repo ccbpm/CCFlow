@@ -2204,7 +2204,7 @@ namespace BP.WF
 
                 #region 检查越轨流程,子流程发起。
                 SubFlowYanXus ygflows = new SubFlowYanXus();
-                ygflows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.No);
+                ygflows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.No, SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.YanXuFlow);
                 foreach (SubFlowYanXu flow in ygflows)
                 {
                     Flow fl = new Flow(flow.SubFlowNo);

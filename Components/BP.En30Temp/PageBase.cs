@@ -705,10 +705,10 @@ namespace BP.Web
         {
             System.Web.HttpContext.Current.Response.Redirect(SystemConfig.PageOfLostSession);
         }
-        protected void ToWelPage()
-        {
-            System.Web.HttpContext.Current.Response.Redirect(BP.Sys.Glo.Request.ApplicationPath + "/Wel.aspx");
-        }
+        //protected void ToWelPage()
+        //{
+        //    System.Web.HttpContext.Current.Response.Redirect(BP.Sys.Glo.Request.ApplicationPath + "/Wel.aspx");
+        //}
         protected void ToErrorPage(Exception mess)
         {
             this.ToErrorPage(mess.Message);

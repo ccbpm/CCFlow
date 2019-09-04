@@ -199,9 +199,9 @@ window.onload = function () {
 
 $(function () {
     $('#HelpAlterDiv').on('hide.bs.modal', function () {
-      
+
         //保存用户的帮助指引信息操作
-        var mypk = webUser.No +"_ND"+ pageData.FK_Node +"_HelpAlert"
+        var mypk = webUser.No + "_ND" + pageData.FK_Node + "_HelpAlert"
         var userRegedit = new Entity("BP.Sys.UserRegedit");
         userRegedit.SetPKVal(mypk);
         var count = userRegedit.RetrieveFromDBSources();
@@ -293,12 +293,12 @@ function figure_Template_Map(MapID, UIIsEnable) {
     var AtPara = "";
     //通过MAINTABLE返回的参数
     for (var ele in mainTable) {
-        if ( ele=="AtPara" && mainTable != '') {
+        if (ele == "AtPara" && mainTable != '') {
             AtPara = mainTable[ele];
             break;
         }
     }
-    
+
     var url = "CCForm/Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&UIIsEnable=" + UIIsEnable + "&Paras=" + AtPara;
     OpenBootStrapModal(url, "eudlgframe", "地图", 800, 500, null, false, function () { }, null, function () {
 
@@ -482,85 +482,85 @@ function Save(saveType) {
         if (beforeSave() == false)
             return false;
 
-//判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
-var btn = document.getElementById('Btn_Save');
-if (btn != null) {
-    //检查最小最大长度.
-    var f = CheckMinMaxLength();
-    if (f == false)
+    //判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
+    var btn = document.getElementById('Btn_Save');
+    if (btn != null) {
+        //检查最小最大长度.
+        var f = CheckMinMaxLength();
+        if (f == false)
+            return false;
+    }
+
+    if (checkAths() == false)
         return false;
-}
-
-if (checkAths() == false)
-    return false;
 
 
-//必填项和正则表达式检查
-var formCheckResult = true;
+    //必填项和正则表达式检查
+    var formCheckResult = true;
 
-if (checkBlanks() == false) {
-    formCheckResult = false;
-}
+    if (checkBlanks() == false) {
+        formCheckResult = false;
+    }
 
-if (checkReg() == false) {
-    formCheckResult = false;
-}
+    if (checkReg() == false) {
+        formCheckResult = false;
+    }
 
-if (formCheckResult == false) {
-    //alert("请检查表单必填项和正则表达式");
-    return false;
-}
+    if (formCheckResult == false) {
+        //alert("请检查表单必填项和正则表达式");
+        return false;
+    }
 
-setToobarDisiable();
+    setToobarDisiable();
 
-//判断是否启用审核组件
-var iframe = document.getElementById("FWC");
-if (iframe)
-    iframe.contentWindow.SaveWorkCheck();
+    //判断是否启用审核组件
+    var iframe = document.getElementById("FWC");
+    if (iframe)
+        iframe.contentWindow.SaveWorkCheck();
 
-//树形表单保存
-if (flowData) {
-    var node = flowData.WF_Node[0];
-    //   alert(node.FormType);
-    if (node && node.FormType == 5) {
-        if (OnTabChange("btnsave") == true) {
-            //判断内容是否保存到待办
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddPara("FK_Flow", pageData.FK_Flow);
-            handler.AddPara("FK_Node", pageData.FK_Node);
-            handler.AddPara("WorkID", pageData.WorkID);
-            handler.AddPara("SaveType", saveType);
-            handler.DoMethodReturnString("SaveFlow_ToDraftRole");
+    //树形表单保存
+    if (flowData) {
+        var node = flowData.WF_Node[0];
+        //   alert(node.FormType);
+        if (node && node.FormType == 5) {
+            if (OnTabChange("btnsave") == true) {
+                //判断内容是否保存到待办
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+                handler.AddPara("FK_Flow", pageData.FK_Flow);
+                handler.AddPara("FK_Node", pageData.FK_Node);
+                handler.AddPara("WorkID", pageData.WorkID);
+                handler.AddPara("SaveType", saveType);
+                handler.DoMethodReturnString("SaveFlow_ToDraftRole");
+            }
+            setToobarEnable();
+            return;
         }
-        setToobarEnable();
-        return;
     }
-}
 
-var params = getFormData(true, true);
+    var params = getFormData(true, true);
 
-var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-$.each(params.split("&"), function (i, o) {
-    var param = o.split("=");
-    if (param.length == 2 && validate(param[1])) {
-        handler.AddPara(param[0], param[1]);
-    } else {
-        handler.AddPara(param[0], "");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    $.each(params.split("&"), function (i, o) {
+        var param = o.split("=");
+        if (param.length == 2 && validate(param[1])) {
+            handler.AddPara(param[0], param[1]);
+        } else {
+            handler.AddPara(param[0], "");
+        }
+    });
+    var data = handler.DoMethodReturnString("Save"); //执行保存方法.
+
+    setToobarEnable();
+    //刷新 从表的IFRAME
+    var dtls = $('.Fdtl');
+    $.each(dtls, function (i, dtl) {
+        $(dtl).attr('src', $(dtl).attr('src'));
+    });
+
+    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+        $('#Message').html(data.substring(4, data.length));
+        $('#MessageDiv').modal().show();
     }
-});
-var data = handler.DoMethodReturnString("Save"); //执行保存方法.
-
-setToobarEnable();
-//刷新 从表的IFRAME
-var dtls = $('.Fdtl');
-$.each(dtls, function (i, dtl) {
-    $(dtl).attr('src', $(dtl).attr('src'));
-});
-
-if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-    $('#Message').html(data.substring(4, data.length));
-    $('#MessageDiv').modal().show();
-}
 
 
 }
@@ -919,7 +919,7 @@ function Send(isHuiQian) {
     //如果启用了流程流转自定义，必须设置选择的游离态节点
     if ($('[name=TransferCustom]').length > 0) {
         var ens = new Entities("BP.WF.TransferCustoms");
-        ens.Retrieve("WorkID",  pageData.WorkID, "IsEnable", 1);
+        ens.Retrieve("WorkID", pageData.WorkID, "IsEnable", 1);
         if (ens.length == 0) {
             alert("该节点启用了流程流转自定义，但是没有设置流程流转的方向，请点击流转自定义按钮进行设置");
             return false;
@@ -997,12 +997,12 @@ function execSend(toNodeID) {
         } else {
             handler.AddPara(objectKey, "");
         }
-//        var param = o.split("=");
-//        if (param.length == 2 && validate(param[1])) {
-//            handler.AddPara(param[0], param[1]);
-//        } else {
-//            handler.AddPara(param[0], "");
-//        }
+        //        var param = o.split("=");
+        //        if (param.length == 2 && validate(param[1])) {
+        //            handler.AddPara(param[0], param[1]);
+        //        } else {
+        //            handler.AddPara(param[0], "");
+        //        }
     });
     //handler.AddUrlData(dataStrs);
 
@@ -1475,7 +1475,7 @@ function GenerWorkNode() {
                 //Handler 获取外部数据源
                 if (srcType == 5) {
                     var selectStatement = sfTable.SelectStatement;
-                    if(plant=='CCFlow')
+                    if (plant == 'CCFlow')
                         selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
                     else
                         selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
@@ -1607,7 +1607,7 @@ function GenerWorkNode() {
             }
 
             if (frmNode.FrmSln != 1)
-            //处理下拉框级联等扩展信息
+                //处理下拉框级联等扩展信息
                 AfterBindEn_DealMapExt(flowData);
         }
     } else {
@@ -1680,16 +1680,16 @@ function GenerWorkNode() {
     $.each(scoreDiv, function (idex, item) {
         var divId = $(item).attr("id");
         var KeyOfEn = divId.substring(3);//获取字段值
-        $("#Star_" + KeyOfEn +" img").click(function () {
+        $("#Star_" + KeyOfEn + " img").click(function () {
             var index = $(this).index() + 1;
-            $("#Star_" + KeyOfEn +" img:lt(" + index + ")").attr("src", "Style/Img/star_2.png");
+            $("#Star_" + KeyOfEn + " img:lt(" + index + ")").attr("src", "Style/Img/star_2.png");
             $("#SP_" + KeyOfEn + " strong").html(index + "  分");
             $("#TB_" + KeyOfEn).val(index);//给评分的隐藏input赋值
             index = index - 1;
-            $("#Star_" + KeyOfEn +" img:gt(" + index + ")").attr("src", "Style/Img/star_1.png");
+            $("#Star_" + KeyOfEn + " img:gt(" + index + ")").attr("src", "Style/Img/star_1.png");
         });
     });
-   
+
 
 
     $(".pimg").on("dblclick", function () {
@@ -2036,19 +2036,19 @@ function initModal(modalType, toNode) {
 
     //初始化退回窗口的SRC.
     var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
-       '<div class="modal-dialog">'
-           + '<div class="modal-content" style="border-radius:0px;width:900px;height:450px;text-align:left;">'
-              + '<div class="modal-header">'
-              + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                  + '<button id="MaxSizeBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
-                   + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
-               + '</div>'
-               + '<div class="modal-body" style="margin:0px;padding:0px;height:450px">'
-                   + '<iframe style="width:100%;border:0px;height:100%;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
-               + '</div>'
-           + '</div><!-- /.modal-content -->'
-       + '</div><!-- /.modal-dialog -->'
-   + '</div>';
+        '<div class="modal-dialog">'
+        + '<div class="modal-content" style="border-radius:0px;width:900px;height:450px;text-align:left;">'
+        + '<div class="modal-header">'
+        + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '<button id="MaxSizeBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
+        + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
+        + '</div>'
+        + '<div class="modal-body" style="margin:0px;padding:0px;height:450px">'
+        + '<iframe style="width:100%;border:0px;height:100%;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+        + '</div>'
+        + '</div><!-- /.modal-content -->'
+        + '</div><!-- /.modal-dialog -->'
+        + '</div>';
 
     $('body').append($(html));
 
@@ -2151,7 +2151,7 @@ function initModal(modalType, toNode) {
             case "Note":
                 $('#modalHeader').text("备注");
                 modalIframeSrc = "./WorkOpt/Note.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
-            
+
             default:
                 break;
         }
@@ -2316,7 +2316,7 @@ function GetPageParas(sArgName) {
     var sHref = window.location.href;
     var args = sHref.split("?");
     var retval = "";
-    if (args[0] == sHref) /*参数为空*/{
+    if (args[0] == sHref) /*参数为空*/ {
         return retval; /*无需做任何处理*/
     }
     var str = args[1];

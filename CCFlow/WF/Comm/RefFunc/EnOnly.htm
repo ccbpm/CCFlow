@@ -107,7 +107,7 @@
 
         ///设置.
         function Setting() {
-            var url = "Setting.htm?EnName=" + GetQueryString("EnName")+"&PKVal=" + GetQueryString("PKVal");
+            var url = "Setting.htm?EnName=" + GetQueryString("EnName") + "&PKVal=" + GetQueryString("PKVal");
             //WinOpen(url, "xxs");
             window.parent.OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -152,7 +152,7 @@
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
             var mapAtrrs = frmData.Sys_MapAttr;
-             //用户设置
+            //用户设置
             var mypk = new WebUser().No + "_Fields_HS_" + GetQueryString("EnName");
             var userRegedit = new Entity("BP.Sys.UserRegedit");
             userRegedit.SetPKVal(mypk);
@@ -167,7 +167,7 @@
 
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
-                if (count!=0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 &&  gf.OID!=mapData.GetPara("PK"))//去除基本信息
+                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
                     continue;
 
                 var lab = gf.Lab;
@@ -182,7 +182,7 @@
                     html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
 
-                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID,userRegedit);
+                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID, userRegedit);
                 html += "</div>";
             }
             if (Sys_GroupFields.length > 1)
@@ -240,14 +240,14 @@
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
 
-                   
+
                     var uiBindKey = mapAttr.UIBindKey;
-                     
+
                     if (uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
 
                         var webUser = new WebUser();
 
-                     //   alert(uiBindKey);
+                        //   alert(uiBindKey);
 
                         var ens = new Entities(uiBindKey);
                         ens.RetrieveAll();
@@ -263,7 +263,7 @@
 
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
                         var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue).target;
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+                        $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
 
                         //$('#DDL_' + mapAttr.KeyOfEn).combotree('select', defValue);
                     } else {
@@ -377,7 +377,7 @@
         }
 
         //解析表单字段 MapAttr.
-        function InitMapAttr(Sys_MapAttr, mainData, groupID,userRegedit) {
+        function InitMapAttr(Sys_MapAttr, mainData, groupID, userRegedit) {
 
             var html = "<table border='0' style='width:99%;' >";
             var isDropTR = true;
@@ -385,7 +385,7 @@
             var fileDesc = "";
             for (var i = 0; i < Sys_MapAttr.length; i++) {
                 var attr = Sys_MapAttr[i];
-                if (userRegedit!= null && userRegedit!=undefined && userRegedit.Vals.indexOf("," + attr.KeyOfEn) != -1)
+                if (userRegedit != null && userRegedit != undefined && userRegedit.Vals.indexOf("," + attr.KeyOfEn) != -1)
                     continue;
                 if (attr.KeyOfEn == "MyFileNum") {
                     isExitMyNum = true;
@@ -415,10 +415,20 @@
                 }
                 else {
 
-                    if (helpUrl.indexOf('javascr') == 0)
-                        name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "</a>";
-                    else
-                        name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "</a>";
+                    if (attr.MyDataType == 4) {
+
+                        if (helpUrl.indexOf('javascr') == 0)
+                            name = "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /></a>";
+                        else
+                            name = "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /></a>";
+
+                    } else {
+
+                        if (helpUrl.indexOf('javascr') == 0)
+                            name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "</a>";
+                        else
+                            name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "</a>";
+                    }
                 }
 
                 var lab = "";
@@ -630,7 +640,7 @@
             var eleHtml = '';
 
             //外部数据源类型.
-            if (mapAttr.LGType == "0" && (mapAttr.MyDataType == "1"|| mapAttr.MyDataType=="2") && mapAttr.UIContralType == "1") {
+            if (mapAttr.LGType == "0" && (mapAttr.MyDataType == "1" || mapAttr.MyDataType == "2") && mapAttr.UIContralType == "1") {
 
                 //枚举类型.
                 if (mapAttr.UIIsEnable == 1)
@@ -1182,7 +1192,7 @@
                 <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'"
                    onclick="Delete()">删除</a>
 
-                                   <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'"
+                <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'"
                    onclick="Setting()">设置</a>
 
 

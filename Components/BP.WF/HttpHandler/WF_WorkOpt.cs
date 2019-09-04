@@ -3403,7 +3403,12 @@ namespace BP.WF.HttpHandler
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
 
-                // 
+                //根据WorkID查询是否有启动的子流程
+                GenerWorkFlows gwfs = new GenerWorkFlows();
+                int count = gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
+                if(count != 0)
+                    return "info@该流程已经启动子流程，不能执行退回";
+
                 //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
                 if (dt.Rows.Count == 1)
                 {

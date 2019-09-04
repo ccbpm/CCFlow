@@ -3406,8 +3406,30 @@ namespace BP.WF.HttpHandler
                 //根据WorkID查询是否有启动的子流程
                 GenerWorkFlows gwfs = new GenerWorkFlows();
                 int count = gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
-                if(count != 0)
+                if (count != 0)
                     return "info@该流程已经启动子流程，不能执行退回";
+
+                //该流程为子流程，启动了平级子流程
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                if (gwf.PWorkID != 0) 
+                {
+                    //存在平级子流程
+                     gwfs = new GenerWorkFlows();
+                     count = gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, gwf.PWorkID);
+                     SubFlows subFlows = new SubFlows(); 
+                     int subFlowCount = subFlows.Retrieve(SubFlowYanXuAttr.FK_Node, this.FK_Node, SubFlowYanXuAttr.SubFlowModel,1);
+                    if (subFlowCount != 0)//含有平级子流程
+                    {
+                        foreach(SubFlow subFlow in subFlows)
+                        {
+                            //根据FlowNo获取有没有发起流程
+                            var subGwf = gwfs.GetEntityByKey(GenerWorkFlowAttr.FK_Flow,subFlow.SubFlowNo);
+                            if(subGwf!=null)
+                                return "info@该流程已经启动平级子流程，不能执行退回";
+                        }
+                    } 
+                }
+               
 
                 //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
                 if (dt.Rows.Count == 1)

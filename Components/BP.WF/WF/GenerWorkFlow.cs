@@ -610,6 +610,7 @@ namespace BP.WF
 		{
 			get
 			{
+                //string rdt = this.GetParaString("");
 				return this.GetValStrByKey(GenerWorkFlowAttr.RDT);
 			}
             set

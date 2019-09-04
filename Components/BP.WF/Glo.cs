@@ -21,12 +21,12 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
-      
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
+            //主流程的信息。
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
 
-            //增加子流程数据.
+            //子流程.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve("PWorkID", workID);
             string json = "[";
@@ -43,7 +43,7 @@ namespace BP.WF
             json += "},";
 
             json += "{ name: '实际执行', ";
-            json += " start:  " + ToData(gwf.RDT) + ",";
+            json += " start:  " + ToData(gwf.RDT) + ","; //实际开始日期.
             json += " end: " + ToData(gwf.SendDT) + ",";
             json += " TodoSta: " + gwf.TodoSta + ",";
             json += " color: 'blue' ";
@@ -55,8 +55,13 @@ namespace BP.WF
             Nodes nds = new Nodes(gwf.FK_Flow);
             nds.Retrieve("FK_Flow", gwf.FK_Flow, "Step");
 
+            //求出来所有的子流程.
             SubFlows subs = new SubFlows();
             subs.Retrieve(SubFlowAttr.FK_Flow, gwf.FK_Flow);
+
+            //求出来设置的游离态.
+            TransferCustoms tcs = new TransferCustoms();
+            tcs.Retrieve(TransferCustomAttr.WorkID, gwf.WorkID, TransferCustomAttr.Idx);
 
             int idxNode = 0;
             foreach (Node nd in nds)
@@ -95,7 +100,6 @@ namespace BP.WF
                         dtlsSubFlow += " TodoSta: " + gwf.TodoSta + ", ";
                         dtlsSubFlow += " color: '#f0f0f0' ";
                         dtlsSubFlow += "},";
-
                     }
 
                     if (DataType.IsNullOrEmpty(dtlsSubFlow) == false)
@@ -115,7 +119,6 @@ namespace BP.WF
 
                     //从表.
                     series += dtlsSubFlow +"," ;
-                     
                 }
 
                 if (DataType.IsNullOrEmpty(series) == false)

@@ -124,8 +124,15 @@
 
                 } else { //未运行到的节点
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
+                      
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
-                        _Html += "<td style='text-align: center'>" + new WebUser().Name + "</td>";
+                        if (webUser == undefined) {
+                            var webUser = new WebUser();
+                            _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
+                        } else
+                             _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
+                            
+                       
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>无</td>";

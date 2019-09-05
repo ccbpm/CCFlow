@@ -1331,7 +1331,7 @@ namespace BP.WF.HttpHandler
         public string HuiQianList_Init()
         {
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
-            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=90 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND (B.IsPass=90 OR A.AtPara LIKE '%HuiQianZhuChiRen="+WebUser.No+"%') AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
             Paras ps = new Paras();
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
@@ -1387,7 +1387,6 @@ namespace BP.WF.HttpHandler
             }
             return BP.Tools.Json.ToJson(dt);
         }
-
         /// <summary>
         /// 获得加签人的待办
         /// @LQ 

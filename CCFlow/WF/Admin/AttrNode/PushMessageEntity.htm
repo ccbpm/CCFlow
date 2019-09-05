@@ -92,8 +92,8 @@
                 $("#DDL_SMS_Fields").val(en.SMSField);
                 $("#DDL_Email_Fields").val(en.MailAddress);
                 $("#TB_SMS").val(en.SMSDoc);
-                $("#TB_Email_Title").val(en.MailTitle);
-                $("#TB_Email_Doc").val(en.MailDoc);
+                $("#TB_Title").val(en.MailTitle);
+
                 var smsnodes = en.SMSNodes;
                 var mailnodes = en.MailNodes;
                 if (smsnodes != "") {
@@ -296,7 +296,7 @@
                     <label>邮件标题</label>
                 </td>
                 <td>
-                    <input type="text" id="TB_Title" style="width:97%;" />
+                    <input type="text" id="TB_Title" name="TB_Title" style="width:97%;" />
                 </td>
             </tr>
 

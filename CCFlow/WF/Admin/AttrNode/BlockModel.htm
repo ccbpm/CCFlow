@@ -31,25 +31,25 @@
             GenerFullAllCtrlsVal(node);
 
             $("#TB_Alert").val(node.BlockAlert);
-            switch (node.BlockModel) {
-                case "0":
+            switch (parseInt(node.BlockModel)) {
+                case 0:
                     break;
-                case "1":
+                case 1:
                     break;
-                case "2":
+                case 2:
                     $("#TB_SpecSubFlow").val(node.BlockExp);
                     break;
-                case "3":
+                case 3:
                     $("#TB_SQL").val(node.BlockExp);
                     break;
-                case "4":
+                case 4:
                     $("#TB_Exp").val(node.BlockExp);
                     break;
-                 case "5":
+                 case 5:
                     $("#TB_SpecSubFlowNode").val(node.BlockExp);
                     break;
-                 case "6":
-                    $("#TB_TB_SameLevelSubFlow").val(node.BlockExp);
+                 case 6:
+                    $("#TB_SameLevelSubFlow").val(node.BlockExp);
                     break;
                 default:
                     break;

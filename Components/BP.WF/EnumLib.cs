@@ -572,7 +572,7 @@ namespace BP.WF
         /// <summary>
         /// 为平级子流程时，指定的子流程未运行到指定节点，则阻塞
         /// </summary>
-        TB_SameLevelSubFlow
+        SameLevelSubFlow
 
 
     }

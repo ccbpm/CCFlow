@@ -85,6 +85,7 @@
 
             var nodeID = GetQueryString("FK_Node");
 
+
             var ens = new Entities("BP.WF.Template.SubFlowHands");
             ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo,"SubFlowType", 0);
 
@@ -93,15 +94,14 @@
                 return;
             }
 
+            var myNode = new Entity("BP.WF.Node", nodeID);
+
             var en = new Entity("BP.WF.Template.SubFlowHand");
-            console.log(en);
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
             en.SubFlowType = 0;
             en.SubFlowName = name;
-
-            var myNode = new Entity("BP.WF.Node", nodeID);
             en.FK_Flow = myNode.FK_Flow;
 
             var myen = en.Insert();

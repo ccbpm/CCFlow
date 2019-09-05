@@ -6760,30 +6760,10 @@ namespace BP.WF
                     }
 
                     //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
-                    if (this.HisGenerWorkFlow.PWorkID != 0)
-                    {
-                        SubFlows subFlows = new SubFlows();
-                        int count = subFlows.Retrieve(SubFlowAttr.FK_Node, this.HisGenerWorkFlow.PNodeID, SubFlowAttr.SubFlowNo, this.HisFlow.No);
-                        if (count == 0)
-                            throw new Exception("父子流程关系配置信息丢失，请联系管理员");
-                        SubFlow subFlow = subFlows[0] as SubFlow;
-                        if (this.HisFlow.IsToParentNextNode == true || subFlow.IsAutoSendSubFlowOver == 1)
-                        {
-                            //主流程自动运行到一下节点
-                            SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
-                            sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
-                            this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
-                        }
-                        //结束父流程
-                        if (subFlow.IsAutoSendSubFlowOver == 2)
-                        {
-                            Flow fl = new Flow(this.HisGenerWorkFlow.PFlowNo);
-                            string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "父流程" + fl.Name + "WorkID[" + this.HisGenerWorkFlow.PWorkID + "]成功结束");
-                            this.HisMsgObjs.AddMsg("info", flowOver, flowOver, SendReturnMsgType.Info);
-                        }
-                    }
+                    string msg = BP.WF.Dev2Interface.FlowOverAutoSendParentOrSameLevelFlow(this.HisGenerWorkFlow, this.HisFlow);
+                    this.HisMsgObjs.AddMsg("info", msg, msg, SendReturnMsgType.Info);
 
-                        return HisMsgObjs;
+                    return HisMsgObjs;
                 }
 
                 //@增加发送到子流程的判断.
@@ -6805,29 +6785,8 @@ namespace BP.WF
                     this.Func_DoSetThisWorkOver();
                     this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                     //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
-                    if (this.HisGenerWorkFlow.PWorkID != 0) 
-                    {
-                        SubFlows subFlows = new SubFlows();
-                        int count = subFlows.Retrieve(SubFlowAttr.FK_Node,this.HisGenerWorkFlow.PNodeID, SubFlowAttr.SubFlowNo,this.HisFlow.No);
-                        if (count == 0)
-                            throw new Exception("父子流程关系配置信息丢失，请联系管理员");
-                        SubFlow subFlow = subFlows[0] as SubFlow;
-                        if (this.HisFlow.IsToParentNextNode == true || subFlow.IsAutoSendSubFlowOver == 1)
-                        {
-                            //主流程自动运行到一下节点
-                            SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
-                            string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
-                            this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
-                        }
-                        //结束父流程
-                        if(subFlow.IsAutoSendSubFlowOver == 2)
-                        {
-                            Flow fl = new Flow(this.HisGenerWorkFlow.PFlowNo);
-                            string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "父流程" + fl.Name + "WorkID[" + this.HisGenerWorkFlow.PWorkID + "]成功结束");
-                            this.HisMsgObjs.AddMsg("info", flowOver, flowOver, SendReturnMsgType.Info);
-                        }
-                       
-                    }
+                    string msg = BP.WF.Dev2Interface.FlowOverAutoSendParentOrSameLevelFlow(this.HisGenerWorkFlow,this.HisFlow);
+                    this.HisMsgObjs.AddMsg("info", msg, msg, SendReturnMsgType.Info);
                 }
                 else
                 {
@@ -7303,6 +7262,7 @@ namespace BP.WF
                 //throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
             }
         }
+
         /// <summary>
         /// 自动启动子流程
         /// </summary>
@@ -7574,6 +7534,13 @@ namespace BP.WF
                         //设置父子关系.
                         BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID);
 
+                        //增加启动该子流程的同级子流程信息
+                        GenerWorkFlow gwf = new GenerWorkFlow(subWorkID);
+                        gwf.SetPara("SLFlowNo", this.HisNode.FK_Flow);
+                        gwf.SetPara("SLNodeID", this.HisNode.NodeID);
+                        gwf.SetPara("SLWorkID", this.HisGenerWorkFlow.WorkID);
+                        gwf.Update();
+
                         //写入消息.
                         this.addMsg("SubFlow" + sub.SubFlowNo, "流程[" + sub.FlowName + "]启动成功.");
                     }
@@ -7586,6 +7553,14 @@ namespace BP.WF
 
                         //设置父子关系.
                         BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No,nd.NodeID);
+
+                        //增加启动该子流程的同级子流程信息
+                        GenerWorkFlow gwf = new GenerWorkFlow(subWorkID);
+                        gwf.SetPara("SLFlowNo", this.HisNode.FK_Flow);
+                        gwf.SetPara("SLNodeID", this.HisNode.NodeID);
+                        gwf.SetPara("SLWorkID", this.HisGenerWorkFlow.WorkID);
+                        gwf.Update();
+
 
                         //执行发送到下一个环节..
                         SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.SubFlowNo, subWorkID, this.rptGe.Row, null);

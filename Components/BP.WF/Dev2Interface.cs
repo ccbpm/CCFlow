@@ -4975,8 +4975,75 @@ namespace BP.WF
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
             rpt.OID = workID;
             rpt.RetrieveFromDBSources();
-            return wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt, stopFlowType);
+            msg =  wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt, stopFlowType);
+
+            msg += FlowOverAutoSendParentOrSameLevelFlow(wf.HisGenerWorkFlow, wf.HisFlow);
+
+            return msg;
         }
+
+        /// <summary>
+        /// 流程运行完成后自动运行/结束父流程或者同级子流程
+        /// </summary>
+        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf,Flow flow)
+        {
+            //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
+            if (gwf.PWorkID != 0)
+            {
+                Int64 slWorkID = gwf.GetParaInt("SLWorkID");
+                if (slWorkID == 0)//启动该流程的是父子流程
+                {
+                    SubFlows subFlows = new SubFlows();
+                    int count = subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, flow.No);
+                    if (count == 0)
+                        throw new Exception("父子流程关系配置信息丢失，请联系管理员");
+                    SubFlow subFlow = subFlows[0] as SubFlow;
+                    if (flow.IsToParentNextNode == true || subFlow.IsAutoSendSubFlowOver == 1)
+                    {
+                        //主流程自动运行到一下节点
+                        SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
+                        string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                        return sendSuccess;
+                    }
+                    //结束父流程
+                    if (subFlow.IsAutoSendSubFlowOver == 2)
+                    {
+                        Flow fl = new Flow(gwf.PFlowNo);
+                        string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.PFlowNo, gwf.PWorkID, "父流程[" + fl.Name + "],WorkID为[" + gwf.PWorkID + "]成功结束");
+                        return flowOver;
+                    }
+
+                }
+                else // 启动的是同级子流程
+                {
+                    string slFlowNo = gwf.GetParaString("SLFlowNo");
+                    Int32 slNodeID = gwf.GetParaInt("SLNodeID");
+
+                    SubFlows subFlows = new SubFlows();
+                    int count = subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, flow.No);
+                    if (count == 0)
+                        throw new Exception("同级子流程关系配置信息丢失，请联系管理员");
+                    SubFlow subFlow = subFlows[0] as SubFlow;
+                    Flow fl = new Flow(slFlowNo);
+                    if (subFlow.IsAutoSendSLSubFlowOver == 1)
+                    {
+                        //主流程自动运行到一下节点
+                        SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(slFlowNo, slWorkID);
+                        string sendSuccess = "同级子流程[" + fl.Name + "]程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                        return sendSuccess;
+                    }
+                    //结束父流程
+                    if (subFlow.IsAutoSendSLSubFlowOver == 2)
+                    {
+                        return BP.WF.Dev2Interface.Flow_DoFlowOver(slFlowNo, slWorkID, "同级子流程流程[" + fl.Name + "],WorkID为[" + slWorkID + "]成功结束");
+                    }
+
+                }
+            }
+            return "";
+        }
+
+
         /// <summary>
         /// 获得执行下一步骤的节点ID，这个功能是在流程未发送前可以预先知道
         /// 它就要到达那一个节点上去,以方便在当前节点发送前处理业务逻辑.
@@ -6968,7 +7035,7 @@ namespace BP.WF
             string starter = null, string title = null, Int64 parentWorkID = 0,
             Int64 parentFID = 0, string parentFlowNo = null,
             int parentNodeID = 0, string parentEmp = null,
-            int jumpToNode = 0, string jumpToEmp = null, string todoEmps = null)
+            int jumpToNode = 0, string jumpToEmp = null, string todoEmps = null,string isStartSameLevelFlow=null)
         {
 
             //把一些其他的参数也增加里面去,传递给ccflow.
@@ -7104,6 +7171,9 @@ namespace BP.WF
             if (parentWorkID != 0)
                 BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);//设置父流程信息
 
+            #warning 增加是防止手动启动子流程或者平级子流程时关闭子流程页面找不到待办 保存到待办
+            if(isStartSameLevelFlow!=null)
+                BP.WF.Dev2Interface.Node_SaveWork(flowNo, int.Parse(flowNo + "01"), wk.OID);
             // 如果有跳转.
             if (jumpToNode != 0)
                 BP.WF.Dev2Interface.Node_SendWork(flowNo, wk.OID, null, null, jumpToNode, jumpToEmp);

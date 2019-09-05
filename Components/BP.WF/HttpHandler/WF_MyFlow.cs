@@ -276,6 +276,8 @@ namespace BP.WF.HttpHandler
         public string MyFlow_Init()
         {
             string isCC = this.GetRequestVal("IsCC");
+            //手动启动子流程的标志 0父子流程 1 同级子流程
+            string isStartSameLevelFlow = this.GetRequestVal("IsStartSameLevelFlow");
             if (isCC != null && isCC == "1")
                 return "url@WFRpt.htm?1=2" + this.RequestParasOfAll;
 
@@ -355,8 +357,9 @@ namespace BP.WF.HttpHandler
             //第一次加载.
             if (this.WorkID == 0 && this.currND.IsStartNode && this.GetRequestVal("IsCheckGuide") == null)
             {
+
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
-                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null);
+                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null,null,isStartSameLevelFlow);
 
                 string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
                 if (DataType.IsNullOrEmpty(hostRun) == false)
@@ -417,6 +420,24 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
+            #region 启动同级子流程的信息存储
+            if(isStartSameLevelFlow!=null && isStartSameLevelFlow .Equals("1") == true && this.WorkID != 0)
+            {
+                gwf.WorkID = this.WorkID;
+                gwf.RetrieveFromDBSources();
+                string slFlowNo = GetRequestVal("SLFlowNo");
+                Int32 slNode = GetRequestValInt("SLNodeID");
+                Int64 slWorkID = GetRequestValInt("SLWorkID");
+                gwf.SetPara("SLFlowNo", slFlowNo);
+                gwf.SetPara("SLNodeID", slNode);
+                gwf.SetPara("SLWorkID", slWorkID);
+                gwf.Update();
+            }
+            
+           
+            
+            #endregion 启动同级子流程的信息存储
+
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
                  || this.currND.HisFormType == NodeFormType.SheetAutoTree)
@@ -435,7 +456,7 @@ namespace BP.WF.HttpHandler
                     gwf.RetrieveFromDBSources();
                 }
 
-                if (gwf.PWorkID == 0 && this.PWorkID != 0)
+                if (gwf.PWorkID == 0 && this.WorkID != 0)
                 {
                     gwf.WorkID = this.WorkID;
                     gwf.PWorkID = this.PWorkID;
@@ -533,11 +554,6 @@ namespace BP.WF.HttpHandler
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                 }
-
-                //// 加入设置父子流程的参数.
-                //toUrl += "&DoFunc=" + this.DoFunc;
-                //toUrl += "&CFlowNo=" + this.CFlowNo;
-                //toUrl += "&Nos=" + this.Nos;
                 return "url@" + toUrl;
             }
 

@@ -39,7 +39,11 @@ namespace BP.DA
                     ht = new Hashtable();
                     hts.Add(enName, ht);
                 }
-                ht.Add(pkVal.ToString(), row);
+                //@sly
+                if (ht.ContainsKey(pkVal) == true)
+                    ht[pkVal] = row;
+                else
+                    ht.Add(pkVal, row);
             }
         }
         public static void UpdateRow(string enName, string pkVal, Row row)
@@ -52,7 +56,7 @@ namespace BP.DA
                     ht = new Hashtable();
                     hts.Add(enName, ht);
                 }
-                ht[pkVal]=row; 
+                ht[pkVal] = row;
             }
         }
         public static void DeleteRow(string enName, string pkVal)
@@ -110,6 +114,6 @@ namespace BP.DA
             return null;
         }
         #endregion 对实体的集合操作.
- 
+
     }
 }

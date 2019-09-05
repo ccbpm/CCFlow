@@ -19,7 +19,11 @@ namespace BP.WF.CCInterface {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWebServices", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo,  string title, string openUrl);
-        
+
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/SendToCCMSG", ReplyAction = "*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults = true)]
+        bool SendToCCMSG(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl);
+
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendWhen", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         bool SendWhen(string flowNo, int nodeID, long workid, string userNo, string userName);
@@ -151,7 +155,12 @@ namespace BP.WF.CCInterface {
         public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl) {
             return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, title, openUrl);
         }
-        
+
+        public bool SendToCCMSG(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string title, string openUrl)
+        {
+            return base.Channel.SendToCCMSG(msgPK, sender, sendToEmpNo, tel, msgInfo, title, openUrl);
+        }
+
         public bool SendWhen(string flowNo, int nodeID, long workid, string userNo, string userName) {
             return base.Channel.SendWhen(flowNo, nodeID, workid, userNo, userName);
         }

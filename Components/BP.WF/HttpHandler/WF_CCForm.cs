@@ -1820,7 +1820,7 @@ namespace BP.WF.HttpHandler
                     if (fn.FrmSln == FrmSln.Readonly)
                     {
                         /*如果是不可以编辑*/
-                        return "err@不可以,该表单不允许编辑..";
+                        return "";
                     }
                 }
                 #endregion  求who is PK.

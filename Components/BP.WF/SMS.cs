@@ -629,15 +629,15 @@ namespace BP.WF
 
                 #region 发送短消息 调用接口
                 //发送短消息的前提必须是手机号不能为空
-                if (DataType.IsNullOrEmpty(this.Mobile) == true)
-                    return;
+                //if (DataType.IsNullOrEmpty(this.Mobile) == true)
+                //    return;
                     //throw new Exception("发送短消息时接收人的手机号不能为空,否则接受不到消息");
 
                 soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
                 //站内消息
                 if (this.PushModel.Contains("CCMsg") == true)
                 {
-
+                    soap.SendToCCMSG(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
                 //短信
                 if (this.PushModel.Contains("SMS") == true)

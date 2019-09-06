@@ -486,7 +486,7 @@ namespace BP.Sys
         /// <summary>
         /// 检查所有的物理表
         /// </summary>
-        public static void CheckAllPTable(string nameS)
+        public static void CheckAllPTable(string nameS=null)
         {
             ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Entities");
             foreach (Entities ens in al)
@@ -494,9 +494,11 @@ namespace BP.Sys
                 if (ens == null || ens.ToString() == null)
                     continue;
 
-                if (ens.ToString().Contains(nameS) == false)
-                    continue;
-
+                if (nameS != null)
+                {
+                    if (ens.ToString().Contains(nameS) == false)
+                        continue;
+                }
 
                 try
                 {
@@ -505,9 +507,7 @@ namespace BP.Sys
                 }
                 catch
                 {
-
                 }
-
             }
 
         }

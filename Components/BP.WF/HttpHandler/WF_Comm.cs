@@ -2249,11 +2249,11 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                Entities ens = ClassFactory.GetEns(this.EnsName);
                 if (this.Paras == null)
                     return "err@删除实体，参数不能为空";
-
                 string[] myparas = this.Paras.Split('@');
+
+                Entities ens = ClassFactory.GetEns(this.EnsName);
 
                 List<string[]> paras = new List<string[]>();
                 int idx = 0;

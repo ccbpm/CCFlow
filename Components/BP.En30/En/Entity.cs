@@ -4817,7 +4817,7 @@ namespace BP.En
             {
                 ps.Add("p", val);
             }
-            ps.Add("p", val);
+            //  ps.Add("p", val);
             return en.RunSQL(ps);
         }
 

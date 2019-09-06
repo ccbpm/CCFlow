@@ -902,7 +902,7 @@ namespace BP.WF.Template
                     if (DataType.IsNullOrEmpty(nodeID) == true)
                         continue;
 
-                    string sql = "SELECT EmpFromT AS Name,EmpFrom AS No FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID ;
+                    string sql = "SELECT EmpFromT AS Name,EmpFrom AS No FROM ND" + int.Parse(this.FK_Flow) + "Track A  WHERE  A.ActionType=1 AND A.WorkID=" + workid + " AND A.NDFrom=" + nodeID ;
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
                         continue;

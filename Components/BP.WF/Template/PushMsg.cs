@@ -715,7 +715,7 @@ namespace BP.WF.Template
                 map.AddTBString(PushMsgAttr.MailNodes, null, "Mail节点s", true, false, 0, 100, 10);
                 #endregion 邮件.
 
-                map.AddTBString(PushMsgAttr.BySQL, null, "按照SQL计算", true, false, 0, 100, 10);
+                map.AddTBString(PushMsgAttr.BySQL, null, "按照SQL计算", true, false, 0, 500, 10);
                 map.AddTBString(PushMsgAttr.ByEmps, null, "发送给指定的人员", true, false, 0, 100, 10);
                 map.AddTBAtParas(500);
 
@@ -938,6 +938,7 @@ namespace BP.WF.Template
                 {
                     return "按照指定的SQL发送消息，SQL数据不能为空";
                 }
+                bySQL = bySQL.Replace("~", "'");
                 //替换SQL中的参数
                 bySQL = bySQL.Replace("@WebUser.No", WebUser.No);
                 bySQL = bySQL.Replace("@WebUser.Name", WebUser.Name);

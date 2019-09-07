@@ -121,6 +121,14 @@ namespace BP.Sys
         /// </summary>
         public const string EditModel = "EditModel";
         /// <summary>
+        /// 移动端显示方式
+        /// </summary>
+        public const string MobileShowModel = "MobileShowModel";
+        /// <summary>
+        /// 移动端列表展示时显示的字段
+        /// </summary>
+        public const string MobileShowField = "MobileShowField";
+        /// <summary>
         /// 过滤的SQL 表达式.
         /// </summary>
         public const string FilterSQLExp = "FilterSQLExp";
@@ -1331,6 +1339,8 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
                 map.AddTBInt(MapDtlAttr.EditModel, 0, "行数据显示格式", false, false);
 
+                map.AddTBInt(MapDtlAttr.MobileShowModel, 0, "移动端数据显示格式", false, false);
+                map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20);
 
                 map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
                 map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);

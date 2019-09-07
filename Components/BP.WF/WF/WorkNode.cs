@@ -6040,9 +6040,29 @@ namespace BP.WF
             if (toEmpIDs == "")
                 throw new Exception(BP.WF.Glo.multilingual("@延续子流程目前仅仅支持选择接收人方式.", "WorkNode", "not_found_receiver"));
 
-            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,
+            SubFlowYanXu subFlow = new SubFlowYanXu();
+            subFlow.MyPK = this.HisNode.NodeID + "_" + node.FK_Flow + "_" + 2;
+            if(subFlow.RetrieveFromDBSources() == 0)
+                throw new Exception(BP.WF.Glo.multilingual("@延续子流程配置信息丢失，请联系管理员.", "WorkNode", "not_found_receiver"));
+            Int64 workid = 0;
+            if(subFlow.HisSubFlowModel == SubFlowModel.SubLevel)//下级子流程
+            {
+                workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,
                 toEmpIDs, null, this.WorkID, 0, this.HisNode.FK_Flow, this.HisNode.NodeID, BP.Web.WebUser.No, 0, null);
-
+            }
+            else if(subFlow.HisSubFlowModel == SubFlowModel.SameLevel)//平级子流程
+            {
+                workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,
+               toEmpIDs, null, this.HisGenerWorkFlow.PWorkID, 0, this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PNodeID, this.HisGenerWorkFlow.PEmp, 0, null);
+                //存储同级子流程的信息
+                GenerWorkFlow subYXGWF = new GenerWorkFlow(workid);
+                subYXGWF.SetPara("SLWorkID", this.WorkID);
+                subYXGWF.SetPara("SLFlowNo", this.HisNode.FK_Flow);
+                subYXGWF.SetPara("SLNodeID", this.HisNode.NodeID);
+                subYXGWF.SetPara("SLEmp", BP.Web.WebUser.No);
+                subYXGWF.Update();
+            }
+            
             //复制当前信息.
             Work wk = node.HisWork;
             wk.OID = workid;
@@ -6050,8 +6070,37 @@ namespace BP.WF
             wk.Copy(this.HisWork);
             wk.Update();
 
+
             //为接收人显示待办.
             BP.WF.Dev2Interface.Node_SetDraft2Todolist(node.FK_Flow, workid);
+
+            // 产生工作列表. 
+            GenerWorkerList gwl = new GenerWorkerList(workid,node.NodeID, toEmpIDs);
+            int count = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, node.NodeID, GenerWorkerListAttr.FK_Emp, toEmpIDs);
+            if (count == 0 )
+            {
+                Emp emp = new Emp(toEmpIDs);
+                gwl.WorkID = workid;
+                gwl.FK_Emp = toEmpIDs;
+                gwl.FK_EmpText = emp.Name;
+
+                gwl.FK_Node = node.NodeID;
+                gwl.FK_NodeText = node.Name;
+                gwl.FID = 0;
+
+                gwl.FK_Flow = node.FK_Flow;
+                gwl.FK_Dept = emp.FK_Dept;
+                gwl.FK_DeptT = emp.FK_DeptText;
+
+                gwl.SDT = "无";
+                gwl.DTOfWarning = DataType.CurrentDataTime;
+                gwl.IsEnable = true;
+
+                gwl.IsPass = false;
+                gwl.Save();
+            }
+
+          
 
             //设置变量.
             this.addMsg(SendReturnMsgFlag.VarToNodeID, node.NodeID.ToString(), workid.ToString(), SendReturnMsgType.SystemMsg);

@@ -110,6 +110,17 @@ namespace BP.WF.Template
                 SetValByKey(SubFlowYanXuAttr.FK_Node, value);
             }
         }
+
+        /// <summary>
+        /// 运行类型
+        /// </summary>
+        public SubFlowModel HisSubFlowModel
+        {
+            get
+            {
+                return (SubFlowModel)this.GetValIntByKey(SubFlowAutoAttr.SubFlowModel);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -137,12 +148,20 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowType, 2, "子流程类型", true, false, SubFlowYanXuAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 
-                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, false, SubFlowYanXuAttr.SubFlowModel,
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
 
 
                 map.AddTBString(SubFlowYanXuAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
+
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "父子流程结束规则", true, true,
+               FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+
+
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
+               FlowAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
+
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.ExpType, 3, "表达式类型", true, true, SubFlowYanXuAttr.ExpType,
                    "@3=按照SQL计算@4=按照参数计算");

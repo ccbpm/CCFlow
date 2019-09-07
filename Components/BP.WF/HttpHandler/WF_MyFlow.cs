@@ -431,6 +431,7 @@ namespace BP.WF.HttpHandler
                 gwf.SetPara("SLFlowNo", slFlowNo);
                 gwf.SetPara("SLNodeID", slNode);
                 gwf.SetPara("SLWorkID", slWorkID);
+                gwf.SetPara("SLEmp", BP.Web.WebUser.No);
                 gwf.Update();
             }
             

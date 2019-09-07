@@ -11,6 +11,7 @@ function numberFormat(obj, decimals) {
       * */
     var number = obj.value;
     number = (number + "").replace(/[^0-9+-Ee.]/g, "");
+    number = number.replace(/,/g, ""); 
     roundtag = "round";  // 四舍五入
     var n = !isFinite(+number) ? 0 : +number;
   var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
@@ -834,7 +835,7 @@ function removeplaceholder(obj, bit) {
  */
 
 function limitLength(obj, length) {
-   obj.value = obj.value.replace(/[^\d.-]/g, "");  //清除“数字”和“.”以外的字符 ;
+   obj.value = obj.value.replace(/[^\d,.-]/g, "");  //清除“数字”和“.”以外的字符 ;
     if (length != null && length != "" && length != "undefined") {
         if (obj.value.indexOf('.')>=0 && obj.value.split('.')[1].length > length) {
             obj.value = obj.value.substring(0, obj.value.length - 1);

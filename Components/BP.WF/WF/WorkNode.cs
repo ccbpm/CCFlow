@@ -5907,7 +5907,7 @@ namespace BP.WF
                     QueryObject qo = new QueryObject(gwfs);
                     qo.AddWhere(GenerWorkFlowAttr.PWorkID, this.HisGenerWorkFlow.PWorkID);
                     qo.addAnd();
-                    qo.AddWhere(GenerWorkFlowAttr.PNodeID, nodeid);
+                    qo.AddWhere(GenerWorkFlowAttr.PNodeID, this.HisGenerWorkFlow.PNodeID);
                     qo.addAnd();
                     qo.AddWhere(GenerWorkFlowAttr.PFlowNo, this.HisGenerWorkFlow.PFlowNo);
                     qo.addAnd();

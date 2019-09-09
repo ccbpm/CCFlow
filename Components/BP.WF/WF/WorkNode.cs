@@ -1967,8 +1967,6 @@ namespace BP.WF
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();
-            int toNodeId = 0;
-            int numOfWay = 0;
             foreach (Node nd in nds)
             {
                 Conds dcs = new Conds();
@@ -2003,15 +2001,23 @@ namespace BP.WF
                 foreach (Node nd in nds)
                 {
                     Conds dcs = new Conds();
+                    bool IsExistCond = false;
                     foreach (Cond dc in dcsAll)
                     {
-                        if (dc.ToNodeID != nd.NodeID)
-                            continue;
-                        dcs.AddEntity(dc);
+                        if (dc.ToNodeID == nd.NodeID)
+                        {
+                            IsExistCond = true;
+                            break;
+                        }
+                        continue;
+                     
                     }
-
-                    if (dcs.Count != 0)
-                        return nd;
+                    //设置了方向条件
+                    if (IsExistCond == true) 
+                        continue;
+                    //没有设置方向条件，默认同意走该节点
+                    return nd;
+                   
                 }
             }
 

@@ -142,6 +142,10 @@
                     var item = gwfs[j];
                     if (item.WFState == 0)
                         continue;
+                    //平级子流程，获取平级的workID
+                    var slWorkID = GetPara(item.AtPara, "SLWorkID");
+                    if (slWorkID != null && slWorkID != undefined && slWorkID != GetQueryString("WorkID"))
+                        continue;
 
                     html += "<tr>";
                     if (item.StarterName == null || item.StarterName == "")

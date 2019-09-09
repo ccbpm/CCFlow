@@ -94,16 +94,15 @@
                 alert("该流程已经存在");
                 return;
             }
-
+            var myNode = new Entity("BP.WF.Node", nodeID);
             var en = new Entity("BP.WF.Template.SubFlowYanXu");
-           // console.log(en);
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
             en.SubFlowName = name;
             en.SubFlowType = 2;
 
-                var myNode = new Entity("BP.WF.Node", nodeID);
+               
             en.FK_Flow = myNode.FK_Flow;
 
             var myen = en.Insert();

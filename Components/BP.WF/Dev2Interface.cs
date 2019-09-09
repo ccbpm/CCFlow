@@ -6500,6 +6500,11 @@ namespace BP.WF
             ds.Tables.Add(dtHistory);
             #endregion 运动轨迹
 
+            #region 游离态
+            TransferCustoms tranfs = new TransferCustoms(workID);
+            ds.Tables.Add(tranfs.ToDataTableField("WF_TransferCustom"));
+            #endregion 游离态
+
             return ds;
         }
         /// <summary>

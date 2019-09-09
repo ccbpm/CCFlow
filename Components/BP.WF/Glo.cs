@@ -21,12 +21,12 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+      
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
-            //主流程的信息。
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
 
-            //子流程.
+            //增加子流程数据.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve("PWorkID", workID);
             string json = "[";
@@ -43,10 +43,33 @@ namespace BP.WF
             json += "},";
 
             json += "{ name: '实际执行', ";
-            json += " start:  " + ToData(gwf.RDT) + ","; //实际开始日期.
+            json += " start:  " + ToData(gwf.RDT) + ",";
             json += " end: " + ToData(gwf.SendDT) + ",";
             json += " TodoSta: " + gwf.TodoSta + ",";
-            json += " color: 'blue' ";
+
+            if (gwf.WFSta == WFSta.Complete)//流程运行结束
+            {
+                if (ToData(gwf.SendDT).CompareTo(ToData(gwf.SDTOfFlow)) <= 0)//正常
+                    json += " color: 'green' ";
+                else
+                    json += " color: 'red' ";
+            }
+            else //未完成
+            {
+                string sendDt = BP.DA.DataType.ParseSysDate2DateTime(gwf.SendDT).ToString("yyyy-MM-dd");
+                string wadingDtOfF = DataType.AddDays(sendDt, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                if (sendDt.CompareTo(ToData(gwf.SDTOfFlow)) > 0)//逾期
+                    json += " color: 'red' ";
+                else
+                {
+                    if (wadingDtOfF.CompareTo(ToData(gwf.SDTOfFlow)) > 0)
+                        json += " color: 'yellow' ";
+                    else
+                        json += " color: 'green' ";
+
+                }
+
+            }
             json += "}]";
             json += "},";
 
@@ -55,91 +78,363 @@ namespace BP.WF
             Nodes nds = new Nodes(gwf.FK_Flow);
             nds.Retrieve("FK_Flow", gwf.FK_Flow, "Step");
 
-            //求出来所有的子流程.
-            SubFlows subs = new SubFlows();
-            subs.Retrieve(SubFlowAttr.FK_Flow, gwf.FK_Flow);
+            //流转自定义
+            string sql = "SELECT FK_Node AS NodeID,NodeName AS Name From WF_TransferCustom WHERE WorkID=" + gwf.WorkID + " AND IsEnable=1 Order By Idx";
+            DataTable dtYL = DBAccess.RunSQLReturnTable(sql);
+            bool isFirstYLT = true;
+            Nodes nodes = new Nodes();
+            //含有流转自定义文件
+            if (dtYL.Rows.Count != 0)
+            {
+                foreach(Node nd in nds)
+                {
+                    if (nd.GetParaBoolen("IsYouLiTai") == true)
+                    {
+                        if(isFirstYLT == true)
+                        {
+                            foreach (DataRow dr in dtYL.Rows)
+                            {
+                                nodes.AddEntity(nds.GetEntityByKey(Int32.Parse(dr["NodeID"].ToString())));
+                            }
+                        }
+                        
+                        isFirstYLT = false;
+                        continue;
+                    }
+                    nodes.AddEntity(nd);
+                }
+            }
+            else
+            {
+                nodes.AddEntities(nds);
+            }
+           
+            
 
-            //求出来设置的游离态.
-            TransferCustoms tcs = new TransferCustoms();
-            tcs.Retrieve(TransferCustomAttr.WorkID, gwf.WorkID, TransferCustomAttr.Idx);
+            SubFlows subs = new SubFlows();
+            var trackTable = "ND" + int.Parse(gwf.FK_Flow) + "Track";
+            sql = "SELECT FID \"FID\",NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
+                  " WHERE WorkID=" + gwf.WorkID + " ORDER BY RDT ASC";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            
 
             int idxNode = 0;
-            foreach (Node nd in nds)
+            foreach (Node nd in nodes)
             {
                 idxNode++;
 
+               string[] dtArray = GetNodeRealTime(dt,nd.NodeID);
+
                 //里程碑.
                 json += " { id:'" + nd.NodeID + "', name:'" + nd.Name + "', ";
+                json += "series:[{ ";
+                json += " name: '计划', ";
+                json += " start:  " + ToData(gwf.GetParaString("PlantStart"+nd.NodeID)) + ", ";
+                json += " end: " + ToData(gwf.GetParaString("CH" + nd.NodeID)) + ",";
+                json += " TodoSta: " + gwf.TodoSta + ", ";
+                json += " color: 'blue' ";
+                json += "},";
 
+                json += "{ name: '实际执行', ";
+                if (nd.IsStartNode == true)
+                {
+                    json += " start:  " + ToData(gwf.RDT) + ",";
+                    json += " end: " + ToData(dtArray[1]) + ",";
+                    json += " TodoSta: " + gwf.TodoSta + ",";
+                    json += " color: 'green' ";
+                }
+                else
+                {
+                    string start = "";
+                    string end = "";
+                    bool isPass = false;
+                    if(DataType.IsNullOrEmpty(dtArray[0]) == true)
+                        json += " start:'',";
+                    else
+                    {
+                        json += " start:  " + ToData(dtArray[0]) + ",";
+                        start = ToData(dtArray[0]);
+                    }
+                        
+                    if (DataType.IsNullOrEmpty(dtArray[1]) == true && DataType.IsNullOrEmpty(dtArray[0]) == true) 
+                        json += " end:'',";
+                    else
+                    {
+                        if (DataType.IsNullOrEmpty(dtArray[1]) == false)
+                            isPass = true;
+                        json += " end: " + ToData(dtArray[1]) + ",";
+                        end = BP.DA.DataType.ParseSysDate2DateTime(dtArray[1]).ToString("yyyy-MM-dd");
+                    }
+
+                    json += " TodoSta: " + gwf.TodoSta + ",";
+                    string plantCHDt = ToData(gwf.GetParaString("CH" + nd.NodeID));
+                    if (isPass && end.CompareTo(plantCHDt) <= 0)
+                        json += " color: 'green' "; //正常
+
+                    if (isPass && end.CompareTo(plantCHDt) > 0)
+                        json += " color: 'red' "; //逾期
+                    if(isPass == false)
+                    {
+                        if (DataType.IsNullOrEmpty(end) == true)
+                            end = DateTime.Now.ToString("yyyy-MM-dd");
+                        if(end.CompareTo(plantCHDt)>0)
+                            json += " color: 'red' ";
+                        // 预警计算
+                        string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                        if(warningDt.CompareTo(plantCHDt)>=0)
+                            json += " color: 'yellow' ";
+                        else
+                            json += " color: 'green' ";
+                    }
+
+                   
+                }
+               
+                json += "}]},";
+
+                //获取子流程
+                subs = new SubFlows(nd.NodeID);
+                if (subs.Count == 0)
+                {
+                    
+                  // json += "},";
+                    continue;
+                }
+
+               // json += "},";
+                //json += " { id:'" + nd.NodeID + "', name:'" + nd.Name + "', ";
                 string series = "";
                 foreach (SubFlow sub in subs)
                 {
                     if (sub.FK_Node != nd.NodeID)
                         continue;
-
+                    json += " { id:'" + sub.FK_Node + "', name:'" +sub.SubFlowNo + " - " + sub.SubFlowName + "',series:[ ";
                     //增加子流成.
                     int idx = 0;
                     string dtlsSubFlow = "";
+                    //获取流程启动的开始和结束
+                    Int64 firstStartWorkID = 0;
+                    Int64 endStartWorkID = 0;
+                    GenerWorkFlow firstStartGwf = null;
+                    GenerWorkFlow endStartGwf = null;
+                    bool IsFirst = true;
                     foreach (GenerWorkFlow subGWF in gwfs)
                     {
                         if (subGWF.FK_Flow != sub.SubFlowNo)
                             continue;
+                        if(IsFirst == true)
+                        {
+                            firstStartWorkID = subGWF.WorkID;
+                            endStartWorkID = subGWF.WorkID;
+                            firstStartGwf = subGWF;
+                            endStartGwf = subGWF;
+                            continue;
 
-                        dtlsSubFlow += "{ ";
-                        dtlsSubFlow += " name: '" + subGWF.FlowName + "(计划)',";
-                        dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ",";
-                        dtlsSubFlow += " end: " + ToData(gwf.SDTOfFlow) + ",";
-                        dtlsSubFlow += " TodoSta: -2, ";
-                        dtlsSubFlow += " color: 'brue' ";
-                        dtlsSubFlow += "},";
-
-                        dtlsSubFlow += "{ ";
-                        dtlsSubFlow += " name: '(实际)',";
-                        dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ",";
-                        dtlsSubFlow += " end: " + ToData(gwf.SendDT) + ",";
-                        dtlsSubFlow += " TodoSta: " + gwf.TodoSta + ", ";
-                        dtlsSubFlow += " color: '#f0f0f0' ";
-                        dtlsSubFlow += "},";
+                        }
+                        if (firstStartWorkID > subGWF.WorkID)
+                        {
+                            firstStartWorkID = subGWF.WorkID;
+                            firstStartGwf = subGWF;
+                        }
+                           
+                        if(endStartWorkID < subGWF.WorkID)
+                        {
+                            endStartWorkID = subGWF.WorkID;
+                            endStartGwf = subGWF;
+                        }
+                           
                     }
-
-                    if (DataType.IsNullOrEmpty(dtlsSubFlow) == false)
-                        dtlsSubFlow = dtlsSubFlow.Substring(0, dtlsSubFlow.Length - 1);
-
-                    //如果没有启动子流程，就需要显示空白的。
-                    if (DataType.IsNullOrEmpty(dtlsSubFlow) == true)
+                    
+                    //没有启动子流程
+                    if(firstStartWorkID == 0)
                     {
-                        dtlsSubFlow += "{ ";
-                        dtlsSubFlow += " name: '" + sub.SubFlowNo + " - " + sub.SubFlowName + "', ";
-                        dtlsSubFlow += " start:  " + ToData(DataType.CurrentData) + ", ";
-                        dtlsSubFlow += " end:  " + ToData(DataType.CurrentData) + ", ";
-                        dtlsSubFlow += " TodoSta: -1, ";
-                        dtlsSubFlow += " color: '#f0f0f0' ";
-                        dtlsSubFlow += "}";
+                        json += "{ ";
+                        json += " name: '" + sub.SubFlowNo + " - " + sub.SubFlowName + "', ";
+                        json += " start:  " + ToData(DataType.CurrentData) + ", ";
+                        json += " end:  " + ToData(DataType.CurrentData) + ", ";
+                        json += " TodoSta: -1, ";
+                        json += " color: 'brue' ";
+                        json += "}";
+                    }
+                    //子流程被启动了一次
+                    if(firstStartWorkID !=0 && firstStartWorkID == endStartWorkID)
+                    {
+                        json += "{ ";
+                        json += " name: '计划',";
+                        json += " start:  " + ToData(firstStartGwf.RDT) + ",";
+                        json += " end: " + ToData(firstStartGwf.SDTOfFlow) + ",";
+                        json += " TodoSta: -2, ";
+                        json += " color: '#9999FF' ";
+                        json += "},";
+
+                        json += "{ ";
+                        json += " name: '实际',";
+                        json += " start:  " + ToData(firstStartGwf.RDT) + ",";
+                        json += " end: " + ToData(firstStartGwf.SendDT) + ",";
+                        json += " TodoSta: " + firstStartGwf.TodoSta + ", ";
+
+                        if (firstStartGwf.WFSta == WFSta.Complete)//流程运行结束
+                        {
+                            if (ToData(firstStartGwf.SendDT).CompareTo(ToData(firstStartGwf.SDTOfFlow)) <= 0)//正常
+                                json += " color: '#66ff66' ";  //绿色
+                            else
+                                json += " color: '#ff8888' ";//红色
+                        }
+                        else //未完成
+                        {
+                            string sendDt = BP.DA.DataType.ParseSysDate2DateTime(firstStartGwf.SendDT).ToString("yyyy-MM-dd");
+                            string wadingDtOfF = DataType.AddDays(sendDt, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                            if (sendDt.CompareTo(ToData(firstStartGwf.SDTOfFlow)) > 0)//逾期
+                                json += " color: '#ff8888' "; //红色
+                            else
+                            {
+                                if (wadingDtOfF.CompareTo(ToData(firstStartGwf.SDTOfFlow)) > 0)
+                                    json += " color: '#ffff77' ";//黄色
+                                else
+                                    json += " color: '#66ff66' ";//绿色
+                            }
+                           
+
+                        }
+                        json += "}";
+                    }
+                    //子流程被启动了多次
+                    if (firstStartWorkID != 0 && firstStartWorkID != endStartWorkID)
+                    {
+                        json += "{ ";
+                        json += " name: '计划',";
+                        json += " start:  " + ToData(firstStartGwf.RDT) + ",";
+                        json += " end: " + ToData(firstStartGwf.SDTOfFlow) + ",";
+                        json += " TodoSta: -2, ";
+                        json += " color: '#9999FF' ";
+                        json += "},";
+
+                        json += "{ ";
+                        json += " name: '实际',";
+                        json += " start:  " + ToData(firstStartGwf.RDT) + ",";
+                        json += " end: " + ToData(endStartGwf.SendDT) + ",";
+                        json += " TodoSta: " + endStartGwf.TodoSta + ", ";
+                        if (endStartGwf.WFSta == WFSta.Complete)//流程运行结束
+                        {
+                            if (ToData(endStartGwf.SendDT).CompareTo(ToData(firstStartGwf.SDTOfFlow)) <= 0)//正常
+                                json += " color: '#66ff66' ";  //绿色
+                            else
+                                json += " color: '#ff8888' ";//红色
+                        }
+                        else //未完成
+                        {
+                            string sendDt = BP.DA.DataType.ParseSysDate2DateTime(endStartGwf.SendDT).ToString("yyyy-MM-dd");
+                            string wadingDtOfF = DataType.AddDays(sendDt, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                            if (sendDt.CompareTo(ToData(firstStartGwf.SDTOfFlow)) > 0)//逾期
+                                json += " color: '#ff8888' "; //红色
+                            else
+                            {
+                                if (wadingDtOfF.CompareTo(ToData(firstStartGwf.SDTOfFlow)) > 0)
+                                    json += " color: '#ffff77' ";//黄色
+                                else
+                                    json += " color: '#66ff66' ";//绿色
+                            }
+
+
+                        }
+                       
+                        json += "}";
                     }
 
-                    //从表.
-                    series += dtlsSubFlow +"," ;
-                }
+                    //foreach (GenerWorkFlow subGWF in gwfs)
+                    //{
+                    //    if (subGWF.FK_Flow != sub.SubFlowNo)
+                    //        continue;
 
-                if (DataType.IsNullOrEmpty(series) == false)
-                    series = series.Substring(0, series.Length - 1);
+                    //    dtlsSubFlow += "{ ";
+                    //    dtlsSubFlow += " name: '计划',";
+                    //    dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ",";
+                    //    dtlsSubFlow += " end: " + ToData(gwf.SDTOfFlow) + ",";
+                    //    dtlsSubFlow += " TodoSta: -2, ";
+                    //    dtlsSubFlow += " color: 'brue' ";
+                    //    dtlsSubFlow += "},";
 
-                if (DataType.IsNullOrEmpty(series))
-                    json += " series:[]";
-                else
-                {
-                    json += " series:["+ series + "]";
+                    //    dtlsSubFlow += "{ ";
+                    //    dtlsSubFlow += " name: '实际',";
+                    //    dtlsSubFlow += " start:  " + ToData(gwf.RDT) + ",";
+                    //    dtlsSubFlow += " end: " + ToData(gwf.SendDT) + ",";
+                    //    dtlsSubFlow += " TodoSta: " + gwf.TodoSta + ", ";
+                    //    dtlsSubFlow += " color: '#f0f0f0' ";
+                    //    dtlsSubFlow += "},";
+
+                    //}
+
+                    //if (DataType.IsNullOrEmpty(dtlsSubFlow) == false)
+                    //    dtlsSubFlow = dtlsSubFlow.Substring(0, dtlsSubFlow.Length - 1);
+
+                    ////如果没有启动子流程，就需要显示空白的。
+                    //if (DataType.IsNullOrEmpty(dtlsSubFlow) == true)
+                    //{
+                    //    dtlsSubFlow += "{ ";
+                    //    dtlsSubFlow += " name: '" + sub.SubFlowNo + " - " + sub.SubFlowName + "', ";
+                    //    dtlsSubFlow += " start:  " + ToData(DataType.CurrentData) + ", ";
+                    //    dtlsSubFlow += " end:  " + ToData(DataType.CurrentData) + ", ";
+                    //    dtlsSubFlow += " TodoSta: -1, ";
+                    //    dtlsSubFlow += " color: '#f0f0f0' ";
+                    //    dtlsSubFlow += "}";
+                    //}
+
+                    ////从表.
+                    //series += dtlsSubFlow +"," ;
+
+                    json += "]},";
+
                 }
-             
-                if (idxNode == nds.Count)
-                    json += "}";
-                else
-                    json += "},";
+                
+                //if (idxNode == nds.Count)
+                //    json += "}";
+                //else
+                //    json += "},";
             }
-
+            json = json.Substring(0, json.Length - 1);
             json += "]";
 
             return json;
+        }
+
+        public static string[] GetNodeRealTime(DataTable dt, Int32 nodeID)
+        {
+            string startDt = "";
+            string endDt = "";
+            foreach(DataRow dr in dt.Rows)
+            {
+                int NDFrom = Int32.Parse(dr["NDFrom"].ToString());
+                if(NDFrom == nodeID)
+                {
+                    endDt = dr["RDT"].ToString();
+                    break;
+                }
+
+
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                int NDTo = Int32.Parse(dr["NDTo"].ToString());
+                if (NDTo == nodeID )
+                {
+                    if(DataType.IsNullOrEmpty(endDt) == true)
+                    {
+                        startDt = dr["RDT"].ToString();
+                        break;
+                    }
+                    if (dr["RDT"].ToString().CompareTo(endDt) <= 0)
+                    {
+                        startDt = dr["RDT"].ToString();
+                        break;
+                    }
+                }
+
+
+            }
+            string[] dtArray = { startDt, endDt };
+            return dtArray;
         }
 
         /// <summary>

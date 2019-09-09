@@ -155,6 +155,7 @@
   <ItemGroup>
     <Compile Include="AppClass.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
+    <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />

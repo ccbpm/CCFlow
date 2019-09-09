@@ -150,13 +150,13 @@ namespace BP.WF
                     string start = "";
                     string end = "";
                     bool isPass = false;
-                    if(DataType.IsNullOrEmpty(dtArray[0]) == true)
-                        json += " start:'',";
-                    else
-                    {
+                    //if(DataType.IsNullOrEmpty(dtArray[0]) == true)
+                    //    json += " start:'',";
+                    //else
+                    //{
                         json += " start:  " + ToData(dtArray[0]) + ",";
-                        start = ToData(dtArray[0]);
-                    }
+                     //   start = ToData(dtArray[0]);
+                    //}
                         
                     if (DataType.IsNullOrEmpty(dtArray[1]) == true && DataType.IsNullOrEmpty(dtArray[0]) == true) 
                         json += " end:'',";

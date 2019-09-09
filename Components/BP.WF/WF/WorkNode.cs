@@ -7360,7 +7360,7 @@ namespace BP.WF
                             if (DataType.IsNullOrEmpty(fl) == true)
                                 continue;
 
-                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + tthis.WorkID + " AND FK_Flow='" + fl + "'";
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + fl + "'";
                             if (DBAccess.RunSQLReturnValInt(sql) == 0)
                             {
                                 isHave = true;

@@ -46,6 +46,11 @@ namespace BP.WF.DTS
         /// <returns></returns>
         public override object Do()
         {
+
+            //执行自动任务.
+            AutoRun_WhoExeIt myen = new AutoRun_WhoExeIt();
+            myen.Do();
+
             //扫描触发式自动发起流程表......
             //自动发起流程.
             AutoRunWF_Task wf_task = new AutoRunWF_Task();

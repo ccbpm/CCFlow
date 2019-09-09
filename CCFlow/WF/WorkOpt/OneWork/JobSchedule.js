@@ -6,7 +6,6 @@ $(function () {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddPara("WorkID", workid);
     var ds = handler.DoMethodReturnJSON("JobSchedule_Init");
-    // console.log(ds);
     var gwf = ds["WF_GenerWorkFlow"][0]; //工作记录.
     var nodes = ds["WF_Node"]; //节点.
     var dirs = ds["WF_Direction"]; //连接线.
@@ -14,8 +13,6 @@ $(function () {
 
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
-
-    //debugger;
 
     var step = 0;
     //循环历史记录, 生成唯一的节点连续字符串比如 101,102,103
@@ -122,12 +119,14 @@ function GenerMNode(tracks, nodeID, gwf) {
     var info = "<ul>";
 
     var emps = "";
+    var track;
     for (var i = 0; i < tracks.length; i++) {
 
         var tk = tracks[i];
       //  debugger
         if (tk.FK_Node != nodeID) continue;
         if (emps.indexOf(tk.EmpNo + ',') >= 0) continue; //已经出现的，就不处理了.
+        track = tk;
 
         emps += tk.EmpNo + ",";
 
@@ -139,11 +138,13 @@ function GenerMNode(tracks, nodeID, gwf) {
         }
     }
     info += "</ul>";
-
-    if (tk.FK_Node == gwf.FK_Node)
-        info = GenerIcon("DotGreen", step, info, false, tk.NodeName);
-    else
-        info = GenerIcon("DotBlue", step, info, false, tk.NodeName);
+    if(track != null && track != undefined) {
+        if (track.FK_Node == gwf.FK_Node)
+            info = GenerIcon("DotGreen", step, info, false, track.NodeName);
+        else
+            info = GenerIcon("DotBlue", step, info, false, track.NodeName);
+    }
+   
 
     return "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
 

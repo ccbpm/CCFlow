@@ -345,6 +345,9 @@ function setIframeHeight() {
 
 function SaveWorkCheck() {
 
+    if ($("#WorkCheck_Doc").length == 0)//审核组件只读
+        return;
+
     var doc = $("#WorkCheck_Doc").val();
 
     if (isReadonly == true)

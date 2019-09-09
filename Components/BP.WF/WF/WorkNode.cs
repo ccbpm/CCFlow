@@ -7360,7 +7360,7 @@ namespace BP.WF
                             if (DataType.IsNullOrEmpty(fl) == true)
                                 continue;
 
-                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + fl + "'";
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + tthis.WorkID + " AND FK_Flow='" + fl + "'";
                             if (DBAccess.RunSQLReturnValInt(sql) == 0)
                             {
                                 isHave = true;
@@ -7381,11 +7381,11 @@ namespace BP.WF
                             if (DataType.IsNullOrEmpty(fl) == true)
                                 continue;
 
-                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + fl + "' AND WFState=3";
+                            string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + fl + "' AND WFState=3";
                             if (DBAccess.RunSQLReturnValInt(sql) == 0)
                             {
                                 isHave = true;
-                                break; //还没有启动过.
+                                break; //还没有启动过/或者没有完成.
                             }
                         }
                         if (isHave == true)

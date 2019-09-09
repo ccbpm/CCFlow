@@ -34,54 +34,115 @@
             ens.Retrieve("Auther", webUser.No);
 
 
-            var html = "<table style='width:80%;'>";
-            html += "<caption> [" + webUser.No + "]授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
-            html += "<tr>";
-            html += "<th>序</th>";
-            html += "<th>授权类型</th>";
-            html += "<th>授权给</th>";
-            html += "<th>流程</th>";
-            html += "<th>收回日期</th>";
-            html += "<th>状态</th>";
-            html += "<th>操作</th>";
-            html += "</tr>";
+           var  html = "<div class='container'>";
+           html += "<div class='fixed-table-header '>";
+           html += "<table class='table table-hover table-striped ' >";
+           html += "<caption style='height:auto;text-indent: 0em;'> [" + webUser.No + "]授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
+            
+           html += "<thead ><tr> ";
+           html += "<th style='background-color:#F2F2F2;'>序</th>";
+           html += "<th style='background-color:#F2F2F2;'>授权给</th>";
+           html += "<th style='background-color:#F2F2F2;'>授权类型</th>";
+           html += "<th style='background-color:#F2F2F2;'>流程</th>";
+           html += "<th style='background-color:#F2F2F2;'>收回日期</th>";
+           html += "<th style='background-color:#F2F2F2;'>状态</th>";
+           html += "<th style='background-color:#F2F2F2;'>操作</th>";
+           html += "</tr></thead>";
 
+
+            html += "<tbody>";
+            var takeBackDT = "";
+            var num = 1;
             for (var i = 0; i < ens.length; i++) {
 
                 en = ens[i];
+                if (en.AuthType == 2) {
+                    if (takeBackDT.indexOf(en.TakeBackDT+",") != -1) {
+                            continue;
+                    }
+                    takeBackDT += en.TakeBackDT + ",";
+
+                    var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 2 and EmpNo = '" + en.EmpNo + "' and TakeBackDT = '" + en.TakeBackDT + "'";
+                    var dt = DBAccess.RunSQLReturnTable(sql);
+                
+                    var flowName = "";
+                    for (var j = 0; j < dt.length; j++) {
+                    
+                        var da = dt[j];
+                        flowName += da.FlowName + ",";
+                    }
+                }
+                var AuthType = en.AuthType;
+                var AuthTypeName;
+                switch (AuthType) {
+                    case 0: AuthTypeName='不授权' ; break;
+                    case 1: AuthTypeName='全部流程授权'; break;
+                    case 2: AuthTypeName='指定流程授权';break;
+                    default: AuthTypeName = '空'; 
+                }
+                var nowDate = getNowFormatDate();
+                var state = "";
+                if (nowDate<=en.TakeBackDT) {
+                    state = "授权中";
+                } else {
+                    state = "已收回";
+                }
+                
                 html += "<tr>";
-                html += "<td>(" + i + 1 + ")</td>";
-                html += "<td>" + en.AuthType + "</td>";
-                html += "<td>" + en.EmpNo + "</td>";
-                html += "<td>" + en.FlowNo + "</td>";
+                html += "<td>" + num + "</td>";
+                html += "<td>" + en.EmpName + "</td>";
+                html += "<td>" + AuthTypeName + "</td>";
+                if (en.AuthType == 2) {
+                    html += "<td>" + flowName + "</td>";
+                } else {
+                    html += "<td>" + en.FlowName + "</td>";
+                }
                 html += "<td>" + en.TakeBackDT + "</td>";
-                html += "<td>" + en.TakeBackDT + "</td>";
-                html += "<td><a href=\"javascript:Del('" + en.MyPK + "')\">删除</a></td>";
+                html += "<td>" + state + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.Auther + "','" + en.EmpNo + "','" + en.TakeBackDT + "')\">删除</a></td>";
                 html += "</tr>";
+                num++;
             }
 
+            html += "</tbody>";
             html += "</table>";
-
+            html += "</div>";
+            html += "</div>";
             $("#docs").html(html);
+           
         });
 
-
         //执行删除.
-        function Delete() {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
-            handler.AddPara("Author", $("#TB_Author").val());
-            handler.AddPara("AuthorDate", $("#TB_DT").val());
-            handler.AddPara("AuthorWay", $("#DDL_AuthorWay").val());
-            var data = handler.DoMethodReturnString("Author_Save");
-
-            alert(data);
-
-            window.location.href = 'Default.htm';
+        function Del(Auther,EmpNo,TakeBackDT) {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+            var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
+            DBAccess.RunSQL(sql);
+            alert("删除成功");
+            window.location.href = window.location.href;
 
         }
+        //获取当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            //当前时间=年份-月份-日 小时：分钟
+            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+            //+ " " + date.getHours() + seperator2 + date.getMinutes();
 
-/**/</script>
+            return cdt;
+        }
+
+</script>
 </head>
 <body onkeypress="Esc()" class="gray-bg">
     <form id="cc" name="cc">

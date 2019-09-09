@@ -109,14 +109,67 @@ namespace BP.WF.HttpHandler
 
 			return BP.Tools.Json.ToJson(dt);
 		}
+        /// <summary>
+        /// 选择器
+        /// </summary>
+        /// <returns></returns>
+        public string SelectEmps_Init()
+        {
+            string fk_flowsort = this.GetRequestVal("FK_FlowSort").Substring(1);
 
+            if (DataType.IsNullOrEmpty(fk_flowsort) == true || fk_flowsort.Equals("undefined") == true)
+                fk_flowsort = "99";
 
-		/// <summary>
-		/// 按照管理员登录.
-		/// </summary>
-		/// <param name="userNo">管理员编号</param>
-		/// <returns>登录信息</returns>
-		public string AdminerChang_LoginAs()
+            DataSet ds = new DataSet();
+
+            string sql = ""; 
+                 sql = "SELECT 'F' + No as No,Name, 'F' + ParentNo as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
+
+            DataTable dtFlowSorts = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //if (dtFlowSort.Rows.Count == 0)
+            //{
+            //    fk_dept = BP.Web.WebUser.FK_Dept;
+            //    sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx ";
+            //    dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //}
+
+            dtFlowSorts.TableName = "FlowSorts";
+            ds.Tables.Add(dtFlowSorts);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dtFlowSorts.Columns[0].ColumnName = "No";
+                dtFlowSorts.Columns[1].ColumnName = "Name";
+                dtFlowSorts.Columns[2].ColumnName = "ParentNo";
+            }
+
+           
+            
+            //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
+            sql = "SELECT  No,(NO + '.' + NAME) as Name, 'F' + FK_FlowSort as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
+            sql += " ORDER BY Idx ";
+            
+
+            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtFlows.TableName = "Flows";
+            ds.Tables.Add(dtFlows);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dtFlows.Columns[0].ColumnName = "No";
+                dtFlows.Columns[1].ColumnName = "Name";
+                dtFlows.Columns[2].ColumnName = "FK_FlowSort";
+            }
+
+            //转化为 json 
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+
+        /// <summary>
+        /// 按照管理员登录.
+        /// </summary>
+        /// <param name="userNo">管理员编号</param>
+        /// <returns>登录信息</returns>
+        public string AdminerChang_LoginAs()
 		{
 			string orgNo = this.GetRequestVal("OrgNo");
 

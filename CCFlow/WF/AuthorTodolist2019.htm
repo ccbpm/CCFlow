@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>待办</title>
+    <title>工作委托</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
@@ -33,43 +33,158 @@
         });
 
         function InitLeft() {
-
-            var sql = "SELECT Auther,AuthName, FK_Flow,FlowName , COUNT(*) as Num   FROM V_WF_AuthTodolist ";
-            sql += "WHERE EmpNo = '" + webUser.No + "'  AND '2019-09-09' >= TakeBackDT ";
+            var nowDate = getNowFormatDate();
+            var sql = "SELECT Auther,AuthName, FK_Flow,FlowName, COUNT(FK_Flow) as Num   FROM V_WF_AuthTodolist ";
+            sql += "WHERE EmpNo = '" + webUser.No + "'";
+            sql  += " AND TakeBackDT >= '" + nowDate +"'";
             sql += "     GROUP BY Auther, AuthName, FK_Flow, FlowName  ";
-            var dt = DBAccess.RunSQLReturnJSON(sql);
-
-            var html = "<ul>";
+            var dt = DBAccess.RunSQLReturnTable(sql);
+            var html = "";
 
             for (var i = 0; i < dt.length; i++) {
 
                 var en = dt[i];
-                html += "<li><a href=\"javascript:InitDocs('" + en.Auther + "','" + en.FK_Flow + "');\" >" + en.AuthName + " - " + en.FlowName + " - " + en.Num + "</a></li>";
+                html += "<tr><td><a href=\"javascript:InitDocs('" + en.Auther + "','" + en.FK_Flow + "');\" >" + en.AuthName + " - " + en.FlowName + " ( " + en.Num + ")</a></td></tr>";
             }
-            html += "</ul>";
+            $("#left").html(html);
+            $('#docs').html("请选择流程。。。");
+
+            //绑定流程.
+            //InitDocs(GetQueryString("FK_Flow"));
         }
+        function InitDocs(author,flowNo) {
+            var nowDate = getNowFormatDate();
+            $("#Help").hide();
+            $('#docs').html("");
+            if (flowNo == null || flowNo == 'null' || flowNo == undefined) {
+                $("#Help").show();
+                return;
+            }
 
-        function InitDocs(author, flowNo) {
+            var html = "<table class='table table-bordered table-hover'>";
+            html += "<thead><tr>";
+            html += "<th>序</th>";
+            html += "<th>标题</th>";
+            html += "<th>授权人</th>";
+            html += "<th>授权给</th>";
+            html += "<th>流程</th>";
+            html += "<th>收回日期</th>";
+            
+            html += "</tr></thead>";
 
+            var sql = "SELECT *   FROM V_WF_AuthTodolist ";
+            sql += "WHERE EmpNo = '" + webUser.No + "' and Auther ='" + author + "' and FK_Flow ='" + flowNo + "'";
+             sql  += "  AND TakeBackDT >= '" + nowDate +"'";
+            var data = DBAccess.RunSQLReturnTable(sql);
+            for (var i = 0; i < data.length; i++) {
 
+                var dt = data[i];
+
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td><a href=\"javascript:winOpen('MyFlow.htm?FK_Flow=" + dt.FK_Flow + "&PWorkID=" + dt.PWorkID + "&FK_Node=" + dt.FK_Node + "&FID=" + dt.FID + "&WorkID=" + dt.WorkID + "' , '" + author + "')\">" + dt.Title + "</td>";
+                html += "<td>" + dt.Auther + "</td>";
+                html += "<td>" + dt.EmpNo + "</td>";
+                html += "<td>" + dt.FlowName + "</td>";
+                html += "<td>" + dt.TakeBackDT + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            html += "</div></div>";
+
+            $('#docs').html(html);
+        }
+        function winOpen(url,author) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("No", author);
+            var data = handler.DoMethodReturnString("AuthorList_LoginAs");
+
+            if (data.indexOf('err') == 0) {
+                alert('授权登录失败! \t\n' + data);
+                return;
+            }
+            window.open(url);
+           
+        
+        }
+        function LogAs(fk_emp, empName) {
+
+            if (window.confirm('您确定要以[' + empName + ']授权方式登陆处理工作吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("No", fk_emp);
+            var data = handler.DoMethodReturnString("AuthorList_LoginAs");
+
+            if (data.indexOf('err') == 0) {
+                alert('授权登录失败! \t\n' + data);
+                return;
+            }
+
+            window.location.href = 'AuthorTodolist.htm?RefNo=' + fk_emp;
+            return;
+
+        }
+        //获取当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            //当前时间=年份-月份-日 小时：分钟
+            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+            //+ " " + date.getHours() + seperator2 + date.getMinutes();
+
+            return cdt;
         }
     </script>
 </head>
 <body>
-    <table style="width:100%;">
-        <caption>工作委托</caption>
-        <tr>
-            <td valign="top" class="Sum" style="width:30%">
+    <div class="col-md-12">
+        <div class="box col-md-3">
 
-                <!--<fieldset>
-                    <legend>授权流程</legend>-->
-                <div id="left"></div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>流程列表</th>
+                        </tr>
+                    </thead>
+                    <tbody id="left"></tbody>
 
-                <!--</fieldset>-->
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
 
-            </td>
-            <td valign="top">  <div id="left"></div> </td>
-        </tr>
-    </table>
+        <div class="box col-md-9">
+            <!-- /.box-header -->
+            <div class="box-body" id="docs">
+            </div>
+
+            <div id="Help" style=" vertical-align:middle; text-align:center">
+                <fieldset style=" text-align:left">
+                    <legend> 帮助 </legend>
+                    <ul>
+                        <li>1. 该功能是工作委托，就是非流程的参与人可以对指定的待办流程进行操作。 </li>
+                        <li>2. 您所看到的流程，就是您被授权处理的流程. </li>
+                        <li>3. 您可以选择左侧的流程名称，在右侧选择待办的流程进行审批工作。 </li>
+                    </ul>
+                </fieldset>
+            </div>
+
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
 </body>
 </html>

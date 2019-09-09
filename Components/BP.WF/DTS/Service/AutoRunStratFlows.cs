@@ -25,6 +25,8 @@ namespace BP.WF.DTS
         {
             this.Title = "自动启动流程";
             this.Help = "在流程属性上配置的信息,自动发起流程,按照时间规则....";
+            this.GroupName = "流程自动执行定时任务";
+
         }
         /// <summary>
         /// 设置执行变量

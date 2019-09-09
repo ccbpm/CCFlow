@@ -23,6 +23,8 @@ namespace BP.WF.DTS
         {
             this.Title = "一键备份流程与表单。";
             this.Help = "把流程、表单、组织结构数据都生成xml文档备份到C:\\CCFlowTemplete下面。";
+            this.GroupName = "数据备份/恢复";
+
         }
         /// <summary>
         /// 设置执行变量

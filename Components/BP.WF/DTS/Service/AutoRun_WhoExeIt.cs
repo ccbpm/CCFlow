@@ -24,6 +24,7 @@ namespace BP.WF.DTS
         {
             this.Title = "执行节点的自动任务.";
             this.Help = "对于节点属性里配置的自动执行或者机器执行的节点上的任务自动发送下去。";
+            this.GroupName = "流程自动执行定时任务";
         }
         /// <summary>
         /// 设置执行变量

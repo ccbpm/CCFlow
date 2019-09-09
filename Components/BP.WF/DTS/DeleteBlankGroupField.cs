@@ -21,6 +21,7 @@ namespace BP.WF.DTS
             this.Title = "删除空白的字段分组";
             this.Help = "";
             this.Icon = "<img src='/WF/Img/Btn/Delete.gif'  border=0 />";
+            this.GroupName = "系统维护";
         }
         public override void Init()
         {

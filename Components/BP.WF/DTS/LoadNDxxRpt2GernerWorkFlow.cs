@@ -23,6 +23,8 @@ namespace BP.WF.DTS
         {
             this.Title = "装载已经完成的流程数据到WF_GenerWorkflow（升级扩展流程数据完成模式下的旧数据查询不到的问题）";
             this.Help = "升级扩展流程数据完成模式下的旧数据查询不到的问题。";
+            this.GroupName = "流程维护";
+
         }
         /// <summary>
         /// 设置执行变量

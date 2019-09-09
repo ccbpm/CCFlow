@@ -20,6 +20,8 @@ namespace BP.WF.DTS
         {
             this.Title = "同步待办时间戳,状态,流程注册表的时间段(本周，上周，2周以前，3其他。).";
             this.Help = "该方法每周一自动执行，如果不能自动执行就手动执行";
+            this.GroupName = "流程自动执行定时任务";
+
         }
         /// <summary>
         /// 设置执行变量

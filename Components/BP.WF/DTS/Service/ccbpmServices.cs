@@ -25,7 +25,11 @@ namespace BP.WF.DTS
         /// </summary>
         public ccbpmServices()
         {
-            this.Title = "ccbpm服务(1,自动发送邮件. 2,自动发起流程. 3,自动执行节点任务. )";
+            this.Title = "ccbpm流程服务 ";
+            this.Help = "1,自动发送邮件. 2,自动发起流程. 3,自动执行节点任务..";
+            this.Help += "所有自动任务的综合.";
+
+            this.GroupName = "流程自动执行定时任务";
         }
         public override void Init()
         {

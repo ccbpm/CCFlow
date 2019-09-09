@@ -28,6 +28,10 @@ namespace BP.WF.DTS
             this.Help += "@1,系统所有的流程数据、模版数据、组织解构数据、将会被删除。";
             this.Help += "@2,重新装载C:\\CCFlowTemplete 的数据。";
             this.Help += "@3,此功能一般提供给ccflow的开发者用于不同的数据库之间的移植。";
+
+            this.GroupName = "数据备份/恢复";
+
+
         }
         /// <summary>
         /// 设置执行变量

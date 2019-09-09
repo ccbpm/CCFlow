@@ -24,6 +24,8 @@ namespace BP.WF.DTS
         {
             this.Title = "处理逾期的任务";
             this.Help = "扫描并处理逾期的任务，按照节点配置的预期规则";
+            this.GroupName = "流程自动执行定时任务";
+
         }
         /// <summary>
         /// 设置执行变量

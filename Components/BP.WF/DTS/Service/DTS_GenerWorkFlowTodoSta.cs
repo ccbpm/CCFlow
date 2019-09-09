@@ -21,6 +21,7 @@ namespace BP.WF.DTS
         {
             this.Title = "更新WF_GenerWorkerFlow.TodoSta状态.";
             this.Help = "该方法每天的8点自动执行";
+            this.GroupName = "流程自动执行定时任务";
         }
         /// <summary>
         /// 设置执行变量

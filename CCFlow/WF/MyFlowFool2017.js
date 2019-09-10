@@ -268,7 +268,7 @@ function GenerFoolFrm(wn) {
             if (gf.CtrlType == '' || gf.CtrlType == null) {
 
                 html += "<tr>";
-                html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
+                html += "  <th colspan='" + tableCol + "' class='form-unit attr-group' >" + gf.Lab + "</th>";
                 html += "</tr>";
                 if (tableCol == 4 || tableCol == 6)
                     html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
@@ -1149,20 +1149,30 @@ function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
 
 //清空所有的设置
 function cleanAll(FK_MapData) {
+    var trs = $("#CCForm  table tr .attr-group"); //如果隐藏就显示
+    $.each(trs, function (i, obj) {
+        if ($(obj).parent().is(":hidden") == true)
+            $(obj).parent().show();
+       
+    });
+
+
     //获取他的值
     var FKMapAttrs = [];
     var newMapAttrs = mapAttrs;
     for (var i = 0; i < newMapAttrs.length; i++) {
-        if (FK_MapData == newMapAttrs[i][FK_MapData]) {
-            FKMapAttrs.push(newMapAttrs[i]["Data"]);
+        if (FK_MapData == newMapAttrs[i].FK_MapData) {
+            FKMapAttrs.push(newMapAttrs[i].Data);
             mapAttrs.pop(newMapAttrs[i]);
         }
     }
-    for (var i = 0; i < FKMapAttrs.length; i++) {
-        SetCtrlShow(FKMapAttrs[i]);
-        SetCtrlEnable(FKMapAttrs[i]);
-        CleanCtrlVal(FKMapAttrs[i]);
+    for (var i = 0; i < FKMapAttrs[0].length; i++) {
+        SetCtrlShow(FKMapAttrs[0][i]);
+        SetCtrlEnable(FKMapAttrs[0][i]);
+        CleanCtrlVal(FKMapAttrs[0][i]);
     }
+
+    
 
 }
 //启用了显示与隐藏.
@@ -1234,6 +1244,30 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
 
     if (NDMapAttrs.length > 0)
         mapAttrs.push({ FK_MapData: FK_MapData, Data: NDMapAttrs });
+
+
+    //设置是否隐藏分组、获取字段分组所有的tr 
+    var trs = $("#CCForm  table tr .attr-group");
+    var isHidden = false;
+    $.each(trs, function (i, obj) {
+        //获取所有跟随的同胞元素，其中有不隐藏的tr,就跳出循环
+        var sibles = $(obj).parent().nextAll();
+        for (var k = 0; k < sibles.length; k++) {
+            var sible = $(sibles[k]);
+            if (sible.find(".attr-group").length > 0 || sible.find(".form-unit").length > 0)
+                break;
+            if (sible.is(":hidden") == false) {
+                isHidden = false;
+                break;
+            } 
+            isHidden = true;
+        }
+        if (isHidden == true)
+            $(obj).parent().hide();
+
+    });
+    
+   
 
 }
 

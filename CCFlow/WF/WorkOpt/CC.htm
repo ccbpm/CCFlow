@@ -23,30 +23,27 @@
     <script type="text/javascript" src="../Comm/Gener.js"></script>
 
     <style type="text/css">
-        body
-        {
+        body {
             background: transparent;
         }
-        body div
-        {
-            text-align: left;
-        }
-        #Message
-        {
+
+            body div {
+                text-align: left;
+            }
+
+        #Message {
             width: 100%;
         }
-        
-        #SelectEmp
-        {
+
+        #SelectEmp {
             position: relative;
             width: 400px;
             border-top: 0;
             display: none;
             margin-top: -7px; /*border: solid 2px #3175af;*/
         }
-        
-        .item
-        {
+
+        .item {
             padding: 3px 5px;
             cursor: pointer;
             float: left;
@@ -55,16 +52,14 @@
             display: inline-block;
             background-color: #F7F7F7;
         }
-        
-        #next
-        {
+
+        #next {
             float: left;
             position: relative;
             width: 600px;
         }
-        
-        .addbg
-        {
+
+        .addbg {
             background: #CFCFCF;
         }
     </style>
@@ -87,18 +82,18 @@
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
-               '<div class="modal-dialog">'
-                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
-                      + '<div class="modal-header">'
-                          + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                           + '<h4 class="modal-title">选择抄送人</h4>'
-                       + '</div>'
-                       + '<div class="modal-body">'
-                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
-                       + '</div>'
-                   + '</div><!-- /.modal-content -->'
-               + '</div><!-- /.modal-dialog -->'
-           + '</div>';
+                '<div class="modal-dialog">'
+                + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                + '<div class="modal-header">'
+                + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<h4 class="modal-title">选择抄送人</h4>'
+                + '</div>'
+                + '<div class="modal-body">'
+                + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                + '</div>'
+                + '</div><!-- /.modal-content -->'
+                + '</div><!-- /.modal-dialog -->'
+                + '</div>';
 
             $('body').append($(selectEmpModalHtml));
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
@@ -137,7 +132,7 @@
                 var row = "";
                 row += "<tr>";
                 // row += "<td>" + i + "</td>";
-                row += "<td>" + cc.CCTo+"," + cc.CCToName + "</td>";
+                row += "<td>" + cc.CCTo + "," + cc.CCToName + "</td>";
                 row += "<td  title='" + cc.CCToDeptName + "' >" + cc.CCToDeptName + "</td>";
 
                 row += "<td><a href=\"javascript:DeleteIt('" + cc.MyPK + "'," + i + ");\" >移除</a></td>";
@@ -179,7 +174,7 @@
             var title = gwf.Title;
             var nodeName = gwf.NodeName;
             var flowName = gwf.FlowName;
-                         
+
             var cc = new Entity("BP.WF.Template.CCList");
 
             //当前人员的信息.
@@ -211,12 +206,9 @@
             cc.FK_Flow = GetQueryString("FK_Flow");
             cc.FlowName = flowName;
             cc.Title = title;
+            cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
 
-         
 
-               cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
-
-          
             if (cc.IsExits() == true) {
                 alert('该人员已经存在.');
                 return;
@@ -483,57 +475,58 @@
     <br />
     <div>
         <div id="labInfo">
-           输入关键字: <input type="text" id="TB_Emps"  title="查张三,您可输入: zs或zhangs或zhangsan"
-         placeholder="查张三,您可输入:zs或zhangs或zhangsan"  name="TB_Emps" value='' style="width: 300px;" />
+            输入关键字: <input type="text" id="TB_Emps" title="查张三,您可输入: zs或zhangs或zhangsan"
+                          placeholder="查张三,您可输入:zs或zhangs或zhangsan" name="TB_Emps" value='' style="width: 300px;" />
             <input type="button" id="Btn_SelectEmps" value='选择抄送人' />
-            <br /><img src="../Img/CC.png"  style="width:27px;"/><a href="javascript:Help()">帮助</a>
+            <br /><img src="../Img/CC.png" style="width:27px;" /><a href="javascript:Help()">帮助</a>
             <div id="SelectEmp">
             </div>
             <br />
             <div id="next">
-<!--
-                <input type="button" id="Btn_CC" value="执行抄送" onclick="SaveAndClose();" />
-                <img src="../Img/CC.png"  onclick="SaveAndClose();"  style="width:27px;"/>-->
+                <!--
+                                <input type="button" id="Btn_CC" value="执行抄送" onclick="SaveAndClose();" />
+                                <img src="../Img/CC.png"  onclick="SaveAndClose();"  style="width:27px;"/>-->
 
                 <div id="HelpInfo" style="">
                     <ul>
                         1、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。
                         <br />2、被抄送人，可以在抄送列表里查看抄送信息。
                         <br />3、可以使用人员名称拼音，支持全拼和简拼。
-                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
-                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
+                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
+                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
                     </ul>
                 </div>
             </div>
         </div>
         <div class="Msg" style="float: left;">
-            <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
+            <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
+        </div>
     </div>
-<br/>
+    <br />
 
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-    <input type="button" value="关闭" onclick="closeWin()"/>
+        <input type="button" value="关闭" onclick="closeWin()" />
     </div>
-<!--
+    <!--
 
-<section style="display: none;">
-    <div>
-        请选择要抄送的人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
-    </div>
-    <div>
-        抄送原因:
-        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br/>
-    </div>
-    <div style="margin: 20px auto;">
-        <h5> 抄送模式:</h5>
-        <input type="radio" value="0" name="RB_Model" checked=checked checked=checked id="RB_Model_0"/> <label for="RB_Model_0">抄送后直接发送给下一步处理人</label>
-        <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">抄送后发送给我由我发送给下一步处理人</label>
-    </div>
-    <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-        <input type=button value="确定" onclick="DoCC();"/>
-        <input type="button" id="" value="关闭" onclick="Close();"/>
-    </div>
-</section>-->
+    <section style="display: none;">
+        <div>
+            请选择要抄送的人：
+            <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
+        </div>
+        <div>
+            抄送原因:
+            <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br/>
+        </div>
+        <div style="margin: 20px auto;">
+            <h5> 抄送模式:</h5>
+            <input type="radio" value="0" name="RB_Model" checked=checked checked=checked id="RB_Model_0"/> <label for="RB_Model_0">抄送后直接发送给下一步处理人</label>
+            <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">抄送后发送给我由我发送给下一步处理人</label>
+        </div>
+        <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
+            <input type=button value="确定" onclick="DoCC();"/>
+            <input type="button" id="" value="关闭" onclick="Close();"/>
+        </div>
+    </section>-->
 </body>
 </html>

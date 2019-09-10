@@ -177,7 +177,6 @@ function MultiUploadFile() {
         var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
         URL = path + "/WF/Comm/ProcessRequest.do?DoType=EntityMultiAth_Upload";
-
     }
 
     if (queryString != null && queryString.length > 0)

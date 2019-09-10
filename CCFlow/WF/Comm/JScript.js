@@ -809,7 +809,7 @@ function valitationAfter(o, validateType) {
 
 
 function addplaceholder(obj, bit) {
-	if (obj.value <= 0) {
+	if (obj.value == "") {
 		//obj.value = 0;
 		//return;
 		switch (bit) {

@@ -131,7 +131,7 @@ namespace BP.WF
                 json += " { id:'" + nd.NodeID + "', name:'" + nd.Name + "', ";
                 json += "series:[{ ";
                 json += " name: '计划', ";
-                json += " start:  " + ToData(gwf.GetParaString("PlantStart"+nd.NodeID)) + ", ";
+                json += " start:  " + ToData(gwf.GetParaString("PlantStartDt"+nd.NodeID)) + ", ";
                 json += " end: " + ToData(gwf.GetParaString("CH" + nd.NodeID)) + ",";
                 json += " TodoSta: " + gwf.TodoSta + ", ";
                 json += " color: 'blue' ";

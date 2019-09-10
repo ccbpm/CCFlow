@@ -3965,8 +3965,35 @@ namespace BP.WF.HttpHandler
             bool isFirstY = true;
             //上一个节点的时间
             string beforeSDTOfNode = "";
+            //先排序运行过的节点
+            foreach(GenerWorkerList gwl in gwls)
+            {
+                dr = dt.NewRow();
+                dr["NodeID"] = gwl.FK_Node;
+                dr["Name"] = gwl.FK_NodeText;
+
+                //计划开始时间
+                string startDt = gwf.GetParaString("PlantStartDt" + gwl.FK_Node);
+                //计划结束时间
+                string endDt = gwf.GetParaString("CH" + gwl.FK_Node);
+
+                if (DataType.IsNullOrEmpty(startDt) == true)
+                    startDt = gwl.RDT;
+                if (DataType.IsNullOrEmpty(endDt) == true)
+                    endDt = gwl.CDT;
+
+                dr["PlantStartDt"] = startDt;
+                dr["SDTOfNode"] = endDt;
+                beforeSDTOfNode = gwl.CDT;
+            }
             foreach (Node node in nds)
             {
+                GenerWorkerList gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, node.NodeID) as GenerWorkerList;
+                if (gwl != null)
+                    continue;
+
+                string sdtOfNode = "";
+                string plantStartDt = "";
                 if (node.GetParaBoolen("IsYouLiTai") == true)
                 {
                     if(isFirstY == true)
@@ -3976,30 +4003,19 @@ namespace BP.WF.HttpHandler
                             dr = dt.NewRow();
                             dr["NodeID"] = drYL["NodeID"];
                             dr["Name"] = drYL["Name"];
-                            GenerWorkerList gwlYL = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node,Int32.Parse(drYL["NodeID"].ToString())) as GenerWorkerList;
-                            if (gwlYL == null)
-                            {
-                                //计划完成时间
-                                string sdtOfNode = gwf.GetParaString("CH" + Int32.Parse(drYL["NodeID"].ToString()));
-                                if (DataType.IsNullOrEmpty(sdtOfNode))
-                                    sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
-                                dr["SDTOfNode"] = sdtOfNode;
+                            //计划完成时间
+                            sdtOfNode = gwf.GetParaString("CH" + Int32.Parse(drYL["NodeID"].ToString()));
+                            if (DataType.IsNullOrEmpty(sdtOfNode))
+                                sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
+                            dr["SDTOfNode"] = sdtOfNode;
 
-                                //计划开始时间
-                                string plantStartDt = gwf.GetParaString("PlantStartDt" + Int32.Parse(drYL["NodeID"].ToString()));
-                                if (DataType.IsNullOrEmpty(plantStartDt))
-                                    plantStartDt = beforeSDTOfNode;
-                                dr["PlantStartDt"] = plantStartDt = beforeSDTOfNode;
+                            //计划开始时间
+                            plantStartDt = gwf.GetParaString("PlantStartDt" + Int32.Parse(drYL["NodeID"].ToString()));
+                            if (DataType.IsNullOrEmpty(plantStartDt))
+                                plantStartDt = beforeSDTOfNode;
+                            dr["PlantStartDt"] = plantStartDt = beforeSDTOfNode;
 
-                                beforeSDTOfNode = sdtOfNode;
-                            }
-                            else
-                            {
-                                dr["PlantStartDt"] = gwf.GetParaString("PlantStartDt" + Int32.Parse(drYL["NodeID"].ToString()));
-                                dr["SDTOfNode"] = gwf.GetParaString("CH" + Int32.Parse(drYL["NodeID"].ToString()));
-                                beforeSDTOfNode = gwlYL.CDT;
-                            }
-
+                            beforeSDTOfNode = sdtOfNode;
                             dt.Rows.Add(dr);
                         }
                         isFirstY = false;
@@ -4009,31 +4025,20 @@ namespace BP.WF.HttpHandler
                 dr = dt.NewRow();
                 dr["NodeID"] = node.NodeID;
                 dr["Name"] = node.Name;
-                GenerWorkerList gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, node.NodeID) as GenerWorkerList;
-                if (gwl == null)
-                {
-                    //计划完成时间
-                    string sdtOfNode = gwf.GetParaString("CH" + node.NodeID);
-                    if(DataType.IsNullOrEmpty(sdtOfNode))
-                        sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
-                    dr["SDTOfNode"] = sdtOfNode;
+               
+                //计划完成时间
+                sdtOfNode = gwf.GetParaString("CH" + node.NodeID);
+                if(DataType.IsNullOrEmpty(sdtOfNode))
+                    sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
+                dr["SDTOfNode"] = sdtOfNode;
 
-                    //计划开始时间
-                    string plantStartDt = gwf.GetParaString("PlantStartDt" + node.NodeID);
-                    if (DataType.IsNullOrEmpty(plantStartDt))
-                        plantStartDt = beforeSDTOfNode;
-                    dr["PlantStartDt"] = plantStartDt ;
+                //计划开始时间
+                plantStartDt = gwf.GetParaString("PlantStartDt" + node.NodeID);
+                if (DataType.IsNullOrEmpty(plantStartDt))
+                    plantStartDt = beforeSDTOfNode;
+                dr["PlantStartDt"] = plantStartDt ;
 
-                    beforeSDTOfNode = sdtOfNode;
-                }
-                else
-                {
-                    dr["SDTOfNode"] = gwf.GetParaString("CH"+node.NodeID);
-                    dr["PlantStartDt"] = gwf.GetParaString("PlantStartDt" + node.NodeID);
-                    beforeSDTOfNode = gwl.CDT;
-                }
-
-                
+                beforeSDTOfNode = sdtOfNode;
                 dt.Rows.Add(dr);
 
             }

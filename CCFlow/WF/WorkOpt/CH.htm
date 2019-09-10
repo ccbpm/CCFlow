@@ -145,12 +145,14 @@
                         _Html += "<td style='text-align: center'>___</td>";
                         
                         if (chRole == 1)
-                            _Html += "<td style='text-align: center'><input type='text' id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                        +"$(this).blur(); CompareDate("+ nd.NodeID+",0);}})'  class='form-control Wdate'/></td>";
                         else
                             _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         if (chRole == 1)
-                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                        +"$(this).blur(); CompareDate("+ nd.NodeID+",1);}})'  class='form-control Wdate'/></td>";
                         else
                             _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
@@ -171,7 +173,7 @@
             _Html += "<td>" + gwf.SDTOfFlow + "</td>";
              var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
             if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
-                _Html += "<td>逾期</td>";
+                _Html += "<td><label style='color:red'>逾期</label></td>";
                 _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
             } else {
                 _Html += "<td>正常</td>";
@@ -187,6 +189,23 @@
             
             $("#FlowCH").html(_Html);
 
+        }
+
+        //比对时间
+        function CompareDate(nodeId,type) {
+            var startDt = $("#PlantStartDt_" + nodeId).val();
+            var endDt = $("#CH_" + nodeId).val();
+            if (startDt > endDt) {
+                if (type == 0) {
+                    alert("计划开始时间不能大于计划完成时间");
+                     $("#PlantStartDt_" + nodeId).focus();
+                }
+                else {
+                    alert("计划完成时间不能小于计划开始时间");
+                    $("#CH_" + nodeId).focus();
+                }
+            }
+            return;
         }
 
         //保存设置的时限

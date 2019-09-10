@@ -905,7 +905,19 @@ namespace BP.WF
 
             if (paras.ContainsKey("PNodeID") == true)
             {
-                PFlowNo = paras["PFlowNo"].ToString();
+
+                if (paras["PFlowNo"] == null)
+                {
+                    Int32 nodeId = Int32.Parse(paras["PNodeID"].ToString());
+                    if(nodeId!=0)
+                    {
+                        Node node = new Node(nodeId);
+                        PFlowNo = node.FK_Flow;
+                    }   
+                        
+                }else
+                    PFlowNo = paras["PFlowNo"].ToString();
+
                 PNodeIDStr = paras["PNodeID"].ToString();
                 PWorkIDStr = paras["PWorkID"].ToString();
                 PFIDStr = "0";

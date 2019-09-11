@@ -1124,7 +1124,7 @@ namespace BP.WF.HttpHandler
                     DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
                          nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
                     //应完成日期.
-                    gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                    gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat+":ss");
                 }
 
                 //求警告日期.
@@ -2105,7 +2105,7 @@ namespace BP.WF.HttpHandler
                         case ActionType.ForwardAskfor:
                         case ActionType.Start:
                         case ActionType.UnSend:
-                        case ActionType.ForwardFL:
+                        //case ActionType.ForwardFL:
                         case ActionType.ForwardHL:
                         case ActionType.TeampUp:
                         case ActionType.Return:

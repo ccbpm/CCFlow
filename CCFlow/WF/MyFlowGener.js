@@ -1111,6 +1111,12 @@ function InitToNodeDDL(flowData) {
         return;
     }
 
+    //如果是会签且不是主持人时，则发送给主持人，不需要选择下一个节点和接收人
+    if (btn.length != 0) {
+        var dataType = $(btn[0]).attr("data-type");
+        if (dataType != null && dataType != undefined && dataType == "isAskFor")
+            return;
+    }
     // $('[value=发送]').
     var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
     $.each(flowData.ToNodes, function (i, toNode) {

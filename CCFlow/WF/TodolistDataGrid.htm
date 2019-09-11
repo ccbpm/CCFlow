@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -506,9 +506,17 @@
             if (strDate >= 0 && strDate <= 9) {
                 strDate = "0" + strDate;
             }
+           var hour = date.getHours();
+            if (hour >= 1 && hour <= 9) {
+                hour = "0" + hour;
+            }
+             var minute = date.getMinutes();
+            if (minute >= 1 && minute <= 9) {
+                minute = "0" + minute;
+            }
             //当前时间=年份-月份-日 小时：分钟
             var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + date.getHours() + seperator2 + date.getMinutes();
+            + " " + hour + seperator2 + minute;
 
             return cdt;
         }

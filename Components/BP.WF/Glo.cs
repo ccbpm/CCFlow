@@ -44,7 +44,11 @@ namespace BP.WF
 
             json += "{ name: '实际执行', ";
             json += " start:  " + ToData(gwf.RDT) + ",";
-            json += " end: " + ToData(gwf.SendDT) + ",";
+            if(gwf.WFState == WFState.Complete)
+                json += " end: " + ToData(gwf.SendDT) + ",";
+            else
+                json += " end:' " + DateTime.Now.ToString("yyyy-MM-dd") + "',";
+
             json += " TodoSta: " + gwf.TodoSta + ",";
 
             if (gwf.WFSta == WFSta.Complete)//流程运行结束
@@ -126,6 +130,8 @@ namespace BP.WF
                 idxNode++;
 
                string[] dtArray = GetNodeRealTime(dt,nd.NodeID);
+                if (nd.IsStartNode == true)
+                    continue;
 
                 //里程碑.
                 json += " { id:'" + nd.NodeID + "', name:'" + nd.Name + "', ";
@@ -272,7 +278,11 @@ namespace BP.WF
                         json += "{ ";
                         json += " name: '实际',";
                         json += " start:  " + ToData(firstStartGwf.RDT) + ",";
-                        json += " end: " + ToData(firstStartGwf.SendDT) + ",";
+                        if (firstStartGwf.WFState == WFState.Complete)
+                            json += " end: " + ToData(firstStartGwf.SendDT) + ",";
+                        else
+                            json += " end: '" + DateTime.Now.ToString("yyyy-MM-dd") + "',";
+
                         json += " TodoSta: " + firstStartGwf.TodoSta + ", ";
 
                         if (firstStartGwf.WFSta == WFSta.Complete)//流程运行结束
@@ -314,8 +324,13 @@ namespace BP.WF
                         json += "{ ";
                         json += " name: '实际',";
                         json += " start:  " + ToData(firstStartGwf.RDT) + ",";
-                        json += " end: " + ToData(endStartGwf.SendDT) + ",";
+                        if (endStartGwf.WFState == WFState.Complete)
+                            json += " end: " + ToData(endStartGwf.SendDT) + ",";
+                        else
+                            json += " end: '" + DateTime.Now.ToString("yyyy-MM-dd") + "',";
+
                         json += " TodoSta: " + endStartGwf.TodoSta + ", ";
+
                         if (endStartGwf.WFSta == WFSta.Complete)//流程运行结束
                         {
                             if (ToData(endStartGwf.SendDT).CompareTo(ToData(firstStartGwf.SDTOfFlow)) <= 0)//正常

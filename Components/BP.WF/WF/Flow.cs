@@ -903,17 +903,15 @@ namespace BP.WF
                 PFIDStr = "0";
             }
 
-            if (paras.ContainsKey("PNodeID") == true)
+            if (paras.ContainsKey("PWorkID") == true && paras.ContainsKey("PNodeID") == true 
+                && Int64.Parse(paras["PWorkID"].ToString())!= 0
+                && Int32.Parse(paras["PNodeID"].ToString())!=0)
             {
-
                 if (paras["PFlowNo"] == null)
                 {
                     Int32 nodeId = Int32.Parse(paras["PNodeID"].ToString());
-                    if(nodeId!=0)
-                    {
-                        Node node = new Node(nodeId);
-                        PFlowNo = node.FK_Flow;
-                    }   
+                    Node node = new Node(nodeId);
+                    PFlowNo = node.FK_Flow; 
                         
                 }else
                     PFlowNo = paras["PFlowNo"].ToString();

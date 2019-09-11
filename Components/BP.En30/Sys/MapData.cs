@@ -46,7 +46,7 @@ namespace BP.Sys
         Dtl
     }
     /// <summary>
-    /// 表单类型 0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单
+    /// 表单类型 @0=傻瓜表单@1=自由表单@3=嵌入式表单@4=Word表单@5=Excel表单@6=VSTOForExcel@7=Entity
     /// </summary>
     public enum FrmType
     {
@@ -58,10 +58,6 @@ namespace BP.Sys
         /// 自由表单
         /// </summary>
         FreeFrm = 1,
-        /// <summary>
-        /// Silverlight表单(已取消)
-        /// </summary>
-        Silverlight = 2,
         /// <summary>
         /// URL表单(自定义)
         /// </summary>
@@ -79,9 +75,9 @@ namespace BP.Sys
         /// </summary>
         VSTOForExcel = 6,
         /// <summary>
-        /// 实体类组件
+        /// 实体类
         /// </summary>
-        Entity
+        Entity=7
     }
     /// <summary>
     /// 映射基础

@@ -545,6 +545,8 @@ namespace BP.Web
         }
         public static string GetValFromCookie(string valKey, string isNullAsVal, bool isChinese)
         {
+
+
             if (IsBSMode == false)
                 return BP.Port.Current.GetSessionStr(valKey, isNullAsVal);
 

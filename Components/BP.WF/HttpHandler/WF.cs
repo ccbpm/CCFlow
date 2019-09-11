@@ -1365,7 +1365,7 @@ namespace BP.WF.HttpHandler
         public string TeamupList_Init()
         {
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
-            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B,WF_Node C ";
+            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C ";
             sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND A.FK_Node=C.NodeID AND C.TodolistModel=1 ";
             sql += " AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
             //   sql += " AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
@@ -1400,10 +1400,13 @@ namespace BP.WF.HttpHandler
         public string HuiQianAdderList_Init()
         {
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
-            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C ";
+            sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
             sql += " AND B.AtPara LIKE '%IsHuiQian=1%' ";
+            sql += " AND A.FK_Node=C.NodeID ";
+            sql += " AND C.TodolistModel= 4";
 
-            Paras ps = new Paras();
+            Paras ps = new Paras(); 
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);

@@ -1186,14 +1186,12 @@ namespace BP.WF
                     if (DBAccess.IsExitsTableCol("WF_EMP", "STARTFLOWS") == false)
                         DBAccess.RunSQL("ALTER TABLE  WF_EMP add STARTFLOWS CLOB");
 
-
                     //将需要改成大字段的项内容copy到大字段中
                     DBAccess.RunSQL("UPDate WF_EMP set startFlows_temp=STARTFLOWS");
                     //删除原有字段
                     DBAccess.RunSQL("ALTER TABLE  WF_EMP drop column STARTFLOWS");
                     //将大字段名改成原字段名
                     DBAccess.RunSQL("ALTER TABLE  WF_EMP rename column startFlows_temp to STARTFLOWS");
-
                 }
                 if (dbtype == DBType.MySQL)
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");

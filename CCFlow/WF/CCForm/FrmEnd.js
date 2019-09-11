@@ -125,8 +125,8 @@
         if (mapAttr.LGType != 1)
             continue;
 
-        if (mapAttr.UIIsEnable == 0)
-            continue;
+       // if (mapAttr.UIIsEnable == 0)
+        //    continue;
 
 
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum

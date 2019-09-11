@@ -674,11 +674,6 @@
 
 
 
-        //导入.
-        function Imp() {
-            alert('尚未实现');
-        }
-
         function New() {
 
             var frmID = GetQueryString("FrmID");
@@ -806,7 +801,7 @@
 
         ///导入.
         function Imp() {
-            var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID");
+            var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID") + "&EntityType=2";
             window.location.href = url;
         }
         function Group() {

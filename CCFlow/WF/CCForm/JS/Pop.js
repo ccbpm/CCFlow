@@ -1,7 +1,7 @@
 ﻿//自定义url. ********************************************************************************************************
-function SelfUrl(mapExt) {
+function SelfUrl(mapExt,targetId,index,oid) {
 
-    var tb = $("#TB_" + mapExt.AttrOfOper);
+    var tb = $("#" + targetId);
     if (tb.length == 0) {
         alert(mapExt.AttrOfOper + "字段删除了.");
         mapExt.Delete();
@@ -13,13 +13,14 @@ function SelfUrl(mapExt) {
     // tb.attr('disabled', 'true');
 
     //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
-    tb.bind("click", function () { SelfUrl_Done(mapExt) });
+    tb.bind("click", function () { SelfUrl_Done(mapExt,targetId,index,oid) });
 }
 
-function SelfUrl_Done(mapExt) {
+function SelfUrl_Done(mapExt, targetId, index, pkval) {
 
     //获得主键.
-    var pkval = GetPKVal();
+    if (pkval == null || pkval == undefined)
+        pkval = GetPKVal();
     var webUser = new WebUser();
 
     var url = mapExt.Tag;
@@ -32,8 +33,8 @@ function SelfUrl_Done(mapExt) {
              var iframe = document.getElementById("eudlgframe");
              if (iframe) {
                  var val = iframe.contentWindow.Btn_OK();
-                 $("#TB_" + mapExt.AttrOfOper).val(val);
-                 FullIt(val, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                 $("#" + targetId).val(val);
+                 FullIt(val, mapExt.MyPK, targetId);
              }
 
          }, null, function () {
@@ -42,8 +43,14 @@ function SelfUrl_Done(mapExt) {
     
 }
 //***************************************树干叶子模式*****************************************************************
-function PopBranchesAndLeaf(mapExt, val) {
-    var target = $("#TB_" + mapExt.AttrOfOper);
+function PopBranchesAndLeaf(mapExt, val, targetId, index,oid) {
+
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
+
+    var target = $("#" + targetId);
+
     var width = target.outerWidth();
     var height = target.outerHeight();
     target.hide();
@@ -51,9 +58,16 @@ function PopBranchesAndLeaf(mapExt, val) {
     target.after(container);
     container.width(width);
     container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
-
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
+    mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -65,7 +79,8 @@ function PopBranchesAndLeaf(mapExt, val) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    var oid = GetPKVal();
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -78,25 +93,27 @@ function PopBranchesAndLeaf(mapExt, val) {
             "Name": o.Tag2
         });
     });
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
+
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+    $("#" + targetId).val(mtags.mtags("getText"));
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
-    container.on("click", function () {
+    container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
                 if (iframe) {
-                    var selectedRows = iframe.contentWindow.selectedRows;
+                    var selectedRows = iframe.selectedRows;
                     if ($.isArray(selectedRows)) {
+
+                        mtags = $("#" + mtagsId);
                         mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        target.val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
                         }
                         var No = "";
                         if (selectedRows != null && $.isArray(selectedRows))
@@ -122,8 +139,12 @@ function PopBranchesAndLeaf(mapExt, val) {
 }
 
 //***************************************树干模式.*****************************************************************
-function PopBranches(mapExt, val) {
-    var target = $("#TB_" + mapExt.AttrOfOper);
+function PopBranches(mapExt, val, targetId, index,oid) {
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
+
+    var target = $("#" + targetId);
   
     var width = target.outerWidth();
     var height = target.outerHeight();
@@ -133,8 +154,18 @@ function PopBranches(mapExt, val) {
     container.width(width);
     container.css("height", height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
+    var mtags;
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
 
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+    mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             console.log("unselect: " + JSON.stringify(record));
@@ -146,35 +177,38 @@ function PopBranches(mapExt, val) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    var oid = GetPKVal();
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
     //初始加载
-    Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, val);
+    Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, val, targetId, mtagsId);
     //这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
-    container.on("click", function () {
+    container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
-
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
+                //var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     //删除保存的数据
                     Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
-                    var nodes = iframe.contentWindow.GetCheckNodes();
-                    var nodeText;
+                    var nodes = iframe.GetCheckNodes();
+
+                    mtags = $("#" + mtagsId);
+
                     if ($.isArray(nodes)) {
                         $.each(nodes, function (i, node) {
                             SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
 
                         });
                         //重新加载
-                        Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null);
+                        Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null, targetId, mtagsId);
 
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
                             ValSetter(mapExt.Tag4, nodes[0].No);
-                            FullIt(nodes[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(nodes[0].No, mapExt.MyPK, targetId);
                         }
 
                         //执行JS方法
@@ -198,9 +232,14 @@ function PopBranches(mapExt, val) {
 }
 
 /******************************************  表格查询 **********************************/
-function PopTableSearch(mapExt) {
-    var target = $("#TB_" + mapExt.AttrOfOper);
-   
+function PopTableSearch(mapExt,val, targetId, index, oid) {
+    
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
+
+    var target = $("#" + targetId);
+
     var width = target.outerWidth();
     var height = target.outerHeight();
     target.hide();
@@ -208,10 +247,18 @@ function PopTableSearch(mapExt) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    //container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
-
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+   
+    
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
+    mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -223,7 +270,8 @@ function PopTableSearch(mapExt) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    var oid = GetPKVal();
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -235,28 +283,27 @@ function PopTableSearch(mapExt) {
             "Name": o.Tag2
         });
     });
-
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+    target.val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-    container.on("click", function () {
+    container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
                 if (iframe) {
-                    var selectedRows = iframe.contentWindow.selectedRows;
+                    var selectedRows = iframe.selectedRows;
                     if ($.isArray(selectedRows)) {
+                        mtags = $("#" + mtagsId);
                         mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        target.val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
                         }
                         //执行JS方法
                         var No = "";
@@ -281,9 +328,13 @@ function PopTableSearch(mapExt) {
 
 /******************************************  分组平铺列表 **********************************/
 
-function PopGroupList(mapExt) {
+function PopGroupList(mapExt, targetId, index, oid) {
 
-    var target = $("#TB_" + mapExt.AttrOfOper);
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
+
+    var target = $("#" + targetId);
     
 
     var width = target.outerWidth();
@@ -293,9 +344,17 @@ function PopGroupList(mapExt) {
     target.after(container);
     container.width(width);
     //container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
 
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+    mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -320,28 +379,28 @@ function PopGroupList(mapExt) {
         });
     });
 
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+    target.val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/GroupList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-    container.on("click", function () {
+    container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
 
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
                 if (iframe) {
-                    var selectedRows = iframe.contentWindow.Save();
+                    var selectedRows = iframe.Save();
                     if ($.isArray(selectedRows)) {
+                        mtags = $("#" + mtagsId);
                         mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        target.val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
                         }
 
                         //执行JS方法
@@ -369,10 +428,13 @@ function PopGroupList(mapExt) {
 
 /******************************************  绑定外键-外部数据源 **********************************/
 
-function PopBindSFTable(mapExt) {
+function PopBindSFTable(mapExt, targetId, index, oid) {
 
-    var target = $("#TB_" + mapExt.AttrOfOper);
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
 
+    var target = $("#" + targetId);
 
     var width = target.outerWidth();
     var height = target.outerHeight();
@@ -380,10 +442,17 @@ function PopBindSFTable(mapExt) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    //container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
 
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+    mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -408,9 +477,8 @@ function PopBindSFTable(mapExt) {
         });
     });
 
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+   target.val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
@@ -418,18 +486,19 @@ function PopBindSFTable(mapExt) {
 
     container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
 
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
                 if (iframe) {
-                    var selectedRows = iframe.contentWindow.Save();
+                    var selectedRows = iframe.Save();
                     if ($.isArray(selectedRows)) {
+                        mtags = $("#" + mtagsId);
                         mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        target.val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
                         }
 
                         //执行JS方法
@@ -457,9 +526,13 @@ function PopBindSFTable(mapExt) {
 
 /******************************************  绑定外键-单表数据源 PopTableList **********************************/
  
-function PopTableList(mapExt) {
+function PopTableList(mapExt, targetId, index, oid) {
 
-    var target = $("#TB_" + mapExt.AttrOfOper);
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
+
+    var target = $("#" + targetId);
 
     var width = target.outerWidth();
     var height = target.outerHeight();
@@ -467,10 +540,18 @@ function PopTableList(mapExt) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    //container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
 
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+
+    mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -495,9 +576,8 @@ function PopTableList(mapExt) {
         });
     });
 
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+    target.val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
@@ -505,18 +585,19 @@ function PopTableList(mapExt) {
 
     container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
 
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
                 if (iframe) {
-                    var selectedRows = iframe.contentWindow.Save();
+                    var selectedRows = iframe.Save();
                     if ($.isArray(selectedRows)) {
+                        mtags = $("#" + mtagsId);
                         mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        target.val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
                         }
 
                         //执行JS方法
@@ -547,10 +628,13 @@ function PopTableList(mapExt) {
 
 /******************************************  绑定枚举 **********************************/
 
-function PopBindEnum(mapExt) {
+function PopBindEnum(mapExt, targetId, index, oid) {
 
-    var target = $("#TB_" + mapExt.AttrOfOper);
+    var mtagsId;
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
 
+    var target = $("#" + targetId);
 
     var width = target.outerWidth();
     var height = target.outerHeight();
@@ -558,10 +642,18 @@ function PopBindEnum(mapExt) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    //container.height(height);
-    container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined) {
+        container.attr("id", mapExt.AttrOfOper + "_mtags");
+        mtagsId = mapExt.AttrOfOper + "_mtags";
+    }
+    else {
+        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+        mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
+    }
+    var mtags = $("#" + mtagsId);
 
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+
+   mtags.mtags({
         "fit": true,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -586,9 +678,8 @@ function PopBindEnum(mapExt) {
         });
     });
 
-    var mtags = $("#" + mapExt.AttrOfOper + "_mtags");
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+    target.val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
@@ -596,18 +687,19 @@ function PopBindEnum(mapExt) {
 
     container.on("click", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+            window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
 
-                var iframe = document.getElementById(iframeId);
+                var iframe = window.parent.frames[iframeId];
                 if (iframe) {
-                    var selectedRows = iframe.contentWindow.Save();
+                    var selectedRows = iframe.Save();
                     if ($.isArray(selectedRows)) {
+                        mtags = $("#" + mtagsId);
                         mtags.mtags("loadData", selectedRows);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                       target.val(mtags.mtags("getText"));
                         // 单选复制当前表单
                         if (selectType == "0" && selectedRows.length == 1) {
-                            FullIt(selectedRows[0].No, mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                            FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
                         }
 
                         //执行JS方法
@@ -673,7 +765,7 @@ function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {
     }
 }
 //刷新
-function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val) {
+function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val,targetId,mtagsId) {
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
     var initJsonData = [];
@@ -685,9 +777,9 @@ function Refresh_Mtags(FK_MapData, AttrOfOper, oid, val) {
             "Name": o.Tag2
         });
     });
-    var mtags = $("#" + AttrOfOper + "_mtags");
+    var mtags = $("#" + mtagsId);
     mtags.mtags("loadData", initJsonData);
-    $("#TB_" + AttrOfOper).val(mtags.mtags("getText"));
+    $("#" + targetId).val(mtags.mtags("getText"));
 }
 
 

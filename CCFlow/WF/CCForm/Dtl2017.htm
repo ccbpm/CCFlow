@@ -2,20 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>从表</title>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <base target="_self" />
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
     <script type="text/javascript" src="../Scripts/easyUI145/jquery.min.js"></script>
-	<script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
 
-	<script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
@@ -24,10 +24,20 @@
 
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="MapExt2019.js"></script>
-    <script src="../Comm/JS/TBHelpDiv.js"  type="text/javascript" ></script>
+    <!--begin Pop弹出框、小范围多选-->
+    <script src="JS/Pop.js"></script>
+    <script src="../CCForm/JS/MultipleChoiceSearch.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/MultipleChoiceSmall.js" type="text/javascript"></script>
+    <link href="../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
+    <script src="../CCForm/JS/mselector.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
+    <!--End Pop弹出框、小范围多选-->
+
+    <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
 
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Data/JSLibData/CovertMoneyToDaXie.js" type="text/javascript"></script>
@@ -38,7 +48,7 @@
             border-color: red !important;
         }
     </style>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
 
         var hjl = new Array(); //合计列名称集合
         var mapExts;  //mapExts扩展
@@ -47,7 +57,7 @@
 
         //页面数据
         var pageData = {
-            DBDtl: [{ OID: 0, RowData: {}}],
+            DBDtl: [{ OID: 0, RowData: {} }],
             updateRowIndex: -1, //正在更新的列索引
             saveRowCurrent: { count: 0, overCount: 0, saveAll: false, rowIndex: 0 },
             currentRowIndex: -1//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
@@ -69,12 +79,21 @@
 
             InitPage();
 
+            BindMapExt();
+
             var bodyHeight = $(document).height();
             var headHeight = $("#dtlDiv div table thead").height();
             $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
             $("#dtlDiv").height(bodyHeight - 35);
 
         });
+        //绑定mapExt
+        function BindMapExt() {
+            var tbodyTrs1 = $('#dtlDiv div table tbody tr');
+            $.each(tbodyTrs1, function (m, tbodyTrObj) {
+                AfterBindEn_DealMapExt(tbodyTrObj, m);
+            });
+        }
 
         //公共方法
         function AjaxServiceGener(param, callback, scope) {
@@ -125,6 +144,9 @@
                         saveAll = false;
 
                         InitPage();
+                        BindMapExt();
+                        
+
                     }
                 }
             });
@@ -203,14 +225,14 @@
             var linkUrl = sys_MapDtl.LinkUrl;
             linkUrl = DealJsonExp(en, linkUrl);
             linkUrl = linkUrl.replace("@WorkID", GetQueryString("RefPKVal"));
-            linkUrl = linkUrl.replace("@FK_Node",GetQueryString("FK_Node"));
+            linkUrl = linkUrl.replace("@FK_Node", GetQueryString("FK_Node"));
             linkUrl = linkUrl.replace("@FK_Flow", GetQueryString("FK_Flow"));
             if (sys_MapDtl.LinkTarget == "_self")
                 window.location.href = linkUrl;
             else if (sys_MapDtl.LinkTarget == "_blank")
                 window.open(linkUrl);
             else
-                parent.OpenEasyUiDialogExt(linkUrl, sys_MapDtl.LinkLabel, 800, 500, false);    
+                parent.OpenEasyUiDialogExt(linkUrl, sys_MapDtl.LinkLabel, 800, 500, false);
 
         }
 
@@ -382,7 +404,7 @@
                 $('#dtlDiv div table tbody').append(insertTr);
             }
 
-            AfterBindEn_DealMapExt(insertTr, newRowIndex);
+
 
 
 
@@ -390,6 +412,8 @@
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
             doAlignColumns();
+
+            AfterBindEn_DealMapExt(insertTr, newRowIndex);
             //setTimeout(doAlignColumns,100);
         }
 
@@ -553,7 +577,7 @@
 
                     linkTh.data(linkThData);
                     threadTr.append(linkTh);
-                   
+
                 }
 
                 //添加删除,保存列
@@ -649,18 +673,20 @@
                                     tmplate.attr("disabled", "disabled");
                                 }
                                 if (tmplate.length >= 2) {
+                                     var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
                                     if (tmplate[1].nodeName == "SPAN") {
                                         $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn });
 
                                         //ID 设置为  id+'_1'
-                                        var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
                                         //先写出 NAME   单选扭会出问题
                                         $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + rowIndex);
                                     }
                                     if (tmplate[1].nodeName == "INPUT") {
                                         $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn + "T" });
-                                        $(tmplate[1]).data({ KeyOfEn: o.data().KeyOfEn });
+                                        $(tmplate[1]).data({ KeyOfEn: o.data().KeyOfEn }); 
                                     }
+                                    $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + rowIndex);
+                                    $(tmplate[1]).attr('id', $(tmplate[1]).attr('name') + '_' + rowIndex);
                                 } else {
                                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
 
@@ -751,11 +777,6 @@
                         });
                     }
 
-                    //循环TBODY 初始化 SYS_MAPEXT
-                    var tbodyTrs1 = $('#dtlDiv div table tbody tr');
-                    $.each(tbodyTrs1, function (m, tbodyTrObj) {
-                        AfterBindEn_DealMapExt(tbodyTrObj, m);
-                    });
 
                     //mouseleave  鼠标离开行
                     regMouseLeaveTr();
@@ -806,7 +827,11 @@
                 //setTimeout(doAlignColumns, 500);
             }
             // 统计行over
-
+            ////循环TBODY 初始化 SYS_MAPEXT
+            //       var tbodyTrs1 = $('#dtlDiv div table tbody tr');
+            //       $.each(tbodyTrs1, function (m, tbodyTrObj) {
+            //           AfterBindEn_DealMapExt(tbodyTrObj, m);
+            //       });
             $('#Msg').hide();
             return;
 
@@ -1144,7 +1169,7 @@
             var trData = tr.data().data;
             //input text
             //select
-            //循环  td  
+            //循环  td
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
@@ -1152,6 +1177,20 @@
                 var checkbox = tdObj.find('input[type=checkbox]');
 
                 var keyOfEn = '', value = '';
+                if (text.length == 3) { // 小范围多选
+                    for (var idx = 0; idx < 3; idx++) {
+                        var name = $(text[idx]).attr('name');
+                        if (name == null || name == undefined)
+                            continue;
+                        if (name.indexOf('TB_') == 0) {
+                            keyOfEn = name.substring(3);
+                            value = $(text[idx]).val();
+                            break;
+                        }
+                       
+                    }
+
+                }
                 if (text.length == 1) {
                     var name = text.attr('name');
                     if (name.indexOf('TB_') == 0) {
@@ -1187,7 +1226,7 @@
             var trData = tr.data().data;
             //input text
             //select
-            //循环  td  
+            //循环  td
             $.each(tdArr, function (i, tdObj) {
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
@@ -1260,7 +1299,7 @@
 
                     } else {
                         //添加文本框 ，日期控件等
-                        //AppString   
+                        //AppString
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                                 eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
@@ -1310,7 +1349,7 @@
                             }
                         }
 
-                        // AppDouble  AppFloat 
+                        // AppDouble  AppFloat
                         if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
@@ -1363,7 +1402,7 @@
 
                 if (!islabelIsInEle) {
                     eleHtml +=
-                   mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '"></span>' : "";
+                        mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '"></span>' : "";
                 }
             } else {
                 var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn, mapAttr.MyDataType);
@@ -1552,6 +1591,7 @@
                 saveAll = false;
 
                 InitPage();
+                 BindMapExt();
             }
         }
         $(function () {
@@ -1563,29 +1603,33 @@
         });
 
 
-        
 
-     </script>
-	<style type="text/css">
-		.table thead {
-			display:block;
-		}
-		.table tbody {
-			display: block;
-			overflow-x: hidden;
-			overflow-y: auto;
-			/**margin-right:-5px;**/
-		}
-		.table thead, .tbody tr {
-			display: table;
-			width: 100%;
-			table-layout: fixed;
-			width: calc( 100% - 1em );
-		}
-		.table thead {
-			width: calc(100% - 1em)
-		}
-	</style>
+
+
+/**/</script>
+    <style type="text/css">
+        .table thead {
+            display: block;
+        }
+
+        .table tbody {
+            display: block;
+            overflow-x: hidden;
+            overflow-y: auto;
+            /**margin-right:-5px;**/
+        }
+
+        .table thead, .tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            width: calc( 100% - 1em );
+        }
+
+        .table thead {
+            width: calc(100% - 1em)
+        }
+    </style>
 </head>
 <body onblur="SaveAll(this)" >
     <form>
@@ -1720,80 +1764,108 @@
             isChange = true;
             $('#' + id).focus();
         }
-
+         var iframe;
+        function getIframeByElement(element){
+            $("iframe").each(function(){
+                if(element.ownerDocument === this.contentWindow.document) {
+                    iframe = this;
+                }
+                return !iframe;
+            });
+            return iframe;
+        }
         //处理MapExt
         function AfterBindEn_DealMapExt(tr, rowIndex) {
             var workNode = workNodeData;
             var mapExtArr = workNode.Sys_MapExt; // 扩展信息
+            var OID = $(tr).data().data.OID;
             for (var i = 0; i < mapExtArr.length; i++) {
                 var mapExt = mapExtArr[i];
-                switch (mapExt.ExtType) {
-                    case "PopVal": //PopVal窗返回值
-                        var tb = $(tr).find('[name$=' + mapExt.AttrOfOper + ']');
-                        tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-                        tb.attr("ondblclick", "ShowPopValOnParentForm(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
+                //一起转成entity.
+                mapExt = new Entity("BP.Sys.MapExt", mapExt.MyPK);
+                var mapAttr = new Entity("BP.Sys.MapAttr", mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                //处理Pop弹出框
+                var PopModel = mapAttr.GetPara("PopModel");
+                if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
+                    var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
+                     var tbID = tbAuto.attr('id');
+                    PopDtlMapExt(mapAttr, mapExt,tbID,rowIndex,OID);
+                    continue;
+                }
+                //处理文本自动填充
+                var TBModel = mapAttr.GetPara("TBFullCtrl");
+                if (TBModel != undefined && TBModel != "" && TBModel != "None" && (mapExt.ExtType == "FullData")) {
+                    var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
+                    if (tbAuto == null)
+                        continue;
 
-                        tb.attr('readonly', 'true');
-                        tb.attr('disabled', 'true');
-                        var icon = '';
-                        var popWorkModelStr = '';
-                        var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;
-                        if (popWorkModelIndex >= 0) {
-                            popWorkModelIndex = popWorkModelIndex + '@PopValWorkModel='.length;
-                            popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
+                    var tbID = tbAuto.attr('id');
+                    if (tbID == undefined)
+                        continue;
+
+                    tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
+                    tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value, '" + tbID + "', '" + mapExt.MyPK + "',\'" + TBModel + "\');");
+                    tbAuto.attr("AUTOCOMPLETE", "OFF");
+
+                    continue;
+                }
+
+                //下拉框填充其他控件
+                var DDLFull = mapAttr.GetPara("IsFullData");
+                if (DDLFull != undefined && DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
+                    //枚举类型
+                    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 3) {
+                        var ddlOper = $(tr).find('input:radio[name="RB_' + mapExt.AttrOfOper + '"]');
+                        if (ddlOper.length == 0)
+                            continue;
+
+                        ddlOper.attr("onchange", "DDLFullCtrl(this.value,\'" + "RB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
+
+                        //初始化填充数据
+                        var val = $('input:radio[name="RB_' + mapExt.AttrOfOper + '"]:checked').val();
+                        DDLFullCtrl(val, "DDL_" + mapExt.AttrOfOper+ "_" + rowIndex, mapExt.MyPK);
+                        continue;
+                    }
+
+                    //外键类型
+                    var ddlOper = $("#DDL_" + mapExt.AttrOfOper + "_" + rowIndex);
+                    if (ddlOper.length == 0)
+                        continue;
+
+                    ddlOper.attr("onchange", "DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper+ "_" + rowIndex + "\', \'" + mapExt.MyPK + "\')");
+                    //初始化填充数据
+                    var val = ddlOper.val();
+                    if (val != "" && val != undefined)
+                        DDLFullCtrl(val, "DDL_" + mapExt.AttrOfOper+ "_" + rowIndex, mapExt.MyPK);
+                    continue;
+                }
+
+                switch (mapExt.ExtType) {
+                    case "MultipleChoiceSmall":
+                        var tbMulti = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
+                        var tbID = tbMulti.attr('id');
+                        if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
+                            var oid = (pageData.WorkID || pageData.OID || "");
+                            var ens = new Entities("BP.Sys.FrmEleDBs");
+                            ens.Retrieve("FK_MapData", mapAttr.FK_MapData, "EleID", mapAttr.KeyOfEn, "RefPKVal", oid);
+                            var val = "";
+                            var defaultVal = tbMulti.val();
+                            for (var k = 0; k < ens.length; k++) {
+                                if (defaultVal.indexOf(ens[k].Tag1) == -1)
+                                    continue;
+                                val += ens[k].Tag2 + ",";
+                            }
+                            tbMulti.val(val);
+                            break;
                         }
-                        switch (popWorkModelStr) {
-                            /// <summary>       
-                            /// 自定义URL       
-                            /// </summary>       
-                            //SelfUrl =1,       
-                            case "1":
-                                icon = "glyphicon glyphicon-th";
-                                break;
-                            /// <summary>       
-                            /// 表格模式       
-                            /// </summary>       
-                            // TableOnly,       
-                            case "2":
-                                icon = "glyphicon glyphicon-list";
-                                break;
-                            /// <summary>       
-                            /// 表格分页模式       
-                            /// </summary>       
-                            //TablePage,       
-                            case "3":
-                                icon = "glyphicon glyphicon-list-alt";
-                                break;
-                            /// <summary>       
-                            /// 分组模式       
-                            /// </summary>       
-                            // Group,       
-                            case "4":
-                                icon = "glyphicon glyphicon-list-alt";
-                                break;
-                            /// <summary>       
-                            /// 树展现模式       
-                            /// </summary>       
-                            // Tree,       
-                            case "5":
-                                icon = "glyphicon glyphicon-tree-deciduous";
-                                break;
-                            /// <summary>       
-                            /// 双实体树       
-                            /// </summary>       
-                            // TreeDouble       
-                            case "6":
-                                icon = "glyphicon glyphicon-tree-deciduous";
-                                break;
-                            default:
-                                break;
-                        }
-                        tb.width(tb.width() - 40);
-                        tb.height('auto');
-                        var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
-                    '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-                        tb.parent().html(eleHtml);
+                        MultipleChoiceSmall(mapExt, mapAttr,tbID,rowIndex,OID); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                         break;
+                    case "MultipleChoiceSearch":
+                        if (mapAttr.UIIsEnable == 0)
+                            break;
+                        MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                        break;
+                   
                     case "RegularExpression": //正则表达式  统一在保存和提交时检查
                         var tb = $(tr).find('[name$=' + mapExt.AttrOfOper + ']');
 
@@ -1894,46 +1966,7 @@
                                 eval(mapExtThis.Doc + '(this)');
                         });
                         break;
-                    case "TBFullCtrl": //自动填充  先不做.
-                        var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
-                        if (tbAuto == null)
-                            continue;
-
-                        var tbID = tbAuto.attr('id');
-                        if (tbID == undefined)
-                            continue;
-
-                        tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                        tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value, '" + tbID + "', '" + mapExt.MyPK + "');");
-                        tbAuto.attr("AUTOCOMPLETE", "OFF");
-                        if (mapExt.Tag != "") {
-                            /* 处理下拉框的选择范围的问题 */
-                            var strs = mapExt.Tag.split('$');
-                            for (var k = 0; k < strs.length; k++) {
-                                var str = strs[k];
-                                if (str == "") {
-                                    continue;
-                                }
-
-                                var myCtl = str.split(':');
-                                var ctlID = myCtl[0];
-
-                                var ddlC1 = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
-                                if (ddlC1 == null) {
-                                    continue;
-                                }
-
-                                //如果文本库数值为空，就让其返回.
-                                var txt = tbAuto.val();
-                                if (txt == '')
-                                    continue;
-
-                                //获取要填充 ddll 的SQL.
-                                var sql = myCtl[1].replace("~", "'");
-                                sql = sql.replace("@Key", txt);
-                            }
-                        }
-                        break;
+                    
                     case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                         var ddlParent = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
                         var ddlChild = $(tr).find("[name=DDL_" + mapExt.AttrsOfActive + ']');
@@ -1953,9 +1986,10 @@
                         });
                         // 处理默认选择。
                         //string val = ddlPerant.SelectedItemStringVal;
-                        var valClient = ConvertDefVal(workNode, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
+                        //var valClient = ConvertDefVal(workNode, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
 
-                        //ddlChild.select(valClient);  未写
+                        DDLAnsc(ddlParent.val(), ddlChild.attr('id'), mapExt.MyPK, mapExt);
+
                         break;
                     case "AutoFullDLL": // 自动填充下拉框.
                         continue; //已经处理了。
@@ -2044,48 +2078,39 @@
                             }
                         }
                         break;
-                    case "DDLFullCtrl": // 自动填充其他的控件..  先不做
-                        var ddlOper = $("#DDL_" + mapExt.AttrOfOper + "_" + rowIndex);
-                        if (ddlOper.length == 0)
-                            continue;
-
-                        var dbSrc = mapExt.Doc;
-
-
-                        ddlOper.attr("onchange", "DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "_" + rowIndex + "\', \'" + mapExt.MyPK + "\')");
-
-                        var defValue = ddlOper.val();
-                        if (defValue != null && defValue != undefined && defValue != "")
-                            DDLFullCtrl(defValue, "DDL_" + mapExt.AttrOfOper + "_" + rowIndex, mapExt.MyPK);
-                        if (mapExt.Tag != null && mapExt.Tag != "") {
-                            /* 下拉框填充范围. */
-                            var strs = mapExt.Tag.split('$');
-                            for (var k = 0; k < strs.length; k++) {
-                                var str = strs[k];
-                                if (str == "")
-                                    continue;
-
-                                var myCtl = str.split(':');
-                                var ctlID = myCtl[0];
-                                var ddlC1 = $("#DDL_" + ctlID);
-                                if (ddlC1 == null) {
-                                    continue;
-                                }
-
-                                //如果触发的dll 数据为空，则不处理.
-                                if (ddlOper.val() == "")
-                                    continue;
-
-                                var sql = myCtl[1].replace("~", "'");
-                                sql = sql.replace("@Key", ddlOper.val());
-
-                                ddlC1.children().remove();
-                                ddlC1.html(operations);
-
-                            }
-                        }
-                        break;
                 }
+            }
+        }
+
+    /**Pop弹出框的处理**/
+    function PopDtlMapExt(mapAttr, mapExt, targetId, index,OID) {
+            var val = $("#"+targetId).val();
+            switch (mapAttr.GetPara("PopModel")) {
+                case "PopBranchesAndLeaf": //树干叶子模式.
+                    PopBranchesAndLeaf(mapExt, val,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                case "PopBranches": //树干简单模式.
+                    PopBranches(mapExt, val,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                case "PopBindSFTable": //绑定字典表，外部数据源.
+                    PopBindSFTable(mapExt, val,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                case "PopBindEnum": //绑定枚举.
+                    PopBindEnum(mapExt, val,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                case "PopTableList": //绑定实体表.
+                    PopTableList(mapExt, val,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                case "PopGroupList": //分组模式.
+                    PopGroupList(mapExt,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                case "PopSelfUrl": //自定义url.
+                    SelfUrl(mapExt,targetId,index,OID); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                    break;
+                case "PopTableSearch": //表格查询.
+                    PopTableSearch(mapExt,val,targetId,index,OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    break;
+                default: break;
             }
         }
 

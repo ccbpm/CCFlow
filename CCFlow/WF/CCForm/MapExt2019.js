@@ -763,6 +763,9 @@ function FullIt(selectVal, refPK, elementId) {
     if (oid == null)
         oid = GetQueryString('WorkID');
 
+    if (oid == null)
+        oid = GetQueryString("RefPKVal");
+
     if (oid == null) {
         oid = 0;
         return;
@@ -923,10 +926,13 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 /**填充下拉框信息**/
 function FullCtrlDDL(selectVal, ctrlID , mapExt) {
 
-    if (mapExt.Tag == "" || mapExt.Tag == null) 
+    var doc = mapExt.Tag;
+    if (doc == "" || doc == null)
+        doc = mapExt.Doc;
+    if (doc == "" || doc == null)
         return;
    
-    var dbSrcs = mapExt.Tag.split('$'); //获得集合.
+    var dbSrcs = doc.split('$'); //获得集合.
     for (var i = 0; i < dbSrcs.length; i++) {
 
         var dbSrc = dbSrcs[i];

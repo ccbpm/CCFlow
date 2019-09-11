@@ -81,7 +81,7 @@ namespace BP.DA
         /// <param name="tablePK">表主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="saveFileField">保存到字段</param>
-        public static void SaveBytesToDB(byte[] bytes, string tableName, string tablePK, string pkVal, string saveToFileField)
+        public static void SaveBytesToDB(byte[] bytes, string tableName, string tablePK, object pkVal, string saveToFileField)
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
@@ -118,7 +118,7 @@ namespace BP.DA
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
-                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                    throw new Exception("@缺少此字段["+tableName+","+ saveToFileField + "],有可能系统自动修复." + ex.Message);
                 }
                 return;
             }
@@ -161,6 +161,8 @@ namespace BP.DA
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
+
+
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
                 return;
@@ -182,8 +184,20 @@ namespace BP.DA
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
-                NpgsqlParameter spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Integer);
-                spPK.Value = pkVal;
+                NpgsqlParameter spPK = null;
+                if (tableName.Contains("ND") == true || pkVal.GetType() == typeof(int) || pkVal.GetType() == typeof(Int64))
+                {
+                    spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Integer);
+                    spPK.Value = int.Parse( pkVal.ToString() );
+
+                }
+                else
+                {
+                    spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Varchar);
+                    spPK.Value = pkVal;
+                }
+
+                //spPK.DbType= NpgsqlTypes.NpgsqlDbType.Integer.
                 cm.Parameters.Add(spPK);
 
                 try
@@ -200,7 +214,9 @@ namespace BP.DA
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
-                    throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
+                    throw new Exception("@NpgsqlDbType缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
+
+                  //  throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
                 }
                 return;
             }

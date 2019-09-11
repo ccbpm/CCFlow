@@ -835,7 +835,7 @@ namespace BP.WF.HttpHandler
 
                 if (isAskForOrHuiQian == true)
                 {
-                    toolbar += "<input name='Send' type=button value='执行会签' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(); \" />";
+                    toolbar += "<input name='Send' type=button value='确定/完成' data-type='isAskFor' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(); \" />";
                     // toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
                     if (btnLab.PrintZipEnable == true)
                     {

@@ -116,9 +116,9 @@ namespace BP.Pub
                                     return "是";
                             case "YesNo":
                                 if (val == "1")
-                                    return "[√]";
+                                    return "[X]";
                                 else
-                                    return "[×]";
+                                    return "[X]";
                             case "Year":
                                 return val.Substring(0, 4);
                             case "Month":
@@ -721,9 +721,9 @@ namespace BP.Pub
                     if (checkVal.Length == 1)
                         return relVal;
                     if (relVal.Equals(checkVal[0]))
-                        return "[√]";
+                        return "[Y]";
                     else
-                        return "[×]";
+                        return "[X]";
                 }
 
                 if (strs.Length == 2)
@@ -785,26 +785,26 @@ namespace BP.Pub
                                 return "是";
                         case "Boolen":
                             if (val == "1")
-                                return "[√]";
+                                return "[Y]";
                             else
-                                return "[×]";
+                                return "[X]";
                             break;
                         case "YesNo":
                             if (val == "1")
-                                return "[√]";
+                                return "[Y]";
                             else
-                                return "[×]";
+                                return "[X]";
                             break;
                         case "Yes":
                             if (val == "1")
-                                return "[√]";
+                                return "[Y]";
                             else
-                                return "[×]";
+                                return "[X]";
                         case "No":
                             if (val == "0")
-                                return "[√]";
+                                return "[Y]";
                             else
-                                return "[×]";
+                                return "[X]";
                         default:
                             throw new Exception("参数设置错误，特殊方式取值错误：" + key);
                     }

@@ -901,8 +901,15 @@ namespace BP.WF.HttpHandler
                 em.Name = Web.WebUser.Name;
                 em.Insert();
             }
+            string sql = "";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle) {
 
-            string sql = "SELECT StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
+                 sql = "SELECT dbms_lob.substr(StartFlows) as StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
+            }
+            else
+            {
+                 sql = "SELECT StartFlows as StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
+            }
             json = DBAccess.RunSQLReturnString(sql);
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;

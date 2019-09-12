@@ -56,15 +56,16 @@
             for (var i = 0; i < ens.length; i++) {
 
                 en = ens[i];
+                //指定流程时，授权时间不同，可能会有多条合并流程的记录
                 if (en.AuthType == 2) {
                     if (takeBackDT.indexOf(en.TakeBackDT+",") != -1) {
                             continue;
                     }
                     takeBackDT += en.TakeBackDT + ",";
 
-                    var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 2 and EmpNo = '" + en.EmpNo + "' and TakeBackDT = '" + en.TakeBackDT + "'";
+                    var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 2 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT = '" + en.TakeBackDT + "'";
                     var dt = DBAccess.RunSQLReturnTable(sql);
-                
+                    
                     var flowName = "";
                     for (var j = 0; j < dt.length; j++) {
                     

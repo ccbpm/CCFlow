@@ -57,11 +57,6 @@
         //页面启动函数.
         var webUser = null;
         var emp = null;
-        ////var myPK = GetQueryString("MyPK");
-        //var Auther = GetQueryString("Auther");
-        //var EmpNo = GetQueryString("EmpNo");
-        //var TakeBackDT = GetQueryString("TakeBackDT");
-        //var AuthType = GetQueryString("AuthType");
         var currPowerFlag = "";
         var flows = [];
         var treeFlowName="";
@@ -159,6 +154,13 @@
                 alert("请选择要授权的人员！");
                 return;
             }
+            //判断是否已有全部流程授权
+            var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 1 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT >= '" + en.TakeBackDT + "'";
+            var dt = DBAccess.RunSQLReturnTable(sql); 
+            if (dt.length != 0) {
+                alert("已按全部流程授权！");
+                return;
+            }
 
             en.RDT = getNowFormatDate();
             if (en.AuthType == 2) {
@@ -180,7 +182,7 @@
 
         }
         var flows = [];
-        //设置选中的人员
+        //设置选中的流程
         function selectFlowsWindowClose(data) {
 
             $('#selectEmpsModal').modal('hide');
@@ -231,7 +233,7 @@
             return cdt;
         }
 
-        /**/</script>
+    </script>
 </head>
 <body onkeypress="Esc()" class="gray-bg">
     <form id="cc" name="cc">

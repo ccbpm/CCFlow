@@ -168,8 +168,8 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         int empNum = BP.DA.DBAccess.RunSQLReturnValInt(sql);
 
         //运行存储过程.
-        string spName = "MySp";
-        BP.DA.DBAccess.RunSP(spName);
+       // string spName = "MySp";
+        //BP.DA.DBAccess.RunSP(spName);
         #endregion 执行不带有参数.
 
         #region 执行带有参数.
@@ -199,10 +199,10 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         }
 
         //运行存储过程.
-        ps = new Paras();
-        ps.Add("DeptNoVar", "0102");
-        spName = "MySp";
-        BP.DA.DBAccess.RunSP(spName, ps);
+        //ps = new Paras();
+        //ps.Add("DeptNoVar", "0102");
+        //spName = "MySp";
+        //BP.DA.DBAccess.RunSP(spName, ps);
         #endregion 执行带有参数.
 
 

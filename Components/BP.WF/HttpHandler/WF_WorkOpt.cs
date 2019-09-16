@@ -3944,7 +3944,8 @@ namespace BP.WF.HttpHandler
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
-
+            Flow flow = new Flow(this.FK_Flow);
+            ds.Tables.Add(flow.ToDataTableField("WF_Flow"));
 
             //获取流程流转自定义的数据
             string sql = "SELECT FK_Node AS NodeID,NodeName AS Name From WF_TransferCustom WHERE WorkID=" + WorkID + " AND IsEnable=1 Order By Idx";
@@ -3961,6 +3962,8 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Name");
             dt.Columns.Add("SDTOfNode");//节点应完成时间
             dt.Columns.Add("PlantStartDt");//节点计划开始时间
+            dt.Columns.Add("IsStartSetting");//是否已经设置节点时限
+            dt.Columns.Add("IsEndSetting");
             DataRow dr;
             bool isFirstY = true;
             //上一个节点的时间
@@ -3984,6 +3987,7 @@ namespace BP.WF.HttpHandler
 
                 dr["PlantStartDt"] = startDt;
                 dr["SDTOfNode"] = endDt;
+
                 beforeSDTOfNode = gwl.CDT;
             }
             foreach (Node node in nds)
@@ -4005,14 +4009,24 @@ namespace BP.WF.HttpHandler
                             dr["Name"] = drYL["Name"];
                             //计划完成时间
                             sdtOfNode = gwf.GetParaString("CH" + Int32.Parse(drYL["NodeID"].ToString()));
+                            dr["IsEndSetting"] = 1;
                             if (DataType.IsNullOrEmpty(sdtOfNode))
+                            {
                                 sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
+                                dr["IsEndSetting"] = 0;
+                            }
+                               
                             dr["SDTOfNode"] = sdtOfNode;
 
                             //计划开始时间
+                            dr["IsStartSetting"] = 1;
                             plantStartDt = gwf.GetParaString("PlantStartDt" + Int32.Parse(drYL["NodeID"].ToString()));
                             if (DataType.IsNullOrEmpty(plantStartDt))
+                            {
                                 plantStartDt = beforeSDTOfNode;
+                                dr["IsStartSetting"] = 0;
+                            }
+                                
                             dr["PlantStartDt"] = plantStartDt = beforeSDTOfNode;
 
                             beforeSDTOfNode = sdtOfNode;
@@ -4025,17 +4039,26 @@ namespace BP.WF.HttpHandler
                 dr = dt.NewRow();
                 dr["NodeID"] = node.NodeID;
                 dr["Name"] = node.Name;
-               
+
                 //计划完成时间
+                dr["IsEndSetting"] = 1;
                 sdtOfNode = gwf.GetParaString("CH" + node.NodeID);
-                if(DataType.IsNullOrEmpty(sdtOfNode))
+                if (DataType.IsNullOrEmpty(sdtOfNode))
+                {
                     sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
+                    dr["IsEndSetting"] = 0;
+                } 
                 dr["SDTOfNode"] = sdtOfNode;
 
                 //计划开始时间
+                dr["IsStartSetting"] = 1;
                 plantStartDt = gwf.GetParaString("PlantStartDt" + node.NodeID);
                 if (DataType.IsNullOrEmpty(plantStartDt))
+                {
                     plantStartDt = beforeSDTOfNode;
+                    dr["IsStartSetting"] = 0;
+                }
+                   
                 dr["PlantStartDt"] = plantStartDt ;
 
                 beforeSDTOfNode = sdtOfNode;
@@ -4050,44 +4073,44 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(nd.ToDataTableField("WF_CurrNode"));
            
 
-            #region 获取剩余天数
-            Part part = new Part();
-            part.MyPK = nd.FK_Flow + "_0_DeadLineRole";
-            int count = part.RetrieveFromDBSources();
-            int day = 0; //含假期的天数
-            DateTime dateT = DateTime.Now;
-            if (count > 0)
-            {
-                //判断是否包含假期
-                if (int.Parse(part.Tag4) == 0)
-                {
-                    string holidays = BP.Sys.GloVar.Holidays;
-                    while (true)
-                    {
-                        if (dateT.CompareTo(DataType.ParseSysDate2DateTime(gwf.SDTOfFlow))>= 0)
-                            break;
+            //#region 获取剩余天数
+            //Part part = new Part();
+            //part.MyPK = nd.FK_Flow + "_0_DeadLineRole";
+            //int count = part.RetrieveFromDBSources();
+            //int day = 0; //含假期的天数
+            //DateTime dateT = DateTime.Now;
+            //if (count > 0)
+            //{
+            //    //判断是否包含假期
+            //    if (int.Parse(part.Tag4) == 0)
+            //    {
+            //        string holidays = BP.Sys.GloVar.Holidays;
+            //        while (true)
+            //        {
+            //            if (dateT.CompareTo(DataType.ParseSysDate2DateTime(gwf.SDTOfFlow))>= 0)
+            //                break;
 
-                        if (holidays.Contains(dateT.ToString("MM-dd")))
-                        {
-                            dateT = dateT.AddDays(1);
-                            day++;
-                            continue;
-                        }
-                        dateT = dateT.AddDays(1);
-                    }
+            //            if (holidays.Contains(dateT.ToString("MM-dd")))
+            //            {
+            //                dateT = dateT.AddDays(1);
+            //                day++;
+            //                continue;
+            //            }
+            //            dateT = dateT.AddDays(1);
+            //        }
 
-                }
+            //    }
 
-            }
-            string spanTime = GetSpanTime(DateTime.Now,DataType.ParseSysDate2DateTime(gwf.SDTOfFlow), day);
-            dt = new DataTable();
-            dt.TableName = "SpanTime";
-            dt.Columns.Add("SpanTime");
-            dr = dt.NewRow();
-            dr["SpanTime"] = spanTime;
-            dt.Rows.Add(dr);
-            ds.Tables.Add(dt);
-            #endregion 获取剩余天数
+            //}
+            //string spanTime = GetSpanTime(DateTime.Now,DataType.ParseSysDate2DateTime(gwf.SDTOfFlow), day);
+            //dt = new DataTable();
+            //dt.TableName = "SpanTime";
+            //dt.Columns.Add("SpanTime");
+            //dr = dt.NewRow();
+            //dr["SpanTime"] = spanTime;
+            //dt.Rows.Add(dr);
+            //ds.Tables.Add(dt);
+            //#endregion 获取剩余天数
            
             return BP.Tools.Json.ToJson(ds);
         }

@@ -1862,6 +1862,10 @@ namespace BP.WF.HttpHandler
                 FrmNodes nds = new FrmNodes(this.FK_Flow, this.FK_Node);
                 foreach (FrmNode item in nds)
                 {
+                    if (item.FrmEnableRole == FrmEnableRole.Disable)
+                        continue;
+                    if (item.FK_Frm.Equals("ND"+this.FK_Node) == true)
+                        continue;
                     GEEntity en = null;
                     try
                     {

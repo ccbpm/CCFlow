@@ -187,12 +187,16 @@ namespace BP.WF
                             end = DateTime.Now.ToString("yyyy-MM-dd");
                         if(end.CompareTo(plantCHDt)>0)
                             json += " color: 'red' ";
-                        // 预警计算
-                        string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
-                        if(warningDt.CompareTo(plantCHDt)>=0)
-                            json += " color: 'yellow' ";
                         else
-                            json += " color: 'green' ";
+                        {
+                            // 预警计算
+                            string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                            if (warningDt.CompareTo(plantCHDt) >= 0)
+                                json += " color: 'yellow' ";
+                            else
+                                json += " color: 'green' ";
+                        }
+                       
                     }
 
                    

@@ -98,7 +98,7 @@
                     _Html += "<td style='text-align: center'>" + gwl.FK_NodeText + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.FK_EmpText + "</td>";
                     if (plantStartDt == null || plantStartDt == undefined || plantStartDt == "")
-                        plantStartDt = gwl.RDT;
+                        plantStartDt = "<label>"+gwl.RDT+"</label>";
                     _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.RDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
@@ -144,15 +144,26 @@
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         
-                        if (chRole == 1)
-                            _Html += "<td style='text-align: center'><input type='text' id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                        if (chRole == 1) {
+                            var style = "";
+                            if (nd.IsStartSetting == "1")
+                                style = "style='color:#a7a4a4'";
+
+                            _Html += "<td style='text-align: center'><input type='text' "+ style+" id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
                                         +"$(this).blur(); CompareDate("+ nd.NodeID+",0);}})'  class='form-control Wdate'/></td>";
-                        else
+                        } else
                             _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
+
                         _Html += "<td style='text-align: center'>___</td>";
-                        if (chRole == 1)
-                            _Html += "<td style='text-align: center'><input type='text' id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                        if (chRole == 1) {
+                             var style = "";
+                            if (nd.IsEndSetting == "1")
+                                style = "style='color:#a7a4a4'";
+
+                             _Html += "<td style='text-align: center'><input type='text' "+ style+" id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
                                         +"$(this).blur(); CompareDate("+ nd.NodeID+",1);}})'  class='form-control Wdate'/></td>";
+                        }
+                           
                         else
                             _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
@@ -167,27 +178,35 @@
 
             $("#CHTbody").html(_Html);
 
-            
-            _Html = "<tr>";
-            _Html += "<td>" + gwf.RDT + "</td>";
-            _Html += "<td>" + gwf.SDTOfFlow + "</td>";
-             var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
-            if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
-                _Html += "<td><label style='color:red'>逾期</label></td>";
-                _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
+            var flow = data.WF_Flow[0];
+            if (flow.SDTOfFlowRole != 0 || GetQueryString("FK_Node") == parseInt(GetQueryString("FK_Flow")) + "01"){
+                $("#flowTable").hide();
             } else {
-                _Html += "<td>正常</td>";
-                var spanTime = data.SpanTime[0].SpanTime;
-                _Html += "<td>" + spanTime + "</td>";
-            }
-            if (chRole == 1)
-                _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
+                 _Html = "<tr>";
+                _Html += "<td>" + gwf.RDT + "</td>";
+                _Html += "<td>" + gwf.SDTOfFlow + "</td>";
+                 var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
+                if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
+                    _Html += "<td><label style='color:red'>逾期</label></td>";
+                    _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
+                } else {
+                    _Html += "<td>正常</td>";
+                    var spanTime = data.SpanTime[0].SpanTime;
+                    _Html += "<td>" + spanTime + "</td>";
+                }
+                if (chRole == 1)
+                    _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
+                _Html = "</tr>";
 
+                 $("#FlowCH").html(_Html);
+
+            }
+            
             //可调整时限增加保存按钮
             if (chRole == 1)
                 $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
             
-            $("#FlowCH").html(_Html);
+           
 
         }
 
@@ -198,12 +217,17 @@
             if (startDt > endDt) {
                 if (type == 0) {
                     alert("计划开始时间不能大于计划完成时间");
-                     $("#PlantStartDt_" + nodeId).focus();
+                    $("#PlantStartDt_" + nodeId).focus();
                 }
                 else {
                     alert("计划完成时间不能小于计划开始时间");
                     $("#CH_" + nodeId).focus();
                 }
+            } else {
+                if (type == 0)
+                    $("#PlantStartDt_" + nodeId).css("color", "#a7a4a4");
+                if (type == 1)
+                    $("#CH_" + nodeId).css("color", "#a7a4a4");
             }
             return;
         }
@@ -331,7 +355,7 @@
                 
                 </table>
             </div>
-            <table class="table">
+            <table class="table" id="flowTable">
                 <caption>流程时限 </caption>
                 <thead>
                     <tr>

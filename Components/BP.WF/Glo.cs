@@ -934,33 +934,36 @@ namespace BP.WF
             #endregion
 
             #region 升级视图. 解决厦门信息港的 - 流程监控与授权.
-            if (DBAccess.IsExitsObject("V_MyFlowData") == false && 1 == 2)
+            if (DBAccess.IsExitsObject("V_MyFlowData") == false)
             {
                 BP.WF.Template.PowerModel pm11 = new PowerModel();
                 pm11.CheckPhysicsTable();
 
                 sql = "CREATE VIEW V_MyFlowData ";
                 sql += " AS ";
-                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
-                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=1";
+                sql += " SELECT A.*, B.EmpNo as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B ";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.PowerCtrlType=1 AND A.WFState> = 2";
                 sql += "    UNION  ";
                 sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
-                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
+                sql += " WHERE  A.FK_Flow=B.FlowNo  AND B.PowerCtrlType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station AND A.WFState>=2";
                 DBAccess.RunSQL(sql);
             }
 
-            if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false && 1 == 2)
+            if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false)
             {
-                BP.WF.Template.PowerModel pm11 = new PowerModel();
-                pm11.CheckPhysicsTable();
+               
+                BP.WF.Auth Auth = new Auth();
+                Auth.CheckPhysicsTable();
 
-                sql = "CREATE VIEW V_MyFlowData ";
+                sql = "CREATE VIEW V_WF_AuthTodolist ";
                 sql += " AS ";
-                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
-                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=1";
+                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID,C.EmpNo,  C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title ";
+                sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Auth C";
+                sql += " WHERE A.WorkID=B.WorkID AND C.AuthType=1 AND B.FK_Emp=C.Auther AND B.IsPass=0 AND B.IsEnable=1 AND A.FK_Node = B.FK_Node AND A.WFState >=2";
                 sql += "    UNION  ";
-                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
-                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.ModelType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
+                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID, C.EmpNo, C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title";
+                sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Auth C";
+                sql += " WHERE A.WorkID=B.WorkID AND C.AuthType=2 AND B.FK_Emp=C.Auther AND B.IsPass=0 AND B.IsEnable=1 AND A.FK_Node = B.FK_Node AND A.WFState >=2 AND A.FK_Flow=C.FlowNo";
                 DBAccess.RunSQL(sql);
             }
             #endregion 升级视图.

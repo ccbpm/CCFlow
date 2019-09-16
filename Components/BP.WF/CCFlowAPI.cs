@@ -509,7 +509,7 @@ namespace BP.WF
 
                 if (nd.IsStartNode == false)
                 {
-                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.Name + ";") == false)
+                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.No+",") == false)
                     {
                         gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name;
                         gwf.Update();

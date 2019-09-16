@@ -819,7 +819,39 @@ namespace BP.WF.HttpHandler
 
                     if (key.ToLower().Equals("orderby") == true)
                     {
-                        qo.addOrderBy(val);
+                        //多重排序
+                        if (val.IndexOf(",") != -1)
+                        {
+                            string[] strs1 = val.Split(',');
+                            foreach(string str in strs1)
+                            {
+                                if (DataType.IsNullOrEmpty(str) == true)
+                                    continue;
+                                if (str.ToUpper().IndexOf("DESC") != -1)
+                                {
+                                    string str1 = str.Replace("DESC", "").Replace("desc", "");
+                                    qo.addOrderByDesc(str1.Trim());
+                                }
+                                else
+                                {
+                                    if (str.ToUpper().IndexOf("ASC") != -1)
+                                    {
+                                        string str1 = str.Replace("ASC", "").Replace("asc", "");
+                                        qo.addOrderBy(str1.Trim());
+                                    }
+                                    else
+                                    {
+                                        qo.addOrderBy(str.Trim());
+                                    }
+                                }
+                                
+                            }
+                        }
+                        else
+                        {
+                            qo.addOrderBy(val);
+                        }
+                        
                         continue;
                     }
 

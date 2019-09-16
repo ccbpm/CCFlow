@@ -107,7 +107,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            var Keys = node.GetPara("Keys");//获取的设置的摘要字段
+            var NodeNote = node.GetPara("NodeNote");//获取的设置的摘要字段
             var flowNo = node.FK_Flow;
             var nds = new Entities("BP.WF.Nodes");
             nds.Retrieve("FK_Flow", flowNo);
@@ -121,8 +121,8 @@
 
                 node.FormType = FormType.SheetTree;
                 node.NodeFrmID = "ND" + node.NodeID;
-                if (Keys != undefined) {
-                    node.SetPara("Keys",Keys);//赋值摘要字段
+                if (NodeNote != undefined) {
+                    node.SetPara("NodeNote",NodeNote);//赋值摘要字段
                 }
                 node.Update();
 

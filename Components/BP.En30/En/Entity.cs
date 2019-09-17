@@ -3512,9 +3512,13 @@ namespace BP.En
                         DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
                         break;
                     case DataType.AppFloat:
-                    case DataType.AppMoney:
-                    case DataType.AppDouble:
                         DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " FLOAT (11,2) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+                        break;
+                    case DataType.AppMoney:
+                        DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DECIMAL (20,4) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+                        break;
+                    case DataType.AppDouble:
+                        DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DOUBLE DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
                         break;
                     default:
                         throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);

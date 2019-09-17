@@ -2066,6 +2066,7 @@ var HttpHandler = (function () {
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
+        Clear();
     }
 
     function validate(s) {
@@ -2114,6 +2115,9 @@ var HttpHandler = (function () {
         },
 
         AddFormData: function () {
+            if ($("form").length == 0)
+                throw Error('必须是Form表单才可以使用该方法');
+
             formData = $("form").serialize();
             //序列化时把空格转成+，+转义成％２Ｂ，在保存时需要把+转成空格  
             formData = formData.replace(/\+/g, " ");

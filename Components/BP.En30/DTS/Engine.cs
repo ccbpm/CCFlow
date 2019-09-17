@@ -771,7 +771,11 @@ namespace BP.Pub
 
                 if (strs.Length == 2)
                 {
-                    string val = this.HisGEEntity.GetValStringByKey(strs[0].Trim());
+
+                    string keyOfEn = strs[0].Trim();
+
+                    string val = this.HisGEEntity.GetValStringByKey(keyOfEn);
+
                     switch (strs[1].Trim())
                     {
 
@@ -828,9 +832,9 @@ namespace BP.Pub
                                 return "是";
                         case "Boolen":
                             if (val == "1")
-                                return "[√]";
+                                return "[Y]";
                             else
-                                return "[×]";
+                                return "[X]";
                             break;
                         case "YesNo":
                             if (val == "1")

@@ -576,7 +576,7 @@ namespace BP.WF
                 if (town.HisNode.HisCHWay == CHWay.None)
                     wl.SDT = "无";
                 else
-                    wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                    wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat+":ss");
 
                 //警告日期.
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
@@ -765,7 +765,7 @@ namespace BP.WF
                     if (town.HisNode.HisCHWay == CHWay.None)
                         wl.SDT = "无";
                     else
-                        wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                        wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat+":ss");
 
                     wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
 
@@ -5191,7 +5191,7 @@ namespace BP.WF
                 if (this.HisNode.HisCHWay == CHWay.None)
                     gwl.SDT = "无";
                 else
-                    gwl.SDT = dtNow.ToString(DataType.SysDataTimeFormat);
+                    gwl.SDT = dtNow.ToString(DataType.SysDataTimeFormat+":ss");
 
                 //设置预警日期, 为了方便提前1天预警.
                 dtNow = dtNow.AddDays(-1);
@@ -6099,7 +6099,7 @@ namespace BP.WF
                 gwl.FK_DeptT = emp.FK_DeptText;
 
                 gwl.SDT = "无";
-                gwl.DTOfWarning = DataType.CurrentDataTime;
+                gwl.DTOfWarning = DataType.CurrentDataTimess;
                 gwl.IsEnable = true;
 
                 gwl.IsPass = false;
@@ -7349,9 +7349,10 @@ namespace BP.WF
                     if (sub.CompleteReStart == true)
                     {
                         /* 该子流程启动的流程运行结束后才可以启动.*/
-                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + sub.SubFlowNo + "' AND WFSta !="+(int)WFSta.Complete;
-                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
-                            continue; //已经启动的流程运行没有结束了，就不启动了。
+                        string sql = "SELECT Starter, RDT,WFState FROM WF_GenerWorkFlow WHERE PWorkID=" + this.WorkID + " AND FK_Flow='" + sub.SubFlowNo + "' AND WFSta !="+(int)WFSta.Complete  ;
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 1 && Int32.Parse(dt.Rows[0]["WFState"].ToString()) != 0)
+                            continue;//已经启动的流程运行没有结束了，就不启动了。 WFState 是草稿
                     }
 
 
@@ -7472,9 +7473,10 @@ namespace BP.WF
                     if (sub.CompleteReStart == true)
                     {
                         /* 该子流程启动的流程运行结束后才可以启动.*/
-                        string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + sub.SubFlowNo + "' AND WFSta !=" + (int)WFSta.Complete;
-                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
-                            continue; //已经启动的流程运行没有结束了，就不启动了。
+                        string sql = "SELECT Starter, RDT,WFState FROM WF_GenerWorkFlow WHERE PWorkID=" + this.HisGenerWorkFlow.PWorkID + " AND FK_Flow='" + sub.SubFlowNo + "' AND WFSta !=" + (int)WFSta.Complete;
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 1 && Int32.Parse(dt.Rows[0]["WFState"].ToString()) != 0)
+                            continue;//已经启动的流程运行没有结束了，就不启动了。 WFState 0是草稿可以发起
                     }
 
 
@@ -8165,7 +8167,7 @@ namespace BP.WF
             wl.FK_Dept = this.ExecerDeptNo;
             // wl.WarningHour = this.HisNode.WarningHour;
             wl.SDT = "无";
-            wl.DTOfWarning = DataType.CurrentDataTime;
+            wl.DTOfWarning = DataType.CurrentDataTimess;
 
 
 
@@ -8182,8 +8184,8 @@ namespace BP.WF
             }
             #endregion
 
-            this.rptGe.FlowStartRDT = DataType.CurrentDataTime;
-            this.rptGe.FlowEnderRDT = DataType.CurrentDataTime;
+            this.rptGe.FlowStartRDT = DataType.CurrentDataTimess;
+            this.rptGe.FlowEnderRDT = DataType.CurrentDataTimess;
         }
 
         /// <summary>
@@ -8216,7 +8218,7 @@ namespace BP.WF
             }
 
             rptGe.FlowEnder = this.Execer;
-            rptGe.FlowEnderRDT = DataType.CurrentDataTime;
+            rptGe.FlowEnderRDT = DataType.CurrentDataTimess;
 
             //设置当前的流程所有的用时.
             rptGe.FlowDaySpan = DataType.GeTimeLimits(this.rptGe.GetValStringByKey(GERptAttr.FlowStartRDT), DataType.CurrentDataTime);

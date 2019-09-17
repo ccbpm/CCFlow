@@ -178,6 +178,10 @@ namespace BP.WF.Template
         /// 会签规则
         /// </summary>
         public const string HuiQianRole = "HuiQianRole";
+        /// <summary>
+        /// 会签组长模式
+        /// </summary>
+        public const string HuiQianLeaderRole = "HuiQianLeaderRole";
 
         /// <summary>
         /// 流转自定义 TransferCustomLab

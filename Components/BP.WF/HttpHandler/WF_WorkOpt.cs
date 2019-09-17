@@ -4071,47 +4071,47 @@ namespace BP.WF.HttpHandler
             //获取当前节点信息
             Node nd = new Node(this.FK_Node);
             ds.Tables.Add(nd.ToDataTableField("WF_CurrNode"));
-           
 
-            //#region 获取剩余天数
-            //Part part = new Part();
-            //part.MyPK = nd.FK_Flow + "_0_DeadLineRole";
-            //int count = part.RetrieveFromDBSources();
-            //int day = 0; //含假期的天数
-            //DateTime dateT = DateTime.Now;
-            //if (count > 0)
-            //{
-            //    //判断是否包含假期
-            //    if (int.Parse(part.Tag4) == 0)
-            //    {
-            //        string holidays = BP.Sys.GloVar.Holidays;
-            //        while (true)
-            //        {
-            //            if (dateT.CompareTo(DataType.ParseSysDate2DateTime(gwf.SDTOfFlow))>= 0)
-            //                break;
 
-            //            if (holidays.Contains(dateT.ToString("MM-dd")))
-            //            {
-            //                dateT = dateT.AddDays(1);
-            //                day++;
-            //                continue;
-            //            }
-            //            dateT = dateT.AddDays(1);
-            //        }
+            #region 获取剩余天数
+            Part part = new Part();
+            part.MyPK = nd.FK_Flow + "_0_DeadLineRole";
+            int count = part.RetrieveFromDBSources();
+            int day = 0; //含假期的天数
+            DateTime dateT = DateTime.Now;
+            if (count > 0)
+            {
+                //判断是否包含假期
+                if (int.Parse(part.Tag4) == 0)
+                {
+                    string holidays = BP.Sys.GloVar.Holidays;
+                    while (true)
+                    {
+                        if (dateT.CompareTo(DataType.ParseSysDate2DateTime(gwf.SDTOfFlow)) >= 0)
+                            break;
 
-            //    }
+                        if (holidays.Contains(dateT.ToString("MM-dd")))
+                        {
+                            dateT = dateT.AddDays(1);
+                            day++;
+                            continue;
+                        }
+                        dateT = dateT.AddDays(1);
+                    }
 
-            //}
-            //string spanTime = GetSpanTime(DateTime.Now,DataType.ParseSysDate2DateTime(gwf.SDTOfFlow), day);
-            //dt = new DataTable();
-            //dt.TableName = "SpanTime";
-            //dt.Columns.Add("SpanTime");
-            //dr = dt.NewRow();
-            //dr["SpanTime"] = spanTime;
-            //dt.Rows.Add(dr);
-            //ds.Tables.Add(dt);
-            //#endregion 获取剩余天数
-           
+                }
+
+            }
+            string spanTime = GetSpanTime(DateTime.Now, DataType.ParseSysDate2DateTime(gwf.SDTOfFlow), day);
+            dt = new DataTable();
+            dt.TableName = "SpanTime";
+            dt.Columns.Add("SpanTime");
+            dr = dt.NewRow();
+            dr["SpanTime"] = spanTime;
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+            #endregion 获取剩余天数
+
             return BP.Tools.Json.ToJson(ds);
         }
 

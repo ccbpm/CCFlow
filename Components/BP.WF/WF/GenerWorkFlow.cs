@@ -1265,8 +1265,8 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
 
                 map.AddTBDateTime(GenerWorkFlowAttr.SDTOfNode, "节点应完成时间", true, true);
-                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow, "流程应完成时间", true, true);
-                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, "流程预警时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow,null, "流程应完成时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, null,"流程预警时间", true, true);
 
                 //父子流程信息.
                 map.AddTBString(GenerWorkFlowAttr.PFlowNo, null, "父流程编号", true, false, 0, 3, 10);

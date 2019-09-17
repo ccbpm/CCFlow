@@ -61,6 +61,18 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.HuiQianRole, (int)value);
             }
         }
+
+        public HuiQianLeaderRole HuiQianLeaderRole
+        {
+            get
+            {
+                return (HuiQianLeaderRole)this.GetValIntByKey(BtnAttr.HuiQianLeaderRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.HuiQianLeaderRole, (int)value);
+            }
+        }
         /// <summary>
         /// 超时处理方式
         /// </summary>
@@ -582,7 +594,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
-
+                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长为主@2=任意组长为主");
 
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
@@ -611,7 +623,7 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true,BtnAttr.CHRole,@"0=禁用@1=启用@2=只读");
+                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true,BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
@@ -1453,9 +1465,9 @@ namespace BP.WF.Template
             btnLab.RetrieveFromDBSources();
             Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
             //如果是组长会签模式，通用选择器只能单项选择
-            if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+            if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader && this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
             {
-                Selector selector = new Selector(this.NodeID);          
+                Selector selector = new Selector(this.NodeID);
                 selector.IsSimpleSelector = true;
                 selector.Update();
 

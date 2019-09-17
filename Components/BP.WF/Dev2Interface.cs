@@ -5294,16 +5294,22 @@ namespace BP.WF
 
                 if (item.CompleteReStart == true)
                 {
-                    string sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + flowNo + "' AND WFState != 3";
+                    string sql = "SELECT Starter, RDT,WFState FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkID + " AND FK_Flow='" + flowNo + "' AND WFState != 3";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    if (dt.Rows.Count == 0)
+                    if (dt.Rows.Count != 0)
                     {
-                        // return true; //没有人发起，他可以发起。
+                       if(dt.Rows.Count == 1&& Int32.Parse(dt.Rows[0]["WFState"].ToString()) == 0)
+                        {
+
+                        }
+                        else
+                        {
+                            throw new Exception("该流程已经启动还没有运行结束，不能再次启动.");
+                        }
+
+
                     }
-                    else
-                    {
-                        throw new Exception("该流程已经启动还没有运行结束，不能再次启动.");
-                    }
+                    
                 }
 
 
@@ -8503,7 +8509,7 @@ namespace BP.WF
                 {
                     gwl.FK_EmpText = WebUser.Name;
                     gwl.IsPassInt = 0;
-                    gwl.SDT = DataType.CurrentDataTime;
+                    gwl.SDT = DataType.CurrentDataTimess;
                     gwl.DTOfWarning = DataType.CurrentDataTime;
                     gwl.IsEnable = true;
                     gwl.IsRead = true;

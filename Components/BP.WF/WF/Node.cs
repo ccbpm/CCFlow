@@ -2160,6 +2160,17 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.TeamLeaderConfirmDoc, value);
             }
         }
+        public HuiQianLeaderRole HuiQianLeaderRole
+        {
+            get
+            {
+                return (HuiQianLeaderRole)this.GetValIntByKey(BtnAttr.HuiQianLeaderRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.HuiQianLeaderRole, (int)value);
+            }
+        }
         /// <summary>
         /// 阻塞模式
         /// </summary>
@@ -2724,6 +2735,7 @@ namespace BP.WF
                 //add.
                 map.AddTBInt(NodeAttr.TeamLeaderConfirmRole, 0, "组长确认规则", true, true);
                 map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 100, 10);
+                map.AddTBInt(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true);
 
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 1, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);

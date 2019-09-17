@@ -196,6 +196,9 @@
                 }
                 if (chRole == 1)
                     _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
+                else {
+                    $("#IsChangeDT").hide();
+                }
                 _Html = "</tr>";
 
                  $("#FlowCH").html(_Html);
@@ -363,7 +366,7 @@
                         <th style='background-color:#F2F2F2;'>应完成日期</th>
                         <th style='background-color:#F2F2F2;width:150px'>剩余时间</th >
                         <th style='background-color:#F2F2F2;width:150px'>状态</th>
-                        <th style='background-color:#F2F2F2;width:150px'>调整时间</th>
+                        <th style='background-color:#F2F2F2;width:150px'id="IsChangeDT">调整时间</th>
                         
                     </tr>
                 </thead>

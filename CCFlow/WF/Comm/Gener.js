@@ -2066,7 +2066,8 @@ var HttpHandler = (function () {
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
-        Clear();
+        parameters = {};
+        formData = undefined;
     }
 
     function validate(s) {

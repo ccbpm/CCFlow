@@ -1955,6 +1955,8 @@ namespace BP.DA
                     else
                         oraP.Value = para.val;
 
+                    oraP.DbType = para.DAType;
+
                     cmd.Parameters.Add(oraP);
                 }
                 int i = cmd.ExecuteNonQuery();

@@ -891,9 +891,13 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppFloat:
-                    case DataType.AppMoney:
-                    case DataType.AppDouble:
                         sql += attr.Field + " float  NULL COMMENT '" + attr.Desc + "',";
+                        break;
+                    case DataType.AppMoney:
+                        sql += attr.Field + " decimal(20,4)  NULL COMMENT '" + attr.Desc + "',";
+                        break;
+                    case DataType.AppDouble:
+                        sql += attr.Field + " double  NULL COMMENT '" + attr.Desc + "',";
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:

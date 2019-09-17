@@ -39,6 +39,23 @@ namespace BP.WF
         TeamupGroupLeader = 4
     }
 
+    public enum HuiQianLeaderRole
+    {
+        /// <summary>
+        /// 仅有一个组长
+        /// </summary>
+        OnlyOne =0,
+        /// <summary>
+        /// 最后一个组长为主
+        /// </summary>
+        LastOneMain = 1,
+        /// <summary>
+        /// 任意组长为主
+        /// </summary>
+        EveryOneMain = 2
+
+    }
+
     /// <summary>
     /// 方向条件控制规则
     /// </summary>

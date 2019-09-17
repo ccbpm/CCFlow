@@ -282,7 +282,7 @@ function GenerFrm() {
         }
 
     } else {
-        if (mapData.FrmType == 0) {
+        if (mapData.FrmType == 0 || mapData.FrmType == 10) {
             GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
             isFloolFrm = true;
         }

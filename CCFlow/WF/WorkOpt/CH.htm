@@ -179,22 +179,31 @@
             $("#CHTbody").html(_Html);
 
             var flow = data.WF_Flow[0];
-            if (flow.SDTOfFlowRole != 0 || GetQueryString("FK_Node") == parseInt(GetQueryString("FK_Flow")) + "01"){
+            if (flow.SDTOfFlowRole != 0){
                 $("#flowTable").hide();
             } else {
                  _Html = "<tr>";
                 _Html += "<td>" + gwf.RDT + "</td>";
-                _Html += "<td>" + gwf.SDTOfFlow + "</td>";
-                 var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
-                if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
-                    _Html += "<td><label style='color:red'>逾期</label></td>";
-                    _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
+               
+                if (gwf.SDTOfFlow == "") {
+                    _Html += "<td>无</td>";
+                    _Html += "<td>0秒</td>";
+                    _Html += "<td>无</td>";
                 } else {
-                    _Html += "<td>正常</td>";
-                    var spanTime = data.SpanTime[0].SpanTime;
-                    _Html += "<td>" + spanTime + "</td>";
+                     _Html += "<td>" + gwf.SDTOfFlow + "</td>";
+                    var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
+                    if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
+                         _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
+                        _Html += "<td><label style='color:red'>逾期</label></td>";
+                       
+                    } else {
+                        var spanTime = data.SpanTime[0].SpanTime;
+                        _Html += "<td>" + spanTime + "</td>";
+                         _Html += "<td>正常</td>";
+                    }
                 }
-                if (chRole == 1)
+                
+                if (chRole == 3)
                     _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
                 else {
                     $("#IsChangeDT").hide();

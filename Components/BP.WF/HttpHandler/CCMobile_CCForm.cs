@@ -86,7 +86,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == false)
                     {
                         string val = this.GetValFromFrmByKey("DDL_" + attr.Key + "_" + pkval);
                         item.SetValByKey(attr.Key, val);

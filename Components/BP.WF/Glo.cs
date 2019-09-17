@@ -187,16 +187,12 @@ namespace BP.WF
                             end = DateTime.Now.ToString("yyyy-MM-dd");
                         if(end.CompareTo(plantCHDt)>0)
                             json += " color: 'red' ";
+                        // 预警计算
+                        string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                        if(warningDt.CompareTo(plantCHDt)>=0)
+                            json += " color: 'yellow' ";
                         else
-                        {
-                            // 预警计算
-                            string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
-                            if (warningDt.CompareTo(plantCHDt) >= 0)
-                                json += " color: 'yellow' ";
-                            else
-                                json += " color: 'green' ";
-                        }
-                       
+                            json += " color: 'green' ";
                     }
 
                    
@@ -831,7 +827,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190825;
+        public static int Ver = 20190915;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -938,39 +934,41 @@ namespace BP.WF
             #endregion
 
             #region 升级视图. 解决厦门信息港的 - 流程监控与授权.
-            if (DBAccess.IsExitsObject("V_MyFlowData") == false)
+            if (DBAccess.IsExitsObject("V_MyFlowData") == false )
             {
                 BP.WF.Template.PowerModel pm11 = new PowerModel();
                 pm11.CheckPhysicsTable();
 
                 sql = "CREATE VIEW V_MyFlowData ";
                 sql += " AS ";
-                sql += " SELECT A.*, B.EmpNo as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B ";
-                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.PowerCtrlType=1 AND A.WFState>= 2";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.PowerCtrlType=1";
                 sql += "    UNION  ";
                 sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
-                sql += " WHERE  A.FK_Flow=B.FlowNo  AND B.PowerCtrlType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station AND A.WFState>=2";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.PowerCtrlType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
                 DBAccess.RunSQL(sql);
             }
 
-            if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false)
+            //@sly 安装包弄好了吗？
+            if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false )
             {
-               
-                BP.WF.Auth Auth = new Auth();
-                Auth.CheckPhysicsTable();
+                BP.WF.Template.PowerModel pm11 = new PowerModel();
+                pm11.CheckPhysicsTable();
 
                 sql = "CREATE VIEW V_WF_AuthTodolist ";
                 sql += " AS ";
-                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID,C.EmpNo,  C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title ";
-                sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Auth C";
-                sql += " WHERE A.WorkID=B.WorkID AND C.AuthType=1 AND B.FK_Emp=C.Auther AND B.IsPass=0 AND B.IsEnable=1 AND A.FK_Node = B.FK_Node AND A.WFState >=2";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C ";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.PowerCtrlType=1";
                 sql += "    UNION  ";
-                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID, C.EmpNo, C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title";
-                sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Auth C";
-                sql += " WHERE A.WorkID=B.WorkID AND C.AuthType=2 AND B.FK_Emp=C.Auther AND B.IsPass=0 AND B.IsEnable=1 AND A.FK_Node = B.FK_Node AND A.WFState >=2 AND A.FK_Flow=C.FlowNo";
+                sql += " SELECT A.*, c.No as MyEmpNo FROM WF_GenerWorkflow A, WF_PowerModel B, Port_Emp C, Port_DeptEmpStation D";
+                sql += " WHERE  A.FK_Flow=B.FlowNo AND B.EmpNo=C.No AND B.PowerCtrlType=0 AND C.No=D.FK_Emp AND B.StaNo=D.FK_Station";
                 DBAccess.RunSQL(sql);
             }
             #endregion 升级视图.
+
+            //升级从表的 fk_node .
+            DBAccess.RunSQL("UPDATE SYS_MAPDTL SET FK_NODE=0 WHERE NO IN (SELECT B.NO  FROM SYS_GROUPFIELD A, SYS_MAPDTL B WHERE A.CTRLTYPE='Dtl' AND A.CTRLID=B.NO AND FK_NODE!=0)");
+
 
 
             #region 升级填充数据.
@@ -3533,12 +3531,8 @@ namespace BP.WF
                                     break;
                             }
 
-                            if(en.Row.ContainsKey(dc.ColumnName) == true)
-                            {
-                                if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
-                                    en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
-                            }
-                            
+                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
+                                en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
                         }
                     }
                 }

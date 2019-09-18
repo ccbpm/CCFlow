@@ -19,8 +19,6 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("DBTemplate_Init");
 
-            $('Msg').val('');
-
             if (data.indexOf('err@') == 0) {
                 document.getElementById("Msg").innerHTML = data;
                 return;
@@ -73,6 +71,7 @@
             html += "<table>";
             document.getElementById("Msg").innerHTML = html;
 
+
             //$('Msg').val('');
             //document.getElementById("Msg").innerHTML = html;
         });
@@ -93,9 +92,8 @@
                 return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
             handler.AddPara("WorkID", workid);
-            var data = handler.DoMethodReturnString("Accepter_Send");
+            var data = handler.DoMethodReturnString("DBTemplate_DeleteDBTemplate");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -114,7 +112,7 @@
             name = encodeURI(name);
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
+            handler.AddPara("WorkID", workid);
             handler.AddPara("Title", name);
             var data = handler.DoMethodReturnString("DBTemplate_SaveAsDBTemplate");
 
@@ -125,11 +123,10 @@
             alert(data);
             window.location.href = window.location.href;
         }
-         
+
     </script>
     <style type="text/css">
-        #tb_msg
-        {
+        #tb_msg {
             height: 72px;
             width: 272px;
         }

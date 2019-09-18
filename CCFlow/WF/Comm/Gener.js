@@ -100,15 +100,15 @@ function DearUrlParas(urlParam) {
                     var key = param[0];
                     var value = param[1];
 
-                    if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName" )
+                    if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName")
                         return true;
 
                     if (value == "null" || typeof value == "undefined")
                         return true;
 
                     if (value != null && typeof value != "undefined"
-                            && value != "null"
-                            && value != "undefined") {
+                        && value != "null"
+                        && value != "undefined") {
 
                         //  value = value.trim();
 
@@ -1100,8 +1100,8 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "Retrieve[" + self.enName + "]:err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(jsonString);
+
+                    ThrowMakeErrInfo("Retrieve-" + self.enName + " pkval=" + pkavl, textStatus);
                 }
             });
             return result;
@@ -1227,9 +1227,11 @@ var Entity = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
 
-                    alert(JSON.stringify(XMLHttpRequest));
-                    result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(result);
+                    ThrowMakeErrInfo("Entity_RetrieveFromDBSources-" + self.enName + " pkval=" + pkavl, textStatus);
+
+                    //alert(JSON.stringify(XMLHttpRequest));
+                    //result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    //alert(result);
                 }
             });
             return result;
@@ -1264,8 +1266,7 @@ var Entity = (function () {
                         result = false;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "err@系统发生异常,IsExits, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(result);
+                    ThrowMakeErrInfo("Entity_IsExits-" + self.enName, textStatus);
                 }
             });
             return result;
@@ -1282,8 +1283,8 @@ var Entity = (function () {
             params.push(o);
             });*/
 
-            var pkavl = this.GetPKVal();
-            if (pkavl == null || pkavl == "") {
+            var pkval = this.GetPKVal();
+            if (pkval == null || pkval == "") {
                 alert('[' + this.enName + ']没有给主键赋值无法执行查询.');
                 return;
             }
@@ -1297,15 +1298,17 @@ var Entity = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: arguments,
                 success: function (data) {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(string);
+                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus);
+
+                    //    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    //  alert(string);
                 }
             });
 
@@ -1621,7 +1624,8 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Entities_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    ThrowMakeErrInfo("Entities_Init-" + self.ensName, textStatus);
+
                 }
             });
         },
@@ -1651,7 +1655,9 @@ var Entities = (function () {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Entities_Delte err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+
+                    ThrowMakeErrInfo("Entities_Delte-" + self.ensName, textStatus);
+
                 }
             });
         },
@@ -1706,7 +1712,8 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Entities_RetrieveCond err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+
+                    ThrowMakeErrInfo("Entities_RetrieveCond-" + self.ensName, textStatus);
                 }
             });
 
@@ -1738,14 +1745,13 @@ var Entities = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params+ "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    string = "Entities_DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(string);
+                    ThrowMakeErrInfo("Entities_DoMethodReturnString-" + methodName, textStatus);
                 }
             });
 
@@ -1808,7 +1814,9 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("RetrieveAll err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+
+                    ThrowMakeErrInfo("Entities_RetrieveAll-", textStatus);
+
                 }
             });
         }
@@ -1865,7 +1873,7 @@ var DBAccess = (function () {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("RunSQL 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                ThrowMakeErrInfo("DBAccess_RunSQL-", textStatus);
             }
         });
 
@@ -1986,7 +1994,7 @@ var DBAccess = (function () {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                ThrowMakeErrInfo("DBAccess_RunSQLReturnTable-", textStatus);
             }
         });
         return jsonString;
@@ -2022,8 +2030,10 @@ var DBAccess = (function () {
                 string = data;
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                string = "err系统发生异常, RunUrlReturnString status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState + " \t\nurl:" + url;
-                alert(string);
+
+                alert(url);
+                ThrowMakeErrInfo("HttpHandler-RunUrlCrossReturnString-", textStatus);
+
             }
         });
 
@@ -2107,7 +2117,7 @@ var HttpHandler = (function () {
                         if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName")
                             return;
 
-                            self.AddPara(key, value);
+                        self.AddPara(key, value);
 
                     })(param[0], param[1]);
                 }
@@ -2189,12 +2199,8 @@ var HttpHandler = (function () {
                     jsonString = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    if (XMLHttpRequest.status == 500)
-                        jsonString = "1. Handler DoMethodReturnString err@系统发生异常. \t\n2.估计是数据库连接错误或者是系统环境问题. \t\n3.技术信息:status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    else
-                        jsonString = " Handler DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
 
-                    alert(jsonString);
+                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus);
                 }
             });
 
@@ -2296,7 +2302,7 @@ var WebUser = function () {
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
 
-            alert("WebUser_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus);
         }
     });
 
@@ -2305,6 +2311,15 @@ var WebUser = function () {
         self[n] = o;
     });
 };
+
+function ThrowMakeErrInfo(funcName, obj) {
+
+    var msg = "1. " + funcName + " err@系统发生异常.";
+    msg += "\t\n2.估计是数据库连接错误或者是系统环境问题. ";
+    msg += "\t\n3.技术信息:status: " + obj.status + " readyState: " + obj.readyState;
+    msg += "\t\n4 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
+    alert(msg);
+}
 
 //替换全部.
 function replaceAll(str, oldKey, newKey) {
@@ -2358,7 +2373,7 @@ function FormatDate(now, mask) {
             case 'tt': return d.getHours() < 12 ? 'am' : 'pm';
             case 'TT': return d.getHours() < 12 ? 'AM' : 'PM';
             case 'Z': return d.toUTCString().match(/[A-Z]+$/);
-                // Return quoted strings with the surrounding quotes removed
+            // Return quoted strings with the surrounding quotes removed
             default: return $0.substr(1, $0.length - 2);
         }
     });

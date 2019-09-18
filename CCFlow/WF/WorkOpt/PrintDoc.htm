@@ -64,7 +64,7 @@
                 } else {
                     data = data.replace('word@', '');
                     if (plant == 'CCFlow') {
-                        data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                        data += "?WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
                     }
                     if (plant == "JFlow") {
                         alert('还没有翻译.');
@@ -114,8 +114,7 @@
             }
 
             html += "</ul>";
-            $("#rtf").html(html);
-
+            $("#rtf").html(html);
         }
 
         //打印.
@@ -142,12 +141,15 @@
                 data = data.replace('rtf@', '').replace('word@', '');
 
                 if (plant == 'CCFlow' && printModal == 1) {
-                    data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                    data += "?WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                    alert(data);
                 }
                if(plant == "JFlow"){
                     alert('还没有翻译.');
                     return;
                 }
+
+                alert(data);
 
              
                 WinOpen(data);
@@ -172,8 +174,7 @@
     </div>
     <div id="rtf"></div>
     <center>
-        <input type="button" value='关闭' onclick="window.close();" /> 
+        <input type="button" value='关闭' onclick="window.close();" />
     </center>
-     <a href="../../DataUser/CyclostyleFile/Addin/单据打印插件安装包.rar" >下载打印插件</a>
 </body>
 </html>

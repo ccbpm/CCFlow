@@ -8342,7 +8342,7 @@ namespace BP.WF
 
             Flow fl = new Flow(fk_flow);
             //string sql = "UPDATE "+fl.PTable+" SET WFStarter=1, FlowStater='"+WebUser.No+"' WHERE OID="+workID;
-            string sql = "UPDATE " + fl.PTable + " SET  FlowStarter='" + WebUser.No + "' WHERE OID=" + workID;
+            string sql = "UPDATE " + fl.PTable + " SET  FlowStarter='" + WebUser.No + "',WFState=1 WHERE OID=" + workID;
             DBAccess.RunSQL(sql);
         }
         /// <summary>

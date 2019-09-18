@@ -4975,7 +4975,7 @@ namespace BP.WF
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
             rpt.OID = workID;
             rpt.RetrieveFromDBSources();
-            msg =  wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt, stopFlowType);
+            msg = wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt, stopFlowType);
 
             msg += FlowOverAutoSendParentOrSameLevelFlow(wf.HisGenerWorkFlow, wf.HisFlow);
 
@@ -4985,7 +4985,7 @@ namespace BP.WF
         /// <summary>
         /// 流程运行完成后自动运行/结束父流程或者同级子流程
         /// </summary>
-        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf,Flow flow)
+        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf, Flow flow)
         {
             //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
             if (gwf.PWorkID != 0)
@@ -5298,7 +5298,7 @@ namespace BP.WF
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count != 0)
                     {
-                       if(dt.Rows.Count == 1&& Int32.Parse(dt.Rows[0]["WFState"].ToString()) == 0)
+                        if (dt.Rows.Count == 1 && Int32.Parse(dt.Rows[0]["WFState"].ToString()) == 0)
                         {
 
                         }
@@ -5309,7 +5309,7 @@ namespace BP.WF
 
 
                     }
-                    
+
                 }
 
 
@@ -7046,7 +7046,7 @@ namespace BP.WF
             string starter = null, string title = null, Int64 parentWorkID = 0,
             Int64 parentFID = 0, string parentFlowNo = null,
             int parentNodeID = 0, string parentEmp = null,
-            int jumpToNode = 0, string jumpToEmp = null, string todoEmps = null,string isStartSameLevelFlow=null)
+            int jumpToNode = 0, string jumpToEmp = null, string todoEmps = null, string isStartSameLevelFlow = null)
         {
 
             //把一些其他的参数也增加里面去,传递给ccflow.
@@ -7182,8 +7182,8 @@ namespace BP.WF
             if (parentWorkID != 0)
                 BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);//设置父流程信息
 
-            #warning 增加是防止手动启动子流程或者平级子流程时关闭子流程页面找不到待办 保存到待办
-            if(isStartSameLevelFlow!=null)
+#warning 增加是防止手动启动子流程或者平级子流程时关闭子流程页面找不到待办 保存到待办
+            if (isStartSameLevelFlow != null)
                 BP.WF.Dev2Interface.Node_SaveWork(flowNo, int.Parse(flowNo + "01"), wk.OID);
             // 如果有跳转.
             if (jumpToNode != 0)
@@ -8520,7 +8520,9 @@ namespace BP.WF
 
             Flow fl = new Flow(fk_flow);
             //string sql = "UPDATE "+fl.PTable+" SET WFStarter=1, FlowStater='"+WebUser.No+"' WHERE OID="+workID;
-            string sql = "UPDATE " + fl.PTable + " SET  FlowStarter='" + WebUser.No + "' WHERE OID=" + workID;
+
+            //@sly .
+            string sql = "UPDATE " + fl.PTable + " SET  FlowStarter='" + WebUser.No + "',WFState=1 WHERE OID=" + workID;
             DBAccess.RunSQL(sql);
         }
         /// <summary>
@@ -8860,7 +8862,7 @@ namespace BP.WF
                         gwf.Insert();
 
                         //@sly 这里在代码移动到下面了.
-                      
+
                     }
                     else
                     {
@@ -9554,7 +9556,7 @@ namespace BP.WF
 
                 //处理移交后发送的消息事件 @yuanlina
                 PushMsgs pms1 = new PushMsgs();
-                pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID,PushMsgAttr.FK_Event, EventListOfNode.ShitAfter);
+                pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ShitAfter);
                 foreach (PushMsg pm in pms1)
                 {
                     pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.No);
@@ -9607,7 +9609,7 @@ namespace BP.WF
             string atPara = "@SendToEmpIDs=" + emp.No;
             inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, work, atPara);
 
-            
+
             return inf1o;
         }
         /// <summary>

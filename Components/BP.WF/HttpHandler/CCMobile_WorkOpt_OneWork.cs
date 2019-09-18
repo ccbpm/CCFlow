@@ -36,7 +36,7 @@ namespace BP.WF.HttpHandler
         #region xxx 界面 .
         public string TimeBase_Init()
         {
-            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
+            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
             return en.TimeBase_Init();
         }
         /// <summary>
@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TimeBase_UnSend()
         {
-            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
+            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
             return en.OP_UnSend();
         }
         public string TimeBase_OpenFrm()

@@ -206,14 +206,13 @@ namespace BP.En
 			get { return _IsAllowRepeatNo; }
 			set { _IsAllowRepeatNo = value; }
 		}
+        public string IndexField = null;
 
-       
-
-		#region chuli
-		/// <summary>
-		/// 查询语句(为了避免过多的资源浪费,一次性生成多次使用)
-		/// </summary>
-		public string SelectSQL = null;
+        #region chuli
+        /// <summary>
+        /// 查询语句(为了避免过多的资源浪费,一次性生成多次使用)
+        /// </summary>
+        public string SelectSQL = null;
 		/// <summary>
 		/// 是否是简单的属性集合
 		/// 这里是处理外键的问题，在系统的批量运行过程中太多的外键就会影响效率。

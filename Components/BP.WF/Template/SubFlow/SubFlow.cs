@@ -73,6 +73,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string StartOnceOnly = "StartOnceOnly";
         /// <summary>
+        /// 如果当前为子流程，只有该流程结束后才可以重新启用
+        /// </summary>
+        public const string CompleteReStart = "CompleteReStart";
+        /// <summary>
         /// 是否启动
         /// </summary>
         public const string IsEnableSpecFlowStart = "IsEnableSpecFlowStart";
@@ -294,6 +298,28 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(SubFlowAutoAttr.SendModel);
             }
         }
+
+        /// <summary>
+        /// 父子流程结束规则
+        /// </summary>
+        public int IsAutoSendSubFlowOver
+        {
+            get
+            {
+                return this.GetValIntByKey(FlowAttr.IsAutoSendSubFlowOver);
+            }
+        }
+
+        /// <summary>
+        /// 同级子流程结束规则
+        /// </summary>
+        public int IsAutoSendSLSubFlowOver
+        {
+            get
+            {
+                return this.GetValIntByKey(FlowAttr.IsAutoSendSLSubFlowOver);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -312,15 +338,20 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_NodeSubFlow", "子流程(所有类型子流程属性)");
+                map.IndexField = SubFlowAttr.FK_Node;
 
                 map.AddMyPK();
 
-                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 150, true);
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 10, 150);
                 map.AddTBInt(SubFlowAttr.FK_Node, 0, "主流程节点", false, true);
 
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);
                 map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程模式", false, true);
-                  
+
+                map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "父子流程结束规则", false, true);
+                map.AddTBInt(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", false, true);
+
+
                 map.AddTBString(SubFlowAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 

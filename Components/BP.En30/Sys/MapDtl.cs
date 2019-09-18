@@ -121,6 +121,14 @@ namespace BP.Sys
         /// </summary>
         public const string EditModel = "EditModel";
         /// <summary>
+        /// 移动端显示方式
+        /// </summary>
+        public const string MobileShowModel = "MobileShowModel";
+        /// <summary>
+        /// 移动端列表展示时显示的字段
+        /// </summary>
+        public const string MobileShowField = "MobileShowField";
+        /// <summary>
         /// 过滤的SQL 表达式.
         /// </summary>
         public const string FilterSQLExp = "FilterSQLExp";
@@ -1272,6 +1280,8 @@ namespace BP.Sys
                 Map map = new Map("Sys_MapDtl", "明细");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapDtlAttr.FK_MapData; 
+
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "描述", true, false, 1, 200, 20);
@@ -1329,6 +1339,8 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
                 map.AddTBInt(MapDtlAttr.EditModel, 0, "行数据显示格式", false, false);
 
+                map.AddTBInt(MapDtlAttr.MobileShowModel, 0, "移动端数据显示格式", false, false);
+                map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20);
 
                 map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
                 map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
@@ -1755,7 +1767,8 @@ namespace BP.Sys
         public MapDtls(string fk_mapdata)
         {
             if (fk_mapdata == null)
-                return;
+                throw new Exception("fk_mapdata 传的值为空,不能查询.");
+
             //zhoupeng 注销掉，为了这样多的过滤条件？
            // this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata, MapDtlAttr.FK_Node, 0, MapDtlAttr.No);
             this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);

@@ -895,6 +895,8 @@ namespace BP.WF.Template
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapDtlAttr.FK_MapData;
+
 
                 #region 基础信息.
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
@@ -939,12 +941,16 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=表格模式@1=傻瓜表单@2=自由表单");
                 map.SetHelperAlert(MapDtlAttr.EditModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
 
-                //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
-                //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
-
                 //用于控制傻瓜表单.
                 map.AddTBFloat(MapDtlAttr.H, 350, "高度", true, false);
                 map.SetHelperAlert(MapDtlAttr.H, "对傻瓜表单有效");
+
+                //移动端数据显示方式
+                map.AddDDLSysEnum(MapDtlAttr.MobileShowModel, 0, "移动端数据显示方式", true, true, MapDtlAttr.MobileShowModel, "@0=新页面显示模式@1=列表模式");
+                map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20, false);
+
+                //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
+                //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
 
                 //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
 

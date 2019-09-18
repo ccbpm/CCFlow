@@ -88,6 +88,9 @@ namespace BP.WF.Template
 				map.DepositaryOfEntity=Depositary.None;
 				map.DepositaryOfMap=Depositary.Application;
 
+                map.IndexField = NodeEmpAttr.FK_Node;
+
+
                 map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
 
                 //map.AddDDLEntitiesPK(NodeDeptAttr.FK_Node,0,DataType.AppInt,"节点",new Nodes(),

@@ -77,6 +77,8 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_NodeCancel", "可撤销的节点");
+                map.IndexField = NodeEmpAttr.FK_Node;
+
                  
 
                 map.AddTBIntPK(NodeCancelAttr.FK_Node, 0, "节点", true, true);

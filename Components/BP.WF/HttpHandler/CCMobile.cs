@@ -134,7 +134,7 @@ namespace BP.WF.HttpHandler
         }
         public string StartGuide_MulitSend()
         {
-            WF_MyFlow en = new WF_MyFlow(this.context);
+            WF_MyFlow en = new WF_MyFlow();
             return en.StartGuide_MulitSend();
         }
         public string Home_Init()
@@ -192,7 +192,7 @@ namespace BP.WF.HttpHandler
         }
         public string MyFlow_Init()
         {
-            BP.WF.HttpHandler.WF_MyFlow wfPage = new WF_MyFlow(this.context);
+            BP.WF.HttpHandler.WF_MyFlow wfPage = new WF_MyFlow();
             return wfPage.MyFlow_Init();
         }
         
@@ -295,7 +295,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmView_UnSend()
         {
-            BP.WF.HttpHandler.WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
+            BP.WF.HttpHandler.WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
             return en.OP_UnSend();
         }
 

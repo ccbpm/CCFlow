@@ -128,6 +128,14 @@ namespace BP.WF.Template
         /// 推送邮件的节点s
         /// </summary>
         public const string MailNodes = "MailNodes";
+        /// <summary>
+        /// 按照指定的SQL
+        /// </summary>
+        public const string BySQL = "BySQL";
+        /// <summary>
+        /// 发送给指定的接受人
+        /// </summary>
+        public const string ByEmps = "ByEmps";
     }
     /// <summary>
     /// 消息推送
@@ -322,6 +330,8 @@ namespace BP.WF.Template
                         return "加签新工作{{Title}},发送人@WebUser.No,@WebUser.Name";
                     case EventListOfNode.FlowOverAfter:
                         return "流程{{Title}}已经结束,处理人@WebUser.No,@WebUser.Name";
+                    case EventListOfNode.AfterFlowDel:
+                        return "流程{{Title}}已经删除,处理人@WebUser.No,@WebUser.Name";
                     default:
                         throw new Exception("@该事件类型没有定义默认的消息模版:" + this.FK_Event);
                         break;
@@ -624,6 +634,34 @@ namespace BP.WF.Template
                 this.SetValByKey(PushMsgAttr.SMSDoc, value);
             }
         }
+        /// <summary>
+        /// 按照指定的SQL
+        /// </summary>
+        public string BySQL
+        {
+            get
+            {
+                return this.GetValStrByKey(PushMsgAttr.BySQL);
+            }
+            set
+            {
+                this.SetValByKey(PushMsgAttr.BySQL, value);
+            }
+        }
+        /// <summary>
+        /// 发送给指定的人员，人员之间以逗号分割
+        /// </summary>
+        public string ByEmps
+        {
+            get
+            {
+                return this.GetValStrByKey(PushMsgAttr.ByEmps);
+            }
+            set
+            {
+                this.SetValByKey(PushMsgAttr.ByEmps, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -666,7 +704,7 @@ namespace BP.WF.Template
                 map.AddTBString(PushMsgAttr.SMSNodes, null, "SMS节点s", true, false, 0, 100, 10);
 
                 //@0=站内消息@1=短信@2=钉钉@3=微信@4=即时通
-                map.AddTBString(PushMsgAttr.SMSPushModel, null, "短消息发送设置", true, false, 0, 10, 10);
+                map.AddTBString(PushMsgAttr.SMSPushModel, null, "短消息发送设置", true, false, 0, 50, 10);
                 #endregion 短消息.
 
                 #region 邮件.
@@ -676,6 +714,10 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(PushMsgAttr.MailDoc, null, "邮件内容模版", true, false, true);
                 map.AddTBString(PushMsgAttr.MailNodes, null, "Mail节点s", true, false, 0, 100, 10);
                 #endregion 邮件.
+
+                map.AddTBString(PushMsgAttr.BySQL, null, "按照SQL计算", true, false, 0, 500, 10);
+                map.AddTBString(PushMsgAttr.ByEmps, null, "发送给指定的人员", true, false, 0, 100, 10);
+                map.AddTBAtParas(500);
 
                 this._enMap = map;
                 return this._enMap;
@@ -764,316 +806,89 @@ namespace BP.WF.Template
                 }
             }
 
+            //发送消息
+            string msg = this.SendMessage(title,en,currNode,workid,jumpToEmps,openWorkURl,objs,r);
+
             //发送短消息.
-            string msg1 = this.SendShortMessageToSpecNodes(title, openWorkURl, en, currNode, workid, objs, null, jumpToEmps);
+           // string msg1 = this.SendShortMessageToSpecNodes(title, openWorkURl, en, currNode, workid, objs, null, jumpToEmps);
             //发送邮件.
-            string msg2 = this.SendEmail(title, openWorkURl, en, jumpToEmps, currNode, workid, objs, r);
+            //string msg2 = this.SendEmail(title, openWorkURl, en, jumpToEmps, currNode, workid, objs, r);
 
-            return msg1 + msg2;
+            return msg;
         }
         /// <summary>
-        /// 发送邮件
+        /// 发送消息
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="openWorkURl"></param>
-        /// <param name="en"></param>
-        /// <param name="jumpToEmps"></param>
-        /// <param name="currNode"></param>
-        /// <param name="workid"></param>
-        /// <param name="objs"></param>
-        /// <param name="r">处理好的变量集合</param>
+        /// <param name="title">标题</param>
+        /// <param name="en">数据实体</param>
+        /// <param name="currNode">当前节点</param>
+        /// <param name="workid">流程WorkId</param>
+        /// <param name="jumpToEmps">下一个节点的接收人</param>
+        /// <param name="openUrl">打开链接的URL</param>
+        /// <param name="objs">发送返回的对象</param>
+        /// <param name="r">表单数据HashTable</param>
         /// <returns></returns>
-        private string SendEmail(string title, string openWorkURl, Entity en, string jumpToEmps, Node currNode, Int64 workid, SendReturnObjs objs, Row r)
+        private string SendMessage(string title,Entity en,Node currNode,Int64 workid,string jumpToEmps,string openUrl, SendReturnObjs objs,Row r)
         {
-            if (this.MailPushWay == 0)
-                return "";
-
-            #region 生成相关的变量？
-            string generAlertMessage = ""; //定义要返回的提示消息.
-            // 发送邮件.
-            string mailTitleTmp = ""; //定义标题.
-            string mailDocTmp = ""; //定义内容.
-
-            // 标题.
-            mailTitleTmp = this.MailTitle;
-            mailTitleTmp = mailTitleTmp.Replace("{Title}", title);
-            mailTitleTmp = mailTitleTmp.Replace("@WebUser.No", WebUser.No);
-            mailTitleTmp = mailTitleTmp.Replace("@WebUser.Name", WebUser.Name);
-
-            // 内容.
-            mailDocTmp = this.MailDoc;
-            mailDocTmp = mailDocTmp.Replace("{Url}", openWorkURl);
-            mailDocTmp = mailDocTmp.Replace("{Title}", title);
-
-            mailDocTmp = mailDocTmp.Replace("@WebUser.No", WebUser.No);
-            mailDocTmp = mailDocTmp.Replace("@WebUser.Name", WebUser.Name);
-
-            /*如果仍然有没有替换下来的变量.*/
-            if (mailDocTmp.Contains("@"))
-                mailDocTmp = BP.WF.Glo.DealExp(mailDocTmp, en, null);
-
-            #endregion 生成相关的变量？
-
-            //求发送给的人员 ID.
-            string toEmpIDs = "";
-
-            #region 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
-            if (this.MailPushWay == 3)
-            {
-                /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
-                string[] nodes = this.SMSNodes.Split(',');
-
-                string msg = "";
-                foreach (string nodeID in nodes)
-                {
-                    if (DataType.IsNullOrEmpty(nodeID) == true)
-                        continue;
-                    if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
-                    {
-                        //获取退回原因
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                        ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
-                        DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
-                        if (retunWdt.Rows.Count != 0)
-                        {
-                            string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
-                            string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
-                            mailDocTmp = mailDocTmp.Replace("ReturnMsg", returnMsg);
-
-                        }
-                    }
-
-                    string sql = "SELECT b.Name, b.Email, b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    if (dt.Rows.Count == 0)
-                        continue;
-
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        string emailAddress = dr["Email"].ToString();
-                        string empName = dr["Name"].ToString();
-                        string empNo = dr["No"].ToString();
-
-                        if (DataType.IsNullOrEmpty(emailAddress))
-                            continue;
-
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
-                        //发送邮件
-                        BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, this.FK_Event + workid, BP.Web.WebUser.No, null, empNo, paras);
-                        msg += dr["Name"].ToString() + ",";
-                    }
-                }
-                return "@已向:{" + msg + "}发送提醒消息.";
-
-
-            }
-            #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
-
-            #region WorkArrive-工作到达. - 邮件处理.
-            if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
-                || this.FK_Event == BP.Sys.EventListOfNode.NodeWarning || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
-            {
-                if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
-                {
-                    //获取退回原因
-                    Paras ps = new Paras();
-                    ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                    ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
-                    DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
-                    if (retunWdt.Rows.Count != 0)
-                    {
-                        string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
-                        string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
-                        mailDocTmp = mailDocTmp.Replace("ReturnMsg", returnMsg);
-
-                    }
-                }
-                /*工作到达.*/
-                if (this.MailPushWay == 1 && !string.IsNullOrWhiteSpace(jumpToEmps))
-                {
-                    /*如果向接受人发送邮件.*/
-                    toEmpIDs = jumpToEmps;
-                    string[] emps = toEmpIDs.Split(',');
-                    foreach (string emp in emps)
-                    {
-                        if (DataType.IsNullOrEmpty(emp))
-                            continue;
-
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string mailDocReal = mailDocTmp.Clone() as string;
-                        mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
-
-                        //获得当前人的邮件.
-                        BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
-
-                        //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event,
-                            "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp);
-                    }
-                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
-                }
-
-                if (this.MailPushWay == 2)
-                {
-                    /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
-                    string emailAddress = r[this.MailAddress] as string;
-
-                    //发送邮件
-                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, null);
-                    return "@已向:{" + emailAddress + "}发送提醒信息.";
-                }
-            }
-            #endregion 发送成功事件.
-
-            #region SendSuccess - 发送成功事件. - 邮件处理.
-            if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess)
-            {
-                /*发送成功事件.*/
-                if (this.MailPushWay == 1 && objs.VarAcceptersID != null)
-                {
-                    /*如果向接受人发送邮件.*/
-                    toEmpIDs = objs.VarAcceptersID;
-                    string[] emps = toEmpIDs.Split(',');
-                    foreach (string emp in emps)
-                    {
-                        if (DataType.IsNullOrEmpty(emp))
-                            continue;
-                        if (emp == WebUser.No)
-                            continue;
-
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string mailDocReal = mailDocTmp.Clone() as string;
-                        mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
-
-                        //获得当前人的邮件.
-                        BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
-
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
-
-                        string mail = empEn.Email;
-                        if (DataType.IsNullOrEmpty(mail) == true)
-                        {
-                            BP.GPM.Emp empGPM = new GPM.Emp(emp);
-                            mail = empGPM.Email;
-                            empEn.Email = mail;
-                            empEn.Update();
-                        }
-
-                        //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendEmail(mail, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp, paras);
-
-                    }
-                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
-                }
-
-                if (this.MailPushWay == 2)
-                {
-                    /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
-                    string emailAddress = r[this.MailAddress] as string;
-                    string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
-
-                    //发送邮件
-                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, null, paras);
-
-                    return "@已向:{" + emailAddress + "}发送提醒信息.";
-                }
-            }
-            #endregion 发送成功事件.
-
-
-
-            #region SendSuccess - 流程结束/预警/逾期. - 邮件处理.
-            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter
-                || this.FK_Event == BP.Sys.EventListOfNode.FlowWarning
-                || this.FK_Event == BP.Sys.EventListOfNode.FlowOverDue)
-            {
-                /*发送成功事件.*/
-                if (this.MailPushWay == 1)
-                {
-                    /*如果向接受人发送邮件.*/
-                    /*向所有参与人. */
-                    string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
-                    string[] emps = empsStrs.Split('@');
-
-                    foreach (string emp in emps)
-                    {
-                        if (DataType.IsNullOrEmpty(emp))
-                            continue;
-
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string mailDocReal = mailDocTmp.Clone() as string;
-                        mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
-
-                        //获得当前人的邮件.
-                        BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
-
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
-
-                        //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, emp, paras);
-                    }
-                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
-                }
-
-                if (this.MailPushWay == 2)
-                {
-                    /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
-                    string emailAddress = r[this.MailAddress] as string;
-
-                    string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
-
-                    //发送邮件
-                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, null, paras);
-                    return "@已向:{" + emailAddress + "}发送提醒信息.";
-                }
-            }
-            #endregion 发送成功事件.
-
-            return generAlertMessage;
-        }
-        /// <summary>
-        /// 发送短消息.
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="openWorkURl"></param>
-        /// <param name="en"></param>
-        /// <param name="jumpToEmps"></param>
-        /// <param name="currNode"></param>
-        /// <param name="workid"></param>
-        /// <param name="objs"></param>
-        /// <param name="r">处理好的变量集合</param>
-        /// <returns></returns>
-        private string SendShortMessageToSpecNodes(string title, string openWorkURL, Entity en, Node currNode, Int64 workid, SendReturnObjs objs, Row r, string SendToEmpIDs)
-        {
+            //不启用消息
             if (this.SMSPushWay == 0)
                 return "";
+            string generAlertMessage = ""; //定义要返回的提示消息.
+            string mailTitle = this.MailTitle;// 邮件标题
+            string smsDoc = this.SMSDoc;//消息模板
 
-            //定义短信内容.......
-            string smsDocTmp = "";
+            #region 邮件标题
+            mailTitle = this.MailTitle;
+            mailTitle = mailTitle.Replace("{Title}", title);
+            mailTitle = mailTitle.Replace("@WebUser.No", WebUser.No);
+            mailTitle = mailTitle.Replace("@WebUser.Name", WebUser.Name);
+         
+            #endregion 邮件标题
 
-            #region  生成短信内容
-            smsDocTmp = this.SMSDoc.Clone() as string;
-            smsDocTmp = smsDocTmp.Replace("{Title}", title);
-            smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURL);
-            smsDocTmp = smsDocTmp.Replace("@WebUser.No", WebUser.No);
-            smsDocTmp = smsDocTmp.Replace("@WebUser.Name", WebUser.Name);
-            smsDocTmp = smsDocTmp.Replace("@WorkID", en.PKVal.ToString());
-            smsDocTmp = smsDocTmp.Replace("@OID", en.PKVal.ToString());
+            #region  处理消息内容
+            smsDoc = smsDoc.Replace("{Title}", title);
+            smsDoc = smsDoc.Replace("{Url}", openUrl);
+            smsDoc = smsDoc.Replace("@WebUser.No", WebUser.No);
+            smsDoc = smsDoc.Replace("@WebUser.Name", WebUser.Name);
+            smsDoc = smsDoc.Replace("@WorkID", en.PKVal.ToString());
+            smsDoc = smsDoc.Replace("@OID", en.PKVal.ToString());
 
             /*如果仍然有没有替换下来的变量.*/
-            if (smsDocTmp.Contains("@") == true)
-                smsDocTmp = BP.WF.Glo.DealExp(smsDocTmp, en, null);
+            if (smsDoc.Contains("@") == true)
+                smsDoc = BP.WF.Glo.DealExp(smsDoc, en, null);
 
-            /*如果仍然有没有替换下来的变量.*/
-            if (smsDocTmp.Contains("@"))
-                smsDocTmp = BP.WF.Glo.DealExp(smsDocTmp, en, null);
+            if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+            {
+                //获取退回原因
+                Paras ps = new Paras();
+                ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                ps.Add(ReturnWorkAttr.WorkID, Int64.Parse(en.PKVal.ToString()));
+                DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+                if (retunWdt.Rows.Count != 0)
+                {
+                    string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+                    string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+                    smsDoc = smsDoc.Replace("ReturnMsg", returnMsg);
+                }
+            }
+            #endregion 处理消息内容
 
-            //if (smsDocTmp.Contains("@"))
-            //    throw new Exception("@短信消息内容配置错误,里面有未替换的变量，请确认参数是否正确:"+smsDocTmp);
-
+            #region 消息发送
             string toEmpIDs = "";
-            #endregion 处理当前的内容.
+            #region 表单字段作为接受人
+            if (this.SMSPushWay == 2)
+            {
+                /*从字段里取数据. */
+                string toEmp = r[this.SMSField] as string;
+                //修改内容
+                smsDoc = smsDoc.Replace("{EmpStr}", toEmp);
+                openUrl = openUrl.Replace("{EmpStr}", toEmp);
+
+                //发送消息
+                BP.WF.Dev2Interface.Port_SendMessage(toEmp, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                return "@已向:{" + toEmp + "}发送提醒信息.";
+            }
+            #endregion 表单字段作为接受人
 
             #region 如果发送给指定的节点处理人,就计算出来直接退回,任何方式的处理人都是一致的.
             if (this.SMSPushWay == 3)
@@ -1087,47 +902,26 @@ namespace BP.WF.Template
                     if (DataType.IsNullOrEmpty(nodeID) == true)
                         continue;
 
-                    string sql = "SELECT b.Name, b.Tel ,b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
+                    string sql = "SELECT EmpFromT AS Name,EmpFrom AS No FROM ND" + int.Parse(this.FK_Flow) + "Track A  WHERE  A.ActionType=1 AND A.WorkID=" + workid + " AND A.NDFrom=" + nodeID ;
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
                         continue;
 
-                    if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
-                    {
-                        //获取退回原因
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                        ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
-                        DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
-                        if (retunWdt.Rows.Count != 0)
-                        {
-                            string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
-                            string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
-                            smsDocTmp = smsDocTmp.Replace("ReturnMsg", returnMsg);
-
-                        }
-                    }
-
-
                     foreach (DataRow dr in dt.Rows)
                     {
-                        string tel = dr["Tel"].ToString();
                         string empName = dr["Name"].ToString();
                         string empNo = dr["No"].ToString();
 
-                        if (DataType.IsNullOrEmpty(tel))
-                            continue;
-
+                        
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string mailDocReal = smsDocTmp.Clone() as string;
-                        mailDocReal = mailDocReal.Replace("{EmpStr}", empName);
-                        openWorkURL = openWorkURL.Replace("{EmpStr}", empName);
+                        string smsDocReal = smsDoc.Clone() as string;
+                        smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
+                        openUrl = openUrl.Replace("{EmpStr}", empNo);
 
                         string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
 
-                        //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, WebUser.No, null, empNo, paras, title, openWorkURL, this.SMSPushModel);
-
+                        //发送消息
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
                         //处理短消息.
                         toEmpIDs += empName + ",";
                     }
@@ -1136,197 +930,758 @@ namespace BP.WF.Template
             }
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
-            //求发送给的人员ID.
-            #region WorkArrive - 工作到达事件.
-            if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
-                || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
-                || this.FK_Event == BP.Sys.EventListOfNode.NodeWarning 
-                || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+            #region 按照SQL计算
+            if(this.SMSPushWay == 4)
             {
-                if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+                string bySQL = this.BySQL;
+                if(DataType.IsNullOrEmpty(BySQL) == true)
                 {
-                    //获取退回原因
-                    Paras ps = new Paras();
-                    ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                    ps.Add(ReturnWorkAttr.WorkID, en.PKVal.ToString());
-                    DataTable dt = DBAccess.RunSQLReturnTable(ps);
-                    if (dt.Rows.Count != 0)
-                    {
-                        string returnMsg = dt.Rows[0]["BeiZhu"].ToString();
-                        string returner = dt.Rows[0]["ReturnerName"].ToString();
-                        smsDocTmp = smsDocTmp.Replace("ReturnMsg", returnMsg);
-
-                    }
+                    return "按照指定的SQL发送消息，SQL数据不能为空";
                 }
-                /*发送成功事件, 退回后事件. */
-                if (this.SMSPushWay == 1)
+                bySQL = bySQL.Replace("~", "'");
+                //替换SQL中的参数
+                bySQL = bySQL.Replace("@WebUser.No", WebUser.No);
+                bySQL = bySQL.Replace("@WebUser.Name", WebUser.Name);
+                bySQL = bySQL.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                bySQL = bySQL.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+                bySQL = bySQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                /*如果仍然有没有替换下来的变量.*/
+                if (bySQL.Contains("@") == true)
+                    bySQL = BP.WF.Glo.DealExp(bySQL, en, null);
+                DataTable dt = DBAccess.RunSQLReturnTable(bySQL);
+                foreach (DataRow dr in dt.Rows)
                 {
-                    /*如果向接受人发送短信.*/
-                    toEmpIDs = SendToEmpIDs;
-                    if (DataType.IsNullOrEmpty(toEmpIDs) == false)
-                    {
-                        string[] emps = toEmpIDs.Split(',');
-                        foreach (string emp in emps)
-                        {
-                            if (DataType.IsNullOrEmpty(emp))
-                                continue;
+                    string empName = dr["Name"].ToString();
+                    string empNo = dr["No"].ToString();
 
-                            string smsDocTmpReal = smsDocTmp.Clone() as string;
-                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", emp);
-                            openWorkURL = openWorkURL.Replace("{EmpStr}", emp);
-                            BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
 
-                            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+                    // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                    string smsDocReal = smsDoc.Clone() as string;
+                    smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
+                    openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                            //发送短信.
-                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null, title, openWorkURL, this.SMSPushModel);
-                        }
-                        //return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
-                        return "@已向:{" + toEmpIDs + "}发送提醒消息.";
-                    }
+                    string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
+
+                    //发送消息
+                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+
+                    //处理短消息.
+                    toEmpIDs += empName + ",";
                 }
+               
+            }
+            #endregion 按照SQL计算
 
-                if (this.SMSPushWay == 2)
+            #region 发送给指定的接收人
+            if (this.SMSPushWay == 5)
+            {
+                if (DataType.IsNullOrEmpty(this.ByEmps) == true)
                 {
-                    /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
-                    string tel = r[this.SMSField] as string;
-
-                    //发送短信.
-                    string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
-                    BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
-                    return "@已向:{" + tel + "}发送提醒消息.";
-                    //  return "@已向:{" + tel + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
-
+                    return "发送给指定的人员，则人员集合不能为空。";
+                }
+                //以逗号分割开
+                string[] toEmps = this.ByEmps.Split(',');
+                foreach(string empNo in toEmps)
+                {
+                    if (DataType.IsNullOrEmpty(empNo) == true)
+                        continue;
+                    BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(empNo);
+                    // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                    string smsDocReal = smsDoc.Clone() as string;
+                    smsDocReal = smsDocReal.Replace("{EmpStr}", emp.Name);
+                    openUrl = openUrl.Replace("{EmpStr}", emp.No);
+                    //发送消息
+                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                    //处理短消息.
+                    toEmpIDs += emp.Name + ",";
                 }
             }
-            #endregion WorkArrive - 工作到达事件
+            #endregion 发送给指定的接收人
 
-            #region SendSuccess - 发送成功事件
-            if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess)
+            #region 不同的消息事件，接收人不同的处理
+            if (this.SMSPushWay == 1)
             {
-                /*发送成功事件.*/
-                if (this.SMSPushWay == 1 && objs.VarAcceptersID != null)
+                #region 工作到达、退回、移交、撤销
+                if ((this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
+                    || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
+                    || this.FK_Event == BP.Sys.EventListOfNode.ShitAfter
+                    || this.FK_Event == BP.Sys.EventListOfNode.UndoneAfter)
+                     && DataType.IsNullOrEmpty(jumpToEmps) == false)
                 {
-                    /*如果向接受人发送短信.*/
+                    /*当前节点的处理人.*/
+                    toEmpIDs = jumpToEmps;
+                    string[] emps = toEmpIDs.Split(',');
+                    foreach (string empNo in emps)
+                    {
+                        if (DataType.IsNullOrEmpty(empNo))
+                            continue;
+
+                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                        string smsDocReal = smsDoc.Clone() as string;
+                        smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
+                        openUrl = openUrl.Replace("{EmpStr}", empNo);
+
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                    }
+                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
+                }
+                #endregion 工作到达、退回、移交、撤销
+
+                #region 节点发送成功后
+                if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess && objs.VarAcceptersID != null)
+                {
+                    /*如果向接受人发送消息.*/
                     toEmpIDs = objs.VarAcceptersID;
-
-                    toEmpIDs = toEmpIDs.Replace("(", "");
-                    toEmpIDs = toEmpIDs.Replace(")", "");
-
-                    string hasSendEmps = ",";
-
-                    if (DataType.IsNullOrEmpty(toEmpIDs) == false)
+                    string[] emps = toEmpIDs.Split(',');
+                    foreach (string empNo in emps)
                     {
-                        #warning 人员是（zhangyifan,张一凡） 获取结果有问题
-                        string[] emps = toEmpIDs.Split(';');
-                        foreach (string empID in emps)
-                        {
-                            if (DataType.IsNullOrEmpty(empID))
-                                continue;
-                            string[] empIDs = empID.Split(',');
-                            if (DataType.IsNullOrEmpty(empIDs[0]))
-                                continue;
+                        if (DataType.IsNullOrEmpty(empNo))
+                            continue;
+                        if (empNo == WebUser.No)
+                            continue;
+                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                        string smsDocReal = smsDoc.Clone() as string;
+                        smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
+                        openUrl = openUrl.Replace("{EmpStr}", empNo);
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
 
-                            if (hasSendEmps.Contains("," + empIDs[0] + ",") == true)
-                                continue;
+                    }
+                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
+                }
+                #endregion 节点发送成功后
 
-                            hasSendEmps += empIDs[0] + ",";
-
-                            string smsDocTmpReal = smsDocTmp.Clone() as string;
-                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empIDs[0]);
-                            openWorkURL = openWorkURL.Replace("{EmpStr}", empIDs[0]);
-
-                            string myEmpID = empIDs[0];
-                            BP.GPM.Emp empEn = new BP.GPM.Emp();
-                            empEn.No = myEmpID;
-                            if (empEn.RetrieveFromDBSources() == 0)
-                                continue;
-                             
-                            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
-
-                            //发送短信.
-                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
-                        }
+               
+                #region 流程结束后、流程删除后
+                if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter || this.FK_Event == BP.Sys.EventListOfNode.AfterFlowDel)
+                {
+                    /*向所有参与人发送消息. */
+                    DataTable dt = DBAccess.RunSQLReturnTable("SELECT Emps,TodoEmps FROM WF_GenerWorkFlow WHERE WorkID=" + workid);
+                    if (dt.Rows.Count == 0)
                         return "";
-                        //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
-                    }
-                }
-
-                if (this.SMSPushWay == 2)
-                {
-                    /*如果向指定的字段作为发送短信的发送对象, 从字段里取数据. */
-                    string tel = r[this.SMSField] as string;
-                    if (tel != null || tel.Length > 6)
+                    string empsStrs = "";
+                    foreach (DataRow dr in dt.Rows)
                     {
-
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
-
-                        //发送短信.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
-                        return "@已向:{" + tel + "}发送提醒手机短信.";
-                    }
-                }
-            }
-            #endregion SendSuccess - 发送成功事件
-
-            #region FlowOverAfter -  流程结束/预警/逾期  短信息事件
-            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter
-                || this.FK_Event ==BP.Sys.EventListOfNode.FlowWarning
-                || this.FK_Event == BP.Sys.EventListOfNode.FlowOverDue)
-            {
-                /*发送成功事件.*/
-                if (this.SMSPushWay == 1)
-                {
-                    /*向所有参与人. */
-                    string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
-                    if (DataType.IsNullOrEmpty(empsStrs) == false)
-                    {
-                        string[] emps = empsStrs.Split('@');
-                        foreach (string empID in emps)
+                        empsStrs += dr["Emps"];
+                        string todoEmps = dr["TodoEmps"].ToString();
+                        if (DataType.IsNullOrEmpty(todoEmps) == false)
                         {
-                            if (DataType.IsNullOrEmpty(empID))
-                                continue;
-
-                            if (empID == WebUser.No)
-                                continue;
-
-                            string smsDocTmpReal = smsDocTmp.Clone() as string;
-                            smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
-                            openWorkURL = openWorkURL.Replace("{EmpStr}", empID);
-
-                            BP.WF.Port.WFEmp empEn = new Port.WFEmp();
-                            empEn.No = empID;
-                            empEn.RetrieveFromDBSources();
-
-                            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
-
-                            //发送短信.
-                            Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
+                            string[] strs = todoEmps.Split(';');
+                            todoEmps = "";
+                            foreach (string str in strs)
+                            {
+                                if (DataType.IsNullOrEmpty(str) == true || empsStrs.Contains(str) == true)
+                                    continue;
+                                empsStrs += str.Split(',')[0]+"@";
+                            }
                         }
-
-                        return "";
-                        //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
-
                     }
-                }
+                    string[] emps = empsStrs.Split('@');
 
-                if (this.SMSPushWay == 2)
-                {
-                    /*如果向指定的字段作为发送短信的发送对象, 从字段里取数据. */
-                    string tel = r[this.SMSField] as string;
-                    if (tel != null || tel.Length > 6)
+                    foreach (string empNo in emps)
                     {
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
-                        //发送短信.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
-                        return "@已向:{" + tel + "}发送提醒消息.";
+                        if (DataType.IsNullOrEmpty(empNo))
+                            continue;
+
+                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                        string smsDoccReal = smsDoc.Clone() as string;
+                        smsDoc = smsDoc.Replace("{EmpStr}", empNo);
+                        openUrl = openUrl.Replace("{EmpStr}", empNo);
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+                        //发送消息
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
+                    }
+                    return "@已向:{" + empsStrs + "}发送提醒信息.";
+                }
+                #endregion 流程结束后、流程删除后
+
+                #region 节点预警、逾期
+                if(this.FK_Event == BP.Sys.EventListOfNode.NodeWarning
+                    || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+                {
+                    //获取当前节点的接收人
+                    GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                    string[] emps = gwf.TodoEmps.Split(';');
+                    foreach (string emp in emps)
+                    {
+                        if (DataType.IsNullOrEmpty(emp))
+                            continue;
+                        string[] empA = emp.Split(',');
+                        if (DataType.IsNullOrEmpty(empA[0]) ==true || empA[0] == WebUser.No)
+                            continue;
+                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                        string smsDocReal = smsDoc.Clone() as string;
+                        smsDocReal = smsDocReal.Replace("{EmpStr}", empA[0]);
+                        openUrl = openUrl.Replace("{EmpStr}", empA[0]);
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+                        BP.WF.Dev2Interface.Port_SendMessage(empA[0], smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
                     }
                 }
+                #endregion 节点预警、逾期
+
             }
-            #endregion SendSuccess - 发送成功事件
+            #endregion 不同的消息事件，接收人不同的处理
+
+            #endregion  消息发送
 
             return "";
+
         }
+        /// <summary>
+        /// 发送邮件
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="openWorkURl"></param>
+        /// <param name="en"></param>
+        /// <param name="jumpToEmps"></param>
+        /// <param name="currNode"></param>
+        /// <param name="workid"></param>
+        /// <param name="objs"></param>
+        /// <param name="r">处理好的变量集合</param>
+        /// <returns></returns>
+        //private string SendEmail(string title, string openWorkURl, Entity en, string jumpToEmps, Node currNode, Int64 workid, SendReturnObjs objs, Row r)
+        //{
+        //    if (this.MailPushWay == 0)
+        //        return "";
+
+        //    #region 生成相关的变量？
+        //    string generAlertMessage = ""; //定义要返回的提示消息.
+        //    // 发送邮件.
+        //    string mailTitleTmp = ""; //定义标题.
+        //    string mailDocTmp = ""; //定义内容.
+           
+
+            
+
+        //    // 内容.
+        //    mailDocTmp = this.MailDoc;
+        //    mailDocTmp = mailDocTmp.Replace("{Url}", openWorkURl);
+        //    mailDocTmp = mailDocTmp.Replace("{Title}", title);
+        //    mailDocTmp = mailDocTmp.Replace("{Title}", title);
+
+        //    mailDocTmp = mailDocTmp.Replace("@WebUser.No", WebUser.No);
+        //    mailDocTmp = mailDocTmp.Replace("@WebUser.Name", WebUser.Name);
+
+        //    /*如果仍然有没有替换下来的变量.*/
+        //    if (mailDocTmp.Contains("@"))
+        //        mailDocTmp = BP.WF.Glo.DealExp(mailDocTmp, en, null);
+
+        //    #endregion 生成相关的变量？
+
+        //    //求发送给的人员 ID.
+        //    string toEmpIDs = "";
+
+        //    #region 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
+        //    if (this.MailPushWay == 3)
+        //    {
+        //        /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+        //        string[] nodes = this.SMSNodes.Split(',');
+
+        //        string msg = "";
+        //        foreach (string nodeID in nodes)
+        //        {
+        //            if (DataType.IsNullOrEmpty(nodeID) == true)
+        //                continue;
+        //            if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+        //            {
+        //                //获取退回原因
+        //                Paras ps = new Paras();
+        //                ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+        //                ps.Add(ReturnWorkAttr.WorkID,Int64.Parse( en.PKVal.ToString()));
+        //                DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+        //                if (retunWdt.Rows.Count != 0)
+        //                {
+        //                    string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+        //                    string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+        //                    mailDocTmp = mailDocTmp.Replace("ReturnMsg", returnMsg);
+
+        //                }
+        //            }
+
+        //            string sql = "SELECT b.Name, b.Email, b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
+        //            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+        //            if (dt.Rows.Count == 0)
+        //                continue;
+
+        //            foreach (DataRow dr in dt.Rows)
+        //            {
+        //                string emailAddress = dr["Email"].ToString();
+        //                string empName = dr["Name"].ToString();
+        //                string empNo = dr["No"].ToString();
+
+        //                if (DataType.IsNullOrEmpty(emailAddress))
+        //                    continue;
+
+        //                string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+        //                //发送邮件
+        //                BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, this.FK_Event + workid, BP.Web.WebUser.No, null, empNo, paras);
+        //                msg += dr["Name"].ToString() + ",";
+        //            }
+        //        }
+        //        return "@已向:{" + msg + "}发送提醒消息.";
+
+
+        //    }
+        //    #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
+
+        //    #region WorkArrive-工作到达. - 邮件处理.
+        //    if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
+        //        || this.FK_Event == BP.Sys.EventListOfNode.NodeWarning || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+        //    {
+        //        if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+        //        {
+        //            //获取退回原因
+        //            Paras ps = new Paras();
+        //            ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+        //            ps.Add(ReturnWorkAttr.WorkID, Int64.Parse( en.PKVal.ToString()));
+        //            DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+        //            if (retunWdt.Rows.Count != 0)
+        //            {
+        //                string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+        //                string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+        //                mailDocTmp = mailDocTmp.Replace("ReturnMsg", returnMsg);
+
+        //            }
+        //        }
+        //        /*工作到达.*/
+        //        if (this.MailPushWay == 1 && !string.IsNullOrWhiteSpace(jumpToEmps))
+        //        {
+        //            /*如果向接受人发送邮件.*/
+        //            toEmpIDs = jumpToEmps;
+        //            string[] emps = toEmpIDs.Split(',');
+        //            foreach (string emp in emps)
+        //            {
+        //                if (DataType.IsNullOrEmpty(emp))
+        //                    continue;
+
+        //                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+        //                string mailDocReal = mailDocTmp.Clone() as string;
+        //                mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
+
+        //                //获得当前人的邮件.
+        //                BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
+
+        //                //发送邮件.
+        //                BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event,
+        //                    "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp);
+        //            }
+        //            return "@已向:{" + toEmpIDs + "}发送提醒信息.";
+        //        }
+
+        //        if (this.MailPushWay == 2)
+        //        {
+        //            /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+        //            string emailAddress = r[this.MailAddress] as string;
+
+        //            //发送邮件
+        //            BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, null);
+        //            return "@已向:{" + emailAddress + "}发送提醒信息.";
+        //        }
+        //    }
+        //    #endregion 发送成功事件.
+
+        //    #region SendSuccess - 发送成功事件. - 邮件处理.
+        //    if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess)
+        //    {
+        //        /*发送成功事件.*/
+        //        if (this.MailPushWay == 1 && objs.VarAcceptersID != null)
+        //        {
+        //            /*如果向接受人发送邮件.*/
+        //            toEmpIDs = objs.VarAcceptersID;
+        //            string[] emps = toEmpIDs.Split(',');
+        //            foreach (string emp in emps)
+        //            {
+        //                if (DataType.IsNullOrEmpty(emp))
+        //                    continue;
+        //                if (emp == WebUser.No)
+        //                    continue;
+
+        //                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+        //                string mailDocReal = mailDocTmp.Clone() as string;
+        //                mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
+
+        //                //获得当前人的邮件.
+        //                BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
+
+        //                string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+        //                string mail = empEn.Email;
+        //                if (DataType.IsNullOrEmpty(mail) == true)
+        //                {
+        //                    BP.GPM.Emp empGPM = new GPM.Emp(emp);
+        //                    mail = empGPM.Email;
+        //                    empEn.Email = mail;
+        //                    empEn.Update();
+        //                }
+
+        //                //发送邮件.
+        //                BP.WF.Dev2Interface.Port_SendEmail(mail, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp, paras);
+
+        //            }
+        //            return "@已向:{" + toEmpIDs + "}发送提醒信息.";
+        //        }
+
+        //        if (this.MailPushWay == 2)
+        //        {
+        //            /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+        //            string emailAddress = r[this.MailAddress] as string;
+        //            string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+        //            //发送邮件
+        //            BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, null, paras);
+
+        //            return "@已向:{" + emailAddress + "}发送提醒信息.";
+        //        }
+        //    }
+        //    #endregion 发送成功事件.
+
+
+
+        //    #region SendSuccess - 流程结束/预警/逾期. - 邮件处理.
+        //    if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter
+        //        || this.FK_Event == BP.Sys.EventListOfNode.FlowWarning
+        //        || this.FK_Event == BP.Sys.EventListOfNode.FlowOverDue)
+        //    {
+        //        /*发送成功事件.*/
+        //        if (this.MailPushWay == 1)
+        //        {
+        //            /*如果向接受人发送邮件.*/
+        //            /*向所有参与人. */
+        //            string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
+        //            string[] emps = empsStrs.Split('@');
+
+        //            foreach (string emp in emps)
+        //            {
+        //                if (DataType.IsNullOrEmpty(emp))
+        //                    continue;
+
+        //                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+        //                string mailDocReal = mailDocTmp.Clone() as string;
+        //                mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
+
+        //                //获得当前人的邮件.
+        //                BP.WF.Port.WFEmp empEn = new BP.WF.Port.WFEmp(emp);
+
+        //                string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+        //                //发送邮件.
+        //                BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, emp, paras);
+        //            }
+        //            return "@已向:{" + toEmpIDs + "}发送提醒信息.";
+        //        }
+
+        //        if (this.MailPushWay == 2)
+        //        {
+        //            /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+        //            string emailAddress = r[this.MailAddress] as string;
+
+        //            string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+        //            //发送邮件
+        //            BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, null, paras);
+        //            return "@已向:{" + emailAddress + "}发送提醒信息.";
+        //        }
+        //    }
+        //    #endregion 发送成功事件.
+
+        //    return generAlertMessage;
+        //}
+        /// <summary>
+        /// 发送短消息.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="openWorkURl"></param>
+        /// <param name="en"></param>
+        /// <param name="jumpToEmps"></param>
+        /// <param name="currNode"></param>
+        /// <param name="workid"></param>
+        /// <param name="objs"></param>
+        /// <param name="r">处理好的变量集合</param>
+        /// <returns></returns>
+        //private string SendShortMessageToSpecNodes(string title, string openWorkURL, Entity en, Node currNode, Int64 workid, SendReturnObjs objs, Row r, string SendToEmpIDs)
+        //{
+        //    if (this.SMSPushWay == 0)
+        //        return "";
+
+        //    //定义短信内容.......
+        //    string smsDocTmp = "";
+
+        //    #region  生成短信内容
+        //    smsDocTmp = this.SMSDoc.Clone() as string;
+        //    smsDocTmp = smsDocTmp.Replace("{Title}", title);
+        //    smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURL);
+        //    smsDocTmp = smsDocTmp.Replace("@WebUser.No", WebUser.No);
+        //    smsDocTmp = smsDocTmp.Replace("@WebUser.Name", WebUser.Name);
+        //    smsDocTmp = smsDocTmp.Replace("@WorkID", en.PKVal.ToString());
+        //    smsDocTmp = smsDocTmp.Replace("@OID", en.PKVal.ToString());
+
+        //    /*如果仍然有没有替换下来的变量.*/
+        //    if (smsDocTmp.Contains("@") == true)
+        //        smsDocTmp = BP.WF.Glo.DealExp(smsDocTmp, en, null);
+
+        //    /*如果仍然有没有替换下来的变量.*/
+        //    if (smsDocTmp.Contains("@"))
+        //        smsDocTmp = BP.WF.Glo.DealExp(smsDocTmp, en, null);
+
+        //    //if (smsDocTmp.Contains("@"))
+        //    //    throw new Exception("@短信消息内容配置错误,里面有未替换的变量，请确认参数是否正确:"+smsDocTmp);
+
+        //    string toEmpIDs = "";
+        //    #endregion 处理当前的内容.
+
+        //    #region 如果发送给指定的节点处理人,就计算出来直接退回,任何方式的处理人都是一致的.
+        //    if (this.SMSPushWay == 3)
+        //    {
+        //        /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+        //        string[] nodes = this.SMSNodes.Split(',');
+
+        //        string msg = "";
+        //        foreach (string nodeID in nodes)
+        //        {
+        //            if (DataType.IsNullOrEmpty(nodeID) == true)
+        //                continue;
+
+        //            string sql = "SELECT b.Name, b.Tel ,b.No FROM ND" + int.Parse(this.FK_Flow) + "Track a, WF_Emp b WHERE  a.ActionType=1 AND A.WorkID=" + workid + " AND a.NDFrom=" + nodeID + " AND a.EmpFrom=B.No ";
+        //            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+        //            if (dt.Rows.Count == 0)
+        //                continue;
+
+        //            if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+        //            {
+        //                //获取退回原因
+        //                Paras ps = new Paras();
+        //                ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+        //                ps.Add(ReturnWorkAttr.WorkID, Int64.Parse( en.PKVal.ToString()));
+        //                DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
+        //                if (retunWdt.Rows.Count != 0)
+        //                {
+        //                    string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
+        //                    string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+        //                    smsDocTmp = smsDocTmp.Replace("ReturnMsg", returnMsg);
+
+        //                }
+        //            }
+
+
+        //            foreach (DataRow dr in dt.Rows)
+        //            {
+        //                string tel = dr["Tel"].ToString();
+        //                string empName = dr["Name"].ToString();
+        //                string empNo = dr["No"].ToString();
+
+        //                if (DataType.IsNullOrEmpty(tel))
+        //                    continue;
+
+        //                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+        //                string mailDocReal = smsDocTmp.Clone() as string;
+        //                mailDocReal = mailDocReal.Replace("{EmpStr}", empName);
+        //                openWorkURL = openWorkURL.Replace("{EmpStr}", empName);
+
+        //                string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
+
+        //                //发送邮件.
+        //                BP.WF.Dev2Interface.Port_SendSMS(tel, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, WebUser.No, null, empNo, paras, title, openWorkURL, this.SMSPushModel);
+
+        //                //处理短消息.
+        //                toEmpIDs += empName + ",";
+        //            }
+        //        }
+        //        return "@已向:{" + toEmpIDs + "}发送了短消息提醒.";
+        //    }
+        //    #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
+
+        //    //求发送给的人员ID.
+        //    #region WorkArrive - 工作到达事件.
+        //    if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
+        //        || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
+        //        || this.FK_Event == BP.Sys.EventListOfNode.NodeWarning 
+        //        || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+        //    {
+        //        if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+        //        {
+        //            //获取退回原因
+        //            Paras ps = new Paras();
+        //            ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+        //            ps.Add(ReturnWorkAttr.WorkID, Int64.Parse( en.PKVal.ToString()));
+        //            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+        //            if (dt.Rows.Count != 0)
+        //            {
+        //                string returnMsg = dt.Rows[0]["BeiZhu"].ToString();
+        //                string returner = dt.Rows[0]["ReturnerName"].ToString();
+        //                smsDocTmp = smsDocTmp.Replace("ReturnMsg", returnMsg);
+
+        //            }
+        //        }
+        //        /*发送成功事件, 退回后事件. */
+        //        if (this.SMSPushWay == 1)
+        //        {
+        //            /*如果向接受人发送短信.*/
+        //            toEmpIDs = SendToEmpIDs;
+        //            if (DataType.IsNullOrEmpty(toEmpIDs) == false)
+        //            {
+        //                string[] emps = toEmpIDs.Split(',');
+        //                foreach (string emp in emps)
+        //                {
+        //                    if (DataType.IsNullOrEmpty(emp))
+        //                        continue;
+
+        //                    string smsDocTmpReal = smsDocTmp.Clone() as string;
+        //                    smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", emp);
+        //                    openWorkURL = openWorkURL.Replace("{EmpStr}", emp);
+        //                    BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
+
+        //                    string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+
+        //                    //发送短信.
+        //                    Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null, title, openWorkURL, this.SMSPushModel);
+        //                }
+        //                //return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
+        //                return "@已向:{" + toEmpIDs + "}发送提醒消息.";
+        //            }
+        //        }
+
+        //        if (this.SMSPushWay == 2)
+        //        {
+        //            /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+        //            string tel = r[this.SMSField] as string;
+
+        //            //发送短信.
+        //            string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+        //            BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
+        //            return "@已向:{" + tel + "}发送提醒消息.";
+        //            //  return "@已向:{" + tel + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
+
+        //        }
+        //    }
+        //    #endregion WorkArrive - 工作到达事件
+
+        //    #region SendSuccess - 发送成功事件
+        //    if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess)
+        //    {
+        //        /*发送成功事件.*/
+        //        if (this.SMSPushWay == 1 && objs.VarAcceptersID != null)
+        //        {
+        //            /*如果向接受人发送短信.*/
+        //            toEmpIDs = objs.VarAcceptersID;
+
+        //            toEmpIDs = toEmpIDs.Replace("(", "");
+        //            toEmpIDs = toEmpIDs.Replace(")", "");
+
+        //            string hasSendEmps = ",";
+
+        //            if (DataType.IsNullOrEmpty(toEmpIDs) == false)
+        //            {
+        //                #warning 人员是（zhangyifan,张一凡） 获取结果有问题
+        //                string[] emps = toEmpIDs.Split(';');
+        //                foreach (string empID in emps)
+        //                {
+        //                    if (DataType.IsNullOrEmpty(empID))
+        //                        continue;
+        //                    string[] empIDs = empID.Split(',');
+        //                    if (DataType.IsNullOrEmpty(empIDs[0]))
+        //                        continue;
+
+        //                    if (hasSendEmps.Contains("," + empIDs[0] + ",") == true)
+        //                        continue;
+
+        //                    hasSendEmps += empIDs[0] + ",";
+
+        //                    string smsDocTmpReal = smsDocTmp.Clone() as string;
+        //                    smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empIDs[0]);
+        //                    openWorkURL = openWorkURL.Replace("{EmpStr}", empIDs[0]);
+
+        //                    string myEmpID = empIDs[0];
+        //                    BP.GPM.Emp empEn = new BP.GPM.Emp();
+        //                    empEn.No = myEmpID;
+        //                    if (empEn.RetrieveFromDBSources() == 0)
+        //                        continue;
+                             
+        //                    string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+
+        //                    //发送短信.
+        //                    Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
+        //                }
+        //                return "";
+        //                //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
+        //            }
+        //        }
+
+        //        if (this.SMSPushWay == 2)
+        //        {
+        //            /*如果向指定的字段作为发送短信的发送对象, 从字段里取数据. */
+        //            string tel = r[this.SMSField] as string;
+        //            if (tel != null || tel.Length > 6)
+        //            {
+
+        //                string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+
+        //                //发送短信.
+        //                BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
+        //                return "@已向:{" + tel + "}发送提醒手机短信.";
+        //            }
+        //        }
+        //    }
+        //    #endregion SendSuccess - 发送成功事件
+
+        //    #region FlowOverAfter -  流程结束/预警/逾期  短信息事件
+        //    if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter
+        //        || this.FK_Event ==BP.Sys.EventListOfNode.FlowWarning
+        //        || this.FK_Event == BP.Sys.EventListOfNode.FlowOverDue)
+        //    {
+        //        /*发送成功事件.*/
+        //        if (this.SMSPushWay == 1)
+        //        {
+        //            /*向所有参与人. */
+        //            string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
+        //            if (DataType.IsNullOrEmpty(empsStrs) == false)
+        //            {
+        //                string[] emps = empsStrs.Split('@');
+        //                foreach (string empID in emps)
+        //                {
+        //                    if (DataType.IsNullOrEmpty(empID))
+        //                        continue;
+
+        //                    if (empID == WebUser.No)
+        //                        continue;
+
+        //                    string smsDocTmpReal = smsDocTmp.Clone() as string;
+        //                    smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
+        //                    openWorkURL = openWorkURL.Replace("{EmpStr}", empID);
+
+        //                    BP.WF.Port.WFEmp empEn = new Port.WFEmp();
+        //                    empEn.No = empID;
+        //                    empEn.RetrieveFromDBSources();
+
+        //                    string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+
+        //                    //发送短信.
+        //                    Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, empID, paras, title, openWorkURL, this.SMSPushModel);
+        //                }
+
+        //                return "";
+        //                //return "@已向:{" + toEmpIDs + "}发送提醒消息.";
+
+        //            }
+        //        }
+
+        //        if (this.SMSPushWay == 2)
+        //        {
+        //            /*如果向指定的字段作为发送短信的发送对象, 从字段里取数据. */
+        //            string tel = r[this.SMSField] as string;
+        //            if (tel != null || tel.Length > 6)
+        //            {
+        //                string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+        //                //发送短信.
+        //                BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, paras, title, openWorkURL, this.SMSPushModel);
+        //                return "@已向:{" + tel + "}发送提醒消息.";
+        //            }
+        //        }
+        //    }
+        //    #endregion SendSuccess - 发送成功事件
+
+        //    return "";
+        //}
 
         /// <summary>
         /// 发送短信到其它节点的处理人.

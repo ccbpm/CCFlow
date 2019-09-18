@@ -84,6 +84,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_CCEmp", "抄送人员");
+                map.IndexField = CCEmpAttr.FK_Node;
 
                 map.AddTBIntPK(CCEmpAttr.FK_Node, 0, "节点", true, true);
                 map.AddDDLEntitiesPK(CCEmpAttr.FK_Emp, null, "人员", new Emps(), true);

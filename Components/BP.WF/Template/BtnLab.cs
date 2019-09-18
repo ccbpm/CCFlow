@@ -506,6 +506,22 @@ namespace BP.WF.Template
             }
         }
 
+        public int HelpRole
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.HelpRole);
+            }
+        }
+
+        public string HelpLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.HelpLab);
+            }
+        }
+
         /// <summary>
         /// 审核标签
         /// </summary>
@@ -770,6 +786,15 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.HuiQianLab);
             }
         }
+
+        public HuiQianLeaderRole HuiQianLeaderRole
+        {
+            get
+            {
+                return (HuiQianLeaderRole)this.GetValIntByKey(BtnAttr.HuiQianLeaderRole);
+            }
+        }
+
         /// <summary>
         ///是否启用文档,@0=不启用@1=按钮方式@2=公文在前@3=表单在前
         /// </summary>
@@ -1108,6 +1133,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "节点标签");
 
+
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 
                 map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
@@ -1197,6 +1223,9 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole,
                     "@0=不启用@1=协作模式@4=组长模式");
 
+                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "会签组长规则", true, true, BtnAttr.HuiQianLeaderRole,
+                     "0=只有一个组长@1=最后一个组长发送@2=任意组长发送",true);
+
                 //map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=组长模式@2=协作模式");
 
@@ -1218,7 +1247,7 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true, BtnAttr.CHRole, @"0=禁用@1=启用@2=只读");
+                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true, BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
@@ -1252,6 +1281,10 @@ namespace BP.WF.Template
                 //备注 流程不流转，设置备注信息提醒已处理人员当前流程运行情况
                 map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.NoteEnable, 0, "启用规则", true, true, BtnAttr.NoteEnable, @"0=禁用@1=启用@2=只读");
+
+                //for 周大福.
+                map.AddTBString(BtnAttr.HelpLab, "帮助", "帮助标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.HelpRole, 0, "帮助显示规则", true, true, BtnAttr.HelpRole, @"0=禁用@1=启用@2=强制提示@3=选择性提示");
 
 
                 #region 公文按钮

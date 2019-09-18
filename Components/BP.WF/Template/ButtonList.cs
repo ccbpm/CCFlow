@@ -178,6 +178,10 @@ namespace BP.WF.Template
         /// 会签规则
         /// </summary>
         public const string HuiQianRole = "HuiQianRole";
+        /// <summary>
+        /// 会签组长模式
+        /// </summary>
+        public const string HuiQianLeaderRole = "HuiQianLeaderRole";
 
         /// <summary>
         /// 流转自定义 TransferCustomLab
@@ -287,7 +291,15 @@ namespace BP.WF.Template
         //备注是否可用
         /// </summary>
         public const string NoteEnable = "NoteEnable";
-       
+
+        /// <summary>
+        /// 帮助按钮
+        /// </summary>
+        public const string HelpLab = "HelpLab";
+        /// <summary>
+        /// 提示方式.
+        /// </summary>
+        public const string HelpRole = "HelpRole";
 
 
         #region 公文2019

@@ -7,69 +7,9 @@ using BP.WF;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 模版类型
-    /// </summary>
-    public enum TemplateFileModel
-    {
-        /// <summary>
-        /// 旧版本的rtf模版格式
-        /// </summary>
-        RTF,
-        /// <summary>
-        /// Word模版格式
-        /// </summary>
-        VSTOForWord,
-        /// <summary>
-        /// Excel模版格式
-        /// </summary>
-        VSTOForExcel
-    }
-    /// <summary>
-    /// 二维码生成方式
-    /// </summary>
-    public enum QRModel
-    {
-        /// <summary>
-        /// 不生成
-        /// </summary>
-        None,
-        /// <summary>
-        /// 生成
-        /// </summary>
-        Gener
-    }
-    /// <summary>
-    /// 生成的类型
-    /// </summary>
-    public enum BillFileType
-    {
-        /// <summary>
-        /// Word
-        /// </summary>
-        Word=0,
-        PDF=1,
-        Excel=2,
-        Html=3,
-        RuiLang=5
-    }
-    /// <summary>
-    /// 生成的文件打开方式
-    /// </summary>
-    public enum BillOpenModel
-    {
-        /// <summary>
-        /// 下载保存
-        /// </summary>
-        DownLoad=0,
-        /// <summary>
-        /// 在线WebOffice打开
-        /// </summary>
-        WebOffice=1
-    }
-    /// <summary>
     /// 单据模板属性
     /// </summary>
-    public class BillTemplateAttr:BP.En.EntityNoNameAttr
+    public class BillTemplate2019Attr:BP.En.EntityNoNameAttr
     {
         /// <summary>
         /// 路径
@@ -102,12 +42,12 @@ namespace BP.WF.Template
         /// <summary>
         /// 表单的ID
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string MyFrmID = "MyFrmID";
     }
 	/// <summary>
 	/// 单据模板
 	/// </summary>
-	public class BillTemplate : EntityNoName
+	public class BillTemplate2019 : EntityNoName
     {
         #region  属性
         /// <summary>
@@ -137,7 +77,7 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey("No", value);
-                this.SetValByKey(BillTemplateAttr.TempFilePath, value);
+                this.SetValByKey(BillTemplate2019Attr.TempFilePath, value);
             }
         }
         /// <summary>
@@ -147,11 +87,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (BillFileType)this.GetValIntByKey(BillTemplateAttr.BillFileType);
+                return (BillFileType)this.GetValIntByKey(BillTemplate2019Attr.BillFileType);
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.BillFileType, (int)value);
+                this.SetValByKey(BillTemplate2019Attr.BillFileType, (int)value);
             }
         }
         /// <summary>
@@ -161,22 +101,22 @@ namespace BP.WF.Template
         {
             get
             {
-                return (QRModel)this.GetValIntByKey(BillTemplateAttr.QRModel);
+                return (QRModel)this.GetValIntByKey(BillTemplate2019Attr.QRModel);
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.QRModel, (int)value);
+                this.SetValByKey(BillTemplate2019Attr.QRModel, (int)value);
             }
         }
         public TemplateFileModel TemplateFileModel
         {
             get
             {
-                return (TemplateFileModel)this.GetValIntByKey(BillTemplateAttr.TemplateFileModel);
+                return (TemplateFileModel)this.GetValIntByKey(BillTemplate2019Attr.TemplateFileModel);
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.TemplateFileModel, (int)value);
+                this.SetValByKey(BillTemplate2019Attr.TemplateFileModel, (int)value);
             }
         }
         
@@ -187,11 +127,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (BillOpenModel)this.GetValIntByKey(BillTemplateAttr.BillOpenModel);
+                return (BillOpenModel)this.GetValIntByKey(BillTemplate2019Attr.BillOpenModel);
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.BillOpenModel, (int)value);
+                this.SetValByKey(BillTemplate2019Attr.BillOpenModel, (int)value);
             }
         }
         /// <summary>
@@ -201,14 +141,14 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetValStrByKey(BillTemplateAttr.TempFilePath);
+                string s= this.GetValStrByKey(BillTemplate2019Attr.TempFilePath);
                 if (s == "" || s == null)
                     return this.No;
                 return s;
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.TempFilePath, value);
+                this.SetValByKey(BillTemplate2019Attr.TempFilePath, value);
             }
         }
         /// <summary>
@@ -229,23 +169,23 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(BillTemplateAttr.NodeID);
+                return this.GetValIntByKey(BillTemplate2019Attr.NodeID);
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.NodeID, value);
+                this.SetValByKey(BillTemplate2019Attr.NodeID, value);
             }
         }
 
-        public string FK_MapData
+        public string MyFrmID
         {
             get
             {
-                return this.GetValStringByKey(BillTemplateAttr.FK_MapData);
+                return this.GetValStringByKey(BillTemplate2019Attr.MyFrmID);
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.FK_MapData, value);
+                this.SetValByKey(BillTemplate2019Attr.MyFrmID, value);
             }
         }
 
@@ -255,8 +195,8 @@ namespace BP.WF.Template
         /// <summary>
         /// 单据模板
 		/// </summary>
-		public BillTemplate(){}
-        public BillTemplate(string no):base(no.Replace( "\n","" ).Trim() ) 
+		public BillTemplate2019(){}
+        public BillTemplate2019(string no):base(no.Replace( "\n","" ).Trim() ) 
         {
         }
         /// <summary>
@@ -291,31 +231,28 @@ namespace BP.WF.Template
                 
                 map.Java_SetCodeStruct("6");
 
-                map.IndexField = BillTemplateAttr.FK_MapData;
+                map.IndexField = BillTemplate2019Attr.MyFrmID;
 
-                map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, true, 6, 6, 20);
-                map.AddTBString(BillTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
-                map.AddTBString(BillTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
-                map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);
-                map.AddTBString(BillTemplateAttr.FK_MapData, null, "表单编号", false, false,0,300,300);
+                map.AddTBStringPK(BillTemplate2019Attr.No, null, "No", true, true, 6, 6, 20);
+                map.AddTBString(BillTemplate2019Attr.Name, null, "名称", true, false, 0, 200, 20);
+                map.AddTBString(BillTemplate2019Attr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
+                map.AddTBInt(BillTemplate2019Attr.NodeID, 0, "NodeID", true, false);
+                map.AddTBString(BillTemplate2019Attr.MyFrmID, null, "表单编号", true, true, 0,300,300);
 
-                map.AddDDLSysEnum(BillTemplateAttr.BillFileType, 0, "生成的文件类型", true, false,
+                map.AddDDLSysEnum(BillTemplate2019Attr.BillFileType, 0, "生成的文件类型", true, false,
                     "BillFileType","@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)");
 
-                map.AddDDLSysEnum(BillTemplateAttr.BillOpenModel, 0, "生成的文件打开方式", true, false,
+                map.AddDDLSysEnum(BillTemplate2019Attr.BillOpenModel, 0, "生成的文件打开方式", true, true,
                     "BillOpenModel", "@0=下载本地@1=在线WebOffice打开");
 
-                map.AddDDLSysEnum(BillTemplateAttr.QRModel, 0, "二维码生成方式", true, false,
-                   BillTemplateAttr.QRModel, "@0=不生成@1=生成二维码");
+                map.AddDDLSysEnum(BillTemplate2019Attr.QRModel, 0, "二维码生成方式", true, true,
+                   BillTemplate2019Attr.QRModel, "@0=不生成@1=生成二维码");
 
-
-                map.AddDDLSysEnum(BillTemplateAttr.TemplateFileModel, 0, "模版模式", true, false,
-                 BillTemplateAttr.TemplateFileModel, "@0=rtf模版@1=vsto模式的word模版@2=vsto模式的excel模版");
+                map.AddDDLSysEnum(BillTemplate2019Attr.TemplateFileModel, 1, "模版模式", true, false,
+                 BillTemplate2019Attr.TemplateFileModel, "@0=rtf模版@1=vsto模式的word模版@2=vsto模式的excel模版");
 
                 map.AddTBString("Idx", null, "Idx", false, false, 0, 200, 20);
 
-               // map.AddTBString(BillTemplateAttr.ExpField, null, "要排除的字段", false, false, 0, 800, 20);
-               // map.AddTBString(BillTemplateAttr.ReplaceVal, null, "要替换的值", false, false, 0, 3000, 20);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -325,7 +262,7 @@ namespace BP.WF.Template
 	/// <summary>
     /// 单据模板s
 	/// </summary>
-	public class BillTemplates: EntitiesNoName
+	public class BillTemplate2019s: EntitiesNoName
 	{
 		#region 构造
 		/// <summary>
@@ -335,13 +272,13 @@ namespace BP.WF.Template
 		{
 			get
 			{
-				return new BillTemplate();
+				return new BillTemplate2019();
 			}
 		}
 		/// <summary>
 		/// 单据模板
 		/// </summary>
-        public BillTemplates()
+        public BillTemplate2019s()
         {
         }
 		#endregion
@@ -351,10 +288,10 @@ namespace BP.WF.Template
         /// 按节点查询
         /// </summary>
         /// <param name="nd"></param>
-        public BillTemplates(Node nd)
+        public BillTemplate2019s(Node nd)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(BillTemplateAttr.NodeID, nd.NodeID);
+            qo.AddWhere(BillTemplate2019Attr.NodeID, nd.NodeID);
             if (nd.IsStartNode)
             {
                 qo.addOr();
@@ -366,20 +303,20 @@ namespace BP.WF.Template
         /// 按流程查询
         /// </summary>
         /// <param name="fk_flow">流程编号</param>
-        public BillTemplates(string fk_flow)
+        public BillTemplate2019s(string fk_flow)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhereInSQL(BillTemplateAttr.NodeID, "SELECT NodeID FROM WF_Node WHERE fk_flow='" + fk_flow + "'");
+            qo.AddWhereInSQL(BillTemplate2019Attr.NodeID, "SELECT NodeID FROM WF_Node WHERE fk_flow='" + fk_flow + "'");
             qo.DoQuery();
         }
         /// <summary>
         /// 按节点查询
         /// </summary>
         /// <param name="fk_node">节点ID</param>
-        public BillTemplates(int fk_node)
+        public BillTemplate2019s(int fk_node)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(BillTemplateAttr.NodeID, fk_node);
+            qo.AddWhere(BillTemplate2019Attr.NodeID, fk_node);
             qo.DoQuery();
         }
         #endregion 查询与构造
@@ -389,20 +326,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<BillTemplate> ToJavaList()
+        public System.Collections.Generic.IList<BillTemplate2019> ToJavaList()
         {
-            return (System.Collections.Generic.IList<BillTemplate>)this;
+            return (System.Collections.Generic.IList<BillTemplate2019>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<BillTemplate> Tolist()
+        public System.Collections.Generic.List<BillTemplate2019> Tolist()
         {
-            System.Collections.Generic.List<BillTemplate> list = new System.Collections.Generic.List<BillTemplate>();
+            System.Collections.Generic.List<BillTemplate2019> list = new System.Collections.Generic.List<BillTemplate2019>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((BillTemplate)this[i]);
+                list.Add((BillTemplate2019)this[i]);
             }
             return list;
         }

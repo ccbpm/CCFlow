@@ -17,14 +17,6 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_AttrNode : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_AttrNode(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_AttrNode()
@@ -85,17 +77,20 @@ namespace BP.WF.HttpHandler
         public string Bill_Save()
         {
             BillTemplate bt = new BillTemplate();
-            if (HttpContext.Current.Request.Files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请上传模版.";
 
             //上传附件
             string filepath = "";
-            HttpPostedFile file = HttpContext.Current.Request.Files[0];
+            //HttpPostedFile file = HttpContext.Current.Request.Files[0];
+            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            var file = HttpContextHelper.RequestFiles(0);
             string fileName = file.FileName;
             fileName = fileName.ToLower();
 
             filepath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + fileName;
-            file.SaveAs(filepath);
+            //file.SaveAs(filepath);
+            HttpContextHelper.UploadFile(file, filepath);
 
             bt.NodeID = this.FK_Node;
             bt.FK_MapData = this.FK_MapData;
@@ -139,15 +134,20 @@ namespace BP.WF.HttpHandler
         {
             BillTemplate en = new BillTemplate(this.No);
             string MyFilePath = en.TempFilePath;
-            HttpResponse response = context.Response;
+            //HttpResponse response = context.Response;
 
-            response.Clear();
-            response.Buffer = true;
-            response.Charset = "utf-8";
-            response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
-            response.ContentEncoding = System.Text.Encoding.UTF8;
-            response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
-            response.End();
+            //response.Clear();
+            //response.Buffer = true;
+            //response.Charset = "utf-8";
+            //response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            //response.ContentEncoding = System.Text.Encoding.UTF8;
+            //response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
+            //response.End();
+
+            HttpContextHelper.ResponseWrite("Charset");
+            HttpContextHelper.ResponseWriteHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            HttpContextHelper.Response.ContentType = "application/octet-stream;charset=utf-8";
+            HttpContextHelper.ResponseWriteFile(MyFilePath);
         }
         #endregion
 
@@ -172,55 +172,60 @@ namespace BP.WF.HttpHandler
             BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
             msg.FK_Flow = nd.FK_Flow;
 
-            #region 求出来选择的节点.
-            string nodesOfSMS = "";
-            string nodesOfEmail = "";
+            //推送方式。
+            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
 
+            //表单字段作为接收人.
+            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");
+
+            #region 其他节点的处理人方式（求选择的节点）
+            string nodesOfSMS = "";
             foreach (BP.WF.Node mynd in nds)
             {
-                foreach (string key in HttpContext.Current.Request.Params.AllKeys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (key.Contains("CB_SMS_" + mynd.NodeID)
                         && nodesOfSMS.Contains(mynd.NodeID + "") == false)
                         nodesOfSMS += mynd.NodeID + ",";
 
-                    if (key.Contains("CB_Email_" + mynd.NodeID)
-                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
-                        nodesOfEmail += mynd.NodeID + ",";
+
                 }
             }
-
-            //节点.
-            msg.MailNodes = nodesOfEmail;
             msg.SMSNodes = nodesOfSMS;
-            #endregion 求出来选择的节点.
+            #endregion 其他节点的处理人方式（求选择的节点）
 
-            #region 短信保存.
-            //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(this.GetRequestVal("RB_SMS").Replace("RB_SMS_", ""));
+            //按照SQL
+            msg.BySQL = HttpContextHelper.RequestParams("TB_SQL");
+
+            //发给指定的人员
+            msg.ByEmps = HttpContextHelper.RequestParams("TB_Emps");
 
             //短消息发送设备
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
-            //短信手机字段.
-            msg.SMSField = this.GetRequestVal("DDL_SMS_Fields");
+            //邮件标题
+            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_title");
+
             //短信内容模版.
-            msg.SMSDoc_Real = this.GetRequestVal("TB_SMS");
- 
-            #endregion 短信保存.
+            msg.SMSDoc_Real = HttpContextHelper.RequestParams("TB_SMS");
 
-            #region 邮件保存.
-            //邮件.
-            msg.MailPushWay = Convert.ToInt32(this.GetRequestVal("RB_Email").Replace("RB_Email_", "")); 
+            //节点预警
+            if(this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
+            {
+                int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
+                msg.SetPara("NoticeType", noticeType);
+                int hour = Convert.ToInt32(HttpContextHelper.RequestParams("TB_NoticeHour"));
+                msg.SetPara("NoticeHour", hour);
+            }
 
-            //邮件标题与内容.
-            msg.MailTitle_Real = this.GetRequestVal("TB_Email_Title"); 
-            msg.MailDoc_Real = this.GetRequestVal("TB_Email_Doc");
-
-            //邮件地址.
-            msg.MailAddress = this.GetRequestVal("DDL_Email_Fields"); 
-
-            #endregion 邮件保存.
+            //节点逾期
+            if (this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+            {
+                int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
+                msg.SetPara("NoticeType", noticeType);
+                int day = Convert.ToInt32(HttpContextHelper.RequestParams("TB_NoticeDay"));
+                msg.SetPara("NoticeDay", day);
+            }
 
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)
@@ -1547,10 +1552,10 @@ namespace BP.WF.HttpHandler
                 nd.BlockModel = BP.WF.BlockModel.SpecSubFlowNode;
                 nd.BlockExp = this.GetRequestVal("TB_SpecSubFlowNode");
             }
-            if (nd.BlockModel == BP.WF.BlockModel.TB_SameLevelSubFlow)
+            if (nd.BlockModel == BP.WF.BlockModel.SameLevelSubFlow)
             {
-                nd.BlockModel = BP.WF.BlockModel.TB_SameLevelSubFlow;
-                nd.BlockExp = this.GetRequestVal("TB_TB_SameLevelSubFlow");
+                nd.BlockModel = BP.WF.BlockModel.SameLevelSubFlow;
+                nd.BlockExp = this.GetRequestVal("TB_SameLevelSubFlow");
             }
 
             nd.BlockAlert = this.GetRequestVal("TB_Alert");

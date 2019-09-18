@@ -269,6 +269,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsAutoSendSubFlowOver = "IsAutoSendSubFlowOver";
         /// <summary>
+        /// 当前节点为子流程时，所有子流程完成后启动他的同级子流程自动运行或者结束
+        /// </summary>
+        public const string IsAutoSendSLSubFlowOver = "IsAutoSendSLSubFlowOver";
+        /// <summary>
         /// 版本号
         /// </summary>
         public const string Ver = "Ver";

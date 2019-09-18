@@ -147,6 +147,14 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(SubFlowAutoAttr.StartOnceOnly);
             }
         }
+
+        public bool CompleteReStart
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowAutoAttr.CompleteReStart);
+            }
+        }
         /// <summary>
         /// 指定的流程启动后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
@@ -292,13 +300,20 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "结束规则", true, true,
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "父子流程结束规则", true, true,
                 FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+
+
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
+               FlowAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
 
                 map.AddDDLSysEnum(SubFlowAttr.InvokeTime, 0, "调用时间", true, true, SubFlowAttr.InvokeTime,
                     "@0=发送时@1=工作到达时");
 
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次.", true, true, true);
+
+                map.AddBoolean(SubFlowHandAttr.CompleteReStart, false, "该子流程运行结束后才可以重新发起.",
+                   true, true, true);
 
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).",

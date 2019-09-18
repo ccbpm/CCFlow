@@ -280,9 +280,17 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoBill";
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-               
                 map.AddRefMethod(rm);
-             
+
+
+                rm = new RefMethod();
+                rm.Title = "模板打印2019";
+                rm.ClassMethodName = this.ToString() + ".DoBill2019";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                 #endregion 方法 - 基本功能.
 
                 #region 高级功能.
@@ -395,7 +403,14 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/Bill.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
         }
-
+        /// <summary>
+        /// 单据打印
+        /// </summary>
+        /// <returns></returns>
+        public string DoBill2019()
+        {
+            return "../../Admin/AttrNode/Bill2019.htm?FK_MapData=" + this.No + "&FrmID=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+        }
 
         /// <summary>
         /// 傻瓜表单设计器

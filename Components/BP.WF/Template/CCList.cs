@@ -441,6 +441,8 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("WF_CCList", "抄送列表");
 
+
+
                 map.AddMyPK();
 
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);

@@ -29,14 +29,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(this.WorkID);
             return BP.Tools.Json.ToJson(ds);
         }
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_WorkOpt_OneWork(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -145,7 +138,7 @@ namespace BP.WF.HttpHandler
 
         public string TimeBase_OpenFrm()
         {
-            WF en = new WF(this.context);
+            WF en = new WF();
             return en.Runing_OpenFrm();
         }
         /// <summary>
@@ -154,7 +147,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmGuide_Init()
         {
-            WF en = new WF(this.context);
+            WF en = new WF();
             return en.Runing_OpenFrm();
         }
 
@@ -296,6 +289,16 @@ namespace BP.WF.HttpHandler
 
             bool CanPackUp = true; //是否可以打包下载.
 
+            #region  PowerModel权限的解析
+            string psql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
+             + " UNION "
+             + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+            psql = "SELECT PowerFlag From(" + psql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
+
+           string powers = DBAccess.RunSQLReturnStringIsNull(psql,"");
+          
+            #endregion PowerModel权限的解析
+
             #region 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
             if (SystemConfig.CustomerNo == "TianYe" && WebUser.No != "admin")
                 CanPackUp = IsCanPrintSpecForTianYe(gwf);
@@ -304,6 +307,14 @@ namespace BP.WF.HttpHandler
                 ht.Add("CanPackUp", 1);
             else
                 ht.Add("CanPackUp", 0);
+
+            //获取打印的方式PDF/RDF,节点打印方式
+            Node nd = new Node(this.FK_Node);
+            if (nd.HisPrintDocEnable == true)
+                ht.Add("PrintType", 1);
+            else
+                ht.Add("PrintType", 0);
+
 
             //是否可以打印.
             switch (gwf.WFState)
@@ -314,6 +325,14 @@ namespace BP.WF.HttpHandler
                         ht.Add("IsCanDelete", 1);
                     else
                         ht.Add("IsCanDelete", 0);
+
+                    if (powers.Contains("FlowDataDelete") == true) { 
+                        //存在移除这个键值
+                        if (ht.ContainsKey("IsCanDelete") == true)
+                            ht.Remove("IsCanDelete");
+                        ht.Add("IsCanDelete", 1);
+                    }
+
 
                     /*取回审批*/
                     string para = "";
@@ -346,6 +365,26 @@ namespace BP.WF.HttpHandler
                     else
                         ht.Add("CanUnSend", 0);
 
+                    if (powers.Contains("FlowDataUnSend") == true)
+                    {
+                        //存在移除这个键值
+                        if (ht.ContainsKey("CanUnSend") == true)
+                            ht.Remove("CanUnSend");
+                        ht.Add("CanUnSend", 1);
+                    }
+
+                    //流程结束
+                    if (powers.Contains("FlowDataOver") == true)
+                    {
+                        ht.Add("CanFlowOver", 1);
+                    }
+
+                    //催办
+                    if (powers.Contains("FlowDataPress") == true)
+                    {
+                        ht.Add("CanFlowPress", 1);
+                    }
+
                     break;
                 case WFState.Complete: // 完成.
                 case WFState.Delete:   // 逻辑删除..
@@ -354,6 +393,15 @@ namespace BP.WF.HttpHandler
                         ht.Add("CanRollBack", 1);
                     else
                         ht.Add("CanRollBack", 0);
+
+                    if (powers.Contains("FlowDataRollback") == true)
+                    {
+                        //存在移除这个键值
+                        if (ht.ContainsKey("CanRollBack") == true)
+                            ht.Remove("CanRollBack");
+                        ht.Add("CanRollBack", 1);
+                    }
+
 
                     //判断是否可以打印.
                     break;
@@ -918,7 +966,7 @@ namespace BP.WF.HttpHandler
 
         public string Runing_OpenFrm()
         {
-            BP.WF.HttpHandler.WF wf = new WF(this.context);
+            BP.WF.HttpHandler.WF wf = new WF();
             return wf.Runing_OpenFrm();
         }
     }

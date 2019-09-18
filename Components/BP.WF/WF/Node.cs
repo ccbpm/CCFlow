@@ -310,8 +310,8 @@ namespace BP.WF
                      {
                          PushMsg pm = new PushMsg();
                          pm.FK_Event = EventListOfNode.SendSuccess;
-                         pm.MailPushWay = 1; /*默认: 让其使用mail提醒.*/
-                         pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
+                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
+                         pm.SMSPushModel = "Email";
                          obj.AddEntity(pm);
                      }
 
@@ -319,8 +319,8 @@ namespace BP.WF
                      {
                          PushMsg pm = new PushMsg();
                          pm.FK_Event = EventListOfNode.ReturnAfter;
-                         pm.MailPushWay = 1; /*默认: 让其使用mail提醒.*/
-                         pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
+                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
+                         pm.SMSPushModel = "Email";
                          obj.AddEntity(pm);
                      }
 
@@ -2160,6 +2160,17 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.TeamLeaderConfirmDoc, value);
             }
         }
+        public HuiQianLeaderRole HuiQianLeaderRole
+        {
+            get
+            {
+                return (HuiQianLeaderRole)this.GetValIntByKey(BtnAttr.HuiQianLeaderRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.HuiQianLeaderRole, (int)value);
+            }
+        }
         /// <summary>
         /// 阻塞模式
         /// </summary>
@@ -2724,6 +2735,7 @@ namespace BP.WF
                 //add.
                 map.AddTBInt(NodeAttr.TeamLeaderConfirmRole, 0, "组长确认规则", true, true);
                 map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 100, 10);
+                map.AddTBInt(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true);
 
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 1, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
@@ -2803,6 +2815,12 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数(如果太小可以手动扩大)", true, false, 0, 1000, 10);
 
                 #region 与参数有关系的属性。
+
+                #region 子流程相关的参数
+                map.AddTBFloat(FrmSubFlowAttr.SF_H, 300, "高度", true, false);
+                map.AddTBFloat(FrmSubFlowAttr.SF_W, 400, "宽度", true, false);
+                #endregion 子流程相关的参数
+
                 //map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,
                 //  "@0=不发送@1=按设置的发送范围自动发送@2=由本节点表单系统字段(IsSendEmail,IsSendSMS)来决定@3=由SDK开发者参数(IsSendEmail,IsSendSMS)来决定", true);
 

@@ -128,6 +128,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_LabNote", "标签");
+                map.IndexField = NodeAttr.FK_Flow;
 
                 map.AddMyPK();
 

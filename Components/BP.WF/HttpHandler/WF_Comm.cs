@@ -2796,7 +2796,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type, this.context)
+                BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type)
                     as BP.WF.HttpHandler.DirectoryPageBase;
                 en.context = this.context;
                 return en.DoMethod(en, methodName);

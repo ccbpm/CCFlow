@@ -5871,7 +5871,7 @@ namespace BP.WF
             }
 
             //为平级流程时，指定的子流程未运行到指定节点，则阻塞
-            if (this.HisNode.BlockModel == BlockModel.TB_SameLevelSubFlow)
+            if (this.HisNode.BlockModel == BlockModel.SameLevelSubFlow)
             {
                 /*如果按照特定的格式判断阻塞*/
                 string exp = this.HisNode.BlockExp;

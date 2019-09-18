@@ -79,6 +79,7 @@
     <ErrorReport>prompt</ErrorReport>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -188,6 +189,7 @@
     </Compile>
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
+    <Compile Include="HttpContextHelper.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>

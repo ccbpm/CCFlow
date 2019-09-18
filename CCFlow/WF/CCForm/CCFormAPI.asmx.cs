@@ -343,11 +343,15 @@ namespace CCFlow.WF.CCForm
             if (dsDtlsChange != null)
             {
                 //截去『BP.XXX.』以便下方的“new MapDtls(frmID)”能正常取值
+                string tempFrmID = frmID;
                 if (frmID.Contains("BP."))
                     frmID = frmID.Substring(frmID.LastIndexOf(".") + 1);
 
                 //明细集合.
                 MapDtls dtls = new MapDtls(frmID);
+
+                if (dtls.Count == 0)
+                    dtls = new MapDtls(tempFrmID);
 
                 //保存从表
                 foreach (System.Data.DataTable dt in dsDtlsChange.Tables)

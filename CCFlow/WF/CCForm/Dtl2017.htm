@@ -1992,7 +1992,7 @@
                         //string val = ddlPerant.SelectedItemStringVal;
                         //var valClient = ConvertDefVal(workNode, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
 
-                        DDLAnsc(ddlParent.val(), ddlChild.attr('id'), mapExt.MyPK, mapExt);
+                         DDLAnsc(ddlParent.val(), ddlChild.attr('id'), mapExt.MyPK, $(ddlParent.parent().parent()).data().data);
 
                         break;
                     case "AutoFullDLL": // 自动填充下拉框.

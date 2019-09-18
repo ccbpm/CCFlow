@@ -308,7 +308,26 @@
                     var o = $(threadThObj);
                     var tmplate = figure_MapAttr_Template(o.data());
                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
-                    tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
+                    if (tmplate.length >= 2) {
+                       
+                        if (tmplate[1].nodeName == "SPAN") {
+                            $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn });
+
+                            //ID 设置为  id+'_1'
+                            //先写出 NAME   单选扭会出问题
+                            $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + newRowIndex);
+                        }
+                        if (tmplate[1].nodeName == "INPUT") {
+                            $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn + "T" });
+                            $(tmplate[1]).data({ KeyOfEn: o.data().KeyOfEn }); 
+                        }
+                        $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + newRowIndex);
+                        $(tmplate[1]).attr('id', $(tmplate[1]).attr('name') + '_' + newRowIndex);
+                    } else {
+                        tmplate.data({ KeyOfEn: o.data().KeyOfEn });
+                        //先写出 NAME   单选扭会出问题
+                        tmplate.attr('id', tmplate.attr('name') + '_' + newRowIndex);
+                    }
                     if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {
                         $(tmplate).bind('blur', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =

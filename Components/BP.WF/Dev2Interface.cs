@@ -10009,7 +10009,7 @@ namespace BP.WF
 
                 string sealimg = BP.WF.Glo.CCFlowAppPath + "DataUser/Seal/" + deptno + "_" + stationno + ".jpg";
 
-                if (File.Exists(HttpContextHelper.PhysicalApplicationPath + sealimg) == false)
+                if (File.Exists(SystemConfig.PathOfWebApp + sealimg) == false)
                 {
                     return @"签章文件：" + sealimg + "不存在，请联系管理员！";
                 }
@@ -10146,7 +10146,7 @@ namespace BP.WF
 
                 try
                 {
-                    savePath = HttpContextHelper.PhysicalApplicationPath + savePath;
+                    savePath = SystemConfig.PathOfWebApp + savePath;
                 }
                 catch (Exception ex)
                 {

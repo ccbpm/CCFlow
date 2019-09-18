@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
 
             StringBuilder append = new StringBuilder();
             append.Append("{");
-            string userPath = HttpContextHelper.PhysicalApplicationPath + "/DataUser/UserIcon/";
+            string userPath = SystemConfig.PathOfWebApp + "/DataUser/UserIcon/";
             string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
             if (System.IO.File.Exists(userIcon))
             {

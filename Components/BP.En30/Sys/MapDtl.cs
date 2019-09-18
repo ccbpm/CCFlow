@@ -1767,7 +1767,8 @@ namespace BP.Sys
         public MapDtls(string fk_mapdata)
         {
             if (fk_mapdata == null)
-                return;
+                throw new Exception("fk_mapdata 传的值为空,不能查询.");
+
             //zhoupeng 注销掉，为了这样多的过滤条件？
            // this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata, MapDtlAttr.FK_Node, 0, MapDtlAttr.No);
             this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);

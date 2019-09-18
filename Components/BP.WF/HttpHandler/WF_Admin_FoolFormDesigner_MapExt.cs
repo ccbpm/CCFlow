@@ -1220,7 +1220,7 @@ namespace BP.WF.HttpHandler
             try {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = HttpContextHelper.PhysicalApplicationPath.Replace("\\", "/");
+                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
                 if (!File.Exists(filePath)) {
@@ -1243,7 +1243,7 @@ namespace BP.WF.HttpHandler
             {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = HttpContextHelper.PhysicalApplicationPath.Replace("\\", "/");
+                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = HttpContextHelper.RequestParams("JSDoc"); // this.context.Request.Params["JSDoc"];
 
@@ -1264,7 +1264,7 @@ namespace BP.WF.HttpHandler
             try {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = HttpContextHelper.PhysicalApplicationPath.Replace("\\", "/");
+                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
 
                 if (File.Exists(filePath))

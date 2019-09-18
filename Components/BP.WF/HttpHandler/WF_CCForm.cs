@@ -791,8 +791,8 @@ namespace BP.WF.HttpHandler
                 //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + myName + ".png";
                 //string saveToPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
-                string saveToPath = HttpContextHelper.PhysicalApplicationPath + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
-                string fileUPloadPath = HttpContextHelper.PhysicalApplicationPath + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
+                string saveToPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
+                string fileUPloadPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
                 //创建路径
                 if (!Directory.Exists(saveToPath))
                     Directory.CreateDirectory(saveToPath);
@@ -871,7 +871,7 @@ namespace BP.WF.HttpHandler
             string savePath = SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             //获取上传的大图片
             //string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png");
-            string strImgPath = HttpContextHelper.PhysicalApplicationPath + SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png";
+            string strImgPath = SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png";
             if (File.Exists(strImgPath) == true)
             {
                 //剪切图
@@ -3128,7 +3128,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                saveTo = HttpContextHelper.PhysicalApplicationPath + saveTo; //context.Server.MapPath("~/" + saveTo);
+                saveTo = SystemConfig.PathOfWebApp + saveTo; //context.Server.MapPath("~/" + saveTo);
             }
             catch
             {
@@ -3292,8 +3292,8 @@ namespace BP.WF.HttpHandler
                     savePath = savePath.Replace("\\\\", "\\");
                     try
                     {
-                        if(savePath.Contains(HttpContextHelper.PhysicalApplicationPath) == false)
-                        savePath = HttpContextHelper.PhysicalApplicationPath + savePath;
+                        if(savePath.Contains(SystemConfig.PathOfWebApp) == false)
+                        savePath = SystemConfig.PathOfWebApp + savePath;
                     }
                     catch (Exception ex)
                     {

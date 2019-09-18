@@ -297,10 +297,10 @@ namespace BP.WF.HttpHandler
             string path = "/DataUser/Siganture/" + no + ".jpg";
             //如果文件存在
 
-            if (File.Exists(HttpContextHelper.PhysicalApplicationPath + (path)) == false)
+            if (File.Exists(SystemConfig.PathOfWebApp + (path)) == false)
             {
                 path = "/DataUser/Siganture/" + no + ".JPG";
-                if (File.Exists(HttpContextHelper.PhysicalApplicationPath + (path)) == true)
+                if (File.Exists(SystemConfig.PathOfWebApp + (path)) == true)
                 {
                     return "";
                 }

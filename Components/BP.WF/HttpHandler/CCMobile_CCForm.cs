@@ -212,7 +212,7 @@ namespace BP.WF.HttpHandler
                     savePath = savePath.Replace("\\\\", "\\");
                     try
                     {
-                        savePath = HttpContextHelper.PhysicalApplicationPath + savePath;
+                        savePath = SystemConfig.PathOfWebApp + savePath;
                     }
                     catch (Exception)
                     {
@@ -225,7 +225,7 @@ namespace BP.WF.HttpHandler
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + HttpContextHelper.PhysicalApplicationPath + savePath + "===" + savePath + "@技术问题:" + ex.Message);
+                        throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + SystemConfig.PathOfWebApp + savePath + "===" + savePath + "@技术问题:" + ex.Message);
                     }
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");

@@ -4634,7 +4634,7 @@ namespace BP.WF
                 if (_IntallPath == null)
                 {
                     if (SystemConfig.IsBSsystem == true)
-                        _IntallPath = HttpContextHelper.PhysicalApplicationPath;
+                        _IntallPath = SystemConfig.PathOfWebApp;
                 }
 
                 if (_IntallPath == null)

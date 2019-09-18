@@ -282,7 +282,6 @@ namespace BP.WF
                 Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
                 Entity myen = ens.GetNewEntity;
                 myen.DTSMapToSys_MapData();
-
                 return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
 
                 //上面这行代码的解释（2017-04-25）：

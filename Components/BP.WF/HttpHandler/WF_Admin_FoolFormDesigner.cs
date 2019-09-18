@@ -1737,7 +1737,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public void DownTempFrm()
         {
-            string fileFullName = HttpContextHelper.PhysicalApplicationPath + "\\Temp\\" + this.FK_MapData + ".xml";
+            string fileFullName = SystemConfig.PathOfWebApp + "\\Temp\\" + this.FK_MapData + ".xml";
 
             HttpContextHelper.ResponseWriteFile(fileFullName, this.FK_MapData + ".xml");
         }

@@ -1554,9 +1554,8 @@ function Ele_Attachment(workNode, gf) {
         athUrl = '../CCForm/' + athUrl;
     }
 
-
     //这里的连接要取 FK_MapData的值.
-    src = athUrl + "?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + GetQueryString("FK_MapData") + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+    src = athUrl + "?PKVal=" + pageData.OID + "&Ath=" + noOfObj + "&FK_MapData=" + ath.FK_MapData + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
 
     //自定义表单模式.
     if (ath.AthRunModel == 2) {

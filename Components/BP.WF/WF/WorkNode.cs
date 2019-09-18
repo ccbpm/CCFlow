@@ -5330,17 +5330,32 @@ namespace BP.WF
             {
                 if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == true)
                 {
-                    /*当前人是组长，检查是否可以可以发送,检查自己是否是最后一个人 ？*/
+
+                    /*当前人是组长，检查是否可以可以发送,检查自己是否是加签后的最后一个人 ？*/
                     string todoEmps = ""; //记录没有处理的人.
                     int num = 0;
                     foreach (GenerWorkerList item in gwls)
                     {
-                        if (item.IsPassInt == 0 || item.IsPassInt == 90)
-                        {
-                            if (item.FK_Emp != WebUser.No)
-                                todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
-                            num++;
-                        }
+                            if (item.IsPassInt == 0 || item.IsPassInt == 90)
+                            {
+                                if (item.FK_Emp != WebUser.No)                              
+                                   todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                                                              
+                                //仅只有一个组长
+                                if (this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
+                                    num++;
+
+                                string huiQianZhuChiRen = item.GetParaString("HuiQianZhuChiRen");
+                                //任意组长
+                                if(this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.EveryOneMain &&(huiQianZhuChiRen.Equals(WebUser.No) || item.FK_Emp == WebUser.No))
+                                    num++;
+
+                                //最后一个组长
+                                if (this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.LastOneMain && (huiQianZhuChiRen.Equals(WebUser.No) || DataType.IsNullOrEmpty(huiQianZhuChiRen) == true))
+                                    num++;
+                            }
+                       
+                       
                     }
 
                     /*只有一个待办,说明自己就是最后的一个人.*/
@@ -5348,7 +5363,43 @@ namespace BP.WF
                     {
                         this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                         this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
+
+                        //如果是任意组长可以发送,则需要设置所有的GenerWorkerList待办结束
+                       
+                        if (this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.EveryOneMain)
+                        {
+                            string sql = "Delete FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.HisNode.NodeID + " AND IsPass=0";
+                            DBAccess.RunSQL(sql);
+
+                        }
                         return false;
+                    }
+
+                    //把当前的待办设置已办，并且提示未处理的人当前节点是主持人。
+                    foreach (GenerWorkerList gwl in gwls)
+                    {
+                        if (gwl.FK_Emp != WebUser.No)
+                            continue;
+
+                        //设置当前已经完成.
+                        gwl.IsPassInt = 1;
+                        gwl.Update();
+
+                        // 检查完成条件。
+                        if (this.HisNode.IsEndNode == false)
+                            this.CheckCompleteCondition();
+                        //调用发送成功事件.
+                        string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                            this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                        this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+                        //执行时效考核.
+                        if (this.rptGe == null)
+                            Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
+                        else
+                            Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
+
+                        this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
                     }
 
                     if (SystemConfig.CustomerNo == "LIMS")

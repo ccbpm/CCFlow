@@ -786,6 +786,15 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.HuiQianLab);
             }
         }
+
+        public HuiQianLeaderRole HuiQianLeaderRole
+        {
+            get
+            {
+                return (HuiQianLeaderRole)this.GetValIntByKey(BtnAttr.HuiQianLeaderRole);
+            }
+        }
+
         /// <summary>
         ///是否启用文档,@0=不启用@1=按钮方式@2=公文在前@3=表单在前
         /// </summary>
@@ -1215,7 +1224,7 @@ namespace BP.WF.Template
                     "@0=不启用@1=协作模式@4=组长模式");
 
                 map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "会签组长规则", true, true, BtnAttr.HuiQianLeaderRole,
-                     "0=只有一个组长@1=最后一个组长为主@2=任意组长为主");
+                     "0=只有一个组长@1=最后一个组长发送@2=任意组长发送",true);
 
                 //map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=组长模式@2=协作模式");

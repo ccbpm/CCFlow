@@ -809,23 +809,36 @@ namespace BP.WF.HttpHandler
         {
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
+            BtnLab btnLab = new BtnLab(this.FK_Node);
             if (this.FK_Node.ToString().EndsWith("01") == false)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 if (gwf.WFState == WFState.Askfor)
                     isAskForOrHuiQian = true;
 
-                /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
+                /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮.*/
+                /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-                    if (gwf.HuiQianZhuChiRen != WebUser.No)
-                        isAskForOrHuiQian = true;
+                    if(btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                    {
+                        if (btnLab.HuiQianLeaderRole == 0)
+                        {
+                            if (gwf.HuiQianZhuChiRen != WebUser.No)
+                                isAskForOrHuiQian = true;
+                        }
+                        else
+                        {
+                            //不是主持人
+                            if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false)
+                                isAskForOrHuiQian = true;
+                        }
+                    }
                 }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
 
             string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
-            BtnLab btnLab = new BtnLab(this.FK_Node);
             string toolbar = "";
             try
             {

@@ -594,7 +594,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
-                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长为主@2=任意组长为主");
+                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送",true);
 
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);

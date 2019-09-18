@@ -966,10 +966,11 @@ namespace BP.WF.HttpHandler
             //查询出来集合.
             GenerWorkerLists ens = new GenerWorkerLists(this.WorkID, this.FK_Node);
             BtnLab btnLab = new BtnLab(this.FK_Node);
-            if (btnLab.HuiQianRole != HuiQianRole.TeamupGroupLeader) { 
+            if (btnLab.HuiQianRole != HuiQianRole.TeamupGroupLeader || (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole!= HuiQianLeaderRole.OnlyOne)) { 
                 foreach (GenerWorkerList item in ens)
                 {
-                    if (gwf.TodoEmps.Contains(item.FK_Emp + ",") == true && item.FK_Emp != BP.Web.WebUser.No)
+
+                    if ((gwf.TodoEmps.Contains(item.FK_Emp + ",") == true || gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true) && item.FK_Emp != BP.Web.WebUser.No)
                     {
                         item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
                         item.FK_EmpText = item.FK_EmpText;
@@ -1112,6 +1113,7 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.FK_Dept = emp.FK_Dept;
                 gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
                 gwlOfMe.IsRead = false;
+                gwlOfMe.SetPara("HuiQianZhuChiRen", WebUser.No);
 
                 #region 计算会签时间.
                 if (nd.HisCHWay == CHWay.None)
@@ -1200,8 +1202,18 @@ namespace BP.WF.HttpHandler
 
             //设置当前接单是会签的状态.
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
-            gwf.HuiQianZhuChiRen = WebUser.No;
-            gwf.HuiQianZhuChiRenName = WebUser.Name;
+            if(nd.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && nd.TodolistModel == TodolistModel.TeamupGroupLeader)
+            {
+                gwf.HuiQianZhuChiRen = WebUser.No;
+                gwf.HuiQianZhuChiRenName = WebUser.Name;
+            }
+            else
+            {
+                //多人的组长模式或者协作模式
+                if(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
+                    gwf.HuiQianZhuChiRen = gwf.TodoEmps;
+            }
+            
 
             //改变了节点就把会签状态去掉.
             gwf.HuiQianSendToNodeIDStr = "";

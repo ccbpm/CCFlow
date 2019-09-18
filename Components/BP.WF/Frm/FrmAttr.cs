@@ -61,6 +61,16 @@ namespace BP.Frm
         /// 按钮save启用规则
         /// </summary>
         public const string BtnSaveEnable = "BtnSaveEnable";
+
+        /// <summary>
+        /// 保存andclose
+        /// </summary>
+        public const string BtnSaveAndCloseLable = "BtnSaveAndCloseLable";
+        /// <summary>
+        /// 保存并关闭.
+        /// </summary>
+        public const string BtnSaveAndCloseEnable = "BtnSaveAndCloseEnable";
+
         /// <summary>
         /// 按钮del标签
         /// </summary>
@@ -146,7 +156,6 @@ namespace BP.Frm
         public const string BtnExpExcelEnable = "BtnExpExcelEnable";
         #endregion 集合的操作.
 
-        public const string BtnNewEnable = "BtnNewEnable";
         /// <summary>
         /// 行打开模式
         /// </summary>

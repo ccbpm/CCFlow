@@ -222,6 +222,9 @@ namespace BP.Frm
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
+                map.AddTBString(FrmDictAttr.BtnSaveAndCloseLable, "保存并关闭", "保存并关闭", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnSaveAndCloseEnable, true, "是否可用？", true, true);
+
                 map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 

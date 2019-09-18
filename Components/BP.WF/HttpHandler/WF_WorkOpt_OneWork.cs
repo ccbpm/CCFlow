@@ -291,11 +291,11 @@ namespace BP.WF.HttpHandler
 
             #region  PowerModel权限的解析
             string psql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
-             + "UNION"
+             + " UNION "
              + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
-            psql = "SELECT PowerFlag From(" + psql + ") WHERE EmpNo='" + WebUser.No + "'";
+            psql = "SELECT PowerFlag From(" + psql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
-           string powers = DBAccess.RunSQLReturnString(psql);
+           string powers = DBAccess.RunSQLReturnStringIsNull(psql,"");
           
             #endregion PowerModel权限的解析
 

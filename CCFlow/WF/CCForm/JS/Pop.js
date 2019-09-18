@@ -1,5 +1,7 @@
 ﻿//自定义url. ********************************************************************************************************
 function SelfUrl(mapExt,targetId,index,oid) {
+    if (targetId == null || targetId == undefined)
+        targetId = "TB_" + mapExt.AttrOfOper;
 
     var tb = $("#" + targetId);
     if (tb.length == 0) {

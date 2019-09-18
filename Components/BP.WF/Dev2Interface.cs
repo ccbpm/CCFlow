@@ -8729,12 +8729,12 @@ namespace BP.WF
                     }
                 }
                 //获取表单树的数据
-                BP.WF.WorkNode workNode = new WorkNode(workID, fk_node);
-                Work treeWork = workNode.CopySheetTree();
-                if (treeWork != null)
-                {
-                    wk.Copy(treeWork);
-                }
+               // BP.WF.WorkNode workNode = new WorkNode(workID, fk_node);
+                //Work treeWork = workNode.CopySheetTree();
+               // if (treeWork != null)
+               // {
+                //    wk.Copy(treeWork);
+               // }
 
                 //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
                 if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
@@ -8742,6 +8742,11 @@ namespace BP.WF
                     FrmNodes nds = new FrmNodes(fk_flow, fk_node);
                     foreach (FrmNode item in nds)
                     {
+                        if (item.FrmEnableRole == FrmEnableRole.Disable)
+                            continue;
+                        if (item.FK_Frm.Equals("ND" + fk_node) == true)
+                            continue;
+
                         GEEntity en = null;
                         try
                         {

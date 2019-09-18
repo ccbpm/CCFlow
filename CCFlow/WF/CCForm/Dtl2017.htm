@@ -716,7 +716,11 @@
                                             try {
                                                 var c = workNodeData.DBDtl[k];
                                                 if (c) {
-                                                    tmplate.append("<option value='" + textVal + "'>" + c[o.data().KeyOfEn + "Text"] + "</option>");
+                                                    var text = c[o.data().KeyOfEn + "Text"];
+                                                    if (text == "" || text == undefined)
+                                                        text = c[o.data().KeyOfEn + "T"];
+
+                                                    tmplate.append("<option value='" + textVal + "'>" +text + "</option>");
                                                 }
                                             } catch (e) {
                                             }

@@ -496,8 +496,7 @@ namespace BP.WF
 
             #region 输出明细.
             int dtlsCount = 0;
-            MapDtls dtls = new MapDtls();
-            dtls.Retrieve(MapDtlAttr.FK_MapData, frmID, MapDtlAttr.FK_Node, 0);
+            MapDtls dtls = new MapDtls(frmID);
             foreach (MapDtl dtl in dtls)
             {
                 if (dtl.IsView == false)
@@ -790,13 +789,59 @@ namespace BP.WF
             return sb;
         }
 
-        private static StringBuilder GenerHtmlOfFool(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null, string FK_Node = null, string basePath = null)
+        private static StringBuilder GenerHtmlOfFool(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null, string FK_Node = null, string basePath = null, NodeFormType formType = NodeFormType.FoolForm)
         {
             StringBuilder sb = new StringBuilder();
-
             //字段集合.
             MapAttrs mapAttrs = new MapAttrs(frmID);
-            Attrs attrs = en.EnMap.Attrs;
+            Attrs attrs = null;
+            GroupFields gfs = null;
+            if (formType == NodeFormType.FoolTruck && DataType.IsNullOrEmpty(FK_Node) == false)
+            {
+                Node nd = new Node(FK_Node);
+                Work wk = nd.HisWork;
+                wk.OID = workid;
+                wk.RetrieveFromDBSources();
+
+                /* 求出来走过的表单集合 */
+                string sql = "SELECT NDFrom FROM ND" + int.Parse(flowNo) + "Track A, WF_Node B ";
+                sql += " WHERE A.NDFrom=B.NodeID  ";
+                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
+                sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
+                sql += "  AND NDFrom!=" + Int32.Parse(FK_Node.Replace("ND", "")) + " "; //排除当前的表单.
+
+
+                sql += "  AND (A.WorkID=" + workid + ") ";
+                sql += " ORDER BY A.RDT ";
+
+                // 获得已经走过的节点IDs.
+                DataTable dtNodeIDs = DBAccess.RunSQLReturnTable(sql);
+                string frmIDs = "";
+                if (dtNodeIDs.Rows.Count > 0)
+                {
+                    //把所有的节点字段.
+                    foreach (DataRow dr in dtNodeIDs.Rows)
+                    {
+                        if (frmIDs.Contains("ND" + dr[0].ToString()) == true)
+                            continue;
+                        frmIDs += "'ND" + dr[0].ToString() + "',";
+                    }
+                }
+                frmIDs = frmIDs.Substring(0, frmIDs.Length - 1);
+                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                if (gwf.WFState == WFState.Complete)
+                    frmIDs = frmIDs + ",'" + FK_Node + "'";
+                gfs = new GroupFields();
+                gfs.RetrieveIn(GroupFieldAttr.FrmID, "(" + frmIDs + ")");
+
+                mapAttrs = new MapAttrs();
+                mapAttrs.RetrieveIn(MapAttrAttr.FK_MapData, "(" + frmIDs + ")");
+            }
+            else
+            {
+                gfs = new GroupFields(frmID);
+                attrs = en.EnMap.Attrs;
+            }
 
             //生成表头.
             String frmName = mapData.Name;
@@ -853,7 +898,7 @@ namespace BP.WF
             sb.Append("</td>");
             //#endregion 生成头部信息.
 
-            GroupFields gfs = new GroupFields(frmID);
+
             foreach (GroupField gf in gfs)
             {
                 //输出标题.
@@ -995,6 +1040,8 @@ namespace BP.WF
                 //#region 如果是从表.
                 if (gf.CtrlType == "Dtl")
                 {
+                    if (DataType.IsNullOrEmpty(gf.CtrlID) == true)
+                        continue;
                     /* 如果是从表 */
                     MapAttrs attrsOfDtls = null;
                     try
@@ -1062,6 +1109,8 @@ namespace BP.WF
                 //#region 如果是附件.
                 if (gf.CtrlType == "Ath")
                 {
+                    if (DataType.IsNullOrEmpty(gf.CtrlID) == true)
+                        continue;
                     FrmAttachment ath = new FrmAttachment(gf.CtrlID);
                     if (ath.IsVisable == false)
                         continue;
@@ -1161,6 +1210,8 @@ namespace BP.WF
                 //如果是IFrame页面
                 if (gf.CtrlType == "Frame" && flowNo != null)
                 {
+                    if (DataType.IsNullOrEmpty(gf.CtrlID) == true)
+                        continue;
                     sb.Append("<tr>");
                     sb.Append("  <td colspan='4' >");
 
@@ -1353,7 +1404,7 @@ namespace BP.WF
             Hashtable ht = new Hashtable();
 
             if ((int)node.HisFormType == (int)NodeFormType.FoolForm || (int)node.HisFormType == (int)NodeFormType.FreeForm
-                || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree)
+                || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree || (int)node.HisFormType == (int)NodeFormType.FoolTruck)
             {
                 resultMsg = setPDFPath("ND" + node.NodeID, workid, flowNo, gwf);
                 if (resultMsg.IndexOf("err@") != -1)
@@ -1735,7 +1786,6 @@ namespace BP.WF
             }
             document.Close();
         }
-
         /// <summary>
         /// 冒泡排序
         /// </summary>
@@ -1975,7 +2025,7 @@ namespace BP.WF
 
                         if (nd.HisFormType == NodeFormType.FreeForm)
                             mapData.HisFrmType = FrmType.FreeFrm;
-                        else if (nd.HisFormType == NodeFormType.FoolForm)
+                        else if (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FoolTruck)
                             mapData.HisFrmType = FrmType.FoolForm;
                         else if (nd.HisFormType == NodeFormType.SelfForm)
                             mapData.HisFrmType = FrmType.Url;
@@ -1984,7 +2034,7 @@ namespace BP.WF
                     if (mapData.HisFrmType == FrmType.FoolForm)
                     {
                         docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFool.htm");
-                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo, nodeID, basePath);
+                        sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo, nodeID, basePath, nd.HisFormType);
                         docs = docs.Replace("@Width", mapData.FrmW.ToString() + "px");
                     }
                     else if (mapData.HisFrmType == FrmType.FreeFrm)
@@ -1994,6 +2044,7 @@ namespace BP.WF
                         docs = docs.Replace("@Width", (mapData.FrmW * 1.5).ToString() + "px");
                     }
                 }
+
 
 
 

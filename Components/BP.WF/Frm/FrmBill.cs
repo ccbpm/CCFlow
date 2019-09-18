@@ -221,7 +221,7 @@ namespace BP.Frm
 
                 #region 按钮权限.
                 map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnNewEnable, true, "是否可用？", true, true);
+                map.AddBoolean(FrmBillAttr.BtnNewModel, true, "新建模式？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);

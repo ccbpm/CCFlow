@@ -535,7 +535,7 @@ namespace BP.En
         {
             if (this._orderBy.IndexOf("ORDER BY") != -1)
             {
-                this._orderBy = " , " + attr2Field(attr);
+                this._orderBy += " , " + attr2Field(attr);
             }
             else
             {
@@ -565,7 +565,15 @@ namespace BP.En
         /// <param name="desc"></param>
         public void addOrderByDesc(string attr)
         {
-            this._orderBy = " ORDER BY " + attr2Field(attr) + " DESC ";
+            if (this._orderBy.IndexOf("ORDER BY") != -1)
+            {
+                this._orderBy += " , " + attr2Field(attr) + " DESC ";
+            }
+            else
+            {
+                this._orderBy = " ORDER BY " + attr2Field(attr) + " DESC ";
+            }
+            
         }
         public void addOrderByDesc(string attr1, string attr2)
         {

@@ -656,7 +656,7 @@ namespace BP.WF
                     BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
                 }
                 //WebService
-                if (this.PushModel.Contains("WebService") == true)
+                if (this.PushModel.Contains("WS") == true)
                 {
                     soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }

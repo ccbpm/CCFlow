@@ -12,6 +12,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -116,15 +117,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 部门-人员关系
-
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Comm(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -183,7 +175,7 @@ namespace BP.WF.HttpHandler
             //查询结果
             QueryObject qo = new QueryObject(ens);
 
-            string[] strs = this.context.Request.Form.ToString().Split('&');
+            string[] strs = HttpContextHelper.Request.Form.ToString().Split('&');
             foreach (string str in strs)
             {
                 if (str.IndexOf("EnsName") != -1)
@@ -191,6 +183,7 @@ namespace BP.WF.HttpHandler
 
                 string[] mykey = str.Split('=');
                 string key = mykey[0];
+
 
                 if (key == "OID" || key == "MyPK")
                     continue;
@@ -201,12 +194,24 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
                 bool isExist = false;
+                bool IsInt = false;
+                bool IsDouble = false;
+                bool IsFloat = false;
+                bool IsMoney = false;
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
                     if (attr.Key.Equals(key))
                     {
                         isExist = true;
-                        break;
+                        if (attr.MyDataType == DataType.AppInt)
+                            IsInt = true;
+                        if (attr.MyDataType == DataType.AppDouble)
+                            IsDouble = true;
+                        if (attr.MyDataType == DataType.AppFloat)
+                            IsFloat = true;
+                        if (attr.MyDataType == DataType.AppMoney)
+                            IsMoney = true;
+                       break;
                     }
                 }
 
@@ -249,6 +254,15 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
+                    if(IsInt == true && DataType.IsNullOrEmpty(mykey[1])==false)
+                        qo.AddWhere(mykey[0], Int32.Parse(mykey[1]));
+                    else if (IsDouble == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], double.Parse(mykey[1]));
+                    else if (IsFloat == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], float.Parse(mykey[1]));
+                    else if (IsMoney == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], decimal.Parse(mykey[1]));
+                    else
                     qo.AddWhere(mykey[0], mykey[1]);
                 }
                 qo.addAnd();
@@ -298,7 +312,7 @@ namespace BP.WF.HttpHandler
 
             //查询结果
             QueryObject qo = new QueryObject(ens);
-            string[] strs = this.context.Request.Form.ToString().Split('&');
+            string[] strs = HttpContextHelper.Request.Form.ToString().Split('&');
             foreach (string str in strs)
             {
                 if (str.IndexOf("EnsName") != -1)
@@ -316,7 +330,29 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                if (en.EnMap.Attrs.Contains(key) == false)
+                bool isExist = false;
+                bool IsInt = false;
+                bool IsDouble = false;
+                bool IsFloat = false;
+                bool IsMoney = false;
+                foreach (Attr attr in en.EnMap.Attrs)
+                {
+                    if (attr.Key.Equals(key))
+                    {
+                        isExist = true;
+                        if (attr.MyDataType == DataType.AppInt)
+                            IsInt = true;
+                        if (attr.MyDataType == DataType.AppDouble)
+                            IsDouble = true;
+                        if (attr.MyDataType == DataType.AppFloat)
+                            IsFloat = true;
+                        if (attr.MyDataType == DataType.AppMoney)
+                            IsMoney = true;
+                        break;
+                    }
+                }
+
+                if (isExist == false)
                     continue;
 
                 if (mykey[1] == "mvals")
@@ -355,7 +391,16 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    qo.AddWhere(mykey[0], mykey[1]);
+                    if (IsInt == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], Int32.Parse(mykey[1]));
+                    else if (IsDouble == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], double.Parse(mykey[1]));
+                    else if (IsFloat == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], float.Parse(mykey[1]));
+                    else if (IsMoney == true && DataType.IsNullOrEmpty(mykey[1]) == false)
+                        qo.AddWhere(mykey[0], decimal.Parse(mykey[1]));
+                    else
+                        qo.AddWhere(mykey[0], mykey[1]);
                 }
                 qo.addAnd();
             }
@@ -453,8 +498,9 @@ namespace BP.WF.HttpHandler
 
                 #region 首先判断参数删除.
                 string key1 = this.GetRequestVal("Key1");
-                string key2 = this.GetRequestVal("Key2");
                 string val1 = this.GetRequestVal("Val1");
+
+                string key2 = this.GetRequestVal("Key2");
                 string val2 = this.GetRequestVal("Val2");
 
                 if (DataType.IsNullOrEmpty(key1) == false && key1.Equals("undefined") == false)
@@ -471,7 +517,6 @@ namespace BP.WF.HttpHandler
                     return num.ToString();
                 }
                 #endregion 首先判断参数删除.
-
 
                 if (en.PKCount != 1)
                 {
@@ -755,6 +800,8 @@ namespace BP.WF.HttpHandler
                 if (this.Paras == null)
                     return "0";
 
+                Entity en = ens.GetNewEntity;
+
                 QueryObject qo = new QueryObject(ens);
                 string[] myparas = this.Paras.Split('@');
 
@@ -769,20 +816,58 @@ namespace BP.WF.HttpHandler
                     string key = strs[0];
                     string val = strs[1];
 
+
                     if (key.ToLower().Equals("orderby") == true)
                     {
-                        qo.addOrderBy(val);
+                        //多重排序
+                        if (val.IndexOf(",") != -1)
+                        {
+                            string[] strs1 = val.Split(',');
+                            foreach(string str in strs1)
+                            {
+                                if (DataType.IsNullOrEmpty(str) == true)
+                                    continue;
+                                if (str.ToUpper().IndexOf("DESC") != -1)
+                                {
+                                    string str1 = str.Replace("DESC", "").Replace("desc", "");
+                                    qo.addOrderByDesc(str1.Trim());
+                                }
+                                else
+                                {
+                                    if (str.ToUpper().IndexOf("ASC") != -1)
+                                    {
+                                        string str1 = str.Replace("ASC", "").Replace("asc", "");
+                                        qo.addOrderBy(str1.Trim());
+                                    }
+                                    else
+                                    {
+                                        qo.addOrderBy(str.Trim());
+                                    }
+                                }
+                                
+                            }
+                        }
+                        else
+                        {
+                            qo.addOrderBy(val);
+                        }
+                        
                         continue;
                     }
 
+                    object valObj = val;
+
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        valObj = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs, key, val);
+
                     if (idx == 0)
                     {
-                        qo.AddWhere(key, val);
+                        qo.AddWhere(key, valObj);
                     }
                     else
                     {
                         qo.addAnd();
-                        qo.AddWhere(key, val);
+                        qo.AddWhere(key, valObj);
                     }
                     idx++;
                 }
@@ -811,6 +896,8 @@ namespace BP.WF.HttpHandler
                 QueryObject qo = new QueryObject(ens);
                 string[] myparas = this.Paras.Split('@');
 
+                Attrs attrs = ens.GetNewEntity.EnMap.Attrs;
+
                 int idx = 0;
                 for (int i = 0; i < myparas.Length; i++)
                 {
@@ -829,14 +916,19 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
+                    //获得真实的数据类型.
+                    object typeVal = val;
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
+
                     if (idx == 0)
                     {
-                        qo.AddWhere(key, oper, val);
+                        qo.AddWhere(key, oper, typeVal);
                     }
                     else
                     {
                         qo.addAnd();
-                        qo.AddWhere(key, oper, val);
+                        qo.AddWhere(key, oper, typeVal);
                     }
                     idx++;
                 }
@@ -871,7 +963,7 @@ namespace BP.WF.HttpHandler
             object[] myparas = new object[0];
 
             if (DataType.IsNullOrEmpty(paras) == false)
-                myparas = paras.Split(',');
+                myparas = paras.Split('~');
 
             string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
@@ -1108,7 +1200,7 @@ namespace BP.WF.HttpHandler
                 dr["Name"] = item.HisAttr.Desc;
                 dr["Width"] = item.Width; //下拉框显示的宽度.
                 dr["UIContralType"] = item.HisAttr.UIContralType;
-                
+
                 dt.Rows.Add(dr);
             }
             ds.Tables.Add(dt);
@@ -1139,7 +1231,7 @@ namespace BP.WF.HttpHandler
                 {
                     //获取SQl
                     string sql = item.HisAttr.UIBindKey;
-                    sql = BP.WF.Glo.DealExp(sql,null,null);
+                    sql = BP.WF.Glo.DealExp(sql, null, null);
                     DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataColumn col in dtSQl.Columns)
                     {
@@ -1365,8 +1457,19 @@ namespace BP.WF.HttpHandler
                 if (attr.IsHidden)
                 {
                     qo.addAnd();
-                    qo.addLeftBracket();                    
-                    qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+                    qo.addLeftBracket();
+
+                    //获得真实的数据类型.
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                            attr.RefAttrKey, attr.DefaultValRun);
+                        qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
+                    }
+                    else
+                    {
+                        qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+                    }
                     qo.addRightBracket();
                     continue;
                 }
@@ -1424,7 +1527,12 @@ namespace BP.WF.HttpHandler
                     continue;
                 qo.addAnd();
                 qo.addLeftBracket();
-                qo.AddWhere(str, ap.GetValStrByKey(str));
+
+                //获得真实的数据类型.
+                var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                    str, ap.GetValStrByKey(str));
+
+                qo.AddWhere(str, valType);
                 qo.addRightBracket();
             }
 
@@ -1831,11 +1939,11 @@ namespace BP.WF.HttpHandler
             #region 处理无参数的方法.
             if (rm.HisAttrs == null || rm.HisAttrs.Count == 0)
             {
-               
+
                 string infos = "";
                 foreach (string mypk in pks)
                 {
-                    if(DataType.IsNullOrEmpty(mypk) == true)
+                    if (DataType.IsNullOrEmpty(mypk) == true)
                         continue;
 
                     en.PKVal = mypk;
@@ -1879,7 +1987,7 @@ namespace BP.WF.HttpHandler
                 return infos;
             }
             #endregion 处理无参数的方法.
-             DataSet ds = new DataSet();
+            DataSet ds = new DataSet();
 
             //转化为json 返回到前台解析. 处理有参数的方法.
             MapAttrs attrs = rm.HisAttrs.ToMapAttrs;
@@ -1998,7 +2106,7 @@ namespace BP.WF.HttpHandler
                     {
                         ds.Tables.Add(dt1);
                     }
-                   
+
                 }
             }
 
@@ -2173,11 +2281,11 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                Entities ens = ClassFactory.GetEns(this.EnsName);
                 if (this.Paras == null)
                     return "err@删除实体，参数不能为空";
-
                 string[] myparas = this.Paras.Split('@');
+
+                Entities ens = ClassFactory.GetEns(this.EnsName);
 
                 List<string[]> paras = new List<string[]>();
                 int idx = 0;
@@ -2196,10 +2304,10 @@ namespace BP.WF.HttpHandler
 
                 if (paras.Count == 2)
                     ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1]);
-                
+
                 if (paras.Count == 3)
                     ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1], paras[2][0], paras[2][1]);
-                
+
                 if (paras.Count == 4)
                     ens.Delete(paras[0][0], paras[0][1], paras[1][0], paras[1][1], paras[2][0], paras[2][1], paras[3][0], paras[3][1]);
 
@@ -2212,7 +2320,7 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
-           
+
         }
         /// <summary>
         /// 初始化
@@ -2544,7 +2652,7 @@ namespace BP.WF.HttpHandler
                         }
                         break;
                     case UIContralType.CheckBok:
-                        objs[idx] = this.GetValBoolenFromFrmByKey(attr.Key );
+                        objs[idx] = this.GetValBoolenFromFrmByKey(attr.Key);
 
                         attr.DefaultVal = objs[idx].ToString();
 
@@ -2653,9 +2761,8 @@ namespace BP.WF.HttpHandler
             if (clsName.Contains(".HttpHandler.") == true)
             {
                 //创建类实体.
-                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType("BP.WF.HttpHandler.DirectoryPageBase"),
-                    this.context) as DirectoryPageBase;
-                ctrl.context = this.context;
+                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType("BP.WF.HttpHandler.DirectoryPageBase")) as DirectoryPageBase;
+                //ctrl.context = this.context;
 
                 try
                 {
@@ -2666,9 +2773,9 @@ namespace BP.WF.HttpHandler
                 catch (Exception ex)
                 {
                     string parasStr = "";
-                    foreach (string key in context.Request.QueryString.Keys)
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
                     {
-                        parasStr += "@" + key + "=" + context.Request.QueryString[key];
+                        parasStr += "@" + key + "=" + HttpContextHelper.RequestParams(key);
                     }
                     return "err@" + ex.Message + " 参数:" + parasStr;
                 }
@@ -2736,7 +2843,7 @@ namespace BP.WF.HttpHandler
 
             sql = sql.Replace("/#", "+"); //为什么？
             sql = sql.Replace("/$", "-"); //为什么？
-            
+
 
             if (null == sql || "" == sql)
             {
@@ -2791,14 +2898,14 @@ namespace BP.WF.HttpHandler
                 BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
                 if (obj == null)
                     return "err@页面处理类名[" + httpHandlerName + "],没有获取到，请检查拼写错误？";
-                obj.context = this.context;
+                //obj.context = this.context;
                 return obj.DoMethod(obj, methodName);
             }
             else
             {
                 BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type)
                     as BP.WF.HttpHandler.DirectoryPageBase;
-                en.context = this.context;
+                //en.context = this.context;
                 return en.DoMethod(en, methodName);
             }
         }
@@ -2874,7 +2981,7 @@ namespace BP.WF.HttpHandler
 
         public string EntityAth_Upload()
         {
-            HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();
             if (files.Count == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
@@ -2906,7 +3013,7 @@ namespace BP.WF.HttpHandler
             ext = ext.Replace(".", ""); //去掉点 @李国文
 
             //文件大小
-            float size = files[0].ContentLength / 1024;
+            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
 
             //保存位置
             string filepath = "";
@@ -2921,12 +3028,14 @@ namespace BP.WF.HttpHandler
                 string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
                 try
                 {
-                    files[0].SaveAs(temp);
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
                 }
                 catch (Exception ex)
                 {
                     System.IO.File.Delete(temp);
-                    files[0].SaveAs(temp);
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
                 }
 
                 /*保存到fpt服务器上.*/
@@ -2951,7 +3060,7 @@ namespace BP.WF.HttpHandler
                 ftpconn.SetCurrentDirectory("Helper");
 
                 //把文件放上去.
-                ftpconn.PutFile(temp, guid+ "."+ ext);
+                ftpconn.PutFile(temp, guid + "." + ext);
                 ftpconn.Close();
 
                 //删除临时文件
@@ -2978,7 +3087,8 @@ namespace BP.WF.HttpHandler
                     System.IO.File.Delete(filepath);
 
                 FileInfo info = new FileInfo(filepath);
-                files[0].SaveAs(filepath);
+                //files[0].SaveAs(filepath);
+                HttpContextHelper.UploadFile(files[0], filepath);
             }
 
             //需要这样写 @李国文.
@@ -2995,7 +3105,8 @@ namespace BP.WF.HttpHandler
 
         public string EntityMultiAth_Upload()
         {
-            HttpFileCollection files = context.Request.Files;
+            //HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();
             if (files.Count == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
@@ -3026,7 +3137,7 @@ namespace BP.WF.HttpHandler
             string ext = System.IO.Path.GetExtension(files[0].FileName);
 
             //文件大小
-            float size = files[0].ContentLength / 1024;
+            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
 
             //保存位置
             string filepath = "";
@@ -3040,12 +3151,14 @@ namespace BP.WF.HttpHandler
                 string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
                 try
                 {
-                    files[0].SaveAs(temp);
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
                 }
                 catch (Exception ex)
                 {
                     System.IO.File.Delete(temp);
-                    files[0].SaveAs(temp);
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
                 }
 
                 /*保存到fpt服务器上.*/
@@ -3094,7 +3207,8 @@ namespace BP.WF.HttpHandler
 
                 FileInfo info = new FileInfo(filepath);
 
-                files[0].SaveAs(filepath);
+                //files[0].SaveAs(filepath);
+                HttpContextHelper.UploadFile(files[0], filepath);
             }
             //保存上传的文件
             SysFileManager fileManager = new SysFileManager();
@@ -3493,7 +3607,10 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     Condition += aa.Condition;
-                    groupKey += " round (" + aa.Exp + ", 4)  \"" + paras[0] + "\",";
+                    if(SystemConfig.AppCenterDBType  == DBType.PostgreSQL)
+                        groupKey += " round ( cast (" + aa.Exp + " as  numeric), 4)  \"" + paras[0] + "\",";
+                    else
+                        groupKey += " round (" + aa.Exp + ", 4)  \"" + paras[0] + "\",";
                     StateNumKey += paras[0] + "=Checked@"; // 记录状态
                     continue;
                 }
@@ -3510,16 +3627,31 @@ namespace BP.WF.HttpHandler
                             if (dataType == 2)
                                 groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            {
+                                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                    groupKey += " round ( cast (SUM(" + paras[0] + ") as  numeric), 4)  \"" + paras[0] + "\",";
+                                else
+                                    groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            }
+                                
                             break;
                         case "AVG":
-                            groupKey += " round (AVG(" + paras[0] + "), 4)  \"" + paras[0] + "\",";
+                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                groupKey += " round ( cast (AVG(" + paras[0] + ") as  numeric), 4)  \"" + paras[0] + "\",";
+                            else
+                                groupKey += " round (AVG(" + paras[0] + "), 4)  \"" + paras[0] + "\",";
                             break;
                         case "AMOUNT":
                             if (dataType == 2)
                                 groupKey += " SUM(" + paras[0] + ") \"" + paras[0] + "\",";
                             else
-                                groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            {
+                                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                    groupKey += " round ( cast (SUM(" + paras[0] + ") as  numeric), 4)  \"" + paras[0] + "\",";
+                                else
+                                    groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
+                            }
+                                
                             break;
                         default:
                             throw new Exception("没有判断的情况.");

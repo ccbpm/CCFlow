@@ -958,6 +958,8 @@ namespace BP.WF.HttpHandler
                 return "err@没有找到类[" + this.EnsName + "]方法[" + methodName + "].";
 
             string paras = this.GetRequestVal("paras");
+            if ("un".Equals(paras) == true)
+                paras = "";
 
             //执行该方法.
             object[] myparas = new object[0];
@@ -2898,7 +2900,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
                 if (obj == null)
                     return "err@页面处理类名[" + httpHandlerName + "],没有获取到，请检查拼写错误？";
-                //obj.context = this.context;
+                // obj.context = this.context;
                 return obj.DoMethod(obj, methodName);
             }
             else

@@ -25,7 +25,7 @@ namespace BP.WF.HttpHandler
             context = mycontext;
 
             //创建 ctrl 对象, 获得业务实体类.
-            DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType, context) as DirectoryPageBase;
+            DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType) as DirectoryPageBase;
             ctrl.context = mycontext;
 
             //让其支持跨域访问.

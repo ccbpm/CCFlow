@@ -211,7 +211,6 @@ namespace BP.Frm
                 //map.AddDDLSysEnum(FrmAttr.EntityEditModel, 0, "编辑模式", true, true, FrmAttr.EntityEditModel, "@0=只读列表模式@1=Table编辑模式");
                 #endregion 实体属性.
 
-
                 #region 可以创建的权限.
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new StationCreates(), new BP.WF.Port.Stations(),

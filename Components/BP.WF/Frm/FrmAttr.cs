@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace BP.Frm
@@ -19,6 +18,10 @@ namespace BP.Frm
         /// 实体类型
         /// </summary>
         public const string EntityType = "EntityType";
+        /// <summary>
+        /// 展示模式
+        /// </summary>
+        public const string EntityShowModel = "EntityShowModel";
         /// <summary>
         /// 单据编号生成规则
         /// </summary>

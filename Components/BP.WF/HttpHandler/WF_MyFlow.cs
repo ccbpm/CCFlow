@@ -755,6 +755,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_MyFlow()
         {
+
         }
         /// <summary>
         /// 结束流程.

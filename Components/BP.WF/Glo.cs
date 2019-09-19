@@ -967,7 +967,15 @@ namespace BP.WF
             #endregion 升级视图.
 
             //升级从表的 fk_node .
-            DBAccess.RunSQL("UPDATE SYS_MAPDTL SET FK_NODE=0 WHERE NO IN (SELECT B.NO  FROM SYS_GROUPFIELD A, SYS_MAPDTL B WHERE A.CTRLTYPE='Dtl' AND A.CTRLID=B.NO AND FK_NODE!=0)");
+            //获取需要修改的从表
+            string dtlNos = DBAccess.RunSQLReturnString("SELECT B.NO  FROM SYS_GROUPFIELD A, SYS_MAPDTL B WHERE A.CTRLTYPE='Dtl' AND A.CTRLID=B.NO AND FK_NODE!=0");
+            if(DataType.IsNullOrEmpty(dtlNos) == false)
+            {
+                dtlNos = dtlNos.Replace(",", "','");
+                dtlNos = "('" + dtlNos + "')";
+                DBAccess.RunSQL("UPDATE SYS_MAPDTL SET FK_NODE=0 WHERE NO IN " + dtlNos);
+            }
+            
 
 
 

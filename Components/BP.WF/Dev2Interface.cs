@@ -8743,7 +8743,6 @@ namespace BP.WF
                         if (SystemConfig.CustomerNo == "LIMS")
                             continue; //可以去掉。
 
-
                         GEEntity en = null;
                         try
                         {

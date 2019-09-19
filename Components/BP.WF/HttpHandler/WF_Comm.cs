@@ -957,6 +957,8 @@ namespace BP.WF.HttpHandler
                 return "err@没有找到类[" + this.EnsName + "]方法[" + methodName + "].";
 
             string paras = this.GetRequestVal("paras");
+            if ("undefined".Equals(paras) == true)
+                paras = "";
 
             //执行该方法.
             object[] myparas = new object[0];

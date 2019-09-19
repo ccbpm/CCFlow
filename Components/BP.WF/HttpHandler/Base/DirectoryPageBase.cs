@@ -66,6 +66,8 @@ namespace BP.WF.HttpHandler
         {
             try
             {
+                myEn.context = this.context;
+
                 Type tp = myEn.GetType();
                 MethodInfo mp = tp.GetMethod(methodName);
                 if (mp == null)
@@ -783,7 +785,17 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        public HttpContext context = null;
+        public HttpContext context
+        {
+            get
+            {
+                return System.Web.HttpContext.Current;
+            }
+            set
+            {
+                var i = 1;
+            }
+        }
         /// <summary>
         /// 获得Int数据
         /// </summary>

@@ -12,7 +12,6 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -857,8 +856,8 @@ namespace BP.WF.HttpHandler
 
                     object valObj = val;
 
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                        valObj = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs, key, val);
+                    //if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    //    valObj = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs, key, val);
 
                     if (idx == 0)
                     {
@@ -917,18 +916,18 @@ namespace BP.WF.HttpHandler
                     }
 
                     //获得真实的数据类型.
-                    object typeVal = val;
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                        typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
+                    //object typeVal = val;
+                    //if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    //    typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
 
                     if (idx == 0)
                     {
-                        qo.AddWhere(key, oper, typeVal);
+                        qo.AddWhere(key, oper, val);
                     }
                     else
                     {
                         qo.addAnd();
-                        qo.AddWhere(key, oper, typeVal);
+                        qo.AddWhere(key, oper, val);
                     }
                     idx++;
                 }
@@ -1460,16 +1459,9 @@ namespace BP.WF.HttpHandler
                     qo.addLeftBracket();
 
                     //获得真实的数据类型.
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                    {
-                        var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
-                            attr.RefAttrKey, attr.DefaultValRun);
-                        qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
-                    }
-                    else
-                    {
+                   
                         qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
-                    }
+                     
                     qo.addRightBracket();
                     continue;
                 }
@@ -1529,10 +1521,8 @@ namespace BP.WF.HttpHandler
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
-                var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
-                    str, ap.GetValStrByKey(str));
-
-                qo.AddWhere(str, valType);
+               
+                qo.AddWhere(str, str);
                 qo.addRightBracket();
             }
 
@@ -2898,14 +2888,14 @@ namespace BP.WF.HttpHandler
                 BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
                 if (obj == null)
                     return "err@页面处理类名[" + httpHandlerName + "],没有获取到，请检查拼写错误？";
-                //obj.context = this.context;
+                obj.context = this.context;
                 return obj.DoMethod(obj, methodName);
             }
             else
             {
                 BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(type)
                     as BP.WF.HttpHandler.DirectoryPageBase;
-                //en.context = this.context;
+                en.context = this.context;
                 return en.DoMethod(en, methodName);
             }
         }

@@ -1284,7 +1284,7 @@
                 return;
             }
 
-            var en = new Entity("BP.Sys.MapFrame");
+            var en = new Entity("BP.Sys.FrmUI.MapFrameExt");
             en.MyPK = GetQueryString("FK_MapData") + "_" + val;
             if (en.IsExits() == true) {
                 alert("该编号[" + val + "]已经存在");
@@ -1293,7 +1293,7 @@
 
             en.FK_MapData = GetQueryString("FK_MapData");
             en.Name = "我的框架" + val;
-            en.URL = 'MapFrameDefPage.htm';
+            en.FrameURL = 'MapFrameDefPage.htm';
             en.H = 200;
             en.W = 200;
             en.X = 100;

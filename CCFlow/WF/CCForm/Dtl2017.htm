@@ -308,26 +308,7 @@
                     var o = $(threadThObj);
                     var tmplate = figure_MapAttr_Template(o.data());
                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
-                    if (tmplate.length >= 2) {
-                       
-                        if (tmplate[1].nodeName == "SPAN") {
-                            $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn });
-
-                            //ID 设置为  id+'_1'
-                            //先写出 NAME   单选扭会出问题
-                            $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + newRowIndex);
-                        }
-                        if (tmplate[1].nodeName == "INPUT") {
-                            $(tmplate[0]).data({ KeyOfEn: o.data().KeyOfEn + "T" });
-                            $(tmplate[1]).data({ KeyOfEn: o.data().KeyOfEn }); 
-                        }
-                        $(tmplate[0]).attr('id', $(tmplate[0]).attr('name') + '_' + newRowIndex);
-                        $(tmplate[1]).attr('id', $(tmplate[1]).attr('name') + '_' + newRowIndex);
-                    } else {
-                        tmplate.data({ KeyOfEn: o.data().KeyOfEn });
-                        //先写出 NAME   单选扭会出问题
-                        tmplate.attr('id', tmplate.attr('name') + '_' + newRowIndex);
-                    }
+                    tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
                     if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {
                         $(tmplate).bind('blur', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
@@ -1806,6 +1787,9 @@
                 var mapExt = mapExtArr[i];
                 //一起转成entity.
                 mapExt = new Entity("BP.Sys.MapExt", mapExt.MyPK);
+                if (mapExt.AttrOfOper == "Table")
+                    continue;
+
                 var mapAttr = new Entity("BP.Sys.MapAttr", mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
                 //处理Pop弹出框
                 var PopModel = mapAttr.GetPara("PopModel");

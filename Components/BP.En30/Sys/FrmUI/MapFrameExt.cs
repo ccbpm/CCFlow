@@ -94,10 +94,11 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
                     "@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
-                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
-               
+                map.AddTBString(MapFrameAttr.FrameURL, null, "URL", true, false, 0, 3000, 20, true);
+                map.AddTBString(MapFrameAttr.URL, null, "URL", false, false, 0, 3000, 20, true);
+
                 //显示的分组.
-               // map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
+                // map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
 
                 map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
                 map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
@@ -159,7 +160,12 @@ namespace BP.Sys.FrmUI
             {
                 string sql = "SELECT Url FROM Sys_MapData WHERE No='" + this.GetValStrByKey(MapFrameAttr.FrmID) + "'";
                 string url = DBAccess.RunSQLReturnStringIsNull(sql, "");
+                this.SetValByKey(MapFrameAttr.FrameURL, url);
                 this.SetValByKey(MapFrameAttr.URL, url);
+            }
+            else
+            {
+                this.SetValByKey(MapFrameAttr.URL, this.GetValByKey(MapFrameAttr.FrameURL));
             }
 
             //更新group.

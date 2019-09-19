@@ -5946,6 +5946,24 @@ namespace BP.WF
                             en.Insert();
                         }
                         break;
+                    case "Sys_MapFrame":
+                        idx = 0;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            idx++;
+                            MapFrame en = new MapFrame();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                object val = dr[dc.ColumnName] as object;
+                                if (val == null)
+                                    continue;
+
+
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace("ND" + oldFlowID, "ND" + flowID));
+                            }
+                            en.DirectInsert();
+                        }
+                        break;
                     case "WF_NodeEmp": //FAppSets.xml。
                         foreach (DataRow dr in dt.Rows)
                         {

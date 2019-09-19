@@ -523,7 +523,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20190702;
+        public static int Ver = 20190902;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -628,6 +628,10 @@ namespace BP.WF
             #endregion
 
             #region 升级填充数据.
+
+            BP.WF.Template.NodeExt ne = new NodeExt();
+            ne.CheckPhysicsTable();
+
             //pop自动填充
             MapExts exts = new MapExts();
             QueryObject qo = new QueryObject(exts);

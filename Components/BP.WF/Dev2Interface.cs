@@ -5463,20 +5463,10 @@ namespace BP.WF
             string str = mygwf.FK_Node.ToString();
             if (str.EndsWith("01") == true)
             {
-                //如果是开始节点，如何去判断是否可以处理当前节点的权限.
-                GenerWorkFlow gwf = new GenerWorkFlow();
-                gwf.WorkID = workID;
-                if (gwf.RetrieveFromDBSources() == 0)
-                {
-                    return true;
-                }
-
-                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + gwf.FK_Node;
+                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + mygwf.FK_Node;
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                 if (mydt.Rows.Count == 0)
-                {
                     return true;
-                }
 
                 foreach (DataRow dr in mydt.Rows)
                 {

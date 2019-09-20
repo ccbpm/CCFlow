@@ -211,7 +211,7 @@ namespace BP.WF.HttpHandler
                             IsFloat = true;
                         if (attr.MyDataType == DataType.AppMoney)
                             IsMoney = true;
-                       break;
+                        break;
                     }
                 }
 
@@ -254,7 +254,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    if(IsInt == true && DataType.IsNullOrEmpty(mykey[1])==false)
+                    if (IsInt == true && DataType.IsNullOrEmpty(mykey[1]) == false)
                         qo.AddWhere(mykey[0], Int32.Parse(mykey[1]));
                     else if (IsDouble == true && DataType.IsNullOrEmpty(mykey[1]) == false)
                         qo.AddWhere(mykey[0], double.Parse(mykey[1]));
@@ -263,7 +263,7 @@ namespace BP.WF.HttpHandler
                     else if (IsMoney == true && DataType.IsNullOrEmpty(mykey[1]) == false)
                         qo.AddWhere(mykey[0], decimal.Parse(mykey[1]));
                     else
-                    qo.AddWhere(mykey[0], mykey[1]);
+                        qo.AddWhere(mykey[0], mykey[1]);
                 }
                 qo.addAnd();
             }
@@ -823,7 +823,7 @@ namespace BP.WF.HttpHandler
                         if (val.IndexOf(",") != -1)
                         {
                             string[] strs1 = val.Split(',');
-                            foreach(string str in strs1)
+                            foreach (string str in strs1)
                             {
                                 if (DataType.IsNullOrEmpty(str) == true)
                                     continue;
@@ -844,14 +844,14 @@ namespace BP.WF.HttpHandler
                                         qo.addOrderBy(str.Trim());
                                     }
                                 }
-                                
+
                             }
                         }
                         else
                         {
                             qo.addOrderBy(val);
                         }
-                        
+
                         continue;
                     }
 
@@ -3609,7 +3609,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     Condition += aa.Condition;
-                    if(SystemConfig.AppCenterDBType  == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         groupKey += " round ( cast (" + aa.Exp + " as  numeric), 4)  \"" + paras[0] + "\",";
                     else
                         groupKey += " round (" + aa.Exp + ", 4)  \"" + paras[0] + "\",";
@@ -3635,7 +3635,7 @@ namespace BP.WF.HttpHandler
                                 else
                                     groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
                             }
-                                
+
                             break;
                         case "AVG":
                             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -3653,7 +3653,7 @@ namespace BP.WF.HttpHandler
                                 else
                                     groupKey += " round ( SUM(" + paras[0] + "), 4) \"" + paras[0] + "\",";
                             }
-                                
+
                             break;
                         default:
                             throw new Exception("没有判断的情况.");

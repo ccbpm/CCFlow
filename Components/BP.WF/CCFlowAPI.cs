@@ -212,7 +212,7 @@ namespace BP.WF
                     if (count!=0 && frmNode.IsEnableFWC == true &&  nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                         isHaveFWC = true;
                  
-                    if (nd.FormType == NodeFormType.FoolForm || isHaveFWC == true)
+                    if (nd.FormType == NodeFormType.FoolForm && isHaveFWC == true)
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];

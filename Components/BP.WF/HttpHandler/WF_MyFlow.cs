@@ -359,7 +359,7 @@ namespace BP.WF.HttpHandler
             {
 
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
-                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null, null, isStartSameLevelFlow);
+                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null,null,isStartSameLevelFlow);
 
                 string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
                 if (DataType.IsNullOrEmpty(hostRun) == false)
@@ -421,7 +421,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 启动同级子流程的信息存储
-            if (isStartSameLevelFlow != null && isStartSameLevelFlow.Equals("1") == true && this.WorkID != 0)
+            if(isStartSameLevelFlow!=null && isStartSameLevelFlow .Equals("1") == true && this.WorkID != 0)
             {
                 gwf.WorkID = this.WorkID;
                 gwf.RetrieveFromDBSources();
@@ -434,9 +434,9 @@ namespace BP.WF.HttpHandler
                 gwf.SetPara("SLEmp", BP.Web.WebUser.No);
                 gwf.Update();
             }
-
-
-
+            
+           
+            
             #endregion 启动同级子流程的信息存储
 
             #region 处理表单类型.
@@ -821,7 +821,7 @@ namespace BP.WF.HttpHandler
                 /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                    if(btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
                     {
                         if (btnLab.HuiQianLeaderRole == 0)
                         {
@@ -1358,7 +1358,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<a data-role='button' type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" ></a>";
                 }
 
-
+               
 
                 if (btnLab.JumpWayEnable)
                 {
@@ -1870,79 +1870,73 @@ namespace BP.WF.HttpHandler
                 wk.RetrieveFromDBSources();
             }
 
-            //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
-            GenerWorkFlow gwf = null;
-            if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
+            //获取表单树的数据
+            BP.WF.WorkNode workNode = new WorkNode(this.WorkID, this.FK_Node);
+            Work treeWork = workNode.CopySheetTree();
+            if (treeWork != null)
             {
-                FrmNodes nds = new FrmNodes(this.FK_Flow, this.FK_Node);
-                foreach (FrmNode item in nds)
-                {
-                    if (item.FrmEnableRole == FrmEnableRole.Disable)
-                        continue;
-                    if (item.FK_Frm.Equals("ND" + this.FK_Node) == true)
-                        continue; //如果当前表单是节点表单.
-
-                    if (SystemConfig.CustomerNo == "LIMS")
-                        continue; //vsto的问题解决后，可以去掉.
-
-                    if (item.FrmEnableRole == FrmEnableRole.WhenHaveFrmPara)
-                    {
-                        if (gwf == null)
-                            gwf = new GenerWorkFlow(this.WorkID);
-
-                        if (gwf.GetParaString("@Frms").Contains(item.FK_Frm) == false)
-                            continue;
-                    }
-
-                    GEEntity en = null;
-                    try
-                    {
-                        en = new GEEntity(item.FK_Frm);
-                        en.PKVal = this.WorkID;
-                        if (en.RetrieveFromDBSources() == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        continue;
-                    }
-
-                    Attrs frmAttrs = en.EnMap.Attrs;
-                    Attrs wkAttrs = wk.EnMap.Attrs;
-                    foreach (Attr wkattr in wkAttrs)
-                    {
-                        if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
-                            || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
-                            || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
-                            || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
-                            || wkattr.Key.Equals(Data.GERptAttr.FlowStarter) || wkattr.Key.Equals(Data.GERptAttr.FlowStartRDT) || wkattr.Key.Equals(Data.GERptAttr.WFState))
-                        {
-                            continue;
-                        }
-
-                        foreach (Attr attr in frmAttrs)
-                        {
-                            if (wkattr.Key.Equals(attr.Key))
-                            {
-                                wk.SetValByKey(wkattr.Key, en.GetValStrByKey(attr.Key));
-                                break;
-                            }
-
-                        }
-                    }
-
-                }
+                wk.Copy(treeWork);
                 wk.Update();
             }
+
+            //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
+            //if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
+            //{
+            //    FrmNodes nds = new FrmNodes(this.FK_Flow, this.FK_Node);
+            //    foreach (FrmNode item in nds)
+            //    {
+            //        if (item.FrmEnableRole == FrmEnableRole.Disable)
+            //            continue;
+            //        if (item.FK_Frm.Equals("ND"+this.FK_Node) == true)
+            //            continue;
+            //        GEEntity en = null;
+            //        try
+            //        {
+            //            en = new GEEntity(item.FK_Frm);
+            //            en.PKVal = this.WorkID;
+            //            if (en.RetrieveFromDBSources() == 0)
+            //            {
+            //                continue;
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            continue;
+            //        }
+
+            //        Attrs frmAttrs = en.EnMap.Attrs;
+            //        Attrs wkAttrs = wk.EnMap.Attrs;
+            //        foreach (Attr wkattr in wkAttrs)
+            //        {
+            //            if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
+            //                || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
+            //                || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
+            //                || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
+            //                || wkattr.Key.Equals(Data.GERptAttr.FlowStarter) || wkattr.Key.Equals(Data.GERptAttr.FlowStartRDT) || wkattr.Key.Equals(Data.GERptAttr.WFState))
+            //            {
+            //                continue;
+            //            }
+
+            //            foreach (Attr attr in frmAttrs)
+            //            {
+            //                if (wkattr.Key.Equals(attr.Key))
+            //                {
+            //                    wk.SetValByKey(wkattr.Key, en.GetValStrByKey(attr.Key));
+            //                    break;
+            //                }
+
+            //            }
+
+            //        }
+
+            //    }
+            //    wk.Update();
+            //}
 
             #region 为开始工作创建待办.
             if (nd.IsStartNode == true)
             {
-                if (gwf == null)
-                    gwf = new GenerWorkFlow(this.WorkID);
-
+                GenerWorkFlow gwf = new GenerWorkFlow();
                 Flow fl = new Flow(this.FK_Flow);
                 if (fl.DraftRole == DraftRole.None && this.GetRequestValInt("SaveType") != 1)
                     return "保存成功";
@@ -1962,9 +1956,55 @@ namespace BP.WF.HttpHandler
                 wk.Update();
 
                 gwf.WorkID = this.WorkID;
+                int count = gwf.RetrieveFromDBSources();
+
                 gwf.Title = title; //标题.
-                gwf.WFState = wfState;
-                gwf.DirectUpdate();
+                if (count == 0)
+                {
+                    gwf.FlowName = fl.Name;
+                    gwf.FK_Flow = this.FK_Flow;
+                    gwf.FK_FlowSort = fl.FK_FlowSort;
+                    gwf.SysType = fl.SysType;
+
+                    gwf.FK_Node = this.FK_Node;
+                    gwf.NodeName = nd.Name;
+                    gwf.WFState = wfState;
+
+                    gwf.FK_Dept = WebUser.FK_Dept;
+                    gwf.DeptName = WebUser.FK_DeptName;
+                    gwf.Starter = WebUser.No;
+                    gwf.StarterName = WebUser.Name;
+                    gwf.RDT = DataType.CurrentDataTimess;
+                    gwf.Insert();
+
+                    // 产生工作列表.
+                    GenerWorkerList gwl = new GenerWorkerList();
+                    gwl.WorkID = this.WorkID;
+                    gwl.FK_Emp = WebUser.No;
+                    gwl.FK_EmpText = WebUser.Name;
+
+                    gwl.FK_Node = gwf.FK_Node;
+                    gwl.FK_NodeText = nd.Name;
+                    gwl.FID = 0;
+
+                    gwl.FK_Flow = gwf.FK_Flow;
+                    gwl.FK_Dept = WebUser.FK_Dept;
+                    gwl.FK_DeptT = WebUser.FK_DeptName;
+
+                    gwl.SDT = "无";
+                    gwl.DTOfWarning = DataType.CurrentDataTimess;
+                    gwl.IsEnable = true;
+
+                    gwl.IsPass = false;
+                    //  gwl.Sender = WebUser.No;
+                    gwl.PRI = gwf.PRI;
+                    gwl.Insert();
+                }
+                else
+                {
+                    gwf.WFState = wfState;
+                    gwf.DirectUpdate();
+                }
 
             }
             #endregion 为开始工作创建待办
@@ -2472,7 +2512,7 @@ namespace BP.WF.HttpHandler
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
                 {
                     /*如果是表单树并且是，移动模式.*/
-
+                   
 
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);

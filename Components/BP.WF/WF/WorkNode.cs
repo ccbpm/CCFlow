@@ -5023,18 +5023,16 @@ namespace BP.WF
         /// <returns></returns>
         public Work CopySheetTree()
         {
-            if (this.HisNode.HisFormType != NodeFormType.SheetTree)
+            if (this.HisNode.HisFormType != NodeFormType.SheetTree && this.HisNode.HisFormType != NodeFormType.RefOneFrmTree)
                 return null;
 
             //查询出来所有的设置。
             FrmFields ffs = new FrmFields();
-
-
-
             QueryObject qo = new QueryObject(ffs);
             qo.AddWhere(FrmFieldAttr.FK_Node, this.HisNode.NodeID);
+            qo.addAnd();
+            qo.AddWhere(FrmFieldAttr.IsWriteToFlowTable, 1);
             qo.DoQuery();
-
 
             BP.WF.Template.FrmNodes frmNDs = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
             string err = "";
@@ -5045,7 +5043,7 @@ namespace BP.WF
                 //可能是url.
                 if (md.HisFrmType == FrmType.Url)
                     continue;
-
+                
                 //检查是否有？
                 bool isHave = false;
                 foreach (FrmField myff in ffs)
@@ -5058,13 +5056,6 @@ namespace BP.WF
 
                 if (isHave == false)
                     continue;
-
-                MapAttrs attrs = new MapAttrs(item.FK_Frm);
-                string attrstr = "";
-                foreach (MapAttr attr in attrs)
-                {
-                    attrstr += attr.KeyOfEn + ",";
-                }
 
                 // 处理主键.
                 long pk = 0;// this.WorkID;
@@ -5101,13 +5092,12 @@ namespace BP.WF
                     if (ff.FK_MapData != item.FK_Frm)
                         continue;
 
-                    if (!attrstr.Contains(ff.KeyOfEn))
+                    if (dt.Columns.Contains(ff.KeyOfEn) == false)
                         continue;
 
                     //获得数据.
                     string val = string.Empty;
                     val = dt.Rows[0][ff.KeyOfEn].ToString();
-
                     this.HisWork.SetValByKey(ff.KeyOfEn, val);
                 }
             }

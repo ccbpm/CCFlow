@@ -754,14 +754,11 @@ namespace BP.WF
                 extP.DBType = ext.DBType;
                 extP.Doc = ext.Doc;
 
-
                 //填充从表
                 extP.Tag1 = ext.Tag1;
                 //填充下拉框
                 extP.Tag = ext.Tag;
-
                 extP.Insert(); //执行插入.
-
             }
             #endregion 升级 填充数据.
 

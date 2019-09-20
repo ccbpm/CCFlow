@@ -623,7 +623,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HandlerMapExt()
         {
-            WF_CCForm wf = new WF_CCForm(context);
+            WF_CCForm wf = new WF_CCForm();
             return wf.HandlerMapExt();
         }
         /// <summary>

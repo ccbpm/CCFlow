@@ -15,7 +15,6 @@ using BP.WF.XML;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
 using LitJson;
-using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {

@@ -20,14 +20,6 @@ namespace BP.WF.HttpHandler
     public class CCMobile : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public CCMobile(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public CCMobile()
@@ -57,7 +49,7 @@ namespace BP.WF.HttpHandler
 
         public string Login_Init()
         {
-            BP.WF.HttpHandler.WF ace = new WF(this.context);
+            BP.WF.HttpHandler.WF ace = new WF();
             return ace.Login_Init();
         }
 
@@ -106,7 +98,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQianList_Init()
         {
-            WF wf = new WF(this.context);
+            WF wf = new WF();
             return wf.HuiQianList_Init();
         }
 
@@ -117,7 +109,7 @@ namespace BP.WF.HttpHandler
 
             StringBuilder append = new StringBuilder();
             append.Append("{");
-            string userPath = HttpContext.Current.Server.MapPath("/DataUser/UserIcon/");
+            string userPath = SystemConfig.PathOfWebApp + "/DataUser/UserIcon/";
             string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
             if (System.IO.File.Exists(userIcon))
             {
@@ -198,7 +190,7 @@ namespace BP.WF.HttpHandler
         
         public string Runing_Init()
         {
-            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
+            BP.WF.HttpHandler.WF wfPage = new WF();
           return  wfPage.Runing_Init();
         }
         
@@ -209,7 +201,8 @@ namespace BP.WF.HttpHandler
         public string Todolist_Init()
         {
             string fk_node = this.GetRequestVal("FK_Node");
-            DataTable dt = BP.WF.Dev2Interface.DB_Todolist(WebUser.No, this.FK_Node);
+            string showWhat = this.GetRequestVal("ShowWhat");
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -248,13 +241,13 @@ namespace BP.WF.HttpHandler
 
         public string Start_Init()
         {
-            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
+            BP.WF.HttpHandler.WF wfPage = new WF();
             return wfPage.Start_Init();
         }
 
         public string HandlerMapExt()
         {
-            WF_CCForm en = new WF_CCForm(this.context);
+            WF_CCForm en = new WF_CCForm();
             return en.HandlerMapExt();
         }
 
@@ -286,7 +279,7 @@ namespace BP.WF.HttpHandler
         /// <returns>json</returns>
         public string FrmView_Init()
         {
-            BP.WF.HttpHandler.WF wf = new WF(this.context);
+            BP.WF.HttpHandler.WF wf = new WF();
             return wf.FrmView_Init();
         }
         /// <summary>
@@ -301,13 +294,13 @@ namespace BP.WF.HttpHandler
 
         public string AttachmentUpload_Down()
         {
-            WF_CCForm ccform = new WF_CCForm(this.context);
+            WF_CCForm ccform = new WF_CCForm();
             return ccform.AttachmentUpload_Down();
         }
 
         public string AttachmentUpload_DownByStream()
         {
-            WF_CCForm ccform = new WF_CCForm(this.context);
+            WF_CCForm ccform = new WF_CCForm();
             return ccform.AttachmentUpload_DownByStream();
         }
 
@@ -318,7 +311,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SearchKey_OpenFrm()
         {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
             return search.KeySearch_OpenFrm();
         }
         /// <summary>
@@ -327,7 +320,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SearchKey_Query()
         {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.
@@ -412,9 +405,10 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 500";
             else if(SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
-            else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere +" LIMIT 500";
-
+            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
             DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {

@@ -19,14 +19,6 @@ namespace BP.WF.HttpHandler
     public class CCMobile_WorkOpt_OneWork : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public CCMobile_WorkOpt_OneWork(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public CCMobile_WorkOpt_OneWork()
@@ -50,7 +42,7 @@ namespace BP.WF.HttpHandler
         }
         public string TimeBase_OpenFrm()
         {
-            WF en = new WF(this.context);
+            WF en = new WF();
             return en.Runing_OpenFrm();
         }
         #endregion xxx 界面方法.

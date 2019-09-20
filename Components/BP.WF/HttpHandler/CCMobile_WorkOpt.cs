@@ -20,14 +20,6 @@ namespace BP.WF.HttpHandler
     public class CCMobile_WorkOpt : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public CCMobile_WorkOpt(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public CCMobile_WorkOpt()

@@ -15,6 +15,7 @@ using BP.WF.XML;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
 using LitJson;
+using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -217,9 +218,9 @@ namespace BP.WF.HttpHandler
                     sql = this.DealSQL(me.DocOfSQLDeal, key);
                     if (sql.Contains("@") == true)
                     {
-                        foreach (string strKey in context.Request.QueryString)
+                        foreach (string strKey in HttpContextHelper.RequestParamKeys)
                         {
-                            sql = sql.Replace("@" + strKey, context.Request[strKey]);
+                            sql = sql.Replace("@" + strKey, HttpContextHelper.RequestParams(strKey));
                         }
                     }
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
@@ -233,7 +234,8 @@ namespace BP.WF.HttpHandler
                         case "ReqCtrl":
                             // 获取填充 ctrl 值的信息.
                             sql = this.DealSQL(me.DocOfSQLDeal, key);
-                            System.Web.HttpContext.Current.Session["DtlKey"] = key;
+                            //System.Web.HttpContext.Current.Session["DtlKey"] = key;
+                            HttpContextHelper.SessionSet("DtlKey", key);
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                             return JSONTODT(dt);
@@ -252,7 +254,8 @@ namespace BP.WF.HttpHandler
                                 string fk_dtl = ss[0];
                                 if (ss[1] == "" || ss[1] == null)
                                     continue;
-                                string dtlKey = System.Web.HttpContext.Current.Session["DtlKey"] as string;
+                                //string dtlKey = System.Web.HttpContext.Current.Session["DtlKey"] as string;
+                                string dtlKey = HttpContextHelper.SessionGet("DtlKey") as string;
                                 if (dtlKey == null)
                                     dtlKey = key;
                                 string mysql = DealSQL(ss[1], dtlKey);
@@ -399,9 +402,9 @@ namespace BP.WF.HttpHandler
 
             if (sql.Contains("@") == true)
             {
-                foreach (string mykey in context.Request.QueryString.AllKeys)
+                foreach (string mykey in HttpContextHelper.RequestParamKeys)
                 {
-                    sql = sql.Replace("@" + mykey, context.Request.QueryString[mykey]);
+                    sql = sql.Replace("@" + mykey, HttpContextHelper.RequestParams(mykey));
                 }
             }
 
@@ -506,14 +509,7 @@ namespace BP.WF.HttpHandler
         #endregion HanderMapExt
 
         #region 执行父类的重写方法.
-        /// <summary>
-        /// 表单功能界面
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_CCForm(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -527,7 +523,7 @@ namespace BP.WF.HttpHandler
         protected override string DoDefaultMethod()
         {
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到.@原始URL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.@原始URL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -538,6 +534,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Frm_Init()
         {
+            bool IsMobile = GetRequestValBoolen("IsMobile");
             if (this.GetRequestVal("IsTest") != null)
             {
                 MapData mymd = new MapData(this.EnsName);
@@ -586,9 +583,9 @@ namespace BP.WF.HttpHandler
 
                     if (en.RetrieveFromDBSources() == 0)
                     {
-                        foreach (string key in context.Request.QueryString.Keys)
+                        foreach (string key in HttpContextHelper.RequestParamKeys)
                         {
-                            enOID.SetValByKey(key, context.Request.QueryString[key]);
+                            enOID.SetValByKey(key, HttpContextHelper.RequestParams(key));
                         }
                         enOID.SetValByKey("OID", this.WorkID);
 
@@ -692,6 +689,9 @@ namespace BP.WF.HttpHandler
 
                     if (md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
                     {
+                        if (IsMobile == true)
+                            return "url@../FrmView.htm?1=2" + paras;
+
                         if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                             return "url@FrmGener.htm?1=2" + paras;
                         else
@@ -706,6 +706,9 @@ namespace BP.WF.HttpHandler
                             return "url@FrmVSTO.htm?1=2" + paras;
                     }
 
+                    if (IsMobile == true)
+                        return "url@../FrmView.htm?1=2" + paras;
+
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmGener.htm?1=2" + paras;
                     else
@@ -718,6 +721,8 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.FreeFrm)
             {
+                if (IsMobile == true)
+                    return "url@../FrmView.htm?1=2" + paras;
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                     return "url@FrmGener.htm?1=2" + paras;
                 else
@@ -731,6 +736,9 @@ namespace BP.WF.HttpHandler
                 else
                     return "url@FrmVSTO.htm?1=2" + paras;
             }
+
+            if (IsMobile == true)
+                return "url@../FrmView.htm?1=2" + paras;
 
             if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                 return "url@FrmGener.htm?1=2" + paras;
@@ -769,8 +777,8 @@ namespace BP.WF.HttpHandler
             int zoomW = this.GetRequestValInt("zoomW");
             int zoomH = this.GetRequestValInt("zoomH");
 
-            HttpFileCollection files = this.context.Request.Files;
-            if (files.Count > 0 && files[0].ContentLength > 0)
+            //HttpFileCollection files = this.context.Request.Files;
+            if (HttpContextHelper.RequestFilesCount > 0)
             {
                 string myName = "";
                 string fk_mapData = this.FK_MapData;
@@ -782,8 +790,9 @@ namespace BP.WF.HttpHandler
                 //生成新路径，解决返回相同src后图片不切换问题
                 //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + myName + ".png";
-                string saveToPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
-                string fileUPloadPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
+                //string saveToPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
+                string saveToPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
+                string fileUPloadPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
                 //创建路径
                 if (!Directory.Exists(saveToPath))
                     Directory.CreateDirectory(saveToPath);
@@ -792,7 +801,8 @@ namespace BP.WF.HttpHandler
 
                 saveToPath = saveToPath + "\\" + myName + ".png";
                 fileUPloadPath = fileUPloadPath + "\\" + myName + ".png";
-                files[0].SaveAs(saveToPath);
+                //files[0].SaveAs(saveToPath);
+                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), saveToPath);
 
                 //源图像  
                 System.Drawing.Bitmap oldBmp = new System.Drawing.Bitmap(saveToPath);
@@ -860,7 +870,8 @@ namespace BP.WF.HttpHandler
             string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             string savePath = SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             //获取上传的大图片
-            string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png");
+            //string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png");
+            string strImgPath = SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png";
             if (File.Exists(strImgPath) == true)
             {
                 //剪切图
@@ -930,9 +941,9 @@ namespace BP.WF.HttpHandler
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                 }
             }
 
@@ -1044,9 +1055,9 @@ namespace BP.WF.HttpHandler
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
-                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    foreach (string k in HttpContextHelper.RequestParamKeys)
                     {
-                        en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                        en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                     }
                 }
 
@@ -1250,9 +1261,9 @@ namespace BP.WF.HttpHandler
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
-                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    foreach (string k in HttpContextHelper.RequestParamKeys)
                     {
-                        en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                        en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                     }
                 }
 
@@ -1380,7 +1391,11 @@ namespace BP.WF.HttpHandler
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
                     {
                         /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
-                        int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
+                       int  refNodeID = 0;
+                        if (nd.NodeFrmID.IndexOf("ND")==-1)
+                            refNodeID  = nd.NodeID;
+                        else
+                            refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
                         BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
 
@@ -1805,7 +1820,7 @@ namespace BP.WF.HttpHandler
                     if (fn.FrmSln == FrmSln.Readonly)
                     {
                         /*如果是不可以编辑*/
-                        return "err@不可以,该表单不允许编辑..";
+                        return "";
                     }
                 }
                 #endregion  求who is PK.
@@ -1814,7 +1829,7 @@ namespace BP.WF.HttpHandler
                 int i = en.RetrieveFromDBSources();
                 en.ResetDefaultVal();
 
-                en = BP.Sys.PubClass.CopyFromRequest(en, context.Request) as GEEntity;
+                en = BP.Sys.PubClass.CopyFromRequest(en) as GEEntity;
 
                 en.OID = pk;
 
@@ -2418,13 +2433,13 @@ namespace BP.WF.HttpHandler
         /// <returns>从from里面替换的表达式.</returns>
         public string DealExpByFromVals(string exp)
         {
-            foreach (string strKey in context.Request.Form.AllKeys)
+            foreach (string strKey in HttpContextHelper.RequestParamKeys)
             {
                 if (exp.Contains("@") == false)
                     return exp;
                 string str = strKey.Replace("TB_", "").Replace("CB_", "").Replace("DDL_", "").Replace("RB_", "");
 
-                exp = exp.Replace("@" + str, context.Request.Form[strKey]);
+                exp = exp.Replace("@" + str, HttpContextHelper.RequestParams(strKey));
             }
             return exp;
         }
@@ -2642,7 +2657,7 @@ namespace BP.WF.HttpHandler
 
                     //参数.
                     string para = cond.Substring(5, cond.IndexOf("#") - 5);
-                    string val = context.Request.QueryString[para];
+                    string val = HttpContextHelper.RequestParams(para);
                     if (DataType.IsNullOrEmpty(val))
                     {
                         if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
@@ -2803,7 +2818,7 @@ namespace BP.WF.HttpHandler
 
                     //参数.
                     string para = cond.Substring(5, cond.IndexOf("#") - 5);
-                    string val = context.Request.QueryString[para];
+                    string val = HttpContextHelper.RequestParams(para);
                     if (DataType.IsNullOrEmpty(val))
                     {
                         if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
@@ -2980,7 +2995,7 @@ namespace BP.WF.HttpHandler
 
                     //参数.
                     string para = cond.Substring(5, cond.IndexOf("#") - 5);
-                    string val = context.Request.QueryString[para];
+                    string val = HttpContextHelper.RequestParams(para);
                     if (DataType.IsNullOrEmpty(val))
                     {
                         if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
@@ -3089,7 +3104,7 @@ namespace BP.WF.HttpHandler
         }
 
         //单附件上传方法
-        private void SingleAttach(HttpContext context, string attachPk, Int64 workid, Int64 fid, int fk_node, string ensName)
+        private void SingleAttach(string attachPk, Int64 workid, Int64 fid, int fk_node, string ensName)
         {
             FrmAttachment frmAth = new FrmAttachment();
             frmAth.MyPK = attachPk;
@@ -3113,7 +3128,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                saveTo = context.Server.MapPath("~/" + saveTo);
+                saveTo = SystemConfig.PathOfWebApp + saveTo; //context.Server.MapPath("~/" + saveTo);
             }
             catch
             {
@@ -3124,8 +3139,9 @@ namespace BP.WF.HttpHandler
                 System.IO.Directory.CreateDirectory(saveTo);
 
 
-            saveTo = saveTo + "\\" + athDBPK + "." + context.Request.Files[0].FileName.Substring(context.Request.Files[0].FileName.LastIndexOf('.') + 1);
-            context.Request.Files[0].SaveAs(saveTo);
+            saveTo = saveTo + "\\" + athDBPK + "." + HttpContextHelper.RequestFiles(0).FileName.Substring(HttpContextHelper.RequestFiles(0).FileName.LastIndexOf('.') + 1);
+            //context.Request.Files[0].SaveAs(saveTo);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), saveTo);
 
             FileInfo info = new FileInfo(saveTo);
 
@@ -3153,7 +3169,7 @@ namespace BP.WF.HttpHandler
             #endregion 处理文件路径，如果是保存到数据库，就存储pk.
 
 
-            dbUpload.FileName = context.Request.Files[0].FileName;
+            dbUpload.FileName = HttpContextHelper.RequestFiles(0).FileName;
             dbUpload.FileSize = (float)info.Length;
             dbUpload.Rec = WebUser.No;
             dbUpload.RecName = WebUser.Name;
@@ -3241,9 +3257,10 @@ namespace BP.WF.HttpHandler
             //获取上传文件是否需要加密
             bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
 
-            for (int i = 0; i < context.Request.Files.Count; i++)
+            for (int i = 0; i < HttpContextHelper.RequestFilesCount; i++)
             {
-                HttpPostedFile file = context.Request.Files[i];
+                //HttpPostedFile file = context.Request.Files[i];
+                var file = HttpContextHelper.RequestFiles(i);
 
                 #region 文件上传的iis服务器上 or db数据库里.
                 if (athDesc.AthSaveWay == AthSaveWay.IISServer)
@@ -3275,7 +3292,8 @@ namespace BP.WF.HttpHandler
                     savePath = savePath.Replace("\\\\", "\\");
                     try
                     {
-                        savePath = context.Server.MapPath("~/" + savePath);
+                        if(savePath.Contains(SystemConfig.PathOfWebApp) == false)
+                        savePath = SystemConfig.PathOfWebApp + savePath;
                     }
                     catch (Exception ex)
                     {
@@ -3309,14 +3327,16 @@ namespace BP.WF.HttpHandler
                     {
 
                         string strtmp = realSaveTo + ".tmp";
-                        file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        //file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        HttpContextHelper.UploadFile(file, strtmp);
                         EncHelper.EncryptDES(strtmp, strtmp.Replace(".tmp", ""));//加密
                         File.Delete(strtmp);//删除临时文件
                     }
                     else
                     {
                         //文件保存的路径
-                        file.SaveAs(realSaveTo);
+                        //file.SaveAs(realSaveTo);
+                        HttpContextHelper.UploadFile(file, realSaveTo);
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
@@ -3408,14 +3428,16 @@ namespace BP.WF.HttpHandler
                     {
 
                         string strtmp = SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
-                        file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        //file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
+                        HttpContextHelper.UploadFile(file, strtmp);
                         EncHelper.EncryptDES(strtmp, temp);//加密
                         File.Delete(strtmp);//删除临时文件
                     }
                     else
                     {
                         //文件保存的路径
-                        file.SaveAs(temp);
+                        //file.SaveAs(temp);
+                        HttpContextHelper.UploadFile(file, temp);
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
@@ -3832,7 +3854,8 @@ namespace BP.WF.HttpHandler
             {
                 string tempPath = BP.Sys.SystemConfig.PathOfTemp;
 
-                HttpFileCollection files = context.Request.Files;
+                //HttpFileCollection files = context.Request.Files;
+                var files = HttpContextHelper.RequestFiles();
                 if (files.Count == 0)
                     return "err@请选择要上传的从表模版。";
                 //求出扩展名.
@@ -3853,7 +3876,9 @@ namespace BP.WF.HttpHandler
                     System.IO.Directory.CreateDirectory(tempPath);
 
                 //执行保存附件
-                files[0].SaveAs(file);
+                //files[0].SaveAs(file);
+                HttpContextHelper.UploadFile(files[0], file);
+
                 System.Data.DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(file);
 
                 string FK_MapDtl = this.FK_MapDtl;
@@ -4179,7 +4204,8 @@ namespace BP.WF.HttpHandler
         #region 打印.
         public string Print_Init()
         {
-            string ApplicationPath = this.context.Request.PhysicalApplicationPath;
+            //string ApplicationPath = this.context.Request.PhysicalApplicationPath;
+            string ApplicationPath = HttpContextHelper.RequestApplicationPath;
 
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             string path = ApplicationPath + @"DataUser\CyclostyleFile\FlowFrm\" + nd.FK_Flow + "\\" + nd.NodeID + "\\";
@@ -4423,12 +4449,13 @@ namespace BP.WF.HttpHandler
             byte[] byteList = downDB.GetFileFromDB("FileDB", null);
             if (byteList != null)
             {
-                HttpContext.Current.Response.Charset = "GB2312";
-                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=" + downDB.FileName);
-                HttpContext.Current.Response.ContentType = "application/octet-stream;charset=gb2312";
-                HttpContext.Current.Response.BinaryWrite(byteList);
-                HttpContext.Current.Response.End();
-                HttpContext.Current.Response.Close();
+                //HttpContext.Current.Response.Charset = "GB2312";
+                //HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=" + downDB.FileName);
+                //HttpContext.Current.Response.ContentType = "application/octet-stream;charset=gb2312";
+                //HttpContext.Current.Response.BinaryWrite(byteList);
+                //HttpContext.Current.Response.End();
+                //HttpContext.Current.Response.Close();
+                HttpContextHelper.ResponseWriteFile(byteList, downDB.FileName, "application/octet-stream;charset=gb2312");
             }
         }
         /// <summary>
@@ -4738,7 +4765,7 @@ namespace BP.WF.HttpHandler
             gwf.SetPara(athDesc.NoOfObj, str);
             gwf.Update();
 
-            string url = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
+            string url = HttpContextHelper.RequestApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
             return "url@" + url;
 
         }
@@ -4833,7 +4860,7 @@ namespace BP.WF.HttpHandler
 
             #region 生成参数串.
             string paras = "";
-            foreach (string str in this.context.Request.QueryString)
+            foreach (string str in HttpContextHelper.RequestParamKeys)
             {
                 string val = this.GetRequestVal(str);
                 if (val.IndexOf('@') != -1)

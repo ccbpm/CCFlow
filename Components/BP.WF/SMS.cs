@@ -662,7 +662,6 @@ namespace BP.WF
                 }
 
                 #endregion 发送短消息 调用接口
-
                 
 			}
 			catch (Exception ex)

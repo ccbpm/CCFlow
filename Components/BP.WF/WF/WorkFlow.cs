@@ -1010,7 +1010,9 @@ namespace BP.WF
                 GenerWorkerLists wls = new GenerWorkerLists(wn.HisWork.OID, wn.HisNode.NodeID);
                 if (wls.Count == 0)
                     throw new Exception("@恢复流程出现错误,产生的工作者列表");
-                BP.WF.MsgsManager.AddMsgs(wls, "恢复的流程", wn.HisNode.Name, "回复的流程");
+
+                foreach (GenerWorkerList item in wls)
+                    BP.WF.Dev2Interface.Port_SendMsg(item.FK_Emp, "流程恢复通知:" + gwf.Title, "该流程[" + gwf.Title + "]，请打开待办处理.", "rback");
             }
             catch (Exception ex)
             {

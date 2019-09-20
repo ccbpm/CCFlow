@@ -5473,9 +5473,7 @@ namespace BP.WF
                     string fk_emp = dr[0].ToString();
                     string isPass = dr[1].ToString();
                     if (fk_emp == userNo && (isPass == "0" || isPass == "80" || isPass == "90"))
-                    {
                         return true;
-                    }
                 }
                 return false;
             }

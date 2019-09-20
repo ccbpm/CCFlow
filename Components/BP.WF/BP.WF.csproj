@@ -511,9 +511,6 @@
     <Compile Include="WF\FlowOpList.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />
     <Compile Include="Data\GERpt.cs" />
-    <Compile Include="Msg.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Template\BillTemplate.cs">
       <SubType>Code</SubType>
     </Compile>

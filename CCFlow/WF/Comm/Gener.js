@@ -1040,6 +1040,7 @@ var Entity = (function () {
             //var params = getParams(self);
             var params = getParams1(this);
 
+
             var result;
             $.ajax({
                 type: 'post',
@@ -1277,11 +1278,13 @@ var Entity = (function () {
             if (myparams == null || myparams == undefined)
                 myparams = "";
 
+            $.each(arguments, function (i, o) {
+                if (i != 0)
+                    params += o + "~";
+            });
+
             arguments["paras"] = myparams;
-            /*$.each(arguments, function (i, o) {
-            if (i > 0)
-            params.push(o);
-            });*/
+           
 
             var pkval = this.GetPKVal();
             if (pkval == null || pkval == "") {

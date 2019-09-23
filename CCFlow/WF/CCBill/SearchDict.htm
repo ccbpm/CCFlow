@@ -239,7 +239,7 @@
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
             //权限判断按钮.
-            if (fb.BtnNewEnable == 1)
+            if (parseInt(fb.BtnNewModel) !=2)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">' + fb.BtnNewLable + '</a>';
 
             if (fb.BtnDelEnable == 1)

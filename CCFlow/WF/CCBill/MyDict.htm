@@ -106,15 +106,27 @@
 
             //当前是归档状态.
             if (frmBill.BtnNewModel != 2) {
-                toolBar += "<input type=button value='" + frmBill.BtnNewLable + "' onclick='NewIt();' />";
+                 var btnNew = frmBill.BtnNewLable;
+                if (btnNew == null || btnNew == "")
+                    btnNew = "新增";
+                toolBar += "<input type=button value='" + btnNew + "' onclick='NewIt();' />";
             }
 
-            if (frmBill.BtnSaveEnable == 1)
-                toolBar += "<input type=button value='" + frmBill.BtnSaveLable + "' onclick='SaveIt(false);' />";
+            if (frmBill.BtnSaveEnable == 1) {
+                var btnSave = frmBill.BtnSaveLable;
+                if (btnSave == null || btnSave == "")
+                    btnSave = "保存";
+                toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
+            }
+                
 
 
-            if (frmBill.BtnSaveAndCloseEnable == 1)
-                toolBar += "<input type=button value='" + frmBill.BtnSaveAndCloseLable + "' onclick='SaveIt(true);' />";
+            if (frmBill.BtnSaveAndCloseEnable == 1) {
+                 var btnSaveAndClose = frmBill.BtnSaveAndCloseLable;
+                if (btnSaveAndClose == null || btnSaveAndClose == "")
+                    btnSaveAndClose = "保存并关闭";
+            }
+                toolBar += "<input type=button value='" +btnSaveAndClose + "' onclick='SaveIt(true);' />";
 
 
             if (frmBill.BtnSearchLabel == "") frmBill.BtnSearchLabel = "查询";

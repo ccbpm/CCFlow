@@ -156,13 +156,8 @@ namespace BP.WF
                     string start = "";
                     string end = "";
                     bool isPass = false;
-                    //if(DataType.IsNullOrEmpty(dtArray[0]) == true)
-                    //    json += " start:'',";
-                    //else
-                    //{
-                        json += " start:  " + ToData(dtArray[0]) + ",";
-                     //   start = ToData(dtArray[0]);
-                    //}
+                    json += " start:  " + ToData(dtArray[0]) + ",";
+
                         
                     if (DataType.IsNullOrEmpty(dtArray[1]) == true && DataType.IsNullOrEmpty(dtArray[0]) == true) 
                         json += " end:'',";
@@ -187,12 +182,16 @@ namespace BP.WF
                             end = DateTime.Now.ToString("yyyy-MM-dd");
                         if(end.CompareTo(plantCHDt)>0)
                             json += " color: 'red' ";
-                        // 预警计算
-                        string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
-                        if(warningDt.CompareTo(plantCHDt)>=0)
-                            json += " color: 'yellow' ";
                         else
-                            json += " color: 'green' ";
+                        {
+                            // 预警计算
+                            string warningDt = DataType.AddDays(end, 3, TWay.Holiday).ToString("yyyy-MM-dd");
+                            if (warningDt.CompareTo(plantCHDt) >= 0)
+                                json += " color: 'yellow' ";
+                            else
+                                json += " color: 'green' ";
+                        }
+                        
                     }
 
                    
@@ -768,11 +767,7 @@ namespace BP.WF
                 url = "/DataUser/PortalInterface.asmx";
                 url = Glo.HostURL + url;
             }
-            else
-            {
-                //  url = string.Format("/{0}webservices/webservice.*", AppName != string.Empty ? AppName + "/" : string.Empty);
-                //    url = new Uri(App.Current.Host.Source, "../").ToString() + "service/Service?wsdl";
-            }
+
 
             url = url.Replace("//", "/");
             url = url.Replace(":/", "://");

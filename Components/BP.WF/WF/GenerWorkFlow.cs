@@ -262,9 +262,6 @@ namespace BP.WF
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
-        /// <summary>
-        /// FK_NY
-        /// </summary>
         public const string FK_NY = "FK_NY";
         /// <summary>
         /// 周次

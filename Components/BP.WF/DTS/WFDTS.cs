@@ -15,7 +15,7 @@ namespace BP.WF.DTS
 {
     
 
-    public class UserPort : DataIOEn2
+    public class UserPort : DataIOEn
     {
         /// <summary>
         /// 调度人员,岗位,部门

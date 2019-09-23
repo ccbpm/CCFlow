@@ -1195,18 +1195,6 @@ namespace BP.WF.HttpHandler
                 /* 如果是枚举 */
                 SysEnums ses = new SysEnums();
                 ses.Retrieve(SysEnumAttr.IntKey, attr.UIBindKey);
-
-                //ses.ToStringOfSQLModelByKey
-
-                BP.Pub.NYs nys = new Pub.NYs();
-                foreach (SysEnum item in ses)
-                {
-                    BP.Pub.NY ny =new Pub.NY();
-                    ny.No = item.IntKey.ToString();
-                    ny.Name = item.Lab;
-                    nys.AddEntity(ny);
-                }
-                return nys.ToJson();
             }
 
             return "err@设置的默认分组[" + key + "]不能是普通字段.";

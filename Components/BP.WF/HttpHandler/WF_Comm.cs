@@ -760,7 +760,38 @@ namespace BP.WF.HttpHandler
             object[] myparas = new object[0];
 
             if (DataType.IsNullOrEmpty(paras) == false)
-                myparas = paras.Split('~');
+            {
+                string[] str = paras.Split('~');
+                myparas = new object[str.Length];
+                RefMethod rm = null;
+                foreach(RefMethod item in en.EnMap.HisRefMethods)
+                {
+                    if (item.ClassMethodName.Replace(this.EnName+".","").Equals(methodName+"()"))
+                    {
+                        rm = item;
+                        break;
+                    }
+                }
+
+                Attrs attrs = rm.HisAttrs;
+                int idx = 0;
+
+                foreach(Attr attr in attrs)
+                {
+                     myparas[idx] = str[idx];
+                    if (attr.MyDataType == DataType.AppInt)
+                        myparas[idx] = Int32.Parse(str[idx]);
+                    if (attr.MyDataType == DataType.AppFloat)
+                        myparas[idx] = float.Parse(str[idx]);
+                    if (attr.MyDataType == DataType.AppDouble)
+                        myparas[idx] = double.Parse(str[idx]);
+                    if (attr.MyDataType == DataType.AppMoney)
+                        myparas[idx] = new Decimal(double.Parse(str[idx]));
+                    idx++;
+                }
+            }
+            
+            
 
             string result = mp.Invoke(en, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;

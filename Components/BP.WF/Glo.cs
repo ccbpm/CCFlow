@@ -1865,21 +1865,47 @@ namespace BP.WF
         {
             string sql = "";
 
+            string errInfo = "";
             try
             {
+                errInfo = " 当前用户没有[查询系统表]的权限. ";
+
                 if (DBAccess.IsExitsObject("AA"))
                 {
+                    errInfo = " 当前用户没有[删除表]的权限. ";
                     sql = "DROP TABLE AA";
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                sql = "CREATE TABLE AA (OID int NOT NULL)";
+                errInfo = " 当前用户没有[创建表]的权限. ";
+                sql = "CREATE TABLE AA (OID int NOT NULL)"; //检查是否可以创建表.
                 BP.DA.DBAccess.RunSQL(sql);
 
-                sql = "select * from AA ";
+                errInfo = " 当前用户没有[插入数据]的权限. ";
+                sql = "INSERT INTO AA (OID) VALUE(100 )"; 
                 BP.DA.DBAccess.RunSQL(sql);
 
-                sql = "select * from aa ";
+                errInfo = " 当前用户没有[update 表数据]的权限. ";
+                sql = "UPDATE AA SET OID=101";
+                BP.DA.DBAccess.RunSQL(sql);
+
+                errInfo = " 当前用户没有[delete 表数据]的权限. ";
+                sql = "DELETE FROM AA";
+                BP.DA.DBAccess.RunSQL(sql);
+
+                errInfo = " 当前用户没有[创建表主键]的权限. ";
+                DBAccess.CreatePK("AA", "OID", SystemConfig.AppCenterDBType);
+
+                errInfo = " 当前用户没有[创建索引]的权限. ";
+                DBAccess.CreatIndex("AA", "OID"); //可否创建索引.
+
+
+                errInfo = " 当前用户没有[查询数据表]的权限. ";
+                sql = "select * from AA "; //检查是否有查询的权限.
+                BP.DA.DBAccess.RunSQL(sql);
+
+                errInfo = " 当前数据库设置区分了大小写，不能对大小写敏感，如果是mysql数据库请参考 https://blog.csdn.net/ccflow/article/details/100079825 ";
+                sql = "select * from aa "; //检查是否区分大小写.
                 BP.DA.DBAccess.RunSQL(sql);
 
                 if (DBAccess.IsExitsObject("AAVIEW"))
@@ -1888,15 +1914,17 @@ namespace BP.WF
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                sql = "CREATE VIEW AAVIEW AS SELECT * FROM AA ";
+                errInfo = " 当前用户没有[创建视图]的权限. ";
+                sql = "CREATE VIEW AAVIEW AS SELECT * FROM AA "; //检查是否可以创建视图.
                 BP.DA.DBAccess.RunSQL(sql);
 
-                sql = "DROP VIEW AAVIEW";
+                errInfo = " 当前用户没有[删除视图]的权限. ";
+                sql = "DROP VIEW AAVIEW"; //检查是否可以删除视图.
                 BP.DA.DBAccess.RunSQL(sql);
 
-                sql = "DROP TABLE AA";
+                errInfo = " 当前用户没有[删除表]的权限. ";
+                sql = "DROP TABLE AA"; //检查是否可以删除表.
                 BP.DA.DBAccess.RunSQL(sql);
-
                 return true;
             }
             catch (Exception ex)
@@ -1913,11 +1941,14 @@ namespace BP.WF
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                string info = "";
-                info += "1. 当前登录的数据库帐号，必须有创建、删除视图或者table的权限。";
-                info += "2. 必须有查询的权限。";
-                info += "3. 不能对大小写敏感，如果是mysql数据库请参考 https://blog.csdn.net/ccflow/article/details/100079825 ";
-                info += "etc: 数据库测试异常信息:" + ex.Message;
+                string info = "检查数据库安装权限出现错误:";
+                info += "\t\n1. 当前登录的数据库帐号，必须有创建、删除视图或者table的权限。";
+                info += "\t\n2. 必须对表有增、删、改、查的权限。 ";
+                info += "\t\n3. 必须有删除创建索引主键的权限。 ";
+                info += "\t\n4. 我们建议您设置当前数据库连接用户为管理员权限。 ";
+                info += "\t\n ccbpm检查出来的信息如下：" + errInfo;
+
+                info += "\t\n etc: 数据库测试异常信息:" + ex.Message;
 
                 throw new Exception("err@" + info);
                 //  return false;

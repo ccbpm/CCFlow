@@ -1873,12 +1873,11 @@ namespace BP.WF
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                sql = "CREATE TABLE AA (XXX,DDD)";
+                sql = "CREATE TABLE AA (OID int NOT NULL)";
                 BP.DA.DBAccess.RunSQL(sql);
 
                 sql = "select * from aa ";
                 BP.DA.DBAccess.RunSQL(sql);
-
 
                 if (DBAccess.IsExitsObject("AAVIEW"))
                 {
@@ -1911,7 +1910,9 @@ namespace BP.WF
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                throw new Exception("err@当前用户没有创建,删除表，或者创建,删除视图的权限，或者区分大小写。");
+                string info = " ccbpm不支持,数据库区分大小写，请修改数据库的设置,让其不区分大小写. mysql数据库请参考设置:https://blog.csdn.net/ccflow/article/details/100079825";
+
+                throw new Exception("err@当前用户没有创建,删除表，或者创建,删除视图的权限，或者区分大小写。"+info);
                 //  return false;
             }
             return true;

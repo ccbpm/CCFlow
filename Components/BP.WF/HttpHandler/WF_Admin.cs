@@ -274,10 +274,9 @@ namespace BP.WF.HttpHandler
                 if (DBAccess.TestIsConnection() == false)
                     return "err@数据库连接配置错误,请参考手册查看数据库配置连接.";
 
-                //检查是否区分大小写. 
-                if (DBAccess.IsCaseSensitive == true)
-                    return "err@ccbpm不支持,数据库区分大小写，请修改数据库的设置,让其不区分大小写. mysql数据库请参考设置:https://blog.csdn.net/ccflow/article/details/100079825";
 
+             //   DBAccess.IsCaseSensitive
+ 
                 //判断是否可以安装,不能安装就抛出异常.
                 BP.WF.Glo.IsCanInstall();
 
@@ -295,7 +294,8 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+
+                return "err@" + ex.Message ;
             }
         }
         public string DBInstall_Submit()

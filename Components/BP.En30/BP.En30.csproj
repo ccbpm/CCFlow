@@ -184,7 +184,7 @@
     <Compile Include="DTS\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\TableFieldAddComment.cs" />
+    <Compile Include="DTS\Sys\TableFieldAddComment.cs" />
     <Compile Include="En\EnObj.cs">
       <SubType>Code</SubType>
     </Compile>

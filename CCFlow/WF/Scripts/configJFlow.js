@@ -15,22 +15,15 @@ function basePath()
 	
 	return localhostPaht+projectName;
 	
-	
-	
-	
-	var curWwwPath = window.document.location.href;		
-	var pathName =  window.document.location.pathname;
-	var pos = curWwwPath.indexOf(pathName);
-	var localhostPaht = curWwwPath.substring(0,pos);
-	var projectName = pathName.substring(0,pathName.substr(1).indexOf('/WF')+1);
-	
-	var path= localhostPaht + projectName ;
-	
-	
-	
 }
 
-
+/**
+ * 获取项目路径
+ * @returns
+ */
+function getContextPath(){
+	return basePath.substring(basePath.lastIndexOf("/"));
+}
 
 //For .net 后台的调用的url ,  java的与.net的不同.
 var plant = "JFlow";

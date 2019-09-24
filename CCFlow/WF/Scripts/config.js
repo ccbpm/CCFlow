@@ -20,6 +20,13 @@ function basePath() {
 }
 
 
+/**
+ * 获取项目路径
+ * @returns
+ */
+function getContextPath(){
+	return basePath.substring(basePath.lastIndexOf("/"));
+}
 
 //公共方法
 function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {

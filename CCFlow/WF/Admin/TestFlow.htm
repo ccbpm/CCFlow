@@ -52,7 +52,7 @@
             var urlHost = "";
             if (plant == "jeesite") {
 
-                urlHost = "/js/a/logout";
+                urlHost = getContextPath() + "/a/logout";
                 //$("#Table1").attr("caption", "&nbsp;&nbsp;演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a>");
 
                 document.getElementById("Table1").caption.innerHTML = "演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a> - <font color=red><a href=\"javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');\" >提示</font>";

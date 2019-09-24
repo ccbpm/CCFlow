@@ -251,3 +251,7 @@ ModelManifest.xml
 /CCFlow/Temp
 /CCFlow/DataUser/TempleteExpEns/ND2RptMyDept
 /CCFlow/Bin
+/.idea/.gitignore
+/.idea/ccflow.iml
+/.idea/modules.xml
+/.idea/vcs.xml

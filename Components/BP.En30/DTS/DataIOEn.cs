@@ -24,7 +24,7 @@ namespace BP.DTS
 
         }
     }
-    public class AddEmpLeng : DataIOEn2
+    public class AddEmpLeng : DataIOEn
     {
         public AddEmpLeng()
         {
@@ -109,16 +109,9 @@ namespace BP.DTS
 	/// <summary>
 	/// 调度
 	/// </summary>
-	abstract public class DataIOEn :DataIOEn2
+	abstract public class DataIOEn 
 	{
 		public bool Enable=true;
-	}
-	
-	/// <summary>
-	/// EnMap 的摘要说明。
-	/// </summary>
-	abstract public class DataIOEn2
-	{
 		 
 		/// <summary>
 		/// 获取在 DTS 中的编号。
@@ -239,7 +232,7 @@ namespace BP.DTS
 		/// <summary>
 		/// 调度
 		/// </summary>
-		public  DataIOEn2(){}
+		public  DataIOEn(){}
 		#region 公共方法．
 		 
 		public int ToDBUrlRunSQL(string sql)
@@ -247,26 +240,7 @@ namespace BP.DTS
             return DBAccess.RunSQL(sql);
              
 		}
-		public int ToDBUrlRunDropTable(string table)
-		{
-			switch(this.ToDBUrl)
-			{
-				case DBUrlType.AppCenterDSN:
-					return DBAccess.RunSQLDropTable(table);
-                //case DBUrlType.DBAccessOfMSSQL1:
-                //    return DBAccessOfMSSQL1.RunSQL(table);
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    return DBAccessOfMSSQL2.RunSQL(table);
-				case DBUrlType.DBAccessOfODBC:
-					return DBAccessOfODBC.RunSQL(table);
-                //case DBUrlType.DBAccessOfOracle1:
-                //    return DBAccessOfOracle1.RunSQLTRUNCATETable(table);
-                //case DBUrlType.DBAccessOfOracle2:
-                //    return DBAccessOfOracle2.RunSQLTRUNCATETable(table);
-				default:
-					throw new Exception("@ error it");
-			}
-		}
+		 
 		/// <summary>
 		/// 是否存在?
 		/// </summary>
@@ -275,26 +249,6 @@ namespace BP.DTS
 		public bool ToDBUrlIsExit(string sql)
 		{
             return DBAccess.IsExits(sql);
-
-            //switch(this.ToDBUrl)
-            //{
-            //    case DBUrlType.AppCenterDSN:
-            //        return DBAccess.IsExits(sql);
-            //    case DBUrlType.DBAccessOfMSSQL1:
-            //        return DBAccessOfMSSQL1.IsExits(sql);
-            //    case DBUrlType.DBAccessOfMSSQL2:
-            //        return DBAccessOfMSSQL2.IsExits(sql);
-            //    case DBUrlType.DBAccessOfODBC:
-            //        return DBAccessOfODBC.IsExits(sql);
-            //    case DBUrlType.DBAccessOfOLE:
-            //        return DBAccessOfOLE.IsExits(sql);
-            //    case DBUrlType.DBAccessOfOracle1:
-            //        return DBAccessOfOracle1.IsExits(sql);
-            //    case DBUrlType.DBAccessOfOracle2:
-            //        return DBAccessOfOracle2.IsExits(sql);
-            //    default:
-            //        throw new Exception("@ error it");
-            //}
 		}
 		#endregion
 

@@ -688,31 +688,6 @@ namespace BP.En
         }
         #endregion
 
-        #region 获取 Htable_Rpt2Base.
-        /// <summary>
-        /// 实体集合
-        /// </summary>
-        public static Hashtable Htable_Rpt2Base;
-        /// <summary>
-        /// 得到一个实体
-        /// </summary>
-        /// <param name="rpt2Base">类名称</param>
-        /// <returns>BP.Rpt.Rpt2Base</returns>
-        public static BP.Pub.Rpt2Base GetRpt2Base(string rpt2Base)
-        {
-            if (Htable_Rpt2Base == null)
-            {
-                Htable_Rpt2Base = new Hashtable();
-                string cl = "BP.Rpt.Rpt2Base";
-                ArrayList al = ClassFactory.GetObjects(cl);
-                foreach (BP.Pub.Rpt2Base en in al)
-                    Htable_Rpt2Base.Add(en.ToString(), en);
-            }
-            object tmp = Htable_Rpt2Base[rpt2Base];
-            return (tmp as BP.Pub.Rpt2Base);
-        }
-        #endregion
-
         #endregion
 
 

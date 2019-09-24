@@ -168,6 +168,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\AtPara.cs" />
+    <Compile Include="DA\Cash.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -181,12 +184,11 @@
     <Compile Include="DTS\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\Sys\TableFieldAddComment.cs" />
+    <Compile Include="DTS\TableFieldAddComment.cs" />
     <Compile Include="En\EnObj.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\KeyVal.cs" />
-    <Compile Include="En\GloEntity.cs" />
     <Compile Include="NetPlatformImpl\CacheHelper.cs" />
     <Compile Include="NetPlatformImpl\DA.cs" />
     <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
@@ -195,7 +197,7 @@
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Pub\Day.cs" />
+    <Compile Include="Pub\Rpt2Base.cs" />
     <Compile Include="References\IJsonWrapper.cs" />
     <Compile Include="References\JsonData.cs" />
     <Compile Include="References\JsonException.cs" />
@@ -205,7 +207,6 @@
     <Compile Include="References\JsonWriter.cs" />
     <Compile Include="References\Lexer.cs" />
     <Compile Include="References\ParserToken.cs" />
-    <Compile Include="Pub\Rpt2Base.cs" />
     <Compile Include="Service References\ccportal\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -301,9 +302,6 @@
     <Compile Include="Sys\SFTableSQL.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="DA\EnumDA.cs" />
-    <Compile Include="DA\Cash.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DA\DataType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -370,9 +368,6 @@
     <Compile Include="En\ControlsEnum.cs" />
     <Compile Include="En\Map.cs" />
     <Compile Include="En\Row.cs" />
-    <Compile Include="En\SimpleNoNameFix.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="En\EntityTree.cs" />
     <Compile Include="Tools\WFSealData.cs" />
     <Compile Include="Sys\EventBase.cs" />
@@ -385,15 +380,6 @@
     <Compile Include="GPM\Station.cs" />
     <Compile Include="GPM\StationType.cs" />
     <Compile Include="Web\GuestUser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pub\ND.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pub\NY.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pub\YF.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\GroupEnsTemplate.cs">
@@ -417,9 +403,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\RefMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\SimpleNoName.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\EntityMyPK.cs" />

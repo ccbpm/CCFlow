@@ -1357,7 +1357,6 @@ namespace BP.Pub
         }
         #endregion
 
-
         #region 生成单据
         #region 生成单据
         /// <summary>
@@ -1416,6 +1415,4 @@ namespace BP.Pub
         }
         #endregion
     }
-
-
 }

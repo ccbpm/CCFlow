@@ -2584,6 +2584,18 @@ namespace BP.WF
             return DB_GenerHungUpList(null);
         }
         /// <summary>
+        /// 将要执行的工作
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable DB_FutureTodolist()
+        {
+            string sql = "SELECT A.* FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID=B.WorkID AND B.FK_Emp='"+BP.Web.WebUser.No+"'";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return dt;
+        }
+            
+        /// <summary>
         /// 获得指定流程挂起工作列表
         /// </summary>
         /// <param name="fk_flow">流程编号,如果编号为空则返回所有的流程挂起工作列表.</param>

@@ -1505,6 +1505,17 @@ namespace BP.WF.HttpHandler
             //转化大写的toJson.
             return BP.Tools.Json.ToJson(dt);
         }
+
+        public string FutureTodolist_Init()
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_FutureTodolist();
+
+            //转化大写的toJson.
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+        
         #endregion 获得列表.
 
 

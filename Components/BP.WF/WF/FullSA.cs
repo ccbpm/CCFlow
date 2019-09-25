@@ -147,15 +147,46 @@ namespace BP.WF
 
                                 sa.Insert();
                             }
-
                         }
-
                         continue;
                     }
-
                     continue;
-                   
                 }
+
+                #region 仅按岗位计算
+                if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
+                {
+                   string sql = "SELECT c.No,c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)                    
+                        throw new Exception("err@节点绑定的仅按照岗位计算，没有找到人员:"+item.Name +" SQL="+ps.SQLNoPara);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string no = dr[0].ToString();                         
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
+
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
+
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
+
+                        sa.Insert();
+                    }
+
+                }
+                #endregion
 
                 //处理与指定节点相同的人员.
                 if (item.HisDeliveryWay == DeliveryWay.BySpecNodeEmp

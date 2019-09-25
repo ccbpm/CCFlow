@@ -3885,6 +3885,7 @@ namespace BP.WF.HttpHandler
                 wk.Retrieve();
                 WorkNode wn = new WorkNode(wk, currNode);
                 wn.HisFlow.IsFullSA = true;
+
                 //执行计算未来处理人.
                 FullSA fsa = new FullSA(wn);
                 #endregion 执行计算未来处理人.

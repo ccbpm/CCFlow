@@ -95,13 +95,13 @@ namespace CCFlow.WF.CCForm
                 foreach (GEDtl dtl in dtlEns)
                 {
                     DataTable dtDtl = dtl.ToDataTableField(item.No);
-                    
+
                     #region 处理bool类型.
                     foreach (Attr dtlitem in dtl.EnMap.Attrs)
                     {
                         if (dtlitem.MyDataType == DataType.AppBoolean)
                         {
-                            if(Dtl.Columns.Contains(dtlitem.Key + "Text"))
+                            if (Dtl.Columns.Contains(dtlitem.Key + "Text"))
                             {
                                 continue;
                             }
@@ -126,6 +126,35 @@ namespace CCFlow.WF.CCForm
             BP.WF.Template.BillTemplate template = new BP.WF.Template.BillTemplate(billTemplateNo);
             bytes = template.GenerTemplateFile();
             return;
+        }
+
+
+        [WebMethod]
+        public string SaveBillDesingerTemplate_2019(string billNo, string frmID, byte[] bytes)
+        {
+            try
+            {
+                string filePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
+                string fileName = billNo + "_" + frmID + ".docx";
+                if (!Directory.Exists(filePath))
+                    Directory.CreateDirectory(filePath);
+
+                string fileFullPath = filePath + fileName;
+
+                if (File.Exists(fileFullPath))
+                    File.Delete(fileFullPath);
+
+                FileStream fs = new FileStream(fileFullPath, System.IO.FileMode.CreateNew);
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Close();
+
+                return "模版上传成功";
+            }
+            catch (Exception ex)
+            {
+
+                return "err@:" + ex.Message;
+            }
         }
         #endregion
 
@@ -606,46 +635,46 @@ namespace CCFlow.WF.CCForm
         /// <param name="pkValue">主键</param>
         /// <param name="byt">文件流.</param>
         [WebMethod]
-      public void SaveFrmAth(string userNo, string sid, string frmID, int nodeID, Int64 workID, byte[] byt, string guid)
-		{
-			BP.WF.Dev2Interface.Port_Login(userNo);
-			MapData md = new MapData(frmID);
-			FrmAttachments aths = new FrmAttachments(frmID);
-			if (aths.Count == 0)
-			{
-				BP.Sys.CCFormAPI.CreateOrSaveAthMulti(md.No, "Ath", "附件", 100, 100);
-				aths = new FrmAttachments(frmID);
-			}
-			FrmAttachment ath = aths[0] as FrmAttachment;
+        public void SaveFrmAth(string userNo, string sid, string frmID, int nodeID, Int64 workID, byte[] byt, string guid)
+        {
+            BP.WF.Dev2Interface.Port_Login(userNo);
+            MapData md = new MapData(frmID);
+            FrmAttachments aths = new FrmAttachments(frmID);
+            if (aths.Count == 0)
+            {
+                BP.Sys.CCFormAPI.CreateOrSaveAthMulti(md.No, "Ath", "附件", 100, 100);
+                aths = new FrmAttachments(frmID);
+            }
+            FrmAttachment ath = aths[0] as FrmAttachment;
 
-			//把文件写入.
-			string rootPath = Context.Server.MapPath("~/" + ath.SaveTo);
-			string fileName = guid + "." + System.Drawing.Imaging.ImageFormat.Jpeg.ToString();
-			string filePath = rootPath + fileName;
-			if (System.IO.File.Exists(filePath) == true)
-				System.IO.File.Delete(filePath);
-			BP.DA.DataType.WriteFile(filePath, byt);
+            //把文件写入.
+            string rootPath = Context.Server.MapPath("~/" + ath.SaveTo);
+            string fileName = guid + "." + System.Drawing.Imaging.ImageFormat.Jpeg.ToString();
+            string filePath = rootPath + fileName;
+            if (System.IO.File.Exists(filePath) == true)
+                System.IO.File.Delete(filePath);
+            BP.DA.DataType.WriteFile(filePath, byt);
 
-			FileInfo info = new FileInfo(filePath);
-			FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-			dbUpload.MyPK = guid;
-			dbUpload.NodeID = nodeID.ToString();
-			dbUpload.Sort = null;
-			dbUpload.FK_FrmAttachment = ath.MyPK;
-			dbUpload.FK_MapData = ath.FK_MapData;
-			dbUpload.FileExts = info.Extension;
-			dbUpload.FileFullName = filePath;
-			dbUpload.FileName = fileName;
-			dbUpload.FileSize = (float)info.Length;
-			dbUpload.RDT = DataType.CurrentDataTimess;
-			dbUpload.Rec = userNo;
-			dbUpload.RecName = BP.Web.WebUser.Name;
-			dbUpload.RefPKVal = workID.ToString();
+            FileInfo info = new FileInfo(filePath);
+            FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+            dbUpload.MyPK = guid;
+            dbUpload.NodeID = nodeID.ToString();
+            dbUpload.Sort = null;
+            dbUpload.FK_FrmAttachment = ath.MyPK;
+            dbUpload.FK_MapData = ath.FK_MapData;
+            dbUpload.FileExts = info.Extension;
+            dbUpload.FileFullName = filePath;
+            dbUpload.FileName = fileName;
+            dbUpload.FileSize = (float)info.Length;
+            dbUpload.RDT = DataType.CurrentDataTimess;
+            dbUpload.Rec = userNo;
+            dbUpload.RecName = BP.Web.WebUser.Name;
+            dbUpload.RefPKVal = workID.ToString();
 
-			dbUpload.UploadGUID = guid;
-			dbUpload.DirectSave();
+            dbUpload.UploadGUID = guid;
+            dbUpload.DirectSave();
 
-		}
+        }
         /// <summary>
         /// 级联接口
         /// </summary>
@@ -727,66 +756,66 @@ namespace CCFlow.WF.CCForm
             //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
             return "1.0.0.0";
         }
-		public class ReportImage
-		{
-			public string ext;
-			public string fileName;
-			public byte[] bytesData;
-			public string mypk;
-		}
+        public class ReportImage
+        {
+            public string ext;
+            public string fileName;
+            public byte[] bytesData;
+            public string mypk;
+        }
 
-		[WebMethod]
-		public string GetReportImagesData(long workID, string createReportType)
-		{
-			try
-			{
-				if (string.IsNullOrWhiteSpace(createReportType))
-					return null;
+        [WebMethod]
+        public string GetReportImagesData(long workID, string createReportType)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(createReportType))
+                    return null;
 
-				string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-				BP.DA.Paras ps = new BP.DA.Paras();
+                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                BP.DA.Paras ps = new BP.DA.Paras();
 
 
-				switch (createReportType)
-				{
-					case "1":
-						ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE  RefPKVal=" + dbStr + "RefPKVal";
-						ps.Add(BP.Sys.FrmAttachmentDBAttr.RefPKVal, workID);
-						break;
-					case "2":
-						ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE " +
-								 "RefPKVal in(SELECT WorkID FROM WF_GenerWorkFlow WHERE PWORKID=" + dbStr + "PWORKID)";
-						ps.Add("PWORKID", workID);
-						break;
-					default:
-						break;
-				}
-				DataTable dt = DBAccess.RunSQLReturnTable(ps);
+                switch (createReportType)
+                {
+                    case "1":
+                        ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE  RefPKVal=" + dbStr + "RefPKVal";
+                        ps.Add(BP.Sys.FrmAttachmentDBAttr.RefPKVal, workID);
+                        break;
+                    case "2":
+                        ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE " +
+                                 "RefPKVal in(SELECT WorkID FROM WF_GenerWorkFlow WHERE PWORKID=" + dbStr + "PWORKID)";
+                        ps.Add("PWORKID", workID);
+                        break;
+                    default:
+                        break;
+                }
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-				List<ReportImage> reImgsList = new List<ReportImage>();
-				foreach (DataRow dr in dt.Rows)
-				{
-					FileStream fs = new FileStream(dr["FileFullName"].ToString(), FileMode.Open);
-					long size = fs.Length;
-					byte[] bytes = new byte[size];
-					fs.Read(bytes, 0, bytes.Length);
-					fs.Close();
+                List<ReportImage> reImgsList = new List<ReportImage>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    FileStream fs = new FileStream(dr["FileFullName"].ToString(), FileMode.Open);
+                    long size = fs.Length;
+                    byte[] bytes = new byte[size];
+                    fs.Read(bytes, 0, bytes.Length);
+                    fs.Close();
 
-					reImgsList.Add(new ReportImage
-					{
-						ext = dr["FileExts"].ToString(), //frmDB.FileExts,
-						fileName = dr["FileName"].ToString(), //frmDB.FileName,
-						bytesData = bytes,
-						mypk = dr["MyPK"].ToString() //frmDB.MyPK
-					});
-				}
+                    reImgsList.Add(new ReportImage
+                    {
+                        ext = dr["FileExts"].ToString(), //frmDB.FileExts,
+                        fileName = dr["FileName"].ToString(), //frmDB.FileName,
+                        bytesData = bytes,
+                        mypk = dr["MyPK"].ToString() //frmDB.MyPK
+                    });
+                }
 
-				return LitJson.JsonMapper.ToJson(reImgsList);
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
-		}
-	}
+                return LitJson.JsonMapper.ToJson(reImgsList);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+    }
 }

@@ -7,7 +7,7 @@ function GetPublicJSON() {
 if (langJson!=null)
 return langJson;
 
-     langJson= {"" };
+     langJson= {};
 
 }
  

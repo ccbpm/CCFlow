@@ -69,6 +69,20 @@ namespace BP.WF
             //int x2 = DBAccess.RunSQLReturnValInt("SELECT MAX(X) FROM WF_NodeLabelNode WHERE FK_Flow='" + this.No + "'", 0);
             //this.MaxY = DBAccess.RunSQLReturnValInt("SELECT MAX(Y) FROM WF_Node WHERE FK_Flow='" + this.No + "'", 0);
         }
+        /// <summary>
+        /// 待办的业务字段
+        /// </summary>
+        public string BuessFields
+        {
+            get
+            {
+                return this.GetParaString(FlowAttr.BuessFields);
+            }
+            set
+            {
+                this.SetPara(FlowAttr.BuessFields, value);
+            }
+        }
         #endregion 参数属性.
 
         #region 业务数据表同步属性.

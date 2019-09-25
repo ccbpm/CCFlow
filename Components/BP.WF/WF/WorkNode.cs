@@ -6477,7 +6477,6 @@ namespace BP.WF
             // 处理自动运行 - 预先设置未来的运行节点.
             this.DealAutoRunEnable();
 
-
             //把数据更新到数据库里.
             this.HisWork.DirectUpdate();
             if (this.HisWork.EnMap.PhysicsTable != this.rptGe.EnMap.PhysicsTable)
@@ -6775,8 +6774,6 @@ namespace BP.WF
                             this.HisGenerWorkFlow.TodolistModel = _transferCustom.TodolistModel;
                         }
                     }
-                    
-
                 }
 
 
@@ -6815,7 +6812,7 @@ namespace BP.WF
 
                     ////调用发送成功事件.
                     //string  flowOver = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
-                    //    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    //this.HisNode, this.rptGe, null, this.HisMsgObjs);
                     //this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
                     //执行考核
@@ -6869,6 +6866,28 @@ namespace BP.WF
                     return NodeSendToYGFlow(jumpToNode, jumpToEmp);
                 }
 
+                # region 2019.09.25 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
+                if (this.HisNode.IsStartNode && DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
+                {
+                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
+                    string[] expFields = this.HisFlow.BuessFields.Split(',');
+                    string exp = "";
+                    Attrs attrs = this.rptGe.EnMap.Attrs;
+                    foreach (string item in expFields)
+                    {
+                        if (DataType.IsNullOrEmpty(item) == true)
+                            continue;
+                        if (attrs.Contains(item) == false)
+                            continue;
+
+                        Attr attr = attrs.GetAttrByKey(item);
+                        exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                    }
+                    this.HisGenerWorkFlow.BuessFields = exp;
+                }
+                #endregion 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
+
+
                 #region 第二步: 进入核心的流程运转计算区域. 5*5 的方式处理不同的发送情况.
 
                 // 执行节点向下发送的25种情况的判断.
@@ -6906,6 +6925,10 @@ namespace BP.WF
                         this.HisGenerWorkFlow.Update();
                     }
                 }
+
+                
+
+
 
                 //计算从发送到现在的天数.
                 this.rptGe.FlowDaySpan = DataType.GeTimeLimits(this.HisGenerWorkFlow.RDT);

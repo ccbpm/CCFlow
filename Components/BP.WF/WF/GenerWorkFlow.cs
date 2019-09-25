@@ -331,10 +331,22 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.FlowNote, value);
             }
         }
-		/// <summary>
-		/// 工作流程编号
-		/// </summary>
-		public string  FK_Flow
+        public string BuessFields
+        {
+            get
+            {
+                return this.GetParaString("BuessFields");
+            }
+            set
+            {
+                this.SetPara("BuessFields", value);
+            }
+        }
+        
+        /// <summary>
+        /// 工作流程编号
+        /// </summary>
+        public string  FK_Flow
 		{
 			get
 			{

@@ -170,6 +170,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string BillNoFormat = "BillNoFormat";
         /// <summary>
+        /// 待办字段s
+        /// </summary>
+        public const string BuessFields = "BuessFields";
+        /// <summary>
         /// 流程备注的表达式
         /// </summary>
         public const string FlowNoteExp = "FlowNoteExp";

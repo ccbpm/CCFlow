@@ -470,10 +470,22 @@ namespace BP.WF.Template
                 //add  2013-08-30.
                 map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, false);
                 map.SetHelperUrl(FlowAttr.BillNoFormat, "http://ccbpm.mydoc.io/?v=5404&t=17041");
+
+                map.AddTBString(FlowAttr.BuessFields, null, "关键业务字段", true, false, 0, 100, 10, false);
+
+                string msg = "用于显示在待办上的业务字段信息.";
+                msg += "\t\n 1. 用户在看到待办的时候，就可以看到流程的实例的关键信息。";
+                msg += "\t\n 2. 用于待办的列表信息显示.";
+                msg += "\t\n 3. 配置格式为. Tel,Addr,Email  这些字段区分大小写并且是节点表单字段.";
+                msg += "\t\n 4. 数据存储在WF_GenerWorkFlow.AtPara里面.";
+                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
+
+                map.SetHelperAlert(FlowAttr.BuessFields, msg);
+                 
                 #endregion 表单数据.
 
                 #region 开发者信息.
-               
+
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, true, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, true, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignTime, null, "创建时间", true, true, 0, 50, 20, false);
@@ -1811,6 +1823,7 @@ namespace BP.WF.Template
             //更新缓存数据。
             Flow fl = new Flow(this.No);
             fl.RetrieveFromDBSources();
+
             #region StartFlows的清缓存
             if (fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart)
             {
@@ -1820,6 +1833,10 @@ namespace BP.WF.Template
             #endregion StartFlows的清缓存
 
             fl.Copy(this);
+
+            //2019.09.25 为周大福增加 关键业务字段.
+            fl.BuessFields = this.GetValStrByKey(FlowAttr.BuessFields);
+            fl.DirectUpdate();
 
             #region 检查数据完整性 - 同步业务表数据。
             // 检查业务是否存在.

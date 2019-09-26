@@ -928,8 +928,6 @@ function FullCtrlDDL(selectVal, ctrlID , mapExt) {
 
     var doc = mapExt.Tag;
     if (doc == "" || doc == null)
-        doc = mapExt.Doc;
-    if (doc == "" || doc == null)
         return;
    
     var dbSrcs = doc.split('$'); //获得集合.

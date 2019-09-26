@@ -1203,6 +1203,8 @@ function cleanAll(KeyOfEn) {
     //        $(obj).parent().show();
 
     //});
+    if (AllObjSet.length == 0)
+        return;
    var mapAttrs = AllObjSet[KeyOfEn];
     for (var i = 0; i < mapAttrs.length; i++) {
         SetCtrlShow(mapAttrs[i]);
@@ -1272,6 +1274,9 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
                 mapAttrs.push(key);
             }
 
+        }
+        if (!$.isArray(AllObjSet[KeyOfEn])) {
+            AllObjSet[KeyOfEn] = [];
         }
         AllObjSet[KeyOfEn].push(mapAttrs);
 

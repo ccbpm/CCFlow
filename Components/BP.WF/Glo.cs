@@ -1902,11 +1902,11 @@ namespace BP.WF
 
                 errInfo = " 当前用户没有[查询数据表]的权限. ";
                 sql = "select * from AA "; //检查是否有查询的权限.
-                BP.DA.DBAccess.RunSQL(sql);
+                BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 errInfo = " 当前数据库设置区分了大小写，不能对大小写敏感，如果是mysql数据库请参考 https://blog.csdn.net/ccflow/article/details/100079825 ";
                 sql = "select * from aa "; //检查是否区分大小写.
-                BP.DA.DBAccess.RunSQL(sql);
+                BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 if (DBAccess.IsExitsObject("AAVIEW"))
                 {

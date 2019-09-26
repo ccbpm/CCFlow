@@ -6891,6 +6891,20 @@ namespace BP.WF
                         Attr attr = attrs.GetAttrByKey(item);
                         exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
                     }
+
+                    // 如果用户需要从表单树里获得数据.
+                    //FrmNodes fns = new FrmNodes();
+                    //fns.Retrieve(FrmNodeAttr.FK_Node, this.HisNode.NodeID);
+                    //foreach (FrmNode fn in fns)
+                    //{
+                    //    if (fn.WhoIsPK == WhoIsPK.OID)
+                    //    {
+                    //    }
+                    //    if (fn.WhoIsPK == WhoIsPK.PPWorkID)
+                    //    {
+                    //    }
+                    //}
+
                     this.HisGenerWorkFlow.BuessFields = exp;
                 }
                 #endregion 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.

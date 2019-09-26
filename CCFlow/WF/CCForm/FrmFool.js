@@ -1178,31 +1178,32 @@ function InitMapAttrOfCtrl(mapAttr) {
 }
 
 //记录改变字段样式 不可编辑，不可见
-var mapAttrs = [];
+var AllObjSet = {};
+
 function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
     if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
         var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
-        cleanAll();
+        cleanAll(KeyOfEn);
         setEnable(FK_MapData, KeyOfEn, selecedval);
     }
 }
 function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
     if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
         var selectVal = $(obj).val();
-        cleanAll();
+        cleanAll(KeyOfEn);
         setEnable(FK_MapData, KeyOfEn, selectVal);
     }
 }
 
 //清空所有的设置
-function cleanAll() {
+function cleanAll(KeyOfEn) {
     //var trs = $("#CCForm  table tr .attr-group"); //如果隐藏就显示
     //$.each(trs, function (i, obj) {
     //    if ($(obj).parent().is(":hidden") == true)
     //        $(obj).parent().show();
 
     //});
-
+   var mapAttrs = AllObjSet[KeyOfEn];
     for (var i = 0; i < mapAttrs.length; i++) {
         SetCtrlShow(mapAttrs[i]);
         SetCtrlEnable(mapAttrs[i]);
@@ -1216,7 +1217,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
 		return;
     var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
     var frmRB = new Entity("BP.Sys.FrmRB", pkval);
-
+    var mapAttrs = [];
 
     //解决字段隐藏显示.
     var cfgs = frmRB.FieldsCfg;
@@ -1272,7 +1273,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
             }
 
         }
-
+        AllObjSet[KeyOfEn].push(mapAttrs);
 
     }
 

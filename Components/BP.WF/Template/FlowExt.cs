@@ -471,15 +471,14 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, false);
                 map.SetHelperUrl(FlowAttr.BillNoFormat, "http://ccbpm.mydoc.io/?v=5404&t=17041");
 
+                // add 2019-09-25 by zhoupeng
                 map.AddTBString(FlowAttr.BuessFields, null, "关键业务字段", true, false, 0, 100, 10, false);
-
                 string msg = "用于显示在待办上的业务字段信息.";
                 msg += "\t\n 1. 用户在看到待办的时候，就可以看到流程的实例的关键信息。";
                 msg += "\t\n 2. 用于待办的列表信息显示.";
                 msg += "\t\n 3. 配置格式为. Tel,Addr,Email  这些字段区分大小写并且是节点表单字段.";
                 msg += "\t\n 4. 数据存储在WF_GenerWorkFlow.AtPara里面.";
                 msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
-
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
                  
                 #endregion 表单数据.
@@ -1834,7 +1833,7 @@ namespace BP.WF.Template
 
             fl.Copy(this);
 
-            //2019.09.25 为周大福增加 关键业务字段.
+            //2019-09-25 -by zhoupeng 为周大福增加 关键业务字段.
             fl.BuessFields = this.GetValStrByKey(FlowAttr.BuessFields);
             fl.DirectUpdate();
 

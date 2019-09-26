@@ -70,7 +70,7 @@ namespace BP.WF
             //this.MaxY = DBAccess.RunSQLReturnValInt("SELECT MAX(Y) FROM WF_Node WHERE FK_Flow='" + this.No + "'", 0);
         }
         /// <summary>
-        /// 待办的业务字段
+        /// 待办的业务字段 2019-09-25 by zhoupeng
         /// </summary>
         public string BuessFields
         {
@@ -4661,21 +4661,7 @@ namespace BP.WF
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = this.ToE("FlowDataOut", "数据转出定义");  //"数据转出定义";
-                ////  rm.Icon = "/WF/Img/Btn/Table.gif";
-                //rm.ToolTip = "在流程完成时间，流程数据转储存到其它系统中应用。";
-                //rm.ClassMethodName = this.ToString() + ".DoExp";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "删除数据";
-                //rm.Warning = "您确定要执行删除流程数据吗？";
-                //rm.ToolTip = "清除历史流程数据。";
-                //rm.ClassMethodName = this.ToString() + ".DoExp";
-                //map.AddRefMethod(rm);
-                //map.AttrsOfOneVSM.Add(new FlowStations(), new Stations(), FlowStationAttr.FK_Flow,
-                //    FlowStationAttr.FK_Station, DeptAttr.Name, DeptAttr.No, "抄送岗位");
+              
 
                 this._enMap = map;
                 return this._enMap;

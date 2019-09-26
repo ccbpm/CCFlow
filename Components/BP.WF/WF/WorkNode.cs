@@ -6866,7 +6866,7 @@ namespace BP.WF
                     return NodeSendToYGFlow(jumpToNode, jumpToEmp);
                 }
 
-                #region 2019.09.25 计算未来处理人.
+                #region 2019-09-25 计算未来处理人.
                 if (this.HisNode.IsStartNode==true && this.HisFlow.IsFullSA==true)
                 {
                     FullSA fa=new FullSA(this);
@@ -6874,7 +6874,7 @@ namespace BP.WF
                 #endregion 计算未来处理人.
 
 
-                #region 2019.09.25 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
+                #region 2019-09-25 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
                 if (this.HisNode.IsStartNode && DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                 {
                     //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;

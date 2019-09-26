@@ -153,7 +153,7 @@ namespace BP.WF
                     continue;
                 }
 
-                #region 仅按岗位计算
+                #region 2019-09-25 byzhoupeng, 仅按岗位计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
                 {
                    string sql = "SELECT c.No,c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";

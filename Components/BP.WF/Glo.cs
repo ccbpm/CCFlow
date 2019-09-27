@@ -1858,7 +1858,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 检查是否可以安装系统
+        /// 检查是否可以安装驰骋BPM系统
         /// </summary>
         /// <returns></returns>
         public static bool IsCanInstall()
@@ -1882,7 +1882,7 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQL(sql);
 
                 errInfo = " 当前用户没有[插入数据]的权限. ";
-                sql = "INSERT INTO AA (OID) VALUE(100 )"; 
+                sql = "INSERT INTO AA (OID) VALUES(100)"; 
                 BP.DA.DBAccess.RunSQL(sql);
 
                 errInfo = " 当前用户没有[update 表数据]的权限. ";
@@ -1910,19 +1910,20 @@ namespace BP.WF
 
                 if (DBAccess.IsExitsObject("AAVIEW"))
                 {
+                    errInfo = " 当前用户没有[删除视图]的权限. ";
                     sql = "DROP VIEW AAVIEW";
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                errInfo = " 当前用户没有[创建视图]的权限. ";
+                errInfo = " 当前用户没有[创建视图]的权限.";
                 sql = "CREATE VIEW AAVIEW AS SELECT * FROM AA "; //检查是否可以创建视图.
                 BP.DA.DBAccess.RunSQL(sql);
 
-                errInfo = " 当前用户没有[删除视图]的权限. ";
+                errInfo = " 当前用户没有[删除视图]的权限.";
                 sql = "DROP VIEW AAVIEW"; //检查是否可以删除视图.
                 BP.DA.DBAccess.RunSQL(sql);
 
-                errInfo = " 当前用户没有[删除表]的权限. ";
+                errInfo = " 当前用户没有[删除表]的权限.";
                 sql = "DROP TABLE AA"; //检查是否可以删除表.
                 BP.DA.DBAccess.RunSQL(sql);
                 return true;
@@ -1941,7 +1942,7 @@ namespace BP.WF
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                string info = "检查数据库安装权限出现错误:";
+                string info = "驰骋工作流引擎 - 检查数据库安装权限出现错误:";
                 info += "\t\n1. 当前登录的数据库帐号，必须有创建、删除视图或者table的权限。";
                 info += "\t\n2. 必须对表有增、删、改、查的权限。 ";
                 info += "\t\n3. 必须有删除创建索引主键的权限。 ";

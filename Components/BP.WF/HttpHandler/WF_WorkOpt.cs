@@ -1437,7 +1437,7 @@ namespace BP.WF.HttpHandler
             if (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12)
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
+                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node Order By RDT,CDT";
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FK_Node", this.FK_Node);
                 DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(ps);
@@ -2002,7 +2002,7 @@ namespace BP.WF.HttpHandler
             if (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12)
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
+                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node  Order By RDT,CDT";
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FK_Node", this.FK_Node);
                 DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(ps);

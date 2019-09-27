@@ -5494,8 +5494,8 @@ namespace BP.WF
                 if (gwl.FK_Emp != WebUser.No)
                     continue;
 
-                //设置当前不可以用.
-                gwl.IsPassInt = idx;
+                //设置当前不可以用. //@yuan 修改，审核组件显示有问题IsPass设置成1审核通过
+                gwl.IsPassInt = 1;
                 gwl.Update();
             }
 
@@ -8417,6 +8417,7 @@ namespace BP.WF
                 case ActionType.ForwardFL:
                 case ActionType.ForwardHL:
                 case ActionType.TeampUp:
+                case ActionType.Order:
                     //判断是否有焦点字段，如果有就把它记录到日志里。
                     if (this.HisNode.FocusField.Length > 1)
                     {
@@ -8554,6 +8555,7 @@ namespace BP.WF
                 case ActionType.ForwardFL:
                 case ActionType.ForwardHL:
                 case ActionType.TeampUp:
+                case ActionType.Order:
                     //判断是否有焦点字段，如果有就把它记录到日志里。
                     if (this.HisNode.FocusField.Length > 1)
                     {

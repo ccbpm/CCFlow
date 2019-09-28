@@ -170,7 +170,7 @@ function InitPage() {
         newRow += "<td >" + idx + "</td>";
         newRow += "<td >" + track.NDFromT + "</td>";
 
-        newRow += "<td >" + '' + "</td>";
+        //newRow += "<td >" + '' + "</td>";
 
         newRow += "<td >" + msg + "</td>";
         newRow += "<td >" + track.ActionTypeText + "</td>";
@@ -212,7 +212,7 @@ function InitPage() {
                 newRow = "<tr>";
                 newRow += "<td >" + idx + "</td>";
                 newRow += "<td >" + gwl.FK_NodeText + "</td>";
-                newRow += "<td >" + '' + "</td>";
+                //newRow += "<td >" + '' + "</td>";
 
                 if (gwl.IsRead == "1") {
                     newRow += "<td ><span><font color=green>已阅读.</font></span></td>";

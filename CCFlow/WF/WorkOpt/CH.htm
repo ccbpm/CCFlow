@@ -84,11 +84,13 @@
             var Idx = 0;
             var plantStartDt; // 计划开始时间
             var sdtOfNode; //计划完成时间
+            var GS;
             var limintT;
             for (var i = 0; i < nds.length; i++) {
                 var nd = nds[i];
                 sdtOfNode = nd.SDTOfNode;
                 plantStartDt = nd.PlantStartDt;
+                GS = nd.GS;
                 //根据节点获取GenerWorkerList对应的数据
                 var gwl = GetEntityByNode(gwls,nd.NodeID);
                 _Html += "<tr>";
@@ -104,10 +106,11 @@
                     _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.CDT + "</td>";
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
-              
+                         _Html += "<td style='text-align: center'>0</td>";
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
                     } else {
+                        _Html += "<td style='text-align: center'>0</td>";
                         //耗时
                         var rdt = new Date(Date.parse(gwl.RDT.replace(/-/g, "/")));
                         var cdt = new Date(Date.parse(gwl.CDT.replace(/-/g, "/")));
@@ -137,6 +140,7 @@
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>无</td>";
+                        _Html += "<td style='text-align: center'>0</td>";
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
 
@@ -167,6 +171,7 @@
                         else
                             _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
+                        _Html += "<td style='text-align: center'><input type='text' id='GS_" + nd.NodeID + "' name='GS_" + nd.NodeID + "' value='" + GS + "'/></td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                        
@@ -356,6 +361,7 @@
                             <th style='background-color:#F2F2F2;width:160px;text-align:center'>任务到达时间</th>
                             <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划完成时间</th>
                             <th style='background-color:#F2F2F2;width:160px;text-align:center'>实际完成时间</th>
+                            <th style='background-color:#F2F2F2;width:50px;text-align:center'>工时(天)</th>
                             <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
                             <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
 

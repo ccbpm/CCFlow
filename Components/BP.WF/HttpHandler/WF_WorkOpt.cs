@@ -3975,6 +3975,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Name");
             dt.Columns.Add("SDTOfNode");//节点应完成时间
             dt.Columns.Add("PlantStartDt");//节点计划开始时间
+            dt.Columns.Add("GS");//工时
             dt.Columns.Add("IsStartSetting");//是否已经设置节点时限
             dt.Columns.Add("IsEndSetting");
             DataRow dr;
@@ -4041,8 +4042,9 @@ namespace BP.WF.HttpHandler
                             }
                                 
                             dr["PlantStartDt"] = plantStartDt = beforeSDTOfNode;
-
+                            dr["GS"] = gwf.GetParaInt("GS" + node.NodeID);
                             beforeSDTOfNode = sdtOfNode;
+                           
                             dt.Rows.Add(dr);
                         }
                         isFirstY = false;
@@ -4073,7 +4075,7 @@ namespace BP.WF.HttpHandler
                 }
                    
                 dr["PlantStartDt"] = plantStartDt ;
-
+                dr["GS"] = gwf.GetParaInt("GS" + node.NodeID);
                 beforeSDTOfNode = sdtOfNode;
                 dt.Rows.Add(dr);
 
@@ -4178,6 +4180,10 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(plantStartDt) == false)
                     //保存时限设置
                     gwf.SetPara("PlantStartDt" + nd.NodeID, plantStartDt);
+
+                string gs = this.GetRequestVal("GS_" + nd.NodeID);
+                if (DataType.IsNullOrEmpty(gs) == false)
+                    gwf.SetPara("GS" + nd.NodeID, Int32.Parse(gs));
 
             }
             gwf.Update();

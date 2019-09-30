@@ -66,9 +66,7 @@ namespace BP.DA
                     DBAccess.RunSQL("DROP TABLE TEST ");
                     return true;
                 }
-
                 return false;
-
             }
         }
 

@@ -205,16 +205,6 @@ namespace BP.Sys
                 return (OSDBSrc)SystemConfig.GetValByKeyInt("OSDBSrc", 0);
             }
         }
-        /// <summary>
-        /// 结束流程 窗口配置
-        /// </summary>
-        public static IsOpenEndFlow IsOpenEndFlow
-        {
-            get
-            {
-                return (IsOpenEndFlow)SystemConfig.GetValByKeyInt("IsOpenEndFlow", 0);
-            }
-        }
         #endregion
 
         /// <summary>
@@ -276,50 +266,6 @@ namespace BP.Sys
             #endregion
         }
 
-        #region 关于开发商的信息
-        public static string Ver
-        {
-            get
-            {
-                try
-                {
-                    return AppSettings["Ver"];
-                }
-                catch
-                {
-                    return "1.0.0";
-                }
-            }
-        }
-        public static string TouchWay
-        {
-            get
-            {
-                try
-                {
-                    return AppSettings["TouchWay"];
-                }
-                catch
-                {
-                    return SystemConfig.CustomerTel + " 地址:" + SystemConfig.CustomerAddr;
-                }
-            }
-        }
-        public static string CopyRight
-        {
-            get
-            {
-                try
-                {
-                    return AppSettings["CopyRight"];
-                }
-                catch
-                {
-                    return "版权所有@" + CustomerName;
-                }
-            }
-        }
-        #endregion
 
         #region 用户配置信息
         /// <summary>
@@ -356,11 +302,7 @@ namespace BP.Sys
                 _CS_AppSettings = value;
             }
         }
-
-        public static void InitOptons(NameValueCollection appSetting, NameValueCollection connections)
-        {
-
-        }
+  
         /// <summary>
         /// 封装了AppSettings
         /// </summary>
@@ -393,16 +335,6 @@ namespace BP.Sys
                     return HttpContextHelper.PhysicalApplicationPath;
                 else
                     return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            }
-        }
-        /// <summary>
-        /// 文件放置的路径
-        /// </summary>
-        public static string PathOfUsersFiles
-        {
-            get
-            {
-                return "/Data/Files/";
             }
         }
         /// <summary>
@@ -484,13 +416,7 @@ namespace BP.Sys
                 return PathOfWebApp + "\\WF\\Data\\XML\\";
             }
         }
-        public static string PathOfAppUpdate
-        {
-            get
-            {
-                return PathOfWebApp + "\\WF\\Data\\AppUpdate\\";
-            }
-        }
+      
         public static string PathOfCyclostyleFile
         {
             get
@@ -665,13 +591,7 @@ namespace BP.Sys
                 return s;
             }
         }
-        public static string OrderWay
-        {
-            get
-            {
-                return AppSettings["OrderWay"];
-            }
-        }
+       
         public static int PageSize
         {
             get
@@ -686,48 +606,7 @@ namespace BP.Sys
                 }
             }
         }
-        public static int MaxDDLNum
-        {
-            get
-            {
-                try
-                {
-                    return int.Parse(AppSettings["MaxDDLNum"]);
-                }
-                catch
-                {
-                    return 50;
-                }
-            }
-        }
-        public static int PageSpan
-        {
-            get
-            {
-                try
-                {
-                    return int.Parse(AppSettings["PageSpan"]);
-                }
-                catch
-                {
-                    return 20;
-                }
-            }
-        }
-        /// <summary>
-        ///  到的路径.PageOfAfterAuthorizeLogin
-        /// </summary>
-        public static string PageOfAfterAuthorizeLogin
-        {
-            get { return HttpContextHelper.RequestApplicationPath + "" + AppSettings["PageOfAfterAuthorizeLogin"]; }
-        }
-        /// <summary>
-        /// 丢失session 到的路径.
-        /// </summary>
-        public static string PageOfLostSession
-        {
-            get { return HttpContextHelper.RequestApplicationPath + "" + AppSettings["PageOfLostSession"]; }
-        }
+          
         /// <summary>
         /// 日志路径
         /// </summary>
@@ -814,29 +693,6 @@ namespace BP.Sys
                     return false;
             }
         }
-        public static bool IsOpenSQLCheck
-        {
-            get
-            {
-                if (AppSettings["IsOpenSQLCheck"] == "0")
-                    return false;
-                else
-                    return true;
-            }
-        }
-        /// <summary>
-        /// 是不是多系统工作。
-        /// </summary>
-        public static bool IsMultiSys
-        {
-            get
-            {
-                if (AppSettings["IsMultiSys"] == "1")
-                    return true;
-                return false;
-            }
-        }
-
         /// <summary>
         /// 是否启用密码加密
         /// </summary>

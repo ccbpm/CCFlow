@@ -36,7 +36,7 @@
             }
 
             nodeExt = new Entity("BP.WF.Template.NodeExt", nodeID);
-            if (nodeExt.HuiQianRole == 4) //组长模式
+            if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) //组长模式
                 $("#CB_IsSimpleSelector").attr("checked", 'checked');
         });
 
@@ -51,7 +51,7 @@
 
         function IsChange(obj) {
             if (obj.checked == false) {
-                if (nodeExt.HuiQianRole == 4) {
+                if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) {
                     obj.checked = true;
                     alert("该节点会签模式为组长模式，只能单项选择");
                 }

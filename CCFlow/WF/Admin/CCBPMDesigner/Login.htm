@@ -106,46 +106,50 @@
         }
     </script>
 
-       <script type="text/javascript" language="javascript"> 
-       
-           
-
-       </script>
+    <style>
+        .imgsty {
+            display: inline-block;
+            height: auto;
+            max-width: 100%;
+        }
+    </style>
 
 </head>
 
 <body class="login-bg">
 
         <form id="cc" >
-<div class="login-box_admin">
-           <h1 class="logo-name">驰骋流程&表单设计器</h1>
-           <div class="login-form">
-             <form id="Form1" >
-                <div class="form-group">
-                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required"  class="form-control" />
+            <div class="login-box_admin">
+                <!--<h1 class="logo-name">驰骋流程&表单设计器</h1>-->
+                <div style="margin-bottom: 10px">
+                    <img class="imgsty" src="../../../DataUser/ICON/IconSmall.png" alt="" />
                 </div>
-                <div class="form-group">
-                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
-                </div>
-                <input type="button" class="btn btn-primary btn-block"  value="管理员&二级管理员:登录" id="Btn_Login" onclick="Login();"   />
-            <div class="row login-nav">
-            	<div class="col-xs-6">默认密码：123</div>
-            	<div class="col-xs-6 ">
+                <div class="login-form">
+                    <form id="Form1">
+                        <div class="form-group">
+                            <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
+                        </div>
+                        <input type="button" class="btn btn-primary btn-block" value="管理员&二级管理员:登录" id="Btn_Login" onclick="Login();" />
+                        <div class="row login-nav">
+                            <div class="col-xs-6">默认密码：123</div>
+                            <div class="col-xs-6 ">
 
-                <a href="../../AppClassic/Login.htm"  class="pull-right">前台登录</a><a href="../../../Portal/Login.htm"  class="pull-right">GPM登录-</a>
-                <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
+                                <a href="../../AppClassic/Login.htm" class="pull-right">前台登录</a><a href="../../../Portal/Login.htm" class="pull-right">GPM登录-</a>
+                                <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
 
+                            </div>
+                            <br />
+                            <div id="Msg" style=" float:right" />
+                        </div>
+                    </form>
                 </div>
-                <br />
-                <div id="Msg" style=" float:right" />    </div> 
+
+
             </div>
-
-              
-        </div>
-   </div>
-      
-           
-           </form>
+        </form>
 
 
 </body>

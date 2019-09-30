@@ -701,10 +701,7 @@ namespace BP.Web
             this.Alert("更新成功!");
             // ResponseWriteBlueMsg("更新成功!");
         }
-        protected void ToSignInPage()
-        {
-            System.Web.HttpContext.Current.Response.Redirect(SystemConfig.PageOfLostSession);
-        }
+        
         //protected void ToWelPage()
         //{
         //    System.Web.HttpContext.Current.Response.Redirect(BP.Sys.Glo.Request.ApplicationPath + "/Wel.aspx");

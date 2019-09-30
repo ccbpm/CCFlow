@@ -795,6 +795,22 @@ namespace BP.WF.Template
             }
         }
 
+        public string AddLeaderLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.AddLeaderLab);
+            }
+        }
+
+        public bool AddLeaderEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.AddLeaderEnable);
+            }
+        }
+
         /// <summary>
         ///是否启用文档,@0=不启用@1=按钮方式@2=公文在前@3=表单在前
         /// </summary>
@@ -1226,11 +1242,14 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "会签组长规则", true, true, BtnAttr.HuiQianLeaderRole,
                      "0=只有一个组长@1=最后一个组长发送@2=任意组长发送",true);
 
+                map.AddTBString(BtnAttr.AddLeaderLab, "加组长", "加组长", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.AddLeaderEnable, false, "是否启用", true, true);
+
                 //map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=组长模式@2=协作模式");
 
-               // map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
-              //  map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
+                // map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
+                //  map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
 
                 // add by stone 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);

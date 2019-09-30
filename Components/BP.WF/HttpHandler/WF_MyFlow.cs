@@ -811,9 +811,9 @@ namespace BP.WF.HttpHandler
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             BtnLab btnLab = new BtnLab(this.FK_Node);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (this.FK_Node.ToString().EndsWith("01") == false)
             {
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 if (gwf.WFState == WFState.Askfor)
                     isAskForOrHuiQian = true;
 
@@ -825,13 +825,13 @@ namespace BP.WF.HttpHandler
                     {
                         if (btnLab.HuiQianLeaderRole == 0)
                         {
-                            if (gwf.HuiQianZhuChiRen != WebUser.No)
+                            if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                                 isAskForOrHuiQian = true;
                         }
                         else
                         {
                             //不是主持人
-                            if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false)
+                            if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                                 isAskForOrHuiQian = true;
                         }
                     }
@@ -975,8 +975,8 @@ namespace BP.WF.HttpHandler
                 if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
                 {
                     /*如果要查看父流程.*/
-                    GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
-                    string ur2 = "./WorkOpt/OneWork/FrmGuide.htm?FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "&WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&s=" + tKey;
+                    GenerWorkFlow gwf1 = new GenerWorkFlow(this.PWorkID);
+                    string ur2 = "./WorkOpt/OneWork/FrmGuide.htm?FK_Node=" + gwf1.FK_Node + "&FID=" + gwf1.FID + "&WorkID=" + gwf1.WorkID + "&FK_Flow=" + gwf1.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button  value='" + btnLab.ShowParentFormLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
                 }
 
@@ -1077,6 +1077,13 @@ namespace BP.WF.HttpHandler
                     /*会签 */
                     string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
+                }
+
+                //原始会签主持人可以增加组长
+                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen)==true && gwf.TodoEmps.Contains(WebUser.No) == true)|| gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
+                {
+                    /*增加组长 */
+                    toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";
                 }
 
 

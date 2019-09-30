@@ -963,14 +963,14 @@ namespace BP.WF.HttpHandler
                 return "err@会签工作已经完成，您不能在执行会签。";
             }
 
+            string huiQianType = this.GetRequestVal("HuiQianType");
             //查询出来集合.
             GenerWorkerLists ens = new GenerWorkerLists(this.WorkID, this.FK_Node);
             BtnLab btnLab = new BtnLab(this.FK_Node);
             if (btnLab.HuiQianRole != HuiQianRole.TeamupGroupLeader || (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole!= HuiQianLeaderRole.OnlyOne)) { 
                 foreach (GenerWorkerList item in ens)
                 {
-
-                    if ((gwf.TodoEmps.Contains(item.FK_Emp + ",") == true || gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true) && item.FK_Emp != BP.Web.WebUser.No)
+                        if ((gwf.TodoEmps.Contains(item.FK_Emp + ",") == true || gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true) && item.FK_Emp != BP.Web.WebUser.No)
                     {
                         item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
                         item.FK_EmpText = item.FK_EmpText;
@@ -994,7 +994,7 @@ namespace BP.WF.HttpHandler
             }
 
             //赋值部门名称。
-            DataTable mydt = ens.ToDataTableField();
+            DataTable mydt = ens.ToDataTableField("WF_GenerWorkList");
             mydt.Columns.Add("FK_DeptT", typeof(string));
             foreach (DataRow dr in mydt.Rows)
             {
@@ -1006,7 +1006,16 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return BP.Tools.Json.ToJson(mydt);
+            //获取当前人员的流程处理信息
+            GenerWorkerList gwlOfMe = new GenerWorkerList();
+            gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                        GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mydt);
+            ds.Tables.Add(gwlOfMe.ToDataTableField("My_GenerWorkList"));
+
+            return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
         /// 移除
@@ -1020,7 +1029,8 @@ namespace BP.WF.HttpHandler
 
             //要找到主持人.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+            string addLeader = gwf.GetParaString("AddLeader");
+            if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false && addLeader.Contains(BP.Web.WebUser.No + ",")==false)
                 return "err@您不是主持人，您不能删除。";
 
             //删除该数据.
@@ -1052,6 +1062,9 @@ namespace BP.WF.HttpHandler
             str = str.Replace(myemp.Name + ";", "");
             str = str.Replace(myemp.No +","+ myemp.Name + ";", "");
 
+
+            addLeader = addLeader.Replace(this.FK_Emp + ",", "");
+            gwf.SetPara("AddLeader", addLeader);
             gwf.TodoEmps = str;
             gwf.Update();
 
@@ -1063,10 +1076,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_AddEmps()
         {
-
+            string huiQianType = this.GetRequestVal("HuiQianType");
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            string addLeader = gwf.GetParaString("AddLeader");
             if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                return "err@您不是会签主持人，您不能执行该操作。";
+            {
+                //判断是不是第二会签主持人
+                if(addLeader.Contains(WebUser.No + ",") == false)
+                    return "err@您不是会签主持人，您不能执行该操作。";
+            }
+               
 
             GenerWorkerList gwlOfMe = new GenerWorkerList();
             int num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
@@ -1102,11 +1121,17 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
+                //增加组长
+                if(DataType.IsNullOrEmpty(huiQianType) == false && huiQianType.Equals("AddLeader"))
+                {
+                    addLeader += emp.No + ",";
+                }
+
                 //查询出来其他列的数据.
                 gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
                     GenerWorkerListAttr.WorkID, this.WorkID,
                     GenerWorkerListAttr.FK_Node, this.FK_Node);
-
+                gwlOfMe.SetPara("HuiQianType", "");
                 gwlOfMe.FK_Emp = emp.No;
                 gwlOfMe.FK_EmpText = emp.Name;
                 gwlOfMe.IsPassInt = -1; //设置不可以用.
@@ -1114,6 +1139,9 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
                 gwlOfMe.IsRead = false;
                 gwlOfMe.SetPara("HuiQianZhuChiRen", WebUser.No);
+                //表明后增加的组长
+                if (DataType.IsNullOrEmpty(huiQianType) == false && huiQianType.Equals("AddLeader"))
+                    gwlOfMe.SetPara("HuiQianType", huiQianType);
 
                 #region 计算会签时间.
                 if (nd.HisCHWay == CHWay.None)
@@ -1152,11 +1180,12 @@ namespace BP.WF.HttpHandler
                 BP.WF.Dev2Interface.Port_SendMsg(emp.No,
                     "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
 
-                        string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                 string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
                 if (gwf.TodoEmps.Contains(empStrSepc) == false)
                     gwf.TodoEmps += empStrSepc;
             }
 
+            gwf.SetPara("AddLeader", addLeader);
             gwf.Update();
             if (err.Equals("") == true)
                 return "增加成功.";
@@ -1177,6 +1206,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_SaveAndClose()
         {
+            string huiQianType = this.GetRequestVal("HuiQianType");
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
@@ -1204,8 +1234,12 @@ namespace BP.WF.HttpHandler
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
             if(nd.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
-                gwf.HuiQianZhuChiRen = WebUser.No;
-                gwf.HuiQianZhuChiRenName = WebUser.Name;
+                if(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
+                {
+                    gwf.HuiQianZhuChiRen = WebUser.No;
+                    gwf.HuiQianZhuChiRenName = WebUser.Name;
+                }
+               
             }
             else
             {

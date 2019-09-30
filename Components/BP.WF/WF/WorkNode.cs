@@ -4505,6 +4505,8 @@ namespace BP.WF
                         pk = this.HisWork.OID;
                         break;
                     case WhoIsPK.PWorkID:
+                        if (this.rptGe == null)
+                            this.rptGe = new GERpt("ND" + int.Parse(this.HisFlow.No) + "Rpt", this.WorkID);
                         pk = this.rptGe.PWorkID;
                         break;
                     default:

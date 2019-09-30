@@ -93,6 +93,10 @@ namespace BP.WF.Template
         ///  表单启动表达式.
         /// </summary>
         public const string FrmEnableExp = "FrmEnableExp";
+        /// <summary>
+        /// 表单显示的名字
+        /// </summary>
+        public const string FrmNameShow = "FrmNameShow";
     }
     /// <summary>
     /// 谁是主键？
@@ -668,6 +672,10 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.IsEnable, 1, "是否显示", true, false);
 
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
+
+                //@2019.09.30 by zhoupeng.
+                map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
+              //  map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
 
                 this._enMap = map;
                 return this._enMap;

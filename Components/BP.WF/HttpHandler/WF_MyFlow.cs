@@ -2045,6 +2045,9 @@ namespace BP.WF.HttpHandler
             mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
 
 
+
+
+
             string frms = HttpContextHelper.RequestParams("Frms");
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (DataType.IsNullOrEmpty(frms) == true)
@@ -2260,7 +2263,19 @@ namespace BP.WF.HttpHandler
                     BP.WF.Template.FlowFormTree nodeForm = new BP.WF.Template.FlowFormTree();
                     nodeForm.No = md.No;
                     nodeForm.ParentNo = md.FK_FormTree;
-                    nodeForm.Name = md.Name;
+
+                    //设置他的表单显示名字. 2019.09.30
+                    string frmName = md.Name;
+                    Entity fn = frmNodes.GetEntityByKey(FrmNodeAttr.FK_Frm, md.No);
+                    if (fn!=null)
+                    {
+                        string str = fn.GetValStrByKey(FrmNodeAttr.FrmNameShow);
+                        if (DataType.IsNullOrEmpty(str) == false)
+                            frmName = str;
+                    }
+                    nodeForm.Name = frmName;
+
+
                     nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
                     nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
                     nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
@@ -2302,6 +2317,7 @@ namespace BP.WF.HttpHandler
                 appFlowFormTree.AddEntity(formTree);
             }
             TansEntitiesToGenerTree(appFlowFormTree, root.No, "");
+
             return appendMenus.ToString();
         }
         /// <summary>

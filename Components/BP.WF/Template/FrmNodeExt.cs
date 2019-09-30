@@ -89,6 +89,7 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
+
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 0, 4, 20);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
 
@@ -135,6 +136,11 @@ namespace BP.WF.Template
 
                 map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", false, false, true);
                 #endregion 表单启用规则.
+
+
+                map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
+                map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
+
 
                 RefMethod rm = new RefMethod();
                 //@袁丽娜

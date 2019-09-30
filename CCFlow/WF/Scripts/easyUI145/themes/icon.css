@@ -1,6 +1,9 @@
 ﻿.icon-blank{
 	background:url('icons/blank.gif') no-repeat center center;
 }
+.icon-new{
+	background:url('icons/new.png') no-repeat center center;
+}
 .icon-add{
 	background:url('icons/edit_add.png') no-repeat center center;
 }

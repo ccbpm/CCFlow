@@ -792,27 +792,5 @@ body table tr td {
 .ccflow-tag {
     margin-right: 10px !important;
 }
-/*¹ö¶¯Ìõ*/
-::-webkit-scrollbar-thumb {
-    background-color: #b5b5b5;
-    height: 50px;
-    -webkit-border-radius: 4px;
-}
-
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: #585858;
-        height: 50px;
-        -webkit-border-radius: 4px
-    }
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track-piece {
-    background-color: #fff;
-    -webkit-border-radius: 4px
-}
 
  

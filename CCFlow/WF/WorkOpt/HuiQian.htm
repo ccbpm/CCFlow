@@ -71,8 +71,10 @@
     </style>
     <script type="text/javascript">
         var param = {};
+        var webUser;
+        var huiQianType = GetQueryString("HuiQianType");
         $(function () {
-
+            webUser = new WebUser();
             Help();
 
             //初始化页面移交页面
@@ -129,17 +131,39 @@
                 return;
             }
 
-            var gwls = JSON.parse(data);
-            BindTable(gwls);
+            var data = JSON.parse(data);
+            BindTable(data);
 
         });
 
-        function BindTable(gwls) {
-
+        function BindTable(data) {
+           //判断当前节点是否是第二组长
+            var gwls = data.WF_GenerWorkList;
+            var myGwl = data.My_GenerWorkList[0];
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
+                var zhuChiRen = GetPara(gwl.AtPara, "HuiQianZhuChiRen");
+                var addLeader = GetPara(gwl.AtPara, "HuiQianType");
+                if (gwl.FK_Emp != webUser.No) { //相同即为主持人
+                    if (zhuChiRen != null && zhuChiRen != undefined && zhuChiRen!= webUser.No)
+                    continue;
 
+                   //获取增加组长的信息
+                    if (huiQianType != null && huiQianType != undefined && huiQianType == "AddLeader") {
+                        if (addLeader == null || addLeader != "AddLeader")
+                            continue;
+                    } else {
+                        if (addLeader != null && addLeader == "AddLeader")
+                            continue;
+                    }
+
+                    if (GetPara(myGwl.AtPara, "HuiQianZhuChiRen") == gwl.FK_Emp)
+                        continue;
+
+                } 
+                
+            
                 var row = "";
                 row += "<tr>";
                 // row += "<td>" + i + "</td>";
@@ -151,10 +175,19 @@
                     row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
                 }
 
-                if (gwl.IsPass == 0 ) {
-                    row += "<td>未审批</td>";
-                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                if (gwl.IsPass == 0) {
+                    if (gwl.FK_Emp == webUser.No) {
+                        row += "<td>主持人/未审批</td>";
+                        row += "<td></td>";
+                    }
+                    else {
+                        row += "<td>未审批</td>";
+                        row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                    }
+                      
                 }
+
+                
 
                 //当前是主持人这个是协作模式处理
                 if (gwl.IsPass == 100) {
@@ -167,7 +200,7 @@
                 }
 
                 //当前是组长模式处理，并且是主持人
-                if (gwl.IsPass == 90) {
+                if (gwl.IsPass == 90 ) {
                     row += "<td>主持人（自己）/未审批</td>";
                     row += "<td></td>";
                 }
@@ -185,10 +218,14 @@
                 }
 
                 if (gwl.IsPass == 1) {
-                    row += "<td>已审批</td>";
+                    if (gwl.FK_Emp == webUser.No) 
+                          row += "<td>已审批</td>";
+                    else
+                        row += "<td>已审批</td>";
                     row += "<td></td>";
                 }
 
+             
                 row += "</tr>";
 
                 //$("#Table1 tr:last").after(row);
@@ -226,6 +263,7 @@
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             hand.AddUrlData();
             hand.AddPara("AddEmps", emps);
+             hand.AddPara("HuiQianType", huiQianType);
             var data = hand.DoMethodReturnString("HuiQian_AddEmps");
 
             if (data.indexOf('err@') == 0) {
@@ -428,14 +466,12 @@
                 var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
                 hand.AddUrlData();
                 hand.AddPara("TB_Emps", $("#TB_Emps").val());
+                hand.AddPara("HuiQianType", huiQianType);
                 var data = hand.DoMethodReturnString("HuiQian_SelectEmps");
                 if (data.indexOf('err@') == 0) {
                     alert(data);
                     return;
                 }
-
-                //SelectEmp
-                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
 
                 data = JSON.parse(data);
                 //$("#SelectEmp").hide().html("");

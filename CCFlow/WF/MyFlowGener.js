@@ -15,9 +15,7 @@ $(function () {
 
     InitToolBar(); //工具栏.ajax
 
-    //debugger
     GenerWorkNode(); //表单数据.ajax
-    //debugger
 
 
     if ($("#Message").html() == "") {
@@ -1642,20 +1640,12 @@ function GenerWorkNode() {
         $(obj).attr('title', $(obj).val());
     })
 
+ 
     ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = flowData.Sys_MapData[0].No;
-    try {
-        ////加载JS文件
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
-
+    var filespec = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
+    $.getScript(filespec);
+    
     try {
         ////加载JS文件
         var s = document.createElement('script');
@@ -1728,6 +1718,8 @@ function GenerWorkNode() {
     }
     //给富文本创建编辑器
 }
+
+
 
 function SetFrmReadonly() {
 
@@ -1938,6 +1930,13 @@ function InitToolBar() {
         $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
     }
 
+    if ($('[name=AddLeader]').length > 0) {
+        $('[name=AddLeader]').attr('onclick', '');
+        $('[name=AddLeader]').unbind('click');
+        $('[name=AddLeader]').bind('click', function () { initModal("AddLeader"); $('#returnWorkModal').modal().show(); });
+    }
+
+
     if ($('[name=CC]').length > 0) {
         $('[name=CC]').attr('onclick', '');
         $('[name=CC]').unbind('click');
@@ -2122,6 +2121,11 @@ function initModal(modalType, toNode) {
                     $('#modalHeader').text("会签");
 
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
+
+                break;
+            case "AddLeader":
+                $('#modalHeader').text("加组长");
+                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random()
 
                 break;
             case "CC":

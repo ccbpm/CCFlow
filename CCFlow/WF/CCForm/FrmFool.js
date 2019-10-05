@@ -1197,15 +1197,15 @@ function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
 
 //清空所有的设置
 function cleanAll(KeyOfEn) {
-    //var trs = $("#CCForm  table tr .attr-group"); //如果隐藏就显示
-    //$.each(trs, function (i, obj) {
-    //    if ($(obj).parent().is(":hidden") == true)
-    //        $(obj).parent().show();
+    var trs = $("#CCForm  table tr .attr-group"); //如果隐藏就显示
+    $.each(trs, function (i, obj) {
+        if ($(obj).parent().is(":hidden") == true)
+            $(obj).parent().show();
 
-    //});
+    });
     if (AllObjSet.length == 0)
         return;
-   var mapAttrs = AllObjSet[KeyOfEn];
+   var mapAttrs = AllObjSet[KeyOfEn][0];
     for (var i = 0; i < mapAttrs.length; i++) {
         SetCtrlShow(mapAttrs[i]);
         SetCtrlEnable(mapAttrs[i]);

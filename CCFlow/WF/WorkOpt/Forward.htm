@@ -9,8 +9,6 @@
     -->
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
 
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -26,135 +24,157 @@
     <style type="text/css">
         body {
             background: transparent;
+            padding: 10px;
+             text-align:center;
         }
+
             body div {
                 text-align: left;
             }
+
         #Message {
-        width:100%;
+            width: 100%;
         }
     </style>
     <script type="text/javascript">
-        var param={};
-    $(function () {
-        //初始化页面移交页面
-        param = {
-            FK_Node: GetQueryString('FK_Node'),
-            WorkID: GetQueryString('WorkID'),
-            FID: GetQueryString('FID'),
-            Message: GetQueryString('Info'),
-            FK_Flow:GetQueryString("FK_Flow")
-        };
-        $('#Message').val(param.Message);
-        //初始化人员选择窗口
-        var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 90%;margin: 10px auto;">' +
-           '<div class="modal-dialog" style="margin: 0px;">'
-               + '<div class="modal-content" style="border-radius:0px;width:700px;">'
-                  + '<div class="modal-header">'
-                      + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                       + '<h4 class="modal-title">选择移交人</h4>'
-                   + '</div>'
-                   + '<div class="modal-body">'
-                       + '<iframe style="width:100%;border:0px;height:800px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
-                   + '</div>'
-               + '</div><!-- /.modal-content -->'
-           + '</div><!-- /.modal-dialog -->'
-       + '</div>';
+        var param = {};
+        $(function () {
+            //初始化页面移交页面
+            param = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
+            $('#Message').val(param.Message);
+            //初始化人员选择窗口
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 90%;margin: 10px auto;">' +
+                '<div class="modal-dialog" style="margin: 0px;">'
+                + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                + '<div class="modal-header">'
+                + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<h4 class="modal-title">选择移交人</h4>'
+                + '</div>'
+                + '<div class="modal-body">'
+                + '<iframe style="width:100%;border:0px;height:800px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                + '</div>'
+                + '</div><!-- /.modal-content -->'
+                + '</div><!-- /.modal-dialog -->'
+                + '</div>';
 
-        $('body').append($(selectEmpModalHtml));
-        var ccs_fk_dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
-        if (plant == "JFlow")
-            ccs_fk_dept = $.cookie('FK_Dept');
-        if (ccs_fk_dept == null || ccs_fk_dept == '' || ccs_fk_dept == undefined) {
-            var u = new WebUser();
-            ccs_fk_dept = u.FK_Dept;
-        }
-        $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + ccs_fk_dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random());
-
-        $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
-        $("section").show();
-        $(".wait").hide();
-        
-    });
-
-    //确定  执行移交操作
-    function ShiftWork() {
-
-        //WorkID, this.FID, this.FK_Node
-        var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
-
-        if (empNos == "" || empNos == undefined || empNos == null)
-            return;
-
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-        handler.AddUrlData();
-        handler.AddPara("ToEmp", empNos);
-        handler.AddPara("Message", $('#Message').val());
-
-        var data = handler.DoMethodReturnString("Shift");
-
-        $('body').append($('<div>' + data + '</div>'));
-        
-        $(".foot").hide();
-
-        setTimeout(function () {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.close();
-                if (window.parent.parent != null && window.parent.parent != undefined)
-                    window.parent.parent.close();
-                window.parent.returnWorkWindowClose();
+            $('body').append($(selectEmpModalHtml));
+            var ccs_fk_dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (plant == "JFlow")
+                ccs_fk_dept = $.cookie('FK_Dept');
+            if (ccs_fk_dept == null || ccs_fk_dept == '' || ccs_fk_dept == undefined) {
+                var u = new WebUser();
+                ccs_fk_dept = u.FK_Dept;
             }
-            window.close();
+            $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + ccs_fk_dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random());
 
-        }, 3000);
-        
-    }
+            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            $("section").show();
+            $(".wait").hide();
 
-    //取消移交
-    function Close() {
+        });
 
-        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-            window.parent.returnWorkWindowClose("取消");
-        } else {
-            $('body').append($('<div>' + "已取消操作" + '</div>'));
-            window.close();
+        //确定  执行移交操作
+        function ShiftWork() {
+
+            //WorkID, this.FID, this.FK_Node
+            var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
+
+            if (empNos == "" || empNos == undefined || empNos == null)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("ToEmp", empNos);
+            handler.AddPara("Message", $('#Message').val());
+
+            var data = handler.DoMethodReturnString("Shift");
+
+            $('body').append($('<div>' + data + '</div>'));
+
+            $(".foot").hide();
+
+            setTimeout(function () {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.close();
+                    if (window.parent.parent != null && window.parent.parent != undefined)
+                        window.parent.parent.close();
+                    window.parent.returnWorkWindowClose();
+                }
+                window.close();
+
+            }, 3000);
+
         }
-    }
 
-    //设置选中的人员
-    function selectEmpsWindowClose(data) {
+        //取消移交
+        function Close() {
 
-        $('#selectEmpsModal').modal('hide');
-        if (data == '取消') {
-            return;
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("取消");
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
         }
 
-        $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
-    }
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
 
-    //撤销移交.
-    function UnShif() {
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
 
-    }
+            $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+        }
+
+        //撤销移交.
+        function UnShif() {
+
+        }
     </script>
 
 </head>
-<body>
-<div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
-    <div>
-        请选择要移交的人:<br />
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 81%;"/> 
-        <input type="button" id="BtnSelectEmps" value='选择接受人' />
+<body style=" padding:10px; text-align:center">
 
-        <br/>
-    </div>
-    <div>
-        移交原因:
-        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>
-    </div>
-    <div style="position: fixed; bottom: 55px; right: 0px;" class="foot">
-        <input type=button value="确定移交"  onclick="ShiftWork();"/>
-        <input type="button" id="" value="关闭" onclick="Close();"/>
+    <div style=" text-align:center">
+        <table style="width:99%; text-align:center;  padding:10px;">
+            <tr>
+                <th> 请选择要移交的人: </th>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 81%;" />
+                    <input type="button" id="BtnSelectEmps" value='选择接受人' />
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    移交原因:
+                </th>
+            </tr>
+
+            <tr>
+                <td>
+                    <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type=button value="确定移交" onclick="ShiftWork();" /><input type="button" id="" value="关闭" onclick="Close();" />
+                </td>
+            </tr>
+        </table>
+
     </div>
 
 </body>

@@ -171,6 +171,8 @@
     <Compile Include="DA\Cash.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DA\DBAccessOfMSSQL1.cs" />
+    <Compile Include="DA\DBAccessOfMSSQL2.cs" />
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>

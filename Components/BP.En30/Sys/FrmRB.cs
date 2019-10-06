@@ -241,7 +241,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmRB", "单选框");
-                map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfMSSQL1);
+          //      map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfMSSQL1);
 
                 map.IndexField = FrmImgAthDBAttr.FK_MapData ; 
 

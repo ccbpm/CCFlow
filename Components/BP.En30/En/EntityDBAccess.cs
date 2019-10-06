@@ -301,10 +301,10 @@ namespace BP.En
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
                 case DBUrlType.DBAccessOfMSSQL1:
-                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql,paras);
                     break;
                 case DBUrlType.DBAccessOfMSSQL2:
-                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql, paras);
                     break;
                 //case DBUrlType.DBAccessOfOracle1:
                 //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);

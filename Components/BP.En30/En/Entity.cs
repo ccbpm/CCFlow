@@ -325,10 +325,10 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQL(ps);
-                //case DBUrlType.DBAccessOfMSSQL1:
-                //    return DBAccessOfMSSQL1.RunSQL(ps.SQL);
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    return DBAccessOfMSSQL2.RunSQL(ps.SQL);
+                case DBUrlType.DBAccessOfMSSQL1:
+                    return DBAccessOfMSSQL1.RunSQL(ps.SQL);
+                case DBUrlType.DBAccessOfMSSQL2:
+                    return DBAccessOfMSSQL2.RunSQL(ps.SQL);
                 //case DBUrlType.DBAccessOfOracle1:
                 //    return DBAccessOfOracle1.RunSQL(ps.SQL);
                 //case DBUrlType.DBAccessOfOracle2:
@@ -345,10 +345,11 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQL(sql, paras);
-                //case DBUrlType.DBAccessOfMSSQL1:
-                //    return DBAccessOfMSSQL1.RunSQL(sql);
+                case DBUrlType.DBAccessOfMSSQL1:
+                    return DBAccessOfMSSQL1.RunSQL(sql, paras);
+
                 //case DBUrlType.DBAccessOfMSSQL2:
-                //    return DBAccessOfMSSQL2.RunSQL(sql);
+                //    return DBAccessOfMSSQL2.RunSQL(sql, paras);
                 //case DBUrlType.DBAccessOfOracle1:
                 //    return DBAccessOfOracle1.RunSQL(sql);
                 //case DBUrlType.DBAccessOfOracle2:
@@ -365,14 +366,14 @@ namespace BP.En
         /// </summary>
         /// <param name="sql">要运行的 select sql</param>
         /// <returns>执行的查询结果</returns>
-        public DataTable RunSQLReturnTable(string sql)
+        public DataTable RunSQLReturnTable(string sql,Paras paras=null)
         {
             switch (this.EnMap.EnDBUrl.DBUrlType)
             {
                 case DBUrlType.AppCenterDSN:
-                    return DBAccess.RunSQLReturnTable(sql);
-                //case DBUrlType.DBAccessOfMSSQL1:
-                //    return DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                    return DBAccess.RunSQLReturnTable(sql, paras);
+                case DBUrlType.DBAccessOfMSSQL1:
+                    return DBAccessOfMSSQL1.RunSQLReturnTable(sql, paras);
                 //case DBUrlType.DBAccessOfMSSQL2:
                 //    return DBAccessOfMSSQL2.RunSQLReturnTable(sql);
                 //case DBUrlType.DBAccessOfOracle1:
@@ -385,6 +386,7 @@ namespace BP.En
                     throw new Exception("@没有设置类型。");
             }
         }
+
         #endregion
 
         #region 关于明细的操作
@@ -1143,7 +1145,8 @@ namespace BP.En
                     || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
-                    if (BP.DA.DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
+                    if ( this.EnMap.EnDBUrl.DBUrlType  == DBUrlType.AppCenterDSN
+                        && DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
                         return Retrieve(); //让其在查询一遍.
                 }
                 throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
@@ -2523,46 +2526,50 @@ namespace BP.En
         {
             if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.AppCenterDSN)
             {
+                string sql = "";
                 switch (DBAccess.AppCenterDBType)
                 {
                     case DBType.Oracle:
-                        DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
+                        sql=SqlBuilder.GenerCreateTableSQLOfOra(this);
                         break;
                     case DBType.Informix:
-                        DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOfInfoMix(this));
+                        sql = SqlBuilder.GenerCreateTableSQLOfInfoMix(this);
                         break;
                     case DBType.PostgreSQL:
-                        DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOfPostgreSQL(this));
+                        sql = SqlBuilder.GenerCreateTableSQLOfPostgreSQL(this);
                         break;
                     case DBType.MSSQL:
-                        DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
+                        sql = SqlBuilder.GenerCreateTableSQLOfMS(this);
                         break;
                     case DBType.MySQL:
-                        DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOfMySQL(this));
+                        sql = SqlBuilder.GenerCreateTableSQLOfMySQL(this);
                         break;
                     case DBType.Access:
-                        DBAccess.RunSQL(SqlBuilder.GenerCreateTableSQLOf_OLE(this));
+                        sql = SqlBuilder.GenerCreateTableSQLOf_OLE(this);
                         break;
                     default:
                         throw new Exception("@未判断的数据库类型。");
                 }
+
+                this.RunSQL(sql);
                 this.CreateIndexAndPK();
                 return;
             }
 
-            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
-            //{
-            //    DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
-            //    this.CreateIndexAndPK();
-            //    return;
-            //}
 
-            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL2)
-            //{
-            //    DBAccessOfMSSQL2.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
-            //    this.CreateIndexAndPK();
-            //    return;
-            //}
+            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
+            {
+                DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
+                this.CreateIndexAndPK();
+                return;
+            }
+
+            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL2)
+            {
+                DBAccessOfMSSQL2.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
+                this.CreateIndexAndPK();
+                return;
+            }
 
             //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle1)
             //{

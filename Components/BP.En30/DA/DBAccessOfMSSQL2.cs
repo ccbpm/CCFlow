@@ -83,7 +83,7 @@ namespace BP.DA
                 throw new Exception("RunSPReDecimal error=" + ex.Message + " Obj=" + obj);
             }
         }
-         
+
         #endregion
 
         private static bool lock_SQL = false;
@@ -135,9 +135,13 @@ namespace BP.DA
         #region 重载 RunSQLReturnTable
         public static DataTable RunSQLReturnTable(string sql)
         {
-            return DBAccess.RunSQLReturnTable(sql, GetSingleConn,  SystemConfig.AppSettings["DBAccessOfMSSQL2"], CommandType.Text);
+            return DBAccess.RunSQLReturnTable(sql, GetSingleConn, SystemConfig.AppSettings["DBAccessOfMSSQL2"], CommandType.Text, null);
         }
-        public static DataTable RunSQLReturnTable(string sql, CommandType sqlType, params object[] pars)
+        public static DataTable RunSQLReturnTable(string sql, params object[] pars)
+        {
+            return RunSQLReturnTable(sql, CommandType.Text, pars);
+        }
+        public static DataTable RunSQLReturnTable(string sql, CommandType sqlType, Paras pars)
         {
             return DBAccess.RunSQLReturnTable(sql, GetSingleConn, SystemConfig.AppSettings["DBAccessOfMSSQL2"], sqlType, pars);
         }

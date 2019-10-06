@@ -687,7 +687,7 @@ namespace BP.WF.HttpHandler
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.FID);
                     }
 
-                    if (md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
+                    if ( this.GetRequestVal("ShowFrmType").Equals("FrmFool")==true || md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm )
                     {
                         if (IsMobile == true)
                             return "url@../FrmView.htm?1=2" + paras;

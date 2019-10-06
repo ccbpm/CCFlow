@@ -116,26 +116,6 @@ namespace BP.DA
             get
             {
                 return new SqlConnection(SystemConfig.AppSettings["DBAccessOfMSSQL1"]);
-                //return 
-                //{
-                //    SqlConnection conn = HttpContext.Current.Session["DBAccessOfMSSQL1"] as SqlConnection;
-                //    if (conn == null)
-                //    {
-                //        conn = new SqlConnection(SystemConfig.AppSettings["DBAccessOfMSSQL1"]);
-                //        HttpContext.Current.Session["DBAccessOfMSSQL1"] = conn;
-                //    }
-                //    return conn;
-                //}
-                //else
-                //{
-                //    SqlConnection conn = SystemConfig.CS_DBConnctionDic["DBAccessOfMSSQL1"] as SqlConnection;
-                //    if (conn == null)
-                //    {
-                //        conn = new SqlConnection(SystemConfig.AppSettings["DBAccessOfMSSQL1"]);
-                //        SystemConfig.CS_DBConnctionDic["DBAccessOfMSSQL1"] = conn;
-                //    }
-                //    return conn;
-                //}
             }
         }
         #endregion 取得连接对象 ，CS、BS共用属性
@@ -143,9 +123,13 @@ namespace BP.DA
         #region 重载 RunSQLReturnTable
         public static DataTable RunSQLReturnTable(string sql)
         {
-            return DBAccess.RunSQLReturnTable(sql, GetSingleConn,  SystemConfig.AppSettings["DBAccessOfMSSQL1"], CommandType.Text);
+            return DBAccess.RunSQLReturnTable(sql, GetSingleConn,  SystemConfig.AppSettings["DBAccessOfMSSQL1"], CommandType.Text,null);
         }
-        public static DataTable RunSQLReturnTable(string sql, CommandType sqlType, params object[] pars)
+        public static DataTable RunSQLReturnTable(string sql, Paras pars)
+        {
+           return RunSQLReturnTable(sql, CommandType.Text, pars);
+        }
+        public static DataTable RunSQLReturnTable(string sql, CommandType sqlType, Paras pars)
         {
             return DBAccess.RunSQLReturnTable(sql, GetSingleConn, SystemConfig.AppSettings["DBAccessOfMSSQL1"], sqlType, pars);
         }
@@ -166,15 +150,15 @@ namespace BP.DA
         /// <param name="sqlType">CommandType</param>
         /// <param name="pars">params</param>
         /// <returns>返回运行结果</returns>
-        public static int RunSQL(string sql)
+        public static int RunSQL(string sql,Paras paras=null)
         {
             SqlConnection conn = DBAccessOfMSSQL1.GetSingleConn;
+
             //string step="step=1" ;
             //如果是锁定状态，就等待.
             while (lock_SQL)
-            {
                 lock_SQL = true; //锁定
-            }
+
             try
             {
 
@@ -184,6 +168,17 @@ namespace BP.DA
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.CommandType = CommandType.Text;
 
+                // 加入参数
+                if (paras != null)//qin 解决为null时的异常
+                {
+                    foreach (Para para in paras)
+                    {
+                        SqlParameter oraP = new SqlParameter(para.ParaName, para.val);
+                        cmd.Parameters.Add(oraP);
+                    }
+                }
+
+                //开始执行.
                 int i = 0;
                 try
                 {

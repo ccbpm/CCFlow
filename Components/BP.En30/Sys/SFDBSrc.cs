@@ -1335,7 +1335,7 @@ namespace BP.Sys
         private DataTable RunSQLReturnTable(string sql, System.Data.Common.DbConnection conn, string dsn, CommandType cmdType)
         {
             if (conn is System.Data.SqlClient.SqlConnection)
-                return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType);
+                return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType,null);
              
             //if (conn is System.Data.OracleClient.OracleConnection)
             //    return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);

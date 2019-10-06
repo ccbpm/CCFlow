@@ -131,12 +131,12 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql, paras);
                         break;
-                    //case DBUrlType.DBAccessOfMSSQL1:
-                    //    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                    //    break;
-                    //case DBUrlType.DBAccessOfMSSQL2:
-                    //    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                    //    break;
+                    case DBUrlType.DBAccessOfMSSQL1:
+                        dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                        break;
+                    case DBUrlType.DBAccessOfMSSQL2:
+                        dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+                        break;
                     //case DBUrlType.DBAccessOfOracle1:
                     //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
                     //    break;
@@ -168,12 +168,12 @@ namespace BP.En
                 case DBUrlType.AppCenterDSN:
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
-                //case DBUrlType.DBAccessOfMSSQL1:
-                //    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                //    break;
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                //    break;
+                case DBUrlType.DBAccessOfMSSQL1:
+                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql,paras);
+                    break;
+                case DBUrlType.DBAccessOfMSSQL2:
+                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql, paras);
+                    break;
                 //case DBUrlType.DBAccessOfOracle1:
                 //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
                 //    break;
@@ -208,12 +208,12 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql);
                         break;
-                    //case DBUrlType.DBAccessOfMSSQL1:
-                    //    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                    //    break;
-                    //case DBUrlType.DBAccessOfMSSQL2:
-                    //    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                    //    break;
+                    case DBUrlType.DBAccessOfMSSQL1:
+                        dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                        break;
+                    case DBUrlType.DBAccessOfMSSQL2:
+                        dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+                        break;
                     //case DBUrlType.DBAccessOfOracle1:
                     //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
                     //    break;
@@ -253,6 +253,12 @@ namespace BP.En
                 {
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql);
+                        break;
+                    case DBUrlType.DBAccessOfMSSQL1:
+                        dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                        break;
+                    case DBUrlType.DBAccessOfMSSQL2:
+                        dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
                         break;
                     default:
                         throw new Exception("@没有设置DB类型。");
@@ -294,12 +300,12 @@ namespace BP.En
                 case DBUrlType.AppCenterDSN:
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
-                //case DBUrlType.DBAccessOfMSSQL1:
-                //    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                //    break;
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                //    break;
+                case DBUrlType.DBAccessOfMSSQL1:
+                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                    break;
+                case DBUrlType.DBAccessOfMSSQL2:
+                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+                    break;
                 //case DBUrlType.DBAccessOfOracle1:
                 //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
                 //    break;

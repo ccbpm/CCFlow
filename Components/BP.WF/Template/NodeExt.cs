@@ -14,26 +14,7 @@ namespace BP.WF.Template
     /// </summary>
     public class NodeExt : Entity
     {
-        #region 索引
-        /// <summary>
-        /// 获取节点的帮助信息url
-        /// <para></para>
-        /// <para>added by liuxc,2014-8-19</para> 
-        /// </summary>
-        /// <param name="sysNo">帮助网站中所属系统No</param>
-        /// <param name="searchTitle">帮助主题标题</param>
-        /// <returns></returns>
-        private string this[string sysNo, string searchTitle]
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(sysNo) || string.IsNullOrWhiteSpace(searchTitle))
-                    return "javascript:alert('此处还没有帮助信息！')";
 
-                return string.Format("http://online.ccflow.org/KM/Tree.aspx?no={0}&st={1}", sysNo, Uri.EscapeDataString(searchTitle));
-            }
-        }
-        #endregion
 
         #region 常量
         /// <summary>
@@ -361,7 +342,7 @@ namespace BP.WF.Template
 
                 //map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
 
-                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel, 
+                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
                     "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
                 map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
 
@@ -376,6 +357,8 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true, false);
                 map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
                 map.AddBoolean(NodeAttr.IsOpenOver, false, "已阅即完成?", true, true, true);
+                map.SetHelperAlert(NodeAttr.IsOpenOver, "如果接受人打开了该工作，就标记该工作已经完成，而不必在点击发送按钮来标记完成。"); //增加帮助
+
 
                 map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true);
                 map.AddBoolean(NodeAttr.IsYouLiTai, false, "该节点是否是游离态", true, true);
@@ -543,7 +526,7 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
                 map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
-                map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100,true);
+                map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
 
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
@@ -594,7 +577,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
-                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送",true);
+                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送", true);
 
                 map.AddTBString(BtnAttr.AddLeaderLab, "加组长", "加组长", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.AddLeaderEnable, false, "是否启用", true, true);
@@ -626,7 +609,7 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true,BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
+                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true, BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
@@ -737,13 +720,10 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-
-                //设置相关字段.
-                rm.RefAttrKey = NodeAttr.CancelRole;
+                rm.RefAttrKey = NodeAttr.CancelRole; //在该节点下显示连接.
                 rm.RefAttrLinkLabel = "";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
 
                 //rm = new RefMethod();
                 //rm.Title = "绑定打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)";
@@ -751,20 +731,22 @@ namespace BP.WF.Template
                 //rm.Icon = "../../WF/Img/FileType/doc.gif";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
-                //设置相关字段.
-                rm.RefAttrKey = NodeAttr.PrintDocEnable;
-                rm.RefAttrLinkLabel = "";
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-                if (BP.Sys.SystemConfig.CustomerNo == "HCBD")
-                {
-                    /* 为海成邦达设置的个性化需求. */
-                    rm = new RefMethod();
-                    rm.Title = "DXReport设置";
-                    rm.ClassMethodName = this.ToString() + ".DXReport";
-                    rm.Icon = "../../WF/Img/FileType/doc.gif";
-                    map.AddRefMethod(rm);
-                }
+                //rm = new RefMethod();
+                //rm.Title = "打印设置"; // "可撤销发送的节点";
+                ////设置相关字段.
+                //rm.RefAttrKey = NodeAttr.PrintDocEnable;
+                //rm.Target = "_blank";
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //map.AddRefMethod(rm);
+                //if (BP.Sys.SystemConfig.CustomerNo == "HCBD")
+                //{
+                //    /* 为海成邦达设置的个性化需求. */
+                //    rm = new RefMethod();
+                //    rm.Title = "DXReport设置";
+                //    rm.ClassMethodName = this.ToString() + ".DXReport";
+                //    rm.Icon = "../../WF/Img/FileType/doc.gif";
+                //    map.AddRefMethod(rm);
+                //}
 
                 rm = new RefMethod();
                 rm.Title = "设置自动抄送规则(当节点为自动抄送时,该设置有效.)"; // "抄送规则";
@@ -816,7 +798,7 @@ namespace BP.WF.Template
                 #endregion 表单设置.
 
                 #region 考核属性.
-               
+
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
@@ -947,7 +929,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "设置提示信息";
                 rm.GroupName = "实验中的功能";
-           //     rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
+                //     rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
                 rm.ClassMethodName = this.ToString() + ".DoHelpRole";  //要执行的方法名.
                 rm.RefAttrKey = BtnAttr.HelpRole; //帮助信息.
                 rm.RefMethodType = RefMethodType.LinkeWinOpen; // 功能类型

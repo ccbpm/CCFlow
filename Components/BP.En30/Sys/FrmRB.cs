@@ -241,12 +241,9 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmRB", "单选框");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
+                map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfMSSQL1);
 
                 map.IndexField = FrmImgAthDBAttr.FK_MapData ; 
-
 
                 map.AddMyPK();
                 map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 300, 20);

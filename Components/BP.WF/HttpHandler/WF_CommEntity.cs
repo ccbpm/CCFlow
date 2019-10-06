@@ -805,7 +805,7 @@ namespace BP.WF.HttpHandler
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@"+ex.Message+"@"+ex.InnerException+" @方法名:"+item.ClassMethodName );
+                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@"+ex.Message+"@"+ex.InnerException+" @方法名:"+item.Title+" - 方法:"+item.ClassMethodName );
                         }
                     }
                     else

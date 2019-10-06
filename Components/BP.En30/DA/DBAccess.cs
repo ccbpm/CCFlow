@@ -2124,7 +2124,7 @@ namespace BP.DA
         /// <param name="sqlType"></param>
         /// <param name="pars"></param>
         /// <returns></returns>
-        public static DataTable RunSQLReturnTable(string msSQL, SqlConnection conn, string connStr, CommandType sqlType, params object[] pars)
+        public static DataTable RunSQLReturnTable(string msSQL, SqlConnection conn, string connStr, CommandType sqlType, Paras paras)
         {
             string msg = "step1";
 
@@ -2137,19 +2137,19 @@ namespace BP.DA
 #if DEBUG
             Debug.WriteLine(msSQL);
 #endif
-
+           
             while (lock_msSQL_ReturnTable)
                 ;
 
             SqlDataAdapter msAda = new SqlDataAdapter(msSQL, conn);
             msg = "error 2";
             msAda.SelectCommand.CommandType = sqlType;
-            if (pars != null)
+            if (paras != null)
             {
                 //CommandType.
-                foreach (object par in pars)
+                foreach (Para para in paras)
                 {
-                    msAda.SelectCommand.Parameters.AddWithValue("par", par);
+                    msAda.SelectCommand.Parameters.AddWithValue(para.ParaName, para.val);
                 }
             }
 
@@ -3282,7 +3282,7 @@ namespace BP.DA
                     else
                         return false;
                 case DBType.Access:
-                    sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
+                    sql = "select   Type   from   msysobjects  WHERE  UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
                     DataTable dtw = DBAccess.RunSQLReturnTable(sql);
                     if (dtw.Rows.Count == 0)
                         return false;

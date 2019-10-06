@@ -718,7 +718,7 @@ namespace BP.En
             else
                 sql1 += " ORDER BY " + attrGroup.Key;
 
-            return DBAccess.RunSQLReturnTable(sql1, this.MyParas);
+            return this.En.RunSQLReturnTable(sql1, this.MyParas);
         }
 
         public DataTable DoGroupReturnTableSqlServer(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
@@ -798,7 +798,7 @@ namespace BP.En
                 sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
             else
                 sql1 += " ORDER BY " + attrGroup.Key;
-            return DBAccess.RunSQLReturnTable(sql1, this.MyParas);
+            return this.En.RunSQLReturnTable(sql1, this.MyParas);
         }
         /// <summary>
         /// 分组查询，返回datatable.
@@ -882,7 +882,7 @@ namespace BP.En
                 sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
             else
                 sql1 += " ORDER BY " + attrGroup.Key;
-            return DBAccess.RunSQLReturnTable(sql1);
+            return this.En.RunSQLReturnTable(sql1);
         }
         public string[] FullAttrs = null;
         /// <summary>
@@ -935,7 +935,7 @@ namespace BP.En
         }
         public string DealString(string sql)
         {
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = this.En.RunSQLReturnTable(sql);
             string strs = "";
             foreach (DataRow dr in dt.Rows)
             {
@@ -985,7 +985,7 @@ namespace BP.En
         public string GenerPKsByTable(string sql, int from, int to)
         {
             //Log.DefaultLogWriteLineWarning(" ***************************** From= " + from + "  T0" + to);
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, this.MyParas);
+            DataTable dt = this.En.RunSQLReturnTable(sql, this.MyParas);
             string pks = "";
             int i = 0;
             foreach (DataRow dr in dt.Rows)
@@ -1361,7 +1361,7 @@ namespace BP.En
             }
             try
             {
-                int i = DBAccess.RunSQLReturnValInt(sql, this.MyParas);
+                int i = this.En.RunSQLReturnValInt(sql, this.MyParas);
                 if (this.Top == -1)
                     return i;
 
@@ -1411,7 +1411,7 @@ namespace BP.En
                     //	sql=sql.Substring(0,i);
                     break;
             }
-            return DBAccess.RunSQLReturnTable(sql, this.MyParas);
+            return this.En.RunSQLReturnTable(sql, this.MyParas);
 
         }
         /// <summary>
@@ -1422,7 +1422,7 @@ namespace BP.En
         public DataTable DoQueryToTable(int topNum)
         {
             this.Top = topNum;
-            return DBAccess.RunSQLReturnTable(this.SQL, this.MyParas);
+            return this.En.RunSQLReturnTable(this.SQL, this.MyParas);
         }
 
         private int doEntityQuery()
@@ -1448,7 +1448,7 @@ namespace BP.En
             return EntityDBAccess.Retrieve(this.Ens, this.SQL, this.MyParas, this.FullAttrs);
         }
         /// <summary>
-        /// 根据data初始化entiies.
+        /// 根据data初始化entiies.   
         /// </summary>
         /// <param name="ens">实体s</param>
         /// <param name="dt">数据表</param>

@@ -210,9 +210,20 @@ namespace BP.DA
         {
             return DBAccess.RunSQLReturnVal(sql, GetSingleConn, CommandType.Text, SystemConfig.AppSettings["DBAccessOfMSSQL1"]);
         }
-        public static object RunSQLReturnVal(string sql, CommandType sqlType, params object[] pars)
+        public static object RunSQLReturnVal(string sql, Paras paras)
         {
-            return DBAccess.RunSQLReturnVal(sql, GetSingleConn, sqlType, SystemConfig.AppSettings["DBAccessOfMSSQL1"], pars);
+            return DBAccess.RunSQLReturnVal(sql, GetSingleConn, CommandType.Text, SystemConfig.AppSettings["DBAccessOfMSSQL1"], paras);
+        }
+
+        public static object RunSQLReturnVal(Paras paras)
+        {
+            return DBAccess.RunSQLReturnVal(paras.SQL, GetSingleConn, CommandType.Text, SystemConfig.AppSettings["DBAccessOfMSSQL1"], paras);
+        }
+
+        public static int RunSQLReturnInt(Paras ps)
+        {
+            object val  = RunSQLReturnVal(ps);
+            return int.Parse(val.ToString());
         }
         #endregion 执行SQL ，返回首行首列
 

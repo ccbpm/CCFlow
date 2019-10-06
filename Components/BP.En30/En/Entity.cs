@@ -361,7 +361,6 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 
         /// 在此实体是运行sql 返回结果集合
         /// </summary>
         /// <param name="sql">要运行的 select sql</param>
@@ -382,6 +381,37 @@ namespace BP.En
                 //    return DBAccessOfOracle2.RunSQLReturnTable(sql);
                 case DBUrlType.DBSrc:
                     return this.EnMap.EnDBUrl.HisDBSrc.RunSQLReturnTable(sql);
+                default:
+                    throw new Exception("@没有设置类型。");
+            }
+        }
+
+        /// <summary>
+        /// 查询SQL返回int
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        public int RunSQLReturnValInt(string sql, Paras paras = null)
+        {
+            if (paras == null)
+                paras = new Paras();
+
+            paras.SQL = sql;
+            switch (this.EnMap.EnDBUrl.DBUrlType)
+            {
+                case DBUrlType.AppCenterDSN:
+                    return DBAccess.RunSQLReturnValInt(paras,0);
+                case DBUrlType.DBAccessOfMSSQL1:
+                    return DBAccessOfMSSQL1.RunSQLReturnInt(paras);
+                //case DBUrlType.DBAccessOfMSSQL2:
+                //    return DBAccessOfMSSQL2.RunSQLReturnTable(sql);
+                //case DBUrlType.DBAccessOfOracle1:
+                //    return DBAccessOfOracle1.RunSQLReturnTable(sql);
+                //case DBUrlType.DBAccessOfOracle2:
+                //    return DBAccessOfOracle2.RunSQLReturnTable(sql);
+                case DBUrlType.DBSrc:
+                    return this.EnMap.EnDBUrl.HisDBSrc.RunSQLReturnValInt(sql);
                 default:
                     throw new Exception("@没有设置类型。");
             }

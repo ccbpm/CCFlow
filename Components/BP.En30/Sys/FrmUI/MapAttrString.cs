@@ -114,7 +114,6 @@ namespace BP.Sys.FrmUI
                 #region 基本字段信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
-
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true);
 
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
@@ -125,27 +124,43 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL("ExtDefVal", "0", "系统默认值", sql, true);
 
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值表达式", true, false, 0, 400, 20, true);
+                map.SetHelperAlert(MapAttrAttr.DefVal,"可以编辑的字段设置默认值后，保存时候按照编辑字段计算.");
 
                 map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
+                map.SetHelperAlert(MapAttrAttr.MaxLen, "定义该字段的字节长度.");
+
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
+                map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
+
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);
 
                 //map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
+                map.SetHelperAlert(MapAttrAttr.UIVisible, "对于不可见的字段可以在隐藏功能的栏目里找到这些字段进行编辑或者删除.");
+
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
+                map.SetHelperAlert(MapAttrAttr.UIIsEnable, "不可编辑,让该字段设置为只读.");
+
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                 map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
+                map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
+
                 map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
+                map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
+
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
+                map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
+
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单
                 //单元格数量 2013-07-24 增加
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrDT",
                     "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨4个单元格@6=跨4个单元格");
+                map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
                 map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
@@ -159,8 +174,13 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章");
+                map.SetHelperAlert(MapAttrAttr.IsSigan, "图片签名,需要的是当前是只读的并且默认值为@WebUser.No,其他签名需要个性化的编写数字签章的集成代码.");
 
-                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
+
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
+                map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
+
+
                 #endregion 傻瓜表单
 
                 #region 基本功能.
@@ -179,11 +199,11 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "脚本验证";
-                rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "脚本验证";
+                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "事件绑函数";

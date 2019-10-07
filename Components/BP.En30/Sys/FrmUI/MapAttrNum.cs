@@ -180,11 +180,11 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "脚本验证";
-                rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "脚本验证";
+                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "事件绑函数";
@@ -313,14 +313,7 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
         }
-        /// <summary>
-        /// 设置级联
-        /// </summary>
-        /// <returns></returns>
-        public string DoInputCheck()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
-        }
+        
         /// <summary>
         /// 扩展控件
         /// </summary>

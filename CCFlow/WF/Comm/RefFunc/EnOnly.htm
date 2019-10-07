@@ -781,15 +781,15 @@
                 }
                 var name = "";
                 var helpUrl = GetPara(mapAttr.AtPara, "HelpUrl");
-                if (helpUrl == null || helpUrl == "" || helpUrl == "null") {
-                    name = mapAttr.Name;
-                } else {
+                //if (helpUrl == null || helpUrl == "" || helpUrl == "null") {
+               //     name = mapAttr.Name;
+                //} else {
                      if (helpUrl.indexOf('javascr') == 0)
-                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /></a>";
+                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right;height:15px'  /></a>";
                 else
-                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /></a>";
+                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right;height:15px' /></a>";
 
-                }
+                //}
                 
                 checkedStr = "";
 

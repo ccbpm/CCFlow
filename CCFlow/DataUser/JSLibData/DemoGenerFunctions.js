@@ -1,10 +1,5 @@
-﻿function SendMyFlow() {
-
-    alert('该纳税人，有欠税，您不能注销.');
-    return true;
-}
-
-//计算两个请假天数
+﻿
+/***  计算两个请假天数 begin ***/
 function DateDiffExt() {
 
     var d1 = $("#TB_QingJiaShiJianCong").val();
@@ -82,3 +77,5 @@ function validatePeriod(fyear, fmonth, fday, byear, bmonth, bday) {
         return false;
     }
 }
+
+/***  计算两个请假天数 end ***/

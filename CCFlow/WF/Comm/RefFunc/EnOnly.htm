@@ -447,9 +447,9 @@
                     if (attr.MyDataType == 4) {
 
                         if (helpUrl.indexOf('javascr') == 0)
-                            name = "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  />" + attr.Name + "</a>";
+                            name = "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /></a>";
                         else
-                            name = "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' />" + attr.Name + "</a>";
+                            name = "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /></a>";
 
                     } else {
 
@@ -478,10 +478,18 @@
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40) || attr.UIHeight > 40) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td  class='FDesc' style='width:20%;'>" + lab + "</td>";
-                    html += "<td colspan=3>";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
+                     if (attr.UIContralType == 2) {
+                        html += "<td class='FContext' colspan='4' >";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    } else {
+                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FContext'  colspan=3>";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    }
+
+                  
                     html += "</tr>";
 
                     if (rm != null) {
@@ -777,9 +785,9 @@
                     name = mapAttr.Name;
                 } else {
                      if (helpUrl.indexOf('javascr') == 0)
-                    name = "<a href=\"" + helpUrl + "\" >" + mapAttr.Name + "<img src='../../Img/Help.png' style='text-align:right'  /></a>";
+                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /></a>";
                 else
-                    name = "<a href=\"" + helpUrl + "\" target=_blank >" + mapAttr.Name + "<img src='../../Img/Help.png' style='text-align:right' /></a>";
+                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /></a>";
 
                 }
                 

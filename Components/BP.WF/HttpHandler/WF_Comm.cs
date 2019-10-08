@@ -4209,16 +4209,9 @@ namespace BP.WF.HttpHandler
 
 
             }
-
-            //StringBuilder sBuilder = new StringBuilder();
-            //sBuilder.Append("{\"total\":" + ds.Tables["DataCount"].Rows[0][0] + ",\"rows\":" + BP.Tools.Json.ToJson(ds.Tables["MainTable"]) + "}");
-
-            //return sBuilder.ToString();
-
-            string b= BP.DA.DataTableConvertJson.DataTable2Json(ds.Tables["MainTable"], int.Parse(ds.Tables["DataCount"].Rows[0][0].ToString()));
-
-            return b;
-            return BP.Tools.Json.ToJson(ds);
+ 
+            return BP.DA.DataTableConvertJson.DataTable2Json(ds.Tables["MainTable"], int.Parse(ds.Tables["DataCount"].Rows[0][0].ToString()));
+            //return BP.Tools.Json.ToJson(ds);
         }
 
         /// <summary>

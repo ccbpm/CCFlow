@@ -1656,6 +1656,7 @@ namespace BP.DA
             if (DataType.IsNullOrEmpty(sql))
                 return 1;
 
+
             int result = 0;
             try
             {
@@ -1905,11 +1906,16 @@ namespace BP.DA
             {
                 MySqlCommand cmd = new MySqlCommand(sql, connOfMySQL);
                 cmd.CommandType = CommandType.Text;
-                foreach (Para para in paras)
+
+                if (paras != null)
                 {
-                    MySqlParameter oraP = new MySqlParameter(para.ParaName, para.val);
-                    cmd.Parameters.Add(oraP);
+                    foreach (Para para in paras)
+                    {
+                        MySqlParameter oraP = new MySqlParameter(para.ParaName, para.val);
+                        cmd.Parameters.Add(oraP);
+                    }
                 }
+
                 i = cmd.ExecuteNonQuery();
                 cmd.Dispose();
 

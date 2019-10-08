@@ -671,7 +671,7 @@ namespace BP.WF.HttpHandler
 			}
 			catch (Exception ex)
 			{
-				string msg = "err@升级失败(ccbpm有自动修复功能,您可以刷新一下系统会自动创建字段,刷新多次扔解决不了问题,请反馈给我们.www.ccflow.org)";
+				string msg = "err@升级失败(ccbpm有自动修复功能,您可以刷新一下系统会自动创建字段,刷新多次扔解决不了问题,请反馈给我们)";
 				msg += "@系统信息:" + ex.Message;
 				return msg;
 			}

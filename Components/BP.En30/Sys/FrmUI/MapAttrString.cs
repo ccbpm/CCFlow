@@ -279,19 +279,19 @@ namespace BP.Sys.FrmUI
                 #endregion Pop 自动填充.
 
                 #region 高级设置.
-                rm = new RefMethod();
-                rm.Title = "扩展控件";
-                rm.ClassMethodName = this.ToString() + ".DoEditFExtContral()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "扩展控件";
+                //rm.ClassMethodName = this.ToString() + ".DoEditFExtContral()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "扩展控件2019";
-                rm.ClassMethodName = this.ToString() + ".DoEditFExtContral2019()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "扩展控件2019";
+                //rm.ClassMethodName = this.ToString() + ".DoEditFExtContral2019()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "批处理";

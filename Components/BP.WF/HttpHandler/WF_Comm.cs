@@ -13,6 +13,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using BP.NetPlatformImpl;
+using System.Text;
 
 namespace BP.WF.HttpHandler
 {
@@ -764,9 +765,9 @@ namespace BP.WF.HttpHandler
                 string[] str = paras.Split('~');
                 myparas = new object[str.Length];
                 RefMethod rm = null;
-                foreach(RefMethod item in en.EnMap.HisRefMethods)
+                foreach (RefMethod item in en.EnMap.HisRefMethods)
                 {
-                    if (item.ClassMethodName.Replace(this.EnName+".","").Equals(methodName+"()"))
+                    if (item.ClassMethodName.Replace(this.EnName + ".", "").Equals(methodName + "()"))
                     {
                         rm = item;
                         break;
@@ -776,9 +777,9 @@ namespace BP.WF.HttpHandler
                 Attrs attrs = rm.HisAttrs;
                 int idx = 0;
 
-                foreach(Attr attr in attrs)
+                foreach (Attr attr in attrs)
                 {
-                     myparas[idx] = str[idx];
+                    myparas[idx] = str[idx];
                     if (attr.MyDataType == DataType.AppInt)
                         myparas[idx] = Int32.Parse(str[idx]);
                     if (attr.MyDataType == DataType.AppFloat)
@@ -790,8 +791,8 @@ namespace BP.WF.HttpHandler
                     idx++;
                 }
             }
-            
-            
+
+
 
             string result = mp.Invoke(en, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
@@ -4154,6 +4155,8 @@ namespace BP.WF.HttpHandler
 
                 qo.DoQuery("MyPK", iPageSize, iPageNumber);
 
+
+                var gg = BP.Tools.Json.ToJson(dvs.ToDataTableField("MainTable"));
                 ds.Tables.Add(dvs.ToDataTableField("MainTable")); //把描述加入.
             }
             if (lb == "hisWords")
@@ -4206,9 +4209,16 @@ namespace BP.WF.HttpHandler
 
 
             }
+
+            //StringBuilder sBuilder = new StringBuilder();
+            //sBuilder.Append("{\"total\":" + ds.Tables["DataCount"].Rows[0][0] + ",\"rows\":" + BP.Tools.Json.ToJson(ds.Tables["MainTable"]) + "}");
+
+            //return sBuilder.ToString();
+
+            string b= BP.DA.DataTableConvertJson.DataTable2Json(ds.Tables["MainTable"], int.Parse(ds.Tables["DataCount"].Rows[0][0].ToString()));
+
+            return b;
             return BP.Tools.Json.ToJson(ds);
-
-
         }
 
         /// <summary>

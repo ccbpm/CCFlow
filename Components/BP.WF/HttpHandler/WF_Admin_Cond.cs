@@ -48,16 +48,32 @@ namespace BP.WF.HttpHandler
             switch (this.GetRequestVal("MoveType"))
             {
                 case "Up":
+                    
+                   
                     Cond up = new Cond(this.MyPK);
-                    up.DoUp(this.FK_Node);
-                    up.RetrieveFromDBSources();
-                    DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + up.PRI + " WHERE ToNodeID=" + up.ToNodeID);
+                    string mypk = up.FK_Flow + "_" + up.FK_Node + "_" + up.ToNodeID;
+                    Direction dir = new Direction(mypk);
+                    dir.DoUp(this.FK_Node);
+                    dir.RetrieveFromDBSources();
+                    Directions dirs = new Directions(this.FK_Node);
+                    foreach(Direction dire in dirs)
+                    {
+                        DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + dire.Idx + " WHERE ToNodeID=" + dire.ToNode +" AND FK_Node="+dire.Node);
+                    }
+                   
                     break;
                 case "Down":
                     Cond down = new Cond(this.MyPK);
-                    down.DoDown(this.FK_Node);
-                    down.RetrieveFromDBSources();
-                    DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + down.PRI + " WHERE ToNodeID=" + down.ToNodeID);
+                    mypk = down.FK_Flow + "_" + down.FK_Node + "_" + down.ToNodeID;
+                    dir = new Direction(mypk);
+                    dir.DoDown(this.FK_Node);
+                    dir.RetrieveFromDBSources();
+                    dirs = new Directions(this.FK_Node);
+                    foreach (Direction dire in dirs)
+                    {
+                        DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + dire.Idx + " WHERE ToNodeID=" + dire.ToNode + " AND FK_Node=" + dire.Node);
+                    }
+                    //DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + dir.Idx + " WHERE ToNodeID=" + down.ToNodeID);
                     break;
                 default:
                     break;

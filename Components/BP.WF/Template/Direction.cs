@@ -32,6 +32,10 @@ namespace BP.WF.Template
         /// 折线信息
         /// </summary>
         public const string Dots = "Dots";
+        /// <summary>
+        /// 顺序
+        /// </summary>
+        public const string Idx = "Idx";
 	}
 	/// <summary>
 	/// 节点方向
@@ -105,17 +109,34 @@ namespace BP.WF.Template
                 this.SetValByKey(DirectionAttr.Dots, value);
             }
         }
-		#endregion 
 
-		#region 构造方法
-		/// <summary>
-		/// 节点方向
-		/// </summary>
-		public Direction(){}
-		/// <summary>
-		/// 重写基类方法
-		/// </summary>
-		public override Map EnMap
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(DirectionAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(DirectionAttr.Idx, value);
+            }
+        }
+        #endregion
+
+        #region 构造方法
+        /// <summary>
+        /// 节点方向
+        /// </summary>
+        public Direction(){}
+        public Direction(string mypk)
+        {
+            this.MyPK = mypk;
+            this.Retrieve();
+        }
+        /// <summary>
+        /// 重写基类方法
+        /// </summary>
+        public override Map EnMap
 		{
 			get
 			{
@@ -138,6 +159,7 @@ namespace BP.WF.Template
                  * Dots 存储格式为: @x1,y1@x2,y2
                  */
                 map.AddTBString(NodeReturnAttr.Dots, null, "轨迹信息", true, true, 0, 300, 0, false);
+                map.AddTBInt(DirectionAttr.Idx, 0, "顺序", true, true);
 
                 //相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.WF.Port.Stations(),
@@ -168,7 +190,25 @@ namespace BP.WF.Template
             this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode;
             return base.beforeDelete();
         }
-	}
+        /// <summary>
+        /// 上移
+        /// </summary>
+        /// <param name="fk_node">节点ID</param>
+        public void DoUp(int fk_node)
+        {
+            
+            this.DoOrderUp(DirectionAttr.Node, fk_node.ToString(), DirectionAttr.Idx);
+        }
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <param name="fk_node">节点ID</param>
+        public void DoDown(int fk_node)
+        {
+          
+            this.DoOrderDown(DirectionAttr.Node, fk_node.ToString(), DirectionAttr.Idx);
+        }
+    }
 	 /// <summary>
 	 /// 节点方向
 	 /// </summary>

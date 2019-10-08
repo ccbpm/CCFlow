@@ -125,7 +125,7 @@
         if (mapAttr.LGType != 1)
             continue;
 
-       // if (mapAttr.UIIsEnable == 0)
+        // if (mapAttr.UIIsEnable == 0)
         //    continue;
 
 
@@ -408,16 +408,18 @@ function AfterBindEn_DealMapExt(frmData) {
                         var mapextDoc = mapExt.Doc;
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
                             if (minDate == "" || minDate == undefined)
-                                WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
-                                    $(this).blur(); //失去焦点 
-                                    DBAccess.RunFunctionReturnStr(mapextDoc);
-                                }
+                                WdatePicker({
+                                    dateFmt: dateFmt, onpicked: function (dp) {
+                                        $(this).blur(); //失去焦点 
+                                        DBAccess.RunFunctionReturnStr(mapextDoc);
+                                    }
                                 });
                             else
-                                WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-                                    $(this).blur(); //失去焦点 
-                                    DBAccess.RunFunctionReturnStr(mapextDoc);
-                                }
+                                WdatePicker({
+                                    dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                        $(this).blur(); //失去焦点 
+                                        DBAccess.RunFunctionReturnStr(mapextDoc);
+                                    }
                                 });
 
                         });
@@ -584,7 +586,7 @@ function AfterBindEn_DealMapExt(frmData) {
                             });
                         } else {
                             $('#TB_' + mapExt.AttrOfOper).unbind("focus");
-                            
+
                             var bindFunctionExt = new Entity("BP.Sys.MapExt", functionPK);
                             $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
 
@@ -595,10 +597,10 @@ function AfterBindEn_DealMapExt(frmData) {
                                     }
                                 });
                             });
-                           
+
                         }
 
-                       
+
                     }
 
                 }
@@ -623,7 +625,7 @@ function AfterBindEn_DealMapExt(frmData) {
 /**Pop弹出框的处理**/
 function PopMapExt(mapAttr, mapExt, frmData) {
     switch (mapAttr.GetPara("PopModel")) {
-       
+
         case "PopBranchesAndLeaf": //树干叶子模式.
             var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
             PopBranchesAndLeaf(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
@@ -715,7 +717,7 @@ function PopMapExt(mapAttr, mapExt, frmData) {
             tb.width(tb.width() - 40);
             tb.height('auto');
             var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
-                        '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
+                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
             tb.parent().html(eleHtml);
             break;
         default: break;
@@ -724,9 +726,9 @@ function PopMapExt(mapAttr, mapExt, frmData) {
 
 
 function TBHelp(ObjId, MyPK) {
-    var url = basePath+"/WF/CCForm/Pop/HelperOfTBEUIBS.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-    var W = document.body.clientWidth - 500;
-    var H = document.body.clientHeight - 140;
+    var url = basePath + "/WF/CCForm/Pop/HelperOfTBEUIBS.htm?PKVal=" + MyPK + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+    var W = document.body.clientWidth / 2.5;//- 500;
+    var H = document.body.clientHeight / 1.5; //- 140;
     //var str = OpenEasyUiDialogExt(url, "词汇选择", W, H, false);
     OpenBootStrapModal(url, "TBHelpIFram", "词汇选择", W, H);
 }

@@ -637,7 +637,7 @@ namespace BP.WF
                 map.AddTBDateTime(GenerWorkerListAttr.DTOfWarning, "警告日期", false, false);
                // map.AddTBFloat(GenerWorkerListAttr.WarningHour, 0, "预警天", true, false);
                 map.AddTBDateTime(GenerWorkerListAttr.RDT, "记录时间", false, false);
-                map.AddTBDateTime(GenerWorkerListAttr.CDT, "完成时间", false, false);
+                map.AddTBDateTime(GenerWorkerListAttr.CDT, GenerWorkerListAttr.CDT, DateTime.Now.ToString(DataType.SysDataTimeFormat+":ss"), "完成时间", false, false);
                 map.AddTBInt(GenerWorkerListAttr.IsEnable, 1, "是否可用", true, true);
 
                 //  add for 上海 2012-11-30

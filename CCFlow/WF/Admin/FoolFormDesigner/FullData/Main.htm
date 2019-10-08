@@ -71,54 +71,54 @@
 </head>
 <body>
     <form id="cc">
-    <div id="bar">
-    </div>
-    <table style="width: 99%;">
-        <tr>
-            <th colspan="2">
-                填充主表数据SQL
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                数据源类型
-            </td>
-            <td>
-                <select id="DDL_DBType" name="DDL_DBType">
-                    <option value="0">执行SQL</option>
-                    <option value="1">执行url返回JSON</option>
-                    <option value="2">执行CCFromRef.js返回JSON</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="4">
-                <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>
-                <div id="backFunction" style="color: Gray; display: none">
-                    <ul>
-                        <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法().</li>
-                    </ul>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <input type="text" id="TB_Tag2" name="TB_Tag2" style="width: 99%;" />
-            </td>
-        </tr>
-    </table>
-    <fieldset>
-        <legend>帮助.</legend>
-        <ul>
-            <li>填充主表的SQL, </li>
-            <li>必须返回一行数据.</li>
-        </ul>
-    </fieldset>
+        <div id="bar">
+        </div>
+        <table style="width: 99%;">
+            <tr>
+                <td colspan="2">
+                    填充主表数据SQL
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    数据源类型
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>,可以为空.
+                    <div id="backFunction" style="color: Gray; display: none">
+                        <ul>
+                            <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法().</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" id="TB_Tag2" name="TB_Tag2" style="width: 99%;" />
+                </td>
+            </tr>
+        </table>
+        <fieldset>
+            <legend>帮助.</legend>
+            <ul>
+                <li>填充主表的SQL, </li>
+                <li>必须返回一行数据.</li>
+            </ul>
+        </fieldset>
     </form>
 </body>
 </html>

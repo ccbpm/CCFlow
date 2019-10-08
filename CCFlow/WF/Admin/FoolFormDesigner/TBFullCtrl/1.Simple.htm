@@ -16,7 +16,7 @@
             InitBar("Simple");
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn")+"_FullData" ;
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             //批量为复制.
@@ -50,7 +50,7 @@
             en.Update();
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn")+"_FullData";
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
             var n = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
@@ -65,12 +65,9 @@
                 mapExt.Insert();
             window.location.href = window.location.href;
         }
-       
-
     </script>
     <style type="text/css">
-        .style1
-        {
+        .style1 {
             height: 21px;
         }
     </style>
@@ -79,46 +76,54 @@
     <div id="bar">
     </div>
     <form id="cc">
-    <table id="table" style="width: 100%;">
-        <caption>
-            为文本框填充其它控件</caption>
-        <tr>
-            <td>
-                数据源类型
-            </td>
-            <td>
-                <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
-                    <option value="0">执行SQL</option>
-                    <option value="1">执行url返回JSON</option>
-                    <option value="2">执行CCFromRef.js返回JSON</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">
-                数据源   <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                
-                <div id='sqlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>填充SQL帮助:</li>
-                        <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
-                        <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                        <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                        <li>4. 比如:SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%' </li>
-                        
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="width: 100%;">
-                <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
-            </td>
-        </tr>
-    </table>
+        <table id="table" style="width: 100%;">
+            <caption>
+                为文本框填充其它控件
+            </caption>
+            <tr>
+                <td>
+                    数据源类型
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    数据源: <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" /> 帮助: </a>
+                         <div id='sqlexp' style='color: Gray; display: none'>
+                             <ul>
+                                 <li>填充SQL帮助:</li>
+                                 <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+                                 <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                                 <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                                 <li>
+                                     4. 比如: SELECT No,Name,Name as MingCheng, Email, Tel FROM WF_Emp
+                                     WHERE No LIKE '@Key%'
+                                 </li>
+                             </ul>
+                             <fieldset>
+                                 <legend>主表运行效果</legend>
+                                 <img src="1.Simple.png" style="width:90%;" />
+                             </fieldset>
+
+                             <fieldset>
+                                 <legend>从表运行效果</legend>
+                                 <img src="1.Simple-1.png" style="width:90%;" />
+                             </fieldset>
+                         </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+        </table>
     </form>
 </body>
 </html>

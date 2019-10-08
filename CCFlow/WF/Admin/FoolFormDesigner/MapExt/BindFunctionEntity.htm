@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>消息推送 </title>
-    
+
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -22,7 +22,7 @@
             en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
             var i = en.RetrieveFromDBSources();
 
-            $("#Btn_Save").attr("value", "保存:" + GetQueryString("FK_Event")+"事件");
+            $("#Btn_Save").attr("value", "保存:" + GetQueryString("FK_Event") + "事件");
 
             GenerFullAllCtrlsVal(en);
 
@@ -40,7 +40,7 @@
 
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            
+
             var en = new Entity("BP.Sys.MapExt");
             en.FK_MapData = GetQueryString("FK_MapData");
             en.ExtType = "BindFunction";
@@ -81,54 +81,59 @@
             window.location.href = "BindFunction.htm?FK_MapData=" + FK_MapData + "&KeyOfEn=" + AttrOfOper;
         }
     </script>
-    
+
 </head>
-<body   style="font-size: smaller">
-    <form method="post"   id="form1">  
-    <table id="table1" name="table1" style=" width:98%; "> 
-    <caption> 事件 </caption>
+<body style="font-size: smaller">
+    <form method="post" id="form1">
+        <table id="table1" name="table1" style=" width:98%; ">
+            <caption> 事件 </caption>
 
-    <tr>
-    <td>函数名称 </td>
-    <td> 
-    <input type="text" id="TB_Doc" name="TB_Doc" style="width:99%" />
-     </td>
-    <td>比如: MyFunc() </td>
-    </tr>
+            <tr>
+                <td>函数名称 </td>
+                <td>
+                    <input type="text" id="TB_Doc" name="TB_Doc" style="width:99%" />
+                </td>
+                <td>比如: MyFunc() </td>
+            </tr>
 
-    
-    <tr>
-    <td>备注 </td>
-    <td> 
-    <input type="text" id="TB_Tag1" name="TB_Tag1"  style="width:99%"/>
-     </td>
-    <td>对该函数的说明</td>
-    </tr>
-    </table>  
 
-    <input type="button" value="Save" id="Btn_Save" onclick="Save();" />
-    <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="Delete();" />
-    <input type="button" value="返回" id="Back" name="Back" onclick="BackTo();" />    
+            <tr>
+                <td>备注 </td>
+                <td>
+                    <input type="text" id="TB_Tag1" name="TB_Tag1" style="width:99%" />
+                </td>
+                <td>对该函数的说明</td>
+            </tr>
+        </table>
 
-    <fieldset>
-    <legend> 帮助</legend>
-    <ul>
-    <li>1.您可以自定义一个函数，然后把函数名称设置到文本框里。</li>
-    <li>2. 该函数可以写入到 \DataUser\JSLibData\FrmID_Self.js 里面 </li>
-    <li>3. 如果该函数是一个通用的函数，可以写入到CCFormRef.js </li> 
-    </ul>
-    </fieldset>
+        <input type="button" value="Save" id="Btn_Save" onclick="Save();" />
+        <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="Delete();" />
+        <input type="button" value="返回" id="Back" name="Back" onclick="BackTo();" />
+
+        <fieldset>
+            <legend> 帮助</legend>
+            <ul>
+                <li>1.您可以自定义一个函数，然后把函数名称设置到文本框里。</li>
+                <li>2. 该函数可以写入到 \DataUser\JSLibData\FrmID_Self.js 里面 </li>
+                <li>3. 如果该函数是一个通用的函数，可以写入到CCFormRef.js </li>
+            </ul>
+        </fieldset>
     </form>
 
     <fieldset>
-    <legend>函数方法载体</legend>
-    <ul>
-    <li>如果是公共的方法，请写入到:\DataUser\JSLabData\CCFormRef.js</li>
-    <li>如果是个性化的方法，请写入到:\DataUser\JSLabData\<b><font color=red>@FrmID</font></b>_Self.js， @FrmID 是当前表单的ID. </li>
-    <li>在这个方法里面，您可以使用JQuery的语法，操作其他的字段.</li>
-    <li>比如：根据请假天数从，到两个日期字段计算请假天数.</li>
-    </ul>
+        <legend>函数方法载体</legend>
+        <ul>
+            <li>如果是公共的方法，请写入到:\DataUser\JSLabData\CCFormRef.js</li>
+            <li>如果是个性化的方法，请写入到:\DataUser\JSLabData\<b><font color=red>@FrmID</font></b>_Self.js， @FrmID 是当前表单的ID. </li>
+            <li><b>以上两个js文件在系统会自动装载到表单里面去.</b></li>
+            <li>在这个方法里面，您可以使用JQuery的语法，操作其他的字段.</li>
+            <li>比如：根据请假天数从，到两个日期字段计算请假天数. 请参考:<font color="red">\DataUser\JSLabData\DemoGenerFunctions.js</font>里面的方法. </li>
+            <li>编写脚本的时候对于文本框可以使用$("#TB_QingJiaRiQiCong") 获取文本框对象. </li>
+            <li>下拉框$("#DDL_QingJiaLeiXing").val() 获取对象</li>
+            <li>Boolean类型的数据通过$("#CB_HunFou")来获取对象.</li>
+            <li>Radionbutton类型的数据通过$("#RB_QingJiaLeiXing") 来获取对象.</li>
+        </ul>
     </fieldset>
-   
+
 </body>
 </html>

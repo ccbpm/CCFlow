@@ -11,16 +11,20 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
-        
+
         $(function () {
+
             InitBar("PopBranches");
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopBranches_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-            if (mapExt.GetPara("SelectType") == "")
+            if (i == 0) {
                 mapExt.SetPara("SelectType", "1");
+                mapExt.Doc = "@WebUser.FK_Dept";
+            }
+
 
             //批量为赋值.
             GenerFullAllCtrlsVal(mapExt);
@@ -53,6 +57,11 @@
             mapExt.ExtType = "PopBranches";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
 
+            var errInfo = "";
+            if (mapExt.Tag1 == "")
+                errInfo += "";
+
+
             var err = "";
             if (mapExt.GetPara("Title") == "")
                 err += '\t\n必填字段[标题]不能为空';
@@ -80,8 +89,7 @@
 
     </script>
     <style type="text/css">
-        .style1
-        {
+        .style1 {
             height: 21px;
         }
     </style>
@@ -90,149 +98,142 @@
     <div id="bar">
     </div>
     <form id="cc">
-    <table id="Table1" style="width: 99%;">
-        
-        <tr>
-            <th colspan="4">
-                基本信息
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <a href="javascript:alert('显示在窗口的文字，比如:请选择部门.')">Pop标题</a>
-            </td>
-            <td colspan="3">
-                <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
-            </td>
-        </tr>
-      
-        <tr>
-            <td>
-                弹窗属性
-            </td>
-            <td colspan="2">
-                高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
-                宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
-            </td>
-            <td>
-                <font color="gray">用于控制弹出窗口的大小</font>
-            </td>
-        </tr>
+        <table id="Table1" style="width: 99%;">
+            <tr>
+                <td>
+                    <a href="javascript:alert('显示在窗口的文字，比如:请选择部门.')">Pop标题</a>
+                </td>
+                <td colspan="3">
+                    <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    弹窗属性
+                </td>
+                <td colspan="2">
+                    高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                    宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
+                </td>
+                <td>
+                    <font color="gray">用于控制弹出窗口的大小</font>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    数据源类型
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                </td>
+                <td>
+                    选择类型:
+                </td>
+                <td>
+                    <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" checked="true" />
+                    <label for="RBPara_SelectType_0">
+                        单选
+                    </label>
+                    <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                    <label for="RBPara_SelectType_1">
+                        多选
+                    </label>
+                </td>
+            </tr>
 
 
+            <tr>
+                <td>
+                    <a href="javascript:ShowHidden('HSearch')">搜索提示</a>
+                    <div id="HSearch" style="color: Gray; display: none">
+                        <ul>
+                            <li>显示在搜索文本框的背景文字，比如:</li>
+                            <li>请输入付款人名称,进行搜索.</li>
+                            <li>输入人员编号,名称，名称全拼,简拼关键字搜索.</li>
+                        </ul>
+                    </div>
+                </td>
+                <td colspan="3">
+                    <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                数据源类型
-            </td>
-            <td>
-                <select id="DDL_DBType" name="DDL_DBType">
-                    <option value="0">执行SQL</option>
-                    <option value="1">执行url返回JSON</option>
-                    <option value="2">执行CCFromRef.js返回JSON</option>
-                </select>
-            </td>
-            <td>
-                选择类型:
-            </td>
-            <td>
-                <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" checked="true" />
-                <label for="RBPara_SelectType_0">
-                    单选</label>
-                <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
-                <label for="RBPara_SelectType_1">
-                    多选</label>
-            </td>
-        </tr>
+            <!-- 搜索数据源  -->
+            <tr>
+                <td colspan="4">
+                    <a href="javascript:ShowHidden('condSearchs')">搜索数据源</a>
+                    <div id="condSearchs" style="color: Gray; display: none">
+                        <ul>
+                            <li>设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列. </li>
+                            <li>比如:Url事例: /DataUser/Handler.ashx?DoType=ReqDepts </li>
+                            <li>SQL事例: SELECT No,Name,ParentNo FROM Port_Dept</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 23px;"></textarea>
+                </td>
+            </tr>
 
-        
-          <tr>
-            <td>
-                <a href="javascript:ShowHidden('HSearch')">搜索提示</a>
-                <div id="HSearch" style="color: Gray; display: none">
-                    <ul>
-                        <li>显示在搜索文本框的背景文字，比如:</li>
-                        <li>请输入付款人名称,进行搜索.</li>
-                        <li>输入人员编号,名称，名称全拼,简拼关键字搜索.</li>
-                    </ul>
-                </div>
-            </td>
-            <td colspan="3">
-                <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
-            </td>
-        </tr>
-
-         <!-- 搜索数据源  -->
-        <tr>
-            <th colspan="4">
-                <a href="javascript:ShowHidden('condSearchs')">搜索数据源</a>
-                <div id="condSearchs" style="color: Gray; display: none">
-                    <ul>
-                        <li>设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列. </li>
-                        <li>比如:Url事例: /DataUser/Handler.ashx?DoType=ReqDepts </li>
-                        <li>SQL事例: SELECT No,Name,ParentNo FROM Port_Dept</li>
-                    </ul>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 23px;"></textarea>
-            </td>
-        </tr>
-
-        <!-- 树干列表数据源  -->
-        <tr>
-            <th colspan="4">
-                <a href="javascript:ShowHidden('PopValSearchCond')">树干列表数据源</a>
-                <div id="PopValSearchCond" style="color: Gray; display: none">
-                    <ul>
-                        <li>设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列. </li>
-                        <li>比如:Url事例: /DataUser/Handler.ashx?DoType=ReqDepts </li>
-                        <li>SQL事例: SELECT No,Name,ParentNo FROM Port_Dept</li>
-                    </ul>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="javascript:alert('支持ccbpm的表达式,比如:@WebUser.FK_Dept , @FieldName')">根目录树编号</a>
-            </td>
-            <td colspan="3">
-                <input id="TB_Doc" name="TB_Doc" value="0" style="width: 250px;" type="text" />
-            </td>
-        </tr>
+            <!-- 树干列表数据源  -->
+            <tr>
+                <td colspan="4">
+                    <a href="javascript:ShowHidden('PopValSearchCond')">树干列表数据源</a>
+                    <div id="PopValSearchCond" style="color: Gray; display: none">
+                        <ul>
+                            <li>设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列. </li>
+                            <li>比如:Url事例: /DataUser/Handler.ashx?DoType=ReqDepts </li>
+                            <li>SQL事例: SELECT No,Name,ParentNo FROM Port_Dept</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="javascript:alert('支持ccbpm的表达式,比如:@WebUser.FK_Dept , @FieldName')">根目录树编号</a>
+                </td>
+                <td colspan="3">
+                    <input id="TB_Doc" name="TB_Doc" value="0" style="width: 250px;" type="text" />
+                </td>
+            </tr>
 
 
-        <!-- 数据列名与中文意思对照 -->
-        <tr>
-            <th colspan="4">
-                <a href="javascript:ShowHidden('tab6')">数据列名与中文意思对照</a>
-                <div id="tab6" style="color: Gray; display: none">
-                    <ul>
-                        <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
-                        <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
-                    </ul>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
-            </td>
-        </tr>
+            <!-- 数据列名与中文意思对照 -->
+            <tr>
+                <td colspan="4">
+                    <a href="javascript:ShowHidden('tab6')">数据列名与中文意思对照</a>
+                    <div id="tab6" style="color: Gray; display: none">
+                        <ul>
+                            <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
+                            <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
+                </td>
+            </tr>
+        </table>
 
-    </table>
-    
-    <fieldset>
-    <legend>样例</legend>
-    <img alt="" src='3.Branches.png'  />
-    </fieldset>
+        <fieldset>
+            <legend>样例</legend>
+           <a href="javascript:WinOpen('3.Branches.png');" >  <img alt="" src='3.Branches.png' /> </a>
+        </fieldset>
 
     </form>
 </body>

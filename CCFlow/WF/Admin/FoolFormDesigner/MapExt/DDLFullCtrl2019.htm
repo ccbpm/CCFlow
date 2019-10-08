@@ -15,7 +15,6 @@
         var mapExt;
         $(function () {
 
-
             var keyOfEn = GetQueryString("KeyOfEn");
             var frmID = GetQueryString("FK_MapData");
 
@@ -36,89 +35,98 @@
             return;
 
         });
-  
+
     </script>
 </head>
 <body>
     <form id="cc">
 
-<table style="width:99%;">
-<caption> 设置下拉框在值变化后，填充其他控件与从表 </caption>
-<tr>
-<td>
+        <table style="width:99%;">
+            <caption> 设置下拉框在值变化后，填充其他控件与从表 </caption>
+            <tr>
+                <td>
 
-  <fieldset>
-        <legend><label> <input type="radio" value="0" id="RB_IsEnableJS_0"  name="RB_IsEnableJS"  checked="checked"/>
-        不启用</label>
-        </legend> 
+                    <fieldset>
+                        <legend>
+                            <label>
+                                <input type="radio" value="0" id="RB_IsEnableJS_0" name="RB_IsEnableJS" checked="checked" />
+                                不启用
+                            </label>
+                        </legend>
 
-        <ul>
-        <li>不设置，不启用，默认为不启用。</li>
-        </ul>
-    </fieldset>
+                        <ul>
+                            <li>不设置，不启用，默认为不启用。</li>
+                        </ul>
+                    </fieldset>
 
-    <fieldset>
-        <legend> <label><input type="radio" value="1" id="RB_IsEnableJS_1"  name="RB_IsEnableJS" />启用 </label>
+                    <fieldset>
+                        <legend>
+                            <label><input type="radio" value="1" id="RB_IsEnableJS_1" name="RB_IsEnableJS" />启用 </label>
 
-        </legend>
-        <ul>
-            <li>应用场景1：在做一个选择操作员的时候，需要把操作员的电话，邮件填充到主表其他字段里面，需要把操作员的岗位显示到下拉框里面。 </li>
-            <li><img src='./Img/DDLFullCtrl.png' /></li>
-            <li>启用后需要您配置数据填充模式.</li>
-        </ul>
-    </fieldset>
-</td>
-</tr>
+                        </legend>
+                        <ul>
+                            <li>启用后需要您配置数据填充模式.</li>
+                        </ul>
+                    </fieldset>
+                </td>
+            </tr>
 
-<tr>
-<td>
+            <tr>
+                <td>
+                    <input type="button" value="保存" onclick="Save();" />
+                    <input type="button" value="设置填充" id="Btn_FullData" onclick="Set();" />
+                    <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />帮助:</a>
+                </td>
+            </tr>
+        </table>
+
+        <div id='sqlexp' style='color: Gray; display: none'>
+            <fieldset>
+                <legend> 运行效果 </legend>
+                <ul>
+                    <li>应用场景1：在做一个选择操作员的时候，需要把操作员的电话，邮件填充到主表其他字段里面，需要把操作员的岗位显示到下拉框里面。 </li>
+                    <li>人员是一个下拉框，人员变动的时候，其他的控件也在跟着变动。</li>
+                </ul>
+                <a href="javascript:WinOpen('./Img/DDLFullCtrl.png');">   <img src='./Img/DDLFullCtrl.png' style="width:90%;" /> </a>
+            </fieldset>
+        </div>
+
+        <div id="Msg">
+        </div>
+        <script type="text/javascript">
 
 
-    <input type="button" value="保存" onclick="Save();" />
-    <input type="button" value="设置填充" id="Btn_FullData"  onclick="Set();" />
+            function Save() {
 
-</td>
-</tr>
-</table>
-  
+                var keyOfEn = GetQueryString("KeyOfEn");
+                var frmID = GetQueryString("FK_MapData");
 
+                var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
 
-    <div id="Msg">
-    </div>
-    <script type="text/javascript">
-
-
-        function Save() {
-
-            var keyOfEn = GetQueryString("KeyOfEn");
-            var frmID = GetQueryString("FK_MapData");
-
-            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
-
-            var isEnable = $("input[name='RB_IsEnableJS']:checked").val();
-            if (isEnable == "1") {
-                en.SetPara("IsFullData", 1);
-                $("#Btn_FullData").removeAttr("disabled");
-            } else {
-                en.SetPara("IsFullData", 0);
-                $("#Btn_FullData").attr("disabled", true);
+                var isEnable = $("input[name='RB_IsEnableJS']:checked").val();
+                if (isEnable == "1") {
+                    en.SetPara("IsFullData", 1);
+                    $("#Btn_FullData").removeAttr("disabled");
+                } else {
+                    en.SetPara("IsFullData", 0);
+                    $("#Btn_FullData").attr("disabled", true);
+                }
+                en.Update();
+                window.location.href = window.location.href;
+                return;
             }
-            en.Update();
-            window.location.href = window.location.href;
-            return;
-        }
 
-        function Set() {
-            var keyOfEn = GetQueryString("KeyOfEn");
-            var frmID = GetQueryString("FK_MapData");
-            var extType = GetQueryString("ExtType");
-            var myPK = "DDLFullCtrl_" + frmID + "_" + keyOfEn;
-            var url = "../FullData/Main.htm?FK_MapData=" + frmID + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn + "&ExtType=" + extType;
+            function Set() {
+                var keyOfEn = GetQueryString("KeyOfEn");
+                var frmID = GetQueryString("FK_MapData");
+                var extType = GetQueryString("ExtType");
+                var myPK = "DDLFullCtrl_" + frmID + "_" + keyOfEn;
+                var url = "../FullData/Main.htm?FK_MapData=" + frmID + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn + "&ExtType=" + extType;
 
-            window.location.href = url;
-            return;
-        }
-    </script>
+                window.location.href = url;
+                return;
+            }
+        </script>
     </form>
 </body>
 </html>

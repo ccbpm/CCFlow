@@ -44,6 +44,7 @@
                 var list = "<ul>";
                 var mapExts = new Entities("BP.Sys.MapExts");
                 mapExts.Retrieve("FK_MapData", en.No);
+
                 for (var idx = 0; idx < mapExts.length; idx++) {
                     var mapExt = mapExts[idx];
                     list += "<li><a href=\"javascript:AddMapExt('" + mapExt.MyPK + "','" + mapExt.AttrOfOper + "','" + mapExt.FK_MapData + "')\" >" + mapExt.AttrOfOper + " - " + mapExt.Tag1 + " - " + mapExt.ExtType + "</a></li>";

@@ -57,8 +57,8 @@
             AttrKey = mapExt.AttrOfOper;
             FK_MapData = mapExt.FK_MapData;
             $('#myTab a').click(function (e) {
-                e.preventDefault(); //阻止a链接的跳转行为 
-                $(this).tab('show'); //显示当前选中的链接及关联的content 
+                e.preventDefault(); //阻止a链接的跳转行为
+                $(this).tab('show'); //显示当前选中的链接及关联的content
                 switch ($(this).text()) {
                     case "我的词汇":
                         startBtn(); //允许新增、编辑、删除
@@ -85,18 +85,20 @@
             runEffect("myWords"); //初始化加载我的词汇
         });
         function startBtn() { //启用按钮
+          $('#tools').show();
             $('#btnAdd').attr("disabled",false);
             $('#btnEdit').attr("disabled", false);
             $('#btnDel').attr("disabled", false);
         }
         function forbiddenBtn() {  //禁用按钮
+            $('#tools').hide();
             $('#btnAdd').attr("disabled", true);
             $('#btnEdit').attr("disabled", true);
             $('#btnDel').attr("disabled", true);
         }
         function runEffect(v) {
             lb = v;
-            LoadGridData(1, 15);
+            LoadGridData(1, 10);
         }
 
         function GetSearchData(pageNumber, pageSize) {
@@ -140,13 +142,13 @@
                     SearchData.push({"MyPK":i,"CurValue":doc});
                 }
                 DataCount = SearchData.length;
-               
+
             }else{
                 SearchData = GetSearchData(pageNumber,pageSize);
             }
             $('#newsGrid').bootstrapTable({
                 columns: [[
-                { checkbox: true, width: 1, 
+                { checkbox: true, width: 1,
                   cellStyle: {css: { "width": "1px" } }
                 },
                 { field: 'CurValue', title: '', align: 'left' }
@@ -162,7 +164,7 @@
                 striped: true,
                 showHeader:false,
                 showFooter:false
-              
+
             });
             $('#newsGrid').bootstrapTable('load', SearchData);
 
@@ -210,9 +212,9 @@
             //var curPage = options.pageNumber;
             //var pageSize = options.pageSize;
             //LoadGridData(curPage, pageSize);
-            LoadGridData(1, 15);
+            LoadGridData(1, 10);
         }
-       
+
         var insEdit = true;
         //添加数据
         function btnOpenWindow() {
@@ -251,12 +253,12 @@
                     defVal.CurValue = text;
                     defVal.Insert();
                     $('#myModal').modal('hide');
-                    LoadGridData(1, 15);
+                    LoadGridData(1, 10);
 
                 }
-               
-               
-                
+
+
+
             } else {//编辑
                 var text = $('#TextArea').val();
                 text = replaceTrim(text);
@@ -278,7 +280,7 @@
                 defVal.Update();
                 $('#myModal').modal('hide');
                 RefreshGrid();
-                
+
             }
 
         }
@@ -324,7 +326,7 @@
                     var defVal = new Entity("BP.Sys.DefVal", value.MyPK);
                     defVal.Delete();
                 });
-                LoadGridData(1, 15);
+                LoadGridData(1, 10);
             }
             else {
                 alert("请选择一条数据");
@@ -387,46 +389,51 @@
     <div style=" border: 1px solid #ddd;">
         <!--tab标签-->
         <div class="tabbable">
-		    <ul class="nav nav-tabs" id="myTab">
-			    <li class="active">
-				    <a data-toggle="tab" href="#home">我的词汇</a>
-			    </li>
-			   <!-- <li id="lsch">
-				    <a data-toggle="tab" href="#messages">历史词汇</a>
-			    </li>-->
-			    <li>
-				    <a data-toggle="tab" href="#dropdown1">系统词汇</a>
-			    </li>
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active">
+                    <a data-toggle="tab" href="#home">我的词汇</a>
+                </li>
+                <!-- <li id="lsch">
+                 <a data-toggle="tab" href="#messages">历史词汇</a>
+             </li>-->
                 <li>
-				    <a data-toggle="tab" href="#dropdown1">读取文件</a>
-			    </li>
+                    <a data-toggle="tab" href="#dropdown1">系统词汇</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#dropdown1">读取文件</a>
+                </li>
             </ul>
         </div>
         <!--button按钮-->
-        <div >
-            <div style="text-align: left; float: left;margin:3px 5px">
+        <div>
+            <div id="tools" style="text-align: left; float: left;margin:3px 5px">
                 <button class=" btn btn-info btn-xs" type="button" id="btnAdd" onclick='btnOpenWindow()'><i class="glyphicon-plus"></i> 添加数据</button>
                 <button class=" btn btn-info btn-xs" type="button" id="btnEdit" onclick='btnEdit()'><i class="fa fa-edit"></i> 编辑</button>
                 <button class=" btn btn-info btn-xs" type="button" id="btnDel" onclick='btnDelete()'><i class="fa fa-remove"></i> 删除</button>
-        
+
             </div>
-            <div style="text-align: right; margin:3px 5px">
+            <!--<div style="text-align: right; margin:3px 5px">
                 <button class=" btn btn-success btn-xs" type="button" onclick='btnOk()' id='btnOk'><i class="fa fa-check"></i> 确定</button>
                 <button class=" btn btn-danger btn-xs" type="button" onclick='btnClose()' id='btnClose'><i class="fa fa-mail-reply"></i> 取消</button>
-            </div>
+            </div>-->
         </div>
-    
+
         <!--table页面-->
         <div style="padding: 5px;">
             <table id="newsGrid" fit="true"></table>
         </div>
-         <!-- 显示分页信息 -->
-        <div  style="text-align: left;">
-            <ul class="pagination" id="page_nav">
-            </ul>
-            <ul class="pagination controls" id="page_info">
-            </ul>
+        <!-- 显示分页信息 -->
+        <div style="text-align: left;">
+            <ul class="pagination" id="page_nav"></ul>
+            <ul class="pagination controls" id="page_info"></ul>
             <div style="clear: both;">
+            </div>
+        </div>
+
+        <div>
+            <div style="float: right; margin:3px 5px">
+                <button class=" btn btn-success btn-xs" type="button" onclick='btnOk()' id='btnOk'><i class="fa fa-check"></i> 确定</button>
+                <button class=" btn btn-danger btn-xs" type="button" onclick='btnClose()' id='btnClose'><i class="fa fa-mail-reply"></i> 取消</button>
             </div>
         </div>
     </div>

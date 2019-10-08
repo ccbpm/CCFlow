@@ -181,7 +181,7 @@ function addTab(id, title, url, IsCloseEtcFrm) {
         ///以下代码是为页签动态绑定单击事件
         tabs[i].panel('options').tab.unbind().bind('click', { index: i }, function (e) {
             var title = ($(this).find(".tabs-title").html());
-            OnTabChange(null, clickTab);
+            OnTabChange(null);
             $('#tabs').tabs('select', title); //选中并刷新
         });
     }

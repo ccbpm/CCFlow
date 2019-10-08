@@ -11,16 +11,16 @@
     <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript" ></script>
-    <script src="../../Scripts/config.js" type="text/javascript" ></script>
+    <!--<script src="../../Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>-->
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <style type="text/css">
-        .bs-checkbox 
-        {
-           width:20px
+        .bs-checkbox {
+            width: 20px
         }
+
         .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
             color: #555;
             cursor: default;
@@ -28,7 +28,6 @@
             border-right: 1px solid #ddd;
             border-bottom-color: transparent;
         }
-            
     </style>
     <script type="text/ecmascript">
         var WordsSort;
@@ -39,8 +38,7 @@
         var mapExt;
         var lb;
         var webUser = new WebUser();
-        var SearchData;
-        var DataCount;
+        var data;
         $(function () {
             mapExt = new Entity("BP.Sys.MapExt", PKVal);
             var i = mapExt.RetrieveFromDBSources();
@@ -116,15 +114,11 @@
                 $("#newsGrid").html("<b>访问页面出错，请联系管理员。<b>");
                 return;
             }
-            data = ToJson(data);
+            data =eval('(' + data + ')');// ToJson(data);
             if (data == null || data =="" || data==undefined) {
-                SearchData = [];
-                DataCount = 0;
-            } else {
-                SearchData = data["MainTable"];
-                DataCount = data["DataCount"][0]["DataCount"];
+                data = [];
             }
-            return SearchData;
+            return data;
         }
         function LoadGridData(pageNumber, pageSize) {
             $("#newsGrid").html("");
@@ -132,77 +126,47 @@
             //$('#newsGrid').bootstrapTable('clearChecked');
             var pagination = (lb == "sysWords"?false:true) ;
             if (lb == "sysWords") {
-                SearchData = [];
+                data = [];
                 var docs = mapExt.Doc;
                 docs = docs.split('@');
                 for (var i = 0; i < docs.length; i++) {
                     var doc = docs[i];
                     if (doc == null || doc == "")
                         continue;
-                    SearchData.push({"MyPK":i,"CurValue":doc});
+                    data.push({"MYPK":i,"CURVALUE":doc});
                 }
-                DataCount = SearchData.length;
-
             }else{
-                SearchData = GetSearchData(pageNumber,pageSize);
+                data = GetSearchData(pageNumber,pageSize);
             }
+
+
             $('#newsGrid').bootstrapTable({
                 columns: [[
                 { checkbox: true, width: 1,
                   cellStyle: {css: { "width": "1px" } }
                 },
-                { field: 'CurValue', title: '', align: 'left' }
+                { field: 'CURVALUE', title: '', align: 'left' }
                 ]],
-                idField: 'MyPK',
+                idField: 'MYPK',
                 selectOnCheck: false,
                 clickToSelect: true,
                 checkOnSelect: true,
                 singleSelect: false,
-                data: SearchData,
+                data: data,
                 width: 'auto',
                 height: 'auto',
                 striped: true,
                 showHeader:false,
-                showFooter:false
-
-            });
-            $('#newsGrid').bootstrapTable('load', SearchData);
-
-        }
-
-        //分页功能
-        function Paginator(pageCount, currentPage) {
-            var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
-            var options = {
-                bootstrapMajorVersion: 3, //版本
-                currentPage: currentPage, //当前页数
-                totalPages: pageCount, //总页数
-                shouldShowPage: true, //是否显示该按钮
-                itemTexts: function (type, page, current) {
-                    switch (type) {
-                        case "first":
-                            return "首页";
-                        case "prev":
-                            return "上一页";
-                        case "next":
-                            return "下一页";
-                        case "last":
-                            return "末页";
-                        case "page":
-                            return page;
-                    }
-                }, //点击事件，用于通过Ajax来刷新整个list列表
-                onPageClicked: function (event, originalEvent, type, page) {
-                    pageIdx = page;
-                    SearchData(page);
-                    $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
-                                "页,总共" + count + "条记录。</li>");
+                showFooter:false,
+                pageNumber: 1, //初始化加载第一页，默认第一页
+                pagination:true,//是否分页
+                sidePagination:'server',//在服务器分页
+                pageSize:10,//单页记录数
+                onPageChange:function(pn,size){
+                    LoadGridData(pn,size);
                 }
-            };
-            $('#page_nav').bootstrapPaginator(options);
-            $('#page_info').append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
-                                "页,总共" + count + "条记录。</li>");
-
+             });
+             $('#newsGrid').bootstrapTable('load', data);
         }
 
         //刷新
@@ -240,7 +204,7 @@
                 if (lb == "myWords")//我的词汇
                 {
                     //判断是否存在我的词汇
-                    var defVals = new Entities("BP.Sys.DefVals", "FK_MapData", FK_MapData, "AttrKey", AttrKey, "FK_Emp", webUser.No, "LB", "1", "CurValue", text);
+                    var defVals = new Entities("BP.Sys.DefVals", "FK_MapData", FK_MapData, "AttrKey", AttrKey, "FK_Emp", webUser.No, "LB", "1", "CURVALUE", text);
                     if (defVals.length != 0) {
                         alert("该词汇已经存在，不能重复录入");
                         return;
@@ -254,11 +218,7 @@
                     defVal.Insert();
                     $('#myModal').modal('hide');
                     LoadGridData(1, 10);
-
                 }
-
-
-
             } else {//编辑
                 var text = $('#TextArea').val();
                 text = replaceTrim(text);
@@ -280,7 +240,6 @@
                 defVal.Update();
                 $('#myModal').modal('hide');
                 RefreshGrid();
-
             }
 
         }
@@ -294,9 +253,9 @@
                 return;
             var rows = $('#newsGrid').bootstrapTable('getAllSelections');
             if (rows.length == 1) {
-                againText = rows[0].CurValue;
-                defValPK = rows[0].MyPK;
-                $('#TextArea').val(rows[0].CurValue);
+                againText = rows[0].CURVALUE;
+                defValPK = rows[0].MYPK;
+                $('#TextArea').val(rows[0].CURVALUE);
                 $('#myModal').modal('show');
                 $('#TextArea').focus();
             }
@@ -323,7 +282,7 @@
 
                 var oids = '';
                 $.each(rows, function (n, value) {
-                    var defVal = new Entity("BP.Sys.DefVal", value.MyPK);
+                    var defVal = new Entity("BP.Sys.DefVal", value.MYPK);
                     defVal.Delete();
                 });
                 LoadGridData(1, 10);
@@ -361,7 +320,7 @@
 
             } else {
                 $.each(rows, function (n, value) {
-                    str += value.CurValue + ",";
+                    str += value.CURVALUE + ",";
                 });
 
                 str = str.substr(0, str.length - 1);
@@ -385,7 +344,7 @@
         }
     </script>
 </head>
-<body >
+<body>
     <div style=" border: 1px solid #ddd;">
         <!--tab标签-->
         <div class="tabbable">
@@ -394,8 +353,8 @@
                     <a data-toggle="tab" href="#home">我的词汇</a>
                 </li>
                 <!-- <li id="lsch">
-                 <a data-toggle="tab" href="#messages">历史词汇</a>
-             </li>-->
+                    <a data-toggle="tab" href="#messages">历史词汇</a>
+                </li>-->
                 <li>
                     <a data-toggle="tab" href="#dropdown1">系统词汇</a>
                 </li>
@@ -450,11 +409,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary"onclick="AddWorks()">保存</a></button>
+                    <button type="button" class="btn btn-primary" onclick="AddWorks()">保存</a></button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
-   </div>
+    </div>
 
 </body>
 </html>

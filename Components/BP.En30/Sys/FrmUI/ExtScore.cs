@@ -11,20 +11,6 @@ namespace BP.Sys.FrmUI
     {
         #region 属性
         /// <summary>
-        /// 目标
-        /// </summary>
-        //public string Target
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey(MapAttrAttr.Tag1);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(MapAttrAttr.Tag1, value);
-        //    }
-        //}
-        /// <summary>
         /// URL
         /// </summary>
         public string URL

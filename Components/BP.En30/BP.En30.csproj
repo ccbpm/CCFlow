@@ -231,6 +231,8 @@
     <Compile Include="Sys\FormEventBase.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
+    <Compile Include="Sys\FrmUI\ExtMap.cs" />
+    <Compile Include="Sys\FrmUI\ExtScore.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />

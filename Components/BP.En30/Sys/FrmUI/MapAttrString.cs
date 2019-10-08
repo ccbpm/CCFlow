@@ -211,11 +211,11 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "超链接";
-                rm.ClassMethodName = this.ToString() + ".DoLink()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "超链接";
+                //rm.ClassMethodName = this.ToString() + ".DoLink()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "快速录入";
@@ -227,7 +227,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "全局默认值";
                 rm.ClassMethodName = this.ToString() + ".DoDefVal()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+              //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "字段重命名";
@@ -453,7 +453,6 @@ namespace BP.Sys.FrmUI
             //return "../../Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
             return "../../Admin/FoolFormDesigner/EleBatch.htm?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
-
         /// <summary>
         /// 小范围多选
         /// </summary>

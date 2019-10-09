@@ -340,6 +340,7 @@
                 var TB_Key = $("#TB_Key").val();
 
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                 handler.AddPara("IsContainFuture", isContainFuture);
                 var data = handler.DoMethodReturnString("Runing_Init");
 
                 if (data.indexOf('err@') == 0) {
@@ -415,7 +416,10 @@
                 return data;
 
             }
-            var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
+        var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
+        var isContainFuture = GetQueryString("IsContainFuture");
+        if (isContainFuture == null || isContainFuture == undefined || isContainFuture == "")
+            isContainFuture = "0";
 			//初始化数据.
         function InitPage() {
             var data = GetRuningData(pageIdx);
@@ -466,9 +470,11 @@
 			        listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 			        listbox += "<td>";
 			        //listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
-			        listbox += "<a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
-                    listbox += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
-
+                    listbox += "<a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a>";
+                    if (work.RunType == 0) {
+                        listbox += "&nbsp;&nbsp;&nbsp; <a href =\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
+                        listbox += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
+                    }
                     
                     listbox += "</td>";
 			        listbox += "</tr>";

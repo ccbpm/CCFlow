@@ -16,36 +16,35 @@
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <style type="text/css">
-       .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th ,.table>colgroup+thead>tr:first-child>th
-       {
-           border: 1px solid rgb(221, 221, 221);
-       }
-       body{
-           font-size:12px;
-       }
-       /*滚动条*/
-::-webkit-scrollbar-thumb {
-    background-color: #b5b5b5;
-    height: 50px;
-    -webkit-border-radius: 4px;
-}
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th, .table > colgroup + thead > tr:first-child > th {
+            border: 1px solid rgb(221, 221, 221);
+        }
 
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: #585858;
-        height: 50px;
-        -webkit-border-radius: 4px
-    }
+        body {
+            font-size: 12px;
+        }
+        /*滚动条*/
+        ::-webkit-scrollbar-thumb {
+            background-color: #b5b5b5;
+            height: 50px;
+            -webkit-border-radius: 4px;
+        }
 
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: #585858;
+                height: 50px;
+                -webkit-border-radius: 4px
+            }
 
-::-webkit-scrollbar-track-piece {
-    background-color: #fff;
-    -webkit-border-radius: 4px
-}
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
 
+        ::-webkit-scrollbar-track-piece {
+            background-color: #fff;
+            -webkit-border-radius: 4px
+        }
     </style>
     <script type="text/javascript">
         var currtab = GetQueryString("CurrTab");
@@ -60,7 +59,7 @@
 
         //初始化数据
         function InitPage() {
-            
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CH_Init");
@@ -92,7 +91,7 @@
                 plantStartDt = nd.PlantStartDt;
                 GS = nd.GS;
                 //根据节点获取GenerWorkerList对应的数据
-                var gwl = GetEntityByNode(gwls,nd.NodeID);
+                var gwl = GetEntityByNode(gwls, nd.NodeID);
                 _Html += "<tr>";
                 Idx = i + 1;
                 _Html += "<td>" + Idx + "</td>";
@@ -100,17 +99,17 @@
                     _Html += "<td style='text-align: center'>" + gwl.FK_NodeText + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.FK_EmpText + "</td>";
                     if (plantStartDt == null || plantStartDt == undefined || plantStartDt == "")
-                        plantStartDt = "<label>"+gwl.RDT+"</label>";
+                        plantStartDt = "<label>" + gwl.RDT + "</label>";
                     _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.RDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
                     _Html += "<td style='text-align: center'>" + gwl.CDT + "</td>";
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
-                         _Html += "<td style='text-align: center'>0</td>";
+                        _Html += "<td style='text-align: center'>0</td>";
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
                     } else {
-                        _Html += "<td style='text-align: center'>0</td>";
+                        _Html += "<td style='text-align: center'>" + GS + "</td>";
                         //耗时
                         var rdt = new Date(Date.parse(gwl.RDT.replace(/-/g, "/")));
                         var cdt = new Date(Date.parse(gwl.CDT.replace(/-/g, "/")));
@@ -127,15 +126,15 @@
 
                 } else { //未运行到的节点
                     if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
-                      
+
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         if (webUser == undefined) {
                             var webUser = new WebUser();
                             _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
                         } else
-                             _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
-                            
-                       
+                            _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
+
+
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>无</td>";
@@ -147,34 +146,34 @@
                     } else {
                         _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
-                        
+
                         if (chRole == 1) {
                             var style = "";
                             if (nd.IsStartSetting == "1")
                                 style = "style='color:#a7a4a4'";
 
-                            _Html += "<td style='text-align: center'><input type='text' "+ style+" id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                        +"$(this).blur(); CompareDate("+ nd.NodeID+",0);}})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' " + style + " id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                + "$(this).blur(); CompareDate(" + nd.NodeID + ",0);}})'  class='form-control Wdate'/></td>";
                         } else
                             _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
 
                         _Html += "<td style='text-align: center'>___</td>";
                         if (chRole == 1) {
-                             var style = "";
+                            var style = "";
                             if (nd.IsEndSetting == "1")
                                 style = "style='color:#a7a4a4'";
 
-                             _Html += "<td style='text-align: center'><input type='text' "+ style+" id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                        +"$(this).blur(); CompareDate("+ nd.NodeID+",1);}})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' " + style + " id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                + "$(this).blur(); CompareDate(" + nd.NodeID + ",1);}})'  class='form-control Wdate'/></td>";
                         }
-                           
+
                         else
                             _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'><input type='text' id='GS_" + nd.NodeID + "' name='GS_" + nd.NodeID + "' value='" + GS + "'/></td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
-                       
+
                         _Html += "</tr>";
                     }
                 }
@@ -184,30 +183,30 @@
             $("#CHTbody").html(_Html);
 
             var flow = data.WF_Flow[0];
-            if (flow.SDTOfFlowRole != 0){
+            if (flow.SDTOfFlowRole != 0) {
                 $("#flowTable").hide();
             } else {
-                 _Html = "<tr>";
+                _Html = "<tr>";
                 _Html += "<td>" + gwf.RDT + "</td>";
-               
+
                 if (gwf.SDTOfFlow == "") {
                     _Html += "<td>无</td>";
                     _Html += "<td>0秒</td>";
                     _Html += "<td>无</td>";
                 } else {
-                     _Html += "<td>" + gwf.SDTOfFlow + "</td>";
-                    var sdtofFlow= new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
+                    _Html += "<td>" + gwf.SDTOfFlow + "</td>";
+                    var sdtofFlow = new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
                     if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
-                         _Html += "<td>-"+GetSpanTime(sdtofFlow, new Date()) + "</td>";
+                        _Html += "<td>-" + GetSpanTime(sdtofFlow, new Date()) + "</td>";
                         _Html += "<td><label style='color:red'>逾期</label></td>";
-                       
+
                     } else {
                         var spanTime = data.SpanTime[0].SpanTime;
                         _Html += "<td>" + spanTime + "</td>";
-                         _Html += "<td>正常</td>";
+                        _Html += "<td>正常</td>";
                     }
                 }
-                
+
                 if (chRole == 3)
                     _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
                 else {
@@ -215,20 +214,20 @@
                 }
                 _Html += "</tr>";
 
-                 $("#FlowCH").html(_Html);
+                $("#FlowCH").html(_Html);
 
             }
-            
+
             //可调整时限增加保存按钮
             if (chRole == 1)
                 $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
-            
-           
+
+
 
         }
 
         //比对时间
-        function CompareDate(nodeId,type) {
+        function CompareDate(nodeId, type) {
             var startDt = $("#PlantStartDt_" + nodeId).val();
             var endDt = $("#CH_" + nodeId).val();
             if (startDt > endDt) {
@@ -337,7 +336,7 @@
             for (var k in date) {
                 if (new RegExp("(" + k + ")").test(format)) {
                     format = format.replace(RegExp.$1, RegExp.$1.length == 1
-                            ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+                        ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
                 }
             }
             return format;
@@ -349,7 +348,7 @@
 <body>
     <div style="padding:12px">
         <form id="cc">
-           <div style="height:80%">
+            <div style="height:80%">
                 <table class="table table-hover" style="width:100%">
                     <caption>节点时限 </caption>
                     <thead>
@@ -367,10 +366,8 @@
 
                         </tr>
                     </thead>
-                    <tbody id="CHTbody">
-                
-                    </tbody>
-                
+                    <tbody id="CHTbody"></tbody>
+
                 </table>
             </div>
             <table class="table" id="flowTable">
@@ -379,22 +376,20 @@
                     <tr>
                         <th style='background-color:#F2F2F2;'>开始日期</th>
                         <th style='background-color:#F2F2F2;'>应完成日期</th>
-                        <th style='background-color:#F2F2F2;width:150px'>剩余时间</th >
+                        <th style='background-color:#F2F2F2;width:150px'>剩余时间</th>
                         <th style='background-color:#F2F2F2;width:150px'>状态</th>
-                        <th style='background-color:#F2F2F2;width:150px'id="IsChangeDT">调整时间</th>
-                        
+                        <th style='background-color:#F2F2F2;width:150px' id="IsChangeDT">调整时间</th>
+
                     </tr>
                 </thead>
-                 <tbody id="FlowCH">
-                
-                </tbody>
-               
-           </table>
+                <tbody id="FlowCH"></tbody>
+
+            </table>
         </form>
 
-       <div id="bottomBar"></div>
-      
+        <div id="bottomBar"></div>
+
     </div>
-    
+
 </body>
 </html>

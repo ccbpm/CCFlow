@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <!--UEditor-->
+    <link href="../../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../../../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../../Comm/umeditor1.2.3-utf8/umeditor.js"></script>
+    <script type="text/javascript" src="../../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
+
+    
+    <script type="text/javascript" language="javascript">
+        var editor = "";
+        //页面启动函数.
+        $(function () {
+
+            //初始化富文本编辑器
+            editor = UM.getEditor('container', {
+                'autoHeightEnabled': false,
+                'fontsize': [10, 12, 16, 18, 24, 36],
+                'initialFrameWidth': '100%',
+                'initialFrameHeight': '240',
+            });
+
+            var id = "BigNoteHtmlText";
+            var frmID = GetQueryString("FrmID");
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + id);
+            var doc = en.DoMethodReturnString("ReadBigNoteHtmlText");
+            //初始化富文本框的内容
+            editor.setContent(doc); 
+
+        });
+        function Save() {
+
+            var id = "BigNoteHtmlText";
+            var frmID = GetQueryString("FrmID");
+            //获取富文本的内容
+            var html = editor.getContent();
+            if (html == "") {
+                alert("内容不能为空！");
+                return;
+            }
+            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + id);
+            //执行保存富文本的内容
+            var msg = en.DoMethodReturnString("SaveBigNoteHtmlText",html);
+
+            alert(msg);
+            window.location.href = window.location.href;
+
+        }
+    </script>
+</head>
+<body>
+
+    
+    <div style='white-space:normal;margin:8px'>
+        <h3> 编辑提示信息 </h3>
+        <!-- 加载编辑器的容器 -->
+        <script id="container" name="content" type="text/plain">
+        
+        </script>
+
+    </div>
+    <br />
+    <input type="button" value="保存" onclick="Save();" />
+
+
+</body>
+</html>

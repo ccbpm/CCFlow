@@ -4021,7 +4021,7 @@ namespace BP.WF
         public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara)
         {
             string str = this.DoFlowEventEntity(doType, currNode, en, atPara, null);
-            return BP.DA.DataType.PraseGB2312_To_utf8(str);
+            return str;
         }
         private BP.WF.FlowEventBase _FDEventEntity = null;
         /// <summary>
@@ -4870,6 +4870,10 @@ namespace BP.WF
                 fl.SetValByKey(dc.ColumnName, val);
             }
             fl.FK_FlowSort = fk_flowSort;
+            if(DBAccess.IsExitsObject(fl.PTable) == true)
+            {
+                fl.PTable = null;
+            }
             fl.Insert();
             #endregion 处理流程表数据
 

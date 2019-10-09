@@ -4076,7 +4076,7 @@ namespace BP.WF.HttpHandler
                             }
                                 
                             dr["PlantStartDt"] = plantStartDt = beforeSDTOfNode;
-                            dr["GS"] = gwf.GetParaInt("GS" + node.NodeID);
+                            dr["GS"] = gwf.GetParaInt("GS" + Int32.Parse(drYL["NodeID"].ToString()));
                             beforeSDTOfNode = sdtOfNode;
                            
                             dt.Rows.Add(dr);

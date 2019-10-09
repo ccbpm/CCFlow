@@ -1186,10 +1186,10 @@ namespace BP.WF
                 if (dbtype == DBType.Oracle)
                 {
                     if (DBAccess.IsExitsTableCol("WF_EMP", "startFlows_temp") == false)
-                        DBAccess.RunSQL("ALTER TABLE  WF_EMP add startFlows_temp CLOB");
+                        DBAccess.RunSQL("ALTER TABLE  WF_EMP add startFlows_temp BLOB");
 
                     if (DBAccess.IsExitsTableCol("WF_EMP", "STARTFLOWS") == false)
-                        DBAccess.RunSQL("ALTER TABLE  WF_EMP add STARTFLOWS CLOB");
+                        DBAccess.RunSQL("ALTER TABLE  WF_EMP add STARTFLOWS BLOB");
 
                     //将需要改成大字段的项内容copy到大字段中
                     DBAccess.RunSQL("UPDate WF_EMP set startFlows_temp=STARTFLOWS");

@@ -792,6 +792,10 @@ namespace BP.WF.HttpHandler
                         idx++;
                     }
                 }
+                else
+                {
+                    myparas = str;
+                }
                 
             }
 

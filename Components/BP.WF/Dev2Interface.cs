@@ -48,82 +48,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 等待要去处理的消息数量.
-        /// <summary>
-        /// 待办工作
-        /// </summary>
-        public static int Todolist_Todolist
-        {
-            get
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-
-                if (WebUser.IsAuthorize == false)
-                {
-                    /*不是授权状态*/
-                    if (BP.WF.Glo.IsEnableTaskPool == true)
-                    {
-                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
-                    }
-                    else
-                    {
-                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
-                    }
-
-                    ps.Add("FK_Emp", BP.Web.WebUser.No);
-
-                    //  BP.DA.Log.DebugWriteInfo(ps.SQL);
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
-                }
-
-                /*如果是授权状态, 获取当前委托人的信息. */
-                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
-                switch (emp.HisAuthorWay)
-                {
-                    case Port.AuthorWay.All:
-                        if (BP.WF.Glo.IsEnableTaskPool == true)
-                        {
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1  ";
-                        }
-                        else
-                        {
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
-                        }
-                        ps.Add("FK_Emp", BP.Web.WebUser.No);
-                        break;
-                    case Port.AuthorWay.SpecFlows:
-                        if (BP.WF.Glo.IsEnableTaskPool == true)
-                        {
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta!=0   ";
-                        }
-                        else
-                        {
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows;
-                        }
-
-                        ps.Add("FK_Emp", BP.Web.WebUser.No);
-                        break;
-                    case Port.AuthorWay.None:
-                        /*不是授权状态 */
-                        if (BP.WF.Glo.IsEnableTaskPool == true)
-                        {
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
-                        }
-                        else
-                        {
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
-                        }
-
-                        ps.Add("FK_Emp", BP.Web.WebUser.No);
-                        return BP.DA.DBAccess.RunSQLReturnValInt(ps);
-                    default:
-                        throw new Exception("no such way...");
-                }
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
-            }
-        }
-
         /// <summary>
         /// 待办工作数量
         /// </summary>
@@ -294,14 +218,7 @@ namespace BP.WF
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND WFState=" + (int)WFState.Complete;
                 return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
-                //}
-                //else
-                //{
-                //    Paras ps = new Paras();
-                //    string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                //    ps.SQL = "SELECT count(*) Num FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' AND FID=0 AND WFState=" + (int)WFState.Complete;
-                //    return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
-                //}
+
             }
         }
         /// <summary>
@@ -369,11 +286,7 @@ namespace BP.WF
                 if (WebUser.IsAuthorize == false)
                 {
                     /*不是授权状态*/
-                    // ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY FK_Flow,ADT DESC ";
-                    //ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY ADT DESC ";
                     ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp";
-
-                    // ps.SQL = "select v1.*,v2.name,v3.name as ParentName from (" + realSql + ") as v1 left join JXW_Inc v2 on v1.WorkID=v2.OID left join Jxw_Inc V3 on v1.PWorkID = v3.OID ORDER BY v1.ADT DESC";
 
                     ps.Add("FK_Emp", BP.Web.WebUser.No);
                     return BP.DA.DBAccess.RunSQLReturnValInt(ps);
@@ -399,7 +312,6 @@ namespace BP.WF
                 return BP.DA.DBAccess.RunSQLReturnValInt(ps);
             }
         }
-        #endregion 等待要去处理的消息数量.
 
         #region 自动执行
         /// <summary>
@@ -3074,7 +2986,7 @@ namespace BP.WF
         /// <param name="fk_flow">流程编号</param>
         /// <param name="isMyStarter">是否仅仅查询我发起的在途流程</param>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false, string domain = null)
+        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false, string domain = null,bool isContainFuture = false)
         {
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
@@ -3098,6 +3010,12 @@ namespace BP.WF
             }
 
             //授权模式.
+            string sql = "";
+            string futureSQL = "";
+            if (isContainFuture == true)
+                futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ," + currNode + " AS CurrNode ,1 AS RunType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
+                            + "(SELECT GROUP_CONCAT(B.EmpName SEPARATOR ';') AS EmpName, B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node) C,WF_Node D"
+                            + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND B.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "' AND B.FK_Node !=A.FK_Node";
             if (WebUser.IsAuthorize == true)
             {
                 WF.Port.WFEmp emp = new Port.WFEmp(userNo);
@@ -3105,13 +3023,24 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.*," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        if(isContainFuture == true)
+                        {
+
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("Starter", userNo);
                         ps.Add("FK_Emp", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.*," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                       sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunTypeFROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -3119,14 +3048,24 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter AND A.FK_Flow IN " + emp.AuthorFlows;
-                        ps.Add("FK_Flow", fk_flow);
+                        sql = "SELECT DISTINCT a.WorkID,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE  A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter AND A.FK_Flow IN " + emp.AuthorFlows;
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
+                       ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.WorkID FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        sql = "SELECT DISTINCT a.WorkID ,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }
@@ -3141,13 +3080,23 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.*," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND  A.Starter=" + dbStr + "Starter ";
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)";
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("FK_Emp", userNo);
                     }
                 }
@@ -3155,14 +3104,24 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) AND  A.Starter=" + dbStr + "Starter ";
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
                     else
                     {
-                        ps.SQL = "SELECT DISTINCT a.* ," + currNode + " AS CurrNode FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < 0 ) ";
+                        if (isContainFuture == true)
+                        {
+                            sql += futureSQL;
+                        }
+                        ps.SQL = sql;
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }
@@ -3175,50 +3134,53 @@ namespace BP.WF
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["STARTERNAME"].ColumnName = "StarterName";
                 dt.Columns["TITLE"].ColumnName = "Title";
-                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                //dt.Columns["WFSTA"].ColumnName = "WFSta";
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["RDT"].ColumnName = "RDT";
-                dt.Columns["BILLNO"].ColumnName = "BillNo";
-                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
-                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                //dt.Columns["BILLNO"].ColumnName = "BillNo";
+                //dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                //dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
-                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                //dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
-                dt.Columns["WFSTATE"].ColumnName = "WFState";
-                dt.Columns["FK_NY"].ColumnName = "FK_NY";
-                dt.Columns["MYNUM"].ColumnName = "MyNum";
+                //dt.Columns["WFSTATE"].ColumnName = "WFState";
+                //dt.Columns["FK_NY"].ColumnName = "FK_NY";
+                //dt.Columns["MYNUM"].ColumnName = "MyNum";
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
-                dt.Columns["STARTER"].ColumnName = "Starter";
-                dt.Columns["SENDER"].ColumnName = "Sender";
+                //dt.Columns["STARTER"].ColumnName = "Starter";
+                //dt.Columns["SENDER"].ColumnName = "Sender";
                 dt.Columns["DEPTNAME"].ColumnName = "DeptName";
-                dt.Columns["PRI"].ColumnName = "PRI";
-                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
-                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
-                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
-                dt.Columns["PWORKID"].ColumnName = "PWorkID";
-                dt.Columns["PNODEID"].ColumnName = "PNodeID";
-                dt.Columns["PFID"].ColumnName = "PFID";
-                dt.Columns["PEMP"].ColumnName = "PEmp";
-                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
-                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                //dt.Columns["PRI"].ColumnName = "PRI";
+                //dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                //dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                //dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                //dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                //dt.Columns["PNODEID"].ColumnName = "PNodeID";
+                //dt.Columns["PFID"].ColumnName = "PFID";
+                //dt.Columns["PEMP"].ColumnName = "PEmp";
+                //dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                //dt.Columns["GUESTNAME"].ColumnName = "GuestName";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
-                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
-                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
-                dt.Columns["ATPARA"].ColumnName = "AtPara";
-                dt.Columns["EMPS"].ColumnName = "Emps";
-                dt.Columns["GUID"].ColumnName = "GUID";
-                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
-                dt.Columns["TSPAN"].ColumnName = "TSpan";
-                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
-                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                //dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                //dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                //dt.Columns["ATPARA"].ColumnName = "AtPara";
+                //dt.Columns["EMPS"].ColumnName = "Emps";
+                //dt.Columns["GUID"].ColumnName = "GUID";
+                //dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+                //dt.Columns["TSPAN"].ColumnName = "TSpan";
+                //dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                //dt.Columns["SYSTYPE"].ColumnName = "SysType";
                 dt.Columns["CURRNODE"].ColumnName = "CurrNode";
+                dt.Columns["RUNTYPE"].ColumnName = "RunType";
                 //dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
                 //dt.Columns["CWORKID"].ColumnName = "CWorkID";
 
             }
             return dt;
         }
+
+
         /// <summary>
         /// 在途统计:用于流程查询
         /// </summary>
@@ -3390,9 +3352,9 @@ namespace BP.WF
         /// 获取未完成的流程(也称为在途流程:我参与的但是此流程未完成)
         /// </summary>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning()
+        public static DataTable DB_GenerRuning(bool isContainFuture= false)
         {
-            DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null);
+            DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null,false,null, isContainFuture);
 
             /*暂时屏蔽type的拼接，拼接后转json会报错 于庆海修改*/
             /*dt.Columns.Add("Type");
@@ -9195,9 +9157,8 @@ namespace BP.WF
             SelectAccper sa = new SelectAccper();
             sa.Delete(SelectAccperAttr.FK_Node, formNodeID, SelectAccperAttr.WorkID, workID, SelectAccperAttr.FK_Emp, emp, SelectAccperAttr.Tag, tag);
 
-            Emp empEn = new Emp();
+            Emp empEn = new Emp(emp);
             sa.MyPK = formNodeID + "_" + workID + "_" + emp + "_" + tag;
-            empEn.No = emp;
             sa.Tag = tag;
             sa.FK_Emp = emp;
             sa.EmpName = empEn.Name;

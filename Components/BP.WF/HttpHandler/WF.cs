@@ -516,8 +516,8 @@ namespace BP.WF.HttpHandler
                         //调用DoDeleteWorkFlowByReal方法
                         WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID);
                         wf.DoDeleteWorkFlowByReal(true);
-                        //  Glo.ToMsg("流程删除成功");
-                        BP.WF.Glo.ToMsg("流程删除成功");
+                        //Glo.ToMsg("流程删除成功");
+                        return "流程删除成功";
 
                         //this.ToWFMsgPage("流程删除成功");
                         break;
@@ -991,7 +991,8 @@ namespace BP.WF.HttpHandler
         public string Runing_Init()
         {
             DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerRuning();
+            bool isContainFuture = this.GetRequestValBoolen("IsContainFuture");
+            dt = BP.WF.Dev2Interface.DB_GenerRuning(isContainFuture);
 
             return BP.Tools.Json.ToJson(dt);
         }

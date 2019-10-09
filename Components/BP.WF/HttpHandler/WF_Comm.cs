@@ -773,23 +773,26 @@ namespace BP.WF.HttpHandler
                         break;
                     }
                 }
-
-                Attrs attrs = rm.HisAttrs;
-                int idx = 0;
-
-                foreach (Attr attr in attrs)
+                if (rm != null)
                 {
-                    myparas[idx] = str[idx];
-                    if (attr.MyDataType == DataType.AppInt)
-                        myparas[idx] = Int32.Parse(str[idx]);
-                    if (attr.MyDataType == DataType.AppFloat)
-                        myparas[idx] = float.Parse(str[idx]);
-                    if (attr.MyDataType == DataType.AppDouble)
-                        myparas[idx] = double.Parse(str[idx]);
-                    if (attr.MyDataType == DataType.AppMoney)
-                        myparas[idx] = new Decimal(double.Parse(str[idx]));
-                    idx++;
+                    Attrs attrs = rm.HisAttrs;
+                    int idx = 0;
+
+                    foreach (Attr attr in attrs)
+                    {
+                        myparas[idx] = str[idx];
+                        if (attr.MyDataType == DataType.AppInt)
+                            myparas[idx] = Int32.Parse(str[idx]);
+                        if (attr.MyDataType == DataType.AppFloat)
+                            myparas[idx] = float.Parse(str[idx]);
+                        if (attr.MyDataType == DataType.AppDouble)
+                            myparas[idx] = double.Parse(str[idx]);
+                        if (attr.MyDataType == DataType.AppMoney)
+                            myparas[idx] = new Decimal(double.Parse(str[idx]));
+                        idx++;
+                    }
                 }
+                
             }
 
 

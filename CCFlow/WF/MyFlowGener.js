@@ -11,6 +11,16 @@ var isLoadOk = false;
 
 $(function () {
 
+    //动态加载css样式
+    if (webUser == null)
+        webUser = new WebUser();
+    var theme = webUser.Theme;
+    if (theme == null || theme == undefined || theme == "")
+        theme = "Default";
+    $('head').append('<link href="../DataUser/Style/CSS/' + theme+'/ccbpm.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+
+
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax
@@ -1639,7 +1649,6 @@ function GenerWorkNode() {
     $.each(disabledTextAreas, function (i, obj) {
         $(obj).attr('title', $(obj).val());
     })
-
  
     ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = flowData.Sys_MapData[0].No;

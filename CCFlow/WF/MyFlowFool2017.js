@@ -246,7 +246,7 @@ function GenerFoolFrm(wn) {
             }
 
             //审核组件..
-            if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
+            if (gf.CtrlType == 'FWC' && node.FWCSta != 0 && gf.FrmID=='ND'+node.NodeID) {
 
                 html += "<tr>";
                 html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";

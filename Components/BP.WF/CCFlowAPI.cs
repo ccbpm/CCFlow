@@ -310,12 +310,22 @@ namespace BP.WF
                     GroupFields gfsNew = new GroupFields();
 
                     //遍历查询出来的分组.
+                    //只能增加一个审核分组
+                    GroupField FWCG = null;
                     foreach (DataRow dr in dtOrder.Rows)
                     {
                         string pkOID = dr[0].ToString();
-                        var mygf = gfs.GetEntityByKey(pkOID);
+                        GroupField mygf = gfs.GetEntityByKey(pkOID) as GroupField;
+                        if (mygf.CtrlType.Equals("FWC"))
+                        {
+                            FWCG = mygf;
+                            continue;
+                        }
+                           
                         gfsNew.AddEntity(mygf); //把分组字段加入里面去.
                     }
+                    if (FWCG != null)
+                        gfsNew.AddEntity(FWCG);
 
                     DataTable dtGF = gfsNew.ToDataTableField("Sys_GroupField");
                     myds.Tables.Remove("Sys_GroupField");

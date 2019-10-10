@@ -786,7 +786,7 @@ namespace BP.Sys
                 return "<hr>" + en.ToString() + "体检失败:" + ex.Message;
             }
         }
-        public static void AddCommentForTable_Ora(Entity en)
+        private static void AddCommentForTable_Ora(Entity en)
         {
            
 
@@ -830,7 +830,7 @@ namespace BP.Sys
                 }
             }
         }
-        public static void AddCommentForTable_MySql(Entity en)
+        private static void AddCommentForTable_MySql(Entity en)
         {
             MySql.Data.MySqlClient.MySqlConnection conn =
                 new MySql.Data.MySqlClient.MySqlConnection(BP.Sys.SystemConfig.AppCenterDSN);

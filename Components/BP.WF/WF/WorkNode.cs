@@ -6978,9 +6978,15 @@ namespace BP.WF
                     //判断当前流程是子流程，并且启用运行到该节点时主流程自动运行到下一个节点@yuan
                     if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisNode.IsToParentNextNode == true)
                     {
-                        SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
-                        string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" +returnObjs.VarAcceptersName+"\n @下一步["+ returnObjs.VarCurrNodeName + "]启动";
-                        this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                        GenerWorkFlow pgwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
+                        if(pgwf.FK_Node== this.HisGenerWorkFlow.PNodeID)
+                        {
+                            SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
+                            string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                            this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                        }
+
+                      
                     }
 
                     if (town != null && town.HisNode.HisBatchRole == BatchRole.Group)
@@ -7559,6 +7565,7 @@ namespace BP.WF
                         //设置父子关系.
                         BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID,WebUser.No, nd.NodeID);
 
+                        BP.WF.Dev2Interface.Flow_ReSetFlowTitle(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID);
 
                         //写入消息.
                         this.addMsg("SubFlow" + sub.SubFlowNo, "流程[" + sub.FlowName + "]启动成功.");
@@ -7712,6 +7719,7 @@ namespace BP.WF
                         //为开始节点设置待办.
                         BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
 
+                        BP.WF.Dev2Interface.Flow_ReSetFlowTitle(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID);
                         //设置父子关系.
                         BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID);
 

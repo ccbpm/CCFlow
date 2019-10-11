@@ -316,5 +316,16 @@ namespace BP.WF.HttpHandler
         }
         #endregion 修改密码.
 
+
+        public string SetUserTheme()
+        {
+            string theme = this.GetRequestVal("Theme");
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            emp.SetPara("Theme", theme);
+            emp.Update();
+            
+            return "设置成功";
+        }
+
     }
 }

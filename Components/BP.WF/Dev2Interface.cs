@@ -3014,22 +3014,29 @@ namespace BP.WF
             string sql = "";
             string futureSQL = "";
             if (isContainFuture == true)
+            {
+           
                 switch (DBAccess.AppCenterDBType)
                 {
                     case DBType.MySQL:
                         futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ," + currNode + " AS CurrNode ,1 AS RunType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT GROUP_CONCAT(B.EmpName SEPARATOR ';') AS EmpName, B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node) C,WF_Node D"
-                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND B.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "' AND B.FK_Node !=A.FK_Node";
+                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND B.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
+                                 + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";
                         break;
                     case DBType.MSSQL:
                         futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ," + currNode + " AS CurrNode ,1 AS RunType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT EmpName=STUFF((Select ';'+FK_Emp+','+EmpName From WF_SelectAccper t Where t.FK_Node=B.FK_Node FOR xml path('')) , 1 , 1 , '') , B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node,B.WorkID) C,WF_Node D"
-                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND B.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "' AND B.FK_Node !=A.FK_Node";
+                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND B.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
+                                + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";
+                              
                         break;
                     default:
                         break;
 
                 }
+            }
+                
                     
             if (WebUser.IsAuthorize == true)
             {
@@ -4987,8 +4994,11 @@ namespace BP.WF
                     if (count == 0)
                         throw new Exception("父子流程关系配置信息丢失，请联系管理员");
                     SubFlow subFlow = subFlows[0] as SubFlow;
+                    GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
                     if (flow.IsToParentNextNode == true || subFlow.IsAutoSendSubFlowOver == 1)
                     {
+                        if (pgwf.FK_Node != gwf.PNodeID)
+                            return "";
                         //主流程自动运行到一下节点
                         SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
                         string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
@@ -4997,7 +5007,9 @@ namespace BP.WF
                     //结束父流程
                     if (subFlow.IsAutoSendSubFlowOver == 2)
                     {
-                        Flow fl = new Flow(gwf.PFlowNo);
+                        if (pgwf.WFState == WFState.Complete)
+                            return "";
+                            Flow fl = new Flow(gwf.PFlowNo);
                         string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.PFlowNo, gwf.PWorkID, "父流程[" + fl.Name + "],WorkID为[" + gwf.PWorkID + "]成功结束");
                         return flowOver;
                     }
@@ -5014,8 +5026,12 @@ namespace BP.WF
                         throw new Exception("同级子流程关系配置信息丢失，请联系管理员");
                     SubFlow subFlow = subFlows[0] as SubFlow;
                     Flow fl = new Flow(slFlowNo);
+                    GenerWorkFlow subgwf = new GenerWorkFlow(slWorkID);
                     if (subFlow.IsAutoSendSLSubFlowOver == 1)
                     {
+                        if (subgwf.FK_Node != slNodeID)
+                            return "";
+
                         //主流程自动运行到一下节点
                         SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(slFlowNo, slWorkID);
                         string sendSuccess = "同级子流程[" + fl.Name + "]程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
@@ -5024,6 +5040,8 @@ namespace BP.WF
                     //结束父流程
                     if (subFlow.IsAutoSendSLSubFlowOver == 2)
                     {
+                        if (subgwf.WFState == WFState.Complete)
+                            return "";
                         return BP.WF.Dev2Interface.Flow_DoFlowOver(slFlowNo, slWorkID, "同级子流程流程[" + fl.Name + "],WorkID为[" + slWorkID + "]成功结束");
                     }
 

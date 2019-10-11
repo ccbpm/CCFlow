@@ -1977,7 +1977,6 @@ namespace BP.WF
             //}
             #endregion 检查是否是空白的数据库。
 
-
             #region 首先创建Port类型的表, 让admin登录.
 
             FrmRB rb = new FrmRB();
@@ -2042,7 +2041,6 @@ namespace BP.WF
             }
             #endregion 首先创建Port类型的表.
 
-
             #region 3, 执行基本的 sql
             string sqlscript = "";
 
@@ -2052,7 +2050,6 @@ namespace BP.WF
             BP.Port.Emp empAdmin = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(empAdmin);
             #endregion 执行基本的 sql
-
 
             ArrayList al = null;
             string info = "BP.En.Entity";
@@ -2182,6 +2179,29 @@ namespace BP.WF
             }
             #endregion 注册枚举类型
 
+            //删除视图.
+            if (DBAccess.IsExitsObject("WF_EmpWorks") == true)
+                DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
+
+            if (DBAccess.IsExitsObject("V_WF_Delay") == true)
+                DBAccess.RunSQL("DROP VIEW V_WF_Delay");
+
+            if (DBAccess.IsExitsObject("V_FlowStarter") == true)
+                DBAccess.RunSQL("DROP VIEW V_FlowStarter");
+
+            if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
+                DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
+
+            if (DBAccess.IsExitsObject("V_TOTALCH") == true)
+                DBAccess.RunSQL("DROP VIEW V_TOTALCH");
+
+
+            if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
+                DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
+
+
+            if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
+                DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
 
 
             #region 4, 创建视图与数据.

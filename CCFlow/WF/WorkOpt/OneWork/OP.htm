@@ -11,6 +11,10 @@
 <body>
     <script type="text/javascript">
 
+        var fk_node = GetQueryString("FK_Node");
+        var fk_flow = GetQueryString("FK_Flow");
+        var workid = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
         $(function () {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");

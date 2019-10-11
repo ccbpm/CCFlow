@@ -655,73 +655,95 @@ namespace BP.WF
         /// <returns></returns>
         private string ExeReturn5_2()
         {
-            GenerWorkFlow gwf = new GenerWorkFlow(this.FID);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
             string info = "@工作已经成功的退回到（" + ReturnToNode.Name + "）退回给：";
 
-            //查询退回到的工作人员列表.
+            //子线程退回应该是单线退回到干流程
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
-                GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+            gwls.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID, GenerWorkerListAttr.FID,this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+
+
+            //查询退回到的工作人员列表.
+            //GenerWorkerLists gwls = new GenerWorkerLists();
+            //gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
+            //    GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
             string toEmp = "";
             string toEmpName = "";
-            if (gwls.Count == 1)
+            GenerWorkerList gwl = null;
+            if(gwls.Count == 1)
             {
-                /*有可能多次退回的情况，表示曾经退回过n次。*/
-                foreach (GenerWorkerList item in gwls)
-                {
-                    item.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
-                    item.IsRead = false; //
-                    item.Update();
-                    info += item.FK_Emp + "," + item.FK_EmpText;
-                    toEmp = item.FK_Emp;
-                    toEmpName = item.FK_EmpText;
-                    info += "(" + item.FK_Emp + "," + item.FK_EmpText + ")";
-                }
+                gwl = gwls[0] as GenerWorkerList;
+                gwl.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
+                gwl.IsRead = false; //
+                gwl.Update();
+                info += gwl.FK_Emp + "," + gwl.FK_EmpText;
+                toEmp = gwl.FK_Emp;
+                toEmpName = gwl.FK_EmpText;
+                info += "(" + gwl.FK_Emp + "," + gwl.FK_EmpText + ")";
             }
             else
             {
-                // 找到合流点的发送人.
-                Nodes nds = this.HisNode.FromNodes;
-                gwls = new GenerWorkerLists();
-                GenerWorkerList gwl = new GenerWorkerList();
-                foreach (Node nd in nds)
-                {
-                    gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
-                        GenerWorkerListAttr.FK_Node, nd.NodeID,
-                        GenerWorkerListAttr.IsPass, 1);
-                    if (gwls.Count == 0)
-                        continue;
+                /*有可能多次退回的情况，表示曾经退回过n次。*/
 
-                    if (gwls.Count != 1)
-                        throw new Exception("@应该只有一个记录，现在有多个，可能错误。");
-
-                    //求出分流节点的发送人.
-                    gwl = (GenerWorkerList)gwls[0];
-                    toEmp = gwl.FK_Emp;
-                    toEmpName = gwl.FK_EmpText;
-                    info += "(" + toEmp + "," + toEmpName + ")";
-                }
-
-                if (DataType.IsNullOrEmpty(toEmp) == true)
-                    throw new Exception("@在退回时出现错误，没有找到分流节点的发送人。");
-
-                // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.
-                gwl.WorkID = this.WorkID;
-                gwl.FID = this.FID;
-                gwl.IsPass = false;
-                if (gwl.IsExits == false)
-                    gwl.Insert();
-                else
-                    gwl.Update();
             }
+            //if (gwls.Count == 1)
+            //{
+            //    /*有可能多次退回的情况，表示曾经退回过n次。*/
+            //    foreach (GenerWorkerList item in gwls)
+            //    {
+            //        item.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
+            //        item.IsRead = false; //
+            //        item.Update();
+            //        info += item.FK_Emp + "," + item.FK_EmpText;
+            //        toEmp = item.FK_Emp;
+            //        toEmpName = item.FK_EmpText;
+            //        info += "(" + item.FK_Emp + "," + item.FK_EmpText + ")";
+            //    }
+            //}
+            //else
+            //{
+            //    // 找到合流点的发送人.
+            //    Nodes nds = this.HisNode.FromNodes;
+            //    gwls = new GenerWorkerLists();
+            //    GenerWorkerList gwl = new GenerWorkerList();
+            //    foreach (Node nd in nds)
+            //    {
+            //        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
+            //            GenerWorkerListAttr.FK_Node, nd.NodeID,
+            //            GenerWorkerListAttr.IsPass, 1);
+            //        if (gwls.Count == 0)
+            //            continue;
+
+            //        if (gwls.Count != 1)
+            //            throw new Exception("@应该只有一个记录，现在有多个，可能错误。");
+
+            //        //求出分流节点的发送人.
+            //        gwl = (GenerWorkerList)gwls[0];
+            //        toEmp = gwl.FK_Emp;
+            //        toEmpName = gwl.FK_EmpText;
+            //        info += "(" + toEmp + "," + toEmpName + ")";
+            //    }
+
+            //    if (DataType.IsNullOrEmpty(toEmp) == true)
+            //        throw new Exception("@在退回时出现错误，没有找到分流节点的发送人。");
+
+            //    // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.
+            //    gwl.WorkID = this.WorkID;
+            //    gwl.FID = this.FID;
+            //    gwl.IsPass = false;
+            //    if (gwl.IsExits == false)
+            //        gwl.Insert();
+            //    else
+            //        gwl.Update();
+            //}
 
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.HisNode.Name;
+            rw.ReturnNodeName = this.ReturnToNode.Name+"-"+this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
@@ -950,12 +972,12 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             DateTime dtOfShould;
             
-                //增加天数. 考虑到了节假日.             
-                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
-                    this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
+            //增加天数. 考虑到了节假日.             
+            dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
+                this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
              
             // 应完成日期.
-            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
+            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat+":ss");
 
             // 改变当前待办工作节点
             gwf.WFState = WFState.ReturnSta;
@@ -1010,7 +1032,7 @@ namespace BP.WF
                 item.IsPassInt = 0;
                 item.IsRead = false;
                 item.SDT = sdt;
-                item.RDT = DataType.CurrentDataTime;
+                item.RDT = DataType.CurrentDataTimess;
                 item.Sender = WebUser.Name + "," + WebUser.No;
                 item.Update();
             }
@@ -1381,7 +1403,7 @@ namespace BP.WF
             DateTime dtNew = DateTime.Now;
             // dtNew = dtNew.AddDays(nd.WarningHour);
 
-            wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat); // DataType.CurrentDataTime;
+            wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat+":ss"); // DataType.CurrentDataTime;
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.Insert();
 

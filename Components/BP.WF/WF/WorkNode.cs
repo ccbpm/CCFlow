@@ -6651,8 +6651,99 @@ namespace BP.WF
                 #region 处理退回的情况.
                 if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta)
                 {
+
+                    #region 当前节点是分流节点但是是子线程退回的节点,需要直接发送给子线程
+                    if ((this.HisNode.HisRunModel == RunModel.FL || this.HisNode.HisRunModel == RunModel.FHL) && this.HisGenerWorkFlow.FID != 0)
+                    {
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID  ORDER BY RDT DESC";
+                        ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
+                        DataTable mydt11 = DBAccess.RunSQLReturnTable(ps);
+                        if (mydt11.Rows.Count == 0)
+                            throw new Exception(BP.WF.Glo.multilingual("@没有找到退回流程的记录.", "WorkNode", "not_found_my_expected_data", new string[0]));
+
+                        this.JumpToNode = new Node(int.Parse(mydt11.Rows[0]["ReturnNode"].ToString()));
+                        this.JumpToEmp = mydt11.Rows[0]["Returner"].ToString();
+                        string toEmpName = mydt11.Rows[0]["ReturnerName"].ToString();
+
+                        /**处理发送的数据*/
+                        GenerWorkerList myGwl = new GenerWorkerList();
+                        myGwl.FK_Emp = WebUser.No;
+                        myGwl.FK_Node = this.HisNode.NodeID;
+                        myGwl.WorkID = this.WorkID;
+                        if (myGwl.RetrieveFromDBSources() == 0)
+                            throw new Exception(BP.WF.Glo.multilingual("@没有找到自己期望的数据.", "WorkNode", "not_found_my_expected_data", new string[0]));
+                        myGwl.IsPass = false;
+                        myGwl.IsPassInt = -2;
+                        myGwl.Update();
+
+                        GenerWorkerLists gwls = new GenerWorkerLists();
+                        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisGenerWorkFlow.WorkID, GenerWorkerListAttr.FK_Node, this.JumpToNode.NodeID, GenerWorkerListAttr.IsPass, 5);
+                        if (gwls.Count == 0)
+                            throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人期望的数据.", "WorkNode", "not_found_receiver_expected_data", new string[0]));
+
+                        GenerWorkerList gwl = gwls[0] as GenerWorkerList;
+
+                        #region 要计算当前人员的应完成日期
+                        // 计算出来 退回到节点的应完成时间. 
+                        DateTime dtOfShould;
+
+                        //增加天数. 考虑到了节假日.             
+                        dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.HisNode.TimeLimit,
+                            this.HisNode.TimeLimitHH, this.HisNode.TimeLimitMM, this.HisNode.TWay);
+
+                        // 应完成日期.
+                        string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
+                        #endregion
+
+                        //更新日期，为了考核. 
+                        if (this.HisNode.HisCHWay == CHWay.None)
+                            gwl.SDT = "无";
+                        else
+                            gwl.SDT = sdt;
+
+                        gwl.IsPassInt = 0;
+                        gwl.IsPass = false;
+                        gwl.Update();
+
+                        GenerWorkerLists ens = new GenerWorkerLists();
+                        ens.AddEntity(gwl);
+                        this.HisWorkerLists = ens;
+
+                        this.addMsg(SendReturnMsgFlag.VarAcceptersID, gwl.FK_Emp, gwl.FK_Emp, SendReturnMsgType.SystemMsg);
+                        this.addMsg(SendReturnMsgFlag.VarAcceptersName, gwl.FK_EmpText, gwl.FK_EmpText, SendReturnMsgType.SystemMsg);
+                        string[] para = new string[2];
+                        para[0] = gwl.FK_Emp;
+                        para[1] = gwl.FK_EmpText;
+                        var str = BP.WF.Glo.multilingual("@当前工作已经发送给退回人({0},{1}).", "WorkNode", "current_work_send_to_returner", para);
+
+                        this.addMsg(SendReturnMsgFlag.OverCurr, str, null, SendReturnMsgType.Info);
+
+                        this.HisGenerWorkFlow.WFState = WFState.Runing;
+                        this.HisGenerWorkFlow.FK_Node = gwl.FK_Node;
+                        this.HisGenerWorkFlow.NodeName = gwl.FK_NodeText;
+
+                        this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
+                        this.HisGenerWorkFlow.TodoEmpsNum = 0;
+                        this.HisGenerWorkFlow.TaskSta = TaskSta.None;
+                        this.HisGenerWorkFlow.Update();
+
+                        //写入track.
+                        this.AddToTrack(ActionType.Forward, this.JumpToEmp, gwl.FK_Emp, this.JumpToNode.NodeID, this.JumpToNode.Name, BP.WF.Glo.multilingual("退回后发送", "WorkNode", "send_error_2"));
+
+                        //调用发送成功事件.
+                        string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                            this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                        this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+                        //执行时效考核.
+                        Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                        return this.HisMsgObjs;
+                    }
+                    #endregion 当前节点是分流节点但是是子线程退回的节点
+
                     /* 检查该退回是否是原路返回 ? */
-                    Paras ps = new Paras();
+                    ps = new Paras();
                     ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
                     ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
                     DataTable mydt = DBAccess.RunSQLReturnTable(ps);
@@ -6716,6 +6807,8 @@ namespace BP.WF
                         }
                         #endregion  如果当前是退回. 并且当前的运行模式按照自由流程设置方式运行
                     }
+
+                   
                 }
                 #endregion 处理退回的情况.
 

@@ -752,14 +752,13 @@ namespace BP.Sys
         }
         public static string AddComment(Entity en)
         {
+
             if (en == null)
-                return null;
-
+                return "实体错误 en=null ";
             if (en.EnMap == null)
-                return null;
-
+                return "实体错误 en.getEnMap=null ";
             if (en.EnMap.PhysicsTable == null)
-                return null;
+                return "实体错误 en.getEnMap.getPhysicsTable=null ";
 
 
             if (DBAccess.IsExitsObject(en.EnMap.PhysicsTable) == false)

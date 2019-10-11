@@ -25,7 +25,6 @@ namespace BP.WF
     /// 4, 以 Node_ 是节点接口.
     /// 5, 以 Port_ 是组织架构接口.
     /// 6, 以 DTS_ 是调度. data tranr system.
-    /// 7, 以 UI_ 是流程的功能窗口
     /// 8, 以 WorkOpt_ 用工作处理器相关的接口。
     /// </summary>
     public class Dev2Interface

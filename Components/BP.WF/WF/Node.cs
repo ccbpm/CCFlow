@@ -2714,8 +2714,7 @@ namespace BP.WF
 
                 map.AddTBInt(NodeAttr.CancelRole, 0, "撤销规则", true, true);
                 map.AddTBInt(NodeAttr.CancelDisWhenRead, 0, "对方已读不能撤销", true, true);
-
-
+         
                 map.AddTBInt(NodeAttr.WhenNoWorker, 0, "未找到处理人时", true, true);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.NodeFrmID, null, "节点表单ID", true, false, 0, 50, 10);

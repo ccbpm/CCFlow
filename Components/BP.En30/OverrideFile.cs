@@ -5,7 +5,7 @@ using System.Text;
 namespace BP.En
 {
     /// <summary>
-    /// 可以被重写的类
+    /// 可以被重写的类 
     /// </summary>
     public class OverrideFile
     {

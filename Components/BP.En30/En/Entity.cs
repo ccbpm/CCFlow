@@ -3634,7 +3634,7 @@ namespace BP.En
         private void CheckPhysicsTable_Ora()
         {
             #region 检查字段是否存在
-            string sql = "SELECT *  FROM " + this.EnMap.PhysicsTable + " WHERE 1=2";
+            string sql = "SELECT * FROM " + this.EnMap.PhysicsTable + " WHERE 1=2 ";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
             //如果不存在.

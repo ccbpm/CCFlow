@@ -1932,6 +1932,10 @@ namespace BP.DA
         }
         private static int RunSQL_200705_Ora(string sql, Paras paras)
         {
+            if (sql.EndsWith(";") == false)
+                sql = sql + ";";
+            sql = "begin " + sql + " end;";
+
             OracleConnection conn = new OracleConnection(SystemConfig.AppCenterDSN);
             try
             {

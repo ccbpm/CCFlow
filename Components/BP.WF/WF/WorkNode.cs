@@ -7802,7 +7802,13 @@ namespace BP.WF
                             }
                             if (gwfSub.WFSta != WFSta.Complete)
                             {
-                                string sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkerList WHERE WorkID=" + gwfSub.WorkID + " AND FK_Flow='" + flowNode[0] + "' AND FK_Node=" + int.Parse(flowNode[1]) + " AND IsEnable=1 AND IsPass=1";
+                                //判断该节点是不是子线程
+                                Node subNode = new Node(int.Parse(flowNode[1]));
+                                string sql = "";
+                                if(subNode.HisRunModel == RunModel.SubThread)
+                                    sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkerList WHERE FID=" + gwfSub.WorkID + " AND FK_Flow='" + flowNode[0] + "' AND FK_Node=" + int.Parse(flowNode[1]) + " AND IsEnable=1 AND IsPass=1";
+                                else
+                                    sql = "SELECT COUNT(*) as Num FROM WF_GenerWorkerList WHERE WorkID=" + gwfSub.WorkID + " AND FK_Flow='" + flowNode[0] + "' AND FK_Node=" + int.Parse(flowNode[1]) + " AND IsEnable=1 AND IsPass=1";
                                 if (DBAccess.RunSQLReturnValInt(sql) == 0)
                                 {
                                     isHave = true;

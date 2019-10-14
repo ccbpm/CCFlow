@@ -206,9 +206,10 @@ namespace BP.WF.HttpHandler
                 //如果是以下情况，导入模式
                 case BP.Sys.FrmType.WordFrm:
                 case BP.Sys.FrmType.ExcelFrm:
+                case BP.Sys.FrmType.VSTOForExcel:
                     break;
                 default:
-                    throw new Exception("未知表单类型.");
+                    throw new Exception("未知表单类型."+ md.HisFrmType.ToString() );
             }
             md.Insert();
 

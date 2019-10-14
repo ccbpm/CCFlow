@@ -5,10 +5,12 @@ function InitBar(optionKey) {
     html += "<select id='changBar' onchange='changeOption()'>";
 
     html += "<option value=null  disabled='disabled'>+内置表单</option>";
-    html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>";
-    html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>";
-    html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>";
+    html += "<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;傻瓜表单(默认)</option>";
+    html += "<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;自由表单</option>";
+    html += "<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;累加模式表单</option>";
+    html += "<option value=" + FormType.CTFrm + "  >&nbsp;&nbsp;传统表单</option>";
     html += "<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
+
 
     html += "<option value=null  disabled='disabled'>+自定义表单</option>";
     html += "<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";

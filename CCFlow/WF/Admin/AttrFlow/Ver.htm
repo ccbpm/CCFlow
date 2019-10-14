@@ -45,6 +45,7 @@
             html += "<th>删除</th>";
             html += "<th>操作</th>";
             html += "<th>编辑</th>";
+            html += "<th>导入导出</th>";
             html += "</tr>";
 
             for (var i = 0; i < data.length; i++) {
@@ -77,6 +78,9 @@
                 //html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow=" + item.No + "' target=_blank >编辑</a></td>";
                 html += "<td><a href='javaScript:void(0)' onclick='changeOrOpenTab(\""
                     + item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
+
+                html += "<td><a href='Imp.htm?FK_Flow=" + item.No + "'>导入</a>|<a href='Exp.htm?FK_Flow=" + item.No + "'>导出</a></td>";
+
                 html += "</tr>";
             }
             html += "</table>";

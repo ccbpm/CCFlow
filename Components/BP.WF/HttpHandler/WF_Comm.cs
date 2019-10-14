@@ -3796,23 +3796,29 @@ namespace BP.WF.HttpHandler
                     if (isAddAnd == false)
                     {
                         isAddAnd = true;
-                        whereLike += "      " + attr.Field + " LIKE '%" + keyWord + "%' ";
+                        whereLike += "     ( " + attr.Field + " LIKE '%" + keyWord + "%' ";
                     }
                     else
                     {
-                        whereLike += "   AND   " + attr.Field + " LIKE '%" + keyWord + "%'";
+                        whereLike += "   OR   " + attr.Field + " LIKE '%" + keyWord + "%'";
                     }
                 }
-                whereLike += "          ";
+                whereLike += ")          ";
                 where += whereLike;
             }
+            else
+            {
+                where += "1=1";
+            }
+           
+
 
             //其余查询条件
             //时间
-            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
+            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(searchUr.DTFrom) == false)
             {
-                string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
-                string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
+                string dtFrom = searchUr.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
+                string dtTo = searchUr.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
                 //按日期查询
                 if (map.DTSearchWay == DTSearchWay.ByDate)
@@ -3843,20 +3849,26 @@ namespace BP.WF.HttpHandler
                 }
             }
             /// #region 获得查询数据.
-            foreach (string str in ap.HisHT.Keys)
+            if (ap.HisHT.Keys.Count > 0)
             {
-                Object val = ap.GetValStrByKey(str);
-                if (val.Equals("all"))
+                foreach (string str in ap.HisHT.Keys)
                 {
-                    continue;
+                    Object val = ap.GetValStrByKey(str);
+                    if (val.Equals("all"))
+                    {
+                        continue;
+                    }
+                    where += " " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                    if (str != "FK_NY")
+                        whereOfLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+
+                    myps.Add(str, val);
+
                 }
-                where += " " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
-                if (str != "FK_NY")
-                    whereOfLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
-
-                myps.Add(str, val);
-
+                where = where.Substring(0, where.Length - " AND ".Length);
+                whereOfLJ = whereOfLJ.Substring(0, whereOfLJ.Length - " AND ".Length);
             }
+           
 
             #endregion
 
@@ -3867,8 +3879,8 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                where = where.Substring(0, where.Length - " AND ".Length) + Condition;
-                whereOfLJ = whereOfLJ.Substring(0, whereOfLJ.Length - " AND ".Length) + Condition;
+                where = where + Condition;
+                whereOfLJ = whereOfLJ + Condition;
             }
 
             string orderByReq = this.GetRequestVal("OrderBy");

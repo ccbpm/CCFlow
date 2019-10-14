@@ -2519,12 +2519,16 @@ namespace BP.DA
                     ada.SelectCommand.CommandType = CommandType.Text;
 
                     // 加入参数
-                    foreach (Para para in paras)
+                    if (paras != null)
                     {
-                        MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
-                        myParameter.Size = para.Size;
-                        ada.SelectCommand.Parameters.Add(myParameter);
+                        foreach (Para para in paras)
+                        {
+                            MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
+                            myParameter.Size = para.Size;
+                            ada.SelectCommand.Parameters.Add(myParameter);
+                        }
                     }
+                   
 
                     try
                     {

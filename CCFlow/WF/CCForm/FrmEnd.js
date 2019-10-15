@@ -280,23 +280,23 @@ function AfterBindEn_DealMapExt(frmData) {
         //一起转成entity.
         var mapExt = new Entity("BP.Sys.MapExt", mapExt.MyPK);
 
-        if (mapExt.ExtType == 'PageLoadFull' || mapExt.ExtType == 'StartFlow') {
+        if (mapExt.ExtType == "DtlImp"
+            || mapExt.MyPK.indexOf(mapExt.FK_MapData + '_Table') >= 0
+            || mapExt.MyPK.indexOf('PageLoadFull') >= 0
+            || mapExt.ExtType == 'StartFlow')
+            continue;
+
+        if (mapExt.AttrOfOper == '')
+            continue; //如果是不操作字段，就conntinue;
+
+
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+        if (mapAttr.RetrieveFromDBSources() == 0) {
+            mapExt.Delete();
             continue;
         }
-
-        var mapAttr = null;
-
-        for (var j = 0; j < mapAttrs.length; j++) {
-            if (mapAttrs[j].FK_MapData == mapExt.FK_MapData && mapAttrs[j].KeyOfEn == mapExt.AttrOfOper) {
-                mapAttr = mapAttrs[j];
-                break;
-            }
-        }
-        if (mapAttr == null) {
-            mapExt.Delete("MyPK", mapExt.MyPK);
-            break;
-        }
-        mapAttr = new Entity("BP.Sys.MapAttr", mapAttr.MyPK);
+       
 
         //判断MapAttr属性是否可编辑不可以编辑返回
         if (mapAttr.UIVisible == 0)

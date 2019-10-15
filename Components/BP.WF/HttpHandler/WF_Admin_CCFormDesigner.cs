@@ -202,6 +202,7 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.FrmType.Url:
                 case BP.Sys.FrmType.Entity:
                     md.Url = md.PTable;
+                    md.PTable = "";
                     break;
                 //如果是以下情况，导入模式
                 case BP.Sys.FrmType.WordFrm:

@@ -2992,6 +2992,8 @@ namespace BP.WF.HttpHandler
             {
                 ht.Add("IsAuthorize", "0");
             }
+            Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            ht.Add("Theme",emp.GetParaString("Theme"));
             return BP.Tools.Json.ToJson(ht);
         }
 

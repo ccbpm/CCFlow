@@ -780,6 +780,8 @@ namespace BP.WF.HttpHandler
 
                     foreach (Attr attr in attrs)
                     {
+                        if (idx >= str.Length)
+                            break;
                         myparas[idx] = str[idx];
                         if (attr.MyDataType == DataType.AppInt)
                             myparas[idx] = Int32.Parse(str[idx]);

@@ -3260,7 +3260,7 @@ namespace BP.WF
                     gwf.NodeName = toNode.Name;
                     gwf.FK_Dept = wl.FK_Dept;
                     gwf.DeptName = wl.FK_DeptT;
-                    gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText;
+                    gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText+";";
                     if (wl.GroupMark != "")
                         gwf.Paras_GroupMark = wl.GroupMark;
 
@@ -5229,7 +5229,7 @@ namespace BP.WF
                 {
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
-                    this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                    this.HisGenerWorkFlow.TodoEmps = WebUser.No+","+WebUser.Name + ";";
                 }
                 else
                 {
@@ -5238,7 +5238,7 @@ namespace BP.WF
 
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(huiqianNo, huiqianName);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
-                    this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                    this.HisGenerWorkFlow.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
 
 
                 }
@@ -6129,7 +6129,7 @@ namespace BP.WF
                 {
                     ps = new Paras();
                     ps.Add("FK_Node", node.NodeID);
-                    ps.SQL = "SELECT FK_Emp No FROM WF_NodeEmp WHERE FK_Node=" + dbStr + "FK_Node ORDER BY FK_Emp";
+                    ps.SQL = "SELECT FK_Emp AS No FROM WF_NodeEmp WHERE FK_Node=" + dbStr + "FK_Node ORDER BY FK_Emp";
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
                         throw new Exception(BP.WF.Glo.multilingual("@流程设计错误:没找到下一个节点(" + town.HisNode.Name + ")的接收人.", "WorkNode", "system_error_not_found_operator", town.HisNode.Name));

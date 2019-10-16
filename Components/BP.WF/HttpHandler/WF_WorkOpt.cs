@@ -1059,9 +1059,9 @@ namespace BP.WF.HttpHandler
             //从待办里移除.
             BP.Port.Emp myemp = new BP.Port.Emp(this.FK_Emp);
             string str = gwf.TodoEmps;
+            str = str.Replace(myemp.No + "," + myemp.Name + ";", "");
             str = str.Replace(myemp.Name + ";", "");
-            str = str.Replace(myemp.No +","+ myemp.Name + ";", "");
-
+            
 
             addLeader = addLeader.Replace(this.FK_Emp + ",", "");
             gwf.SetPara("AddLeader", addLeader);

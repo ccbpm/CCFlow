@@ -521,7 +521,7 @@ namespace BP.WF
                 {
                     if (gwf.TodoEmps.Contains(BP.Web.WebUser.No+",") == false)
                     {
-                        gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name;
+                        gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name+";";
                         gwf.Update();
                     }
                 }

@@ -745,7 +745,7 @@ namespace BP.WF
                             {
                                 item.IsRead = false;
                                 item.IsPassInt = 0;
-                                item.SDT = BP.DA.DataType.CurrentDataTime;
+                                item.SDT = BP.DA.DataType.CurrentDataTimess;
                                 item.Update();
                             }
                         }
@@ -755,7 +755,7 @@ namespace BP.WF
                 {
                     gwl.IsRead = false;
                     gwl.IsPassInt = 0;
-                    gwl.SDT = BP.DA.DataType.CurrentDataTime;
+                    gwl.SDT = BP.DA.DataType.CurrentDataTimess;
                     gwl.Update();
                     return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.htm?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";
 

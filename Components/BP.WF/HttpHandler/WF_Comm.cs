@@ -1204,6 +1204,8 @@ namespace BP.WF.HttpHandler
             else
                 ht.Add("IsShowSearchKey", 0);
 
+            ht.Add("SearchFields", map.SearchFields);
+
             //按日期查询.
             ht.Add("DTSearchWay", (int)map.DTSearchWay);
             ht.Add("DTSearchLable", map.DTSearchLable);
@@ -1323,9 +1325,7 @@ namespace BP.WF.HttpHandler
             Map map = en.EnMapInTime;
 
             MapAttrs attrs = new MapAttrs(); ;
-            //DataTable dtAttrs = attrs.ToDataTableField();
-            //dtAttrs.TableName = "Attrs";
-
+           
 
             MapData md = new MapData();
             md.No = this.EnsName;
@@ -1384,73 +1384,124 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(ens);
 
             #region 关键字字段.
-            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+            if(DataType.IsNullOrEmpty(map.SearchFields) == false)
             {
-                Attr attrPK = new Attr();
-                foreach (Attr attr in map.Attrs)
-                {
-                    if (attr.IsPK)
-                    {
-                        attrPK = attr;
-                        break;
-                    }
-                }
-                int i = 0;
-                string enumKey = ","; //求出枚举值外键.
-                foreach (Attr attr in map.Attrs)
-                {
-                    switch (attr.MyFieldType)
-                    {
-                        case FieldType.Enum:
-                            enumKey = "," + attr.Key + "Text,";
-                            break;
-                        case FieldType.FK:
-                            // case FieldType.PKFK:
-                            continue;
-                        default:
-                            break;
-                    }
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
 
-                    if (attr.MyDataType != DataType.AppString)
+                //获取查询的字段
+                string[] searchFields = map.SearchFields.Split('@');
+                foreach(String str in searchFields)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
-                    //排除枚举值关联refText.
-                    if (attr.MyFieldType == FieldType.RefText)
-                    {
-                        if (enumKey.Contains("," + attr.Key + ",") == true)
-                            continue;
-                    }
-
-                    if (attr.Key == "FK_Dept")
+                    //字段名
+                    field = str.Split('=')[1];
+                    if (DataType.IsNullOrEmpty(field) == true)
                         continue;
 
-                    i++;
-                    if (i == 1)
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    idx++;
+                    if (idx == 1)
                     {
                         /* 第一次进来。 */
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field+",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field +"+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field +"||'%'");
+                        qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
-                    qo.addOr();
+                    qo.addAnd();
 
                     if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field +",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field+ "+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr +field+ "||'%'");
+                    qo.MyParas.Add(field, fieldValue);
+                    
 
                 }
-                qo.MyParas.Add("SKey", keyWord);
-                qo.addRightBracket();
-
+                if(idx!=0)
+                    qo.addRightBracket();
             }
             else
             {
-                qo.AddHD();
+                if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+                {
+                    Attr attrPK = new Attr();
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        if (attr.IsPK)
+                        {
+                            attrPK = attr;
+                            break;
+                        }
+                    }
+                    int i = 0;
+                    string enumKey = ","; //求出枚举值外键.
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        switch (attr.MyFieldType)
+                        {
+                            case FieldType.Enum:
+                                enumKey = "," + attr.Key + "Text,";
+                                break;
+                            case FieldType.FK:
+                                // case FieldType.PKFK:
+                                continue;
+                            default:
+                                break;
+                        }
+
+                        if (attr.MyDataType != DataType.AppString)
+                            continue;
+
+                        //排除枚举值关联refText.
+                        if (attr.MyFieldType == FieldType.RefText)
+                        {
+                            if (enumKey.Contains("," + attr.Key + ",") == true)
+                                continue;
+                        }
+
+                        if (attr.Key == "FK_Dept")
+                            continue;
+
+                        i++;
+                        if (i == 1)
+                        {
+                            /* 第一次进来。 */
+                            qo.addLeftBracket();
+                            if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                                qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                            else
+                                qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            continue;
+                        }
+                        qo.addOr();
+
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        else
+                            qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+
+                    }
+                    qo.MyParas.Add("SKey", keyWord);
+                    qo.addRightBracket();
+
+                }
+                else
+                {
+                    qo.AddHD();
+                }
             }
+            
             #endregion
 
             if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)

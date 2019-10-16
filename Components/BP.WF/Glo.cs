@@ -1183,11 +1183,17 @@ namespace BP.WF
                 #region 更新wf_emp. 的字段类型. 2019.06.19
                 DBType dbtype = BP.Sys.SystemConfig.AppCenterDBType;
 
-                if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == true)
-                    DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
 
                 if (dbtype == DBType.Oracle)
-                    DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows CLOB");
+                {
+                    if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == true)
+                    {
+                        DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
+
+                    }
+                        DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows CLOB");
+
+                }
 
                 if (dbtype == DBType.MySQL)
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");

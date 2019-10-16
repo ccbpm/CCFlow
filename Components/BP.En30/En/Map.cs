@@ -1000,6 +1000,11 @@ namespace BP.En
         /// </summary>
         public bool IsEnableVer = false;
         public bool IsShowSearchKey = true;
+        /// <summary>
+        /// 如果是null，就按照通用的查询关键字.
+        /// </summary>
+        public string SearchFields = null;
+
         public BP.Sys.DTSearchWay DTSearchWay = BP.Sys.DTSearchWay.None;
         public string DTSearchLable = "日期从";
         public string DTSearchKey = null;

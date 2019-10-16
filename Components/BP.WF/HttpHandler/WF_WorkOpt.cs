@@ -1277,8 +1277,8 @@ namespace BP.WF.HttpHandler
             DBAccess.RunSQL(sql);
 
             //删除以前执行的会签点,比如:该人多次执行会签，仅保留最后一个会签时间点.  
-            sql = "DELETE FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.HuiQian + " AND NDFrom=" + this.FK_Node;
-            DBAccess.RunSQL(sql);
+            //sql = "DELETE FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.HuiQian + " AND NDFrom=" + this.FK_Node;
+            //DBAccess.RunSQL(sql);
 
             //执行会签,写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian,

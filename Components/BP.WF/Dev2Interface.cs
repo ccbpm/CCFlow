@@ -3017,7 +3017,7 @@ namespace BP.WF
                 switch (DBAccess.AppCenterDBType)
                 {
                     case DBType.MySQL:
-                        futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ,A.FK_FlowSort" + currNode + " AS CurrNode ,1 AS RunType,D.FormType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
+                        futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ,A.FK_FlowSort," + currNode + " AS CurrNode ,1 AS RunType,D.FormType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT GROUP_CONCAT(B.EmpName SEPARATOR ';') AS EmpName, B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node) C,WF_Node D"
                                 + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
                                 + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";

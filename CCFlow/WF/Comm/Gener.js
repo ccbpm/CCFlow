@@ -1274,7 +1274,7 @@ var Entity = (function () {
         },   //一个参数直接传递,  多个参数，参数之间使用 ~隔开， 比如: zhangsna~123~1~山东济南.
         DoMethodReturnString: function (methodName, myparams) {
 
-            var params = {};
+            var params = "";
             if (myparams == null || myparams == undefined)
                 myparams = "";
 
@@ -1282,8 +1282,9 @@ var Entity = (function () {
                 if (i != 0)
                     params += o + "~";
             });
-
-            arguments["paras"] = myparams;
+            if (params.lastIndexOf("~") == params.length - 1)
+                params = params.substr(0, params.length - 1);
+            arguments["paras"] = params;
            
 
             var pkval = this.GetPKVal();

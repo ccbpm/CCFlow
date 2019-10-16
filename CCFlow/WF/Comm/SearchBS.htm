@@ -73,6 +73,7 @@
 
         //定义公共个变量.
         var webUser = new WebUser();
+        var fields=[];
 
          //页面设置信息
         var cfg = new Entity("BP.Sys.EnCfg");
@@ -167,7 +168,6 @@
             //获得map基本信息.
             mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
 
-            // $("#Title").html(mapBase.EnDesc);
             document.title = mapBase.EnDesc;
 
             //获得查询信息，包含了查询数据表.
@@ -191,15 +191,42 @@
                showBarTable(attrs,data);
                return;
             }
-           
-            if (mapBase.IsShowSearchKey == "1"){
-                var keyLabel  = cfg.GetPara("KeyLabel");
-                if(keyLabel == null || keyLabel == undefined || keyLabel =="")
-                    keyLabel="关键字";
-                html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+keyLabel+":&nbsp;&nbsp</label>"
-                html +="<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
-                barCount += 1;
+
+            var searchFields = mapBase.SearchFields;
+            //关键字查询
+            if (searchFields == null || searchFields == "" || searchFields == undefined) {
+                searchFields = "";
+                if (mapBase.IsShowSearchKey == "1") {
+                    var keyLabel = cfg.GetPara("KeyLabel");
+                    if (keyLabel == null || keyLabel == undefined || keyLabel == "")
+                        keyLabel = "关键字";
+                    html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":&nbsp;&nbsp</label>"
+                    html += "<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
+                    barCount += 1;
+                }
+            //String字段查询
+            } else {
+                var strs = searchFields.split("@");
+                var str;
+                var fieldV = "";
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+
+                    str = strs[i].split("=");
+                    if (str.length < 2 || str[0] == "" || str[1] == "")
+                        continue;
+                    fields.push(str[1]);
+                    fieldV = ur.GetPara(str[1]);
+                    if (fieldV == null || fieldV == undefined)
+                        fieldV = "";
+                    
+                    html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+str[1]+"'>" +str[0] + ":&nbsp;&nbsp</label>"
+                    html += "<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" +fieldV + "' class='form-control' />";
+                     barCount += 1;
+                }
             }
+            
 
             if (mapBase.DTSearchWay != "0") {
             	barCount += 2;
@@ -303,14 +330,40 @@
                 html +="<table style='width:100%;' >";
 
 
-             html +="<tr>";
-             if (mapBase.IsShowSearchKey == "1"){
-                 var keyLabel  = cfg.GetPara("KeyLabel");
-                if(keyLabel == null || keyLabel == undefined || keyLabel =="")
-                    keyLabel="关键字";
-                html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+keyLabel+":</label></td>";
-                html +="<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+            html += "<tr>";
+              var searchFields = mapBase.SearchFields;
+            //关键字查询
+            if (searchFields == null || searchFields == "" || searchFields == undefined) {
+                searchFields = "";
+                if (mapBase.IsShowSearchKey == "1"){
+                     var keyLabel  = cfg.GetPara("KeyLabel");
+                    if(keyLabel == null || keyLabel == undefined || keyLabel =="")
+                        keyLabel="关键字";
+                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+keyLabel+":</label></td>";
+                    html +="<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+                }
+             //String字段查询
+            } else {
+                var strs = searchFields.split("@");
+                var fieldV = "";
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+                   
+                    var str = strs[i].split("=");
+                    if (str.length < 2 || str[0] == "" || str[1] == "")
+                        continue;
+                    fields.push(str[1]);
+
+                     fieldV = ur.GetPara(str[1]);
+                    if (fieldV == null || fieldV == undefined)
+                        fieldV = "";
+
+                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+str[1]+"'>"+str[0]+":</label></td>";
+                    html +="<td align='left'><input style='width:100%;' type=text id='TB_"+str[1]+"' name='TB_"+str[1]+"' value='" +fieldV + "' class='form-control' /></td>";
+                }
             }
+             
             if (mapBase.DTSearchWay != "0") {
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + ":</label></td>";
 
@@ -430,6 +483,13 @@
                 ur.SearchKey = $("#TB_Key").val();
             else
                 ur.SearchKey = "";
+
+            //增加字段查询
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if ($("#TB_" + field).length == 1 && $("#TB_" + field).val() != "")
+                    ur.SetPara(field, $("#TB_" + field).val());
+            }
 
             //设置查询时间.
             if ($("#TB_DTFrom").length == 1)

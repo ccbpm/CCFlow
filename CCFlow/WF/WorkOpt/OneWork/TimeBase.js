@@ -96,7 +96,7 @@ function InitPage() {
         var isHaveCheck = false;
         if (at == ActionType.Forward || at == ActionType.FlowOver) {
             doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
-            //  doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDFrom + "')\">表单</a></span></p>";
+            doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDTo + "','" + fk_flow + "','" + fid+"','" + track.NDFrom + "')\">查看表单</a></span></p>";
 
             //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
 

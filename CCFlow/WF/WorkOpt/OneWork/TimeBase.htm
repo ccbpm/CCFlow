@@ -17,15 +17,43 @@
     }
     </style>
     <script type="text/javascript">
-
         /* 打开表单. */
-        function OpenFrm(nodeID) {
+        function OpenFrm(workid, nodeID, flowNo, fid, currNodeId) {
+            //但前节点所处的位置
+            var nowNode = new Entity("BP.WF.Node", nodeID);
+
+            //如果是树形表单，则显示当前人所处节点的数据
+            if (nowNode.FormType == 5) {
+                //获取人员所处的流程节点
+
+                var currNode = new Entity("BP.WF.Node", currNodeId);
+                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    }
+                } else {
+                    //判断当前节点的运行模式
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    } else if (currNode.RunModel == RunModel.SubThread) {
+                        nodeID = currNodeId;
+                    }
+                }
+
+
+            }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
             handler.AddUrlData();
-            if (nodeID != undefined)
-                handler.AddPara("FK_Node", nodeID);
-
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
             var data = handler.DoMethodReturnString("Runing_OpenFrm");
 
             if (data.indexOf('err@') == 0) {
@@ -33,13 +61,54 @@
                 return;
             }
 
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-                WinOpen(data);
+            //SDK表单或者是嵌入式表单
+            if (data.indexOf('urlForm@') == 0) {
+                data = data.replace('urlForm@', '');
+                if (data.indexOf("http") == -1)
+                    data = basePath + data;
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
                 return;
             }
+            //自由/傻瓜/树形表单
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                data = data.replace('./', '/WF/');
+                data = basePath + data;
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+
             alert(data);
+
         }
+        /* 打开表单. */
+        //function OpenFrm(nodeID) {
+
+        //    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+        //    handler.AddUrlData();
+        //    if (nodeID != undefined)
+        //        handler.AddPara("FK_Node", nodeID);
+
+        //    var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+        //    if (data.indexOf('err@') == 0) {
+        //        alert(data);
+        //        return;
+        //    }
+
+        //    if (data.indexOf('url@') == 0) {
+        //        data = data.replace('url@', '');
+        //        WinOpen(data);
+        //        return;
+        //    }
+        //    alert(data);
+        //}
     </script>
 </head>
 <body>

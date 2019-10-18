@@ -108,7 +108,9 @@ namespace BP.WF.Template
 
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
-                 
+
+                map.AddTBAtParas(500);
+
                 this._enMap = map;
                 return this._enMap;
             }

@@ -3998,6 +3998,9 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT FK_Node AS NodeID,NodeName AS Name From WF_TransferCustom WHERE WorkID=" + WorkID + " AND IsEnable=1 Order By Idx";
             DataTable dtYL = DBAccess.RunSQLReturnTable(sql);
 
+            //节点时限表
+            CHNodes chNodes = new CHNodes(this.WorkID);
+
 
 
             #region 获取流程节点信息的列表
@@ -4010,38 +4013,41 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("SDTOfNode");//节点应完成时间
             dt.Columns.Add("PlantStartDt");//节点计划开始时间
             dt.Columns.Add("GS");//工时
-            dt.Columns.Add("IsStartSetting");//是否已经设置节点时限
-            dt.Columns.Add("IsEndSetting");
+           
             DataRow dr;
             bool isFirstY = true;
             //上一个节点的时间
             string beforeSDTOfNode = "";
             //先排序运行过的节点
+            CHNode chNode = null;
             foreach(GenerWorkerList gwl in gwls)
             {
-                dr = dt.NewRow();
-                dr["NodeID"] = gwl.FK_Node;
-                dr["Name"] = gwl.FK_NodeText;
-
-                //计划开始时间
-                string startDt = gwf.GetParaString("PlantStartDt" + gwl.FK_Node);
-                //计划结束时间
-                string endDt = gwf.GetParaString("CH" + gwl.FK_Node);
-
-                if (DataType.IsNullOrEmpty(startDt) == true)
-                    startDt = gwl.RDT;
-                if (DataType.IsNullOrEmpty(endDt) == true)
-                    endDt = gwl.CDT;
-
-                dr["PlantStartDt"] = startDt;
-                dr["SDTOfNode"] = endDt;
-
+                chNode = chNodes.GetEntityByKey(CHNodeAttr.FK_Node, gwl.FK_Node) as CHNode;
+                if (chNode != null)
+                    continue;
+                chNode = new CHNode();
+                chNode.WorkID = this.WorkID;
+                chNode.FK_Node = gwl.FK_Node;
+                chNode.NodeName = gwl.FK_NodeText;
+                chNode.StartDT = gwl.RDT;
+                chNode.EndDT = gwl.CDT;
+                chNode.FK_Emp = gwl.FK_Emp;
+                chNode.FK_EmpT = gwl.FK_EmpText;
+                chNode.SetPara("RDT", gwl.RDT);
+                chNode.SetPara("CDT", gwl.CDT);
+                chNode.SetPara("IsPass", gwl.IsPass);
+                chNodes.AddEntity(chNode);
                 beforeSDTOfNode = gwl.CDT;
             }
             foreach (Node node in nds)
             {
                 GenerWorkerList gwl = gwls.GetEntityByKey(GenerWorkerListAttr.FK_Node, node.NodeID) as GenerWorkerList;
                 if (gwl != null)
+                    continue;
+
+                //已经设定
+                chNode = chNodes.GetEntityByKey(CHNodeAttr.FK_Node, node.NodeID) as CHNode;
+                if (chNode != null)
                     continue;
 
                 string sdtOfNode = "";
@@ -4052,71 +4058,55 @@ namespace BP.WF.HttpHandler
                     {
                         foreach(DataRow drYL in dtYL.Rows)
                         {
-                            dr = dt.NewRow();
-                            dr["NodeID"] = drYL["NodeID"];
-                            dr["Name"] = drYL["Name"];
-                            //计划完成时间
-                            sdtOfNode = gwf.GetParaString("CH" + Int32.Parse(drYL["NodeID"].ToString()));
-                            dr["IsEndSetting"] = 1;
-                            if (DataType.IsNullOrEmpty(sdtOfNode))
-                            {
-                                sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
-                                dr["IsEndSetting"] = 0;
-                            }
-                               
-                            dr["SDTOfNode"] = sdtOfNode;
-
+                            chNode = new CHNode();
+                            chNode.WorkID = this.WorkID;
+                            chNode.FK_Node = int.Parse(drYL["NodeID"].ToString());
+                            chNode.NodeName = drYL["Name"].ToString();
                             //计划开始时间
-                            dr["IsStartSetting"] = 1;
-                            plantStartDt = gwf.GetParaString("PlantStartDt" + Int32.Parse(drYL["NodeID"].ToString()));
-                            if (DataType.IsNullOrEmpty(plantStartDt))
-                            {
-                                plantStartDt = beforeSDTOfNode;
-                                dr["IsStartSetting"] = 0;
-                            }
-                                
-                            dr["PlantStartDt"] = plantStartDt = beforeSDTOfNode;
-                            dr["GS"] = gwf.GetParaInt("GS" + Int32.Parse(drYL["NodeID"].ToString()));
+                            plantStartDt = beforeSDTOfNode;
+                            chNode.StartDT = plantStartDt;
+                            //计划完成时间
+                            sdtOfNode = sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
+                            chNode.EndDT = sdtOfNode;
+                            //工时
+                            int gty = 0;
+                            if(DataType.IsNullOrEmpty(plantStartDt) == false && DataType.IsNullOrEmpty(sdtOfNode) == false)
+                                gty = DataType.SpanDays(plantStartDt, sdtOfNode, false);
+
+                            chNode.GT = gty;
+
                             beforeSDTOfNode = sdtOfNode;
-                           
-                            dt.Rows.Add(dr);
+                            chNodes.AddEntity(chNode);
                         }
                         isFirstY = false;
                     }
                     continue;
                 }
-                dr = dt.NewRow();
-                dr["NodeID"] = node.NodeID;
-                dr["Name"] = node.Name;
-
-                //计划完成时间
-                dr["IsEndSetting"] = 1;
-                sdtOfNode = gwf.GetParaString("CH" + node.NodeID);
-                if (DataType.IsNullOrEmpty(sdtOfNode))
-                {
-                    sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
-                    dr["IsEndSetting"] = 0;
-                } 
-                dr["SDTOfNode"] = sdtOfNode;
+                chNode = new CHNode();
+                chNode.WorkID = this.WorkID;
+                chNode.FK_Node = node.NodeID;
+                chNode.NodeName = node.Name;
 
                 //计划开始时间
-                dr["IsStartSetting"] = 1;
-                plantStartDt = gwf.GetParaString("PlantStartDt" + node.NodeID);
-                if (DataType.IsNullOrEmpty(plantStartDt))
-                {
-                    plantStartDt = beforeSDTOfNode;
-                    dr["IsStartSetting"] = 0;
-                }
-                   
-                dr["PlantStartDt"] = plantStartDt ;
-                dr["GS"] = gwf.GetParaInt("GS" + node.NodeID);
+                plantStartDt = beforeSDTOfNode;
+                chNode.StartDT = plantStartDt;
+
+                //计划完成时间
+                sdtOfNode = getSDTOfNode(node, beforeSDTOfNode, gwf);
+                chNode.EndDT = sdtOfNode;
+
+                //计算初始值工天
+                int gs = 0;
+                if(DataType.IsNullOrEmpty(plantStartDt)==false && DataType.IsNullOrEmpty(sdtOfNode)==false) 
+                    gs = DataType.SpanDays(plantStartDt, sdtOfNode,false);
+                chNode.GT = gs;
                 beforeSDTOfNode = sdtOfNode;
-                dt.Rows.Add(dr);
+                chNodes.AddEntity(chNode);
 
             }
             #endregion 流程节点信息
 
-            ds.Tables.Add(dt);
+            ds.Tables.Add(chNodes.ToDataTableField("WF_CHNode"));
             //获取当前节点信息
             Node nd = new Node(this.FK_Node);
             ds.Tables.Add(nd.ToDataTableField("WF_CurrNode"));
@@ -4204,21 +4194,30 @@ namespace BP.WF.HttpHandler
 
             //获取节点的时限设置
             Nodes nds = new Nodes(this.FK_Flow);
+            CHNode chNode = null;
             foreach (Node nd in nds)
             {
-                string ndCH  = this.GetRequestVal("CH_"+nd.NodeID);
-                if (DataType.IsNullOrEmpty(ndCH) == false)
-                    //保存时限设置
-                    gwf.SetPara("CH" + nd.NodeID, ndCH);
-                string plantStartDt = this.GetRequestVal("PlantStartDt_" + nd.NodeID);
-                if (DataType.IsNullOrEmpty(plantStartDt) == false)
-                    //保存时限设置
-                    gwf.SetPara("PlantStartDt" + nd.NodeID, plantStartDt);
+                chNode = new CHNode();
+                string startDT = this.GetRequestVal("StartDT_" + nd.NodeID);
+                string endDT = this.GetRequestVal("EndDT_" + nd.NodeID);
+                int gt = this.GetRequestValInt("GT_" + nd.NodeID);
+                float scale = this.GetRequestValFloat("Scale_" + nd.NodeID);
+                float chanzhi = this.GetRequestValFloat("ChanZhi_" + nd.NodeID);
+                float totalScale = this.GetRequestValFloat("TotalScale_" + nd.NodeID);
 
-                string gs = this.GetRequestVal("GS_" + nd.NodeID);
-                if (DataType.IsNullOrEmpty(gs) == false)
-                    gwf.SetPara("GS" + nd.NodeID, Int32.Parse(gs));
+                chNode.WorkID = this.WorkID;
+                chNode.FK_Node = nd.NodeID;
+                chNode.NodeName = nd.Name;
+                if (DataType.IsNullOrEmpty(startDT) == false)
+                    chNode.StartDT = startDT;
+                if(DataType.IsNullOrEmpty(endDT) == false)
+                    chNode.EndDT = endDT;
 
+                chNode.GT = gt;
+                chNode.Scale = scale;
+                chNode.ChanZhi = chanzhi;
+                chNode.TotalScale = totalScale;
+                chNode.Save();
             }
             gwf.Update();
             return "保存成功";

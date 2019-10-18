@@ -438,9 +438,10 @@ namespace BP.WF
 
             if (town.HisNode.HisCHWay == CHWay.ByTime)
             {
-                string sdtOdNode = this._HisGenerWorkFlow.GetParaString("CH" + this.town.HisNode.NodeID);
-                if (DataType.IsNullOrEmpty(sdtOdNode) == false)
-                    dtOfShould = DateTime.Parse(sdtOdNode);
+                CHNode chNode = new CHNode();
+                chNode.MyPK = this.HisGenerWorkFlow.WorkID + "_" + this.town.HisNode.NodeID;
+                if(chNode.RetrieveFromDBSources()!=0)
+                    dtOfShould = DateTime.Parse(chNode.EndDT);
                 else
                 {
                     //按天、小时考核

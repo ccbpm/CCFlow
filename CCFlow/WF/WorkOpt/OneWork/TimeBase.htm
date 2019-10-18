@@ -78,7 +78,7 @@
                 data = data.replace('./', '/WF/');
                 data = basePath + data;
                 if (data.indexOf('FromWorkOpt') == -1)
-                    data = data + "&FromWorkOpt=1";
+                    data = data + "&FromWorkOpt=2";//2表示时间轴中的显示表单
 
                 window.open(data);
                 return;
@@ -87,28 +87,7 @@
             alert(data);
 
         }
-        /* 打开表单. */
-        //function OpenFrm(nodeID) {
-
-        //    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-        //    handler.AddUrlData();
-        //    if (nodeID != undefined)
-        //        handler.AddPara("FK_Node", nodeID);
-
-        //    var data = handler.DoMethodReturnString("Runing_OpenFrm");
-
-        //    if (data.indexOf('err@') == 0) {
-        //        alert(data);
-        //        return;
-        //    }
-
-        //    if (data.indexOf('url@') == 0) {
-        //        data = data.replace('url@', '');
-        //        WinOpen(data);
-        //        return;
-        //    }
-        //    alert(data);
-        //}
+        
     </script>
 </head>
 <body>

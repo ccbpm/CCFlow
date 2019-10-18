@@ -29,9 +29,17 @@ $(function () {
 
     initPageParam(); //初始化参数.
 
+    //时间轴的表单增加打印按钮
+    var fromWorkOpt = GetQueryString("FromWorkOpt");
+    if (fromWorkOpt == 2) {
+        $("#topToolBar").append("<input type=button name='PackUp_pdf'  value='打印pdf' enable=true/>");
+        if ($('[name=PackUp_pdf]').length > 0) {
+            $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
+        }
+    }
+
     //构造表单.
     GenerFrm(); //表单数据.
-
 
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
         //计算高度，展示滚动条
@@ -58,6 +66,43 @@ $(function () {
     }
 });
 
+
+//初始化退回、移交、加签窗口
+function initModal(modalType, toNode) {
+
+    //初始化退回窗口的SRC.
+    var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
+        '<div class="modal-dialog">'
+        + '<div class="modal-content" style="border-radius:0px;width:900px;height:450px;text-align:left;">'
+        + '<div class="modal-header">'
+        + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '<button id="MaxSizeBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
+        + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
+        + '</div>'
+        + '<div class="modal-body" style="margin:0px;padding:0px;height:450px">'
+        + '<iframe style="width:100%;border:0px;height:100%;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+        + '</div>'
+        + '</div><!-- /.modal-content -->'
+        + '</div><!-- /.modal-dialog -->'
+        + '</div>';
+
+    $('body').append($(html));
+
+    var modalIframeSrc = '';
+    if (modalType != undefined) {
+        switch (modalType) {
+
+            case "PackUp_pdf":
+                $('#modalHeader').text("打包下载/打印");
+                modalIframeSrc = "../WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+
+            default:
+                break;
+        }
+    }
+    $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
+}
 function numonly(e) {
     if (navigator.userAgent.indexOf("Firefox") > 0) {
         var code;

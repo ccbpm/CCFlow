@@ -289,8 +289,26 @@
             $("#Btn_HuiQian").attr("disabled", "disabled");
             $("#Btn_HuiQian").val("执行中...");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
+            var trs = $("tbody tr");
+            var flag = true;
+            if (trs.length >= 2) {
+                $.each(trs, function (i, tr) {
+                    if (tr.innerHTML.indexOf("新增") > 0) {
 
+                        flag = false;
+                        return;
+                    };
+                    
+                })
+                if (flag) {
+                    alert("表中会签人已审批，请选择新的会签人再发送！");
+                    $("#Btn_HuiQian").attr("disabled", false);
+                    $("#Btn_HuiQian").val("执行会签");
+                    $("#Btn_SelectEmps").attr("disabled", false);
+                    return;
+                }
 
+            }
             //执行数据初始化工作.
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             hand.AddUrlData();

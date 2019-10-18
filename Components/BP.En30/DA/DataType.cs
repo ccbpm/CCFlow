@@ -367,26 +367,7 @@ namespace BP.DA
                 _PraseParentTree2TreeNo(dtTree, newDt, dtTree.Rows[0]["No"].ToString());
             return newDt;
         }
-        public static string PraseGB2312_To_utf8(string text)
-        {
-            /* 2019-8-12 前后端全部采用utf8，无需转码
-            if (DataType.IsNullOrEmpty(text))
-                return text;
-
-            //声明字符集   
-            System.Text.Encoding utf8, gb2312;
-            //gb2312   
-            gb2312 = System.Text.Encoding.GetEncoding("gb2312");
-            //utf8   
-            utf8 = System.Text.Encoding.GetEncoding("utf-8");
-            byte[] gb;
-            gb = gb2312.GetBytes(text);
-            gb = System.Text.Encoding.Convert(gb2312, utf8, gb);
-            //返回转换后的字符   
-            return utf8.GetString(gb);
-            */
-            return text;
-        }
+       
 
         /// <summary>
         /// 转换成MB
@@ -421,13 +402,10 @@ namespace BP.DA
                 return fileName;
             }
 
-            //HttpUtility.HtmlEncode(fileName);
 
             string filePath = fileName.Substring(0, fileName.LastIndexOf('\\'));
             string fName = fileName.Substring(fileName.LastIndexOf('\\'));
-            // fName = HttpUtility.HtmlEncode(fName);
-            //if (1 == 2)
-            //{
+            
             fName = PraseStringToUrlFileNameExt(fName, "%", "%25");
             fName = PraseStringToUrlFileNameExt(fName, "+", "%2B");
             fName = PraseStringToUrlFileNameExt(fName, " ", "%20");
@@ -438,7 +416,6 @@ namespace BP.DA
             fName = PraseStringToUrlFileNameExt(fName, "=", "%3D");
             fName = PraseStringToUrlFileNameExt(fName, " ", "%20");
 
-            // }
             return filePath + fName;
         }
         private static string PraseStringToUrlFileNameExt(string fileName, string val, string replVal)
@@ -942,6 +919,37 @@ namespace BP.DA
                 //throw new Exception(ex.Message +"" +fromday +"  " +today ) ; 
                 return 0;
             }
+        }
+
+
+        public static int SpanDays(string fromday,string today,bool isContHoliday)
+        {
+            DateTime fromDate = DateTime.Parse(fromday);
+            DateTime toDate = DateTime.Parse(today);
+            int day = 0;
+            if(isContHoliday == false)
+            {
+                /* 设置节假日. */
+                while (fromDate.CompareTo(toDate) < 0)
+                {
+                    if (BP.Sys.GloVar.Holidays.Contains(fromDate.ToString("MM-dd")))
+                    {
+                        fromDate = fromDate.AddDays(1);
+                        continue;
+                    }
+                    day++;
+                    if (toDate.CompareTo(fromDate) == 0)
+                        break;
+
+                    fromDate = fromDate.AddDays(1);
+                }
+            }
+            else
+            {
+                SpanDays(fromday, today);
+            }
+            
+            return day;
         }
 
         public static int SpanHours(string fromday,string today)

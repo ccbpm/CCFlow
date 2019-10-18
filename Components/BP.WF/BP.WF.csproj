@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppClass.cs" />
+    <Compile Include="Data\CHNode.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />

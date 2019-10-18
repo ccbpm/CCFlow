@@ -17,7 +17,7 @@ using BP.WF.XML;
 namespace BP.WF.HttpHandler
 {
 	/// <summary>
-	/// 初始化函数
+	/// 初始化函数 
 	/// </summary>
 	public class WF_Admin_CCBPMDesigner : DirectoryPageBase
 	{

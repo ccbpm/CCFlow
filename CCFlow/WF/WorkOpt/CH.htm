@@ -52,6 +52,7 @@
         var fk_flow = GetQueryString("FK_Flow");
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
+        var webUser = new WebUser();
 
         $(function () {
             InitPage();
@@ -69,7 +70,7 @@
             }
 
             data = JSON.parse(data);
-            var nds = data["WF_Node"];
+            var chNodes = data["WF_CHNode"];
             var gwls = data["WF_GenerWorkerList"];
             var node = data.WF_CurrNode[0];
             //流程时限属性
@@ -80,97 +81,94 @@
             //判断是否可以修改时限
             var chRole = node.CHRole;
             var _Html = "";
-            var Idx = 0;
+            var idx = 0;
             var plantStartDt; // 计划开始时间
             var sdtOfNode; //计划完成时间
             var GS;
+            var Pro;
             var limintT;
-            for (var i = 0; i < nds.length; i++) {
-                var nd = nds[i];
-                sdtOfNode = nd.SDTOfNode;
-                plantStartDt = nd.PlantStartDt;
-                GS = nd.GS;
-                //根据节点获取GenerWorkerList对应的数据
-                var gwl = GetEntityByNode(gwls, nd.NodeID);
+            for (var i = 0; i < chNodes.length; i++) {
+                idx = i + 1;
+                var chNode = chNodes[i];
                 _Html += "<tr>";
-                Idx = i + 1;
-                _Html += "<td>" + Idx + "</td>";
-                if (gwl != null) { // 已经运行的节点或者运行到的节点
-                    _Html += "<td style='text-align: center'>" + gwl.FK_NodeText + "</td>";
-                    _Html += "<td style='text-align: center'>" + gwl.FK_EmpText + "</td>";
-                    if (plantStartDt == null || plantStartDt == undefined || plantStartDt == "")
-                        plantStartDt = "<label>" + gwl.RDT + "</label>";
-                    _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
-                    _Html += "<td style='text-align: center'>" + gwl.RDT + "</td>";
-                    _Html += "<td style='text-align: center'>" + gwl.SDT + "</td>";
-                    _Html += "<td style='text-align: center'>" + gwl.CDT + "</td>";
-                    if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
-                        _Html += "<td style='text-align: center'>0</td>";
+                _Html += "<td>" + idx + "</td>";
+
+                //已经运行过的节点或者运行到的节点
+                if (chNode.AtPara != "" && chNode.AtPara != undefined) {
+                    _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
+                    _Html += "<td style='text-align: center'>" + chNode.FK_EmpT + "</td>";
+                    _Html += "<td style='text-align: center'>" + chNode.StartDt + "</td>"; //计划开始
+                    _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";//计划完成
+                    var isPass = GetPara(chNode.AtPara, "IsPass");
+                    if (isPass != 1) {
+                        _Html += "<td style='text-align: center'><input type='text' id=GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
+                        _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
+                        _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
+
+                    } else {
+                        _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
+                        _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
+                        _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
+                    }
+
+
+                    if (chNode.FK_Node == parseInt(fk_flow) + "01") { // 开始节点
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
                     } else {
-                        _Html += "<td style='text-align: center'>" + GS + "</td>";
                         //耗时
-                        var rdt = new Date(Date.parse(gwl.RDT.replace(/-/g, "/")));
-                        var cdt = new Date(Date.parse(gwl.CDT.replace(/-/g, "/")));
+                        var rdt = GetPara(chNode.AtPara, "RDT");
+                        rdt = new Date(Date.parse(rdt.replace(/-/g, "/")));
+                        var cdt = GetPara(chNode.AtPara, "CDT");
+                        var cdtD = new Date(Date.parse(cdt.replace(/-/g, "/")));
 
                         _Html += "<td style='text-align: center'>" + GetSpanTime(rdt, cdt) + "</td>";
                         //状态
-                        if (gwl.CDT <= gwl.SDT)
+                        if (cdt <= chNode.EndDT)
                             _Html += "<td style='text-align: center'>正常</td>";
                         else
                             _Html += "<td style='text-align: center'><label style='color:red'>逾期</label></td>";
 
                     }
-                    _Html += "</tr>";
-
                 } else { //未运行到的节点
-                    if (nd.NodeID == parseInt(fk_flow) + "01") { // 开始节点
-
-                        _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
-                        if (webUser == undefined) {
-                            var webUser = new WebUser();
-                            _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
-                        } else
-                            _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
-
-
-                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
+                    if (chNode.FK_Node == parseInt(fk_flow) + "01") { // 开始节点
+                        _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
+                        _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
                         _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>无</td>";
+                        _Html += "<td style='text-align: center'><input type='text' id=GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
+                        _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
+                        _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
+
+                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
                         _Html += "<td style='text-align: center'>无</td>";
-                        _Html += "<td style='text-align: center'>0</td>";
                         _Html += "<td style='text-align: center'>无</td>";
                         _Html += "<td style='text-align: center'>正常</td>";
 
                     } else {
-                        _Html += "<td style='text-align: center'>" + nd.Name + "</td>";
+                        _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
 
                         if (chRole == 1) {
-                            var style = "";
-                            if (nd.IsStartSetting == "1")
-                                style = "style='color:#a7a4a4'";
 
-                            _Html += "<td style='text-align: center'><input type='text' " + style + " id='PlantStartDt_" + nd.NodeID + "' name='PlantStartDt_" + nd.NodeID + "' value='" + plantStartDt + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                + "$(this).blur(); CompareDate(" + nd.NodeID + ",0);}})'  class='form-control Wdate'/></td>";
-                        } else
-                            _Html += "<td style='text-align: center'>" + plantStartDt + "</td>";
 
-                        _Html += "<td style='text-align: center'>___</td>";
-                        if (chRole == 1) {
-                            var style = "";
-                            if (nd.IsEndSetting == "1")
-                                style = "style='color:#a7a4a4'";
+                            _Html += "<td style='text-align: center'><input type='text'  id='StartDT_" + chNode.FK_Node + "' name='StartDT_" + chNode.FK_Node + "' value='" + chNode.StartDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"StartDT\");}})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='EndDT_" + chNode.FK_Node + "' name='EndDT_" + chNode.FK_Node + "' value='" + chNode.EndDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"EndDT\");}})'  class='form-control Wdate'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.GT + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
+                            _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
 
-                            _Html += "<td style='text-align: center'><input type='text' " + style + " id='CH_" + nd.NodeID + "' name='CH_" + nd.NodeID + "' value='" + sdtOfNode + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                + "$(this).blur(); CompareDate(" + nd.NodeID + ",1);}})'  class='form-control Wdate'/></td>";
+                        } else {
+                            _Html += "<td style='text-align: center'>" + chNode.StartDT + "</td>";
+                            _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";
+                            _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
+                            _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
+                            _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
                         }
-
-                        else
-                            _Html += "<td style='text-align: center'>" + sdtOfNode + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'><input type='text' id='GS_" + nd.NodeID + "' name='GS_" + nd.NodeID + "' value='" + GS + "'/></td>";
+                        _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
 
@@ -226,6 +224,17 @@
 
         }
 
+        function changeStyle(nodeId, type) {
+            if (type == "StartDT")
+                $("#StartDT_" + nodeId).css("color", "#a7a4a4");
+            if (type == "EndDT")
+                $("#EndDT_" + nodeId).css("color", "#a7a4a4");
+            if (type == "GT")
+                $("#GT_" + nodeId).css("color", "#a7a4a4");
+            if (type == "Scale")
+                $("#Scale_" + nodeId).css("color", "#a7a4a4");
+        }
+
         //比对时间
         function CompareDate(nodeId, type) {
             var startDt = $("#PlantStartDt_" + nodeId).val();
@@ -240,10 +249,7 @@
                     $("#CH_" + nodeId).focus();
                 }
             } else {
-                if (type == 0)
-                    $("#PlantStartDt_" + nodeId).css("color", "#a7a4a4");
-                if (type == 1)
-                    $("#CH_" + nodeId).css("color", "#a7a4a4");
+                changeStyle(nodeId, type);
             }
             return;
         }
@@ -357,13 +363,14 @@
                             <th style='background-color:#F2F2F2;text-align:center;width:10%'>节点</th>
                             <th style='background-color:#F2F2F2;text-align:center;width:10%'>处理人</th>
                             <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划开始时间</th>
-                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>任务到达时间</th>
                             <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划完成时间</th>
-                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>实际完成时间</th>
-                            <th style='background-color:#F2F2F2;width:50px;text-align:center'>工时(天)</th>
+                            <th style='background-color:#F2F2F2;width:70px;text-align:center'>工天(天)</th>
+                            <th style='background-color:#F2F2F2;width:100px;text-align:center'>阶段占比(%)</th>
+                            <th style='background-color:#F2F2F2;width:100px;text-align:center'>总体进度(%)</th>
+                            <th style='background-color:#F2F2F2;width:120px;text-align:center'>任务到达时间</th>
+                            <th style='background-color:#F2F2F2;width:120px;text-align:center'>实际完成时间</th>
                             <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
                             <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
-
                         </tr>
                     </thead>
                     <tbody id="CHTbody"></tbody>

@@ -292,10 +292,11 @@ function AfterBindEn_DealMapExt(frmData) {
 
         var mapAttr = new Entity("BP.Sys.MapAttr");
         mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-        if (mapAttr.RetrieveFromDBSources() == 0) {
-            mapExt.Delete();
-            continue;
-        }
+        //由于客户pop有实效问题，此处暂时注掉
+        //if (mapAttr.RetrieveFromDBSources() == 0) {
+        //    mapExt.Delete();
+        //    continue;
+        //}
        
 
         //判断MapAttr属性是否可编辑不可以编辑返回

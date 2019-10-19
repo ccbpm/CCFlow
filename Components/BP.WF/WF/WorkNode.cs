@@ -8607,28 +8607,27 @@ namespace BP.WF
                         }
 
                     }
-                    else
+                   
+                    //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                    if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
-                        //判断是否有审核组件，把审核信息存储在Msg中 @yuan
-                        if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
-                        {
-                            //获取审核组件信息
-                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
-                            t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                        //获取审核组件信息
+                        string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
+                        t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
 
-                            //把审核组件的立场信息保存在track表中
-                            string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
-                            string[] strs = checkTag.Split('@');
-                            foreach (string str in strs)
+                        //把审核组件的立场信息保存在track表中
+                        string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
+                        string[] strs = checkTag.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (str.Contains("FWCView") == true)
                             {
-                                if (str.Contains("FWCView") == true)
-                                {
-                                    t.Tag = t.Tag + "@" + str;
-                                    break;
-                                }
+                                t.Tag = t.Tag + "@" + str;
+                                break;
                             }
                         }
                     }
+                   
                     break;
                 default:
                     break;
@@ -8744,28 +8743,26 @@ namespace BP.WF
                             Log.DebugWriteError(BP.WF.Glo.multilingual("@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}.", "WorkNode", "delete_focus_field", para));
                         }
                     }
-                    else
+                    //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                    if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
-                        //判断是否有审核组件，把审核信息存储在Msg中 @yuan
-                        if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
+                        //获取审核组件信息
+                        string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
+                        t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
+                        //把审核组件的立场信息保存在track表中
+                        string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
+                        string[] strs = checkTag.Split('@');
+                        foreach (string str in strs)
                         {
-                            //获取审核组件信息
-                            string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
-                            t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");
-                            //把审核组件的立场信息保存在track表中
-                            string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
-                            string[] strs = checkTag.Split('@');
-                            foreach (string str in strs)
+                            if (str.Contains("FWCView") == true)
                             {
-                                if (str.Contains("FWCView") == true)
-                                {
-                                    t.Tag = t.Tag + "@" + str;
-                                    break;
-                                }
+                                t.Tag = t.Tag + "@" + str;
+                                break;
                             }
-
                         }
+
                     }
+                    
                     break;
                 default:
                     break;

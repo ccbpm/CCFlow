@@ -1,4 +1,3 @@
-/*  Table 风格   */
 body
 {
     color: #333333;
@@ -19,7 +18,7 @@ input[type="button"], input[type="submit"], input[type="file"]
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-    border:1px solid #d2cdcd;
+    border: 1px solid #d2cdcd;
 }
 input:hover[type="button"]
 {
@@ -59,37 +58,37 @@ textarea[disabled], input[type=text]:disabled
     /**border: 1px solid #DDD;
     background-color: #F5F5F5;
     color: #009999;*/
-    width:100%;
-    padding-left:10px;
-     border: none !important;
-     background: none; 
-     text-align: left; 
-     color: #666; 
-     cursor: no-drop;
+    width: 100%;
+    padding-left: 10px;
+    border: none !important;
+    background: none;
+    text-align: left;
+    color: #666;
+    cursor: no-drop;
 }
 
 input[type=checkbox]:disabled
 {
-        display:inline;
-        width:20px;
+    display: inline;
+    width: 20px;
 }
 
 /*文本框只读风格.*/
 select[disabled], input[type=text]:disabled
 {
-   /**border: 1px solid #DDD;
+    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
     color: #009999;*/
-    width:100%;
-    padding-left:10px;
-     border: none; 
-     background: none; 
-     text-align: left; 
-     color: #666; 
-     cursor: no-drop;
-     appearance:none;   
-      -moz-appearance:none;   
-      -webkit-appearance:none;   
+    width: 100%;
+    padding-left: 10px;
+    border: none;
+    background: none;
+    text-align: left;
+    color: #666;
+    cursor: no-drop;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
 /*  table 类型风格 */
 table
@@ -105,7 +104,7 @@ table
 /*扩展应用明细表与多附件.*/
 .TitleExt
 {
-    background-color: #f4f4f4;
+    background-color: #663300;
     font-size: 12px;
     border: 1px solid #C2D5E3;
     text-align: center;
@@ -125,7 +124,7 @@ th
     color: 0a0a0a;
     white-space: nowrap;
     padding: 5px 2px;
-    background-color: #e0ecff;
+    background-color: #999999;
     font-size: 14px;
     text-align: left;
     font-size: 12px;

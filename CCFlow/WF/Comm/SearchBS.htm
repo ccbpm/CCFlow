@@ -312,29 +312,34 @@
         }
         
         function showBarTable(attrs,data){
-               var html = "";
-          
+             var html = "";
+            var searchFields = mapBase.SearchFields;
+            if (searchFields == null || searchFields == "" || searchFields == undefined)
+                searchFields = "";
+            var len = 0;
+            if(searchFields!="")
+                len= searchFields.split("@").length;
+            len = parseInt(attrs.len) + length;
               if(mapBase.DTSearchWay == "0"){
-                  if (attrs.length==0 )
+                  if (len==0 )
                     html +="<table style='width:30%;' >";
-                  if (attrs.length==1 )
+                  if (len==1 )
                      html +="<table style='width:50%;' >";
               }else{
-                 if (attrs.length==0 )
+                 if (len==0 )
                     html +="<table style='width:60%;' >";
-                 if (attrs.length==1 )
+                 if (len==1 )
                      html +="<table style='width:80%;' >";
               }
 
-            if (attrs.length>1)
+            if (len>1)
                 html +="<table style='width:100%;' >";
 
 
             html += "<tr>";
-              var searchFields = mapBase.SearchFields;
+             
             //关键字查询
-            if (searchFields == null || searchFields == "" || searchFields == undefined) {
-                searchFields = "";
+            if (searchFields=="") {
                 if (mapBase.IsShowSearchKey == "1"){
                      var keyLabel  = cfg.GetPara("KeyLabel");
                     if(keyLabel == null || keyLabel == undefined || keyLabel =="")

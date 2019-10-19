@@ -601,7 +601,7 @@ namespace BP.WF
         {
             // 检查是否可以发起该流程？
             if (Glo.CheckIsCanStartFlow_InitStartFlow(this) == false)
-                throw new Exception("@您违反了该流程的【" + this.StartLimitRole + "】限制规则。" + this.StartLimitAlert);
+                throw new Exception("err@您违反了该流程的【" + this.StartLimitRole + "】限制规则。" + this.StartLimitAlert);
 
             //如果是bs系统.
             if (paras == null)
@@ -644,6 +644,8 @@ namespace BP.WF
             /*如果要启用草稿,就创建一个新的WorkID .*/
             if (this.DraftRole != Template.DraftRole.None && nd.IsStartNode)
                 IsNewWorkID = true;
+
+            string errInfo = "";
 
             try
             {

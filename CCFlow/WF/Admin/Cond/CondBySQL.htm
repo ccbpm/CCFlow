@@ -149,7 +149,9 @@
 
             //打开方向条件.
             var url = "../SettingTemplate.htm?TemplateType=CondBySQL&CondType=2";
-            WinOpen(url, 'ss');
+             var newWindow = window.open(url, 'SQL模板', 'width=900,height=700,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+            newWindow.focus();
+           
         }
         //返回.
         function Back() {

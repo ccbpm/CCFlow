@@ -192,7 +192,7 @@
             var tableWidth = 800; //  w - 40;
             var html = "";
             if (Sys_GroupFields.length > 1)
-                html = "<div id='tabDiv' class='easyui-tabs' >";
+                html = "<div id='tabDiv' class='easyui-tabs' data-options='fit:true' >";
 
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
@@ -1180,9 +1180,9 @@
         }
     </style>
 </head>
-<body class="easyui-layout">
-    <div class="easyui-layout" data-options="region:'center'" border="false">
-        <div class="easyui-layout" data-options="fit:true">
+<body class="easyui-layout" data-options="fit:true">
+    <!--<div class="easyui-layout" data-options="region:'center'" border="false">-->
+        <!--<div class="easyui-layout" data-options="fit:true">-->
             <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false"
                  style="height: 30px; padding: 2px; background-color: #d3d3d34a">
                 <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'"
@@ -1197,15 +1197,15 @@
 
 
             </div>
-            <div data-options="region:'center',noheader:true,border:false" style="margin: 0px">
-                <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin: 0px;
+            <div class="easyui-layout" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px">
+                <div class="easyui-layout" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;
                     padding: 0px; overflow: auto">
                     <br />
                     <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
                     <br />
                 </div>
             </div>
-        </div>
-    </div>
+        <!--</div>-->
+    <!--</div>-->
 </body>
 </html>

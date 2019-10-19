@@ -206,7 +206,14 @@
             if (w == null || w == undefined)
                 w = document.body.clientWidth - 200;
             if (h == null || h == undefined)
-                h = document.body.clientHeight-140;
+                h = document.body.clientHeight - 140;
+
+            var W = document.body.clientWidth-40;
+            var H = document.body.clientHeight - 40;
+            if (w > W)
+                w = W;
+             if (h > H)
+                h = H;
             if (FunPara == true || FunPara == "true")
                 OpenEasyUiDialogExt(url, title, w, h, false);
             else {

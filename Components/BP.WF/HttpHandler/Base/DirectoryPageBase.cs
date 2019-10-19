@@ -79,10 +79,17 @@ namespace BP.WF.HttpHandler
                 if (methodName.Contains(">") == true)
                     return "err@非法的脚本植入.";
 
+
                 if (ex.InnerException != null)
+                    if (ex.InnerException.Message.IndexOf("err@") == 0)
+                        return ex.InnerException.Message;
+                    else
                     return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.InnerException;
                 else
-                    return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
+                    if (ex.Message.IndexOf("err@") == 0)
+                        return ex.Message;
+                    else
+                        return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
             }
         }
         /// <summary>

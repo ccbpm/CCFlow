@@ -186,6 +186,9 @@
             var html = "<table border=0 width='98%' > ";
 
             if (depts == null) {
+                 if (isSimplate == "0") {
+                        html += "<tr><th><input  type='checkbox' name='selectAll' id='selectAll' onclick='selectAll()'  value='全选' /><b>全选</b></th></tr>";
+                    }
                 $.each(emps, function (i, emp) {
 
                     //检查该人员是否被选择.
@@ -217,8 +220,10 @@
             }
 
             if (depts != null) {
+                    if (isSimplate == "0") {
+                        html += "<tr><th><input  type='checkbox' name='selectAll' id='selectAll' onclick='selectAll()'  value='全选' /><b>全选</b></th></tr>";
+                    }
                 $.each(depts, function (i, dept) {
-
                     html += "<tr><th><b> " + dept.Name + "</b></th></tr>";
                     html += "<tr><td>";
 
@@ -285,6 +290,19 @@
             Close(false);
         }
 
+         //复选框全选反选
+        function selectAll() {
+            var obj = $("#selectAll");
+            if (obj != null && obj != undefined && obj.prop("checked")) {
+                $("input:checkbox").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("input:checkbox").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        };
         //确定【选择接收人并发送】 / 保存.  Accepter_Save Accepter_Send
         function SendNode() {
 

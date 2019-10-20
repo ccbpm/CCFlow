@@ -516,8 +516,12 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
 
                 // add 2019.1.9 for 东孚.
-                map.AddTBString(BtnAttr.OfficeBtnLab, "公文主文件", "公文按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
+                map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.OfficeBtnEnable, 0, "文件状态", true, true, BtnAttr.OfficeBtnEnable,
+                "@0=不可用@1=可编辑@2=不可编辑", false);
+
+                //map.AddTBString(BtnAttr.OfficeBtnLab, "公文主文件", "公文按钮标签", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
 
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);

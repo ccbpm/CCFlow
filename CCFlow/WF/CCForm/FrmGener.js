@@ -66,7 +66,7 @@ $(function () {
 });
 //打印单据
 function printDoc() {
-    WinOpen("../WorkOpt/PrintDoc.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID + "&FK_Flow=" + pageData.FK_Flow + "s=" + Math.random()+"', 'dsdd'");
+    WinOpen("../WorkOpt/PrintDoc.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()+"', 'dsdd'");
 }
 
 function numonly(e) {

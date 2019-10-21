@@ -92,11 +92,11 @@
             var atpara = cond.AtPara;
             if (atpara != "") {
 
-                var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
+                var initDDL_SpecOperWay = atpara.split("@")[2].split("=")[1];
                 document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
                 document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
 
-                var initTB_SpecOperPara = atpara.split("@")[2].split("=")[1];
+                var initTB_SpecOperPara = atpara.split("@")[3].split("=")[1];
                 document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
                 if (initDDL_SpecOperWay != 0) {
                     document.getElementById("TB_SpecOperPara").disabled = "";
@@ -204,7 +204,7 @@
             handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
             handler.AddPara("DirType", GetQueryString("DirType"));
             handler.AddPara("CondType", GetQueryString("CondType"));
-            handler.AddFormData(frmData)
+            handler.AddFormData()
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByStation_Save");
             window.location.href = window.location.href;
@@ -281,14 +281,14 @@
             var ToNodeID = GetQueryString("ToNodeID");
 
             //条件属性.
-            var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
-            var cond = new Entity("BP.WF.Template.Cond");
-            cond.MyPK = mypk;
-            cond.RetrieveFromDBSources();
+            //var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
+            //var cond = new Entity("BP.WF.Template.Cond");
+            //cond.MyPK = mypk;
+            //cond.RetrieveFromDBSources();
 
-            cond.OperatorValue = data[0];
-            cond.OperatorValueT = data[1];
-            cond.Save();
+            //cond.OperatorValue = data[0];
+            //cond.OperatorValueT = data[1];
+            //cond.Save();
         }
 
         //返回.
@@ -334,13 +334,13 @@
     </style>
 </head>
 <body>
-    <form action="/" method="post" id="cc">
+    <form  id="cc">
 
     <table style=" width:100%; "> 
-<caption ><a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 方向条件-按岗位</caption>
-    <tr>
-    <td> 
- 
+        <caption >
+            <a href="javascript:Back();"> <img src='../../Img/Btn/back.gif' >返回</a> 方向条件-按岗位
+        </caption>
+    </table>
     <div>
          <div id="AdminModel">
             <fieldset >
@@ -412,15 +412,7 @@
             <iframe id="stationFrame" src="#" scrolling="no" frameborder="0" width="99%" ></iframe>
            
        </div>    
-            
-        
    </div>    
-
-
-      </td>
-    </tr>
-    <table> 
-
 
     </form>
 </body>

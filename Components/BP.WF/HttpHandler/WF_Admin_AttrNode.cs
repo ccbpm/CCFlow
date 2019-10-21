@@ -86,6 +86,7 @@ namespace BP.WF.HttpHandler
             //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
             var file = HttpContextHelper.RequestFiles(0);
             string fileName = file.FileName;
+            fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
             fileName = fileName.ToLower();
 
             filepath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + fileName;

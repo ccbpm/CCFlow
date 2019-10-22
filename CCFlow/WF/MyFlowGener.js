@@ -17,7 +17,7 @@ $(function () {
     var theme = webUser.Theme;
     if (theme == null || theme == undefined || theme == "")
         theme = "Default";
-    $('head').append('<link href="../DataUser/Style/CSS/' + theme+'/ccbpm.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 
 
@@ -1649,12 +1649,12 @@ function GenerWorkNode() {
     $.each(disabledTextAreas, function (i, obj) {
         $(obj).attr('title', $(obj).val());
     })
- 
+
     ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = flowData.Sys_MapData[0].No;
     var filespec = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
     $.getScript(filespec);
-    
+
     try {
         ////加载JS文件
         var s = document.createElement('script');
@@ -2019,9 +2019,7 @@ function InitToolBar() {
 }
 
 /* ss */
-function OpenOffice() {
-
-
+function OpenOffice(isEdit) {
     var paras = "WorkID=" + GetQueryString("WorkID") + ",";
     paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
     paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
@@ -2030,11 +2028,18 @@ function OpenOffice() {
     paras += "UserNo=" + webUser.No + ",";
     paras += "SID=" + webUser.SID + ",";
 
+    //是否可以编辑(只读)
+    if (isEdit == "True")
+        paras += "isReadonly=1,";
+    else
+        paras += "isReadonly=0,";
+
+
     var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
 
     var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
-    var url = "httpCCWord://-fromccflow,App=FrmExcel," + paras + "WSUrl=" + urlWS;
-    alert(url);
+    var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
+    //alert(url);
     window.open(url);
 }
 

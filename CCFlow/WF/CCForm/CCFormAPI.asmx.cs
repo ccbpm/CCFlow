@@ -10,6 +10,8 @@ using BP.Sys;
 using BP.Web;
 using BP.DA;
 using BP.En;
+using BP.WF;
+using System.Drawing;
 
 namespace CCFlow.WF.CCForm
 {
@@ -128,7 +130,6 @@ namespace CCFlow.WF.CCForm
             return;
         }
 
-
         [WebMethod]
         public string SaveBillDesingerTemplate_2019(string billNo, string frmID, byte[] bytes)
         {
@@ -156,6 +157,65 @@ namespace CCFlow.WF.CCForm
                 return "err@:" + ex.Message;
             }
         }
+
+        /// <summary>
+        /// 获取模版
+        /// </summary>
+        /// <param name="billNo"></param>
+        /// <param name="frmID"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string GetBillDesingerTemplate_2019(string billNo, string frmID)
+        {
+            MethodReturnMessage<byte[]> msg = null;
+
+            try
+            {
+                string filePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
+                string fileName = billNo + "_" + frmID + ".docx";
+                if (!Directory.Exists(filePath))
+                    Directory.CreateDirectory(filePath);
+
+                string fileFullPath = filePath + fileName;
+
+                if (File.Exists(fileFullPath))
+                {
+                    FileStream fs = new FileStream(fileFullPath, FileMode.Open);
+                    var buffer = new byte[fs.Length];
+                    fs.Position = 0;
+                    fs.Read(buffer, 0, buffer.Length);
+                    fs.Close();
+
+                    msg = new MethodReturnMessage<byte[]>
+                    {
+                        Success = true,
+                        Message = "读取文件成功",
+                        Data = buffer
+                    };
+                }
+                else
+                {
+                    msg = new MethodReturnMessage<byte[]>
+                    {
+                        Success = false,
+                        Message = "模版不存在",
+                        Data = null
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+
         #endregion
 
         #region 与公文相关的接口.
@@ -817,5 +877,126 @@ namespace CCFlow.WF.CCForm
                 return null;
             }
         }
+
+
+
+        #region       公文主文件
+        [WebMethod]
+        public string WordDoc_GetWordFile(string flowNo, int nodeId, string userNo, long workId)
+        {
+            MethodReturnMessage<byte[]> msg = null;
+            try
+            {
+                string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
+
+                if (bytes == null)
+                {
+                    Spire.Doc.Document spire_Doc = new Spire.Doc.Document();
+                    Spire.Doc.Section spire_Section = spire_Doc.AddSection();
+
+                    Spire.Doc.Documents.Paragraph parag = spire_Section.AddParagraph();
+                    parag.AppendText("欢迎使用ccflow word");
+
+                    //将第一段作为标题，设置标题格式
+                    Spire.Doc.Documents.ParagraphStyle style = new Spire.Doc.Documents.ParagraphStyle(spire_Doc);
+                    style.Name = "titleStyle";
+                    style.CharacterFormat.Bold = true;
+                    style.CharacterFormat.TextColor = Color.Purple;
+                    style.CharacterFormat.FontName = "宋体";
+                    style.CharacterFormat.FontSize = 12f;
+                    spire_Doc.Styles.Add(style);
+                    parag.ApplyStyle("titleStyle");
+
+
+                    string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
+
+                    if (!System.IO.Directory.Exists(rootPath))
+                        System.IO.Directory.CreateDirectory(rootPath);
+
+                    string fileName = userNo + "_" + flowNo + "_" + workId + ".docx";
+                    string fullFilePath = rootPath + fileName;
+
+                    spire_Doc.SaveToFile(fullFilePath, Spire.Doc.FileFormat.Docx2013);
+
+                    bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
+
+                    spire_Doc.Dispose();
+                    File.Delete(fullFilePath);
+                }
+
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = true,
+                    Message = "读取文件成功",
+                    Data = bytes
+                };
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+
+        [WebMethod]
+        public string WordDoc_SaveWordFile(string flowNo, int nodeId, string userNo, long workId, byte[] bytes)
+        {
+            MethodReturnMessage<string> msg = null;
+            try
+            {
+                string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+
+                BP.DA.DBAccess.SaveBytesToDB(bytes, tableName, "OID", workId, "WordFile");
+
+                msg = new MethodReturnMessage<string>
+                {
+                    Success = true,
+                    Message = "读取文件成功",
+                    Data = ""
+                };
+
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<string>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = ""
+                };
+
+            };
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// 返回信息格式
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class MethodReturnMessage<T>
+    {
+        /// <summary>
+        /// 是否运行成功
+        /// </summary>
+        public bool Success { get; set; }
+        /// <summary>
+        /// 信息    
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 返回的数据
+        /// </summary>
+        public T Data { get; set; }
     }
 }

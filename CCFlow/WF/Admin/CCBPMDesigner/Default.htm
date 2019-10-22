@@ -616,6 +616,13 @@
                     $.messager.alert('错误', '信息填写不完整', 'error');
                     return false;
                 }
+                //判断流程标记是否存在  19.10.22 by sly
+                var flows = new Entities("BP.WF.Flows");
+                flows.Retrieve("FlowMark", newFlowInfo.flowCode);
+                if (flows.length > 0) {
+                    $.messager.alert('错误', '该流程标记已经存在系统中！', 'error');
+                    return false;
+                }
                 var html = $("#ShowMsg").html();
                 $("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
                 $("#ShowMsg").css({ "width": "320px" });

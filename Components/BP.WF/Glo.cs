@@ -5691,6 +5691,37 @@ namespace BP.WF
         {
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
+            if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+            {
+                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pworkid, 0).ToString();
+                if (pWorkID == null || pWorkID == "0")
+                    pWorkID = pkval;
+
+                if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                {
+                    /* 继承模式 */
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+
+                    if (pWorkID.Equals(pkval) == true)
+                    {
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                    }
+                    else
+                    {
+                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + pWorkID + "','" + pkval + "')");
+                    }
+                    qo.addOrderBy("RDT");
+                    qo.DoQuery();
+                }
+
+                if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                {
+                    /*共享模式*/
+                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                }
+                return dbs;
+            }
+
             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
             {
                 string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pkval, 0).ToString();
@@ -5708,10 +5739,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, '(' + pWorkID + ',' + pkval + ')');
-                        //qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, "=", pWorkID, "RefPKVal1");
-                        //qo.addOr();
-                        //qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, "=", pkval, "");
+                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + pWorkID + "','" + pkval + "')");
                     }
                     qo.addOrderBy("RDT");
                     qo.DoQuery();

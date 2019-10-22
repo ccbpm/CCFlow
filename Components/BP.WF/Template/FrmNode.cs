@@ -104,11 +104,11 @@ namespace BP.WF.Template
     public enum WhoIsPK
     {
         /// <summary>
-        /// 工作ID是主键
+        /// 流程ID是主键 
         /// </summary>
         OID,
         /// <summary>
-        /// 流程ID是主键
+        ///  FID是主键(干流程的WorkID)
         /// </summary>
         FID,
         /// <summary>

@@ -75,7 +75,11 @@ namespace BP.Sys
         /// <summary>
         /// 工作ID,对流程有效.
         /// </summary>
-        WorkID
+        WorkID,
+        /// <summary>
+        /// 爷孙流程
+        /// </summary>
+        PPWorkID
     }
     /// <summary>
     /// 附件上传类型

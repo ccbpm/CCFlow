@@ -37,8 +37,15 @@ namespace BP.WF.HttpHandler
                 string pkVal = this.PKVal;
                 if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                     pkVal = this.FID.ToString();
+               
+                if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+                {
+                    //根据流程的PWorkID获取他的爷爷流程
+                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                    pkVal = pWorkID;
+                }
 
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
+                    BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
 
                 #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
@@ -113,7 +120,6 @@ namespace BP.WF.HttpHandler
                             ps.Add("WorkID", this.PKVal);
                             string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                             if (pWorkID == null || pWorkID == "0")
-
                                 pWorkID = this.PKVal;
                             dbUpload.RefPKVal = pWorkID;
                         }
@@ -3239,6 +3245,20 @@ namespace BP.WF.HttpHandler
 
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                         pkVal = this.PWorkID.ToString();
+                    if(fn.WhoIsPK == WhoIsPK.OID)
+                    {
+                        if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                            pkVal = this.FID.ToString();
+                        if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                            pkVal = this.PWorkID.ToString();
+
+                        if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+                        {
+                            //根据流程的PWorkID获取他的爷爷流程
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                            pkVal = pWorkID;
+                        }
+                    }
                 }
 
                 //自定义方案.
@@ -3250,8 +3270,17 @@ namespace BP.WF.HttpHandler
 
                     if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                         pkVal = this.PWorkID.ToString();
+
+                    if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+                    {
+                        //根据流程的PWorkID获取他的爷爷流程
+                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                        pkVal = pWorkID;
+                    }
                 }
             }
+
+            
 
 
             //获取上传文件是否需要加密

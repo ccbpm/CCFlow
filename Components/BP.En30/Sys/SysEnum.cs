@@ -231,27 +231,33 @@ namespace BP.Sys
                     continue;
                 }
                 //获取mapAttr 
-                MapAttr mapAttr = new MapAttr(fk_mapdata + "_" + this.EnumKey);
-                int RBShowModel = mapAttr.GetParaInt("RBShowModel");
-                FrmRB frmrb1 = new FrmRB(fk_mapdata + "_" + this.EnumKey + "_0");
+                MapAttr mapAttr = new MapAttr();
+                mapAttr.MyPK = fk_mapdata + "_" + this.EnumKey;
+                int i = mapAttr.RetrieveFromDBSources();
+                if (i!=0)
+                {
+
+                    int RBShowModel = mapAttr.GetParaInt("RBShowModel");
+                    FrmRB frmrb1 = new FrmRB(fk_mapdata + "_" + this.EnumKey + "_0");
 
 
-                frmrb.FK_MapData = fk_mapdata;
-                frmrb.KeyOfEn = this.EnumKey;
-                frmrb.EnumKey = this.EnumKey;
-                frmrb.Lab = this.Lab;
-                frmrb.IntKey = this.IntKey;
-                if (RBShowModel == 0)
-                {
-                    frmrb.X = frmrb1.X;
-                    frmrb.Y = frmrb1.Y+40;
+                    frmrb.FK_MapData = fk_mapdata;
+                    frmrb.KeyOfEn = this.EnumKey;
+                    frmrb.EnumKey = this.EnumKey;
+                    frmrb.Lab = this.Lab;
+                    frmrb.IntKey = this.IntKey;
+                    if (RBShowModel == 0)
+                    {
+                        frmrb.X = frmrb1.X;
+                        frmrb.Y = frmrb1.Y+40;
+                    }
+                    if (RBShowModel == 3)
+                    {
+                        frmrb.X = frmrb1.X+100;
+                        frmrb.Y = frmrb1.Y ;
+                    }
+                    frmrb.Insert();
                 }
-                if (RBShowModel == 3)
-                {
-                    frmrb.X = frmrb1.X+100;
-                    frmrb.Y = frmrb1.Y ;
-                }
-                frmrb.Insert();
 
             }
             

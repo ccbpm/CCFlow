@@ -822,7 +822,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20191019;
+        public static int Ver = 20191020;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1193,7 +1193,7 @@ namespace BP.WF
                         DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
 
                     }
-                        DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows CLOB");
+                        DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows BLOB");
 
                 }
 

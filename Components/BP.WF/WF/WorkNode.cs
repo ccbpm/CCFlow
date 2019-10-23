@@ -2645,6 +2645,25 @@ namespace BP.WF
                         gwf.FK_Dept = wl.FK_Dept;
                         gwf.DeptName = wl.FK_DeptT;
                         gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
+
+                       if(DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
+                        {
+                            //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
+                            string[] expFields = this.HisFlow.BuessFields.Split(',');
+                            string exp = "";
+                            Attrs attrs = this.rptGe.EnMap.Attrs;
+                            foreach (string item in expFields)
+                            {
+                                if (DataType.IsNullOrEmpty(item) == true)
+                                    continue;
+                                if (attrs.Contains(item) == false)
+                                    continue;
+
+                                Attr attr = attrs.GetAttrByKey(item);
+                                exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                            }
+                            gwf.BuessFields = exp;
+                        }
                         gwf.DirectInsert();
                     }
 
@@ -3266,6 +3285,25 @@ namespace BP.WF
                         gwf.Paras_GroupMark = wl.GroupMark;
 
                     gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
+
+                    if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
+                    {
+                        //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
+                        string[] expFields = this.HisFlow.BuessFields.Split(',');
+                        string exp = "";
+                        Attrs attrs = this.rptGe.EnMap.Attrs;
+                        foreach (string item in expFields)
+                        {
+                            if (DataType.IsNullOrEmpty(item) == true)
+                                continue;
+                            if (attrs.Contains(item) == false)
+                                continue;
+
+                            Attr attr = attrs.GetAttrByKey(item);
+                            exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                        }
+                        gwf.BuessFields = exp;
+                    }
 
                     gwf.DirectInsert();
                 }

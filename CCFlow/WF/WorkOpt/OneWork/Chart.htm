@@ -34,6 +34,7 @@
         var dragTrackTextPointStart;
         var dragPossibleTextPointStart;
         var isSubFlowNode;
+       
 
         //定义样式变量，可在此统一修改流程样式
         var STYLE_CANVAS_COLOR = '#FFFFFF'; //画布背景颜色,E7F1F9
@@ -76,6 +77,7 @@
         var fk_Flow;
         var work_ID;
         var fid;
+        var gwf;
         var uh = new UrlHerf(location.href);
         $(function () {
             fk_Flow = uh["FK_Flow"];
@@ -88,6 +90,14 @@
 
             if (!fid || fid == "null") {
                 fid = "0";
+            }
+
+            gwf = new Entity("BP.WF.GenerWorkFlow")
+            gwf.SetPKVal(work_ID);
+            if (gwf.RetrieveFromDBSources() == 0) {
+                alert("没有找到GenerWorkFlow["+work_ID+"]的数据,请联系管理员");
+                return;
+
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
@@ -137,7 +147,7 @@
             var nodeTracks;
             var nodeTrack;
             var isExist;
-            var currNode = uh["FK_Node"];
+            var currNode = parseInt(uh["FK_Node"]);
             var flowInfo = datas.FlowInfo[0];
 
             $('#tracktable').hover(function () { }, function () {
@@ -200,7 +210,6 @@
                 //开始绘制
                 rNode = new RNode(this.ID, this.Name, this.X - STYLE_NODE_WIDTH / 2, this.Y - STYLE_NODE_HEIGHT / 2);
                 rNode.rBorder = r.rect(rNode.x, rNode.y, STYLE_NODE_WIDTH, STYLE_NODE_HEIGHT, STYLE_NODE_BORDER_RADIUS);
-                // rNode.rIcon = r.image(this.ICON, rNode.x + 1, rNode.y + 1, STYLE_NODE_WIDTH - 2, STYLE_NODE_HEIGHT - 2);
                 rNode.rIcon = r.image(this.ICON, rNode.x + 1, rNode.y + 1, STYLE_NODE_WIDTH - 2, STYLE_NODE_HEIGHT - 2);
 
                 rNode.rText = r.text(rNode.x + STYLE_NODE_WIDTH / 2, rNode.y + STYLE_NODE_HEIGHT + Math.ceil(this.Name.length / 7.00) * 7 + 10, breakstr(this.Name, 7));    //edited by liuxc,2016-3-31,增加节点名称换行处理
@@ -219,22 +228,78 @@
                 var beforTrack = null;
                 var lastTwoBit = currNode.toString().substring(currNode.toString().length - 2);
                 if (rNode.currTrack != null) {
+                    //上一个发送的节点
                     beforTrack = getBeforeNodeTrack(datas.Track, this.ID, rNode.currTrack.track);
-                    //流程处于当前节点的情况 1.干流程、子线程到子线程 2.分流/分合流运行到子线程，但是当前节点位置仍为干流程的节点
-                    //1.主干到主干
+                    //流程运行到的节点
                     var currTrack = rNode.currTrack.track;
-                    //node的最后两位判断是否为开始节点
-                    if ((this.ID == currNode && lastTwoBit == "01")
-                        || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState != 3)) {
-                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
-                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
-                    } else if (this.ID != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
-                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
-                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
-                    } else {
+                    //流程已结束
+                    if (gwf.WFState == 3) {
                         TextColor = STYLE_NODE_COLOR_FORE_TRACK;
                         borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                    //流程未结束
+                    } else {
+                        //该流程处于子线程
+                        if (gwf.FID != 0) {
+                            //干流程上的节点且为前进的节点为绿色
+                            if (currTrack.FID == 0) {
+                                //来源于本节点
+                                if (currTrack.NDFrom == this.ID) {
+                                    borderColor = STYLE_NODE_COLOR_FORE_TRACK;
+                                    TextColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                                }
+                                //到达本节点
+                                if (currTrack.ActionType == 6 && currTrack.NDTo == this.ID) {
+                                    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                }
+                            } else {
+                                //子线程上的节点,当前处的节点为红色
+                                if (this.ID == gwf.FK_Node) {
+                                    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                }
+                                if (currTrack.NDFrom == this.ID) {
+                                    borderColor = STYLE_NODE_COLOR_FORE_TRACK;
+                                    TextColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                                }
+
+                                //到达本节点
+                                if (currTrack.NDTo == this.ID) {
+                                    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                }
+                            }
+
+                        } else {
+                            //当前流程运行到的节点为红色
+                            if ((this.ID == gwf.FK_Node && currTrack.NDTo == this.ID) || ( currTrack.NDTo == this.ID)) {
+                                borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                            } else {
+                                borderColor = STYLE_NODE_COLOR_FORE_TRACK;
+                                TextColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                            }
+                             
+                        }
+
                     }
+
+                    ////node的最后两位判断是否为开始节点
+                    //if ((this.ID == gwf.FK_Node && lastTwoBit == "01")//当前运行到的节点是开始节点
+                    //    || (this.ID == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && gwf.WFState != 3)) {//运行到该节点
+                    //    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                    //    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                    //    //当前运行到的节点是子线程，解析的节点同为子线程
+                    //} else if (this.ID != currNode && (rNode.currTrack.track.NDFrom == currTrack.NDFrom || beforTrack.NDFrom==currTrack.NDFrom) && rNode.currTrack.track.NDTo==this.ID  && currTrack.ActionType == 6) {
+                    //    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                    //    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                    //} else if (this.ID != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
+                    //    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                    //    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                    //} else {
+                    //    TextColor = STYLE_NODE_COLOR_FORE_TRACK;
+                    //    borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                    //}
                 } else {
                     if (lastTwoBit == "01" && this.ID == currNode) {
                         borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
@@ -252,8 +317,7 @@
                     rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EmpFromT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EmpToT);
                     rNode.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
-                }
-                else if (datas.Possible) {
+                } else if (datas.Possible) {
 
                     //检索是否有计算出节点处理人，以及可能处理时间，有则显示出来，added by liuxc,2016-4-15
                     rNode.rPossible = datas.Possible.findByField("FK_Node", this.ID);
@@ -663,17 +727,68 @@
                         var borderColor = nodeBorderColor;
                         var TextColor = STYLE_NODE_COLOR_FORE;
                         if (node.currTrack != null) {
-                            var currTrack = node.currTrack.track;
-                            if ((node.id == currNode && lastTwoBit == "01") || (node.id == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState != 3)) {
-                                borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
-                                TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
-                            } else if (node.id != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
-                                borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
-                                TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                             //流程已结束
+                        if (gwf.WFState == 3) {
+                            TextColor = STYLE_NODE_COLOR_FORE_TRACK;
+                            borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                        //流程未结束
+                        } else {
+                            //该流程处于子线程
+                            if (gwf.FID != 0) {
+                                //干流程上的节点且为前进的节点为绿色
+                                if (currTrack.FID == 0) {
+                                    //来源于本节点
+                                    if (currTrack.NDFrom == node.id) {
+                                        borderColor = STYLE_NODE_COLOR_FORE_TRACK;
+                                        TextColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                                    }
+                                    //到达本节点
+                                    if (currTrack.ActionType == 6 && currTrack.NDTo == node.id) {
+                                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                    }
+                                } else {
+                                    //子线程上的节点,当前处的节点为红色
+                                    if (node.id == gwf.FK_Node) {
+                                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                    }
+                                    if (currTrack.NDFrom == node.id) {
+                                        borderColor = STYLE_NODE_COLOR_FORE_TRACK;
+                                        TextColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                                    }
+
+                                    //到达本节点
+                                    if (currTrack.NDTo == node.id) {
+                                        borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                        TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                    }
+                                }
+
                             } else {
-                                TextColor = STYLE_NODE_COLOR_FORE_TRACK;
-                                borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                                //当前流程运行到的节点为红色
+                                if ((node.id == gwf.FK_Node && currTrack.NDTo == node.id) || ( currTrack.NDTo == node.id)) {
+                                    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                                    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                                } else {
+                                    borderColor = STYLE_NODE_COLOR_FORE_TRACK;
+                                    TextColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                                }
+                             
                             }
+
+                        }
+                            //var currTrack = node.currTrack.track;
+                            //if ((node.id == currNode && lastTwoBit == "01") || (node.id == currNode && currTrack.ActionType != 8 && currTrack.NDTo == currNode && flowInfo.WFState != 3)) {
+                            //    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                            //    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                            //} else if (node.id != currNode && currNode == currTrack.NDFrom && currTrack.ActionType == 6) {
+                            //    borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;
+                            //    TextColor = STYLE_CURRENT_NODE_COLOR_FORE;
+                            //} else {
+                            //    TextColor = STYLE_NODE_COLOR_FORE_TRACK;
+                            //    borderColor = STYLE_NODE_BORDER_COLOR_TRACK;
+                            //}
                         } else {
                             if (node.id == currNode && lastTwoBit == "01") {
                                 borderColor = STYLE_CURRENT_NODE_BORDER_COLOR;

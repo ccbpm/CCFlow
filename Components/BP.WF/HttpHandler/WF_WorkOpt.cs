@@ -1256,7 +1256,7 @@ namespace BP.WF.HttpHandler
             //求会签人.
             GenerWorkerLists gwfs = new GenerWorkerLists();
             gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
-                GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 0);
+                GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, -1);
 
             string empsOfHuiQian = "会签人:";
             foreach (GenerWorkerList item in gwfs)

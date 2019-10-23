@@ -933,6 +933,42 @@ function Send(isHuiQian) {
             return false;
         }
     }
+
+    //树形表单保存
+    if (flowData) {
+        var node = flowData.WF_Node[0];
+        if (node && node.FormType == 5) {
+            OnTabChange("btnsave");
+            var p = $(document.getElementById("tabs")).find("li");
+
+            //查看附件上传的最新数量
+            var isSend = true;
+            var msg = "";
+            $.each(p, function (i, val) {
+                selectSpan = $(val).find("span")[0];
+                var currTab = $("#tabs").tabs("getTab", i);
+                tabText = $(selectSpan).text();
+                var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+                if (lastChar == "*") 
+                    tabText = tabText.substring(0, tabText.length - 1);
+                var currScope = currTab.find('iframe')[0];
+
+                var contentWidow = currScope.contentWindow;
+                // 不支持火狐浏览器。
+                var frms = contentWidow.document.getElementsByName("Attach");
+                for (var i = 0; i < frms.length; i++) {
+                    if (frms[i].contentWindow.numOfUpload > frms[i].contentWindow.numOfAths) {
+                        msg += "["+tabText+"]表单至少需要上传" + frms[i].contentWindow.numOfUpload + "附件";
+                        isSend = false;
+                    }
+                }
+            });
+            if (isSend == false) {
+                alert(msg);
+                return;
+            }
+        }
+    }
     window.hasClickSend = true; //标志用来刷新待办.
 
     var toNodeID = 0;
@@ -983,13 +1019,6 @@ function execSend(toNodeID) {
     if (iframe)
         iframe.contentWindow.SaveWorkCheck();
 
-    //树形表单保存
-    if (flowData) {
-        var node = flowData.WF_Node[0];
-        if (node && node.FormType == 5) {
-            OnTabChange("btnsave");
-        }
-    }
 
     //组织数据.
     var dataStrs = getFormData(true, true) + "&ToNode=" + toNodeID;

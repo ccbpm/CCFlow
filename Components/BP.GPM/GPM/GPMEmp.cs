@@ -264,12 +264,12 @@ namespace BP.GPM
 
         public string DoEmpDepts()
         {
-            return "../../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
+            return "../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()
         {
-            return "../../../GPM/Siganture.htm?EmpNo=" + this.No;
+            return "../../GPM/Siganture.htm?EmpNo=" + this.No;
         }
 
         public static GPMEmp GenerData(GPMEmp en)

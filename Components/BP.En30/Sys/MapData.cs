@@ -77,7 +77,7 @@ namespace BP.Sys
         /// <summary>
         /// 实体类
         /// </summary>
-        Entity=7
+        Entity = 7
     }
     /// <summary>
     /// 映射基础
@@ -769,7 +769,7 @@ namespace BP.Sys
                 if (obj == null)
                 {
                     obj = new MapDtls();
-                    obj.Retrieve(MapDtlAttr.FK_MapData, this.No,MapDtlAttr.FK_Node, 0);
+                    obj.Retrieve(MapDtlAttr.FK_MapData, this.No, MapDtlAttr.FK_Node, 0);
                     this.SetRefObject("MapDtls", obj);
                 }
                 return obj;
@@ -1047,7 +1047,7 @@ namespace BP.Sys
             this.Row.SetValByKey("FrmRBs", null);
             this.Row.SetValByKey("MapAttrs", null);
             return;
-            
+
 
 
         }
@@ -1455,7 +1455,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(MapDataAttr.TableCol,value);
+                this.SetValByKey(MapDataAttr.TableCol, value);
             }
         }
 
@@ -2245,9 +2245,9 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
-                            if(DataType.IsNullOrEmpty(en.KeyOfEn) == true)
+                            if (DataType.IsNullOrEmpty(en.KeyOfEn) == true)
                                 en.MyPK = DBAccess.GenerGUID();
-                           
+
                             en.Insert();
                         }
                         break;
@@ -2891,24 +2891,32 @@ namespace BP.Sys
         /// <returns></returns>
         public bool ExcelGenerFile(string pkValue, ref byte[] bytes, string saveTo)
         {
-            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
-            if (by != null)
+            try
             {
-                bytes = by;
-                return true;
+                byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
+                if (by != null)
+                {
+                    bytes = by;
+                    return true;
+                }
+                else //说明当前excel文件没有生成.
+                {
+                    string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+                    if (System.IO.File.Exists(tempExcel) == true)
+                    {
+                        bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                        return false;
+                    }
+                    else //模板文件也不存在时
+                    {
+                        throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
+                    }
+                }
             }
-            else //说明当前excel文件没有生成.
+            catch (Exception ex)
             {
-                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
-                if (System.IO.File.Exists(tempExcel) == true)
-                {
-                    bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
-                    return false;
-                }
-                else //模板文件也不存在时
-                {
-                    throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
-                }
+                Log.DebugWriteError("读取excel失败：" + ex.Message);
+                return false;
             }
         }
         /// <summary>

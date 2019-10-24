@@ -5268,7 +5268,7 @@ namespace BP.WF
                 {
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
-                    this.HisGenerWorkFlow.TodoEmps = WebUser.No+","+WebUser.Name + ";";
+                    this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
                 }
                 else
                 {
@@ -5277,7 +5277,7 @@ namespace BP.WF
 
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(huiqianNo, huiqianName);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
-                    this.HisGenerWorkFlow.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
+                    this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
 
 
                 }
@@ -5367,7 +5367,8 @@ namespace BP.WF
                 string myhuiQianZhuChiRen = gwlOfMe.GetParaString("HuiQianZhuChiRen");
                 string huiQianType = gwlOfMe.GetParaString("huiQianType");
                 //说明是主持人/第二主持人
-                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == true)
+                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == true
+                    &&(this.HisGenerWorkFlow.HuiQianZhuChiRen.Contains(BP.Web.WebUser.No)==true || this.HisGenerWorkFlow.GetParaString("AddLeader").Contains(BP.Web.WebUser.No) == true))
                 {
 
                     /*当前人是组长，检查是否可以可以发送,检查自己是否是加签后的最后一个人 ？*/

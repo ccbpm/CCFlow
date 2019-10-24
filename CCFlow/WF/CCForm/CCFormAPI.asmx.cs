@@ -819,13 +819,13 @@ namespace CCFlow.WF.CCForm
         [WebMethod]
         public void RecordMsg(Int64 workID, string msg)
         {
-            VSTOMsg vMsg = new VSTOMsg();
-            vMsg.WorkID = workID;
-            vMsg.ErrorMsg = msg;
-            vMsg.RDT = DateTime.Now.ToString(BP.DA.DataType.SysDataTimeFormat);
-            vMsg.IsDelete = false;
+            //VSTOMsg vMsg = new VSTOMsg();
+            //vMsg.WorkID = workID;
+            //vMsg.ErrorMsg = msg;
+            //vMsg.RDT = DateTime.Now.ToString(BP.DA.DataType.SysDataTimeFormat);
+            //vMsg.IsDelete = false;
 
-            vMsg.DirectSave();
+            //vMsg.DirectSave();
         }
         public class ReportImage
         {

@@ -198,7 +198,13 @@ namespace BP.WF
                 /*获取数据.*/
                 string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 BP.DA.Paras ps = new BP.DA.Paras();
-                ps.SQL = "SELECT COUNT(workid) as Num FROM WF_GenerWorkerlist WHERE FK_Emp=" + dbStr + "FK_Emp AND IsPass=90";
+                string sql = "SELECT count(*)";
+                sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
+                sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node ";
+                sql += " AND (B.IsPass=90 OR A.AtPara LIKE '%HuiQianZhuChiRen=" + WebUser.No + "%') ";
+                sql += " AND B.FK_Emp=" + dbStr + "FK_Emp";
+                //ps.SQL = "SELECT COUNT(workid) as Num FROM WF_GenerWorkerlist WHERE FK_Emp=" + dbStr + "FK_Emp AND IsPass=90";
+                ps.SQL = sql;
                 ps.Add(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
                 return BP.DA.DBAccess.RunSQLReturnValInt(ps);
             }

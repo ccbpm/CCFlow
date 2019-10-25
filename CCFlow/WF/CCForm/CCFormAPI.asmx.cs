@@ -10,7 +10,6 @@ using BP.Sys;
 using BP.Web;
 using BP.DA;
 using BP.En;
-using BP.LI;
 using System.Drawing;
 
 namespace CCFlow.WF.CCForm

@@ -901,18 +901,12 @@ namespace BP.WF.HttpHandler
                 em.Name = Web.WebUser.Name;
                 em.Insert();
             }
-            string sql = "";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle) {
 
-                 sql = "SELECT dbms_lob.substr(StartFlows) as StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
-            }
-            else
-            {
-                 sql = "SELECT StartFlows as StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
-            }
-            json = DBAccess.RunSQLReturnString(sql);
+            json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
+
+
 
 
             //定义容器.
@@ -933,15 +927,11 @@ namespace BP.WF.HttpHandler
 
             //返回组合
             json = BP.Tools.Json.DataSetToJson(ds, false);
-
             //把json存入数据表，避免下一次再取.
             if (json.Length > 40)
             {
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET StartFlows=" + ps.DBStr + "StartFlows WHERE No=" + ps.DBStr + "No";
-                ps.Add("StartFlows", json);
-                ps.Add("No", WebUser.No);
-                DBAccess.RunSQL(ps);
+                BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
+
             }
 
             //返回组合

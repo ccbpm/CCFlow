@@ -81,6 +81,7 @@
 
             BindMapExt();
 
+             
             var bodyHeight = $(document).height();
             var headHeight = $("#dtlDiv div table thead").height();
             $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
@@ -831,6 +832,12 @@
 
                 //setTimeout(doAlignColumns, 500);
             }
+           
+            //textarea的高度自适应的设置
+            var textareas = $("textarea");
+            $.each(textareas, function (idex, item) {
+                autoTextarea(item);
+            });
             // 统计行over
             ////循环TBODY 初始化 SYS_MAPEXT
             //       var tbodyTrs1 = $('#dtlDiv div table tbody tr');
@@ -1316,14 +1323,12 @@
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                                 eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + " onChange='ChangeValue(this)'>" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
-                            } else {//文本区域
-                                if (mapAttr.UIHeight <= 40) {
-                                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
-                                }
-                                else {
-                                    eleHtml += "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
-                                }
+                            } else if (mapAttr.IsSupperText == "1") {
+                                eleHtml += "<textarea id='TB_" + mapAttr.KeyOfEn + "' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
+                            } else {
+                                eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                             }
+                            
                         } //AppDate
                         else if (mapAttr.MyDataType == 6) {//AppDate
                             var enableAttr = '';
@@ -1439,7 +1444,7 @@
                     eleHtml.attr('disabled', true);
                 }
             }
-
+           
             return eleHtml;
         }
 

@@ -134,6 +134,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string PTable = "PTable";
         /// <summary>
+        /// 表单连接
+        /// </summary>
+        public const string FrmUrl = "FrmUrl";
+        /// <summary>
         /// 流程数据存储模式
         /// </summary>
         public const string DataStoreModel = "DataStoreModel";

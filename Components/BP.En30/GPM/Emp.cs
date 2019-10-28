@@ -330,18 +330,19 @@ namespace BP.GPM
 
         public string DoEditMainDept()
         {
-            return "../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
+            return "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
         }
         
 
         public string DoEmpDepts()
         {
-            return "../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
+            return "../../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()
         {
-            return "../../GPM/Siganture.htm?EmpNo=" + this.No;
+            //路径
+            return "../../../GPM/Siganture.htm?EmpNo=" + this.No;
         }
 
 
@@ -402,6 +403,19 @@ namespace BP.GPM
             DBAccess.RunSQL(sql);
 
             base.afterInsertUpdateAction();
+        }
+        /// <summary>
+        /// 删除之后要做的事情
+        /// </summary>
+        protected override void afterDelete()
+        {
+            DeptEmps des = new DeptEmps();
+            des.Delete(DeptEmpAttr.FK_Emp, this.No );
+           
+            DeptEmpStations stas = new DeptEmpStations();
+            stas.Delete(DeptEmpAttr.FK_Emp, this.No);
+
+            base.afterDelete();
         }
 
         public static string GenerPinYin(string no,string name)

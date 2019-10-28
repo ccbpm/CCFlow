@@ -6391,7 +6391,6 @@ namespace BP.WF
 
                     sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
                     this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
-
                 }
 
                 return this.HisMsgObjs;

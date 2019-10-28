@@ -474,6 +474,50 @@ namespace BP.DA
                 return byteFile;
             }
 
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                NpgsqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as NpgsqlConnection;
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
+
+                string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
+
+                NpgsqlDataReader dr = null;
+                NpgsqlCommand cm = new NpgsqlCommand();
+                cm.Connection = cn;
+                cm.CommandText = strSQL;
+                cm.CommandType = CommandType.Text;
+
+                // 执行它.
+                try
+                {
+                    dr = cm.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD " + fileSaveField + " LONGBLOB NULL ";
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                }
+
+                byte[] byteFile = null;
+                if (dr.Read())
+                {
+                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                        return null;
+
+                    byteFile = dr[0] as byte[];
+                    //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                }
+
+                return byteFile;
+            }
+
+
             //最后仍然没有找到.
             throw new Exception("@获取文件，从数据库里面，没有判断的数据库类型.");
         }

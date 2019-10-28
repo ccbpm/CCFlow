@@ -480,7 +480,10 @@ namespace BP.WF.Template
                 msg += "\t\n 4. 数据存储在WF_GenerWorkFlow.AtPara里面.";
                 msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
-                 
+
+                //表单URL.
+                map.AddTBString(FlowAttr.FrmUrl, null, "表单Url", true, false, 0, 150, 10, true);
+                map.SetHelperAlert(FlowAttr.FrmUrl, "对嵌入式表单,SDK表单的url的表单有效,用与整体流程的设置.");
                 #endregion 表单数据.
 
                 #region 开发者信息.
@@ -571,7 +574,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "权限控制";
-               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoPowerModel()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 // rm.GroupName = "实验中的功能";
@@ -1155,7 +1158,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/PowerModel.htm?FK_Flow=" + this.No;
         }
-        
+
         /// <summary>
         /// 时限规则
         /// </summary>
@@ -1604,7 +1607,7 @@ namespace BP.WF.Template
 
             gwf.FK_Node = nodeID;
             gwf.NodeName = nd.Name;
-            gwf.TodoEmps = emp.No +","+ emp.Name + ";";
+            gwf.TodoEmps = emp.No + "," + emp.Name + ";";
             gwf.TodoEmpsNum = 1;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.Update();
@@ -1911,7 +1914,7 @@ namespace BP.WF.Template
             }
             #endregion 检查数据完整性. - 同步业务表数据。
 
-           
+
 
             return base.beforeUpdate();
         }
@@ -1952,7 +1955,7 @@ namespace BP.WF.Template
             fl.No = this.No;
             fl.RetrieveFromDBSources();
             fl.Update();
-           
+
 
 
             base.afterInsertUpdateAction();
@@ -1994,7 +1997,7 @@ namespace BP.WF.Template
 
                 BP.WF.Template.FrmNodeComponent fnd = new FrmNodeComponent(nd.NodeID);
 
-                if (nd.IsEndNode == true || nd.HisToNodes.Count==0)
+                if (nd.IsEndNode == true || nd.HisToNodes.Count == 0)
                 {
                     nd.FrmWorkCheckSta = FrmWorkCheckSta.Readonly;
                     nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
@@ -2009,7 +2012,7 @@ namespace BP.WF.Template
                     continue;
                 }
 
-              //  fnd.HisFormType = NodeFormType.FoolForm;
+                //  fnd.HisFormType = NodeFormType.FoolForm;
 
                 fnd.Update(); //不执行更新，会导致部分字段错误.
 

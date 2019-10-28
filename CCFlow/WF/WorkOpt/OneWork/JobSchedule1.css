@@ -1,0 +1,155 @@
+﻿
+.DashbCon{display: flex;flex-direction:row;width: 90%;margin:0 auto}
+.DashbCon>div{flex: 1;position: relative;height: 130px;overflow: hidden;}
+.DashbCon .multiple{display: flex;flex-direction: column;}
+.DashbCon .circle{
+    font-size: 12px;
+    padding-right:5px;
+    position: relative;
+    padding-left:10px;
+}
+.DashbCon .circle>div{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: gray;
+    border-radius: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0
+}
+.DashbCon .daughter{
+    flex: 1;
+    position: relative;
+}
+.DashbCon .circleDot ,.roundDot{
+    position: absolute;
+    background: white;
+    z-index: 10;
+    padding: 0 10px;
+}
+.DashbCon .roundDot .circle{
+    float:left;
+    font-size: 12px;
+    align-items: center;
+    display: -webkit-flex;
+    height: 100%;
+}
+.DashbCon .circleDot{
+    left:50%;
+    transform: translate(-50%,-50%);
+    top:50%;
+    align-items:center;
+    display: -webkit-flex;
+}
+.DashbCon .roundDot{
+    top:50%;
+    transform: translateY(-50%);
+}
+.DashbCon .roundDot .data{
+    font-size: 12px;
+    background: white;
+    padding-left: 5px;
+    align-items: center;
+    display: -webkit-flex;
+    float:left;
+    height: 100%
+}
+.DashbCon .roundDot .name{
+    font-size: 12px;
+    align-items: center;
+    display: -webkit-flex;
+    float:left;
+    height: 100%
+}
+.DashbCon .finishColor{
+    background: #3385ff;
+}
+.DashbCon .procedure{
+    background: #eee;;
+}
+.DashbCon .contentCon{
+    width: 100%;
+    position: absolute;
+    left:50%;
+    top:105px;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+.DashbCon .alone p{
+    font-size: 12px;
+    line-height: 20px;
+}
+.DashbCon>div .figure{
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
+.DashbCon>div:first-child .figure{
+    width: calc(50% - 20px);
+    height: 2px;
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+    right: 0;
+}
+.DashbCon>div:last-child .figure{
+    width: calc(50% - 20px);
+    height: 2px;
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+    left: 0;
+}
+.DashbCon .multiple .figure{
+    position: absolute;
+    width: calc(100% - 20px);
+    height: 2px;
+    top:50%;
+    transform: translateY(-50%);
+    left: 50%;
+}
+.DashbCon .gray .circle div{
+    background:gray;
+}
+.DashbCon .gray .figure{
+    background: gray;
+}
+.DashbCon .gray .contentCon p{
+    color:gray ;
+}
+.DashbCon .green .circle div{
+    background: #409EFF;
+}
+.DashbCon .green .figure{
+    background: #409EFF;
+}
+.DashbCon .red .circle div{
+    background: #F56C6C;
+}
+.DashbCon .red .figure{
+    background:#F56C6C;
+}
+.DashbCon .green{
+    color:#409EFF!important;
+}
+.DashbCon .gray .data{
+    color: gray;
+}
+
+
+.Dashboard2Warn{
+    font-size: 12px;
+    color:red;
+    text-indent: 1em
+}
+.Dashboard2 .downLoad{
+    display: inline-block
+}
+.Dashboard2 .upBtn .el-form-item__content{
+    /*width: 95px!important;*/
+    height:30px!important;
+    /*overflow: hidden*/
+}

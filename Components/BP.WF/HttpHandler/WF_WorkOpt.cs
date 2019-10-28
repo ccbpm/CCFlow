@@ -229,8 +229,10 @@ namespace BP.WF.HttpHandler
 
                 paths = file.Split('_');
                 path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
-
-                string billUrl = "url@" + BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
+                string fileModelT = "rtf";
+                if ((int)func.TemplateFileModel == 1)
+                    fileModelT = "word";
+                string billUrl = "url@" + fileModelT+"@"+ BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
 
                 if (func.HisBillFileType == BillFileType.PDF)
                     billUrl = billUrl.Replace(".doc", ".pdf");
@@ -1180,7 +1182,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Dev2Interface.Port_SendMsg(emp.No,
                     "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
 
-                 string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
                 if (gwf.TodoEmps.Contains(empStrSepc) == false)
                     gwf.TodoEmps += empStrSepc;
             }

@@ -421,9 +421,8 @@ function GenerFrm() {
         }
     }
 
-    //处理下拉框级联等扩展信息
-    if (pageData.IsReadonly != "1")
-        AfterBindEn_DealMapExt(frmData);
+    //处理下拉框级联等扩展信息(小范围多选)
+       AfterBindEn_DealMapExt(frmData);
 
     if (isFloolFrm == true)
         //表单联动设置

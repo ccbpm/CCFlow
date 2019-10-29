@@ -45,11 +45,11 @@ namespace BP.DA
         {
             get
             {
-                if(DBAccess.IsExitsObject("TEST") == true)
+                if (DBAccess.IsExitsObject("TEST") == true)
                 {
                     DBAccess.RunSQL("DROP TABLE TEST ");
                 }
-                if(DBAccess.IsExitsObject("test") == true)
+                if (DBAccess.IsExitsObject("test") == true)
                 {
                     DBAccess.RunSQL("DROP table test ");
                 }
@@ -116,7 +116,7 @@ namespace BP.DA
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
-                    throw new Exception("@缺少此字段["+tableName+","+ saveToFileField + "],有可能系统自动修复." + ex.Message);
+                    throw new Exception("@缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
                 }
                 return;
             }
@@ -186,7 +186,7 @@ namespace BP.DA
                 if (tableName.Contains("ND") == true || pkVal.GetType() == typeof(int) || pkVal.GetType() == typeof(Int64))
                 {
                     spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Integer);
-                    spPK.Value = int.Parse( pkVal.ToString() );
+                    spPK.Value = int.Parse(pkVal.ToString());
 
                 }
                 else
@@ -214,7 +214,7 @@ namespace BP.DA
                     }
                     throw new Exception("@NpgsqlDbType缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
 
-                  //  throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
+                    //  throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
                 }
                 return;
             }
@@ -270,8 +270,17 @@ namespace BP.DA
         /// <param name="saveFileField">保存到字段</param>
         public static void SaveBigTextToDB(string docs, string tableName, string tablePK, string pkVal, string saveToFileField)
         {
-            System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-            //byte[] inputBytes = converter.GetBytes(docs);
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
+                || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                string sql = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
+                DBAccess.RunSQL(sql);
+                return;
+            }
+
+            // System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+
             byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
 
             //执行保存.
@@ -322,11 +331,17 @@ namespace BP.DA
         /// <returns></returns>
         public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
         {
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
+                return DBAccess.RunSQLReturnString(getSql);
+            }
+
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
             if (byteFile == null)
                 return null;
 
-            string strs= System.Text.Encoding.UTF8.GetString(byteFile);
+            string strs = System.Text.Encoding.UTF8.GetString(byteFile);
             int idx = strs.IndexOf('$');
             if (idx != 0)
                 strs = strs.Substring(idx + 1);
@@ -1425,7 +1440,7 @@ namespace BP.DA
             try
             {
                 sql = "DROP INDEX " + idxName + " ON " + table;
-                DBAccess.RunSQL( sql);
+                DBAccess.RunSQL(sql);
             }
             catch
             {
@@ -1434,13 +1449,13 @@ namespace BP.DA
             try
             {
                 sql = "CREATE INDEX " + idxName + " ON " + table + " (" + fields + ")";
-                DBAccess.RunSQL( sql);
+                DBAccess.RunSQL(sql);
             }
             catch
             {
             }
         }
-        public static void CreatIndex( string table, string pk1, string pk2)
+        public static void CreatIndex(string table, string pk1, string pk2)
         {
 
             try
@@ -1455,7 +1470,7 @@ namespace BP.DA
         {
             try
             {
-                  DBAccess.RunSQL( "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
+                DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
             }
             catch (Exception ex)
             {
@@ -1465,7 +1480,7 @@ namespace BP.DA
         {
             try
             {
-                DBAccess.RunSQL( "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + "," + pk4 + ")");
+                DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + "," + pk4 + ")");
             }
             catch (Exception ex)
             {
@@ -1579,10 +1594,10 @@ namespace BP.DA
         public static string DealSQL(string sql)
         {
             return sql;
-          ////  return sql;
-          //= sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
-          //  String presult = p.matcher(sql).replaceAll("$1");
-          //  return presult;
+            ////  return sql;
+            //= sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
+            //  String presult = p.matcher(sql).replaceAll("$1");
+            //  return presult;
         }
         /// <summary>
         /// 运行SQLs
@@ -1598,8 +1613,8 @@ namespace BP.DA
             sql = sql.Replace("@GO", "~");
             sql = sql.Replace("@", "~");
 
-            if (sql.Contains("';'")==false)
-              sql = sql.Replace(";", "~");
+            if (sql.Contains("';'") == false)
+                sql = sql.Replace(";", "~");
 
             sql = sql.Replace("UPDATE", "~UPDATE");
             sql = sql.Replace("DELETE", "~DELETE");
@@ -1758,7 +1773,7 @@ namespace BP.DA
             {
                 return new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
 
-                if (_conn==null)
+                if (_conn == null)
                 {
                     _conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
                     return _conn;
@@ -1774,12 +1789,12 @@ namespace BP.DA
         /// <returns>执行的结果</returns>
         private static int RunSQL_201902_PSQL(string sql, Paras paras)
         {
-            if (1==1)
+            if (1 == 1)
             {
                 if (paras == null)
                     paras = new Paras();
                 paras.SQL = sql;
-               // BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
+                // BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
             }
 
             //Npgsql.NpgsqlConnection conn =   new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
@@ -1804,8 +1819,8 @@ namespace BP.DA
                 int i = cmd.ExecuteNonQuery();
                 cmd.Dispose();
 
-                if (isCloseConn==true)
-                   conn.Close();
+                if (isCloseConn == true)
+                    conn.Close();
                 return i;
             }
             catch (System.Exception ex)
@@ -2059,7 +2074,7 @@ namespace BP.DA
                 conn.Close();
             }
         }
-       
+
         /*
         /// <summary>
         /// 运行sql
@@ -2190,7 +2205,7 @@ namespace BP.DA
 #if DEBUG
             Debug.WriteLine(msSQL);
 #endif
-           
+
             while (lock_msSQL_ReturnTable)
                 ;
 
@@ -2375,7 +2390,7 @@ namespace BP.DA
                 foreach (Para para in paras)
                 {
                     // 2019-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
-                    object valObj = para.val;                     
+                    object valObj = para.val;
 
                     Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, valObj);
                     myParameter.Size = para.Size;
@@ -2389,8 +2404,8 @@ namespace BP.DA
                 ada.Fill(oratb);
                 ada.Dispose();
 
-                if(isCloseConn==true)
-                   conn.Close();
+                if (isCloseConn == true)
+                    conn.Close();
 
                 return oratb;
             }
@@ -2473,7 +2488,7 @@ namespace BP.DA
             }
             return mysql;
         }
-        
+
         /*
         /// <summary>
         /// RunSQLReturnTable_200705_Informix
@@ -2571,7 +2586,7 @@ namespace BP.DA
                             ada.SelectCommand.Parameters.Add(myParameter);
                         }
                     }
-                   
+
 
                     try
                     {
@@ -3278,7 +3293,7 @@ namespace BP.DA
         /// </summary>
         /// <param name="tabelOrViewName"></param>
         /// <returns></returns>
-        public static bool IsView(string tabelOrViewName,DBType dbType)
+        public static bool IsView(string tabelOrViewName, DBType dbType)
         {
             //if (dbType == null) dbType是Enum，永远不会为null. 张磊 2019-7-24
             //    dbType = SystemConfig.AppCenterDBType;
@@ -3303,7 +3318,7 @@ namespace BP.DA
                     if (dt1.Rows.Count == 0)
                         return false;
 
-                    if (dt1.Rows[0][0].ToString().ToUpper().Trim().Equals("V")==true )
+                    if (dt1.Rows[0][0].ToString().ToUpper().Trim().Equals("V") == true)
                         return true;
                     else
                         return false;
@@ -3378,42 +3393,42 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsExitsObject(DBUrl dburl, string obj)
         {
-          
-                //有的同事写的表名包含dbo.导致创建失败.
-                obj = obj.Replace("dbo.", "");
 
-                // 增加参数.
-                Paras ps = new Paras();
-                ps.Add("obj", obj);
+            //有的同事写的表名包含dbo.导致创建失败.
+            obj = obj.Replace("dbo.", "");
 
-                switch (AppCenterDBType)
-                {
-                    case DBType.Oracle:
-                        if (obj.IndexOf(".") != -1)
-                            obj = obj.Split('.')[1];
-                        return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
-                    case DBType.MSSQL:
-                        return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
-                    case DBType.PostgreSQL:
-                        return IsExits("SELECT relname FROM pg_class WHERE relname = '" + obj.ToLower() + "'");
-                    case DBType.Informix:
-                        return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
-                    case DBType.MySQL:
+            // 增加参数.
+            Paras ps = new Paras();
+            ps.Add("obj", obj);
 
-                        /*如果不是检查的PK.*/
-                        if (obj.IndexOf(".") != -1)
-                            obj = obj.Split('.')[1];
+            switch (AppCenterDBType)
+            {
+                case DBType.Oracle:
+                    if (obj.IndexOf(".") != -1)
+                        obj = obj.Split('.')[1];
+                    return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
+                case DBType.MSSQL:
+                    return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
+                case DBType.PostgreSQL:
+                    return IsExits("SELECT relname FROM pg_class WHERE relname = '" + obj.ToLower() + "'");
+                case DBType.Informix:
+                    return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
+                case DBType.MySQL:
 
-                        // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
-                        return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
+                    /*如果不是检查的PK.*/
+                    if (obj.IndexOf(".") != -1)
+                        obj = obj.Split('.')[1];
 
-                    case DBType.Access:
-                        //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");
-                        return IsExits("SELECT * FROM MSysObjects WHERE Name =  '" + obj + "'");
-                    default:
-                        throw new Exception("没有识别的数据库编号");
-                }
-             
+                    // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
+                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
+
+                case DBType.Access:
+                    //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");
+                    return IsExits("SELECT * FROM MSysObjects WHERE Name =  '" + obj + "'");
+                default:
+                    throw new Exception("没有识别的数据库编号");
+            }
+
 
             //if (dburl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
             //    return DBAccessOfMSSQL1.IsExitsObject(obj);
@@ -3423,7 +3438,7 @@ namespace BP.DA
 
             //if (dburl.DBUrlType == DBUrlType.DBAccessOfOLE)
             //    return DBAccessOfOLE.IsExitsObject(obj);
-          
+
             //if (dburl.DBUrlType == DBUrlType.DBAccessOfOracle2)
             //    return DBAccessOfOracle2.IsExitsObject(obj);
 
@@ -3777,5 +3792,5 @@ namespace BP.DA
 
     }
     #endregion
- 
+
 }

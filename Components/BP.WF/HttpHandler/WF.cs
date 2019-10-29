@@ -901,22 +901,11 @@ namespace BP.WF.HttpHandler
                 em.Name = Web.WebUser.Name;
                 em.Insert();
             }
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
-            {
-                string getSql = "SELECT StartFlows FROM WF_Emp WHERE No = '"+ WebUser.No +"'";
-                json = DBAccess.RunSQLReturnString(getSql);
+           
+            json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
 
-            }
-            else
-            {
-                json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
-
-            }
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
-
-
-
 
             //定义容器.
             DataSet ds = new DataSet();
@@ -936,20 +925,11 @@ namespace BP.WF.HttpHandler
 
             //返回组合
             json = BP.Tools.Json.DataSetToJson(ds, false);
+
             //把json存入数据表，避免下一次再取.
-            if (json.Length > 40)
-            {
-                if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
-                {
-                    string sql = "UPDATE WF_Emp SET StartFlows='" + json + "' WHERE No='" + WebUser.No+"'";
-                    DBAccess.RunSQL(sql);
+            BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
 
-                }
-                else {
-                    BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
-                }
-
-            }
+           
 
             //返回组合
             return json;

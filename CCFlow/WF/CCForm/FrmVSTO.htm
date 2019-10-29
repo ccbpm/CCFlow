@@ -13,6 +13,7 @@
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript">
 
+        var vstoUrl = "";
         //页面启动函数.
         $(function () {
 
@@ -36,8 +37,8 @@
 
             if (GetQueryString("CreateReportType") != null)
                 url += ",CreateReportType=" + GetQueryString("CreateReportType");
-          
-    		if (GetQueryString("No") != null)
+
+            if (GetQueryString("No") != null)
                 url += ",No=" + GetQueryString("No");
 
             if (GetQueryString("WorkID") != null)
@@ -55,7 +56,7 @@
             url += ",FK_Flow=" + GetQueryString("FK_Flow");
             url += ",FK_Node=" + GetQueryString("FK_Node");
             url += ",UserNo=" + webUser.No;
-            url += ",SID=" + webUser.SID; 
+            url += ",SID=" + webUser.SID;
             url += ",FID=" + GetQueryString("FID");
             url += ",PFlowNo=" + GetQueryString("PFlowNo");
             url += ",IsLoadData=" + GetQueryString("IsLoadData");
@@ -67,25 +68,40 @@
             url += ",PWorkID=" + GetQueryString("PWorkID");
             url += ",PEmpNo=" + GetQueryString("PEmpNo");
 
+
+
+
             var wsUrl = "http://" + location.hostname + ":" + location.port + "/WF/CCForm/CCFormAPI.asmx";
             url += ",WSUrl=" + wsUrl;
 
-            //WinOpen(url);
-            //   excelform: //-fromccflow,App=FrmExcel,DoType=HttpHandler,DoMethod=FrmVSTO_Init,HttpHandlerName=BP.WF.HttpHandler
-            //.WF_CCForm,t=0.19633340549996892,SID=onocvxh1y2xw4o4jm5pfhwhi,UserNo=admin,IsAutoTesting=0,
-            //  WSUrl=http://localhost:12999/WF/CCForm/CCFormAPI.asmx
-            // var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-            // handler.AddUrlData();
-            // var data = handler.DoMethodReturnJSON("FrmVSTO_Init");
-
+            vstoUrl = url + ",TemDataSync=1,IsSendOnlineWork=1";
+            //alert(vstoUrl);
             var html1 = "<a href='" + url + "'>打开VSTO版本excel模式的表单</a>";
-            $("#UrlOfVSTO").html(html1); //打开Excel表单.
+            $("#UrlOfVSTO").html(html1);
 
-            //  var html1 = "<a href='" + data.UrlOfFrm + "'>打开自由表单</a>";
-            // $("#UrlOfFrm").html(html1); //打开Excel表单.
+            html1 = "<a href='" + vstoUrl + "'>导入离线文件</a>";
+            $("#ImportDataVSTO").html(html1);
+
 
             $("#Msg").html("");
+
+            ShowCopyWin();
+
         });
+
+        var frmid = GetQueryString("FK_MapData");
+        var nodeid = GetQueryString("FK_Node");
+
+        function ShowCopyWin() {
+            var url = "../../App/ImportData.aspx?FrmId=" + frmid + "&NodeID=" + nodeid + "&";
+            $('#ImportDataIfr').attr('src', url);
+
+            if (frmid == "CYSheBeiUse" || nodeid != "201")
+                $("#copyexcel").hide();
+            else
+                $("#copyexcel").show();
+        }
+
     </script>
 </head>
 <body>
@@ -98,10 +114,19 @@
                 <div id="UrlOfVSTO">
                 </div>
             </li>
-           <!-- <li>
-                <div id="UrlOfFrm">
+            <!-- <li>
+                 <div id="UrlOfFrm">
+                 </div>
+             </li>-->
+        </ul>
+    </fieldset>
+    <fieldset id="copyexcel">
+        <legend>从本机拷贝Excel数据</legend>
+        <ul>
+            <li>
+                <div id="ImportDataVSTO">
                 </div>
-            </li>-->
+            </li>
         </ul>
     </fieldset>
     <fieldset>

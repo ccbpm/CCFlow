@@ -596,7 +596,6 @@ namespace BP.WF
 		{
 			try
 			{
-				CCInterface.PortalInterfaceSoapClient soap = null;
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
 
@@ -682,8 +681,6 @@ namespace BP.WF
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
-
-                
                 #endregion 发送短消息 调用接口
 
             }

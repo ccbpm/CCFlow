@@ -747,46 +747,7 @@ namespace BP.WF
                 return Platform.CCFlow;
             }
         }
-        /// <summary>
-        /// 得到WebService对象 
-        /// </summary>
-        /// <returns></returns>
-        public static CCInterface.PortalInterfaceSoapClient GetPortalInterfaceSoapClient()
-        {
-            TimeSpan ts = new TimeSpan(0, 5, 0);
-            var basicBinding = new BasicHttpBinding()
-            {
-                ReceiveTimeout = ts,
-                SendTimeout = ts,
-                MaxBufferSize = 2147483647,
-                MaxReceivedMessageSize = 2147483647,
-                Name = "PortalInterfaceSoap"
-            };
-            basicBinding.Security.Mode = BasicHttpSecurityMode.None;
-
-            string url = "";
-            if (Glo.Platform == Platform.CCFlow)
-            {
-                url = "/DataUser/PortalInterface.asmx";
-                url = Glo.HostURL + url;
-            }
-
-
-            url = url.Replace("//", "/");
-            url = url.Replace(":/", "://");
-
-            //  MessageBox.Show(url);
-
-            var endPoint = new EndpointAddress(url);
-            var ctor =
-                typeof(CCInterface.PortalInterfaceSoapClient).GetConstructor(
-                new Type[] {
-                    typeof(Binding),
-                    typeof(EndpointAddress)
-                });
-            return (CCInterface.PortalInterfaceSoapClient)ctor.Invoke(
-                new object[] { basicBinding, endPoint });
-        }
+       
         /// <summary>
         /// 短消息写入类型
         /// </summary>
@@ -6470,8 +6431,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-
-                return "0";//连接服务器失败
+                throw new Exception("err@发送消息连接服务器失败.设置的url=["+ serverUrl + "]"+ex.Message);
             }
             return res;
         }

@@ -12,6 +12,9 @@ using BP.Web;
 using BP.Port;
 using BP.WF.Data;
 using BP.WF.Template;
+using System.Net;
+using LitJson;
+using System.IO;
 
 namespace BP.WF
 {
@@ -6388,5 +6391,90 @@ namespace BP.WF
             return result;
         }
         #endregion 其他方法。
+        #region http请求
+        /// <summary>
+        /// Http Get请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static string HttpGet(string url)
+        {
+            try
+            {
+                HttpWebRequest request;
+                // 创建一个HTTP请求
+                request = (HttpWebRequest)WebRequest.Create(url);
+                // request.Method="get";
+                HttpWebResponse response;
+                response = (HttpWebResponse)request.GetResponse();
+                System.IO.StreamReader myreader = new System.IO.StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                string responseText = myreader.ReadToEnd();
+                myreader.Close();
+                response.Close();
+                //TestJson
+                // JsonData jd = new JsonData();
+                // jd["personalId"] = "341125197309155056";
+                // jd["uid_"] = "00000001";
+                // jd["userId"] = "00000062";
+                //responseText = JsonMapper.ToJson(jd).ToString() ;
+                return responseText;
+            }
+            catch (Exception ex)
+            {
+                //url请求失败
+                return ex.Message;
+            }
+        }
+        /// <summary>
+        /// httppost方式发送数据
+        /// </summary>
+        /// <param name="url">要提交的url</param>
+        /// <param name="postDataStr"></param>
+        /// <param name="timeOut">超时时间</param>
+        /// <param name="encode">text code.</param>
+        /// <returns>成功：返回读取内容；失败：0</returns>
+        public static string HttpPostConnect(string serverUrl, string postData)
+        {
+            var dataArray = Encoding.UTF8.GetBytes(postData);
+            //创建请求
+            var request = (HttpWebRequest)HttpWebRequest.Create(serverUrl);
+            request.Method = "POST";
+            request.ContentLength = dataArray.Length;
+            //设置上传服务的数据格式  设置之后不好使
+            //request.ContentType = "application/json";
+            //请求的身份验证信息为默认
+            request.Credentials = CredentialCache.DefaultCredentials;
+            //请求超时时间
+            request.Timeout = 10000;
+            //创建输入流
+            Stream dataStream;
+            try
+            {
+                dataStream = request.GetRequestStream();
+            }
+            catch (Exception)
+            {
+                return "0";//连接服务器失败
+            }
+            //发送请求
+            dataStream.Write(dataArray, 0, dataArray.Length);
+            dataStream.Close();
+            //读取返回消息
+            string res;
+            try
+            {
+                var response = (HttpWebResponse)request.GetResponse();
+                var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                res = reader.ReadToEnd();
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+
+                return "0";//连接服务器失败
+            }
+            return res;
+        }
+        #endregion http请求
     }
 }

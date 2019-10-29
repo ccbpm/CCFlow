@@ -496,83 +496,13 @@
             }
 
             //转化成json.
-            data = JSON.parse(data);
-            if (data.length <= 0) {
+             flowData = JSON.parse(data);
+            if (flowData.length <= 0) {
                 alert('未查询出来数据');
                 return;
             }
-           
-            var tableHtml = "";
-            tableHtml += "<tr>";
-            tableHtml += "<th>Idx</th>";
-            tableHtml += "<th width='380px'>标题</th>";
-            tableHtml += "<th width='80px'>发起人</th>";
-            tableHtml += "<th width='120px'>发起日期</th>";
-            tableHtml += "<th width='120px'>流程</th>";
-            tableHtml += "<th width='120px'>停留节点</th>";
-            tableHtml += "<th width='160px'>审批人</th>";
-            tableHtml += "<th width='90px'>应完成日期</th>";
-            tableHtml += "<th width='60px'>状态</th>";
-            tableHtml += "<th width='60px'>操作</th>";
-          //  tableHtml += "<th>参与人</th>";
-            tableHtml += "</tr>";
-
-            var user = new WebUser();
-            var userNo = user.No;
-			htmlboxs= "";
-            data.forEach(function (en, index) {
-
-                var tr = "";
-
-                //是否可以执行当前工作?
-                var isCanDo = false;
-                if (en.TodoEmps.indexOf(webUser.No) != -1)
-                    isCanDo = true;
-
-                //图片.
-                var icon = GenerICON(isCanDo, en.WFState);
-
-                // 获得颜色.
-                var color = GenerColor(en.WFState, isCanDo);
-
-                var todoEmpsName = en.TodoEmps;
-                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
-
-                htmlboxs += "<tr>";
-                htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
-
-                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.WFState + "','" + en.WorkID + "','" + en.FK_Flow + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "')\"><img src=" + icon + " border=0 width='18px;' />" + en.Title + "</td>";
-
-                htmlboxs += "<td><font color='" + color + "'>" + en.StarterName + "</font></td>";
-
-                htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-
-                htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
-
-
-                htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
-                if (en.TDTime == null)
-                    htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-                else
-                    htmlboxs += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
-
-               
-
-                htmlboxs += "<td><font color='" + color + "'>" + GetWFState(en.WFState, isCanDo) + "</font></td>";
-
-                htmlboxs += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.WFState, en.FK_Flow, en.FK_Node, en.FID, isCanDo) + "</font></td>";
-
-                //  html += "<td><font color='" + color + "'>" + en.Emps + "</font></td>";
-
-                htmlboxs += "</tr>";
-
-
-            });
-
-            
-            $("#Table2").html(tableHtml);
-            $("#Table1").html(htmlboxs);
+            InitData();
+            Paginator(pageCount, pageIdx);
         }
     </script>        
         

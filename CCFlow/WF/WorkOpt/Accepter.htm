@@ -274,7 +274,9 @@
             var selectedEmps = [];
             var selectedEmpLab = "";
             for (var i = 0; i < checked.length; i++) {
-
+                if (checked[i].id == "selectAll") {
+                    continue;
+                }
                 selectedEmps.push(checked[i].id);
             }
 
@@ -311,7 +313,9 @@
             var selectedEmps = [];
             var selectedEmpLab = "";
             for (var i = 0; i < checked.length; i++) {
-
+                if (checked[i].id == "selectAll") {
+                    continue;
+                }
                 selectedEmps.push(checked[i].id);
 
                 var ctrl = checked[i];

@@ -430,7 +430,7 @@
                         dbSrc = dbSrc + " WHERE 1=1";
                     if (value != "") {
                         if (obj.CtrlType.indexOf("Date") == -1) {
-                            dbSrc = dbSrc + " and " + obj.FieldKey + "=" + value;
+                            dbSrc = dbSrc + " and " + obj.FieldKey + "='" + value+"'";
                         } else {
                             if (obj.CtrlType == "DateFrom")
                                 dbSrc = dbSrc + " and " + obj.FieldKey + ">='" + value+"'";

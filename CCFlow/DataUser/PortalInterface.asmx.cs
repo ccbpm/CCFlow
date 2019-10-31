@@ -31,8 +31,10 @@ namespace ccbpm
         /// <param name="openUrl">链接</param>
         /// <returns>是否发送成功</returns>
         [WebMethod(EnableSession = true)]
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string title,string openUrl)
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, 
+            string msgInfo, string title,string openUrl)
         {
+            
             return true;
         }
 

@@ -18,7 +18,6 @@ using BP.Web;
 using BP.Port;
 using BP.Demo.BPFramework;
 using ThoughtWorks.QRCode.Codec;
-  
 
 namespace CCFlow
 {
@@ -26,6 +25,41 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+
+            return;
+            // BP.WF.Dev2Interface.Port_SendMsg
+            // qo.DoQuery
+            // BP.DA.DBAccessOfMSSQL1.RunSQL("UPDATA  xxx set xxx");
+            //DataTable dt= BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT * FROM PORT_EMP");
+            //  ？、  return;
+            BP.Sys.FrmRBs rbs = new FrmRBs();
+            BP.En.QueryObject qo = new QueryObject(rbs);
+            qo.AddWhere("FK_MapData", "ss");
+            qo.DoQuery();
+            return;
+
+            //rb.CheckPhysicsTable();
+            //rb.MyPK = "2323";
+            // rb.Retrieve();
+            // QueryObject qo = new QueryObject(rb);
+            //  qo.DoQuery();
+            // rb.RunSQL
+
+            // HttpContextHelper.Current
+            //HuiQianLeaderRole
+
+            // BP.Web.WebUser.No
+            //TodolistModel.Teamup
+            // BP.WF.HttpHandler.WF
+            //  BP.WF.Template.FrmField
+            //   BP.DA.DBAccess.IsExitsTableCol("ND154Track", "FrmDB");
+            return;
+
+            BP.WF.Template.PowerModel pm = new BP.WF.Template.PowerModel();
+            pm.CheckPhysicsTable();
+            // BP.WF.Data.Delays
+            // BP.Sys.Glo.GenerRealType(
             //BP.WF.Rpt.RptDfine.
             return;
             BP.WF.Template.NodeExt ext = new BP.WF.Template.NodeExt();
@@ -47,7 +81,7 @@ namespace CCFlow
             // nd.FormType
             // nd.FormType = NodeFormType.SDKForm;
             // nd.DirectUpdate();
-            return; 
+            return;
 
             BP.WF.Flow fe2 = new Flow();
             fe2.No = "128";

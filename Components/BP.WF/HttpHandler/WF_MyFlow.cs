@@ -359,7 +359,7 @@ namespace BP.WF.HttpHandler
             {
 
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
-                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null,null,isStartSameLevelFlow);
+                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null, null, isStartSameLevelFlow);
 
                 string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
                 if (DataType.IsNullOrEmpty(hostRun) == false)
@@ -421,7 +421,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 启动同级子流程的信息存储
-            if(isStartSameLevelFlow!=null && isStartSameLevelFlow .Equals("1") == true && this.WorkID != 0)
+            if (isStartSameLevelFlow != null && isStartSameLevelFlow.Equals("1") == true && this.WorkID != 0)
             {
                 gwf.WorkID = this.WorkID;
                 gwf.RetrieveFromDBSources();
@@ -434,9 +434,9 @@ namespace BP.WF.HttpHandler
                 gwf.SetPara("SLEmp", BP.Web.WebUser.No);
                 gwf.Update();
             }
-            
-           
-            
+
+
+
             #endregion 启动同级子流程的信息存储
 
             #region 处理表单类型.
@@ -821,7 +821,7 @@ namespace BP.WF.HttpHandler
                 /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-                    if(btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
                     {
                         if (btnLab.HuiQianLeaderRole == 0)
                         {
@@ -1080,7 +1080,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //原始会签主持人可以增加组长
-                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen)==true && gwf.TodoEmps.Contains(WebUser.No) == true)|| gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
+                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true && gwf.TodoEmps.Contains(WebUser.No) == true) || gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
                 {
                     /*增加组长 */
                     toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";
@@ -1191,7 +1191,7 @@ namespace BP.WF.HttpHandler
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true)
                 {
-                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable   + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
                 }
                 #endregion
 
@@ -1365,7 +1365,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<a data-role='button' type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" ></a>";
                 }
 
-               
+
 
                 if (btnLab.JumpWayEnable)
                 {
@@ -2023,16 +2023,16 @@ namespace BP.WF.HttpHandler
         /// 获取表单树数据
         /// </summary>
         /// <returns></returns>
-        BP.WF.Template.FlowFormTrees appFlowFormTree = new FlowFormTrees();
         public string FlowFormTree_Init()
         {
+            BP.WF.Template.FlowFormTrees appFlowFormTree = new FlowFormTrees();
+
             //add root
             BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
-            root.No = "00";
+            root.No = "1";
             root.ParentNo = "0";
             root.Name = "目录";
             root.NodeType = "root";
-            appFlowFormTree.Clear();
             appFlowFormTree.AddEntity(root);
 
             #region 添加表单及文件夹
@@ -2044,15 +2044,23 @@ namespace BP.WF.HttpHandler
             frmNodes.Retrieve(FrmNodeAttr.FK_Node, this.FK_Node, FrmNodeAttr.Idx);
 
             //文件夹
-            SysFormTrees formTrees = new SysFormTrees();
-            formTrees.RetrieveAll(SysFormTreeAttr.Name);
+            //SysFormTrees formTrees = new SysFormTrees();
+            //formTrees.RetrieveAll(SysFormTreeAttr.Name);
 
-            //所有表单集合.
+            //所有表单集合. 为了优化效率,这部分重置了一下.
             MapDatas mds = new MapDatas();
-            mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
-
-
-
+            if (frmNodes.Count <= 3)
+            {
+                foreach (FrmNode fn in frmNodes)
+                {
+                    MapData md = new MapData(fn.FK_Frm);
+                    mds.AddEntity(md);
+                }
+            }
+            else
+            {
+                mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+            }
 
 
             string frms = HttpContextHelper.RequestParams("Frms");
@@ -2075,7 +2083,9 @@ namespace BP.WF.HttpHandler
                     case FrmEnableRole.Allways:
                         break;
                     case FrmEnableRole.WhenHaveData: //判断是否有数据.
-                        MapData md = new MapData(frmNode.FK_Frm);
+                        MapData md = mds.GetEntityByKey(frmNode.FK_Frm) as MapData;
+                        if (md == null)
+                            continue;
                         Int64 pk = this.WorkID;
                         switch (frmNode.WhoIsPK)
                         {
@@ -2238,20 +2248,15 @@ namespace BP.WF.HttpHandler
                     if (md.FK_FormTree == "")
                         md.FK_FormTree = treeNo;
 
-                    foreach (SysFormTree formTree in formTrees)
+                    //给他增加目录.
+                    if (appFlowFormTree.Contains("Name", md.FK_FormTreeText) == false)
                     {
-                        if (md.FK_FormTree != formTree.No)
-                            continue;
-                        if (appFlowFormTree.Contains("No", formTree.No) == false)
-                        {
-                            BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
-                            nodeFolder.No = formTree.No;
-                            nodeFolder.ParentNo = formTree.ParentNo;
-                            nodeFolder.Name = formTree.Name;
-                            nodeFolder.NodeType = "folder";
-                            appFlowFormTree.AddEntity(nodeFolder);
-                            break;
-                        }
+                        BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                        nodeFolder.No = md.FK_FormTree;
+                        nodeFolder.ParentNo = "1";
+                        nodeFolder.Name = md.FK_FormTreeText;
+                        nodeFolder.NodeType = "folder";
+                        appFlowFormTree.AddEntity(nodeFolder);
                     }
 
                     //检查必填项.
@@ -2274,15 +2279,13 @@ namespace BP.WF.HttpHandler
                     //设置他的表单显示名字. 2019.09.30
                     string frmName = md.Name;
                     Entity fn = frmNodes.GetEntityByKey(FrmNodeAttr.FK_Frm, md.No);
-                    if (fn!=null)
+                    if (fn != null)
                     {
                         string str = fn.GetValStrByKey(FrmNodeAttr.FrmNameShow);
                         if (DataType.IsNullOrEmpty(str) == false)
                             frmName = str;
                     }
                     nodeForm.Name = frmName;
-
-
                     nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
                     nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
                     nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
@@ -2290,118 +2293,40 @@ namespace BP.WF.HttpHandler
                     break;
                 }
             }
-            //找上级表单文件夹
-            AppendFolder(formTrees);
             #endregion
 
-            //扩展工具，显示位置为表单树类型.
-            NodeToolbars extToolBars = new NodeToolbars();
-            QueryObject info = new QueryObject(extToolBars);
-            info.AddWhere(NodeToolbarAttr.FK_Node, this.FK_Node);
-            info.addAnd();
-            info.AddWhere(NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
-            info.DoQuery();
+            //扩展工具，显示位置为表单树类型. 
+            #warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
+            //NodeToolbars extToolBars = new NodeToolbars();
+            //extToolBars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
 
-            foreach (NodeToolbar item in extToolBars)
-            {
-                string url = "";
-                if (DataType.IsNullOrEmpty(item.Url))
-                    continue;
+            //foreach (NodeToolbar item in extToolBars)
+            //{
+            //    string url = "";
+            //    if (DataType.IsNullOrEmpty(item.Url))
+            //        continue;
 
-                url = item.Url;
+            //    url = item.Url;
 
-                BP.WF.Template.FlowFormTree formTree = new BP.WF.Template.FlowFormTree();
-                formTree.No = item.OID.ToString();
-                formTree.ParentNo = "01";
-                formTree.Name = item.Title;
-                formTree.NodeType = "tools|0";
-                if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
-                {
-                    formTree.NodeType = "tools|1";
-                }
+            //    BP.WF.Template.FlowFormTree formTree = new BP.WF.Template.FlowFormTree();
+            //    formTree.No = item.OID.ToString();
+            //    formTree.ParentNo = "1";
+            //    formTree.Name = item.Title;
+            //    formTree.NodeType = "tools|0";
+            //    if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
+            //    {
+            //        formTree.NodeType = "tools|1";
+            //    }
 
-                formTree.Url = url;
-                appFlowFormTree.AddEntity(formTree);
-            }
+            //    formTree.Url = url;
+            //    appFlowFormTree.AddEntity(formTree);
+            //}
+
+            //增加到数据结构上去.
             TansEntitiesToGenerTree(appFlowFormTree, root.No, "");
 
+
             return appendMenus.ToString();
-        }
-        /// <summary>
-        /// 拼接文件夹
-        /// </summary>
-        /// <param name="formTrees"></param>
-        private void AppendFolder(SysFormTrees formTrees)
-        {
-            BP.WF.Template.FlowFormTrees parentFolders = new BP.WF.Template.FlowFormTrees();
-            //二级目录
-            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
-            {
-                if (DataType.IsNullOrEmpty(folder.NodeType) || !folder.NodeType.Equals("folder"))
-                    continue;
-
-                foreach (SysFormTree item in formTrees)
-                {
-                    //排除根节点
-                    if (item.ParentNo.Equals("0") || item.No.Equals("0"))
-                        continue;
-                    if (parentFolders.Contains("No", item.No) == true)
-                        continue;
-                    //文件夹
-                    if (folder.ParentNo.Equals(item.No))
-                    {
-                        if (parentFolders.Contains("No", item.No) == true)
-                            continue;
-                        if (item.ParentNo.Equals("0") == true)
-                            continue;
-
-                        BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
-                        nodeFolder.No = item.No;
-                        nodeFolder.ParentNo = item.ParentNo;
-                        nodeFolder.Name = item.Name;
-                        nodeFolder.NodeType = "folder";
-                        parentFolders.AddEntity(nodeFolder);
-                    }
-                }
-            }
-            //找到父级目录添加到集合
-            foreach (BP.WF.Template.FlowFormTree folderapp in parentFolders)
-            {
-                if (appFlowFormTree.Contains(folderapp) == false)
-                    appFlowFormTree.AddEntity(folderapp);
-            }
-            //求出没有父节点的文件夹
-            parentFolders.Clear();
-            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
-            {
-                if (DataType.IsNullOrEmpty(folder.NodeType) || folder.NodeType.Equals("folder") == false)
-                    continue;
-
-                bool bHave = false;
-                foreach (BP.WF.Template.FlowFormTree child in appFlowFormTree)
-                {
-                    if (folder.ParentNo.Equals(child.No) == true)
-                    {
-                        bHave = true;
-                        break;
-                    }
-                }
-                //没有父节点的文件夹
-                if (bHave == false && parentFolders.Contains("No", folder.No) == false)
-                {
-                    parentFolders.AddEntity(folder);
-                }
-            }
-            //修改根节点编号
-            foreach (BP.WF.Template.FlowFormTree folder in parentFolders)
-            {
-                foreach (BP.WF.Template.FlowFormTree folderApp in appFlowFormTree)
-                {
-                    if (folderApp.No.Equals(folder.No) == false)
-                        continue;
-                    folderApp.ParentNo = "00";
-                }
-            }
         }
         /// <summary>
         /// 将实体转为树形
@@ -2432,11 +2357,12 @@ namespace BP.WF.HttpHandler
             // 增加它的子级.
             appendMenus.Append(",\"children\":");
             AddChildren(root, ens, checkIds);
+
             appendMenus.Append(appendMenuSb);
             appendMenus.Append("}]");
         }
 
-        public void AddChildren(EntityTree parentEn, Entities ens, string checkIds)
+        private void AddChildren(EntityTree parentEn, Entities ens, string checkIds)
         {
             appendMenus.Append(appendMenuSb);
             appendMenuSb.Clear();
@@ -2535,7 +2461,7 @@ namespace BP.WF.HttpHandler
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
                 {
                     /*如果是表单树并且是，移动模式.*/
-                   
+
 
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);

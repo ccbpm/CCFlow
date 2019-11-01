@@ -1392,8 +1392,7 @@ namespace BP.WF.HttpHandler
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-
-                if ( nd!=null && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
+                if ( nd!=null && fn.IsEnableFWC == true && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
@@ -1463,20 +1462,17 @@ namespace BP.WF.HttpHandler
                                 ds.Tables.Add(gf);
 
                                 //执行更新,就自动生成那个丢失的字段分组.
-                                refFnc.Update();
+                                refFnc.Update(); //这里生成到了NDxxx表单上去了。
 
                             }
                         }
                     }
 
 
-
-                    #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
-                    if (fn.IsEnableFWC == true 
-                        &&  nd.NodeFrmID == "ND" + nd.NodeID 
-                        && nd.HisFormType != NodeFormType.RefOneFrmTree)
+                    #region 没有审核组件分组就增加上审核组件分组.
+                    if (fn.IsEnableFWC == true)
                     {
-
+                        //如果启用了审核组件，并且 节点表单与当前一致。
                         if (md.HisFrmType == FrmType.FoolForm)
                         {
                             //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
@@ -1517,7 +1513,6 @@ namespace BP.WF.HttpHandler
                                     fwc.HisFrmWorkCheckSta = FrmWorkCheckSta.Readonly;
 
                                 refFnc.Update();
-
                             }
                         }
                     }
@@ -1706,8 +1701,7 @@ namespace BP.WF.HttpHandler
 
                 #region 加入主表的数据.
                 //增加主表数据.
-                DataTable mainTable = en.ToDataTableField(md.No);
-                mainTable.TableName = "MainTable";
+                DataTable mainTable = en.ToDataTableField("MainTable");
                 ds.Tables.Add(mainTable);
                 #endregion 加入主表的数据.
 

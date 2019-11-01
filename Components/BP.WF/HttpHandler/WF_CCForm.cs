@@ -1264,6 +1264,8 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
+                //BP.Sys.Glo.GenerRealType
+
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
@@ -1391,7 +1393,7 @@ namespace BP.WF.HttpHandler
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
 
-                if (this.FK_Node != 0 && this.FK_Node != 999999 && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
+                if ( nd!=null && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
                 {
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
@@ -1470,7 +1472,9 @@ namespace BP.WF.HttpHandler
 
 
                     #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
-                    if (nd.NodeFrmID == "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
+                    if (fn.IsEnableFWC == true 
+                        &&  nd.NodeFrmID == "ND" + nd.NodeID 
+                        && nd.HisFormType != NodeFormType.RefOneFrmTree)
                     {
 
                         if (md.HisFrmType == FrmType.FoolForm)
@@ -1520,10 +1524,10 @@ namespace BP.WF.HttpHandler
                     #endregion 没有审核组件分组就增加上审核组件分组.
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
                 }
-                if (this.FK_Node != 0 && this.FK_Node != 999999)
+                if (nd!=null)
                     ds.Tables.Add(nd.ToDataTableField("WF_Node"));
 
-                if (this.FK_Node != 0 && this.FK_Node != 999999)
+                if (nd != null)
                     ds.Tables.Add(fn.ToDataTableField("WF_FrmNode"));
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.

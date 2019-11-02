@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>方向条件控制规则</title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", fk_node);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(node);
+
+            rb_onchange(node.CondModel);
+            return;
+        }
+
+
+        function Save() {
+
+            var fk_node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", fk_node);
+            var CondModel = $("input[name='CondModel']:checked").val();
+            node.CondModel = CondModel;
+            node.Update();
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <table style="width: 100%">
+            <caption>节点转向规则</caption>
+
+            <tr>
+                <td valign="top" style="width:70%">
+                    <fieldset>
+                        <legend>
+                            <input type="radio" ID="RB_CondModel_0" name="CondModel" runat="server" value="0"
+                                   onclick="rb_onchange(0)" /><label for="RB_CondModel_0"> 由连接线条件控制</label>
+                        </legend>
+
+                        <ul>
+                            <li>该模式需要为每一跟连接线设置方向条件.</li>
+                            <li>ccbpm在发送的时候会检查这些条件，如果条件成立就转向这个节点. </li>
+                            <li>该模式是让ccbpm自动为您计算要发送到的节点. </li>
+                        </ul>
+
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <input type="radio" ID="RB_CondModel_1" name="CondModel" value="1"
+                                   onClick="rb_onchange(1)" /><label for="RB_CondModel_1">按照用户选择计算 </label>
+                        </legend>
+                        <ul>
+                            <li>该模式多用于分合流节点. </li>
+                            <li>在异表单的合流节点上配置该模式，合流节点的操作员发送后，就转到该页面上，选择到达的节点。 </li>
+                        </ul>
+
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <input type="radio" ID="RB_CondModel_2" name="CondModel" runat="server" value="2"
+                                   onClick="rb_onchange(2)" /><label for="RB_CondModel_2"> 发送按钮旁下拉框选择-(默认模式) </label>
+                        </legend>
+                        <ul>
+                            <li>用户发送的时候，在发送按钮旁边有一个下拉框，该下拉框是ccbpm为您计算出来的可以发送到的节点。 </li>
+                            <li>是有操作者来决定要发送到那个节点上去. </li>
+                            <li>如果您选择的节点的接收人规则是由上一步发送人员来选择的，系统就会弹出接受人按钮. </li>
+                        </ul>
+                        <img src="CondModel1.png" style="width:95%;" />
+                    </fieldset>
+
+                </td>
+            </tr>
+
+        </table>
+
+        <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Save()" />
+
+
+    </form>
+
+</body>
+</html>

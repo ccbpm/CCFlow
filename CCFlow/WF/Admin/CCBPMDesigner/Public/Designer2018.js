@@ -118,6 +118,22 @@ function NodeFrmSln(nodeID) {
     // OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
 }
 
+//表单方案
+function CondDir(fromNodeID) {
+
+    var flowNo = GetQueryString("FK_Flow");
+
+    var targetId = fromNodeID;
+
+    var url = "../Cond/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();
+    $("#LineModal").hide();
+    $(".modal-backdrop").hide();
+    OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, 880, 500, "icon-property", true, null, null, null, function () {
+
+    });
+}
+
+
 
 //设计表单
 function NodeFrmD(nodeID) {

@@ -1,8 +1,22 @@
-﻿
+﻿$(function () {
+
+    jQuery.getScript(basePath + "/WF/Admin/Admin.js")
+        .done(function () {
+            /* 耶，没有问题，这里可以干点什么 */
+            // alert('ok');
+        })
+        .fail(function () {
+            /* 靠，马上执行挽救操作 */
+            //alert('err');
+        });
+});
+
+
 var optionKey = 0;
 function InitBar(key) {
 
     optionKey = key;
+
 
     var nodeID = GetQueryString("FK_Node");
     var str = nodeID.substr(nodeID.length - 2);
@@ -11,7 +25,7 @@ function InitBar(key) {
         isSatrtNode = true;
 
     // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
-    var html = "<div style='padding:5px' >接受人范围限定: ";
+    var html = "<div style='padding:5px' >接受人可以选择的范围限定: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
@@ -34,7 +48,7 @@ function InitBar(key) {
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
 //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
-    html += "<input type=button onclick='Help()' value='我需要帮助' />";
+ //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;

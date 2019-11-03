@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -15,7 +15,7 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-    <script  type="text/javascript">
+    <script type="text/javascript">
         //页面初始化
         $(function () {
 
@@ -23,6 +23,7 @@
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
 
+            //给字段赋值.
             GenerFullAllCtrlsVal(node);
 
         });
@@ -36,52 +37,69 @@
 
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Template.Selector", nodeID);            
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
             node.SelectorModel = SelectorModel.SQL;
             node.CopyForm();
             node.Update();
-             
+
             alert("保存成功.");
         }
     </script>
 </head>
-<body >
+<body>
+    <div id="bar"> </div>
+    <form id="cc">
+        <fieldset>
+            <legend>人员显示的分组SQL.  <a href="javascript:ShowHidden('DivHelp1')">填写示例</a> </legend>
+            <textarea id="TB_SelectorP1" name="TB_SelectorP1" class="SQL" style="width:95%;height:50px"></textarea>
 
-<div id="bar"> </div>
-<form id="cc">
-<fieldset>
-    <legend>分组SQL.</legend>
-    <textarea id="TB_SelectorP1" name="TB_SelectorP1" rows="" cols="" style="width:95%;height:50px"></textarea>
-</fieldset>
+            <div id="DivHelp1" class="help" style="color: blue; display: none">
+                是对人员的分组,分组的目的就是为了更友好的找到人员，比如:<br />
+                1. SELECT No,Name FROM Port_Dept <br />
+                2. SELECT No,Name FROM Port_Dept WHERE ParentNo='@WebUser.FK_Dept'<br />
+                3. SELECT No,Name FROM Port_Station WHERE No IN('01','02') 查询岗位编号是01，02 <br />
+                4. 分组数据源可以为空，如果为空就显示的时候不分组.<br />
+            </div>
 
-<fieldset>
-    <legend>人员SQL.</legend>
-    <textarea id="TB_SelectorP2" name="TB_SelectorP2" rows="" cols="" style="width:95%;height:50px"></textarea>
-</fieldset>
+        </fieldset>
+
+        <fieldset>
+            <legend>人员SQL. <a href="javascript:ShowHidden('DivHelp2')">填写示例</a></legend>
+            <textarea id="TB_SelectorP2" name="TB_SelectorP2" class="SQL" style="width:95%;height:50px"></textarea>
+
+            <div id="DivHelp2" class="help" style="color: blue; display: none">
+                人员集合,分组的目的就是为了更友好的找到人员，比如:<br />
+                1. SELECT No,Name,FK_Dept FROM Port_Emp <br />
+                2. SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept IN (SELECT No FROM Port_Dept WHERE ParentNo='@WebUser.FK_Dept')<br />
+                3. SELECT A.No,a.Name, B.FK_Station FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station IN('01','02') 查询岗位编号是01，02 <br />
+                4. 如果分组为空,就可以返回2个列,如果分组不为空则查询的数据源要范围三个列,使用第3个列与分组数据源的编号进行匹配..<br />
+            </div>
+
+        </fieldset>
 
 
-<fieldset>
-    <legend>默认选择SQL.</legend>
-    <textarea id="TB_SelectorP3" name="TB_SelectorP3" rows="" cols="" style="width:95%;height:50px"></textarea>
-</fieldset>
+        <fieldset>
+            <legend>默认选择SQL,可为空</legend>
+            <textarea id="TB_SelectorP3" name="TB_SelectorP3" class="SQL" style="width:95%;height:50px"></textarea>
+        </fieldset>
 
 
-<fieldset>
-    <legend>强制选择的数据源.</legend>
-    <textarea id="TB_SelectorP4" name="TB_SelectorP4" rows="" cols="" style="width:95%;height:50px"></textarea>
-</fieldset>
+        <fieldset>
+            <legend>强制选择的数据源,可为空</legend>
+            <textarea id="TB_SelectorP4" name="TB_SelectorP4" class="SQL" style="width:95%;height:50px"></textarea>
+        </fieldset>
 
-</form>
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-           <li >该SQL是需要返回No,Name两个列，分别是人员编号,人员名称。</li>
-           <li >SQL语句支持ccbpm表达式, 比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' </li>
-           <li >比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@MyFieldName'   MyFieldName 必须是节点表单字段. </li>
-           <li >什么是ccbpm表达式，请百度：ccbpm 表达式</li>
-           <li ><a href="javascript:LoadTemplate();" >我要从模版里选择一个设置.</a></li>
-   </ul>
-</fieldset>
+    </form>
+    <fieldset>
+        <legend id="help">说明</legend>
+        <ul>
+            <li>该SQL是需要返回No,Name两个列，分别是人员编号,人员名称。</li>
+            <li>SQL语句支持ccbpm表达式, 比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' </li>
+            <li>比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@MyFieldName'   MyFieldName 必须是节点表单字段. </li>
+            <li>什么是ccbpm表达式，请百度：ccbpm 表达式</li>
+            <li><a href="javascript:LoadTemplate();">我要从模版里选择一个设置.</a></li>
+        </ul>
+    </fieldset>
 
 </body>
 </html>

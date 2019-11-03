@@ -1,4 +1,17 @@
-﻿
+﻿$(function () {
+
+    jQuery.getScript(basePath + "/WF/Admin/Admin.js")
+        .done(function () {
+            /* 耶，没有问题，这里可以干点什么 */
+            // alert('ok');
+        })
+        .fail(function () {
+            /* 靠，马上执行挽救操作 */
+            //alert('err');
+        });
+});
+
+
 function InitBar(optionKey) {
 
     var html = "<b>设置Pop返回值模式</b>:";
@@ -37,6 +50,7 @@ function FullData() {
     window.location.href = url;
 
 }
+
 
 
 function HelpOnline() {

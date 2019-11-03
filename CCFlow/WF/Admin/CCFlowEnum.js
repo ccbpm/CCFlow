@@ -196,7 +196,7 @@ if (typeof FormType == "undefined") {
         /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
-        FormType.DisableIt = 100
+        FormType.DisableIt = 100    
 }
 /// 公文工作模式
 if (typeof WebOfficeWorkModel == "undefined") {

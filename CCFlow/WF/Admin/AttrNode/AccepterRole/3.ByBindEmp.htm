@@ -22,25 +22,16 @@
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
 
-            var html = "<table style='width:100%;' >";
-            html += "<caption >已经设置的处理人,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var html = "<ul>";
             var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-
-                if (idx == 0)
-                    html += "<tr>";
-
-                html += "<td>" + en.FK_EmpText + "</td>";
-
-                idx++;
-                if (idx == 4) {
-                    idx = 0;
-                    html += "</tr>";
-                }
+                html += "<li>" + en.FK_EmpText + "</li>";
             }
+            if (ens.length == 0)
+                html += "<li>未绑定</li>";
 
-            html += "</table>";
+            html += "</ul>";
             document.getElementById("emp").innerHTML = html;
 
         });
@@ -68,21 +59,26 @@
 </head>
 
 <body>
-<div id="bar"> </div>
- 
-<fieldset>
-    <legend>设置</legend>
-    <ul>
-        <li>
-            <a href="javascript:OpenDialog()">设置/更改处理人</a>
-        <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
+    <div id="bar"> </div>
 
-        </li>                                                      
-    </ul>
-</fieldset>
- 
+    <fieldset>
+        <legend>设置</legend>
+        <ul>
+            <li>
+                <a href="javascript:OpenDialog()">设置/更改处理人</a>
+            </li>
+            <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
+            <li> 绑定多少个人，当前节点就有多少个人处理，这一种是最简洁最直接的方式。</li>
+            <li> 适用于当前节点人员比较稳定，一般不会变化的情况。</li>
+            <li> 如果人员变化比较频繁，就需要设置岗位，让岗位设置人员。</li>
+        </ul>
+    </fieldset>
 
-<div id="emp"> </div>
+    <fieldset>
+        <legend>绑定的人员</legend>
+        <div id="emp"> </div>
+    </fieldset>
+     
 
 </body>
 </html>

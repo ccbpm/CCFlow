@@ -24,26 +24,34 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+            var html = "<ul>";
+            if (ens.length == 0)
+                html += "<li>未绑定岗位</li>";
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_StationText;
+                html += "<li>" + en.FK_StationText+"</li>";
             }
+            html += "</ul>";
             document.getElementById("stas").innerHTML = html;
 
             //获取节点部门
             ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+            var html = "<ul>";
+
+             if (ens.length == 0)
+                html += "<li>未绑定岗位</li>";
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 console.log(en);
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
+                html += "<li>" + en.FK_DeptText+"</li>";
             }
+            html += "</ul>";
+
             document.getElementById("dept").innerHTML = html;
         });
 
@@ -87,45 +95,49 @@
 
 <div id="bar"> </div>
 
-<table  style="width:100%;">
+<table style="width:100%;">
 
-<tr>
-<td style="width:50%;"  valign=top > 
-    <h5>设置岗位</h5>
-    <ul>
-        <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
-        <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
-    </ul>
-</td>
+    <tr>
+        <td style="width:50%;" valign=top>
+            <h5>设置岗位</h5>
+            <ul>
+                <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
+                <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
+            </ul>
+        </td>
 
-<td  style="width:50%;" valign=top> 
-    <h5>设置部门</h5>
-    <ul>
-        <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
-        <!--<li>  <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a> </li>-->
-    </ul>
-</td>
-</tr>
+        <td style="width:50%;" valign=top>
+            <h5>设置部门</h5>
+            <ul>
+                <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
+                <!--<li>  <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a> </li>-->
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <td valign=top>
+
+            <fieldset>
+                <legend>已经设置的岗位 </legend>
+                <div id="stas"> </div>
+            </fieldset>
+
+        </td>
+
+        <td valign=top>
 
 
+            <fieldset>
+                <legend>已经设置的部门 </legend>
+                <div id="dept"> </div>
+            </fieldset>
+
+        </td>
+
+    </tr>
 
 
-<tr>
-<td valign=top> 
-
-    <h5>已经设置的岗位</h5>
-    <div id="stas"> </div>
-
-</td>
-
-<td valign=top>
-
-    <h5>已经设置的部门</h5>
-    <div id="dept"> </div>
-
- </td>
-
-</tr>
 </table>
 
 

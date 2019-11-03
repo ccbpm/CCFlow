@@ -22,25 +22,16 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "<table style='width:60%;' >";
-            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
-            var idx = 0;
+            var html = "<ul>";
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-
-                if (idx == 0)
-                    html += "<tr>";
-
-                html += "<td>" + en.FK_StationText + "</td>";
-
-                idx++;
-                if (idx == 7) {
-                    idx = 0;
-                    html += "</tr>";
-                }
+                html += "<li>" + en.FK_StationText + "</li>";
             }
+            if (ens.length == 0)
+                html += "<li>未设置</li>";
 
-            html += "</table>";
+            html += "<ul>";
+
             document.getElementById("stas").innerHTML = html;
 
             //根据用户的信息，判断是否启用那个设置工具。
@@ -104,17 +95,7 @@
             <ul>
                 <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
                 <li><a href="javascript:OpenNew()">设置/更改岗位（左右树结构）</a> </li>
-                <li><a href='http://ccbpm.mydoc.io' target='_blank'>
-                    <img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a></li>
-                <li>查找人员算法 
-                    <ul>
-                        <li>第0步：首先从本级部门内的人员寻找，该节点绑定的岗位，如果找不到人就进入下一步寻找。 </li>
-                        <li>第1步：直线上级寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
-                        <li>第2步：直线上级的平级部门寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
-                        <li>第3步：当前部门的下一级所有的部门寻找。 </li>
-                        <li>第4步：查找全局岗位人员。 </li>
-                    </ul>
-                </li>
+
             </ul>
         </fieldset>
     </div>
@@ -132,6 +113,17 @@
         <div id="stas">
         </div>
     </fieldset>
-   
+
+    <fieldset>
+        <legend id="help">查找人员算法</legend>
+        <ul>
+            <li>第0步：首先从本级部门内的人员寻找，该节点绑定的岗位，如果找不到人就进入下一步寻找。 </li>
+            <li>第1步：直线上级寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
+            <li>第2步：直线上级的平级部门寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
+            <li>第3步：当前部门的下一级所有的部门寻找。</li>
+            <li>第4步：查找全局岗位人员。</li>
+        </ul>
+    </fieldset>
+
 </body>
 </html>

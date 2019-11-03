@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
+    <title></title>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -12,11 +12,11 @@
     <script src="../../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
-    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
-    <script  type="text/javascript">
+    <script type="text/javascript">
         var nodeID = 0;
         var fk_flow = "";
         $(function () {
@@ -91,7 +91,7 @@
 
             alert("保存成功.");
         }
-        
+
         function SetNodeNote() {
             var W = document.body.clientWidth - 400;
             var H = document.body.clientHeight - 120;
@@ -122,7 +122,7 @@
                 node.FormType = FormType.SheetTree;
                 node.NodeFrmID = "ND" + node.NodeID;
                 if (NodeNote != undefined) {
-                    node.SetPara("NodeNote",NodeNote);//赋值摘要字段
+                    node.SetPara("NodeNote", NodeNote);//赋值摘要字段
                 }
                 node.Update();
 
@@ -137,90 +137,60 @@
             alert('设置成功.');
             window.location.href = window.location.href;
         }
-     
+
     </script>
 </head>
-<body >
-
-<div id="bar"> </div>
-
-
-<table style="width:100%;">
-<tr>
-
-
-
-<td valign=top> 
-<fieldset>
-    <legend>绑定表单</legend>
-    <ul>
-    <li>  <a href="javascript:BindFrms()" >绑定/取消绑定表单</a> </li>
-        <li>设置该节点上需要绑定那些表单。</li>
-    <li>这些表单在从表单库里选择。</li>
-    <li><div id="InfoBind"></div></li>
-
-    </ul>
-     
-
-</fieldset>
-</td>
-
-
-<td valign=top> 
-<fieldset>
-    <legend>设定每个表单的权限</legend>
-    <ul>
-    <li>  <a href="javascript:BindAttrs()" >设置表单字段控件权限</a></li>
-    <li>设置表单权限。</li>
-    <li>可以控制那些表单可以显示，那些表单主键类型。</li>
-    </ul>
-</fieldset>
-
-</td>
-
-
-
-<td valign=top> 
-<fieldset>
-    <legend>呈现风格</legend>
-
-    <ul>
-        <li>
-            <input type="radio" value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label for="RB_tree">表单树 </label>
-        </li>
-
-        <li>
-            <input type="radio" value="1" id="RB_tab" name="SheetTreeModel" /> <label for="RB_tab">Tab标签页 </label>
-        </li>
-
-        <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
-
-        <li> <a href="javascript:SetNodeNote()">设置摘要字段</a></li>
-
-        <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
-
-    </ul>
-</fieldset>
-</td>
-
-
-</tr>
-</table>
-
-
-
-
-
-<fieldset>
-    <legend>说明</legend>
-    <font color="gray">
+<body>
+    <div id="bar"> </div>
+    <fieldset>
+        <legend>绑定表单</legend>
         <ul>
-             <li>我们把一个节点需要绑定多个表单的节点称为多表单节点，它有两种展现方式，标签页与表单树。</li>
-             <li>对应的流程demo:\\流程树\\表单解决方案\\树形表单与多表单 </li>
-             <li><img src='../Img/Tree.png' border="0px" style="width:70%;"  /> </li>
+            <li>  <a href="javascript:BindFrms()">绑定/取消绑定表单</a> </li>
+            <li>设置该节点上需要绑定那些表单。</li>
+            <li>这些表单在从表单库里选择。</li>
+            <li><div id="InfoBind"></div></li>
 
         </ul>
-    </font>
-</fieldset>
+
+
+    </fieldset>
+
+
+    <fieldset>
+        <legend>设定每个表单的权限</legend>
+        <ul>
+            <li>  <a href="javascript:BindAttrs()">设置表单字段控件权限</a></li>
+            <li>设置表单权限。</li>
+            <li>可以控制那些表单可以显示，那些表单主键类型。</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>呈现风格</legend>
+
+        <ul>
+            <li>
+                <input type="radio" value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label for="RB_tree">表单树 </label>
+                <input type="radio" value="1" id="RB_tab" name="SheetTreeModel" /> <label for="RB_tab">Tab标签页 </label>
+            </li>
+
+            <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
+
+            <li> <a href="javascript:SetNodeNote()">设置摘要字段</a> </li>
+            <li> 这些字段的信息会存储到NDxxRpt的Para字段里.可以显示到待办列表中，让用户没有打开工作之前就可以看到信息。</li>
+            <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend id="help">说明</legend>
+        <font color="gray">
+            <ul>
+                <li>我们把一个节点需要绑定多个表单的节点称为多表单节点，它有两种展现方式，标签页与表单树。</li>
+                <li>对应的流程demo:\\流程树\\表单解决方案\\树形表单与多表单 </li>
+                <li><img src='../Img/Tree.png' border="0px" style="width:70%;" /> </li>
+            </ul>
+        </font>
+    </fieldset>
 </body>
 </html>

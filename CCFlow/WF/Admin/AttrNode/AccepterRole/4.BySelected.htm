@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -15,14 +15,14 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-    <script  type="text/javascript">
+    <script type="text/javascript">
         var nodeExt;
         //初始化
         $(function () {
             InitBar(DeliveryWay.BySelected);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
-            if(node.IsAutoLoadEmps==1){
+            if (node.IsAutoLoadEmps == 1) {
                 $("#CB_IsAutoLoadEmps").attr("checked", 'checked');
             }
             if (node.IsSimpleSelector == 1) {
@@ -69,70 +69,68 @@
         }
 
 
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.BySelected;
-           node.Update();
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.BySelected;
+            node.Update();
 
-           var node = new Entity("BP.WF.Template.Selector", nodeID);
-           node.CopyForm();  //按照规则把数据放入到entity.
-           node.Update();
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            node.CopyForm();  //按照规则把数据放入到entity.
+            node.Update();
 
-           alert("保存成功.");
-       }
+            alert("保存成功.");
+        }
     </script>
 </head>
-<body >
+<body>
 
-<div id="bar"> </div>
+    <div id="bar"> </div>
 
-<form id="cc" name="cc">
+    <form id="cc" name="cc">
 
-<fieldset>
-    <legend>设置</legend>
-    <ul>
+        <fieldset>
+            <legend>设置</legend>
+            <ul>
 
-    <li>
-      <label> <input type="checkbox" id="CB_IsAutoLoadEmps" name="CB_IsAutoLoadEmps" /> 是否自动加载上一次选择的人员？</label>
-    </li>
-       <li>
-      <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector"  onclick="IsChange(this)"/> 是否单项选择(只能选择一个人)？</label>
-    </li>
+                <li>
+                    <label> <input type="checkbox" id="CB_IsAutoLoadEmps" name="CB_IsAutoLoadEmps" /> 是否自动加载上一次选择的人员？</label>
+                </li>
+                <li>
+                    <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector" onclick="IsChange(this)" /> 是否单项选择(只能选择一个人)？</label>
+                </li>
 
-       <li>
-      <label> <input type="checkbox" id="CB_IsEnableDeptRange" name="CB_IsEnableDeptRange" /> 是否启用部门搜索范围限定(对使用通用人员选择器有效)？</label>
-    </li>
+                <li>
+                    <label> <input type="checkbox" id="CB_IsEnableDeptRange" name="CB_IsEnableDeptRange" /> 是否启用部门搜索范围限定(对使用通用人员选择器有效)？</label>
+                </li>
 
-      <li>
-      <label> <input type="checkbox" id="CB_IsEnableStaRange" name="CB_IsEnableStaRange" />是否启用岗位搜索范围限定(对使用通用人员选择器有效)？</label>
-    </li>
+                <li>
+                    <label> <input type="checkbox" id="CB_IsEnableStaRange" name="CB_IsEnableStaRange" />是否启用岗位搜索范围限定(对使用通用人员选择器有效)？</label>
+                </li>
 
-        <li>
-        
-            <a href="javascript:OpenDialog2019()">设置处理人可以选择的范围</a> 
-        </li>
-    </ul>
-</fieldset>
+                <li>
+                    <a href="javascript:OpenDialog2019()">设置处理人可以选择的范围 </a>
 
-<fieldset>
-    <legend>设置（旧版本）</legend>
-    <ul>
-        <li>
-            <a href="javascript:OpenDialog()">设置处理人可以选择的范围</a> 
-        </li>
-    </ul>
-</fieldset>
+                </li>
+            </ul>
+        </fieldset>
 
-<fieldset>
-    <legend>说明</legend>
-    <ul>
+        <fieldset >
+            <legend id="help">说明</legend>
+            <ul>
+                <li>特别说名:<font color=red> 如果当前节点为开始节点，所有的人员都可以发起。</font></li>
+                <li>A节点发送到B节点，如果B节点的接受人规则是由A来选择的,这样的行为类似于发送邮件模式，就是我选择谁就发送给谁.</li>
+                <li>这种模式是有上一个节点的发送人主管判断的，而非自动计算。</li>
+                <li>人员选择有两种：海选与固定范围的多选.</li>
+                <li>海选:就是可以选择任何人,如下图，可以在文本框里搜索.</li>
+                <li>固定范围的选择:就是需要设置选择人的范围，比如：按照SQL,部门，人员设定仅仅选择副局长，副部长.</li>
+            </ul>
+            <h5>通用的人员选择器</h5>
+            <img src="4.BySelected.png" style="width:50%" class="HelpImg" />
+            <h5>固定范围人员选择器</h5>
+            <img src="4.BySelected-1.png"  style="width:50%"  class="HelpImg" />
+        </fieldset>
 
-        <li >绑定的所有的人员，都可以处理该节点的工作。</li>
-        <li >特别说名:<font color=red> 如果当前节点为开始节点，所有的人员都可以发起。</font></li>
-    </ul>
-</fieldset>
-
-</form>
+    </form>
 </body>
 </html>

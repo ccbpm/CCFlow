@@ -23,12 +23,14 @@
             var ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
+            var html = "<ul>";
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                html += "&nbsp;&nbsp;&nbsp;" + en.FK_DeptText;
+                html += "<li>" + en.FK_DeptText+"</li>";
             }
+
+            html += "</ul>";
 
             document.getElementById("depts").innerHTML = html;
 
@@ -67,10 +69,12 @@
     <legend>设置</legend>
 
     <ul>
-    <li>
-        <a href="javascript:OpenNew()">设置与更改部门</a>
-     </li>
-    <!-- <li> 
+        <li>
+            <a href="javascript:OpenNew()">设置与更改部门</a>
+        </li>
+        <li>仅适用于子线程节点，按照部门分组子线程上的处理人员，每个部门一个任务，如果该部门的其中有一个人处理了，就标识该部门的工作完成，可以流转到下一步。</li>
+
+        <!-- <li>
         <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
       </li>-->
     </ul>
@@ -83,13 +87,7 @@
 <div id="depts"> </div>
 </fieldset>
 
-
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-        <li>仅适用于子线程节点，按照部门分组子线程上的处理人员，每个部门一个任务，如果该部门的其中有一个人处理了，就标识该部门的工作完成，可以流转到下一步。</li>
-    </ul>
-</fieldset>
+     
 
 </body>
 </html>

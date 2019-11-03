@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -15,7 +15,7 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-    <script  type="text/javascript">
+    <script type="text/javascript">
 
         $(function () {
 
@@ -25,53 +25,33 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "<table style='width:100%;' >";
-            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var html = "<ul>";
             var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                if (idx == 0)
-                    html += "<tr>";
-
-                html += "<td>" + en.FK_StationText + "</td>";
-
-                idx++;
-                if (idx == 3) {
-                    idx = 0;
-                    html += "</tr>";
-                }
+                html += "<li>" + en.FK_StationText + "</li>";
             }
 
-            html += "</table>";
+            html += "</ul>";
             document.getElementById("stas").innerHTML = html;
 
-             
+
 
             //获取节点部门
             ens = new Entities("BP.WF.Template.NodeDepts");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
 
-            var html = "<table style='width:100%;' >";
-            html += "<caption >已经设置的部门,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var html = "<ul>";
             var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                if (idx == 0)
-                    html += "<tr>";
-
-                html += "<td>" + en.FK_DeptText + "</td>";
-
-                idx++;
-                if (idx == 3) {
-                    idx = 0;
-                    html += "</tr>";
-                }
+                html += "<li>" + en.FK_DeptText + "</li>";
             }
 
-            html += "</table>";
+            html += "</ul>";
             document.getElementById("dept").innerHTML = html;
-             
+
         });
 
 
@@ -95,87 +75,84 @@
             OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
         }
 
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.ByStationAndEmpDept;
-           node.Update();
-           alert("保存成功.");
-       }
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.ByStationAndEmpDept;
+            node.Update();
+            alert("保存成功.");
+        }
     </script>
 </head>
-<body >
+<body>
 
-<div id="bar"> </div>
+    <div id="bar"> </div>
 
-<table style="width:100%; border:0px;">
-<tr>
+    <table style="width:100%; border:0px;">
+        <tr>
 
-<td style="width:50%;"> 
+            <td style="width:50%;">
 
-<fieldset>
-    <legend>设置岗位</legend>
-
-    <ul>
-        <li>
-             <a href="javascript:OpenStation()"> 设置与更改岗位</a> 
-        </li>
-    </ul>
-</fieldset>
- </td>
-
-
- 
-<td style="width:50%;"> 
-<fieldset>
-    <legend>设置部门</legend>
-
-    <ul>
-        <li> 
-            <a href="javascript:OpenNew()"> 设置/更改部门</a>
-        </li>
-       <!-- <li> 
-            <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
-        </li>-->
-
-    </ul>
-</fieldset>
- </td>
-
-</tr>
-<tr>
-
-
-<td  valign=top>
-    <div id="stas"> </div>
-  </td>
-
-<td valign=top>   
-    <div id="dept"> </div>
- </td>
-
-</tr>
+                <fieldset>
+                    <legend>设置岗位</legend>
+                    <ul>
+                        <li>
+                            <a href="javascript:OpenStation()"> 设置与更改岗位</a>
+                        </li>
+                    </ul>
+                </fieldset>
+            </td>
 
 
 
+            <td style="width:50%;">
+                <fieldset>
+                    <legend>设置部门</legend>
 
-</table>
+                    <ul>
+                        <li>
+                            <a href="javascript:OpenNew()"> 设置/更改部门</a>
+                        </li>
+                        <!-- <li>
+                             <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
+                         </li>-->
+
+                    </ul>
+                </fieldset>
+            </td>
+
+        </tr>
+        <tr>
 
 
+            <td valign=top>
+                <fieldset>
+                    <legend>已经绑定的岗位 </legend>
+                    <div id="stas"> </div>
+                </fieldset>
+            </td>
+
+            <td valign=top>
+                <fieldset>
+                    <legend>已经绑定的部门 </legend>
+                    <div id="dept"> </div>
+                </fieldset>
+            </td>
+
+        </tr>
+    </table>
 
 
-
-
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-        <li>该操作需要设置部门与设置岗位，两个设置。</li>
-        <li>当前节点的处理人员需要求两个集合的交集。</li>
-        <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
-        <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
-        <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
-    </ul>
-</fieldset>
+    <fieldset>
+        <legend id="help">说明</legend>
+        <ul>
+            <li>该操作需要设置部门与设置岗位，两个设置。</li>
+            <li>当前节点的处理人员需要求两个集合的交集。</li>
+            <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
+            <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
+            <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
+        </ul>
+    </fieldset>
 
 
 </body>

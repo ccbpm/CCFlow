@@ -24,25 +24,16 @@
             var ens = new Entities("BP.WF.Template.NodeStations");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
 
-            var html = "<table style='width:60%;' >";
-            html += "<caption >已经设置的岗位,合计:(<font color=red>" + ens.length + "</font>)条</caption>";
+            var html = "<ul>";
+            if ( ens.length ==0)
+             html += "<li >未设置岗位</li>";
             var idx = 0;
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-
-                if (idx == 0)
-                    html += "<tr>";
-
-                html += "<td>" + en.FK_StationText + "</td>";
-                
-                idx++;
-                if (idx == 7) {
-                    idx = 0;
-                    html += "</tr>";
-                }
+                html += "<li>" + en.FK_StationText + "</li>";
             }
 
-            html += "</table>";
+            html += "</ul>";
             document.getElementById("stas").innerHTML = html;
 
             //根据用户的信息，判断是否启用那个设置工具。
@@ -59,9 +50,7 @@
                 /*调用集团模式的.*/
                 $("#OrgModel").show();
             }
-
         });
-
 
         function OpenNew() {
             var nodeID = GetQueryString("FK_Node");
@@ -97,32 +86,42 @@
        }
     </script>
 </head>
-<body >
-<div id="bar"> </div>
- 
- <div id="AdminModel">
-    <fieldset >
-        <legend>设置岗位</legend>
-        <ul>
-            <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
-            <li> <a href="javascript:OpenNew()" >设置/更改岗位（左右树结构）</a> </li>
-            <li><a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
-            </li>
-        </ul>
-    </fieldset>
-</div>
-<div id="OrgModel">
-    <fieldset >
-        <legend>设置（组织管理员）</legend>
-        <ul>
-            <li> <a href="javascript:SetGroupStations()" >设置集团岗位</a> </li>
-            <li> <a href="javascript:SetOrgStations()" >设置本组织岗位</a> </li>
-            </li>
-        </ul>
-    </fieldset>
-</div>
+<body>
+    <div id="bar"> </div>
 
-   <div id="stas"></div>
+    <div id="AdminModel">
+        <fieldset>
+            <legend>设置岗位</legend>
+            <ul>
+                <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+                <li> <a href="javascript:OpenNew()">设置/更改岗位（左右树结构）</a> </li>
+            </ul>
+        </fieldset>
+    </div>
+    <div id="OrgModel">
+        <fieldset>
+            <legend>设置（组织管理员）</legend>
+            <ul>
+                <li> <a href="javascript:SetGroupStations()">设置集团岗位</a> </li>
+                <li> <a href="javascript:SetOrgStations()">设置本组织岗位</a> </li>
+            </ul>
+        </fieldset>
+    </div>
+
+    <fieldset>
+        <legend>已经绑定的岗位</legend>
+        <div id="stas"></div>
+    </fieldset>
+
+
+    <fieldset>
+        <legend id="help">帮助</legend>
+        <ul>
+            <li>可以设置一个或者多个岗位。</li>
+            <li>每个岗位下的人员都是上一个节点可以选择的人员范围.</li>
+        </ul>
+        <img src="../AccepterRole/4.BySelected-1.png" style="width:50%" class="HelpImg" />
+    </fieldset>
 
 
 </body>

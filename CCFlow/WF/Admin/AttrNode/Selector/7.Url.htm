@@ -18,9 +18,14 @@
     <script  type="text/javascript">
         //页面初始化
         $(function () {
+
             InitBar(SelectorModel.Url);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
+
+            if (node.SelectorP1.indexOf('SELECT ') != -1)
+                node.SelectorP1 = "";
+
 
             GenerFullAllCtrlsVal(node);
 
@@ -38,27 +43,28 @@
         }
     </script>
 </head>
-<body >
+<body>
 
-<div id="bar"> </div>
-<form id="cc">
-<fieldset>
-    <legend>输入自定义URL</legend>
-    <textarea id="TB_SelectorP1" name="TB_SelectorP1" rows="" cols="" style="width:95%;height:50px"></textarea>
-</fieldset>
- 
+    <div id="bar"> </div>
+    <form id="cc">
+        <fieldset>
+            <legend>输入自定义URL</legend>
+            <textarea id="TB_SelectorP1" name="TB_SelectorP1" style="width:95%;height:50px"></textarea>
+        </fieldset>
 
-</form>
-<fieldset>
-    <legend>说明</legend>
-    <ul>
-           <li >该SQL是需要返回No,Name两个列，分别是人员编号,人员名称。</li>
-           <li >SQL语句支持ccbpm表达式, 比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' </li>
-           <li >比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@MyFieldName'   MyFieldName 必须是节点表单字段. </li>
-           <li >什么是ccbpm表达式，请百度：ccbpm 表达式</li>
-           <li ><a href="javascript:LoadTemplate();" >我要从模版里选择一个设置.</a></li>
-   </ul>
-</fieldset>
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>您可以自己写一个接受人选择器的页面，然后把它嵌入里面去.</li>
+                <li>在用户发送的时候，系统弹出的是您的页面.</li>
+                <li>系统会在您自定义的url后面追加WorkID,FK_Flow,FK_Node等参数.</li>
+
+                <!--<li ><a href="javascript:LoadTemplate();" >我要从模版里选择一个设置.</a></li>-->
+            </ul>
+        </fieldset>
+
+    </form>
+
 
 </body>
 </html>

@@ -28,29 +28,33 @@
         body {
             background: transparent;
         }
-        body div {
-           text-align: left;
-        }
+
+            body div {
+                text-align: left;
+            }
+
         #Message {
             width: 100%;
         }
+
         #SelectEmp {
-          position: relative;
-          width:400px;
-          border-top: 0;
-          display: none;
-          margin-top:-7px;
-          /*border: solid 2px #3175af;*/
+            position: relative;
+            width: 400px;
+            border-top: 0;
+            display: none;
+            margin-top: -7px;
+            /*border: solid 2px #3175af;*/
         }
+
         .addbg {
             background: #CFCFCF;
         }
-        #next
-        {
-            float:left;
+
+        #next {
+            float: left;
             position: relative;
-            width:600px;
-         }
+            width: 600px;
+        }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -61,20 +65,23 @@
             if (IsSend == "0")
                 $("#Btn_Send").hide();
 
+            $("#HelpInfo").toggle(); //没有起作用。
+
+
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="SelectEmpsModal">' +
-               '<div class="modal-dialog">'
-                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
-                      + '<div class="modal-header">'
-                          + '<button type="button" class="close" style="color:#0000007a;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                           + '<h4 class="modal-title">接受人</h4>'
-                       + '</div>'
-                       + '<div class="modal-body">'
-                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
-                       + '</div>'
-                   + '</div><!-- /.modal-content -->'
-               + '</div><!-- /.modal-dialog -->'
-           + '</div>';
+                '<div class="modal-dialog">'
+                + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                + '<div class="modal-header">'
+                + '<button type="button" class="close" style="color:#0000007a;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<h4 class="modal-title">接受人</h4>'
+                + '</div>'
+                + '<div class="modal-body">'
+                + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                + '</div>'
+                + '</div><!-- /.modal-content -->'
+                + '</div><!-- /.modal-dialog -->'
+                + '</div>';
 
             $('body').append($(selectEmpModalHtml));
 
@@ -139,16 +146,16 @@
             var sa = new Entity("BP.WF.Template.Selector", toNodeID);
             if (sa.IsSimpleSelector == 1)
                 isDel = false;
-            
+
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];
                 var row = "";
                 row += "<tr>";
-                row += "<td>" + (i+1) + "</td>";
+                row += "<td>" + (i + 1) + "</td>";
                 //row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
                 row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
-                if (isDel==true)
+                if (isDel == true)
                     row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
                 else
                     row += "<td> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
@@ -303,7 +310,7 @@
 
             data = data.replace('<br/>', '');
             data = data.replace('<br/>', '');
-             data = data.replace('<br/>', '');
+            data = data.replace('<br/>', '');
             data = data.replace('@', '<br/>@');
             data = data.replace(/@/g, '<br/>&nbsp;@');
 
@@ -316,7 +323,7 @@
 
             $("#next").empty();
 
-           
+
             //隐藏table.
             document.getElementById("Table1").style.display = "none";
             document.getElementById("TB_Emps").style.display = "none";
@@ -339,7 +346,7 @@
             if ($("#CloseBtn").length == 0)
                 return;
             num >= 0 ? num-- : clearInterval(int);
-            $("#CloseBtn").attr("value","关    闭(" + num + "秒)");
+            $("#CloseBtn").attr("value", "关    闭(" + num + "秒)");
             if (num == 0)
                 CloseAll();
         }
@@ -380,7 +387,7 @@
             AddEmpsExt(false, val)
             //$('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
-    
+
         //得到行对象
         function getRowObj(obj) {
             var i = 0;
@@ -392,7 +399,7 @@
             return obj;
         }
 
-        //根据得到的行对象得到所在的行数 
+        //根据得到的行对象得到所在的行数
         function getRowNo(obj) {
             var trObj = getRowObj(obj);
             var trArr = trObj.parentNode.children;
@@ -402,7 +409,7 @@
                 }
             }
         }
- 
+
         //事件
         $(function () {
             //人员选择
@@ -462,54 +469,54 @@
         function Help() {
             $("#HelpInfo").toggle();
         }
-</script> 
+    </script>
 
 </head>
 <body>
     <div class="Msg" style="text-align: left; display:none;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
 
-    <table id="Table1" style="width:90%;margin:0px 20px" >
-   <!-- <caption>下一步接受人员列表</caption>-->
-    <thead>
-        <tr id="title">
-         <th style="width:40px;" >#</th>
-         <!--<th>编号 </th>-->
-        <th style="width:60px;" >姓名</th>
-        <th >所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></th>
-        <th style="width:40px;" >操作</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
+    <table id="Table1" style="width:90%;margin:0px 20px">
+        <!-- <caption>下一步接受人员列表</caption>-->
+        <thead>
+            <tr id="title">
+                <th style="width:40px;">#</th>
+                <!--<th>编号 </th>-->
+                <th style="width:60px;">姓名</th>
+                <th>所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></th>
+                <th style="width:40px;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
     </table>
     <br />
 
-      <div style="margin-left:20px"> 
-       
+    <div style="margin-left:20px">
+
         <input type="text" id="TB_Emps" name="TB_Emps"
-         title="查张三,您可输入: zs或zhangs或zhangsan";
-         placeholder="查张三,您可输入: zs或zhangs或zhangsan";
-         value='' style=" width:400px; "/> 
-        <input type="button" id="Btn_SelectEmps" value='选择人员'/>
+               title="查张三,您可输入: zs或zhangs或zhangsan" ;=;
+               placeholder="查张三,您可输入: zs或zhangs或zhangsan" ;=;
+               value='' style=" width:400px; " />
+        <input type="button" id="Btn_SelectEmps" value='选择人员' />
         <div id="SelectEmp"></div>
-             <!--<select id="SelectEmp"></select>-->
-         <br />
-         <div id="next">
-             <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
-             <input type="button" value="执行发送" onclick="Send();" id="Btn_Send"/>
-             <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
+        <!--<select id="SelectEmp"></select>-->
+        <br />
+        <div id="next">
+            <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
+            <input type="button" value="执行发送" onclick="Send();" id="Btn_Send" />
+            <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
 
-             <a href="javascript:Help()" >查询帮助?</a>
+            <a href="javascript:Help()">查询帮助?</a>
 
-                 <div id="HelpInfo" >
-        <ul>
-        <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
-        <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
-        <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
-        </ul>
+            <div id="HelpInfo" >
+                <ul>
+                    <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
+                    <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
+                    <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
+                </ul>
+            </div>
+
         </div>
-
-         </div>
 
     </div>
 

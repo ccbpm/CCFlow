@@ -1609,7 +1609,7 @@ var Entities = (function () {
                 url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
-
+                   
                     if (data.indexOf("err@") != -1) {
                         alert(data);
                         return;
@@ -2241,10 +2241,17 @@ var HttpHandler = (function () {
 
 })();
 
+var webUserJsonString = null;
 var WebUser = function () {
 
-    //if (webUser != undefined)
-    //this.self
+    if (webUserJsonString != null) {
+        var self = this;
+        $.each(webUserJsonString, function (n, o) {
+            self[n] = o;
+        });
+        return;
+    }
+   
 
     if (plant == "CCFlow") {
         // CCFlow
@@ -2276,7 +2283,7 @@ var WebUser = function () {
     }*/
 
 
-    var jsonString = {};
+   
 
     $.ajax({
         type: 'post',
@@ -2299,7 +2306,7 @@ var WebUser = function () {
             }
 
             try {
-                jsonString = JSON.parse(data);
+                webUserJsonString = JSON.parse(data);
             } catch (e) {
                 alert("json解析错误: " + data);
             }
@@ -2311,7 +2318,7 @@ var WebUser = function () {
     });
 
     var self = this;
-    $.each(jsonString, function (n, o) {
+    $.each(webUserJsonString, function (n, o) {
         self[n] = o;
     });
 };

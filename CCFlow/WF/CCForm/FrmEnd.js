@@ -275,10 +275,11 @@ function AfterBindEn_DealMapExt(frmData) {
     var webUser = new WebUser();
 
     for (var i = 0; i < mapExts.length; i++) {
-        var mapExt = mapExts[i];
+        var mapExt1 = mapExts[i];
 
         //一起转成entity.
-        var mapExt = new Entity("BP.Sys.MapExt", mapExt.MyPK);
+        var mapExt = new Entity("BP.Sys.MapExt", mapExt1);
+        mapExt.MyPK = mapExt1.MyPK;
 
         if (mapExt.ExtType == "DtlImp"
             || mapExt.MyPK.indexOf(mapExt.FK_MapData + '_Table') >= 0
@@ -289,19 +290,30 @@ function AfterBindEn_DealMapExt(frmData) {
         if (mapExt.AttrOfOper == '')
             continue; //如果是不操作字段，就conntinue;
 
-
-        var mapAttr = new Entity("BP.Sys.MapAttr");
-        mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-        //由于客户pop有实效问题，此处暂时注掉
-        if (mapAttr.RetrieveFromDBSources() == 0) {
-            //mapExt.Delete();
-            continue;
+        var mapAttr1 = null;
+        for (var j = 0; j < mapAttrs.length; j++) {
+            if (mapAttrs[j].FK_MapData == mapExt.FK_MapData && mapAttrs[j].KeyOfEn == mapExt.AttrOfOper) {
+                mapAttr1 = mapAttrs[j];
+                break;
+            }
         }
-       
+        if (mapAttr1 == null)
+            continue;
 
+        var mapAttr = new Entity("BP.Sys.MapAttr", mapAttr1);
+        mapAttr.MyPK = mapAttr1.MyPK;
         //判断MapAttr属性是否可编辑不可以编辑返回
         if (mapAttr.UIVisible == 0)
             continue;
+
+        //var mapAttr = new Entity("BP.Sys.MapAttr");
+        //mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+        ////由于客户pop有实效问题，此处暂时注掉
+        //if (mapAttr.RetrieveFromDBSources() == 0) {
+        //    //mapExt.Delete();
+        //    continue;
+        //}
+       
 
         //处理Pop弹出框
         var PopModel = mapAttr.GetPara("PopModel");

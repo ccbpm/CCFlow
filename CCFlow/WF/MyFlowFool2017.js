@@ -1279,16 +1279,19 @@ function SetCtrlEnable(key) {
     var ctrl = $("#TB_" + key);
     if (ctrl.length > 0) {
         ctrl.removeAttr("disabled");
+        ctrl.addClass("form-control");
     }
 
     ctrl = $("#DDL_" + key);
     if (ctrl.length > 0) {
         ctrl.removeAttr("disabled");
+        ctrl.addClass("form-control");
     }
 
     ctrl = $("#CB_" + key);
     if (ctrl.length > 0) {
         ctrl.removeAttr("disabled");
+        ctrl.addClass("form-control");
     }
 
     ctr = document.getElementsByName('RB_' + key);

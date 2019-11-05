@@ -36,11 +36,17 @@
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
+            //if (fk_Node == toNodeID) {
+            //    var url = window.location.href;
+            //    url = url.replace("List.htm", "CondModel.htm");
+            //    //   window.location.href = url;
+            //    return;
+            //}
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
 
             var data = handler.DoMethodReturnString("ConditionLine_Init");
-
 
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
@@ -53,7 +59,7 @@
                 return;
             }
 
-            $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenTurnToRole(this);'><span class='nav'>转向规则</span></a></div></li>");
+            $("#list").append("<li><div><a id='role' href='javascript:void(0)' onclick='OpenTurnToRole(this);'><span class='nav'>转向规则</span></a></div></li>");
 
 
             //转json.
@@ -91,7 +97,16 @@
         }
 
         function initNodeTree() {
+
+            debugger;
             var toNodeID = GetQueryString("ToNodeID");
+            var nodeID = GetQueryString("FK_Node");
+            if (nodeID == toNodeID) {
+                var li = $('ul.navlist').find("a[id='role']");
+                OpenTurnToRole(li);
+                return;
+            }
+
             var li = $('ul.navlist').find("a[id='a" + toNodeID + "']");
             OpenCond(li, toNodeID);
             //$('ul.navlist').find("a[id='a" + toNodeID + "']").click();
@@ -128,18 +143,18 @@
 </head>
 <body class="easyui-layout">
     <form id="form1" runat="server">
-    <div data-options="region:'center',border:false">
-        <div class="easyui-layout" data-options="fit:true">
-            <div data-options="region:'west',split:true,title:'节点方向'" style="width: 160px;">
-                <ul class="navlist" id="list">
-                </ul>
-            </div>
-            <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
-                <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%;
+        <div data-options="region:'center',border:false">
+            <div class="easyui-layout" data-options="fit:true">
+                <div data-options="region:'west',split:true,title:'节点方向'" style="width: 160px;">
+                    <ul class="navlist" id="list">
+                    </ul>
+                </div>
+                <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
+                    <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%;
                     height: 100%;"></iframe>
+                </div>
             </div>
         </div>
-    </div>
     </form>
 </body>
 </html>

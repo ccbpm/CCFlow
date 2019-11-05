@@ -1285,7 +1285,7 @@ var Entity = (function () {
             if (params.lastIndexOf("~") == params.length - 1)
                 params = params.substr(0, params.length - 1);
             arguments["paras"] = params;
-           
+
 
             var pkval = this.GetPKVal();
             if (pkval == null || pkval == "") {

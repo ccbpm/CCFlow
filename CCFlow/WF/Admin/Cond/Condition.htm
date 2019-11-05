@@ -30,7 +30,7 @@
 
         //初始化页面函数.....
         $(function () {
-
+           
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
@@ -44,6 +44,8 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
+                alert(url);
+
                 window.location.href = url;
                 return;
             }

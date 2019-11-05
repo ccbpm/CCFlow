@@ -23,15 +23,14 @@
                 <i class="fa fa-times-circle"></i>
             </div>
             <div class="sidebar-collapse">
-                
+
                 <ul class="nav" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                     <span class="block m-t-xs" style="font-size:20px;">
-
-                                        <strong class="font-bold"><img src="../../DataUser/ICON/logoHome.png" /></strong>
+                                        <strong class="font-bold"><img src="../../../DataUser/ICON/logoHomeFrm.png" /></strong>
                                     </span>
                                 </span>
                             </a>
@@ -63,7 +62,6 @@
             </div>
         </nav>
         <!--左侧导航结束-->
-
         <!--右侧部分开始-->
         <div id="page-wrapper" class="gray-bg dashbard-1" style="overflow:hidden">
             <div class="row border-bottom">
@@ -73,10 +71,10 @@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
 
-                        <li id="LI_GenerBill"><a href="../CCBill/GenerBill.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="GenerBill">工作台</span></a></li>
-                        <li id="LI_Bill_Start"><a href="../CCBill/Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="danju1">单据</span></a></li>
+                        <li id="LI_GenerBill"><a href="../GenerBill.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="GenerBill">工作台</span></a></li>
+                        <li id="LI_Bill_Start"><a href="../Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="danju1">单据</span></a></li>
                         <!--<li><a href="../Setting/ChangePassword.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="UpdatePass">密码修改</span><label class="label label-warning pull-right"  id="Label2" ></label></a></li>-->
-                        <li><a href='../Setting/Default.htm' class="J_menuItem lang-setting"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
+                        <li><a href='../../Setting/Default.htm' class="J_menuItem lang-setting"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
                         <li>
                             <a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu fred fz18"></i><span class="lang" data-key="tuichu">退出</span></a>
                         </li>
@@ -130,11 +128,11 @@
 
                 html += "<ul class='nav nav - second - level in' >";
                 for (var idx = 0; idx < frms.length; idx++) {
-
                     var frm = frms[idx];
                     if (frm.FK_FormTree != dir.No)
                         continue;
-                    html += " <li><a href='../Start.htm' class='J_menuItem'><i class='icon iconfont icon-faqi'></i><span class='lang' data-key='lcfq'>" + frm.Name + "</span></a></li>";
+
+                    html += " <li><a href='../SearchDict.htm?FrmID=" + frm.No + "&FK_MapData=" + frm.No + "' class='J_menuItem'><i class='icon iconfont icon-faqi'></i><span class='lang' data-key='lcfq'>" + frm.Name + "</span></a></li>";
                 }
                 html += "</ul>";
 
@@ -142,8 +140,6 @@
             }
 
             $("#list").append(html);
-            return;
-
 
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");

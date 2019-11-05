@@ -30,13 +30,15 @@
             if (condType == null || condType == undefined)
                 condType = 2; //默认为方向条件.
 
+            var toNode = new Entity("BP.WF.Node", toNodeID);
+
             var ens = new Entities("BP.WF.Template.Conds");
             ens.Retrieve("NodeID", nodeID, "CondType", condType, "ToNodeID", toNodeID);
 
             var html = "<table style='width:98%;'>";
 
             if (condType == 2)
-                html += "<caption><img src='../../Img/Event.png' />节点- 方向条件</caption>";
+                html += "<caption><img src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID +" "+ toNode.Name + "</font>]的方向条件</caption>";
 
             if (condType == 1)
                 html += "<caption><img src='../../Img/Event.png' />该节点上的 - 流程完成条件</caption>";

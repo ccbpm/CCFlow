@@ -37,7 +37,8 @@
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;
         z-index: 21006;">
     </div>
-    <div id="Msg">
+    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;" id="Msg">
+        <img src="./Img/DemoLine.gif" alt="正在加载....." />
     </div>
     <!-- fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -194,7 +195,7 @@
             <li id="pmNodeAccepterRole"><i class="icon-user"></i>&nbsp;<span class="_label">接收人规则</span></li>
             <li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
             <li id="pmCondDir"><i class="icon-share"></i>&nbsp;<span class="_label">方向条件</span></li>
-            <li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
+            <li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点黑色区域,然后拖拉会出现连接线，然后指向要连接到的节点，请看演示');">增加连接线</span></li>
         </ul>
     </div>
     <div id="processMenu3" style="padding: 3px; position: absolute; background: #fff;
@@ -216,7 +217,7 @@
             <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
             <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
             <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
-            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
+            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif();">增加连接线</span></li>
             <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
         </ul>
     </div>
@@ -1103,6 +1104,18 @@
         //刷新页面
         function page_reload() {
             location.reload();
+        }
+
+    </script>
+    <script>
+        function ShowGif() {
+            alert("用鼠标按住节点黑色区域,然后拖拉会出现连接线，然后指向要连接到的节点，请看演示");
+            
+            $("#Msg").css('display', 'block');
+            setTimeout("HideGif()", 7000);
+        }
+        function HideGif() {
+            $("#Msg").css('display', 'none');
         }
 
     </script>

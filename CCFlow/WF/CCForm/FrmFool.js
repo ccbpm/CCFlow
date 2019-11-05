@@ -1216,9 +1216,26 @@ function cleanAll(KeyOfEn) {
 //启用了显示与隐藏.
 function setEnable(FK_MapData, KeyOfEn, selectVal) {
 	if(selectVal==undefined)
-		return;
+        return;
+
     var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
-    var frmRB = new Entity("BP.Sys.FrmRB", pkval);
+
+
+    var frmRBs = frmData["Sys_FrmRB"];
+    if (frmRBs.length <= 0)
+        return;
+
+
+    var frmRB = null;
+    for (var i = 0; i < frmRBs.length; i++) {
+        if (frmRBs[i].MyPK == pkval) {
+            frmRB = frmRBs[i];
+            break;
+        }
+    }
+    if (frmRB == null)
+        return;
+
     var mapAttrs = [];
 
     //解决字段隐藏显示.
@@ -1327,10 +1344,13 @@ function SetCtrlEnable(key) {
 //        ctrl.addClass("form-control");
     }
 
-    ctr = document.getElementsByName('RB_' + key);
-    if (ctrl != null) {
+    ctrl = document.getElementsByName('RB_' + key);
+    if (ctrl != null && ctrl.length !=0 ) {
+
         var ses = new Entities("BP.Sys.SysEnums");
         ses.Retrieve("EnumKey", key);
+
+
         for (var i = 0; i < ses.length; i++)
             $("#RB_" + key + "_" + ses[i].IntKey).removeAttr("disabled");
     }

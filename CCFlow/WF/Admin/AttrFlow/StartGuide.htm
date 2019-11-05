@@ -77,28 +77,28 @@
 
 
             //查询出来数据.
-            var parts = new Entities("BP.WF.Template.Parts");
-            parts.Retrieve("PartType", "ParentSubFlowGuide", "FK_Flow", fk_flow);
+            //var parts = new Entities("BP.WF.Template.Parts");
+            //parts.Retrieve("PartType", "ParentSubFlowGuide", "FK_Flow", fk_flow);
 
-            var strs = "<table>";
-            strs += "<tr>";
-            strs += "<th>流程编号</th>";
-            strs += "<th>名称</th>";
-            strs += "<th>操作</th>";
-            strs += "</tr>";
+            //var strs = "<table>";
+            //strs += "<tr>";
+            //strs += "<th>流程编号</th>";
+            //strs += "<th>名称</th>";
+            //strs += "<th>操作</th>";
+            //strs += "</tr>";
 
-            for (var i = 0; i < parts.length; i++) {
-                var part = parts[i];
+            //for (var i = 0; i < parts.length; i++) {
+            //    var part = parts[i];
 
-                strs += "<tr>";
-                strs += "<td>" + part.Tag0 + "</td>";
-                strs += "<td>" + part.Tag1 + "</td>";
-                strs += "<td><a href=\"javascript:Part('"+part.MyPK+"');\" >编辑</a></td>";
-                strs += "</tr>";
-            }
-            strs += "</table>";
+            //    strs += "<tr>";
+            //    strs += "<td>" + part.Tag0 + "</td>";
+            //    strs += "<td>" + part.Tag1 + "</td>";
+            //    strs += "<td><a href=\"javascript:Part('"+part.MyPK+"');\" >编辑</a></td>";
+            //    strs += "</tr>";
+            //}
+            //strs += "</table>";
 
-            $("#parts").val(strs);
+            //$("#parts").val(strs); 
 
             //alert(data.StartGuideWay);
 

@@ -1,5 +1,6 @@
 ﻿
 var frmData = null;
+var IsLoadUEditor = false;
 function GenerFoolFrm(mapData, frmData) {
 
     frmData = frmData;
@@ -1012,6 +1013,16 @@ function InitMapAttrOfCtrl(mapAttr) {
                 eleHtml += "<div class='richText'>" + defValue + "</div>";
             } else {
 
+                if (IsLoadUEditor == false) {
+                    //加载UEditor需要的JS
+                    $("<link href='../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css' type = 'text/css' rel = 'stylesheet' />").appendTo("head");
+                    $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/third-party/template.min.js'></script>").appendTo("head");
+                    $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/umeditor.config.js'></script>").appendTo("head");
+                    $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/umeditor.min.js'></script>").appendTo("head");
+                    $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js'></script>").appendTo("head");
+                    IsLoadUEditor = true;
+                    
+                }
                 document.BindEditorMapAttr = mapAttr; //存到全局备用.
 
                 //设置编辑器的默认样式
@@ -1469,9 +1480,24 @@ function CleanCtrlVal(key) {
 
 //初始化 框架
 function Ele_Frame(frmData, gf) {
-    var frame = new Entity("BP.Sys.MapFrame", gf.CtrlID);
-    if (frame == null)
+
+
+    var frames = frmData["Sys_MapFrame"];
+    if (frames.length == 0)
         return "没有找到框架的定义，请与管理员联系。";
+
+    var frame = null;
+    for (var i = 0; i < frames.length; i++) {
+
+        if (frames[i].MyPK == gf.CtrlID)
+        {
+            frame = frames[i];
+            break;
+        }
+    }   
+     
+    if (frame == null)
+        return;
 
     var eleHtml = '';
     //获取框架的类型 0 自定义URL 1 地图开发 2流程轨迹表 3流程轨迹图

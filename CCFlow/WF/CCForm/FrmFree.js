@@ -1,5 +1,6 @@
 ﻿
 var isSigantureChecked = false;
+var IsLoadUEditor = false;
 function GenerFreeFrm(mapData, frmData) {
 
     //循环FrmRB
@@ -525,9 +526,6 @@ function figure_Template_IFrame(fram) {
                 strs += "&" + str + "=" + paras[str];
         }
 
-
-
-
         url = url + strs + "&IsReadonly=0";
 
         //4.追加GenerWorkFlow AtPara中的参数
@@ -759,7 +757,16 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 eleHtml = "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
                 return eleHtml;
             }
+            if (IsLoadUEditor == false) {
+                //加载UEditor需要的JS
+                $("<link href='../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css' type = 'text/css' rel = 'stylesheet' />").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/third-party/template.min.js'></script>").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/umeditor.config.js'></script>").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/umeditor.min.js'></script>").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js'></script>").appendTo("head");
+                IsLoadUEditor = true;
 
+            }
             document.BindEditorMapAttr = mapAttr; //存到全局备用
 
             //设置编辑器的默认样式

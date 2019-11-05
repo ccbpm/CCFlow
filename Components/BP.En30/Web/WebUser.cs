@@ -83,7 +83,6 @@ namespace BP.Web
             {
                 throw new Exception("@执行更改当前操作员的主部门的时候错误,请检查SQL配置:" + ex.Message);
             }
-
         }
         /// <summary>
         /// 通用的登陆

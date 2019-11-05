@@ -92,13 +92,13 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
 
             MapDtls dtls = new MapDtls();
-            dtls.Retrieve(MapDtlAttr.FK_MapData,this.FK_MapData,MapDtlAttr.FK_Node,0);
+            dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
             ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
 
             MapFrames frms = new MapFrames(this.FK_MapData);
             ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
 
-            
+
 
             //附件表.
             FrmAttachments aths = new FrmAttachments(this.FK_MapData);
@@ -106,13 +106,13 @@ namespace BP.WF.HttpHandler
 
 
             //加入扩展属性.
-            MapExts  MapExts = new MapExts(this.FK_MapData);
+            MapExts MapExts = new MapExts(this.FK_MapData);
             ds.Tables.Add(MapExts.ToDataTableField("Sys_MapExt"));
 
             // 检查组件的分组是否完整?
             foreach (GroupField item in gfs)
             {
-                    bool isHave=false;
+                bool isHave = false;
                 if (item.CtrlType == "Dtl")
                 {
                     foreach (MapDtl dtl in dtls)
@@ -163,7 +163,7 @@ namespace BP.WF.HttpHandler
             MapDtl dtl = new MapDtl();
 
             //如果传递来了节点信息, 就是说明了独立表单的节点方案处理, 现在就要做如下判断
-            if(this.FK_Node != 0)
+            if (this.FK_Node != 0)
             {
                 dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
 
@@ -173,7 +173,7 @@ namespace BP.WF.HttpHandler
                     MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
                     MapDtl odtl = new Sys.MapDtl();
                     odtl.No = this.FK_MapDtl;
-                    int i= odtl.RetrieveFromDBSources();
+                    int i = odtl.RetrieveFromDBSources();
                     if (i == 0)
                         return "info@字段列";
 
@@ -196,7 +196,7 @@ namespace BP.WF.HttpHandler
                     int idx = 0;
                     foreach (MapAttr item in attrs)
                     {
-                        if(item.GroupID != 0)
+                        if (item.GroupID != 0)
                         {
                             if (groupids.ContainsKey(item.GroupID))
                             {
@@ -275,7 +275,7 @@ namespace BP.WF.HttpHandler
             string msg = "";
             GroupField gf = new GroupField(this.RefOID);
             gf.DoUp();
-            
+
             return msg;
         }
         public string Designer_GFDoDown()
@@ -348,7 +348,7 @@ namespace BP.WF.HttpHandler
             //返回字串.
             return en.No;
         }
-       
+
         /// <summary>
         /// 创建一个多附件
         /// </summary>
@@ -434,7 +434,7 @@ namespace BP.WF.HttpHandler
             BP.Sys.GroupField gf = new GroupField();
             gf.FrmID = this.FK_MapData;
             gf.Lab = this.GetRequestVal("Lab");
-            gf.EnName =this.FK_MapData;
+            gf.EnName = this.FK_MapData;
             gf.Insert();
             return "创建成功..";
         }
@@ -515,12 +515,12 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                return this.GetRequestVal("FK_SFDBSrc"); 
+                return this.GetRequestVal("FK_SFDBSrc");
                 //return context.Request.QueryString["FK_SFDBSrc"];
             }
         }
 
-        
+
         private string _STable = null;
         public string STable
         {
@@ -560,7 +560,7 @@ namespace BP.WF.HttpHandler
 
             DataTable tables = src.GetTables();
             dictionary.Add("tables", tables);
-            
+
             DataTable tableColumns = src.GetColumns(this.STable);
             dictionary.Add("columns", tableColumns);
 
@@ -627,7 +627,7 @@ namespace BP.WF.HttpHandler
             md.No = this.FK_MapData;
             md.RetrieveFromDBSources();
 
-            string msg = md.Name+"导入字段信息:"+this.FK_MapData;
+            string msg = md.Name + "导入字段信息:" + this.FK_MapData;
             bool isLeft = true;
             float maxEnd = md.MaxEnd;
 
@@ -652,7 +652,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(ma.Name))
                     ma.Name = ma.KeyOfEn;
 
-                ma.MyDataType =this.GetValIntFromFrmByKey("DDL_DBType_" + columnName);
+                ma.MyDataType = this.GetValIntFromFrmByKey("DDL_DBType_" + columnName);
                 ma.MaxLen = this.GetValIntFromFrmByKey("TB_Len_" + columnName);
                 ma.UIBindKey = this.GetValFromFrmByKey("TB_BindKey_" + columnName);
                 ma.LGType = BP.En.FieldTypeS.Normal;
@@ -764,7 +764,7 @@ namespace BP.WF.HttpHandler
             mf.Save(); //执行保存.
             return "保存成功..";
         }
-        
+
         #region SFList 外键表列表.
         /// <summary>
         /// 删除
@@ -790,14 +790,14 @@ namespace BP.WF.HttpHandler
         public string SFList_Init()
         {
             DataSet ds = new DataSet();
-             
+
             SFTables ens = new SFTables();
             ens.RetrieveAll();
 
             DataTable dt = ens.ToDataTableField("SFTables");
             ds.Tables.Add(dt);
 
-            int pTableModel=0;
+            int pTableModel = 0;
             if (this.GetRequestVal("PTableModel").Equals("2"))
                 pTableModel = 2;
 
@@ -814,7 +814,7 @@ namespace BP.WF.HttpHandler
                 {
                     MapData md = new MapData();
                     md.No = this.FK_MapData;
-                    if(md.RetrieveFromDBSources() == 1)
+                    if (md.RetrieveFromDBSources() == 1)
                         pTableModel = md.PTableModel;
                 }
             }
@@ -840,7 +840,7 @@ namespace BP.WF.HttpHandler
             attr.Retrieve();
             Paras ps = new Paras();
             ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
-            ps.Add("FrmID",this.FK_MapData);
+            ps.Add("FrmID", this.FK_MapData);
             //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
             attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
             attr.Update();
@@ -855,7 +855,7 @@ namespace BP.WF.HttpHandler
         #endregion 外键表列表.
 
 
-    
+
 
         /// <summary>
         /// 初始化表.
@@ -960,7 +960,7 @@ namespace BP.WF.HttpHandler
             attr.KeyOfEn = keyOfEn;
             attr.MyPK = attr.FK_MapData + "_" + keyOfEn;
             if (attr.IsExits)
-                return "err@该字段["+keyOfEn+"]已经加入里面了.";
+                return "err@该字段[" + keyOfEn + "]已经加入里面了.";
 
             attr.Name = name;
             attr.MyDataType = dataType;
@@ -969,12 +969,12 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.CheckBok;
             else
                 attr.UIContralType = UIContralType.TB;
-            
+
             Paras ps = new Paras();
             ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND CtrlType='' OR CtrlType= NULL";
             ps.Add("FrmID", this.FK_MapData);
             //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
-            attr.GroupID  = DBAccess.RunSQLReturnValInt(ps, 0);
+            attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
 
             attr.Insert();
 
@@ -993,7 +993,7 @@ namespace BP.WF.HttpHandler
             string name = this.GetRequestVal("name");
             string newNo = DataType.ParseStringForNo(no, 20);
             string newName = DataType.ParseStringForName(name, 20);
-            int fType = int.Parse( this.GetRequestVal("FType"));
+            int fType = int.Parse(this.GetRequestVal("FType"));
 
             MapAttrs attrs = new MapAttrs();
             int i = attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, newNo);
@@ -1005,7 +1005,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT OID FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr +"FrmID and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ";
+                ps.SQL = "SELECT OID FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ";
                 ps.Add("FrmID", this.FK_MapData);
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt != null && dt.Rows.Count > 0)
@@ -1015,7 +1015,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
- 
+
             }
             #endregion
 
@@ -1125,14 +1125,14 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-             
+
 
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDate)
             {
-                
+
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 attr.UIVisible = true;
@@ -1145,11 +1145,11 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 BP.Sys.FrmUI.MapAttrDT dt = new Sys.FrmUI.MapAttrDT();
-                dt.MyPK  = attr.MyPK;
+                dt.MyPK = attr.MyPK;
                 dt.RetrieveFromDBSources();
                 dt.Format = 0;
                 dt.Update();
-                 
+
 
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
@@ -1347,7 +1347,7 @@ namespace BP.WF.HttpHandler
                 //@周朋 , 判断数据模式，创建的字段是否符合要求.
                 MapData md = new MapData(this.FK_MapData);
                 md.CheckPTableSaveModel(this.KeyOfEn);
-             
+
 
 
                 //赋值.
@@ -1526,8 +1526,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 //定义变量.
-                int fType = int.Parse(  this.GetRequestVal("FType"));  //字段数据物理类型
-                FieldTypeS lgType = (FieldTypeS)int.Parse( this.GetRequestVal("LGType") ); //逻辑类型.
+                int fType = int.Parse(this.GetRequestVal("FType"));  //字段数据物理类型
+                FieldTypeS lgType = (FieldTypeS)int.Parse(this.GetRequestVal("LGType")); //逻辑类型.
                 string uiBindKey = this.GetRequestVal("UIBindKey");// context.Request.QueryString["UIBindKey"];
 
                 //赋值.
@@ -1876,7 +1876,7 @@ namespace BP.WF.HttpHandler
         public string SFGuide_SaveInfo()
         {
             bool IsNew = this.GetRequestValBoolen("IsNew");
-            string sfno = this.GetRequestVal("No"); 
+            string sfno = this.GetRequestVal("No");
             string myname = this.GetRequestVal("Name");
 
             int srctype = this.GetRequestValInt("SrcType");
@@ -2092,7 +2092,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
-        
+
         #region Methods
         /// <summary>
         /// 获取webservice方法列表
@@ -2102,6 +2102,170 @@ namespace BP.WF.HttpHandler
         public List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
         {
             return BP.WF.NetPlatformImpl.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
+        }
+
+        public string FrmView_Init()
+        {
+            string frmID = this.GetRequestVal("FrmID");
+
+            MapData md = new MapData(frmID);
+
+            //获得表单模版.
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+
+
+            #region 把主从表数据放入里面.
+            //.工作数据放里面去, 放进去前执行一次装载前填充事件.
+            GEEntity wk = new GEEntity(FrmID);
+            
+            DataTable mainTable = wk.ToDataTableField("MainTable");
+            mainTable.TableName = "MainTable";
+            myds.Tables.Add(mainTable);
+            #endregion
+
+
+            #region 增加附件信息.
+            BP.Sys.FrmAttachments athDescs = new FrmAttachments();
+            
+            athDescs.Retrieve(FrmAttachmentAttr.FK_MapData, this.FrmID);
+            if (athDescs.Count != 0)
+            {
+                FrmAttachment athDesc = athDescs[0] as FrmAttachment;
+
+                //查询出来数据实体.
+                BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
+                if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                {
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.Add("WorkID", this.WorkID);
+                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                    if (pWorkID == null || pWorkID == "0")
+                    {
+                        pWorkID = this.WorkID.ToString();
+                    }
+
+                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                    {
+                        /* 继承模式 */
+                        BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                        qo.addOr();
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+                        qo.addOrderBy("RDT");
+                        qo.DoQuery();
+                    }
+
+                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                    {
+                        /*共享模式*/
+                        dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                    }
+                }
+                else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+                {
+                    /* 继承模式 */
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+                    qo.addOrderBy("RDT");
+                    qo.DoQuery();
+                }
+
+                //增加一个数据源.
+                myds.Tables.Add(dbs.ToDataTableField("Sys_FrmAttachmentDB").Copy());
+            }
+            #endregion
+
+            #region 把外键表加入DataSet
+            DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
+            DataTable dt = new DataTable();
+            MapExts mes = md.MapExts;
+            MapExt me = new MapExt();
+            DataTable ddlTable = new DataTable();
+            ddlTable.Columns.Add("No");
+            foreach (DataRow dr in dtMapAttr.Rows)
+            {
+                string lgType = dr["LGType"].ToString();
+                string uiBindKey = dr["UIBindKey"].ToString();
+
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    continue; //为空就continue.
+
+                if (lgType.Equals("1") == true)
+                    continue; //枚举值就continue;
+
+                string uiIsEnable = dr["UIIsEnable"].ToString();
+                if (uiIsEnable.Equals("0") == true && lgType.Equals("1") == true)
+                    continue; //如果是外键，并且是不可以编辑的状态.
+
+                if (uiIsEnable.Equals("1") == true && lgType.Equals("0") == true)
+                    continue; //如果是外部数据源，并且是不可以编辑的状态.
+
+
+
+                // 检查是否有下拉框自动填充。
+                string keyOfEn = dr["KeyOfEn"].ToString();
+                string fk_mapData = dr["FK_MapData"].ToString();
+
+                #region 处理下拉框数据范围. for 小杨.
+                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                if (me != null)
+                {
+                    string fullSQL = me.Doc.Clone() as string;
+                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
+                    dt = DBAccess.RunSQLReturnTable(fullSQL);
+                    //重构新表
+                    DataTable dt_FK_Dll = new DataTable();
+                    dt_FK_Dll.TableName = keyOfEn;//可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                    dt_FK_Dll.Columns.Add("No", typeof(string));
+                    dt_FK_Dll.Columns.Add("Name", typeof(string));
+                    foreach (DataRow dllRow in dt.Rows)
+                    {
+                        DataRow drDll = dt_FK_Dll.NewRow();
+                        drDll["No"] = dllRow["No"];
+                        drDll["Name"] = dllRow["Name"];
+                        dt_FK_Dll.Rows.Add(drDll);
+                    }
+                    myds.Tables.Add(dt_FK_Dll);
+                    continue;
+                }
+                #endregion 处理下拉框数据范围.
+
+                // 判断是否存在.
+                if (myds.Tables.Contains(uiBindKey) == true)
+                {
+                    continue;
+                }
+
+                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                if (mydt == null)
+                {
+                    DataRow ddldr = ddlTable.NewRow();
+                    ddldr["No"] = uiBindKey;
+                    ddlTable.Rows.Add(ddldr);
+                }
+                else
+                {
+                    myds.Tables.Add(mydt);
+                }
+            }
+            ddlTable.TableName = "UIBindKey";
+            myds.Tables.Add(ddlTable);
+            #endregion End把外键表加入DataSet
+
+            #region 图片附件
+            FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(this.FrmID, this.WorkID.ToString());
+            if (imgAthDBs != null && imgAthDBs.Count > 0)
+            {
+                DataTable dt_ImgAth = imgAthDBs.ToDataTableField("Sys_FrmImgAthDB");
+                myds.Tables.Add(dt_ImgAth);
+            }
+            #endregion
+
+            return BP.Tools.Json.ToJson(myds);
         }
         #endregion
 

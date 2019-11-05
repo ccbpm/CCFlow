@@ -32,14 +32,24 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string CondPRI_Init()
         {
+            //Directions dirs = new Directions();
+            //dirs.Retrieve(DirectionAttr.Node, this.FK_Node, DirectionAttr.pr)
+            //Node mynd = new Node(this.FK_Node);
+            //return mynd.HisToNodes.ToJson();
+
+            //按照条件的先后计算.
             Conds cds = new Conds();
-            cds.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, 2, CondAttr.PRI);
+            cds.Retrieve(CondAttr.FK_Node, this.FK_Node,
+                CondAttr.CondType, 2, CondAttr.PRI);
 
             foreach (Cond item in cds)
             {
                 Node nd = new Node(item.ToNodeID);
                 item.Note = nd.Name;
             }
+
+            if (cds.Count <= 1)
+                return "info@当前只有["+ cds.Count + "]个条件，无法进行排序.";
 
             return cds.ToJson();
         }

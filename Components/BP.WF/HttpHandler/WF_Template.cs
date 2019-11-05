@@ -16,7 +16,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_Template : DirectoryPageBase
+    public class WF_Template : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
         /// 构造函数

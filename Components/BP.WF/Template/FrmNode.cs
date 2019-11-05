@@ -621,7 +621,7 @@ namespace BP.WF.Template
                 this.FrmSln = Template.FrmSln.Default;
                 // this.IsEdit = false;
                 return;
-                throw new Exception("@表单关联信息已被删除。");
+               // throw new Exception("@表单关联信息已被删除。");
             }
         }
         /// <summary>

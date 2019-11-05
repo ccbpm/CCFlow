@@ -65,11 +65,9 @@
         }
         //预览手机端
         function Form_View(FK_MapData, FK_Flow) {
-            alert('该功能未开放');
-            return;
 
-            var url = '../../../CCMobile/Frm.aspx?FK_MapData=' + FK_MapData + '&IsTest=1&WorkID=0&FK_Node=999999';
-            OpenDialogAndCloseRefresh(url, "预览手机端表单", 600, 550, "icon-edit", function () { });
+            var url = "../FoolFormDesigner/MobileFrmView/FrmView.htm?IsTest=1&FrmID="+FK_MapData;
+            OpenDialogAndCloseRefresh(url, "预览手机端表单", 300, 450, "icon-edit", function () { });
         }
         //复制顺序到节点
         function Form_Copy(FK_MapData, FK_Flow) {

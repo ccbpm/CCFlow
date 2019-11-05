@@ -28,6 +28,9 @@
     <!--JL.plus-->
 </head>
 <body>
+    <div id="gifimg">
+        <img src="CCFlow\WF\Admin\CCBPMDesigner\Img" />
+    </div>
     <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: none;
         width: 320px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
         font-weight: bold;">
@@ -37,8 +40,10 @@
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;
         z-index: 21006;">
     </div>
-    <div id="Msg">
+    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;" id="Msg">
+        <img src="./Img/DemoLine.gif" />
     </div>
+    
     <!-- fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner" style="background: Background; font-size: 14px;">
@@ -183,9 +188,7 @@
             #mainul li {
                 padding: 1px 2px !important;
             }*/
-        icon-wrench
-        {
-
+        icon-wrench {
         }
     </style>
     <div id="processMenu" style="display: none;">
@@ -212,6 +215,10 @@
             <li id="Node_SubThread1"><i class="icon-tag"></i>&nbsp;<span class="_label">异表单子线程</span></li>
         </ul>
     </div>
+    <div id="div1">
+        <img src="CCFlow/WF/Admin/CCBPMDesigner/Img/DemoLine.gif" />
+
+    </div>
     <div id="canvasMenu" style="display: none;">
         <ul>
             <li id="cmNewNode"><i class="icon-plus"></i>&nbsp;<span class="_label">新建节点</span></li>
@@ -219,7 +226,7 @@
             <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
             <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
             <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
-            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="alert('用鼠标按住节点icon,然后拖拉会出现连接线，然后指向要连接到的节点.');">增加连接线</span></li>
+            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif()">增加连接线</span></li>
             <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
         </ul>
     </div>
@@ -342,6 +349,9 @@
     <script type="text/javascript">
         var the_flow_id = '4';
 
+        function ShowImage() {
+
+        }
         /*页面回调执行    callbackSuperDialog
         if(window.ActiveXObject){ //IE
         window.returnValue = globalValue
@@ -613,7 +623,7 @@
                         //表单方案.
                         var activeId = _canvas.getActiveId(); //右键当前的ID
                         NodeFrmSln(activeId); //表单方案.
-                    },                     
+                    },
                     "pmFrmD": function (t) {
                         var activeId = _canvas.getActiveId(); //右键当前的ID
                         NodeFrmD(activeId);
@@ -1106,6 +1116,18 @@
         //刷新页面
         function page_reload() {
             location.reload();
+        }
+
+    </script>
+    <script>
+        function ShowGif() {
+            alert("鼠标拖拽方式实现，请看演示");
+            /*$("#Msg").html("<img src='./Img/DemoLine.gif' style='width:400px; height:300px; margin-left:30%; margin-top:15%; background-color:blueviolet; position:fixed;' />  ");*/
+            $("#Msg").css('display', 'block');
+            setTimeout("HideGif()", 7000);
+        }
+        function HideGif() {
+            $("#Msg").css('display', 'none');
         }
 
     </script>

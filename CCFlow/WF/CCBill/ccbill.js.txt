@@ -1,0 +1,5 @@
+
+
+//自动的加载js Gener.js config.js queryString.js
+
+

@@ -81,7 +81,7 @@
 
                 var checked = $("#CB_" + node.NodeID).prop("checked");
 
-                if (checked == false)
+                if (checked == false || checked == undefined)
                     continue;
 
                 nodeReturn.FK_Node = GetQueryString("FK_Node");

@@ -37,9 +37,8 @@
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;
         z-index: 21006;">
     </div>
-    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;" id="Msg">
-        <img src="./Img/DemoLine.gif" alt="正在加载....." />
-    </div>
+   
+
     <!-- fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner" style="background: Background; font-size: 14px;">
@@ -97,6 +96,7 @@
             </button>
         </div>
     </div>
+
     <!-- 修改节点名称 -->
     <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -116,6 +116,26 @@
         <div class="modal-footer">
             <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
                 保存
+            </button>
+        </div>
+    </div>
+    <!-- 连接线提示 -->
+    <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                消息提示
+            </h3>
+        </div>
+        <div class="modal-body">
+            <img src="Img/DemoLine.gif" />
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                我知道了
             </button>
         </div>
     </div>
@@ -217,7 +237,7 @@
             <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
             <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
             <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
-            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif();">增加连接线</span></li>
+            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label">增加连接线</span></li>
             <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
         </ul>
     </div>
@@ -392,6 +412,7 @@
 
             var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
             var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
+            var alertModal2 = $('#alertModal2'), attributeModal = $("#attributeModal");
             var alertModal3 = $('#alertModal3'), attributeModal = $("#attributeModal");
             //消息提示
             mAlert = function (messages, s) {
@@ -408,6 +429,14 @@
                 alertModal1.find(".modal-body").html(messages);
                 alertModal1.modal('toggle');
                 setTimeout(function () { alertModal1.modal("hide") }, s);
+            }
+             //连接线演示
+            showGif = function (s) {
+               
+                if (!s) s = 200000;
+               
+                alertModal2.modal('toggle');
+                setTimeout(function () { alertModal2.modal("hide") }, s);
             }
             //消息弹出（标签）
             labAlert = function (messages, s) {
@@ -554,10 +583,14 @@
                         }
                         alert("粘贴:" + pasteId);
                     },
+                    "Li3": function (t) {
+                        showGif(20000);
+                    },
                     "cmHelp": function (t) {
 
                         Help();
                     }
+
                 }
                 /*步骤右键*/
                 , processMenus: {
@@ -1107,17 +1140,6 @@
         }
 
     </script>
-    <script>
-        function ShowGif() {
-            alert("用鼠标按住节点黑色区域,然后拖拉会出现连接线，然后指向要连接到的节点，请看演示");
-            
-            $("#Msg").css('display', 'block');
-            setTimeout("HideGif()", 7000);
-        }
-        function HideGif() {
-            $("#Msg").css('display', 'none');
-        }
-
-    </script>
+    
 </body>
 </html>

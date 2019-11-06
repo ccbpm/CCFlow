@@ -2075,19 +2075,29 @@ function OpenOffice(isEdit) {
 function setModalMax() {
     //设置bootstrap最大化窗口
     //获取width
-    var w = ddocument.body.clientWidth - 40;
-    $("#returnWorkModal .modal-dialog").css("width", w + "px");
-}
+    var w = document.body.clientWidth - 40;
+    $("#returnWorkModal .modal-dialog").css("width",w+ "px");
 
+   
+}
+function SetPageSize(w,h) {
+    $("#returnWorkModal .modal-dialog").css("width", w+"%");
+    $("#returnWorkModal .modal-dialog").css("height", h+"%");
+
+    $("#returnWorkModal .modal-content").css("width", "100%");
+    $("#returnWorkModal .modal-content").css("height", "100%");
+    $("#returnWorkModal .modal-content .modal-body").css("height", "100%");
+
+}
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode) {
 
     //初始化退回窗口的SRC.
-    var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
+    var html = '<div style="width:100%; height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
         '<div class="modal-dialog">'
         + '<div class="modal-content" style="border-radius:0px;width:900px;height:450px;text-align:left;">'
         + '<div class="modal-header">'
-        + '<button type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '<button id="ClosePageBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
         + '<button id="MaxSizeBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
         + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
         + '</div>'
@@ -2104,17 +2114,20 @@ function initModal(modalType, toNode) {
         setToobarEnable();
     });
     $("#MaxSizeBtn").click(function () {
-        var w = document.body.clientWidth - 80;
-        var h = document.body.clientHeight - 80;
+        //var w = document.body.clientWidth - 80;
+        //var h = document.body.clientHeight - 80;
 
-        $("#returnWorkModal .modal-dialog").css("width", w + "px");
-        $("#returnWorkModal .modal-dialog").css("height", h + "px");
+        //$("#returnWorkModal .modal-dialog").css("width", w + "px");
+        //$("#returnWorkModal .modal-dialog").css("height", h + "px");
 
-        $("#returnWorkModal .modal-content").css("width", w + "px");
-        $("#returnWorkModal .modal-content").css("height", h + "px");
-        $("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
+        //$("#returnWorkModal .modal-content").css("width", w + "px");
+        //$("#returnWorkModal .modal-content").css("height", h + "px");
+        //$("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
 
+        //按百分比自适应
+        SetPageSize(100, 100);
     });
+ 
     var modalIframeSrc = '';
     if (modalType != undefined) {
         switch (modalType) {
@@ -2122,17 +2135,24 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("提示信息");
                 modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
+            case "Send":
+                SetChildPageSize(60, 60);
+                break;
             case "TransferCustom":
                 $('#modalHeader').text("流转自定义");
                 //设置弹出页面的宽度高度
-                var w = document.body.clientWidth - 300;
-                var h = document.body.clientHeight - 40;
-                $("#returnWorkModal .modal-dialog").css("width", w + "px");
-                $("#returnWorkModal .modal-dialog").css("height", h + "px");
+                //var w = document.body.clientWidth - 300;
+                //var h = document.body.clientHeight - 40;
+                //$("#returnWorkModal .modal-dialog").css("width", w + "px");
+                //$("#returnWorkModal .modal-dialog").css("height", h + "px");
 
-                $("#returnWorkModal .modal-content").css("width", w + "px");
-                $("#returnWorkModal .modal-content").css("height", h + "px");
-                $("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
+                //$("#returnWorkModal .modal-content").css("width", w + "px");
+                //$("#returnWorkModal .modal-content").css("height", h + "px");
+                //$("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
+
+                //按百分比自适应
+                SetPageSize(80, 80);
+
                 modalIframeSrc = "./WorkOpt/TransferCustom.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             case "accpter":

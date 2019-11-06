@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<%@ Page validateRequest="false" %>
 <head>
     <title>任务分配</title>
 
@@ -8,8 +9,8 @@
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript"   src="../Scripts/config.js" ></script>
-    <script type="text/javascript"   src="../Comm/Gener.js" ></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript">
 
         var workID = GetQueryString("WorkID");
@@ -121,9 +122,9 @@
                 var empInfo = gwl.FK_Emp + "," + gwl.FK_EmpText;
 
                 if (obj.indexOf(gwl.FK_Emp) != -1)
-                    empExts += "<font color=green>" + empInfo + "</font>&nbsp;&nbsp;";
+                    empExts += empInfo;
                 else
-                    empExts += "<strike><font color=red>(" + empInfo + "</font></strike>&nbsp;&nbsp;";
+                    empExts += empInfo;
             }
 
             rm.Emps = emps;
@@ -135,17 +136,17 @@
         }
     </script>
 </head>
-<body >
+<body>
 
-<form id="cc">
+    <form id="cc">
 
-<h3>工作分配</h3>
+        <h3>工作分配</h3>
 
-     <div id="info" ></div>
+        <div id="info"></div>
 
-     <input type=button value='执行分配'  onclick='Save()' />
+        <input type=button value='执行分配' onclick='Save()' />
 
-</form>
+    </form>
 
 </body>
 </html>

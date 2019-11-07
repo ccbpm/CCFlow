@@ -138,6 +138,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FrmUrl = "FrmUrl";
         /// <summary>
+        /// 流程表单类型
+        /// </summary>
+        public const string FlowFrmType = "FlowFrmType";
+        /// <summary>
         /// 流程数据存储模式
         /// </summary>
         public const string DataStoreModel = "DataStoreModel";

@@ -481,9 +481,11 @@ namespace BP.WF.Template
                 msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
 
-                //表单URL.
+                //表单URL. //@liuqiang 把他翻译到java里面去.
+                map.AddDDLSysEnum(FlowAttr.FlowFrmType, 0, "流程全局表单类型", true, false, FlowAttr.FlowFrmType,
+                    "@0=完整版-2019年更早版本@1=开发者表单@2=傻瓜表单@3=自定义(嵌入)表单@4=SDK表单");
                 map.AddTBString(FlowAttr.FrmUrl, null, "表单Url", true, false, 0, 150, 10, true);
-                map.SetHelperAlert(FlowAttr.FrmUrl, "对嵌入式表单,SDK表单的url的表单有效,用与整体流程的设置.");
+                map.SetHelperAlert(FlowAttr.FrmUrl, "对嵌入式表单,SDK表单的url的表单,嵌入式表单有效,用与整体流程的设置.");
                 #endregion 表单数据.
 
                 #region 开发者信息.

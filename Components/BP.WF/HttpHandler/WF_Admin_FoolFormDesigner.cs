@@ -2104,6 +2104,10 @@ namespace BP.WF.HttpHandler
             return BP.WF.NetPlatformImpl.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
         }
 
+        /// <summary>
+        /// @sly 翻译到java.
+        /// </summary>
+        /// <returns></returns>
         public string FrmView_Init()
         {
             string frmID = this.GetRequestVal("FrmID");

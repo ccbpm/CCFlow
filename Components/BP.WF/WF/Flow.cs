@@ -209,6 +209,34 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.FlowEventEntity, value);
             }
         }
+        /// <summary>
+        /// 流程表单类型
+        /// </summary>
+        public FlowFrmType FlowFrmType
+        {
+            get
+            {
+                return (FlowFrmType)this.GetValIntByKey(FlowAttr.FlowFrmType);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.FlowFrmType, (int)value);
+            }
+        }
+        /// <summary>
+        /// url
+        /// </summary>
+        public string FrmUrl
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.FrmUrl);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.FrmUrl, value);
+            }
+        }
 
         /// <summary>
         /// 流程标记
@@ -4576,8 +4604,9 @@ namespace BP.WF
                 // add 2013-01-01. 
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储主表", true, false, 0, 30, 10);
 
-                // 表单连接.
-                map.AddTBString(FlowAttr.FrmUrl, null, "表单Url", true, false, 0, 150, 10);
+                // add 2019.11.07  @liuqiang.
+                map.AddTBInt(FlowAttr.FlowFrmType, 0, "流程表单类型", true, true);
+                map.AddTBString(FlowAttr.FrmUrl, null, "表单Url", true, false, 0, 150, 10, true);
 
 
                 // 草稿规则 "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱"

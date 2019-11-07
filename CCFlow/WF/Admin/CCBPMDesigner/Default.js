@@ -3,10 +3,6 @@ var runOnPlant = "BP";
 var initData = null;
 var runModelType = 0; // 0=完整版 1=简洁版.
 $(function () {
-    if (plant == "CCFlow")
-        Handler = basePath + "/WF/Admin/CCBPMDesigner/Handler.ashx";
-    else
-        Handler = basePath + "/WF/Admin/CCBPMDesigner/ProcessRequest.do";
 
     //判断运行的类型.
     var url = window.location.href;
@@ -327,42 +323,17 @@ function Login2App() {
         window.location.href = getContextPath() + "/a/logout";
         return;
     }
-
     window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
     return;
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    var data = handler.DoMethodReturnString("Login_Redirect");
-    if (data.indexOf('err@') == 0) {
-        alert(data);
-        return;
-    }
-
-    var url = data.replace('url@', '');
-    window.open(url);
 }
+
 //退出
 function LoginOut() {
-    $.messager.confirm("提示", "确定需要退出？", function (n) {
-        if (n == true) {
-            window.location.href = "Login.htm?DoType=Logout";
-        }
-    });
-}
-function BPMN_Msg(msg, callBack) {
-    // create the notification
-    var notification = new NotificationFx({
-        message: '<span class="icon icon-megaphone"></span><div class="ns-p"><p>' + msg + '</p></div>',
-        layout: 'bar',
-        effect: 'slidetop',
-        type: 'notice', // notice, warning or error
-        onClose: function () {
-            if (callBack) callBack();
-        }
-    });
-    notification.show();
-}
 
+    if (confirm("提示确定需要退出？") == false)
+        return;
+    window.location.href = "Login.htm?DoType=Logout";
+}
 
 var FLOW_TREE = "flowTree";
 var FORM_TREE = "formTree";
@@ -587,19 +558,11 @@ function editFlowSort() {
     if (val == null || val == '')
         return;
 
-    //传入后台参数
-    var params = {
-        No: currSort.id,
-        Name: val
-    };
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    handler.AddPara(params);
-    var data = handler.DoMethodReturnString("EditFlowSort");
-
-    if (data.indexOf('err@') == 0) {
-        alert(data);
-    }
+    var sortNo = currSort.id;
+    sortNo = sortNo.substring(1);
+    var en = new Entity("BP.WF.Template.FlowSort", sortNo);
+    en.Name = val;
+    en.Update();
 
     $('#flowTree').tree('update', {
         target: currSort.target,
@@ -621,6 +584,9 @@ function deleteFlowSort() {
     handler.AddPara("FK_FlowSort", currSort.id);
     var data = handler.DoMethodReturnString("DelFlowSort");
     alert(data);
+    if (data.indexOf("err@") == 0)
+        return "";
+
     //删除节点
     $('#flowTree').tree('remove', currSort.target);
 }
@@ -869,8 +835,6 @@ function newCCFormSort(isSub) {
     else
         data = en.DoMethodReturnString("DoCreateSameLevelNodeIt", val);
 
-    // alert(data);
-
     var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
 
     $('#formTree').tree('append', {
@@ -894,34 +858,25 @@ function newCCFormSort(isSub) {
 function EditCCFormSort() {
 
     var currCCFormSort = $('#formTree').tree('getSelected');
-    if (currCCFormSort == null || currCCFormSort.attributes.TType != "FORMTYPE")
+    if (currCCFormSort == null
+        || currCCFormSort.attributes.TType != "FORMTYPE")
         return;
 
-    alert('sss');
+    var val = prompt("请输入表单类别名称", currCCFormSort.text);
+    if (val == null || val == '')
+        return;
 
-    OpenEasyUiSampleEditDialog("编辑类别名称", '', currCCFormSort.text, function (val) {
-        if (val == null || val.length == 0) {
-            $.messager.alert('错误', '请输入类别名称', 'error');
-            return false;
-        }
+    var sortNo = currCCFormSort.id;
+    var en = new Entity("BP.WF.Template.SysFormTree", sortNo);
+    en.Name = val;
+    en.Update();
 
-        //传入参数
-        var params = {
-            action: "CCForm_EditCCFormSort",
-            No: currCCFormSort.id,
-            Name: val
-        };
+    $('#formTree').tree('update', {
+        target: currCCFormSort.target,
+        text: val
+    });
+    $('#formTree').tree('select', $('#formTree').tree('find', data).target);
 
-        ajaxService(params, function (data) {
-
-            $('#formTree').tree('update', {
-                target: currCCFormSort.target,
-                text: val
-            });
-            $('#formTree').tree('select', $('#formTree').tree('find', data).target);
-
-        }, this);
-    }, null, false, 'icon-new');
 }
 //删除表单树类别
 function DeleteCCFormSort() {
@@ -929,21 +884,20 @@ function DeleteCCFormSort() {
     if (currFormSort == null || currFormSort.attributes.TType != 'FORMTYPE')
         return;
 
-    OpenEasyUiConfirm("你确定要删除名称为“" + currFormSort.text + "”的类别吗？", function () {
-        var params = {
-            DoType: "CCForm_DelFormSort",
-            No: currFormSort.id
-        };
-        ajaxService(params, function (data) {
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-            alert(data);
-            $('#flowTree').tree('remove', currFormSort.target);
+    if (window.confirm("你确定要删除名称为“" + currFormSort.text + "”的类别吗？") == false)
+        return;
 
-        }, this);
-    });
+    //删除表单树类别.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("No", currFormSort.id);
+    var data = handler.DoMethodReturnString("CCForm_DelFormSort");
+
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+    alert(data);
+    $('#flowTree').tree('remove', currFormSort.target);
 }
 
 //上移表单类别
@@ -951,40 +905,36 @@ function moveUpCCFormSort() {
     var currFormSort = $('#formTree').tree('getSelected');
     if (currFormSort == null)
         return;
-    //传入后台参数
-    var params = {
-        DoType: "CCForm_MoveUpCCFormSort",
-        No: currFormSort.id
-    };
-    ajaxService(params, function (data) {
-        var before = $(currFormSort.target).parent().prev();
-        if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORMTYPE") {
-            return;
-        }
 
-        $(currFormSort.target).parent().insertBefore(before);
-    });
+    var no = currFormSort.id;
+    var en = new Entity("BP.WF.Template.SysFormTree", no);
+    en.DoMethodReturnString("DoUp");
+
+    var before = $(currFormSort.target).parent().prev();
+    if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORMTYPE") {
+        return;
+    }
+
+    $(currFormSort.target).parent().insertBefore(before);
 }
 
 //下移表单类别
 function moveDownCCFormSort() {
+
     var currFormSort = $('#formTree').tree('getSelected');
     if (currFormSort == null)
         return;
 
-    //传入后台参数
-    var params = {
-        DoType: "CCForm_MoveDownCCFormSort",
-        No: currFormSort.id
-    };
-    ajaxService(params, function (data) {
-        var next = $(currFormSort.target).parent().next();
-        if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORMTYPE") {
-            return;
-        }
+    var no = currFormSort.id;
+    var en = new Entity("BP.WF.Template.SysFormTree", no);
+    en.DoMethodReturnString("DoDown");
 
-        $(currFormSort.target).parent().insertAfter(next);
-    });
+    var next = $(currFormSort.target).parent().next();
+    if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORMTYPE") {
+        return;
+    }
+
+    $(currFormSort.target).parent().insertAfter(next);
 }
 
 //新建表单
@@ -1173,22 +1123,20 @@ function designFoolFrm() {
 
 //上移表单
 function moveUpCCFormTree() {
+
     var currForm = $('#formTree').tree('getSelected');
     if (currForm == null)
         return;
-    //传入后台参数
-    var params = {
-        DoType: "CCForm_MoveUpCCFormTree",
-        FK_MapData: currForm.id
-    };
-    ajaxService(params, function (data) {
-        var before = $(currForm.target).parent().prev();
-        if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORM") {
-            return;
-        }
 
-        $(currForm.target).parent().insertBefore(before);
-    });
+    var en = new Entity("BP.Sys.MapData", currForm.id);
+    en.DoMethodReturnString("DoUp");
+
+    var before = $(currForm.target).parent().prev();
+    if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORM") {
+        return;
+    }
+
+    $(currForm.target).parent().insertBefore(before);
 }
 
 //下移表单
@@ -1197,41 +1145,29 @@ function moveDownCCFormTree() {
     if (currForm == null)
         return;
 
-    //传入后台参数
-    var params = {
-        DoType: "CCForm_MoveDownCCFormTree",
-        FK_MapData: currForm.id
-    };
-    ajaxService(params, function (data) {
-        var next = $(currForm.target).parent().next();
-        if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORM") {
-            return;
-        }
+    var en = new Entity("BP.Sys.MapData", currForm.id);
+    en.DoMethodReturnString("DoOrderDown");
 
-        $(currForm.target).parent().insertAfter(next);
-    });
+    var next = $(currForm.target).parent().next();
+    if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORM") {
+        return;
+    }
+
+    $(currForm.target).parent().insertAfter(next);
 }
 
 
 //删除流程树表单
 function deleteCCFormTreeMapData() {
+
     var currForm = $('#formTree').tree('getSelected');
     if (currForm == null)
         return;
 
     if (confirm('您确认要删除吗？') == false)
         return;
-
     var en = new Entity("BP.Sys.MapData", currForm.id);
     en.Delete();
-
-    //            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    //            handler.AddPara("FK_MapData", currForm.id);
-    //            var data = handler.DoMethodReturnString("CCForm_DeleteCCFormMapData");
-    //            if (data.indexOf('err@') != -1) {
-    //                alert(data);
-    //                return;
-    //            }
 
     //如果右侧有打开该表单，则关闭
     var currTab = $('#tabs').tabs('getTab', currForm.text);
@@ -1256,6 +1192,7 @@ function CopyFrm() {
         alert("表单ID不能为空");
         return;
     }
+
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
     handler.AddPara("FromFrmID", node.id);
     handler.AddPara("ToFrmID", frmID)
@@ -1272,114 +1209,6 @@ function CopyFrm() {
 
     //设计表单.
     addTab("DesignerFrm" + frmID, "设计表单-" + frmName, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID);
-
-}
-
-
-//新建数据源，added by liuxc,2015-10-7
-function newSrc() {
-    var url = "../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=New";
-    //OpenEasyUiDialog(url, "euiframeid", '新建数据源', 800, 495, 'icon-new');
-    //todo:增加数据源后，在树上增加新结节的逻辑
-    addTab("NewSrc", "新建数据源", url);
-}
-
-//新建数据源表
-function newSrcTable() {
-    var url = "../FoolFormDesigner/CrateSFGuide.htm?DoType=New&FromApp=SL";
-    //OpenEasyUiDialog(url, "euiframeid", '新建数据源表', 800, 495, 'icon-new');
-    //todo:增加数据源表后，在树上增加新结节的逻辑
-    addTab("NewSrcTable", "新建数据源表", url);
-}
-
-//数据源属性
-function srcProperty() {
-    var srcNode = $('#formTree').tree('getSelected');
-    if (!srcNode || srcNode.attributes.TTYPE != 'SRC') {
-        $.messager.alert('错误', '请选择数据源！', 'error');
-        return;
-    }
-
-    var url = '../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=Edit&No=' + srcNode.id + '&t=' + Math.random();
-    //OpenEasyUiDialog(url, "euiframeid", srcNode.text + ' 属性', 800, 495, 'icon-edit');
-    //todo:数据源属性修改后，在树上的结节信息的相应变更逻辑
-    addTab(srcNode.id, srcNode.text, url, srcNode.iconCls);
-}
-
-
-//数据源表数据查看/编辑
-function srcTableData() {
-    var srcTableNode = $('#formTree').tree('getSelected');
-    if (!srcTableNode || srcTableNode.attributes.TTYPE != 'SRCTABLE') {
-        $.messager.alert('错误', '请选择数据源表！', 'error');
-        return;
-    }
-
-    var url = "../FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + srcTableNode.id; //todo:此处BP.Pub.Days样式的，页面报错
-    //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 数据编辑', 800, 495, 'icon-edit');
-    addTab(srcTableNode.id, srcTableNode.text + ' 数据编辑', url, srcTableNode.iconCls);
-}
-
-/*组织结构树操作开始*/
-function getSelected(sTreeId, sName, oChecks) {
-    var node = $("#" + sTreeId).tree("getSelected");
-
-    if (!node) {
-        $.messager.alert("提示", "请选择" + (sName ? sName : "树结点") + "！", "warning");
-        return null;
-    }
-
-    if (!oChecks) {
-        return node;
-    }
-
-    var pass = true;
-    var exist = false;
-
-    for (var field in oChecks) {
-        exist = false;
-
-        if (node[field]) {
-            exist = true;
-
-            if (node[field] != oChecks[field]) {
-                pass = false;
-                break;
-            }
-        }
-
-        if (!exist && node.attributes && node.attributes[field]) {
-            exist = true;
-
-            if (node.attributes[field] != oChecks[field]) {
-                pass = false;
-                break;
-            }
-        }
-
-        if (!exist) {
-            pass = false;
-        }
-
-        if (!pass) {
-            break;
-        }
-    }
-
-    if (!pass) {
-        $.messager.alert("提示", "请选择" + (sName ? sName : "树结点") + "！检查规则不通过！", "warning");
-        return null;
-    }
-
-    return node;
-}
-
-function newDept() {
-    var node = getSelected(ORG_TREE, "部门", { TTYPE: "DEPT" });
-    if (!node) return;
-
-    var pnode = $("#" + ORG_TREE).tree("getParent", node.target);
-    addTab("NewDept", "新建同级部门", "../../Comm/En.htm?EnName=BP.GPM.Dept&ParentNo=" + node.id, "icon-new");
 }
 
 
@@ -1395,172 +1224,9 @@ function WinOpen(url) {
     }
     window.open(url, "_blank", "height=" + winHeight + ",width=" + winWidth + ",top=0,left=0,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
 }
-//用户信息
-var WebUser = { No: '', Name: '', FK_Dept: '', SID: '' };
-function InitUserInfo() {
-
-    var params = {
-        action: "GetWebUserInfo"
-    };
-    ajaxService(params, function (data) {
-
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            window.location.href = "Login.htm?DoType=Logout";
-            return;
-        }
-
-        var jdata = $.parseJSON(data);
-        WebUser.No = jdata.No;
-        WebUser.Name = jdata.Name;
-        WebUser.FK_Dept = jdata.FK_Dept;
-        WebUser.SID = jdata.SID;
-    }, this);
-}
-
-
-
-function GenerStructureTree(parentrootid, pnodeid, treeid) {
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    handler.AddPara("parentrootid", parentrootid);
-    var data = handler.DoMethodReturnString("GetStructureTreeRootTable");
-
-    if (data.indexOf('err@') == 0) {
-        alert(data);
-        return;
-    }
-
-
-    data = $.parseJSON(data);
-    var roottarget;
-
-    if (pnodeid) {
-        roottarget = $("#" + treeid).tree("find", pnodeid).target;
-    }
-
-    $("#" + treeid).tree("append", {
-        parent: roottarget,
-        data: [{
-            id: "DEPT_" + data[0].NO,
-            text: data[0].NAME,
-            state: "closed",
-            attributes: { TType: "DEPT", IsLoad: false },
-            children: [{
-                text: "加载中..."
-            }]
-        }]
-    });
-
-    $("#" + treeid).tree({
-        onExpand: function (node) {
-            ShowSubDepts(node, treeid);
-        }
-    });
-
-    $("#" + treeid).tree("expand", $("#" + treeid).tree("getChildren", "DEPT_" + data[0].NO)[0].target);
-}
-
-function ShowSubDepts(node, treeid) {
-    if (node.attributes.IsLoad) {
-        return;
-    }
-
-    var isStation = node.attributes.TType == "STATION";
-    var data;
-
-    if (isStation) {
-        var deptNo = node.attributes.DeptId;
-        var stationNo = node.attributes.StationId;
-
-        ajaxService({ action: "GetEmpsByStationTable", DeptNo: deptNo, StationNo: stationNo }, function (re) {
-            data = $.parseJSON(re);
-            var children = $("#" + treeid).tree('getChildren', node.target);
-            if (children && children.length >= 1) {
-                if (children[0].text == "加载中...") {
-                    $("#" + treeid).tree("remove", children[0].target);
-                }
-            }
-
-            $.each(data, function () {
-                $("#" + treeid).tree("append", {
-                    parent: node.target,
-                    data: [{
-                        id: this.PARENTNO + "|" + this.NO,
-                        text: this.NAME,
-                        iconCls: "icon-user",
-                        attributes: { TType: "EMP", StationId: stationNo, DeptId: deptNo }
-                    }]
-                });
-            });
-
-            node.attributes.IsLoad = true;
-        });
-    }
-    else {
-        var deptid = node.id.replace(/DEPT_/g, "");
-        ajaxService({ action: "GetSubDeptsTable", rootid: deptid }, function (re) {
-            data = $.parseJSON(re);
-
-            var children = $("#" + treeid).tree('getChildren', node.target);
-            if (children && children.length >= 1) {
-                if (children[0].text == "加载中...") {
-                    $("#" + treeid).tree("remove", children[0].target);
-                }
-            }
-
-            $.each(data, function () {
-                var n = {
-                    id: this.TTYPE + "_" + this.NO,
-                    text: this.NAME,
-                    attributes: {
-                        TType: this.TTYPE
-                    }
-                };
-
-                switch (this.TTYPE) {
-                    case "DEPT":
-                        n.iconCls = "icon-tree_folder";
-                        n.state = "closed";
-                        n.attributes.IsLoad = false;
-                        n.children = [{
-                            text: "加载中..."
-                        }];
-                        break;
-                    case "STATION":
-                        n.iconCls = "icon-station";
-                        n.state = "closed";
-                        n.attributes.IsLoad = false;
-                        n.attributes.StationId = this.NO;
-                        n.attributes.DeptId = deptid;
-                        n.children = [{
-                            text: "加载中..."
-                        }];
-                        break;
-                    case "EMP":
-                        n.iconCls = "icon-user";
-                        n.attributes.DeptId = deptid;
-                        n.attributes.EmpId = this.NO;
-                        break;
-                }
-
-                $("#" + treeid).tree("append", {
-                    parent: node.target,
-                    data: [n]
-                });
-            });
-            //再次绑定
-            $("#" + treeid).tree({
-                onExpand: function (node) {
-                    ShowSubDepts(node, treeid);
-                }
-            });
-            node.attributes.IsLoad = true;
-        });
-    }
-}
 
 var treesObj;   //保存功能区处理对象
+var webUser = new WebUser();
 
 $(function () {
 
@@ -1574,11 +1240,10 @@ $(function () {
     }
 
     var jdata = $.parseJSON(data);
-    WebUser.No = jdata.No;
-    WebUser.Name = jdata.Name;
-    WebUser.FK_Dept = jdata.FK_Dept;
-    WebUser.SID = jdata.SID;
-
+    //WebUser.No = jdata.No;
+    //WebUser.Name = jdata.Name;
+    //WebUser.FK_Dept = jdata.FK_Dept;
+    //WebUser.SID = jdata.SID;
     // SetTreeRoot(jdata);
 
     treesObj = new FuncTrees("menuTab");

@@ -46,11 +46,10 @@
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
             }
-
         });
-
+        //要返回的json.
         function getNewFlowInfo() {
-
+              
             return {
                 FlowName: $('#TB_FlowName').val(),
                 FlowSort: $('#HD_FlowSort').val(),

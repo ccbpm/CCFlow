@@ -74,7 +74,8 @@
             var model = $("#DDL_FlowFrmType").val();
             
             if (model == "0") {
-                $("#TB_URL").attr("disabled","disabled");
+                $("#TB_URL").attr("disabled", "disabled");
+                $("#TB_URL").attr("value","   当前不可用");
             }
             else {
                 $("#TB_URL").attr("disabled",false);

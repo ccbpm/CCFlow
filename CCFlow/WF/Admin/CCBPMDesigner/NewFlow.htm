@@ -15,7 +15,7 @@
     <script type="text/javascript">
 
         var model = 0;
-        var flowSort ="";
+        var flowSort = "";
         $(function () {
 
             //让其落到第一个文本框上，焦点.
@@ -49,7 +49,7 @@
         });
         //要返回的json.
         function getNewFlowInfo() {
-              
+
             return {
                 FlowName: $('#TB_FlowName').val(),
                 FlowSort: $('#HD_FlowSort').val(),
@@ -71,14 +71,14 @@
         function FrmTypeChange() {
             //var model = GetQueryString("RunModel");
             var model = $("#DDL_FlowFrmType").val();
-            
+
             if (model == "0") {
                 $("#TB_URL").attr("disabled", "disabled");
-                $("#TB_URL").attr("value","   当前不可用");
+                $("#TB_URL").attr("value", "   当前不可用");
             }
             else {
-                $("#TB_URL").attr("disabled",false);
-                $("#TB_URL").attr("value","");
+                $("#TB_URL").attr("disabled", false);
+                $("#TB_URL").attr("value", "");
             }
         }
     </script>
@@ -124,7 +124,7 @@
             <tr id="trfrm">
                 <td>表单URL</td>
                 <td>
-                    <input disabled="disabled"  value="&nbsp&nbsp&nbsp当前不可用" id="TB_URL" style="width:200px" />
+                    <input disabled="disabled" value="&nbsp&nbsp&nbsp当前不可用" id="TB_URL" style="width:200px" />
                 </td>
                 <td> 当表单为SDK </td>
             </tr>
@@ -141,7 +141,7 @@
         </table>
 
 
-      
+
     </form>
 </body>
 </html>

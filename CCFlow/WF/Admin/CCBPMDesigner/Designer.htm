@@ -813,7 +813,6 @@
                     lb.Update();
                 }
 
-
                 // 清除流程缓存，并修复数据.
                 var flow = new Entity("BP.WF.Flow", flowNo);
                 flow.DoMethodReturnString("DoCheck");

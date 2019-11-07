@@ -118,7 +118,7 @@ function NodeFrmSln(nodeID) {
     // OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
 }
 
-//表单方案
+//方向条件.
 function CondDir(fromNodeID) {
 
     var flowNo = GetQueryString("FK_Flow");
@@ -172,9 +172,11 @@ function NodeAccepterRole(nodeID) {
 }
 
 function Reload() {
+    if (confirm('您确定要刷新吗？刷新将不能保存.') == false)
+        return;
+
     window.location.href = window.location.href;
 }
-
 
 //打开.
 function OpenEasyUiDialogExt(url, title, w, h, isReload) {

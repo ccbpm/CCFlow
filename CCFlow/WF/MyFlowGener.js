@@ -895,7 +895,7 @@ function GenerCheckIDs() {
 
 //发送
 function Send(isHuiQian) {
-
+    SetPageSize(80, 80);
     //保存前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
@@ -975,12 +975,12 @@ function Send(isHuiQian) {
 
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
-
+        
         var selectToNode = $('#DDL_ToNode  option:selected').data();
         toNodeID = selectToNode.No;
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
-
+           
             Save(1); //执行保存.
 
             if (isHuiQian == true) {
@@ -2136,7 +2136,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             case "Send":
-                SetChildPageSize(60, 60);
+                SetChildPageSize(80, 80);
                 break;
             case "TransferCustom":
                 $('#modalHeader').text("流转自定义");
@@ -2157,42 +2157,53 @@ function initModal(modalType, toNode) {
                 break;
             case "accpter":
                 $('#modalHeader').text("工作移交");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "shift":
                 $('#modalHeader').text("工作移交");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/Forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "askfor":
                 $('#modalHeader').text("加签");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "Btn_WorkCheck":
                 $('#modalHeader').text("审核");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
 
             case "Track": //轨迹.
                 $('#modalHeader').text("轨迹");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "HuiQian":
 
-                if (toNode != null)
+                if (toNode != null) {
                     $('#modalHeader').text("先会签，后发送。");
-                else
+                    SetPageSize(80, 80);
+                }
+                else {
                     $('#modalHeader').text("会签");
+                    SetPageSize(80, 80);
+                }
 
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
 
                 break;
             case "AddLeader":
                 $('#modalHeader').text("加组长");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random()
 
                 break;
             case "CC":
                 $('#modalHeader').text("抄送");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/CC.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
                 break;
             case "PackUp_zip":

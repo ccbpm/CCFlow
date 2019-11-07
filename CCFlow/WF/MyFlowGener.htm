@@ -114,6 +114,7 @@
         }
 
         window.onunload = function () {
+            SetPageSize(80, 80);
             if (window.hasClickSend && opener.frameElement.contentWindow.location.href.toLowerCase().indexOf("todolist") != -1) {
                 //刷新代办
                 if (opener.frameElement) {
@@ -204,8 +205,7 @@
             </div>
         </div>
         <!--底部功能按钮 发送、移交-->
-        <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);
-            padding-top: 5px;" class="Bar">
+        <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);padding-top: 5px;" class="">
         </div>
     </div>
     <!-- /.modal -->

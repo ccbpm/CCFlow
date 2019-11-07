@@ -443,33 +443,35 @@ function newFlow() {
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
 
-        if (newFlowInfo.flowName == null || newFlowInfo.flowName.length == 0 || newFlowInfo.flowSort == null || newFlowInfo.flowSort.length == 0) {
-            $.messager.alert('错误', '信息填写不完整', 'error');
+        if (newFlowInfo.FlowName == null || newFlowInfo.FlowName.length == 0
+            || newFlowInfo.FlowSort == null || newFlowInfo.FlowSort.length == 0) {
+
+            alert('信息填写不完整:' + newFlowInfo.FlowName + newFlowInfo.FlowSort);
+            //$.messager.alert('错误', '信息填写不完整', 'error');
             return false;
         }
 
+        debugger;
+
+        var flowFrmType = newFlowInfo.FlowFrmType;
+
         if (newFlowInfo.RunModel == 1) {
 
-            if (newFlowInfo.FlowFrmType == FlowFrmType.SDKFrm
-                || newFlowInfo.FlowFrmType == FlowFrmType.SelfFrm)
-            {
-                if (newFlowInfo.FrmUrl == "") {
+            if (flowFrmType == 3 || flowFrmType == 4) {
+                if (newFlowInfo.FrmUrl == "" || newFlowInfo.FrmUrl == null
+                    || newFlowInfo.FrmUrl == undefined) {
                     alert('请输入url');
                     return false;
                 }
             }
-
         }
 
         //判断流程标记是否存在  19.10.22 by sly
-        if (newFlowInfo.flowCode != ""
-            && newFlowInfo.flowCode != null
-            && newFlowInfo.flowCode != undefined) {
-
+        if (newFlowInfo.FlowMark != "") {
             var flows = new Entities("BP.WF.Flows");
-            flows.Retrieve("FlowMark", newFlowInfo.flowCode);
+            flows.Retrieve("FlowMark", newFlowInfo.FlowMark);
             if (flows.length > 0) {
-                $.messager.alert('错误', '该流程标记已经存在系统中！', 'error');
+                alert('该流程标记[' + newFlowInfo.FlowMark + ']已经存在系统中');
                 return false;
             }
         }
@@ -479,8 +481,8 @@ function newFlow() {
         $("#ShowMsg").css({ "width": "320px" });
         $(".mymask").show();
 
-      
-        var handler = new HttpHandler("BP.");
+
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
         handler.AddPara(newFlowInfo);
         var data = handler.DoMethodReturnString("Defualt_NewFlow");
 
@@ -493,12 +495,12 @@ function newFlow() {
         }
 
         var flowNo = data;
-        var flowName = newFlowInfo.flowName;
+        var flowName = newFlowInfo.FlowName;
 
         //在左侧流程树上增加新建的流程,并选中
         //获取新建流程所属的类别节点
         //todo:此处还有问题，类别id与流程id可能重复，重复就会出问题，解决方案有待进一步确定
-        var parentNode = $('#flowTree').tree('find', "F" + newFlowInfo.flowSort);
+        var parentNode = $('#flowTree').tree('find', "F" + newFlowInfo.FlowSort);
         var node = $('#flowTree').tree('append', {
             parent: parentNode.target,
             data: [{

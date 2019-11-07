@@ -451,8 +451,6 @@ function newFlow() {
             return false;
         }
 
-        debugger;
-
         var flowFrmType = newFlowInfo.FlowFrmType;
 
         if (newFlowInfo.RunModel == 1) {
@@ -480,7 +478,6 @@ function newFlow() {
         $("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
         $("#ShowMsg").css({ "width": "320px" });
         $(".mymask").show();
-
 
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
         handler.AddPara(newFlowInfo);
@@ -556,25 +553,27 @@ function newFlowSort(isSub) {
         Name: val
     };
 
-    ajaxService(params, function (data) {
-        var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
+    //创建目录.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara(params);
+    var data = handler.DoMethodReturnString(doWhat);
 
-        $('#flowTree').tree('append', {
-            parent: parentNode.target,
-            data: [{
-                id: data,
-                text: val,
-                attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
-                checked: false,
-                iconCls: 'icon-tree_folder',
-                state: 'open',
-                children: []
-            }]
-        });
+    var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
 
-        $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
+    $('#flowTree').tree('append', {
+        parent: parentNode.target,
+        data: [{
+            id: data,
+            text: val,
+            attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
+            checked: false,
+            iconCls: 'icon-tree_folder',
+            state: 'open',
+            children: []
+        }]
+    });
 
-    }, this);
+    $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
 }
 
 //修改流程类别
@@ -590,42 +589,40 @@ function editFlowSort() {
 
     //传入后台参数
     var params = {
-        DoType: "EditFlowSort",
         No: currSort.id,
         Name: val
     };
 
-    ajaxService(params, function (data) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara(params);
+    var data = handler.DoMethodReturnString("EditFlowSort");
 
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-        }
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+    }
 
-        $('#flowTree').tree('update', {
-            target: currSort.target,
-            text: val
-        });
+    $('#flowTree').tree('update', {
+        target: currSort.target,
+        text: val
+    });
 
-    }, this);
 }
 
+//删除流程类别.
 function deleteFlowSort() {
     /// <summary>删除流程类别</summary>
     var currSort = $('#flowTree').tree('getSelected');
-    if (currSort == null || currSort.attributes.ISPARENT == undefined) return;
+    if (currSort == null || currSort.attributes.ISPARENT == undefined)
+        return;
 
-    OpenEasyUiConfirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？", function () {
-        //传入后台参数
-        var params = {
-            DoType: "DelFlowSort",
-            FK_FlowSort: currSort.id
-        };
-        ajaxService(params, function (data) {
-            alert(data);
-            //删除节点
-            $('#flowTree').tree('remove', currSort.target);
-        });
-    });
+    if (window.confirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？") == false)
+        return;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("FK_FlowSort", currSort.id);
+    var data = handler.DoMethodReturnString("DelFlowSort");
+    alert(data);
+    //删除节点
+    $('#flowTree').tree('remove', currSort.target);
 }
 
 /// <summary>流程树节点属性</summary>
@@ -656,19 +653,16 @@ function moveUpFlowSort() {
     var currSort = $('#flowTree').tree('getSelected');
     if (currSort == null) return;
 
-    //传入后台参数
-    var params = {
-        DoType: "MoveUpFlowSort",
-        FK_FlowSort: currSort.id
-    };
-    ajaxService(params, function (data) {
-        var before = $(currSort.target).parent().prev();
-        if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOWTYPE") {
-            return;
-        }
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("FK_FlowSort", currSort.id);
+    var data = handler.DoMethodReturnString("MoveUpFlowSort");
 
-        $(currSort.target).parent().insertBefore(before);
-    });
+    var before = $(currSort.target).parent().prev();
+    if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+        return;
+    }
+
+    $(currSort.target).parent().insertBefore(before);
 }
 
 //下移流程类别
@@ -676,19 +670,16 @@ function moveDownFlowSort() {
     var currSort = $('#flowTree').tree('getSelected');
     if (currSort == null) return;
 
-    //传入后台参数
-    var params = {
-        DoType: "MoveDownFlowSort",
-        FK_FlowSort: currSort.id
-    };
-    ajaxService(params, function (data) {
-        var next = $(currSort.target).parent().next();
-        if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOWTYPE") {
-            return;
-        }
 
-        $(currSort.target).parent().insertAfter(next);
-    });
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("FK_FlowSort", currSort.id);
+    var data = handler.DoMethodReturnString("MoveDownFlowSort");
+
+    var next = $(currSort.target).parent().next();
+    if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+        return;
+    }
+    $(currSort.target).parent().insertAfter(next);
 }
 
 function CloseAllTabs() {
@@ -816,23 +807,25 @@ function FlowProperty() {
 
 //上移流程
 function moveUpFlow() {
+
     var currFlow = $('#flowTree').tree('getSelected');
     if (currFlow == null || currFlow.attributes.ISPARENT != '0')
         return;
 
-    //传入后台参数
-    var params = {
-        DoType: "MoveUpFlow",
-        FK_Flow: currFlow.id
-    };
-    ajaxService(params, function (data) {
-        var before = $(currFlow.target).parent().prev();
-        if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOW") {
-            return;
-        }
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("FK_Flow", currFlow.id);
+    var data = handler.DoMethodReturnString("MoveUpFlow");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
 
-        $(currFlow.target).parent().insertBefore(before);
-    });
+    var before = $(currFlow.target).parent().prev();
+    if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOW") {
+        return;
+    }
+
+    $(currFlow.target).parent().insertBefore(before);
 }
 
 //下移流程
@@ -841,19 +834,20 @@ function moveDownFlow() {
     if (currFlow == null || currFlow.attributes.ISPARENT != '0')
         return;
 
-    //传入后台参数
-    var params = {
-        DoType: "MoveDownFlow",
-        FK_Flow: currFlow.id
-    };
-    ajaxService(params, function (data) {
-        var next = $(currFlow.target).parent().next();
-        if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOW") {
-            return;
-        }
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("FK_Flow", currFlow.id);
+    var data = handler.DoMethodReturnString("MoveDownFlow");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
 
-        $(currFlow.target).parent().insertAfter(next);
-    });
+    var next = $(currFlow.target).parent().next();
+    if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOW") {
+        return;
+    }
+
+    $(currFlow.target).parent().insertAfter(next);
 }
 
 //新建表单树类别
@@ -902,6 +896,8 @@ function EditCCFormSort() {
     var currCCFormSort = $('#formTree').tree('getSelected');
     if (currCCFormSort == null || currCCFormSort.attributes.TType != "FORMTYPE")
         return;
+
+    alert('sss');
 
     OpenEasyUiSampleEditDialog("编辑类别名称", '', currCCFormSort.text, function (val) {
         if (val == null || val.length == 0) {

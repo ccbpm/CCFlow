@@ -144,6 +144,30 @@ if (typeof StartGuideWay == "undefined") {
         StartGuideWay.ByParentFlowModel = 9
 }
 
+
+//流程表单模式
+if (typeof FlowFrmType == "undefined") {
+    var FlowFrmType = {}
+    //完整版-2019年更早版本
+    FlowFrmType.Ver2019Earlier = 0,
+        /// <summary>
+        /// 开发者表单.
+        /// </summary>
+        FlowFrmType.DeveloperFrm = 1,
+        /// <summary>
+        /// 傻瓜表单.
+        /// </summary>
+        FlowFrmType.FoolFrm = 2,
+        /// <summary>
+        /// 自定义(嵌入)表单
+        /// </summary>
+        FlowFrmType.SelfFrm = 3,
+        /// <summary>
+        /// SDK表单
+        /// </summary>
+        FlowFrmType.SDKFrm = 4
+}
+
 //表单模式
 if (typeof FormType == "undefined") {
     var FormType = {}
@@ -196,7 +220,7 @@ if (typeof FormType == "undefined") {
         /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
-        FormType.DisableIt = 100    
+        FormType.DisableIt = 100
 }
 /// 公文工作模式
 if (typeof WebOfficeWorkModel == "undefined") {

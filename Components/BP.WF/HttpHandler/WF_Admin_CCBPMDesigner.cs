@@ -1441,12 +1441,12 @@ namespace BP.WF.HttpHandler
                 int flowFrmType = this.GetRequestValInt("FlowFrmType");
                 string FrmUrl = this.GetRequestVal("FrmUrl");
                 string FlowVersion = this.GetRequestVal("FlowVersion");
-                 
+
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
                         Template.DataStoreModel.SpecTable, PTable, FlowMark, FlowVersion);
 
                 //如果是简洁版.
-                if (runModel==1)
+                if (runModel == 1)
                 {
                     Flow fl = new Flow(flowNo);
                     fl.FlowFrmType = (BP.WF.FlowFrmType)flowFrmType;
@@ -1549,40 +1549,6 @@ namespace BP.WF.HttpHandler
             return "F" + subFlowSort.No;
         }
         /// <summary>
-        /// 上移流程类别
-        /// </summary>
-        /// <returns></returns>
-        public string MoveUpFlowSort()
-        {
-            string fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
-            FlowSort fsSub = new FlowSort(fk_flowSort);//传入的编号多出F符号，需要替换掉
-            fsSub.DoUp();
-            return "F" + fsSub.No;
-        }
-        /// <summary>
-        /// 下移流程类别
-        /// </summary>
-        /// <returns></returns>
-        public string MoveDownFlowSort()
-        {
-            string fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
-            FlowSort fsSub = new FlowSort(fk_flowSort);//传入的编号多出F符号，需要替换掉
-            fsSub.DoDown();
-            return "F" + fsSub.No;
-        }
-
-        /// <summary>
-        /// 表单树 - 编辑表单类别
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_EditCCFormSort()
-        {
-            SysFormTree formTree = new SysFormTree(this.No);
-            formTree.Name = this.Name;
-            formTree.Update();
-            return this.No;
-        }
-        /// <summary>
         /// 表单树 - 删除表单类别
         /// </summary>
         /// <returns></returns>
@@ -1609,47 +1575,6 @@ namespace BP.WF.HttpHandler
             formTree.Delete();
             return "删除成功";
         }
-        /// <summary>
-        /// 表单树-上移表单类别
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_MoveUpCCFormSort()
-        {
-            SysFormTree formTree = new SysFormTree(this.No);
-            formTree.DoUp();
-            return formTree.No;
-        }
-        /// <summary>
-        /// 表单树-下移表单类别
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_MoveDownCCFormSort()
-        {
-            SysFormTree formTree = new SysFormTree(this.No);
-            formTree.DoDown();
-            return formTree.No;
-        }
-
-        /// <summary>
-        /// 表单树-上移表单
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_MoveUpCCFormTree()
-        {
-            MapData mapData = new MapData(this.FK_MapData);
-            mapData.DoUp();
-            return mapData.No;
-        }
-        /// <summary>
-        /// 表单树-下移表单
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_MoveDownCCFormTree()
-        {
-            MapData mapData = new MapData(this.FK_MapData);
-            mapData.DoOrderDown();
-            return mapData.No;
-        }
 
         /// <summary>
         /// 表单树 - 删除表单
@@ -1669,15 +1594,6 @@ namespace BP.WF.HttpHandler
             }
         }
 
-        public string EditFlowSort()
-        {
-            FlowSort fs = new FlowSort();//传入的编号多出F符号，需要替换掉
-            fs.No = this.No.TrimStart('F');
-            fs.RetrieveFromDBSources();
-            fs.Name = this.Name;
-            fs.Update();
-            return fs.No;
-        }
 
         /// <summary>
         /// 让admin 登陆

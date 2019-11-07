@@ -15,34 +15,36 @@
     <script type="text/javascript">
 
         var model = 0;
+        var flowSort ="";
         $(function () {
 
+            //让其落到第一个文本框上，焦点.
             var flowName = document.getElementById("TB_FlowName");
             flowName.focus();
 
-            var flowSort = GetQueryString("sort");
+            //流程类型.
+            flowSort = GetQueryString("sort");
             flowSort = flowSort.replace("F", "");
-            $("#HD_FlowSort").val(flowSort);
+            model = GetQueryString("RunModel");
 
-             model = GetQueryString("RunModel");
             if (model == "1") {
                 //简洁版.
-                $("#DDL_DefFrmModel").append("<option value=null  disabled='disabled'>+内置表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FlowFrmType.FoolFrm + " selected=true >&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
-                $("#DDL_DefFrmModel").append("<option value=null  disabled='disabled'>+自定义表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FlowFrmType.DeveloperFrm + " >&nbsp;&nbsp;开发者表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FlowFrmType.SelfFrm + " >&nbsp;&nbsp;嵌入式表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FlowFrmType.SDKFrm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内置表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.FoolFrm + " selected=true >&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+自定义表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.DeveloperFrm + " >&nbsp;&nbsp;开发者表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.SelfFrm + " >&nbsp;&nbsp;嵌入式表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.SDKFrm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
             } else {
-                $("#DDL_DefFrmModel").append("<option value=null  disabled='disabled'>+内置表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>");
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内置表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>");
 
-                $("#DDL_DefFrmModel").append("<option value=null  disabled='disabled'>+自定义表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
-                $("#DDL_DefFrmModel").append("<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
+                $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+自定义表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
             }
 
         });
@@ -50,12 +52,12 @@
         function getNewFlowInfo() {
 
             return {
-                flowName: $('#TB_FlowName').val(),
-                flowSort: $('#HD_FlowSort').val(),
-                dataStoreModel: 1,
-                pTable: $('#TB_PTable').val(),
-                flowCode: $('#TB_FlowCode').val(),
-                FlowFrmType: $('#DDL_DefFrmModel').val(),
+                FlowName: $('#TB_FlowName').val(),
+                FlowSort: $('#HD_FlowSort').val(),
+                DataStoreModel: 1,
+                PTable: $('#TB_PTable').val(),
+                FlowMark: $('#TB_FlowMark').val(),
+                FlowFrmType: $('#DDL_FlowFrmType').val(),
                 FrmUrl: $('#TB_URL').val(),
                 RunModel: model,
                 FlowVersion: 1
@@ -69,13 +71,13 @@
         //下拉框变化的时候.
         function FrmTypeChange() {
             var model = GetQueryString("RunModel");
-            if (model != "1") 
+            if (model != "1")
                 return;
 
-            var val = $("#DDL_DefFrmModel").val();
+            var val = $("#DDL_FlowFrmType").val();
 
             //如果是傻瓜表单，就隐藏url输入框.
-             //alert(val); //当等于 2 的时候.
+            //alert(val); //当等于 2 的时候.
         }
     </script>
     <base target=_blank />
@@ -112,7 +114,7 @@
             <tr>
                 <td>默认表单模式</td>
                 <td>
-                    <select id="DDL_DefFrmModel" onchange="FrmTypeChange()" ></select>
+                    <select id="DDL_FlowFrmType" onchange="FrmTypeChange()"></select>
                 </td>
                 <td>  <a href="javascript:OpenFrmHelp()"><img src='../../Img/Help.png' />帮助</a></td>
             </tr>
@@ -130,14 +132,14 @@
                     流程标记：
                 </td>
                 <td>
-                    <input id="TB_FlowCode" style="width: 200px" />
+                    <input id="TB_FlowMark" style="width: 200px" />
                 </td>
                 <td> <a href="http://ccbpm.mydoc.io/?v=5404&t=16847"><img src='../../Img/Help.png' />唯一来确定此流程的标记、也叫流程别名、比如:BaoXiao,QingJia (可以为空)</a></td>
             </tr>
         </table>
 
 
-        <input type="hidden" id="HD_FlowSort" name="HD_FlowSort" />
+      
     </form>
 </body>
 </html>

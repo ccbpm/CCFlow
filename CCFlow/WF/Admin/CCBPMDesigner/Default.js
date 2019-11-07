@@ -450,9 +450,15 @@ function newFlow() {
 
         if (newFlowInfo.RunModel == 1) {
 
-            if (newFlowInfo.)
+            if (newFlowInfo.FlowFrmType == FlowFrmType.SDKFrm
+                || newFlowInfo.FlowFrmType == FlowFrmType.SelfFrm)
+            {
+                if (newFlowInfo.FrmUrl == "") {
+                    alert('请输入url');
+                    return false;
+                }
+            }
 
-            return false;
         }
 
         //判断流程标记是否存在  19.10.22 by sly

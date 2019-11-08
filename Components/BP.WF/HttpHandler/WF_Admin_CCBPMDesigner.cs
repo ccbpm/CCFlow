@@ -143,12 +143,9 @@ namespace BP.WF.HttpHandler
                 dtFlowSorts.Columns[2].ColumnName = "ParentNo";
             }
 
-
-
             //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
             sql = "SELECT  No,(NO + '.' + NAME) as Name, 'F' + FK_FlowSort as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
             sql += " ORDER BY Idx ";
-
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtFlows.TableName = "Flows";
@@ -796,40 +793,6 @@ namespace BP.WF.HttpHandler
 
         #region 节点相关 Nodes
         /// <summary>
-        /// 创建流程节点并返回编号
-        /// </summary>
-        /// <returns></returns>
-        public string CreateNode()
-        {
-            try
-            {
-                string FK_Flow = this.GetValFromFrmByKey("FK_Flow");
-                string figureName = this.GetValFromFrmByKey("FigureName");
-                string x = this.GetValFromFrmByKey("x");
-                string y = this.GetValFromFrmByKey("y");
-                int iX = 20;
-                int iY = 20;
-                if (!DataType.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
-                if (!DataType.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
-
-                int nodeId = BP.WF.Template.TemplateGlo.NewNode(FK_Flow, iX, iY);
-
-                BP.WF.Node node = new BP.WF.Node(nodeId);
-                node.HisRunModel = Node_GetRunModelByFigureName(figureName);
-                node.Update();
-
-                Hashtable ht = new Hashtable();
-                ht.Add("NodeID", node.NodeID);
-                ht.Add("Name", node.Name);
-
-                return BP.Tools.Json.ToJsonEntityModel(ht);
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        /// <summary>
         /// gen
         /// </summary>
         /// <param name="figureName"></param>
@@ -1447,13 +1410,36 @@ namespace BP.WF.HttpHandler
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
                         Template.DataStoreModel.SpecTable, PTable, FlowMark, FlowVersion);
 
+
+                #region 对极简版特殊处理. @liuqiang 
                 //如果是简洁版.
                 if (runModel == 1)
                 {
                     Flow fl = new Flow(flowNo);
                     fl.FlowFrmType = (BP.WF.FlowFrmType)flowFrmType;
                     fl.Update(); //更新表单类型.
+
+                    //预制权限数据.
+                    int nodeID = int.Parse(fl.No + "01");
+                    FrmNode fn = new FrmNode();
+                    fn.FK_Frm = "ND" + nodeID;
+                    fn.IsEnableFWC = false;
+                    fn.FK_Node = nodeID;
+                    fn.FK_Flow = flowNo;
+                    fn.FrmSln = FrmSln.Default;
+                    fn.Insert();
+
+                    nodeID = int.Parse(fl.No + "02");
+                    fn = new FrmNode();
+                    fn.FK_Frm = "ND" + nodeID;
+                    fn.IsEnableFWC = false;
+                    fn.FK_Node = nodeID;
+                    fn.FK_Flow = flowNo;
+                    fn.FrmSln = FrmSln.Default;
+                    fn.Insert();
                 }
+                #endregion 对极简版特殊处理. @liuqiang
+
 
 
                 //清空WF_Emp 的StartFlows ,让其重新计算.

@@ -75,7 +75,7 @@ namespace BP.WF.HttpHandler
 
 
                 #region  //2019.11.08 增加如果是极简版, 就设置初始化参数.
-                Flow fl = new Flow();
+                Flow fl = new Flow(this.FK_Flow);
                 if (fl.FlowFrmType != FlowFrmType.Ver2019Earlier)
                 {
                     FrmNode fm = new FrmNode();

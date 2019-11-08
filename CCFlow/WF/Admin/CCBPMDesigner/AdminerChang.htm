@@ -29,7 +29,6 @@
             var adminers = DBAccess.RunSQLReturnTable(mysql);
 
             var html = "";
-
             html += "<table style='width:80%;'>";
             html += "<caption>切换组织</caption>";
             html += "<tr>";
@@ -39,7 +38,6 @@
             html += "<th>操作</th>";
             html += "</tr>";
             for (var i = 0; i < adminers.length; i++) {
-
 
                 var adminer = adminers[i];
                 var dept = new Entity("BP.Port.Dept", adminer.RootOfDept);
@@ -88,12 +86,12 @@
     </script>
 </head>
 
-<body >
+<body>
 
-        <form id="cc" >
+    <form id="cc">
         <div id="Msg">
         </div>
-           </form>
+    </form>
 
 </body>
 </html>

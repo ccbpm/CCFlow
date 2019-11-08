@@ -9,6 +9,8 @@ $(function () {
     if (url.indexOf('Simple') > 1)
         runModelType = 1;
 
+    if (url.indexOf('Frm') > 1)
+        runModelType = 2;
 
     //定义等待界面的位置
     $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });

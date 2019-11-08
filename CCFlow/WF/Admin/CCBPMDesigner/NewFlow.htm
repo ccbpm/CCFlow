@@ -36,6 +36,7 @@
                 $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.SelfFrm + " >&nbsp;&nbsp;嵌入式表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FlowFrmType.SDKFrm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
             } else {
+
                 $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内置表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
@@ -45,6 +46,7 @@
                 $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+自定义表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
+
             }
         });
         //要返回的json.
@@ -69,12 +71,13 @@
         }
         //下拉框变化的时候.
         function FrmTypeChange() {
+
             //var model = GetQueryString("RunModel");
             var model = $("#DDL_FlowFrmType").val();
 
             if (model == "0") {
                 $("#TB_URL").attr("disabled", "disabled");
-                $("#TB_URL").attr("value", "   当前不可用");
+                $("#TB_URL").attr("value", " 当前不可用");
             }
             else {
                 $("#TB_URL").attr("disabled", false);
@@ -110,7 +113,7 @@
                 <td>
                     <input id="TB_PTable" style="width: 200px" />
                 </td>
-                <td> <font color="gray"><a href="http://ccbpm.mydoc.io/?v=5404&t=17897" target=_blank> <img src='../../Img/Help.png' />流程运行的数据表名称,可以为空,默认为NDxxxRpt,xxx是流程编号.</a></font></a></td>
+                <td> <font color="gray"><a href="http://ccbpm.mydoc.io/?v=5404&t=17897" target=_blank> <img src='../../Img/Help.png' /></a></font></a></td>
             </tr>
 
             <tr>
@@ -118,7 +121,9 @@
                 <td>
                     <select id="DDL_FlowFrmType" onchange="FrmTypeChange()"></select>
                 </td>
-                <td>  <a href="javascript:OpenFrmHelp()"><img src='../../Img/Help.png' />帮助</a></td>
+                <td>
+                    <!--<a href="javascript:OpenFrmHelp()"><img src='../../Img/Help.png' />帮助</a>-->
+                </td>
             </tr>
 
             <tr id="trfrm">
@@ -136,7 +141,7 @@
                 <td>
                     <input id="TB_FlowMark" style="width: 200px" />
                 </td>
-                <td> <a href="http://ccbpm.mydoc.io/?v=5404&t=16847"><img src='../../Img/Help.png' />唯一来确定此流程的标记、也叫流程别名、比如:BaoXiao,QingJia (可以为空)</a></td>
+                <td> <a href="http://ccbpm.mydoc.io/?v=5404&t=16847"><img src='../../Img/Help.png' /></a></td>
             </tr>
         </table>
 

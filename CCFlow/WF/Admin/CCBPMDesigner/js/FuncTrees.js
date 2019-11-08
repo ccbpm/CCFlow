@@ -1,4 +1,5 @@
-﻿//定义功能树存储数组，数组中元素对应easyui-tabs控件中的tab页
+﻿
+//定义功能树存储数组，数组中元素对应easyui-tabs控件中的tab页
 /*
 easyui-tabs功能导航区定义，added by liuxc
 说明：
@@ -174,6 +175,13 @@ function FuncTrees(sTabsId) {
 
             //循环增加tab标签
             $.each(functrees, function (fcidx, fc) {
+
+                if (runModelType == 1 && fc.Id == "formTree")
+                    return; //如果是简洁版.
+
+                if (runModelType == 2 && fc.Id == "flowTree")
+                    return; // 如果是表单引擎.
+
                 $(tabid).tabs("add", {
                     id: "tab_" + this.Id,
                     title: this.Name,

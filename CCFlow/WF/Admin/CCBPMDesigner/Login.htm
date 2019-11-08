@@ -25,7 +25,6 @@
         //初始化页面函数.....
         $(function () {
 
-
             if (! +[1,]) {
                 //  alert("这是ie浏览器，您只能使用sliverlight版本浏览器。");
                 // window.location.href = '../XAP/Designer.htm';
@@ -35,9 +34,7 @@
             $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
 
             document.getElementById("Btn_Login").disabled = 'disabled';
-            document.getElementById("Btn_LoginSimple").disabled = 'disabled';
-
-
+           // document.getElementById("Btn_LoginSimple").disabled = 'disabled';
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnJSON("Login_InitInfo");
@@ -63,7 +60,7 @@
             }
 
             document.getElementById("Btn_Login").disabled = false;
-            document.getElementById("Btn_LoginSimple").disabled = false;
+           // document.getElementById("Btn_LoginSimple").disabled = false;
 
             $("body").keydown(function () {
                 if (event.keyCode == 13) {
@@ -102,52 +99,19 @@
                 return;
             }
 
+            var systemp = $("#DDL_System").val();
             if (data.indexOf('url@') == 0) {
-                window.location.href = data.replace('url@', '');
+                var data = data.replace('url@', '');
+                window.location.href = data.replace("Default.htm", systemp + ".htm");
                 return;
             }
             alert(data);
         }
-        function LoginSimple() {
 
-            var msg = "ccbpm简洁版登录提示:";
-
-            msg += "\t\n1.简洁版我们在测试过程中.";
-            msg += "\t\n2.改版本包含工作流引擎+开发者表单引擎.";
-            msg += "\t\n3.是为了迎合sdk高级开发者的需要，与对功能密集症的需要特地开发的版本.";
-
-            if (alert(msg) == true)
-                return;
-
-            $("#Msg").html("<font> ccbpm 正在登录流程&表单引擎设计器,请稍候... </font>");
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-
-            var userNo = $("#TB_No").val();
-            var pass = $("#TB_PW").val();
-
-            if (userNo == "" || pass == "") {
-                $("#Msg").html("<font>请输入用户名，密码.</font>");
-                return;
-            }
-
-            handler.AddPara("TB_No", userNo);
-            handler.AddPara("TB_PW", pass);
-
-            var data = handler.DoMethodReturnString("Login_SubmitSimple");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-
-                window.location.href = data.replace('url@', '');
-
-                return;
-            }
-            alert(data);
+        // 选择系统后登录.
+        function SelectChange()
+        {
+            var val = $("#DDL_System").val();
         }
 
     </script>
@@ -172,13 +136,25 @@
             <div class="login-form">
                 <form id="Form1">
                     <div class="form-group">
+                        <b>您要登录的系统:</b>
+                        <select id="DDL_System"  onchange="SelectChange()" >
+                            <option value="Default"> 驰骋BPM完整版 </option>
+                            <option value="DefaultSimple">驰骋BPM轻量版(beta)</option>
+                            <option value="DefaultFrm"> 驰骋表单引擎(beta)</option>
+                            <option value="DefaultGPM"> 驰骋权限管理(beta)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required" class="form-control" />
                     </div>
                     <div class="form-group">
                         <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
                     </div>
-                    <input type="button" class="btn btn-primary btn-block" value="登录ccbmp完整版" id="Btn_Login" onclick="Login();" />
-                    <input type="button" class="btn btn-primary btn-block" value="简洁版" id="Btn_LoginSimple" onclick="LoginSimple();" />
+
+                    <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
+                    <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
+    // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
 
                     <div class="row login-nav">
                         <div class="col-xs-6">默认密码：123</div>
@@ -191,6 +167,7 @@
                         <br />
                         <div id="Msg" style=" float:right" />
                     </div>
+                </form></div>
                 </form>
             </div>
 

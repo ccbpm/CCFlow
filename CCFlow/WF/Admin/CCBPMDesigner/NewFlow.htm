@@ -14,7 +14,7 @@
     <script src="../CCFlowEnum.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-        var model = 0;
+        var model = 0; //运行模式 0完整版 1轻量版
         var flowSort = "";
         $(function () {
 
@@ -22,8 +22,12 @@
             var flowName = document.getElementById("TB_FlowName");
             flowName.focus();
 
+            if (window.location.href.indexOf("Simple.htm") > 0)
+                model = 1; //轻量版.
+
+
             //流程类型.
-            //flowSort = GetQueryString("sort");   //？？？？会阻止下拉框的显示
+            flowSort = GetQueryString("sort");   //？？？？会阻止下拉框的显示
             flowSort = flowSort.replace("F", " ");
             model = GetQueryString("RunModel");
 
@@ -51,10 +55,9 @@
         });
         //要返回的json.
         function getNewFlowInfo() {
-
             return {
                 FlowName: $('#TB_FlowName').val(),
-                FlowSort: $('#HD_FlowSort').val(),
+                FlowSort: flowSort,
                 DataStoreModel: 1,
                 PTable: $('#TB_PTable').val(),
                 FlowMark: $('#TB_FlowMark').val(),
@@ -131,7 +134,7 @@
                 <td>
                     <input disabled="disabled" value="&nbsp&nbsp&nbsp当前不可用" id="TB_URL" style="width:200px" />
                 </td>
-                <td> 当表单为SDK </td>
+                <td>  </td>
             </tr>
 
             <tr>
@@ -144,8 +147,6 @@
                 <td> <a href="http://ccbpm.mydoc.io/?v=5404&t=16847"><img src='../../Img/Help.png' /></a></td>
             </tr>
         </table>
-
-
 
     </form>
 </body>

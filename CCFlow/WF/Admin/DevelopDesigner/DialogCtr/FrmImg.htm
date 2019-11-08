@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+   
+      <!-- 增加一个配置  -->
+     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+
+    <link href="../../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <style type="text/css">
+        .Table
+        {
+            display: block;
+        }
+       
+    </style>
+</head>
+<body>
+    <form id="from1" action="">
+    <table class="Table" cellpadding="0"  style="border-collapse:separate; border-spacing:5px;" cellspacing="0" border="0" style="width: 100%">
+        <tr>
+            <td>
+                中文名称：
+            </td>
+            <td>
+                <input id="Chinese_name" class="easyui-textbox" style="width: 400px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                英文名称：
+            </td>
+            <td>
+                <input id="English_name" class="easyui-textbox" style="width: 400px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                上传图片方式：
+            </td>
+            <td>
+                <select id="Ud_pictures" class="easyui-combobox" style="width: 200px;">
+                    <option value="0">本地图片</option>
+                    <option value="1">指定路径</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                本地图片：
+            </td>
+            <td>
+                <input type="file" name="upfile" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                指定路径：
+            </td>
+            <td>
+                <input id="Specified_path" class="easyui-textbox" style="width: 400px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                图片链接到：
+            </td>
+            <td>
+                <input id="Picture_link" class="easyui-textbox" style="width: 400px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                打开窗口：
+            </td>
+            <td>
+                <select id="Open_window" class="easyui-combobox" style="width: 200px;">
+                    <option value="0">新窗口</option>
+                    <option value="1">父窗口</option>
+                    <option value="2">本窗口</option>
+                    <option value="1">自定义</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                窗口名称：
+            </td>
+            <td>
+                <input id="Wd_name" class="easyui-textbox" style="width: 400px" />
+            </td>
+        </tr>
+    </table>
+    <input id="Determine"  type="button" style="float: right" value="确定" /><input id="Cancel"
+        style="float: right" type="button" value="取消" />
+    </form>
+</body>
+</html>

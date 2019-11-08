@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+  
+     <!-- 增加一个配置  -->
+    <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
+    <script type="text/javascript">
+        $(function () {
+
+            var Ele_TBName = document.getElementById("TB_Name");
+            Ele_TBName.focus();
+
+            PageTransfer_value = Application.common.getArgsFromHref("DataType"); //取出页面传至
+            //给单选赋值
+            if (PageTransfer_value == "TextBox") {
+                $("#RB_String").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxInt") {
+                $("#RB_Int").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxFloat") {
+                $("#RB_Float").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxMoney") {
+                $("#RB_Money").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "Date") {
+                $("#RB_Date").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "DateTime") {
+                $("#RB_DateTime").attr("checked", true);
+            }
+           
+            if (PageTransfer_value == "CheckBox") {
+                $("#RB_Boolen").attr("checked", true);
+            }
+
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var TB_Name = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_qpjp"]:checked').val();
+                if (TB_Name == "") {
+                    document.getElementById("TB_KeyOfEn").value = "";
+                    return;
+                }
+
+                if (val == "ziduanquanpin") {
+                    ParsePinYin(TB_Name, true, "TB_KeyOfEn");
+//                    ParseStringToPinYin(TB_Name, true);
+                }
+                else {
+                    ParsePinYin(TB_Name, false, "TB_KeyOfEn");
+//                    ParseStringToPinYin(TB_Name, false);
+                }
+
+            });
+            //点击全拼
+            $('input[id=RB_qp]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParsePinYin(TB_Name, true, "TB_KeyOfEn");
+            });
+            //点击简拼
+            $('input[id=RB_jp]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParsePinYin(TB_Name, false, "TB_KeyOfEn");
+            });
+        });
+
+        //传入父窗体
+        function GetFrmInfo() {
+            return {
+                Name: $.trim($("#TB_Name").val()),
+                KeyOfEn: $.trim($("#TB_KeyOfEn").val()),
+                IsCreateLabel: $("#CB_scbq").prop("checked"),
+                IsHidenField: $("#CB_sfyczd").prop("checked"),
+                FieldType: $('input:radio[name=Field_Type]:checked').val()
+            };
+        }
+    </script>
+</head>
+<body>
+    <form id="from1" action="">
+    <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+        <tr>
+            <td> 字段名称 </td>
+            <td> 字段类型 </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
+            </td>
+            <td rowspan="4">
+                <input id="RB_String" type="radio" name="Field_Type" value="1" checked="checked" /><label for="RB_String">文字类型(地址、电话、公司名称)</label><br />
+                <input id="RB_Int" type="radio" name="Field_Type" value="2" /><label for="RB_Int">整数类型(年龄、个数)</label><br />
+                <input id="RB_Float" type="radio" name="Field_Type" value="3" /><label for="RB_Float">浮点类型(身高、体重、长度)</label><br />
+                <input id="RB_Money" type="radio" name="Field_Type" value="8" /><label for="RB_Money">金额类型(应付、应收、单价)</label><br />
+                <input id="RB_Date" type="radio" name="Field_Type" value="6" /><label for="RB_Date">日期类型(出生日期、还款日期)</label><br />
+                <input id="RB_DateTime" type="radio" name="Field_Type" value="7" /><label for="RB_DateTime">日期时间类型(发生时间、出发时间)</label><br />
+                <input id="RB_Boolen" type="radio" name="Field_Type" value="4" /><label for="RB_Boolen">Boolen型(是否同意、是否结算)</label><br />
+            </td>
+        </tr>
+        <tr>
+            <td>英文字段 </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="TB_KeyOfEn" class="easyui-textbox" style="width: 200px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="RB_qp" type="radio" name="RB_qpjp" checked="checked" value="ziduanquanpin" /><label
+                    for="RB_qp">字段全拼</label>
+                <input id="RB_jp" type="radio" name="RB_qpjp" value="ziduanjianpin" /><label for="RB_jp">字段简拼</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input id="CB_scbq" type="checkbox" checked="checked" /><label for="CB_scbq">是否根据名称生成标签</label>
+                <input id="CB_sfyczd" type="checkbox" /><label for="CB_sfyczd">是否隐藏字段</label>
+            </td>
+        </tr>
+    </table>
+    </form>
+</body>
+</html>

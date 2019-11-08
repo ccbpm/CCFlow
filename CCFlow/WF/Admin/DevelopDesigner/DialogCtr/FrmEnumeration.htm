@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!-- 增加一个配置  -->
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../js/ueditor/dialogs/internal.js"></script>
+    <style type="text/css">
+        .trSP {
+            background-color: #B9D3EE
+        }
+    </style>
+    <script language="javascript" type="text/javascript">
+        var dataType = GetQueryString("DataType");
+         var fk_mapData = GetQueryString("FK_MapData");
+        $(function () {
+
+            var enumMains = new Entities("BP.Sys.SysEnumMains");
+            enumMains.RetrieveAll();
+
+            var html = "<table border=0 style='width:100%;'>";
+            html += "<tr>";
+            html += "<th>Idx</th>";
+            html += "<th>编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>配置值</th>";
+            html += "<th></th>";
+            html += "</tr>";
+
+            for (var i = 0; i < enumMains.length; i++) {
+
+                var sysEnumMain = enumMains[i];
+
+                html += "<tr>";
+                html += "<td class=Idx>" + i + "</td>";
+                html += "<td><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
+                html += "<td>" + sysEnumMain.Name + "</td>";
+                html += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "');\">" + sysEnumMain.CfgVal + "</a></td>";
+
+                html += "<td><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
+
+                html += "</tr>";
+            }
+
+            html += "</table>";
+
+            $("#table").html(html);
+
+        });
+
+        var rownum = -1;
+        function getTr(No, Name, CfgVal, i) {
+            $('#TB_Name').val(Name);
+            $('#TB_KeyOfEn').val(No);
+            $('#TB_UIBindKey').val(No);
+            $('#TB_Vals').val(CfgVal);
+        }
+
+        //传入父窗体
+        function GetFrmInfo() {
+            return {
+                Name: $.trim($("#TB_Name").val()),
+                KeyOfEn: $.trim($("#TB_KeyOfEn").val()),
+                IsCreateLabel: $("#CB_Generate_Tags").prop("checked"),
+                UIBindKey: $.trim($("#TB_UIBindKey").val()),
+                Vals: $.trim($("#TB_Vals").val())
+            };
+        }
+
+        function NewEnum() {
+            var url = "EnumerationNew.htm";
+
+            OpenDialogAndCloseRefresh(url, '新建枚举', 560, 400, null, function () { window.location.href = window.location.href; });
+        }
+
+
+        function Del(key) {
+
+            var v = window.confirm("您确定要删除枚举值[" + key + "]吗？");
+            if (v == false)
+                return;
+
+            //检查该枚举值是否被其他表单字段引用.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("UIBindKey", key);
+
+            var info = '';
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                info += "\t\n" + i + ",表单编号:" + attr.FK_MapData + " , 字段:" + attr.KeyOfEn + ", 名称:" + attr.Name;
+            }
+
+            if (info != '') {
+
+                info = "如下表单引用了该字段您不能删除:" + info;
+                alert(info);
+                return;
+            }
+
+            //执行删除.
+            var enumMain = new Entity("BP.Sys.SysEnumMain", key);
+            enumMain.Delete();
+
+            window.location.href = window.location.href;
+        }
+        function Edit(key) {
+            var url = "EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + key;
+            OpenDialogAndCloseRefresh(url, '编辑枚举', 560, 400, null, function () { window.location.href = window.location.href; });
+        }
+
+        var thePlugins = 'enum';
+        dialog.oncancel = function () {
+            if (UE.plugins[thePlugins].editdom) {
+                delete UE.plugins[thePlugins].editdom;
+            }
+        };
+        dialog.onok = function () {
+            var name = $.trim($("#TB_Name").val());
+            var KeyOfEn = $.trim($("#TB_KeyOfEn").val());
+            var UIBindKey = $.trim($("#TB_UIBindKey").val());
+            var vals = $.trim($('#TB_Vals').val());
+            if (name == null || name.length == 0) {
+                $.messager.alert('错误', '字段名称不能为空。', 'error');
+                return false;
+            }
+            if (KeyOfEn == null || KeyOfEn.length == 0) {
+                $.messager.alert('错误', '英文字段不能为空。', 'error');
+                return false;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("KeyOfEn", KeyOfEn);
+            handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("EnumKey", UIBindKey);
+            var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
+            var _Html = "";
+            var strs = [];
+            if (vals != null && vals != "") {
+                strs = vals.split("@")
+            }
+            //单选按钮
+            if (dataType == "Radio") {
+                if (strs.length != 0) {
+                    _Html += "<span leipiplugins='enum' id='SR_"+ UIBindKey+"' title='单选' name='leipiNewField'  data-key='"+KeyOfEn+"' data-type='" + dataType + "'>";
+                    for (var i = 0; i < strs.length; i++) {
+                        var keyVal = strs[i].split("=")
+                        if (keyVal.length == 2)
+                            _Html += "<input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-type='" + dataType + "'   data-bindKey='"+UIBindKey+"' class='form-control' />"+keyVal[1];
+                    }
+                    _Html += "</span>";
+
+                }
+            }
+            if (dataType == "Select") {
+                if (strs.length != 0) {
+                    _Html += "<span leipiplugins='enum' id='SS_" + UIBindKey + "' title='下拉框' name='leipiNewField' data-type='EnumSelect' data-key='"+KeyOfEn+"'  data-bindKey='"+UIBindKey+"'>";
+                    _Html += "<select id='DDL_" + KeyOfEn + "' name='DDL_" + KeyOfEn + "' data-type='EnumSelect'  class='form-control' >";
+                    for (var i = 0; i < strs.length; i++) {
+                        var keyVal = strs[i].split("=")
+                        if (keyVal.length == 2)
+                            _Html += "<option value='" + keyVal[0] + "'>" + keyVal[1] + "</option>";
+                    }
+                    _Html += "</select>";
+                    _Html += "</span>";
+                }
+            }
+            editor.execCommand('insertHtml', _Html);
+
+
+        };
+
+
+/**/</script>
+</head>
+<body>
+        
+
+                <div id="table"></div>
+                
+                <table style="width:100%;">
+                <tr>
+                <td>中文名 </td>
+
+                <td><input id="TB_Name" class="easyui-textbox" style="width: 150px" /> </td>
+
+
+                <td>字段英文名 </td>
+                <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
+
+                <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
+
+                <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建枚举" /> </td>
+                </tr>
+                </table>
+           
+                             
+                          <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+                          <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+
+                          
+                           
+             
+</body>
+</html>

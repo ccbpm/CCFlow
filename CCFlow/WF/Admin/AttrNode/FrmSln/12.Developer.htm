@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>开发者表单</title> 
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
+    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script  type="text/javascript">
+
+        $(function () {
+            InitBar(FormType.Developer);
+            var html = "";
+            //获取节点属性
+            var nodeID = GetQueryString("FK_Node");
+
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            //获取节点方案的表单引用值 frmIDSelected为空时为 0当前节点表单，1 其他表单
+            var frmIDSelected = node.NodeFrmID;
+            if (frmIDSelected == "" || frmIDSelected == null)
+                frmIDSelected = "ND" + nodeID;
+
+            var seledtNodeID = frmIDSelected.replace('ND', '');
+
+            var nodeFrmID = node.NodeFrmID;
+            var frmID = "ND" + nodeID;
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
+
+
+            //增加slect的节点值 
+            GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
+
+            //表单引用设置
+            if (node.FormType == FormType.Developer) {
+
+                if (node.NodeFrmID == "" || node.NodeFrmID == null) {
+                    document.getElementById("RB_CurrentForm").checked = true;
+                    SetDDLEnable('DDL_Frm', 'enable');
+                } else if (node.NodeFrmID == "Pri") {
+                    document.getElementById("RB_Pri").checked = true;
+                }
+                else {
+                    document.getElementById("RB_OtherForms").checked = true;
+                    SetDDLEnable('DDL_Frm', 'disable')
+                }
+            }
+
+        });
+
+        function SetDDLEnable(ctrl, val) {
+            if (val == "enable")
+                $("#" + ctrl).attr("disabled", "disabled");
+            else
+                $("#" + ctrl).removeAttr("disabled");
+        }
+
+        function Save() {
+            
+            //更新节点表单类型.
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.FormType = FormType.Developer;
+            var frmValue = $("input[name='RefFrm']:checked").val();
+
+            if (frmValue == "0") {
+                node.NodeFrmID = "";
+            }
+            if (frmValue == "1") {
+                node.NodeFrmID = "ND" + $("#DDL_Frm ").val();
+            }
+
+            //上一个节点表单.
+            if (frmValue == "2") {
+                node.NodeFrmID = "Pri";
+            }
+
+            node.Update();
+
+            //更新表单类型.
+            var frmID = "ND" + nodeID;
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            mapData.FrmType = 12; //  FormType.FoolForm;
+            mapData.Update();
+
+            //设置显示的主表单,在完成的流程轨迹里可以看到该表单.
+            SetNDxxRpt_FrmType(node.FK_Flow, 12);
+
+            alert("保存成功.");
+        }
+       
+
+        //节点表单组件属性.
+        function ShowFWCAttr() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '节点表单组件', 800, 600, false);
+        }
+    </script>
+</head>
+<body >
+
+<div id="bar"> </div>
+
+<fieldset>
+<legend><input type="radio" value="0" id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')"  name="RefFrm" />
+ <label  for="RB_CurrentForm" >当前节点表单 </label></legend>
+<ul>
+    <li>每个节点都有一个独立表单</li>
+    <li>在创建节点的时候默认的为当前节点表单.</li>
+    <li><a href="javascript:DDeveloper()">设计开发者表单</a></li>
+    <li><font color="green"><b>该表单风格可以通过改变\DataUser\Style\ccbpm.css文件改变</b></font></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend><input type="radio"  value="1"   id="RB_OtherForms" onclick="SetDDLEnable('DDL_Frm','disable')"  name="RefFrm" />
+ <label  for="RB_OtherForms" >关联引用其他节点表单</label></legend>
+
+选择节点: <select id="DDL_Frm" name="DDL_Frm" > </select>
+  <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
+
+ <ul>
+  <li>当前节点可以引用其他节点的表单.</li>
+  <li>一般流程都符合1，2规律. 这个1，2规律是:开始节点填写表单, 第2个节点是只读的，第2个以后都是审批节点。</li>
+  <li>对于符合1，2规律的流程模式设计步骤如下</li>
+  <li>1: 设计开始表单. </li>
+  <li>2: 把该表单导入到第2个节点上去，然后把字段设置为只读。 </li>
+  <li>3: 在第2个节点上拖入一个审核组件，并设置为启用状态(审核组件有禁用，启用，只读三个状态) </li>
+  <li>4: 在第3个节点以及第3个节点以后，设置为引用第2个节点的表单,并把审核组件启用起来.</li>
+</ul>
+</fieldset>
+
+<fieldset>
+<legend><input type="radio"  value="2"   id="RB_Pri"   name="RefFrm" />
+ <label  for="RB_Pri" >有上一个节点表单来确定</label> - <a href="javascript:ShowFWCAttr()">节点表单组件属性</a></legend>
+ <ul>
+  <li>1.当前节点可以引用其上一个节点的表单.</li>
+  <li>2.如果上一个节点表单也是引用的上一个节点表单，那么系统就会依次类推的去寻找第一个当前节点表单.</li>
+</ul>
+
+</fieldset>
+
+<fieldset>
+<legend>说明</legend>
+<ul>
+  <li>该表单有4个列,设计简单方便.</li>
+  <li><img src='../Img/Col4Frm.JPG' style="width:70%;"  /> </li>
+</ul>
+</fieldset>
+
+
+</body>
+</html>

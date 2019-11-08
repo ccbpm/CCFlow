@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+  
+    <!-- 增加一个配置  -->
+     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../js/FormDesignerService.js" type="text/javascript"></script>
+
+
+    <script language="javascript" type="text/javascript">
+
+
+        //向后台传删除参数
+        function HiddenFieldDelete() {
+            var DataSet = $('#newsGrid').datagrid('getSelected');
+            if (DataSet == null) {
+                $.messager.alert('提示', '请选择一条数据。', 'error');
+                return;
+            }
+
+            $.messager.confirm('警告', '请确认是否删除', function (e) {
+                if (e) {
+                    var en = new Entity("BP.Sys.MapAttr", DataSet.MyPK);
+                    if (en.Delete() > 0) {
+                        $.messager.alert('提示', '删除成功。', 'info');
+                        LoadGridData(1, 6);
+                    } else {
+                        $.messager.alert('提示', '您请求的删除没有成功。', 'error');
+                    }
+                }
+            });
+        }
+
+        //点击 新建 和 编辑
+        function WinOpen(model) {
+
+            var now = new Date();
+            now.getHours(); //获取当前小时数(0-23) 
+            now.getMinutes(); //获取当前分钟数(0-59) 
+            now.getSeconds();
+            k = now.getHours().toString() + now.getMinutes().toString() + now.getSeconds().toString();
+
+            var dataRow = $('#newsGrid').datagrid('getSelected');
+            if (model == "Edit") {
+                if (dataRow == null) {
+                    $.messager.alert('提示', '请选择一条数据。', 'error');
+                    return;
+                }
+
+                var ftype = dataRow.MyDataType;
+                var ensName = "";
+                if (ftype == "1")
+                    ensName = "BP.Sys.FrmUI.MapAttrString";
+                else
+                    ensName = "BP.Sys.FrmUI.MapAttrNum";
+
+                var url = '../../../Comm/RefFunc/En.htm?EnName=' + ensName + '&MyPK=' + FK_MapData + "_" + dataRow.KeyOfEn;
+                window.open(url, '', 'height=430, width=760, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+            }
+        }
+
+        //加载grid
+        function LoadGridData(pageNumber, pageSize) {
+            this.pageNumber = pageNumber;
+            this.pageSize = pageSize;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
+            handler.AddPara("pageNumber", pageNumber);
+            handler.AddPara("pageSize", pageSize);
+            handler.AddPara("FK_MapData", FK_MapData);
+            var data = handler.DoMethodReturnString("Hiddenfielddata");
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+            LoadDataGridCallBack(data);
+        }
+        var FK_MapData = "";
+
+        //初始化
+        $(function () {
+            FK_MapData = Application.common.getArgsFromHref("FK_MapData"); //取出页面传至
+            LoadGridData(1,100);
+        });
+
+        //加载grid后回调函数
+        function LoadDataGridCallBack(js) {
+
+            $("#pageloading").hide();
+           
+            var pushData = eval('(' + js + ')');
+
+            $('#newsGrid').datagrid({
+                columns: [[
+                    { field: 'KeyOfEn', title: '字段英文名', width: 100 },
+                    { field: 'Name', title: '字段中文名', width: 100 }
+                ]],
+                idField: 'No',
+                singleSelect: true,
+                data: pushData,
+                width: 'auto',
+                height: 'auto',
+                striped: true,
+                rownumbers: true,
+                pagination: false,
+                fitColumns: true,
+                pageNumber: 1,
+                pageSize: 1000,
+                pageList: [100, 200, 300, 400],
+                loadMsg: '数据加载中......'
+
+            });
+
+            //分页
+            var pg = $("#newsGrid").datagrid("getPager");
+            if (pg) {
+                $(pg).pagination({
+                    onRefresh: function (pageNumber, pageSize) {
+                        LoadGridData(pageNumber, pageSize);
+                    },
+                    onSelectPage: function (pageNumber, pageSize) {
+                        LoadGridData(pageNumber, pageSize);
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center'">
+        <div id="tb" style="padding: 3px;">
+            <a id="LB_Edit" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-design'"
+                onclick="WinOpen('Edit')">编辑</a> <a id="LB_DELETE" href="#" class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-no'" onclick="HiddenFieldDelete()">删除</a>
+        </div>
+        <table id="newsGrid" toolbar="#tb" class="easyui-datagrid">
+        </table>
+    </div>
+</body>
+</html>

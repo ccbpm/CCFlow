@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!-- 引用配置文件.-->
+    <script src="../../../Scripts/config.js" type="text/javascript"> </script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"></script>
+     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            var ctrlType = GetQueryString("CtrlType");
+            var frmID = GetQueryString("FrmID");
+            if (frmID == null)
+                frmID = GetQueryString("FK_MapData");
+
+            var note = "";
+            switch (ctrlType) {
+                case "Dtl":
+                    note = "<ul>";
+                    note += "<li>明细表也叫从表，它是用来解决行数据模式数据存储的。</li>";
+                    note += "<li>比如：报销明细、工作履历、化验指标。</li>";
+                    note += "<li>每个明细表，都以一个数据表存储数据，该表以OID为主键，以RefPK为关联的主表的主键做主从关系。</li>";
+                    note += "<li>该存储的表的名称可以被自定义，在创建之后打开明细表属性。</li>";
+                    note += "<li>默认的字段OID,int类型, 主键；RefPK int类型关联外键；RDT 记录日期, Idx 序号.</li>";
+                    note += "<li>从表是以框架实现的，在框架失去焦点的时候自动保存。</li>";
+                    note += "</ul>";
+                    break;
+                case "AthMulti":
+                    note = "<ul>";
+                    note += "<li>多附件组件是用于存储表单的附件类的数据的组件。</li>";
+                    note += "<li>他属于框架类的组件：对于附件的上传与下载都是以框架里的功能界面来实现的。</li>";
+                    note += "<li>创建之后打开属性，可以对该控件的更多属性设置。</li>";
+                    note += "<li>比如对附件上传下载的权限控制、上传附件的类型控制等等。</li>";
+                    note += "</ul>";
+                    break;
+                case "AthSingle":
+                    note = "<ul>";
+                    note += "<li>单附件组件是用于存储表单的附件类的数据的组件。</li>";
+                    note += "<li>他属于框架类的组件：对于附件的上传与下载都是以框架里的功能界面来实现的。</li>";
+                    note += "<li>创建之后打开属性，可以对该控件的更多属性设置。</li>";
+                    note += "<li>比如对附件上传下载的权限控制、上传附件的类型控制等等。</li>";
+                    note += "</ul>";
+                case "AthImg":
+                    note = "<ul>";
+                    note += "<li>图片附件是存储图片类的控件。</li>";
+                    note += "<li>比如：员工基本资料的头像、学生资料的学生头像、身份证、半身照、地图位置信息。</li>";
+                    note += "<li>创建之后打开属性，可以对该控件的更多属性设置。</li>";
+                    note += "<li>比如对附件上传下载的权限控制、上传附件的类型控制等等。</li>";
+                    note += "</ul>";
+                    break;
+                default:
+                    note = "<ul>";
+                    note += "<li>您没有为标记[" + ctrlType + "]编写说明.</li>";
+                    note += "</ul>";
+                    break;
+            }
+
+            document.getElementById("note").innerHTML = note;
+
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
+
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr");
+            handler.AddPara("CtrlType", ctrlType);
+            handler.AddPara("FK_MapData", frmID);
+            var data = handler.DoMethodReturnString("PublicNoName_InitFieldVal");
+
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+            document.getElementById("TB_No").value = data.No;
+            document.getElementById("TB_Name").value = data.Name;
+
+
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var tbName = document.getElementById("TB_Name").value;
+                var tbNo = document.getElementById("TB_No").value;
+
+                // 如果有数据了, 就不自动生成拼音了。
+                if (tbNo != "") {
+                    return;
+                }
+
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (tbName == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
+
+                if (tbName == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
+
+                if (val == "ZiDuanQuanPin") {
+                    ParsePinYin(tbName, true, "TB_No");
+                }
+                else {
+                    ParsePinYin(tbName, false, "TB_No");
+                }
+            });
+
+            //点击全拼
+            $('input[id=RB_QP]').change(function () {
+                var name = document.getElementById("TB_Name").value;
+                ParsePinYin(name, true, "TB_No");
+            });
+            //点击简拼
+            $('input[id=RB_JP]').change(function () {
+                var name = document.getElementById("TB_Name").value;
+                ParsePinYin(name, false, "TB_No");
+            });
+        });
+
+        //传入父窗体
+        function GetFrmInfo() {
+            return {
+                Name: $.trim($("#TB_Name").val()),
+                No: $.trim($("#TB_No").val()),
+                IsCreateLabel: $("#CB_SCBQ").prop("checked")
+            };
+        }
+    </script>
+</head>
+<body>
+    <form id="cc" action="">
+    <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+        <tr>
+            <td>
+                中文名称
+            </td>
+            <td>
+                帮助
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
+            </td>
+            <td rowspan="4">
+                <div id="note">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                编号
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="TB_No" class="easyui-textbox" style="width: 200px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="RB_QP" type="radio" name="RB_QPJP" checked="checked" value="ZiDuanQuanPin" /><label
+                    for="RB_QP">字段全拼</label>
+                <input id="RB_JP" type="radio" name="RB_QPJP" value="ZiDuanJianPin" /><label for="RB_JP">字段简拼</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input id="CB_SCBQ" type="checkbox" checked="checked" /><label for="CB_SCBQ">是否根据名称生成标签</label>
+            </td>
+        </tr>
+    </table>
+    </form>
+</body>
+</html>

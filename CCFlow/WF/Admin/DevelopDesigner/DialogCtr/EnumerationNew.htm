@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+     <!-- 增加一个配置  -->
+     <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+  <!--  <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>-->
+
+    <script src="../js/FormDesignerService.js" type="text/javascript"></script>
+
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+	<script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript" > </script>
+
+    <script language="javascript" type="text/javascript">
+
+		closeWhileEscUp();
+
+		$(function () {
+
+		    var doType = GetQueryString('DoType');
+
+		    if (doType != null) {
+		        $("#RB_QPJP").attr({ "disabled": "disabled" });
+		        $("#RB_QPQP").attr({ "disabled": "disabled" });
+		        $("#TB_EnumKey").attr({ "disabled": "disabled" });
+		        return;
+		    }
+
+		    var tb_Name = document.getElementById("TB_EnumName");
+		    tb_Name.focus();
+
+		    $('#TB_EnumName').blur(function () //文本失去焦点时触发的事件
+		    {
+		        var name = document.getElementById("TB_EnumName").value;
+		        var val = $('input:radio[name="RB_QPJP"]:checked').val();
+		        if (name == "") {
+		            document.getElementById("TB_EnumKey").value = "";
+		            return;
+		        }
+
+		        if (val == "ziduanquanpin") {
+		            ParsePinYin(name, true, "TB_EnumKey");
+		        }
+		        else {
+		            ParsePinYin(name, false, "TB_EnumKey");
+		        }
+
+		    });
+
+		    //点击全拼
+		    $('input[id=RB_QP]').change(function () {
+		        var tbName = document.getElementById("TB_EnumName").value;
+		        ParsePinYin(tbName, true, "TB_EnumKey");
+		    });
+
+		    //点击简拼
+		    $('input[id=RB_JP]').change(function () {
+		        var tbName = document.getElementById("TB_EnumName").value;
+		        ParsePinYin(tbName, false, "TB_EnumKey");
+		    });
+		});
+
+        var pageData = {};
+         
+        //初始化,信息.
+        $(function () {
+
+            var enumKey = GetQueryString('EnumKey');
+
+            if (enumKey == null) {
+                NewEnum();
+                return;
+            }
+
+            //获得枚举值.
+            var enumKey = GetQueryString('EnumKey'); // $.trim($("#TB_KeyOfEn").val());
+            var enumMain = new Entity("BP.Sys.SysEnumMain", enumKey);
+
+            Edit(enumMain.No, enumMain.Name, enumMain.CfgVal);
+
+        });
+
+        function NewEnum() {
+
+            $("#TB_EnumName").val("");
+            $("#TB_EnumKey").val("");
+            $("#tabs").tabs('select', '枚举信息');
+
+            var str = '<table>';
+            for (var i = 0; i < 31; i++) {
+
+                str += '<tr>';
+                str += "<td> " + i + "</td> ";
+                str += "<td> <input id='TB" + i + "' class='easyui-textbox' style='width: 200px' /></td> ";
+                str += '</tr>';
+            }
+
+            var div = this.document.getElementById('DivEnumList');
+            div.innerHTML = str;
+            pageData.DoType = "FrmEnumeration_NewEnum";
+        }
+
+        function Edit(key, name, cfgVal) {
+
+            if (key == null || key == "") {
+                alert('您没有选择行.');
+                return;
+            }
+
+            $("#TB_EnumName").val(name);
+            $("#TB_EnumKey").val(key);
+
+
+            var cfgVals = cfgVal.split('@');
+            var str = '<table>';
+            var long = 0;
+            var enumCount = cfgVals.length + 10;
+            enumCount = enumCount < 31 ? 31 : enumCount;
+            for (var i = 0; i < enumCount; i++) {
+                var keyValue = [];
+                keyValue = $.grep(cfgVals, function (value) {
+                    var keyValue = value.split('=');
+                    return keyValue.length >= 2 && keyValue[0] == i;
+                });
+                if (keyValue.length == 0) {
+                    str += '<tr>';
+                    str += "<td> " + i + "</td> ";
+                    str += "<td> <input id='TB" + i + "'  class='easyui-textbox'  value='' class='easyui-textbox' style='width: 200px' /></td> ";
+                    str += '</tr>';
+                }
+                else {
+                    var vls = keyValue[0].split('=');
+                    var text = vls.slice(1, vls.length).join('=');
+                    if (text == undefined) {
+                        continue;
+                    }
+                    str += '<tr>';
+                    str += "<td> " + i + "</td> ";
+                    str += "<td> <input id='TB" + i + "'  class='easyui-textbox'  value='" + text + "' class='easyui-textbox' style='width: 200px' /></td> ";
+                    str += '</tr>';
+                    long = i + 1;
+                }
+            }
+
+            var div = this.document.getElementById('DivEnumList');
+            div.innerHTML = str;
+
+            pageData.DoType = "FrmEnumeration_SaveEnum";
+        }
+
+        //执行保存.
+        function SaveEnum() {
+
+            //组织数据.
+            var name = $("#TB_EnumName").val();
+            var keyofEn = $("#TB_EnumKey").val();
+
+            if (name == '' || name == null) {
+                alert('枚举中文名称不能为空.');
+                return;
+            }
+
+            if (keyofEn == '' || keyofEn == null) {
+                alert('枚举英文名称不能为空.');
+                return;
+            }
+
+            //秦 18.11.16
+            if (!CheckID(keyofEn)) {
+                alert("枚举键值不符合规则");
+                return;
+            }
+             
+
+            //删除现在的枚举值.
+            var se = new Entity("BP.Sys.SysEnum");
+            se.Delete("EnumKey", keyofEn);
+
+            var strs = '';
+            for (var i = 0; i < 30; i++) {
+                var v = $("#TB" + i).val();
+                if (v == '' || v == null)
+                    continue;
+                
+                strs += '@' + i + '=' + v; //该变量用于保存sys_EnumMain .
+
+                //创建实例.
+                var se = new Entity("BP.Sys.SysEnum");
+
+                //给实体的各个属性赋值.
+                se.EnumKey = keyofEn;
+                se.Lab = v;
+                se.IntKey = i;
+                se.Lang = "CH";
+                se.MyPK = se.EnumKey + '_CH_' + se.IntKey;
+                se.SetPKVal(se.MyPK);
+                se.Insert();
+            }
+
+            //alert('将要保存' + strs + "  name=" + name + " keyofEn=" + keyofEn);
+            //定义参数，让其保存到数据库里。
+
+            var doType = GetQueryString("DoType");
+            if (doType == null || doType == undefined) {
+                doType = "FrmEnumeration_NewEnum";
+            }
+
+            var en = new Entity("BP.Sys.SysEnumMain");
+            en.SetPKVal(keyofEn);
+            en.No = keyofEn;
+
+            if (doType == "FrmEnumeration_NewEnum") {
+                var i = en.RetrieveFromDBSources();
+                if (i == 1) {
+                    alert('枚举值已经存在');
+                    return;
+                }
+
+                en.CfgVal = strs;
+                en.Lang = "CH";
+                en.Name = name;
+                en.Insert();
+
+            } else {
+
+                en.Retrieve();
+                en.Name = name;
+                en.CfgVal = strs;
+                en.Update();
+
+            }
+
+
+
+            // var data = en.DoMethodReturnString("SaveEnum", strs);
+            //alert(data);
+
+            var url = '?EnumKey=' + keyofEn + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center'">
+        <div id="tabs" class="easyui-tabs" data-options="fit:true ,border:false">
+
+     <!--       <div title="选择已有枚举值" style="width: 600px; height: 600px; visibility:hidden" >
+                <div id="tb" style="padding: 3px;">
+                    <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新增" />
+                    &nbsp;&nbsp;
+                    <input type="button" id="Btn_Edit" onclick="Edit(true)" value="编辑" />
+                    &nbsp;&nbsp;
+                    <input type="button" id="Btn_DELETE" onclick="Del()" value="删除" />
+                </div>
+                <table id="newsGrid" toolbar="#tb" class="easyui-datagrid">
+                </table>
+
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <br />
+                            中文名：
+                            <input id="TB_Name" class="easyui-textbox" style="width: 150px" />
+                            字段英文名：<input id="TB_KeyOfEn" class="easyui-textbox" style="width: 100px" />
+                             <input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label>
+                          <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+                          <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+
+                        </td>
+                    </tr>
+                </table>
+            </div>-->
+
+            <div title="枚举信息" id="tab_Edit" style="padding: 10px" >
+
+           <table> 
+           <tr>
+           <td valign="top" >
+
+                 <table>
+                    <tr>
+                      <td>  标签 </td>
+                      <td> <input id="TB_EnumName" class="easyui-textbox" style="width: 200px" />  </td>
+                    </tr>
+                    <tr>
+                      <td>  枚举键值 </td>
+                      <td> <input id="TB_EnumKey" class="easyui-textbox" style="width: 200px" />  </td>
+                    </tr>
+                     
+                     <tr>
+                     <td colspan="2" >
+                     <input id="RB_QP" type="radio" name="RB_QPJP" value="ziduanquanpin" /><label  for="RB_QP">字段全拼</label>
+                     <input id="RB_JP" type="radio" name="RB_QPJP"  checked="checked" value="ziduanjianpin" /><label for="RB_JP">字段简拼</label>
+                     <input type="button"  value="保存"  onclick="SaveEnum()" />
+                     <input type="button"  value="重置"  onclick="NewEnum()" style="visibility:hidden"/>
+                   <!--  <input type="button"  value="删除"  onclick="DelEnum()" />-->
+                     </td>
+                     </tr>
+                     <tr>
+                         <td colspan="2">
+                             <p class="text-right" >帮助:</p> 
+
+                             <p class="text-right">1. 请在标签上面输入枚举中文名，比如:"请假类型"</p>
+                             <p class="text-right">2. 系统自动生成枚举标识字段，QJLX .</p>
+                             <p class="text-right">3. 请在右边文本框列表，输入枚举值，比如: 病假  事假 婚假 其他</p>
+                             <p class="text-right">4. 点击保存.</p>
+                         </td>
+                     </tr>
+                 </table>
+                 </td>
+
+                  <td valign="top">
+                  <div  id='DivEnumList' ></div>
+                  </td>
+                 </tr>
+           
+                 </table>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

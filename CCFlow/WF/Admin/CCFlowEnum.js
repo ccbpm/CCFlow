@@ -217,6 +217,10 @@ if (typeof FormType == "undefined") {
         /// 表单库的表单
         /// </summary>
         FormType.RefOneFrmTree = 11,
+         /// <summary>
+        /// 开发者表单
+        /// </summary>
+        FormType.Developer = 12,
         /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>

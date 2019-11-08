@@ -20,6 +20,7 @@ function InitBar(optionKey) {
     html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
     html += "<option value=" + FormType.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
     html += "<option value=" + FormType.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
+    html += "<option value=" + FormType.Developer + " >&nbsp;&nbsp;开发者表单</option>";
 
     html += "</select >";
 
@@ -131,6 +132,9 @@ function Help() {
             return;
             //  url = "11.RefOneFrmTree.htm";
             break;
+        case FormType.Developer:
+            url = "12.Developer.htm";
+            break;
         case FormType.DisableIt:
             url = "100.DisableIt.htm";
             break;
@@ -189,6 +193,9 @@ function changeOption() {
             break;
         case FormType.RefOneFrmTree:
             url = "11.RefOneFrmTree.htm";
+            break;
+        case FormType.Developer:
+            url = "12.Developer.htm";
             break;
         case FormType.DisableIt:
             url = "100.DisableIt.htm";

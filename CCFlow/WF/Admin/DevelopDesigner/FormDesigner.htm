@@ -1,0 +1,731 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <title>开发者表单设计器</title>
+    <!--引入jquery-->
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <!--引入bootstrap-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--引入easyui-->
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js"></script>
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+
+    <!--引入CSS样式 begin-->
+    <link href="css/default.css" rel="stylesheet" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+
+    <!--引入CSS样式 end-->
+    <!--UEditer Begin-->
+    <script src="js/ueditor/ueditor.config.js"></script>
+    <script src="js/ueditor/ueditor.all.js"></script>
+    <script src="js/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <!--<link href="js/ueditor/themes/iframe.css" rel="stylesheet" />-->
+    <!--UEditer End-->
+    <!--引入通用的JS-->
+    <script src="../../Scripts/config.js"></script>
+    <script src="../../Scripts/QueryString.js"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/PinYin.js"></script>
+
+    <script src="js/designer.js"></script>
+    <style type="text/css">
+        .main-sidebar, .left-side {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            /**padding-top: 50px;*/
+            min-height: 100%;
+            width: 200px;
+            z-index: 810;
+            -webkit-transition: -webkit-transform .3s ease-in-out,width .3s ease-in-out;
+            -moz-transition: -moz-transform .3s ease-in-out,width .3s ease-in-out;
+            -o-transition: -o-transform .3s ease-in-out,width .3s ease-in-out;
+            transition: transform .3s ease-in-out,width .3s ease-in-out;
+        }
+
+        .content-wrapper {
+            margin-left: 200px;
+        }
+
+        .content-wrapper, .right-side {
+            min-height: 100%;
+            background-color: #f5f5f5;
+            z-index: 800;
+        }
+
+        .navlist {
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+            .navlist li div {
+                border: 1px dashed #e0ecff;
+                background-repeat: no-repeat !important;
+                background-position: left;
+                /* background-size: 136px 26px; */
+                height: 24px;
+                width: 137px;
+                background: #e0ecff;
+            }
+
+        .navlistspan {
+            margin-left: 30px;
+            font-family: Microsoft YaHei;
+            font-size: 13px;
+        }
+
+        .figurePanel img {
+            display: inline;
+            vertical-align: middle;
+        }
+
+        .figurePanel div {
+            display: inline;
+            margin-left: 5px;
+            line-height: 25px;
+            font-size: small;
+        }
+    </style>
+
+    <script type="text/javascript">
+        //全局变量
+        var pageParam = {};
+        pageParam.fk_mapdata = GetQueryString("FK_MapData")
+
+        //保存表单的htm代码
+        function SaveForm() {
+            if (leipiEditor.queryCommandState('source'))
+                leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
+
+
+            if (leipiEditor.hasContents()) {
+                leipiEditor.sync();       //同步内容
+
+
+                if (typeof type !== 'undefined') {
+                    type_value = type;
+                }
+                formeditor = leipiEditor.getContent();
+
+                //比对Sys_MapAttr,如果html存在符合我们代码规则的保存到Sys_MapAttr中
+                var strs = "FID,FK_Dept,FK_Emp,FK_NY,MyNum,OID,RDT,CDT,Rec"//默认的
+                var ens = new Entities("BP.Sys.MapAttrs");
+                ens.Retrieve("FK_MapData", pageParam.fk_mapdata);
+                var mapAttrs = {};
+                $.each(ens, function (i, en) {
+                    if ($.isArray(mapAttrs[en.MyPK]) == false)
+                        mapAttrs[en.MyPK] = [];
+                    mapAttrs[en.MyPK].push(en);
+                })
+
+                //获取含有data-type的元素
+                var inputs = leipiEditor.document.getElementsByTagName("input");
+                //遍历所有的input元素属性
+                $.each(inputs, function (i, tag) {
+                    var dataType = tag.getAttribute("data-type");
+                    if (dataType != null && dataType != undefined && dataType != "") {
+                        //判断是否保存在Sys_MapAttr中，没有则保存
+                        var keyOfEn = tag.getAttribute("data-key");
+                        var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
+                        if (mapAttr == undefined || mapAttr == null) {
+                            if (dataType == "Radio") {
+                                var uiBindKey = tag.getAttribute("data-bindKey");
+                                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                                handler.AddPara("KeyOfEn", KeyOfEn);
+                                handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                                handler.AddPara("EnumKey", uiBindKey);
+                                var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+                                if (data.indexOf("err@") >= 0) {
+                                    alert(data);
+                                    return;
+                                }
+                            }
+                            var name = tag.getAttribute("data-name");
+                            mapAttr = new Entity("BP.Sys.MapAttr");
+
+                            mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
+                            mapAttr.FK_MapData = pageParam.fk_mapdata;
+                            mapAttr.KeyOfEn = keyOfEn;
+                            mapAttr.Name = name;
+                            if (dataType == "Text")
+                                dataType = 1;
+                            if (dataType == "Int")
+                                dataType = 2;
+                            if (dataType == "Float")
+                                dataType = 3
+                            if (dataType == "Money")
+                                dataType = 8;
+                            if (dataType == "Date")
+                                dataType = 6;
+                            if (dataType == "DateTime")
+                                dataType = 7;
+                            if (dataType == "CheckBox")
+                                dataType = 4;
+                            mapAttr.MyDataType = dataType;
+                            if (dataType == 4) {
+                                mapAttr.UIContralType = 2//checkbox
+                                mapAttr.LGType = 0;
+                            }
+                            else if (dataType == "Radio" || dataType == "Select") {
+                                mapAttr.UIContralType = 1;//下拉框
+                                mapAttr.LGType = 1;//枚举
+                            } else {
+                                mapAttr.UIContralType = 0;//TB
+                                mapAttr.LGType = 0;
+                            }
+                            mapAttr.Insert();
+                        }
+                    }
+                });
+                var selects = leipiEditor.document.getElementsByTagName("select");
+                $.each(selects, function (i, tag) {
+                    var dataType = tag.getAttribute("data-type");
+                    if (dataType != null && dataType != undefined && dataType != "") {
+                        //找到父节点
+                        var ptag = $(tag).parent()[0];
+                        var sfTable = "";
+                        var keyOfEn = "";
+                        var uiBindKey = "";
+                        if (ptag.tagName.toLowerCase() == "span" && (ptag.getAttribute('leipiplugins') == "select" || ptag.getAttribute('leipiplugins') == "enum")) {
+                            sfTable = ptag.getAttribute("data-sfTable");
+                            keyOfEn = ptag.getAttribute("data-key");
+                            uiBindKey = tag.getAttribute("data-bindKey");
+                        }
+                        var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
+                        if (mapAttr == undefined || mapAttr == null) {
+                            if (dataType == "EnumSelect") {
+                                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                                handler.AddPara("KeyOfEn", keyOfEn);
+                                handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                                handler.AddPara("EnumKey", uiBindKey);
+                                var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+                                if (data.indexOf("err@") >= 0) {
+                                    alert(data);
+                                    return;
+                                }
+                            } else {
+                                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                                handler.AddPara("KeyOfEn", keyOfEn);
+                                handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                                handler.AddPara("SFTable", sfTable);
+                                var data = handler.DoMethodReturnString("SFList_SaveSFField");
+                                if (data.indexOf("err@") >= 0) {
+                                    alert(data);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+                //保存表单的html信息
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+                handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                handler.AddPara("HtmlCode", formeditor);
+
+                var data = handler.DoMethodReturnString("SaveForm");
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+
+            } else {
+                alert('表单内容不能为空！')
+                return false;
+            }
+        }
+        //预览
+        function PreviewForm() {
+            if (leipiEditor.queryCommandState('source'))
+                leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
+
+            if (leipiEditor.hasContents()) {
+                leipiEditor.sync();       //同步内容
+                document.saveform.target = "mywin";
+                window.open('', 'mywin', "menubar=0,toolbar=0,status=0,resizable=1,left=0,top=0,scrollbars=1,width=" + (screen.availWidth - 10) + ",height=" + (screen.availHeight - 50) + "\"");
+                SaveForm();
+            } else {
+                alert('表单内容不能为空！');
+                return false;
+            }
+        }
+
+/**/</script>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini" style="overflow:hidden;">
+    <div>
+        <input type="button" onclick="SaveForm()" value="保存" />
+        <input type="button" onclick="PreviewForm()" value="预览" />
+    </div>
+    <!--左边导航-->
+    <div class="main-sidebar">
+        <div class="sidebar">
+            <div id="sidebar-menu">
+                <div id="figures" style="height: 100%; overflow: auto; position: relative;">
+                    <div class="figurePanel">
+                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="basicimg" />
+                        <div>基本控件</div>
+                     </div>
+                     <div id="basic">
+                        <ul class="navlist">
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="Button" style="background-image: url(../CCFormDesigner/Controls/basic/Button.png);">
+                                    <span class="navlistspan">按钮</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="HyperLink" style="background-image: url(../CCFormDesigner/Controls/basic/HyperLink.png);">
+                                    <span class="navlistspan">超链接</span>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                     </div>
+                     <div class="figurePanel">
+                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="Dataimg" />
+                        <div>字段控件</div>
+                     </div>
+                     <div id="Data">
+                        <ul class="navlist">
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="TextBox" style="background-image: url(../CCFormDesigner/Controls/Data/TextBox.png);" class="" onclick="leipiFormDesign.exec('text','Text');">
+                                    <span class="navlistspan">文本类型</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="TextBoxInt" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxInt.png);" class="" onclick="leipiFormDesign.exec('text','Int');">
+                                    <span class="navlistspan">数值类型</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="TextBoxMoney" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxMoney.png);" class="" onclick="leipiFormDesign.exec('text','Money');">
+                                    <span class="navlistspan">金额类型</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="TextBoxFloat" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxFloat.png);" class="" onclick="leipiFormDesign.exec('text','Float');">
+                                    <span class="navlistspan">浮点类型</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="Date" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxDate.png);" class="" onclick="leipiFormDesign.exec('text','Date');">
+                                    <span class="navlistspan">日期类型</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="DateTime" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxDateTime.png);" class="" onclick="leipiFormDesign.exec('text','DateTime');">
+                                    <span class="navlistspan">日期时间类型</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="CheckBox" style="background-image: url(../CCFormDesigner/Controls/Data/Checkbox.png);" class="" onclick="leipiFormDesign.exec('text','CheckBox');">
+                                    <span class="navlistspan">选择框</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="RadioButton" style="background-image: url(../CCFormDesigner/Controls/Data/Radiobutton.png);" class="" onclick="leipiFormDesign.exec('enum','Radio');">
+                                   <span class="navlistspan">枚举单选按钮</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="DropDownListEnum" style="background-image: url(../CCFormDesigner/Controls/Data/DropDownListEnum.png);" class="" onclick="leipiFormDesign.exec('enum','Select');">
+                                    <span class="navlistspan">枚举下拉框</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="DropDownListTable" class="" style="background-image: url(../CCFormDesigner/Controls/Data/DropDownListTable.png);" onclick="leipiFormDesign.exec('select');">
+                                    <span class="navlistspan">外键下拉框</span>
+                                </div>
+                            </li>
+                        </ul>
+                     </div>
+                     <div class="figurePanel">
+                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="Componentsimg" />
+                        <div>组件类</div>
+                     </div>
+                     <div id="Components">
+                        <ul class="navlist">
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="Dtl" class="" style="background-image: url(../CCFormDesigner/Controls/Components/Dtl.png);" onclick="leipiFormDesign.exec('dtl');">
+                                    <span class="navlistspan">明细表/从表</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="AthMulti" style="background-image: url(../CCFormDesigner/Controls/Components/AthMulti.png);" onclick="leipiFormDesign.exec('ath');">
+                                    <span class="navlistspan">多附件</span>
+                                </div>
+                            </li>
+                           
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="AthImg" style="background-image: url(../CCFormDesigner/Controls/Components/AthImg.png);" onclick="leipiFormDesign.exec('component','AthImg');">
+                                    <span class="navlistspan">图片附件</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="HandSiganture" style="background-image: url(../CCFormDesigner/Controls/Components/HandSiganture.png);" onclick="leipiFormDesign.exec('component','HandWriting');">
+                                    <span class="navlistspan">签字板</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="iFrame" style="background-image: url(../CCFormDesigner/Controls/Components/iFrame.png);" onclick="leipiFormDesign.exec('component','IFrame');">
+                                    <span class="navlistspan">框架</span>
+                                </div>
+                            </li>
+                         </ul>
+                     </div>
+                    <div class="figurePanel">
+                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="mobileimg" />
+                        <div>控件</div>
+                    </div>
+                    <div id="mobile">
+                        <ul class="navlist">
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="Map" style="background-image: url(../CCFormDesigner/Controls/mobile/Map.png);" onclick="leipiFormDesign.exec('component','Map');">
+                                    <span class="navlistspan">地图控件</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="Map" style="background-image: url(../CCFormDesigner/Controls/mobile/Map.png);" onclick="leipiFormDesign.exec('component','Score');">
+                                    <span class="navlistspan">评分控件</span>
+                                </div>
+                            </li>
+                            <!--<li style="cursor: pointer; margin-top: 2px;">
+                                <div id="Camera" style="background-image: url(../CCFormDesigner/Controls/mobile/Camera.png);">
+                                    <span class="navlistspan">拍照上传</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="SoundRecord" style="background-image: url(../CCFormDesigner/Controls/mobile/SoundRecord.png);">
+                                    <span class="navlistspan">录音</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="VideoRecord" style="background-image: url(../CCFormDesigner/Controls/mobile/VideoRecord.png);">
+                                    <span class="navlistspan">录像</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="QRCode" style="background-image: url(../CCFormDesigner/Controls/mobile/QRCode.png);">
+                                    <span class="navlistspan">二维码</span>
+                                </div>
+                            </li>-->
+                        </ul>
+                    </div>
+                    <div class="figurePanel">
+                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="ccbpmimg" />
+                        <div>流程组件</div>
+                    </div>
+                    <div id="ccbpm">
+                        <ul class="navlist">
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="FlowChart" style="background-image: url(../CCFormDesigner/Controls/ccbpm/FlowChart.png);" onclick="leipiFormDesign.exec('component','JobSchedule');">
+                                    <span class="navlistspan">进度图</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="FrmCheck" style="background-image: url(../CCFormDesigner/Controls/ccbpm/FrmCheck.png);" onclick="leipiFormDesign.exec('component','WorkCheck');">
+                                    <span class="navlistspan">审核组件</span>
+                                </div>
+                            </li>
+                            <li style="cursor: pointer; margin-top: 2px;">
+                                <div id="SubFlowDtl" style="background-image: url(../CCFormDesigner/Controls/ccbpm/SubFlowDtl.png);" onclick="leipiFormDesign.exec('component','SubFlow');">
+                                    <span class="navlistspan">子流程</span>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--中间内容-->
+    <div id="content-wrapper" class="content-wrapper">
+        <div class="tab-content">
+            <div class="row" style="height:600px">
+                <script id="myFormDesign" type="text/plain" style="margin-left:20px;margin-right:20px;"> </script>
+            </div><!--end row-->
+        </div>
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+                <a data-toggle="tab" href="#designer">设计</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#html">Html</a>
+            </li>
+
+            <li>
+                <a data-toggle="tab" href="#code">后台代码</a>
+            </li>
+
+        </ul>
+    </div>
+</body>
+<script type="text/javascript">
+    var leipiEditor = UE.getEditor('myFormDesign', {
+            toolleipi: true,//是否显示，设计器的 toolbars
+            textarea: 'design_content',
+            //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
+            toolbars: [[
+                'fullscreen', 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'removeformat', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', '|', 'fontfamily', 'fontsize', '|', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|', 'simpleupload', 'horizontal', 'spechars', 'wordimage', '|', 'inserttable', 'deletetable', 'mergecells', 'splittocells', '|', 'template']],
+            //focus时自动清空初始化时的内容
+            //autoClearinitialContent:true,
+            //关闭字数统计
+            wordCount: false,
+            //关闭elementPath
+            elementPathEnabled: false,
+            //默认的编辑区域高度
+            initialFrameHeight:300
+            //更多其他参数，请参考ueditor.config.js中的配置项
+        });
+
+    //给富文本赋值
+    window.onload = function () {
+   
+        
+        //先判断DataUser/CCForm/HtmlTemplateFile/FK_MapData.htm是否存在
+         var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" +pageParam.fk_mapdata + ".htm";
+        var htmlobj = $.ajax({ url: filename, async: false });
+        var htmlContent = "";
+        if (htmlobj.status == 404) {
+            //数据库中查找
+            var mapdata = new Entity("BP.Sys.MapData");
+            mapdata.SetPKVal(pageParam.fk_mapdata);
+            if (mapdata.RetrieveFromDBSources() == 0) {
+                alert("在数据库表Sys_MapData不存在No=" + pageParam.fk_mapdata + "的数据，请联系管理员");
+                return;
+            }
+            htmlContent = mapdata.HtmlTemplateFile;
+        } else {
+            htmlContent = htmlobj.responseText;
+            if (htmlContent == null && htmlContent == "" && htmlContent == undefined) {
+                htmlContent = "";
+            }
+        }
+        leipiEditor.ready(function () {//编辑器初始化完成再赋值
+            leipiEditor.setHeight(document.body.clientHeight-160);
+			 leipiEditor.setContent(htmlContent,false);;  //赋值给UEditor
+		});
+
+        if (leipiEditor) {
+
+
+            //调整样式,让必选的红色 * 随后垂直居中
+            $(leipiEditor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
+        }
+            
+
+    };
+        var leipiFormDesign = {
+            exec: function (method,dataType) {
+                leipiEditor.execCommand(method,dataType);
+            },
+             /*
+                Javascript 解析表单
+                template 表单设计器里的Html内容
+                fields 字段总数
+            */
+           parse_form:function(template,fields)
+            {
+                //正则  radios|checkboxs|select 匹配的边界 |--|  因为当使用 {} 时js报错
+                var preg =  /(\|-<span(((?!<span).)*leipiplugins=\"(radios|checkboxs|select)\".*?)>(.*?)<\/span>-\||<(img|input|textarea|select).*?(<\/select>|<\/textarea>|\/>))/gi,preg_attr =/(\w+)=\"(.?|.+?)\"/gi,preg_group =/<input.*?\/>/gi;
+                if(!fields) fields = 0;
+
+                var template_parse = template,template_data = new Array(),add_fields=new Object(),checkboxs=0;
+
+                var pno = 0;
+                template.replace(preg, function(plugin,p1,p2,p3,p4,p5,p6){
+                    var parse_attr = new Array(),attr_arr_all = new Object(),name = '', select_dot = '' , is_new=false;
+                    var p0 = plugin;
+                    var tag = p6 ? p6 : p4;
+
+                    if(tag == 'radios' || tag == 'checkboxs')
+                    {
+                        plugin = p2;
+                    }else if(tag == 'select')
+                    {
+                        plugin = plugin.replace('|-','');
+                        plugin = plugin.replace('-|','');
+                    }
+                    plugin.replace(preg_attr, function(str0,attr,val) {
+                            if(attr=='name')
+                            {
+                                if(val=='leipiNewField')
+                                {
+                                    is_new=true;
+                                    fields++;
+                                    val = 'data_'+fields;
+                                }
+                                name = val;
+                            }
+                    
+                            if(tag=='select' && attr=='value')
+                            {
+                                if(!attr_arr_all[attr]) attr_arr_all[attr] = '';
+                                attr_arr_all[attr] += select_dot + val;
+                                select_dot = ',';
+                            }else
+                            {
+                                attr_arr_all[attr] = val;
+                            }
+                            var oField = new Object();
+                            oField[attr] = val;
+                            parse_attr.push(oField);
+                    }) 
+                    /*alert(JSON.stringify(parse_attr));return;*/
+                     if(tag =='checkboxs') /*复选组  多个字段 */
+                     {
+                        plugin = p0;
+                        plugin = plugin.replace('|-','');
+                        plugin = plugin.replace('-|','');
+                        var name = 'checkboxs_'+checkboxs;
+                        attr_arr_all['parse_name'] = name;
+                        attr_arr_all['name'] = '';
+                        attr_arr_all['value'] = '';
+                
+                        attr_arr_all['content'] = '<span leipiplugins="checkboxs"  title="'+attr_arr_all['title']+'">';
+                        var dot_name ='', dot_value = '';
+                        p5.replace(preg_group, function(parse_group) {
+                            var is_new=false,option = new Object();
+                            parse_group.replace(preg_attr, function(str0,k,val) {
+                                if(k=='name')
+                                {
+                                    if(val=='leipiNewField')
+                                    {
+                                        is_new=true;
+                                        fields++;
+                                        val = 'data_'+fields;
+                                    }
+
+                                    attr_arr_all['name'] += dot_name + val;
+                                    dot_name = ',';
+
+                                }
+                                else if(k=='value')
+                                {
+                                    attr_arr_all['value'] += dot_value + val;
+                                    dot_value = ',';
+
+                                }
+                                option[k] = val;    
+                            });
+                    
+                            if(!attr_arr_all['options']) attr_arr_all['options'] = new Array();
+                            attr_arr_all['options'].push(option);
+                            //if(!option['checked']) option['checked'] = '';
+                            var checked = option['checked'] !=undefined ? 'checked="checked"' : '';
+                            attr_arr_all['content'] +='<input type="checkbox" name="'+option['name']+'" value="'+option['value']+'"  '+checked+'/>'+option['value']+'&nbsp;';
+
+                            if(is_new)
+                            {
+                                var arr = new Object();
+                                arr['name'] = option['name'];
+                                arr['leipiplugins'] = attr_arr_all['leipiplugins'];
+                                add_fields[option['name']] = arr;
+
+                            }
+
+                        });
+                        attr_arr_all['content'] += '</span>';
+
+                        //parse
+                        template = template.replace(plugin,attr_arr_all['content']);
+                        template_parse = template_parse.replace(plugin,'{'+name+'}');
+                        template_parse = template_parse.replace('{|-','');
+                        template_parse = template_parse.replace('-|}','');
+                        template_data[pno] = attr_arr_all;
+                        checkboxs++;
+
+                     }else if(name)
+                    {
+                        if(tag =='radios') /*单选组  一个字段*/
+                        {
+                            plugin = p0;
+                            plugin = plugin.replace('|-','');
+                            plugin = plugin.replace('-|','');
+                            attr_arr_all['value'] = '';
+                            attr_arr_all['content'] = '<span leipiplugins="radios" name="'+attr_arr_all['name']+'" title="'+attr_arr_all['title']+'">';
+                            var dot='';
+                            p5.replace(preg_group, function(parse_group) {
+                                var option = new Object();
+                                parse_group.replace(preg_attr, function(str0,k,val) {
+                                    if(k=='value')
+                                    {
+                                        attr_arr_all['value'] += dot + val;
+                                        dot = ',';
+                                    }
+                                    option[k] = val;    
+                                });
+                                option['name'] = attr_arr_all['name'];
+                                if(!attr_arr_all['options']) attr_arr_all['options'] = new Array();
+                                attr_arr_all['options'].push(option);
+                                //if(!option['checked']) option['checked'] = '';
+                                var checked = option['checked'] !=undefined ? 'checked="checked"' : '';
+                                attr_arr_all['content'] +='<input type="radio" name="'+attr_arr_all['name']+'" value="'+option['value']+'"  '+checked+'/>'+option['value']+'&nbsp;';
+
+                            });
+                            attr_arr_all['content'] += '</span>';
+
+                        }else
+                        {
+                            attr_arr_all['content'] = is_new ? plugin.replace(/leipiNewField/,name) : plugin;
+                        }
+                        template = template.replace(plugin,attr_arr_all['content']);
+                        template_parse = template_parse.replace(plugin,'{'+name+'}');
+                        template_parse = template_parse.replace('{|-','');
+                        template_parse = template_parse.replace('-|}','');
+                        if(is_new)
+                        {
+                            var arr = new Object();
+                            arr['name'] = name;
+                            arr['leipiplugins'] = attr_arr_all['leipiplugins'];
+                            add_fields[arr['name']] = arr;
+                        }
+                        template_data[pno] = attr_arr_all;
+
+               
+                    }
+                    pno++;
+                })
+                var parse_form = new Object({
+                    'fields':fields,//总字段数
+                    'template':template,//完整html
+                    'parse':template_parse,//控件替换为{data_1}的html
+                    'data':template_data,//控件属性
+                    'add_fields':add_fields//新增控件
+                });
+                return JSON.stringify(parse_form);
+            },
+            fnCheckForm: function (type) {
+                SaveForm();
+            },
+
+            fnReview: function () {
+                if (leipiEditor.queryCommandState('source'))
+                    leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
+
+                if (leipiEditor.hasContents()) {
+                    leipiEditor.sync();       //同步内容
+                    document.saveform.target = "mywin";
+                    window.open('', 'mywin', "menubar=0,toolbar=0,status=0,resizable=1,left=0,top=0,scrollbars=1,width=" + (screen.availWidth - 10) + ",height=" + (screen.availHeight - 50) + "\"");
+                    document.saveform.action = "/demo/temp_preview.html";
+                    document.saveform.submit(); //提交表单
+                } else {
+                    alert('表单内容不能为空！');
+                    return false;
+                }
+            }
+        };
+
+</script>
+</html>

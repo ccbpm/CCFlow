@@ -1,0 +1,156 @@
+﻿.icon-Search {
+    background: url('./Img/Search.png') no-repeat;
+}
+
+.icon-Event {
+    background: url('../../Img/Event.png') no-repeat;
+}
+
+.icon-Setting {
+    background: url('../../Img/Setting.png') no-repeat;
+}
+
+.icon-DTS {
+    background: url('./Img/DTS.png') no-repeat;
+}
+
+.icon-URL {
+    background: url('./Img/URL.png') no-repeat;
+}
+
+.icon-API {
+    background: url('./Img/API.png') no-repeat;
+}
+
+.icon-StartGuide {
+    background: url('./Img/StartGuide.png') no-repeat;
+}
+
+.icon-limit {
+    background: url('./Img/limit.png') no-repeat;
+}
+
+.icon-AutoStart {
+    background: url('./Img/AutoStart.png') no-repeat;
+}
+
+.icon-DesignRpt {
+    background: url('./Img/DesignRpt.png') no-repeat;
+}
+
+.icon-Group {
+    background: url('./Img/Group.png') no-repeat;
+}
+
+.icon-D3 {
+    background: url('./Img/D3.png') no-repeat;
+}
+
+.icon-Contrast {
+    background: url('./Img/Contrast.png') no-repeat;
+}
+
+.icon-SQL {
+    background: url('./Img/SQL.png') no-repeat;
+}
+
+.icon-Field {
+    background: url('./Img/Field.png') no-repeat;
+}
+
+.icon-Node {
+    background: url('./Img/Node.png') no-repeat;
+}
+
+.icon-FuncFolder {
+    background: url('./Img/FuncFolder.png') no-repeat;
+}
+
+.icon-Monitor {
+    background: url('./Img/Monitor.png') no-repeat;
+}
+
+.icon-SearchKey {
+    background: url('./Img/SearchKey.png') no-repeat;
+}
+
+.icon-app {
+    background: url('./Img/app.png') no-repeat;
+}
+
+.icon-flows {
+    background: url('./Img/flows.png') no-repeat;
+}
+
+.icon-RptOrder {
+    background: url('./Img/RptOrder.png') no-repeat;
+}
+
+.icon-Grow {
+    background: url('./Img/Grow.png') no-repeat;
+}
+
+.icon-Warning {
+    background: url('./Img/Warning.png') no-repeat;
+}
+
+.icon-overtime {
+    background: url('./Img/overtime.png') no-repeat;
+}
+
+.icon-log {
+    background: url('./Img/log.png') no-repeat;
+}
+
+.icon-flowcloud {
+    background: url('./Img/FlowCloud.png') no-repeat;
+    width: 16px;
+    height: 16px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+
+.icon-Home {
+    background: url('../CCFormDesigner/Img/Home.png') no-repeat;
+}
+
+.icon-Glasses {
+    background: url('../CCFormDesigner/Img/Glasses.png') no-repeat;
+}
+
+.icon-JavaScript {
+    background: url('../CCFormDesigner/Img/JavaScript.png') no-repeat;
+}
+
+.icon-LoadFull {
+    background: url('../CCFormDesigner/Img/LoadFull.png') no-repeat;
+}
+
+.icon-flow1 {
+    background: url('../CCFormDesigner/Img/Flow.png') no-repeat;
+}
+
+.panel-header {
+    height: 36px;
+}
+
+.logpanel {
+    height: 50px;
+}
+
+.icon-logPic {
+    background: url('/DataUser/ICON/Smaller.png') no-repeat;
+    height: 50px;
+    width: 50px;
+    float: left;
+    display: inline;
+}
+
+.logPicspan {
+    margin-left: 15px;
+    margin-top: 6px;
+    font-size: large;
+    float: left;
+    display: inline;
+}

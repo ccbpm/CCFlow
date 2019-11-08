@@ -1,0 +1,365 @@
+﻿<!DOCTYPE>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>驰骋工作流程引擎设计器-完整版</title>
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/dialog.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../CCFormDesigner/normalize/css/ns-default.css" rel="stylesheet" type="text/css" />
+    <link href="../CCFormDesigner/normalize/css/ns-style-bar.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="FuncTrees.js" type="text/javascript"></script>
+    <script src="Default.js"></script>
+    <link href="Default.css" rel="stylesheet" />
+</head>
+<body class="easyui-layout" data-options="fit: true">
+    <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: block;
+        width: 32px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
+        font-weight: bold;">
+        <img alt="" src="./Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
+    </div>
+    <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
+        z-index: 21006;">
+    </div>
+    <div data-options="region:'west',border:true,split:true" title="<img src='../../../DataUser/ICON/CCBPMDesigner.png' style='width:100%;vertical-align:middle' />"
+         style="width: 250px;">
+        <div id="menuTab" class="easyui-tabs" data-options="fit:true,border:false">
+        </div>
+    </div>
+    <div data-options="region:'center',border:true" collapsible="true">
+        <script type="text/javascript" language="javascript">
+            if (!isBrowserReady()) {
+                document.write('<span style="background-color: red;" >');
+                document.write("您的浏览器不支持HTML5。请升级您的浏览器到高级版本，或者使用火狐、谷歌浏览器。");
+                document.write("</span>");
+            }
+        </script>
+        <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
+        </div>
+        <div id="tab-tools">
+            <a href="#" class="easyui-linkbutton" id="Login2App" data-options="plain:true" onclick="Login2App()">
+                <b style="color: Blue;">
+                    <img alt='使用普通用户,登录前台demo系统' src='../../AppClassic/Img/Key.png' style="width: 14px;
+                        height: 14px;" />登录前台
+                </b>
+            </a><a href="#" class="easyui-linkbutton" data-options="plain:true"
+                   onclick="LoginOut()">
+                <b style="color: Blue;">
+                    <img alt='退出ccbpm流程设计器' src='../../Img/Exit.png' style="width: 14px; height: 14px;" />退出
+                </b>
+            </a>
+        </div>
+    </div>
+    <!--  context menu -->
+    <div id="mFlowRoot" class="easyui-menu" style="width: 120px;">
+        <div onclick="newFlow()" data-options="iconCls:'icon-add'">
+            新建流程
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="SearchFlow()" data-options="iconCls:'icon-Search'">
+            按关键字查询流程
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-tree_folder'">
+            新建子级类别
+        </div>
+        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
+            编辑
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+    </div>
+    <div id="mFlowSort" class="easyui-menu" style="width: 120px;">
+        <div onclick="newFlow()" data-options="iconCls:'icon-add'">
+            新建流程
+        </div>
+        <div onclick="ImpFlowBySort()" data-options="iconCls:'icon-redo'">
+            导入流程模板
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="newFlowSort(false)" data-options="iconCls:'icon-tree_folder'">
+            新建同级类别
+        </div>
+        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-tree_folder'">
+            新建子级类别
+        </div>
+        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
+            编辑
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="deleteFlowSort()" data-options="iconCls:'icon-Delete'">
+            删除
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="moveUpFlowSort()" data-options="iconCls:'icon-up'">
+            上移
+        </div>
+        <div onclick="moveDownFlowSort()" data-options="iconCls:'icon-down'">
+            下移
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+        <div onclick="viewFlowSort()" data-options="iconCls:'icon-config'">
+            树节点属性
+        </div>
+    </div>
+    <div id="mFlow" class="easyui-menu" style="width: 120px;">
+        <div onclick="showFlow()" data-options="iconCls:'icon-design'">
+            设计流程图
+        </div>
+        <!--<div onclick="RefreshFlowJson()" data-options="iconCls:'icon-reset'">重置流程图</div>-->
+        <div class="menu-sep">
+        </div>
+        <div onclick="ImpFlow()" data-options="iconCls:'icon-redo'">
+            导入流程模板
+        </div>
+        <div onclick="ExpFlow()" data-options="iconCls:'icon-unredo'">
+            导出流程模板
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="DeleteFlow()" data-options="iconCls:'icon-delete'">
+            删除流程
+        </div>
+        <div onclick="FlowProperty()" data-options="iconCls:'icon-sheet'">
+            流程属性
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="moveUpFlow()" data-options="iconCls:'icon-up'">
+            上移
+        </div>
+        <div onclick="moveDownFlow()" data-options="iconCls:'icon-down'">
+            下移
+        </div>
+    </div>
+    <!--  <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
+        <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>-->
+    </div>
+    <div id="mFormRoot" class="easyui-menu" style="width: 120px;">
+        <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
+        <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+    </div>
+    <div id="mFormSrc" class="easyui-menu" style="width: 120px;">
+        <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-add'">
+            新建下级目录
+        </div>
+        <!-- <div onclick="newFrm()" data-options="iconCls:'icon-new'">
+             新建表单</div>-->
+        <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
+    </div>
+    <div id="mFormSort" class="easyui-menu" style="width: 120px;">
+        <!--<div onclick="newFrm(0)" data-options="iconCls:'icon-excel'"   >
+            新建独立表单
+        </div>-->
+
+        <div onclick="newFrm(2)" data-options="iconCls:'icon-add'">
+            新建实体表单
+        </div>
+
+        <div onclick="newFrm(1)" data-options="iconCls:'icon-sheet'">
+            新建单据表单
+        </div>
+
+        <div class="menu-sep">
+        </div>
+        <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-tree_folder'">
+            新建同级类别
+        </div>
+        <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-tree_folder'">
+            新建子级类别
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="EditCCFormSort()" data-options="iconCls:'icon-edit'">
+            编辑
+        </div>
+        <div onclick="DeleteCCFormSort()" data-options="iconCls:'icon-cancel'">
+            删除
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="moveUpCCFormSort()" data-options="iconCls:'icon-up'">
+            上移
+        </div>
+        <div onclick="moveDownCCFormSort()" data-options="iconCls:'icon-down'">
+            下移
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+    </div>
+    <div id="mForm" class="easyui-menu" style="width: 120px;">
+        <div onclick="Bill_CCForm()" data-options="iconCls:'icon-property'">
+            表单属性
+        </div>
+        <div onclick="Bill_Open()" data-options="iconCls:'icon-Search'">
+            数据查询
+        </div>
+        <div class="menu-sep">
+        </div>
+        <!--  <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
+            表单属性</div>-->
+        <!--<div onclick="designFoolFrm()" data-options="iconCls:'icon-sheet'">
+            设计傻瓜表单
+        </div>
+        <div onclick="designFreeFrm()" data-options="iconCls:'icon-library'">
+            设计自由表单
+        </div>-->
+        <!--<div onclick="CopyFrm()" data-options="iconCls:'icon-copy'">复制表单</div>-->
+        <div class="menu-sep">
+        </div>
+        <div onclick="moveUpCCFormTree()" data-options="iconCls:'icon-up'">
+            上移
+        </div>
+        <div onclick="moveDownCCFormTree()" data-options="iconCls:'icon-down'">
+            下移
+        </div>
+        <div onclick="deleteCCFormTreeMapData()" data-options="iconCls:'icon-Delete'">
+            删除
+        </div>
+
+        <div onclick="CopyFrm()" data-options="iconCls:'icon-Copy'">
+            复制
+        </div>
+        <!--<div class="menu-sep"></div>
+        <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">刷新</div>-->
+    </div>
+    <div id="mSrcRoot" class="easyui-menu" style="width: 120px;">
+        <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
+        <div onclick="RefreshNode('formTree', 'SrcRoot')" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+    </div>
+    <div id="mSrc" class="easyui-menu" style="width: 120px;">
+        <div onclick="srcProperty()" data-options="iconCls:'icon-sheet'">
+            数据源属性
+        </div>
+        <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
+        <div onclick="newSrcTable()" data-options="iconCls:'icon-new'">
+            新建表
+        </div>
+        <div onclick="alert('删除数据源，待开发')" data-options="iconCls:'icon-delete'">
+            删除数据源
+        </div>
+        <div onclick="RefreshNode('formTree', 'SrcRoot')" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+    </div>
+    <div id="mSrcTable" class="easyui-menu" style="width: 120px;">
+        <div onclick="srcTableProperty()" data-options="iconCls:'icon-sheet'">
+            表属性
+        </div>
+        <div onclick="newSrcTable()" data-options="iconCls:'icon-new'">
+            新建表
+        </div>
+        <div onclick="srcTableData()" data-options="iconCls:'icon-edit'">
+            查看&编辑数据
+        </div>
+        <div onclick="alert('删除表，待开发')" data-options="iconCls:'icon-delete'">
+            删除表
+        </div>
+    </div>
+    <div id="mm" class="easyui-menu cs-tab-menu">
+        <div id="mm-tabupdate">
+            刷新
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div id="mm-tabclose">
+            关闭
+        </div>
+        <div id="mm-tabcloseother">
+            关闭其他
+        </div>
+        <div id="mm-tabcloseall">
+            关闭全部
+        </div>
+        <div id="mm-tabcloseright">
+            关闭右侧
+        </div>
+        <div id="mm-tabcloseleft">
+            关闭左侧
+        </div>
+    </div>
+    <div id="mDeptRoot" class="easyui-menu" style="width: 120px;">
+        <div onclick="newSubDept()" data-options="iconCls:'icon-new'">
+            增加下级部门
+        </div>
+        <div onclick="editDept()" data-options="iconCls:'icon-edit'">
+            编辑部门
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="newStation()" data-options="iconCls:'icon-add'">
+            增加岗位
+        </div>
+    </div>
+    <div id="mDept" class="easyui-menu" style="width: 120px;">
+        <div onclick="newSubDept()" data-options="iconCls:'icon-new'">
+            增加下级部门
+        </div>
+        <div onclick="newDept()" data-options="iconCls:'icon-new'">
+            增加同级部门
+        </div>
+        <div onclick="editDept()" data-options="iconCls:'icon-edit'">
+            编辑部门
+        </div>
+        <div onclick="deleteDept()" data-options="iconCls:'icon-delete'">
+            删除部门
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="newStation()" data-options="iconCls:'icon-add'">
+            增加岗位
+        </div>
+    </div>
+    <div id="mStation" class="easyui-menu" style="width: 120px;">
+        <div onclick="editStation()" data-options="iconCls:'icon-edit'">
+            编辑岗位
+        </div>
+        <div onclick="deleteStation()" data-options="iconCls:'icon-delete'">
+            删除岗位
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="newEmp()" data-options="iconCls:'icon-add'">
+            增加人员
+        </div>
+    </div>
+    <div id="mEmp" class="easyui-menu" style="width: 120px;">
+        <div onclick="editEmp()" data-options="iconCls:'icon-edit'">
+            编辑人员
+        </div>
+        <div onclick="deleteEmp()" data-options="iconCls:'icon-delete'">
+            删除人员
+        </div>
+    </div>
+    <script src="../CCFormDesigner/normalize/js/classie.js" type="text/javascript"></script>
+    <script src="../CCFormDesigner/normalize/js/modernizr.custom.js" type="text/javascript"></script>
+    <script src="../CCFormDesigner/normalize/js/notificationFx.js" type="text/javascript"></script>
+</body>
+</html>

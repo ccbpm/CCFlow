@@ -113,7 +113,41 @@
         {
             var val = $("#DDL_System").val();
         }
-
+         //设置cookies值
+        function setCookie(cname,cvalue,exdays) {
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          var expires = "expires=" + d.toGMTString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+        //获取cookies值
+        function getCookie(cname) {
+          var name = cname + "=";
+          var decodedCookie = decodeURIComponent(document.cookie);
+          var ca = decodedCookie.split(';');
+          for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
+        }
+        //检查cookies值
+        function checkCookie() {
+            var user=getCookie("username");
+            if (user != "") {
+                $(" select option[value='" + user + "']").attr("selected", "selected");
+          } else {
+            
+             if (user != "" && user != null) {
+               setCookie("username", user, 30);
+             }
+          }
+        }
     </script>
 
     <style>
@@ -125,7 +159,7 @@
     </style>
 </head>
 
-<body class="login-bg">
+<body class="login-bg" onload="checkCookie()">
 
     <form id="cc">
         <div class="login-box_admin">
@@ -138,10 +172,10 @@
                     <div class="form-group">
                         <b>您要登录的系统:</b>
                         <select id="DDL_System"  onchange="SelectChange()" >
-                            <option value="Default"> 驰骋BPM完整版 </option>
-                            <option value="DefaultSimple">驰骋BPM轻量版(beta)</option>
-                            <option value="DefaultFrm"> 驰骋表单引擎(beta)</option>
-                            <option value="DefaultGPM"> 驰骋权限管理(beta)</option>
+                            <option  value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋BPM完整版 </option>
+                            <option  value="DefaultSimple" onclick="setCookie('username', $(this).val(), 30)">驰骋BPM轻量版(beta)</option>
+                            <option  value="DefaultFrm" onclick="setCookie('username', $(this).val(), 30)"> 驰骋表单引擎(beta)</option>
+                            <option  value="DefaultGPM" onclick="setCookie('username', $(this).val(), 30)"> 驰骋权限管理(beta)</option>
                         </select>
                     </div>
 
@@ -167,12 +201,12 @@
                         </div>
                         <br />
                         <div id="Msg" style=" float:right" />
+                        </div>
                     </div>
-                </form></div>
                 </form>
             </div>
-
-
+               
+            </div>
         </div>
     </form>
 

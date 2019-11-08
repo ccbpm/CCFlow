@@ -24,9 +24,10 @@
 
             if (window.location.href.indexOf("Simple.htm") > 0)
                 model = 1; //轻量版.
+            
 
             //流程类型.
-            flowSort = GetQueryString("sort");   //？？？？会阻止下拉框的显示
+            //flowSort = GetQueryString("sort");   
             flowSort = flowSort.replace("F", " ");
             model = GetQueryString("RunModel");
             if (model == "1") {
@@ -41,10 +42,9 @@
                 $(".IsHidden").show();
 
             } else {
-                $(".IsHidden").hide();
-
+                //$(".IsHidden").hide();
                 $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内置表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单(默认)</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>");
                 $("#DDL_FlowFrmType").append("<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>");
@@ -79,8 +79,7 @@
 
             //var model = GetQueryString("RunModel");
             var model = $("#DDL_FlowFrmType").val();
-
-            if (model == "0") {
+            if (model == "0" || model == "1" || model == "7" || model=="10") {
                 $("#TB_URL").attr("disabled", "disabled");
                 $("#TB_URL").attr("value", " 当前不可用");
             }

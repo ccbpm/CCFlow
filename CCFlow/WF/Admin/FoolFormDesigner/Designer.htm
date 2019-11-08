@@ -37,6 +37,7 @@
         {
             width: 100%;
         }
+
     </style>
     <style type="text/css">
         body
@@ -103,13 +104,23 @@
     </script>
     <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
+
+        var frmID = "";
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            if (GetQueryString("FK_Node") == "0")
+            frmID = GetQueryString("FrmID");
+            if (frmID == null || frmid == undefined)
+                frmID = GetQueryString("FK_MapData");
+
+            if (GetQueryString("FK_Node") == "0") {
+
                 $("#FrmNodeComponent").hide();
+                $("#fwc").hide();
+            }
+
             //初始化groupID.
             var fk_mapData = GetQueryString("FK_MapData");
             var isF = GetQueryString("IsFirst"); //是否第一次加载?
@@ -1028,9 +1039,7 @@
             OpenEasyUiDialog(url, "eudlgframe", '轨迹图', 400, 700, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
-
         }
-
 
         /// 审核组件.
         function EditFWC(mypk) {
@@ -1093,7 +1102,6 @@
             if (mypk == null || mypk == "undefined")
                 mypk = GetQueryString("FK_Node");
 
-
             var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=轨迹组件';
 
 
@@ -1103,9 +1111,13 @@
 
         }
 
+        //表单属性.
         function MapDataEdit() {
 
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + GetQueryString("FK_MapData");
+            var frm = new Entity("BP.Sys.MapData", frmID);
+
+
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + frmID;
 
             //获取页面的大小
             var W = document.body.clientWidth - 80;
@@ -1322,13 +1334,12 @@
             });
         }
 
+        //估计不要了
         function HidAttr() {
             var url = 'HidAttr.htm?FK_MapData=' + pageParam.fk_mapdata;
-
             OpenEasyUiDialog(url, "eudlgframe", '隐藏字段', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
-
             // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             // window.location.href = window.location.href;
         }
@@ -1370,10 +1381,18 @@
                         <a href="javascript:MapDataEdit();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
                             表单属性 </a><a href="javascript:ExpImp();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'">
                                 导入/导出</a> <a href="javascript:AddF();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">
-                                    新建字段</a> <a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
-                                        隐藏字段 </a><a href="javascript:GroupFieldNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">
-                                            新建字段分组</a> <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-checkGroup'">
-                                                新建审核分组</a> <a href="javascript:NewMapDtl();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">
+                                    新建字段</a> 
+
+                        <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
+                                        隐藏字段 </a>-->
+                        
+                        <a href="javascript:GroupFieldNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">
+
+                                            新建字段分组</a> 
+                        <a id="fwc" href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-checkGroup'">
+                            &nbsp;&nbsp;新建审核分组
+                        </a>
+                        <a href="javascript:NewMapDtl();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">
                                                     新建从表</a> <a href="javascript:NewAth();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
                                                         新建附件</a><a href="javascript:NewFrame();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">
                                                             新建框架</a> <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" id="FrmNodeComponent"

@@ -54,6 +54,7 @@
         var frmID = GetQueryString("FK_MapData");
         var flowNo = GetQueryString("FK_Flow");
         var nodeID = GetQueryString("FK_Node");
+
         var btnFrmLib = null;
         var selFrmNode = null;
         var Btn_Flows = null;
@@ -75,8 +76,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Imp_Init");
-
-
 
             if (data.indexOf("err@") > -1) {
                 alert(data);

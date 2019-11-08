@@ -1434,7 +1434,9 @@ namespace BP.WF.HttpHandler
             {
                 int runModel = this.GetRequestValInt("RunModel");
                 string FlowName = this.GetRequestVal("FlowName");
-                string FlowSort = this.GetRequestVal("FlowSort");
+                string FlowSort = this.GetRequestVal("FlowSort").Trim();
+                FlowSort = FlowSort.Trim();
+
                 int DataStoreModel = this.GetRequestValInt("DataStoreModel");
                 string PTable = this.GetRequestVal("PTable");
                 string FlowMark = this.GetRequestVal("FlowMark");

@@ -292,6 +292,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FrmNodeExt.cs" />
+    <Compile Include="Template\FrmNodeJiJian.cs" />
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\MapFrmWord.cs" />

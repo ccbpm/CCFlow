@@ -114,6 +114,7 @@ function Frm() {
         url = "../FoolFormDesigner/Designer.htm?FrmID=" + flowNo + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
 
     window.parent.addTab(nodeID, "设计表单" + nodeID, url);
+
     // window.open(url);
     //OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
     //window.location.href = window.location.href;
@@ -169,6 +170,7 @@ function superDialog(URL, viewField, hidField, isOnly, dialogWidth, dialogHeight
 
 var flowNo = null;
 $(function () {
+
     flowNo = GetQueryString("FK_Flow");
     if (flowNo == undefined || flowNo == null)
         flowNo = "002";
@@ -398,6 +400,10 @@ $(function () {
             "pmFrmD": function (t) {
                 var activeId = _canvas.getActiveId(); //右键当前的ID
                 NodeFrmD(activeId);
+            },
+            "pmFrmPower": function (t) {
+                var activeId = _canvas.getActiveId(); //表单权限ID
+                FrmPower(activeId);
             },
             "pmFrmFool": function (t) {
                 var activeId = _canvas.getActiveId(); //右键当前的ID
@@ -1042,6 +1048,18 @@ function NodeFrmD(nodeID) {
     }
 
     NodeFrmFool(nodeID);
+}
+
+//表单的权限.
+function FrmPower(nodeID) {
+
+    var frmID = "ND" + parseInt(flowNo + "01");
+    var mypk = frmID + "_" + nodeID + "_" + flowNo;
+
+    //傻瓜表单.
+    var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeJiJian&MyPK=" + mypk + "&Lang=CH";
+    //WinOpen(url);
+    window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
 }
 
 function NodeFrmFool(nodeID) {

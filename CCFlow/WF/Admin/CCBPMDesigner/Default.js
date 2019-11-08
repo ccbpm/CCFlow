@@ -417,7 +417,7 @@ function newFlow() {
         var newFlowInfo = win.getNewFlowInfo();
 
         if (newFlowInfo.FlowName == null || newFlowInfo.FlowName.length == 0
-            || newFlowInfo.FlowSort == null || newFlowInfo.FlowSort.length == 0) {
+            || newFlowInfo.TreeFlowSort == null || newFlowInfo.TreeFlowSort.length == 0) {
 
             alert('信息填写不完整:' + newFlowInfo.FlowName + newFlowInfo.FlowSort);
             //$.messager.alert('错误', '信息填写不完整', 'error');

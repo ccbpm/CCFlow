@@ -6,7 +6,10 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+
     <script src="Public/Designer2018.js" type="text/javascript"></script>
+
     <!--JL.plus-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -63,6 +66,11 @@
                     <button class="btn btn-danger" type="button" id="Btn_RunIt" onclick="FlowRunAdmin()">
                         admin运行
                     </button>
+
+                    <button class="btn btn-app" type="button" id="Btn_Frm" onclick="Frm()">
+                        设计表单
+                    </button>
+
                     <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
                     <!--<button class="btn btn-info" type="button" id="Btn_OldVer" onclick="OldVer()" >旧版本</button>-->
                     <button class="btn btn-help" type="button" id="Btn_Reload" onclick="Reload()">
@@ -184,7 +192,6 @@
             #mainul li {
                 padding: 1px 2px !important;
             }*/
-
     </style>
     <div id="processMenu" style="display: none;">
         <ul id="mainul">
@@ -250,10 +257,10 @@
             padding: 0px 0px 1px 5px;
         }
 
-            #processMenu3 li:hover {
+         #processMenu3 li:hover {
                 background-color: #2980b9;
                 cursor: pointer;
-            }
+         }
         /****给弹出框URL写的样式*/
         .ui-icon-closethick {
             background-position: 0;
@@ -331,8 +338,33 @@
 
         //改变节点风格.
         function ChangeNodeIcon(nodeID, runModel) {
-
+            alert('未实现.');
         }
+
+        //设计表单
+        function Frm() {
+
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            alert(flow.Name);
+            if (flow.FlowFrmType == FlowFrmType.Ver2019Earlier) {
+                alert('流程表单是旧版本需要在完整版设计.');
+                return;
+            }
+
+            var frmID = "ND" +  flowNo;
+
+            var url = "";
+            if (flow.FlowFrmType == FlowFrmType.FoolFrm)
+                url = "../FoolFormDesigner/Designer.htm?FrmID=" + frmID + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID;
+
+            window.open(url);
+            //OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
+            //window.location.href = window.location.href;
+            //});
+        }
+
+
 
     </script>
     <script type="text/javascript">
@@ -831,7 +863,6 @@
 
         ///保存方法
         function SaveFlow(_canvas) {
-
 
             //获取所有节点信息.
             try {

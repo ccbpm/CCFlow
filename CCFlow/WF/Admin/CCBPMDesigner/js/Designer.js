@@ -623,24 +623,26 @@ function Run_Flow() {
     });
 }
 
-//运行流程
-function Beta() {
-
-    var url = "Designer2018.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH";
-
-    window.location.href = url;
-
-
-}
+ 
 
 //检查流程
 function Check_Flow() {
     var url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&DoType11=FlowCheck&Lang=CH";
     OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
         //window.location.href = window.location.href;
-    });
+    });     
+}
 
-    // WinOpen(url);
+//设计表单
+function Frm() {
+
+    var flow = new Entity("BP.WF.Flow", CCBPM_Data_FK_Flow);
+    alert(flow.Name);
+
+    var url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&DoType11=FlowCheck&Lang=CH";
+    OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
+        //window.location.href = window.location.href;
+    });
 }
 
 //工具栏展开缩放

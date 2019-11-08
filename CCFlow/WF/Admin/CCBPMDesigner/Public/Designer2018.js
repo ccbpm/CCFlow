@@ -177,6 +177,7 @@ $(function () {
 
     var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
     var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
+    var alertModal2 = $('#alertModal2'), attributeModal = $("#attributeModal");
     var alertModal3 = $('#alertModal3'), attributeModal = $("#attributeModal");
     //消息提示
     mAlert = function (messages, s) {
@@ -201,6 +202,14 @@ $(function () {
         alertModal3.find(".modal-body").html(messages);
         alertModal3.modal('toggle');
         setTimeout(function () { alertModal3.modal("hide") }, s);
+    }
+    //连接线演示
+    ShowGif = function (s) {
+
+        if (!s) s = 200000;
+
+        alertModal2.modal('toggle');
+        setTimeout(function () { alertModal2.modal("hide") }, s);
     }
     //消息弹出（线）
     fAlert = function (messages, s) {

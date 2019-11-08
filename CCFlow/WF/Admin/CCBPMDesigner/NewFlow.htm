@@ -58,6 +58,7 @@
         function getNewFlowInfo() {
             return {
                 FlowName: $('#TB_FlowName').val(),
+                TreeFlowSort: GetQueryString('sort'),
                 FlowSort: flowSort,
                 DataStoreModel: 1,
                 PTable: $('#TB_PTable').val(),

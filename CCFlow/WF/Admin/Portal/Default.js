@@ -426,11 +426,7 @@ function newFlow() {
             return false;
         }
 
-
-
-
         var flowFrmType = newFlowInfo.FlowFrmType;
-
         if (newFlowInfo.RunModel == 1) {
 
             if (flowFrmType == 3 || flowFrmType == 4) {

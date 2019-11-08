@@ -103,7 +103,6 @@ function Frm() {
     }
 
     var frmID = "ND" + parseInt(flowNo) + "01";
-
     var nodeID = parseInt(flowNo + "01");
 
     var url = "";
@@ -111,7 +110,7 @@ function Frm() {
         url = "../FoolFormDesigner/Designer.htm?FrmID=" + frmID + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
 
     if (flow.FlowFrmType == FlowFrmType.DeveloperFrm)
-        url = "../FoolFormDesigner/Designer.htm?FrmID=" + flowNo + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
+        url = "../DevelopDesigner/Designer.htm?FrmID=" + flowNo + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
 
     window.parent.addTab(nodeID, "设计表单" + nodeID, url);
 

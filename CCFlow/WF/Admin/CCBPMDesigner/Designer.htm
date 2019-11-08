@@ -6,7 +6,10 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+
     <script src="Public/Designer2018.js" type="text/javascript"></script>
+
     <!--JL.plus-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,8 +40,9 @@
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;
         z-index: 21006;">
     </div>
-
-
+    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;" id="Msg">
+        <img src="./Img/DemoLine.gif" alt="正在加载....." />
+    </div>
     <!-- fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner" style="background: Background; font-size: 14px;">
@@ -62,6 +66,11 @@
                     <button class="btn btn-danger" type="button" id="Btn_RunIt" onclick="FlowRunAdmin()">
                         admin运行
                     </button>
+
+                    <button class="btn btn-app" type="button" id="Btn_Frm" onclick="Frm()">
+                        设计表单
+                    </button>
+
                     <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
                     <!--<button class="btn btn-info" type="button" id="Btn_OldVer" onclick="OldVer()" >旧版本</button>-->
                     <button class="btn btn-help" type="button" id="Btn_Reload" onclick="Reload()">
@@ -96,7 +105,6 @@
             </button>
         </div>
     </div>
-
     <!-- 修改节点名称 -->
     <div id="alertModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -116,26 +124,6 @@
         <div class="modal-footer">
             <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
                 保存
-            </button>
-        </div>
-    </div>
-    <!-- 连接线提示 -->
-    <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                ×
-            </button>
-            <h3>
-                消息提示
-            </h3>
-        </div>
-        <div class="modal-body">
-            <img src="Img/DemoLine.gif" />
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
-                我知道了
             </button>
         </div>
     </div>
@@ -197,6 +185,14 @@
         </div>
     </div>
     <!--contextmenu div-->
+    <style type="text/css">
+        /*#mainul {
+            padding: 1px 0px !important;
+        }
+            #mainul li {
+                padding: 1px 2px !important;
+            }*/
+    </style>
     <div id="processMenu" style="display: none;">
         <ul id="mainul">
             <li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
@@ -212,13 +208,13 @@
     <div id="processMenu3" style="padding: 3px; position: absolute; background: #fff;
         display: none; font-family: verdana, helvetica, arial, sans-serif; font-size: 12px;
         z-index: 501;">
-        <ul id="mainul2" style="margin: 3px 3px; background-color: aliceblue;">
-            <li id="Node_Ordinary"><i class="icon-tag"></i>&nbsp;<span class="_label"><img style="width:90px;height:45px;" src="Img/普通点.png" /></span></li>
-            <li id="Node_FL"><i class="icon-tags"></i>&nbsp;<span class="_label"><img style="width:90px;height:45px;" src="Img/分流点.png" /></span></li>
-            <li id="Node_HL"><i class="icon-tags"></i>&nbsp;<span class="_label"><img style="width:90px;height:45px;" src="Img/合流点.png" /></span></li>
-            <li id="Node_FHL"><i class="icon-tags"></i>&nbsp;<span class="_label"><img style="width:90px;height:45px;" src="Img/分合流点.png" /></span></li>
-            <li id="Node_SubThread0"><i class="icon-tag"></i>&nbsp;<span class="_label"><img style="width:90px;height:60px;" src="Img/同表单子线程.png" /></span></li>
-            <li id="Node_SubThread1"><i class="icon-tag"></i>&nbsp;<span class="_label"><img style="width:90px;height:60px;" src="Img/异表单子线程.png" /></span></li>
+        <ul id="mainul2" style="margin: 3px 3px;">
+            <li id="Node_Ordinary"><i class="icon-tag"></i>&nbsp;<span class="_label">普通</span></li>
+            <li id="Node_FL"><i class="icon-tags"></i>&nbsp;<span class="_label">分流</span></li>
+            <li id="Node_HL"><i class="icon-tags"></i>&nbsp;<span class="_label">合流</span></li>
+            <li id="Node_FHL"><i class="icon-tags"></i>&nbsp;<span class="_label">分合流</span></li>
+            <li id="Node_SubThread0"><i class="icon-tag"></i>&nbsp;<span class="_label">同表单子线程</span></li>
+            <li id="Node_SubThread1"><i class="icon-tag"></i>&nbsp;<span class="_label">异表单子线程</span></li>
         </ul>
     </div>
     <div id="canvasMenu" style="display: none;">
@@ -228,7 +224,7 @@
             <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
             <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
             <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
-            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label">增加连接线</span></li>
+            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif();">增加连接线</span></li>
             <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
         </ul>
     </div>
@@ -282,9 +278,21 @@
     </style>
     <script type="text/javascript">
 
+        var flowNo = GetQueryString("FK_Flow");
+        var flow = new Entity("BP.WF.Flow", flowNo);
+        if (flow.FlowFrmType == 0) {
+            $("#Btn_Frm").hide(); //如果是旧版本的就隐藏该按钮.
+
+        } else
+        {
+            alert("ss");
+            $("#pmFrmSln").hide(); //如果是旧版本的就隐藏该按钮.
+            $("#pmFrmD").hide(); //如果是旧版本的就隐藏该按钮.
+        }
+
+       
+
         $("#pmfun,#processMenu3").hover(function () {
-
-
             var mLeft = $("#jqContextMenu").css("left").replace('px', '');
             var mTop = $("#jqContextMenu").css("top").replace('px', '');
             $("#processMenu3").css({ "left": parseInt(mLeft) + 148 + "px", "top": parseInt(mTop) + 62 + "px" });
@@ -327,6 +335,8 @@
             SetNodeRunModel(nodeID.value, 4, 1);
         });
 
+
+
         //设置节点类型。
         function SetNodeRunModel(nodeID, runModel, subThreadType) {
             //获得nodeID.
@@ -344,8 +354,38 @@
 
         //改变节点风格.
         function ChangeNodeIcon(nodeID, runModel) {
-
+            alert('未实现.');
         }
+
+        //设计表单
+        function Frm() {
+
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            if (flow.FlowFrmType == FlowFrmType.Ver2019Earlier) {
+                alert('流程表单是旧版本需要在完整版设计.');
+                return;
+            }
+
+            var frmID = "ND" + parseInt(flowNo) + "01";
+
+            var nodeID = parseInt(flowNo + "01");
+
+            var url = "";
+            if (flow.FlowFrmType == FlowFrmType.FoolFrm)
+                url = "../FoolFormDesigner/Designer.htm?FrmID=" + frmID + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
+
+            if (flow.FlowFrmType == FlowFrmType.DeveloperFrm)
+                url = "../FoolFormDesigner/Designer.htm?FrmID=" + flowNo + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
+
+            window.parent.addTab(nodeID, "设计表单" + nodeID, url);
+            // window.open(url);
+            //OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
+            //window.location.href = window.location.href;
+            //});
+        }
+
+
 
     </script>
     <script type="text/javascript">
@@ -403,7 +443,6 @@
 
             var alertModal = $('#alertModal'), attributeModal = $("#attributeModal");
             var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
-            var alertModal2 = $('#alertModal2'), attributeModal = $("#attributeModal");
             var alertModal3 = $('#alertModal3'), attributeModal = $("#attributeModal");
             //消息提示
             mAlert = function (messages, s) {
@@ -420,14 +459,6 @@
                 alertModal1.find(".modal-body").html(messages);
                 alertModal1.modal('toggle');
                 setTimeout(function () { alertModal1.modal("hide") }, s);
-            }
-            //连接线演示
-            showGif = function (s) {
-
-                if (!s) s = 200000;
-
-                alertModal2.modal('toggle');
-                setTimeout(function () { alertModal2.modal("hide") }, s);
             }
             //消息弹出（标签）
             labAlert = function (messages, s) {
@@ -574,14 +605,10 @@
                         }
                         alert("粘贴:" + pasteId);
                     },
-                    "Li3": function (t) {
-                        showGif(20000);
-                    },
                     "cmHelp": function (t) {
 
                         Help();
                     }
-
                 }
                 /*步骤右键*/
                 , processMenus: {
@@ -714,6 +741,7 @@
 
             /*保存*/
             $("#Btn_Save").bind('click', function () {
+
                 $("#Btn_Save").attr("disabled", true);
                 $("#Btn_Save").html("保存中...");
 
@@ -838,7 +866,6 @@
                     lb.Update();
                 }
 
-
                 // 清除流程缓存，并修复数据.
                 var flow = new Entity("BP.WF.Flow", flowNo);
                 flow.DoMethodReturnString("DoCheck");
@@ -949,11 +976,9 @@
                 handler.AddPara("FK_Flow", flowNo);
                 var data = handler.DoMethodReturnString("Designer_Save");
 
-                if (data.indexOf('err@') != 0) {
+                if (data.indexOf('err@') == 0) {
                     alert(data);
                 }
-
-
             }
             catch (e) {
                 alert(e);
@@ -1131,6 +1156,17 @@
         }
 
     </script>
+    <script>
+        function ShowGif() {
+            alert("用鼠标按住节点黑色区域,然后拖拉会出现连接线，然后指向要连接到的节点，请看演示");
 
+            $("#Msg").css('display', 'block');
+            setTimeout("HideGif()", 7000);
+        }
+        function HideGif() {
+            $("#Msg").css('display', 'none');
+        }
+
+    </script>
 </body>
 </html>

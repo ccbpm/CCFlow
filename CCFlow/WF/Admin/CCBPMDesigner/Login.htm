@@ -99,6 +99,12 @@
                 return;
             }
 
+            if (data.indexOf("Install") != -1) {
+                var data = data.replace('url@', '');
+                window.location.href = data;
+                return;
+            }
+
             var systemp = $("#DDL_System").val();
             if (data.indexOf('url@') == 0) {
                 var data = data.replace('url@', '');

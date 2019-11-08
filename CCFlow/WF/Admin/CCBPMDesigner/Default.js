@@ -453,7 +453,7 @@ function newFlow() {
         $(".mymask").show();
 
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-        handler.AddPara(newFlowInfo);
+        handler.AddJson(newFlowInfo);
         var data = handler.DoMethodReturnString("Defualt_NewFlow");
 
         $(".mymask").hide();
@@ -471,7 +471,6 @@ function newFlow() {
         //获取新建流程所属的类别节点
         //todo:此处还有问题，类别id与流程id可能重复，重复就会出问题，解决方案有待进一步确定
         var sort = newFlowInfo.TreeFlowSort;
-        alert(sort);
         var parentNode = $('#flowTree').tree('find', sort);
         var node = $('#flowTree').tree('append', {
             parent: parentNode.target,

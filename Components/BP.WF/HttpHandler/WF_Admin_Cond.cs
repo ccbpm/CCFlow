@@ -446,7 +446,7 @@ namespace BP.WF.HttpHandler
             CondType condTypeEnum =  (CondType)this.GetRequestValInt("CondType");
 
             //把其他的条件都删除掉.
-            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.StandAloneFrm);
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.StandAloneFrm;

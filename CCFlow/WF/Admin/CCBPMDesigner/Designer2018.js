@@ -13,7 +13,6 @@ $(function () {
         $("#nodeMenu").css({ "left": parseInt(mLeft) + 148 + "px", "top": parseInt(mTop) + 62 + "px" });
         $("#nodeMenu").show();
 
-        SetState();
 
     }, function () {
         $("#nodeMenu").hide();

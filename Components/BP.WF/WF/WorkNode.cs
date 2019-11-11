@@ -2195,6 +2195,7 @@ namespace BP.WF
 
                     if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
                         this.IsStopFlow = true;
+
                     this.addMsg("OneNodeFlowOver", BP.WF.Glo.multilingual("@工作已经成功处理(一个流程的工作)。", "WorkNode", "node_completed_success", new string[0]));
                 }
 

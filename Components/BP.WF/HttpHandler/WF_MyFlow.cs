@@ -477,8 +477,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-
-
                 #region 开始组合url.
                 string toUrl = "";
 

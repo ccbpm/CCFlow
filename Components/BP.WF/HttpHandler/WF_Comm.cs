@@ -2940,9 +2940,7 @@ namespace BP.WF.HttpHandler
 
 
             if (null == sql || "" == sql)
-            {
                 return "err@查询sql为空";
-            }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //暂定

@@ -326,7 +326,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-
             return "err@没有判断的标记:" + this.DoType;
         }
         #endregion 执行父类的重写方法.
@@ -1410,12 +1409,12 @@ namespace BP.WF.HttpHandler
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
                         Template.DataStoreModel.SpecTable, PTable, FlowMark, FlowVersion);
 
+                Flow fl = new Flow(flowNo);
 
-                #region 对极简版特殊处理. @liuqiang 
+                #region 对极简版特殊处理. @liuqiang
                 //如果是简洁版.
                 if (runModel == 1)
                 {
-                    Flow fl = new Flow(flowNo);
                     fl.FlowFrmType = (BP.WF.FlowFrmType)flowFrmType;
                     fl.Update(); //更新表单类型.
 
@@ -1437,10 +1436,11 @@ namespace BP.WF.HttpHandler
                     fn.FK_Flow = flowNo;
                     fn.FrmSln = FrmSln.Default;
                     fn.Insert();
+
+
                 }
                 #endregion 对极简版特殊处理. @liuqiang
-
-
+                 
 
                 //清空WF_Emp 的StartFlows ,让其重新计算.
                 DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");

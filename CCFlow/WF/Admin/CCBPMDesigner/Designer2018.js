@@ -1,6 +1,5 @@
 ﻿var flow = null;
 $(function () {
-
     var flowNo = GetQueryString("FK_Flow");
     flow = new Entity("BP.WF.Flow", flowNo);
 

@@ -56,13 +56,16 @@ $(function () {
 
 //设置状态。
 function SetState() {
-
     var flowFrmType = flow.FlowFrmType;
     if (flowFrmType == 0) {
 
         $("#Btn_Frm").hide(); //如果是旧版本的就隐藏该按钮.
-        $("#pmFrmPower").hide(); //如果是旧版本的就隐藏该按钮.
-        return;
+        $("#pmFrmPower").remove(); //如果是旧版本的就删除该按钮.
+    }
+    else {
+
+        $("#Btn_Frm").show(); //新版本显示这个按钮
+        $("#pmFrmD").after("<li id='pmFrmPower'> ★&nbsp;&nbsp;<span class='_label'>表单权限</span></li>");//新版本就追加这个按钮
     }
 
     //隐藏指定的菜单.

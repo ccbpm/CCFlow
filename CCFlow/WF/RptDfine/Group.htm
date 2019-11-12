@@ -37,7 +37,11 @@
 
         //初始化页面
         $(function () {
-           // $("#Msg").show();
+
+            if (groupType == null)
+                groupType = GetQueryString("SearchType");
+
+            // $("#Msg").show();
             //$("#Msg").css("line-height", $("body").height() / 1.5 + "px");
 
             switch (groupType) {
@@ -54,26 +58,28 @@
                     $("#mainDiv").panel({ title: '高级查询' });
                     break;
             }
-            
+
             //初始化页面
             InitPage();
-           
+
             //显示数据
-           // doPostBack();
-           // $("#Msg").html("");
+            // doPostBack();
+            // $("#Msg").html("");
 
         });
 
         //初始化数据.
         function InitPage() {
 
+
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             handler.AddPara("GroupType", groupType);
-            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
 
             //获得查询信息，包含了查询数据表.
             var data = handler.DoMethodReturnString("FlowGroup_Init");
+
 
             if (data.indexOf("err@") != -1) {
                 $.messager.alert("错误", data, "icon-error");
@@ -133,7 +139,7 @@
                 }
             }
 
-            
+
 
             //当前用户页面信息.
             var searchUr = new Entity("BP.Sys.UserRegedit");
@@ -159,10 +165,10 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = "";
-            
+
             var ens = frmData[mapAttr.Field];
             if (ens == null) {
-                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是'}];
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是' }];
             }
             for (var i = 0; i < ens.length; i++) {
 
@@ -229,19 +235,19 @@
 
         function doPostBack() {
             var groupCount = $('input[name="groupContent"]:checked').length;
-            if (groupCount > 1) 
+            if (groupCount > 1)
                 $("#CB_IsShowPict").attr("disabled", "disabled");
             else
                 $("#CB_IsShowPict").attr("disabled", false);
 
             //给注册表信息重新赋值
             var myPK = webUser.No + rptNo + "_GroupAttrs";
-            ur = new Entity("BP.Sys.UserRegedit",myPK);
+            ur = new Entity("BP.Sys.UserRegedit", myPK);
             if (ur && ur.IsPic == 1)
                 document.getElementById("CB_IsShowPict").checked = "checked";
             var selectedGroupKey = "";
             $('input[name="groupContent"]:checked').each(function () {
-                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             var stateNumKey = "";
 
@@ -250,7 +256,7 @@
                 //获取下拉框的值
                 var defVal = $("#DDL_" + key).val();
 
-                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中  
+                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中
             });
 
             ur.Vals = "SelectedGroupKey=" + selectedGroupKey + "@StateNumKey" + stateNumKey + '@';
@@ -275,7 +281,7 @@
             handler.AddFormData();
             var groupList = "";
             $('input[name="groupContent"]').each(function () {
-                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             handler.AddPara("GroupList", groupList);
 
@@ -323,7 +329,7 @@
                 // 增加数据列
                 for (var i = 0; i < AttrsOfNum.length; i++) {
                     if (ur.Vals.indexOf.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1)
-                    /*  如果本数据列 包含累计 */
+                        /*  如果本数据列 包含累计 */
                         html += "<td  colspan=2 class='GroupTitle' >" + AttrsOfNum[i].Name + "</td>";
                     else
                         html += "<td  rowspan=2 class='GroupTitle' >" + AttrsOfNum[i].Name + "</td>";
@@ -789,7 +795,7 @@
             //保存查询条件.
             var ensName = GetQueryString("EnsName");
             var ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No  + rptNo + "_SearchAttrs";
+            ur.MyPK = webUser.No + rptNo + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
             if ($("#TB_Key") != null && $("#TB_Key").val() != "")
@@ -808,11 +814,11 @@
             var str = "";
             $("select[name^='CXDDL_']").each(function () {
                 var id = $(this).attr("id");
-                if($(this).val()!="all")
-                 str += "@" + id + "=" + $(this).val();
+                if ($(this).val() != "all")
+                    str += "@" + id + "=" + $(this).val();
             });
 
-            ur.CfgKey = rptNo+"_SearchAttrs";
+            ur.CfgKey = rptNo + "_SearchAttrs";
             ur.Vals = str;
             ur.FK_MapData = ensName;
             //ur.SetPara("RecCount", count);
@@ -847,49 +853,50 @@
     </script>
 </head>
 <body class="easyui-layout">
-   <form  id="cc">
+    <form id="cc">
         <div id="mainDiv" data-options="region:'center',title:'学生',noheader:false" style="padding: 5px">
-            <div class="easyui-layout"  data-options="fit:true">
+            <div class="easyui-layout" data-options="fit:true">
                 <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; background-color: #E0ECFF; line-height: 30px">
-                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                      <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
                 <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
                     <div class="easyui-panel" title="显示内容" style="padding: 5px; margin-bottom: 5px">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
                     <div class="easyui-panel" title="分析项目" style="padding: 5px; margin-bottom: 5px">
-                        <table id="AnalyGroup"  cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' ></table>
+                        <table id="AnalyGroup" cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%'></table>
                     </div>
                     <div class="easyui-panel" title="图表" style="padding: 5px; margin-bottom: 5px">
                         <table cellpadding="0" cellspacing="0" border="0" style="border-style: none; width: 100%">
                             <tr>
                                 <td>
-                                    高度：<input name="TB_H" type="text" value="460" id="TB_H"  class="aspNetDisabled" style="width: 60px; height: auto;
+                                    高度：<input name="TB_H" type="text" value="460" id="TB_H" class="aspNetDisabled" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                                 <td style="text-align: right">
-                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W"  class="aspNetDisabled" style="width: 60px; height: auto;
+                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W" class="aspNetDisabled" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <span class="aspNetDisabled" title="注意：仅当“显示内容”选择1项时，图表功能才可用！" style="float: left">
-                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict"  onclick="javascript:doPostBack()" />
+                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack()" />
                                         <label for="CB_IsShowPict">显示图表</label>
                                     </span>
                                     <span style="float: right">
-                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a></span>
+                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a>
+                                    </span>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 <div id="Content" data-options="region:'center'" style="padding: 5px;"></div>
-           </div>
+            </div>
         </div>
-        
+
     </form>
 </body>
 </html>

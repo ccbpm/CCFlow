@@ -325,6 +325,14 @@ function Login2App() {
         window.location.href = getContextPath() + "/a/logout";
         return;
     }
+
+    var url = window.location.href;
+    if (url.indexOf("Frm.htm") != 0)
+    {
+        window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
+        return;
+    }
+
     window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
     return;
 }

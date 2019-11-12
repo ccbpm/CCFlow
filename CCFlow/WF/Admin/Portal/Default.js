@@ -321,18 +321,26 @@ function tabCloseEven() {
 
 //登录,判断为天业BPM，转向到天业新版界面
 function Login2App() {
+
     if (initData.RunOnPlant == "jeesite") {
         window.location.href = getContextPath() + "/a/logout";
         return;
     }
 
+    //表单引擎.
     var url = window.location.href;
-    if (url.indexOf("Frm.htm") != 0)
-    {
+    if (url.indexOf("DefaultFrm.htm") != 0) {
         window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
         return;
     }
 
+    //简洁版.
+    if (url.indexOf("DefaultSimple.htm") != 0) {
+        window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
+        return;
+    }
+
+    //完整版.
     window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
     return;
 }
@@ -412,7 +420,7 @@ function newFlow() {
     if (currSort && currSort.attributes["ISPARENT"] != 0) { //edit by qin 2016/2/16
         currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
     }
-     
+
     var flowSort = currSortId.replace("F", "");
 
     var dgId = "iframDg";

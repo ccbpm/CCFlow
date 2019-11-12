@@ -96,20 +96,15 @@ function InitBar(key) {
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
     }
-
-
     html += "</select >";
-
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_Save' type=button onclick='SaveIt()' value='保存' />";
     html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
-    html += "<input type=button onclick='Help()' value='我需要帮助' />";
+  //  html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
 
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
-
-
 }
 
 function OldVer() {
@@ -240,6 +235,26 @@ function changeOption() {
 function SaveAndClose() {
     Save();
     window.close();
+}
+
+function SaveIt() {
+
+    $("#Btn_Save").val("正在保存请稍后.");
+
+    try {
+        Save();
+        AfterSave();
+    } catch (e) {
+        alert(e);
+    }
+
+    $("#Btn_Save").val("保存成功");
+    setTimeout(function () { $("#Btn_Save").val("保存."); }, 1000);
+}
+// 保存之后要做的事情.
+function AfterSave() {
+    //清除.
+    DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows=''");
 }
 
 //打开窗体.

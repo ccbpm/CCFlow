@@ -201,7 +201,10 @@
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Pub\ND.cs" />
+    <Compile Include="Pub\NY.cs" />
     <Compile Include="Pub\Rpt2Base.cs" />
+    <Compile Include="Pub\YF.cs" />
     <Compile Include="References\IJsonWrapper.cs" />
     <Compile Include="References\JsonData.cs" />
     <Compile Include="References\JsonException.cs" />

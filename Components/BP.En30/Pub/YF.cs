@@ -1,116 +1,107 @@
 ﻿using System;
-using System.Collections;
+using System.Data;
 using BP.DA;
 using BP.En;
+using BP.Port;
 
 namespace BP.Pub
 {
-	/// <summary>
-	/// 月份
-	/// </summary>
-	public class YF :SimpleNoNameFix
-	{
-		#region 实现基本的方方法
-		 
-		/// <summary>
-		/// 物理表
-		/// </summary>
-		public override string  PhysicsTable
-		{
-			get
-			{
-				return "Pub_YF";
-			}
-		}
-		/// <summary>
-		/// 描述
-		/// </summary>
-		public override string  Desc
-		{
-			get
-			{
-                return  "月份";  // "月份";
-			}
-		}
-		#endregion 
+    /// <summary>
+    /// 月份
+    /// </summary>
+    public class YFAttr : EntityNoNameAttr
+    {
+        #region 基本属性
+        public const string FK_SF = "FK_SF";
+        #endregion
+    }
+    /// <summary>
+    /// 月份
+    /// </summary>
+    public class YF : EntityNoName
+    {
+        #region 基本属性
+        #endregion
 
-		#region 构造方法
-		public YF()
+        #region 构造函数
+        public override UAC HisUAC
         {
-        }
-        /// <summary>
-        /// _No
-        /// </summary>
-        /// <param name="_No"></param>
-		public YF(string _No ): base(_No)
-        {
-        }
-		#endregion 
-	}
-	/// <summary>
-	/// NDs
-	/// </summary>
-	public class YFs :SimpleNoNameFixs
-	{
-		/// <summary>
-		/// 月份集合
-		/// </summary>
-		public YFs()
-		{
-		}
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new YF();
-			}
-		}
-        public override int RetrieveAll()
-        {
-            int num= base.RetrieveAll();
-
-            if (num != 12)
+            get
             {
-                BP.DA.DBAccess.RunSQL("DELETE FROM Pub_YF ");
-
-                for (int i = 1; i <= 12; i++)
-                {
-                    BP.Pub.YF yf = new YF();
-                    yf.No = i.ToString().PadLeft( 2,'0');
-                    yf.Name = i.ToString().PadLeft(2, '0');
-                    yf.Insert();
-                }
-
-               return base.RetrieveAll();
+                UAC uac = new UAC();
+                uac.OpenForSysAdmin();
+                return uac;
             }
-            return 12;
+        }
+        /// <summary>
+        /// 月份
+        /// </summary>		
+        public YF() { }
+        public YF(string no) : base(no)
+        {
         }
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List.
+
         /// <summary>
-        /// 转化成 java list,C#不能调用.
+        /// Map
         /// </summary>
-        /// <returns>List</returns>
-        public System.Collections.Generic.IList<YF> ToJavaList()
+        public override Map EnMap
         {
-            return (System.Collections.Generic.IList<YF>)this;
-        }
-        /// <summary>
-        /// 转化成list
-        /// </summary>
-        /// <returns>List</returns>
-        public System.Collections.Generic.List<YF> Tolist()
-        {
-            System.Collections.Generic.List<YF> list = new System.Collections.Generic.List<YF>();
-            for (int i = 0; i < this.Count; i++)
+            get
             {
-                list.Add((YF)this[i]);
+                if (this._enMap != null)
+                    return this._enMap;
+                Map map = new Map("Pub_YF", "月份");
+
+                #region 基本属性 
+                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
+                map.AdjunctType = AdjunctType.AllType;
+                map.DepositaryOfMap = Depositary.Application;
+                map.DepositaryOfEntity = Depositary.None;
+                map.IsCheckNoLength = false;
+                map.EnType = EnType.App;
+                map.CodeStruct = "4";
+                #endregion
+
+                #region 字段 
+                map.AddTBStringPK(YFAttr.No, null, "编号", true, false, 0, 50, 50);
+                map.AddTBString(YFAttr.Name, null, "名称", true, false, 0, 50, 200);
+                #endregion
+
+                this._enMap = map;
+                return this._enMap;
             }
-            return list;
         }
-        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+        public override Entities GetNewEntities
+        {
+            get { return new YFs(); }
+        }
+        #endregion
+    }
+    /// <summary>
+    /// 月份
+    /// </summary>
+    public class YFs : EntitiesNoName
+    {
+        #region 
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new YF();
+            }
+        }
+        #endregion
+
+        #region 构造方法
+        /// <summary>
+        /// 月份s
+        /// </summary>
+        public YFs() { }
+        #endregion
+    }
+
 }

@@ -1,90 +1,107 @@
 ﻿using System;
-using System.Collections;
+using System.Data;
 using BP.DA;
 using BP.En;
+using BP.Port;
 
 namespace BP.Pub
 {
-	/// <summary>
-	/// 年月
-	/// </summary>
-	public class NY :SimpleNoNameFix
-	{
-		#region 实现基本的方方法
-		/// <summary>
-		/// 物理表
-		/// </summary>
-		public override string  PhysicsTable
-		{
-			get
-			{
-				return "Pub_NY";
-			}
-		}
-		/// <summary>
-		/// 描述
-		/// </summary>
-		public override string  Desc
-		{
-			get
-			{
-                return  "年月";// "年月";
-			}
-		}
-		#endregion 
+    /// <summary>
+    /// 年月
+    /// </summary>
+    public class NYAttr : EntityNoNameAttr
+    {
+        #region 基本属性
+        public const string FK_SF = "FK_SF";
+        #endregion
+    }
+    /// <summary>
+    /// 年月
+    /// </summary>
+    public class NY : EntityNoName
+    {
+        #region 基本属性
+        #endregion
 
-		#region 构造方法
-		 
-		public NY(){}
-		 
-		public NY(string _No ): base(_No){}
-		
-		#endregion 
-	}
-	/// <summary>
-	/// NDs
-	/// </summary>
-	public class NYs :BP.En.EntitiesNoName
-	{
-		/// <summary>
-		/// 年月集合
-		/// </summary>
-		public NYs()
-		{
-		}
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new NY();
-			}
-		}
-
-        #region 为了适应自动翻译成java的需要,把实体转换成List.
-        /// <summary>
-        /// 转化成 java list,C#不能调用.
-        /// </summary>
-        /// <returns>List</returns>
-        public System.Collections.Generic.IList<NY> ToJavaList()
+        #region 构造函数
+        public override UAC HisUAC
         {
-            return (System.Collections.Generic.IList<NY>)this;
-        }
-        /// <summary>
-        /// 转化成list
-        /// </summary>
-        /// <returns>List</returns>
-        public System.Collections.Generic.List<NY> Tolist()
-        {
-            System.Collections.Generic.List<NY> list = new System.Collections.Generic.List<NY>();
-            for (int i = 0; i < this.Count; i++)
+            get
             {
-                list.Add((NY)this[i]);
+                UAC uac = new UAC();
+                uac.OpenForSysAdmin();
+                return uac;
             }
-            return list;
         }
-        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+        /// <summary>
+        /// 年月
+        /// </summary>		
+        public NY() { }
+        public NY(string no) : base(no)
+        {
+        }
+
+
+        /// <summary>
+        /// Map
+        /// </summary>
+        public override Map EnMap
+        {
+            get
+            {
+                if (this._enMap != null)
+                    return this._enMap;
+                Map map = new Map("Pub_NY", "年月");
+
+                #region 基本属性 
+                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
+                map.AdjunctType = AdjunctType.AllType;
+                map.DepositaryOfMap = Depositary.Application;
+                map.DepositaryOfEntity = Depositary.None;
+                map.IsCheckNoLength = false;
+                map.EnType = EnType.App;
+                map.CodeStruct = "4";
+                #endregion
+
+                #region 字段 
+                map.AddTBStringPK(NYAttr.No, null, "编号", true, false, 0, 50, 50);
+                map.AddTBString(NYAttr.Name, null, "名称", true, false, 0, 50, 200);
+                #endregion
+
+                this._enMap = map;
+                return this._enMap;
+            }
+        }
+        public override Entities GetNewEntities
+        {
+            get { return new NYs(); }
+        }
+        #endregion
+    }
+    /// <summary>
+    /// 年月
+    /// </summary>
+    public class NYs : EntitiesNoName
+    {
+        #region 
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new NY();
+            }
+        }
+        #endregion
+
+        #region 构造方法
+        /// <summary>
+        /// 年月s
+        /// </summary>
+        public NYs() { }
+        #endregion
+    }
+
 }

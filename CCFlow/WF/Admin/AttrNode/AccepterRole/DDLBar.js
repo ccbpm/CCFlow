@@ -228,6 +228,11 @@ function SaveAndClose() {
     Save();
     window.close();
 }
+// 保存之后要做的事情.
+function AfterSave() {
+    //清除.
+    DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows=''");
+}
 
 //打开窗体.
 function OpenEasyUiDialogExt(url, title, w, h, isReload) {

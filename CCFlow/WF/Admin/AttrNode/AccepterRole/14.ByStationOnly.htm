@@ -94,6 +94,8 @@
             node.DeliveryWay = DeliveryWay.ByStationOnly;
             node.Update();
             alert("保存成功.");
+            AfterSave(); //执行保存之后，清除WF_Emp的StartFlows 字段.
+
         }
     </script>
 </head>

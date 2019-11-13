@@ -336,9 +336,15 @@ namespace BP.WF.HttpHandler
             string sql = "";
 
             string tSpan = this.GetRequestVal("TSpan");
+            
             if (tSpan == "")
                 tSpan = null;
-
+            //查询关键字
+            string keyWord = this.GetRequestVal("KeyWord");
+            if (("").Equals(keyWord))
+            {
+                keyWord = null;
+            }
             #region 1、获取时间段枚举/总数.
             SysEnums ses = new SysEnums("TSpan");
             DataTable dtTSpan = ses.ToDataTableField();
@@ -346,9 +352,9 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTSpan);
 
             if (this.FK_Flow == null)
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND FID = 0 AND WFState > 1 GROUP BY TSpan";
             else
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND FID = 0  AND WFState > 1 GROUP BY TSpan";
 
             DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
@@ -385,12 +391,20 @@ namespace BP.WF.HttpHandler
             #region 3、处理流程实例列表.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             String sqlWhere = "";
-            sqlWhere = "(1 = 1)AND (((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (WFState > 1)";
+            //当前页
+            int pageIdx = int.Parse(this.GetRequestVal("pageIdx"));
+            //每页条数
+            int pageSize = int.Parse(this.GetRequestVal("pageSize"));
+            int num = pageSize * (pageIdx-1);
+            sqlWhere = "(((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (FID = 0) AND (WFState > 1)";
             if (tSpan != "-1")
             {
                 sqlWhere += "AND (TSpan = '" + tSpan + "') ";
             }
-
+            if (keyWord != null)
+            {
+                sqlWhere += "AND (Title like '%" + keyWord + "%') ";
+            }
             if (this.FK_Flow != null)
             {
                 sqlWhere += "AND (FK_Flow = '" + this.FK_Flow + "')) ";
@@ -399,16 +413,53 @@ namespace BP.WF.HttpHandler
             {
                 sqlWhere += ")";
             }
-            sqlWhere += "ORDER BY RDT DESC";
+            
 
+            //获取总条数
+            string totalNumSql = "SELECT count(*) from WF_GenerWorkFlow where " + sqlWhere;
+            int totalNum = BP.DA.DBAccess.RunSQLReturnValInt(totalNumSql);
+            int totalPage = 0;
+            //当前页开始索引
+            int startIndex = (pageIdx - 1) * pageSize;
+            //总页数
+            if (totalNum % pageSize != 0)
+            {
+                totalPage = totalNum / pageSize + 1;
+            }
+            else
+            {
+                totalPage = totalNum / pageSize;
+            }
+            
+            /*
+             * 分页信息放到table
+             */
+            DataTable dtT = new DataTable();
+            dtT.Columns.Add("totalPage");
+            dtT.Columns.Add("totalNum");
+            dtT.Columns.Add("startIndex");
+            dtT.TableName = "PageInfo";
+            DataRow row = dtT.NewRow();
+           
+            row["totalPage"] = totalPage;
+            row["totalNum"] = totalNum;
+            row["startIndex"] = startIndex;
+            dtT.Rows.Add(row);
+
+
+            ds.Tables.Add(dtT);
+            sqlWhere += "ORDER BY RDT DESC";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 500";
-            else if(SystemConfig.AppCenterDBType == DBType.MSSQL)
-                sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
+                sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps " +
+                    "FROM (select A.*, rownum r from (select * from WF_GenerWorkFlow where " + sqlWhere + ") A) where r between "+ (pageIdx * pageSize - pageSize + 1) + " and "+ (pageIdx * pageSize);
+            else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                sql = "SELECT  TOP "+ pageSize + " ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow " +
+                    "where WorkID not in (select top(" + num + ") WorkID from WF_GenerWorkFlow where " + sqlWhere +") AND" + sqlWhere;
+            //sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
+                sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where (1=1) AND " + sqlWhere + " LIMIT "+ startIndex + "," + pageSize;
             else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
+                sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where (1=1) AND " + sqlWhere + " LIMIT "+pageSize+ "offset " + startIndex;
             DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -442,7 +493,7 @@ namespace BP.WF.HttpHandler
             
 
             ds.Tables.Add(mydt);
-
+            
             return BP.Tools.Json.ToJson(ds);
         }
          public static string  GetTraceNewTime(string fk_flow, Int64 workid, Int64 fid)

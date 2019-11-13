@@ -95,20 +95,25 @@
             }
             node.DeliveryParas = DeliveryParas;
             node.Update();
-            alert("保存成功.");
-
-            AfterSave(); //执行保存之后，清除WF_Emp的StartFlows 字段.
-
         }
     </script>
 </head>
-<body >
+<body>
+    <div id="bar"> </div>
 
-<div id="bar"> </div>
- 
-    
     <div id="NodeSelect" style="margin-top:10px;margin-bottom:10px"></div>
-    
+
+
+    <fieldset>
+        <legend id="help">说明</legend>
+        <ul>
+            <li>当前节点的处理人与制定的节点处理人相同。</li>
+            <li>所指定的节点一般都是当前节点以前的节点，由于分支原因会导致历史的节点有多个。</li>
+            <li>如果出现多个，系统就会按照节点的发生时间排序的第一个节点计算。</li>
+        </ul>
+    </fieldset>
+
+
 
 </body>
 </html>

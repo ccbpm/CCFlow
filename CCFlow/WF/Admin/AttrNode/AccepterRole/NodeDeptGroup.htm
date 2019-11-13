@@ -171,14 +171,9 @@
 	            en.FK_Node = nodeID;
 	            en.FK_Dept = nodes[i].id;
 	            en.Insert();
-
+	            
 	        }
-
-	        AfterSave(); //执行保存之后，清除WF_Emp的StartFlows 字段.
-
 	        window.close();
-
-
 	    }
 
     </script>

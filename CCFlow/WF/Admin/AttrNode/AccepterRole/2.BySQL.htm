@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>按照sql计算</title>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -23,6 +23,7 @@
             if (node.DeliveryWay == DeliveryWay.BySQL) {
 
                 var sql = node.DeliveryParas;
+                sql = FormatSQL(sql);
                 //sql = sql.rep
                 document.getElementById("RB_BySQL").value = sql;
             }
@@ -32,7 +33,6 @@
         function LoadTemplate() {
             var url = "../../SettingTemplate.htm?TemplateType=NodeAccepterRole";
             WinOpen(url, 'ss');
-
         }
 
         function Save() {
@@ -40,12 +40,15 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.DeliveryWay = DeliveryWay.BySQL;
             var DeliveryParas = document.getElementById("RB_BySQL").value;
+
+            if (CheckIsSQL(DeliveryParas) == false)
+            {
+                alert("请输入合法的SQL.");
+                return;
+            }
+
             node.DeliveryParas = DeliveryParas;
             node.Update();
-            alert("保存成功.");
-
-            AfterSave(); //执行保存之后，清除WF_Emp的StartFlows 字段.
-
         }
     </script>
 </head>
@@ -54,10 +57,11 @@
     </div>
     <fieldset>
         <legend>请在文本框里输入SQL.</legend>
-        <textarea id="RB_BySQL" rows="" cols="" style="width: 95%; height: 50px"></textarea>
+        <textarea id="RB_BySQL" rows="" cols="" class="SQL" style="width: 95%; height: 50px"></textarea>
     </fieldset>
+
     <fieldset>
-        <legend>说明</legend>
+        <legend id="help">说明</legend>
         <ul>
             <li>该SQL是需要返回No,Name两个列，分别是人员编号,人员名称。</li>
             <li>SQL语句支持ccbpm表达式, 比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'

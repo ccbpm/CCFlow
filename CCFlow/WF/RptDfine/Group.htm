@@ -314,6 +314,11 @@
         }
 
         function GenerTable(divId, groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum) {
+
+            var flowNo = GetQueryString("FK_Flow");
+            var groupType = GetQueryString("GroupType");
+
+
             var html = "<table id='mainTable'  class='Table' cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' > ";
             //生成表头
 
@@ -356,16 +361,16 @@
                     if (OrderBy == AttrsOfGroup[i].KeyOfEn) {
                         switch (OrderWay) {
                             case "Down":
-                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Up' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Up' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 break;
                             case "Up":
                             default:
-                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" +groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 break;
                         }
                     }
                     else {
-                        html += "<td class='GroupTitle' nowrap><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "</a></td>";
+                        html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "</a></td>";
                     }
                 }
 
@@ -383,25 +388,24 @@
                         switch (OrderWay) {
                             case "Down":
                                 if (NumKey == AttrsOfNum[i].KeyOfEn)
-                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 break;
                             case "Up":
                             default:
                                 if (NumKey == AttrsOfNum[i].KeyOfEn)
-                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 break;
                         }
                     }
                     else {
                         if (NumKey == AttrsOfNum[i].KeyOfEn)
-                            html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
+                            html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
                         else
-                            html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
-
+                            html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?GroupType=" + groupType + "&FK_Flow=" + flowNo + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
                     }
                 }
                 html += "<td class='GroupTitle' nowrap></td>";

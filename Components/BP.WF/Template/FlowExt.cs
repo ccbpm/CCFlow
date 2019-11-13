@@ -500,12 +500,7 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
                 RefMethod rm = new RefMethod();
 
-                rm = new RefMethod();
-                rm.Title = "设计报表"; // "报表运行";
-                rm.Icon = "../../WF/Img/Btn/Rpt.gif";
-                rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+              
 
                 rm = new RefMethod();
                 rm.Title = "自动发起";
@@ -834,6 +829,13 @@ namespace BP.WF.Template
                 #endregion 流程运行维护.
 
                 #region 流程监控.
+
+                rm = new RefMethod();
+                rm.Title = "设计报表"; // "报表运行";
+                rm.Icon = "../../WF/Img/Btn/Rpt.gif";
+                rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "监控面板";

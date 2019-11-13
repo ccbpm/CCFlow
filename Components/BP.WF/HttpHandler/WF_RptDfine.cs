@@ -1424,24 +1424,22 @@ namespace BP.WF.HttpHandler
 
             //查询结果
             QueryObject qo = new QueryObject(ges);
-
             var strs = HttpContextHelper.RequestParamKeys;// this.context.Request.Form.ToString().Split('&');
-            foreach (string str in strs)
+            foreach (string key in strs)
             {
-                if (str.IndexOf("FK_Flow") != -1 || str.IndexOf("SearchType") != -1)
+                if (key.IndexOf("FK_Flow") != -1 || key.IndexOf("SearchType") != -1)
                     continue;
 
-                string[] mykey = str.Split('=');
-                string key = mykey[0];
+                string val = this.GetRequestVal(key);
 
                 if (key == "OID" || key == "MyPK")
                     continue;
 
-                if (key == "FK_Dept")
-                {
-                    this.FK_Dept = mykey[1];
-                    continue;
-                }
+                //if (key == "FK_Dept")
+                //{
+                //    this.FK_Dept = mykey[1];
+                //    continue;
+                //}
                 bool isExist = false;
                 foreach (MapAttr attr in attrs)
                 {
@@ -1455,7 +1453,7 @@ namespace BP.WF.HttpHandler
                 if (isExist == false)
                     continue;
 
-                if (mykey[1] == "mvals")
+                if (val.Equals("mvals") ==true)
                 {
                     //如果用户多项选择了，就要找到它的选择项目.
 
@@ -1467,7 +1465,6 @@ namespace BP.WF.HttpHandler
                     string cfgVal = sUr.MVals;
                     AtPara ap = new AtPara(cfgVal);
                     string instr = ap.GetValStrByKey(key);
-                    string val = "";
                     if (instr == null || instr == "")
                     {
                         if (key == "FK_Dept" || key == "FK_Unit")
@@ -1486,12 +1483,12 @@ namespace BP.WF.HttpHandler
                         instr = instr.Replace(".", "','");
                         instr = instr.Substring(2);
                         instr = instr.Substring(0, instr.Length - 2);
-                        qo.AddWhereIn(mykey[0], instr);
+                        qo.AddWhereIn(val, instr);
                     }
                 }
                 else
                 {
-                    qo.AddWhere(mykey[0], mykey[1]);
+                    qo.AddWhere(key, val);
                 }
                 qo.addAnd();
             }
@@ -1555,22 +1552,16 @@ namespace BP.WF.HttpHandler
 
             //string[] strs = this.context.Request.Form.ToString().Split('&');
             var strs = HttpContextHelper.RequestParamKeys;
-            foreach (string str in strs)
+            foreach (string key in strs)
             {
-                if (str.IndexOf("FK_Flow") != -1 || str.IndexOf("SearchType") != -1)
+                if (key.IndexOf("FK_Flow") != -1 || key.IndexOf("SearchType") != -1)
                     continue;
 
-                string[] mykey = str.Split('=');
-                string key = mykey[0];
+                string val = this.GetRequestVal(key);
 
                 if (key == "OID" || key == "MyPK")
                     continue;
 
-                if (key == "FK_Dept")
-                {
-                    this.FK_Dept = mykey[1];
-                    continue;
-                }
                 bool isExist = false;
                 foreach (MapAttr attr in attrs)
                 {
@@ -1584,7 +1575,7 @@ namespace BP.WF.HttpHandler
                 if (isExist == false)
                     continue;
 
-                if (mykey[1] == "mvals")
+                if ( val == "mvals")
                 {
                     //如果用户多项选择了，就要找到它的选择项目.
 
@@ -1596,7 +1587,6 @@ namespace BP.WF.HttpHandler
                     string cfgVal = sUr.MVals;
                     AtPara ap = new AtPara(cfgVal);
                     string instr = ap.GetValStrByKey(key);
-                    string val = "";
                     if (instr == null || instr == "")
                     {
                         if (key == "FK_Dept" || key == "FK_Unit")
@@ -1615,12 +1605,12 @@ namespace BP.WF.HttpHandler
                         instr = instr.Replace(".", "','");
                         instr = instr.Substring(2);
                         instr = instr.Substring(0, instr.Length - 2);
-                        qo.AddWhereIn(mykey[0], instr);
+                        qo.AddWhereIn(key, instr);
                     }
                 }
                 else
                 {
-                    qo.AddWhere(mykey[0], mykey[1]);
+                    qo.AddWhere(key, val);
                 }
                 qo.addAnd();
             }
@@ -1661,8 +1651,6 @@ namespace BP.WF.HttpHandler
             }
 
             string filePath = ExportDGToExcel(dt, ges.GetNewEntity, rptNo, newAttrs);
-
-
             return filePath;
         }
 

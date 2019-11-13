@@ -748,7 +748,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoGroup_AdminerFlow()
         {
-            return "../../RptDfine/Search.htm?GroupType=Adminer&FK_Flow=" + this.No;
+            return "../../RptDfine/Group.htm?GroupType=Adminer&FK_Flow=" + this.No;
         }
 
         public string DoReset_AdminerFlowRight()

@@ -8,29 +8,29 @@
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
  	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <style>
+        /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
+         td
+            {
+               overflow:hidden;
+               white-space:nowrap;
+               text-overflow:ellipsis; 
+            }
+            .pagination
+            {
+                margin: 8px 0;
+                display: block;
+                font-size: 13px;
+            }
+            .pagination .controls
+            {
+                float: left;
+                border: 0;
+                padding: 7px 0 0 15px;
+                color: #777;
+            }
+    </style>
 </head>
-<style >
-    /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
-     td
-        {
-           overflow:hidden;
-           white-space:nowrap;
-           text-overflow:ellipsis; 
-        }
-        .pagination
-        {
-            margin: 8px 0;
-            display: block;
-            font-size: 13px;
-        }
-        .pagination .controls
-        {
-            float: left;
-            border: 0;
-            padding: 7px 0 0 15px;
-            color: #777;
-        }
-</style>
 
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -58,7 +58,7 @@
 		<table style="table-layout:fixed" class="table table-striped">
 			<thead id="Table2">
 			<tr >
-				<th width='30px'>#</th>
+				<th width='40px'>序号</th>
 				<th width='380px'>标题</th>
 				<th width='80px'>发起人</th>
 				<th width='120px'>发起日期</th>
@@ -94,15 +94,19 @@
     <script type="text/javascript">
 
         var webUser = null;
-
         var pageCount = 1; //页数
         var pageSize = 10; //一页显示行数
         var total = 0;
         var pageIdx = 1;//第几页
-        var pageStartN = 1;
+        var startIndex = 1;
         var realCount = 0;
         var flowData;
-
+        var _tspan = GetQueryString("TSpan");
+        var _flowNo = GetQueryString("FK_Flow");
+        var pageInfo;
+        var keyWord;
+        var IsSearchClick = false;//是否点的查询 : fasle 不是 true 是
+		var	 IsPageClick = false;//是否是点的页数 : false 不是 true 是
         $(function () {
             InitPage();//初始化查询列表、
             InitData();//初始化数据
@@ -110,19 +114,21 @@
         });
 
 
-        function InitPage() {
+        function InitPage(keyWord) {
             webUser = new WebUser();
             if (webUser.No == null)
                 return;
 
             var url = "";
+            if(IsSearchClick == true && IsPageClick == false){
+                pageIdx = 1;
 
-            var _tspan = GetQueryString("TSpan");
+            }
             if (_tspan == undefined || _tspan == null || _tspan == "" || _tspan == "null") {
                 _tspan = "-1";
             }
 
-            var _flowNo = GetQueryString("FK_Flow");
+            
             if (_flowNo == undefined || _flowNo == null || _flowNo == "" || _flowNo == "null") {
                 _flowNo = "";
             }
@@ -133,17 +139,22 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
             handler.AddPara("TSpan", _tspan);
             handler.AddPara("FK_Flow", _flowNo);
+            handler.AddPara("KeyWord", keyWord);
+            handler.AddPara("pageIdx", pageIdx);
+
+            handler.AddPara("pageSize", pageSize);
             var data = handler.DoMethodReturnString("Search_Init");
 
             if (data.indexOf('err@') == 0) {
-                $("#Msg").html(data);
+                alert(data);
                 return;
             }
 
             var data = JSON.parse(data);
 
             flowData = data['WF_GenerWorkFlow']; // 流程实例列表
-
+            
+            pageInfo = data['PageInfo'];//分页信息
             //时间段列表. 
             var tSpans = data['TSpan'];
             if (_tspan == "-1")
@@ -185,21 +196,18 @@
         }
 
         function InitData() {
-            //总数
-            total = flowData.length;
-            //获取分页的数据信息
-            data = [];
-            pageStartN = (pageIdx - 1) < 0 ? 1 : (pageIdx - 1) * pageSize;
-            pageEndN = pageIdx * pageSize > total ? total : pageIdx * pageSize;
+            
+            if (flowData.length <= 0) {
+                alert('未查询出来数据');
+                return;
+            }
+            //获取总条数，总页数，当前页第一条索引
+            $.each(pageInfo, function(j,pi) {
+                total = pi["totalNum"];
+                pageCount = pi["totalPage"];
+                startIndex = pi["startIndex"];
 
-            data = flowData.slice(pageStartN, pageEndN)
-            //总页数
-            if (total % pageSize != 0)
-                pageCount = parseInt(total / pageSize) + 1;
-            else
-                pageCount = parseInt(total / pageSize);
-            if (pageCount == 0) pageCount = 1;
-
+            })
 
             _Html = "";
 
@@ -207,21 +215,21 @@
             var userNo = webUser.No;
             var todoEmpsName = "";
             htmlbox = '';
-            var realIndex = pageStartN;
-            for (var i = 0; i < data.length; i++) {
-                var en = data[i];
+            var realIndex = startIndex;
+            for (var i = 0; i < flowData.length; i++) {
+                var en = flowData[i];
 
                 if (en.FID != 0)
                     continue;
 
-                realIndex++;
+                ++realIndex;
 
                 var fk_flow = en.FK_Flow,
-                            fk_node = en.FK_Node,
-                            workid = en.WorkID,
-                            fid = en.FID,
-                            isRead = en.IsRead,
-                            paras = en.AtPara;
+                    fk_node = en.FK_Node,
+                    workid = en.WorkID,
+                    fid = en.FID,
+                    isRead = en.IsRead,
+                    paras = en.AtPara;
 
                 if (paras == null || paras == "") {
                     paras = "";
@@ -307,6 +315,11 @@
                 }, //点击事件，用于通过Ajax来刷新整个list列表
                 onPageClicked: function (event, originalEvent, type, page) {
                     pageIdx = page;
+                    keyWord = $("#TB_Key").val();
+                    IsSearchClick = false;//重置是否点击查询
+                    IsPageClick = true;//点击了页码
+
+                    InitPage(keyWord);
                     InitData();
                     $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
                             "页,总共" + total + "条记录。</li>");
@@ -479,28 +492,10 @@
         }
 
         function SearchKey() {
-
-            var val = $("#TB_Key").val();
-            if (val == null || val == undefined || val == "") {
-                alert("请输入关键字,单据编号，标题。。。");
-                return;
-            }
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
-            handler.AddPara("TB_KWds", val);
-
-            var data = handler.DoMethodReturnString("KeySearch_Query");
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //转化成json.
-             flowData = JSON.parse(data);
-            if (flowData.length <= 0) {
-                alert('未查询出来数据');
-                return;
-            }
+            IsSearchClick = true;//点击了查询
+			IsPageClick = false;//重置点击页面
+            keyWord = $("#TB_Key").val();
+            InitPage(keyWord);
             InitData();
             Paginator(pageCount, pageIdx);
         }

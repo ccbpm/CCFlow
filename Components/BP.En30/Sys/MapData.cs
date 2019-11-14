@@ -1489,6 +1489,9 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(key))
                     continue;
 
+                if (map.Attrs.Contains(key) == false)
+                    continue;
+
                 map.AddSearchAttr(key);
             }
             #endregion 查询条件.

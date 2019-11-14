@@ -112,20 +112,20 @@ namespace BP.Sys
                 this.SetValByKey(UserLogAttr.Docs, value);
             }
         }
-      
-		#endregion
 
-		#region 构造方法
-		/// <summary>
-		/// 用户日志
-		/// </summary>
-		public UserLog()
-		{
-		}
-	 
-		/// <summary>
-		/// EnMap
-		/// </summary>
+        #endregion
+
+        #region 构造方法
+        /// <summary>
+        /// 用户日志
+        /// </summary>
+        public UserLog()
+        {
+        }
+
+        /// <summary>
+        /// EnMap
+        /// </summary>
         public override Map EnMap
         {
             get

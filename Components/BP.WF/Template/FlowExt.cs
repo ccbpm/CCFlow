@@ -1630,9 +1630,9 @@ namespace BP.WF.Template
                 if (nd.HisCHWay == CHWay.None)
                     gwl.SDT = "无";
                 else
-                    gwl.SDT = dt.AddDays(3).ToString("yyyy-MM-dd");
+                    gwl.SDT = dt.AddDays(3).ToString("yyyy-MM-dd HH:mm:ss");
 
-                gwl.RDT = dt.ToString("yyyy-MM-dd");
+                gwl.RDT = dt.ToString("yyyy-MM-dd HH:mm:ss");
                 gwl.IsRead = false;
                 gwl.Insert();
             }

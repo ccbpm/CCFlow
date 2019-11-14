@@ -692,6 +692,7 @@ namespace BP.WF.HttpHandler
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
             //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
+            
 
             if (emp.No != "admin")
             {

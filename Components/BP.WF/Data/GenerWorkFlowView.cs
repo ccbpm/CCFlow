@@ -756,6 +756,7 @@ namespace BP.WF.Data
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY);
 
+
                 //把不等于 0 的去掉.
                 map.AddHidden(GenerWorkFlowViewAttr.WFState, "!=", "0");
 
@@ -764,6 +765,9 @@ namespace BP.WF.Data
                 rm.Title = "轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 rm.Icon = "../../WF/Img/Track.png";
+                rm.IsForEns = true;
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

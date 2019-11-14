@@ -618,15 +618,16 @@ namespace BP.WF.HttpHandler
                     dt = DBAccess.RunSQLReturnTable(sql);
                     DataTable newdt = new DataTable();
                     newdt = dt.Clone();
+                   
                     //判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
                     if (dt.Rows.Count > 0)
                     {
-                        if (Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.UnSend))
+                        if (Equals(dt.Rows[0]["ActionType"], (int)ActionType.Return) || Equals(dt.Rows[0]["ActionType"], (int)ActionType.UnSend))
                         {
                             if (dt.Rows.Count > 1)
                             {
-                                dt.Rows.RemoveAt(0);
-                                dt.Rows.RemoveAt(0);
+                                dt.Rows.RemoveAt(1);
+                                dt.Rows.RemoveAt(1);
                             }
                             else
                             {
@@ -635,7 +636,7 @@ namespace BP.WF.HttpHandler
 
                             newdt = dt;
                         }
-                        else if (dt.Rows.Count > 1 && (Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend)))
+                        else if (dt.Rows.Count > 1 && (Equals(dt.Rows[1]["ActionType"], (int)ActionType.Return) || Equals(dt.Rows[1]["ActionType"], (int)ActionType.UnSend)))
                         {
                             //删除已发送的节点，
                             if (dt.Rows.Count > 3)

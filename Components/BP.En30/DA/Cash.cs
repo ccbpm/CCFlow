@@ -233,18 +233,6 @@ namespace BP.DA
                 }
             }
 
-            if (haveError)
-            {
-                //string myfile = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + cfile;
-                //if (System.IO.File.Exists(myfile) == false)
-                //    myfile = cfile;
-
-                // throw new Exception("@没有文件:"+myfile);
-
-                //StreamWriter wr = new StreamWriter(myfile,false, Encoding.ASCII);
-                //wr.Write(Billstr);
-                //wr.Close();
-            }
 
             if (msg != "")
             {

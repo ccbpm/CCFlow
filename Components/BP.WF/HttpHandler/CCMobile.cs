@@ -392,9 +392,14 @@ namespace BP.WF.HttpHandler
             GenerWorkFlows gwfs = new GenerWorkFlows();
             String sqlWhere = "";
             //当前页
-            int pageIdx = int.Parse(this.GetRequestVal("pageIdx"));
+            int pageIdx = 1;
+            if(DataType.IsNullOrEmpty(this.GetRequestVal("pageIdx")) == false)
+              pageIdx = int.Parse(this.GetRequestVal("pageIdx"));
             //每页条数
-            int pageSize = int.Parse(this.GetRequestVal("pageSize"));
+            int pageSize = 10;
+            if (DataType.IsNullOrEmpty(this.GetRequestVal("pageSize")) == false)
+                pageSize = int.Parse(this.GetRequestVal("pageSize"));
+
             int num = pageSize * (pageIdx-1);
             sqlWhere = "(((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (FID = 0) AND (WFState > 1)";
             if (tSpan != "-1")

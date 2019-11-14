@@ -987,8 +987,8 @@ namespace BP.WF
                         {
                             isDropTR = true;
                             html += " <tr>";
-                            html += " <td  class='FDesc'  >" + attr.Name + "</td>";
-                            html += " <td ColSpan=3>";
+                            html += " <td  class='FDesc' style='width:143px' >" + attr.Name + "</td>";
+                            html += " <td  ColSpan=3 style='width:712.5px'>";
                             html += text;
                             html += " </td>";
                             html += " </tr>";
@@ -1013,8 +1013,8 @@ namespace BP.WF
                         if (isDropTR == true)
                         {
                             html += " <tr>";
-                            html += " <td class='FDesc' >" + attr.Name + "</td>";
-                            html += " <td class='FContext'  >";
+                            html += " <td class='FDesc' style='width:143px'>" + attr.Name + "</td>";
+                            html += " <td class='FContext' style='width:332px'>";
                             html += text;
                             html += " </td>";
                             isDropTR = !isDropTR;
@@ -1023,8 +1023,8 @@ namespace BP.WF
 
                         if (isDropTR == false)
                         {
-                            html += " <td  class='FDesc'>" + attr.Name + "</td>";
-                            html += " <td class='FContext'  >";
+                            html += " <td  class='FDesc'style='width:143px'>" + attr.Name + "</td>";
+                            html += " <td class='FContext' style='width:332px'>";
                             html += text;
                             html += " </td>";
                             html += " </tr>";

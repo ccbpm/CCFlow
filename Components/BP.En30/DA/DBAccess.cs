@@ -2005,6 +2005,7 @@ namespace BP.DA
 
                 OracleCommand cmd = new OracleCommand(sql, conn);
                 cmd.CommandType = CommandType.Text;
+                cmd.BindByName = true;
 
                 foreach (Para para in paras)
                 {

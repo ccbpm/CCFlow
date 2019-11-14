@@ -104,6 +104,7 @@ namespace BP.Web
 
             WebUser.No = em.No;
             WebUser.Name = em.Name;
+            
             if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.
@@ -759,6 +760,23 @@ namespace BP.Web
                     SetSessionByKey("AuthName", null);
                 else
                     SetSessionByKey("AuthName", value);
+            }
+        }
+        public static string Theame
+        {
+            get
+            {
+                string val = GetValFromCookie("Theame", null, false);
+                if (val == null)
+                    val = GetSessionByKey("Theame", null);
+                return val;
+            }
+            set
+            {
+                if (value == "")
+                    SetSessionByKey("Theame", null);
+                else
+                    SetSessionByKey("Theame", value);
             }
         }
 

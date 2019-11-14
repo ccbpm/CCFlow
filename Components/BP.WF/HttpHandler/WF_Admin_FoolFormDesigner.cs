@@ -318,7 +318,6 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND ( CtrlType='' OR CtrlType IS NULL ) ORDER BY OID DESC ";
             ps.Add("FrmID", this.FK_MapData);
-            //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND ( CtrlType='' OR CtrlType IS NULL ) ORDER BY OID DESC ";
             attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
             attr.Insert();
             return attr.MyPK;
@@ -963,7 +962,7 @@ namespace BP.WF.HttpHandler
                 return "err@该字段[" + keyOfEn + "]已经加入里面了.";
 
             attr.Name = name;
-            attr.MyDataType = dataType;
+            attr.MyDataType = dataType ;
 
             if (BP.DA.DataType.AppBoolean == dataType)
                 attr.UIContralType = UIContralType.CheckBok;

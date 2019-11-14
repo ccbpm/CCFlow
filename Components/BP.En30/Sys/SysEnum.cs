@@ -238,7 +238,8 @@ namespace BP.Sys
                 {
 
                     int RBShowModel = mapAttr.GetParaInt("RBShowModel");
-                    FrmRB frmrb1 = new FrmRB(fk_mapdata + "_" + this.EnumKey + "_0");
+                    FrmRB frmrb1 = new FrmRB();
+                    frmrb1.MyPK = fk_mapdata + "_" + this.EnumKey + "_"+ this.IntKey;
 
 
                     frmrb.FK_MapData = fk_mapdata;

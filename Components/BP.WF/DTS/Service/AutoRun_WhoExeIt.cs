@@ -50,7 +50,7 @@ namespace BP.WF.DTS
         public override object Do()
         {
             string info = "";
-            string sql = "SELECT WorkID,FK_Emp,FK_Node,FK_Flow FROM WF_GenerWorkerList WHERE WhoExeIt!=0 AND IsPass=0 AND IsEnable=1 ORDER BY FK_Emp";
+            string sql = "SELECT WorkID,FID,FK_Emp,FK_Node,FK_Flow FROM WF_GenerWorkerList WHERE WhoExeIt!=0 AND IsPass=0 AND IsEnable=1 ORDER BY FK_Emp";
             DataTable dt = null;
 
             dt = DBAccess.RunSQLReturnTable(sql);
@@ -61,6 +61,7 @@ namespace BP.WF.DTS
             foreach (DataRow dr in dt.Rows)
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                Int64 fid = Int64.Parse(dr["FID"].ToString());
                 string FK_Emp = dr["FK_Emp"].ToString();
                 int paras = int.Parse(dr["FK_Node"].ToString());
                 string fk_flow = dr["FK_Flow"].ToString();

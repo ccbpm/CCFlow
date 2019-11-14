@@ -10,7 +10,7 @@
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="../../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="../../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    
     <script type="text/javascript">
 
     </script>
@@ -40,9 +40,14 @@
                         <!-- 驰骋 -->
                         <div class="logo-element lang" data-key="chicheng"></div>
                     </li>
+
                     <!-- 菜单列表 -->
                     <div id="list"></div>
+
                 </ul>
+
+
+
             </div>
         </nav>
         <!--左侧导航结束-->
@@ -104,20 +109,22 @@
                 var dir = dirs[i];
                 if (dir.ParentNo == '0')
                     continue;
-                html += "<li>";
-                html += "<a class='nav-header' style='color:white;' href='#'>";
+
+
+                html += "<li >";
+                html += "<a class='nav nav-header' style='color:white; font-weight:bolder;' href='#'>";
                 html += "<i class='icon iconfont icon-huaban'></i>";
                 html += "<span class='nav-label lang' data-key='jcgn'>" + dir.Name + "</span>";
                 html += "<span class='fa arrow'></span>";
                 html += "</a>";
 
-                html += "<ul class='nav nav-second-level in'>";
+                html += "<ul class='nav nav - second - level in'>";
                 for (var idx = 0; idx < frms.length; idx++) {
                     var frm = frms[idx];
                     if (frm.FK_FormTree != dir.No)
                         continue;
-                    
-                    html += "<li><a href='../SearchDict.htm?FrmID=" + frm.No + "&FK_MapData=" + frm.No + "' class='J_menuItem'><i class='icon iconfont icon-faqi'></i><span class='lang' data-key='lcfq'>" + frm.Name + "</span></a></li>";
+                   
+                    html += "<li><a class='J_menuItem' href='../SearchDict.htm?FrmID=" + frm.No + "&FK_MapData=" + frm.No + "'><i class='icon iconfont icon-faqi'></i><span class='lang' data-key='lcfq'>" + frm.Name + "</span></a></li>";
                 }
                 html += "</ul>";
                 html += "</li>";
@@ -149,7 +156,7 @@
             return;
         });
     </script>
-
+    <script src="../../Style/skin/js/appnew.js"></script>
 </body>
 
 </html>

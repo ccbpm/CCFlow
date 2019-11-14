@@ -10,6 +10,9 @@
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <!--引入图表-->
@@ -226,7 +229,7 @@
                 html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
                 html += "</td>";
                 html += "<td style='font-size:12px;text-align:right'>";
-                html += "<select class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<select style='width:80%' class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 html += "</td>";
                 html += "</tr>";
                 $("#AnalyGroup").append(html);
@@ -319,7 +322,7 @@
             var groupType = GetQueryString("GroupType");
 
 
-            var html = "<table id='mainTable'  class='Table' cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' > ";
+            var html = "<table id='mainTable'  class='table table-bordered table-hover' style='text-align:center;'> ";
             //生成表头
 
             /**含有合计的时候**/
@@ -365,7 +368,7 @@
                                 break;
                             case "Up":
                             default:
-                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" +groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 break;
                         }
                     }
@@ -465,22 +468,22 @@
                     if (AttrsOfNum[j].MyDataType == 8) {
                         if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
                             //需要转换为金额类型，小数位数不到两位的补全,功能待定
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                            html += "<td class='TDNum' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
                         } else {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
                         }
                     } else {
                         if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                            html += "<td class='TDNum' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
                         } else {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
                         }
                     }
                 }
                 url = baseUrl + url;
-                html += "<td nowrap ><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='easyui-linkbutton'>详细</a></td>";
+                html += "<td style=''><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn-sm easyui-linkbutton'>详细</a></td>";
                 html += "</tr>";
             }
 
@@ -522,7 +525,7 @@
                         handler.AddPara("Exp", exp);
                         var data = handler.DoMethodReturnString("ParseExpToDecimal");
                         //待定
-                        html += "<td class='TDNum' nowrap >" + data.toFixed(4) + "</td>";
+                        html += "<td class=' ' nowrap >" + data.toFixed(4) + "</td>";
                     }
 
                     if (isHave == false)
@@ -538,13 +541,13 @@
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
+                            html += "<td class=' ' nowrap >" + d.toFixed(4) + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
+                            html += "<td class=' ' nowrap >" + d.toFixed(4) + "</td>";
                         }
                         else {
                             d = 0;
@@ -553,12 +556,12 @@
                             });
 
                             if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") < 1)
-                                html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
+                                html += "<td class=' ' nowrap >" + d.toFixed(4) + "</td>";
                             else {
                                 if (groupSearch.length == 0)
-                                    html += "<td class='TDNum' nowrap >0</td>";
+                                    html += "<td class=' ' nowrap >0</td>";
                                 else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
+                                    html += "<td class=' ' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
                             }
                         }
                         break;
@@ -569,13 +572,13 @@
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
 
-                            html += "<td class='TDNum' nowrap >" + d + "</td>";
+                            html += "<td class=' ' nowrap >" + d + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d + "</td>";
+                            html += "<td class=' ' nowrap >" + d + "</td>";
 
                         } else {
                             d = 0;
@@ -584,12 +587,12 @@
                             });
 
                             if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") == -1)
-                                html += "<td class='TDNum' nowrap >" + d + "</td>";
+                                html += "<td class=' ' nowrap >" + d + "</td>";
                             else {
                                 if (groupSearch.length == 0)
-                                    html += "<td class='TDNum' nowrap >0</td>";
+                                    html += "<td class=' ' nowrap >0</td>";
                                 else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
+                                    html += "<td class=' ' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
                             }
                         }
                         break;
@@ -857,7 +860,7 @@
     </script>
 </head>
 <body class="easyui-layout">
-    <form id="cc">
+    <form id="cc" class="form-inline" role="form">
         <div id="mainDiv" data-options="region:'center',title:'学生',noheader:false" style="padding: 5px">
             <div class="easyui-layout" data-options="fit:true">
                 <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; background-color: #E0ECFF; line-height: 30px">
@@ -865,14 +868,14 @@
                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
                 <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
-                    <div class="easyui-panel" title="显示内容" style="padding: 5px; margin-bottom: 5px">
+                    <div class="easyui-panel" title="显示内容" style=" Contentpadding: 5px; margin-bottom: 5px">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
                     <div class="easyui-panel" title="分析项目" style="padding: 5px; margin-bottom: 5px">
                         <table id="AnalyGroup" cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%'></table>
                     </div>
                     <div class="easyui-panel" title="图表" style="padding: 5px; margin-bottom: 5px">
-                        <table cellpadding="0" cellspacing="0" border="0" style="border-style: none; width: 100%">
+                        <table class="table" style=" width: 90%">
                             <tr>
                                 <td>
                                     高度：<input name="TB_H" type="text" value="460" id="TB_H" class="aspNetDisabled" style="width: 60px; height: auto;

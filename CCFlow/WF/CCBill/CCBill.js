@@ -6,21 +6,22 @@
 */
 
 
-/* 获得可以填写的表单集合. 返回: No,Name,FrmType,TreeNo,TreeName 的 json. FrmType=是单据，还是实体.
+/* 获得可以操作的单据列表. 返回: No,Name,FrmType,TreeNo,TreeName 的 json. FrmType=是单据，还是实体.
  * 1. 该方法可以用于生成当前用户可以发起的单据列表.
- * 2. 我们提供了一个通用的百搭款的风格的页面.
+ * 2. 我们提供了一个通用的百搭款的风格的页面. /WF/CCBill/Start.htm
  * */
 
-function GenerFrmsOfCanStart() {
+function GenerFrmsOfCanOption() {
 
 }
 
-//获得可以填写的表单集合.  返回 No,Name,FrmType 的json. FrmType=是单据，还是实体.
-//指定目录树下的.
-function GenerFrmsOfCanStart(specTreeNo) {
+/**
+ * 获得可以操作的单据列表
+ * @param {执行的目录树下的单据} specTreeNo
+ */
+function GenerFrmsOfCanOption(specTreeNo) {
 
 }
-
 
 //获得可以填写的表单集合. 返回 No,Name,FrmType，IsView, IsNew, IsSubmit, IsUpdate IsDelete 的json.
 // FrmType = 是单据，还是实体.
@@ -35,35 +36,51 @@ function GenerMyFrmsSpecTreeNo(specTreeNo) {
 }
 
 
-
-//获得表单的Url.
-//表单ID, 主键.
+/**
+ * 获得表单的Url.
+ * @param {表单ID} frmID
+ * @param {主键} pkval
+ */
 function GenerFrmOpenUrl(frmID, pkval) {
     return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + pkval;
 }
 
-//创建表单实例. 说明:指定表单的ID, specID,与参数创建表单实例.
-// 表单ID,
-// 指定的OID,
-// 参数字段.KeyValue 的 json 格式的.  可以为空.
-// return frmJSON 
-function NewBillSpecOID(frmID, specID, paras) {
+/**
+ * 创建表单实例. 说明:指定表单的ID, specID,与参数创建表单实例.
+ * @param {表单ID} frmID
+ * @param {指定的int类型的OID，作为主键} specID
+ * @param {指定的Title，可以为空} specTitle
+ * @param {主表字段的参数，一个key val 的json格式的数据.} paras
+ */
+function NewBillAsSpecOID(frmID, specID, specTitle, paras) {
 
 }
-
-//创建表单实例. 说明:指定表单的ID,OID,与参数创建表单实例.
-// 表单ID, 
-// 参数字段.KeyValue的json格式的.
-// return frmJSON 
-function NewBill(frmID, paras) {
-
-}
-
-
-//删除表单实例. 说明:指定表单的ID,OID删除实例.
-// 表单ID, 
 
 /**
+ * 创建表单实例. 说明:指定表单的ID, specID,与参数创建表单实例.
+ * @param {表单ID} frmID
+ * @param {指定的int类型的OID，作为主键} specBillNo
+ * @param {指定的Title，可以为空} specTitle
+ * @param {主表字段的参数，一个key val 的json格式的数据.} paras
+ */
+function NewBillAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
+
+}
+
+
+/**
+ *  创建表单实例： 返回一个 frmJson。 
+ * @param {表单ID} frmID
+ * @param {标题/名称:可以为空} specTitle
+ * @param {主表的参数 Key Val 可为空} paras
+ */
+function NewBill(frmID, specTitle, paras) {
+
+}
+
+
+/**
+ * 删除表单实例. 说明:指定表单的ID,OID删除实例.
  * 
  * @param {any} frmID
  * @param {any} oid
@@ -81,17 +98,16 @@ function DeleteBillEntity(frmID, oid) {
  * **/
 
 /**
- * 在根目录下创建子2级目录. 子目录的名字:, 返回子目录创建的编号.
- * @param {any} dirName
+ * 在根目录下创建子2级目录. 子目录的名字:,  返回子目录创建的编号. 
+ * @param {目录名字} dirName
  */
-function Admin_CreateTreeDir( dirName)
-{
+function Admin_CreateTreeDir(dirName) {
 
 }
 
 /**
  * 删除表单树
- * @param {any} treeNo
+ * @param {目录编号} treeNo
  */
 function Admin_DeleteTreeDir(treeNo) {
 

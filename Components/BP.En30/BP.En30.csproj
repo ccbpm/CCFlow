@@ -172,8 +172,10 @@
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DA\DTTemp.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DA\EncodingBP.cs" />
-    <Compile Include="DA\DTTemp.cs" />
     <Compile Include="DA\Cash2019.cs" />
     <Compile Include="DA\CashFrmTemplate.cs" />
     <Compile Include="Difference\DBAccess.cs" />

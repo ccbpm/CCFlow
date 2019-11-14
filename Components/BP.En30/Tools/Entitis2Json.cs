@@ -5,8 +5,6 @@ using System.Text;
 using BP.En;
 using BP.DA;
 
-
-
 namespace BP.Tools
 {
     public class Entitis2Json
@@ -484,10 +482,7 @@ namespace BP.Tools
             return sb.ToString();
         }
     }
-}
-
-namespace BP.DA
-{
+     
     public class DataTableConvertJson
     {
 

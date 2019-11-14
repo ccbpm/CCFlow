@@ -183,7 +183,7 @@ namespace BP.WF.HttpHandler
 
             int totalCount = DBAccess.RunSQLReturnCOUNT("select " + key + " from " + dataSource);
 
-            return DataTableConvertJson.DataTable2Json(DTable, totalCount);
+            return BP.Tools.DataTableConvertJson.DataTable2Json(DTable, totalCount);
         }
         #endregion
 

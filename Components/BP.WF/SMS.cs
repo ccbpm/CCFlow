@@ -643,6 +643,7 @@ namespace BP.WF
             {
                 BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }
+
             base.afterInsert();
         }
     }

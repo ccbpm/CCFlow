@@ -832,34 +832,22 @@ namespace BP.WF
                 #region 更新wf_emp. 的字段类型. 2019.06.19
                 DBType dbtype = BP.Sys.SystemConfig.AppCenterDBType;
 
-                if (dbtype == DBType.Oracle)
-                {
-                    DBAccess.RunSQL("ALTER TABLE  WF_EMP add startFlows_temp CLOB");
-                    //将需要改成大字段的项内容copy到大字段中
-                    DBAccess.RunSQL("UPDate WF_EMP set startFlows_temp=STARTFLOWS");
-                    //删除原有字段
-                    DBAccess.RunSQL("ALTER TABLE  WF_EMP drop column STARTFLOWS");
-                    //将大字段名改成原字段名
-                    DBAccess.RunSQL("ALTER TABLE  WF_EMP rename column startFlows_temp to STARTFLOWS");
+                if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == true)
+                    DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
 
-                }
+                if (dbtype == DBType.Oracle)
+                    DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows CLOB");
+
                 if (dbtype == DBType.MySQL)
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
-                if (dbtype == DBType.MSSQL)
-                {
-                    DataTable dtYueSu = DBAccess.RunSQLReturnTable("SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('WF_Emp') and a.Name='StartFlows' ");
-                    if (dtYueSu.Rows.Count != 0)
-                        DBAccess.RunSQL(" ALTER TABLE WF_Emp drop  constraint " + dtYueSu.Rows[0][0]);
 
+                if (dbtype == DBType.MSSQL)
                     DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows text");
-                }
 
                 if (dbtype == DBType.PostgreSQL)
                 {
                     //  DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column StartFlows type text");
                 }
-
-
                 #endregion 更新wf_emp 的字段类型.
 
                 BP.Sys.FrmRB rb = new FrmRB();

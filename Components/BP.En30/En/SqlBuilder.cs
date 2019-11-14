@@ -2423,7 +2423,7 @@ namespace BP.En
                             ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
                             break;
                         case DataType.AppInt:
-                            if (attr.Key == "MyPK") //特殊判断解决 truck 是64位的int类型的数值问题.
+                            if (attr.Key.Equals("MyPK") ) //特殊判断解决 truck 是64位的int类型的数值问题.
                             {
                                 ps.Add(attr.Key, en.GetValInt64ByKey(attr.Key));
                             }
@@ -2431,7 +2431,10 @@ namespace BP.En
                             {
                                 if (en.Row[attr.Key] == DBNull.Value)
                                 {
-                                    ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
+                                    if (DataType.IsNullOrEmpty(attr.DefaultValOfReal))
+                                        ps.Add(attr.Key, 0);
+                                    else
+                                        ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
                                     continue;
                                 }
 

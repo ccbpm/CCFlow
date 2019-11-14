@@ -541,15 +541,11 @@ function newFlowSort(isSub) {
 
     //传入参数
     var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
-    var params = {
-        action: doWhat,
-        No: currSort.id,
-        Name: val
-    };
 
     //创建目录.
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    handler.AddPara(params);
+    handler.AddPara("No", currSort.id);
+    handler.AddPara("Name", val);
     var data = handler.DoMethodReturnString(doWhat);
 
     var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);

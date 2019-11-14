@@ -30,7 +30,9 @@
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                     <span class="block m-t-xs" style="font-size:20px;">
-                                        <strong class="font-bold"><img src="../../../DataUser/ICON/logoHomeFrm.png" /></strong>
+                                        <strong class="font-bold">
+                                            <img src="../../../DataUser/ICON/logoHome.png" />
+                                        </strong>
                                     </span>
                                 </span>
                             </a>
@@ -38,32 +40,9 @@
                         <!-- 驰骋 -->
                         <div class="logo-element lang" data-key="chicheng"></div>
                     </li>
-
-                    <li>
-                        <a href="#">
-                            <i class="icon iconfont icon-huaban"></i>
-                            <!-- 基础功能 -->
-                            <span class="nav-label lang" data-key="jcgn">基础功能</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level in">
-                            <!-- 流程发起 -->
-                            <li><a href="../Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="lcfq">流程发起</span></a></li>
-                            <li><a href="../Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="daiban">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
-                            <li><a href="../Runing.htm " class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i><span class="lang" data-key="zaitu">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
-                            <li><a href="../Complete.htm" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="ywc">已完成</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>
-                        </ul>
-                    </li>
-
-
-
                     <!-- 菜单列表 -->
                     <div id="list"></div>
-
                 </ul>
-
-
-
             </div>
         </nav>
         <!--左侧导航结束-->
@@ -125,21 +104,19 @@
                 var dir = dirs[i];
                 if (dir.ParentNo == '0')
                     continue;
-
-
                 html += "<li>";
-                html += " <a href='#'>";
-                html += "  <i class='icon iconfont icon - huaban'></i>";
-                html += "<span class='nav - label lang' data-key='jcgn'>" + dir.Name + "</span>";
+                html += "<a class='nav-header' style='color:white;' href='#'>";
+                html += "<i class='icon iconfont icon-huaban'></i>";
+                html += "<span class='nav-label lang' data-key='jcgn'>" + dir.Name + "</span>";
                 html += "<span class='fa arrow'></span>";
                 html += "</a>";
 
-                html += "<ul class='nav nav - second - level in'>";
+                html += "<ul class='nav nav-second-level in'>";
                 for (var idx = 0; idx < frms.length; idx++) {
                     var frm = frms[idx];
                     if (frm.FK_FormTree != dir.No)
                         continue;
-                    // html += "<li><a href='../Todolist.htm' class='J_menuItem'><i class='icon iconfont icon-daiban'></i><span class='lang' data-key='daiban'>待办</span><label class='label label-warning pull-right' id='Todolist_EmpWorks'></label></a></li>";
+                    
                     html += "<li><a href='../SearchDict.htm?FrmID=" + frm.No + "&FK_MapData=" + frm.No + "' class='J_menuItem'><i class='icon iconfont icon-faqi'></i><span class='lang' data-key='lcfq'>" + frm.Name + "</span></a></li>";
                 }
                 html += "</ul>";

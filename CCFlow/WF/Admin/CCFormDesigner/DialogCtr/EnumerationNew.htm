@@ -253,6 +253,12 @@
             {  
                 $(this).parent().parent().next().find(".easyui-textbox").removeAttr("disabled");
             });
+            $(".easyui-textbox").keyup(function (event) {    //当前文本框内容全部删除时，禁用下一个文本框
+                if (event.keyCode == 8 && ($(this).val().length<1)) {
+                    //alert("123");
+                    $(this).parent().parent().next().find(".easyui-textbox").attr("disabled", "true");
+                }
+            })
         });
     </script>
 </head>

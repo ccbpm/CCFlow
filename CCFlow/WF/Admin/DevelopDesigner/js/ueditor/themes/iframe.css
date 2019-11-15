@@ -464,9 +464,9 @@ textarea, iframe[src*="Ath.htm"] {
 }
 
 .btn {
-    background: ##f2f2f2 !important;
+    background: #f2f2f2 !important;
     border-radius: 20px !important;
-    color: #0000007a !important;
+    color: #000 !important;
 }
 
 .errorBorder {
@@ -593,7 +593,7 @@ input[type=radio] {
 .modal-title {
     text-align: left;
     font-size: 16px;
-    color: #0000007a;
+    color: #000;
 }
 
 .input-group-addon {

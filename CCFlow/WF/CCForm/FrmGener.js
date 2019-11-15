@@ -717,32 +717,98 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
-    //获取CHECKBOX的值
+    var haseExistStr = ",";
     $.each(formArr, function (i, ele) {
-
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
                 ele = ele.split('=')[0] + '=1';
             } else {
                 ele = ele.split('=')[0] + '=0';
             }
-        }
 
+            formArrResult.push(ele);
+        }
         if (ele.split('=')[0].indexOf('DDL_') == 0) {
 
             var ctrlID = ele.split('=')[0];
 
-            var item = $("#" + ctrlID).find("option:selected").text();
+            var item = $("#" + ctrlID).children('option:checked').text();
 
-            var mystr = "TB_" + ctrlID.substring(4) + 'T=' + item;
+            var mystr = '';
+            mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
             formArrResult.push(mystr);
+            formArrResult.push(ele);
+            haseExistStr += ctrlID.replace("DDL_", "TB_") + "T" + ",";
+        }
+        if (ele.split('=')[0].indexOf('RB_') == 0) {
+            formArrResult.push(ele);
         }
 
-
-        formArrResult.push(ele);
     });
 
 
+    $.each(formArr, function (i, ele) {
+        var ctrID = ele.split('=')[0];
+        if (ctrID.indexOf('TB_') == 0) {
+            if (haseExistStr.indexOf("," + ctrID + ",") == -1) {
+                formArrResult.push(ele);
+                haseExistStr += ctrID + ",";
+            }
+
+
+        }
+    });
+
+
+
+    //获取表单中禁用的表单元素的值
+    var disabledEles = $('#divCCForm :disabled');
+    $.each(disabledEles, function (i, disabledEle) {
+
+        var name = $(disabledEle).attr('id');
+
+        switch (disabledEle.tagName.toUpperCase()) {
+
+            case "INPUT":
+                switch (disabledEle.type.toUpperCase()) {
+                    case "CHECKBOX": //复选框
+                        formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
+                        break;
+                    case "TEXT": //文本框
+                    case "HIDDEN":
+                        if (haseExistStr.indexOf("," + name + ",") == -1) {
+                            formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                            haseExistStr += name + ",";
+                        }
+                       
+                        break;
+                    case "RADIO": //单选钮
+                        name = $(disabledEle).attr('name');
+                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                        if ($.inArray(eleResult, formArrResult) == -1) {
+                            formArrResult.push(eleResult);
+                        }
+                        break;
+                }
+                break;
+            //下拉框            
+            case "SELECT":
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).children('option:checked').val()));
+                var tbID = name.replace("DDL_", "TB_") + 'T';
+                if ($("#" + tbID).length == 1) {
+                    if (haseExistStr.indexOf("," + tbID + ",") == -1) {
+                        formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
+                        haseExistStr += tbID + ",";
+                    }
+                }
+                break;
+
+            //文本区域                    
+            case "TEXTAREA":
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                break;
+        }
+    });
 
     //获取树形结构的表单值
     var combotrees = $(".easyui-combotree");
@@ -754,40 +820,6 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         if (data != null) {
             formArrResult.push(name + '=' + data.id);
             formArrResult.push(name + 'T=' + data.text);
-        }
-    });
-
-    //获取表单中禁用的表单元素的值
-    var disabledEles = $('#divCCForm :disabled');
-    $.each(disabledEles, function (i, disabledEle) {
-        var name = $(disabledEle).attr('name');
-        switch (disabledEle.tagName.toUpperCase()) {
-            case "INPUT":
-                switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
-                        break;
-                    case "TEXT": //文本框
-                    case "HIDDEN":
-                        formArrResult.push(name + '=' + $(disabledEle).val());
-                        break;
-                    case "RADIO": //单选钮
-                        var eleResult = name + '=' + $('[name="' + name + ':checked"]').val();
-                        if (!$.inArray(formArrResult, eleResult)) {
-                            formArrResult.push();
-                        }
-                        break;
-                }
-                break;
-            //下拉框      
-            case "SELECT":
-                formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                break;
-
-            //文本区域      
-            case "TEXTAREA":
-                formArrResult.push(name + '=' + $(disabledEle).val());
-                break;
         }
     });
 

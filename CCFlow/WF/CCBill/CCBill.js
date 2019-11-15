@@ -6,25 +6,33 @@
  * 1. 该方法可以用于生成当前用户可以发起的单据列表.
  * 2. 我们提供了一个通用的百搭款的风格的页面. /WF/CCBill/Start.htm
  * */
-function GenerFrmsOfCanOption() {
-
+function CCFrom_GenerFrmListOfCanOption() {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var data = handler.DoMethodReturnJSON("CCFrom_GenerFrmListOfCanOption");
+    return data;
 }
 
 /**
  * 获得可以操作的单据列表
  * @param {执行的目录树下的单据} specTreeNo
  */
-function GenerFrmsOfCanOption(specTreeNo) {
-
+function CCFrom_GenerFrmListBySpecTreeNo(specTreeNo) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("TreeNo", specTreeNo);
+    var data = handler.DoMethodReturnJSON("CCFrom_GenerFrmListBySpecTreeNo");
+    return data;
 }
 
 /**
- * 获得操作的权限.
+ * 获得一个表单的操作权限.
  * @param {any} frmID
- * 返回 No,Name,FrmType，IsView, IsNew, IsSubmit, IsUpdate IsDelete 的json.
+ * 返回 IsView, IsNew, IsSubmit, IsUpdate IsDelete 的json.
  */
-function GenerFrmPower(frmID) {
-
+function CCFrom_FrmPower(frmID) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    var data = handler.DoMethodReturnJSON("CCFrom_FrmPower");
+    return data;
 }
 
 
@@ -33,19 +41,50 @@ function GenerFrmPower(frmID) {
  * @param {表单ID} frmID
  * @param {主键} pkval
  */
-function GenerFrmOpenUrl(frmID, pkval) {
+function CCFrom_FrmOptionUrl(frmID, pkval) {
     return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + pkval;
 }
 
 /**
+ * 获得表单查看的Url.
+ * @param {表单ID} frmID
+ * @param {主键} oid
+ */
+function CCFrom_FrmViewUrl(frmID, oid) {
+    return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&OID=" + oid;
+}
+
+/**
+ * 获得表单查看的Url.
+ * @param {表单ID} frmID
+ * @param {单据编号} billNo
+ */
+function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
+    //var frm = new Entity(frmID); ??这里需要解析 BillNo传入的值.
+    return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&BillNo=" + pkval;
+}
+
+ 
+
+/**
  * 创建表单实例. 说明:指定表单的ID, specID,与参数创建表单实例.
  * @param {表单ID} frmID
- * @param {指定的int类型的OID，作为主键} specID
+ * @param {指定的int类型的OID，作为主键} specOID
  * @param {指定的Title，可以为空} specTitle
  * @param {主表字段的参数，一个key val 的json格式的数据.} paras
  */
-function NewBillAsSpecOID(frmID, specID, specTitle, paras) {
+function CCFrom_NewFrmEntityAsSpecOID(frmID, specOID, specTitle, paras) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("OID", specOID);
+    handler.AddPara("Title", specTitle);
+    handler.AddJson(paras); //把参数加入.
 
+    var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntityAsSpecOID");
+    if (data.indexOf('err@') == -1) {
+        throw Exception(data); // ??是不是这个语法？
+    }
+    return data;
 }
 
 /**
@@ -55,8 +94,18 @@ function NewBillAsSpecOID(frmID, specID, specTitle, paras) {
  * @param {指定的Title，可以为空} specTitle
  * @param {主表字段的参数，一个key val 的json格式的数据.} paras
  */
-function NewBillAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
+function CCFrom_NewFrmEntityAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("BillNo", specBillNo);
+    handler.AddPara("Title", specTitle);
+    handler.AddJson(paras); //把参数加入.
 
+    var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntityAsSpecBillNo");
+    if (data.indexOf('err@') == -1) {
+        throw Exception(data); // ??是不是这个语法？
+    }
+    return data;
 }
 
 
@@ -66,8 +115,16 @@ function NewBillAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
  * @param {标题/名称:可以为空} specTitle
  * @param {主表的参数 Key Val 可为空} paras
  */
-function NewBill(frmID, specTitle, paras) {
+function CCFrom_NewFrmEntity(frmID, specTitle, paras) {
 
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("OID", oid);
+    var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntity");
+    if (data.indexOf('err@') == -1) {
+        throw Exception(data); // ??是不是这个语法？要检查是否可以创建的权限.
+    }
+    return data;
 }
 
 
@@ -78,8 +135,16 @@ function NewBill(frmID, specTitle, paras) {
  * @param {any} oid
  * 如果返回 err@xxxx 则表是失败.
  */
-function DeleteEntity(frmID, oid) {
+function CCFrom_DeleteFrmEntity(frmID, oid) {
 
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("OID", oid);
+    var data = handler.DoMethodReturnJSON("CCFrom_DeleteFrmEntity");
+    if (data.indexOf('err@') == -1) {
+        throw Exception(data); // ??是不是这个语法？要检查删除权限.
+    }
+    return data;
 }
 
 

@@ -8,16 +8,35 @@
  * 在根目录下创建子2级目录. 子目录的名字:,  返回子目录创建的编号. 
  * @param {目录名字} dirName
  */
-function Admin_CreateTreeDir(dirName) {
-
+function Admin_TreeDir_Create(dirName) {
+    var en = new Entity("BP.Sys.FrmTree", "100");
+    return en.DoMethodReturnString("CreateSubNode");
 }
 
 /**
  * 删除表单树
  * @param {目录编号} treeNo
  */
-function Admin_DeleteTreeDir(treeNo) {
+function Admin_TreeDir_Delete(treeNo) {
+    var en = new Entity("BP.Sys.FrmTree", treeNo);
+    en.Delete();
+}
 
+/**
+ * 上移动目录
+ * @param {目录编号} treeNo
+ */
+function Admin_TreeDir_Up(treeNo) {
+    var en = new Entity("BP.Sys.FrmTree", treeNo);
+    en.DoMethodReturnString("DoUp");
+}
+/**
+ * 下移动目录
+ * @param {目录编号} treeNo
+ */
+function Admin_TreeDir_Down(treeNo) {
+    var en = new Entity("BP.Sys.FrmTree", treeNo);
+    en.DoMethodReturnString("DoDown");
 }
 
 /**
@@ -28,7 +47,7 @@ function Admin_DeleteTreeDir(treeNo) {
  * @param {存储表,如果为Null则与frmID相同} pTable
  * 如果返回 err@xxxx 则表是失败.
  */
-function Admin_CreateFormCCBill(treeNo, frmID, frmName, pTable) {
+function Admin_Form_CreateBill(treeNo, frmID, frmName, pTable) {
 
 }
 
@@ -40,7 +59,7 @@ function Admin_CreateFormCCBill(treeNo, frmID, frmName, pTable) {
  * @param {存储表,如果为Null则与frmID相同} pTable
  * 如果返回 err@xxxx 则表是失败.
  */
-function Admin_CreateFormCCDict(treeNo, frmID, frmName, pTable) {
+function Admin_Form_CreateDict(treeNo, frmID, frmName, pTable) {
 
 }
 
@@ -48,8 +67,26 @@ function Admin_CreateFormCCDict(treeNo, frmID, frmName, pTable) {
  * 删除表单、单据
  * @param {表单ID，不管是Dict还是Bill} frmID
  */
-function Admin_DropFrom(frmID) {
+function Admin_From_Drop(frmID) {
+    var en = new Entity("BP.Sys.MapData", frmID);
+    en.Delete();
+}
+/**
+ * 表单移动,在同一个目录下
+ * @param {表单ID} frmID
+ */
+function Admin_From_Up(frmID) {
+    var en = new Entity("BP.Sys.MapData", frmID);
+    en.DoMethodReturnString("DoUp");
+}
 
+/**
+ * 表单移动,在同一个目录下
+ * @param {表单ID} frmID
+ */
+function Admin_From_Up(frmID) {
+    var en = new Entity("BP.Sys.MapData", frmID);
+    en.DoMethodReturnString("DoOrderDown");
 }
 
 /**

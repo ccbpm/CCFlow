@@ -3448,7 +3448,6 @@ namespace BP.WF
                 this.AddToTrack(at, gwl, BP.WF.Glo.multilingual("子线程", "WorkNode", "sub_thread"), this.town.HisWork.OID);
             }
 
-            string FK_Emp = "";
             string toEmpsStr = "";
             string emps = "";
             foreach (GenerWorkerList wl in current_gwls)
@@ -3458,7 +3457,7 @@ namespace BP.WF
                 if (current_gwls.Count == 1)
                     emps = wl.FK_Emp;
                 else
-                    emps += "@" + FK_Emp;
+                    emps += "@" + wl.FK_Emp;
             }
             //增加变量.
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, emps.Replace("@", ","), SendReturnMsgType.SystemMsg);
@@ -3481,7 +3480,7 @@ namespace BP.WF
             foreach (DataColumn dc in dt.Columns)
                 mainWK.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
 
-            mainWK.Rec = FK_Emp;
+            mainWK.Rec = WebUser.No;
             mainWK.Emps = emps;
             mainWK.OID = this.HisWork.FID;
             mainWK.Save();
@@ -3559,7 +3558,7 @@ namespace BP.WF
 
             #endregion 设置父流程状态
 
-            this.addMsg("InfoToHeLiu", BP.WF.Glo.multilingual("@流程已经运行到合流节点[{0}]. @您的工作已经发送给如下人员[{1}]. @您是第一个到达此节点的处理人.", "WorkNode", "first_node_person", toNode.Name, toEmpsStr));
+            this.addMsg("InfoToHeLiu", BP.WF.Glo.multilingual("@流程已经运行到合流节点[{0}]. @您的工作已经发送给如下人员[{1}]. @您是第{2}个到达此节点的处理人.", "WorkNode", "first_node_person", toNode.Name, toEmpsStr,(count+1).ToString()));
 
             #region 处理国机的需求, 把最后一个子线程的主表数据同步到合流节点的Rpt里面去.(不是很合理) 2015.12.30
             Work towk = town.HisWork;
@@ -8625,6 +8624,7 @@ namespace BP.WF
                 case ActionType.ForwardHL:
                 case ActionType.TeampUp:
                 case ActionType.Order:
+                case ActionType.SubThreadForward:
                     //判断是否有焦点字段，如果有就把它记录到日志里。
                     if (this.HisNode.FocusField.Length > 1)
                     {
@@ -8762,6 +8762,7 @@ namespace BP.WF
                 case ActionType.ForwardHL:
                 case ActionType.TeampUp:
                 case ActionType.Order:
+                case ActionType.SubThreadForward:
                     //判断是否有焦点字段，如果有就把它记录到日志里。
                     if (this.HisNode.FocusField.Length > 1)
                     {

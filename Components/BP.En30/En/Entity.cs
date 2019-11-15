@@ -299,6 +299,7 @@ namespace BP.En
                 /*如果包含这个字段*/
                 AtPara ap = this.atPara;
                 foreach (string key in ap.HisHT.Keys)
+                    if(DataType.IsNullOrEmpty(dr[key].ToString())==true)
                     dr[key] = ap.HisHT[key];
             }
 

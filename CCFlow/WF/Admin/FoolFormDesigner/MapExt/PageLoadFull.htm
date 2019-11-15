@@ -108,8 +108,8 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
             mapExt.Tag = document.getElementById("TB_Tag").value;
-
-            if (CheckIsSQL(mapExt.Tag) == false) {
+            
+            if (mapExt.Tag!=null && mapExt.Tag!="" && CheckIsSQL(mapExt.Tag) == false) {
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
                 return;
             }
@@ -127,7 +127,7 @@
                 var mapDtl = mapDtls[i];
                 var val = $("#TB_" + mapDtl.No).val();
 
-                if (CheckIsSQL(val) == false) {
+                if(val!=null && val!="" && CheckIsSQL(val) == false) {
                     alert('请输入合法的查询SQL' + val);
                     return;
                 }

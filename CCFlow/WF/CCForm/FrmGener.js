@@ -28,17 +28,16 @@ $(function () {
     }
 
     initPageParam(); //初始化参数.
+    //构造表单.
+    GenerFrm(); //表单数据.
 
     //时间轴的表单增加打印单据按钮
+    var wfNode = frmData["WF_Node"];
     var fromWorkOpt = GetQueryString("FromWorkOpt");
-    if (fromWorkOpt == 2) {
+    if (fromWorkOpt == 2 && wfNode[0].PrintDocEnable == 1) {
         var PrintDocHtml = "<input type=button name='PrintDoc' value='打印单据' enable=true onclick='printDoc()' />";
         $("#topToolBar").append(PrintDocHtml);
     }
-   
-
-    //构造表单.
-    GenerFrm(); //表单数据.
 
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
         //计算高度，展示滚动条

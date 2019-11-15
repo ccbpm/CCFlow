@@ -1245,7 +1245,10 @@ namespace BP.Sys
         /// <param name="frmID"></param>
         public static void AfterFrmEditAction(string frmID)
         {
+            //清除缓存.
             BP.DA.CashFrmTemplate.Remove(frmID);
+            BP.DA.Cash.SetMap(frmID, null);
+
             MapData mapdata = new MapData(frmID);
             mapdata.CleanObject();
             return;

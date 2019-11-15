@@ -79,6 +79,7 @@ namespace BP.Sys
         public GEEntity(string fk_mapdata)
         {
             this.FK_MapData = fk_mapdata;
+            this._enMap = null;
         }
         /// <summary>
         /// 通用OID实体
@@ -89,6 +90,7 @@ namespace BP.Sys
         {
             this.FK_MapData = fk_mapdata;
             this.PKVal = pk;
+            this._enMap = null;
             this.Retrieve();
         }
         #endregion

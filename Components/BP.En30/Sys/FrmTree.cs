@@ -146,13 +146,38 @@ namespace BP.Sys
             en.Insert();
             return en;
         }
-        public void DoUp()
+        /// <summary>
+        /// 创建子目录 @lilzhen
+        /// </summary>
+        /// <param name="dirName">要创建的子目录名字</param>
+        /// <returns>返回子目录编号</returns>
+        public string CreateSubNode(string dirName)
+        {
+            FrmTree en = new FrmTree();
+            en.Copy(this);
+            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.ParentNo = this.No;
+            en.Name = dirName;
+            en.Insert();
+            return en.No;
+        }
+        /// <summary>
+        /// 上移 @lizhen
+        /// </summary>
+        /// <returns></returns>
+        public string DoUp()
         {
             this.DoOrderUp(FrmTreeAttr.ParentNo, this.ParentNo, FrmTreeAttr.Idx);
+            return "移动成功";
         }
-        public void DoDown()
+        /// <summary>
+        /// 下移@lizhen
+        /// </summary>
+        /// <returns></returns>
+        public string DoDown()
         {
             this.DoOrderDown(FrmTreeAttr.ParentNo, this.ParentNo, FrmTreeAttr.Idx);
+            return "移动成功";
         }
     }
     /// <summary>

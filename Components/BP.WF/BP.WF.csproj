@@ -167,6 +167,7 @@
     <Compile Include="Frm\EmpCreate.cs" />
     <Compile Include="Frm\StationCreate.cs" />
     <Compile Include="Frm\Track.cs" />
+    <Compile Include="Frm\WF_CCBill_API.cs" />
     <Compile Include="Frm\WF_CCBill.cs" />
     <Compile Include="Frm\MethodLink.cs" />
     <Compile Include="Frm\MethodFunc.cs" />

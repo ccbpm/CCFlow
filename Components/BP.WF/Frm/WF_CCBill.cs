@@ -43,7 +43,6 @@ namespace BP.Frm
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-
         /// <summary>
         /// 草稿列表
         /// </summary>
@@ -343,6 +342,9 @@ namespace BP.Frm
                     continue;
 
                 mapattr = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
+                if (mapattr == null)
+                    continue;
+
                 dr = dt.NewRow();
                 dr["Field"] = mapattr.KeyOfEn;
                 dr["Name"] = mapattr.Name;

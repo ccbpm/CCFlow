@@ -48,6 +48,12 @@
             font-size: 12px;
             font-weight: bolder;
         }
+        h4
+        {
+            text-align:center;
+            font-family:'Microsoft YaHei';
+            font-weight:bolder;
+        }
     </style>
     <base target="_self" />
 
@@ -91,10 +97,10 @@
             //获取流程中设置的权限列表
             var powerModels = new Entities("BP.WF.Template.PowerModels");
             powerModels.Retrieve("Model", "FlowData", "FlowNo", flowNo);
-
+            //李震bs
             var html = "";
-            html += "<table style='width:100%;'>";
-            html += "<caption>权限控制</caption>";
+            html += "<table class='table table-striped table-hover table-condensed' style='width:100%;'>";
+            html += "<h4>权限控制</h4>";
             html += "<tr>";
             html += "<th>序号</th>";
             html += "<th>编号</th>";

@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>测试方案定义</title>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -16,14 +17,14 @@
 
             $("#Msg").html("<img src=../../Img/loading.gif />正在执行请稍候...大概需要1-2分钟时间.");
 
-            var flowNo = ""; // this.GetQueryString("FK_Flow");
+            var flowNo = ""; 
             if (flowNo == null || flowNo == undefined || flowNo == "")
                 flowNo = "001";
 
             var flow = new Entity("BP.WF.Flow", flowNo);
             var dt = flow.DoMethodReturnJSON("DoCheck2018");
 
-            var html = "<table style='width:80%;'>";
+            var html = "<table class='table table-bordered table-striped table-hover table-condensed' style='width:80%;'>";
             html += "<caption>" + flow.Name + ":模拟测试运行</caption>";
             html += "<tr>";
             html += "<th>节点ID</th>";
@@ -48,8 +49,17 @@
 
             $("#Msg").html(html);
         });
-         
+
     </script>
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <div id="Msg">

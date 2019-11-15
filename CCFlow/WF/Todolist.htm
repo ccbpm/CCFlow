@@ -295,7 +295,11 @@
             $('#Table1').html(listbox);
             $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
-            if (webUser.IsAuthorize == "0")
+            //Hide_IsTodoList:是否隐藏该条信息,CommonShowConfig.js中定义
+            if (Hide_IsTodoList == undefined) {
+                Hide_IsTodoList == true;
+            }
+            if (webUser.IsAuthorize == "0" && Hide_IsTodoList == true)
                 $("#Table2").append(", <a href='AuthorList.htm' >查看授权待办</a>");
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
@@ -307,7 +311,7 @@
 
             //alert(wfState);
 
-            switch (parseInt(wfState)) {
+            switch (wfState) {
                 case 1:
                     return window.lang.caogao;
                 case 2:

@@ -224,6 +224,9 @@
             //获取当前行的数据
             var en = $(index).parent().parent().data().data;
             var linkUrl = sys_MapDtl.LinkUrl;
+
+            if (linkUrl.indexOf("?") == -1)
+                linkUrl = linkUrl + "?1=2";
             linkUrl = DealJsonExp(en, linkUrl);
             linkUrl = linkUrl.replace("@WorkID", GetQueryString("RefPKVal"));
             linkUrl = linkUrl.replace("@FK_Node", GetQueryString("FK_Node"));

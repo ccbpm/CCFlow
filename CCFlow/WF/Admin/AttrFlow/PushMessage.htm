@@ -14,7 +14,9 @@
             window.location.href = 'PushMessage.htm?MyPK=' + mypk + '&DoType=Del&FK_Node=' + nodeid;
         }
     </script>
+
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
@@ -43,7 +45,7 @@
         $(function () {
 
             var ens = new Entities("BP.WF.Template.PushMsgs");
-            ens.Retrieve("FK_Flow", GetQueryString("FK_Flow"),"FK_Node",0);
+            ens.Retrieve("FK_Flow", GetQueryString("FK_Flow"), "FK_Node", 0);
 
             for (var i = 0; i < ens.length; i++) {
 
@@ -55,7 +57,7 @@
                 newRow += "<td>" + PushWayText(en.FK_Event, en.MailPushWay) + "</td>";
                 newRow += "<td>" + en.MailTitle + "</td>";
                 newRow += "<td>" + PushWayText(en.FK_Event, en.SMSPushWay) + "</td>";
-                newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "<td><a class='btn btn-default btn-sm' href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
 
                 newRow += "</tr>";
@@ -68,7 +70,7 @@
         function PushWayText(EventListOfNode, PushWay) {
 
             var ret = {
-                "FlowWarning": ["不发送",  "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
+                "FlowWarning": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
                 "FlowOverDue": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
                 "FlowDelete": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"]
             };
@@ -101,14 +103,24 @@
         }
 
     </script>
+    <style type="text/css">
+        caption
+        {
+            text-align:left;
+            font-family:'Microsoft YaHei';
+            font-weight:bolder;
+            border-bottom:none;
+            margin-bottom:10px;
+        }
+    </style>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
     id="form1">
     <div style="margin: 8px">
-        <table id="Table1" style="width: 100%">
+        <table class="table table-bordered table-striped table-hover table-condensed" id="Table1" style="width: 100%">
             <caption>
-                消息事件
+                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />消息事件
             </caption>
             <tr>
                 <th>

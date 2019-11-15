@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>版本管理</title>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"
-          type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Comm/JScript.js"></script>
     <script type="text/javascript"
             src="../../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -33,7 +33,7 @@
             var data = en.DoMethodReturnJSON("VerGenerVerList");
 
             var html = "";
-            html += "<table style='width:100%;'>";
+            html += "<table class='table table-bordered table-striped table-hover table-condensed' style='width:100%;'>";
             html += "<caption>版本管理</caption>";
             html += "<tr>";
             html += "<th>版本号</th>";
@@ -75,11 +75,11 @@
                     html += "<td>主版本</td>";
                 }
 
-                //html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow=" + item.No + "' target=_blank >编辑</a></td>";
-                html += "<td><a href='javaScript:void(0)' onclick='changeOrOpenTab(\""
+               
+                html += "<td><a class='btn btn-default btn-sm' href='javaScript:void(0)' onclick='changeOrOpenTab(\""
                     + item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
 
-                html += "<td><a href='Imp.htm?FK_Flow=" + item.No + "'>导入</a>|<a href='Exp.htm?FK_Flow=" + item.No + "'>导出</a></td>";
+                html += "<td><a class='btn btn-default btn-sm' href='Imp.htm?FK_Flow=" + item.No + "'>导入</a>&nbsp&nbsp<a class='btn btn-default btn-sm' href='Exp.htm?FK_Flow=" + item.No + "'>导出</a></td>";
 
                 html += "</tr>";
             }
@@ -154,6 +154,15 @@
         }
 
     </script>
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 

@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8" />
     <title></title>
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -84,7 +94,7 @@
 </head>
 <body>
     <form id="cc">
-    <table>
+    <table class='table table-bordered table-condensed'>
         <caption>
             与业务表数据同步</caption>
         <tr>
@@ -130,7 +140,7 @@
                             执行同步
                         </label>
                     </legend>
-                    <table style="text-align: center;">
+                    <table class="table table-hover tab-content table-bordered" style="text-align: center;">
                         <tr>
                             <td>
                                 请选择要导出的数据源
@@ -156,14 +166,14 @@
                             </td>
                             <td>
                                 <input type="radio" value="0" id="RB_DTSField0" name="DTSField" />
-                                <label for="RB_DTSField0">
+                                <span for="RB_DTSField0">
                                     字段名相同
-                                </label>
+                                </span>
                                 <input type="radio" value="1" id="RB_DTSField1" name="DTSField" />
-                                <label for="RB_DTSField1">
+                                <span for="RB_DTSField1">
                                     按设置字段
-                                </label>
-                                &nbsp; [<a href="javascript:OpenFields()">设置字段匹配</a>]
+                                </span>
+                                &nbsp; <a class="btn btn-default btn-sm" href="javascript:OpenFields()">设置字段匹配</a>
                             </td>
                         </tr>
                         <script type="text/javascript">

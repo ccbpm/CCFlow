@@ -1,6 +1,8 @@
 ﻿<html>
 <head>
     <title>显示列设置</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString2016.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
@@ -52,15 +54,15 @@
                 html += "<td>" + i + "</td>";
                 html += "<td>" + mapAttr.KeyOfEn + "</td>";
 
-                html += "<td> <input value='" + mapAttr.Name + "' type=text style='width:100%;'  id='TB_" + mapAttr.KeyOfEn + "' /></td>";
-                html += "<td> <input value='" + mapAttr.UIWidth + "' type=text style='width:40px;'  id='TBW_" + mapAttr.KeyOfEn + "' /></td>";
+                html += "<td> <input class='form-control' value='" + mapAttr.Name + "' type=text style='width:80%;'  id='TB_" + mapAttr.KeyOfEn + "' /></td>";
+                html += "<td> <input class='form-control' value='" + mapAttr.UIWidth + "' type=text style='width:66px;'  id='TBW_" + mapAttr.KeyOfEn + "' /></td>";
 
                 if (mapAttrEn.GetPara("SearchVisable") == "1")
-                    html += "<td><a  href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
+                    html += "<td><a class='btn btn-default btn-sm' href=\"javascript:HiddenIt('" + mapAttr.MyPK + "')\">隐藏</a></td>";
                 else
-                    html += "<td style='text-align:right' ><a href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
+                    html += "<td><a class='btn btn-default btn-sm' style='margin-left:25%' href=\"javascript:ShowIt('" + mapAttr.MyPK + "')\">显示</a></td>";
 
-                html += "<td><a href=\"javascript:Up('" + mapAttr.MyPK + "')\">上移</a> - <a href=\"javascript:Down('" + mapAttr.MyPK + "')\">下移</a></td>";
+                html += "<td><a class='btn btn-default btn-sm' href=\"javascript:Up('" + mapAttr.MyPK + "')\">上移</a> &nbsp&nbsp <a class='btn btn-default btn-sm' href=\"javascript:Down('" + mapAttr.MyPK + "')\">下移</a></td>";
                 html += "</tr>";
 
                 $("#Table1 tr:last").after(html);
@@ -140,14 +142,23 @@
             //重置排序顺序
             window.location.href = window.location.href;
         }
-        
+
         function FoolDesinger() {
             var url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + GetQueryString("EnsName") + "&FK_Flow=&FK_Node=0&IsFirst=1";
             window.open(url);
         }
 
-        
+
     </script>
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 
@@ -156,7 +167,7 @@
     <input type="button" value="启动傻瓜表单设计器" onclick="FoolDesinger()" />
     <input type="button" value="返回基本设置" onclick="Back()" />
 
-    <table id="Table1" style="width: 96%;">
+    <table class="table table-bordered table-striped table-hover table-condensed" id="Table1" style="width: 96%;">
         <caption>
             设置显示的列</caption>
         <tr>

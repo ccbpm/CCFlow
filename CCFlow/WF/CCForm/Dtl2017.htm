@@ -228,6 +228,21 @@
             linkUrl = linkUrl.replace("@WorkID", GetQueryString("RefPKVal"));
             linkUrl = linkUrl.replace("@FK_Node", GetQueryString("FK_Node"));
             linkUrl = linkUrl.replace("@FK_Flow", GetQueryString("FK_Flow"));
+            if (linkUrl.indexOf('&OID=') == -1)
+                linkUrl += '&OID' + en.OID;
+            if (linkUrl.indexOf('&WorkID=') == -1)
+                linkUrl += '&WorkID' + GetQueryString("WorkID");
+            if (linkUrl.indexOf('&FK_Node=') == -1)
+                linkUrl += '&FK_Node' + GetQueryString("FK_Node");
+            if (linkUrl.indexOf('&FK_Flow=') == -1)
+                linkUrl += '&FK_Flow' + GetQueryString("FK_Flow");
+            if (linkUrl.indexOf('&EnsName=') == -1)
+                linkUrl += '&EnsName' + GetQueryString("EnsName");
+            if (linkUrl.indexOf('&RefPKVal=') == -1)
+                linkUrl += '&RefPKVal' + GetQueryString("RefPKVal");
+            if (linkUrl.indexOf('&FK_MapData=') == -1)
+                linkUrl += '&FK_MapData' + GetQueryString("FK_MapData");
+
             if (sys_MapDtl.LinkTarget == "_self")
                 window.location.href = linkUrl;
             else if (sys_MapDtl.LinkTarget == "_blank")

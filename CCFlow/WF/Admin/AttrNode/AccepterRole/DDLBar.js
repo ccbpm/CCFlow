@@ -99,7 +99,7 @@ function InitBar(key) {
     html += "</select >";
     html += "<input  id='Btn_Save' type=button onclick='SaveIt()' value='保存' />";
     html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
-  //  html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    //  html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
@@ -246,6 +246,7 @@ function SaveIt() {
         AfterSave();
     } catch (e) {
         alert(e);
+        return;
     }
 
     $("#Btn_Save").val("保存成功");

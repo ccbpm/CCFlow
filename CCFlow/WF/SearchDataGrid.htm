@@ -58,7 +58,7 @@
 		<table style="table-layout:fixed" class="table table-striped">
 			<thead id="Table2">
 			<tr >
-				<th width='40px'>序号</th>
+				<th width='50px'>序号</th>
 				<th width='380px'>标题</th>
 				<th width='80px'>发起人</th>
 				<th width='120px'>发起日期</th>
@@ -136,7 +136,7 @@
             if (_flowNo == "" && _tspan == "")
                 _tspan = "-1";
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("TSpan", _tspan);
             handler.AddPara("FK_Flow", _flowNo);
             handler.AddPara("KeyWord", keyWord);

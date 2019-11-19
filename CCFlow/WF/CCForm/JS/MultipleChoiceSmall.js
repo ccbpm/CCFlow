@@ -155,9 +155,9 @@ function MakeCheckBoxsModel(mapExt, data, mapAttr,tbID) {
         textbox.before(cb);
 
         if (mapExt.Tag == "1")
-            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "</label>");
+            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "&nbsp;&nbsp;</label>");
         else
-            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "</label><br>");
+            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "&nbsp;&nbsp;</label><br>");
 
         textbox.before(lab);
     }

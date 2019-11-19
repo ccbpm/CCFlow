@@ -1181,8 +1181,7 @@ namespace BP.WF.HttpHandler
                 //发送消息.
                 BP.WF.Dev2Interface.Port_SendMsg(emp.No,
                     "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
-
-                string empStrSepc = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                string empStrSepc = emp.No + "," + emp.Name + ";";
                 if (gwf.TodoEmps.Contains(empStrSepc) == false)
                     gwf.TodoEmps += empStrSepc;
             }

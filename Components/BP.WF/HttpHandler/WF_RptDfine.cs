@@ -100,7 +100,7 @@ namespace BP.WF.HttpHandler
         public string Flowlist_Init()
         {
             DataSet ds = new DataSet();
-            string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY ParentNo, Idx";
+            string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY No, Idx";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sort";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)

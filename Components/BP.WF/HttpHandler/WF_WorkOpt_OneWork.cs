@@ -372,7 +372,10 @@ namespace BP.WF.HttpHandler
                             ht.Remove("CanUnSend");
                         ht.Add("CanUnSend", 1);
                     }
+                    if (SystemConfig.CustomerNo == "TianYe") {
+                        ht.Add("CanUnSend", 1);
 
+                    }
                     //流程结束
                     if (powers.Contains("FlowDataOver") == true)
                     {

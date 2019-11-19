@@ -5531,6 +5531,7 @@ namespace BP.WF
 
                     //cut 当前的人员.
                     string emps = this.HisGenerWorkFlow.TodoEmps;
+                    emps = emps.Replace(WebUser.No + ","+WebUser.Name + ";", "");
                     emps = emps.Replace(WebUser.Name + ";", "");
                     emps = emps.Replace(WebUser.Name, "");
 

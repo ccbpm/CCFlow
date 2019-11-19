@@ -459,10 +459,10 @@ namespace BP.WF
             {
                 string str = value;
                 str = str.Replace(" ", "");
-
-                string val = this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
-                if (val.Contains(str) == true)
-                    return;
+                //TodoEmps在会签完去掉人员此判断去不掉，暂时注释掉
+                //string val = this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
+                //if (val.Contains(str) == true)
+                //    return;
 
                 SetValByKey(GenerWorkFlowAttr.TodoEmps, str);
             }

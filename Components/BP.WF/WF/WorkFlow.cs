@@ -1316,7 +1316,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //把当前的人员字符串加入到参与人里面去,以方便查询.
-            string emps = WebUser.No + "@";
+            string emps = "@"+WebUser.No+"," +WebUser.Name;
 
             // 设置流程完成状态.
             ps = new Paras();

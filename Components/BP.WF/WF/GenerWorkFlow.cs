@@ -479,7 +479,7 @@ namespace BP.WF
             }
             set
             {
-                SetValByKey(GenerWorkFlowAttr.Emps, value);
+                this.SetValByKey(GenerWorkFlowAttr.Emps, value);
             }
         }
         /// <summary>

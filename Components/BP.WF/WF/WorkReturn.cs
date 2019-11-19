@@ -600,12 +600,9 @@ namespace BP.WF
             gwf.FK_Node = this.ReturnToNode.NodeID;
             //增加参与的人员
             string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No) == false)
+            if (emps.Contains("@" + WebUser.No + ",") == false)
             {
-                if (DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@" + WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps = "@" + WebUser.No + "," + WebUser.Name;
             }
             gwf.Emps = emps;
             gwf.Update();
@@ -765,12 +762,9 @@ namespace BP.WF
             gwf.Sender = WebUser.No;
             //增加参与的人员
             string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No) == false)
+            if (emps.Contains("@" + WebUser.No + ",") == false)
             {
-                if(DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@"+WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps += "@" + WebUser.No + "," + WebUser.Name;
             }
             gwf.Emps = emps;
             gwf.Update();
@@ -859,10 +853,7 @@ namespace BP.WF
             string emps = gwf.Emps;
             if (emps.Contains("@" + WebUser.No) == false)
             {
-                if (DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@" + WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps += "@" + WebUser.No + "," + WebUser.Name;
             }
             gwf.Emps = emps;
 
@@ -1014,10 +1005,7 @@ namespace BP.WF
             string emps = gwf.Emps;
             if (emps.Contains("@" + WebUser.No) == false)
             {
-                if (DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@" + WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps += "@" + WebUser.No + "," + WebUser.Name;
             }
 
             gwf.TodoEmps = toDoEmps;

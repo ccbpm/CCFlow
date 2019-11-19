@@ -5605,7 +5605,7 @@ namespace BP.WF
 
                     //执行更新.
                     if (this.HisGenerWorkFlow.Emps.Contains("@" + WebUser.No + "@") == false)
-                        this.HisGenerWorkFlow.Emps = this.HisGenerWorkFlow.Emps + WebUser.No + "@";
+                        this.HisGenerWorkFlow.Emps = this.HisGenerWorkFlow.Emps + "@" + WebUser.No + "," + WebUser.Name;
 
                     this.rptGe.FlowEmps = this.HisGenerWorkFlow.Emps;
                     this.rptGe.WFState = WFState.Runing;
@@ -8935,9 +8935,9 @@ namespace BP.WF
                 flowEmps = flowEmps + dr[1] + "," + dr[0].ToString() + "@";
             }
             //追加当前操作人
-            if (emps.Contains("@" + WebUser.No + "@") == false)
+            if (emps.Contains("@" + WebUser.No + ",") == false)
             {
-                emps = emps + WebUser.No + "@";
+                emps = emps +"@"+ WebUser.No +","+ WebUser.Name;
                 flowEmps = flowEmps + WebUser.No + "," + WebUser.Name + "@";
             }
             // 给他们赋值.

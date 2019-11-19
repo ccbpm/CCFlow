@@ -1077,11 +1077,15 @@ namespace BP.WF.Template
                         }
                     }
                     string[] emps = empsStrs.Split('@');
-
-                    foreach (string empNo in emps)
+                    string empNo = ""; 
+                    foreach (string str in emps)
                     {
-                        if (DataType.IsNullOrEmpty(empNo))
+                        if (DataType.IsNullOrEmpty(str))
                             continue;
+
+                        empNo = str;
+                        if (str.IndexOf(",") != -1)
+                            empNo = str.Split(',')[0];
 
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                         string smsDoccReal = smsDoc.Clone() as string;

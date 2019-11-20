@@ -65,7 +65,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
             $("#divinfo").empty();
             //获得对象.
            
-            var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
+            var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType);
             if ($.isEmptyObject(dataObj)) {
                 $("#divinfo").hide();
                 return;
@@ -334,8 +334,6 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
                 }
             } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
                 frames["iframePopModalForm"].window.GetGroupReturnVal();
-                //alert(returnValObj.Value + "|" + ctrl.id);
-                //$(ctrl).val(returnValObj.Value);
                 setValForPopval(ctrl.id, dtlWin, returnValObj.Value);
             } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
                 returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
@@ -346,21 +344,17 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
                     //$(ctrl).val(returnValObj.Name);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 } else {
-                    // ??????????
                     for (var property in returnValObj) {
-                        //$('[id$=_' + property + ']').val(returnValObj[property]);
                         SetEleValByName(property, returnValObj[property]);
                     }
 
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 }
             } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL
-                //frames["iframePopModalForm"].window.GetTreeReturnVal();
                 if (frames["iframePopModalForm"].window.GetReturnVal != undefined &&
                     typeof (frames["iframePopModalForm"].window.GetReturnVal) == "function") {
                     frames["iframePopModalForm"].window.GetReturnVal()
                 }
-                //$(ctrl).val(returnValObj.Value);
                 setValForPopval(ctrl.id, dtlWin, returnValObj.Value);
             }
         } else {

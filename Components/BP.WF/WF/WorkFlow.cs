@@ -1427,7 +1427,6 @@ namespace BP.WF
                 emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
                 //写入消息。
                 BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, this.HisGenerWorkFlow.Title, fixMsg, "Fix" + wl.WorkID, "Fix", wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
-
             }
 
             /* 执行 WF_GenerWorkFlow 冻结. */
@@ -1458,7 +1457,7 @@ namespace BP.WF
             //WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
             //wn.AddToTrack(ActionType.Info, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, fixMsg,);
 
-            return "已经成功执行冻结";
+            return this.WorkID+"-"+this.HisFlow.Name+"已经成功执行冻结";
         }
         /// <summary>
         /// 执行解除冻结

@@ -36,6 +36,8 @@
     <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
 
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/My97DatePicker.htm" rel="stylesheet" type="text/css" />
+
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -81,11 +83,11 @@
 
             BindMapExt();
 
-             
-            var bodyHeight = $(document).height();
-            var headHeight = $("#dtlDiv div table thead").height();
-            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
-            $("#dtlDiv").height(bodyHeight - 35);
+
+            //var bodyHeight = $(document).height();
+            //var headHeight = $("#dtlDiv div table thead").height();
+            //$("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
+            //$("#dtlDiv").height(bodyHeight - 35);
 
         });
         //绑定mapExt
@@ -316,7 +318,6 @@
                     statisticsFlag = false; // 清空无记录行(统计行) 则需要重新生成统计行
                 }
             }
-            debugger;
             var insertTr = $('<tr></tr>');
             var threadTh = $('#dtlDiv div table thead tr th');
             var newRowIndex = $('#dtlDiv div table tbody tr').length;
@@ -432,9 +433,14 @@
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
             doAlignColumns();
+            setIframeHeight();
 
             AfterBindEn_DealMapExt(insertTr, newRowIndex);
             //setTimeout(doAlignColumns,100);
+        }
+
+        function setIframeHeight() {
+            $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
         }
 
         //行最后的保存按钮
@@ -604,9 +610,9 @@
                 var delTh = "";
                 var impModel = sys_MapDtl.ImpModel;
                 if (impModel != 0)
-                    delTh = $('<th style="width:60px;"><img title="选项" style="width: 60px;height: 60px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /></th>');
+                    delTh = $('<th style="width:60px;"><img title="选项" style="width: 50px;height: 30px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /><img title="保存" style="width: 45px;height: 30px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" /></th>');
                 else
-                    delTh = $('<th style="width:60px;"></th>');
+                    delTh = $('<th style="width:60px;"><img title="保存" style="width: 45px;height: 30px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" /></th>');
 
                 //var delTh = $("<th style="width:20px;" onclick= ></th>");
 
@@ -850,7 +856,7 @@
 
                 //setTimeout(doAlignColumns, 500);
             }
-           
+
             //textarea的高度自适应的设置
             var textareas = $("textarea");
             $.each(textareas, function (idex, item) {
@@ -1234,7 +1240,7 @@
                         keyOfEn = name.substring(3);
                         value = textarea.val();
                     }
-                }else if (select.length == 1) {
+                } else if (select.length == 1) {
                     var name = select.attr('name');
                     if (name.indexOf('DDL_') == 0) {
                         keyOfEn = name.substring(4);
@@ -1346,25 +1352,25 @@
                             } else {
                                 eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                             }
-                            
+
                         } //AppDate
                         else if (mapAttr.MyDataType == 6) {//AppDate
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="' + 'WdatePicker();SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
+                                enableAttr = 'onfocus="' + 'WdatePicker();SetChange(false);"' + ' onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text'  class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text'  class='Wdate'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                         }
                         else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="' + 'WdatePicker({dateFmt:' + '\'yyyy-MM-dd HH:mm\'});SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
+                                enableAttr = 'onfocus="' + 'WdatePicker({dateFmt:' + '\'yyyy-MM-dd HH:mm\'});SetChange(false);"' + ' onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                            eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='Wdate'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
                         }
                         else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
                             if (mapAttr.UIIsEnable == 1) {
@@ -1462,7 +1468,7 @@
                     eleHtml.attr('disabled', true);
                 }
             }
-           
+
             return eleHtml;
         }
 
@@ -1629,13 +1635,13 @@
                 BindMapExt();
             }
         }
-        $(function () {
-            var bodyHeight = $(document).height();
-            var headHeight = $("#dtlDiv div table thead").height();
-            $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
-            $("#dtlDiv").height(bodyHeight - 35);
+        //$(function () {
+        //    var bodyHeight = $(document).height();
+        //    var headHeight = $("#dtlDiv div table thead").height();
+        //    $("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
+        //    $("#dtlDiv").height(bodyHeight - 35);
 
-        });
+        //});
 
 
 
@@ -1666,7 +1672,7 @@
         }
     </style>
 </head>
-<body onblur="SaveAll(this)">
+<body>
     <form>
         <input type="hidden" id="formExt" />
         <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
@@ -1813,7 +1819,12 @@
         function AfterBindEn_DealMapExt(tr, rowIndex) {
             var workNode = workNodeData;
             var mapExtArr = workNode.Sys_MapExt; // 扩展信息
-            var OID = $(tr).data().data.OID;
+             //表示从表还没有数据
+            var OID = 0;
+            if ($(tr).data().data == undefined)
+                OID = rowIndex;
+            else
+                OID = $(tr).data().data.OID;
             for (var i = 0; i < mapExtArr.length; i++) {
                 var mapExt = mapExtArr[i];
                 //一起转成entity.
@@ -1838,6 +1849,7 @@
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                     var tbID = tbAuto.attr('id');
+                   
                     PopDtlMapExt(mapAttr, mapExt, tbID, rowIndex, OID);
                     continue;
                 }
@@ -1959,53 +1971,57 @@
                                 ctrl = $(tr).find('[name=CB_' + mapExt.AttrOfOper + ']');
                         }
 
+                        if (ctrl.length == 0)
+                            continue;
+                        //获取ctr是否包含Wdate的class,有则是时间控件
+                        if (ctrl.hasClass("Wdate")) {
+                            var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
 
-                        //                        //获取mapAttr;
-                        //                        var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-                        //                        if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+                            var minDate =ctrl.attr("data-info");
+                            ctrl.attr("data-funcionPK", mapExt.MyPK); // 记录绑定事件的MyPK
+                            ctrl.removeAttr("onfocus");
+                            ctrl.unbind("focus");
+                            var frmDate = mapAttr.IsSupperText; //获取日期格式
+                            var dateFmt = '';
+                            if (frmDate == 0) {
+                                dateFmt = "yyyy-MM-dd";
+                            } else if (frmDate == 1) {
+                                dateFmt = "yyyy-MM-dd HH:mm";
+                            } else if (frmDate == 2) {
+                                dateFmt = "yyyy-MM-dd HH:mm:ss";
+                            } else if (frmDate == 3) {
+                                dateFmt = "yyyy-MM";
+                            } else if (frmDate == 4) {
+                                dateFmt = "HH:mm";
+                            } else if (frmDate == 5) {
+                                dateFmt = "HH:mm:ss";
+                            } else if (frmDate == 6) {
+                                dateFmt = "MM-dd";
+                            }
 
-                        //                            var method = ctrl.attr("onfocus");
-                        //                            var minDate = "";
-                        //                            if (method.indexOf("minDate") != -1)
-                        //                                minDate = '%y-%M-#{%d}';
+                            var mapextDoc = mapExt.Doc;
+                            ctrl.data().MapExt = mapExt;
+                            ctrl.bind("focus", function () {
+                                if (minDate == "" || minDate == undefined)
+                                    WdatePicker({
+                                        dateFmt: dateFmt, onpicked: function (dp) {
+                                            $(this).blur(); //失去焦点 
+                                            DBAccess.RunFunctionReturnStr(mapextDoc);
+                                        }
+                                    });
+                                else
+                                    WdatePicker({
+                                        dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                            $(this).blur(); //失去焦点 
+                                            DBAccess.RunFunctionReturnStr(mapextDoc);
+                                        }
+                                    });
 
-                        //                            ctrl.removeAttr("onfocus");
-                        //                            var dateFmt = 'yyyy-MM-dd';
-                        //                            if (mapAttr.MyDataType == 7)
-                        //                                dateFmt = 'yyyy-MM-dd HH:mm';
+                            });
+                            break;
 
+                        }
 
-                        //                            var mapextDoc = mapExt.Doc;
-                        //                            ctrl.data().MapExt = mapExt;
-
-                        //                            ctrl.bind("focus", function (obj) {
-                        //                                var mapExtThis = $(obj.target).data().MapExt;
-                        //                                if (minDate == "")
-                        //                                    WdatePicker({ dateFmt: dateFmt, onpicked: function (dp) {
-                        //                                        $(this).blur(); //失去焦点
-                        //                                        if (mapExtThis.Doc.indexOf("(") != -1)
-                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
-                        //                                        else
-                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
-                        //                                    }
-                        //                                    });
-                        //                                else
-                        //                                    WdatePicker({ dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-                        //                                        $(this).blur(); //失去焦点
-                        //                                        if (mapExtThis.Doc.indexOf("(") != -1)
-                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc);
-                        //                                        else
-                        //                                            DBAccess.RunFunctionReturnStr(mapExtThis.Doc + '(this)');
-
-                        //
-                        //                                    }
-                        //                                  });
-
-                        //                            });
-
-
-                        //                            break;
-                        //                        }
                         ctrl.data().MapExt = mapExt;
                         ctrl.bind(mapExt.Tag, function (obj) {
                             var mapExtThis = $(obj.target).data().MapExt;
@@ -2014,6 +2030,74 @@
                             else
                                 eval(mapExtThis.Doc + '(this)');
                         });
+                        break;
+                    case "DataFieldInputRole": //时间限制
+                       
+                        //判断是否已经增加了函数
+                        var ctrl = $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']');
+                        if (ctrl.length == 0)
+                            break;
+
+                        if (mapExt.DoWay == 1) {
+                            var tag1 = mapExt.Tag1;
+                            if (tag1 == 1) {
+                                var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                                ctrl.removeAttr("onfocus");
+                                var frmDate = mapAttr.IsSupperText; //获取日期格式
+                                var dateFmt = '';
+                                if (frmDate == 0) {
+                                    dateFmt = "yyyy-MM-dd";
+                                } else if (frmDate == 1) {
+                                    dateFmt = "yyyy-MM-dd HH:mm";
+                                } else if (frmDate == 2) {
+                                    dateFmt = "yyyy-MM-dd HH:mm:ss";
+                                } else if (frmDate == 3) {
+                                    dateFmt = "yyyy-MM";
+                                } else if (frmDate == 4) {
+                                    dateFmt = "HH:mm";
+                                } else if (frmDate == 5) {
+                                    dateFmt = "HH:mm:ss";
+                                } else if (frmDate == 6) {
+                                    dateFmt = "MM-dd";
+                                }
+
+                                var minDate = '%y-%M-#{%d}';
+                                ctrl.attr("data-info", minDate); //绑定时间大小限制的记录
+                                var functionPK =ctrl.attr("data-funcionPK");
+                                if (functionPK == null || functionPK == undefined || functionPK == "") {
+                                    ctrl.bind("focus", function () {
+                                        WdatePicker({ dateFmt: dateFmt, minDate: minDate });
+                                    });
+                                } else {
+                                    ctrl.unbind("focus");
+                                    var bindFunctionExt = null;
+                                    for (var idx = 0; idx < mapExtArr.length; idx++) {
+                                        if (mapExtArr[idx].MyPK == functionPK) {
+                                            bindFunctionExt = mapExtArr[idx];
+                                            break;
+                                        }
+                                    }
+                                    if (bindFunctionExt == null)
+                                         ctrl.bind("focus", function () {
+                                            WdatePicker({ dateFmt: dateFmt, minDate: minDate });
+                                         });
+                                    else
+                                        ctrl.bind("focus", function () {
+
+                                            WdatePicker({
+                                                dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
+                                                    $(this).blur(); //失去焦点 
+                                                    DBAccess.RunFunctionReturnStr(bindFunctionExt.Doc);
+                                                }
+                                            });
+                                        });
+
+                                }
+
+
+                            }
+
+                        }
                         break;
 
                     case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/

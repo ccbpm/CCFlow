@@ -599,12 +599,8 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
             //增加参与的人员
-            string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No + ",") == false)
-            {
-                emps = "@" + WebUser.No + "," + WebUser.Name;
-            }
-            gwf.Emps = emps;
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += "@" + WebUser.No + "," + WebUser.Name;
             gwf.Update();
 
             //更新退回到的人员信息可见.
@@ -761,12 +757,9 @@ namespace BP.WF
             gwf.StarterName = toEmpName;
             gwf.Sender = WebUser.No;
             //增加参与的人员
-            string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No + ",") == false)
-            {
-                emps += "@" + WebUser.No + "," + WebUser.Name;
-            }
-            gwf.Emps = emps;
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += "@" + WebUser.No + "," + WebUser.Name;
+
             gwf.Update();
 
             //找到当前的工作数据.
@@ -850,12 +843,8 @@ namespace BP.WF
             gwf.WFState = WFState.ReturnSta;
             gwf.Sender = WebUser.No;
             //增加参与的人员
-            string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No) == false)
-            {
-                emps += "@" + WebUser.No + "," + WebUser.Name;
-            }
-            gwf.Emps = emps;
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += "@" + WebUser.No + "," + WebUser.Name;
 
             gwf.Update();
 
@@ -1001,16 +990,14 @@ namespace BP.WF
                 returnEmps += item.FK_Emp + ",";
             }
 
-            //增加参与的人员
-            string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No) == false)
-            {
-                emps += "@" + WebUser.No + "," + WebUser.Name;
-            }
+           
 
             gwf.TodoEmps = toDoEmps;
             gwf.TodoEmpsNum = gwls.Count;
-            gwf.Emps = emps;
+
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += "@" + WebUser.No + "," + WebUser.Name;
+
             gwf.Update();
 
             

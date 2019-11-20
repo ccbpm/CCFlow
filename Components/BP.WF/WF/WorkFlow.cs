@@ -1338,7 +1338,10 @@ namespace BP.WF
 
             //执行流程结束.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            gwf.Emps += emps;
+            //增加参与的人员
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += "@" + WebUser.No + "," + WebUser.Name;
+
             gwf.WFState = WFState.Complete;
             gwf.SetPara("StopFlowType", stopFlowType); //结束流程类型.
             gwf.Update();

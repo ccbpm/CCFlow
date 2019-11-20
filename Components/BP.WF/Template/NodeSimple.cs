@@ -120,7 +120,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点集合
     /// </summary>
-    public class NodeSimples : EntitiesOIDName
+    public class NodeSimples : Entities
     {
         #region 方法
         /// <summary>

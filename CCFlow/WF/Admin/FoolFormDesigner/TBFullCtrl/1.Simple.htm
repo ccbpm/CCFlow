@@ -23,13 +23,13 @@
             GenerFullAllCtrlsVal(mapExt);
 
             //去掉 ' 号。
-            var tag = mapExt.Doc;
+            var tag = mapExt.Tag4;
             while (tag.indexOf('~') > 1) {
                 tag = tag.replace("~", "'");
             }
 
             //按照文本计算.
-            $("#TB_Doc").val(tag);
+            $("#TB_Tag4").val(tag);
 
             //设置按钮是否可以用?
             if (i == 0) {
@@ -59,8 +59,8 @@
             mapExt.ExtType = "FullData";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
-            var sql = $("#TB_Doc").val();
-            mapExt.Doc = sql; //设置主表的SQL.
+            var sql = $("#TB_Tag4").val();
+            mapExt.Tag4 = sql; //设置主表的SQL.
             if (mapExt.Update() == 0)
                 mapExt.Insert();
             window.location.href = window.location.href;
@@ -120,7 +120,7 @@
             </tr>
             <tr>
                 <td colspan="2" style="width: 100%;">
-                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
+                    <textarea rows="4" name="TB_Tag4" id="TB_Tag4" style="width: 98%;"> </textarea>
                 </td>
             </tr>
         </table>

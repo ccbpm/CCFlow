@@ -4933,7 +4933,7 @@ namespace BP.WF
                 try
                 {
                     // 执行冻结.
-                    WorkFlow wf = new WorkFlow(flowNo, item.WorkID);
+                    WorkFlow wf = new WorkFlow(item.FK_Flow, item.WorkID);
                     info += wf.DoFix(msg);
                 }
                 catch (Exception ex)

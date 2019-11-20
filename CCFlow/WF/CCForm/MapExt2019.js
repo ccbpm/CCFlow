@@ -149,7 +149,12 @@ function showDataGrid(sender, tbid, dataObj,mapExt) {
             cardView: false,
             detailView: false,
             uniqueId: "No",
-            columns: searchTableColumns
+            columns: searchTableColumns,
+            rowStyle: function () {
+                var style = {};
+                style = 'active';
+                return { classes: style };
+            }
         };
         options.onClickRow = function (row, element) {
             $("#divinfo").empty();

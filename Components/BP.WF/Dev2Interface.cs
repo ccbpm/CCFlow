@@ -4935,6 +4935,21 @@ namespace BP.WF
                     // 执行冻结.
                     WorkFlow wf = new WorkFlow(item.FK_Flow, item.WorkID);
                     info += wf.DoFix(msg);
+                    GenerWorkFlows subgwfs = new GenerWorkFlows();
+                    subgwfs.Retrieve(GenerWorkFlowAttr.PWorkID, item.WorkID);
+                    foreach (GenerWorkFlow subitem in subgwfs) 
+                    {
+                        try
+                        {
+                            // 执行冻结.
+                            WorkFlow subwf = new WorkFlow(subitem.FK_Flow, subitem.WorkID);
+                            info += subwf.DoFix(msg);
+                        }
+                        catch (Exception ex)
+                        {
+                            info += "err@" + ex.Message;
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

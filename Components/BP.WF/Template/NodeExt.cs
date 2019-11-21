@@ -329,6 +329,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
 
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
+                map.SetHelperAlert(NodeAttr.Name, "修改节点名称时如果节点表单名称为空着节点表单名称和节点名称相同，否则节点名称和节点表单名称可以不相同");
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 
                 map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt,
@@ -610,7 +611,7 @@ namespace BP.WF.Template
                 //map.SetHelperUrl(BtnAttr.WebOfficeLab, "http://ccbpm.mydoc.io/?v=5404&t=17993");
 
                 // add by 周朋 2015-08-06. 重要性.
-                map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", false, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.

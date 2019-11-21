@@ -109,9 +109,12 @@
                         <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
                         <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
                         <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                        <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM
-                            WF_Emp WHERE No LIKE '@Key%' </li>
-                       
+                        <li>
+                            4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM
+                            WF_Emp WHERE No LIKE '@Key%'
+                        </li>
+                        <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
+
                     </ul>
                 </div>
             </td>

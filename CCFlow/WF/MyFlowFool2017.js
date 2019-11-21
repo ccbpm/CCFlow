@@ -784,7 +784,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             if (defValue == '' || defValue == null)
                 defValue = '无';
 
-            ctrl += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "Text'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/>";
+            ctrl += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "T'  value='" + defValue + "' disabled='disabled'   class='form-control' type='text'/>";
             return ctrl;
         }
 
@@ -1162,12 +1162,15 @@ function cleanAll(KeyOfEn) {
         return;
 
     //获取他的值
-    var FKMapAttrs = mapAttrs[KeyOfEn][0];
-    for (var i = 0; i < FKMapAttrs.length; i++) {
-        SetCtrlShow(FKMapAttrs[i]);
-        SetCtrlEnable(FKMapAttrs[i]);
-        CleanCtrlVal(FKMapAttrs[i]);
+    if (mapAttrs[KeyOfEn].length > 0) {
+        var FKMapAttrs = mapAttrs[KeyOfEn][0];
+        for (var i = 0; i < FKMapAttrs.length; i++) {
+            SetCtrlShow(FKMapAttrs[i]);
+            SetCtrlEnable(FKMapAttrs[i]);
+            CleanCtrlVal(FKMapAttrs[i]);
+        }
     }
+
 
 
 
@@ -1238,11 +1241,10 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
 
         }
     }
-
+    if (!$.isArray(mapAttrs[KeyOfEn])) {
+        mapAttrs[KeyOfEn] = [];
+    }
     if (NDMapAttrs.length > 0) {
-        if (!$.isArray(mapAttrs[KeyOfEn])) {
-            mapAttrs[KeyOfEn] = [];
-        }
         mapAttrs[KeyOfEn].push(NDMapAttrs);
     }
 

@@ -1561,7 +1561,7 @@ namespace BP.WF.Template
             //更新分组标签.  @fanleiwei. 代码有变化.
             BP.Sys.GroupField gf = new GroupField();
             int i = gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
-            if (i == 0)
+            if (i == 0 && this.FK_Node ==0)
             {
                 gf.CtrlID = this.No;
                 gf.CtrlType = "Dtl";
@@ -1589,6 +1589,19 @@ namespace BP.WF.Template
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
             dtl.Delete();
+
+            //删除分组
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.No + "%");
+            gfs.Delete();
+
+            //如果启用了附件也需要删除
+            if (this.IsEnableAthM == true)
+            {
+                FrmAttachment ath = new FrmAttachment();
+                ath.Delete(FrmAttachmentAttr.MyPK, this.No + "_AthMDtl");
+            }
+               
 
             base.afterDelete();
         }

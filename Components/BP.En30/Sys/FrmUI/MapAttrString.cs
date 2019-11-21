@@ -323,6 +323,13 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
+            //如果是附件字段删除附件属性
+            MapAttr attr = new MapAttr(this.MyPK);
+            if(attr.UIContralType == UIContralType.AthShow)
+            {
+                FrmAttachment ath = new FrmAttachment();
+                ath.Delete(FrmAttachmentAttr.MyPK, this.MyPK);
+            }
             //删除可能存在的关联属性.
             string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);

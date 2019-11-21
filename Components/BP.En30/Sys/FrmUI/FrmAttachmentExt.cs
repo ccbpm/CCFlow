@@ -1028,7 +1028,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
+            if (this.FK_Node == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;
@@ -1057,8 +1057,10 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
-            GroupField gf = new GroupField();
-            gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
+            GroupFields gfs= new GroupFields();
+            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.MyPK+"%");
+            gfs.Delete();
+            //gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();

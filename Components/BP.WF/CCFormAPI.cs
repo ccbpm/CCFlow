@@ -858,7 +858,7 @@ namespace BP.WF
                 if (strs.Length == 2)
                 {
                     qo.addAnd();
-                    qo.AddWhere(strs[0], strs[1]);
+                    qo.AddWhere(strs[0], Glo.DealExp(strs[1], en));
                 }
             }
 

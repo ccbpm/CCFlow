@@ -5605,8 +5605,8 @@ namespace BP.WF
                     this.addMsg(SendReturnMsgFlag.OverCurr, BP.WF.Glo.multilingual("@当前工作已经发送给({0},{1}).", "WorkNode", "send_to_the_operator", gwl.FK_Emp, gwl.FK_EmpText), null, SendReturnMsgType.Info);
 
                     //执行更新.
-                    if (this.HisGenerWorkFlow.Emps.Contains("@" + WebUser.No + ",") == false)
-                        this.HisGenerWorkFlow.Emps += "@" + WebUser.No + "," + WebUser.Name;
+                    if (this.HisGenerWorkFlow.Emps.Contains("@" + WebUser.No+","+ WebUser.Name + "@") == false || this.HisGenerWorkFlow.Emps.Contains("@" + WebUser.No+ "@") == false)
+                        this.HisGenerWorkFlow.Emps = this.HisGenerWorkFlow.Emps  + WebUser.No + "," + WebUser.Name + "@";
 
                     this.rptGe.FlowEmps = this.HisGenerWorkFlow.Emps;
                     this.rptGe.WFState = WFState.Runing;
@@ -8929,16 +8929,16 @@ namespace BP.WF
             string flowEmps = "@";
             foreach (DataRow dr in dt.Rows)
             {
-                if (emps.Contains("@" + dr[0].ToString() + "@"))
+                if (emps.Contains("@" + dr[0].ToString() + "@") || emps.Contains("@" + dr[0].ToString()+","+ dr[1].ToString() + "@"))
                     continue;
 
-                emps = emps + dr[0].ToString() + "@";
-                flowEmps = flowEmps + dr[1] + "," + dr[0].ToString() + "@";
+                emps = emps + dr[0].ToString()+","+ dr[1].ToString() + "@";
+                flowEmps = flowEmps + dr[0].ToString() + "," + dr[1].ToString() + "@";
             }
             //追加当前操作人
             if (emps.Contains("@" + WebUser.No + ",") == false)
             {
-                emps = emps +"@"+ WebUser.No +","+ WebUser.Name;
+                emps = emps + WebUser.No +","+ WebUser.Name + "@";
                 flowEmps = flowEmps + WebUser.No + "," + WebUser.Name + "@";
             }
             // 给他们赋值.

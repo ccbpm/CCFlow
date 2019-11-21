@@ -1454,14 +1454,15 @@ namespace BP.WF.Template
 
             foreach (GenerWorkFlow gwf in gwfs)
             {
-                string emps = "";
-                string sql = "SELECT EmpFrom FROM ND" + int.Parse(this.No) + "Track  WHERE WorkID=" + gwf.WorkID;
+                string emps = "@";
+                string sql = "SELECT EmpFrom,EmpFromT FROM ND" + int.Parse(this.No) + "Track  WHERE WorkID=" + gwf.WorkID;
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (emps.Contains("," + dr[0].ToString() + ","))
+                    if (emps.Contains("@" + dr[0].ToString() + "@") || emps.Contains("@" + dr[0].ToString() + ","+dr[1].ToString()+"@"))
                         continue;
+                    emps += dr[0].ToString() + "," + dr[1].ToString() + "@";
                 }
 
                 sql = "UPDATE " + fl.PTable + " SET FlowEmps='" + emps + "' WHERE OID=" + gwf.WorkID;

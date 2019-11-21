@@ -1316,7 +1316,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //把当前的人员字符串加入到参与人里面去,以方便查询.
-            string emps = "@"+WebUser.No+"," +WebUser.Name;
+            string emps = WebUser.No+"," +WebUser.Name+"@";
 
             // 设置流程完成状态.
             ps = new Paras();
@@ -1430,7 +1430,6 @@ namespace BP.WF
             }
 
             /* 执行 WF_GenerWorkFlow 冻结. */
-
             int sta = (int)WFState.Fix;
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();

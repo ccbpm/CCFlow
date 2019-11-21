@@ -744,14 +744,17 @@ function saveNodeName(activeId) {
 
     //alert(text);
 
-    var node = new Entity("BP.WF.Node", activeId);
+    var node = new Entity("BP.WF.Template.NodeExt", activeId);
     node.Name = text;
     node.Update();
 
     //修改表单名称.
     var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
-    mapData.Name = text;
-    mapData.Update();
+    if (mapData.Name == null || mapData.Name == undefined || mapData.Name == "") {
+        mapData.Name = text;
+        mapData.Update();
+    }
+   
 
     //修改分组名称.
     var groups = new Entities("BP.Sys.GroupFields");
@@ -1051,11 +1054,17 @@ function CondDir(fromNodeID) {
 function NodeFrmD(nodeID) {
 
     var node = new Entity("BP.WF.Node", nodeID);
-    if (node.FormType == 1) {
+    if (node.FormType == 1) {//自由表单
         NodeFrmFree(nodeID);
         return;
     }
 
+    if (node.FormType == 12) {//开发者表单
+        NodeFrmDeveloper(nodeID);
+        return;
+    }
+
+    //傻瓜表单
     NodeFrmFool(nodeID);
 }
 
@@ -1085,6 +1094,12 @@ function NodeFrmFree(nodeID) {
     window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
     ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
     //WinOpen(url);
+}
+
+function NodeFrmDeveloper(nodeID) {
+    //开发者表单.
+    var url = "../DevelopDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    window.parent.addTab(nodeID + "_Developer", "设计表单" + nodeID, url);
 }
 
 //接受人规则.

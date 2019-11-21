@@ -1216,12 +1216,15 @@ function cleanAll(KeyOfEn) {
     });
     if (AllObjSet.length == 0)
         return;
-   var mapAttrs = AllObjSet[KeyOfEn][0];
-    for (var i = 0; i < mapAttrs.length; i++) {
-        SetCtrlShow(mapAttrs[i]);
-        SetCtrlEnable(mapAttrs[i]);
-        CleanCtrlVal(mapAttrs[i]);
+    if (AllObjSet[KeyOfEn].length > 0) {
+        var mapAttrs = AllObjSet[KeyOfEn][0];
+        for (var i = 0; i < mapAttrs.length; i++) {
+            SetCtrlShow(mapAttrs[i]);
+            SetCtrlEnable(mapAttrs[i]);
+            CleanCtrlVal(mapAttrs[i]);
+        }
     }
+   
 
 }
 //启用了显示与隐藏.

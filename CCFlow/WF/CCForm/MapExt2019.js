@@ -1044,6 +1044,9 @@ function GenerDB(dbSrc, selectVal, dbType) {
 
 function DealSQL(dbSrc, key, kvs) {
 
+    if (dbSrc.indexOf('@') == -1)
+        return dbSrc;
+
     dbSrc = dbSrc.replace(/~/g, "'");
 
     dbSrc = dbSrc.replace(/@Key/g, key);

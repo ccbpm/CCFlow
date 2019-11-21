@@ -2393,6 +2393,9 @@ function FormatDate(now, mask) {
 //表达式的替换.
 function DealExp(expStr, webUser) {
 
+    if (expStr.indexOf('@') == -1)
+        return expStr;
+
     if (webUser == null || webUser == undefined)
         webUser = new WebUser();
 

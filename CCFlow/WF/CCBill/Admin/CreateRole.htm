@@ -65,8 +65,9 @@
             var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmStationCreates";
             url += "&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
             url += "&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
-
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, '设置岗位', W, H, true);
         }
         //设置岗位新方式.
         function OpenNewStations() {
@@ -74,7 +75,9 @@
             var frmID = GetQueryString("FrmID");
 
             var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmStationCreates&Dot2DotEnName=BP.Frm.FrmStationCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID;
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, '设置岗位', W, H, true);
         }
         //绑定人员
         function BindEmps() {
@@ -82,8 +85,9 @@
             var frmID = GetQueryString("FrmID");
             var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmEmpCreates&Dot2DotEnName=BP.Frm.FrmEmpCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
             url += '&FrmID=' + frmID + '&PKVal=' + frmID + "&M=" + Math.random();
-
-            OpenEasyUiDialogExt(url, '设置人员', 800, 500, true);
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, '设置人员', W, H, true);
 
         }
         //弹出新页面
@@ -92,7 +96,9 @@
             var frmID = GetQueryString("FrmID");
             var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.Frm.FrmTemplate&Dot2DotEnsName=BP.Frm.FrmDeptCreates&Dot2DotEnName=BP.Frm.FrmDeptCreate&AttrOfOneInMM=FrmID&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
             url += url + '&FrmID=' + frmID + '&PKVal=' + frmID;
-            OpenEasyUiDialogExt(url, "绑定部门", 800, 600, true);
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, "绑定部门", W, H, true);
         }
 
     </script>

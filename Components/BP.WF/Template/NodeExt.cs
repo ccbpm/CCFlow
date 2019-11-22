@@ -555,7 +555,7 @@ namespace BP.WF.Template
                 map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
                 map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", false, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", false, true);
+                map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", false, false);
                 map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //增加帮助.
 
                 //      map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
@@ -611,7 +611,7 @@ namespace BP.WF.Template
                 //map.SetHelperUrl(BtnAttr.WebOfficeLab, "http://ccbpm.mydoc.io/?v=5404&t=17993");
 
                 // add by 周朋 2015-08-06. 重要性.
-                map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", false, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.

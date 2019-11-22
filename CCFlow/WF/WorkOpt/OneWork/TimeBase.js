@@ -1,6 +1,5 @@
 ﻿
 function InitPage() {
-
     var isMobile = GetQueryString('IsMobile');
     if (isMobile == null || isMobile == undefined || isMobile == "")
         isMobile = 0;
@@ -97,10 +96,7 @@ function InitPage() {
         if (at == ActionType.Forward || at == ActionType.FlowOver) {
             doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
 
-            //Hide_IsOpenFrm:是否隐藏该条信息,CommonShowConfig.js中定义
-            if (Hide_IsOpenFrm == undefined) {
-                Hide_IsOpenFrm == true;
-            }
+            //判断是否隐藏
             if (Hide_IsOpenFrm == true) {
                 doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDFrom + "','" + fk_flow + "','" + fid+"','" + track.NDFrom + "')\">查看表单</a></span></p>";
             }
@@ -206,10 +202,7 @@ function InitPage() {
                 var doc = "";
                 doc += "<span>审批人</span>";
                 doc += gwl.FK_EmpText;
-                //Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
-                if (Hide_IsRead == undefined) {
-                    Hide_IsRead == true;
-                }
+                //判断是否隐藏
                 if (Hide_IsRead == true) {
 
                     doc += "<br>";

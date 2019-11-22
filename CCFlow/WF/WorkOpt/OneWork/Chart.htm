@@ -81,6 +81,11 @@
         var gwf;
         var uh = new UrlHerf(location.href);
         $(function () {
+            //Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
+            if ("undefined" == typeof Hide_IsRead) {
+               var Hide_IsRead = true;
+            }
+
             fk_Flow = uh["FK_Flow"];
             work_ID = uh["WorkID"];
             fid = uh["FID"];
@@ -358,10 +363,7 @@
                                     tablehtml += "<td> " + GetSpanTime(rdt, cdt) + "</td>";
                                 }
                                 tablehtml += "</tr>";
-                                //Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
-                                if (Hide_IsRead == undefined) {
-                                    Hide_IsRead == true;
-                                }
+                                
                                 if (gwl.IsPass == 0 && Hide_IsRead == true) {
                                     tablehtml += "<tr style='background-color:InfoBackground' >";
                                     tablehtml += "<td>是否打开？</td>";

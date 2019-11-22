@@ -1581,6 +1581,7 @@ function Ele_Attachment(workNode, gf) {
     url += "&FK_Node=" + GetQueryString("FK_Node");
     url += "&FK_Flow=" + GetQueryString("FK_Flow");
     url += "&FormType=" + GetQueryString("FormType"); //表单类型，累加表单，傻瓜表单，自由表单.
+	url += "&IsReadonly=" + pageData.IsReadonly;
 
     var nodeID = GetQueryString("FK_Node");
     if (nodeID != null && nodeID.length > 2) {

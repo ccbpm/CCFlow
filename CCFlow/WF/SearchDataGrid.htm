@@ -6,29 +6,29 @@
     <title>流程查询</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Comm/JS/layer/layer.css" rel="stylesheet" />
     <style>
         /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
-         td
-            {
-               overflow:hidden;
-               white-space:nowrap;
-               text-overflow:ellipsis; 
-            }
-            .pagination
-            {
-                margin: 8px 0;
-                display: block;
-                font-size: 13px;
-            }
-            .pagination .controls
-            {
-                float: left;
-                border: 0;
-                padding: 7px 0 0 15px;
-                color: #777;
-            }
+        td {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .pagination {
+            margin: 8px 0;
+            display: block;
+            font-size: 13px;
+        }
+
+        .pagination .controls {
+            float: left;
+            border: 0;
+            padding: 7px 0 0 15px;
+            color: #777;
+        }
     </style>
 </head>
 
@@ -58,15 +58,15 @@
 		<table style="table-layout:fixed" class="table table-striped">
 			<thead id="Table2">
 			<tr >
-				<th width='50px'>序号</th>
-				<th width='380px'>标题</th>
-				<th width='80px'>发起人</th>
-				<th width='120px'>发起日期</th>
-				<th width='120px'>停留节点</th>
-				<th width='280px'>审批人</th>
-				<th width='90px'>应完成日期</th>
-				<th width='60px'>状态</th>
-				<th width='60px'>操作</th>
+				<th width='4%'>序号</th>
+				<th width='23%'>标题</th>
+				<th width='5%'>发起人</th>
+				<th width='10%'>发起日期</th>
+				<th width='15%'>停留节点</th>
+				<th width='20%'>审批人</th>
+				<th width='10%'>应完成日期</th>
+				<th width='10%'>状态</th>
+				<th width='5%'>操作</th>
 			</tr>
 			</thead>
 			<tbody id="Table1"></tbody>
@@ -111,6 +111,7 @@
             InitPage();//初始化查询列表、
             InitData();//初始化数据
             Paginator(pageCount, pageIdx); //分页
+            mouseShow();//省略的展现出来
         });
 
 
@@ -242,10 +243,23 @@
                     }
                 }
 
-                todoEmpsName = en.TodoEmps;
+                //审批人
+                var todoEmps = en.TodoEmps;
+                var emp = "";
+                var todoEmp = todoEmps.split(";");
+                for (j = 0; j < todoEmp.length; j++) {
+                    if (todoEmp[j] == '' || todoEmp[j] == null || todoEmp[j] == undefined)
+                        continue;
+                    if (todoEmp[j].indexOf(',') != -1) {
+                        var aa = todoEmp[j].split(",")[1] + "、";
+                        emp += aa;
 
-                if (todoEmpsName != null)
-                    todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
+                    } else {
+                        emp += todoEmp[j] + "、";
+                    }
+
+                }
+                emp = emp.substring(0, emp.lastIndexOf("、"));
 
                 //是否可以执行当前工作?
                 var isCanDo = false;
@@ -271,7 +285,7 @@
 
                 htmlbox += "<td><font color='" + color + "'>" + en.NodeName + "</font></td>";
 
-                htmlbox += "<td ><font color='" + color + "'>" + todoEmpsName + "</font></td>";
+                htmlbox += "<td ><font color='" + color + "'>" + emp + "</font></td>";
 
                 if (en.SDTOfNode == null)
                     htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
@@ -321,6 +335,7 @@
 
                     InitPage(keyWord);
                     InitData();
+                    mouseShow();
                     $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
                             "页,总共" + total + "条记录。</li>");
                 }
@@ -498,6 +513,21 @@
             InitPage(keyWord);
             InitData();
             Paginator(pageCount, pageIdx);
+        }
+        function mouseShow() {
+             $("td").on("mouseover",function() {
+                if (this.offsetWidth < this.scrollWidth) {
+                    var that = this;
+                    var text = $(this).text();
+                   layer.tips(text, that,{
+                        tips: 1,
+                        time: 0
+                   });
+                }
+            });
+            $("td").on("mouseout",function(){
+            layer.closeAll();
+            });
         }
     </script>        
         

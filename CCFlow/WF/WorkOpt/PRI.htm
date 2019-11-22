@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>重要性设置</title>
+    <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+        var workid = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
+        var webUser = new WebUser();
+        var gwf;
+        var pri;
+        $(function () {
+            gwf = new Entity("BP.WF.GenerWorkFlow", workid);
+            pri = gwf.PRI;
+            $("[name='PRI'][value='" + pri + "']").prop("checked", "checked");
+
+        });
+
+
+        function Save() {
+            var PRI = $("input[name='PRI']:checked").val();
+            gwf.PRI = PRI;
+            gwf.Update();
+            alert("保存成功");
+        }
+
+        function Cancel() {
+            gwf.PRI = pri;
+            gwf.Update();
+             alert("取消成功");
+        }
+
+
+/**/</script>
+
+</head>
+<body>
+    <fieldset>
+        <legend>
+            重要性
+        </legend>
+        <input type="radio" id="PRI_0" value="0" name="PRI" /> 高
+        <br />
+        <input type="radio" id="PRI_1" value="1" name="PRI" />中
+        <br />
+
+        <input type="radio" id="PRI_2" value="2" name="PRI"/>低
+        <br />
+
+        <input type="button" id="SaveBtn"  value="保存" onclick="Save()" />
+        <input type="button" id="CancelBtn"  value="取消"  onclick="Cancel()"/>
+    </fieldset>
+
+</body>
+</html>

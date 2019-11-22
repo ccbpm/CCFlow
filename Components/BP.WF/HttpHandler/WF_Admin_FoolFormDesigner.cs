@@ -630,6 +630,18 @@ namespace BP.WF.HttpHandler
             bool isLeft = true;
             float maxEnd = md.MaxEnd;
 
+            Int32 iGroupID = 0;
+           
+            Paras ps = new Paras();
+            ps.SQL = "SELECT OID FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ";
+            ps.Add("FrmID", this.FK_MapData);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                iGroupID =Int32.Parse(dt.Rows[0][0].ToString());
+            }
+           
+
             foreach (string name in HttpContextHelper.RequestParamKeys)
             {
                 if (name.StartsWith("HID_Idx_") == false)
@@ -655,6 +667,7 @@ namespace BP.WF.HttpHandler
                 ma.MaxLen = this.GetValIntFromFrmByKey("TB_Len_" + columnName);
                 ma.UIBindKey = this.GetValFromFrmByKey("TB_BindKey_" + columnName);
                 ma.LGType = BP.En.FieldTypeS.Normal;
+                ma.GroupID = iGroupID;
 
                 //绑定了外键或者枚举.
                 if (DataType.IsNullOrEmpty(ma.UIBindKey) == false)

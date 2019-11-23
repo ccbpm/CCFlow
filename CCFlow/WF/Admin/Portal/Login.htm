@@ -174,45 +174,41 @@
                 <img class="imgsty" src="../../../DataUser/ICON/IconSmall.png" alt="" />
             </div>
             <div class="login-form">
-                <form id="Form1">
-                    <div class="form-group">
-                        <b>您要登录的系统:</b>
-                        <select id="DDL_System"  onchange="SelectChange()" >
-                            <option  value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋BPM专业版 </option>
-                            <option  value="DefaultSimple" onclick="setCookie('username', $(this).val(), 30)">驰骋BPM极简版(beta)</option>
-                            <option  value="DefaultFrm" onclick="setCookie('username', $(this).val(), 30)"> 驰骋表单引擎(beta)</option>
-                            <option  value="DefaultGPM" onclick="setCookie('username', $(this).val(), 30)"> 驰骋权限管理(beta)</option>
-                        </select>
+                <div class="form-group">
+                    <b>您要登录的系统:</b>
+                    <select class="form-control" style="width:auto;display:inline" id="DDL_System" onchange="SelectChange()">
+                        <option value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋BPM专业版 </option>
+                        <option value="DefaultSimple" onclick="setCookie('username', $(this).val(), 30)">驰骋BPM极简版(beta)</option>
+                        <option value="DefaultFrm" onclick="setCookie('username', $(this).val(), 30)"> 驰骋表单引擎(beta)</option>
+                        <option value="DefaultGPM" onclick="setCookie('username', $(this).val(), 30)"> 驰骋权限管理(beta)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
+                </div>
+
+                <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
+                <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
+                    // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
+
+                <div class="row login-nav">
+                    <div class="col-xs-6">默认密码：123</div>
+                    <div class="col-xs-6 ">
+
+                        <a href="../../AppClassic/Login.htm" class="pull-right">前台登录</a>
+
+                        <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
+
                     </div>
-
-                    <div class="form-group">
-                        <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required" class="form-control" />
+                    <br />
+                    <div id="Msg"  style=" float:right;margin-right:14px">
                     </div>
-                    <div class="form-group">
-                        <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
-                    </div>
-
-                    <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
-                    <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
-    // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
-
-                    <div class="row login-nav">
-                        <div class="col-xs-6">默认密码：123</div>
-                        <div class="col-xs-6 ">
-
-                            <a href="../../AppClassic/Login.htm" class="pull-right">前台登录</a>
-                            
-                            <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
-
-                        </div>
-                        <br />
-                        <div id="Msg" style=" float:right" />
-                        </div>
-                    </div>
-                </form>
-            </div>
-               
-            </div>
+                </div>
+            </div>   
         </div>
     </form>
 

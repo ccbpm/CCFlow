@@ -240,7 +240,6 @@ namespace BP.WF.HttpHandler
             {
                 BP.Frm.FrmDict entityDict = new FrmDict(md.No);
                 entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
-
                 entityDict.BtnNewModel = 0;
 
                 //设置默认的查询条件.

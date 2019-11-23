@@ -28,6 +28,7 @@ namespace BP.GPM
             }
         }
         #endregion
+
         #region 构造方法
         /// <summary>
         /// 权限组

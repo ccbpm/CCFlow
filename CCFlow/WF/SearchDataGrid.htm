@@ -500,12 +500,12 @@
                     window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + GetQueryString("TSpan");
             }
         }
-         
+        //跳转url
         function ToUrl(pageID) {
             var url = pageID + ".htm?m=" + Math.random();
             window.location.href = url;
         }
-
+        //关键字查询
         function SearchKey() {
             IsSearchClick = true;//点击了查询
 			IsPageClick = false;//重置点击页面
@@ -514,19 +514,20 @@
             InitData();
             Paginator(pageCount, pageIdx);
         }
+        //鼠标悬浮显示
         function mouseShow() {
              $("td").on("mouseover",function() {
                 if (this.offsetWidth < this.scrollWidth) {
                     var that = this;
                     var text = $(this).text();
-                   layer.tips(text, that,{
-                        tips: 1,
+                   layer.tips("<span style='color:#000'>"+text+"</span>", that,{
+                        tips:[1,'#FFF'],
                         time: 0
                    });
                 }
             });
             $("td").on("mouseout",function(){
-            layer.closeAll();
+            layer.closeAll("tips");//关闭所有tips，避免和iframe冲突
             });
         }
     </script>        

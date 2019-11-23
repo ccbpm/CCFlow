@@ -1907,7 +1907,7 @@ function InitToolBar() {
     var data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
 
     var barHtml = data;
-
+    console.log(barHtml);
     $('.Bar').html(barHtml);
 
     if ($('[name=Return]').length > 0) {
@@ -2095,10 +2095,10 @@ function initModal(modalType, toNode) {
     //初始化退回窗口的SRC.
     var html = '<div style="width:100%; height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
         '<div class="modal-dialog">'
-        + '<div class="modal-content" style="border-radius:0px;width:900px;height:450px;text-align:left;">'
+        + '<div class="modal-content" style="border-radius:0px;width:800px;height:450px;text-align:left;">'
         + '<div class="modal-header">'
-        + '<button id="ClosePageBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-        + '<button id="MaxSizeBtn" type="button" style="color:#0000007a;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
+        + '<button id="ClosePageBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '<button id="MaxSizeBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
         + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
         + '</div>'
         + '<div class="modal-body" style="margin:0px;padding:0px;height:450px">'
@@ -2151,7 +2151,7 @@ function initModal(modalType, toNode) {
                 //$("#returnWorkModal .modal-content .modal-body").css("height", h + "px");
 
                 //按百分比自适应
-                SetPageSize(80, 80);
+                SetPageSize(60, 60);
 
                 modalIframeSrc = "./WorkOpt/TransferCustom.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;

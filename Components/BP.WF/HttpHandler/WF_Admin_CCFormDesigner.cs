@@ -210,7 +210,7 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.FrmType.VSTOForExcel:
                     break;
                 default:
-                    throw new Exception("未知表单类型."+ md.HisFrmType.ToString() );
+                    throw new Exception("未知表单类型." + md.HisFrmType.ToString());
             }
             md.Insert();
 
@@ -267,10 +267,10 @@ namespace BP.WF.HttpHandler
                 return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
-                return "url@FormDesigner.htm?FK_MapData=" + md.No;
+                return "url@FormDesigner.htm?FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
 
 
-            return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
+            return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
         }
         #endregion 创建表单.
 
@@ -280,6 +280,7 @@ namespace BP.WF.HttpHandler
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
+       
 
         public string GoToFrmDesigner_Init()
         {
@@ -489,7 +490,7 @@ namespace BP.WF.HttpHandler
 
             string docs = this.GetRequestVal("diagram");
             BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, docs);
-            
+
             return "保存成功.";
         }
 
@@ -574,14 +575,14 @@ namespace BP.WF.HttpHandler
 
             #region 复制表单
             MapData toMapData = new MapData();
-            toMapData=fromMap;
+            toMapData = fromMap;
             toMapData.No = toFrmID;
             toMapData.Name = toFrmName;
             toMapData.Insert();
             if (billCount != 0)
             {
                 FrmBill toBill = new FrmBill();
-                toBill=fromBill;
+                toBill = fromBill;
                 toBill.No = toFrmID;
                 toBill.Name = toFrmName;
                 toBill.EntityType = EntityType.FrmBill;

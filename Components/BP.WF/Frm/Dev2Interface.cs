@@ -379,6 +379,7 @@ namespace BP.Frm
             //查询出来单据运行模式的.
             FrmBills bills = new FrmBills();
             bills.RetrieveAll();
+
             //bills.Retrieve(FrmBillAttr.EntityType, 0); //实体类型.
 
             DataTable dtStart = bills.ToDataTableField();

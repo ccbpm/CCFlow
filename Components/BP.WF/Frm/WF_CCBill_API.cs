@@ -52,13 +52,25 @@ namespace BP.Frm
         /// <returns></returns>
         public string CCFrom_GenerFrmListOfCanOption()
         {
-            return null;
+            string sql = "";
+            sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData WHERE (EntityType=1 OR EntityType=2) ORDER BY IDX ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "EntityType";
+                dt.Columns[3].ColumnName = "FrmType";
+                dt.Columns[4].ColumnName = "PTable";
+            }
+
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 获得指定的目录下可以操作的单据列表
         /// </summary>
         /// <returns></returns>
-        public string CCFrom_GenerFrmListBySpecTreeNo()
+        public string CCFrom_GenerFrmListOfCanOptionBySpecTreeNo()
         {
             string treeNo = this.GetRequestVal("TreeNo");
             return null;
@@ -82,7 +94,56 @@ namespace BP.Frm
             ht.Add("IsDelete", 1);
             return BP.Tools.Json.ToJson(ht);
         }
+        /// <summary>
+        /// 删除实体根据BillNo
+        /// </summary>
+        /// <returns></returns>
+        public string CCFrom_DeleteFrmEntityByBillNo()
+        {
+
+            GEEntity en = new GEEntity(this.FrmID);
+            int i= en.Retrieve("BillNo", this.GetRequestVal("BillNo"));
+            if (i == 0)
+                return "err@单据编号为" + this.GetRequestVal("BillNo") + "的数据不存在.";
+
+            en.Delete();
+            return "删除成功";
+        }
+        /// <summary>
+        /// 删除实体根据 OID
+        /// </summary>
+        /// <returns></returns>
+        public string CCFrom_DeleteFrmEntityByOID()
+        {
+            GEEntity en = new GEEntity(this.FrmID,this.OID);
+            en.Delete();
+            return "删除成功";
+        }
         #endregion 前台的操作 api.
+
+
+        #region 后台操作api.
+        /// <summary>
+        /// 获得所有的单据、表单 @lizhen 转移代码.
+        /// </summary>
+        /// <returns></returns>
+        public string CCBillAdmin_Admin_GenerAllBills()
+        {
+            string sql = "";
+            sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData WHERE (EntityType=1 OR EntityType=2) ORDER BY IDX ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "EntityType";
+                dt.Columns[3].ColumnName = "FrmType";
+                dt.Columns[4].ColumnName = "PTable";
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
 
     }
 }

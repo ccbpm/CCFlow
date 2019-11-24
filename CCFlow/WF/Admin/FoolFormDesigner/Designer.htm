@@ -16,54 +16,50 @@
     <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js"
-        defer="defer"></script>
+            defer="defer"></script>
     <script language="JavaScript" type="text/javascript" src="../../CCForm/FrmEnd.js"
-        defer="defer"></script>
+            defer="defer"></script>
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt2019.js"
-        defer="defer"></script>
-    <script src="Designer.js" type="text/javascript" defer="defer"> </script>
+            defer="defer"></script>
+    <script src="Designer.js" type="text/javascript" defer="defer"></script>
     <base target="_self" />
     <style type="text/css">
-        body
-        {
+        body {
             margin: 0 auto; /*color: #000;
             line-height: 20px;
             font-family: 宋体;
             text-align: center;
             width: 90%;*/
         }
-        
-        textarea, input[type=text]
-        {
+
+        textarea, input[type=text] {
             width: 100%;
         }
     </style>
     <style type="text/css">
-        body
-        {
+        body {
             font-size: .80em;
-            font-family: "Helvetica Neue" , "Lucida Grande" , "Segoe UI" , Arial, Helvetica, Verdana, sans-serif;
+            font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
             margin: 0px;
             padding: 0px;
             color: #696969;
         }
-        
-        input.align_cb
-        {
+
+        input.align_cb {
             padding-left: 4px;
             cursor: pointer;
             margin: 0;
             vertical-align: middle;
         }
-        label.align_cbl
-        {
+
+        label.align_cbl {
             display: inline-block;
             vertical-align: middle;
             margin-bottom: 2px;
         }
-        th
-        {
-            background-color:InfoBackground;
+
+        th {
+            background-color: InfoBackground;
         }
     </style>
     <script type="text/javascript">
@@ -136,9 +132,21 @@
             //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
             data = JSON.parse(data);
 
+
+            //var frmBill = new Entity("BP.Frm.FrmBill", fk_mapData);
+            //if (frmBill.EntityType == 1)
+            //{
+            //    $("#toolbar").append("sdsdsds");
+            //}
+
+
+            //实体类型.
+            // alert(data["Sys_MapData"][0].EntityType);
+
+
             // var mapAttrs = data.Sys_MapAttrs;
 
-            //拼接 TABLE 
+            //拼接 TABLE
             //按分组拼接
             var groupFields = data.Sys_GroupField;
             var tbody = $('<tbody></tbody>');
@@ -167,7 +175,7 @@
                 var groupObj = groupFields[k];
 
                 //生成工具栏.
-                html += GenerGroupTR(groupObj, tableCol,data);
+                html += GenerGroupTR(groupObj, tableCol, data);
 
                 //生成内容.
                 html += GenerGroupContext(groupObj, data, tableCol);
@@ -222,7 +230,7 @@
 
             $("#Msg").html("");
             ResizeWindow();
-//            AfterBindEn_DealMapExt(data);
+            //            AfterBindEn_DealMapExt(data);
 
         });
 
@@ -518,7 +526,7 @@
             return html;
         }
 
-        function GenerGroupTR(groupEn, tabCol,data) {
+        function GenerGroupTR(groupEn, tabCol, data) {
 
             var lab = groupEn.Lab;
             if (lab == "")
@@ -538,8 +546,8 @@
                     //创建附件描述信息.
                     var frmattachments = data.Sys_FrmAttachment;
                     var ath = null;
-                    for(var i =0;i<frmattachments.length;i++){
-                        if(frmattachments[i].MyPK == groupEn.CtrlID){
+                    for (var i = 0; i < frmattachments.length; i++) {
+                        if (frmattachments[i].MyPK == groupEn.CtrlID) {
                             ath = frmattachments[i];
                             break;
                         }
@@ -549,11 +557,11 @@
                         isShow = false;
                         break;
                     }
-                    if (ath.IsVisable == "0" ) {
+                    if (ath.IsVisable == "0") {
                         //如果是节点字段附件的时候就隐藏
                         var mapAttr = new Entity("BP.Sys.MapAttr");
                         mapAttr.SetPKVal(groupEn.CtrlID);
-                        if(mapAttr.RetrieveFromDBSources()!=0){
+                        if (mapAttr.RetrieveFromDBSources() != 0) {
                             isShow = false;
                             break;
                         }
@@ -875,7 +883,7 @@
                     title = '流程进度图';
                     url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&PKVal=' + mypk + '&s=' + Math.random();
                 }
-                if (uiContralType ==101){
+                if (uiContralType == 101) {
                     title = '评分控件';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk + '&s=' + Math.random();
                 }
@@ -1182,7 +1190,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", pageParam.fk_mapdata);
             handler.AddPara("DtlNo", val);
-            handler.AddPara("FK_Node",0); //从表为原始属性的时候FK_Node=0,设置从表权限的时候FK_Node为该节点的值
+            handler.AddPara("FK_Node", 0); //从表为原始属性的时候FK_Node=0,设置从表权限的时候FK_Node为该节点的值
 
             var data = handler.DoMethodReturnString("Designer_NewMapDtl");
 
@@ -1359,55 +1367,59 @@
         }
 
 
-       
+
     </script>
 </head>
-<body onkeypress="Esc();" class="easyui-layout layout panel-noscroll" topmargin="0"
-    leftmargin="0">
-    <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 0px; width: 100%;">
-        <div class="panel-header" style="width: 100%;">
-            <div class="panel-title">
-                ccform傻瓜表单设计器</div>
-            <div class="panel-tool">
-                <a class="panel-tool-collapse" href="javascript:void(0)" style="display: none;">
+<body onkeypress="Esc();" class="easyui-layout layout panel-noscroll" topmargin="0" leftmargin="0">
+
+    <div class="easyui-layout layout" data-options="fit:true" style="width: 100%; height: 628px;">
+        <div class="panel layout-panel layout-panel-north" style="left: 0px; top: 0px; width: 100%;">
+            <div data-options="region:'north'" id="toolbar" style="padding: 5px; overflow-y: hidden;" title="表单设计器-工具栏"
+                 class="panel-body panel-body-noheader layout-body">
+                <a href="javascript:MapDataEdit();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
+                    表单属性
                 </a>
+
+
+                <a href="javascript:ExpImp();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'">
+                    导入/导出
+                </a>
+
+                <a href="javascript:AddF();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">
+                    新建字段
+                </a> 
+                <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
+                    隐藏字段
+                </a>-->
+                <a href="javascript:GroupFieldNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">
+                    新建字段分组
+                </a> <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-checkGroup'">
+    &nbsp;&nbsp;新建审核分组
+</a> <a href="javascript:NewMapDtl();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">
+                    新建从表
+                </a> <a href="javascript:NewAth();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
+                    新建附件
+                </a><a href="javascript:NewFrame();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">
+                    新建框架
+                </a> <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" id="FrmNodeComponent"
+                        data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+                <a href="javascript:MobileFrm();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-telephone'">
+                    手机表单
+                </a>
+
             </div>
         </div>
-        <div data-options="region:'center',title:'ccform傻瓜表单设计器'" style="padding: 5px; width: 100%;
-            height: 628px;" title="" class="panel-body layout-body panel-noscroll">
-            <div class="easyui-layout layout" data-options="fit:true" style="width: 100%; height: 628px;">
-                <div class="panel layout-panel layout-panel-north" style="left: 0px; top: 0px; width: 100%;">
-                    <div data-options="region:'north'" style="padding: 5px; overflow-y: hidden;" title=""
-                        class="panel-body panel-body-noheader layout-body">
-                        <a href="javascript:MapDataEdit();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
-                            表单属性 </a><a href="javascript:ExpImp();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'">
-                                导入/导出</a> <a href="javascript:AddF();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">
-                                    新建字段</a> <a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
-                                        隐藏字段 </a><a href="javascript:GroupFieldNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">
-                                            新建字段分组</a> <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-checkGroup'">
-                                                新建审核分组</a> <a href="javascript:NewMapDtl();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">
-                                                    新建从表</a> <a href="javascript:NewAth();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
-                                                        新建附件</a><a href="javascript:NewFrame();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">
-                                                            新建框架</a> <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" id="FrmNodeComponent"
-                                                                data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
-                        <a href="javascript:MobileFrm();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-telephone'">
-                            手机表单</a>
-                    </div>
-                </div>
-                <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 36px;
+        <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 36px;
                     width: 100%;">
-                    <div data-options="region:'center'" style="padding-top: 10px; padding-bottom: 10px;
-                        width: 100%; height: 570px; background-color: rgb(208, 208, 208);" title="" class="panel-body panel-body-noheader layout-body">
-                        <div style="width: 900px; background-color: white; border: 1px solid #666; padding: 5px;
+            <div data-options="region:'center'" style="padding-top: 10px; padding-bottom: 10px;
+                        width: 100%; height: 570px; background-color: rgb(208, 208, 208);" title=""
+                 class="panel-body panel-body-noheader layout-body">
+                <div style="width: 900px; background-color: white; border: 1px solid #666; padding: 5px;
                             margin: auto;" align="center">
-                            <table style="border: 1px; padding: 5px; padding-top: 11px; width: 100%;" id="contentTable">
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="layout-split-proxy-h">
-                </div>
-                <div class="layout-split-proxy-v">
+
+                    <table style="border: 1px; padding: 5px; padding-top: 11px; width: 100%;" id="contentTable">
+                    </table>
+
                 </div>
             </div>
         </div>

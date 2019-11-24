@@ -1,10 +1,10 @@
-//×Ô¶¯µÄ¼ÓÔØjs Gener.js config.js queryString.js
+ï»¿//è‡ªåŠ¨çš„åŠ è½½js Gener.js config.js QueryString.js
 
-/** %%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Ç°Ì¨²Ù×÷µÄ·½·¨£º %%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  å‰å°æ“ä½œçš„æ–¹æ³•ï¼š %%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-/* »ñµÃ¿ÉÒÔ²Ù×÷µÄµ¥¾İÁĞ±í. ·µ»Ø: No,Name,FrmType,TreeNo,TreeName µÄ json. FrmType=ÊÇµ¥¾İ£¬»¹ÊÇÊµÌå.
- * 1. ¸Ã·½·¨¿ÉÒÔÓÃÓÚÉú³Éµ±Ç°ÓÃ»§¿ÉÒÔ·¢ÆğµÄµ¥¾İÁĞ±í.
- * 2. ÎÒÃÇÌá¹©ÁËÒ»¸öÍ¨ÓÃµÄ°Ù´î¿îµÄ·ç¸ñµÄÒ³Ãæ. /WF/CCBill/Start.htm
+/* è·å¾—å¯ä»¥æ“ä½œçš„å•æ®åˆ—è¡¨. è¿”å›: No,Name,FrmType,TreeNo,TreeName çš„ json. FrmType=æ˜¯å•æ®ï¼Œè¿˜æ˜¯å®ä½“.
+ * 1. è¯¥æ–¹æ³•å¯ä»¥ç”¨äºç”Ÿæˆå½“å‰ç”¨æˆ·å¯ä»¥å‘èµ·çš„å•æ®åˆ—è¡¨.
+ * 2. æˆ‘ä»¬æä¾›äº†ä¸€ä¸ªé€šç”¨çš„ç™¾æ­æ¬¾çš„é£æ ¼çš„é¡µé¢. /WF/CCBill/Start.htm
  * */
 function CCFrom_GenerFrmListOfCanOption() {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
@@ -13,8 +13,8 @@ function CCFrom_GenerFrmListOfCanOption() {
 }
 
 /**
- * »ñµÃ¿ÉÒÔ²Ù×÷µÄµ¥¾İÁĞ±í
- * @param {Ö´ĞĞµÄÄ¿Â¼Ê÷ÏÂµÄµ¥¾İ} specTreeNo
+ * è·å¾—å¯ä»¥æ“ä½œçš„å•æ®åˆ—è¡¨
+ * @param {æ‰§è¡Œçš„ç›®å½•æ ‘ä¸‹çš„å•æ®} specTreeNo
  */
 function CCFrom_GenerFrmListBySpecTreeNo(specTreeNo) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
@@ -24,9 +24,9 @@ function CCFrom_GenerFrmListBySpecTreeNo(specTreeNo) {
 }
 
 /**
- * »ñµÃÒ»¸ö±íµ¥µÄ²Ù×÷È¨ÏŞ.
+ * è·å¾—ä¸€ä¸ªè¡¨å•çš„æ“ä½œæƒé™.
  * @param {any} frmID
- * ·µ»Ø IsView, IsNew, IsSubmit, IsUpdate IsDelete µÄjson.
+ * è¿”å› IsView, IsNew, IsSubmit, IsUpdate IsDelete çš„json.
  */
 function CCFrom_FrmPower(frmID) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
@@ -37,115 +37,140 @@ function CCFrom_FrmPower(frmID) {
 
 
 /**
- * »ñµÃ±íµ¥µÄUrl.
- * @param {±íµ¥ID} frmID
- * @param {Ö÷¼ü} pkval
+ * è·å¾—è¡¨å•çš„Url.
+ * @param {è¡¨å•ID} frmID
+ * @param {ä¸»é”®} pkval
  */
 function CCFrom_FrmOptionUrl(frmID, pkval) {
     return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + pkval;
 }
 
 /**
- * »ñµÃ±íµ¥²é¿´µÄUrl.
- * @param {±íµ¥ID} frmID
- * @param {Ö÷¼ü} oid
+ * è·å¾—è¡¨å•æŸ¥çœ‹çš„Url.
+ * @param {è¡¨å•ID} frmID
+ * @param {ä¸»é”®} oid
  */
 function CCFrom_FrmViewUrl(frmID, oid) {
     return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&OID=" + oid;
 }
 
 /**
- * »ñµÃ±íµ¥²é¿´µÄUrl.
- * @param {±íµ¥ID} frmID
- * @param {µ¥¾İ±àºÅ} billNo
+ * è·å¾—è¡¨å•æŸ¥çœ‹çš„Url.
+ * @param {è¡¨å•ID} frmID
+ * @param {å•æ®ç¼–å·} billNo
  */
 function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
-    //var frm = new Entity(frmID); ??ÕâÀïĞèÒª½âÎö BillNo´«ÈëµÄÖµ.
+    //var frm = new Entity(frmID); ??è¿™é‡Œéœ€è¦è§£æ BillNoä¼ å…¥çš„å€¼.
     return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&BillNo=" + pkval;
 }
 
  
 
 /**
- * ´´½¨±íµ¥ÊµÀı. ËµÃ÷:Ö¸¶¨±íµ¥µÄID, specID,Óë²ÎÊı´´½¨±íµ¥ÊµÀı.
- * @param {±íµ¥ID} frmID
- * @param {Ö¸¶¨µÄintÀàĞÍµÄOID£¬×÷ÎªÖ÷¼ü} specOID
- * @param {Ö¸¶¨µÄTitle£¬¿ÉÒÔÎª¿Õ} specTitle
- * @param {Ö÷±í×Ö¶ÎµÄ²ÎÊı£¬Ò»¸ökey val µÄjson¸ñÊ½µÄÊı¾İ.} paras
+ * åˆ›å»ºè¡¨å•å®ä¾‹. è¯´æ˜:æŒ‡å®šè¡¨å•çš„ID, specID,ä¸å‚æ•°åˆ›å»ºè¡¨å•å®ä¾‹.
+ * @param {è¡¨å•ID} frmID
+ * @param {æŒ‡å®šçš„intç±»å‹çš„OIDï¼Œä½œä¸ºä¸»é”®} specOID
+ * @param {æŒ‡å®šçš„Titleï¼Œå¯ä»¥ä¸ºç©º} specTitle
+ * @param {ä¸»è¡¨å­—æ®µçš„å‚æ•°ï¼Œä¸€ä¸ªkey val çš„jsonæ ¼å¼çš„æ•°æ®.} paras
  */
 function CCFrom_NewFrmEntityAsSpecOID(frmID, specOID, specTitle, paras) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", specOID);
     handler.AddPara("Title", specTitle);
-    handler.AddJson(paras); //°Ñ²ÎÊı¼ÓÈë.
+    handler.AddJson(paras); //æŠŠå‚æ•°åŠ å…¥.
 
     var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntityAsSpecOID");
     if (data.indexOf('err@') == -1) {
-        throw Exception(data); // ??ÊÇ²»ÊÇÕâ¸öÓï·¨£¿
+        throw Exception(data); // ??æ˜¯ä¸æ˜¯è¿™ä¸ªè¯­æ³•ï¼Ÿ
     }
     return data;
 }
 
 /**
- * ´´½¨±íµ¥ÊµÀı. ËµÃ÷:Ö¸¶¨±íµ¥µÄID, specID,Óë²ÎÊı´´½¨±íµ¥ÊµÀı.
- * @param {±íµ¥ID} frmID
- * @param {Ö¸¶¨µÄintÀàĞÍµÄOID£¬×÷ÎªÖ÷¼ü} specBillNo
- * @param {Ö¸¶¨µÄTitle£¬¿ÉÒÔÎª¿Õ} specTitle
- * @param {Ö÷±í×Ö¶ÎµÄ²ÎÊı£¬Ò»¸ökey val µÄjson¸ñÊ½µÄÊı¾İ.} paras
+ * åˆ›å»ºè¡¨å•å®ä¾‹. è¯´æ˜:æŒ‡å®šè¡¨å•çš„ID, specID,ä¸å‚æ•°åˆ›å»ºè¡¨å•å®ä¾‹.
+ * @param {è¡¨å•ID} frmID
+ * @param {æŒ‡å®šçš„intç±»å‹çš„OIDï¼Œä½œä¸ºä¸»é”®} specBillNo
+ * @param {æŒ‡å®šçš„Titleï¼Œå¯ä»¥ä¸ºç©º} specTitle
+ * @param {ä¸»è¡¨å­—æ®µçš„å‚æ•°ï¼Œä¸€ä¸ªkey val çš„jsonæ ¼å¼çš„æ•°æ®.} paras
  */
 function CCFrom_NewFrmEntityAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("BillNo", specBillNo);
     handler.AddPara("Title", specTitle);
-    handler.AddJson(paras); //°Ñ²ÎÊı¼ÓÈë.
+    handler.AddJson(paras); //æŠŠå‚æ•°åŠ å…¥.
 
     var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntityAsSpecBillNo");
     if (data.indexOf('err@') == -1) {
-        throw Exception(data); // ??ÊÇ²»ÊÇÕâ¸öÓï·¨£¿
+        throw Exception(data); // ??æ˜¯ä¸æ˜¯è¿™ä¸ªè¯­æ³•ï¼Ÿ
     }
     return data;
 }
 
 
 /**
- *  ´´½¨±íµ¥ÊµÀı£º ·µ»ØÒ»¸ö frmJson¡£ 
- * @param {±íµ¥ID} frmID
- * @param {±êÌâ/Ãû³Æ:¿ÉÒÔÎª¿Õ} specTitle
- * @param {Ö÷±íµÄ²ÎÊı Key Val ¿ÉÎª¿Õ} paras
+ *  åˆ›å»ºè¡¨å•å®ä¾‹ï¼š è¿”å›ä¸€ä¸ª frmJsonã€‚ 
+ * @param {è¡¨å•ID} frmID
+ * @param {æ ‡é¢˜/åç§°:å¯ä»¥ä¸ºç©º} specTitle
+ * @param {ä¸»è¡¨çš„å‚æ•° Key Val å¯ä¸ºç©º} paras
  */
 function CCFrom_NewFrmEntity(frmID, specTitle, paras) {
 
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
-    handler.AddPara("OID", oid);
+    handler.AddPara("Title", specTitle);
+    handler.AddJson(paras); //
+
     var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntity");
     if (data.indexOf('err@') == -1) {
-        throw Exception(data); // ??ÊÇ²»ÊÇÕâ¸öÓï·¨£¿Òª¼ì²éÊÇ·ñ¿ÉÒÔ´´½¨µÄÈ¨ÏŞ.
+        throw Exception(data); // ??æ˜¯ä¸æ˜¯è¿™ä¸ªè¯­æ³•ï¼Ÿè¦æ£€æŸ¥æ˜¯å¦å¯ä»¥åˆ›å»ºçš„æƒé™.
     }
     return data;
 }
 
 
 /**
- * É¾³ı±íµ¥ÊµÀı. ËµÃ÷:Ö¸¶¨±íµ¥µÄID,OIDÉ¾³ıÊµÀı.
+ * åˆ é™¤è¡¨å•å®ä¾‹. è¯´æ˜:æŒ‡å®šè¡¨å•çš„ID,OIDåˆ é™¤å®ä¾‹.
  * 
- * @param {any} frmID
- * @param {any} oid
- * Èç¹û·µ»Ø err@xxxx Ôò±íÊÇÊ§°Ü.
+ * @param {è¡¨å•ID} frmID
+ * @param {å•æ®ç¼–å·} oid
+ * å¦‚æœè¿”å› err@xxxx åˆ™è¡¨æ˜¯å¤±è´¥.
  */
-function CCFrom_DeleteFrmEntity(frmID, oid) {
+function CCFrom_DeleteFrmEntityByOID(frmID, oid) {
 
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", oid);
-    var data = handler.DoMethodReturnJSON("CCFrom_DeleteFrmEntity");
+    var data = handler.DoMethodReturnJSON("CCFrom_DeleteFrmEntityByOID");
     if (data.indexOf('err@') == -1) {
-        throw Exception(data); // ??ÊÇ²»ÊÇÕâ¸öÓï·¨£¿Òª¼ì²éÉ¾³ıÈ¨ÏŞ.
+        throw Exception(data); // ??æ˜¯ä¸æ˜¯è¿™ä¸ªè¯­æ³•ï¼Ÿè¦æ£€æŸ¥åˆ é™¤æƒé™.
     }
     return data;
 }
+
+
+/**
+ * åˆ é™¤è¡¨å•å®ä¾‹. è¯´æ˜:æŒ‡å®šè¡¨å•çš„ID,OIDåˆ é™¤å®ä¾‹.
+ * 
+ * @param {è¡¨å•ID} frmID
+ * @param {å•æ®ç¼–å·} BillNo
+ * å¦‚æœè¿”å› err@xxxx åˆ™è¡¨æ˜¯å¤±è´¥.
+ */
+function CCFrom_DeleteFrmEntityByBillNo(frmID, billNo) {
+
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("BillNo", billNo);
+    var data = handler.DoMethodReturnJSON("CCFrom_DeleteFrmEntityByBillNo");
+    if (data.indexOf('err@') == -1) {
+        throw Exception(data); // ??æ˜¯ä¸æ˜¯è¿™ä¸ªè¯­æ³•ï¼Ÿè¦æ£€æŸ¥åˆ é™¤æƒé™.
+    }
+    return data;
+}
+
+
+
 
 
 

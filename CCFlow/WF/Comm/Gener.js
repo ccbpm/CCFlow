@@ -1,4 +1,36 @@
-﻿//检查字段,从表名,附件ID,输入是否合法.
+﻿//初始化页面
+$(function () {
+
+ //   debugger;
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
+
+    //判断登录权限.
+    var url = window.location.href.toLowerCase();
+    if (url.indexOf('login.htm') == -1) {
+        var webUser = new WebUser();
+        if (webUser.No == "" || webUser.No == undefined || webUser.No == null) {
+            dynamicHandler = "";
+            alert("登录信息丢失,请重新登录.");
+            return;
+        }
+
+        //如果进入了管理员目录.
+        if (url.indexOf("/admin/") != 1 && webUser.No != "admin") {
+            dynamicHandler = "";
+            alert("管理员登录信息丢失,请重新登录,当前用户[" + webUser.No + "]不能操作管理员目录功能.");
+            return;
+        }
+    }
+
+});
+
+//检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
     //首位可以是字母以及下划线。 
     //首位之后可以是字母，数字以及下划线。下划线后不能接下划线
@@ -22,15 +54,6 @@ function rtrim(s) {
 //去左右空格;
 function trim(s) {
     return s.replace(/(^\s*)|(\s*$)/g, "");
-}
-
-//
-if (plant == "CCFlow") {
-    // CCFlow
-    dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-} else {
-    // JFlow
-    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
 }
 
 
@@ -1609,7 +1632,7 @@ var Entities = (function () {
                 url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
-                   
+
                     if (data.indexOf("err@") != -1) {
                         alert(data);
                         return;
@@ -2251,7 +2274,7 @@ var WebUser = function () {
         });
         return;
     }
-   
+
 
     if (plant == "CCFlow") {
         // CCFlow
@@ -2283,7 +2306,7 @@ var WebUser = function () {
     }*/
 
 
-   
+
 
     $.ajax({
         type: 'post',

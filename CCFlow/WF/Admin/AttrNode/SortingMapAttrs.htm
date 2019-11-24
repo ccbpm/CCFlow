@@ -39,6 +39,7 @@
             group.FrmID = ensName;
             group.Idx = 100;
             group.Insert();
+
             window.location.href = window.location.href;
 
         }
@@ -66,7 +67,7 @@
         //预览手机端
         function Form_View(FK_MapData, FK_Flow) {
 
-            var url = "../FoolFormDesigner/MobileFrmView/FrmView.htm?IsTest=1&FrmID="+FK_MapData;
+            var url = "../FoolFormDesigner/MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + FK_MapData;
             OpenDialogAndCloseRefresh(url, "预览手机端表单", 300, 450, "icon-edit", function () { });
         }
         //复制顺序到节点
@@ -102,7 +103,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddPara("FK_MapData", FK_MapData);
-            handler.AddPara("attrs", ","+arr.join(',')+",");
+            handler.AddPara("attrs", "," + arr.join(',') + ",");
             var data = handler.DoMethodReturnString("SortingMapAttrs_From_Save");
 
             if (data.indexOf('err') >= 0) {
@@ -311,10 +312,10 @@
                             var athAttr = new Entity("BP.Sys.MapAttr");
                             athAttr.SetPKVal(groupOfAthMents[0].MyPK)
                             var count = athAttr.RetrieveFromDBSources();
-                            if(count == 0)
+                            if (count == 0)
                                 continue;
                         }
-                         if (dtGroups.length == 1) {
+                        if (dtGroups.length == 1) {
                         }
                         else if (i == 0) {//如果是第一个，只显示下移
                             tr += btnDown;
@@ -340,12 +341,12 @@
                             table += "<td style='text-align:center'>1</td>";
                             table += "<td nowrap=''>" + item.MyPK + "</td>";
                             table += "<td nowrap=''>" + item.Name + "</td>";
-                           //是否显示checkbox
-                        var cbox = "";
-                        if (GetPara(item.AtPara,"IsShowMobile") == "1")
-                            table += "<td nowrap=''><label><input type='checkbox' name='CB_" + item.MyPK + "' value='"+item.MyPK +"' checked=true />是否显示</label></td>";
-                        else
-                            table += "<td nowrap=''><label><input type='checkbox' name='CB_" + item.MyPK + "'  value='"+item.MyPK +"' />是否显示</label></td>";
+                            //是否显示checkbox
+                            var cbox = "";
+                            if (GetPara(item.AtPara, "IsShowMobile") == "1")
+                                table += "<td nowrap=''><label><input type='checkbox' name='CB_" + item.MyPK + "' value='" + item.MyPK + "' checked=true />是否显示</label></td>";
+                            else
+                                table += "<td nowrap=''><label><input type='checkbox' name='CB_" + item.MyPK + "'  value='" + item.MyPK + "' />是否显示</label></td>";
                             table += "<td valign='top' nowrap=''>&nbsp;";
                             table += "</td>";
                             table += "</tr>";
@@ -436,7 +437,7 @@
                     //1.1.1-00、如果此分组下没有字段，则显示无字段消息，不能判断dtl
                     if (rows_Attrs.length == 0) {
                         // 该分组下面没有任何字段
-                        tr = "<tr><td colspan='6' style='color:red' nowrap='nowrap' >&nbsp;&nbsp;@该分组下面没有任何字段或控件</td>";
+                        tr = "<tr><td colspan='6'  nowrap='nowrap' >&nbsp;&nbsp;无字段或控件</td>";
                         $("#t1").append(tr);
 
                     }
@@ -540,22 +541,27 @@
     </script>
 </head>
 <body class="easyui-layout">
-<form id="form1">
-    <div id="layoutDiv" data-options="region:'center',title:'字段排序',border:false" style="padding:5px">
-        <div id="p" style="padding:5px">
-        </div>
+    <form id="form1">
+        <div id="layoutDiv" data-options="region:'center',title:'字段排序',border:false" style="padding:5px">
+            <div id="p" style="padding:5px">
+            </div>
 
 
-        <div id="nodes" class="easyui-dialog" data-options="title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'" style="width:280px;height:340px">
-            <div id="nodes_panel" style="width:100%;height:100%"></div>
+            <div id="nodes" class="easyui-dialog" data-options="title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'" style="width:280px;height:340px">
+                <div id="nodes_panel" style="width:100%;height:100%"></div>
+            </div>
+
+            <div id="btns" class="dialog-button">
+                <a onclick="BtnCopy()" class="easyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
+                    <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span></span>
+                </a>
+                <a onclick="$('#nodes').dialog('close');" class="eeasyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
+                    <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span>
+                </a>
+            </div>
+
+
         </div>
-        <div id="btns" class="dialog-button">
-            <a onclick="BtnCopy()"  class="easyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-                <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span></span></a>
-            <a onclick="$('#nodes').dialog('close');" class="eeasyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-                <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span></a>
-        </div>
-    </div>
-</form>
+    </form>
 </body>
 </html>

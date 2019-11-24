@@ -1,12 +1,21 @@
-/** ºóÌ¨¹ÜÀíËùµ÷ÓÃµÄ·½·¨. ******************************************************************************************************
- *  1. ÓÃ»§ÔÚºóÌ¨µ÷ÓÃÈ¨ÏŞ¿ØÖÆ.
- *  2. ÓÃÓÚ¼¯³É×Ô¼ºµÄÈ¨ÏŞ¹ÜÀí¼Ü¹¹.
- *  3. Èç¹û·µ»Ø err@xxxx Ôò±íÊÇÉ¾³ıÊ§°Ü.
+ï»¿/** åå°ç®¡ç†æ‰€è°ƒç”¨çš„æ–¹æ³•. ******************************************************************************************************
+ *  1. ç”¨æˆ·åœ¨åå°è°ƒç”¨æƒé™æ§åˆ¶.
+ *  2. ç”¨äºé›†æˆè‡ªå·±çš„æƒé™ç®¡ç†æ¶æ„.
+ *  3. å¦‚æœè¿”å› err@xxxx åˆ™è¡¨æ˜¯åˆ é™¤å¤±è´¥.
  * **/
 
 /**
- * ÔÚ¸ùÄ¿Â¼ÏÂ´´½¨×Ó2¼¶Ä¿Â¼. ×ÓÄ¿Â¼µÄÃû×Ö:,  ·µ»Ø×ÓÄ¿Â¼´´½¨µÄ±àºÅ. 
- * @param {Ä¿Â¼Ãû×Ö} dirName
+ * è·å¾—åˆ›å»ºçš„æ‰€æœ‰çš„ å•æ®
+ */
+function Admin_GenerAllBills() {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var data = handler.DoMethodReturnJSON("CCBillAdmin_Admin_GenerAllBills");
+    return data;
+}
+
+/**
+ * åœ¨æ ¹ç›®å½•ä¸‹åˆ›å»ºå­2çº§ç›®å½•. å­ç›®å½•çš„åå­—:,  è¿”å›å­ç›®å½•åˆ›å»ºçš„ç¼–å·. 
+ * @param {ç›®å½•åå­—} dirName
  */
 function Admin_TreeDir_Create(dirName) {
     var en = new Entity("BP.Sys.FrmTree", "100");
@@ -14,8 +23,8 @@ function Admin_TreeDir_Create(dirName) {
 }
 
 /**
- * É¾³ı±íµ¥Ê÷
- * @param {Ä¿Â¼±àºÅ} treeNo
+ * åˆ é™¤è¡¨å•æ ‘
+ * @param {ç›®å½•ç¼–å·} treeNo
  */
 function Admin_TreeDir_Delete(treeNo) {
     var en = new Entity("BP.Sys.FrmTree", treeNo);
@@ -23,16 +32,16 @@ function Admin_TreeDir_Delete(treeNo) {
 }
 
 /**
- * ÉÏÒÆ¶¯Ä¿Â¼
- * @param {Ä¿Â¼±àºÅ} treeNo
+ * ä¸Šç§»åŠ¨ç›®å½•
+ * @param {ç›®å½•ç¼–å·} treeNo
  */
 function Admin_TreeDir_Up(treeNo) {
     var en = new Entity("BP.Sys.FrmTree", treeNo);
     en.DoMethodReturnString("DoUp");
 }
 /**
- * ÏÂÒÆ¶¯Ä¿Â¼
- * @param {Ä¿Â¼±àºÅ} treeNo
+ * ä¸‹ç§»åŠ¨ç›®å½•
+ * @param {ç›®å½•ç¼–å·} treeNo
  */
 function Admin_TreeDir_Down(treeNo) {
     var en = new Entity("BP.Sys.FrmTree", treeNo);
@@ -40,40 +49,95 @@ function Admin_TreeDir_Down(treeNo) {
 }
 
 /**
- * ´´½¨±íµ¥-µ¥¾İ
- * @param {´´½¨ÔÚÄÇ¸ö±íµ¥Ê÷µÄÒ¶×ÓÏÂ} treeNo
- * @param {±íµ¥ID} frmID
- * @param {±íµ¥Ãû³Æ} frmName
- * @param {´æ´¢±í,Èç¹ûÎªNullÔòÓëfrmIDÏàÍ¬} pTable
- * Èç¹û·µ»Ø err@xxxx Ôò±íÊÇÊ§°Ü.
+ * åˆ›å»ºè¡¨å•-å•æ®
+ * @param {åˆ›å»ºåœ¨é‚£ä¸ªè¡¨å•æ ‘çš„å¶å­ä¸‹,å¯ä»¥ä¸ºnullï¼Œé»˜è®¤åˆ›å»ºæ ¹ç›®å½•ä¸‹} treeNo
+ * @param {è¡¨å•ID} frmID
+ * @param {è¡¨å•åç§°} frmName
+ * @param {å•æ®ç±»å‹,0=å‚»ç“œè¡¨å•,1=è‡ªç”±è¡¨å•,3=URLè¡¨å•,4=WordFrm,5=ExcelFrm,6=VSTOForExcel,7=Entity} frmTpye
+ * @param {å­˜å‚¨è¡¨,å¦‚æœä¸ºNullåˆ™ä¸frmIDç›¸åŒ} pTable
+ * å¦‚æœè¿”å› err@xxxx åˆ™è¡¨æ˜¯å¤±è´¥.
  */
-function Admin_Form_CreateBill(treeNo, frmID, frmName, pTable) {
-
+function Admin_Form_CreateBill(treeNo, frmID, frmName, frmType, pTable) {
+    return Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, 1);
 }
 
 /**
- * ´´½¨±íµ¥-ÊµÌå
- * @param {´´½¨ÔÚÄÇ¸ö±íµ¥Ê÷µÄÒ¶×ÓÏÂ} treeNo
- * @param {±íµ¥ID} frmID
- * @param {±íµ¥Ãû³Æ} frmName
- * @param {´æ´¢±í,Èç¹ûÎªNullÔòÓëfrmIDÏàÍ¬} pTable
- * Èç¹û·µ»Ø err@xxxx Ôò±íÊÇÊ§°Ü.
+ * åˆ›å»ºè¡¨å•-å®ä½“
+ * @param {åˆ›å»ºåœ¨é‚£ä¸ªè¡¨å•æ ‘çš„å¶å­ä¸‹,å¯ä»¥ä¸ºnullï¼Œé»˜è®¤åˆ›å»ºæ ¹ç›®å½•ä¸‹} treeNo
+ * @param {è¡¨å•ID} frmID
+ * @param {è¡¨å•åç§°} frmName
+ * @param {å•æ®ç±»å‹,0=å‚»ç“œè¡¨å•,1=è‡ªç”±è¡¨å•,3=URLè¡¨å•,4=WordFrm,5=ExcelFrm,6=VSTOForExcel,7=Entity} frmTpye
+ * @param {å­˜å‚¨è¡¨,å¦‚æœä¸ºNullåˆ™ä¸frmIDç›¸åŒ} pTable
+ * å¦‚æœè¿”å› err@xxxx åˆ™è¡¨æ˜¯å¤±è´¥.
  */
-function Admin_Form_CreateDict(treeNo, frmID, frmName, pTable) {
+function Admin_Form_CreateDict(treeNo, frmID, frmName, frmType, pTable) {
 
+    return Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, 2);
 }
 
+function Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, entityType) {
+    if (treeNo == null || treeNo == undefined)
+        treeNo = "100";
+
+   // alert(entityType);
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+    handler.AddPara("EntityType", entityType); //å®ä½“.
+
+    handler.AddPara("TB_No", frmID);  //è¡¨å•ID
+    handler.AddPara("TB_Name", frmName); //è¡¨å•åç§°.
+
+    handler.AddPara("FK_FrmSort", treeNo); //æ ‘ç»“æ„.
+    handler.AddPara("DDL_FrmType", frmType); //è¡¨å•ç±»å‹.
+    handler.AddPara("TB_PTable", pTable); //ptable.
+    handler.AddPara("DDL_PTableModel", 0);  //æ¨¡å¼,å¿˜è®°äº†è¿™ä¸ªå‚æ•°.
+    handler.AddPara("DDL_DBSrc", "local");  //æ•°æ®æº.
+
+    var data = handler.DoMethodReturnString("NewFrmGuide_Create");
+    if (data.indexOf("err@") == 0) {
+        alert(data);
+        return data;
+    }
+    alert("åˆ›å»ºæˆåŠŸ.");
+    return data;
+}
+
+
 /**
- * É¾³ı±íµ¥¡¢µ¥¾İ
- * @param {±íµ¥ID£¬²»¹ÜÊÇDict»¹ÊÇBill} frmID
+ * è·å¾—è®¾è®¡è¡¨å•çš„URL.
+ * @param {è¡¨å•ID} frmID
+ */
+function Admin_Form_GenerDesignerUrl(frmID) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+    handler.AddPara("FK_MapData", frmID);
+    var data = handler.DoMethodReturnString("GoToFrmDesigner_Init");
+    if (data.indexOf("err@") == 0) {
+        alert(data);
+        return data;
+    }
+
+    data = data.replace("url@..", "");
+
+    if (plant == 'JFlow')
+        data = "/jflow-web/WF/Admin" + data;
+    else
+        data = "/WF/Admin" + data;
+
+    return data;
+}
+
+
+/**
+ * åˆ é™¤è¡¨å•ã€å•æ®
+ * @param {è¡¨å•IDï¼Œä¸ç®¡æ˜¯Dictè¿˜æ˜¯Bill} frmID
  */
 function Admin_From_Drop(frmID) {
     var en = new Entity("BP.Sys.MapData", frmID);
     en.Delete();
 }
 /**
- * ±íµ¥ÒÆ¶¯,ÔÚÍ¬Ò»¸öÄ¿Â¼ÏÂ
- * @param {±íµ¥ID} frmID
+ * è¡¨å•ç§»åŠ¨,åœ¨åŒä¸€ä¸ªç›®å½•ä¸‹
+ * @param {è¡¨å•ID} frmID
  */
 function Admin_From_Up(frmID) {
     var en = new Entity("BP.Sys.MapData", frmID);
@@ -81,38 +145,38 @@ function Admin_From_Up(frmID) {
 }
 
 /**
- * ±íµ¥ÒÆ¶¯,ÔÚÍ¬Ò»¸öÄ¿Â¼ÏÂ
- * @param {±íµ¥ID} frmID
+ * è¡¨å•ç§»åŠ¨,åœ¨åŒä¸€ä¸ªç›®å½•ä¸‹
+ * @param {è¡¨å•ID} frmID
  */
-function Admin_From_Up(frmID) {
+function Admin_From_Down(frmID) {
     var en = new Entity("BP.Sys.MapData", frmID);
     en.DoMethodReturnString("DoOrderDown");
 }
 
 /**
- * °´ÕÕ½ÇÉ«°ó¶¨È¨ÏŞ
- * @param {±íµ¥ID} frmID
- * @param {¸ÚÎ»±àºÅ: 001,002,003} staNos
- * @param {ÊÇ·ñ¿ÉÒÔ²é¿´: 0-1} isView
- * @param {ÊÇ·ñ¿ÉÒÔĞÂ½¨: 0-1} isNew
- * @param {ÊÇ·ñ¿ÉÒÔÌá½»: 0-1} isSubmit
- * @param {ÊÇ·ñ¿ÉÒÔ¸üĞÂ: 0-1} isUpdate
- * @param {ÊÇ·ñ¿ÉÒÔÉ¾³ı: 0-1} isDelete
+ * æŒ‰ç…§è§’è‰²ç»‘å®šæƒé™
+ * @param {è¡¨å•ID} frmID
+ * @param {å²—ä½ç¼–å·: 001,002,003} staNos
+ * @param {æ˜¯å¦å¯ä»¥æŸ¥çœ‹: 0-1} isView
+ * @param {æ˜¯å¦å¯ä»¥æ–°å»º: 0-1} isNew
+ * @param {æ˜¯å¦å¯ä»¥æäº¤: 0-1} isSubmit
+ * @param {æ˜¯å¦å¯ä»¥æ›´æ–°: 0-1} isUpdate
+ * @param {æ˜¯å¦å¯ä»¥åˆ é™¤: 0-1} isDelete
  */
-function Admin_Power_AddToStation(frmID, staNos, isView, isNew, isSubmit, isUpdate isDelete) {
+function Admin_Power_AddToStation(frmID, staNos, isView, isNew, isSubmit, isUpdate, isDelete) {
 
 }
 
 /**
- * °´ÕÕÈËÔ±°ó¶¨È¨ÏŞ
- * @param {±íµ¥ID} frmID
- * @param {¸ÚÎ»±àºÅ: 001,002,003} staNos
- * @param {ÊÇ·ñ¿ÉÒÔ²é¿´: 0-1} isView
- * @param {ÊÇ·ñ¿ÉÒÔĞÂ½¨: 0-1} isNew
- * @param {ÊÇ·ñ¿ÉÒÔÌá½»: 0-1} isSubmit
- * @param {ÊÇ·ñ¿ÉÒÔ¸üĞÂ: 0-1} isUpdate
- * @param {ÊÇ·ñ¿ÉÒÔÉ¾³ı: 0-1} isDelete
+ * æŒ‰ç…§äººå‘˜ç»‘å®šæƒé™
+ * @param {è¡¨å•ID} frmID
+ * @param {å²—ä½ç¼–å·: 001,002,003} staNos
+ * @param {æ˜¯å¦å¯ä»¥æŸ¥çœ‹: 0-1} isView
+ * @param {æ˜¯å¦å¯ä»¥æ–°å»º: 0-1} isNew
+ * @param {æ˜¯å¦å¯ä»¥æäº¤: 0-1} isSubmit
+ * @param {æ˜¯å¦å¯ä»¥æ›´æ–°: 0-1} isUpdate
+ * @param {æ˜¯å¦å¯ä»¥åˆ é™¤: 0-1} isDelete
  */
-function Admin_Power_AddToUser(frmID, userNos, isView, isNew, isSubmit, isUpdate isDelete) {
+function Admin_Power_AddToUser(frmID, userNos, isView, isNew, isSubmit, isUpdate, isDelete) {
 
 }

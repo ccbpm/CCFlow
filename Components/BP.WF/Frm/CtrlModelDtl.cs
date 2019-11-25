@@ -75,7 +75,7 @@ namespace BP.Frm
                 //map.AddTBStringDoc(CtrlModelDtlAttr.NodeData, null, "节点数据(日志信息)", true, false);
                 //map.AddTBString(CtrlModelDtlAttr.Tag, null, "参数", true, false, 0, 300, 3000);
                 //map.AddTBString(CtrlModelDtlAttr.Exer, null, "执行人", true, false, 0, 200, 100);
-                //#endregion 字段.
+                #endregion 字段.
 
                 this._enMap = map;
                 return this._enMap;

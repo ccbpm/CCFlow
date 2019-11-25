@@ -249,11 +249,25 @@
         <div id="listMyFrms"></div>
 
         <legend id="help">操作demo:</legend>
-         
 
     </fieldset>
 
-     
+    <script type="text/javascript">
+
+        function DemoCCForm() {
+            //创建一个实体.
+            var frmID = "Student";
+
+            var en = new Entity("Student");
+            en.BillNo = "zhoupeng";
+            en.Ttitle = "周朋";
+            en.Insert();
+
+        }
+
+    </script>
+
+
 
 </body>
 </html>

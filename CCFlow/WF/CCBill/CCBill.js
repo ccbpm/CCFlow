@@ -64,6 +64,44 @@ function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
     return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&BillNo=" + pkval;
 }
 
+
+/**
+ * 创建一个空白的BillID.
+ * @param {表单ID} frmID.
+ */
+function CCForm_CreateBlankBillID(frmID) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill");
+    handler.AddPara("FrmID", frmID);
+    var billOID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+    return billOID;
+}
+
+/**
+ * 保存草稿 By OID
+ * @param {表单ID} frmID
+ * @param {主键} oid
+ */
+function CCForm_SaveAsDraftByOID(frmID,oid) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("OID", oid);
+   // var billOID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+    //return billOID;
+}
+
+/**
+ * 保存草稿By BillNo
+ * @param {表单ID} frmID
+ * @param {单据编号} BillNo
+ */
+function CCForm_SaveAsDraftByBillNo(frmID, billNo) {
+    var handler = new HttpHandler("BP.Frm.WF_CCBill");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("BillNo", billNo);
+    // var billOID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+    //return billOID;
+}
+
  
 
 /**
@@ -74,6 +112,7 @@ function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
  * @param {主表字段的参数，一个key val 的json格式的数据.} paras
  */
 function CCFrom_NewFrmEntityAsSpecOID(frmID, specOID, specTitle, paras) {
+
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", specOID);

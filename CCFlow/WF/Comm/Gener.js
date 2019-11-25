@@ -2545,6 +2545,7 @@ function validate(s) {
 }
 
 //初始化页面
+var webUser = new WebUser();
 $(function () {
 
     //   debugger;
@@ -2558,8 +2559,7 @@ $(function () {
 
     //判断登录权限.
     var url = window.location.href.toLowerCase();
-    if (url.indexOf('login.htm') == -1) {
-        var webUser = new WebUser();
+    if (url.indexOf('login.htm') == -1) {       
         if (webUser.No == "" || webUser.No == undefined || webUser.No == null) {
             dynamicHandler = "";
             alert("登录信息丢失,请重新登录.");

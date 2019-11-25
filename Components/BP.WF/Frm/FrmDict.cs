@@ -219,11 +219,12 @@ namespace BP.Frm
                 map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
                    "@0=表格模式@1=卡片模式@2=不可用");
 
+
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmDictAttr.BtnSaveAndCloseLable, "保存并关闭", "保存并关闭", true, false, 0, 50, 20);
-                map.AddBoolean(FrmDictAttr.BtnSaveAndCloseEnable, true, "是否可用？", true, true);
+                map.AddTBString(FrmDictAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
+                map.AddBoolean(FrmDictAttr.BtnSubmitEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
@@ -351,9 +352,11 @@ namespace BP.Frm
                 rm.Title = "创建规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCreateRole";
                 rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = FrmDictAttr.BtnNewLable;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "编辑规则"; // "设计表单";

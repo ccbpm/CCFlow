@@ -295,13 +295,13 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
                 /* 自由表单 */
-                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData + "&IsFirst=1";
+                return "url@../CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.FK_MapData + "&IsFirst=1";
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.VSTOForExcel)
             {
                 /* 自由表单 */
-                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
+                return "url@../CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.FK_MapData;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.Url)

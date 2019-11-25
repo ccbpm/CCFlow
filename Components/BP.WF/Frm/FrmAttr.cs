@@ -65,6 +65,10 @@ namespace BP.Frm
         /// </summary>
         public const string BtnSaveEnable = "BtnSaveEnable";
 
+        public const string BtnSubmitLable = "BtnSubmitLable";
+        public const string BtnSubmitEnable = "BtnSubmitEnable";
+        
+
         /// <summary>
         /// 保存andclose
         /// </summary>

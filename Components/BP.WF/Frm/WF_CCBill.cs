@@ -760,8 +760,6 @@ namespace BP.Frm
             string name = "数据导出";
             string filename = frmBill.Name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + ".xls";
             string filePath = ExportDGToExcel(Search_Data(), rpts.GetNewEntity, null, null, filename);
-
-
             return filePath;
         }
 

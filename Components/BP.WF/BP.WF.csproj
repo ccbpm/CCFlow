@@ -159,6 +159,7 @@
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
+    <Compile Include="Frm\CtrlModelDtl.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Frm\Method.cs" />
     <Compile Include="Frm\EmpCreate.cs" />
     <Compile Include="Frm\StationCreate.cs" />
+    <Compile Include="Frm\CtrlModel.cs" />
     <Compile Include="Frm\Track.cs" />
     <Compile Include="Frm\WF_CCBill_API.cs" />
     <Compile Include="Frm\WF_CCBill.cs" />

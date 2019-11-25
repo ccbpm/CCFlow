@@ -272,7 +272,7 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 130);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), true);
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
@@ -312,6 +312,7 @@ namespace BP.GPM
                 rm = new RefMethod();
                 rm.Title = "修改密码";
                 rm.ClassMethodName = this.ToString() + ".DoResetpassword";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.HisAttrs.AddTBString("pass1", null, "输入密码", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("pass2", null, "再次输入", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
@@ -319,8 +320,8 @@ namespace BP.GPM
                 rm = new RefMethod();
                 rm.Title = "修改主部门";
                 rm.ClassMethodName = this.ToString() + ".DoEditMainDept";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                // rm.RefAttrKey = EmpAttr.FK_Dept;
+                rm.RefAttrKey = EmpAttr.FK_Dept;
+                rm.RefMethodType = RefMethodType.LinkModel;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -330,19 +331,19 @@ namespace BP.GPM
 
         public string DoEditMainDept()
         {
-            return "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
         }
         
 
         public string DoEmpDepts()
         {
-            return "../../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()
         {
             //路径
-            return "../../../GPM/Siganture.htm?EmpNo=" + this.No;
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
         }
 
 

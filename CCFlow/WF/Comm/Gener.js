@@ -1,34 +1,4 @@
-﻿//初始化页面
-$(function () {
-
- //   debugger;
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
-
-    //判断登录权限.
-    var url = window.location.href.toLowerCase();
-    if (url.indexOf('login.htm') == -1) {
-        var webUser = new WebUser();
-        if (webUser.No == "" || webUser.No == undefined || webUser.No == null) {
-            dynamicHandler = "";
-            alert("登录信息丢失,请重新登录.");
-            return;
-        }
-
-        //如果进入了管理员目录.
-        if (url.indexOf("/admin/") != 1 && webUser.No != "admin") {
-            dynamicHandler = "";
-            alert("管理员登录信息丢失,请重新登录,当前用户[" + webUser.No + "]不能操作管理员目录功能.");
-            return;
-        }
-    }
-
-});
+﻿
 
 //检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
@@ -2573,3 +2543,35 @@ function validate(s) {
     }
     return true;
 }
+
+//初始化页面
+$(function () {
+
+    //   debugger;
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
+
+    //判断登录权限.
+    var url = window.location.href.toLowerCase();
+    if (url.indexOf('login.htm') == -1) {
+        var webUser = new WebUser();
+        if (webUser.No == "" || webUser.No == undefined || webUser.No == null) {
+            dynamicHandler = "";
+            alert("登录信息丢失,请重新登录.");
+            return;
+        }
+
+        //如果进入了管理员目录.
+        if (url.indexOf("/admin/") != 1 && webUser.No != "admin") {
+            dynamicHandler = "";
+            alert("管理员登录信息丢失,请重新登录,当前用户[" + webUser.No + "]不能操作管理员目录功能.");
+            return;
+        }
+    }
+
+});

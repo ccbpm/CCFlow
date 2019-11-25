@@ -2566,7 +2566,7 @@ $(function () {
         }
 
         //如果进入了管理员目录.
-        if (url.indexOf("/admin/") != 1 && loadWebUser.No != "admin") {
+        if (url.indexOf("/admin/") != -1 && loadWebUser.No != "admin") {
             dynamicHandler = "";
             alert("管理员登录信息丢失,请重新登录,当前用户[" + loadWebUser.No + "]不能操作管理员目录功能.");
             return;

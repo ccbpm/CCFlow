@@ -232,6 +232,8 @@
 
         }
 
+        
+
         //获得enName.
         function GetEnName() {
 
@@ -256,12 +258,13 @@
     </div>
     <div style="width: 100%; height: 100%; overflow: auto;">
         <div id="toolBar" style="padding: 0px; background: #fafafa; width: 100%;">
-            <a href="#" id="Create_Sample_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="CreateSampleNode();">新建同级</a> 
-            <a href="#" id="Create_Sub_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="CreateSubNode();">新建下级</a> 
-            <a href="#" id="Edit_Node"class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" onclick="EditNode(0);">修改</a>
-            <a href="#" id="View_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-open'" onclick="EditNode(1);">查看</a>  
-            <a href="#" id="Delete_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="DeleteNode();">删除</a> 
-            <a href="#" id="Up_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-up'" onclick="DoUp();">上移</a> 
+            <a href="#" id="Create_Sample_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="CreateSampleNode();">新建同级</a>
+            <a href="#" id="Create_Sub_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="CreateSubNode();">新建下级</a>
+            <a href="#" id="Edit_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" onclick="EditNode(0);">修改</a>
+            <a href="#" id="View_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="EditNode(1);">查看</a>
+            <a href="#" id="Delete_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="DeleteNode();">删除</a>
+            <a href="#" id="Open_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-open'" onclick="OpenNode(0);">全部展开</a>
+            <a href="#" id="Up_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-up'" onclick="DoUp();">上移</a>
             <a href="#" id="Down_Node" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-down'" onclick="DoDown();">下移</a>
             <a href="#" id="Set" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="Setting();">设置</a>
         </div>
@@ -269,21 +272,31 @@
         </ul>
         <div id="treeMM" class="easyui-menu" style="width: 120px;">
             <div id="Create_Sample_Node_1" data-options="iconCls:'icon-new'" onclick="CreateSampleNode();">
-                新建同级</div>
+                新建同级
+            </div>
             <div id="Create_Sub_Node_1" data-options="iconCls:'icon-new'" onclick="CreateSubNode();">
-                新建下级</div>
+                新建下级
+            </div>
             <div id="Edit_Node_1" data-options="iconCls:'icon-edit'" onclick="EditNode(0);">
-                修改</div>
-            <div id="View_Node_1" data-options="iconCls:'icon-open'" onclick="EditNode(1);">
-                查看</div>
+                修改
+            </div>
+            <div id="View_Node_1" data-options="iconCls:'icon-search'" onclick="EditNode(1);">
+                查看
+            </div>
             <div id="Delete_Node_1" data-options="iconCls:'icon-cancel'" onclick="DeleteNode();">
-                删除</div>
+                删除
+            </div>
             <div class="menu-sep">
             </div>
+            <div id="Open_Node_1" data-options="iconCls:'icon-open'" onclick="OpenNode(1);">
+                展开该节点
+            </div>
             <div id="Up_Node_1" data-options="iconCls:'icon-up'" onclick="DoUp();">
-                上移</div>
+                上移
+            </div>
             <div id="Down_Node_1" data-options="iconCls:'icon-down',disabled:false" onclick="DoDown();">
-                下移</div>
+                下移
+            </div>
         </div>
     </div>
 </div>

@@ -29,7 +29,12 @@
             }
 
         });
-
+        //节点表单组件属性.
+        function ShowFWCAttr() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '节点表单组件', 1000, 600, false);
+        }
         function Save() {
 
             //更新节点表单类型.
@@ -67,7 +72,7 @@
             <tr>
                 <td>请输入URL: </td>
                 <td style="width:70%;">
-                    <input type="text" placeholder="请输入SDK表单的URL" value="" id="TB_CustomURL" name="TB_CustomURL"
+                    <input type="text" placeholder="请输入SDK表单的URL" value="" id="TB_FormURL" name="TB_FormURL"
                            style="width:90%;" />
                 </td>
             </tr>

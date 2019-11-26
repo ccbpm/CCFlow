@@ -262,6 +262,10 @@
 
         //页面启动函数.
         $(function () {
+            //Hide_HastenWork:是否隐藏该条信息,CommonShowConfig.js中定义
+            if ("undefined" == typeof Hide_HastenWork) {
+                var Hide_HastenWork = true;
+            }
             InitPage();
         });
 
@@ -272,10 +276,7 @@
 
         //初始化数据.
         function InitPage() {
-            //Hide_HastenWork:是否隐藏该条信息,CommonShowConfig.js中定义
-            if ("undefined" == typeof Hide_HastenWork) {
-                var Hide_HastenWork = true;
-            }
+            
             //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
             var flowNos = GetQueryString("FlowNos");
 

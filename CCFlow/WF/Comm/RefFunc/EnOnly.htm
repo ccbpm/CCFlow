@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <!--<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />-->
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
     <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
@@ -97,34 +98,34 @@
 
             document.title = mapData.Name;
 
-            
-        //获取没有解析的外部数据源
-        var uiBindKeys = frmData["UIBindKey"];
-        if (uiBindKeys!=null && uiBindKeys.length != 0) {
-            //获取外部数据源 handler/JavaScript
-            var operdata;
-            for (var i = 0; i < uiBindKeys.length; i++) {
-                var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
-                var srcType = sfTable.SrcType;
-                if (srcType != null && srcType != "") {
-                    //Handler 获取外部数据源
-                    if (srcType == 5) {
-                        var selectStatement = sfTable.SelectStatement;
-                        if(plant=='CCFlow')
-                            selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
-                        else
-                            selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
-                        operdata = DBAccess.RunDBSrc(selectStatement, 1);
-                    }
-                    //JavaScript获取外部数据源
-                    if (srcType == 6) {
-                        operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
-                    }
-                    frmData[uiBindKeys[i].No] = operdata;
-                }
-            }
 
-        }
+            //获取没有解析的外部数据源
+            var uiBindKeys = frmData["UIBindKey"];
+            if (uiBindKeys != null && uiBindKeys.length != 0) {
+                //获取外部数据源 handler/JavaScript
+                var operdata;
+                for (var i = 0; i < uiBindKeys.length; i++) {
+                    var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+                    var srcType = sfTable.SrcType;
+                    if (srcType != null && srcType != "") {
+                        //Handler 获取外部数据源
+                        if (srcType == 5) {
+                            var selectStatement = sfTable.SelectStatement;
+                            if (plant == 'CCFlow')
+                                selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                            else
+                                selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
+                            operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                        }
+                        //JavaScript获取外部数据源
+                        if (srcType == 6) {
+                            operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                        }
+                        frmData[uiBindKeys[i].No] = operdata;
+                    }
+                }
+
+            }
 
             InitToolbar(); //初始工具栏.
 
@@ -478,7 +479,7 @@
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40) || attr.UIHeight > 40) {
                     isDropTR = true;
                     html += "<tr>";
-                     if (attr.UIContralType == 2) {
+                    if (attr.UIContralType == 2) {
                         html += "<td class='FContext' colspan='4' >";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
@@ -489,7 +490,7 @@
                         html += "</td>";
                     }
 
-                  
+
                     html += "</tr>";
 
                     if (rm != null) {
@@ -784,13 +785,13 @@
                 if (helpUrl == null || helpUrl == "" || helpUrl == "null") {
                     name = mapAttr.Name;
                 } else {
-                     if (helpUrl.indexOf('javascr') == 0)
-                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right;height:15px'  /></a>";
-                else
-                    name =  mapAttr.Name +"<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right;height:15px' /></a>";
+                    if (helpUrl.indexOf('javascr') == 0)
+                        name = mapAttr.Name + "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right;height:15px'  /></a>";
+                    else
+                        name = mapAttr.Name + "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right;height:15px' /></a>";
 
                 }
-                
+
                 checkedStr = "";
 
                 return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "'   style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
@@ -884,7 +885,7 @@
             });
             return operations;
 
-           
+
         }
 
         function ChangeKeyOfEnText(obj, KeyOfEn) {
@@ -1160,7 +1161,7 @@
 
         }
 
-/**/</script>
+        /**/</script>
     <style type="text/css">
         .panel-body {
             padding: 0px;

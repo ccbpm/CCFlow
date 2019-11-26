@@ -301,7 +301,7 @@ namespace BP.WF
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         myFrmIDs = myFrmIDs.Replace("'", "");
-                        sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
+                        sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
                     }
 
                     DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);

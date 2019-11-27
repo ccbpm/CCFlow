@@ -7133,11 +7133,9 @@ namespace BP.WF
                         if (pgwf.FK_Node == this.HisGenerWorkFlow.PNodeID)
                         {
                             SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
-                            string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                            string sendSuccess = "父流程自动运行到下一个节点，" + returnObjs.ToMsgOfHtml();
                             this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
                         }
-
-
                     }
 
                     if (town != null && town.HisNode.HisBatchRole == BatchRole.Group)

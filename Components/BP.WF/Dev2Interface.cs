@@ -5019,8 +5019,8 @@ namespace BP.WF
                             return "";
                         //主流程自动运行到一下节点
                         SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
-                        string sendSuccess = "父流程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
-                        return sendSuccess;
+
+                        return "父流程自动运行到下一个节点,"+returnObjs.ToMsgOfHtml();
                     }
                     //结束父流程
                     if (subFlow.IsAutoSendSubFlowOver == 2)

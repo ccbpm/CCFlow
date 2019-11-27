@@ -1232,6 +1232,10 @@ function WinOpen(url) {
 
 var treesObj;   //保存功能区处理对象
 var webUser = new WebUser();
+if (webUser.No == "") {
+    window.location.href = "./Login.htm";
+}
+    
 
 $(function () {
 

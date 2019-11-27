@@ -139,7 +139,7 @@ function CheckIsSQL(sql) {
     if (sql == '' || sql == null)
         return false;
 
-    if (sql.toUpperCase().indexOf('SELECT') == -1)
+    if (sql.replace(/(^\s*)/g, "").toUpperCase().indexOf('SELECT') == -1)
         return false;
     return true;
 }

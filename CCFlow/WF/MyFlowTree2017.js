@@ -342,7 +342,7 @@ function OnTabChange(scope, clickTab) {
             if (lastChar == "*") {
                 var currScope = currTab.find('iframe')[0];
                 var contentWidow = currScope.contentWindow;
-                if (contentWidow.SaveDtlData != undefined && typeof (contentWidow.SaveDtlData) == "function") {
+                if (contentWidow!=null && contentWidow.SaveDtlData != undefined && typeof (contentWidow.SaveDtlData) == "function") {
                     contentWidow.IsChange = true;
                     IsSaveTrue = contentWidow.SaveDtlData("btnsave");
 

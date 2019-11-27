@@ -209,6 +209,17 @@ function CCFrom_DeleteFrmEntityByBillNo(frmID, billNo) {
 }
 
 
+function CCForm_FrmSearch(frmID, frmType) {
+    //单据
+    if (frmType == 1) {
+        return "./SearchBill.htm?FrmID=" + frmID;
+    }
+    if (frmType == 2) {
+        return "./SearchDict.htm?FrmID=" + frmID;
+    }
+}
+
+
 
 
 

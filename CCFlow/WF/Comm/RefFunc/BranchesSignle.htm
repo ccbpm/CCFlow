@@ -30,6 +30,25 @@
     </style>
     <script type="text/javascript">
         var mapExt = null;
+         var saveType = GetQueryString("SaveType");
+        if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
+            saveType = 0;
+        else
+            saveType = 1;
+
+        var para = GetQueryString("Para");
+        if (para == null || para == undefined || para == "")
+            para = null;
+        var paraVal = GetQueryString("ParaVal");
+        var para1 = GetQueryString("Para1");
+         if (para1 == null || para1 == undefined || para1 == "")
+            para1 = null;
+        var paraVal1 = GetQueryString("ParaVal1");
+
+
+        //存储在一个字段的集合
+        var selectRows = ",";
+
         var rootNo;
         $(function () {
 
@@ -57,24 +76,40 @@
             var dot2DotEnsName = new Entities(GetQueryString("Dot2DotEnsName"));
 
             var dot2DotEnName = new Entities(GetQueryString("Dot2DotEnName"));
-            dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), pkval);
-            //dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), "1000000");
+            
+            if (para == null)
+                dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), pkval);
+            else if (para1 == null)
+                dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), pkval, para, paraVal);
+            else 
+                dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), pkval, para, paraVal, para1, paraVal1);
 
-            //alert(dot2DotEnsName.length);
-            $.each(dot2DotEnsName, function (i, o) {
+            if (saveType == 1) {
+                if (dot2DotEnsName.length != 0) {
+                    selectRows = dot2DotEnsName[0][GetQueryString("AttrOfMInMM")];
+                    var strs = selectRows.split(",");
+                    for (var i = 0; i < strs.length; i++) {
+                        if (strs[i] == "")
+                            continue;
+                        global.selectedNodes.push({
+                            "No": strs[i]
+                        });
+                    }
+                }
+            } else {
+                $.each(dot2DotEnsName, function (i, o) {
 
-                var enDot = new Entity(dot2DotEnName, o);
+                    var enDot = new Entity(dot2DotEnName, o);
 
-                var no = enDot[GetQueryString("AttrOfMInMM")];
-                var name = enDot[GetQueryString("AttrOfMInMM") + "Text"];
-
-                // alert(no + " - " + name);
-
-                global.selectedNodes.push({
-                    "No": no,
-                    "Name": name
+                    var no = enDot[GetQueryString("AttrOfMInMM")];
+                    var name = enDot[GetQueryString("AttrOfMInMM") + "Text"];
+                    global.selectedNodes.push({
+                        "No": no,
+                        "Name": name
+                    });
                 });
-            });
+            }
+            
 
             // search
             $("#TB_Key").on("keyup", function () {
@@ -85,11 +120,6 @@
                     $('#tree_Panel').show();
                     return;
                 }
-
-                // var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_RefFunc");
-                //   handler.Domss();
-                //  var gridUrl = replaceAll(mapExt.Tag1, "@Key", keyWord);
-                // tree
                 loadViewGrid(keyWord);
 
             });
@@ -169,8 +199,6 @@
 
         function loadTree(rootNo, global) {
 
-            //var json = DBAccess.RunDBSrc(treeUrl); // 执行url返回json.
-
             var ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
             ens.RetrieveAll();
             var jsonTree = createJsonToTree(ens, rootNo);
@@ -188,14 +216,26 @@
                         $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
                         saveCheckNodes(selectNodes, 1);
                     }
+                   
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    en[GetQueryString("AttrOfMInMM")] = node.id;
+                    if (saveType == 1) {
+                        if (selectRows.indexOf("," + node.id + ",") != -1)
+                            return;
+                        selectRows += node.id + ",";
+                        en[GetQueryString("AttrOfMInMM")] = selectRows;
+                    } else {
+                         en[GetQueryString("AttrOfMInMM")] = node.id;
+                    }
+                   
+                    if (para != null)
+                        en[para] = paraVal;
+                    if (para1 != null)
+                        en[para1] = paraVal1;
+
                     en.Save();
 
-                    // var parentNode = $("#tree").treeview("getNode", node.parentId);
-                    //setParentNodeCheck(parentNode);
-
+                  
 
                 },
                 onNodeUnchecked: function (event, node) {
@@ -208,9 +248,20 @@
 
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    en[GetQueryString("AttrOfMInMM")] = node.id;
-                    en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), node.id);
-                    //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+                    if (saveType == 1) {
+                        selectRows = selectRows.replace("," + node.id + ",", ",");
+                        en[GetQueryString("AttrOfMInMM")] = selectRows;
+                         if (para != null)
+                            en[para] = paraVal;
+                        if (para1 != null)
+                            en[para1] = paraVal1;
+
+                        en.Save();
+                    } else {
+                        en[GetQueryString("AttrOfMInMM")] = node.id;
+                        en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), node.id);
+                    }
+                   
                 },
                 onNodeSelected: function (event, node) {
 
@@ -361,27 +412,74 @@
 
         var en = null;
         function saveCheckNodes(selectNodes, flag) {
-            for (var i = 0; i < selectNodes.length; i++) {
-                en = new Entity(GetQueryString("Dot2DotEnName"));
-                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                if (flag == 0)
-                    en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
-                else
-                    en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
-                en.Save();
+            if (saveType == 0) {
+                for (var i = 0; i < selectNodes.length; i++) {
+                    en = new Entity(GetQueryString("Dot2DotEnName"));
+                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                    if (flag == 0)
+                        en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
+                    else
+                        en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
+                    en.Save();
+                }
+                return;
             }
+            for (var i = 0; i < selectNodes.length; i++) {
+
+                
+                if (flag == 0) {
+                    if (selectRows.indexOf("," + selectNodes[i].id + ",") != -1)
+                        continue;
+                    selectRows += selectNodes[i].id + ",";
+                }
+                else {
+                     if (selectRows.indexOf("," + $('#tree').treeview('getNode', selectNodes[i]).id+ ",") != -1)
+                        continue;
+                    selectRows += $('#tree').treeview('getNode', selectNodes[i]).id+",";
+                }
+                    
+            }
+            en = new Entity(GetQueryString("Dot2DotEnName"));
+            en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+            en[GetQueryString("AttrOfMInMM")] = selectRows;
+            if (para != null)
+                en[para] = paraVal;
+            if (para1 != null)
+                en[para1] = paraVal1;
+
+            en.Save();
+            
         }
         function deleteCheckNodes(selectNodes, flag) {
-            for (var i = 0; i < selectNodes.length; i++) {
-                var en = new Entity(GetQueryString("Dot2DotEnName"));
-                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                if (flag == 0)
-                    en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
-                else
-                    en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
+            if (saveType == 0) {
+                for (var i = 0; i < selectNodes.length; i++) {
+                    var en = new Entity(GetQueryString("Dot2DotEnName"));
+                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                    if (flag == 0)
+                        en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
+                    else
+                        en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
 
-                en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), en[GetQueryString("AttrOfMInMM")]);
+                    en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), en[GetQueryString("AttrOfMInMM")]);
+                }
+                return;
             }
+            for (var i = 0; i < selectNodes.length; i++) {
+               
+                if (flag == 0)
+                    selectRows = selectRows.replace(","+selectNodes[i].id+",",",");
+                else
+                    selectRows = selectRows.replace(","+$('#tree').treeview('getNode', selectNodes[i]).id+",",",");
+            }
+            en = new Entity(GetQueryString("Dot2DotEnName"));
+            en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+            en[GetQueryString("AttrOfMInMM")] = selectRows;
+            if (para != null)
+                en[para] = paraVal;
+            if (para1 != null)
+                en[para1] = paraVal1;
+
+            en.Save();
         }
         function CheckAll() {
             $('#tree').treeview('checkAll', { silent: true });

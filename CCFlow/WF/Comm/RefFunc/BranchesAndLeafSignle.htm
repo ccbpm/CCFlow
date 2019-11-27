@@ -66,6 +66,8 @@
         else
             saveType = 1;
 
+        var webUser = new WebUser();
+
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
@@ -83,20 +85,24 @@
             var data = hander.DoMethodReturnJSON("BranchesAndLeaf_Init");
 
             var dbTrees = data["DBTrees"]; //左边的树.
-            selectedRows = data["DBMMs"]; //选择的数据.
 
-            var webUser = new WebUser();
+            //选择的数据.
+            if (saveType == 1) {
+                if (data["DBMMs"].length == 0)
+                    selectedRows = ","
+                else
+                    selectedRows = data["DBMMs"][0].No;
+            }
+            else
+                selectedRows = data["DBMMs"];
+
+
             // AtPara
             var title = "请选择"; // mapExt.GetPara("Title");
             $("#title").text(title); //设置标题.
 
             var tip = "输入关键字."; // mapExt.GetPara("SearchTip");
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
-
-            // global
-            var searchUrl = ""; // mapExt.Tag1;    //查询
-            var treeUrl = ""; // mapExt.Tag2;      //初始化树
-            var treeClickUrl = ""; // mapExt.Tag3; //树选择.
 
 
             var searchTableColumns = [{
@@ -199,28 +205,46 @@
                 }]
             });
 
-            //		        // 初始化加载
-            //		        var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-            //		        frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
-            //		        $.each(frmEleDBs, function (i, o) {
-            //		            selectedRows.push({
-            //		                "No": o.Tag1,
-            //		                "Name": o.Tag2
-            //		            });
-            //		        });
+
             loadViewGrid(selectedRows);
         });
 
         function loadViewGrid(json) {
+            if (saveType == 1) {
+                //把字符串转json
+                var strs = json.split(",");
+                json = [];
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+                    json.push({ "No": strs[i] });
+                }
+            }
             if ($.isArray(json)) {
                 $('#viewGrid').bootstrapTable("load", json);
             }
         }
-        function addSelectedData(globalSelectedRows, selectedRows) {
-            if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
+        function addSelectedData(globalSelectedRows, nowSelectedRows) {
+            if (saveType == 1) {
+                if (!$.isArray(nowSelectedRows))
+                    return;
+                $.each(nowSelectedRows, function (i, o) {
+                    if (globalSelectedRows.indexOf("," + o.No + ",") == -1) {
+                        if (globalSelectedRows == "" || globalSelectedRows == undefined)
+                            globalSelectedRows += "," + o.No + ",";
+                        else
+                            globalSelectedRows += o.No + ",";
+                        
+                    }
+                });
+                SaveVal(globalSelectedRows);
+                selectedRows =globalSelectedRows;
                 return;
             }
-            $.each(selectedRows, function (i, o) {
+            if (!$.isArray(globalSelectedRows) || !$.isArray(nowSelectedRows)) {
+                return;
+            }
+            $.each(nowSelectedRows, function (i, o) {
                 var sel = $.grep(globalSelectedRows, function (obj) {
                     return obj.No == o.No;
                 });
@@ -231,11 +255,25 @@
                 }
             });
         }
-        function removeSelectedData(globalSelectedRows, selectedRows) {
-            if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
+        function removeSelectedData(globalSelectedRows, nowSelectedRows) {
+            if (saveType == 1) {
+                if (!$.isArray(nowSelectedRows))
+                    return;
+                $.each(nowSelectedRows, function (i, o) {
+                    if (globalSelectedRows.indexOf("," + o.No + ",") != -1) {
+                        globalSelectedRows = globalSelectedRows.replace("," + o.No + ",", ",");
+                       
+                    }
+                });
+                 SaveVal(globalSelectedRows);
+                selectedRows = globalSelectedRows;
+
                 return;
             }
-            $.each(selectedRows, function (i, o) {
+            if (!$.isArray(globalSelectedRows) || !$.isArray(nowSelectedRows)) {
+                return;
+            }
+            $.each(nowSelectedRows, function (i, o) {
                 for (var index = 0; index < globalSelectedRows.length; index++) {
                     if (o.No == globalSelectedRows[index].No) {
                         Delete(o.No);
@@ -279,6 +317,7 @@
 
         function loadSelectGrid(json) {
 
+           
             if (!$.isArray(json)) {
                 return;
             }
@@ -289,24 +328,27 @@
             $('#selectGrid').bootstrapTable("showColumn", "No");
             $('#selectGrid').bootstrapTable("showColumn", "Name");
 
-
-            //		        $.each(json[0], function (n, o) {
-            //		            $('#selectGrid').bootstrapTable("showColumn", n);
-            //		        });
-
-
-            if ($.isArray(selectedRows)) {
+            if (saveType == 1) {
                 $.each(json, function (i, o) {
-
-                    var sel = $.grep(selectedRows, function (obj) {
-                        return o.No == obj.No;
-                    });
-
-                    if (sel.length > 0) {
+                    if (selectedRows.indexOf("," + o.No + ",") != -1)
                         o.checked = true;
-                    }
                 });
+            } else {
+                
+                if ($.isArray(selectedRows)) {
+                    $.each(json, function (i, o) {
+                        var sel = $.grep(selectedRows, function (obj) {
+                            return o.No == obj.No;
+                        });
+
+                        if (sel.length > 0) {
+                            o.checked = true;
+                        }
+                    });
+                }
             }
+
+
             $('#selectGrid').bootstrapTable("load", json);
         }
 
@@ -483,11 +525,23 @@
             var attrOfOneInMM = GetQueryString("AttrOfOneInMM");
             var attrOfMInMM = GetQueryString("AttrOfMInMM");
             var mm = new Entity(dot2DotEnName);
-            mm[attrOfOneInMM] = GetPKVal();
+            var para = GetQueryString("Para");
+            var paraVal = GetQueryString("ParaVal");
+            var para1 = GetQueryString("Para1");
+            var paraVal1 = GetQueryString("ParaVal1");
+
             mm[attrOfMInMM] = val;
-            if (mm.Update() == 0) {
-                mm.Insert();
-            }
+
+            if (para != null && para != undefined && para != "") {
+                mm[para] = paraVal;
+                mm[attrOfOneInMM] = GetPKVal().replace("_" + paraVal, "");
+            } else
+                mm[attrOfOneInMM] = GetPKVal();
+
+            if (para1 != null && para1 != undefined && para1 != "")
+                mm[para1] = paraVal1;
+
+            mm.Save();
         }
     </script>
     <head>

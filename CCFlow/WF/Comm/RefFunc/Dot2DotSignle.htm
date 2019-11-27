@@ -15,6 +15,11 @@
     <script type="text/javascript">
 
         var selectedEles = null;
+        var saveType = GetQueryString("SaveType");
+        if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
+            saveType = 0;
+        else
+            saveType = 1;
 
         var mapExt = null;
 
@@ -28,14 +33,39 @@
             var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
             var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应B实体外键.
             var defaultGroupAttrKey = GetQueryString("DefaultGroupAttrKey");
+            var para = GetQueryString("Para");
+            var paraVal = GetQueryString("ParaVal");
+            var para1 = GetQueryString("Para1");
+            var paraVal1 = GetQueryString("ParaVal1");
 
 
-            // alert(AttrOfOneInMM);
+
 
             //获得已经选择的集合.
-            selectedEles = new Entities(dot2DotEnsName);
-            selectedEles.ensName = dot2DotEnsName;
-            selectedEles.Retrieve(AttrOfOneInMM, GetPKVal());
+            if (para == null || para == undefined || para == "") {
+                selectedEles = new Entities(dot2DotEnsName);
+                selectedEles.ensName = dot2DotEnsName;
+                selectedEles.Retrieve(AttrOfOneInMM, GetPKVal());
+            } else if ((para1 == null || para1 == undefined || para1 == "") && saveType == 1) {
+
+                var ens = new new Entities(dot2DotEnsName);
+                ens.enName = enName;
+                ens.Retrieve(AttrOfOneInMM, GetPKVal(), para, paraVal);
+                if (ens.length == 0)
+                    selectedEles = "";
+                else
+                    selectedEles = ens[0][AttrOfMInMM];
+            } else if (para != null && para != undefined && para != "" && (para1 != null && para1 != undefined && para1 != "") && saveType == 1) {
+                var ens = new Entities(dot2DotEnsName);
+                ens.enName = enName;
+                ens.Retrieve(AttrOfOneInMM, GetPKVal(), para, paraVal, para1, paraVal1);
+                if (ens.length == 0)
+                    selectedEles = "";
+                else
+                    selectedEles = ens[0][AttrOfMInMM];
+
+            }
+
 
             if (defaultGroupAttrKey == "" || defaultGroupAttrKey == "null") {
                 BindListModel();
@@ -70,7 +100,7 @@
             var ensOfM = GetQueryString("EnsOfM"); // 主表实体. A实体.
             var entities = new Entities(ensOfM);
             entities.RetrieveAll();
-            entities = unique(entities);//去重复的人员
+            entities = unique(entities);//去重复的数据
 
             var html = "<table style='width:100%;' >";
             html += "<tr>";
@@ -96,17 +126,24 @@
                 en = entities[idx];
 
                 var isHave = false;
-                for (var iEle = 0; iEle < selectedEles.length; iEle++) {
-
-                    var ele = selectedEles[iEle];
-                    if (ele == null || ele == undefined)
-                        continue;
-
-                    if (ele[AttrOfMInMM] == en.No) {
+                if (saveType == 1) {
+                    if (selectedEles.indexOf("," + en.No + ",") != -1)
                         isHave = true;
-                        break;
+                }
+                if (saveType == 0) {
+                    for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+                        var ele = selectedEles[iEle];
+                        if (ele == null || ele == undefined)
+                            continue;
+
+                        if (ele[AttrOfMInMM] == en.No) {
+                            isHave = true;
+                            break;
+                        }
                     }
                 }
+
 
                 var lab = en.Name;
                 if (isHave)
@@ -220,17 +257,24 @@
                         continue;
 
                     var isHave = false;
-                    for (var iEle = 0; iEle < selectedEles.length; iEle++) {
-
-                        var ele = selectedEles[iEle];
-                        if (ele == null || ele == undefined)
-                            continue;
-
-                        if (ele[AttrOfMInMM] == en.No) {
+                    if (saveType == 1) {
+                        if (selectedEles != null && selectedEles.indexOf("," + en.No + ",") != -1)
                             isHave = true;
-                            break;
+                    }
+                    if (saveType == 0) {
+                        for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+                            var ele = selectedEles[iEle];
+                            if (ele == null || ele == undefined)
+                                continue;
+
+                            if (ele[AttrOfMInMM] == en.No) {
+                                isHave = true;
+                                break;
+                            }
                         }
                     }
+
 
                     var lab = en.Name;
                     if (isHave)
@@ -285,11 +329,11 @@
 
             //获得存储的值.
             var cbs = $("input[type='checkbox']:checked");
-            var strs = "";
+            var strs = ",";
             cbs.each(function () {
                 if (this.id.indexOf('CB_') == -1)
                     return true;
-                strs += "," + this.defaultValue;
+                strs += this.defaultValue + ",";
             });
 
             //处理

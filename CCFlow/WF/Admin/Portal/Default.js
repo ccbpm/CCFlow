@@ -1233,6 +1233,7 @@ function WinOpen(url) {
 var treesObj;   //保存功能区处理对象
 var webUser = new WebUser();
 if (webUser.No == "") {
+    alert("登录信息丢失, 请重新登录.");
     window.location.href = "./Login.htm";
 }
     

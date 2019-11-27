@@ -224,7 +224,8 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
 
 /*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
-
+    if (dynamicHandler == "")
+        return;
 
     $.ajax({
 
@@ -258,7 +259,8 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
 /* 绑定枚举值外键表.*/
 function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
-
+    if (dynamicHandler == "")
+        return;
     $.ajax({
         type: 'post',
         async: true,
@@ -287,7 +289,8 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
 绑定外键表.
 */
 function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
-
+    if (dynamicHandler == "")
+        return;
     $.ajax({
         type: 'post',
         async: true,
@@ -315,7 +318,8 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
 2, paras 就是向这个sql传递的参数, 比如： @FK_Mapdata=BAC@KeyOfEn=MyFild  .
 */
 function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
-
+    if (dynamicHandler == "")
+        return;
     if (colNo == null)
         colNo = "NO";
     if (colName == null)
@@ -832,6 +836,8 @@ var Entity = (function () {
 
         loadData: function () {
             var self = this;
+            if (dynamicHandler == "")
+                return;
             $.ajax({
                 type: 'post',
                 async: false,
@@ -875,6 +881,9 @@ var Entity = (function () {
         },
 
         Insert: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
 
@@ -882,6 +891,7 @@ var Entity = (function () {
                 params = getParams1(self);
 
             var result = "";
+           
             $.ajax({
                 type: 'post',
                 async: false,
@@ -919,6 +929,9 @@ var Entity = (function () {
             return result;
         },
         DirectInsert: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
 
@@ -926,6 +939,7 @@ var Entity = (function () {
                 params = getParams1(self);
 
             var result = "";
+           
             $.ajax({
                 type: 'post',
                 async: false,
@@ -964,9 +978,13 @@ var Entity = (function () {
         },
 
         Update: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
             var result;
+           
             $.ajax({
                 type: 'post',
                 async: false,
@@ -997,9 +1015,13 @@ var Entity = (function () {
         },
 
         Save: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
             var result;
+            
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1028,13 +1050,15 @@ var Entity = (function () {
         },
 
         Delete: function (key1, val1, key2, val2) {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
 
 
             var result;
+           
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1064,6 +1088,9 @@ var Entity = (function () {
         },
 
         Retrieve: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams1(this);
             var result;
@@ -1177,6 +1204,8 @@ var Entity = (function () {
             return val;
         },
         RetrieveFromDBSources: function () {
+            if (dynamicHandler == "")
+                return;
             var self = this;
             // var params = getParams1(this); //查询的时候不需要把参数传入里面去.
 
@@ -1232,7 +1261,8 @@ var Entity = (function () {
         },
 
         IsExits: function () {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             var result;
 
@@ -1266,7 +1296,8 @@ var Entity = (function () {
             return result;
         },   //一个参数直接传递,  多个参数，参数之间使用 ~隔开， 比如: zhangsna~123~1~山东济南.
         DoMethodReturnString: function (methodName, myparams) {
-
+            if (dynamicHandler == "")
+                return;
             var params = "";
             if (myparams == null || myparams == undefined)
                 myparams = "";
@@ -1584,7 +1615,8 @@ var Entities = (function () {
     Entities.prototype = {
         constructor: Entities,
         loadData: function () {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
 
             if (self.ensName == null || self.ensName == "" || self.ensName == "") {
@@ -1627,7 +1659,8 @@ var Entities = (function () {
             });
         },
         deleteIt: function () {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             if (self.ensName == null || self.ensName == "" || self.ensName == "") {
                 alert("在初始化实体期间EnsName没有赋值");
@@ -1668,6 +1701,8 @@ var Entities = (function () {
             this.loadData();
         },
         RetrieveCond: function () {
+            if (dynamicHandler == "")
+                return;
             var args = [""];
             $.each(arguments, function (i, o) {
                 args.push(o);
@@ -1725,6 +1760,8 @@ var Entities = (function () {
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
+            if (dynamicHandler == "")
+                return;
             var params = "";
             $.each(arguments, function (i, o) {
                 if (i != 0)
@@ -1776,6 +1813,8 @@ var Entities = (function () {
             return jsonString;
         },
         RetrieveAll: function () {
+            if (dynamicHandler == "")
+                return;
             var pathRe = "";
             if (plant == "JFlow" && (basePath == null || basePath == '')) {
                 var rowUrl = window.document.location.href;
@@ -1851,6 +1890,8 @@ var DBAccess = (function () {
     }
 
     DBAccess.RunSQL = function (sql) {
+        if (dynamicHandler == "")
+            return;
         var count = 0;
         sql = sql.replace(/'/g, '~');
         $.ajax({
@@ -1959,7 +2000,8 @@ var DBAccess = (function () {
     };
 
     DBAccess.RunSQLReturnTable = function (sql) {
-        //sql = replaceAll(sql, "~", "'");
+        if (dynamicHandler == "")
+            return;
 
         sql = sql.replace(/~/g, "'");
         sql = sql.replace(/[+]/g, "/#");
@@ -1998,7 +2040,8 @@ var DBAccess = (function () {
     };
 
     DBAccess.RunUrlReturnString = function (url) {
-
+        if (dynamicHandler == "")
+            return;
         if (url == null || typeof url === "undefined") {
             alert("err@url无效");
             return;
@@ -2178,7 +2221,8 @@ var HttpHandler = (function () {
         },
 
         DoMethodReturnString: function (methodName) {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             var jsonString;
 
@@ -2236,7 +2280,8 @@ var HttpHandler = (function () {
 
 var webUserJsonString = null;
 var WebUser = function () {
-
+    if (dynamicHandler == "")
+        return;
     if (webUserJsonString != null) {
         var self = this;
         $.each(webUserJsonString, function (n, o) {
@@ -2289,7 +2334,7 @@ var WebUser = function () {
         dataType: 'html',
         success: function (data) {
 
-            if (data.indexOf("err@") != -1) {
+            if (data.indexOf("err@") != -1 ) {
                 if (data.indexOf('登录信息丢失') != -1) {
                     alert("登录信息丢失，请重新登录。");
                 } else {
@@ -2300,6 +2345,7 @@ var WebUser = function () {
 
             try {
                 webUserJsonString = JSON.parse(data);
+                
             } catch (e) {
                 alert("json解析错误: " + data);
             }
@@ -2309,11 +2355,11 @@ var WebUser = function () {
             ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus);
         }
     });
-
     var self = this;
     $.each(webUserJsonString, function (n, o) {
         self[n] = o;
     });
+   
 };
 
 function ThrowMakeErrInfo(funcName, obj) {
@@ -2545,7 +2591,6 @@ function validate(s) {
 }
 
 //初始化页面
-var loadWebUser = new WebUser();
 $(function () {
     //   debugger;
     if (plant == "CCFlow") {
@@ -2558,7 +2603,7 @@ $(function () {
     //判断登录权限.
     var url = window.location.href.toLowerCase();
     if (url.indexOf('login.htm') == -1) {
-
+        var loadWebUser = new WebUser();
         if (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null) {
             dynamicHandler = "";
             alert("登录信息丢失,请重新登录.");

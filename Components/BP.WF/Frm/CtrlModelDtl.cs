@@ -22,7 +22,7 @@ namespace BP.Frm
         /// </summary>
         public const string CtrlObj = "CtrlObj";
         /// <summary>
-        /// 组织类型 Station,Emp,Dept
+        /// 组织类型 Station,Dept,User
         /// </summary>
         public const string OrgType = "OrgType";
         /// <summary>
@@ -36,9 +36,66 @@ namespace BP.Frm
     public class CtrlModelDtl : BP.En.EntityMyPK
     {
         #region 基本属性.
+        /// <summary>
+        /// 表单ID
+        /// </summary>
+        public string FrmID
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelDtlAttr.FrmID);
+            }
+            set
+            {
+                SetValByKey(CtrlModelDtlAttr.FrmID, value);
+            }
+        }
+
+        /// <summary>
+        /// 控制权限
+        /// </summary>
+        public string CtrlObj
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelDtlAttr.CtrlObj);
+            }
+            set
+            {
+                SetValByKey(CtrlModelDtlAttr.CtrlObj, value);
+            }
+        }
+
+
+        /// <summary>
+        /// 组织类型
+        /// </summary>
+        public string OrgType
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelDtlAttr.OrgType);
+            }
+            set
+            {
+                SetValByKey(CtrlModelDtlAttr.OrgType, value);
+            }
+        }
+        public string IDs
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelDtlAttr.IDs);
+            }
+            set
+            {
+                SetValByKey(CtrlModelDtlAttr.IDs, value);
+            }
+        }
         #endregion 基本属性.
 
         #region 构造.
+        #endregion 构造方法
         public string RptName = null;
         public override Map EnMap
         {
@@ -52,29 +109,13 @@ namespace BP.Frm
                 #region 字段
                 map.AddMyPK();  //增加一个自动增长的列.
 
-                //map.AddTBInt(CtrlModelDtlAttr.ActionType, 0, "类型", true, false);
-                //map.AddTBString(CtrlModelDtlAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
-                //map.AddTBInt(CtrlModelDtlAttr.FID, 0, "流程ID", true, false);
-                //map.AddTBInt(CtrlModelDtlAttr.WorkID, 0, "工作ID", true, false);
-
-                //map.AddTBInt(CtrlModelDtlAttr.NDFrom, 0, "从节点", true, false);
-                //map.AddTBString(CtrlModelDtlAttr.NDFromT, null, "从节点(名称)", true, false, 0, 300, 100);
-
-                //map.AddTBInt(CtrlModelDtlAttr.NDTo, 0, "到节点", true, false);
-                //map.AddTBString(CtrlModelDtlAttr.NDToT, null, "到节点(名称)", true, false, 0, 999, 900);
-
-                //map.AddTBString(CtrlModelDtlAttr.EmpFrom, null, "从人员", true, false, 0, 20, 100);
-                //map.AddTBString(CtrlModelDtlAttr.EmpFromT, null, "从人员(名称)", true, false, 0, 30, 100);
-
-                //map.AddTBString(CtrlModelDtlAttr.EmpTo, null, "到人员", true, false, 0, 2000, 100);
-                //map.AddTBString(CtrlModelDtlAttr.EmpToT, null, "到人员(名称)", true, false, 0, 2000, 100);
-
-                //map.AddTBString(CtrlModelDtlAttr.RDT, null, "日期", true, false, 0, 20, 100);
-                //map.AddTBFloat(CtrlModelDtlAttr.WorkTimeSpan, 0, "时间跨度(天)", true, false);
-                //map.AddTBStringDoc(CtrlModelDtlAttr.Msg, null, "消息", true, false);
-                //map.AddTBStringDoc(CtrlModelDtlAttr.NodeData, null, "节点数据(日志信息)", true, false);
-                //map.AddTBString(CtrlModelDtlAttr.Tag, null, "参数", true, false, 0, 300, 3000);
-                //map.AddTBString(CtrlModelDtlAttr.Exer, null, "执行人", true, false, 0, 200, 100);
+                map.AddTBString(CtrlModelDtlAttr.FrmID, null, "表单ID", true, false, 0, 300, 100);
+                //BtnNew,BtnSave,BtnSubmit,BtnDelete,BtnSearch
+                map.AddTBString(CtrlModelDtlAttr.CtrlObj, null, "控制权限", true, false, 0, 20, 100);
+                //Station,Dept,User
+                map.AddTBString(CtrlModelDtlAttr.OrgType, null, "组织类型", true, false, 0, 300, 100);
+                map.AddTBString(CtrlModelDtlAttr.IDs, null, "IDs", true, false, 0, 1000, 100);
+               
                 #endregion 字段.
 
                 this._enMap = map;
@@ -87,13 +128,50 @@ namespace BP.Frm
         public CtrlModelDtl()
         {
         }
-        /// <summary>
-        /// 增加授权人
-        /// </summary>
-        /// <returns></returns>
+
         protected override bool beforeInsert()
         {
+            this.MyPK = this.FrmID + "_" + this.CtrlObj + "_" + this.OrgType;
             return base.beforeInsert();
+        }
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.MyPK = this.FrmID + "_" + this.CtrlObj + "_" + this.OrgType;
+            return base.beforeUpdateInsertAction();
+        }
+
+        protected override void afterInsertUpdateAction()
+        {
+            //修改CtrlModel中的数据
+            CtrlModel ctrlM = new CtrlModel();
+            ctrlM.MyPK = this.FrmID + "_" + this.CtrlObj;
+            if(ctrlM.RetrieveFromDBSources() == 0)
+            {
+                ctrlM.FrmID = this.FrmID;
+                ctrlM.CtrlObj = this.CtrlObj;
+                if (this.OrgType.Equals("Station"))
+                    ctrlM.IDOfStations = this.IDs;
+                if (this.OrgType.Equals("Dept"))
+                    ctrlM.IDOfDepts = this.IDs;
+                if (this.OrgType.Equals("User"))
+                    ctrlM.IDOfUsers = this.IDs;
+                ctrlM.Insert();
+
+            }
+            else
+            {
+                if (this.OrgType.Equals("Station"))
+                    ctrlM.IDOfStations = this.IDs;
+                if (this.OrgType.Equals("Dept"))
+                    ctrlM.IDOfDepts = this.IDs;
+                if (this.OrgType.Equals("User"))
+                    ctrlM.IDOfUsers = this.IDs;
+                ctrlM.Update();
+            }
+             base.afterInsertUpdateAction();
+
+
         }
         #endregion 构造.
     }

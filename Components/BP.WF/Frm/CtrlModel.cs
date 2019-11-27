@@ -5,6 +5,7 @@ using BP.En;
 using BP.Sys;
 using BP.WF.Template;
 using BP.WF;
+using BP.Port;
 
 namespace BP.Frm
 {
@@ -40,16 +41,127 @@ namespace BP.Frm
     {
         #region 基本属性.
         /// <summary>
-        /// 表单数据
+        /// 表单ID
         /// </summary>
-        public string FrmDB = null;
-        public string FK_Flow = null;
+        public string FrmID
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelAttr.FrmID);
+            }
+            set
+            {
+                SetValByKey(CtrlModelAttr.FrmID, value);
+            }
+        }
+
+        /// <summary>
+        /// 控制权限
+        /// </summary>
+        public string CtrlObj
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelAttr.CtrlObj);
+            }
+            set
+            {
+                SetValByKey(CtrlModelAttr.CtrlObj, value);
+            }
+        }
+
+        public string IDOfUsers
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelAttr.IDOfUsers);
+            }
+            set
+            {
+                SetValByKey(CtrlModelAttr.IDOfUsers, value);
+            }
+        }
+
+
+        public string IDOfStations
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelAttr.IDOfStations);
+            }
+            set
+            {
+                SetValByKey(CtrlModelAttr.IDOfStations, value);
+            }
+        }
+
+
+        public string IDOfDepts
+        {
+            get
+            {
+                return this.GetValStringByKey(CtrlModelAttr.IDOfDepts);
+            }
+            set
+            {
+                SetValByKey(CtrlModelAttr.IDOfDepts, value);
+            }
+        }
+
+        public bool IsEnableAll
+        {
+            get
+            {
+                return this.GetValBooleanByKey(CtrlModelAttr.IsEnableAll);
+            }
+            set
+            {
+                SetValRefTextByKey(CtrlModelAttr.IsEnableAll, value);
+            }
+        }
+
+        public bool IsEnableStation
+        {
+            get
+            {
+                return this.GetValBooleanByKey(CtrlModelAttr.IsEnableStation);
+            }
+            set
+            {
+                SetValRefTextByKey(CtrlModelAttr.IsEnableStation, value);
+            }
+        }
+
+        public bool IsEnableDept
+        {
+            get
+            {
+                return this.GetValBooleanByKey(CtrlModelAttr.IsEnableDept);
+            }
+            set
+            {
+                SetValRefTextByKey(CtrlModelAttr.IsEnableDept, value);
+            }
+        }
+
+        public bool IsEnableUser
+        {
+            get
+            {
+                return this.GetValBooleanByKey(CtrlModelAttr.IsEnableUser);
+            }
+            set
+            {
+                SetValRefTextByKey(CtrlModelAttr.IsEnableUser, value);
+            }
+        }
         #endregion 基本属性.
 
         #region 字段属性.
         #endregion attrs
 
         #region 构造.
+
         public string RptName = null;
         public override Map EnMap
         {
@@ -63,31 +175,28 @@ namespace BP.Frm
                 #region 字段
                 map.AddMyPK();  //增加一个自动增长的列.
 
-                //map.AddTBInt(CtrlModelAttr.ActionType, 0, "类型", true, false);
-                //map.AddTBString(CtrlModelAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
-                //map.AddTBInt(CtrlModelAttr.FID, 0, "流程ID", true, false);
-                //map.AddTBInt(CtrlModelAttr.WorkID, 0, "工作ID", true, false);
-
-                //map.AddTBInt(CtrlModelAttr.NDFrom, 0, "从节点", true, false);
-                //map.AddTBString(CtrlModelAttr.NDFromT, null, "从节点(名称)", true, false, 0, 300, 100);
-
-                //map.AddTBInt(CtrlModelAttr.NDTo, 0, "到节点", true, false);
-                //map.AddTBString(CtrlModelAttr.NDToT, null, "到节点(名称)", true, false, 0, 999, 900);
-
-                //map.AddTBString(CtrlModelAttr.EmpFrom, null, "从人员", true, false, 0, 20, 100);
-                //map.AddTBString(CtrlModelAttr.EmpFromT, null, "从人员(名称)", true, false, 0, 30, 100);
-
-                //map.AddTBString(CtrlModelAttr.EmpTo, null, "到人员", true, false, 0, 2000, 100);
-                //map.AddTBString(CtrlModelAttr.EmpToT, null, "到人员(名称)", true, false, 0, 2000, 100);
-
-                //map.AddTBString(CtrlModelAttr.RDT, null, "日期", true, false, 0, 20, 100);
-                //map.AddTBFloat(CtrlModelAttr.WorkTimeSpan, 0, "时间跨度(天)", true, false);
-                //map.AddTBStringDoc(CtrlModelAttr.Msg, null, "消息", true, false);
-                //map.AddTBStringDoc(CtrlModelAttr.NodeData, null, "节点数据(日志信息)", true, false);
-                //map.AddTBString(CtrlModelAttr.Tag, null, "参数", true, false, 0, 300, 3000);
-                //map.AddTBString(CtrlModelAttr.Exer, null, "执行人", true, false, 0, 200, 100);
-
+               
+                map.AddTBString(CtrlModelAttr.FrmID, null, "表单ID", true, false, 0, 300, 100);
+                //BtnNew,BtnSave,BtnSubmit,BtnDelete,BtnSearch
+                map.AddTBString(CtrlModelAttr.CtrlObj, null, "控制权限", true, false, 0, 20, 100);
+                map.AddTBInt(CtrlModelAttr.IsEnableAll, 0, "任何人都可以", true, false);
+                map.AddTBInt(CtrlModelAttr.IsEnableStation, 0, "按照岗位计算", true, false);
+                map.AddTBInt(CtrlModelAttr.IsEnableDept, 0, "按照绑定的部门计算", true, false);
+                map.AddTBInt(CtrlModelAttr.IsEnableUser, 0, "按照绑定的人员计算", true, false);
+                map.AddTBString(CtrlModelAttr.IDOfUsers, null, "绑定的人员ID", true, false, 0, 1000, 300);
+                map.AddTBString(CtrlModelAttr.IDOfStations, null, "绑定的岗位ID", true, false, 0, 1000, 300);
+                map.AddTBString(CtrlModelAttr.IDOfDepts, null, "绑定的部门ID", true, false, 0, 1000, 300);
                 #endregion 字段
+
+                //权限设置绑定岗位. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.Frm.CtrlModelDtls(), new BP.Port.Emps(),
+                    BP.Frm.CtrlModelDtlAttr.FrmID,
+                    BP.Frm.CtrlModelDtlAttr.IDs, "权限按照绑定的岗位", "FK_StationType", EmpAttr.Name, EmpAttr.No);
+
+                //权限设置绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.Frm.CtrlModelDtls(), new BP.Port.Emps(),
+                   BP.Frm.CtrlModelDtlAttr.FrmID,
+                   BP.Frm.CtrlModelDtlAttr.IDs, "权限按照绑定的人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 this._enMap = map;
                 return this._enMap;
@@ -105,8 +214,10 @@ namespace BP.Frm
         /// <returns></returns>
         protected override bool beforeInsert()
         {
+            this.MyPK = this.FrmID + "_" + CtrlObj;
             return base.beforeInsert();
         }
+
         #endregion 构造.
     }
     /// <summary>

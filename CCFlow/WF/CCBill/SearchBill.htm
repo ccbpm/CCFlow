@@ -238,11 +238,20 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
+             var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (powerData.indexOf("err@") != -1) {
+                alert(powerData);
+                return;
+            }
+            powerData = JSON.parse(powerData);
+
             //权限判断按钮.
-            if (fb.BtnNewEnable == 1)
+            if (parseInt(powerData.IsInsert) ==1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">' + fb.BtnNewLable + '</a>';
 
-            if (fb.BtnDelEnable == 1)
+            if (parseInt(powerData.IsDelete) == 1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Del" onclick="javascript:Delete();">' + fb.BtnDelLable + '</a>';
 
             if (fb.BtnImpExcelEnable == 1)
@@ -347,6 +356,7 @@
 
 
         function SearchData(orderBy, orderWay) {
+
             //创建处理器.
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData()

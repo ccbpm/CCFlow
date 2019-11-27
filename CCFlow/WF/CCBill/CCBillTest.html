@@ -68,6 +68,7 @@
 
                 html += "<td><a href=\"javascript:DeleteFrm('" + bill.No + "')\">删除模版</a></td>";
                 html += "<td><a href=\"javascript:DFrom('" + bill.No + "')\">设计表单</a></td>";
+                html += "<td><a href=\"javascript:FrmEntity('" + bill.No + "')\">模板属性</a></td>";
 
                 //html += "<td><a href=\"javascript:Delete('" + bill.No + "')\">授权给用户</a></td>";
                 //html += "<td><a href=\"javascript:Delete('" + bill.No + "')\">授权给角色</a></td>";
@@ -111,10 +112,10 @@
                 html += "<td>" + GetEntityType(bill.EntityType) + "</td>";
                 html += "<td>" + bill.PTable + "</td>";
 
-                html += "<td><a href=\"javascript:OpenSearch('" + bill.No + "')\">打开查询</a></td>";
-                html += "<td><a href=\"javascript:NewEntity('" + bill.No + "')\">新建一条记录</a></td>";
-                html += "<td><a href=\"javascript:DeleteRow('" + bill.No + "')\">根据主键-删除一条记录</a></td>";
-                html += "<td><a href=\"javascript:OpenFrm('" + bill.No + "')\">根据主键-打开一条记录</a></td>";
+                html += "<td><a href=\"javascript:OpenSearch('" + bill.No + "'," + bill.EntityType + ")\">打开查询</a></td>";
+                html += "<td><a href=\"javascript:NewEntity('" + bill.No + "'," + bill.EntityType + ")\">新建一条记录</a></td>";
+                html += "<td><a href=\"javascript:DeleteRow('" + bill.No + "'," + bill.EntityType + ")\">根据主键-删除一条记录</a></td>";
+                html += "<td><a href=\"javascript:OpenFrm('" + bill.No + "'," + bill.EntityType + ")\">根据主键-打开一条记录</a></td>";
 
                 html += "</tr>";
             }
@@ -122,9 +123,14 @@
             $("#listMyFrms").html(html);
         }
 
-        function OpenSearch(frmID) {
-
+        //查询列表数据
+        function OpenSearch(frmID, frmType) {
+            var url = CCForm_FrmSearch(frmID, frmType);
+            WinOpen(url);
         }
+
+
+
 
         function GetEntityType(frmType) {
             if (frmType == 1)
@@ -211,7 +217,26 @@
         }
 
 
-    </script>
+        function FrmEntity(frmID) {
+            var en = new Entity("BP.Frm.FrmBill", frmID);
+
+            //流程单据.
+            if (en.EntityType == 0)
+                url = '../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + frmID;
+
+            if (en.EntityType == 1)
+                url = '../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + frmID;
+
+            if (en.EntityType == 2 || en.EntityType == 3)
+                url = '../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + frmID;
+
+            WinOpen(url);
+
+
+        }
+
+
+/**/</script>
 
 </head>
 <body>
@@ -249,23 +274,18 @@
         <div id="listMyFrms"></div>
 
         <legend id="help">操作demo:</legend>
-
+        CCFrom_GenerFrmListOfCanOption
+        <ul>
+            <li>前台是就使用者登陆后查看的菜单所要操作的API.</li>
+            <li>开发者可以利用ccform提供的js 的API函数，完成如下操作.</li>
+            <li>获得所有菜单列表:function <font color="blue">CCFrom_GenerFrmListOfCanOption()</font></li>
+            <li>查询指定菜单列表数据:function <font color="blue"></font></li>
+            <li>新增数据:function <font color="blue"></font></li>
+            <li>删除数据:function <font color="blue"></font></li>
+            <li>保存数据:function <font color="blue"></font></li>
+            <li>提交数据:function <font color="blue"</font></li>
+        </ul>
     </fieldset>
-
-    <script type="text/javascript">
-
-        function DemoCCForm() {
-            //创建一个实体.
-            var frmID = "Student";
-
-            var en = new Entity("Student");
-            en.BillNo = "zhoupeng";
-            en.Ttitle = "周朋";
-            en.Insert();
-
-        }
-
-    </script>
 
 
 

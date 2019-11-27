@@ -60,7 +60,8 @@ function Admin_TreeDir_Down(treeNo) {
 function Admin_Form_CreateBill(treeNo, frmID, frmName, frmType, pTable) {
     return Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, 1);
 }
-
+  
+  
 /**
  * 创建表单-实体
  * @param {创建在那个表单树的叶子下,可以为null，默认创建根目录下} treeNo
@@ -78,8 +79,6 @@ function Admin_Form_CreateDict(treeNo, frmID, frmName, frmType, pTable) {
 function Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, entityType) {
     if (treeNo == null || treeNo == undefined)
         treeNo = "100";
-
-   // alert(entityType);
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
     handler.AddPara("EntityType", entityType); //实体.
@@ -153,6 +152,23 @@ function Admin_From_Down(frmID) {
     en.DoMethodReturnString("DoOrderDown");
 }
 
+/**
+ * 根据用户账号获取表单的增删改查的权限
+ * @param {表单ID} frmID 
+ * @param {用户账号} userNo
+ */
+function Admin_Power(frmID, userNo) {
+    var handler = new HttpHandler(" BP.Frm.WF_CCBill_API");
+    handler.AddPara("FrmID", frmID);
+    handler.AddPara("UserNo", userNo);
+    var data = handler.DoMethodReturnString("CCFrom_FrmPower");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    data = JSON.parse(data);
+    return data;
+}
 /**
  * 按照角色绑定权限
  * @param {表单ID} frmID

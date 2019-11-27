@@ -238,11 +238,21 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
+            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (powerData.indexOf("err@") != -1) {
+                alert(powerData);
+                return;
+            }
+            powerData = JSON.parse(powerData);
+            
+
             //权限判断按钮.
-            if (parseInt(fb.BtnNewModel) !=2)
+            if (parseInt(powerData.IsInsert) ==1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">' + fb.BtnNewLable + '</a>';
 
-            if (fb.BtnDelEnable == 1)
+            if (parseInt(powerData.IsDelete) == 1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Del" onclick="javascript:Delete();">' + fb.BtnDelLable + '</a>';
 
             if (fb.BtnImpExcelEnable == 1)
@@ -758,84 +768,7 @@
 
         }
 
-        function SearchKey() {
-
-            var val = $("#TB_Key").val();
-            if (val == null || val == undefined || val == "") {
-                alert("请输入关键字,单据编号，标题。。。");
-                return;
-            }
-
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
-            handler.AddPara("TB_KWds", val);
-
-            var data = handler.DoMethodReturnString("Search_Init");
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //转化成json.
-            data = JSON.parse(data);
-            if (data.length <= 0) {
-                alert('未查询出来数据');
-                return;
-            }
-
-            var tableHtml = "";
-            tableHtml += "<tr>";
-            tableHtml += "<th>Idx</th>";
-            tableHtml += "<th>标题</th>";
-            tableHtml += "<th>制单日期</th>";
-            tableHtml += "<th>单据编号</th>";
-            tableHtml += "<th>操作员</th>";
-            tableHtml += "<th width='90'>编辑日期</th>";
-            tableHtml += "<th width='60'>状态</th>";
-            tableHtml += "<th width='50'>操作</th>";
-            tableHtml += "</tr>";
-
-            var user = new WebUser();
-            var userNo = user.No;
-            htmlboxs = "";
-            data.forEach(function (en, index) {
-
-                var tr = "";
-
-                //是否可以执行当前工作?
-                var isCanDo = false;
-                if (en.TodoEmps.indexOf(webUser.No) != -1)
-                    isCanDo = true;
-
-                //图片.
-                var icon = GenerICON(isCanDo, en.BillState);
-
-                // 获得颜色.
-                var color = GenerColor(en.BillState, isCanDo);
-
-                var todoEmpsName = en.TodoEmps;
-                todoEmpsName = en.TodoEmps.substr(todoEmpsName.indexOf(',') + 1);
-
-                htmlboxs += "<tr>";
-                htmlboxs += "<td class=Idx>" + (index + 1) + "</td>";
-
-                htmlboxs += "<td><a href=\"javascript:OpenIt('" + en.WorkID + "','" + en.FrmID + "','" + en.FK_Node + "','" + en.TodoEmps + "','" + userNo + "','" + en.BillSta + "',)\"><img src=" + icon + " border=0 style='width:10px;' />&nbsp;" + en.Title + "</td>";
-                htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + en.FlowName + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + todoEmpsName + "</font></td>";
-                if (en.TDTime == null)
-                    htmlboxs += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
-                else
-                    htmlboxs += "<td><font color='" + color + "'>" + en.TDTime.substring(5) + "</font></td>";
-
-                htmlboxs += "<td><font color='" + color + "'>" + GetBillState(en.BillState, isCanDo) + "</font></td>";
-                htmlboxs += "<td><font color='" + color + "'>" + GenerOper(en.WorkID, en.BillState, en.FrmID, en.FK_Node, en.FID, isCanDo) + "</font></td>";
-                htmlboxs += "</tr>";
-
-            });
-
-            $("#Table2").html(tableHtml);
-            $("#Table1").html(htmlboxs);
-        }
+        
 
         ///导入.
         function Imp() {

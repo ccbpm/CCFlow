@@ -173,7 +173,7 @@ namespace BP.Frm
 
 
         }
-        #endregion 构造.
+       
     }
     /// <summary>
     /// 控制模型集合s

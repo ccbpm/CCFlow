@@ -116,7 +116,7 @@ namespace BP.Frm
             }
             set
             {
-                SetValRefTextByKey(CtrlModelAttr.IsEnableAll, value);
+                SetValByKey(CtrlModelAttr.IsEnableAll, value);
             }
         }
 
@@ -128,7 +128,7 @@ namespace BP.Frm
             }
             set
             {
-                SetValRefTextByKey(CtrlModelAttr.IsEnableStation, value);
+                SetValByKey(CtrlModelAttr.IsEnableStation, value);
             }
         }
 
@@ -140,7 +140,7 @@ namespace BP.Frm
             }
             set
             {
-                SetValRefTextByKey(CtrlModelAttr.IsEnableDept, value);
+                SetValByKey(CtrlModelAttr.IsEnableDept, value);
             }
         }
 
@@ -152,7 +152,7 @@ namespace BP.Frm
             }
             set
             {
-                SetValRefTextByKey(CtrlModelAttr.IsEnableUser, value);
+                SetValByKey(CtrlModelAttr.IsEnableUser, value);
             }
         }
         #endregion 基本属性.

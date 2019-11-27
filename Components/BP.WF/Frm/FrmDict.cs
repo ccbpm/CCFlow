@@ -217,20 +217,20 @@ namespace BP.Frm
                 #region MyBill - 按钮权限.
                 map.AddTBString(FrmDictAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
-                   "@0=表格模式@1=卡片模式@2=不可用");
+                   "@0=表格模式@1=卡片模式@2=不可用",true);
 
 
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
-                map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
+                //map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
-                map.AddBoolean(FrmDictAttr.BtnSubmitEnable, true, "是否可用？", true, true);
+                //map.AddBoolean(FrmDictAttr.BtnSubmitEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
-                map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
+               // map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnSearchLabel, "列表", "列表", true, false, 0, 50, 20);
-                map.AddBoolean(FrmDictAttr.BtnSearchEnable, true, "是否可用？", true, true);
+                //map.AddBoolean(FrmDictAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnGroupEnable, false, "是否可用？", true, true);
@@ -359,10 +359,20 @@ namespace BP.Frm
 
 
                 rm = new RefMethod();
-                rm.Title = "编辑规则"; // "设计表单";
+                rm.Title = "保存规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSaveRole";
                 rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = FrmDictAttr.BtnSaveLable;
+                rm.GroupName = "权限规则";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "提交规则"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoSubmitRole";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = FrmDictAttr.BtnSubmitLable;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
@@ -370,7 +380,8 @@ namespace BP.Frm
                 rm.Title = "删除规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDeleteRole";
                 rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = FrmDictAttr.BtnDelLable;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
@@ -378,7 +389,8 @@ namespace BP.Frm
                 rm.Title = "查询权限"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearchRole";
                 rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = FrmDictAttr.BtnSearchLabel;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
                 #endregion
@@ -414,6 +426,48 @@ namespace BP.Frm
             }
         }
         #endregion
+
+        protected override void afterInsertUpdateAction()
+        {
+            //保存权限表
+            CtrlModel ctrl = new CtrlModel();
+
+            ctrl.FrmID = this.No;
+            ctrl.CtrlObj = "BtnNew";
+            ctrl.IsEnableAll = true;
+            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.Save();
+
+            ctrl = new CtrlModel();
+            ctrl.FrmID = this.No;
+            ctrl.CtrlObj = "BtnSave";
+            ctrl.IsEnableAll = true;
+            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.Save();
+
+            ctrl = new CtrlModel();
+            ctrl.FrmID = this.No;
+            ctrl.CtrlObj = "BtnSubmit";
+            ctrl.IsEnableAll = true;
+            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.Save();
+
+            ctrl = new CtrlModel();
+            ctrl.FrmID = this.No;
+            ctrl.CtrlObj = "BtnDelete";
+            ctrl.IsEnableAll = true;
+            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.Save();
+
+            ctrl = new CtrlModel();
+            ctrl.FrmID = this.No;
+            ctrl.CtrlObj = "BtnSearch";
+            ctrl.IsEnableAll = true;
+            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.Save();
+
+            base.afterInsertUpdateAction();
+        }
 
         /// <summary>
         /// 检查enittyNoName类型的实体
@@ -623,30 +677,49 @@ namespace BP.Frm
         #endregion 报表定义.
 
         #region 权限控制.
+        /// <summary>
+        /// 保存权限规则
+        /// </summary>
+        /// <returns></returns>
         public string DoSaveRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
         }
+        /// <summary>
+        /// 提交权限规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubmitRole()
+        {
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSubmit";
+        }
+
+        /// <summary>
+        /// 新增权限规则
+        /// </summary>
+        /// <returns></returns>
         public string DoCreateRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnNew";
         }
+        /// <summary>
+        /// 删除权限规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoDeleteRole()
+        {
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
+        }
+
         /// <summary>
         /// 查询权限
         /// </summary>
         /// <returns></returns>
         public string DoSearchRole()
         {
-            return "../../CCBill/Admin/SearchRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
         }
-        /// <summary>
-        /// 删除规则.
-        /// </summary>
-        /// <returns></returns>
-        public string DoDeleteRole()
-        {
-            return "../../CCBill/Admin/DeleteRole.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
-        }
+       
         #endregion 权限控制.
 
         public string DoMethod()

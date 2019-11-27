@@ -53,7 +53,20 @@ namespace BP.Frm
         public string CCFrom_GenerFrmListOfCanOption()
         {
             string sql = "";
-            sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData WHERE (EntityType=1 OR EntityType=2) ORDER BY IDX ";
+            string userNo = GetRequestVal("UserNo");
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = WebUser.No;
+            string powerSQL = "SELECT FrmID," +
+                "(CASE WHEN IsEnableAll=1 THEN true " +
+                "ELSE(CASE WHEN IsEnableUser=1 AND INSTR(IDOfUsers,'," + userNo + ",')>0 THEN true " +
+                "ELSE(CASE WHEN IsEnableStation=1 AND (SELECT COUNT(*) From Port_DeptEmpStation D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfStations,D.FK_Station))>0 THEN true " +
+                "ELSE(CASE WHEN IsEnableDept=1 AND (SELECT COUNT(*) From Port_DeptEmp D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfDepts,D.FK_Dept))>0 THEN true " +
+                "ELSE false END)" +
+                "END)" +
+                "END)" +
+                "END) AS IsView   FROM Frm_CtrlModel WHERE CtrlObj='BtnSearch'";
+
+            sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData M, ("+ powerSQL+") AS B WHERE M.No=B.FrmID AND (M.EntityType=1 OR M.EntityType=2) AND B.IsView=1 ORDER BY M.IDX ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -81,19 +94,92 @@ namespace BP.Frm
         /// <returns></returns>
         public string CCFrom_FrmPower()
         {
-            var frmID = this.FrmID;
-
-            //Frm.FrmBill fb = new FrmBill(frmID);
-
             Hashtable ht = new Hashtable();
-            //ht.Add("No", fb.No);
-            //ht.Add("Name", fb.Name);
-            ht.Add("IsView", 1);
-            ht.Add("IsInsert", 1);
-            ht.Add("IsUpdate", 1);
-            ht.Add("IsDelete", 1);
+            string frmID = this.FrmID;
+            CtrlModels ctrlMs = new CtrlModels();
+            ctrlMs.Retrieve(CtrlModelAttr.FrmID, frmID);
+            string userNo = GetRequestVal("UserNo");
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = WebUser.No;
+            foreach(CtrlModel ctrlM in ctrlMs)
+            {
+                int isTrue = 0;
+                if(ctrlM.IsEnableAll == true)
+                    isTrue = 1;
+                else
+                {
+                    //根据设置的权限来判断
+                    if (ctrlM.IsEnableStation == true)
+                    {
+                        string stations = ctrlM.IDOfStations;
+                        stations = stations.Trim(',');
+                        stations = stations.Replace(",", "','");
+                        stations = "'" + stations + "'";
+                        string sql = "SELECT * From Port_DeptEmpStation DES,Port_Emp E WHERE  E.No = DES.FK_Emp AND E.No='"+ userNo + "' AND DES.FK_Station IN(" + stations+")";
+                        if (DBAccess.RunSQLReturnCOUNT(sql) > 1)
+                            isTrue = 1;
+                    }
+
+                    if (ctrlM.IsEnableUser == true && isTrue == 0)
+                    {
+                        string emps = ctrlM.IDOfUsers;
+                       if(emps.Contains(","+ userNo + ",") == true)
+                            isTrue = 1;
+                    }
+
+                    if (ctrlM.IsEnableDept == true && isTrue == 0)
+                    {
+                        string depts = ctrlM.IDOfDepts;
+                        depts = depts.Trim(',');
+                        depts = depts.Replace(",", "','");
+                        depts = "'" + depts + "'";
+                        string sql = "SELECT * From Port_DeptEmp D,Port_Emp E WHERE  E.No = D.FK_Emp AND E.No='" + userNo + "' AND D.FK_Dept IN(" + depts + ")";
+                        if (DBAccess.RunSQLReturnCOUNT(sql) > 1)
+                            isTrue = 1;
+                    }
+
+                }
+
+                if (ctrlM.CtrlObj.Equals("BtnNew") == true)
+                    ht.Add("IsInsert", isTrue);
+                if (ctrlM.CtrlObj.Equals("BtnSave") == true)
+                    ht.Add("IsSave", isTrue);
+                if (ctrlM.CtrlObj.Equals("BtnSubmit") == true)
+                    ht.Add("IsSubmit", isTrue);
+                if (ctrlM.CtrlObj.Equals("BtnSearch") == true)
+                    ht.Add("IsView", isTrue);
+                if (ctrlM.CtrlObj.Equals("BtnDelete") == true)
+                    ht.Add("IsDelete", isTrue);
+            }
+
             return BP.Tools.Json.ToJson(ht);
         }
+
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_Power_ViewList()
+        {
+            string userNo = GetRequestVal("UserNo");
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = WebUser.No;
+            string sql = "SELECT FrmID," +
+                "(CASE WHEN IsEnableAll=1 THEN true " +
+                "ELSE(CASE WHEN IsEnableUser=1 AND INSTR(IDOfUsers,'," + userNo + ",')>0 THEN true " +
+                "ELSE(CASE WHEN IsEnableStation=1 AND (SELECT COUNT(*) From Port_DeptEmpStation D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfStations,D.FK_Station))>0 THEN true " +
+                "ELSE(CASE WHEN IsEnableDept=1 AND (SELECT COUNT(*) From Port_DeptEmp D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfDepts,D.FK_Dept))>0 THEN true " +
+                "ELSE false END)" +
+                "END)" +
+                "END)" +
+                "END) AS IsView   FROM Frm_CtrlModel WHERE CtrlObj='BtnSearch'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "FrmView";
+            return BP.Tools.Json.ToJson(dt);
+
+
+        }
+       
         /// <summary>
         /// 删除实体根据BillNo
         /// </summary>

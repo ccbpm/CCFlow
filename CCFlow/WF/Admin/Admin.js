@@ -136,6 +136,7 @@ function LoadCodeMirror(id) {
 
 
 function CheckIsSQL(sql) {
+
     if (sql == '' || sql == null)
         return false;
 

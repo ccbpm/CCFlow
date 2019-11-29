@@ -281,8 +281,8 @@ namespace BP.WF.HttpHandler
                         || key.Equals("t")
                         || key.Equals("HttpHandlerName"))
                         continue;
-
-                    urlExt += "&" + key + "=" + HttpContextHelper.RequestParams(key);
+                    if(urlExt.Contains("&"+key+"=")==false)
+                        urlExt += "&" + key + "=" + HttpContextHelper.RequestParams(key);
                 }
 
                 return urlExt;

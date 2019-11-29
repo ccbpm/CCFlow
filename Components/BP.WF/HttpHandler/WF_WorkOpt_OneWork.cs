@@ -349,33 +349,39 @@ namespace BP.WF.HttpHandler
                         }
                     }
 
-                    /*撤销发送*/
-                    GenerWorkerLists workerlists = new GenerWorkerLists();
-                    QueryObject info = new QueryObject(workerlists);
-                    info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.IsPass, "1");
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-
-                    if (info.DoQuery() > 0)
-                        ht.Add("CanUnSend", 1);
-                    else
-                        ht.Add("CanUnSend", 0);
-
-                    if (powers.Contains("FlowDataUnSend") == true)
+                    if (SystemConfig.CustomerNo == "TianYe")
                     {
-                        //存在移除这个键值
-                        if (ht.ContainsKey("CanUnSend") == true)
-                            ht.Remove("CanUnSend");
-                        ht.Add("CanUnSend", 1);
-                    }
-                    if (SystemConfig.CustomerNo == "TianYe") {
                         ht.Add("CanUnSend", 1);
 
                     }
+                    else {
+                        /*撤销发送*/
+                        GenerWorkerLists workerlists = new GenerWorkerLists();
+                        QueryObject info = new QueryObject(workerlists);
+                        info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.IsPass, "1");
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+
+                        if (info.DoQuery() > 0)
+                            ht.Add("CanUnSend", 1);
+                        else
+                            ht.Add("CanUnSend", 0);
+
+                        if (powers.Contains("FlowDataUnSend") == true)
+                        {
+                            //存在移除这个键值
+                            if (ht.ContainsKey("CanUnSend") == true)
+                                ht.Remove("CanUnSend");
+                            ht.Add("CanUnSend", 1);
+                        }
+
+                    }
+
+
                     //流程结束
                     if (powers.Contains("FlowDataOver") == true)
                     {

@@ -12,6 +12,10 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
+using LitJson;
+using System.Net;
+using System.IO;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -55,6 +59,102 @@ namespace BP.WF.HttpHandler
 
         #endregion xxx 界面方法.
 
+        /// <summary>
+        /// 蓝信登陆
+        /// </summary>
+        /// <returns></returns>
+        public string LanXin_Login()
+        {
+            string code = GetRequestVal("code");
+
+            //获取Token
+            string url = "http://xjtyjt.e.lanxin.cn:11180/sns/oauth2/access_token?code=" + code + "&appid=100243&grant_type=authorization_code";
+            string result = HttpPostConnect(url, "");
+            JsonData jd = JsonMapper.ToObject(result);
+            result = jd["errcode"].ToString();
+            if (result != "0")
+            {
+                return "err@" + jd["errmsg"].ToString();
+            }
+            string access_token = jd["access_token"].ToString();
+            string openId = jd["openid"].ToString();
+
+            //获取用户信息
+            url = "http://xjtyjt.e.lanxin.cn:11180/sns/userinfo?access_token=" + access_token + "&mobile=" + openId;
+            result = HttpPostConnect(url, "");
+            jd = JsonMapper.ToObject(result);
+            result = jd["errcode"].ToString();
+            if (result != "0")
+            {
+                return "err@" + jd["errmsg"].ToString();
+            }
+            string userNo = jd["openOrgMemberList"][0]["serialNumber"].ToString();
+            string tel = jd["openOrgMemberList"][0]["mobile"].ToString();
+
+            /**单点登陆*/
+            Paras ps = new Paras();
+            ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No and Tel=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "Tel";
+            ps.Add("No", userNo);
+            ps.Add("Tel", tel);
+            string No = BP.DA.DBAccess.RunSQLReturnString(ps);
+            if (DataType.IsNullOrEmpty(No))
+                return "err@用户信息不正确，请联系管理员";
+
+            BP.WF.Dev2Interface.Port_Login(userNo);
+            result = jd["errcode"].ToString();
+            return userNo;
+        }
+        /// <summary>
+        /// httppost方式发送数据
+        /// </summary>
+        /// <param name="url">要提交的url</param>
+        /// <param name="postDataStr"></param>
+        /// <param name="timeOut">超时时间</param>
+        /// <param name="encode">text code.</param>
+        /// <returns>成功：返回读取内容；失败：0</returns>
+        public static string HttpPostConnect(string serverUrl, string postData)
+        {
+            var dataArray = Encoding.UTF8.GetBytes(postData);
+            //创建请求
+            var request = (HttpWebRequest)HttpWebRequest.Create(serverUrl);
+            request.Method = "POST";
+            request.ContentLength = dataArray.Length;
+            //设置上传服务的数据格式  设置之后不好使
+            //request.ContentType = "application/json";
+            //请求的身份验证信息为默认
+            request.Credentials = CredentialCache.DefaultCredentials;
+            //请求超时时间
+            request.Timeout = 10000;
+            //创建输入流
+            Stream dataStream;
+            try
+            {
+                dataStream = request.GetRequestStream();
+            }
+            catch (Exception)
+            {
+                return "0";//连接服务器失败
+            }
+            //发送请求
+            dataStream.Write(dataArray, 0, dataArray.Length);
+            dataStream.Close();
+            //读取返回消息
+            string res;
+            try
+            {
+                var response = (HttpWebResponse)request.GetResponse();
+
+                var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                res = reader.ReadToEnd();
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+
+                return "0";//连接服务器失败
+            }
+            return res;
+        }
         /// <summary>
         /// 初始化Home
         /// </summary>

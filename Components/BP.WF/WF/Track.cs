@@ -757,6 +757,8 @@ namespace BP.WF
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
                 this.RDT = BP.DA.DataType.CurrentDataTimess;
 
+
+
             this.DoInsert(0);
             return false;
         }

@@ -262,12 +262,26 @@ namespace BP.WF.HttpHandler
                     if (para == "1=1")
                         continue;
 
+                    // @lizhen 同步.
+                    if (para.Contains("DoType=")
+                       || para.Contains("DoMethod=")
+                       || para.Contains("t=")
+                       || para.Contains("HttpHandlerName="))
+                        continue;
+
                     urlExt += "&" + para;
                 }
 
 
                 foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
+                    // @lizhen 同步.
+                    if (key.Equals("DoType")
+                        || key.Equals("DoMethod")
+                        || key.Equals("t")
+                        || key.Equals("HttpHandlerName"))
+                        continue;
+
                     urlExt += "&" + key + "=" + HttpContextHelper.RequestParams(key);
                 }
 

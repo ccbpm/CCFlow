@@ -4770,6 +4770,9 @@ namespace BP.En
         }
         public virtual void Remove(string pks)
         {
+            //设置
+            pks = pks.Replace(",", "@");
+
             string[] mypks = pks.Split('@');
             string pkAttr = this.GetNewEntity.PK;
 

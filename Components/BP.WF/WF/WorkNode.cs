@@ -7356,7 +7356,6 @@ namespace BP.WF
                 CallAutoSubFlow(this.town.HisNode, 1);
                 #endregion 执行启动子流程.
 
-
                 #region 处理流程数据与业务表的数据同步.
                 if (this.HisFlow.DTSWay != FlowDTSWay.None)
                     this.HisFlow.DoBTableDTS(this.rptGe, this.HisNode, this.IsStopFlow);

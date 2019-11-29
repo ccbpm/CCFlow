@@ -2026,6 +2026,9 @@ namespace BP.WF.HttpHandler
 
             if (pk == null)
                 return "err@错误pkval 没有值。";
+            
+            en.PKVal = pk;
+            en.Retrieve();
 
             //获取主键集合
             string[] pks = pk.Split(',');

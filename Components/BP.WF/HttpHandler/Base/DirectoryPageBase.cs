@@ -265,7 +265,7 @@ namespace BP.WF.HttpHandler
                     // @lizhen 同步.
                     if (para.Contains("DoType=")
                        || para.Contains("DoMethod=")
-                       || para.Contains("t=")
+                       || para.ToLower().Equals("t")
                        || para.Contains("HttpHandlerName="))
                         continue;
 
@@ -278,7 +278,7 @@ namespace BP.WF.HttpHandler
                     // @lizhen 同步.
                     if (key.Equals("DoType")
                         || key.Equals("DoMethod")
-                        || key.Equals("t")
+                        || key.ToLower().Equals("t")
                         || key.Equals("HttpHandlerName"))
                         continue;
                     if(urlExt.Contains("&"+key+"=")==false)

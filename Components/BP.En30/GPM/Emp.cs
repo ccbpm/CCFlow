@@ -3,6 +3,7 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.Port;
+using BP.Sys;
 
 namespace BP.GPM
 {
@@ -481,6 +482,8 @@ namespace BP.GPM
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
 
+            if(SystemConfig.IsEnablePasswordEncryption == true)
+                pass1 = BP.Tools.Cryptography.EncryptString(pass1);
 
             this.Pass = pass1;
 

@@ -5018,7 +5018,7 @@ namespace BP.WF
                         if (pgwf.FK_Node != gwf.PNodeID)
                             return "";
 
-                        //@sly 同步.
+                        
                         if (pgwf.WFState == WFState.Complete)
                             return "";
 

@@ -236,9 +236,27 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string OP_UnSend()
         {
+            //获取用户当前所在的节点
+            String currNode = "";
+            switch (DBAccess.AppCenterDBType)
+            {
+                case DBType.Oracle:
+                    currNode = "(SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1)";
+                    break;
+                case DBType.MySQL:
+                case DBType.PostgreSQL:
+                    currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1)";
+                    break;
+                case DBType.MSSQL:
+                    currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
+                    break;
+                default:
+                    break;
+            }
+            String unSendToNode = DBAccess.RunSQLReturnString(currNode);
             try
             {
-                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID);
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, int.Parse(unSendToNode), this.FID);
             }
             catch (Exception ex)
             {

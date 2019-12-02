@@ -5500,6 +5500,7 @@ namespace BP.WF
                 if (mynum == 1)
                 {
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                    this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
                     return false; /*只有一个待办,说明自己就是最后的一个人.*/
                 }
 

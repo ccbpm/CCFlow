@@ -66,6 +66,12 @@ namespace BP.WF.HttpHandler
         public string LanXin_Login()
         {
             string code = GetRequestVal("code");
+            
+            if(DataType.IsNullOrEmpty(WebUser.Token) == false)
+            {
+                return WebUser.No;
+            }
+
 
             //获取Token
             string url = "http://xjtyjt.e.lanxin.cn:11180/sns/oauth2/access_token?code=" + code + "&appid=100243&grant_type=authorization_code";
@@ -101,6 +107,7 @@ namespace BP.WF.HttpHandler
                 return "err@用户信息不正确，请联系管理员";
 
             BP.WF.Dev2Interface.Port_Login(userNo);
+            WebUser.Token = access_token;
             result = jd["errcode"].ToString();
             return userNo;
         }
@@ -301,12 +308,20 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+       
         /// <summary>
         /// 执行登录
         /// </summary>
         /// <returns></returns>
         public string Login_Init()
         {
+            string doType = GetRequestVal("LoginType");
+            if(DataType.IsNullOrEmpty(doType) == false && doType.Equals("Out") == true)
+            {
+                //清空cookie
+                WebUser.Exit();
+            }
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);

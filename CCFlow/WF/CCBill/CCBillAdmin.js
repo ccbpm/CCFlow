@@ -5,7 +5,7 @@
  * **/
 
 /**
- * 获得创建的所有的 单据
+ * 获得创建的所有的 单据 
  */
 function Admin_GenerAllBills() {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
@@ -49,7 +49,7 @@ function Admin_TreeDir_Down(treeNo) {
 }
 
 /**
- * 创建表单-单据
+ * 创建表单-单据模版
  * @param {创建在那个表单树的叶子下,可以为null，默认创建根目录下} treeNo
  * @param {表单ID} frmID
  * @param {表单名称} frmName
@@ -72,7 +72,6 @@ function Admin_Form_CreateBill(treeNo, frmID, frmName, frmType, pTable) {
  * 如果返回 err@xxxx 则表是失败.
  */
 function Admin_Form_CreateDict(treeNo, frmID, frmName, frmType, pTable) {
-
     return Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, 2);
 }
 
@@ -151,48 +150,5 @@ function Admin_From_Down(frmID) {
     var en = new Entity("BP.Sys.MapData", frmID);
     en.DoMethodReturnString("DoOrderDown");
 }
-
-/**
- * 根据用户账号获取表单的增删改查的权限
- * @param {表单ID} frmID 
- * @param {用户账号} userNo
- */
-function Admin_Power(frmID, userNo) {
-    var handler = new HttpHandler(" BP.Frm.WF_CCBill_API");
-    handler.AddPara("FrmID", frmID);
-    handler.AddPara("UserNo", userNo);
-    var data = handler.DoMethodReturnString("CCFrom_FrmPower");
-    if (data.indexOf("err@") != -1) {
-        alert(data);
-        return;
-    }
-    data = JSON.parse(data);
-    return data;
-}
-/**
- * 按照角色绑定权限
- * @param {表单ID} frmID
- * @param {岗位编号: 001,002,003} staNos
- * @param {是否可以查看: 0-1} isView
- * @param {是否可以新建: 0-1} isNew
- * @param {是否可以提交: 0-1} isSubmit
- * @param {是否可以更新: 0-1} isUpdate
- * @param {是否可以删除: 0-1} isDelete
- */
-function Admin_Power_AddToStation(frmID, staNos, isView, isNew, isSubmit, isUpdate, isDelete) {
-
-}
-
-/**
- * 按照人员绑定权限
- * @param {表单ID} frmID
- * @param {岗位编号: 001,002,003} staNos
- * @param {是否可以查看: 0-1} isView
- * @param {是否可以新建: 0-1} isNew
- * @param {是否可以提交: 0-1} isSubmit
- * @param {是否可以更新: 0-1} isUpdate
- * @param {是否可以删除: 0-1} isDelete
- */
-function Admin_Power_AddToUser(frmID, userNos, isView, isNew, isSubmit, isUpdate, isDelete) {
-
-}
+ 
+ 

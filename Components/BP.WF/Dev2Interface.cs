@@ -5017,6 +5017,13 @@ namespace BP.WF
                     {
                         if (pgwf.FK_Node != gwf.PNodeID)
                             return "";
+
+                        if (pgwf.WFState == WFState.Complete)
+                            return "";
+
+                        if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwf.PWorkID, WebUser.No) == false)
+                            return "";
+
                         //主流程自动运行到一下节点
                         SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
 

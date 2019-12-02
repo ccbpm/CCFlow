@@ -69,7 +69,16 @@ namespace BP.WF.HttpHandler
             
             if(DataType.IsNullOrEmpty(WebUser.Token) == false)
             {
-                return WebUser.No;
+                //刷新token
+                string urlr = "http://xjtyjt.e.lanxin.cn:11180//sns/oauth2/refresh_token?refresh_token="+WebUser.Token+"&appid=100243&grant_type=refresh_token";
+                string resultr = HttpPostConnect(urlr, "");
+                JsonData jdr = JsonMapper.ToObject(resultr);
+                resultr = jdr["errcode"].ToString();
+                if (resultr == "0")
+                {
+                    WebUser.Token = jdr["access_token"].ToString();
+                }
+                 return WebUser.No;
             }
 
 
@@ -107,7 +116,7 @@ namespace BP.WF.HttpHandler
                 return "err@用户信息不正确，请联系管理员";
 
             BP.WF.Dev2Interface.Port_Login(userNo);
-            WebUser.Token = access_token;
+            WebUser.Token = access_token;            
             result = jd["errcode"].ToString();
             return userNo;
         }

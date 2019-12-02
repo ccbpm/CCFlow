@@ -5417,6 +5417,12 @@ namespace BP.WF
                     /*只有一个待办,说明自己就是最后的一个人.*/
                     if (num == 1)
                     {
+                        if(this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
+                        {
+                            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                            this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
+                            return false;
+                        }
                         //说明是原始主持人
                         if (this.HisGenerWorkFlow.GetParaString("AddLeader").Contains(BP.Web.WebUser.No + ",") == false && leaderNum == 0)
                         {

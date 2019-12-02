@@ -159,6 +159,7 @@
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
+    <Compile Include="DTS\Tool_RepairCHAtPara.cs" />
     <Compile Include="Frm\CtrlModelDtl.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
     <Compile Include="Frm\FrmAttr.cs" />

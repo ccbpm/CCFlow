@@ -6395,7 +6395,7 @@ namespace BP.WF
                 //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
                 if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisFlow.IsToParentNextNode == true)
                 {
-                    //检查父流程是否运行到了下一个节点？如果没有运行到下一个节点，就让其发送. @shilianyu
+                    //检查父流程是否运行到了下一个节点？如果没有运行到下一个节点，就让其发送.
                     GenerWorkFlow pgwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
                     if (pgwf.FK_Node == this.HisGenerWorkFlow.PNodeID)
                     {

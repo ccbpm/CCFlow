@@ -662,7 +662,6 @@ namespace BP.WF.HttpHandler
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + PPPWorkID);
                     }
 
-
                     if (fn.WhoIsPK == WhoIsPK.PPWorkID)
                     {
                         //根据PWorkID 获取PPWorkID

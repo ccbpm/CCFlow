@@ -508,7 +508,8 @@ namespace BP.WF
                 default:
                     this.HisGenerWorkFlow.FK_Node = town.HisNode.NodeID;
                     this.HisGenerWorkFlow.SDTOfNode = dtOfShould.ToString(DataType.SysDataTimeFormat);
-                    this.HisGenerWorkFlow.SetPara("CH" + this.town.HisNode.NodeID, this.HisGenerWorkFlow.SDTOfNode);
+                     //暂时注释掉，忘记使用情况yuanlina
+                    //this.HisGenerWorkFlow.SetPara("CH" + this.town.HisNode.NodeID, this.HisGenerWorkFlow.SDTOfNode);
                     //this.HisGenerWorkFlow.SDTOfFlow = dtOfFlow.ToString(DataType.SysDataTimeFormat);
                     //this.HisGenerWorkFlow.SDTOfFlowWarning = dtOfFlowWarning.ToString(DataType.SysDataTimeFormat);
                     this.HisGenerWorkFlow.TodoEmpsNum = dt.Rows.Count;

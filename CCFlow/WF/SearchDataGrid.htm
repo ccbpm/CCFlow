@@ -245,6 +245,8 @@
 
                 //审批人
                 var todoEmps = en.TodoEmps;
+                if (todoEmps == null || todoEmps == undefined)
+                    todoEmps = "";
                 var emp = "";
                 var todoEmp = todoEmps.split(";");
                 for (j = 0; j < todoEmp.length; j++) {

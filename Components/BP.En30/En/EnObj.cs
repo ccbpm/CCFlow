@@ -1034,7 +1034,7 @@ namespace BP.En
             if (DataType.IsNullOrEmpty(s))
                 s = this.EnMap.GetAttrByKey(key).DefaultVal.ToString();
 
-            if (s == "0")
+            if (int.Parse(s) < 0 || int.Parse(s)==0)
                 return false;
 
             if (s == "1")

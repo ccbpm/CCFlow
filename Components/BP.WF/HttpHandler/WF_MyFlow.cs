@@ -819,20 +819,35 @@ namespace BP.WF.HttpHandler
                 /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+#warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+                    gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
+                    if (gwls.Count == 1)
                     {
-                        if (btnLab.HuiQianLeaderRole == 0)
-                        {
-                            if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                                isAskForOrHuiQian = true;
-                        }
-                        else
-                        {
-                            //不是主持人
-                            if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                                isAskForOrHuiQian = true;
-                        }
+                        //修改流程会签状态
+                        gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+                        isAskForOrHuiQian = false;
                     }
+                    else
+                    {
+                        if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                        {
+                            if (btnLab.HuiQianLeaderRole == 0)
+                            {
+                                if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                                    isAskForOrHuiQian = true;
+                            }
+                            else
+                            {
+                                //不是主持人
+                                if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                                    isAskForOrHuiQian = true;
+                            }
+                        }
+
+                    }
+
+                   
                 }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.

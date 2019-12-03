@@ -821,8 +821,9 @@ namespace BP.WF.HttpHandler
                 {
 #warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
                     GenerWorkerLists gwls = new GenerWorkerLists();
-                    gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.IsPass,0);
-                    if (gwls.Count == 1)
+                    string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
+                   
+                    if (DBAccess.RunSQLReturnCOUNT(sql) == 1 )
                     {
                         //修改流程会签状态
                         gwf.HuiQianTaskSta = HuiQianTaskSta.None;

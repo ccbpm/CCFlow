@@ -823,7 +823,7 @@ namespace BP.WF.HttpHandler
                     GenerWorkerLists gwls = new GenerWorkerLists();
                     string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
                    
-                    if (DBAccess.RunSQLReturnCOUNT(sql) == 1 )
+                    if (DBAccess.RunSQLReturnValInt(sql) == 1 )
                     {
                         //修改流程会签状态
                         gwf.HuiQianTaskSta = HuiQianTaskSta.None;

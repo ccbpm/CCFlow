@@ -704,9 +704,9 @@ namespace BP.WF
 
             #region 删除当前节点数据。
             // 删除产生的工作列表。
-            DeleteSpanNodesGenerWorkerListData();
-            //GenerWorkerLists wls = new GenerWorkerLists();
-            //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+            //DeleteSpanNodesGenerWorkerListData();
+            GenerWorkerLists wls = new GenerWorkerLists();
+            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
             // 删除工作信息,如果是按照ccflow格式存储的。
             if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)

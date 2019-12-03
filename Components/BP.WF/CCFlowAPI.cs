@@ -209,7 +209,7 @@ namespace BP.WF
                 {
                     bool isHaveFWC = false;
                     //绑定表单库中的表单
-                    if (count!=0 && frmNode.IsEnableFWC == true &&  nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                    if ((count != 0 && frmNode.IsEnableFWC == true || nd.NodeFrmID == "ND" + nd.NodeID) && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                         isHaveFWC = true;
                  
                     if (nd.FormType == NodeFormType.FoolForm && isHaveFWC == true)

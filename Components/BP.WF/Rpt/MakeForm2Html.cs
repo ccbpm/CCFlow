@@ -848,6 +848,26 @@ namespace BP.WF
         //#endregion 生成头部信息.
 
         GroupFields gfs = new GroupFields(frmID);
+        if(DataType.IsNullOrEmpty(FK_Node) == false && DataType.IsNullOrEmpty(flowNo) == false)
+        {
+                Node nd = new Node(Int32.Parse(FK_Node));
+                string NDFrmID = Int32.Parse(flowNo) + FK_Node;
+                if(NDFrmID.Equals(frmID) && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                {
+                    GroupField  gf =  gfs.GetEntityByKey(GroupFieldAttr.CtrlType, "FWC") as GroupField;
+                    if(gf == null)
+                    {
+                        gf = new GroupField();
+                        gf.OID = 100;
+                        gf.FrmID= nd.NodeFrmID;
+                        gf.CtrlType = "FWC";
+                        gf.CtrlID = "FWCND" + nd.NodeID;
+                        gf.Idx = 100;
+                        gf.Lab = "审核信息";
+                        gfs.AddEntity(gf);
+                    }
+                }
+        }
         foreach (GroupField gf in gfs)
         {
             //输出标题.

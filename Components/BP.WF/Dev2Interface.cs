@@ -4196,7 +4196,7 @@ namespace BP.WF
             Node nd = new Node(currNodeID);
             if (nd.IsStartNode == false)
             {
-                if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing && gwf.HuiQianZhuChiRen!=BP.Web.WebUser.No)
                 {
                     nodeName = nd.Name + "(会签)";
                 }

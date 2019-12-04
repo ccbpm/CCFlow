@@ -972,15 +972,19 @@ namespace BP.WF.HttpHandler
             if (btnLab.HuiQianRole != HuiQianRole.TeamupGroupLeader || (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole!= HuiQianLeaderRole.OnlyOne)) { 
                 foreach (GenerWorkerList item in ens)
                 {
-                        if ((gwf.TodoEmps.Contains(item.FK_Emp + ",") == true || gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true) && item.FK_Emp != BP.Web.WebUser.No)
+                    if(btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
                     {
-                        item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
-                        item.FK_EmpText = item.FK_EmpText;
-                        if (item.IsPass == true)
-                            item.IsPassInt = 1001;
-                        else
-                            item.IsPassInt = 100;
-                        continue;
+                        if ((gwf.TodoEmps.Contains(item.FK_Emp + ",") == true || gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true) && item.FK_Emp != BP.Web.WebUser.No)
+                        {
+                            item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
+                            item.FK_EmpText = item.FK_EmpText;
+                            if (item.IsPass == true)
+                                item.IsPassInt = 1001;
+                            else
+                                item.IsPassInt = 100;
+                            continue;
+                        }
+
                     }
 
                     //标记为自己.

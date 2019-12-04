@@ -900,9 +900,8 @@ namespace BP.WF
 
             if (DataType.IsNullOrEmpty(FK_Node) == false && DataType.IsNullOrEmpty(flowNo) == false)
             {
-                Node nd = new Node(Int32.Parse(FK_Node));
-                string NDFrmID = Int32.Parse(flowNo) + FK_Node;
-                if (NDFrmID.Equals(frmID) && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                Node nd = new Node(Int32.Parse(FK_Node.Replace("ND","")));
+                if (frmID.StartsWith("ND")==true && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
                     GroupField gf = gfs.GetEntityByKey(GroupFieldAttr.CtrlType, "FWC") as GroupField;
                     if (gf == null)

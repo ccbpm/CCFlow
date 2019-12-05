@@ -2602,7 +2602,7 @@ $(function () {
     }
     //判断登录权限.
     var url = window.location.href.toLowerCase();
-    if (url.indexOf('login.htm') == -1 && url.indexOf('dbinstall.htm') == -1) {
+    if (url.indexOf('login.htm') == -1 && url.indexOf('dbinstall.htm') == -1 && url.indexOf('port.htm') == -1) {
         if (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null) {
             dynamicHandler = "";
             alert("登录信息丢失,请重新登录.");

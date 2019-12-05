@@ -71,6 +71,52 @@ namespace BP.WF.DTS
             return "执行成功.";
         }
 
+        public string ssdd()
+        {
+            string sql = "SELECT WORKID FROM WF_GenerWorkFlow A WHERE WFSta <>1 AND WFState =2  AND WorkID Not IN (Select WorkID From WF_GENERWORKERLIST) ORDER BY RDT desc";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            string msg = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                string todoEmps = gwf.TodoEmps;
+                // 如果不存在待办，则增加待办
+                sql = "SELECT *  From WF_GENERWORKERLIST WHERE WORKID=" + workid + " AND instr('" + todoEmps + "',FK_Emp)>0  AND IsPass=0";
+                if (DBAccess.RunSQLReturnCOUNT(sql) > 0)
+                    continue;
+                if (DataType.IsNullOrEmpty(todoEmps) == true)
+                    continue;
+                string[] strs = todoEmps.Split(';');
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str))
+                        continue;
+
+                    GenerWorkerList gwl = new GenerWorkerList();
+                    gwl.WorkID = workid;
+                    string[] emps = str.Split(',');
+
+                    gwl.FK_Emp = emps[0];
+                    gwl.FK_Node = gwf.FK_Node;
+                    if (emps.Length == 2)
+                        gwl.FK_EmpText = emps[1];
+                    gwl.FK_Flow = gwf.FK_Flow;
+                    gwl.RDT = gwf.SDTOfNode;
+                    gwl.CDT = gwf.SDTOfNode;
+                    gwl.IsEnable = true;
+                    gwl.IsRead = false;
+                    gwl.IsPass = false;
+                    gwl.WhoExeIt = 0;
+                    gwl.Save();
+                }
+
+            }
+            return "执行成功.";
+
+        }
+
         public string ss()
         {
             string sql = "SELECT AtPara,WorkID FROM WF_GENERWORKFLOW WHERE WFState !=3 AND atpara like '%@HuiQianTaskSta=1%' ";

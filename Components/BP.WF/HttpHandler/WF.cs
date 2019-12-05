@@ -2331,19 +2331,21 @@ namespace BP.WF.HttpHandler
 
             if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
                 return "err@非法的访问，请与管理员联系。SID=" + this.SID;
+            else
+                BP.WF.Dev2Interface.Port_Login(this.UserNo);
 
-            if (DataType.IsNullOrEmpty(WebUser.No) == true || BP.Web.WebUser.No.Equals(this.UserNo) == false)
-            {
-                BP.WF.Dev2Interface.Port_SigOut();
-                try
-                {
-                    BP.WF.Dev2Interface.Port_Login(this.UserNo);
-                }
-                catch (Exception ex)
-                {
-                    return "err@安全校验出现错误:" + ex.Message;
-                }
-            }
+            //if (DataType.IsNullOrEmpty(WebUser.No) == true || BP.Web.WebUser.No.Equals(this.UserNo) == false)
+            //{
+            //    BP.WF.Dev2Interface.Port_SigOut();
+            //    try
+            //    {
+            //        BP.WF.Dev2Interface.Port_Login(this.UserNo);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        return "err@安全校验出现错误:" + ex.Message;
+            //    }
+            //}
             #endregion 安全性校验.
 
             if (this.DoWhat.Equals("PortLogin") == true)

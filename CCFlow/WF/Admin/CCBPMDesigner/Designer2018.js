@@ -817,6 +817,9 @@ function GenerDrowFlowData() {
             }
         }
 
+        if (node.Name == null || node.Name == "")
+            node.Name = "节点x";
+
         strs += "{'id':'" + node.NodeID + "',";
         strs += "'flow_id':'" + flowNo + "',";
         strs += "'process_name':'" + node.Name.replace(/(^\s*)|(\s*$)/g, "") + "',";

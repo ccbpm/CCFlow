@@ -260,7 +260,22 @@
                         listbox += "<td>" + nodeName + "</td>"; //节点名称
                     }
 
-                    listbox += "<td>" + todoEmps + "</td>"; //参与人
+                    var emp = "";
+                    var todoEmp = todoEmps.split(";");
+                    for (j = 0; j < todoEmp.length; j++) {
+                        if (todoEmp[j] == '' || todoEmp[j] == null || todoEmp[j] == undefined)
+                            continue;
+                        if (todoEmp[j].indexOf(',') != -1) {
+                            var aa = todoEmp[j].split(",")[1] + "、";
+                            emp += aa;
+
+                        } else {
+                            emp += todoEmp[j] + "、";
+                        }
+
+                    }
+                    emp = emp.substring(0, emp.lastIndexOf("、"));
+                    listbox += "<td>" + emp + "</td>"; //参与人
                     listbox += "</tr>";
 
                 }

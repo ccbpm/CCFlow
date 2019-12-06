@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,7 +17,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -27,8 +28,9 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <Use64BitIISExpress />
     <TargetFrameworkProfile />
+    <TypeScriptToolsVersion>3.6</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,17 +57,11 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
     <Reference Include="FtpSupport">
       <HintPath>..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>
     <Reference Include="FusionCharts">
       <HintPath>..\RefDLL\FusionCharts.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\RefDLL\IBM.Data.Informix.dll</HintPath>
@@ -73,10 +69,6 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Lang.Php, Version=1.1.5431.643, Culture=neutral, PublicKeyToken=f4db9c0d094631dc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lang.Php.1.1.5431.643\lib\net40\Lang.Php.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -86,9 +78,6 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\RefDLL\Office12\Microsoft.Office.Interop.Word.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=8.0.17.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.17\lib\net452\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -113,19 +102,21 @@
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
+    <Reference Include="Spire.Doc, Version=7.1.13.41040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.Doc.7.1.13\lib\net40\Spire.Doc.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.7.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.Doc.7.1.13\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=5.1.23.18040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.Doc.7.1.13\lib\net40\Spire.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Management" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
@@ -140,7 +131,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataUser\AppCoder\ccbpmServices.htm" />
+    <Content Include="DataUser\AppCoder\CCFlowWebService.asmx" />
+    <Content Include="DataUser\AppCoder\DataInterface.asmx" />
     <Content Include="DataUser\AppCoder\FlowDesignerWelcome.htm" />
+    <Content Include="DataUser\AppCoder\FrmEventHandle.aspx" />
     <Content Include="DataUser\AppCoder\驰骋工作流引擎任务自动执行.Readme.txt" />
     <Content Include="DataUser\AppCoder\驰骋工作流引擎任务自动执行.xml" />
     <Content Include="DataUser\AthTemplete\readme.txt" />
@@ -174,9 +168,6 @@
     <Content Include="DataUser\FrmImgUpload\readme.txt" />
     <Content Include="DataUser\FrmOfficeFiles\readme.txt" />
     <Content Include="DataUser\FrmOfficeTemplate\Readme.txt" />
-    <Content Include="DataUser\HandlerOfMessage.aspx" />
-    <Content Include="DataUser\HandWritingImg\2019_08\0\159_QZB_094426.png" />
-    <Content Include="DataUser\HandWritingImg\2019_08\10001\868_HandSiganture1_084937.png" />
     <Content Include="DataUser\ICON\CCBPMDesigner.png" />
     <Content Include="DataUser\ICON\CCFlow\LogBig.png" />
     <Content Include="DataUser\ICON\CCFlow\LogBiger.png" />
@@ -214,8 +205,6 @@
     <Content Include="DataUser\JSLibData\ND14701_Self.js" />
     <Content Include="DataUser\JSLibData\ND15201_Self.js" />
     <Content Include="DataUser\JSLibData\ND18701_Self.js" />
-    <Content Include="DataUser\JSLibData\ND201.js" />
-    <Content Include="DataUser\JSLibData\DemoGenerFunctions.js" />
     <Content Include="DataUser\JSLibData\ND201_Self.js" />
     <Content Include="DataUser\JSLibData\ND20601_Self.js" />
     <Content Include="DataUser\JSLibData\ND20901_Self.js" />
@@ -307,10 +296,6 @@
     <Content Include="DataUser\PrjData\Data\readme.txt" />
     <Content Include="DataUser\PrjData\Readme.txt" />
     <Content Include="DataUser\PrjData\Templete\readme.txt" />
-    <Content Include="DataUser\ReturnLog\212\745631734.htm" />
-    <Content Include="DataUser\ReturnLog\212\745631734.txt" />
-    <Content Include="DataUser\ReturnLog\212\844848855.htm" />
-    <Content Include="DataUser\ReturnLog\212\844848855.txt" />
     <Content Include="DataUser\ReturnLog\readme.txt" />
     <Content Include="DataUser\RichTextBoxAttached\readme.txt" />
     <Content Include="DataUser\RichTextFile\readme.txt" />
@@ -340,11 +325,8 @@
     <Content Include="DataUser\Siganture\zhoushengyu.JPG" />
     <Content Include="DataUser\Siganture\zhoutianjiao.JPG" />
     <Content Include="DataUser\Siganture\李言.jpg" />
-    <Content Include="DataUser\Style\admin\designer--备份1.css" />
     <Content Include="DataUser\Style\admin\designer.css" />
-    <Content Include="DataUser\Style\admin\skins\context.standalone.css" />
     <Content Include="DataUser\Style\admin\skins\_all-skins.css" />
-    <Content Include="DataUser\Style\admin\skins\_all-skins1.css" />
     <Content Include="DataUser\Style\ccbpm.css" />
     <Content Include="DataUser\Style\dtl.css" />
     <Content Include="DataUser\TaoHong\readme.txt" />
@@ -531,9 +513,6 @@
       <LastGenOutput>Reference1.cs</LastGenOutput>
     </Content>
     <Content Include="Service References\CloundWS\WS.disco" />
-    <Content Include="DataUser\AppCoder\CCFlowWebService.asmx" />
-    <Content Include="DataUser\AppCoder\DataInterface.asmx" />
-    <Content Include="DataUser\AppCoder\FrmEventHandle.aspx" />
     <Content Include="DataUser\Do.aspx" />
     <Content Include="DataUser\Event.asmx" />
     <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
@@ -541,6 +520,8 @@
     <Content Include="Global.asax" />
     <Content Include="DataUser\Handler.ashx" />
     <Content Include="DataUser\SFTableHandler.ashx" />
+    <Content Include="DataUser\AppCoder\ccbpmServices.bat" />
+    <Content Include="WF\Admin\Admin.js" />
     <Content Include="WF\Admin\AttrFlow\Action.htm" />
     <Content Include="WF\Admin\AttrFlow\ActionDtl.htm" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.htm" />
@@ -549,6 +530,7 @@
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />
+    <Content Include="WF\Admin\AttrFlow\DeadLineRole.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
@@ -558,7 +540,9 @@
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrFlow\NodesIcon.htm" />
     <Content Include="WF\Admin\AttrFlow\NodesIconSelect.htm" />
+    <Content Include="WF\Admin\AttrFlow\PowerModel.htm" />
     <Content Include="WF\Admin\AttrFlow\PushMessage.htm" />
+    <Content Include="WF\Admin\AttrFlow\PushMessageEntity.htm" />
     <Content Include="WF\Admin\AttrFlow\PushMessageFlow.htm" />
     <Content Include="WF\Admin\AttrFlow\SDTOfFlow.htm" />
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
@@ -589,7 +573,9 @@
     <Content Include="WF\Admin\AttrNode\AccepterRole\20.ByStationForPrj.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\21.BySelectedForPrj.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\3.ByBindEmp.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\4.BySelected-1.png" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\4.BySelected.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\4.BySelected.png" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\5.ByPreviousNodeFormEmpsField.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\6.ByPreviousNodeEmp.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\7.ByStarter.htm" />
@@ -607,6 +593,7 @@
     <Content Include="WF\Admin\AttrNode\ActionHelp.htm" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
     <Content Include="WF\Admin\AttrNode\Bill.htm" />
+    <Content Include="WF\Admin\AttrNode\Bill2019.htm" />
     <Content Include="WF\Admin\AttrNode\BindFrmsNodeEnableRole.htm" />
     <Content Include="WF\Admin\AttrNode\BlockModel.htm" />
     <Content Include="WF\Admin\AttrNode\CanCancelNodes.htm" />
@@ -615,11 +602,13 @@
     <Content Include="WF\Admin\AttrNode\CheckFrm.htm" />
     <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
     <Content Include="WF\Admin\AttrNode\CHRole.htm" />
+    <Content Include="WF\Admin\AttrNode\CHRoleDtl.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\0.FoolForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\1.FreeForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\10.FoolTruck.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\100.DisableIt.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\11.RefOneFrmTree.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\12.Developer.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\2.SelfForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\3.SDKForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\4.SLForm.htm" />
@@ -628,14 +617,17 @@
     <Content Include="WF\Admin\AttrNode\FrmSln\7.WebOffice.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\8.ExcelForm.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\9.WordForm.htm" />
-    <Content Include="WF\Admin\AttrNode\FrmSln\NodeNote.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\DDLBar.js" />
     <Content Include="WF\Admin\AttrNode\FrmSln\Default.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\FlowNote.htm" />
+    <Content Include="WF\Admin\AttrNode\FrmSln\NodeNote.htm" />
     <Content Include="WF\Admin\AttrNode\FrmSln\SDKFrm.png" />
     <Content Include="WF\Admin\AttrNode\FrmSln\SelfFrm.png" />
     <Content Include="WF\Admin\AttrNode\Img\Bill.png" />
     <Content Include="WF\Admin\AttrNode\Img\CC.png" />
+    <Content Include="WF\Admin\AttrNode\Img\Col2Frm.jpg" />
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
+    <Content Include="WF\Admin\AttrNode\Img\Col6Frm.jpg" />
     <Content Include="WF\Admin\AttrNode\Img\Cond.png" />
     <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
     <Content Include="WF\Admin\AttrNode\Img\FreeFrm.png" />
@@ -654,6 +646,7 @@
     <Content Include="WF\Admin\AttrNode\Selector\0.Station.htm" />
     <Content Include="WF\Admin\AttrNode\Selector\1.Dept.htm" />
     <Content Include="WF\Admin\AttrNode\Selector\2.Emp.htm" />
+    <Content Include="WF\Admin\AttrNode\Selector\2.Emp.png" />
     <Content Include="WF\Admin\AttrNode\Selector\3.SQL.htm" />
     <Content Include="WF\Admin\AttrNode\Selector\4.SQLTemplate.htm" />
     <Content Include="WF\Admin\AttrNode\Selector\5.GenerUserSelecter.htm" />
@@ -671,6 +664,8 @@
     <Content Include="WF\Admin\AttrNode\SelfParas.htm" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowAuto.htm" />
+    <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowAutoDtl.htm" />
     <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowHand.htm" />
     <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowHandDtl.htm" />
     <Content Include="WF\Admin\AttrNode\SubFlow\SubFlowYanXu.htm" />
@@ -680,139 +675,13 @@
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\AdminerChang.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\AdminerForOneOrg.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\css\default.css" />
-    <Content Include="WF\Admin\DevelopDesigner\Designer.css" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\EnumerationNew.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\Exp.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmEnumeration.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmHiddenField.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmImage.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmImg.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTableAttrEdit.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTextBox.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTextBoxChoseOneField.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\SFList.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\Designer.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\FormDesigner1.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\FrmView.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\Designer.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\FrmView.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\dialogs\internal.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\lang\zh-cn\zh-cn.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\css\ueditor.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\css\ueditor.min.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\dialogbase.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\anchor.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\arrow.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\arrow_down.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\arrow_up.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\button-bg.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cancelbutton.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\charts.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_h.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_h.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_v.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_v.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\dialog-title-bg.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\filescan.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\highlighted.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\icons-all.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\icons.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\icons.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\loaderror.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\loading.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\lock.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\neweditor-tab-bg.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\pagebreak.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\scale.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\sortable.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\spacer.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\sparator_v.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\table-cell-align.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\tangram-colorpicker.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\toolbar_bg.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\unhighlighted.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\upload.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\videologo.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\word.gif" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\wordpaste.png" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\iframe.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\codemirror\codemirror.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\codemirror\codemirror.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\mootools-adapter.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\mootools-adapter.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\prototype-adapter.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\prototype-adapter.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\standalone-framework.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\standalone-framework.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts-more.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts-more.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\annotations.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\annotations.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\canvas-tools.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\canvas-tools.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\data.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\data.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\drilldown.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\drilldown.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\exporting.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\exporting.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\funnel.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\funnel.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\heatmap.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\heatmap.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\map.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\map.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\no-data-to-display.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\no-data-to-display.src.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\dark-blue.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\dark-green.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\gray.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\grid.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\skies.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\SyntaxHighlighter\shCore.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.svg" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.min.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.swf" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video.dev.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\Uploader.swf" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.css" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.flashonly.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.flashonly.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.html5only.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.html5only.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.withoutimage.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.withoutimage.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\zeroclipboard\ZeroClipboard.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\zeroclipboard\ZeroClipboard.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\zeroclipboard\ZeroClipboard.swf" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.all.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.all.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.config.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.parse.js" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.parse.min.js" />
-    <Content Include="WF\Admin\DevelopDesigner\text.html" />
-    <Content Include="WF\Admin\Portal\Default.js" />
-    <Content Include="WF\Admin\Portal\Default.css" />
-    <Content Include="WF\Admin\Portal\DefaultFrm.htm" />
-    <Content Include="WF\Admin\Portal\DefaultSimple.htm" />
-    <Content Include="WF\Admin\Portal\Default.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
-    <Content Include="WF\Admin\Portal\Flows.htm" />
-    <Content Include="WF\Admin\Portal\Guide.htm" />
-    <Content Include="WF\Admin\Portal\Handler.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\Designer2018.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\Flows.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Guide.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\Home.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\arrow.png" />
@@ -864,8 +733,21 @@
     <Content Include="WF\Admin\CCBPMDesigner\Img\URL.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\warning.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\welcome.jpg" />
-    <Content Include="WF\Admin\Portal\FuncTrees.js" />
-    <Content Include="WF\Admin\Portal\Login.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\分合流点.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\分流点.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\合流点.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\同表单子线程.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\子线程点.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\异表单子线程.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\Img\普通点.png" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\browserReady.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\CCBPMDesignerData.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\ChangeNodeEventFactory.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\Designer.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\FuncTrees.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\jquery.ez-bg-resize.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\js\Left.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\bootstrap\css\bootstrap-ie6.css" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\bootstrap\css\bootstrap-ie6.min%281%29.css" />
@@ -882,7 +764,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\images\ui-icons_444444_256x240.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\jquery-ui.min.css" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\css\site.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\Designer2018.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\Designer2018.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\images\grid.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\images\leipi_flowdesign.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\images\loading.gif" />
@@ -917,7 +799,8 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2x2.png" />
-    <Content Include="WF\Admin\Admin.js" />
+    <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFlowEnum.js" />
     <Content Include="WF\Admin\CCFormDesigner\Action.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ActionDtl.htm" />
@@ -1114,7 +997,6 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Fieldset.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\FlowChart.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\FrmCheck.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\FrmTransferCustom.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\HandSiganture.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\iFrame.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Radiobutton.png" />
@@ -1272,7 +1154,6 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide0.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\0.FoolForm.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\1.FreeForm.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide\2.SelfForm.htm" />
@@ -1362,12 +1243,135 @@
     <Content Include="WF\Admin\Cond\ConditionLine.htm" />
     <Content Include="WF\Admin\Cond\ConditionSubFlow.htm" />
     <Content Include="WF\Admin\Cond\CondModel.htm" />
+    <Content Include="WF\Admin\Cond\CondModel1.png" />
     <Content Include="WF\Admin\Cond\CondPRI.htm" />
     <Content Include="WF\Admin\Cond\CondStation.htm" />
     <Content Include="WF\Admin\Cond\List.htm" />
     <Content Include="WF\Admin\Cond\SelectStation.htm" />
     <Content Include="WF\Admin\Cond\StandAloneFrm.htm" />
     <Content Include="WF\Admin\DBInstall.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\css\default.css" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\EnumerationNew.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\Exp.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmEnumeration.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmHiddenField.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmImage.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmImg.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTableAttrEdit.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTextBox.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTextBoxChoseOneField.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\DialogCtr\SFList.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\FormDesigner.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\FormDesigner1.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\FrmView.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\js\designer.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\FrmView.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\dialogs\internal.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\lang\zh-cn\zh-cn.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\css\ueditor.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\css\ueditor.min.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\dialogbase.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\anchor.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\arrow.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\arrow_down.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\arrow_up.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\button-bg.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cancelbutton.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\charts.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_h.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_h.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_v.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\cursor_v.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\dialog-title-bg.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\filescan.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\highlighted.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\icons-all.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\icons.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\icons.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\loaderror.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\loading.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\lock.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\neweditor-tab-bg.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\pagebreak.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\scale.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\sortable.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\spacer.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\sparator_v.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\table-cell-align.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\tangram-colorpicker.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\toolbar_bg.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\unhighlighted.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\upload.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\videologo.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\word.gif" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\default\images\wordpaste.png" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\themes\iframe.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\codemirror\codemirror.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\codemirror\codemirror.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\mootools-adapter.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\mootools-adapter.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\prototype-adapter.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\prototype-adapter.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\standalone-framework.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\adapters\standalone-framework.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts-more.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts-more.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\highcharts.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\annotations.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\annotations.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\canvas-tools.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\canvas-tools.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\data.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\data.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\drilldown.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\drilldown.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\exporting.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\exporting.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\funnel.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\funnel.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\heatmap.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\heatmap.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\map.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\map.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\no-data-to-display.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\modules\no-data-to-display.src.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\dark-blue.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\dark-green.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\gray.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\grid.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\skies.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\SyntaxHighlighter\shCore.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.svg" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.min.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.swf" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video.dev.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\Uploader.swf" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.flashonly.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.flashonly.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.html5only.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.html5only.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.withoutimage.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\webuploader\webuploader.withoutimage.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\zeroclipboard\ZeroClipboard.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\zeroclipboard\ZeroClipboard.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\zeroclipboard\ZeroClipboard.swf" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.all.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.all.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.config.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.parse.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.parse.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\text.html" />
     <Content Include="WF\Admin\DoType.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ActionForDtl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ActionForDtlEntity.htm" />
@@ -1389,17 +1393,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\DtlImp\DDLBar.js" />
     <Content Include="WF\Admin\FoolFormDesigner\DtlSetting\DtlImp\Default.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\0.None.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\10.Text.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\4.MapPin.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\5.MicHot.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\6.AthShow.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\60.BigNoteHtmlText.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\7.MobilePhoto.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\8.HandWriting.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\9.HyperLink.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\DDLBar.js" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral\Default.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFieldGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EleBatch.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
@@ -1453,7 +1447,11 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapDef.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL-0.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull-1.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull-2.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDtlField.htm" />
@@ -1472,7 +1470,11 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Link.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\MultipleChoiceSearch.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\MultipleChoiceSearch.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\MultipleChoiceSmall-1.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\MultipleChoiceSmall-2.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\MultipleChoiceSmall.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\MultipleChoiceSmall.png" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopFullCtrl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopFullCtrlDDL.htm" />
@@ -1499,7 +1501,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\comment\MobForm.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\comment\Progress.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\comment\QueryString.js" />
-    <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\comment\ToolBar.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\iscroll.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\jqm-demosMain.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\jquery.datetimepicker.js" />
@@ -1574,7 +1575,9 @@
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\0.None.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\1.Simple-1.png" />
     <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\1.Simple.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\1.Simple.png" />
     <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\2.Table.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\DDLBar.js" />
     <Content Include="WF\Admin\FoolFormDesigner\TBFullCtrl\Default.htm" />
@@ -1589,6 +1592,16 @@
     <Content Include="WF\Admin\Multilingual\FlowName.htm" />
     <Content Include="WF\Admin\Multilingual\FlowSort.htm" />
     <Content Include="WF\Admin\Multilingual\NodeButton.htm" />
+    <Content Include="WF\Admin\Portal\Default.css" />
+    <Content Include="WF\Admin\Portal\Default.htm" />
+    <Content Include="WF\Admin\Portal\Default.js" />
+    <Content Include="WF\Admin\Portal\DefaultFrm.htm" />
+    <Content Include="WF\Admin\Portal\DefaultSimple.htm" />
+    <Content Include="WF\Admin\Portal\Flows.htm" />
+    <Content Include="WF\Admin\Portal\FuncTrees.js" />
+    <Content Include="WF\Admin\Portal\Guide.htm" />
+    <Content Include="WF\Admin\Portal\Img\loading_small.gif" />
+    <Content Include="WF\Admin\Portal\Login.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
     <Content Include="WF\Admin\RptDfine\Default.htm" />
@@ -1608,6 +1621,7 @@
     <Content Include="WF\Admin\Sln\CopyFromNode.htm" />
     <Content Include="WF\Admin\Sln\Dtls.htm" />
     <Content Include="WF\Admin\Sln\Fields.htm" />
+    <Content Include="WF\Admin\Sln\FlowNote.htm" />
     <Content Include="WF\Admin\Sln\ImgAths.htm" />
     <Content Include="WF\Admin\TestCase.htm" />
     <Content Include="WF\Admin\TestFlow.htm" />
@@ -1656,10 +1670,10 @@
     <Content Include="WF\CCBill\Admin\Portal\Welcome.html" />
     <Content Include="WF\CCBill\Admin\SearchCond.htm" />
     <Content Include="WF\CCBill\Admin\SearchRole.htm" />
-    <Content Include="WF\CCBill\CCBillAdmin.js" />
-    <Content Include="WF\CCBill\CCBill.js" />
-    <Content Include="WF\CCBill\CCBillTest.html" />
+    <Content Include="WF\CCBill\ccbill.js" />
+    <Content Include="WF\CCBill\ccbill.js.txt" />
     <Content Include="WF\CCBill\ContrastDtl.htm" />
+    <Content Include="WF\CCBill\Demo\CCFormDemo.js.txt" />
     <Content Include="WF\CCBill\Demo\index.htm" />
     <Content Include="WF\CCBill\DictTree.htm" />
     <Content Include="WF\CCBill\Draft.htm" />
@@ -1672,12 +1686,14 @@
     <Content Include="WF\CCBill\Img\BillState\Todo.png" />
     <Content Include="WF\CCBill\MyBill.htm" />
     <Content Include="WF\CCBill\MyDict.htm" />
+    <Content Include="WF\CCBill\MyEntityTree.htm" />
     <Content Include="WF\CCBill\MyFrmGener.js" />
     <Content Include="WF\CCBill\Opt\DoMethod.htm" />
     <Content Include="WF\CCBill\Opt\DoMethodPara.htm" />
     <Content Include="WF\CCBill\Opt\DoMethodPara.js" />
     <Content Include="WF\CCBill\Opt\Imp.htm" />
     <Content Include="WF\CCBill\Opt\RefBill.htm" />
+    <Content Include="WF\CCBill\Port.htm" />
     <Content Include="WF\CCBill\Portal\Home.htm" />
     <Content Include="WF\CCBill\Portal\Img\Bar1.png" />
     <Content Include="WF\CCBill\Portal\Img\Bar2.png" />
@@ -1706,6 +1722,7 @@
     <Content Include="WF\CCForm\AthImg.htm" />
     <Content Include="WF\CCForm\AttachmentFix.htm" />
     <Content Include="WF\CCForm\AttachmentUpload.js" />
+    <Content Include="WF\CCForm\CCFormAPI.asmx" />
     <Content Include="WF\CCForm\DownFile.aspx" />
     <Content Include="WF\CCForm\Dtl.htm" />
     <Content Include="WF\CCForm\Dtl2017.htm" />
@@ -1736,8 +1753,6 @@
     <Content Include="WF\CCForm\FrmWord.htm" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\CCForm\HandWriting.htm" />
-    <Content Include="WF\CCForm\Map.htm" />
-    <Content Include="WF\CCForm\Map1.htm" />
     <Content Include="WF\CCForm\ImgAth.htm" />
     <Content Include="WF\CCForm\ImgAth\ajaxfileupload.js" />
     <Content Include="WF\CCForm\ImgAth\css\images\generate.png" />
@@ -1754,13 +1769,13 @@
     <Content Include="WF\CCForm\ImgAth\js\jquery.bitmapcutter.js" />
     <Content Include="WF\CCForm\ImgAth\js\jquery1.4.2.min.js" />
     <Content Include="WF\CCForm\Img\loading.gif" />
-    <Content Include="WF\CCForm\JS\DtlPop.js" />
     <Content Include="WF\CCForm\JS\mselector.css" />
     <Content Include="WF\CCForm\JS\mselector.js" />
     <Content Include="WF\CCForm\JS\mtags.js" />
     <Content Include="WF\CCForm\JS\MultipleChoiceSearch.js" />
     <Content Include="WF\CCForm\JS\MultipleChoiceSmall.js" />
     <Content Include="WF\CCForm\JS\Pop.js" />
+    <Content Include="WF\CCForm\Map.htm" />
     <Content Include="WF\CCForm\MapExt2016.js" />
     <Content Include="WF\CCForm\MapExt2019.js" />
     <Content Include="WF\CCForm\PopFullCtrl.htm" />
@@ -1830,6 +1845,7 @@
     <Content Include="WF\Comm\CSS\images\pointer.png" />
     <Content Include="WF\Comm\CSS\images\resize.gif" />
     <Content Include="WF\Comm\CSS\jquery.bitmapcutter.css" />
+    <Content Include="WF\Comm\CSS\layout.css" />
     <Content Include="WF\Comm\DataHelp.htm" />
     <Content Include="WF\Comm\Do.aspx" />
     <Content Include="WF\Comm\EChart\echarts.js" />
@@ -1859,7 +1875,6 @@
     <Content Include="WF\Comm\JS\Calendar\lang\zh-tw.js" />
     <Content Include="WF\Comm\JS\Calendar\My97DatePicker.htm" />
     <Content Include="WF\Comm\JS\Calendar\skin\datePicker.gif" />
-    <Content Include="WF\Comm\JS\Calendar\skin\datePicker.png" />
     <Content Include="WF\Comm\JS\Calendar\skin\default\datepicker.css" />
     <Content Include="WF\Comm\JS\Calendar\skin\default\img.gif" />
     <Content Include="WF\Comm\JS\Calendar\skin\WdatePicker.css" />
@@ -2041,6 +2056,7 @@
     <Content Include="WF\Data\lang\lang.js" />
     <Content Include="WF\Data\lang\load.js" />
     <Content Include="WF\Data\lang\xml\Public.xml" />
+    <Content Include="WF\Data\lang\xml\sub_wf_stated.xml" />
     <Content Include="WF\Data\lang\xml\WorkNode.xml" />
     <Content Include="WF\Data\MultilingualJS\Lang.js" />
     <Content Include="WF\Data\MultilingualJS\Public.js" />
@@ -2079,12 +2095,9 @@
     <Content Include="WF\Done.htm" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\Focus.htm" />
-    <Content Include="WF\GetTask.htm" />
     <Content Include="WF\FutureTodolist.htm" />
+    <Content Include="WF\GetTask.htm" />
     <Content Include="WF\HuiQianAdderList.htm" />
-    <Content Include="WF\Setting\SearchSetting.htm" />
-    <Content Include="WF\Style\skin\css\loginFrm.css" />
-    <Content Include="WF\TeamupList.htm" />
     <Content Include="WF\HuiQianList.htm" />
     <Content Include="WF\HungUpList.htm" />
     <Content Include="WF\Img\Action\AskforHelp.png" />
@@ -2545,12 +2558,7 @@
     <Content Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.svg" />
     <Content Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.svg" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\avatar.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\avatar04.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\avatar2.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\avatar3.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\avatar5.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\boxed-bg.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\boxed-bg.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\credit\american-express.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\credit\cirrus.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\credit\mastercard.png" />
@@ -2558,24 +2566,10 @@
     <Content Include="WF\Scripts\AdminLTE\dist\img\credit\paypal.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\credit\paypal2.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\credit\visa.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\default-50x50.gif" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\icons.png" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\loading\loading-spinner-blue.gif" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\loading\loading-spinner-default.gif" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\loading\loading-spinner-grey.gif" />
     <Content Include="WF\Scripts\AdminLTE\dist\img\loading\loading.gif" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\photo1.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\photo2.png" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\photo3.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\photo4.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user1-128x128.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user2-160x160.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user3-128x128.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user4-128x128.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user5-128x128.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user6-128x128.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user7-128x128.jpg" />
-    <Content Include="WF\Scripts\AdminLTE\dist\img\user8-128x128.jpg" />
     <Content Include="WF\Scripts\AdminLTE\dist\js\app.js" />
     <Content Include="WF\Scripts\AdminLTE\dist\js\app.min.js" />
     <Content Include="WF\Scripts\AdminLTE\dist\js\app_iframe.js" />
@@ -2989,6 +2983,7 @@
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\index.d.ts" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\bootstrap-table.css" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\bootstrap-table.js" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\colResizable-1.6.min.js" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\accent-neutralise\bootstrap-table-accent-neutralise.js" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\angular\bootstrap-table-angular.js" />
     <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\auto-refresh\bootstrap-table-auto-refresh.css" />
@@ -3386,6 +3381,7 @@
     <Content Include="WF\Scripts\easyUI145\themes\icons\mini_edit.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\mini_refresh.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\more.png" />
+    <Content Include="WF\Scripts\easyUI145\themes\icons\new.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\no.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\ok.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\open.png" />
@@ -6985,6 +6981,25 @@
     <Content Include="WF\Scripts\zTree_v3\css\zTreeStyle\img\zTreeStandard.gif" />
     <Content Include="WF\Scripts\zTree_v3\css\zTreeStyle\img\zTreeStandard.png" />
     <Content Include="WF\Scripts\zTree_v3\css\zTreeStyle\zTreeStyle.css" />
+    <Content Include="WF\Scripts\zTree_v3\images\checked.gif" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\1_close.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\1_open.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\2.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\3.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\4.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\5.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\6.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\7.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\8.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\diy\9.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\icon-ok.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\line_conn.gif" />
+    <Content Include="WF\Scripts\zTree_v3\images\loading.gif" />
+    <Content Include="WF\Scripts\zTree_v3\images\unchecked.gif" />
+    <Content Include="WF\Scripts\zTree_v3\images\zTreeLine.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\zTreeStandard.gif" />
+    <Content Include="WF\Scripts\zTree_v3\images\zTreeStandard.png" />
+    <Content Include="WF\Scripts\zTree_v3\images\未标题-2.png" />
     <Content Include="WF\Scripts\zTree_v3\js\jquery-1.4.4.min.js" />
     <Content Include="WF\Scripts\zTree_v3\js\jquery.ztree.all.js" />
     <Content Include="WF\Scripts\zTree_v3\js\jquery.ztree.all.min.js" />
@@ -7002,136 +7017,19 @@
     <Content Include="WF\SearchDataGrid.htm" />
     <Content Include="WF\SendOverClose.htm" />
     <Content Include="WF\Setting\Author.htm" />
+    <Content Include="WF\Setting\AuthorDtl.htm" />
     <Content Include="WF\Setting\AuthorLogin.htm" />
     <Content Include="WF\Setting\ChangeDept.htm" />
     <Content Include="WF\Setting\ChangePassword.htm" />
     <Content Include="WF\Setting\Default.htm" />
     <Content Include="WF\Setting\Profile.htm" />
+    <Content Include="WF\Setting\SearchSetting.htm" />
     <Content Include="WF\Setting\Siganture.htm" />
     <Content Include="WF\Setting\UserIcon.htm" />
     <Content Include="WF\Start.htm" />
     <Content Include="WF\StartGuide.htm" />
     <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\Style\BlankTitle.JPG" />
-    <Content Include="WF\Style\css\jquery.datetimepicker.css" />
-    <Content Include="WF\Style\css\jquery.swipeButton.css" />
-    <Content Include="WF\Style\css\Main.css" />
-    <Content Include="WF\Style\css\mobiscroll.custom-2.5.0.min.css" />
-    <Content Include="WF\Style\css\mui.min.css" />
-    <Content Include="WF\Style\css\MyFlowGener.css" />
-    <Content Include="WF\Style\css\progress.css" />
-    <Content Include="WF\Style\css\PushScroll.css" />
-    <Content Include="WF\Style\css\themes\classic\images\ajax-loader.gif" />
-    <Content Include="WF\Style\css\themes\classic\theme-classic.css" />
-    <Content Include="WF\Style\css\themes\default\images\ajax-loader.gif" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\action-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\action-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\alert-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\alert-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-d-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-d-l-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-d-l-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-d-r-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-d-r-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-d-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-l-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-l-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-r-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-r-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-u-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-u-l-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-u-l-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-u-r-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-u-r-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\arrow-u-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\audio-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\audio-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\back-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\back-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\bars-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\bars-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\bullets-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\bullets-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\calendar-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\calendar-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\camera-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\camera-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-d-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-d-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-l-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-l-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-r-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-r-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-u-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\carat-u-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\check-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\check-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\clock-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\clock-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\cloud-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\cloud-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\comment-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\comment-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\delete-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\delete-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\edit-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\edit-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\eye-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\eye-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\forbidden-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\forbidden-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\forward-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\forward-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\gear-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\gear-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\grid-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\grid-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\heart-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\heart-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\home-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\home-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\info-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\info-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\location-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\location-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\lock-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\lock-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\mail-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\mail-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\minus-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\minus-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\navigation-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\navigation-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\phone-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\phone-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\plus-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\plus-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\power-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\power-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\recycle-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\recycle-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\refresh-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\refresh-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\search-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\search-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\shop-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\shop-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\star-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\star-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\tag-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\tag-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\user-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\user-white.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\video-black.png" />
-    <Content Include="WF\Style\css\themes\default\images\icons-png\video-white.png" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile-1.4.5.min.css" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile.external-png-1.4.5.min.css" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile.icons-1.4.5.min.css" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile.inline-png-1.4.5.min.css" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile.inline-svg-1.4.5.min.css" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile.structure-1.4.5.min.css" />
-    <Content Include="WF\Style\css\themes\default\jquery.mobile.theme-1.4.5.min.css" />
-    <Content Include="WF\Style\css\timeline.css" />
     <Content Include="WF\Style\Frm\jquery.idTabs.min.js" />
     <Content Include="WF\Style\Frm\jquery.min.js" />
     <Content Include="WF\Style\Frm\tab.css" />
@@ -7150,6 +7048,7 @@
     <Content Include="WF\Style\Min.gif" />
     <Content Include="WF\Style\skin\css\animate.css" />
     <Content Include="WF\Style\skin\css\login.css" />
+    <Content Include="WF\Style\skin\css\LoginFrm.css" />
     <Content Include="WF\Style\skin\css\style.css" />
     <Content Include="WF\Style\skin\font\iconfont.css" />
     <Content Include="WF\Style\skin\images\login_bg.png" />
@@ -7378,6 +7277,7 @@
     <Content Include="WF\Style\Verify.js" />
     <Content Include="WF\TaskPoolApply.htm" />
     <Content Include="WF\TaskPoolSharing.htm" />
+    <Content Include="WF\TeamupList.htm" />
     <Content Include="WF\Todolist.htm" />
     <Content Include="WF\TodolistAdv.htm" />
     <Content Include="WF\TodolistDataGrid.htm" />
@@ -7461,6 +7361,8 @@
     <Content Include="WF\WorkOpt\OneWork\Img\时间轴.png" />
     <Content Include="WF\WorkOpt\OneWork\JobSchedule.htm" />
     <Content Include="WF\WorkOpt\OneWork\JobSchedule.js" />
+    <Content Include="WF\WorkOpt\OneWork\JobSchedule1.css" />
+    <Content Include="WF\WorkOpt\OneWork\JobSchedule1.js" />
     <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
     <Content Include="WF\WorkOpt\OneWork\PubliceTrack.js" />
@@ -7477,7 +7379,9 @@
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
+    <Content Include="WF\WorkOpt\SelectFlows.htm" />
     <Content Include="WF\WorkOpt\SelectNode.htm" />
+    <Content Include="WF\WorkOpt\SelectStationGroup.htm" />
     <Content Include="WF\WorkOpt\StartGuide.htm" />
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
@@ -7494,7 +7398,6 @@
     <Content Include="WF\WorkOpt\WorkCheck.js" />
     <Content Include="WF\WorkOpt\WorkCheck2019.htm" />
     <Content Include="WF\WorkOpt\WorkCheck2019.js" />
-    <None Include="DataUser\AppCoder\ccbpmServices.bat" />
     <None Include="DataUser\CyclostyleFile\chichengfeiyongbaoxiaodan.rtf" />
     <None Include="DataUser\CyclostyleFile\feiyongbaoxiaodan.rtf" />
     <None Include="DataUser\CyclostyleFile\FlowFrm\004\401\all.单据打印样本多表.rtf" />
@@ -7515,6 +7418,7 @@
     <None Include="DataUser\TempleteOfImp\BP.Demo.BPFramework.Students.xls" />
     <None Include="DataUser\TempleteOfImp\ND7401Dtl1.xls" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -7526,280 +7430,185 @@
     <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
-    <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
-    <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
-    <None Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
-    <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
-    <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
-    <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\README.md" />
-    <None Include="WF\Admin\CCBPMDesigner\Public\js\select2\release.sh" />
-    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
-    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
-    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
-    <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\jquery.mobile-1.4.5.min.map" />
-    <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\mui\fonts\mui.ttf" />
+    <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
+    <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\README.md" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\release.sh" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.min.map" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.eot" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.woff" />
-    <None Include="WF\CCForm\Port.readme" />
-    <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.eot" />
-    <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.ttf" />
-    <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.woff" />
-    <None Include="WF\Comm\fonts\fonts\fontawesome-webfont.woff2" />
-    <None Include="WF\Comm\fonts\fonts\FontAwesome.otf" />
-    <None Include="WF\Comm\fonts\fonts\Simple-Line-Icons.eot" />
-    <None Include="WF\Comm\fonts\fonts\Simple-Line-Icons.ttf" />
-    <None Include="WF\Comm\fonts\fonts\Simple-Line-Icons.woff" />
-    <None Include="WF\Comm\fonts\fonts\Simple-Line-Icons.woff2" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.svg" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.ttf" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.woff" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.eot" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.svg" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.ttf" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.woff" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.eot" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.svg" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.ttf" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.woff" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.eot" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.svg" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.ttf" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.woff" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.eot" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.otf" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.svg" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.ttf" />
-    <None Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.woff" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.eot" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.ttf" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.woff" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.woff2" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\FontAwesome.otf" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.eot" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.ttf" />
-    <None Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.woff" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.svg" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.ttf" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-select-1.12.4\css\bootstrap-select.css.map" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-select-1.12.4\js\bootstrap-select.js.map" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\.gitignore" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\.travis.yml" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\bootstrap-table.jquery.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\bower.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\CHANGELOG.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\composer.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\CONTRIBUTING.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\DONATORS.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\LICENSE" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\package.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\accent-neutralise\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\accent-neutralise\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\auto-refresh\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\auto-refresh\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\click-edit-row\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\cookie\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\cookie\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\copy-rows\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\copy-rows\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\defer-url\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\defer-url\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\editable\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\editable\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\export\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\export\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter-control\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter-control\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\flat-json\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\flat-json\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by-v2\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by-v2\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\i18n-enhance\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\i18n-enhance\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\key-events\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\key-events\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\mobile\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\mobile\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multi-column-toggle\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multi-column-toggle\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-search\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-search\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-selection-row\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-selection-row\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-sort\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-sort\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\natural-sorting\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\natural-sorting\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\page-jumpto\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\print\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-columns\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-columns\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-rows\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-rows\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\resizable\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\resizable\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\select2-filter\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\select2-filter\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\sticky-header\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\sticky-header\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\toolbar\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\toolbar\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\tree-column\bootstrap-table-tree-column.less" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\tree-column\extension.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\locale\bootstrap-table-en-US.js.template" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\src\locale\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-table\_config.yml" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\.bowerrc" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\.gitattributes" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\.gitignore" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\.jshintrc" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\.travis.yml" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\bower.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\CHANGELOG.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\LICENSE" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\package.json" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\README.md" />
-    <None Include="WF\Scripts\bootstrap\bootstrap-treeview\tests\README.md" />
-    <None Include="WF\Scripts\bootstrap\css\bootstrap.css.map" />
-    <None Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.eot" />
-    <None Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.ttf" />
-    <None Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.woff" />
-    <None Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.woff2" />
-    <None Include="WF\Scripts\bootstrap\fonts\FontAwesome.otf" />
-    <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
-    <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
-    <None Include="WF\Scripts\CodeMirror\doc\logo.svg" />
-    <None Include="WF\Scripts\easyUI\themes\gray\images\Thumbs.db" />
-    <None Include="WF\Scripts\jBox\LGPL-LICENSE" />
-    <None Include="WF\Scripts\jBox\MIT-LICENSE" />
-    <None Include="WF\Scripts\jBox\Skins\Blue\Desktop.ini" />
-    <None Include="WF\Scripts\jBox\Skins\Blue\images\OneNote 目录.onetoc2" />
-    <None Include="WF\Scripts\jBox\Skins\Blue\OneNote 目录.onetoc2" />
-    <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-16x16.psd" />
-    <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
-    <None Include="WF\Scripts\zTree_v3\css\awesomeStyle\awesome.less" />
-    <None Include="WF\Scripts\zTree_v3\css\awesomeStyle\fa.less" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\action-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\action-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\alert-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\alert-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-d-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-d-l-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-d-l-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-d-r-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-d-r-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-d-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-l-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-l-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-r-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-r-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-u-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-u-l-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-u-l-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-u-r-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-u-r-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\arrow-u-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\audio-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\audio-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\back-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\back-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\bars-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\bars-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\bullets-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\bullets-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\calendar-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\calendar-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\camera-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\camera-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-d-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-d-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-l-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-l-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-r-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-r-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-u-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\carat-u-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\check-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\check-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\clock-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\clock-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\cloud-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\cloud-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\comment-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\comment-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\delete-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\delete-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\edit-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\edit-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\eye-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\eye-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\forbidden-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\forbidden-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\forward-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\forward-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\gear-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\gear-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\grid-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\grid-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\heart-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\heart-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\home-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\home-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\info-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\info-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\location-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\location-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\lock-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\lock-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\mail-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\mail-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\minus-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\minus-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\navigation-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\navigation-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\phone-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\phone-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\plus-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\plus-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\power-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\power-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\recycle-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\recycle-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\refresh-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\refresh-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\search-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\search-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\shop-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\shop-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\star-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\star-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\tag-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\tag-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\user-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\user-white.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\video-black.svg" />
-    <Content Include="WF\Style\css\themes\default\images\icons-svg\video-white.svg" />
-    <None Include="WF\Style\skin\font\iconfont.eot" />
-    <None Include="WF\Style\skin\font\iconfont.svg" />
-    <None Include="WF\Style\skin\font\iconfont.ttf" />
-    <None Include="WF\Style\skin\font\iconfont.woff" />
-    <None Include="WF\Style\skin\layui\font\iconfont.eot" />
-    <None Include="WF\Style\skin\layui\font\iconfont.svg" />
-    <None Include="WF\Style\skin\layui\font\iconfont.ttf" />
-    <None Include="WF\Style\skin\layui\font\iconfont.woff" />
+    <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\jquery.mobile-1.4.5.min.map" />
+    <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\mui\fonts\mui.ttf" />
+    <Content Include="WF\Admin\Portal\Handler.ashx" />
+    <Content Include="WF\CCForm\Port.readme" />
+    <Content Include="WF\Comm\fonts\fonts\fontawesome-webfont.eot" />
+    <Content Include="WF\Comm\fonts\fonts\fontawesome-webfont.ttf" />
+    <Content Include="WF\Comm\fonts\fonts\fontawesome-webfont.woff" />
+    <Content Include="WF\Comm\fonts\fonts\fontawesome-webfont.woff2" />
+    <Content Include="WF\Comm\fonts\fonts\FontAwesome.otf" />
+    <Content Include="WF\Comm\fonts\fonts\Simple-Line-Icons.eot" />
+    <Content Include="WF\Comm\fonts\fonts\Simple-Line-Icons.ttf" />
+    <Content Include="WF\Comm\fonts\fonts\Simple-Line-Icons.woff" />
+    <Content Include="WF\Comm\fonts\fonts\Simple-Line-Icons.woff2" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.svg" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.ttf" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.woff" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.eot" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.svg" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.ttf" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbol-webfont.woff" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.eot" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.svg" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.ttf" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralbolita-webfont.woff" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.eot" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.svg" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.ttf" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\stixgeneral-bundle\stixgeneralitalic-webfont.woff" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.eot" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.otf" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.svg" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.ttf" />
+    <Content Include="WF\Comm\umeditor1.2.3-utf8\third-party\mathquill\font\Symbola.woff" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.eot" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.ttf" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.woff" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\fontawesome-webfont.woff2" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\FontAwesome.otf" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.eot" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.ttf" />
+    <Content Include="WF\Scripts\AdminLTE\dist\fonts\ionicons.woff" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-paginator\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-select-1.12.4\css\bootstrap-select.css.map" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-select-1.12.4\js\bootstrap-select.js.map" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\.gitignore" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\.travis.yml" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\bootstrap-table.jquery.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\bower.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\CHANGELOG.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\composer.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\CONTRIBUTING.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\DONATORS.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\LICENSE" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\package.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\accent-neutralise\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\accent-neutralise\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\auto-refresh\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\auto-refresh\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\click-edit-row\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\cookie\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\cookie\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\copy-rows\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\copy-rows\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\defer-url\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\defer-url\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\editable\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\editable\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\export\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\export\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter-control\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter-control\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\filter\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\flat-json\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\flat-json\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by-v2\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by-v2\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\group-by\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\i18n-enhance\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\i18n-enhance\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\key-events\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\key-events\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\mobile\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\mobile\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multi-column-toggle\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multi-column-toggle\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-search\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-search\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-selection-row\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-selection-row\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-sort\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\multiple-sort\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\natural-sorting\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\natural-sorting\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\page-jumpto\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\print\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-columns\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-columns\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-rows\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\reorder-rows\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\resizable\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\resizable\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\select2-filter\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\select2-filter\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\sticky-header\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\sticky-header\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\toolbar\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\toolbar\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\tree-column\bootstrap-table-tree-column.less" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\extensions\tree-column\extension.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\locale\bootstrap-table-en-US.js.template" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\src\locale\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-table\_config.yml" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\.bowerrc" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\.gitattributes" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\.gitignore" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\.jshintrc" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\.travis.yml" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\bower.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\CHANGELOG.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\LICENSE" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\package.json" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\README.md" />
+    <Content Include="WF\Scripts\bootstrap\bootstrap-treeview\tests\README.md" />
+    <Content Include="WF\Scripts\bootstrap\css\bootstrap.css.map" />
+    <Content Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.eot" />
+    <Content Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.ttf" />
+    <Content Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.woff" />
+    <Content Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.woff2" />
+    <Content Include="WF\Scripts\bootstrap\fonts\FontAwesome.otf" />
+    <Content Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="WF\Scripts\CodeMirror\doc\logo.svg" />
+    <Content Include="WF\Scripts\easyUI\themes\gray\images\Thumbs.db" />
+    <Content Include="WF\Scripts\jBox\LGPL-LICENSE" />
+    <Content Include="WF\Scripts\jBox\MIT-LICENSE" />
+    <Content Include="WF\Scripts\jBox\Skins\Blue\Desktop.ini" />
+    <Content Include="WF\Scripts\jBox\Skins\Blue\images\OneNote 目录.onetoc2" />
+    <Content Include="WF\Scripts\jBox\Skins\Blue\OneNote 目录.onetoc2" />
+    <Content Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-16x16.psd" />
+    <Content Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
+    <Content Include="WF\Scripts\zTree_v3\css\awesomeStyle\awesome.less" />
+    <Content Include="WF\Scripts\zTree_v3\css\awesomeStyle\fa.less" />
+    <Content Include="WF\Style\skin\font\iconfont.eot" />
+    <Content Include="WF\Style\skin\font\iconfont.svg" />
+    <Content Include="WF\Style\skin\font\iconfont.ttf" />
+    <Content Include="WF\Style\skin\font\iconfont.woff" />
+    <Content Include="WF\Style\skin\layui\font\iconfont.eot" />
+    <Content Include="WF\Style\skin\layui\font\iconfont.svg" />
+    <Content Include="WF\Style\skin\layui\font\iconfont.ttf" />
+    <Content Include="WF\Style\skin\layui\font\iconfont.woff" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.cs">
+      <DependentUpon>FrmEventHandle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
     </Compile>
@@ -7810,23 +7619,12 @@
       <DependentUpon>Event.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.cs">
-      <DependentUpon>FrmEventHandle.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="DataUser\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DataUser\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="DataUser\HandlerOfMessage.aspx.cs">
-      <DependentUpon>HandlerOfMessage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DataUser\HandlerOfMessage.aspx.designer.cs">
-      <DependentUpon>HandlerOfMessage.aspx</DependentUpon>
     </Compile>
     <Compile Include="DataUser\IndustrialAutomationWorkflowAPI.asmx.cs">
       <DependentUpon>IndustrialAutomationWorkflowAPI.asmx</DependentUpon>
@@ -7860,9 +7658,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\Portal\Handler.ashx.cs">
+    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\Portal\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
+      <DependentUpon>CCFormAPI.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="WF\CCForm\DownFile.aspx.cs">
       <DependentUpon>DownFile.aspx</DependentUpon>
@@ -7890,11 +7695,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />
+    <Folder Include="DataUser\HandWritingImg\2019_08\0\" />
+    <Folder Include="DataUser\HandWritingImg\2019_08\10001\" />
     <Folder Include="DataUser\OrgData\" />
+    <Folder Include="DataUser\ReturnLog\212\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="DataUser\Temp\" />
     <Folder Include="WF\Data\Multilingual\" />
+    <Folder Include="WF\Scripts\bootstrap\bootstrap-table\.github\" />
+    <Folder Include="WF\Scripts\bootstrap\bootstrap-table\docs\" />
     <Folder Include="WF\Scripts\jqGrid\" />
+    <Folder Include="WF\Style\css\themes\classic\images\" />
+    <Folder Include="WF\Style\css\themes\default\images\icons-png\" />
+    <Folder Include="WF\Style\css\themes\default\images\icons-svg\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -7917,22 +7730,27 @@
       <Name>BP.Demo</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>2207</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2297/</IISUrl>
+          <IISUrl>
+          </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

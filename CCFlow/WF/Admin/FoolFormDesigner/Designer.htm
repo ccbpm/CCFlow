@@ -450,15 +450,18 @@
                 case "Ath":
                     if (groupEn.CtrlID == "")
                         return "";
-                    var athEn = new Entity("BP.Sys.FrmAttachment", groupEn.CtrlID);
-                    if (athEn.RetrieveFromDBSources() == 0)
+                    var athEn = $.grep(data.Sys_FrmAttachment, function (ath) { return ath.MyPK == groupEn.CtrlID });
+                    
+                    if (athEn.length == 0) {
+                        return "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 附件[" + groupEn.CtrlID + "]丢失</td></tr>";
+                    }
+                    if (athEn[0].IsVisable == "0")
                         return "";
-                    if (athEn.IsVisable == "0")
-                        return "";
-                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn.MyPK + "&IsReadonly=1";
 
-                    var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
+                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn[0].MyPK + "&IsReadonly=1";
+
+                    var frameUrl = "<iframe ID='F" + athEn[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                    return "<tr><td colspan=" + tableCol + " id='TD" + athEn[0].MyPK + "' style='width:" + athEn[0].H + "px;'>" + frameUrl + "</td></tr>";
 
                     break;
                 case "SubFlow":
@@ -475,17 +478,19 @@
 
                     break;
                 case "Frame":
-
-                    var athEn = new Entity("BP.Sys.MapFrame", groupEn.CtrlID);
-
-                    var src = athEn.URL;
+                    var frameEn = $.grep(data.Sys_MapFrame, function (frame) { return frame.MyPK == groupEn.CtrlID });
+                    if (frameEn.length == 0) {
+                        return "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 框架[" + groupEn.CtrlID + "]丢失</td></tr>";
+                    }
+                  
+                    var src = frameEn[0].URL;
                     if (src.indexOf('?') == -1)
-                        src = athEn.URL + "?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + athEn.MyPK;
+                        src = frameEn[0].URL + "?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
                     else
-                        src = athEn.URL + "&PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + athEn.MyPK;
+                        src = frameEn[0].URL + "&PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
 
-                    var frameUrl = "<iframe ID='F" + athEn.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " id='TD" + athEn.MyPK + "' style='width:" + athEn.H + "px;'>" + frameUrl + "</td></tr>";
+                    var frameUrl = "<iframe ID='F" + frameEn[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + frameEn[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                    return "<tr><td colspan=" + tableCol + " id='TD" + frameEn[0].MyPK + "' style='width:" + frameEn[0].H + "px;'>" + frameUrl + "</td></tr>";
 
                     break;
                 case "FWC":
@@ -559,9 +564,11 @@
                     }
                     if (ath.IsVisable == "0") {
                         //如果是节点字段附件的时候就隐藏
-                        var mapAttr = new Entity("BP.Sys.MapAttr");
-                        mapAttr.SetPKVal(groupEn.CtrlID);
-                        if (mapAttr.RetrieveFromDBSources() != 0) {
+                        var mapAttr = $.grep(data.Sys_MapAttr, function (obj, i) {
+                            if (obj.MyPK == groupEn.CtrlID)
+                                return obj;
+                        });
+                        if (mapAttr.length !=0) {
                             isShow = false;
                             break;
                         }

@@ -614,12 +614,19 @@ namespace BP.WF.Template
         public FrmNode(string fk_flow, int fk_node, string fk_frm)
         {
             int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
+           
             if (i == 0)
             {
                 this.IsPrint = false;
                 //不可以编辑.
                 this.FrmSln = Template.FrmSln.Default;
                 // this.IsEdit = false;
+                Node node = new Node(fk_node);
+                if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                {
+                    this.IsEnableFWC = true;
+
+                }
                 return;
                // throw new Exception("@表单关联信息已被删除。");
             }

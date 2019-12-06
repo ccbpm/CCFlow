@@ -17,7 +17,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -675,13 +675,8 @@
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\AdminerChang.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\AdminerForOneOrg.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer2018.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\Flows.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Guide.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Home.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\arrow.png" />
@@ -780,6 +775,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\img\loading.gif" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\img\search.gif" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.html" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\js\jquery.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\js\jquery.multiselect2side.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.pin.min.js" />
@@ -794,13 +790,15 @@
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jsPlumb\bak\jquery.jsPlumb-1.6.2-min.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jsPlumb\jquery.jsPlumb-1.3.16-all-min.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\jsPlumb\各版本下载.txt" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\README.md" />
+    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\release.sh" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2-spinner.gif" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.css" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\select2x2.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFlowEnum.js" />
     <Content Include="WF\Admin\CCFormDesigner\Action.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ActionDtl.htm" />
@@ -7432,11 +7430,6 @@
     </Content>
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
-    <Content Include="WF\Admin\CCBPMDesigner\Public\js\jquery.multiselect2side\jmultiselect2side.php" />
-    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\component.json" />
-    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\LICENSE" />
-    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\README.md" />
-    <Content Include="WF\Admin\CCBPMDesigner\Public\js\select2\release.sh" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
@@ -7657,10 +7650,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\Admin\Portal\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link href="../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="../Comm/JS/validation.js"></script>
     <script type="text/javascript" language="javascript">
         document.onkeydown = function (e) {
             e = e || window.event;
@@ -24,15 +25,21 @@
             驰骋工作流引擎登录</h1>
         <div class="login-form">
             <form id="Form1">
-            <div class="form-group">
-                <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"
-                    class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"
-                    class="form-control" />
-            </div>
-            <input type="button" class="btn btn-primary btn-block" value="操作员登录" lay-submit lay-filter="formDemo" />
+                <div class="form-group">
+                    <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"
+                           class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"
+                           class="form-control" />
+                </div>
+                <div id="validate" class="form-group" style="display: none">
+
+                    <input type="text" class="form-control" placeholder="验证码" id="inputCode" style="width:50%;display: inline" />
+                    <canvas id="canvas" width="78" height="24"></canvas>
+                    <a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()">看不清</a>
+                </div>
+                <input type="button" class="btn btn-primary btn-block" value="操作员登录" lay-submit lay-filter="formDemo" />
             </form>
             <div class="row login-nav">
                 <div class="col-xs-6">
@@ -87,7 +94,14 @@
                 layer.msg('请输入用户名与密码');
                 return false;
             }
-
+            //判断验证码是否正确
+            var node = $("#validate");
+            if(node.is(':visible'))
+            {
+                if (!validateCode()) {
+                    return;
+                }
+            }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
 
             handler.AddPara("TB_No", userNo);
@@ -97,6 +111,8 @@
 
             if (data.indexOf('err@') == 0) {
                 layer.msg(data, { time: 3000, icon: 2 });
+                $("#validate").show();
+                createCode();
                 return;
             }
 

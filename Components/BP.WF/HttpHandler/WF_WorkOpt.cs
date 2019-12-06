@@ -3967,9 +3967,6 @@ namespace BP.WF.HttpHandler
                             tc.PlanDT = DateTime.Now.AddDays(1).ToString(DataType.SysDataTimeFormat);
                         }
                         tc.Insert();
-                       
-                       
-
                     }
                 }
                 tcs = new TransferCustoms(this.WorkID);
@@ -4002,6 +3999,10 @@ namespace BP.WF.HttpHandler
             //获取流程流转自定义的数据
             string sql = "SELECT FK_Node AS NodeID,NodeName AS Name From WF_TransferCustom WHERE WorkID=" + WorkID + " AND IsEnable=1 Order By Idx";
             DataTable dtYL = DBAccess.RunSQLReturnTable(sql);
+
+            //删除不启用的游离态节点时限设置
+            sql = "DELETE FROM WF_CHNode WHERE WorkID="+WorkID+" AND FK_Node IN(SELECT FK_Node FROM WF_TransferCustom WHERE WorkID=" + WorkID + " AND IsEnable=0 )";
+            DBAccess.RunSQL(sql);
 
             //节点时限表
             CHNodes chNodes = new CHNodes(this.WorkID);

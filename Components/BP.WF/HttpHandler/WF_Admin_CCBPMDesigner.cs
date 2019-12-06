@@ -250,7 +250,7 @@ namespace BP.WF.HttpHandler
                         sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0] + ";");
                     }
 
-                    DBAccess.RunSQL(sBuilder.ToString());
+                    DBAccess.RunSQLs(sBuilder.ToString());
 
                     //保存方向.
                     sBuilder = new StringBuilder();
@@ -264,7 +264,7 @@ namespace BP.WF.HttpHandler
                         sBuilder.Append("INSERT INTO WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
                     }
 
-                    DBAccess.RunSQL(sBuilder.ToString());
+                    DBAccess.RunSQLs(sBuilder.ToString());
 
                     //保存label位置.
                     sBuilder = new StringBuilder();
@@ -277,7 +277,8 @@ namespace BP.WF.HttpHandler
                         sBuilder.Append("UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0] + "';");
                     }
 
-                    DBAccess.RunSQL(sBuilder.ToString());
+                    string sqls = sBuilder.ToString();
+                    DBAccess.RunSQLs(sqls);
 
                     return "保存成功.";
                 }

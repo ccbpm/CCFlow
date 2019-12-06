@@ -19,8 +19,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_Multilingual : DirectoryPageBase
     {
-
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -43,7 +41,6 @@ namespace BP.WF.HttpHandler
             ht.Add("Langue", SystemConfig.Langue);
             return BP.Tools.Json.ToJson(ht);
         }
-
 
         #region 执行父类的重写方法.
         /// <summary>

@@ -63,6 +63,9 @@
 
             //从后台获取当前登录会话的信息.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+             var doType = GetQueryString("DoType");
+            if (doType != null && doType != undefined && doType != "")
+                handler.AddPara("LoginType", doType);
             var data = handler.DoMethodReturnString("Login_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);

@@ -90,15 +90,17 @@ function GenerFoolFrm(wn) {
                 if (MyPK == "")
                     continue;
                 //创建附件描述信息.
-                var ath = new Entity("BP.Sys.FrmAttachment");
-                ath.MyPK = gf.CtrlID;
-                if (ath.RetrieveFromDBSources() == 0)
+                var ath = $.grep(flowData.Sys_FrmAttachment, function (obj, idx) {
+                    if (obj.MyPK == gf.CtrlID)
+                        return obj;
+                });
+                if (ath.length == 0)
                     continue;
-                if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
+                if (ath[0].IsVisable == "0" || ath[0].NoOfObj == "FrmWorkCheck")
                     continue;
                 html += "<tr>";
                 html += "  <td colspan='" + tableCol + "' >";
-                html += Ele_Attachment(flowData, gf, node, ath);
+                html += Ele_Attachment(flowData, gf, node, ath[0]);
                 html += "  </td>";
                 html += "</tr>";
                 html += "</table>";
@@ -1811,11 +1813,13 @@ function GetLab(flowData, attr) {
     }
     //附件控件
     if (contralType == 6) {
-        //创建附件描述信息.
         var mypk = attr.MyPK;
-        var ath = new Entity("BP.Sys.FrmAttachment");
-        ath.MyPK = mypk;
-        if (ath.RetrieveFromDBSources() == 0) {
+        //创建附件描述信息.
+        var ath = $.grep(flowData.Sys_FrmAttachment, function (obj, idx) {
+            if (obj.MyPK == mypk)
+                return obj;
+        });
+        if (ath.length == 0) {
             alert("没有找到附件属性,请联系管理员");
             return;
         }
@@ -1849,7 +1853,7 @@ function GetLab(flowData, attr) {
             src += "&IsReadOnly=1";
 
         //自定义表单模式.
-        if (ath.AthRunModel == 2) {
+        if (ath[0].AthRunModel == 2) {
             src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         }
         lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";

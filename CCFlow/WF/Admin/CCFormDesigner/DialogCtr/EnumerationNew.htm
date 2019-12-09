@@ -248,17 +248,23 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".easyui-textbox").attr("disabled", "true");//所有文本框变为不可用
+
             $(".easyui-textbox:eq(0)").removeAttr("disabled");//启用第一个文本框
+            $("#TB_EnumKey").removeAttr("disabled");
+            for (var i = 0; i < 30; i++) {
+                if ($("#TB" + i + "").val().length > 0)
+                    $(".easyui-textbox:eq("+i+")").removeAttr("disabled");
+            }
             $('.easyui-textbox').bind('input propertychange', function ()    //监听当前操作的文本框，若有值输入，则启用下一个文本框
-            {  
+            {
                 $(this).parent().parent().next().find(".easyui-textbox").removeAttr("disabled");
             });
             $(".easyui-textbox").keyup(function (event) {    //当前文本框内容全部删除时，禁用下一个文本框
-                if (event.keyCode == 8 && ($(this).val().length<1)) {
-                    //alert("123");
+                if (event.keyCode == 8 && ($(this).val().length < 1)) {
                     $(this).parent().parent().next().find(".easyui-textbox").attr("disabled", "true");
                 }
             })
+            
         });
     </script>
 </head>

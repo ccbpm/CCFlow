@@ -967,7 +967,7 @@ function Send(isHuiQian) {
                 // 不支持火狐浏览器。
                 var frms = contentWidow.document.getElementsByName("Attach");
                 for (var i = 0; i < frms.length; i++) {
-                    var msg = frms[i].contentWindow.CheckAthNum();
+                    msg = frms[i].contentWindow.CheckAthNum();
                     if (msg!="") {
                         msg += "["+tabText+"]表单"+msg+";";
                         isSend = false;
@@ -1379,7 +1379,7 @@ function checkAths() {
     var frm = document.getElementById('Ath1');
 
     if (frm == null || frm == undefined) {
-        return true;
+        return "";
         //alert('系统错误,没有找到SelfForm的ID.');
     }
     return frm.contentWindow.CheckAthNum();

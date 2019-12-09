@@ -4064,6 +4064,9 @@ namespace BP.WF.HttpHandler
                     {
                         foreach(DataRow drYL in dtYL.Rows)
                         {
+                            chNode = chNodes.GetEntityByKey(CHNodeAttr.FK_Node, int.Parse(drYL["NodeID"].ToString())) as CHNode;
+                            if (chNode != null)
+                                continue;
                             chNode = new CHNode();
                             chNode.WorkID = this.WorkID;
                             chNode.FK_Node = int.Parse(drYL["NodeID"].ToString());
@@ -4189,7 +4192,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 时限初始化数据
 
-        #region 节点时限重新设置
+       #region 节点时限重新设置
         public string CH_Save()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);

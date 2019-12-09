@@ -145,7 +145,7 @@
         //检查上传的附件数量是否符合要求
         function CheckAthNum() {
             if (numOfUpload > numOfAths) {
-                return false;
+                return "上传附件数量不能小于"+numOfUpload;
             }
 
              if (athSortNum.length != 0 && athDesc.UploadFileNumCheck==2) {
@@ -155,15 +155,14 @@
                         msg += athSortNum[idx].Sort + ",";
                 }
                 if (msg != "") {
-                    alert(msg.substring(0, msg.length - 1) + "分组至少上传一个附件");
-                    return false;
+                    return msg.substring(0, msg.length - 1) + "分组至少上传一个附件";
                 }
-                return true;
+                return "";
                     
 
             }
 
-            return true;
+            return "";
         }
 
         $(function () {
@@ -649,7 +648,7 @@
         function changeSort(sort) {
             $("#Sort").val(sort);
             //激活上传文件
-            $("#file").click();
+            $("#fileUploadContent .uploadBts .selectFileBt").click()
 
         }
 

@@ -1036,7 +1036,19 @@ function GenerWorkNode() {
     }
     url += "&WorkID=" + GetPageParas("WorkID") + "&FK_Flow=" + GetPageParas("FK_Flow") + "&FK_Node=" + GetPageParas("FK_Node");
 
-    var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:" + mapData.FrmH + "px' leftMargin='0' topMargin='0' />";
+    var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:auto' leftMargin='0' topMargin='0' />";
+
+    var compoents = workNodeData.WF_FrmNodeComponent;
+    //增加审核分组
+    for (var i = 0; i < compoents.length; i++) {
+        var component = compoents[i];
+        if (component.FWCSta != 0) {
+            if (wf_node.FormType == 10 && gf.FrmID != 'ND' + wf_node.NodeID)
+                continue;
+            html += Ele_FrmCheck(wf_node);
+            continue;
+        }
+    }
 
     $('#CCForm').html("").append(html);
 
@@ -1080,6 +1092,39 @@ function GenerWorkNode() {
 
     showTbNoticeInfo();
 
+}
+
+function Ele_FrmCheck(wf_node) {
+
+    //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
+    var sta = wf_node.FWCSta;
+
+    var h = wf_node.FWC_H + 1300;
+    var src = "";
+    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+        src = "./WorkOpt/WorkCheck.htm?s=2";
+    else
+        src = "./WorkOpt/WorkCheck2019.htm?s=2";
+    var fwcOnload = "";
+    var paras = '';
+
+    paras += "&FID=" + pageData["FID"];
+    paras += "&OID=" + pageData["WorkID"];
+    paras += '&FK_Flow=' + pageData.FK_Flow;
+    paras += '&FK_Node=' + pageData.FK_Node;
+    paras += '&WorkID=' + pageData.WorkID;
+    if (sta == 2)//只读
+    {
+        src += "&DoType=View";
+    }
+    src += "&r=q" + paras;
+
+    if (h == 0)
+        h = 400;
+
+    var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "'";
+    eleHtml += " frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
+    return eleHtml;
 }
 
 
@@ -1165,7 +1210,8 @@ $(function () {
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax
-
+    
+debugger
     GenerWorkNode(); //表单数据.ajax
 
     if ($("#Message").html() == "") {

@@ -2825,7 +2825,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        sql = "SELECT A.FK_Node as \"No\",a.FK_NodeText as \"Name\", a.FK_Emp as \"Rec\", a.FK_EmpText as \"RecName\", b.IsBackTracking as \"IsBackTracking\", a.AtPara as \"AtPara\"  FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + "  AND ( a.AtPara NOT LIKE '%@IsHuiQian=1%' OR a.AtPara Is　Null) ORDER BY a.RDT DESC ";
+                        sql = "SELECT A.FK_Node as \"No\",a.FK_NodeText as \"Name\", a.FK_Emp as \"Rec\", a.FK_EmpText as \"RecName\", b.IsBackTracking as \"IsBackTracking\", a.AtPara as \"AtPara\"  FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + "  AND ( a.AtPara NOT LIKE '%@IsHuiQian=1%' OR a.AtPara Is Null) ORDER BY a.RDT DESC ";
                         DataTable mydt = DBAccess.RunSQLReturnTable(sql);
 
                         if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)

@@ -1338,7 +1338,7 @@ namespace BP.WF
 
 
                         html += "<tr>";
-                        html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
+                        html += " <td valign=middle style='font-size:18px'>" + dr["NDFromT"] + "</td>";
 
                         String msg = dr["Msg"].ToString();
 
@@ -1370,13 +1370,14 @@ namespace BP.WF
 
                             if (singType == "1")
                             {
-                                empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" /> " + dr["EmpFromT"];
+                                String src = SystemConfig.HostURLOfBS + "/DataUser/Siganture/";
+                                empStrs = "<img src='"+src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
                             }
 
                         }
                         msg += "审核人:" + empStrs + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
 
-                        html += " <td colspan=3 valign=middle >" + msg + "</td>";
+                        html += " <td colspan=3 valign=middle style='font-size:18px'>" + msg + "</td>";
                         html += " </tr>";
                     }
                     //#endregion 生成审核信息.

@@ -1016,10 +1016,10 @@ function CCForm_Attr() {
 //单据属性
 function Bill_CCForm() {
 
-    if (plant != 'CCFlow') {
-        alert('功能尚未同步到该版本上.');
-        return;
-    }
+    // if (plant != 'CCFlow') {
+    //     alert('功能尚未同步到该版本上.');
+    //     return;
+    // }
 
     var node = $('#formTree').tree('getSelected');
     if (!node) {
@@ -1049,10 +1049,10 @@ function Bill_CCForm() {
 //打开单据
 function Bill_Open() {
 
-    if (plant != 'CCFlow') {
-        alert('功能尚未同步到该版本上.');
-        return;
-    }
+    // if (plant != 'CCFlow') {
+    //     alert('功能尚未同步到该版本上.');
+    //     return;
+    // }
 
     var node = $('#formTree').tree('getSelected');
     if (!node) {

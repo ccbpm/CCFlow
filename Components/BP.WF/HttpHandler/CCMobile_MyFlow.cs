@@ -178,6 +178,36 @@ namespace BP.WF.HttpHandler
             WF_CCForm ccform = new WF_CCForm();
             return ccform.AttachmentUpload_Down();
         }
-      
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="enName"></param>
+        /// <returns></returns>
+        public string RetrieveFieldGroup()
+        {
+            string FrmID = this.GetRequestVal("FrmID");
+            GroupFields gfs = new GroupFields();
+            QueryObject qo = new QueryObject(gfs);
+            qo.AddWhere(GroupFieldAttr.FrmID, FrmID);
+            qo.addAnd();
+            qo.AddWhereIsNull(GroupFieldAttr.CtrlID);
+            int num = qo.DoQuery();
+
+            if (num == 0)
+            {
+                GroupField gf = new GroupField();
+                gf.FrmID = FrmID;
+                MapData md = new MapData();
+                md.No = FrmID;
+                if (md.RetrieveFromDBSources() == 0)
+                    gf.Lab = "基础信息";
+                else
+                    gf.Lab = md.Name;
+                gf.Idx = 0;
+                gf.Insert();
+                gfs.AddEntity(gf);
+            }
+            return gfs.ToJson();
+        }
     }
 }

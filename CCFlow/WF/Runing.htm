@@ -377,7 +377,7 @@
 
                     //listbox += "[<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + nodeID + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>][<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','"+currNodeId+"')\">撤销</a>]";
                     listbox += "<a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a>";
-                    if (work.RunType == 0) {
+                    if (work.RunType == 0 || work.RunType == undefined) {
                         listbox += "&nbsp;&nbsp;&nbsp; <a href =\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
                         //判断是否隐藏
                         if (Hide_HastenWork == true) {

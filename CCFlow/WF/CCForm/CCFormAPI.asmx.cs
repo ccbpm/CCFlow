@@ -717,7 +717,7 @@ namespace CCFlow.WF.CCForm
             FileInfo info = new FileInfo(filePath);
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
             dbUpload.MyPK = guid;
-            dbUpload.NodeID = nodeID.ToString();
+            dbUpload.NodeID = nodeID;
             dbUpload.Sort = null;
             dbUpload.FK_FrmAttachment = ath.MyPK;
             dbUpload.FK_MapData = ath.FK_MapData;
@@ -728,6 +728,8 @@ namespace CCFlow.WF.CCForm
             dbUpload.RDT = DataType.CurrentDataTimess;
             dbUpload.Rec = userNo;
             dbUpload.RecName = BP.Web.WebUser.Name;
+            dbUpload.FK_Dept = WebUser.FK_Dept;
+            dbUpload.FK_DeptName = WebUser.FK_DeptName;
             dbUpload.RefPKVal = workID.ToString();
 
             dbUpload.UploadGUID = guid;

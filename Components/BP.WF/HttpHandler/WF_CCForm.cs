@@ -103,7 +103,7 @@ namespace BP.WF.HttpHandler
 
                         dbUpload.CheckPhysicsTable();
                         dbUpload.MyPK = athDesc.FK_MapData + oid.ToString();
-                        dbUpload.NodeID = FK_Node.ToString();
+                        dbUpload.NodeID = FK_Node;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -135,6 +135,8 @@ namespace BP.WF.HttpHandler
                         dbUpload.RDT = DataType.CurrentDataTime;
                         dbUpload.Rec = BP.Web.WebUser.No;
                         dbUpload.RecName = BP.Web.WebUser.Name;
+                        dbUpload.FK_Dept = WebUser.FK_Dept;
+                        dbUpload.FK_DeptName = WebUser.FK_DeptName;
 
                         dbUpload.Insert();
 
@@ -3155,9 +3157,11 @@ namespace BP.WF.HttpHandler
             dbUpload.FileSize = (float)info.Length;
             dbUpload.Rec = WebUser.No;
             dbUpload.RecName = WebUser.Name;
+            dbUpload.FK_Dept = WebUser.FK_Dept;
+            dbUpload.FK_DeptName = WebUser.FK_DeptName;
             dbUpload.RDT = BP.DA.DataType.CurrentDataTime;
 
-            dbUpload.NodeID = fk_node.ToString();
+            dbUpload.NodeID = fk_node;
             dbUpload.Save();
 
             if (frmAth.AthSaveWay == AthSaveWay.DB)
@@ -3362,7 +3366,7 @@ namespace BP.WF.HttpHandler
                     FileInfo info = new FileInfo(realSaveTo);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
-                    dbUpload.NodeID = this.FK_Node.ToString();
+                    dbUpload.NodeID = this.FK_Node;
                     dbUpload.Sort = sort;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
@@ -3402,6 +3406,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     dbUpload.RefPKVal = pkVal;
                     dbUpload.FID = this.FID;
 
@@ -3466,7 +3472,7 @@ namespace BP.WF.HttpHandler
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
                     dbUpload.Sort = sort;
-                    dbUpload.NodeID = FK_Node.ToString();
+                    dbUpload.NodeID = FK_Node;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (fileEncrypt == true)
@@ -3496,6 +3502,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     if (athDesc.IsExpCol == true)
                     {
                         if (paras != null && paras.Length > 0)

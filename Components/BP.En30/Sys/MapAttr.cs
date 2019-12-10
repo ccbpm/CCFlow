@@ -1696,7 +1696,7 @@ namespace BP.Sys
 
             //added by liuxc,2016-12-2
             //判断当前属性是否有分组，没有分组，则自动创建一个分组，并关联
-            if (this.GroupID.ToString() == "0")
+            if (this.GroupID.ToString() == "1")
             {
                 //查找分组，查找到的第一个分组，关联当前属性
                 GroupField group = new GroupField();

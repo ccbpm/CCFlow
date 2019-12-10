@@ -265,7 +265,7 @@ namespace BP.WF.HttpHandler
 
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
-                    dbUpload.NodeID = this.FK_Node.ToString();
+                    dbUpload.NodeID = this.FK_Node;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
@@ -290,6 +290,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     dbUpload.RefPKVal = PKVal;
                     dbUpload.FID = this.FID;
 
@@ -354,7 +356,7 @@ namespace BP.WF.HttpHandler
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
-                    dbUpload.NodeID = FK_Node.ToString();
+                    dbUpload.NodeID = FK_Node;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -382,6 +384,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     //if (athDesc.IsNote)
                     //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
 

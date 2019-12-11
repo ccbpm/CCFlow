@@ -126,27 +126,31 @@
             //$('#newsGrid').bootstrapTable('clearChecked');
             var pagination = (lb == "sysWords"?false:true) ;
             if (lb == "sysWords") {
-                data = [];
+                data = {};
+                data1 = [];
                 var docs = mapExt.Doc;
                 docs = docs.split('@');
                 for (var i = 0; i < docs.length; i++) {
                     var doc = docs[i];
                     if (doc == null || doc == "")
                         continue;
-                    data.push({"MYPK":i,"CURVALUE":doc});
+                    data1.push({"MYPK":i,"CURVALUE":doc});
                 }
+                data.rows = data1;
+                data.total = docs.length-1;
+
             }else{
                 data = GetSearchData(pageNumber,pageSize);
             }
 
 
             $('#newsGrid').bootstrapTable({
-                columns: [[
+                columns: [
                 { checkbox: true, width: 1,
                   cellStyle: {css: { "width": "1px" } }
                 },
                 { field: 'CURVALUE', title: '', align: 'left' }
-                ]],
+                ],
                 idField: 'MYPK',
                 selectOnCheck: false,
                 clickToSelect: true,

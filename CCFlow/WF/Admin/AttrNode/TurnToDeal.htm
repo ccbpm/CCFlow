@@ -69,13 +69,13 @@
                 $("#TB_SpecMsg").val("");
                 node.TurnToDealDoc = $("#TB_SpecURL").val();
             }
-
-            if (node.TurnToDeal == 0) {
+            
+            if (node.TurnToDeal == 0 || node.TurnToDeal == 3) {
                 $("#TB_SpecMsg").val("");
                 $("#TB_SpecURL").val("");
             }
 
-            if (node.TurnToDeal != 0) {
+            if (node.TurnToDeal != 0 && node.TurnToDeal != 3) {
                 if (node.TurnToDealDoc == '') {
                     alert('执行内容没有填写');
                     return;
@@ -159,7 +159,7 @@
 
                      <fieldset>
                         <legend>
-                            <input type="radio" ID="RB_TurnToDeal_3" name="TurnToDeal" runat="server" value="2"
+                            <input type="radio" ID="RB_TurnToDeal_3" name="TurnToDeal" runat="server" value="3"
                                 onClick="rb_onchange(3)" /><label for="RB_TurnToDeal_3"> 发送完毕就关闭，不提示任何信息。 </label>
                         </legend>
 

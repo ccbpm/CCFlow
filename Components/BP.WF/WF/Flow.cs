@@ -4851,6 +4851,7 @@ namespace BP.WF
                     fl.No = fl.GenerNewNo;
                     fl.DoDelData();
                     fl.DoDelete(); /*删除可能存在的垃圾.*/
+                    fl.Insert();
                     break;
                 case ImpFlowTempleteModel.AsTempleteFlowNo: /*用流程模版中的编号*/
                     fl.No = oldFlowNo;
@@ -4909,7 +4910,7 @@ namespace BP.WF
             {
                 fl.PTable = null;
             }
-            fl.Insert();
+            fl.Update();
             #endregion 处理流程表数据
 
             #region 处理OID 插入重复的问题 Sys_GroupField, Sys_MapAttr.

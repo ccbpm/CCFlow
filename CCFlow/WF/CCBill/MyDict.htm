@@ -95,6 +95,15 @@
             var frmID = GetQueryString("FrmID");
             var frmBill = new Entity("BP.Frm.FrmDict", frmID);
 
+            //获取表单的操作权限
+            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            handler.AddPara("FrmID",frmID);
+            var power = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (power.indexOf("err@") != -1) {
+                alert(power);
+                return;
+            }
+            power = JSON.parse(power);
 
             var html = "<table style='width:100%;padding:15px;'>";
             html += "<tr>";
@@ -105,29 +114,27 @@
             //$("#Title").html(html);
 
             //当前是归档状态.
-            if (frmBill.BtnNewModel != 2) {
+            if (power.IsInsert == 1) {
                  var btnNew = frmBill.BtnNewLable;
-                if (btnNew == null || btnNew == "")
+                if (btnNew == null || btnNew == "" || btnNew==undefined)
                     btnNew = "新增";
                 toolBar += "<input type=button value='" + btnNew + "' onclick='NewIt();' />";
             }
 
-            if (frmBill.BtnSaveEnable == 1) {
+            if (power.IsSave == 1) {
                 var btnSave = frmBill.BtnSaveLable;
-                if (btnSave == null || btnSave == "")
+                if (btnSave == null || btnSave == ""|| btnSave==undefined)
                     btnSave = "保存";
                 toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
             }
-                
 
-
-            if (frmBill.BtnSaveAndCloseEnable == 1) {
-                 var btnSaveAndClose = frmBill.BtnSaveAndCloseLable;
-                if (btnSaveAndClose == null || btnSaveAndClose == "")
-                    btnSaveAndClose = "保存并关闭";
+            if (power.IsSubmit == 1) {
+                var btnSubmit = frmBill.BtnSubmitLable;
+                if (btnSubmit == null || btnSubmit == ""|| btnSubmit==undefined)
+                    btnSubmit = "提交";
+                toolBar += "<input type=button value='" + btnSubmit + "' onclick='Submit(false);' />";
             }
-                toolBar += "<input type=button value='" +btnSaveAndClose + "' onclick='SaveIt(true);' />";
-
+                
 
             if (frmBill.BtnSearchLabel == "") frmBill.BtnSearchLabel = "查询";
             if (frmBill.BtnGroupLabel == "") frmBill.BtnGroupLabel = "分析";
@@ -138,7 +145,7 @@
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
 
             //是初始化状态.
-            if (frmBill.BtnDelEnable == "1")
+            if (power.IsDelete == 1)
                 toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
 
             if (frmBill.BtnSearchEnable == 1)
@@ -275,6 +282,41 @@
             */
 
             var data = handler.DoMethodReturnString("MyDict_SaveIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (isClose == true) {
+                window.close();
+                return;
+            }
+
+            window.location.href = window.location.href;
+        }
+
+         function Submit( isClose ) {
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+            //组织数据.
+            var dataStrs = getFormData(true, true);
+
+            $.each(dataStrs.split("&"), function (i, o) {
+                var param = o.split("=");
+                if (param.length == 2 && validate(param[1])) {
+                    handler.AddPara(param[0], param[1]);
+                } else {
+                    handler.AddPara(param[0], "");
+                }
+            });
+
+            /*
+            //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
+            // @yuanlina. 
+            */
+
+            var data = handler.DoMethodReturnString("MyDict_Submit");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;

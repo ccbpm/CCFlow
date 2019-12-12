@@ -6,9 +6,9 @@
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
-        media="all" />
+          media="all" />
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -17,10 +17,12 @@
     <!--bootstrap-table-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
-        type="text/javascript"></script>
+            type="text/javascript"></script>
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js"
-        type="text/javascript"></script>
+            type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/colResizable-1.6.min.js"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/extensions/resizable/bootstrap-table-resizable.js"></script>
     <!--公共JS-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -34,13 +36,12 @@
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
     <base target="_self" />
     <style type="text/css">
-        .Wdate
-        {
+        .Wdate {
             border: 1px solid #e5e6e7;
             height: 28px;
         }
-        .fixed-table-container thead th .th-inner
-        {
+
+        .fixed-table-container thead th .th-inner {
             padding: 8px;
             line-height: 24px;
             vertical-align: top;
@@ -49,14 +50,12 @@
             white-space: nowrap; /**background-color: #eaf2ff;**/
             width: 100%;
         }
-        .fixed-table-header
-        {
+
+        .fixed-table-header {
             background-color: #f2f2f2;
-            
         }
-        
-        td
-        {
+
+        td {
             word-break: keep-all; /* 不换行 */
             white-space: nowrap; /* 不换行 */
             overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
@@ -73,9 +72,9 @@
 
         //定义公共个变量.
         var webUser = new WebUser();
-        var fields=[];
+        var fields = [];
 
-         //页面设置信息
+        //页面设置信息
         var cfg = new Entity("BP.Sys.EnCfg");
         cfg.No = ensName;
         cfg.RetrieveFromDBSources();
@@ -85,9 +84,9 @@
         ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
         ur.RetrieveFromDBSources();
 
-         //获取Url传的查询Key值
+        //获取Url传的查询Key值
         var key = GetQueryString("Key");
-        if(key!=null && key!=undefined){
+        if (key != null && key != undefined) {
             ur.SearchKey = key;
             ur.Update();
         }
@@ -97,23 +96,23 @@
         var pageIdx = this.GetQueryString("PageIdx");//当前页
 
         var pageSize = cfg.GetPara("PageSize");
-        if(pageSize == null || pageSize == undefined || pageSize ==0)
+        if (pageSize == null || pageSize == undefined || pageSize == 0)
             pageSize = 10;//一页显示的行数
 
         var pages = 1;//总页数
-        if (count%pageSize!=0)
+        if (count % pageSize != 0)
             pages = parseInt(count / pageSize) + 1;
         else
             pages = parseInt(count / pageSize);
-        if(pages == 0) pages =1;
+        if (pages == 0) pages = 1;
 
         //页面字体大小
         var fontSize = cfg.GetPara("FontSize");
-        if(fontSize == null || fontSize == undefined || fontSize ==0)
+        if (fontSize == null || fontSize == undefined || fontSize == 0)
             fontSize = 13;
-      
 
-      var firstLoadTable = false;
+
+        var firstLoadTable = false;
 
         //页面启动函数.
         $(function () {
@@ -137,26 +136,26 @@
             BindTable();
             $("#Msg").html("");
 
-            $("td").on("mouseover",function() {
+            $("td").on("mouseover", function () {
                 if (this.offsetWidth < this.scrollWidth) {
                     var that = this;
                     var text = $(this).text();
-                   layer.tips(text, that,{
+                    layer.tips(text, that, {
                         tips: 1,
                         time: 0
-                   });
+                    });
                 }
-              });
-              $("td").on("mouseout",function(){
+            });
+            $("td").on("mouseout", function () {
                 layer.closeAll();
-              });   
-            
-            if(pageIdx==null || pageIdx==undefined || pageIdx == "")
+            });
+
+            if (pageIdx == null || pageIdx == undefined || pageIdx == "")
                 pageIdx = 1;
             //分页
-            Paginator(pages,pageIdx);
-            $("#SearchHtml").css("font-size", fontSize+"px");
-           
+            Paginator(pages, pageIdx);
+            $("#SearchHtml").css("font-size", fontSize + "px");
+
         });
 
         //初始化数据.
@@ -172,14 +171,14 @@
 
             //获得查询信息，包含了查询数据表.
             var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
-            
+
             var barCount = 0; //记录查询条件，超过五个就换行
             var IsTableShow = false;
-             //绑定外键枚举查询条件.
+            //绑定外键枚举查询条件.
             var attrs = data["Attrs"];
-            if(attrs.length>0){
-                for(var i = 0; i < attrs.length; i++){
-                    if(attrs[i].Width>=1000){
+            if (attrs.length > 0) {
+                for (var i = 0; i < attrs.length; i++) {
+                    if (attrs[i].Width >= 1000) {
                         IsTableShow = true;
                         break;
                     }
@@ -187,9 +186,9 @@
                 }
             }
             var html = "";
-            if(IsTableShow || 1==1){
-               showBarTable(attrs,data);
-               return;
+            if (IsTableShow || 1 == 1) {
+                showBarTable(attrs, data);
+                return;
             }
 
             var searchFields = mapBase.SearchFields;
@@ -204,7 +203,7 @@
                     html += "<input style='width:140px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
                     barCount += 1;
                 }
-            //String字段查询
+                //String字段查询
             } else {
                 var strs = searchFields.split("@");
                 var str;
@@ -220,16 +219,16 @@
                     fieldV = ur.GetPara(str[1]);
                     if (fieldV == null || fieldV == undefined)
                         fieldV = "";
-                    
-                    html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+str[1]+"'>" +str[0] + ":&nbsp;&nbsp</label>"
-                    html += "<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" +fieldV + "' class='form-control' />";
-                     barCount += 1;
+
+                    html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":&nbsp;&nbsp</label>"
+                    html += "<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' />";
+                    barCount += 1;
                 }
             }
-            
+
 
             if (mapBase.DTSearchWay != "0") {
-            	barCount += 2;
+                barCount += 2;
                 html += "<label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + ":&nbsp;&nbsp</label>";
 
                 if (mapBase.DTSearchWay == "1") {
@@ -240,135 +239,135 @@
                     html += "&nbsp;&nbsp;<label>到</label>&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:120px;' class='form-control' />";
                 }
             }
-			
+
             $("#toolbar").append(html); //设置基础信息.
 
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
-            
+
             for (var i = 0; i < attrs.length; i++) {
-            	 var attr = attrs[i];
-                 var str = "";
-					
+                var attr = attrs[i];
+                var str = "";
+
                 str += "<label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label>";
 
-                str += "<select class='form-control' style='margin-top:5px;width:"+attr.Width+"px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str += "<select class='form-control' style='margin-top:5px;width:" + attr.Width + "px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
-              
+
                 barCount += 1;
-                
+
                 $("#toolbar").append(str); //设置基础信息.
             }
-            
-            html="";
+
+            html = "";
             //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
-                 var selectVal = json[attr.Field];
+                var selectVal = json[attr.Field];
 
                 if (selectVal == undefined || selectVal == "")
                     selectVal = "all";
 
                 //判断是否有级联关系
-                var myPK = "ActiveDDL_"+ensName+"_"+attr.Field;
+                var myPK = "ActiveDDL_" + ensName + "_" + attr.Field;
                 var mapExt = new Entity("BP.Sys.MapExt");
                 mapExt.SetPKVal(myPK);
                 var isExist = mapExt.RetrieveFromDBSources();
                 //处理级联关系
-                if(isExist == 1){
+                if (isExist == 1) {
                     var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                     var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
-                    if (ddlPerant != null && ddlChild != null){
+                    if (ddlPerant != null && ddlChild != null) {
                         ddlPerant.attr("onchange", "DDLRelation(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\',\'" + ddlPerant.val() + "\')");
-                       
+
                     }
                 }
-                
+
                 $("#DDL_" + attr.Field).val(selectVal);
             }
-            
-            html += '<a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
-           var btnLab1 = cfg.GetPara("BtnLab1");
-            var btnLab2 = cfg.GetPara("BtnLab2");
-            if(btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
-                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\""+cfg.GetPara("BtnJS1")+"\",\""+btnLab1+"\")'>"+btnLab1+"</a>";
 
-             if(btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
-                 html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\""+cfg.GetPara("BtnJS2")+"\",\""+btnLab2+"\")'>"+btnLab2+"</a>";
-            
+            html += '<a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+            var btnLab1 = cfg.GetPara("BtnLab1");
+            var btnLab2 = cfg.GetPara("BtnLab2");
+            if (btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
+                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
+
+            if (btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
+                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
+
             if (mapBase.IsInsert.toString().toLowerCase() == "true") {
                 html += '<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="New()">新建</a>  ';
-            } 
-			html +='<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>  ';
+            }
+            html += '<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>  ';
 
-            if(mapBase.IsImp.toString().toLowerCase() == "true")
-                html +='<a href="#" class="btn btn-default btn-sm" id="imp_btn" onclick="Imp()">导入</a>';
+            if (mapBase.IsImp.toString().toLowerCase() == "true")
+                html += '<a href="#" class="btn btn-default btn-sm" id="imp_btn" onclick="Imp()">导入</a>';
 
-			if(new WebUser().No=="admin")
-			    html +='<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
+            if (new WebUser().No == "admin")
+                html += '<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
 
-			$("#toolbar").append(html);
-			
+            $("#toolbar").append(html);
+
         }
-        
-        function showBarTable(attrs,data){
-             var html = "";
+
+        function showBarTable(attrs, data) {
+            var html = "";
             var searchFields = mapBase.SearchFields;
             if (searchFields == null || searchFields == "" || searchFields == undefined)
                 searchFields = "";
             var len = 0;
-            if(searchFields!="")
-                len= searchFields.split("@").length;
+            if (searchFields != "")
+                len = searchFields.split("@").length;
             len = parseInt(attrs.len) + length;
-              if(mapBase.DTSearchWay == "0"){
-                  if (len==0 )
-                    html +="<table style='width:30%;' >";
-                  if (len==1 )
-                     html +="<table style='width:50%;' >";
-              }else{
-                 if (len==0 )
-                    html +="<table style='width:60%;' >";
-                 if (len==1 )
-                     html +="<table style='width:80%;' >";
-              }
+            if (mapBase.DTSearchWay == "0") {
+                if (len == 0)
+                    html += "<table style='width:30%;' >";
+                if (len == 1)
+                    html += "<table style='width:50%;' >";
+            } else {
+                if (len == 0)
+                    html += "<table style='width:60%;' >";
+                if (len == 1)
+                    html += "<table style='width:80%;' >";
+            }
 
-            if (len>1)
-                html +="<table style='width:100%;' >";
+            if (len > 1)
+                html += "<table style='width:100%;' >";
 
 
             html += "<tr>";
-             
+
             //关键字查询
-            if (searchFields=="") {
-                if (mapBase.IsShowSearchKey == "1"){
-                     var keyLabel  = cfg.GetPara("KeyLabel");
-                    if(keyLabel == null || keyLabel == undefined || keyLabel =="")
-                        keyLabel="关键字";
-                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>"+keyLabel+":</label></td>";
-                    html +="<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+            if (searchFields == "") {
+                if (mapBase.IsShowSearchKey == "1") {
+                    var keyLabel = cfg.GetPara("KeyLabel");
+                    if (keyLabel == null || keyLabel == undefined || keyLabel == "")
+                        keyLabel = "关键字";
+                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":</label></td>";
+                    html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
                 }
-             //String字段查询
+                //String字段查询
             } else {
                 var strs = searchFields.split("@");
                 var fieldV = "";
                 for (var i = 0; i < strs.length; i++) {
                     if (strs[i] == "")
                         continue;
-                   
+
                     var str = strs[i].split("=");
                     if (str.length < 2 || str[0] == "" || str[1] == "")
                         continue;
                     fields.push(str[1]);
 
-                     fieldV = ur.GetPara(str[1]);
+                    fieldV = ur.GetPara(str[1]);
                     if (fieldV == null || fieldV == undefined)
                         fieldV = "";
 
-                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+str[1]+"'>"+str[0]+":</label></td>";
-                    html +="<td align='left'><input style='width:100%;' type=text id='TB_"+str[1]+"' name='TB_"+str[1]+"' value='" +fieldV + "' class='form-control' /></td>";
+                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
+                    html += "<td align='left'><input style='width:100%;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' /></td>";
                 }
             }
-             
+
             if (mapBase.DTSearchWay != "0") {
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + ":</label></td>";
 
@@ -380,70 +379,70 @@
                     html += "<td align='left'>&nbsp;<label>到</label>&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:140px;' class='form-control Wdate' /></td>";
                 }
             }
-			
+
 
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
-            
+
             for (var i = 0; i < attrs.length; i++) {
-            	 var attr = attrs[i];
-                 var W = attr.Width;
-				if(attr.Width>=1000){
-                    html +="</tr>";
-                    html +="<tr>";
+                var attr = attrs[i];
+                var W = attr.Width;
+                if (attr.Width >= 1000) {
+                    html += "</tr>";
+                    html += "<tr>";
                     W = 130;
                 }
 
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
                 html += "<td align='left'><select class='form-control' style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
             }
-            
+
             //增加按钮.
             html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
-            
+
             var btnLab1 = cfg.GetPara("BtnLab1");
             var btnLab2 = cfg.GetPara("BtnLab2");
-            if(btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
-                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'  onclick='executeFunction(\""+cfg.GetPara("BtnJS1")+"\",\""+btnLab1+"\")'>"+btnLab1+"</a>";
+            if (btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
+                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'  onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
 
-             if(btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
-                 html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\""+cfg.GetPara("BtnJS2")+"\",\""+btnLab2+"\")'>"+btnLab2+"</a>";
+            if (btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
+                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
 
             if (mapBase.IsInsert.toString().toLowerCase() == "true")
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="New()">新建</a>';
-            
-            html +='&nbsp;<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>';
 
-            if(mapBase.IsImp.toString().toLowerCase() == "true")
-               html +='&nbsp;<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Imp()">导入</a> ';
-            if(new WebUser().No=="admin")
-			    html +='&nbsp;<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
-         
-			html +="</td></tr>";
+            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>';
 
-			html +="</table>";
+            if (mapBase.IsImp.toString().toLowerCase() == "true")
+                html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Imp()">导入</a> ';
+            if (new WebUser().No == "admin")
+                html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
 
-			$("#toolbar").append(html);
+            html += "</td></tr>";
 
-             //为查询外键赋值.
+            html += "</table>";
+
+            $("#toolbar").append(html);
+
+            //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
-                  var selectVal = json[attr.Field];
+                var selectVal = json[attr.Field];
 
                 if (selectVal == undefined || selectVal == "")
                     selectVal = "all";
                 //判断是否有级联关系
-                var myPK = "ActiveDDL_"+ensName+"_"+attr.Field;
+                var myPK = "ActiveDDL_" + ensName + "_" + attr.Field;
                 var mapExt = new Entity("BP.Sys.MapExt");
                 mapExt.SetPKVal(myPK);
                 var isExist = mapExt.RetrieveFromDBSources();
                 //处理级联关系
-                if(isExist == 1){
+                if (isExist == 1) {
                     var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                     var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
-                    if (ddlPerant != null && ddlChild != null){
+                    if (ddlPerant != null && ddlChild != null) {
                         ddlPerant.attr("onchange", "DDLRelation(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\',\'" + ddlPerant.val() + "\')");
-                       
+
                     }
                 }
 
@@ -451,7 +450,7 @@
             }
         }
 
-    
+
 
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(frmData, mapAttr, defVal) {
@@ -461,7 +460,7 @@
 
             var ens = frmData[mapAttr.Field];
             if (ens == null) {
-                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是'}];
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是' }];
             }
             for (var i = 0; i < ens.length; i++) {
 
@@ -517,16 +516,16 @@
             ur.FK_MapData = ensName;
             ur.SetPara("RecCount", count);
             var i = ur.Save();
-            
+
             var url = window.location.href;
-            if(url.indexOf("PageIdx")!=-1)
-             url = replaceParamVal(url, "PageIdx", 1);
-           
-          
+            if (url.indexOf("PageIdx") != -1)
+                url = replaceParamVal(url, "PageIdx", 1);
+
+
             window.location.href = url;
         }
 
-    
+
         function SearchData() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
@@ -549,40 +548,40 @@
             ur.RetrieveFromDBSources();
 
             count = ur.GetPara("RecCount");
-            if (count%pageSize!=0)
+            if (count % pageSize != 0)
                 pages = parseInt(count / pageSize) + 1;
             else
                 pages = parseInt(count / pageSize);
 
-            if(pages == 0) pages =1;
+            if (pages == 0) pages = 1;
 
-             if (firstLoadTable){
-                $('#dg').bootstrapTable("load",data["DT"]);
-                
-                $("td").on("mouseover",function() {
+            if (firstLoadTable) {
+                $('#dg').bootstrapTable("load", data["DT"]);
+
+                $("td").on("mouseover", function () {
                     if (this.offsetWidth < this.scrollWidth) {
                         var that = this;
                         var text = $(this).text();
-                       layer.tips(text, that,{
+                        layer.tips(text, that, {
                             tips: 1,
                             time: 0
-                       });
+                        });
                     }
-                  });
-                  $("td").on("mouseout",function(){
+                });
+                $("td").on("mouseout", function () {
                     layer.closeAll();
-                  });
+                });
                 return;
-           }
+            }
             return data;
         }
 
         //生成查询页面..
         function BindTable() {
-           
+
             //获取页面的高度
             var H = document.body.clientHeight;
-            var tableH = H-$("#toolbar").outerHeight()-$("#page-nav").outerHeight()-70;
+            var tableH = H - $("#toolbar").outerHeight() - $("#page-nav").outerHeight() - 70;
 
             if (pageIdx == "" || pageIdx == undefined)
                 pageIdx = "1";
@@ -606,53 +605,60 @@
 
             var keyOfEn = "";
 
-            var columns = new Array(); ;
-           columns.push({
+            var columns = new Array();;
+            columns.push({
                 title: '序',
                 field: '',
                 align: 'center',
-                width:25,
+                width: 25,
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
-           });
+            });
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
 
                 if (attr.UIVisible == 0
-                || attr.KeyOfEn == "OID"
-                || attr.KeyOfEn == "WorkID"
-                || attr.KeyOfEn == "NodeID"
-                || attr.KeyOfEn == "MyNum"
-                || attr.KeyOfEn == "MyPK") {
+                    || attr.KeyOfEn == "OID"
+                    || attr.KeyOfEn == "WorkID"
+                    || attr.KeyOfEn == "NodeID"
+                    || attr.KeyOfEn == "MyNum"
+                    || attr.KeyOfEn == "MyPK") {
                     keyOfEn = attr.KeyOfEn
                     continue;
                 }
 
 
                 var field = attr.KeyOfEn;
-                var title = attr.Name;
+                
                 var width = attr.Width;
-                if (attr.UIContralType == 1){
-                    if(width==null || width==""|| width==undefined)
+                if (width < 60) {
+                    width = 60;
+                }
+                if (field == "Title") {
+                     width = 230;
+                }
+                var title = attr.Name;
+                if (attr.UIContralType == 1) {
+                    if (width == null || width == "" || width == undefined)
                         width = 180;
                     field = field + "Text";
-                     columns.push({
+                    columns.push({
                         field: field,
                         title: title,
                         fixed: false,
-                        width:width,
-                        cellStyle:{
-                            css:{"white-space": "nowrap","word-break":"keep-all",  "width":"100%"}
+                        width: width,
+                        cellStyle: {
+                            css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
                         }
                     });
                     continue;
                 }
-                if (attr.UIContralType == 2){
+                if (attr.UIContralType == 2) {
                     columns.push({
                         field: field,
                         title: title,
-                        width:attr.Width,
+                        width: width,
                         fixed: false,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
@@ -661,83 +667,82 @@
                     });
                     continue;
                 }
-                if(width==null || width==""|| width==undefined)
+                if (width == null || width == "" || width == undefined)
                     width = 100;
                 columns.push({
                     field: field,
                     title: title,
-                    width:attr.Width,
+                    width: width,
                     fixed: false
 
                 });
             }
-           
+
             //获取屏幕的长宽
-           var W = document.body.clientWidth-40;
-           var H = document.body.clientHeight-40;
+            var W = document.body.clientWidth - 40;
+            var H = document.body.clientHeight - 40;
             var entityAthType = sysMapData.GetPara("BPEntityAthType");
-            if(dtMs.length>0 || entityAthType == 1 || entityAthType == 2){
+            if (dtMs.length > 0 || entityAthType == 1 || entityAthType == 2) {
                 columns.push({
                     field: '_operate',
                     title: '操作',
-                    width:200,
-                    align:'center',
-                    formatter: function(value,row,index){
-                    var pkval = row[enPK];
-                    var html = "";
-                    for(var k = 0 ;k<dtMs.length;k++){
-                        var dtm = dtMs[k];
-                        var warning = dtm.Warning;
-                        var refMethodType = parseInt(dtm.RefMethodType);
-                        var url = dtm.Url+pkval;
-                        switch(refMethodType){
-                            case RefMethodType.LinkeWinOpen:
-                                html += "<a href='#' onclick='WinOpenIt(\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
-                                break;
-                            case RefMethodType.LinkModel:
-                            case RefMethodType.RightFrameOpen:
-                                html += "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
-                                break;
-                            case RefMethodType.Func:
+                    width: 200,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var pkval = row[enPK];
+                        var html = "";
+                        for (var k = 0; k < dtMs.length; k++) {
+                            var dtm = dtMs[k];
+                            var warning = dtm.Warning;
+                            var refMethodType = parseInt(dtm.RefMethodType);
+                            var url = dtm.Url + pkval;
+                            switch (refMethodType) {
+                                case RefMethodType.LinkeWinOpen:
+                                    html += "<a href='#' onclick='WinOpenIt(\"" + url + "\",\"" + dtm.Title + "\")'>" + dtm.Title + "</a>&nbsp;&nbsp;";
+                                    break;
+                                case RefMethodType.LinkModel:
+                                case RefMethodType.RightFrameOpen:
+                                    html += "<a href='#' onclick='OpenBootStrapModal(\"" + url + "\",\"eudlgframe\",\"" + dtm.Title + "\"," + W + "," + H + ",\"icon-property\", null, null, null, null, null, \"black\")'>" + dtm.Title + "</a>&nbsp;&nbsp;";
+                                    break;
+                                case RefMethodType.Func:
                                     if (dtm.FunPara == true || dtm.FunPara == "true")
-                                    html += "<a href='#' onclick='OpenBootStrapModal(\""+url+"\",\"eudlgframe\",\""+dtm.Title+"\","+W+","+H+",\"icon-property\", null, null, null, null, null, \"black\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
-                                else {
-                                    if (warning ==null || warning == "null" || warning == "")
-                                    {
-                                        warning = "确定要执行吗？";
-                                    }
+                                        html += "<a href='#' onclick='OpenBootStrapModal(\"" + url + "\",\"eudlgframe\",\"" + dtm.Title + "\"," + W + "," + H + ",\"icon-property\", null, null, null, null, null, \"black\")'>" + dtm.Title + "</a>&nbsp;&nbsp;";
                                     else {
-                                        warning = warning.replace(/,\s+/g, ",");
-                                        warning = warning.replace(/\s+/g, "\r\n");
+                                        if (warning == null || warning == "null" || warning == "") {
+                                            warning = "确定要执行吗？";
+                                        }
+                                        else {
+                                            warning = warning.replace(/,\s+/g, ",");
+                                            warning = warning.replace(/\s+/g, "\r\n");
+                                        }
+                                        html += "<a href='#' onclick='openFun(\"" + warning + "\",\"" + url + "\",\"" + dtm.Title + "\")'>" + dtm.Title + "</a>&nbsp;&nbsp;";
+
                                     }
-                                    html += "<a href='#' onclick='openFun(\""+warning+"\",\""+url+"\",\""+dtm.Title+"\")'>"+dtm.Title+"</a>&nbsp;&nbsp;";
-                       
-                                }
 
                                     break;
-                                default:break;
+                                default: break;
                             }
                         }
-                        html += formatOper(value,row,index);
-                        if(html == "")
-                        html ="-";
-                              
-                    return html;
-                              
+                        html += formatOper(value, row, index);
+                        if (html == "")
+                            html = "-";
+
+                        return html;
+
                     }
                 });
             }
 
             var isEnableOpen = cfg.GetPara("IsEnableOpenICON");
             //添加显示详情列
-            if(isEnableOpen == "1"){
+            if (isEnableOpen == "1") {
                 //加入操作下载文件
-                 columns.push({
-                     field: 'viewDetail',
-                     title: '详细信息',
-                     width: 80,
-                     align:'center',
-                     formatter: function(value,row,index){
+                columns.push({
+                    field: 'viewDetail',
+                    title: '详细信息',
+                    width: 80,
+                    align: 'center',
+                    formatter: function (value, row, index) {
                         var pkval = row[enPK];
                         var paras = "&" + enPK + "=" + pkval;
                         for (var i = 0; i < attrs.length; i++) {
@@ -746,18 +751,18 @@
                                 paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                         }
 
-                        return "<a href='#' onclick='OpenEn(\""+pkval+"\",\""+paras+"\")'>详情</a>";
-                     }
-                 }); 
+                        return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\")'>详情</a>";
+                    }
+                });
             }
-           
+
             $('#dg').html("");
             $('#dg').bootstrapTable({
                 data: mapdata["DT"],
                 columns: [columns],
-                cache:false,
+                cache: false,
                 striped: true,
-                height:tableH,
+                height: tableH,
                 singleSelect: true,
                 sidePagination: "server",
                 pageNumber: 1,
@@ -767,7 +772,7 @@
                     //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                     var temp = {
                         rows: 10,                         //页面大小
-                        page: (count /10) + 1,   //页码
+                        page: (count / 10) + 1,   //页码
 
                     };
                     return temp;
@@ -785,94 +790,102 @@
                     OpenEn(pkval, paras);
                 }
 
-            });  
-             firstLoadTable = true;
-
-     }
-  
-     //分页功能
-    function Paginator(pageCount,currentPage) {
-        var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
-        var options = {
-            bootstrapMajorVersion: 3, //版本
-            currentPage: currentPage, //当前页数
-            totalPages: pageCount, //总页数
-            shouldShowPage: true, //是否显示该按钮
-            itemTexts: function (type, page, current) {
-                switch (type) {
-                    case "first":
-                        return "首页";
-                    case "prev":
-                        return "上一页";
-                    case "next":
-                        return "下一页";
-                    case "last":
-                        return "末页";
-                    case "page":
-                        return page;
+            });
+             $("#dg").colResizable({
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
+                resizeMode: 'fit',
+                //拖动事件
+                onDrag: function () {
+                    $('#dg').bootstrapTable("resetView")
                 }
-            }, //点击事件，用于通过Ajax来刷新整个list列表
-            onPageClicked: function (event, originalEvent, type, page) {
-                pageIdx = page;
-                SearchData(page);
-               $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
-                                "页,总共"+count+"条记录。</li>");
-            }
-        };
-        $('#page_nav').bootstrapPaginator(options);
-        $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
-                                "页,总共"+count+"条记录。</li>");
-        
-    }
-   
-     
+            });
+            firstLoadTable = true;
+
+        }
+
+        //分页功能
+        function Paginator(pageCount, currentPage) {
+            var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
+            var options = {
+                bootstrapMajorVersion: 3, //版本
+                currentPage: currentPage, //当前页数
+                totalPages: pageCount, //总页数
+                shouldShowPage: true, //是否显示该按钮
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first":
+                            return "首页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "末页";
+                        case "page":
+                            return page;
+                    }
+                }, //点击事件，用于通过Ajax来刷新整个list列表
+                onPageClicked: function (event, originalEvent, type, page) {
+                    pageIdx = page;
+                    SearchData(page);
+                    $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
+                        "页,总共" + count + "条记录。</li>");
+                }
+            };
+            $('#page_nav').bootstrapPaginator(options);
+            $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
+                "页,总共" + count + "条记录。</li>");
+
+        }
+
+
         function operate(value, row, index) {
             return '<a href="#" onclick="editUser(' + index + ')">查看明细</a>';
         }
 
-        function OpenEn(pk, paras,flag) {
-            
+        function OpenEn(pk, paras, flag) {
+
             //当前URL参数
-            var  currUrl = window.location.search.substring(1);
+            var currUrl = window.location.search.substring(1);
             //去除URL中的参数 EnsName、 PKVal
             var currUrls = currUrl.split("&");
-            currUrl="";
-            $.each(currUrls,function(i,param){
-                if(param.indexOf("EnsName") ==-1 && param.indexOf("PKVal")==-1)
-                  currUrl += "&"+param;  
+            currUrl = "";
+            $.each(currUrls, function (i, param) {
+                if (param.indexOf("EnsName") == -1 && param.indexOf("PKVal") == -1)
+                    currUrl += "&" + param;
             });
 
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
             //考虑兼容旧版本.
             var url = cfg.GetPara("WinOpenUrl");
-            if (url && url.length >4)
-            {
-               cfg.Url=url;
-               cfg.Update();
+            if (url && url.length > 4) {
+                cfg.Url = url;
+                cfg.Update();
             }
-            
-            url= cfg.Url;
-            var urlOpenType=cfg.GetPara("SearchUrlOpenType");
-            
-            if (urlOpenType == 0 || urlOpenType==undefined)
-                url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk+currUrl;
 
-            if (urlOpenType==1)
-                url = "./RefFunc/EnOnly.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk+currUrl;
+            url = cfg.Url;
+            var urlOpenType = cfg.GetPara("SearchUrlOpenType");
+
+            if (urlOpenType == 0 || urlOpenType == undefined)
+                url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk + currUrl;
+
+            if (urlOpenType == 1)
+                url = "./RefFunc/EnOnly.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk + currUrl;
 
             if (urlOpenType == 2)
-                url = "../CCForm/FrmGener.htm?FK_MapData=" +GetQueryString("EnsName") + "&PKVal=" + pk+currUrl;
+                url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk + currUrl;
 
             if (urlOpenType == 3)
-                url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk+currUrl;
+                url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk + currUrl;
 
-            if (urlOpenType==9)
-            {
+            if (urlOpenType == 9) {
                 if (url.indexOf('?') == -1)
                     url = url + "?1=1";
-                if(url.indexOf('FrmID')!=-1)
-                     url = url + "&WorkID=" + pk +"&OID="+pk+ paras;
+                if (url.indexOf('FrmID') != -1)
+                    url = url + "&WorkID=" + pk + "&OID=" + pk + paras;
                 else
                     url = url + "&EnsName=" + ensName + "&EnName=" + enName + "&PKVal=" + pk + paras;
             }
@@ -886,15 +899,15 @@
                 windowH = 500;
 
 
-            OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null,  null, function () {
-                    SearchData(1);
-                    Paginator(pages,1);
-                 
-            },null,'black');
+            OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null, null, function () {
+                SearchData(1);
+                Paginator(pages, 1);
+
+            }, null, 'black');
         }
 
         function New() {
-            OpenEn("","",0);
+            OpenEn("", "", 0);
         }
 
         function Exp() {
@@ -906,33 +919,33 @@
             if (data.indexOf('err@') == 0) {
                 alert(data);
             }
-            
-             data = basePath + data;
-           
+
+            data = basePath + data;
+
             window.open(data);
             return;
 
         }
 
-        function Imp(){
-           var url = "./Sys/ImpData.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
-           //获取屏幕的长宽
-           var W = document.body.clientWidth-80;
-           var H = document.body.clientHeight-120;
-           OpenBootStrapModal(url, "eudlgframe", '导入数据', W, H, "icon-property", null, null, null, function(){
-             window.location.href= window.location.href;
-           }, null, 'black'); 
+        function Imp() {
+            var url = "./Sys/ImpData.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+            //获取屏幕的长宽
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 120;
+            OpenBootStrapModal(url, "eudlgframe", '导入数据', W, H, "icon-property", null, null, null, function () {
+                window.location.href = window.location.href;
+            }, null, 'black');
         }
 
         function Setting() {
             var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
             //获取屏幕的长宽
-           var W = document.body.clientWidth-340;
-           var H = document.body.clientHeight-40;
-            OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black'); 
+            var W = document.body.clientWidth - 340;
+            var H = document.body.clientHeight - 40;
+            OpenBootStrapModal(url, "eudlgframe", '设置', W, H, "icon-property", null, null, null, null, null, 'black');
         }
 
-        function formatOper(val,rowData,index){
+        function formatOper(val, rowData, index) {
             var pkval = rowData["No"];
             if (pkval == undefined) {
                 pkval = rowData["OID"];
@@ -947,17 +960,17 @@
                 pkval = rowData["NodeID"];
             }
 
-             if (rowData.MyFileName != null && rowData.MyFileName != "")
+            if (rowData.MyFileName != null && rowData.MyFileName != "")
                 return "<a href='#' onclick='downLoadFile(\"" + pkval + "\")' target='_self'>下载</a>";
             else
-                return ""; 
+                return "";
         }
 
-        function openFun(warning,url,title){
-            var W = document.body.clientWidth-40;
-           var H = document.body.clientHeight-40;
-            if(confirm(warning)){
-               OpenBootStrapModal(url,"eudlgframe",title,W,H,"icon-property", null, null, null, null, null, "black"); 
+        function openFun(warning, url, title) {
+            var W = document.body.clientWidth - 40;
+            var H = document.body.clientHeight - 40;
+            if (confirm(warning)) {
+                OpenBootStrapModal(url, "eudlgframe", title, W, H, "icon-property", null, null, null, null, null, "black");
             }
         }
 
@@ -972,166 +985,163 @@
             }
         }
 
-       function executeFunction(jsString,label){
-         jsString = jsString.replace(/~/g, "'");
-         if(jsString.indexOf("/")!=-1){
-             var W = document.body.clientWidth-40;
-             var H = document.body.clientHeight-40;
-            OpenBootStrapModal(jsString, "eudlgframe", label, W, H, "icon-property", null, null, null, null, null, 'black'); 
-          }else{
-            if (jsString.indexOf('(') == -1)
-                eval(jsString + "()");
-            else
-                eval(jsString);
-          }
-       }
-
-       /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
-    function DDLRelation(selectVal, ddlChild, fk_mapExt, param) {
-        if (selectVal == "all") {
-            $("#" + ddlChild).empty();
-            //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
-            $("#" + ddlChild).append("<option value='all' selected='selected' >全部</option");
-            var chg = $("#" + ddlChild).attr("onchange");
-
-            $("#" + ddlChild).change();
-
-            return;
-        }
-
-        var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
-
-        //处理参数问题
-        if (param != undefined) {
-            kvs = '';
-        }
-        var dbSrc = mapExt.Doc;
-        if (param != undefined) {
-            for (var pro in param) {
-                if (pro == 'DoType')
-                    continue;
-                dbSrc = dbSrc.replace("@" + pro, param[pro]);
+        function executeFunction(jsString, label) {
+            jsString = jsString.replace(/~/g, "'");
+            if (jsString.indexOf("/") != -1) {
+                var W = document.body.clientWidth - 40;
+                var H = document.body.clientHeight - 40;
+                OpenBootStrapModal(jsString, "eudlgframe", label, W, H, "icon-property", null, null, null, null, null, 'black');
+            } else {
+                if (jsString.indexOf('(') == -1)
+                    eval(jsString + "()");
+                else
+                    eval(jsString);
             }
         }
 
-        var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType); //获得数据源.
+        /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
+        function DDLRelation(selectVal, ddlChild, fk_mapExt, param) {
+            if (selectVal == "all") {
+                $("#" + ddlChild).empty();
+                //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
+                $("#" + ddlChild).append("<option value='all' selected='selected' >全部</option");
+                var chg = $("#" + ddlChild).attr("onchange");
 
-        // 这里要设置一下获取的外部数据.
-        // 获取原来选择值.
-        var oldVal = null;
-        var ddl = document.getElementById(ddlChild);
-
-        if (ddl == null) {
-            alert(ddlChild + "丢失,或者该字段被删除.");
-            return;
-        }
-
-
-        var mylen = ddl.options.length - 1;
-        while (mylen >= 0) {
-            if (ddl.options[mylen].selected) {
-                oldVal = ddl.options[mylen].value;
-            }
-            mylen--;
-        }
-
-        //清空级联字段
-        $("#" + ddlChild).empty();
-
-        //查询数据为空时为级联字段赋值
-        if (dataObj == null || dataObj.length == 0) {
-            //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
-            $("#" + ddlChild).append("<option value='' selected='selected' >无数据</option");
-            var chg = $("#" + ddlChild).attr("onchange");
-
-            if (typeof chg == "function") {
                 $("#" + ddlChild).change();
+
+                return;
             }
+
+            var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
+
+            //处理参数问题
+            if (param != undefined) {
+                kvs = '';
+            }
+            var dbSrc = mapExt.Doc;
+            if (param != undefined) {
+                for (var pro in param) {
+                    if (pro == 'DoType')
+                        continue;
+                    dbSrc = dbSrc.replace("@" + pro, param[pro]);
+                }
+            }
+
+            var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType); //获得数据源.
+
+            // 这里要设置一下获取的外部数据.
+            // 获取原来选择值.
+            var oldVal = null;
+            var ddl = document.getElementById(ddlChild);
+
+            if (ddl == null) {
+                alert(ddlChild + "丢失,或者该字段被删除.");
+                return;
+            }
+
+
+            var mylen = ddl.options.length - 1;
+            while (mylen >= 0) {
+                if (ddl.options[mylen].selected) {
+                    oldVal = ddl.options[mylen].value;
+                }
+                mylen--;
+            }
+
+            //清空级联字段
+            $("#" + ddlChild).empty();
+
+            //查询数据为空时为级联字段赋值
+            if (dataObj == null || dataObj.length == 0) {
+                //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
+                $("#" + ddlChild).append("<option value='' selected='selected' >无数据</option");
+                var chg = $("#" + ddlChild).attr("onchange");
+
+                if (typeof chg == "function") {
+                    $("#" + ddlChild).change();
+                }
+                return;
+            }
+
+            //不为空的时候赋值
+            $("#" + ddlChild).append("<option value='all' >全部</option>");
+            $.each(dataObj, function (idx, item) {
+                var no = item.No;
+                if (no == undefined)
+                    no = item.NO;
+
+                var name = item.Name;
+                if (name == undefined)
+                    name = item.NAME;
+
+                $("#" + ddlChild).append("<option value='" + no + "'>" + name + "</option");
+
+            });
+
+            var isInIt = false;
+            mylen = ddl.options.length - 1;
+            while (mylen >= 0) {
+                if (ddl.options[mylen].value == oldVal) {
+                    ddl.options[mylen].selected = true;
+                    isInIt = true;
+                    break;
+                }
+                mylen--;
+            }
+            if (isInIt == false) {
+                //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
+                //$("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
+                $("#" + ddlChild).val('');
+                //增加默认选择第一条数据
+                ddl.options[0].selected = true;
+                var chg = $("#" + ddlChild).attr("onchange");
+                $("#" + ddlChild).change();
+
+            }
+        }
+        //打开窗口
+        function WinOpenIt(url, winName) {
+            //var w = screen.availWidth;
+            //var h = screen.availHeight;
+            var newWindow = window.open(url, winName, 'height=1200,width=1000,top=' + (window.screen.availHeight - 800) / 2 + ',left=' + (window.screen.availWidth - 1030) / 2 + ',scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+            newWindow.focus();
             return;
         }
 
-        //不为空的时候赋值
-         $("#" + ddlChild).append("<option value='all' >全部</option>");
-        $.each(dataObj, function (idx, item) {
-            var no = item.No;
-            if (no == undefined)
-                no = item.NO;
-
-            var name = item.Name;
-            if (name == undefined)
-                name = item.NAME;
-
-            $("#" + ddlChild).append("<option value='" + no + "'>" + name + "</option");
-
-        });
-
-        var isInIt = false;
-        mylen = ddl.options.length - 1;
-        while (mylen >= 0) {
-            if (ddl.options[mylen].value == oldVal) {
-                ddl.options[mylen].selected = true;
-                isInIt = true;
-                break;
-            }
-            mylen--;
-        }
-        if (isInIt == false) {
-            //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
-            //$("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
-            $("#" + ddlChild).val('');
-            //增加默认选择第一条数据
-            ddl.options[0].selected = true;
-            var chg = $("#" + ddlChild).attr("onchange");
-            $("#" + ddlChild).change();
-       
-        }
-    }
-           //打开窗口
-    function WinOpenIt(url, winName) {
-        //var w = screen.availWidth;
-        //var h = screen.availHeight;
-        var newWindow = window.open(url, winName, 'height=1200,width=1000,top=' + (window.screen.availHeight - 800) / 2 + ',left=' + (window.screen.availWidth - 1030) / 2 + ',scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
-        newWindow.focus();
-        return;
-    }
-   
 
     </script>
     <style type="text/css">
-        body
-        {
+        body {
             margin: 0px;
         }
-        .panel-header, .panel-body
-        {
+
+        .panel-header, .panel-body {
             border-width: 1px;
             border-top: 0px;
             border-left: 0px;
             border-right: 0px;
         }
-        
-        .table
-        {
+
+        .table {
             table-layout: fixed;
         }
-        
-        table > td
-        {
+
+        table > td {
             width: 100%;
         }
-        .pagination
-        {
+
+        .pagination {
             margin: 8px 0;
             display: block;
             font-size: 13px;
         }
-        .pagination .controls
-        {
-            float: left;
-            border: 0;
-            padding: 7px 0 0 15px;
-            color: #777;
-        }
+
+            .pagination .controls {
+                float: left;
+                border: 0;
+                padding: 7px 0 0 15px;
+                color: #777;
+            }
     </style>
 </head>
 <body id="SearchHtml">

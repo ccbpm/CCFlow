@@ -199,6 +199,26 @@ namespace BP.Frm
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
             return str;
         }
+        public string MyBill_Submit()
+        {
+            //执行保存.
+            GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+
+            Hashtable ht = GetMainTableHT();
+            foreach (string item in ht.Keys)
+            {
+                rpt.SetValByKey(item, ht[item]);
+            }
+
+            rpt.OID = this.WorkID;
+            rpt.SetValByKey("BillState", (int)BillState.Over);
+            rpt.Update();
+
+            string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+            return str;
+        }
+
         /// <summary>
         /// 执行保存
         /// </summary>
@@ -218,6 +238,31 @@ namespace BP.Frm
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Editing);
+            rpt.Update();
+
+            string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+            return str;
+        }
+
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
+        public string MyDict_Submit()
+        {
+            //  throw new Exception("dddssds");
+            //执行保存.
+            GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
+            rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+
+            Hashtable ht = GetMainTableHT();
+            foreach (string item in ht.Keys)
+            {
+                rpt.SetValByKey(item, ht[item]);
+            }
+
+            rpt.OID = this.WorkID;
+            rpt.SetValByKey("BillState", (int)BillState.Over);
             rpt.Update();
 
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);

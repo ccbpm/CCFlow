@@ -22,6 +22,8 @@
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js"
             type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/colResizable-1.6.min.js"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/extensions/resizable/bootstrap-table-resizable.js"></script>
     <script src="../CCForm/MapExt2016.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
@@ -279,6 +281,12 @@
                 var field = attr.No;
                 var title = attr.Name;
                 var width = attr.Width;
+                if (width < 60) {
+                    width = 60;
+                }
+                if (field == "Title") {
+                     width = 230;
+                }
                 if (attr.UIContralType == 1) {
                     if (width == null || width == "" || width == undefined)
                         width = 180;
@@ -312,7 +320,7 @@
                 columns.push({
                     field: field,
                     title: title,
-                    width: attr.Width,
+                    width: width,
                     fixed: false
 
                 });
@@ -347,6 +355,16 @@
                     WinOpen(url);
                 }
 
+            });
+            $("#dg").colResizable({
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
+                resizeMode: 'fit',
+                //拖动事件
+                onDrag: function () {
+                    $('#dg').bootstrapTable("resetView")
+                }
             });
             firstLoadTable = true;
 

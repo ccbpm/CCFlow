@@ -158,6 +158,8 @@ namespace BP.WF.HttpHandler
 
             if (this.FK_MapDtl.Contains("_Ath") == true)
                 return "info@附件扩展";
+            if (this.FK_MapDtl.Contains("BP.WF.ReturnWorks") == true)
+                return "info@退回字段扩展";
 
 
             MapDtl dtl = new MapDtl();
@@ -1052,6 +1054,8 @@ namespace BP.WF.HttpHandler
             attr.MyPK = this.FK_MapData + "_" + newNo;
             attr.GroupID = iGroupID;
             attr.MyDataType = fType;
+            if(DataType.IsNullOrEmpty(this.GetRequestVal("FK_Flow")))
+            attr.SetPara("FK_Flow", this.GetRequestVal("FK_Flow"));
 
             int colspan = attr.ColSpan;
             attr.Para_FontSize = 12;

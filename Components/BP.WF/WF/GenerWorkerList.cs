@@ -289,7 +289,7 @@ namespace BP.WF
             {
                 return this.GetValIntByKey(GenerWorkerListAttr.IsPass);
             }
-            set
+           set
             {
                 this.SetValByKey(GenerWorkerListAttr.IsPass, value);
             }

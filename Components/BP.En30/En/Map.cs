@@ -1948,11 +1948,12 @@ namespace BP.En
         /// <summary>
         /// 同步两个实体属性.
         /// </summary>
-        public void AddAttrsFromMapData()
+        public void AddAttrsFromMapData(string FK_MapData=null)
         {
-            if (DataType.IsNullOrEmpty(this.FK_MapData))
+            if (DataType.IsNullOrEmpty(this.FK_MapData) && DataType.IsNullOrEmpty(FK_MapData))
                 throw new Exception("@您没有为map的 FK_MapData 赋值.");
-
+            if (DataType.IsNullOrEmpty(FK_MapData) == false)
+                this.FK_MapData = FK_MapData;
             MapData md = null;
             md = new MapData();
             md.No = this.FK_MapData;

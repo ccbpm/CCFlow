@@ -476,16 +476,18 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(NodeAttr.ReturnRole, 0, "退回规则", true, true, NodeAttr.ReturnRole);
-                //  map.AddTBString(NodeAttr.ReturnToNodes, null, "可退回节点", true, false, 0, 200, 10, true);
                 map.SetHelperUrl(NodeAttr.ReturnRole, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //增加帮助.
-
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 999, 10, true);
-
                 map.AddBoolean(NodeAttr.IsBackTracking, false, "是否可以原路返回(启用退回功能才有效)", true, true, false);
+                //map.AddTBString(NodeAttr.RetunFieldsLable, "退回扩展字段", "退回扩展字段", true, false, 0, 50, 20);
+
+
                 map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10);
                 map.SetHelperUrl(NodeAttr.IsBackTracking, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //增加帮助.
 
                 map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 999, 10, true);
+
+                map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);
 
                 map.AddDDLSysEnum(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true, NodeAttr.ReturnOneNodeRole,
                    "@@0=不启用@1=按照[退回信息填写字段]作为退回意见直接退回@2=按照[审核组件]填写的信息作为退回意见直接退回", true);
@@ -942,6 +944,15 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen; // 功能类型
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "退回扩展列";
+                rm.ClassMethodName = this.ToString() + ".DtlOfReturn";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = NodeAttr.ReturnCHEnable;
+                map.AddRefMethod(rm);
+              
+
                 #endregion 实验中的功能
 
                 this._enMap = map;
@@ -1304,6 +1315,11 @@ namespace BP.WF.Template
                 }
             }
             return doc;
+        }
+        public string DtlOfReturn()
+        {
+            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=BP.WF.ReturnWorks"+ "&For=BP.WF.ReturnWorks&FK_Flow="+this.FK_Flow;
+            return url;
         }
         protected override bool beforeUpdate()
         {

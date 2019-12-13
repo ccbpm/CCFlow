@@ -1380,6 +1380,18 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.ReturnAlert, value);
             }
         }
+
+        public bool ReturnCHEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.ReturnCHEnable);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.ReturnCHEnable, value);
+            }
+        }
         /// <summary>
         /// 退回原因
         /// </summary>
@@ -2704,6 +2716,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.ReturnRole, 2, "退回规则", true, true);
                 map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 50, 10, true);
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 50, 10, true);
+                map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);
 
                 map.AddTBInt(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true);
                 map.AddTBString(BtnAttr.ReturnField, null, "退回信息填写字段", true, false, 0, 50, 10, true); 

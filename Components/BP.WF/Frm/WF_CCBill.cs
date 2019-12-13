@@ -166,7 +166,8 @@ namespace BP.Frm
         /// <returns></returns>
         public string MyBill_CreateBlankBillID()
         {
-            return BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null).ToString();
+            string billNo = this.GetRequestVal("BillNo");
+            return BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null,billNo).ToString();
         }
         /// <summary>
         /// 创建空白的DictID.

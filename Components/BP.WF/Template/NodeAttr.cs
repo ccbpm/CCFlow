@@ -75,6 +75,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsBackTracking = "IsBackTracking";
         /// <summary>
+        /// 是否启用退回考核规则
+        /// </summary>
+        public const string ReturnCHEnable = "ReturnCHEnable";
+        /// <summary>
         /// 退回原因(多个原因使用@符号分开.)
         /// </summary>
         public const string ReturnReasonsItems = "ReturnReasonsItems";

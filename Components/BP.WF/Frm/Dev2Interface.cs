@@ -26,7 +26,7 @@ namespace BP.Frm
         /// <param name="userNo">用户编号</param>
         /// <param name="htParas">参数</param>
         /// <returns>一个新的WorkID</returns>
-        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas)
+        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas,string billNo=null)
         {
             GenerBill gb = new GenerBill();
             int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
@@ -54,13 +54,20 @@ namespace BP.Frm
             if (fb.EntityType == EntityType.FrmBill)
             {
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
-                gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+                if (DataType.IsNullOrEmpty(billNo) == false)
+                    gb.BillNo = billNo;
+                else
+                    gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
             }
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
                 rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;
-                gb.BillNo = rpt.GenerNewNoByKey("BillNo");
+                if (DataType.IsNullOrEmpty(billNo) == false)
+                    gb.BillNo = billNo;
+                else
+                    gb.BillNo = rpt.GenerNewNoByKey("BillNo");
+
                 // BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
             }

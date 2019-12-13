@@ -52,6 +52,10 @@ namespace BP.WF
         private string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
         private Paras ps;
         public string ReturnToEmp = null;
+        /// <summary>
+        /// 退回考核规则字段
+        /// </summary>
+        public string ReturnCHDatas = null;
         #endregion
 
         /// <summary>
@@ -65,7 +69,7 @@ namespace BP.WF
         /// <param name="reutrnToEmp">退回到人</param>
         /// <param name="isBackTrack">是否需要原路返回？</param>
         /// <param name="returnInfo">退回原因</param>
-        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo)
+        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo,string pageData=null)
         {
             this.HisNode = new Node(currNodeID);
 
@@ -104,6 +108,8 @@ namespace BP.WF
                 this.ReurnToWork.OID = fid;
                 this.ReurnToWork.RetrieveFromDBSources();
             }
+            //退回考核规则
+            this.ReturnCHDatas = pageData;
         }
         /// <summary>
         /// 删除两个节点之间的业务数据与流程引擎控制数据.
@@ -286,6 +292,16 @@ namespace BP.WF
             rw.BeiZhu = Msg;
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
             rw.Insert();
 
             // 加入track.
@@ -376,6 +392,17 @@ namespace BP.WF
             // 去掉了 else .
             rw.IsBackTracking = this.IsBackTrack;
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_","").Replace("DDL_","").Replace("CB_",""), param[1]);
+                 }
+            }
             rw.Insert();
 
 
@@ -633,6 +660,37 @@ namespace BP.WF
                 item.IsPassInt = -2;
                 item.Update();
             }
+
+            // 记录退回轨迹。
+            ReturnWork rw = new ReturnWork();
+            rw.WorkID = this.WorkID;
+            rw.ReturnToNode = this.ReturnToNode.NodeID;
+            rw.ReturnNodeName = this.ReturnToNode.Name + "-" + this.HisNode.Name;
+
+            rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
+            rw.ReturnToEmp = returnEmp; //退回给。
+
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
+
+            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.BeiZhu = Msg;
+            rw.IsBackTracking = this.IsBackTrack;
+            rw.Insert();
+
+            // 加入track.
+            this.AddToTrack(ActionType.Return, returnEmp, ReturnToEmp,
+                this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
+
+
             //退回消息事件 @yuanlina
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.UndoneAfter);
@@ -741,6 +799,17 @@ namespace BP.WF
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
 
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
+
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
@@ -835,6 +904,17 @@ namespace BP.WF
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
+
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.BeiZhu = Msg;
@@ -1078,7 +1158,16 @@ namespace BP.WF
             //调用删除GenerWorkerList数据，不然会导致两个节点之间有垃圾数据，特别遇到中间有分合流时候。
             this.DeleteSpanNodesGenerWorkerListData();
 
-
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.Insert();
 

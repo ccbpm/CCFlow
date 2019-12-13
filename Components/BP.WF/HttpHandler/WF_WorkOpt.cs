@@ -3480,9 +3480,10 @@ namespace BP.WF.HttpHandler
                         }
                     } 
                 }
-               
+
 
                 //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
+               
                 if (dt.Rows.Count == 1)
                 {
                     Node nd = new Node(this.FK_Node);
@@ -3512,7 +3513,6 @@ namespace BP.WF.HttpHandler
                         return "info@" + info;
                     }
                 }
-
                 return BP.Tools.Json.ToJson(dt);
             }
             catch (Exception ex)
@@ -3537,7 +3537,9 @@ namespace BP.WF.HttpHandler
             if (isBack == "1")
                 isBackBoolen = true;
 
-            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, toEmp, reMesage, isBackBoolen);
+            string pageData = this.GetRequestVal("PageData");
+
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, toEmp, reMesage, isBackBoolen, pageData);
         }
         #endregion
 

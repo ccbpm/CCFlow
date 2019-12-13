@@ -239,6 +239,7 @@ namespace BP.WF
                 map.AddTBDateTime(ReturnWorkAttr.RDT, null, "退回日期", true, true);
 
                 map.AddTBInt(ReturnWorkAttr.IsBackTracking, 0, "是否要原路返回?", true, true);
+                map.AddAttrsFromMapData("BP.WF.ReturnWorks");
                 this._enMap = map;
                 return this._enMap;
             }

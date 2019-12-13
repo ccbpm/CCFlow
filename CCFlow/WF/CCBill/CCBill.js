@@ -41,8 +41,24 @@ function CCFrom_FrmPower(frmID) {
  * @param {表单ID} frmID
  * @param {主键} pkval
  */
-function CCFrom_FrmOptionUrl(frmID, pkval) {
+function CCFrom_FrmOptionUrlByOID(frmID, pkval) {
     return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + pkval;
+}
+
+/**
+ * 获得表单的Url.
+ * @param {表单ID} frmID
+ * @param {主键} pkval
+ */
+function CCFrom_FrmOptionUrlByBillNo(frmID, billNo) {
+
+    var en = new Entity(frmID);
+    var i = en.Retrieve("BillNo", billNo);
+    if (i == 0) {
+        en.BillNo = billno;
+        en.Insert();
+    }
+    return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + en.OID;
 }
 
 /**
@@ -60,8 +76,12 @@ function CCFrom_FrmViewUrl(frmID, oid) {
  * @param {单据编号} billNo
  */
 function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
-    //var frm = new Entity(frmID); ??这里需要解析 BillNo传入的值.
-    return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&BillNo=" + pkval;
+    var frm = new Entity(frmID); //??这里需要解析 BillNo传入的值.
+    var i = frm.Retrieve("BillNo", billNo);
+    if (i == 1) {
+        return "../WF/CCForm/Frm.htm?FrmID=" + frmID + "&OID=" + frm.OID;
+    }
+    alert('无此数据.');
 }
 
 
@@ -69,11 +89,11 @@ function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
  * 创建一个空白的BillID.
  * @param {表单ID} frmID.
  */
-function CCForm_CreateBlankBillID(frmID) {
+function CCForm_CreateBlankOID(frmID) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill");
     handler.AddPara("FrmID", frmID);
-    var billOID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
-    return billOID;
+    var oid = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+    return oid;
 }
 
 /**

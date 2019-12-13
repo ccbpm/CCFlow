@@ -129,6 +129,7 @@
             handler.AddPara("FK_MapData", fk_mapdata);
             handler.AddPara("KeyOfEn", no);
             handler.AddPara("GroupField", groupID);
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
 
             var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
             if (data.indexOf("err@") >= 0) {

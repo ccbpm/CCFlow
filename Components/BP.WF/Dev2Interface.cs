@@ -6470,9 +6470,30 @@ namespace BP.WF
             sql += " ORDER BY A.RDT ";
 
             DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType== DBType.Oracle)
+            {
+                dtTrack.Columns["NDFROM"].ColumnName = "NDFrom";
+                dtTrack.Columns["NDFROMT"].ColumnName = "NDFromT";
+                dtTrack.Columns["EMPFROM"].ColumnName = "EmpFrom";
+                dtTrack.Columns["EMPFROMT"].ColumnName = "EmpFromT";
+                dtTrack.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dtTrack.Columns["RDT"].ColumnName = "RDT";
+
+            }
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dtTrack.Columns["ndfrom"].ColumnName = "NDFrom";
+                dtTrack.Columns["ndfromt"].ColumnName = "NDFromT";
+                dtTrack.Columns["empfrom"].ColumnName = "EmpFrom";
+                dtTrack.Columns["empfromt"].ColumnName = "EmpFromT";
+                dtTrack.Columns["deptname"].ColumnName = "DeptName";
+                dtTrack.Columns["rdt"].ColumnName = "RDT";
+
+            }
 
             foreach (DataRow drTrack in dtTrack.Rows)
             {
+               
                 DataRow dr = dtHistory.NewRow();
                 dr["FK_Node"] = drTrack["NDFrom"];
                 //dr["ActionType"] = drTrack["NDFrom"];
@@ -9663,9 +9684,9 @@ namespace BP.WF
         /// <param name="isBackToThisNode">退回后是否要原路返回？</param>
         /// <returns>执行结果，此结果要提示给用户。</returns>
         public static string Node_ReturnWork(string fk_flow, Int64 workID, Int64 fid, int currentNodeID, int returnToNodeID,
-            string returnToEmp, string msg = "无", bool isBackToThisNode = false)
+            string returnToEmp, string msg = "无", bool isBackToThisNode = false,string pageData=null)
         {
-            WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg);
+            WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg,pageData);
             return wr.DoIt();
         }
         /// <summary>

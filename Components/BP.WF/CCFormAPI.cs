@@ -547,6 +547,9 @@ namespace BP.WF
                             case DtlOpenType.ForWorkID: // 按工作ID来控制
                                 qo.AddWhere(GEDtlAttr.RefPK, pkval);
                                 break;
+                            case DtlOpenType.ForPWorkID: // 按工作ID来控制
+                                qo.AddWhere(GEDtlAttr.RefPK, DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID="+ pkval) );
+                                break;
                             case DtlOpenType.ForFID: // 按流程ID来控制.
                                 qo.AddWhere(GEDtlAttr.FID, pkval);
                                 break;

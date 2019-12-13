@@ -93,7 +93,11 @@ namespace BP.Sys
         /// <summary>
         /// 对流程开放
         /// </summary>
-        ForFID
+        ForFID,
+        /// <summary>
+        /// 父工作ID
+        /// </summary>
+        ForPWorkID
     }
     /// <summary>
     /// 明细表工作方式

@@ -1731,7 +1731,7 @@ namespace BP.En
         public void Add(Attr attr)
         {
             if (attr.Field == null || attr.Field == "")
-                throw new Exception("@属性设置错误：您不能设置 key='" + attr.Key + "',得字段值为空");
+                throw new Exception("@属性设置错误：您不能设置 key='" + attr.Key + "', "+attr.Desc+",得字段值为空");
 
             bool k = attr.IsKeyEqualField;
             this.Add(attr, true, false);

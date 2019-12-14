@@ -60,8 +60,8 @@ function Admin_TreeDir_Down(treeNo) {
 function Admin_Form_CreateBill(treeNo, frmID, frmName, frmType, pTable) {
     return Admin_Form_Create(treeNo, frmID, frmName, frmType, pTable, 1);
 }
-  
-  
+
+
 /**
  * 创建表单-实体
  * @param {创建在那个表单树的叶子下,可以为null，默认创建根目录下} treeNo
@@ -124,6 +124,26 @@ function Admin_Form_GenerDesignerUrl(frmID) {
     return data;
 }
 
+/**
+ * 表单属性
+ * @param {表单ID} frmID
+ */
+function Admin_FromTemplateAttr(frmID) {
+
+    var en = new Entity("BP.Frm.FrmBill", frmID);
+
+    //流程单据.
+    if (en.EntityType == 0)
+        url = '../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + frmID;
+
+    if (en.EntityType == 1)
+        url = '../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + frmID;
+
+    if (en.EntityType == 2 || en.EntityType == 3)
+        url = '../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + frmID;
+    return url;
+}
+
 
 /**
  * 删除表单、单据
@@ -150,5 +170,4 @@ function Admin_From_Down(frmID) {
     var en = new Entity("BP.Sys.MapData", frmID);
     en.DoMethodReturnString("DoOrderDown");
 }
- 
- 
+

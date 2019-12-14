@@ -26,6 +26,13 @@
         //页面启动函数.
         $(function () {
 
+            var webUser = new WebUser();
+            if (webUser.No == null) {
+                window.location.href = "./Portal/Login.htm?RefUrl=" + window.location.href;
+                return;
+            }
+
+
             //后台的操作.
             BindAdmin();
 
@@ -115,7 +122,7 @@
                 html += "<td><a href=\"javascript:OpenSearch('" + bill.No + "'," + bill.EntityType + ")\">打开查询</a></td>";
                 html += "<td><a href=\"javascript:NewEntity('" + bill.No + "'," + bill.EntityType + ")\">新建一条记录</a></td>";
                 html += "<td><a href=\"javascript:DeleteRow('" + bill.No + "'," + bill.EntityType + ")\">根据主键-删除一条记录</a></td>";
-                html += "<td><a href=\"javascript:OpenFrm('" + bill.No + "'," + bill.EntityType + ")\">根据主键-打开一条记录</a></td>";
+                html += "<td><a href=\"javascript:OpenFrm('" + bill.No + "'," + bill.EntityType + ")\">根据单据编号-打开/创建一条记录</a></td>";
 
                 html += "</tr>";
             }
@@ -123,13 +130,44 @@
             $("#listMyFrms").html(html);
         }
 
+        //打开根据单据编号打开或者创建一个表单.
+        function OpenFrm(frmID, frmType) {
+            var billNo = window.prompt("请输入单据编号");
+            if (billNo == null || billNo == undefined)
+                return;
+
+            var name = window.prompt("单据名称");
+            if (name == null || name == undefined)
+                name = "";
+
+            var paras = window.prompt("其他参数(默认字段名字或者值,格式为:@Name=张三@Age=12@Addr=山东济南):",
+                "@Name=张三@Age=12@Addr=山东济南");
+            if (paras == null || paras == undefined)
+                paras = "";
+
+            var data = CCFrom_NewFrmEntityAsSpecBillNo(frmID, billNo, name, paras);
+
+            if (data == null) {
+                alert('没有创建成功.');
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+            } else {
+                alert(data);
+                return;
+            }
+
+            alert('根据billNo创建一条数据,返回的url:' + data);
+            WinOpen(data);
+        }
+
         //查询列表数据
         function OpenSearch(frmID, frmType) {
             var url = CCForm_FrmSearch(frmID, frmType);
             WinOpen(url);
         }
-
-
 
 
         function GetEntityType(frmType) {
@@ -147,7 +185,6 @@
 
             return "url模式";
         }
-
 
         ///设计表单.
         function DFrom(frmID) {
@@ -216,28 +253,14 @@
             window.location.href = window.location.href;
         }
 
-
+        //打开模版属性.
         function FrmEntity(frmID) {
-            var en = new Entity("BP.Frm.FrmBill", frmID);
 
-            //流程单据.
-            if (en.EntityType == 0)
-                url = '../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + frmID;
-
-            if (en.EntityType == 1)
-                url = '../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + frmID;
-
-            if (en.EntityType == 2 || en.EntityType == 3)
-                url = '../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + frmID;
-
+            var url = Admin_FromTemplateAttr(frmID);
             WinOpen(url);
-
-
         }
 
-
-/**/</script>
-
+        /**/</script>
 </head>
 <body>
 
@@ -246,12 +269,12 @@
 
         <div id="list"></div>
         <br />
-        <button onclick="NewFrmBill(1);"> 新建单据(傻瓜表单)</button>
-        <button onclick="NewFrmBill(2);"> 新建单据(自由表单)</button>
+        <button onclick="NewFrmBill(0);"> 新建单据(傻瓜表单)</button>
+        <button onclick="NewFrmBill(1);"> 新建单据(自由表单)</button>
         <button onclick="NewFrmBill(3);"> 新建单据(Url表单)</button>
         -
-        <button onclick="NewFrmDict(1);"> 新建实体(傻瓜表单)</button>
-        <button onclick="NewFrmDict(2);"> 新建实体(自由表单)</button>
+        <button onclick="NewFrmDict(0);"> 新建实体(傻瓜表单)</button>
+        <button onclick="NewFrmDict(1);"> 新建实体(自由表单)</button>
         <button onclick="NewFrmDict(3);"> 新建实体(Url表单)</button>
         <br />
         <br />

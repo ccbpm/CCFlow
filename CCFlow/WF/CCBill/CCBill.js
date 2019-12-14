@@ -151,18 +151,20 @@ function CCFrom_NewFrmEntityAsSpecOID(frmID, specOID, specTitle, paras) {
  * @param {表单ID} frmID
  * @param {指定的int类型的OID，作为主键} specBillNo
  * @param {指定的Title，可以为空} specTitle
- * @param {主表字段的参数，一个key val 的json格式的数据.} paras
+ * @param {主表字段的参数，一个key val 的strs格式的数据,比如:@Name=zhangsan@Age=12@Add=山东济南} paras
  */
 function CCFrom_NewFrmEntityAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("BillNo", specBillNo);
     handler.AddPara("Title", specTitle);
-    handler.AddJson(paras); //把参数加入.
+    handler.AddPara("Paras", paras); //加入参数.
 
-    var data = handler.DoMethodReturnJSON("CCFrom_NewFrmEntityAsSpecBillNo");
-    if (data.indexOf('err@') == -1) {
-        throw Exception(data); // ??是不是这个语法？
+    var data = handler.DoMethodReturnString("CCFrom_NewFrmBillAsSpecBillNo");
+    if (data.indexOf('url@') == -1) {
+        alert(data);
+        return;
+        //throw Exception(data); // ??是不是这个语法？
     }
     return data;
 }

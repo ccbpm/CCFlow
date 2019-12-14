@@ -72,6 +72,8 @@
             //判断是否有WorkID.
             var workID = GetQueryString("WorkID");
             if (workID == null || workID == undefined)
+                workID = GetQueryString("OID");
+            if (workID == null || workID == undefined)
                 workID = 0;
 
             if (workID == 0) {

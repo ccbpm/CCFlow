@@ -91,7 +91,7 @@ namespace BP.WF.HttpHandler
 
                 #region 保存新加行.
                 int newRowCount = this.GetRequestValInt("NewRowCount");
-                bool isEntityOID = dtl.IsOIDEntity;  //@sly 同步数据.
+                bool isEntityOID = dtl.IsOIDEntity;  //已同步数据.
                 bool isEntityNo = dtl.IsNoEntity;
                 for (int i = 0; i < newRowCount; i++)
                 {
@@ -139,7 +139,7 @@ namespace BP.WF.HttpHandler
                     //dtl.SetValByKey(pkval, 0);
                     dtl.SetValByKey(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
 
-                    //@sly 同步数据.
+                    //已同步数据.
                     if (isEntityOID == true)
                     {
                         dtl.PKVal = "0";

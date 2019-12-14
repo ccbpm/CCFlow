@@ -13,7 +13,6 @@ namespace BP.WF
 
         public  static void SendMsg()
         {
-
         }
 
     }

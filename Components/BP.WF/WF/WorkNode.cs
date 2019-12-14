@@ -8449,8 +8449,12 @@ namespace BP.WF
 
 
             //设置项目名称. @shilianyu.
-            gwf.PrjNo = this.rptGe.PrjNo;
-            gwf.PrjName = this.rptGe.PrjName;
+            if (this.rptGe.EnMap.Attrs.Contains("PrjNo") == true)
+            {
+                gwf.PrjNo = this.rptGe.PrjNo;
+                if (this.rptGe.EnMap.Attrs.Contains("PrjName") == true)
+                    gwf.PrjName = this.rptGe.PrjName;
+            }
 
             this.HisGenerWorkFlow = gwf;
 

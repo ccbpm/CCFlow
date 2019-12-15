@@ -121,7 +121,7 @@
 
                 html += "<td><a href=\"javascript:OpenSearch('" + bill.No + "'," + bill.EntityType + ")\">打开查询</a></td>";
                 html += "<td><a href=\"javascript:NewEntity('" + bill.No + "'," + bill.EntityType + ")\">新建一条记录</a></td>";
-                html += "<td><a href=\"javascript:DeleteRow('" + bill.No + "'," + bill.EntityType + ")\">根据主键-删除一条记录</a></td>";
+                html += "<td><a href=\"javascript:DeleteEntity('" + bill.No + "'," + bill.EntityType + ")\">根据主键-删除一条记录</a></td>";
                 html += "<td><a href=\"javascript:OpenFrm('" + bill.No + "'," + bill.EntityType + ")\">根据单据编号-打开/创建一条记录</a></td>";
 
                 html += "</tr>";
@@ -163,12 +163,20 @@
             WinOpen(data);
         }
 
+        function DeleteEntity(frmID)
+        {
+            var oid = window.prompt("要删除表单[" + frmID + "]的OID.");
+            if (oid == null || oid == undefined)
+                return;
+            var data = CCFrom_DeleteFrmEntityByOID(frmID, oid);
+            alert(data);
+        }
+
         //查询列表数据
         function OpenSearch(frmID, frmType) {
             var url = CCForm_FrmSearch(frmID, frmType);
             WinOpen(url);
         }
-
 
         function GetEntityType(frmType) {
             if (frmType == 1)
@@ -188,8 +196,14 @@
 
         ///设计表单.
         function DFrom(frmID) {
+
             var url = Admin_Form_GenerDesignerUrl(frmID);
-            WinOpen(url);
+            var root = $("#tbWebRoot").val();
+            var myurl = root + url;
+
+            alert("接口返回的url:" + url + "\t\n组合后的url:" + myurl);
+
+            WinOpen(myurl);
         }
 
         //新建单据. frmType  0=傻瓜表单 1=自由表单, 3=URL
@@ -263,6 +277,12 @@
         /**/</script>
 </head>
 <body>
+
+    <fieldset>
+        <legend id="help" >设置根目录</legend>
+        根目录参数:<input type="text" value="" id="tbWebRoot" /> 
+        <br>说明:在集成ccform的时候，有的开发环境并不是  /WF/或者 /jflow-web/是根目录.
+    </fieldset>
 
     <fieldset>
         <legend id="help">后台操作: CCBillAdmin.js</legend>

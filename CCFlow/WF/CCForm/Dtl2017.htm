@@ -433,9 +433,10 @@
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
             doAlignColumns();
+            AfterBindEn_DealMapExt(insertTr, newRowIndex);
+
             setIframeHeight();
 
-            AfterBindEn_DealMapExt(insertTr, newRowIndex);
             //setTimeout(doAlignColumns,100);
         }
 
@@ -2107,7 +2108,7 @@
                     case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                         var ddlParent = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
                         var ddlChild = $(tr).find("[name=DDL_" + mapExt.AttrsOfActive + ']');
-                        if (ddlParent == null || ddlChild == null)
+                        if (ddlParent.length == 0 || ddlChild.length == null)
                             continue;
                         var rowIndex = (parseInt($($(tr).find('td')[0]).text()) - 1);
                         ddlParent.data().MapExt = mapExt;

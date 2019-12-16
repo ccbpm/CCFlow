@@ -912,7 +912,6 @@ function Send(isHuiQian) {
 
     var msg = checkAths();
     if (msg != "") {
-        alert(msg);
         return false;
     }
         

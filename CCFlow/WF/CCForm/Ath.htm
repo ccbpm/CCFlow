@@ -144,25 +144,27 @@
 
         //检查上传的附件数量是否符合要求
         function CheckAthNum() {
+            if (numOfUpload == 0)
+                return true;
+
             if (numOfUpload > numOfAths) {
-                return "上传附件数量不能小于"+numOfUpload;
+                alert("上传附件数量不能小于" + numOfUpload);
+                return false;
             }
 
-             if (athSortNum.length != 0 && athDesc.UploadFileNumCheck==2) {
+            if (athSortNum.length != 0 && athDesc.UploadFileNumCheck == 2) {
                 var msg = "";
-                for (var idx=0; idx < athSortNum.length; idx++) {
+                for (var idx = 0; idx < athSortNum.length; idx++) {
                     if (athSortNum[idx].Num == 0)
                         msg += athSortNum[idx].Sort + ",";
                 }
                 if (msg != "") {
-                    return msg.substring(0, msg.length - 1) + "分组至少上传一个附件";
+                    msg = msg.substring(0, msg.length - 1) + "分组至少上传一个附件";
+                    alert(msg);
+                    return false;
                 }
-                return "";
-                    
-
             }
-
-            return "";
+            return true;
         }
 
         $(function () {

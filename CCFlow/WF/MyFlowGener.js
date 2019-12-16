@@ -485,6 +485,7 @@ function CheckMinMaxLength() {
 
 //保存 0单保存 1发送的保存
 function Save(saveType) {
+
     //保存前事件
     if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
         if (beforeSave() == false)
@@ -499,7 +500,7 @@ function Save(saveType) {
             return false;
     }
 
-    if (checkAths() != "")
+    if (checkAths() == false)
         return false;
 
 
@@ -911,7 +912,8 @@ function Send(isHuiQian) {
         return false;
 
     var msg = checkAths();
-    if (msg != "") {
+    if (msg != "" && msg != true) {
+        alert(msg);
         return false;
     }
         

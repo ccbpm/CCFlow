@@ -1636,6 +1636,11 @@ var Entities = (function () {
                 success: function (data) {
 
                     if (data.indexOf("err@") != -1) {
+                        data = data.replace('err@', '');
+                        data += "\t\n参数信息:";
+                        data += "\t\nDoType=Entities_Init";
+                        data += "\t\EnsName=" + self.ensName;
+                        data += "\t\Paras=" + self.Paras;
                         alert(data);
                         return;
                     }

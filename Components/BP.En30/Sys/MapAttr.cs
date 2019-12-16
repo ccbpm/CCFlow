@@ -971,7 +971,7 @@ namespace BP.Sys
             {
                 string str= this.GetValStringByKey(MapAttrAttr.GroupID);
                 if (str == "无" || str=="")
-                    return 0;
+                    return 1;
                 return int.Parse(str);
             }
             set

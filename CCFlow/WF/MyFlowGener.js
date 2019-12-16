@@ -499,7 +499,7 @@ function Save(saveType) {
             return false;
     }
 
-    if (checkAths() == false)
+    if (checkAths() != "")
         return false;
 
 

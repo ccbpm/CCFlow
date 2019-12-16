@@ -110,5 +110,26 @@ namespace BP.GPM
         }
         #endregion GPM接口
 
+        /// <summary>
+        /// 推送消息到微信
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <param name="title"></param>
+        /// <param name="url"></param>
+        public static void PushMessageToTelByWeiXin(string tel, string title, string url)
+        {
+
+        }
+        /// <summary>
+        /// 推送消息到钉钉
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <param name="title"></param>
+        /// <param name="url"></param>
+        public static void PushMessageToTelByDingDing(string tel, string title, string url)
+        {
+
+        }
+
     }
 }

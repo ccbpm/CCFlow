@@ -1378,7 +1378,7 @@ function checkAths() {
     var frm = document.getElementById('Ath1');
 
     if (frm == null || frm == undefined) {
-        return "";
+        return true;
         //alert('系统错误,没有找到SelfForm的ID.');
     }
     return frm.contentWindow.CheckAthNum();

@@ -970,7 +970,7 @@ namespace BP.Sys.FrmUI
 
             #region 处理分组.
             //更新相关的分组信息.
-            if (this.IsVisable == true)
+            if (this.IsVisable == true && this.FK_Node == 0)
             {
                 GroupField gf = new GroupField();
                 int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);

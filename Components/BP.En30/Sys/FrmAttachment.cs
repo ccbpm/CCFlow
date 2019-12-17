@@ -1406,7 +1406,7 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
+            if (this.FK_Node == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;

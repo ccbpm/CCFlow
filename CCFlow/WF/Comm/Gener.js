@@ -1797,6 +1797,20 @@ var Entities = (function () {
             return string;
 
         },
+        GetEns: function () {
+            // { data: [{}, {}, {}], length: 3, name: 'xxx' };
+            var result = [];
+            for (const key in this) {
+                console.log(typeof this[key]);
+                if (typeof this[key] === 'object') {
+                    result.push(this[key]);
+                    // delete ens[key];
+                }
+            }
+            this.data = result;
+            console.log('data', this);
+            return this;
+        },
 
         DoMethodReturnJSON: function (methodName, params) {
 

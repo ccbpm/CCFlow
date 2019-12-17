@@ -485,7 +485,6 @@ function CheckMinMaxLength() {
 
 //保存 0单保存 1发送的保存
 function Save(saveType) {
-
     //保存前事件
     if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
         if (beforeSave() == false)
@@ -499,9 +498,12 @@ function Save(saveType) {
         if (f == false)
             return false;
     }
-
-    if (checkAths() == false)
-        return false;
+	var msg = checkAths();
+    if (msg != ""){
+		alert(msg);
+		return false;
+	}
+        
 
 
     //必填项和正则表达式检查
@@ -912,7 +914,7 @@ function Send(isHuiQian) {
         return false;
 
     var msg = checkAths();
-    if (msg != "" && msg != true) {
+    if (msg != "") {
         alert(msg);
         return false;
     }
@@ -1380,7 +1382,7 @@ function checkAths() {
     var frm = document.getElementById('Ath1');
 
     if (frm == null || frm == undefined) {
-        return true;
+        return "";
         //alert('系统错误,没有找到SelfForm的ID.');
     }
     return frm.contentWindow.CheckAthNum();

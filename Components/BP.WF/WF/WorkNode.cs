@@ -6628,9 +6628,15 @@ namespace BP.WF
                 string todoEmps = this.HisGenerWorkFlow.TodoEmps;
                 todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
                 todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name, "");
-
+                // 追加当前操作人
+                string emps = this.HisGenerWorkFlow.Emps;
+                if (emps.Contains("@" + WebUser.No + "@") == false)
+                {
+                    emps = emps + WebUser.No + "@";
+                }
+                this.HisGenerWorkFlow.Emps = emps;
                 this.HisGenerWorkFlow.TodoEmps = todoEmps;
-                this.HisGenerWorkFlow.Update(GenerWorkFlowAttr.TodoEmps, todoEmps);
+                this.HisGenerWorkFlow.Update(GenerWorkFlowAttr.TodoEmps, todoEmps, GenerWorkFlowAttr.Emps, emps);
 
 
                 /* 如果是协作*/
@@ -8448,7 +8454,7 @@ namespace BP.WF
             #region 设置  HisGenerWorkFlow
 
 
-            //设置项目名称. @shilianyu.
+            //设置项目名称.
             if (this.rptGe.EnMap.Attrs.Contains("PrjNo") == true)
             {
                 gwf.PrjNo = this.rptGe.PrjNo;

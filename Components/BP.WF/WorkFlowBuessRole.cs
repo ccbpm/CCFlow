@@ -140,8 +140,13 @@ namespace BP.WF
                         //  wk.DirectUpdate();
                         // wk.RetrieveFromDBSources();
                     }
-
-                    titleRole = titleRole.Replace("@" + attr.Key, temp);
+                    if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "T"));
+                        titleRole = titleRole.Replace("@" + attr.Key, temp);
+                    }
+                        
+                   
                 }
 
                 //在考虑其它的字段替换.

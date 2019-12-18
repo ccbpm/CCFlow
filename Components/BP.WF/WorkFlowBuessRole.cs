@@ -71,7 +71,16 @@ namespace BP.WF
                         break;
                     if (attr.IsRefAttr == true)
                         continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "T"));
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
+                    else
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
+                    
                 }
             }
             titleRole = titleRole.Replace('~', '-');
@@ -140,11 +149,9 @@ namespace BP.WF
                         //  wk.DirectUpdate();
                         // wk.RetrieveFromDBSources();
                     }
-                    if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
-                    {
-                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "T"));
-                        titleRole = titleRole.Replace("@" + attr.Key, temp);
-                    }
+                   
+                     titleRole = titleRole.Replace("@" + attr.Key, temp);
+                   
                         
                    
                 }
@@ -157,7 +164,15 @@ namespace BP.WF
 
                     if (attr.IsRefAttr == true)
                         continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "T"));
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
+                    else
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
                 }
             }
             titleRole = titleRole.Replace('~', '-');
@@ -226,7 +241,17 @@ namespace BP.WF
 
                     if (attr.IsRefAttr == true)
                         continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "T"));
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
+                    else
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
+
+                   
                 }
             }
             titleRole = titleRole.Replace('~', '-');
@@ -282,7 +307,17 @@ namespace BP.WF
 
                     if (attr.IsRefAttr == true)
                         continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                    if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key + "T"));
+                        titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                    }
+                    else
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                    }
+
+                   
                 }
 
                 //如果全部已经替换完成.

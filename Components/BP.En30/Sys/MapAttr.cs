@@ -240,6 +240,8 @@ namespace BP.Sys
         /// </summary>
         public const string TBModel = "TBModel";
 
+        public const string CSS = "CSS";
+
 
         #region 参数属性.
         /// <summary>

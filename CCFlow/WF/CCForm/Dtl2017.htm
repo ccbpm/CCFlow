@@ -107,7 +107,6 @@
             //DoType换为DoMethod
             var method =  param["DoType"];
     		delete param["DoType"];
-    		var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
    			var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     		handler.AddJson(param);
     		var data = handler.DoMethodReturnString(method);

@@ -105,54 +105,32 @@
                 return;
             }
             //DoType换为DoMethod
-            param.DoMethod = param.DoType;
-            delete param["DoType"];
-            var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
+            var method =  param["DoType"];
+    		delete param["DoType"];
+    		var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
+   			var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    		handler.AddJson(param);
+    		var data = handler.DoMethodReturnString(method);
+    		if(data.indexOf("err@")!=-1){
+        		alert('保存数据出错');
+        		return;
+    		}else{
+        	    if (saveAll) {
+            	    alerdaySaveCount++;
+        	    } else {
+            	    callback(data, scope);
+        	    }
+        	    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
+            	    $('#Msg').hide();
+            	    $('#ContentDtlDiv').show();
+            	    alerdaySaveCount = 0;
+            	    needSaveCount = 0;
+            	    saveAll = false;
 
-            $.ajax({
-                type: "GET", //使用GET或POST方法访问后台
-                dataType: "text", //返回json格式的数据
-                contentType: "application/json; charset=utf-8",
-                url: dynamicHandler + "?DoType=HttpHandler&HttpHandlerName=" + httpHandlerName, //要访问的后台地址
-                data: param, //要发送的数据
-                async: false,
-                cache: false,
-                complete: function () { }, //AJAX请求完成时隐藏loading提示
-                error: function (XMLHttpRequest, errorThrown) {
-                    alert(errorThrown)
-                    callback(XMLHttpRequest);
-                    alert('保存数据出错');
-                    $('#Msg').hide();
-                    $('#ContentDtlDiv').show();
-                },
-                success: function (msg) { //msg为返回的数据，在这里做数据绑定.
-
-                    if (msg.indexOf('err@') == 0) {
-                        alert(msg);
-                        console.log(msg);
-                        return;
-                    }
-
-                    if (saveAll) {
-                        alerdaySaveCount++;
-                    } else {
-                        var data = msg;
-                        callback(data, scope);
-                    }
-                    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
-                        $('#Msg').hide();
-                        $('#ContentDtlDiv').show();
-                        alerdaySaveCount = 0;
-                        needSaveCount = 0;
-                        saveAll = false;
-
-                        InitPage();
-                        BindMapExt();
-
-
-                    }
-                }
-            });
+            	    InitPage();
+            	    BindMapExt();
+        	    }
+    	    }
         }
 
         //保存数据
@@ -433,19 +411,17 @@
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
             doAlignColumns();
-            AfterBindEn_DealMapExt(insertTr, newRowIndex);
-
             setIframeHeight();
 
+            AfterBindEn_DealMapExt(insertTr, newRowIndex);
             //setTimeout(doAlignColumns,100);
         }
 
         function setIframeHeight() {
-            if ($("body").height()<260) {
-                $("body").height() = 260;
-            }
+        	if($("body").height()<260){
+        		$("body").height=260;
+        	}
             $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
-            
         }
 
         //行最后的保存按钮
@@ -1350,8 +1326,9 @@
                         //AppString
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                                //eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
+                                
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + " onChange='ChangeValue(this)'>" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                              	eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
                             } else if (mapAttr.IsSupperText == "1") {
                                 eleHtml += "<textarea id='TB_" + mapAttr.KeyOfEn + "' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                             } else {
@@ -1848,14 +1825,15 @@
                     mapExt.Delete();
                     continue;
                 }
-
+				if(mapAttr.UIIsEnable=="0")
+					continue;
                 //处理Pop弹出框
                 var PopModel = mapAttr.GetPara("PopModel");
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                     var tbID = tbAuto.attr('id');
                    
-                    PopDtlMapExt(mapAttr, mapExt, tbID, rowIndex, OID);
+                    PopDtlMapExt(mapAttr, mapExt, tbID, rowIndex, OID,tr);
                     continue;
                 }
                 //处理文本自动填充
@@ -2108,7 +2086,7 @@
                     case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                         var ddlParent = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
                         var ddlChild = $(tr).find("[name=DDL_" + mapExt.AttrsOfActive + ']');
-                        if (ddlParent.length == 0 || ddlChild.length == null)
+                        if (ddlParent == null || ddlChild == null)
                             continue;
                         var rowIndex = (parseInt($($(tr).find('td')[0]).text()) - 1);
                         ddlParent.data().MapExt = mapExt;
@@ -2221,14 +2199,14 @@
         }
 
         /**Pop弹出框的处理**/
-        function PopDtlMapExt(mapAttr, mapExt, targetId, index, OID) {
+        function PopDtlMapExt(mapAttr, mapExt, targetId, index, OID,objtr) {
             var val = $("#" + targetId).val();
             switch (mapAttr.GetPara("PopModel")) {
                 case "PopBranchesAndLeaf": //树干叶子模式.
-                    PopBranchesAndLeaf(mapExt, val, targetId, index, OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    PopBranchesAndLeaf(mapExt, val, targetId, index, OID,objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
                     break;
                 case "PopBranches": //树干简单模式.
-                    PopBranches(mapExt, val, targetId, index, OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    PopBranches(mapExt, val, targetId, index, OID,objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
                     break;
                 case "PopBindSFTable": //绑定字典表，外部数据源.
                     PopBindSFTable(mapExt, val, targetId, index, OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
@@ -2246,7 +2224,7 @@
                     SelfUrl(mapExt, targetId, index, OID); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                     break;
                 case "PopTableSearch": //表格查询.
-                    PopTableSearch(mapExt, val, targetId, index, OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    PopTableSearch(mapExt, val, targetId, index, OID,objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
                     break;
                 default: break;
             }

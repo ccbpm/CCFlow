@@ -385,13 +385,13 @@ namespace BP.Sys.FrmUI
 
                 foreach (MapData item in mds)
                 {
-                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + newField + "_" + item.No + " WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
+                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No  + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
                     DBAccess.RunSQL(sql);
                 }
             }
             else
             {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + newField + "_" + this.FK_MapData + "  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" +  newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
                 DBAccess.RunSQL(sql);
             }
 

@@ -226,6 +226,8 @@
             global.selectedRows = [];
 
             var mypk = GetQueryString("MyPK");
+            var atParas=GetQueryString("AtParas");
+            
             mapExt = new Entity("BP.Sys.MapExt", mypk);
 
             var webUser = new WebUser();
@@ -249,6 +251,20 @@
             global.oid = GetQueryString("OID");
 
             var treeUrl = mapExt.Tag2;
+            var treeTag1=mapExt.Tag1;
+            if(atParas.indexOf('@')==0){
+            	var paras=atParas.split('@');
+            	for(i = 0,len=paras.length; i < len; i++) {
+                	var key=paras[i];
+                	if(key==""||key==null){
+                		continue;
+                	}
+                	var attrKeyOfEn=key.split('=')[0];
+                	var val=key.split('=')[1];
+                	treeUrl=treeUrl.replace("@"+attrKeyOfEn,val);
+                	treeTag1=treeTag1.replace("@"+attrKeyOfEn,val);
+            	}
+            }
             if (treeUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源不能为空。');
                 return;
@@ -272,7 +288,7 @@
                     $('#tree_Panel').show();
                     return;
                 }
-                var gridUrl = replaceAll(mapExt.Tag1, "@Key", keyWord);
+                var gridUrl = replaceAll(treeTag1, "@Key", keyWord);
                 // tree
                 loadViewGrid(gridUrl);
             });

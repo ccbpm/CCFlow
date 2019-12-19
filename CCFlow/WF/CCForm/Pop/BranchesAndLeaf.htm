@@ -232,6 +232,24 @@
 		        var treeUrl = mapExt.Tag2;      //初始化树
 		        var treeClickUrl = mapExt.Tag3; //树选择.
 
+		        var atParas=GetQueryString("AtParas");
+		        var treeUrl = mapExt.Tag2;
+	            var treeTag1=mapExt.Tag1;
+	            if(atParas.indexOf('@')==0){
+	            	var paras=atParas.split('@');
+	            	for(i = 0,len=paras.length; i < len; i++) {
+	                	var key=paras[i];
+	                	if(key==""||key==null){
+	                		continue;
+	                	}
+	                	var attrKeyOfEn=key.split('=')[0];
+	                	var val=key.split('=')[1];
+	                	searchUrl=searchUrl.replace("@"+attrKeyOfEn,val);
+	                	treeUrl=treeUrl.replace("@"+attrKeyOfEn,val);
+	                	treeClickUrl=treeClickUrl.replace("@"+attrKeyOfEn,val);
+	            	}
+	            }
+		        
 		        if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
 		            alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
 		            return;

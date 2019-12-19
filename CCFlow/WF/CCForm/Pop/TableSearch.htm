@@ -71,9 +71,24 @@
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
-
-            //获取列表的数据源
+            
+            var atParas=GetQueryString("AtParas");
+          //获取列表的数据源
             var tableUrl = mapExt.Tag2;
+            if(atParas.indexOf('@')==0){
+            	var paras=atParas.split('@');
+            	for(i = 0,len=paras.length; i < len; i++) {
+                	var key=paras[i];
+                	if(key==""||key==null){
+                		continue;
+                	}
+                	var attrKeyOfEn=key.split('=')[0];
+                	var val=key.split('=')[1];
+                	tableUrl=tableUrl.replace("@"+attrKeyOfEn,val);
+            	}
+            }
+
+            
             if (tableUrl == "") {
                 alert('配置错误:查询数据源，初始化列表的数据源不能为空。');
                 return;

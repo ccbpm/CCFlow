@@ -45,7 +45,7 @@ function SelfUrl_Done(mapExt, targetId, index, pkval) {
     
 }
 //***************************************树干叶子模式*****************************************************************
-function PopBranchesAndLeaf(mapExt, val, targetId, index,oid) {
+function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
 
     var mtagsId;
     if (targetId == null || targetId == undefined)
@@ -103,7 +103,16 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid) {
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+        	var data=$(objtr).data().data;
+        	var paras="";
+        	Object.keys(data).forEach(function(key){
+        		if(key=="OID"||key=="FID"||key=="Rec"||key=="RefPK"||key=="RDT")
+        			{}
+        		else{
+        			paras+="@"+key+"="+data[key];
+        		}
+        	});
+            window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
                 var iframe = window.parent.frames[iframeId];
                 if (iframe) {
@@ -141,7 +150,7 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid) {
 }
 
 //***************************************树干模式.*****************************************************************
-function PopBranches(mapExt, val, targetId, index,oid) {
+function PopBranches(mapExt, val, targetId, index,oid,objtr) {
     var mtagsId;
     if (targetId == null || targetId == undefined)
         targetId = "TB_" + mapExt.AttrOfOper;
@@ -188,9 +197,19 @@ function PopBranches(mapExt, val, targetId, index,oid) {
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+        	var data=$(objtr).data().data;
+        	var paras="";
+        	Object.keys(data).forEach(function(key){
+        		if(key=="OID"||key=="FID"||key=="Rec"||key=="RefPK"||key=="RDT")
+        			{}
+        		else{
+        			paras+="@"+key+"="+data[key];
+        		}
+        	});
+            window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
                 var iframe = window.parent.frames[iframeId];
+                
                 //var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     //删除保存的数据
@@ -198,14 +217,19 @@ function PopBranches(mapExt, val, targetId, index,oid) {
                     var nodes = iframe.GetCheckNodes();
 
                     mtags = $("#" + mtagsId);
-
+                    var initJsonData = [];
                     if ($.isArray(nodes)) {
                         $.each(nodes, function (i, node) {
-                            SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
-
+                            //SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
+                            initJsonData.push({
+                                "No": node.No,
+                                "Name": node.Name
+                            });
                         });
+                        mtags.mtags("loadData", initJsonData);
+                        $("#" + targetId).val(mtags.mtags("getText"));
                         //重新加载
-                        Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null, targetId, mtagsId);
+                        //Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, null, targetId, mtagsId);
 
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
@@ -234,7 +258,7 @@ function PopBranches(mapExt, val, targetId, index,oid) {
 }
 
 /******************************************  表格查询 **********************************/
-function PopTableSearch(mapExt,val, targetId, index, oid) {
+function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
     
     var mtagsId;
     if (targetId == null || targetId == undefined)
@@ -294,7 +318,16 @@ function PopTableSearch(mapExt,val, targetId, index, oid) {
 
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-            window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
+        	var data=$(objtr).data().data;
+        	var paras="";
+        	Object.keys(data).forEach(function(key){
+        		if(key=="OID"||key=="FID"||key=="Rec"||key=="RefPK"||key=="RDT")
+        			{}
+        		else{
+        			paras+="@"+key+"="+data[key];
+        		}
+        	});
+            window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
                 var iframe = window.parent.frames[iframeId];
                 if (iframe) {

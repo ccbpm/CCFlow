@@ -6,6 +6,12 @@ using BP.En;
 using BP.Web;
 using BP.Sys;
 using BP.Port;
+using BP.WF;
+using BP.EAI.Plugins.WXin;
+using BP.WF.Data;
+using BP.EAI.Plugins.DINGTalk;
+using BP.EAI.Plugins;
+using System.Collections;
 
 namespace BP.GPM
 {
@@ -113,22 +119,173 @@ namespace BP.GPM
         /// <summary>
         /// 推送消息到微信
         /// </summary>
-        /// <param name="tel"></param>
-        /// <param name="title"></param>
-        /// <param name="url"></param>
-        public static void PushMessageToTelByWeiXin(string tel, string title, string url)
+        /// <param name="WorkID">WorkID</param>
+        /// <param name="sender">发送人</param>
+        public static MessageErrorModel PushMessageToTelByWeiXin(long WorkID, string sender)
         {
+            //企业应用必须存在
+            string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+            if (agentId != null)
+            {
+                //获取 AccessToken
+                string accessToken = new BP.EAI.Plugins.WXin.WeiXin().getAccessToken();
 
+                //当前业务
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = WorkID;
+                gwf.RetrieveFromDBSources();
+                //接收人
+                Monitors empWorks = new Monitors();
+                QueryObject obj = new QueryObject(empWorks);
+                obj.AddWhere(MonitorAttr.WorkID, WorkID);
+                obj.addOr();
+                obj.AddWhere(MonitorAttr.FID, WorkID);
+                obj.DoQuery();
+
+                //发送给多人的消息格式   zhangsan|lisi|wangwu
+                //此处根据手机号作为推送人的帐号，便于关联
+                string toUsers = "";
+                foreach (Monitor empWork in empWorks)
+                {
+                    if (toUsers.Length > 0)
+                        toUsers += "|";
+                    Emp emp = new Emp(empWork.FK_Emp);
+                    toUsers += emp.Tel;
+                }
+                if (toUsers.Length == 0)
+                    return null;
+
+                //消息样式为图文连接
+                News_Articles newArticle = new News_Articles();
+                //设置消息标题
+                newArticle.title = "待办事项：" + gwf.Title;
+
+                //设置消息内容主体
+                string msgConten = "业务名称：" + gwf.FlowName + "\n";
+                msgConten += "申请人：" + gwf.StarterName + "\n";
+                msgConten += "申请部门：" + gwf.DeptName + "\n";
+                msgConten += "当前步骤：" + gwf.NodeName + "\n";
+                msgConten += "上一步处理人：" + sender + "\n";
+                newArticle.description = msgConten;
+
+                //设置图片连接
+                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
+                    + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+                newArticle.url = New_Url;
+
+                //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
+                newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/CCBPM.png";
+
+                //加入消息
+                WX_Msg_News wxMsg = new WX_Msg_News();
+                wxMsg.Access_Token = accessToken;
+                wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                wxMsg.touser = toUsers;
+                wxMsg.articles.Add(newArticle);
+                //执行发送
+                return WeiXinMessage.PostMsgOfNews(wxMsg);
+            }
+            return null;
         }
         /// <summary>
         /// 推送消息到钉钉
         /// </summary>
-        /// <param name="tel"></param>
-        /// <param name="title"></param>
-        /// <param name="url"></param>
-        public static void PushMessageToTelByDingDing(string tel, string title, string url)
+        /// <param name="msgType">消息类型</param>
+        /// <param name="WorkID">WorkID</param>
+        /// <param name="sender">发送人</param>
+        public static Ding_Post_ReturnVal PushMessageToTelByDingDing(DingMsgType msgType, long WorkID, string sender)
         {
+            //当前业务
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = WorkID;
+            gwf.RetrieveFromDBSources();
+            //获取接收人
+            Monitors empWorks = new Monitors();
+            QueryObject obj = new QueryObject(empWorks);
+            obj.AddWhere(MonitorAttr.WorkID, WorkID);
+            obj.addOr();
+            obj.AddWhere(MonitorAttr.FID, WorkID);
+            obj.DoQuery();
 
+
+            //结束不发送消息
+            if (gwf.WFState == WFState.Complete)
+                return null;
+
+            string toUsers = "";
+            foreach (Monitor empWork in empWorks)
+            {
+                if (toUsers.Length > 0)
+                    toUsers += "|";
+                Emp emp = new Emp(empWork.FK_Emp);
+                toUsers += emp.Tel;
+            }
+            if (toUsers.Length == 0)
+                return null;
+
+            switch (msgType)
+            {
+                //文本类型
+                case DingMsgType.text:
+                    Ding_Msg_Text msgText = new Ding_Msg_Text();
+                    msgText.Access_Token = DingDing.getAccessToken();
+                    msgText.agentid = SystemConfig.Ding_AgentID;
+                    msgText.touser = toUsers;
+                    msgText.content = gwf.Title + "\n发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    return DingTalk_Message.Msg_AgentText_Send(msgText);
+                //连接类型
+                case DingMsgType.link:
+                    Ding_Msg_Link msgLink = new Ding_Msg_Link();
+                    msgLink.Access_Token = DingDing.getAccessToken();
+                    msgLink.touser = toUsers;
+                    msgLink.agentid = SystemConfig.Ding_AgentID;
+                    msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
+                    msgLink.picUrl = "@lALOACZwe2Rk";
+                    msgLink.title = gwf.Title;
+                    msgLink.text = "发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    return DingTalk_Message.Msg_AgentLink_Send(msgLink);
+                //工作消息类型
+                case DingMsgType.OA:
+                    string[] users = toUsers.Split('|');
+                    string faildSend = "";
+                    Ding_Post_ReturnVal postVal = null;
+                    foreach (string user in users)
+                    {
+                        Ding_Msg_OA msgOA = new Ding_Msg_OA();
+                        msgOA.Access_Token = DingDing.getAccessToken();
+                        msgOA.agentid = SystemConfig.Ding_AgentID;
+                        msgOA.touser = user;
+                        msgOA.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/DingAction.aspx?ActionFrom=message&UserID=" + user
+                            + "&ActionType=ToDo&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node
+                            + "&WorkID=" + WorkID + "&FID=" + gwf.FID;
+                        //00是完全透明，ff是完全不透明，比较适中的透明度值是 1e
+                        msgOA.head_bgcolor = "FFBBBBBB";
+                        msgOA.head_text = "审批";
+                        msgOA.body_title = gwf.Title;
+                        Hashtable hs = new Hashtable();
+                        hs.Add("流程名", gwf.FlowName);
+                        hs.Add("当前节点", gwf.NodeName);
+                        hs.Add("申请人", gwf.StarterName);
+                        hs.Add("申请时间", gwf.RDT);
+                        msgOA.body_form = hs;
+                        msgOA.body_author = sender;
+                        postVal = DingTalk_Message.Msg_OAText_Send(msgOA);
+                        if (postVal.errcode != "0")
+                        {
+                            if (faildSend.Length > 0)
+                                faildSend += ",";
+                            faildSend += user;
+                        }
+                    }
+                    //有失败消息
+                    if (faildSend.Length > 0)
+                    {
+                        postVal.errcode = "500";
+                        postVal.errmsg = faildSend + "消息发送失败";
+                    }
+                    return postVal;
+            }
+            return null;
         }
 
     }

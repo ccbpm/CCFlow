@@ -45,7 +45,7 @@
     var modalContent = $("<div class='modal-content' style='border-radius:0px;text-align:left;'></div>");
     modalDialog.append(modalContent);
     //标题
-    var modalHead = $("<div class='modal-header' style='padding: 5px;'></div>");
+    var modalHead = $("<div class='modal-header' style='padding: 5px;background-color:#1d7dd4'></div>");
     if (showCloseBtn == null)
         showCloseBtn = true;
     //关闭按钮

@@ -147,6 +147,9 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.UIWidth, 0, "宽度(对自由表单有效)", true, false);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, 0, "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+
                 #endregion 傻瓜表单。
 
 
@@ -155,6 +158,13 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "高级JS设置";
+                rm.ClassMethodName = this.ToString() + ".DoCheckboxs()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -201,8 +211,16 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
-        #endregion
-    }
+        /// <summary>
+        /// 高级设置
+        /// </summary>
+        /// <returns></returns>
+        public  String DoCheckboxs() 
+        {
+		    return "../../Admin/FoolFormDesigner/MapExt/CheckBoxs.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+        }
+    #endregion
+}
     /// <summary>
     /// 实体属性s
     /// </summary>

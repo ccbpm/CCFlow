@@ -319,6 +319,16 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
+        /// 字段自定义样式查询
+        /// </summary>
+        public static string SQLOfCSSAttr
+        {
+            get
+            {
+                return "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='CSS' OR GroupKey='css' ";
+            }
+        }
+        /// <summary>
         /// 删除
         /// </summary>
         protected override void afterDelete()

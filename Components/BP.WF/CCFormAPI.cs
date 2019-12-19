@@ -751,11 +751,32 @@ namespace BP.WF
 
                 #region 外键字段
                 string UIIsEnable = dr["UIIsEnable"].ToString();
-                if (UIIsEnable.Equals("0")) //字段未启用
-                    continue;
-
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString();
+                if (UIIsEnable.Equals("0")) //字段未启用
+                {
+                    me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                    if (me == null)
+                    {
+                        continue;
+                    }
+
+                    SFTable sfTable = new SFTable(uiBindKey);
+
+                    String fullSQL = sfTable.SelectStatement;
+                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = BP.WF.Glo.DealExp(fullSQL, null, null);
+
+                    DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+
+                    dt.TableName = uiBindKey;
+
+                    dt.Columns[0].ColumnName = "No";
+                    dt.Columns[1].ColumnName = "Name";
+
+                    myds.Tables.Add(dt);
+                    continue;
+                }
 
                 #region 处理下拉框数据范围. for 小杨.
                 me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;

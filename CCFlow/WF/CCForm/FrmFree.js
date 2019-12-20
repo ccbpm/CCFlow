@@ -5,8 +5,10 @@ function GenerFreeFrm(mapData, frmData) {
 
     //循环FrmRB
     for (var i in frmData.Sys_FrmRB) {
-        var frmLab = frmData.Sys_FrmRB[i];
-        var label = figure_Template_Rb(frmLab);
+        var frmRB = frmData.Sys_FrmRB[i];
+        if (frmRB.AtPara.indexOf("@MyDataType=4") != -1)
+            continue;
+        var label = figure_Template_Rb(frmRB);
         $('#CCForm').append(label);
     }
 
@@ -426,8 +428,8 @@ function figure_Template_Dtl(frmDtl, ext) {
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='Dtl_" + frmDtl.No + "' src='" + src +
-                 "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='atuo' /></iframe>");
+        "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
+        "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='atuo' /></iframe>");
     if (pageData.IsReadonly) {
 
     } else {
@@ -546,8 +548,8 @@ function figure_Template_IFrame(fram) {
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
-	                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
-	                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+        "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
+        "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
     eleHtml.append(eleIframe);
 
@@ -820,7 +822,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
         if (mapAttr.UIContralType == 1) { //DDL
             //多选下拉框
-            eleHtml += "<select style='padding:0px;'  class='form-control " + mapAttr.CSS + "'  data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            eleHtml += "<select style='padding:0px;'  class='form-control " + mapAttr.CSS + "'  data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         }
         return eleHtml;
     }
@@ -977,7 +979,7 @@ function figure_Template_Rb(frmRb) {
     var childLabEle = $('<label class="labRb"></label>');
     childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
-    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + "_" + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
     //    if (frmRb.UIIsEnable == false)
     //        childRbEle.attr('disabled', 'disabled');
 
@@ -1074,7 +1076,7 @@ function figure_Template_Image(frmImage) {
         }
 
         eleHtml.attr("id", frmImage.MyPK);
-        eleHtml.css('position', 'absolute').css('top', frmImage.Y + 'px').css('left', frmImage.X + 'px').css('width', frmImage.W).css('height', frmImage.H); ;
+        eleHtml.css('position', 'absolute').css('top', frmImage.Y + 'px').css('left', frmImage.X + 'px').css('width', frmImage.W).css('height', frmImage.H);;
     } else if (frmImage.ImgAppType == 3)//二维码  手机
     {
 
@@ -1206,14 +1208,14 @@ function connector_Template_Line(frmLine) {
     eleHtml.find('td').css('padding', '0px')
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
         eleHtml.find('td').css('padding', '0px')
-        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
-    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
-        .css("background", frmLine.BorderColor);
+            .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
+            .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
+            .css("background", frmLine.BorderColor);
     } else {
         eleHtml.find('td').css('padding', '0px')
-        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
-    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
-        .css("background", frmLine.BorderColor);
+            .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
+            .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
+            .css("background", frmLine.BorderColor);
     }
 
     return eleHtml;

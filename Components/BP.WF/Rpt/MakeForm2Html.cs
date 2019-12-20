@@ -966,7 +966,7 @@ namespace BP.WF
                                     {
                                         String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
                                         String src = SystemConfig.HostURLOfBS + "/DataUser/Siganture/";
-                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' style='height:60px;'  alt='图片丢失' /> ";
+                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\""+src+ "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
                                     }
                                     else
                                     {

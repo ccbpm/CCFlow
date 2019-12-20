@@ -1503,6 +1503,7 @@ namespace BP.Sys
 
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
+                map.AddTBString(MapAttrAttr.CSS, "0", "自定义样式", true, false, 1, 100, 20);
 
                 //参数属性.
                 map.AddTBAtParas(4000); //

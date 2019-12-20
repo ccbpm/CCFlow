@@ -153,6 +153,8 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
                 map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
 
                 #endregion 基本字段信息.
 

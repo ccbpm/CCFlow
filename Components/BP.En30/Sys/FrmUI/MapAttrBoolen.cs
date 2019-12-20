@@ -148,7 +148,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
                 //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, 0, "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
 
                 #endregion 傻瓜表单。
 

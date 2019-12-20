@@ -140,6 +140,8 @@ namespace BP.Sys.FrmUI
                     "@0=yyyy-MM-dd@1=yyyy-MM-dd HH:mm@2=yyyy-MM-dd HH:mm:ss@3=yyyy-MM@4=HH:mm@5=HH:mm:ss@6=MM-dd");
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
 
                 #endregion 基本信息.
 

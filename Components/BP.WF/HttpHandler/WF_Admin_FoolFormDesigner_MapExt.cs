@@ -716,6 +716,36 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
             return BP.Tools.Json.ToJson(ds);
         }
+
+        /// <summary>
+        /// 复选框选择事件
+        /// </summary>
+        /// <returns></returns>
+        public string CheckBoxs_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //放入表单字段.
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+            //属性.
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.Retrieve();
+
+            //把分组加入里面.
+            GroupFields gfs = new GroupFields(this.FK_MapData);
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupFields"));
+
+            FrmRBs rbs = new FrmRBs();
+            rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
+            //加入单选按钮.
+            ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
+
+
+            return BP.Tools.Json.ToJson(ds);
+        }
         /// <summary>
         /// 执行保存
         /// </summary>

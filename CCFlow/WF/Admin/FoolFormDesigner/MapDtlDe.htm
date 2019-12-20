@@ -36,7 +36,8 @@
 
 		    $("#trTitle").append("<th>序</th>");
 
-		    var colNum = 0;
+            var colNum = 0;
+            var fields = "WorkID,ReturnNode,ReturnNodeName,Returner,ReturnerName,ReturnToNode,ReturnToEmp,BeiZhu,RDT,IsBackTracking,";
 		    //生成表头..
 		    for (var i = 0; i < attrs.length; i++) {
 
@@ -44,7 +45,8 @@
 		        var visable = attr.UIVisible;
 		        if (visable == 0)
 		            continue;
-
+                if (fk_mapData == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1)
+                    continue;
 
 		        colNum++;
 

@@ -961,7 +961,17 @@ namespace BP.WF
                                 }
                                 else
                                 {
-                                    text = en.GetValStrByKey(attr.KeyOfEn);
+                                    //判断是不是图片签名
+                                    if (attr.IsSigan == true)
+                                    {
+                                        String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
+                                        String src = SystemConfig.HostURLOfBS + "/DataUser/Siganture/";
+                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' style='height:60px;'  alt='图片丢失' /> ";
+                                    }
+                                    else
+                                    {
+                                        text = en.GetValStrByKey(attr.KeyOfEn);
+                                    }
                                     if (attr.IsRichText == true)
                                     {
                                         text = text.Replace("white-space: nowrap;", "");

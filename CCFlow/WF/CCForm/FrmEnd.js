@@ -648,16 +648,16 @@ function PopMapExt(mapAttr, mapExt, frmData) {
             PopBranches(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
             break;
         case "PopBindSFTable": //绑定字典表，外部数据源.
-            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-            PopBindSFTable(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+            //var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            PopBindSFTable(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
             break;
         case "PopBindEnum": //绑定枚举.
-            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-            PopBindEnum(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+            //var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            PopBindEnum(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
             break;
         case "PopTableList": //绑定实体表.
-            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-            PopTableList(mapExt, val); //调用 /CCForm/JS/Pop.js 的方法来完成.
+            //var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            PopTableList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
             break;
         case "PopGroupList": //分组模式.
             PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.

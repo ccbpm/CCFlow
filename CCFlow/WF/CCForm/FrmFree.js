@@ -811,10 +811,8 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     //checkbox 类型.
     if (mapAttr.MyDataType == 4) { // AppBoolean = 7
-
-
-        eleHtml += "<div class='checkbox' ><label style='width:100%;' > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' name='CB_" + mapAttr.KeyOfEn + "'/>";
-        eleHtml += mapAttr.Name + '</label></div>';
+        eleHtml += "<label style='width:100%;' > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' name='CB_" + mapAttr.KeyOfEn + "'/>";
+        eleHtml += mapAttr.Name + '</label>';
         return eleHtml;
     }
 

@@ -53,7 +53,7 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
         var webUser = new WebUser();
-        var isReadOnly = GetQueryString("IsReadOnly")=="1"?true:false;
+        var isReadOnly = GetQueryString("IsReadOnly");
        
 
         $(function () {
@@ -151,24 +151,34 @@
                         _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
 
-                        if (chRole == 1 && isReadOnly == false) {
-
-
-                            _Html += "<td style='text-align: center'><input type='text'  id='StartDT_" + chNode.FK_Node + "' name='StartDT_" + chNode.FK_Node + "' value='" + chNode.StartDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"StartDT\");}})'  class='form-control Wdate'/></td>";
-                            _Html += "<td style='text-align: center'><input type='text' id='EndDT_" + chNode.FK_Node + "' name='EndDT_" + chNode.FK_Node + "' value='" + chNode.EndDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"EndDT\");}})'  class='form-control Wdate'/></td>";
-                            _Html += "<td style='text-align: center'><input type='text' id='GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.GT + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
-                            _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
-                            _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
-
-                        } else {
+                        if (isReadOnly == "1") {
                             _Html += "<td style='text-align: center'>" + chNode.StartDT + "</td>";
                             _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";
                             _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
                             _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
                             _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
+                        } else {
+                            if (chRole == 1||chRole==3 || isReadOnly == "0") {
+
+
+                                _Html += "<td style='text-align: center'><input type='text'  id='StartDT_" + chNode.FK_Node + "' name='StartDT_" + chNode.FK_Node + "' value='" + chNode.StartDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                    + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"StartDT\");}})'  class='form-control Wdate'/></td>";
+                                _Html += "<td style='text-align: center'><input type='text' id='EndDT_" + chNode.FK_Node + "' name='EndDT_" + chNode.FK_Node + "' value='" + chNode.EndDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
+                                    + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"EndDT\");}})'  class='form-control Wdate'/></td>";
+                                _Html += "<td style='text-align: center'><input type='text' id='GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.GT + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
+                                _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
+                                _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
+
+                            } else {
+                                _Html += "<td style='text-align: center'>" + chNode.StartDT + "</td>";
+                                _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";
+                                _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
+                                _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
+                                _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
+                            }
                         }
+
+                        
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
                         _Html += "<td style='text-align: center'>___</td>";
@@ -189,7 +199,7 @@
                 _Html = "<tr>";
                 _Html += "<td>" + gwf.RDT + "</td>";
 
-                if (gwf.SDTOfFlow == "") {
+                if (gwf.SDTOfFlow == null || gwf.SDTOfFlow == "" || gwf.SDTOfFlow == undefined) {
                     _Html += "<td>无</td>";
                     _Html += "<td>0秒</td>";
                     _Html += "<td>无</td>";
@@ -206,12 +216,16 @@
                         _Html += "<td>正常</td>";
                     }
                 }
-
-                if (chRole == 3 && isReadOnly == false)
-                    _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
-                else {
+                if (isReadOnly == "1") {
                     $("#IsChangeDT").hide();
+                } else {
+                     if (chRole == 3|| isReadOnly == "0")
+                        _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
+                    else {
+                        $("#IsChangeDT").hide();
                 }
+                }
+               
                 _Html += "</tr>";
 
                 $("#FlowCH").html(_Html);
@@ -219,8 +233,13 @@
             }
 
             //可调整时限增加保存按钮
-            if (chRole == 1 || isReadOnly == false)
-                $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
+            if (isReadOnly == "1") {
+
+            } else {
+                if (chRole == 1||chRole==3  || isReadOnly == "0")
+                    $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
+            }
+            
 
 
 

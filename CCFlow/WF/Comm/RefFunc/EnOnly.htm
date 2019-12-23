@@ -71,6 +71,7 @@
         var webUser = new WebUser();
         $(function () {
             pkVal = GetPKVal();
+            debugger
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1 && pkVal == null)
                 window.parent.$('#EnLayout').layout('remove', 'west');
@@ -292,8 +293,13 @@
                             $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-                        var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue).target;
-                        $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+                        var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
+                        if (target != null) {
+                            target = target.target;
+                             $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+                        }
+                           
+                       
 
                         //$('#DDL_' + mapAttr.KeyOfEn).combotree('select', defValue);
                     } else {

@@ -2515,6 +2515,19 @@ namespace BP.WF
                 return this.HisNodeWorkType.ToString();
             }
         }
+
+
+        public int CHRole
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.CHRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.CHRole, value);
+            }
+        }
         #endregion
 
         #region 公共方法 (用户执行动作之后,所要做的工作)

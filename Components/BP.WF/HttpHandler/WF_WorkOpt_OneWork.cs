@@ -412,6 +412,33 @@ namespace BP.WF.HttpHandler
                         ht.Add("CanFlowPress", 1);
                     }
 
+                   
+
+                    //是否可以调整工时
+                    sql = "SELECT CHRole \"CHRole\" From WF_GenerWorkerList G,WF_Node N Where G.FK_Node=N.NodeID AND N.CHRole!=0 AND WorkID=" + this.WorkID +" AND FK_Emp='"+WebUser.No+"'";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (Int32.Parse(dr["CHRole"].ToString()) == 1 || Int32.Parse(dr["CHRole"].ToString()) == 3)
+                            {
+                                ht.Add("CanChangCHRole", 1);
+                                break;
+                            }
+                            else
+                            {
+                                ht.Add("CanChangCHRole", 2);
+                            }
+
+                        }
+
+                        
+
+                    }
+
+
+
                     break;
                 case WFState.Complete: // 完成.
                 case WFState.Delete:   // 逻辑删除..
@@ -427,6 +454,12 @@ namespace BP.WF.HttpHandler
                         if (ht.ContainsKey("CanRollBack") == true)
                             ht.Remove("CanRollBack");
                         ht.Add("CanRollBack", 1);
+                    }
+
+                    if (nd.CHRole != 0)//0禁用 1 启用 2 只读 3 启用并可以调整流程应完成时间
+                    {
+                        ht.Add("CanChangCHRole", 2);
+
                     }
 
 

@@ -355,6 +355,17 @@ namespace BP.WF.Template
         }
         #endregion
 
+        public string DoUp()
+        {
+            this.DoOrderUp(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, this.FK_Node, SelectAccperAttr.Idx);
+            return "";
+        }
+        public string DoDown()
+        {
+            this.DoOrderDown(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, this.FK_Node, SelectAccperAttr.Idx);
+            return "";
+        }
+
 
         protected override bool beforeInsert()
         {
@@ -368,6 +379,7 @@ namespace BP.WF.Template
             //注释掉了.
             // this.MyPK = this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp+"_"+this.Idx;
             this.MyPK = this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp;
+            this.Idx = DBAccess.RunSQLReturnValInt("SELECT Max(idx) +1 FROM WF_SelectAccper WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID, 1);
         }
         protected override bool beforeUpdateInsertAction()
         {

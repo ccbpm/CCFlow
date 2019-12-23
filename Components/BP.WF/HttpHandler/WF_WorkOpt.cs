@@ -669,7 +669,9 @@ namespace BP.WF.HttpHandler
 
             //查询出来,已经选择的人员.
             SelectAccpers sas = new SelectAccpers();
-            int i = sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+            int i = sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID,
+                this.WorkID, SelectAccperAttr.Idx);
+
             if (i == 0)
             {
                 //获得最近的一个workid.
@@ -765,7 +767,8 @@ namespace BP.WF.HttpHandler
 
                 //查询出来,已经选择的人员.
                 SelectAccpers sas = new SelectAccpers();
-                sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+                sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID,
+                    this.WorkID, SelectAccperAttr.Idx);
 
                 return sas.ToJson();
             }
@@ -792,7 +795,7 @@ namespace BP.WF.HttpHandler
             int toNodeID = this.GetRequestValInt("ToNode");
             //查询出来,已经选择的人员.
             SelectAccpers sas = new SelectAccpers();
-            sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+            sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.Idx);
             return sas.ToJson();
         }
         /// <summary>

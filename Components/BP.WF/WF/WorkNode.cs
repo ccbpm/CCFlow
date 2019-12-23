@@ -2322,9 +2322,6 @@ namespace BP.WF
             //执行更新。
             if (this.IsStopFlow == false)
                 this.HisGenerWorkFlow.Update();
-
-
-
             return BP.WF.Glo.multilingual("@流程已经完成.", "WorkNode", "workflow_completed");
         }
         #endregion 附属功能

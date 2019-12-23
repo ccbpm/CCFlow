@@ -29,9 +29,17 @@ namespace BP.Frm
         public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas,string billNo=null)
         {
             GenerBill gb = new GenerBill();
-            int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
-            if (i == 1)
-                return gb.WorkID;
+            if (DataType.IsNullOrEmpty(billNo) == true)
+            {
+                int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
+                if (i == 1)
+                    return gb.WorkID;
+            }else
+            {
+                int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.BillNo, billNo);
+                if (i == 1)
+                    return gb.WorkID;
+            }
 
             FrmBill fb = new FrmBill(frmID);
 
@@ -41,6 +49,9 @@ namespace BP.Frm
             gb.StarterName = BP.Web.WebUser.Name;
             gb.FrmName = fb.Name; //单据名称.
             gb.FrmID = fb.No; //单据ID
+
+            if (DataType.IsNullOrEmpty(billNo) == false)
+                gb.BillNo = billNo ; //BillNo
 
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
             gb.RDT = BP.DA.DataType.CurrentDataTime;

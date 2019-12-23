@@ -56,17 +56,40 @@ namespace BP.Frm
             string userNo = GetRequestVal("UserNo");
             if (DataType.IsNullOrEmpty(userNo) == true)
                 userNo = WebUser.No;
-            string powerSQL = "SELECT FrmID," +
-                "(CASE WHEN IsEnableAll=1 THEN true " +
-                "ELSE(CASE WHEN IsEnableUser=1 AND INSTR(IDOfUsers,'," + userNo + ",')>0 THEN true " +
-                "ELSE(CASE WHEN IsEnableStation=1 AND (SELECT COUNT(*) From Port_DeptEmpStation D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfStations,D.FK_Station))>0 THEN true " +
-                "ELSE(CASE WHEN IsEnableDept=1 AND (SELECT COUNT(*) From Port_DeptEmp D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfDepts,D.FK_Dept))>0 THEN true " +
-                "ELSE false END)" +
-                "END)" +
-                "END)" +
-                "END) AS IsView   FROM Frm_CtrlModel WHERE CtrlObj='BtnSearch'";
 
-            sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData M, ("+ powerSQL+") AS B WHERE M.No=B.FrmID AND (M.EntityType=1 OR M.EntityType=2) AND B.IsView=1 ORDER BY M.IDX ";
+            string powerSQL = "";
+
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                powerSQL = "SELECT FrmID," +
+              "(CASE WHEN IsEnableAll=1 THEN true " +
+              "ELSE(CASE WHEN IsEnableUser=1 AND INSTR(IDOfUsers,'," + userNo + ",')>0 THEN true " +
+              "ELSE(CASE WHEN IsEnableStation=1 AND (SELECT COUNT(*) From Port_DeptEmpStation D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfStations,D.FK_Station))>0 THEN true " +
+              "ELSE(CASE WHEN IsEnableDept=1 AND (SELECT COUNT(*) From Port_DeptEmp D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND INSTR(IDOfDepts,D.FK_Dept))>0 THEN true " +
+              "ELSE false END)" +
+              "END)" +
+              "END)" +
+              "END) AS IsView   FROM Frm_CtrlModel WHERE CtrlObj='BtnSearch'";
+
+                sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData M, (" + powerSQL + ") AS B WHERE M.No=B.FrmID AND (M.EntityType=1 OR M.EntityType=2) AND B.IsView=1 ORDER BY M.IDX ";
+
+            }
+            else 
+            {
+                powerSQL = "SELECT FrmID," +
+             "(CASE WHEN IsEnableAll=1 THEN true " +
+             "ELSE(CASE WHEN IsEnableUser=1 AND 1=1 THEN true " +
+             "ELSE(CASE WHEN IsEnableStation=1 AND (SELECT COUNT(*) From Port_DeptEmpStation D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND  1=1 THEN true " +
+             "ELSE(CASE WHEN IsEnableDept=1 AND (SELECT COUNT(*) From Port_DeptEmp D,Port_Emp E WHERE D.FK_Emp = E.No AND E.No='" + userNo + "' AND  1=1 THEN true " +
+             "ELSE false END)" +
+             "END)" +
+             "END)" +
+             "END) AS IsView   FROM Frm_CtrlModel WHERE CtrlObj='BtnSearch'";
+
+                sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData M  WHERE  (M.EntityType=1 OR M.EntityType=2)   ORDER BY M.IDX ";
+
+            }
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -78,6 +101,50 @@ namespace BP.Frm
             }
 
             return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 根据单据编号创建或者更新实体信息.
+        /// </summary>
+        /// <returns>返回url：打开该实体的url.</returns>
+        public string CCFrom_NewFrmBillAsSpecBillNo()
+        {
+
+            string billNo = this.GetRequestVal("BillNo");
+            string title = this.GetRequestVal("Title");
+            string paras = this.GetRequestVal("Paras");
+
+            if (DataType.IsNullOrEmpty(paras) == true)
+                paras = "";
+            AtPara ap = new AtPara(paras);
+
+            GEEntity en = new GEEntity(this.FrmID);
+            int i = en.Retrieve("BillNo", billNo);
+            if (i == 0)
+            {
+                Int64 workid = BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, WebUser.No, ap.HisHT, billNo);
+                en = new GEEntity(this.FrmID, workid);
+                if (DataType.IsNullOrEmpty(title) == false)
+                {
+                    en.SetValByKey("Title", title);
+                    en.Update();
+                }
+                return "url@../../WF/CCBill/MyBill.htm?FrmID=" + this.FrmID + "&OID=" + workid;
+            }
+            else
+            {
+                if (DataType.IsNullOrEmpty(paras) == false)
+                {
+                    en.Copy(ap.HisHT);
+                    en.Update();
+                }
+
+                if (DataType.IsNullOrEmpty(title) == false && en.GetValStrByKey("Title").Equals(title)==false)
+                {
+                    en.SetValByKey("Title", title);
+                    en.Update();
+                }
+            }
+            return "url@../../WF/CCBill/MyBill.htm?FrmID=" + this.FrmID + "&OID=" + en.OID;
         }
         /// <summary>
         /// 获得指定的目录下可以操作的单据列表
@@ -101,10 +168,10 @@ namespace BP.Frm
             string userNo = GetRequestVal("UserNo");
             if (DataType.IsNullOrEmpty(userNo) == true)
                 userNo = WebUser.No;
-            foreach(CtrlModel ctrlM in ctrlMs)
+            foreach (CtrlModel ctrlM in ctrlMs)
             {
                 int isTrue = 0;
-                if(ctrlM.IsEnableAll == true)
+                if (ctrlM.IsEnableAll == true)
                     isTrue = 1;
                 else
                 {
@@ -115,7 +182,7 @@ namespace BP.Frm
                         stations = stations.Trim(',');
                         stations = stations.Replace(",", "','");
                         stations = "'" + stations + "'";
-                        string sql = "SELECT * From Port_DeptEmpStation DES,Port_Emp E WHERE  E.No = DES.FK_Emp AND E.No='"+ userNo + "' AND DES.FK_Station IN(" + stations+")";
+                        string sql = "SELECT * From Port_DeptEmpStation DES,Port_Emp E WHERE  E.No = DES.FK_Emp AND E.No='" + userNo + "' AND DES.FK_Station IN(" + stations + ")";
                         if (DBAccess.RunSQLReturnCOUNT(sql) > 1)
                             isTrue = 1;
                     }
@@ -123,7 +190,7 @@ namespace BP.Frm
                     if (ctrlM.IsEnableUser == true && isTrue == 0)
                     {
                         string emps = ctrlM.IDOfUsers;
-                       if(emps.Contains(","+ userNo + ",") == true)
+                        if (emps.Contains("," + userNo + ",") == true)
                             isTrue = 1;
                     }
 
@@ -176,10 +243,7 @@ namespace BP.Frm
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "FrmView";
             return BP.Tools.Json.ToJson(dt);
-
-
         }
-       
         /// <summary>
         /// 删除实体根据BillNo
         /// </summary>
@@ -188,7 +252,7 @@ namespace BP.Frm
         {
 
             GEEntity en = new GEEntity(this.FrmID);
-            int i= en.Retrieve("BillNo", this.GetRequestVal("BillNo"));
+            int i = en.Retrieve("BillNo", this.GetRequestVal("BillNo"));
             if (i == 0)
                 return "err@单据编号为" + this.GetRequestVal("BillNo") + "的数据不存在.";
 
@@ -201,7 +265,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string CCFrom_DeleteFrmEntityByOID()
         {
-            GEEntity en = new GEEntity(this.FrmID,this.OID);
+            GEEntity en = new GEEntity(this.FrmID, this.OID);
             en.Delete();
             return "删除成功";
         }

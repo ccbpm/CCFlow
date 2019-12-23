@@ -214,14 +214,14 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
     var html = "";
     html += "<table style='height:100px;width: 100%; table-layout: fixed;border:none;margin:0px; padding:0px;'>";
     html += "<tr>";
-    html += "<td style='border:none;width:30%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
-    html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><table ><tr><td><img src='" + url + "' style='width:18px;'/></td><td ><nobr>" + nodeName + "</nobr></td></tr></table></td>";
-    html += "<td style='border:none;margin:0px; padding:0px;width:30%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
+    //html += "<td style='border:none;width:30%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
+    html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><table style='border:none;'><tr><td style='border:none;'><img src='" + url + "' style='width:18px;'/></td></tr><tr><td style='border:none;'><nobr>" + nodeName + "</nobr></td></tr><tr><td style='border:none;'>" + barUrlRight + "</td></tr><tr><td style='border:none;'>" + docs + "</td></tr></table></td>";
+    //html += "<td style='border:none;margin:0px; padding:0px;width:30%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
     html += "<tr>";
 
-    html += "<tr>";
-    html += "<td colspan=3 style='border:none;' >" + docs + "</td>";
-    html += "<tr>";
+    //html += "<tr>";
+    //html += "<td colspan=3 style='border:none;' >" + docs + "</td>";
+    //html += "<tr>";
     html += "</table>";
 
     return html;

@@ -155,10 +155,13 @@
                 //row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
                 row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
+                row += "<td style='width:40px;'><a href=\"javascript:Up('" + sa.MyPK + "');\" >上移</a></td>";
+                row += "<td style='width:40px;'><a href=\"javascript:Down('" + sa.MyPK + "');\" >下移</a></td>";
+
                 if (isDel == true)
-                    row += "<td><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
+                    row += "<td style='width:40px;'><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
                 else
-                    row += "<td> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
+                    row += "<td style='width:40px;'> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
 
                 row += "</tr>";
 
@@ -184,6 +187,17 @@
         }
 
         function Ref() {
+            window.location.href = window.location.href;
+        }
+
+        function Up(mypk) {
+            var en = new Entity("BP.WF.Template.SelectAccper", mypk);
+            en.DoMethodReturnString("DoUp");
+            window.location.href = window.location.href;
+        }
+        function Down(mypk) {
+              var en = new Entity("BP.WF.Template.SelectAccper", mypk);
+            en.DoMethodReturnString("DoDown");
             window.location.href = window.location.href;
         }
 
@@ -479,11 +493,12 @@
         <!-- <caption>下一步接受人员列表</caption>-->
         <thead>
             <tr id="title">
-                <th style="width:40px;">#</th>
+                <td style="width:40px; font-weight:bolder">#</td>
                 <!--<th>编号 </th>-->
-                <th style="width:60px;">姓名</th>
-                <th>所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></th>
-                <th style="width:40px;">操作</th>
+                <td style="width:60px; font-weight:bolder">姓名</td>
+                <td style="font-weight:bolder">所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></td>
+                <td style="width:40px; font-weight:bolder" colspan="3">操作</td>
+
             </tr>
         </thead>
         <tbody>
@@ -508,7 +523,7 @@
 
             <a href="javascript:Help()">查询帮助?</a>
 
-            <div id="HelpInfo" >
+            <div id="HelpInfo">
                 <ul>
                     <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
                     <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>

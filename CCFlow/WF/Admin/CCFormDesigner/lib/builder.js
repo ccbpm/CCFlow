@@ -342,7 +342,7 @@ BuilderProperty.TYPE_URL = 'URL';
 
 /**Line widths*/
 BuilderProperty.LINE_WIDTHS = [
-    { Text: '1px', Value: '1' }, { Text: '2px', Value: '2' }, { Text: '3px', Value: '3' },
+    { Text: '0.5px', Value: '0.5' }, { Text: '1px', Value: '1' }, { Text: '2px', Value: '2' }, { Text: '3px', Value: '3' },
     { Text: '4px', Value: '4' }, { Text: '5px', Value: '5' }, { Text: '6px', Value: '6' },
     { Text: '7px', Value: '7' }, { Text: '8px', Value: '8' }, { Text: '9px', Value: '9' },
     { Text: '10px', Value: '10'}];

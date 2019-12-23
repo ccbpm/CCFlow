@@ -1199,21 +1199,40 @@ function figure_Template_Attachment(frmAttachment) {
     return eleHtml;
 }
 
+// function connector_Template_Line(frmLine) {
+//     var eleHtml = '';
+//     eleHtml = '<table><tr><td></td></tr></table>';
+//     eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1 + 'px').css('left', frmLine.X1 + 'px');
+//     eleHtml.find('td').css('padding', '0px')
+//     if (navigator.userAgent.indexOf('Firefox') >= 0) {
+//         eleHtml.find('td').css('padding', '0px')
+//             .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
+//             .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
+//             .css("background", frmLine.BorderColor);
+//     } else {
+//         eleHtml.find('td').css('padding', '0px')
+//             .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
+//             .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
+//             .css("background", frmLine.BorderColor);
+//     }
+
+//     return eleHtml;
+// }
 function connector_Template_Line(frmLine) {
-    var eleHtml = '';
-    eleHtml = '<table><tr><td></td></tr></table>';
-    eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1 + 'px').css('left', frmLine.X1 + 'px');
-    eleHtml.find('td').css('padding', '0px')
+    var eleHtml = '';    
+    //姜玲 20191219 解决画1个像素宽度问题   
+    eleHtml = '<div><div>';
+    eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1).css('left', frmLine.X1);
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
-        eleHtml.find('td').css('padding', '0px')
-            .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
-            .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
-            .css("background", frmLine.BorderColor);
+        eleHtml.css('padding', '0px')
+        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
+    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2: Math.abs(frmLine.Y1 - frmLine.Y2))
+        .css("background", frmLine.BorderColor);
     } else {
-        eleHtml.find('td').css('padding', '0px')
-            .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
-            .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
-            .css("background", frmLine.BorderColor);
+        eleHtml.css('padding', '0px')
+        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0.5 : Math.abs(frmLine.X1 - frmLine.X2))
+    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
+        .css("background", frmLine.BorderColor).css("border-color",frmLine.BorderColor == 'Black'?"":frmLine.BorderColor);
     }
 
     return eleHtml;

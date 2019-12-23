@@ -53,6 +53,8 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
         var webUser = new WebUser();
+        var isReadOnly = GetQueryString("IsReadOnly")=="1"?true:false;
+       
 
         $(function () {
             InitPage();
@@ -149,7 +151,7 @@
                         _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
                         _Html += "<td style='text-align: center'>___</td>";
 
-                        if (chRole == 1) {
+                        if (chRole == 1 && isReadOnly == false) {
 
 
                             _Html += "<td style='text-align: center'><input type='text'  id='StartDT_" + chNode.FK_Node + "' name='StartDT_" + chNode.FK_Node + "' value='" + chNode.StartDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
@@ -205,7 +207,7 @@
                     }
                 }
 
-                if (chRole == 3)
+                if (chRole == 3 && isReadOnly == false)
                     _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
                 else {
                     $("#IsChangeDT").hide();
@@ -217,7 +219,7 @@
             }
 
             //可调整时限增加保存按钮
-            if (chRole == 1)
+            if (chRole == 1 || isReadOnly == false)
                 $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
 
 

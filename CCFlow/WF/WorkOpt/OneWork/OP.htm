@@ -49,6 +49,10 @@
             if (data.CanFlowOver == "1")
                 html += addFlowOver();
 
+            //调整工天
+            if (data.CanChangCHRole != undefined)
+                html += addCHNode(data.CanChangCHRole);
+
 
             $("#ccop").append(html);
 
@@ -269,6 +273,18 @@
 
         function addBlockEnd() {
             return "</td></tr></table>";
+        }
+
+        function addCHNode(data) {
+            var html = addBlockBegin("调整工天");
+            var IsReadOnly = 1;
+            if (data == 1)
+                IsReadOnly = 0;
+
+           html += "功能执行:<a href='../CH.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") +"&FK_Node=" + GetQueryString("FK_Node") + "&IsReadOnly="+IsReadOnly+"' >调整工天</a>。";
+           html += "<br />说明：调整工天，计算工时。";
+
+            return html;
         }
     </script>
     <div id="ccop" style="width: 100%; height: auto">

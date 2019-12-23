@@ -1054,8 +1054,8 @@ namespace BP.WF.HttpHandler
             attr.MyPK = this.FK_MapData + "_" + newNo;
             attr.GroupID = iGroupID;
             attr.MyDataType = fType;
-            if(DataType.IsNullOrEmpty(this.GetRequestVal("FK_Flow")))
-            attr.SetPara("FK_Flow", this.GetRequestVal("FK_Flow"));
+            if(DataType.IsNullOrEmpty(this.GetRequestVal("FK_Flow")) == false)
+                attr.SetPara("FK_Flow", this.GetRequestVal("FK_Flow"));
 
             int colspan = attr.ColSpan;
             attr.Para_FontSize = 12;

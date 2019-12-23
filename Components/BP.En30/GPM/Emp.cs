@@ -404,6 +404,11 @@ namespace BP.GPM
                 sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
             DBAccess.RunSQL(sql);
 
+            //修改Port_Emp中的缓存
+            BP.Port.Emp emp = new BP.Port.Emp(this.No);
+            emp.FK_Dept=this.FK_Dept;
+            emp.Update();
+
             base.afterInsertUpdateAction();
         }
         /// <summary>

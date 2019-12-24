@@ -103,13 +103,13 @@
                     for (var i = 0; i < mapAttrs.length; i++) {
                         if (mapAttrs[i].AtPara.indexOf("FK_Flow=" + pageData.FK_Flow) != -1) {
                                  idx++;
-                        if (i==0 ||i% 2 == 0)
+                        if ((idx+1)% 2 == 0)
                             html += "<tr>";
                         html += "<td>" + mapAttrs[i].Name + "</td>";
                         html += "<td  style='text-align:left'>";
                         html += InitAthMapAttrOfCtrlFool(null, mapAttrs[i],null);
                         html += "</td>";
-                        if ((i+1)% 2 == 0)
+                        if (idx % 2 == 0)
                             html += "</tr>";
                         }
                        

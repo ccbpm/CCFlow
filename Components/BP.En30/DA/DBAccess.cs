@@ -274,9 +274,21 @@ namespace BP.DA
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
                 || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                string sql = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
-                DBAccess.RunSQL(sql);
-                return;
+
+                try
+                {
+                    string sql = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
+                    DBAccess.RunSQL(sql);
+                }catch(Exception ex)
+                {
+                    /*如果没有此列，就自动创建此列.*/
+                    if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                    {
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+                    throw ex;
+                }
             }
 
             // System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();

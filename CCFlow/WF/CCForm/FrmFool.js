@@ -1043,7 +1043,6 @@ function InitMapAttrOfCtrl(mapAttr) {
                     IsLoadUEditor = true;
                     
                 }
-                //document.BindEditorMapAttr = mapAttr; //存到全局备用.
                 document.BindEditorMapAttr.push(mapAttr); //存到全局备用
                 //设置编辑器的默认样式
                 var styleText = "text-align:left;font-size:12px;";

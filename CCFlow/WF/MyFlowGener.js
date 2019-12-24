@@ -2115,13 +2115,13 @@ function initModal(modalType, toNode) {
     //初始化退回窗口的SRC.
     var html = '<div style="width:100%; height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
         '<div class="modal-dialog">'
-        + '<div class="modal-content" style="border-radius:0px;width:800px;height:450px;text-align:left;">'
+        + '<div class="modal-content" style="border-radius:0px;width:900px;height:560px;text-align:left;">'
         + '<div class="modal-header">'
         + '<button id="ClosePageBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
         + '<button id="MaxSizeBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
         + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
         + '</div>'
-        + '<div class="modal-body" style="margin:0px;padding:0px;height:450px">'
+        + '<div class="modal-body" style="margin:0px;padding:0px;height:560px">'
         + '<iframe style="width:100%;border:0px;height:100%;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
         + '</div>'
         + '</div><!-- /.modal-content -->'

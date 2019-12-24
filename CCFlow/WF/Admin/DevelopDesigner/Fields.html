@@ -19,10 +19,60 @@
     <script src="../../Scripts/QueryString.js"></script>
     <script src="../../Scripts/config.js"></script>
     <script src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/PinYin.js"></script> 
+    <script src="../../Scripts/PinYin.js"></script>
+    <script src="../../Scripts/vue.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
 
 </head>
 <body>
+
+    <table id="App" style="width:100%">
+        <tr>
+            <th>序</th>
+            <th>字段</th>
+            <th>英文名</th>
+            <th>类型</th>
+            <th>操作</th>
+        </tr>
+
+        <tr v-for="(value,index) in listData.data">
+            <td>{{index+1}}</td>
+            <td>{{value.KeyOfEn}}</td>
+            <td>{{value.Name}}</td>
+            <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
+        </tr>
+
+    </table>
+
+    <script type="text/javascript">
+
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                listData: [],
+            },
+            created() {
+                var frmID = GetQueryString("FrmID");
+                var ens = new Entities("BP.Sys.MapAttrs");
+                ens.Retrieve("FK_MapData", frmID, "Idx");
+                this.listData = ens.GetEns();
+                // console.log(this.listData);
+            },
+            methods: {
+                Edit: function (myPK) {
+                    var url = "/WF/Comm/En.htm?EnName=BP.Sys.MapAttr&MyPK=" + myPK;
+                    WinOpen(url);
+                },
+                Insert: function () {
+                    var workid = GetQueryString("WorkID");
+                    var url = "/WF/Comm/En.htm?EnName=BP.TGK.ND14Rpt&OID=" + workid;
+                    WinOpen(url);
+                }
+            }
+
+        })
+
+    </script>
 
 
 </body>

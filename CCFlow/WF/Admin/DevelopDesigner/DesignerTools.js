@@ -1,8 +1,15 @@
 ﻿//预览.
-function PreviewForm()
-{
+function PreviewForm() {
+    var frmID = GetQueryString("FK_MapData");
+    var url = "FrmView.htm?FrmID=" + frmID;
+    window.open(url);
+}
+
+//另存为.
+function SaveAs() {
     alert('在实现中..');
 }
+
 
 //导入表单模版.
 function ImpFrmTemplate() {
@@ -11,9 +18,8 @@ function ImpFrmTemplate() {
 
 //导入现有字段.
 function ImpFrmFields() {
-
-    var url = "Fields.html?FrmID=" + GetQueryString("FrmID");
+    var frmID = GetQueryString("FK_MapData");
+    var url = "Fields.html?FrmID=" + frmID;
     window.open(url);
-   // alert('在实现中..');
+    // alert('在实现中..');
 }
- 

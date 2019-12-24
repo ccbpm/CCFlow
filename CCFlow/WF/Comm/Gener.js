@@ -1800,11 +1800,10 @@ var Entities = (function () {
         GetEns: function () {
             // { data: [{}, {}, {}], length: 3, name: 'xxx' };
             var result = [];
-            for (const key in this) {
+            for (var key in this) {
                 console.log(typeof this[key]);
                 if (typeof this[key] === 'object') {
                     result.push(this[key]);
-                    // delete ens[key];
                 }
             }
             this.data = result;
@@ -2245,6 +2244,8 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
+            console.log(url);
             $.ajax({
                 type: 'post',
                 async: false,

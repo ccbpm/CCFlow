@@ -254,9 +254,7 @@
             if (plant == 'CCFlow')
                url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&DoType=MoreAttach&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
             else {
-                var currentPath = window.document.location.href;
-                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                url = path + "WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + FK_FrmAttachment + '&FK_Flow=' + FK_Flow + "&PKVal=" + PKVal;
+                url = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + FK_FrmAttachment + '&FK_Flow=' + FK_Flow + "&PKVal=" + PKVal;
             }
             url += "&WorkID=" + GetQueryString("WorkID");
             url += "&FID=" + GetQueryString("FID");
@@ -290,7 +288,7 @@
                 "fileType":realFileExts//文件类型限制，默认不限制，注意写的是文件后缀
             });
 
-
+            setIframeHeight();
 
         });
 
@@ -737,9 +735,7 @@
             if (plant == 'CCFlow')
                 Url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_FrmAttachment=" + FK_FrmAttachment + "&WorkID=" + WorkID + "&PKVal=" + PKVal + "&AttachPK=" + AttachPK + "&parasData=" + parasData + "&t=" + new Date().getTime();
             else {
-                var currentPath = window.document.location.href;
-                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                Url = path + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal + "&parasData=" + parasData;
+                Url = basePath + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal + "&parasData=" + parasData;
             }
 
             Url += "&FID=" + GetQueryString("FID");

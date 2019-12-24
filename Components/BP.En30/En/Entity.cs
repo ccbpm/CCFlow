@@ -835,14 +835,14 @@ namespace BP.En
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'");
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
         }
-        protected void DoOrderUp(string groupKeyAttr, string groupKeyVal, string gKey2, string gVal2, string idxAttr)
+        protected void DoOrderUp(string groupKeyAttr, object gVal1, string gKey2, object gVal2, string idxAttr)
         {
             //  string pkval = this.PKVal as string;
             string pkval = this.PKVal.ToString();
             string pk = this.PK;
             string table = this.EnMap.PhysicsTable;
 
-            string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKey2 + "='" + gVal2 + "') ORDER BY " + idxAttr;
+            string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + gVal1 + "' AND " + gKey2 + "='" + gVal2 + "') ORDER BY " + idxAttr;
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             int idx = 0;
             string beforeNo = "";
@@ -936,13 +936,13 @@ namespace BP.En
 
             BP.DA.DBAccess.RunSQLs(sqls);
         }
-        protected void DoOrderDown(string groupKeyAttr, string groupKeyVal, string gKeyAttr2, string gKeyVal2, string idxAttr)
+        protected void DoOrderDown(string groupKeyAttr, object val1, string gKeyAttr2, object gKeyVal2, string idxAttr)
         {
             string pkval = this.PKVal.ToString();
             string pk = this.PK;
             string table = this.EnMap.PhysicsTable;
 
-            string sql = "SELECT " + pk + " ," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) order by " + idxAttr;
+            string sql = "SELECT " + pk + " ," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) order by " + idxAttr;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = 0;
             string nextNo = "";
@@ -963,11 +963,11 @@ namespace BP.En
                 if (myNo == pkval)
                     isMeet = true;
 
-                sqls += "@UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ";
+                sqls += "@UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ";
             }
 
-            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
-            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
 
             BP.DA.DBAccess.RunSQLs(sqls);
         }
@@ -2249,7 +2249,6 @@ namespace BP.En
                     else
                         throw ex;
                 }
-
 
                 Log.DefaultLogWriteLine(LogType.Error, ex.Message);
                 if (SystemConfig.IsDebug)

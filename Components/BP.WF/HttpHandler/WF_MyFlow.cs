@@ -299,6 +299,13 @@ namespace BP.WF.HttpHandler
                 if (gwf.RetrieveFromDBSources() == 0)
                     return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
                 IsExistGWF = true;
+
+                String frms = this.GetRequestVal("Frms");
+                if (DataType.IsNullOrEmpty(frms) == false)
+                {
+                    gwf.Paras_Frms=frms;
+                    gwf.Update();
+                }
             }
 
             //判断当前节点是否是打开即阅读

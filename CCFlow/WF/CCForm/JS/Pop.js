@@ -103,15 +103,22 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-        	var data=$(objtr).data().data;
-        	var paras="";
-        	Object.keys(data).forEach(function(key){
-        		if(key=="OID"||key=="FID"||key=="Rec"||key=="RefPK"||key=="RDT")
-        			{}
-        		else{
-        			paras+="@"+key+"="+data[key];
-        		}
-        	});
+            var data = "";
+            var paras = "";
+            if (objtr == "" || objtr == null || objtr == undefined) {
+                paras = "ats=1";
+            }
+            else {
+                data = $(objtr).data().data;
+                Object.keys(data).forEach(function (key) {
+                    if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
+                    else {
+                        paras += "@" + key + "=" + data[key];
+                    }
+                });
+            }
+        	
+        	
             window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
                 var iframe = window.parent.frames[iframeId];
@@ -197,15 +204,20 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-        	var data=$(objtr).data().data;
-        	var paras="";
-        	Object.keys(data).forEach(function(key){
-        		if(key=="OID"||key=="FID"||key=="Rec"||key=="RefPK"||key=="RDT")
-        			{}
-        		else{
-        			paras+="@"+key+"="+data[key];
-        		}
-        	});
+            var data = "";
+            var paras = "";
+            if (objtr == "" || objtr == null || objtr == undefined) {
+                paras = "ats=1";
+            }
+            else {
+                data = $(objtr).data().data;
+                Object.keys(data).forEach(function (key) {
+                    if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
+                    else {
+                        paras += "@" + key + "=" + data[key];
+                    }
+                });
+            }
             window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, title, width, height, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
                 var iframe = window.parent.frames[iframeId];
@@ -318,15 +330,20 @@ function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
 
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
-        	var data=$(objtr).data().data;
-        	var paras="";
-        	Object.keys(data).forEach(function(key){
-        		if(key=="OID"||key=="FID"||key=="Rec"||key=="RefPK"||key=="RDT")
-        			{}
-        		else{
-        			paras+="@"+key+"="+data[key];
-        		}
-        	});
+            var data = "";
+            var paras = "";
+            if (objtr == "" || objtr == null || objtr == undefined) {
+                paras = "ats=1";
+            }
+            else {
+                data = $(objtr).data().data;
+                Object.keys(data).forEach(function (key) {
+                    if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
+                    else {
+                        paras += "@" + key + "=" + data[key];
+                    }
+                });
+            }
             window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
                 var iframe = window.parent.frames[iframeId];

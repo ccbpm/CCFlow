@@ -232,7 +232,7 @@ function Set_Frm_Enable(frmData) {
         if (mapAttr.UIVisible == 0)
             continue;
 
-        if (mapAttr.LGType != 1)
+        if (mapAttr.LGType != 1 && mapAttr.MyDataType != 4)
             continue;
 
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
@@ -258,6 +258,14 @@ function Set_Frm_Enable(frmData) {
 
                 }
             }
+        }
+        //复选框
+        if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            //获取复选框的值
+            if ($("#CB_" + mapAttr.KeyOfEn).checked == true)
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 1);
+            else
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 0);
         }
 
     }
@@ -834,11 +842,18 @@ function InitMapAttrOfCtrl(mapAttr) {
             var mypk = mapAttr.MyPK;
 
             //获取附件显示的格式
+            var ath=null;
             var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel");
+            var frmAths = frmData.Sys_FrmAttachment;
+            for (var i = 0; i < frmAths.length; i++) {
+                if (frmAths[i].MyPK == mypk) {
+                    ath = frmAths[i];
+                    break;
+                }
+            }
 
-            var ath = new Entity("BP.Sys.FrmAttachment");
-            ath.MyPK = mypk;
-            if (ath.RetrieveFromDBSources() == 0) {
+           
+            if (ath==null) {
                 alert("没有找到附件属性,请联系管理员");
                 return;
             }
@@ -1119,7 +1134,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
 
-        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
     }
 
     //枚举类型.
@@ -1208,6 +1223,16 @@ function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
         var selectVal = $(obj).val();
         cleanAll(KeyOfEn);
         setEnable(FK_MapData, KeyOfEn, selectVal);
+    }
+}
+
+function changeCBEnable(obj, FK_MapData, KeyOfEn, AtPara) {
+    if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+        cleanAll(KeyOfEn);
+       if(obj.checked == true)
+           setEnable(FK_MapData, KeyOfEn, 1);
+        else
+           setEnable(FK_MapData, KeyOfEn, 0);
     }
 }
 
@@ -1314,6 +1339,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal) {
         if (!$.isArray(AllObjSet[KeyOfEn])) {
             AllObjSet[KeyOfEn] = [];
         }
+        AllObjSet[KeyOfEn] = [];
         AllObjSet[KeyOfEn].push(mapAttrs);
 
     }

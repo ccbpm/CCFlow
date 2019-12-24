@@ -1747,25 +1747,30 @@ function GenerWorkNode() {
 
     //给富文本创建编辑器
     if (document.BindEditorMapAttr) {
-        //给富文本 创建编辑器
-        var editor = document.activeEditor = UM.getEditor('editor', {
-            'autoHeightEnabled': false,
-            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-            'initialFrameWidth': '100%'
-        });
-        var height = document.BindEditorMapAttr.UIHeight;
-        $(".edui-container").css("height", height);
+        var EditorDivs = $(".EditorClass");
+        $.each(EditorDivs, function (i,EditorDiv) {
+            var editorId = $(EditorDiv).attr("id");
+            //给富文本 创建编辑器
+            var editor = document.activeEditor = UM.getEditor(editorId, {
+                'autoHeightEnabled': false,
+                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+                'initialFrameWidth': '100%'
+            });
+            var height = document.BindEditorMapAttr[i].UIHeight;
+            $("#Td_" + document.BindEditorMapAttr[i].KeyOfEn).find('div[class = "edui-container"]').css("height", height);
+            //$(".edui-container").css("height", height);
 
-        if (editor) {
+            if (editor) {
 
-            editor.MaxLen = document.BindEditorMapAttr.MaxLen;
-            editor.MinLen = document.BindEditorMapAttr.MinLen;
-            editor.BindField = document.BindEditorMapAttr.KeyOfEn;
-            editor.BindFieldName = document.BindEditorMapAttr.Name;
+                editor.MaxLen = document.BindEditorMapAttr[i].MaxLen;
+                editor.MinLen = document.BindEditorMapAttr[i].MinLen;
+                editor.BindField = document.BindEditorMapAttr[i].KeyOfEn;
+                editor.BindFieldName = document.BindEditorMapAttr[i].Name;
 
-            //调整样式,让必选的红色 * 随后垂直居中
-            $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
-        }
+                //调整样式,让必选的红色 * 随后垂直居中
+                $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
+            }
+        })
     }
     //给富文本创建编辑器
 }
@@ -1898,7 +1903,7 @@ function dealWithUrl(src) {
 }
 
 var colVisibleJsonStr = ''
-
+document.BindEditorMapAttr = [];
 /*
 公共的工作处理器js. 
 1. 该js的方法都是从各个类抽取出来的.

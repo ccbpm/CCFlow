@@ -1012,7 +1012,12 @@ function InitMapAttrOfCtrl(mapAttr) {
                 defValue = defValue.replace(/white-space: nowrap;/g, "");
                 eleHtml += "<div class='richText'>" + defValue + "</div>";
             } else {
+                //设置一个默认高度
+                if (mapAttr.UIHeight < 180) {
+                    mapAttr.UIHeight = 180;
+                }
 
+                
                 if (IsLoadUEditor == false) {
                     //加载UEditor需要的JS
                     $("<link href='../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css' type = 'text/css' rel = 'stylesheet' />").appendTo("head");
@@ -1023,15 +1028,15 @@ function InitMapAttrOfCtrl(mapAttr) {
                     IsLoadUEditor = true;
                     
                 }
-                document.BindEditorMapAttr = mapAttr; //存到全局备用.
-
+                //document.BindEditorMapAttr = mapAttr; //存到全局备用.
+                document.BindEditorMapAttr.push(mapAttr); //存到全局备用
                 //设置编辑器的默认样式
                 var styleText = "text-align:left;font-size:12px;";
                 styleText += "width:100%;";
                 var height = parseInt(mapAttr.UIHeight) - 54;
                 styleText += "height:" + height + "px;";
                 //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
-                eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                eleHtml += "<script class='EditorClass' id='editor_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
             }
 
             eleHtml = "<div style='white-space:normal;'>" + eleHtml + "</div>";

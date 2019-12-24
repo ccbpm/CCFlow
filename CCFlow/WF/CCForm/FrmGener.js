@@ -11,6 +11,7 @@ var colVisibleJsonStr = ''
 var jsonStr = '';
 var IsChange = false;
 var webUser = null;
+document.BindEditorMapAttr = [];
 //初始化函数
 $(function () {
 
@@ -439,23 +440,47 @@ function GenerFrm() {
     }
     //给富文本 创建编辑器
     if (document.BindEditorMapAttr) {
-        var editor = document.activeEditor = UM.getEditor('editor', {
-            'autoHeightEnabled': false, //是否自动长高
-            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-            'initialFrameWidth': document.BindEditorMapAttr.UIWidth
+        var EditorDivs = $(".EditorClass");
+        $.each(EditorDivs, function (i, EditorDiv) {
+            var editorId = $(EditorDiv).attr("id");
+            //给富文本 创建编辑器
+            var editor = document.activeEditor = UM.getEditor(editorId, {
+                'autoHeightEnabled': false, //是否自动长高
+                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+                'initialFrameWidth': document.BindEditorMapAttr.UIWidth
+            });
+            var height = document.BindEditorMapAttr[i].UIHeight;
+            $("#Td_" + document.BindEditorMapAttr[i].KeyOfEn).find('div[class = "edui-container"]').css("height", height);
+            //$(".edui-container").css("height", height);
 
-        });
-        var height = document.BindEditorMapAttr.UIHeight;
-        $(".edui-container").css("height", height);
+            if (editor) {
 
-        if (document.BindEditorMapAttr) {
-            editor.MaxLen = document.BindEditorMapAttr.MaxLen;
-            editor.MinLen = document.BindEditorMapAttr.MinLen;
-            editor.BindField = document.BindEditorMapAttr.KeyOfEn;
-            editor.BindFieldName = document.BindEditorMapAttr.Name;
-        }
-        //调整样式,让必选的红色 * 随后垂直居中
-        editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+                editor.MaxLen = document.BindEditorMapAttr[i].MaxLen;
+                editor.MinLen = document.BindEditorMapAttr[i].MinLen;
+                editor.BindField = document.BindEditorMapAttr[i].KeyOfEn;
+                editor.BindFieldName = document.BindEditorMapAttr[i].Name;
+
+                //调整样式,让必选的红色 * 随后垂直居中
+                $(editor.container).css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+            }
+        })
+        //var editor = document.activeEditor = UM.getEditor('editor', {
+        //    'autoHeightEnabled': false, //是否自动长高
+        //    'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+        //    'initialFrameWidth': document.BindEditorMapAttr.UIWidth
+
+        //});
+        //var height = document.BindEditorMapAttr.UIHeight;
+        //$(".edui-container").css("height", height);
+
+        //if (document.BindEditorMapAttr) {
+        //    editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+        //    editor.MinLen = document.BindEditorMapAttr.MinLen;
+        //    editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+        //    editor.BindFieldName = document.BindEditorMapAttr.Name;
+        //}
+        ////调整样式,让必选的红色 * 随后垂直居中
+        //editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
 
         $(".pimg").on("dblclick", function () {
             var _this = $(this); //将当前的pimg元素作为_this传入函数  

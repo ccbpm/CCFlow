@@ -32,11 +32,14 @@
     <script src="../../Comm/Gener.js"></script>
     <script src="../../Scripts/PinYin.js"></script>
     <script src="Designer.js"></script>
+    <script src="DesignerTools.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini" style="overflow:hidden;">
     <div>
         <input type="button" onclick="SaveForm()" value="保存" />
         <input type="button" onclick="PreviewForm()" value="预览" />
+        <input type="button" onclick="ImpFrmTemplate()" value="导入表单模版" />
+        <input type="button" onclick="ImpFrmFields()" value="导入现有字段" />
     </div>
     <!--左边导航-->
     <div class="main-sidebar">
@@ -263,7 +266,6 @@
 
     //给富文本赋值
     window.onload = function () {
-
 
         //先判断DataUser/CCForm/HtmlTemplateFile/FK_MapData.htm是否存在
         var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + pageParam.fk_mapdata + ".htm";

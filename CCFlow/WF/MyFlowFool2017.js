@@ -981,12 +981,17 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
                 eleHtml += "<div class='richText' style='width:99%;margin-right:2px'>" + defValue + "</div>";
 
             } else {
+                //设置一个默认高度
+                if (mapAttr.UIHeight<180) {
+                    mapAttr.UIHeight = 180;
+                }
                 document.BindEditorMapAttr = mapAttr; //存到全局备用
 
                 //设置编辑器的默认样式
                 var styleText = "text-align:left;font-size:12px;";
                 styleText += "width:100%;";
                 var height = parseInt(mapAttr.UIHeight) - 54;
+                
                 styleText += "height:" + height + "px;";
                 //注意这里 name 属性是可以用来绑定表单提交时的字段名字的 id 是特殊约定的.
                 eleHtml += "<script id='editor'  name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";

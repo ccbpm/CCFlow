@@ -130,8 +130,8 @@ function GenerFrm() {
         h = 1200;
     // beign 设置表单标题和表单的布局
     document.title = mapData.Name;
-    $('#divCCForm').height(h);
-    $('#topContentDiv').height(h);
+    //$('#divCCForm').height(h);
+    //$('#topContentDiv').height(h);
     $('#topContentDiv').width(w);
     $('.Bar').width(w + 15);
     var marginLeft = $('#topContentDiv').css('margin-left');

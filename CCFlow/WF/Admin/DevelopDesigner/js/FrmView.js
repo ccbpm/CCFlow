@@ -145,9 +145,10 @@ function GenerFrm() {
     //end
 
     // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
-    $("<script type='text/javascript' src=../../DataUser/JSLibData/" + enName + "_Self.js'></script>").appendTo("head");
-    $("<script type='text/javascript' src=../../DataUser/JSLibData/" + enName + ".js'></script>").appendTo("head");
+    jQuery.getScript("../../DataUser/JSLibData/" + mapData.No + "_Self.js");
+    jQuery.getScript("../../DataUser/JSLibData/" + mapData.No + ".js");
 
+    
    //加载开发者表单的内容
     //先判断DataUser/CCForm / HtmlTemplateFile / FK_MapData.htm是否存在
     var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + mapData.No + ".htm";
@@ -175,7 +176,63 @@ function GenerFrm() {
     LoadFrmDataAndChangeEleStyle(frmData); 
 
     //2.解析控件 从表、附件、附件图片、框架、地图、签字版、父子流程
+   var frmDtls = frmData.Sys_MapDtl;
+    for (var i = 0; i < frmDtls.length;i++) {
+        var frmDtl = frmDtls[i];
+        //根据data-key获取从表元素
+        var element = $("Img[data-key=" + frmDtl.No + "]");
+        if (element.length == 0)
+            continue;
+        figure_Template_Dtl(element,frmDtl);
 
+    }
+    var aths = frmData.Sys_FrmAttachment;//附件
+    for (var i = 0; i < aths.length; i++) {
+        var ath = aths[i];
+        //根据data-key获取从表元素
+        var element = $("Img[data-key=" + ath.MyPK + "]");
+        if (element.length == 0)
+            continue;
+        figure_Template_Ath(element,ath);
+
+    }
+
+    var athImgs = frmData.Sys_FrmImgAth;//从表附件 figure_Template_Ath
+    for (var i = 0; i < athImgs.length; i++) {
+        var athImg = athImgs[i];
+        //根据data-key获取从表元素
+        var element = $("Img[data-key=" + athImg.MyPK + "]");
+        if (element.length == 0)
+            continue;
+        figure_Template_ImageAth(element,athImg);
+
+    }
+    var iframes = frmData.Sys_MapFrame;//框架
+    for (var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i];
+        //根据data-key获取从表元素
+        var element = $("Img[data-key=" + iframe.MyPK + "]");
+        if (element.length == 0)
+            continue;
+        figure_Template_IFrame(element, iframe);
+
+    }
+    if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
+        var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
+        if (nodeComponents != null) {
+            var element = $("Img[data-key=" + nodeComponents.NodeID + "]");
+            if (element.length != 0)
+                figure_Template_FigureSubFlowDtl(nodeComponents, mapData, element);
+            //如果有审核组件，增加审核组件的HTML
+            var _html = figure_Template_FigureFrmCheck(nodeComponents, mapData, frmData);
+            $("#CCForm").append(_html);
+
+        }
+    }
+    
+
+
+ 
 
     
    
@@ -192,16 +249,111 @@ function GenerFrm() {
     ShowTextBoxNoticeInfo();
 
     //textarea的高度自适应的设置
-    if (isFloolFrm == true) {
-        var textareas = $("textarea");
-        $.each(textareas, function (idex, item) {
-            autoTextarea(item);
-        });
-    }
+    var textareas = $("textarea");
+    $.each(textareas, function (idex, item) {
+        autoTextarea(item);
+    });
+   
    
 }
 
+//从表
+function figure_Template_Dtl(element,frmDtl, ext) {
+    //$("<link href='../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css' type = 'text/css' rel = 'stylesheet' />").appendTo("head");  
+    //在Image元素下引入IFrame文件
+    var src = "";
+    if (frmDtl.ListShowModel == "0")
+        //表格模式
+        src = "../../CCForm/Dtl2017.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "Version=1";
 
+    if (frmDtl.ListShowModel == "1")
+        //卡片模式
+        src = "../../CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.isReadonly + "&Version=1";
+
+    var W =element.width();
+    var eleHtml = $("<div id='Fd" + frmDtl.No + "' style='width:" + W + "px; height:auto;' ></div>");
+
+    var eleIframe = $("<iframe class= 'Fdtl' ID = 'Dtl_" + frmDtl.No + "' src = '" + src + "' frameborder=0  style='width:" + W + "px;"
+        + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+    eleHtml.append(eleIframe);
+    $(element).after(eleHtml);
+    $(element).remove(); //移除Imge节点
+}
+
+//附件
+function figure_Template_Ath(element,ath) {
+    var src = "../../CCForm/Ath.htm?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=" + pageData.isReadonly + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+
+    var fid = GetQueryString("FID");
+    var pWorkID = GetQueryString("PWorkID");
+
+    src += "&FID=" + fid;
+    src += "&PWorkID=" + pWorkID;
+    var W = element.width();
+    var eleHtml = $("<div id='Fd" + ath.MyPK + "' style='width:" + W + "px; height:auto;' ></div>");
+
+    var eleIframe = $("<iframe class= 'Fdtl' ID = 'Attach_" + ath.MyPK + "' src = '" + src + "' frameborder=0  style='width:" + W + "px;"
+        + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+    eleHtml.append(eleIframe);
+    $(element).after(eleHtml);
+    $(element).remove(); //移除Imge节点
+}
+
+//图片附件
+function figure_Template_ImageAth(element,frmImageAth) {
+    var isEdit = frmImageAth.IsEdit;
+    var eleHtml = $("<div></div>");
+    var img = $("<img class='pimg'/>");
+
+    var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
+
+    var refpkVal = pageData.OID;
+    //获取数据
+    if (pageData.FK_MapData.indexOf("ND") != -1)
+        imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImageAth.CtrlID + "_" + refpkVal + ".png";
+    else
+        imgSrc = basePath + "/DataUser/ImgAth/Data/" + pageData.FK_MapData + "_" + frmImageAth.CtrlID + "_" + refpkVal + ".png";
+   
+    //设计属性
+    img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
+    img.attr("src", imgSrc).attr('onerror', "this.src='" + basePath + "/WF/Admin/CCFormDesigner/Controls/DataView/AthImg.png'");
+    img.css('width', element.width()).css('height', element.height()).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
+    //不可编辑
+    if (isEdit == "1" && pageData.IsReadonly != 1) {
+        var fieldSet = $("<fieldset></fieldset>");
+        var length = $("<legend></legend>");
+        var a = $("<a></a>");
+        var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + pageData.FK_MapData + "&RefPKVal=" + refpkVal + "&CtrlID=" + frmImageAth.CtrlID;
+
+        a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
+        length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');
+
+        fieldSet.append(length);
+        length.append(a);
+        fieldSet.append(img);
+        eleHtml.append(fieldSet);
+    } else {
+        eleHtml.append(img);
+    }
+   
+    $(element).after(eleHtml);
+    $(element).remove(); //移除Imge节点
+}
+
+//图片附件编辑
+function ImgAth(url, athMyPK) {
+    var dgId = "iframDg";
+    url = url + "&s=" + Math.random();
+    OpenEasyUiDialog(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
+
+    }, null, null, function () {
+        //关闭也切换图片
+        var imgSrc = $("#imgSrc").val();
+        if (imgSrc != null && imgSrc != "")
+            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc + "?t=" + Math.random());
+        $("#imgSrc").val("");
+    });
+}
 function getMapExt(Sys_MapExt, KeyOfEn) {
     var ext = {};
     for (var p in Sys_MapExt) {
@@ -213,8 +365,217 @@ function getMapExt(Sys_MapExt, KeyOfEn) {
     return ext;
 }
 
+//初始化框架
+function figure_Template_IFrame(element,frame) {
+
+    //获取框架的类型 0 自定义URL 1 地图开发 2流程轨迹表 3流程轨迹图
+    var urlType = frame.UrlSrcType;
+    var url = "";
+    if (urlType == 0) {
+        url = frame.URL;
+        if (url.indexOf('?') == -1)
+            url += "?1=2";
+
+        if (url.indexOf("@basePath") == 0)
+            url = url.replace("@basePath", basePath);
+
+        //1.处理URL需要的参数
+        var pageParams = getQueryString();
+        $.each(pageParams, function (i, pageParam) {
+            var pageParamArr = pageParam.split('=');
+            url = url.replace("@" + pageParamArr[0], pageParamArr[1]);
+        });
+
+        var src = url.replace(new RegExp(/(：)/g), ':');
+        if (src.indexOf("?") > 0) {
+            var params = getQueryStringFromUrl(src);
+            if (params != null && params.length > 0) {
+                $.each(params, function (i, param) {
+                    if (param.indexOf('@') != -1) {//是需要替换的参数
+                        paramArr = param.split('=');
+                        if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                            if (paramArr[1].indexOf('@WebUser.') == 0)
+                                url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr('@WebUser.'.length)]);
+                            else
+                                url = url.replace(paramArr[1], frmData.MainTable[0][paramArr[1].substr(1)]);
+                        }
+                    }
+                });
+            }
+        }
 
 
+        //1.拼接参数
+        var paras = this.pageData;
+        var strs = "";
+        for (var str in paras) {
+            if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+                continue
+            else
+                strs += "&" + str + "=" + paras[str];
+        }
+
+        url = url + strs + "&IsReadonly=0";
+
+        //4.追加GenerWorkFlow AtPara中的参数
+        var gwf = frmData.WF_GenerWorkFlow[0];
+        if (gwf != null) {
+            var atPara = gwf.AtPara;
+            if (atPara != null && atPara != "") {
+                atPara = atPara.replace(/@/g, '&');
+                url = url + atPara;
+            }
+        }
+    }
+    if (urlType == 2) //轨迹表
+        url = "../WorkOpt/OneWork/Table.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
+    if (urlType == 3)//轨迹图
+        url = "../WorkOpt/OneWork/TimeBase.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
+
+    var eleHtml = $("<div id='Frame" + frame.MyPK + "' style='width:" + frame.W + "px; height:auto;' ></div>");
+
+    var eleIframe = $("<iframe class= 'Fdtl' ID = 'Frame_" + frame.MyPK + "' src = '" + url + "' frameborder=0  style='width:" + frame.W + "px;"
+        + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+
+
+    eleHtml.append(eleIframe);
+    $(element).after(eleHtml);
+    $(element).remove(); //移除Frame节点
+
+}
+
+
+//子流程
+function figure_Template_FigureSubFlowDtl(wf_node, mapData,element) {
+
+    //@这里需要处理, 对于流程表单.
+    if (sta == 0 || sta == "0" || sta == undefined)
+        return $('');
+
+    var sta = wf_node.SFSta;
+    var x = wf_node.SF_X;
+    var y = wf_node.SF_Y;
+    var h = wf_node.SF_H;
+    var w = wf_node.SF_W;
+
+    var src = "../WorkOpt/SubFlow.htm?s=2";
+    var paras = '';
+
+    paras += "&FID=" + pageData.FID;
+    paras += "&OID=" + pageData.OID;
+    paras += '&FK_Flow=' + pageData.FK_Flow;
+    paras += '&FK_Node=' + pageData.FK_Node;
+    paras += '&WorkID=' + pageData.OID;
+    if (sta == 2 || pageData.IsReadonly == 1)//只读
+    {
+        src += "&DoType=View";
+    }
+    else {
+        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
+        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
+    }
+    src += "&r=q" + paras;
+
+    var eleHtml = $("<div id=''SubFlow" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' ></div>");
+
+    var eleIframe = $("<iframe class= 'Fdtl' ID = 'SubFlow_" + wf_node.NodeID + "' src = '" + src + "' frameborder=0  style='width:" + w + "px;"
+        + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+
+
+    eleHtml.append(eleIframe);
+    $(element).after(eleHtml);
+    $(element).remove(); //移除SubFlow节点
+
+}
+
+
+//审核组件
+function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
+
+
+
+    var sta = wf_node.FWCSta;
+    if (sta == 0 || sta == undefined)
+        return $('');
+
+    var node = frmData.WF_Node;
+    if (node != undefined)
+        node = node[0];
+
+    var frmNode = frmData.WF_FrmNode;
+    if (frmNode != undefined)
+        frmNode = frmNode[0];
+
+    if (node == null || frmNode == null)
+        return $('');
+    if (node.FormType == 5 && frmNode.IsEnableFWC != 1)
+        return $('');
+
+    var pos = PreaseFlowCtrls(mapData.FlowCtrls, "FrmCheck");
+
+    var x = 0, y = 0, h = 0, w = 0;
+    if (pos == null) {
+        x = wf_node.FWC_X;
+        y = wf_node.FWC_Y;
+        h = wf_node.FWC_H;
+        w = wf_node.FWC_W;
+    }
+
+    if (pos != null) {
+        x = parseFloat(pos.X);
+        y = parseFloat(pos.Y);
+        h = parseFloat(pos.H);
+        w = parseFloat(pos.W);
+    }
+    if (x <= 10)
+        x = 100;
+    if (y <= 10)
+        y = 100;
+
+    if (h <= 10)
+        h = 100;
+
+    if (w <= 10)
+        w = 300;
+
+    var src = "";
+    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+        src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+    else
+        src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+    var fwcOnload = "";
+    var paras = '';
+
+    var isReadonly = GetQueryString('IsReadonly');
+    if (isReadonly != "1") {
+        isReadonly = "0";
+    }
+    if (sta == 2)//只读
+        isReadonly = "1";
+
+
+    paras += "&FID=" + pageData["FID"];
+    paras += "&WorkID=" + pageData["OID"];
+    paras += '&FK_Flow=' + pageData.FK_Flow;
+    paras += '&FK_Node=' + pageData.FK_Node;
+
+    //  paras += '&WorkID=' + pageData.WorkID;
+    if (sta == 2)//只读
+    {
+        // src += "&DoType=View";
+    }
+    else {
+        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
+        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
+    }
+    src += "&r=q" + paras;
+
+    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
+
+    eleHtml = $(eleHtml);
+    eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
+    return eleHtml;
+}
 
 var pageData = {};
 //初始化网页URL参数
@@ -226,18 +587,23 @@ function initPageParam() {
 
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
-    //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
     pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
 
     var oid = GetQueryString("WorkID");
     if (oid == null)
         oid = GetQueryString("OID");
+    if (oid == null)
+        oid = 0;
     pageData.OID = oid;
 
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadonly = GetQueryString("IsReadonly"); //如果是IsReadonly，就表示是查看页面，不是处理页面
+    var isReadonly = GetQueryString("IsReadonly");
+    if (isReadonly == null || isReadonly == undefined || isReadonly == "" || isReadonly == "0")
+        pageData.IsReadonly = 0;
+    else
+        pageData.IsReadonly = 1;
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View

@@ -166,8 +166,8 @@
             }
             if (dataType == "Select") {
                 if (strs.length != 0) {
-                    _Html += "<span leipiplugins='enum' id='SS_" + UIBindKey + "' title='下拉框' name='leipiNewField' data-type='EnumSelect' data-key='" + KeyOfEn + "'  data-bindKey='" + UIBindKey + "'>";
-                    _Html += "<select id='DDL_" + KeyOfEn + "' name='DDL_" + KeyOfEn + "' data-type='EnumSelect'  class='form-control' >";
+                    _Html += "<span leipiplugins='enum' id='SS_" + UIBindKey + "' title='下拉框' name='leipiNewField' data-type='EnumSelect'   data-bindKey='" + UIBindKey + "'>";
+                    _Html += "<select id='DDL_" + KeyOfEn + "' name='DDL_" + KeyOfEn + "' data-type='EnumSelect' data-key='" + KeyOfEn + "' class='form-control' >";
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)

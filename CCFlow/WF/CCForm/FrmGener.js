@@ -420,6 +420,11 @@ function GenerFrm() {
                 $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
         }
 
+        //枚举
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+            $("#RB_" + mapAttr.KeyOfEn + "_" + defValue).attr("checked", 'checked');
+        }
+
         //只读或者属性为不可编辑时设置
         if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
 

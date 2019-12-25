@@ -39,6 +39,14 @@ function GenerDevelopFrm(mapData, frmData) {
         $('#RB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth);
         $('#DDL_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth);
 
+        if ((mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1)//外部数据源
+            || (mapAttr.LGType == "2" && mapAttr.MyDataType == "1")) {
+            var _html = InitDDLOperation(frmData, mapAttr, null);
+            $("#DDL_" + mapAttr.KeyOfEn).empty();
+            $("#DDL_" + mapAttr.KeyOfEn).append(_html);
+
+        }
+
         if (mapAttr.UIVisible == 0 && $("#TB_" + mapAttr.KeyOfEn).length == 0) {
             var defval = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
             html = "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + defval + "' />";
@@ -47,6 +55,14 @@ function GenerDevelopFrm(mapData, frmData) {
             continue;
         }
     }
+
+
+    //外键、外部数据源增加选择项option
+    var selects = $("select");
+    $.each(selects, function (obj, i) {
+        var _html = InitDDLOperation(frmData,mapAttr,null)
+    })
+
 
 
     //2.解析控件 从表、附件、附件图片、框架、地图、签字版、父子流程
@@ -71,7 +87,12 @@ function GenerDevelopFrm(mapData, frmData) {
 
     }
 
-    var athImgs = frmData.Sys_FrmImgAth;//从表附件 figure_Template_Ath
+    //图片附件
+    var athImgs = frmData.Sys_FrmImgAth;
+    if (athImgs.length > 0) {
+        var imgSrc = "<input type='hidden' id='imgSrc'/>";
+        $('#CCForm').append(imgSrc);
+    }
     for (var i = 0; i < athImgs.length; i++) {
         var athImg = athImgs[i];
         //根据data-key获取从表元素
@@ -79,6 +100,18 @@ function GenerDevelopFrm(mapData, frmData) {
         if (element.length == 0)
             continue;
         figure_Template_ImageAth(element,athImg);
+
+    }
+
+    //图片
+    var imgs = frmData.Sys_FrmImg;
+    for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //根据data-key获取从表元素
+        var element = $("Img[data-key=" + img.MyPK + "]");
+        if (element.length == 0)
+            continue;
+        figure_Template_Image(element, img);
 
     }
     var iframes = frmData.Sys_MapFrame;//框架
@@ -152,7 +185,6 @@ function figure_Template_Ath(element,ath) {
 //图片附件
 function figure_Template_ImageAth(element,frmImageAth) {
     var isEdit = frmImageAth.IsEdit;
-    var eleHtml = $("<div></div>");
     var img = $("<img class='pimg'/>");
 
     var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
@@ -170,23 +202,22 @@ function figure_Template_ImageAth(element,frmImageAth) {
     img.css('width', element.width()).css('height', element.height()).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
     //不可编辑
     if (isEdit == "1" && pageData.IsReadonly != 1) {
-        var fieldSet = $("<fieldset></fieldset>");
+        var fieldSet = $("<fieldset style='display:inline'></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
         var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=" + pageData.FK_MapData + "&RefPKVal=" + refpkVal + "&CtrlID=" + frmImageAth.CtrlID;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
-        length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');
+        length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px').css('width', frmImageAth.W);
 
         fieldSet.append(length);
         length.append(a);
         fieldSet.append(img);
-        eleHtml.append(fieldSet);
+        $(element).after(fieldSet);
+       
     } else {
-        eleHtml.append(img);
+        $(element).after(img);
     }
-   
-    $(element).after(eleHtml);
     $(element).remove(); //移除Imge节点
 }
 
@@ -194,9 +225,10 @@ function figure_Template_ImageAth(element,frmImageAth) {
 function ImgAth(url, athMyPK) {
     var dgId = "iframDg";
     url = url + "&s=" + Math.random();
-    OpenEasyUiDialog(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
 
-    }, null, null, function () {
+    OpenBootStrapModal(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
+
+    }, null, function () {
         //关闭也切换图片
         var imgSrc = $("#imgSrc").val();
         if (imgSrc != null && imgSrc != "")
@@ -204,6 +236,59 @@ function ImgAth(url, athMyPK) {
         $("#imgSrc").val("");
     });
 }
+
+//初始化 IMAGE  只初始化了图片类型
+function figure_Template_Image(element,frmImage) {
+    //解析图片
+    if (frmImage.ImgAppType == 0) { //图片类型
+        //数据来源为本地.
+        var imgSrc = '';
+        if (frmImage.ImgSrcType == 0) {
+            //替换参数
+            var frmPath = frmImage.ImgPath;
+            frmPath = frmPath.replace('＠', '@');
+            frmPath = frmPath.replace('@basePath', basePath);
+            frmPath = frmPath.replace('@basePath', basePath);
+            imgSrc = DealJsonExp(frmData.MainTable[0], frmPath);
+        }
+
+        //数据来源为指定路径.
+        if (frmImage.ImgSrcType == 1) {
+            var url = frmImage.ImgURL;
+            url = url.replace('＠', '@');
+            url = url.replace('@basePath', basePath);
+            imgSrc = DealJsonExp(flowData.MainTable[0], url);
+        }
+        // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
+        if (imgSrc == "" || imgSrc == null)
+            imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
+
+        var a = $("<a></a>");
+        var img = $("<img/>")
+
+        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='../DataUser/ICON/CCFlow/LogBig.png'");
+
+        if (frmImage.LinkURL != undefined && frmImage.LinkURL != '') {
+            a.attr('href', frmImage.LinkTarget).attr('target', frmImage.LinkTarget).css('width', frmImage.W).css('height', frmImage.H);
+            a.append(img);
+            $(element).after(a);
+        } else {
+            $(element).after(img);
+        }
+
+
+
+        $(element).remove(); //移除Imge节点
+    } else if (frmImage.ImgAppType == 3)//二维码  手机
+    {
+
+
+    } else if (frmImage.ImgAppType == 1) {//暂不解析
+        //电子签章  写后台
+    }
+}
+
+
 function getMapExt(Sys_MapExt, KeyOfEn) {
     var ext = {};
     for (var p in Sys_MapExt) {

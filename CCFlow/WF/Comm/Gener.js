@@ -2626,7 +2626,7 @@ $(function () {
     }
     //判断登录权限.
 
-    if (url.indexOf('login.htm') == -1 && url.indexOf('dbinstall.htm') == -1) {
+    if (url.indexOf('login.htm') == -1 && url.indexOf('dbinstall.htm') == -1 && url.indexOf('Port.htm') == -1) {
 
         if (loadWebUser != null && (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null)) {
             dynamicHandler = "";

@@ -198,6 +198,7 @@ namespace BP.WF.HttpHandler
                 //自由，傻瓜，SL表单不做判断
                 case BP.Sys.FrmType.FreeFrm:
                 case BP.Sys.FrmType.FoolForm:
+                case BP.Sys.FrmType.Develop:
                     break;
                 case BP.Sys.FrmType.Url:
                 case BP.Sys.FrmType.Entity:
@@ -269,6 +270,9 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
 
+            if (md.HisFrmType == BP.Sys.FrmType.Develop)
+                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + md.No + "&FrmID="+md.No+"&EntityType=" + this.GetRequestVal("EntityType");
+
 
             return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
         }
@@ -290,6 +294,12 @@ namespace BP.WF.HttpHandler
             {
                 /* 傻瓜表单 需要翻译. */
                 return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
+            }
+
+            if (md.HisFrmType == BP.Sys.FrmType.Develop)
+            {
+                /* 开发者表单 */
+                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + this.FK_MapData + "&FrmID="+this.FK_MapData+"&IsFirst=1";
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)

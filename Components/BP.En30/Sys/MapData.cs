@@ -67,9 +67,9 @@ namespace BP.Sys
         /// </summary>
         WordFrm = 4,
         /// <summary>
-        /// Excel类型表单
+        /// Excel表单
         /// </summary>
-        ExcelFrm = 5,
+        ExcelFrm=5,
         /// <summary>
         /// VSTOExccel模式.
         /// </summary>
@@ -77,7 +77,11 @@ namespace BP.Sys
         /// <summary>
         /// 实体类
         /// </summary>
-        Entity = 7
+        Entity = 7,
+        /// <summary>
+        /// 开发者表单
+        /// </summary>
+        Develop = 8
     }
     /// <summary>
     /// 映射基础

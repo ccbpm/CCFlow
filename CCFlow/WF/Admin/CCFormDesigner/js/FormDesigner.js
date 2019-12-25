@@ -670,7 +670,9 @@ function Conver_CCForm_V1ToV2() {
     //循环FrmRB
     for (var i in flow_Data.Sys_FrmRB) {
         var frmRb = flow_Data.Sys_FrmRB[i];
-        //if (i == 0) {
+        if (frmRb.AtPara.indexOf("@MyDataType=4") != -1)
+            continue;
+       
         var createdFigure = figure_Template_Rb(frmRb);
         //move it into position
         //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))

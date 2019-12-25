@@ -34,6 +34,7 @@ UE.plugins['text'] = function () {
                         label: '确定',
                         onclick: function () {
                             dialog.close(true);
+                            
                         }
                     },
                     {
@@ -1604,12 +1605,14 @@ function SaveForm() {
         if (dataType != null && dataType != undefined && dataType != "") {
             //判断是否保存在Sys_MapAttr中，没有则保存
             var keyOfEn = tag.getAttribute("data-key");
+            if (dataType == "Radio")
+                keyOfEn = $(tag).parent()[0].getAttribute("data-key");//获取父级的data-key
             var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
             if (mapAttr == undefined || mapAttr == null) {
                 if (dataType == "Radio") {
                     var uiBindKey = tag.getAttribute("data-bindKey");
                     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-                    handler.AddPara("KeyOfEn", KeyOfEn);
+                    handler.AddPara("KeyOfEn", keyOfEn);
                     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
                     handler.AddPara("EnumKey", uiBindKey);
                     var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
@@ -1711,6 +1714,7 @@ function SaveForm() {
 }
 //预览
 function PreviewForm() {
+    debugger
     if (leipiEditor.queryCommandState('source'))
         leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
 

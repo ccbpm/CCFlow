@@ -191,7 +191,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
         return;
     }
 
-    if (shap == 'Image') {
+    if (shap == 'Img') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + mypk;
         CCForm_ShowDialog(url, '图片' + mypk + '属性');
         return;
@@ -212,7 +212,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
     }
 
     if (shap == 'AthImg') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&PKVal=' + mypk;
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&PKVal=' + mypk;
         CCForm_ShowDialog(url, '图片附件');
         return;
     }
@@ -961,7 +961,7 @@ UE.plugins['component'] = function () {
             if (dataType == "AthMulti") { //多附件
 
             }
-            if (dataType == "AthImg") {//图片附件
+            if (dataType == "Img") {//图片
                 ExtImg();
             }
             if (dataType == "IFrame") {//框架
@@ -973,6 +973,10 @@ UE.plugins['component'] = function () {
 
             if (dataType == "Score") {//评分
                 ExtScore();
+            }
+
+            if (dataType == "AthImg") {//图片附件
+                ExtImgAth();
             }
 
             if (dataType == "HandWriting") {//手写签字版
@@ -1029,6 +1033,9 @@ UE.plugins['component'] = function () {
                 _html = popup.formatHtml(
                     '<nobr>附件控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
             if (dataType == "AthImg")
+                _html = popup.formatHtml(
+                    '<nobr>图片附件控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+            if (dataType == "Img")
                 _html = popup.formatHtml(
                     '<nobr>图片控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
             if (dataType == "IFrame")
@@ -1341,7 +1348,39 @@ function ExtHandWriting() {
         leipiEditor.execCommand('insertHtml', _html);
     });
 }
+
 //图片附件
+function ExtImgAth() {
+    var name = window.prompt('请输入图片附件名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
+    if (name == null || name == undefined)
+        return;
+    var ImgAths = new Entities("BP.Sys.FrmImgAths");
+    ImgAths.Retrieve("FK_MapData", pageParam.fk_mapdata, "Name", name);
+    if (ImgAths.length >= 1) {
+        alert('名称：[' + name + "]已经存在.");
+        ExtImgAth();
+        return;
+    }
+
+    //获得ID.
+    var id = StrToPinYin(name);
+
+    var imgAth = new Entity("BP.Sys.FrmImgAth");
+    imgAth.FK_MapData = pageParam.fk_mapdata;
+    imgAth.CtrlID = id;
+    imgAth.MyPK = pageParam.fk_mapdata + "_" + id;
+    imgAth.Name = name;
+    imgAth.Insert();
+
+    var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + imgAth.MyPK;
+    OpenEasyUiDialog(url, "eudlgframe", '图片附件', 800, 500, "icon-edit", true, null, null, null, function () {
+        var _html = "<img src='../CCFormDesigner/Controls/DataView/AthImg.png' style='width:" + imgAth.W + "px;height:" + imgAth.H + "px'  leipiplugins='component' data-key='" + imgAth.MyPK + "' data-type='AthImg'/>"
+        leipiEditor.execCommand('insertHtml', _html);
+    });
+}
+
+
+//图片
 function ExtImg() {
     var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
     if (name == null || name == undefined)
@@ -1388,8 +1427,8 @@ function ExtImg() {
     en.Insert(); //插入到数据库.
 
     var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK;
-    OpenEasyUiDialog(url, "eudlgframe", '图片附件', 800, 500, "icon-edit", true, null, null, null, function () {
-        var _html = "<img src='../CCFormDesigner/Controls/DataView/AthImg.png' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px'  leipiplugins='athimg' data-key='" + en.MyPK + "' data-type='AthImg'/>"
+    OpenEasyUiDialog(url, "eudlgframe", '图片', 800, 500, "icon-edit", true, null, null, null, function () {
+        var _html = "<img src='../CCFormDesigner/Controls/basic/Img.png' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px'  leipiplugins='component' data-key='" + en.MyPK + "' data-type='Img'/>"
         leipiEditor.execCommand('insertHtml', _html);
     });
 }

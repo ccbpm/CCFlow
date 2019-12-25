@@ -7,7 +7,7 @@ function PreviewForm() {
     en.SetPKVal(pageParam.fk_mapdata);
     en.DoMethodReturnString("ClearCash");
     var frmID = GetQueryString("FK_MapData");
-    var url = "../../CCForm/Frm.htm?FrmID=" + pageParam.fk_mapdata;
+    var url = "../../CCForm/Frm.htm?FrmID=" + pageParam.fk_mapdata + "&FK_MapData=" + pageParam.fk_mapdata;
     window.open(url);
 }
 

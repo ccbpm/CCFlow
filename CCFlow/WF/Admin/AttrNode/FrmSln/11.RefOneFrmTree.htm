@@ -21,7 +21,7 @@
         var nodeFrmID = "";
         $(function () {
 
-            InitBar(FormType.RefOneFrmTree);
+            InitBar(FormSlnType.RefOneFrmTree);
 
             var html = "";
             //获取节点属性
@@ -32,7 +32,7 @@
             var frmTrees = new Entities("BP.Sys.FrmTrees");
             frmTrees.RetrieveAll();
 
-            if (node.FormType == FormType.RefOneFrmTree) {
+            if (node.FormType == FormSlnType.RefOneFrmTree) {
                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
             } else {
                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
@@ -51,7 +51,7 @@
             nodeFrmID = node.NodeFrmID;
 
             //表单库的表单.
-            if (node.FormType == FormType.RefOneFrmTree) {
+            if (node.FormType == FormSlnType.RefOneFrmTree) {
                 var frmNode = new Entity("BP.WF.Template.FrmNode");
                 frmNode.MyPK = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
                 var i = frmNode.RetrieveFromDBSources();
@@ -101,7 +101,7 @@
             var i = node.RetrieveFromDBSources();
 
             //更新节点表单类型.
-            node.FormType = FormType.RefOneFrmTree;
+            node.FormType = FormSlnType.RefOneFrmTree;
             node.NodeFrmID = selectFrm; //选择的表单
             node.RefOneFrmTreeType = $("#DDL_FrmTree").val();
 
@@ -121,12 +121,12 @@
             alert("独立表单库表单 - 保存成功.");
             return;
 
-            //更新表单类型.
-            var frmID = "ND" + nodeID;
-            var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = FormType.RefOneFrmTree;
-            mapData.FK_FormTree = $("#DDL_FrmTree").val();
-            mapData.Update();
+           // //更新表单类型.
+           // var frmID = "ND" + nodeID;
+           // var mapData = new Entity("BP.Sys.MapData", frmID);
+           //// mapData.FrmType = FormSlnType.RefOneFrmTree;
+           // mapData.FK_FormTree = $("#DDL_FrmTree").val();
+           // mapData.Update();
 
             alert("保存成功.");
         }
@@ -183,7 +183,7 @@
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
                 var mapData = new Entity("BP.Sys.MapData", frmID);
-                mapData.FrmType = FormType.RefOneFrmTree;
+                mapData.FrmType = FormSlnType.RefOneFrmTree;
                 mapData.FK_FormTree = currNode.RefOneFrmTreeType;
                 mapData.Update();
 

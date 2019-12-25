@@ -825,7 +825,6 @@ namespace CCFlow.WF.CCForm
             //vMsg.ErrorMsg = msg;
             //vMsg.RDT = DateTime.Now.ToString(BP.DA.DataType.SysDataTimeFormat);
             //vMsg.IsDelete = false;
-
             //vMsg.DirectSave();
         }
         public class ReportImage

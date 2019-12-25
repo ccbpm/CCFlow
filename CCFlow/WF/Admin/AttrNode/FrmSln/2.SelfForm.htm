@@ -20,11 +20,11 @@
     <script type="text/javascript">
         var nodeID = 0;
         $(function () {
-            InitBar(FormType.SelfForm);
+            InitBar(FormSlnType.SelfForm);
             //获取节点属性
             nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            if (node.FormType == FormType.SelfForm) {
+            if (node.FormType == FormSlnType.SelfForm) {
                 document.getElementById("TB_CustomURL").value = node.FormUrl;
             }
 
@@ -43,17 +43,19 @@
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.FormType = FormType.SelfForm;
+            node.FormType = FormSlnType.SelfForm;
             node.FormUrl = document.getElementById("TB_CustomURL").value;
             node.Update();
 
-            //更新表单类型.
-            var frmID = "ND" + nodeID;
-            var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = FormType.SelfForm;
-            mapData.Update();
-
             alert("保存成功.");
+            return;
+
+            ////更新表单类型.
+            //var frmID = "ND" + nodeID;
+            //var mapData = new Entity("BP.Sys.MapData", frmID);
+            //mapData.FrmType = FrmType.Url;
+            //mapData.Update();
+
 
         }
     </script>

@@ -6,6 +6,7 @@ function GenerFreeFrm(wn) {
     flowData = wn;
 
     $('#CCForm').html('');
+
     //循环FrmRB
     for (var i in flowData.Sys_FrmRB) {
         var frmLab = flowData.Sys_FrmRB[i];

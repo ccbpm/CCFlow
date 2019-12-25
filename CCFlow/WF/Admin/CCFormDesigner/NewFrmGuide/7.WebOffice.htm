@@ -21,7 +21,7 @@
         var frmSort = 0;
         var fk_flow = "";
         $(function () {
-            InitBar(FormType.WebOffice);
+            InitBar(FormSlnType.WebOffice);
             //获取节点属性
             frmSort = GetQueryString("FK_FrmSort");
             var node = new Entity("BP.WF.Node", frmSort);
@@ -31,7 +31,7 @@
             var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", frmSort);
 
             //使用公文表单..
-            if (node.FormType == FormType.WebOffice) {
+            if (node.FormType == FormSlnType.WebOffice) {
                 document.getElementById("RB_WebOffice_FrmFirst").checked = true;
 
                 var FrmFirst = 2;
@@ -41,7 +41,7 @@
                     document.getElementById("RB_WebOffice_WordFirst").checked = true;
 
                 //表单工作模式.
-                if (btnOffice.WebOfficeFrmModel == FormType.FreeForm)
+                if (btnOffice.WebOfficeFrmModel == FormSlnType.FreeForm)
                     document.getElementById("RB_WebOffice_FreeFrm").checked = true;
                 else
                     document.getElementById("RB_WebOffice_FoolForm").checked = true;
@@ -65,7 +65,7 @@
             //节点
             frmSort = GetQueryString("FK_FrmSort");
             var node = new Entity("BP.WF.Node", frmSort);
-            node.FormType = FormType.WebOffice;
+            node.FormType = FormSlnType.WebOffice;
             node.Update();
 
             //按钮
@@ -78,15 +78,15 @@
 
             var WebOfficeFrmType = $("input[name='WebOfficeFrmType']:checked").val(); 
             if (WebOfficeFrmType == "0")
-                    btnLab.WebOfficeFrmModel = FormType.FoolForm;
+                    btnLab.WebOfficeFrmModel = FormSlnType.FoolForm;
                 else
-                    btnLab.WebOfficeFrmModel = FormType.FreeForm;
+                    btnLab.WebOfficeFrmModel = FormSlnType.FreeForm;
              btnLab.Update();
 
             //更新表单类型.
             var frmID = "ND" + frmSort;
             var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = FormType.WebOffice;
+            mapData.FrmType = FormSlnType.WebOffice;
             mapData.Update();
 
             alert("保存成功.");

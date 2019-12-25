@@ -45,14 +45,14 @@
             } else {
                 $(".IsHidden").hide();
                 $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+内置表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.FoolForm + ">&nbsp;&nbsp;内置傻瓜表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.FreeForm + ">&nbsp;&nbsp;内置自由表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;内置累加模式表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(2018版本已不支持)</option>");
 
                 $("#DDL_FlowFrmType").append("<option value=null  disabled='disabled'>+自定义表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
-                $("#DDL_FlowFrmType").append("<option value=" + FormType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>");
+                $("#DDL_FlowFrmType").append("<option value=" + FormSlnType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>");
             }
         });
         //要返回的json.

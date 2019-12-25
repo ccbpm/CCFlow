@@ -22,7 +22,7 @@
 
         $(function () {
 
-            InitBar(FormType.FreeForm);
+            InitBar(FormSlnType.FreeForm);
 
             var html = "";
 
@@ -153,7 +153,7 @@
 //            //更新节点表单类型.
 //            var frmSort = GetQueryString("FK_FrmSort");
 //            var node = new Entity("BP.WF.Node", frmSort);
-//            node.FormType = FormType.FoolForm;
+//            node.FormType = FormSlnType.FoolForm;
 //            var frmValue = $("input[name='RefFrm']:checked").val();
 
 //            if (frmValue == "0") {
@@ -173,7 +173,7 @@
 //            //更新表单类型.
 //            var frmID = "ND" + frmSort;
 //            var mapData = new Entity("BP.Sys.MapData", frmID);
-//            mapData.FrmType = FormType.FoolForm;
+//            mapData.FrmType = FormSlnType.FoolForm;
 //            mapData.Update();
 
 //            alert("保存成功.");

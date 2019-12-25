@@ -520,8 +520,6 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
 
         //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
         lab = GetLab(flowData, attr);
-
-
         if (colSpan == 0) {
             //占一行
             if (textColSpan == tableCol) {

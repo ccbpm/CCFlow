@@ -21,9 +21,9 @@ UE.leipiFormDesignUrl = 'formdesign';
 UE.plugins['text'] = function () {
     var me = this, thePlugins = 'text';
     me.commands[thePlugins] = {
-        execCommand: function (method,dataType) {
+        execCommand: function (method, dataType) {
             var dialog = new UE.ui.Dialog({
-                iframeUrl:'./DialogCtr/FrmTextBox.htm?FK_MapData='+pageParam.fk_mapdata+'&DataType='+dataType,
+                iframeUrl: './DialogCtr/FrmTextBox.htm?FK_MapData=' + pageParam.fk_mapdata + '&DataType=' + dataType,
                 name: thePlugins,
                 editor: this,
                 title: '文本框',
@@ -60,7 +60,7 @@ UE.plugins['text'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
-                 //在Sys_MapAttr、Sys_MapExt中删除除控件属性
+                //在Sys_MapAttr、Sys_MapExt中删除除控件属性
                 var keyOfEn = this.anchorEl.getAttribute("data-key");
                 if (keyOfEn == null || keyOfEn == undefined) {
                     alert('字段没有获取到，请联系管理员');
@@ -73,7 +73,7 @@ UE.plugins['text'] = function () {
 
                 //删除富文本中html
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
-               
+
             }
             this.hide();
         }
@@ -115,7 +115,7 @@ UE.plugins['edit'] = function () {
     };
 }
 
-function showFigurePropertyWin(shap, mypk,fk_mapdata) {
+function showFigurePropertyWin(shap, mypk, fk_mapdata) {
 
     if (shap == 'Text') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
@@ -159,7 +159,7 @@ function showFigurePropertyWin(shap, mypk,fk_mapdata) {
         return;
     }
 
-    if (shap == 'Radio' || shap =='EnumSelect') {
+    if (shap == 'Radio' || shap == 'EnumSelect') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + fk_mapdata + '_' + mypk;
         CCForm_ShowDialog(url, '字段Enum属性');
         return;
@@ -171,7 +171,7 @@ function showFigurePropertyWin(shap, mypk,fk_mapdata) {
         return;
     }
 
-    if (shap == 'BPClass' || shap == "CreateTable" || shap =="TableOrView") {
+    if (shap == 'BPClass' || shap == "CreateTable" || shap == "TableOrView") {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + fk_mapdata + '_' + mypk;
         CCForm_ShowDialog(url, '字段外键属性');
         return;
@@ -211,7 +211,7 @@ function showFigurePropertyWin(shap, mypk,fk_mapdata) {
     }
 
     if (shap == 'AthImg') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&PKVal='+ mypk;
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&PKVal=' + mypk;
         CCForm_ShowDialog(url, '图片附件');
         return;
     }
@@ -235,7 +235,7 @@ function showFigurePropertyWin(shap, mypk,fk_mapdata) {
         return;
     }
 
-    
+
     if (shap == 'HyperLink') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmLink&PKVal=' + mypk;
         CCForm_ShowDialog(url, '超链接属性');
@@ -252,7 +252,7 @@ function showFigurePropertyWin(shap, mypk,fk_mapdata) {
         mypk = mypk.replace('_2', "");
         mypk = mypk.replace('_3', "");
 
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' +fk_mapData + "_" + mypk;
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + fk_mapData + "_" + mypk;
         CCForm_ShowDialog(url, '单选按钮属性');
         return;
     }
@@ -272,7 +272,7 @@ function showFigurePropertyWin(shap, mypk,fk_mapdata) {
         CCForm_ShowDialog(url, '签字版');
         return;
     }
-   
+
 
     alert('没有判断的双击类型:' + shap);
 }
@@ -384,9 +384,9 @@ UE.plugins['macros'] = function () {
 UE.plugins['enum'] = function () {
     var me = this, thePlugins = 'enum';
     me.commands[thePlugins] = {
-        execCommand: function (method,dataType) {
+        execCommand: function (method, dataType) {
             var dialog = new UE.ui.Dialog({
-                iframeUrl: './DialogCtr/FrmEnumeration.htm?FK_MapData=' + pageParam.fk_mapdata+"&DataType="+dataType ,
+                iframeUrl: './DialogCtr/FrmEnumeration.htm?FK_MapData=' + pageParam.fk_mapdata + "&DataType=" + dataType,
                 name: thePlugins,
                 editor: this,
                 title: '单选框',
@@ -422,7 +422,7 @@ UE.plugins['enum'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
-                 //在Sys_MapAttr、Sys_MapExt中删除除控件属性
+                //在Sys_MapAttr、Sys_MapExt中删除除控件属性
                 var keyOfEn = this.anchorEl.getAttribute("data-key");
                 if (keyOfEn == null || keyOfEn == undefined) {
                     alert('字段没有获取到，请联系管理员');
@@ -812,7 +812,7 @@ UE.plugins['dtl'] = function () {
 
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageParam.fk_mapdata + '&No=' + data;
             OpenEasyUiDialog(url, "eudlgframe", '从表属性', 800, 500, "icon-edit", true, null, null, null, function () {
-                var _html = "<img src='../CCFormDesigner/Controls/DataView/Dtl.png' style='width:67%;height:200px'  leipiplugins='dtl' data-key='"+data+"'/>"
+                var _html = "<img src='../CCFormDesigner/Controls/DataView/Dtl.png' style='width:67%;height:200px'  leipiplugins='dtl' data-key='" + data + "'/>"
                 leipiEditor.execCommand('insertHtml', _html);
             });
 
@@ -897,10 +897,10 @@ UE.plugins['ath'] = function () {
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + data;
             OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
                 var _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + data + "' />"
-               leipiEditor.execCommand('insertHtml', _html);
+                leipiEditor.execCommand('insertHtml', _html);
             });
 
-           
+
         }
     };
     var popup = new baidu.editor.ui.Popup({
@@ -987,14 +987,14 @@ UE.plugins['component'] = function () {
                 var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
                 OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
                     //加载js
-                   // $("<script type='text/javascript' src='../../WorkOpt/SubFlow.js'></script>").appendTo("head");
+                    // $("<script type='text/javascript' src='../../WorkOpt/SubFlow.js'></script>").appendTo("head");
                     var _html = "<img src='../CCFormDesigner/Controls/DataView/SubFlowDtl.png' style='width:67%;height:200px'  leipiplugins='component' data-key='" + mypk + "'  data-type='SubFlow'/>"
                     leipiEditor.execCommand('insertHtml', _html);
                     return;
 
                 });
             }
-           
+
         }
     };
     var popup = new baidu.editor.ui.Popup({
@@ -1300,7 +1300,7 @@ function ExtHandWriting() {
     if (name == null || name == undefined)
         return;
 
-    var frmID =pageParam.fk_mapdata;
+    var frmID = pageParam.fk_mapdata;
     var mapAttrs = new Entities("BP.Sys.MapAttrs");
     mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
     if (mapAttrs.length >= 1) {
@@ -1336,7 +1336,7 @@ function ExtHandWriting() {
     mapAttr.Retrieve();
     var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
     OpenEasyUiDialog(url, "eudlgframe", '签字版', 800, 500, "icon-edit", true, null, null, null, function () {
-        var _html = "<img src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' data-type='HandWriting' data-key='" + mapAttr.MyPK +"'  leipiplugins='component'/>";
+        var _html = "<img src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' data-type='HandWriting' data-key='" + mapAttr.MyPK + "'  leipiplugins='component'/>";
         leipiEditor.execCommand('insertHtml', _html);
     });
 }
@@ -1349,7 +1349,7 @@ function ExtImg() {
     mapAttrs.Retrieve("FK_MapData", pageParam.fk_mapdata, "Name", name);
     if (mapAttrs.length >= 1) {
         alert('名称：[' + name + "]已经存在.");
-         ExtImg();
+        ExtImg();
         return;
     }
 
@@ -1570,144 +1570,144 @@ function SaveForm() {
     if (leipiEditor.queryCommandState('source'))
         leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
 
-
-    if (leipiEditor.hasContents()) {
-        leipiEditor.sync();       //同步内容
-
-
-        if (typeof type !== 'undefined') {
-            type_value = type;
-        }
-        formeditor = leipiEditor.getContent();
-
-        //比对Sys_MapAttr,如果html存在符合我们代码规则的保存到Sys_MapAttr中
-        var strs = "FID,FK_Dept,FK_Emp,FK_NY,MyNum,OID,RDT,CDT,Rec"//默认的
-        var ens = new Entities("BP.Sys.MapAttrs");
-        ens.Retrieve("FK_MapData", pageParam.fk_mapdata);
-        var mapAttrs = {};
-        $.each(ens, function (i, en) {
-            if ($.isArray(mapAttrs[en.MyPK]) == false)
-                mapAttrs[en.MyPK] = [];
-            mapAttrs[en.MyPK].push(en);
-        })
-
-        //获取含有data-type的元素
-        var inputs = leipiEditor.document.getElementsByTagName("input");
-        //遍历所有的input元素属性
-        $.each(inputs, function (i, tag) {
-            var dataType = tag.getAttribute("data-type");
-            if (dataType != null && dataType != undefined && dataType != "") {
-                //判断是否保存在Sys_MapAttr中，没有则保存
-                var keyOfEn = tag.getAttribute("data-key");
-                var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
-                if (mapAttr == undefined || mapAttr == null) {
-                    if (dataType == "Radio") {
-                        var uiBindKey = tag.getAttribute("data-bindKey");
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-                        handler.AddPara("KeyOfEn", KeyOfEn);
-                        handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-                        handler.AddPara("EnumKey", uiBindKey);
-                        var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
-                        if (data.indexOf("err@") >= 0) {
-                            alert(data);
-                            return;
-                        }
-                    }
-                    var name = tag.getAttribute("data-name");
-                    mapAttr = new Entity("BP.Sys.MapAttr");
-
-                    mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
-                    mapAttr.FK_MapData = pageParam.fk_mapdata;
-                    mapAttr.KeyOfEn = keyOfEn;
-                    mapAttr.Name = name;
-                    if (dataType == "Text")
-                        dataType = 1;
-                    if (dataType == "Int")
-                        dataType = 2;
-                    if (dataType == "Float")
-                        dataType = 3
-                    if (dataType == "Money")
-                        dataType = 8;
-                    if (dataType == "Date")
-                        dataType = 6;
-                    if (dataType == "DateTime")
-                        dataType = 7;
-                    if (dataType == "CheckBox")
-                        dataType = 4;
-                    mapAttr.MyDataType = dataType;
-                    if (dataType == 4) {
-                        mapAttr.UIContralType = 2//checkbox
-                        mapAttr.LGType = 0;
-                    }
-                    else if (dataType == "Radio" || dataType == "Select") {
-                        mapAttr.UIContralType = 1;//下拉框
-                        mapAttr.LGType = 1;//枚举
-                    } else {
-                        mapAttr.UIContralType = 0;//TB
-                        mapAttr.LGType = 0;
-                    }
-                    mapAttr.Insert();
-                }
-            }
-        });
-        var selects = leipiEditor.document.getElementsByTagName("select");
-        $.each(selects, function (i, tag) {
-            var dataType = tag.getAttribute("data-type");
-            if (dataType != null && dataType != undefined && dataType != "") {
-                //找到父节点
-                var ptag = $(tag).parent()[0];
-                var sfTable = "";
-                var keyOfEn = "";
-                var uiBindKey = "";
-                if (ptag.tagName.toLowerCase() == "span" && (ptag.getAttribute('leipiplugins') == "select" || ptag.getAttribute('leipiplugins') == "enum")) {
-                    sfTable = ptag.getAttribute("data-sfTable");
-                    keyOfEn = ptag.getAttribute("data-key");
-                    uiBindKey = tag.getAttribute("data-bindKey");
-                }
-                var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
-                if (mapAttr == undefined || mapAttr == null) {
-                    if (dataType == "EnumSelect") {
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-                        handler.AddPara("KeyOfEn", keyOfEn);
-                        handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-                        handler.AddPara("EnumKey", uiBindKey);
-                        var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
-                        if (data.indexOf("err@") >= 0) {
-                            alert(data);
-                            return;
-                        }
-                    } else {
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-                        handler.AddPara("KeyOfEn", keyOfEn);
-                        handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-                        handler.AddPara("SFTable", sfTable);
-                        var data = handler.DoMethodReturnString("SFList_SaveSFField");
-                        if (data.indexOf("err@") >= 0) {
-                            alert(data);
-                            return;
-                        }
-                    }
-                }
-            }
-        });
-
-
-        //保存表单的html信息
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-        handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-        handler.AddPara("HtmlCode", formeditor);
-
-        var data = handler.DoMethodReturnString("SaveForm");
-        if (data.indexOf("err@") != -1) {
-            alert(data);
-            return;
-        }
-
-
-    } else {
-        alert('表单内容不能为空！')
+    if (leipiEditor.hasContents() == false) {
+        alert('表单内容不能为空！');
         return false;
     }
+
+    $("#Btn_Save").val("正在保存...");
+
+    leipiEditor.sync();       //同步内容
+
+
+    if (typeof type !== 'undefined') {
+        type_value = type;
+    }
+    formeditor = leipiEditor.getContent();
+
+    //比对Sys_MapAttr,如果html存在符合我们代码规则的保存到Sys_MapAttr中
+    var strs = "FID,FK_Dept,FK_Emp,FK_NY,MyNum,OID,RDT,CDT,Rec"//默认的
+    var ens = new Entities("BP.Sys.MapAttrs");
+    ens.Retrieve("FK_MapData", pageParam.fk_mapdata);
+    var mapAttrs = {};
+    $.each(ens, function (i, en) {
+        if ($.isArray(mapAttrs[en.MyPK]) == false)
+            mapAttrs[en.MyPK] = [];
+        mapAttrs[en.MyPK].push(en);
+    })
+
+    //获取含有data-type的元素
+    var inputs = leipiEditor.document.getElementsByTagName("input");
+    //遍历所有的input元素属性
+    $.each(inputs, function (i, tag) {
+        var dataType = tag.getAttribute("data-type");
+        if (dataType != null && dataType != undefined && dataType != "") {
+            //判断是否保存在Sys_MapAttr中，没有则保存
+            var keyOfEn = tag.getAttribute("data-key");
+            var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
+            if (mapAttr == undefined || mapAttr == null) {
+                if (dataType == "Radio") {
+                    var uiBindKey = tag.getAttribute("data-bindKey");
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                    handler.AddPara("KeyOfEn", KeyOfEn);
+                    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                    handler.AddPara("EnumKey", uiBindKey);
+                    var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+                    if (data.indexOf("err@") >= 0) {
+                        alert(data);
+                        return;
+                    }
+                }
+                var name = tag.getAttribute("data-name");
+                mapAttr = new Entity("BP.Sys.MapAttr");
+
+                mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
+                mapAttr.FK_MapData = pageParam.fk_mapdata;
+                mapAttr.KeyOfEn = keyOfEn;
+                mapAttr.Name = name;
+                if (dataType == "Text")
+                    dataType = 1;
+                if (dataType == "Int")
+                    dataType = 2;
+                if (dataType == "Float")
+                    dataType = 3
+                if (dataType == "Money")
+                    dataType = 8;
+                if (dataType == "Date")
+                    dataType = 6;
+                if (dataType == "DateTime")
+                    dataType = 7;
+                if (dataType == "CheckBox")
+                    dataType = 4;
+                mapAttr.MyDataType = dataType;
+                if (dataType == 4) {
+                    mapAttr.UIContralType = 2//checkbox
+                    mapAttr.LGType = 0;
+                }
+                else if (dataType == "Radio" || dataType == "Select") {
+                    mapAttr.UIContralType = 1;//下拉框
+                    mapAttr.LGType = 1;//枚举
+                } else {
+                    mapAttr.UIContralType = 0;//TB
+                    mapAttr.LGType = 0;
+                }
+                mapAttr.Insert();
+            }
+        }
+    });
+    var selects = leipiEditor.document.getElementsByTagName("select");
+    $.each(selects, function (i, tag) {
+        var dataType = tag.getAttribute("data-type");
+        if (dataType != null && dataType != undefined && dataType != "") {
+            //找到父节点
+            var ptag = $(tag).parent()[0];
+            var sfTable = "";
+            var keyOfEn = "";
+            var uiBindKey = "";
+            if (ptag.tagName.toLowerCase() == "span" && (ptag.getAttribute('leipiplugins') == "select" || ptag.getAttribute('leipiplugins') == "enum")) {
+                sfTable = ptag.getAttribute("data-sfTable");
+                keyOfEn = ptag.getAttribute("data-key");
+                uiBindKey = tag.getAttribute("data-bindKey");
+            }
+            var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
+            if (mapAttr == undefined || mapAttr == null) {
+                if (dataType == "EnumSelect") {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                    handler.AddPara("KeyOfEn", keyOfEn);
+                    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                    handler.AddPara("EnumKey", uiBindKey);
+                    var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+                    if (data.indexOf("err@") >= 0) {
+                        alert(data);
+                        return;
+                    }
+                } else {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                    handler.AddPara("KeyOfEn", keyOfEn);
+                    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+                    handler.AddPara("SFTable", sfTable);
+                    var data = handler.DoMethodReturnString("SFList_SaveSFField");
+                    if (data.indexOf("err@") >= 0) {
+                        alert(data);
+                        return;
+                    }
+                }
+            }
+        }
+    });
+
+    //保存表单的html信息
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+    handler.AddPara("HtmlCode", formeditor);
+
+    var data = handler.DoMethodReturnString("SaveForm");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    $("#Btn_Save").val("保存成功.....");
+    $("#Btn_Save").val("保存");
 }
 //预览
 function PreviewForm() {

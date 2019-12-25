@@ -168,63 +168,95 @@ if (typeof FlowFrmType == "undefined") {
         FlowFrmType.SDKFrm = 4
 }
 
-//表单模式
-if (typeof FormType == "undefined") {
-    var FormType = {}
+
+//表单类型
+if (typeof FrmType == "undefined") {
+    var FrmType = {}
     //傻瓜表单
-    FormType.FoolForm = 0,
+    FrmType.FoolForm = 0,
         /// <summary>
         /// 自由表单.
         /// </summary>
-        FormType.FreeForm = 1,
+        FrmType.FreeForm = 1,
+        /// <summary>
+        /// Url.
+        /// </summary>
+        FrmType.Url = 3,
+        /// <summary>
+        ///     Word类型表单
+        /// </summary>
+        FrmType.WordFrm = 4,
+        /// <summary>
+        /// VSTOExccel模式
+        /// </summary>
+        FrmType.VSTOForExcel = 6,
+        /// <summary>
+        /// 实体类
+        /// </summary>
+        FrmType.SheetAutoTree = 7,
+        /// <summary>
+        /// 开发者表单
+        /// </summary>
+        FrmType.WebOffice = 8
+}
+
+//节点表单方案
+if (typeof FormSlnType == "undefined") {
+    var FormSlnType = {}
+    //傻瓜表单
+    FormSlnType.FoolForm = 0,
+        /// <summary>
+        /// 自由表单.
+        /// </summary>
+        FormSlnType.FreeForm = 1,
         /// <summary>
         /// 嵌入式表单.
         /// </summary>
-        FormType.SelfForm = 2,
+        FormSlnType.SelfForm = 2,
         /// <summary>
         /// SDKForm
         /// </summary>
-        FormType.SDKForm = 3,
+        FormSlnType.SDKForm = 3,
         /// <summary>
         /// SL表单
         /// </summary>
-        FormType.SLForm = 4,
+        FormSlnType.SLForm = 4,
         /// <summary>
         /// 表单树
         /// </summary>
-        FormType.SheetTree = 5,
+        FormSlnType.SheetTree = 5,
         /// <summary>
         /// 动态表单树
         /// </summary>
-        FormType.SheetAutoTree = 6,
+        FormSlnType.SheetAutoTree = 6,
         /// <summary>
         /// 公文表单
         /// </summary>
-        FormType.WebOffice = 7,
+        FormSlnType.WebOffice = 7,
         /// <summary>
         /// Excel表单
         /// </summary>
-        FormType.ExcelForm = 8,
+        FormSlnType.ExcelForm = 8,
         /// <summary>
         /// Word表单
         /// </summary>
-        FormType.WordForm = 9,
+        FormSlnType.WordForm = 9,
         /// <summary>
         /// 傻瓜轨迹表单
         /// </summary>
-        FormType.FoolTruck = 10,
+        FormSlnType.FoolTruck = 10,
         /// <summary>
         /// 表单库的表单
         /// </summary>
-        FormType.RefOneFrmTree = 11,
+        FormSlnType.RefOneFrmTree = 11,
          /// <summary>
         /// 开发者表单
         /// </summary>
-        FormType.Developer = 12,
+        FormSlnType.Developer = 12,
         /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
-        FormType.DisableIt = 100
+        FormSlnType.DisableIt = 100
 }
 /// 公文工作模式
 if (typeof WebOfficeWorkModel == "undefined") {

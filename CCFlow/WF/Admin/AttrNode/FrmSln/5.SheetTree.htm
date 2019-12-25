@@ -21,18 +21,18 @@
         var fk_flow = "";
         $(function () {
 
-            InitBar(FormType.SheetTree);
+            InitBar(FormSlnType.SheetTree);
             var html = "";
             //获取节点属性
             nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             fk_flow = node.FK_Flow;
             //表单树.
-            if (node.FormType == FormType.SheetTree) {
+            if (node.FormType == FormSlnType.SheetTree) {
                 document.getElementById("RB_tree").checked = true;
             }
 
-            if (node.FormType == FormType.DisableIt) {
+            if (node.FormType == FormSlnType.DisableIt) {
                 document.getElementById("RB_tab").checked = true;
             }
 
@@ -76,9 +76,9 @@
             var node = new Entity("BP.WF.Node", nodeID);
             var fromKey = $("input[name='SheetTreeModel']:checked").val();
             if (fromKey == "0") {
-                node.FormType = FormType.SheetTree;
+                node.FormType = FormSlnType.SheetTree;
             } else {
-                node.FormType = FormType.DisableIt;
+                node.FormType = FormSlnType.DisableIt;
             }
 
             node.Update();
@@ -119,7 +119,7 @@
 
                 var node = new Entity("BP.WF.Node", jsNode);
 
-                node.FormType = FormType.SheetTree;
+                node.FormType = FormSlnType.SheetTree;
                 node.NodeFrmID = "ND" + node.NodeID;
                 if (NodeNote != undefined) {
                     node.SetPara("NodeNote", NodeNote);//赋值摘要字段
@@ -129,7 +129,7 @@
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
                 var mapData = new Entity("BP.Sys.MapData", frmID);
-                mapData.FrmType = FormType.FoolForm;
+                mapData.FrmType = FormSlnType.FoolForm;
                 mapData.Update();
 
 

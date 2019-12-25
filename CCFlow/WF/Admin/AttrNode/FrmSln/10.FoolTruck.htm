@@ -24,7 +24,7 @@
         var fk_flow = "";
         $(function () {
 
-            InitBar(FormType.FoolTruck);
+            InitBar(FormSlnType.FoolTruck);
 
             Sln(); //设置权限控制方案.
 
@@ -35,7 +35,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            if (node.FormType != FormType.FoolTruck)
+            if (node.FormType != FormSlnType.FoolTruck)
                 return;
 
             $("#sln").html("正在加载表单方案,请稍后...");
@@ -191,14 +191,14 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.FormType = FormType.FoolTruck;
+            node.FormType = FormSlnType.FoolTruck;
             node.NodeFrmID = "ND" + nodeID;
             node.Update();
 
             //更新表单类型.
             var frmID = "ND" + nodeID;
             var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = 0; //  FormType.FoolTruck;
+            mapData.FrmType = FrmType.FoolForm;  
             mapData.Update();
 
 
@@ -229,7 +229,7 @@
 
                 var node = new Entity("BP.WF.Node", jsNode);
 
-                node.FormType = FormType.FoolTruck;
+                node.FormType = FormSlnType.FoolTruck;
                 node.NodeFrmID = "ND" + node.NodeID;
                 node.Update();
 
@@ -237,7 +237,7 @@
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
                 var mapData = new Entity("BP.Sys.MapData", frmID);
-                mapData.FrmType = 0; //FormType.FoolTruck;
+                mapData.FrmType = 0; //FormSlnType.FoolTruck;
                 mapData.Update();
             }
 

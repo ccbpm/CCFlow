@@ -67,7 +67,7 @@ function Admin_Form_CreateBill(treeNo, frmID, frmName, frmType, pTable) {
  * @param {创建在那个表单树的叶子下,可以为null，默认创建根目录下} treeNo
  * @param {表单ID} frmID
  * @param {表单名称} frmName
- * @param {单据类型,0=傻瓜表单,1=自由表单,3=URL表单,4=WordFrm,5=ExcelFrm,6=VSTOForExcel,7=Entity} frmTpye
+ * @param {单据类型,0=傻瓜表单,1=自由表单,3=URL表单,4=WordFrm,5=ExcelFrm,6=VSTOForExcel,7=Entity,8=Develop} frmTpye
  * @param {存储表,如果为Null则与frmID相同} pTable
  * 如果返回 err@xxxx 则表是失败.
  */

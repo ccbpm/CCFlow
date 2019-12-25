@@ -20,7 +20,7 @@
     <script  type="text/javascript">
 
         $(function () {
-            InitBar(FormType.Developer);
+            InitBar(FormSlnType.Developer);
             var html = "";
             //获取节点属性
             var nodeID = GetQueryString("FK_Node");
@@ -46,7 +46,7 @@
             GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
 
             //表单引用设置
-            if (node.FormType == FormType.Developer) {
+            if (node.FormType == FormSlnType.Developer) {
 
                 if (node.NodeFrmID == "" || node.NodeFrmID == null) {
                     document.getElementById("RB_CurrentForm").checked = true;
@@ -74,7 +74,7 @@
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.FormType = FormType.Developer;
+            node.FormType = FormSlnType.Developer;
             var frmValue = $("input[name='RefFrm']:checked").val();
 
             if (frmValue == "0") {
@@ -94,7 +94,7 @@
             //更新表单类型.
             var frmID = "ND" + nodeID;
             var mapData = new Entity("BP.Sys.MapData", frmID);
-            mapData.FrmType = 12; //  FormType.FoolForm;
+            mapData.FrmType = FrmType.Developer;  
             mapData.Update();
 
             //设置显示的主表单,在完成的流程轨迹里可以看到该表单.

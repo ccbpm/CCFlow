@@ -20,11 +20,11 @@
     <script  type="text/javascript">
         var frmSort = 0;
         $(function () {
-            InitBar(FormType.SDKForm);
+            InitBar(FormSlnType.SDKForm);
             //获取节点属性
             frmSort = GetQueryString("FK_FrmSort");
             var node = new Entity("BP.WF.Node", frmSort);
-            if (node.FormType == FormType.SDKForm) {
+            if (node.FormType == FormSlnType.SDKForm) {
                 document.getElementById("TB_FormURL").value = node.FormUrl;
             }
 
@@ -157,14 +157,14 @@
 //            //更新节点表单类型.
 //            var frmSort = GetQueryString("FK_FrmSort");
 //            var node = new Entity("BP.WF.Node", frmSort);
-//            node.FormType = FormType.SDKForm;
+//            node.FormType = FormSlnType.SDKForm;
 //            node.FormUrl = document.getElementById("TB_FormURL").value;
 //            node.Update();
 
 //            //更新表单类型.
 //            var frmID = "ND" + frmSort;
 //            var mapData = new Entity("BP.Sys.MapData", frmID);
-//            mapData.FrmType = FormType.SDKForm;
+//            mapData.FrmType = FormSlnType.SDKForm;
 //            mapData.Update();
 
 //            alert("保存成功.");

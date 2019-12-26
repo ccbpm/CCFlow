@@ -1,4 +1,4 @@
-﻿
+﻿var StarStepNum = 0;
 var step = 0;
 $(function () {
 
@@ -89,7 +89,7 @@ $(function () {
             if (nextNode == 0)
                 var info = GenerIcon("DotEnd", step, doc, true, nodeName);
             else
-                var info = GenerIcon("DotEnd", step, doc, false, nodeName);
+                var info = GenerIcon("DotEnd", step + StarStepNum, doc, false, nodeName);
 
             html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
 
@@ -171,10 +171,10 @@ function GenerSingerNode(tracks, nodeID, gwf) {
 
         var info = "";
         if (tk.FK_Node == gwf.FK_Node)
-            info = GenerIcon("DotGreen", i + 1, doc, false, tk.NodeName);
+            info = GenerIcon("DotGreen", step, doc, false, tk.NodeName);
         else
-            info = GenerIcon("DotBlue", i + 1, doc, false, tk.NodeName);
-
+            info = GenerIcon("DotBlue", step, doc, false, tk.NodeName);
+        StarStepNum = step;
         return "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
     }
 }
@@ -198,9 +198,6 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
 
         barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
         barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
-
-        if (step == 1)
-            barUrlLeft = "";
     }
 
     if (icon == 'DotEnd') {

@@ -11,6 +11,19 @@ function PreviewForm() {
     window.open(url);
 }
 
+//移动表单
+function FrmMobile() {
+    var frmID = GetQueryString("FK_MapData");
+
+    var frmID = GetQueryString("FK_MapData");
+    var flowNo = GetQueryString("FK_Flow");
+    var nodeID = GetQueryString("FK_Node");
+
+    var url = "/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeid + "&FK_MapData=" + frmID;
+    window.open(url);
+}
+
+
 //另存为.
 function SaveAs() {
     alert('在实现中..');
@@ -19,7 +32,13 @@ function SaveAs() {
 
 //导入表单模版.
 function ImpFrmTemplate() {
-    alert('在实现中..');
+
+    var frmID = GetQueryString("FK_MapData");
+    var flowNo = GetQueryString("FK_Flow");
+    var nodeID = GetQueryString("FK_Node");
+
+    var url = "../FoolFormDesigner/ImpExp/Imp.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&DoType=FunList&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    window.open(url);
 }
 
 //导入现有字段.

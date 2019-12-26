@@ -42,6 +42,11 @@
                 $(option1).val('1');
                 $(option1).text('自由表单');
                 $('#DDL_FrmType').append(option1);
+
+                var option2 = document.createElement("option");
+                $(option2).val('8');
+                $(option2).text('开发者表单');
+                $('#DDL_FrmType').append(option2);
                 //$("#DDL_FrmType").it;
             }
 
@@ -59,7 +64,7 @@
             //http://localhost:2207/WF/Admin/CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=2&FK_FrmSort=1133
 
             //创建数据源.
-           // GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
+            // GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
             // var sort = GetQueryString("FK_FrmSort");
             // $("#HD_FK_FormTree").val(sort);
@@ -126,281 +131,284 @@
 </head>
 <body>
     <form id="cc">
-    <table style="width: 95%;" id="Table">
-        <caption>
-            创建独立表单</caption>
-        <tr>
-            <td class="Idx">
-                1
-            </td>
-            <td>
-                创建的表单类型
-            </td>
-            <td>
-                <select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />
-            </td>
-            <td>
-                根据自己的业务场景需要选择相应的表单类型.
-            </td>
-        </tr>
-        <!--
-<tr>
-<td class="Idx" > 2 </td>
-<td > 数据源类型</td>
-<td> <select name="DDL_DBSrc" id="DDL_DBSrc" />  </td>
-<td>该表单要创建到那个数据源上？</td>
-</tr>
--->
-        <!--
-<tr>
-<td class="Idx" > 3 </td>
-<td > 节点位置</td>
-<td> <select name="DDL_FrmTree" id="DDL_FrmTree" />  </td>
-<td>保存到表单树的位置。</td>
-</tr>-->
-        <tr>
-            <td class="Idx">
-                4
-            </td>
-            <td>
-                表单名称
-            </td>
-            <td>
-                <input type="text" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" style="width: 100%;" />
-            </td>
-            <td>
-                表单的名称，允许重复，允许多个表单映射到一张表上。
-            </td>
-        </tr>
-        <tr>
-            <td class="Idx">
-                5
-            </td>
-            <td>
-                表单编号(必须是字母或者下划线组合)
-            </td>
-            <td>
-                <input type="text" id="TB_No" name="TB_No" style="width: 100%;" />
-            </td>
-            <td>
-                <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked="true" onclick="GenerPinYin()" /><label
-                    for="RB_ZZMM_0" onclick="GenerPinYin()">全拼</label>
-                <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label
-                    for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
-            </td>
-        </tr>
-        <tr id="Idx_6">
-            <td class="Idx">
-                6
-            </td>
-            <td>
-                <div>
-                    数据表存储类型</div>
-            </td>
-            <td>
-                <select id="DDL_PTableModel" name="DDL_PTableModel">
-                    <option value="0">自定存储表 </option>
-                    <option value="1">从数据库中指定，可以修改数据库结构。 </option>
-                    <option value="2">从数据库中指定，不允许修改数据库结构。 </option>
-                </select>
-            </td>
-            <td>
-                <div>
-                    确定后，不允许修改。</div>
-            </td>
-        </tr>
-        <tr id="Idx_7">
-            <td class="Idx" id="idx_td_7">
-                7
-            </td>
-            <td>
-                <div id="PTableName">
-                    自定义存储表
-                </div>
-            </td>
-            <td>
-                <input type="text" id="TB_PTable" name="TB_PTable" style="width: 100%;" />
-            </td>
-            <td>
-                <div id="PTableDesc">
-                    数据要存储到那个表里？</div>
-            </td>
-        </tr>
-        <tr id="Idx_8">
-            <td class="Idx">
-                8
-            </td>
-            <td>
-                <div id="Div1">
-                    本机已存在的表
-                </div>
-            </td>
-            <td>
-                <select id="DDL_PTable" name="DDL_PTable" onchange="DDL_PTable_Change(this.id)">
-                </select>
-            </td>
-            <td>
-                <div id="Div2">
-                    请选择系统存在的表，对后两项有效？</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="Idx" id="OtherTd">
-                9
-            </td>
-            <td>
-            </td>
-            <td colspan="2">
-                <input type="button" value="创建 - Create" onclick="Save()" id="Btn_Save" />
-                <script type="text/javascript">
+        <table style="width: 95%;" id="Table">
+            <caption>
+                创建独立表单
+            </caption>
+            <tr>
+                <td class="Idx">
+                    1
+                </td>
+                <td>
+                    创建的表单类型
+                </td>
+                <td>
+                    <select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />
+                </td>
+                <td>
+                    根据自己的业务场景需要选择相应的表单类型.
+                </td>
+            </tr>
+            <!--
+            <tr>
+            <td class="Idx" > 2 </td>
+            <td > 数据源类型</td>
+            <td> <select name="DDL_DBSrc" id="DDL_DBSrc" />  </td>
+            <td>该表单要创建到那个数据源上？</td>
+            </tr>
+            -->
+            <!--
+            <tr>
+            <td class="Idx" > 3 </td>
+            <td > 节点位置</td>
+            <td> <select name="DDL_FrmTree" id="DDL_FrmTree" />  </td>
+            <td>保存到表单树的位置。</td>
+            </tr>-->
+            <tr>
+                <td class="Idx">
+                    4
+                </td>
+                <td>
+                    表单名称
+                </td>
+                <td>
+                    <input type="text" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" style="width: 100%;" />
+                </td>
+                <td>
+                    表单的名称，允许重复，允许多个表单映射到一张表上。
+                </td>
+            </tr>
+            <tr>
+                <td class="Idx">
+                    5
+                </td>
+                <td>
+                    表单编号(必须是字母或者下划线组合)
+                </td>
+                <td>
+                    <input type="text" id="TB_No" name="TB_No" style="width: 100%;" />
+                </td>
+                <td>
+                    <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked="true" onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()">全拼</label>
+                    <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
+                </td>
+            </tr>
+            <tr id="Idx_6">
+                <td class="Idx">
+                    6
+                </td>
+                <td>
+                    <div>
+                        数据表存储类型
+                    </div>
+                </td>
+                <td>
+                    <select id="DDL_PTableModel" name="DDL_PTableModel">
+                        <option value="0">自定存储表 </option>
+                        <option value="1">从数据库中指定，可以修改数据库结构。 </option>
+                        <option value="2">从数据库中指定，不允许修改数据库结构。 </option>
+                    </select>
+                </td>
+                <td>
+                    <div>
+                        确定后，不允许修改。
+                    </div>
+                </td>
+            </tr>
+            <tr id="Idx_7">
+                <td class="Idx" id="idx_td_7">
+                    7
+                </td>
+                <td>
+                    <div id="PTableName">
+                        自定义存储表
+                    </div>
+                </td>
+                <td>
+                    <input type="text" id="TB_PTable" name="TB_PTable" style="width: 100%;" />
+                </td>
+                <td>
+                    <div id="PTableDesc">
+                        数据要存储到那个表里？
+                    </div>
+                </td>
+            </tr>
+            <tr id="Idx_8">
+                <td class="Idx">
+                    8
+                </td>
+                <td>
+                    <div id="Div1">
+                        本机已存在的表
+                    </div>
+                </td>
+                <td>
+                    <select id="DDL_PTable" name="DDL_PTable" onchange="DDL_PTable_Change(this.id)">
+                    </select>
+                </td>
+                <td>
+                    <div id="Div2">
+                        请选择系统存在的表，对后两项有效？
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="Idx" id="OtherTd">
+                    9
+                </td>
+                <td>
+                </td>
+                <td colspan="2">
+                    <input type="button" value="创建 - Create" onclick="Save()" id="Btn_Save" />
+                    <script type="text/javascript">
 
-                    function GenerPinYin() {
+                        function GenerPinYin() {
 
-                        //是否是全拼.
-                        var isQuanPin = 0;
-                        if (document.getElementById("RB_ZZMM_0").checked == true)
-                            isQuanPin = 1;
+                            //是否是全拼.
+                            var isQuanPin = 0;
+                            if (document.getElementById("RB_ZZMM_0").checked == true)
+                                isQuanPin = 1;
 
-                        // var name = $('#TB_Nam').val();
-                        var name = document.getElementById("TB_Name").value;
-                        if (name == "")
-                            return;
+                            // var name = $('#TB_Nam').val();
+                            var name = document.getElementById("TB_Name").value;
+                            if (name == "")
+                                return;
 
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
-                        handler.AddPara("IsQuanPin", isQuanPin);
-                        handler.AddPara("EntityType", entityType);
-                        handler.AddPara("TB_Name", encodeURIComponent(name));
-                        var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+                            handler.AddPara("IsQuanPin", isQuanPin);
+                            handler.AddPara("EntityType", entityType);
+                            handler.AddPara("TB_Name", encodeURIComponent(name));
+                            var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
 
-                        $("#Msg").html("");
-
-                        if (data.indexOf('err@') >= 0) {
-                            $("#Msg").html("<font color=red>" + data + "</font>");
-                            return;
-                        }
-
-                        var key = "CCFrm_" + data;
-
-                        var frmType = $("#DDL_FrmType").val();
-                        if (frmType != "3" && frmType != "7") {
-
-                            if (entityType == 0)
-                                key = "Frm_" + data;
-
-                            if (entityType == 1)
-                                key = "Bill_" + data;
-
-                            if (entityType == 2)
-                                key = "Dict_" + data;
-                        }
-
-                        $('#TB_No').val(key);
-                        $('#TB_PTable').val(key);
-                        return;
-                    }
-
-                    function Save() {
-
-                        $("#Msg").html("正在创建,请稍后......");
-
-                        var name = document.getElementById("TB_Name").value;
-                        var no = document.getElementById("TB_No").value;
-                        var pTable = document.getElementById("TB_PTable").value;
-
-                        if (name == "" || no == "" || pTable == "") {
                             $("#Msg").html("");
-                            alert('@请输入必填的字段.');
+
+                            if (data.indexOf('err@') >= 0) {
+                                $("#Msg").html("<font color=red>" + data + "</font>");
+                                return;
+                            }
+
+                            var key = "CCFrm_" + data;
+
+                            var frmType = $("#DDL_FrmType").val();
+                            if (frmType != "3" && frmType != "7") {
+
+                                if (entityType == 0)
+                                    key = "Frm_" + data;
+
+                                if (entityType == 1)
+                                    key = "Bill_" + data;
+
+                                if (entityType == 2)
+                                    key = "Dict_" + data;
+                            }
+
+                            $('#TB_No').val(key);
+                            $('#TB_PTable').val(key);
                             return;
                         }
 
+                        function Save() {
 
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
-                        handler.AddFormData();
-                        handler.AddUrlData();
-                        var data = handler.DoMethodReturnString("NewFrmGuide_Create");
+                            $("#Msg").html("正在创建,请稍后......");
 
-                        if (data.indexOf('err@') >= 0) {
-                            $("#Msg").html("<font color=red>" + data + "</font>");
+                            var name = document.getElementById("TB_Name").value;
+                            var no = document.getElementById("TB_No").value;
+                            var pTable = document.getElementById("TB_PTable").value;
+
+                            if (name == "" || no == "" || pTable == "") {
+                                $("#Msg").html("");
+                                alert('@请输入必填的字段.');
+                                return;
+                            }
+
+
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+                            handler.AddFormData();
+                            handler.AddUrlData();
+                            var data = handler.DoMethodReturnString("NewFrmGuide_Create");
+
+                            if (data.indexOf('err@') >= 0) {
+                                $("#Msg").html("<font color=red>" + data + "</font>");
+                                return;
+                            }
+
+                            $("#Msg").html("<font color=green>" + data + "</font>");
+                            data = data.replace('url@', '');
+
+                            try {
+
+                                //表单库增加表单节点
+                                if (typeof window.parent.AppendFrmToFormTree != "undefined") {
+                                    // var sort = $("#HD_FK_FormTree").val();
+                                    var sort = GetQueryString("FK_FrmSort"); // $("#HD_FK_FormTree").val();
+                                    window.parent.AppendFrmToFormTree(sort, no, name);
+                                }
+
+                                if (typeof window.parent.TabCloseByTitle != "undefined") {
+                                    //需要延时关闭，不可立即关闭。
+                                    setTimeout("window.parent.TabCloseByTitle('新建表单')", 1000);
+                                }
+
+                            } catch (e) {
+
+                            }
+
+                            //切换页面
+                            window.location.href = data;
                             return;
                         }
+                    </script>
+                </td>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
+        <input type="hidden" id="HD_FK_FormTree" name="HD_FK_FormTree" />
+        <!--
+        <fieldset>
+        <legend> 帮助</legend>
 
-                        $("#Msg").html("<font color=green>" + data + "</font>");
-                        data = data.replace('url@', '');
-
-                        try {
-
-                            //表单库增加表单节点
-                            if (typeof window.parent.AppendFrmToFormTree != "undefined") {
-                                // var sort = $("#HD_FK_FormTree").val();
-                                var sort = GetQueryString("FK_FrmSort"); // $("#HD_FK_FormTree").val();
-                                window.parent.AppendFrmToFormTree(sort, no, name);
-                            }
-
-                            if (typeof window.parent.TabCloseByTitle != "undefined") {
-                                //需要延时关闭，不可立即关闭。
-                                setTimeout("window.parent.TabCloseByTitle('新建表单')", 1000);
-                            }
-
-                        } catch (e) {
-
-                        }
-
-                        //切换页面
-                        window.location.href = data;
-                        return;
-                    }
-                </script>
-            </td>
-        </tr>
-    </table>
-    <div id="Msg">
-    </div>
-    <input type="hidden" id="HD_FK_FormTree" name="HD_FK_FormTree" />
-    <!--
-<fieldset>
-<legend> 帮助</legend>
-
-1. 如果普通类型的字段：身高(float)，年龄(int)，地址(string)，电话(string)，就不用配置。
-2. 金额类型  费用@DType=Money
-3, 枚举类型. 性别@0=女@1=男
-4, 外键类型.   岗位@Table=Port_Station@No=BianHao@Name=MingCheng
-5, Boolen.    是否符合要求@DType=Boolen
-6. 日期类型:      出生日期@DType=Date   2017-11-12
-7. 日期时间类型:  发生时间@DType=DateTime   2017-11-12 12:01
-4, 外键扩展类型.  人员$SELECT No,Name from mytable where xxx='@WebUser.FK_Dept' and myfiel='@MainTableField'
+        1. 如果普通类型的字段：身高(float)，年龄(int)，地址(string)，电话(string)，就不用配置。
+        2. 金额类型  费用@DType=Money
+        3, 枚举类型. 性别@0=女@1=男
+        4, 外键类型.   岗位@Table=Port_Station@No=BianHao@Name=MingCheng
+        5, Boolen.    是否符合要求@DType=Boolen
+        6. 日期类型:      出生日期@DType=Date   2017-11-12
+        7. 日期时间类型:  发生时间@DType=DateTime   2017-11-12 12:01
+        4, 外键扩展类型.  人员$SELECT No,Name from mytable where xxx='@WebUser.FK_Dept' and myfiel='@MainTableField'
 
 
-自由表单的数据存储格式:
+        自由表单的数据存储格式:
 
-<br />
-枚举值:
-性别@XB;@0=女@1=男
-<br />
+        <br />
+        枚举值:
+        性别@XB;@0=女@1=男
+        <br />
 
-外键:
-岗位@Table=Port_Station@No=BianHao@Name=MingCheng
-<br />
+        外键:
+        岗位@Table=Port_Station@No=BianHao@Name=MingCheng
+        <br />
 
 
-日期:
-出生日期@DType=Date
+        日期:
+        出生日期@DType=Date
 
-<br />
+        <br />
 
-日期时间:
-发生时间@DType=DateTime
+        日期时间:
+        发生时间@DType=DateTime
 
-<br />
+        <br />
 
-金额:
-费用@DType=Money
+        金额:
+        费用@DType=Money
 
-<br />
+        <br />
 
-Boolen类型:
-是否符合要求@DType=Boolen
+        Boolen类型:
+        是否符合要求@DType=Boolen
 
-</fieldset>-->
+        </fieldset>-->
     </form>
 </body>
 </html>

@@ -20,7 +20,6 @@ $(function () {
     $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 
-
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax

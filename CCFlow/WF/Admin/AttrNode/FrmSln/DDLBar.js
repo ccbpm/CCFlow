@@ -8,7 +8,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FormSlnType.FoolForm + ">&nbsp;&nbsp;傻瓜表单(默认)</option>";
     html += "<option value=" + FormSlnType.FreeForm + ">&nbsp;&nbsp;自由表单</option>";
     html += "<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;累加模式表单</option>";
-    html += "<option value=" + FormSlnType.CTFrm + "  >&nbsp;&nbsp;开发者表单(研发中)</option>";
+    html += "<option value=" + FormSlnType.Developer + " >&nbsp;&nbsp;开发者表单(研发中)</option>";
     html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
 
@@ -20,7 +20,6 @@ function InitBar(optionKey) {
     html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
     html += "<option value=" + FormSlnType.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
     html += "<option value=" + FormSlnType.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
-    html += "<option value=" + FormSlnType.Developer + " >&nbsp;&nbsp;开发者表单</option>";
 
     html += "</select >";
 

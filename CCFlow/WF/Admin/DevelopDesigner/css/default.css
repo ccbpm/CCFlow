@@ -1,10 +1,12 @@
 ﻿.main-sidebar, .left-side {
     position: absolute;
-    top: 20px;
-    left: 0;
+    top: 37px;
+    left: 3px;
     /**padding-top: 50px;*/
+    border: 1px solid #C5D0DC;
+    border-right: none;
     min-height: 100%;
-    width: 200px;
+    width: 197px;
     z-index: 810;
     -webkit-transition: -webkit-transform .3s ease-in-out,width .3s ease-in-out;
     -moz-transition: -moz-transform .3s ease-in-out,width .3s ease-in-out;
@@ -29,15 +31,18 @@
 }
 
     .navlist li div {
-        border: 1px dashed #e0ecff;
+        border-bottom: 1px dashed #e0ecff;
         background-repeat: no-repeat !important;
         background-position: left;
         /* background-size: 136px 26px; */
         height: 24px;
-        width: 137px;
-        background: #e0ecff;
+        /* width: 137px;*/
+        /*background: #e0ecff;*/
     }
-
+.figurePanel {
+    background-color: #f4f4f4;
+    border-bottom: 1px dashed #e0ecff;
+}
 .navlistspan {
     margin-left: 30px;
     font-family: Microsoft YaHei;

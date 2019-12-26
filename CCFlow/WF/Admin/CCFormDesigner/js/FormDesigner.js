@@ -670,7 +670,7 @@ function Conver_CCForm_V1ToV2() {
     //循环FrmRB
     for (var i in flow_Data.Sys_FrmRB) {
         var frmRb = flow_Data.Sys_FrmRB[i];
-        if (frmRb.AtPara.indexOf("@MyDataType=4") != -1)
+        if (frmRb.AtPara != null && frmRb.AtPara != undefined && frmRb.AtPara.indexOf("@MyDataType=4") != -1)
             continue;
        
         var createdFigure = figure_Template_Rb(frmRb);

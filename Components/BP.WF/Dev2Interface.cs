@@ -221,7 +221,7 @@ namespace BP.WF
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND WFState=" + (int)WFState.Complete;
+                ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%') AND WFState=" + (int)WFState.Complete;
                 return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
 
             }

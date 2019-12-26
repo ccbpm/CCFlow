@@ -567,7 +567,7 @@ namespace BP.WF.Data
         public string DoOpenTrack()
         {
             //@sly
-            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
+            return "../WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
         }
     }
     /// <summary>

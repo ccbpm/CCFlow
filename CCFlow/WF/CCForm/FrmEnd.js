@@ -380,7 +380,9 @@ function AfterBindEn_DealMapExt(frmData) {
                         if (defaultVal.indexOf(ens[k].Tag1) == -1)
                             continue;
                         val += ens[k].Tag2 + ",";
-                    }
+                    }                
+                    if (val == "")
+                        val = frmData.MainTable[0][mapAttr.KeyOfEn + "T"];
                     $("#TB_" + mapAttr.KeyOfEn).val(val);
                     break;
                 }

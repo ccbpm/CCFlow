@@ -78,8 +78,24 @@
             },
             methods: {
                 Edit: function (myPK) {
-                    var url = "/WF/Comm/En.htm?EnName=BP.Sys.MapAttr&MyPK=" + myPK;
-                    WinOpen(url);
+
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    if (attr.LGType == 0 && attr.UIContralType == 1) {
+                        EditTableSQL( attr.MyPK  ,  attr.KeyOfEn);
+                    }
+
+                    if (attr.LGType == 0) {
+                        Edit(attr.MyPK, attr.MyDataType, attr.GroupID, attr.LGType, attr.UIContralType);
+                    }
+
+                    if (attr.LGType == 1)
+                    {
+                        EditEnum(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
+                    }
+                    if (attr.LGType == 2)
+                    {
+                        EditTable(  attr.FK_MapData ,   attr.MyPK ,   attr.KeyOfEn);
+                    }
                 },
                 Insert: function () {
                     var workid = GetQueryString("WorkID");
@@ -128,6 +144,129 @@
                 return  "";
             } 
             return "其他类型";
+        }
+
+        
+        function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
+
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + gf;
+            var title = '';
+            if (ftype == 1) {
+
+
+                if (uiContralType == 0) {
+                    title = '字段String属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 9) {
+                    title = '字段String超连接';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 8) {
+                    title = '手写签名版';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 6) {
+                    title = '附件组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 11) {
+
+                    debugger;
+                    var imgEn = new Entity("BP.Sys.FrmUI.ExtImg");
+                    imgEn.SetPKVal(mypk);
+
+                    if (imgEn.RetrieveFromDBSources() == 0) {
+                        var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+
+                        imgEn.CopyJSON(mapAttr);
+                        imgEn.MyPK = mypk;
+                        imgEn.Insert();
+                    }
+
+                    title = '装饰类图片属性';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 8) {
+                    title = '书写签字版';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 4) {
+                    title = '地图';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 50) {
+                    title = '流程进度图';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 101) {
+                    title = '评分控件';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+            }
+
+            if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
+                title = '字段Num属性';
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = '字段 date 属性';
+
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = '字段 datetime 属性';
+
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 4) {
+                title = '字段 boolen 属性';
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
+
+                window.location.href = window.location.href;
+
+            });
+
+            // OpenEasyUiDialog(url, "dd", title, 730, 500);
+            return;
+        }
+
+        function EditEnum(fk_mapdata, mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function EditTableSQL(mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外键SQL字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function EditTable(fk_mapData, mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外键字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
     </script>

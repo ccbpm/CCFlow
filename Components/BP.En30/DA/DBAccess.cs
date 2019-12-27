@@ -112,7 +112,16 @@ namespace BP.DA
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+
+                        if (SystemConfig.AppCenterDBType== DBType.MSSQL)
+                          sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+
+
                         BP.DA.DBAccess.RunSQL(sql);
+
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
@@ -1673,23 +1682,6 @@ namespace BP.DA
             Paras ps = new Paras();
             ps.SQL = sql;
             return RunSQL(ps);
-
-
-            //switch (dburl)
-            //{
-            //    case DBUrlType.AppCenterDSN:
-            //        return RunSQL(ps);
-            //    //case DBUrlType.DBAccessOfMSSQL1:
-            //    //    return DBAccessOfMSSQL1.RunSQL(sql);
-            //    //case DBUrlType.DBAccessOfMSSQL2:
-            //    //    return DBAccessOfMSSQL2.RunSQL(sql);
-            //    //case DBUrlType.DBAccessOfOracle1:
-            //    //    return DBAccessOfOracle1.RunSQL(sql);
-            //    //case DBUrlType.DBAccessOfOracle2:
-            //    //    return DBAccessOfOracle2.RunSQL(sql);
-            //    default:
-            //        throw new Exception("@没有判断的类型" + dburl.ToString());
-            //}
         }
         public static int RunSQL(string sql, string paraKey, object val)
         {
@@ -1726,7 +1718,6 @@ namespace BP.DA
         {
             if (DataType.IsNullOrEmpty(sql))
                 return 1;
-
 
             int result = 0;
             try

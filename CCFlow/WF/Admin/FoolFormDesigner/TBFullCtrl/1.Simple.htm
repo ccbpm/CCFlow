@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -18,6 +19,9 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            //格式化.
+            mapExt.Tag4 = FormatSQL(mapExt.Tag4);
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
@@ -101,7 +105,7 @@
                                  <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
                                  <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
                                  <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                                 <li> 4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
+                                 <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
                                  <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
                              </ul>
                              <fieldset>

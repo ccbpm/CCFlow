@@ -4716,7 +4716,17 @@ namespace BP.WF
             if (this.HisNode.HisFormType == NodeFormType.SheetTree)
             {
                 //获取绑定的表单.
-                FrmNodes nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
+                string frms = this.HisGenerWorkFlow.Paras_Frms;
+                FrmNodes nds = null;
+                if (DataType.IsNullOrEmpty(frms) == false)
+                {
+                    frms = "'" + frms.Replace(",", "','")+"'";
+                    nds = new FrmNodes();
+                    nds.RetrieveIn(FrmNodeAttr.FK_Frm, frms);
+                }
+                   
+                else
+                    nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
                 foreach (FrmNode item in nds)
                 {
                     if (item.FrmEnableRole == FrmEnableRole.Disable)

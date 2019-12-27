@@ -4720,6 +4720,7 @@ namespace BP.WF
                 FrmNodes nds = null;
                 if (DataType.IsNullOrEmpty(frms) == false)
                 {
+                    //设置前置导航，选择表单的操作
                     frms = "'" + frms.Replace(",", "','")+"'";
                     nds = new FrmNodes();
                     nds.RetrieveIn(FrmNodeAttr.FK_Frm, frms);

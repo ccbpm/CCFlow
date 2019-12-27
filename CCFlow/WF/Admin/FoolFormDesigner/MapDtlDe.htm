@@ -29,7 +29,9 @@
 		    //表单ID.
 		    var fk_mapData = GetQueryString("FK_MapData");
 		    //明细表ID.
-		    var fk_mapDtl = GetQueryString("FK_MapDtl");
+            var fk_mapDtl = GetQueryString("FK_MapDtl");
+
+            var fk_flow = GetQueryString("FK_Flow");
 
 		    var attrs = new Entities("BP.Sys.MapAttrs");
 		    attrs.Retrieve("FK_MapData", fk_mapDtl, "Idx");
@@ -45,7 +47,7 @@
 		        var visable = attr.UIVisible;
 		        if (visable == 0)
 		            continue;
-                if (fk_mapData == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1)
+                if (fk_mapData == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 && attr.AtPara.indexOf("FK_Flow="+fk_flow)==-1)
                     continue;
 
 		        colNum++;

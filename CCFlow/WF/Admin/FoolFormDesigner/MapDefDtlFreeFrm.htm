@@ -34,7 +34,7 @@
 
           var isFor = GetQueryString("For");
 
-          var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + "&For=" + isFor + "&m=" + Math.random();
+          var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl+'&FK_Flow='+GetQueryString("FK_Flow") + "&For=" + isFor + "&m=" + Math.random();
 
           $(function () {
 

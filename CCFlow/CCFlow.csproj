@@ -17,7 +17,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -1249,6 +1249,10 @@
     <Content Include="WF\Admin\Cond\StandAloneFrm.htm" />
     <Content Include="WF\Admin\DBInstall.htm" />
     <Content Include="WF\Admin\DevelopDesigner\css\default.css" />
+    <Content Include="WF\Admin\DevelopDesigner\Designer.css" />
+    <Content Include="WF\Admin\DevelopDesigner\Designer.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\Designer.js" />
+    <Content Include="WF\Admin\DevelopDesigner\DesignerTools.js" />
     <Content Include="WF\Admin\DevelopDesigner\DialogCtr\EnumerationNew.htm" />
     <Content Include="WF\Admin\DevelopDesigner\DialogCtr\Exp.htm" />
     <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmEnumeration.htm" />
@@ -1260,10 +1264,9 @@
     <Content Include="WF\Admin\DevelopDesigner\DialogCtr\FrmTextBoxChoseOneField.htm" />
     <Content Include="WF\Admin\DevelopDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\DevelopDesigner\DialogCtr\SFList.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\FormDesigner.htm" />
+    <Content Include="WF\Admin\DevelopDesigner\Fields.html" />
     <Content Include="WF\Admin\DevelopDesigner\FormDesigner1.htm" />
     <Content Include="WF\Admin\DevelopDesigner\FrmView.htm" />
-    <Content Include="WF\Admin\DevelopDesigner\js\designer.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\FrmView.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\dialogs\internal.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\lang\zh-cn\zh-cn.js" />
@@ -1342,10 +1345,14 @@
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\highcharts\themes\skies.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.min.map" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\SyntaxHighlighter\shCore.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.eot" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.svg" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.ttf" />
+    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.woff" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.css" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.min.css" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\video-js.swf" />
@@ -1369,6 +1376,7 @@
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.config.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.parse.js" />
     <Content Include="WF\Admin\DevelopDesigner\js\ueditor\ueditor.parse.min.js" />
+    <Content Include="WF\Admin\DevelopDesigner\Template\index.htm" />
     <Content Include="WF\Admin\DevelopDesigner\text.html" />
     <Content Include="WF\Admin\DoType.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ActionForDtl.htm" />
@@ -7433,10 +7441,6 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\jquery-1.10.2.min.map" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.eot" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.ttf" />
-    <Content Include="WF\Admin\DevelopDesigner\js\ueditor\third-party\video-js\font\vjs.woff" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\jquery.mobile-1.4.5.min.map" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\mui\fonts\mui.ttf" />
     <Content Include="WF\Admin\Portal\Handler.ashx" />

@@ -35,10 +35,11 @@
             <th>操作</th>
         </tr>
 
-        <tr v-for="(value,index) in listData.data">
+        <tr v-for="(value,index) in delData">
             <td>{{index+1}}</td>
             <td>{{value.KeyOfEn}}</td>
             <td>{{value.Name}}</td>
+            <td>{{value.contralType}}</td>
             <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
         </tr>
 
@@ -46,22 +47,34 @@
 
     <script type="text/javascript">
 
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-        handler.AddPara("FrmID", this.GetQueryString("FrmID"));
-        var html = handler.DoMethodReturnString("Fields_Init");
-
 
         var Baseinfo = new Vue({
             el: '#App',
             data: {
-                listData: [],
+                //listData: [],
+                delData: []
             },
             created() {
                 var frmID = GetQueryString("FrmID");
                 var ens = new Entities("BP.Sys.MapAttrs");
                 ens.Retrieve("FK_MapData", frmID, "Idx");
-                this.listData = ens.GetEns();
-                // console.log(this.listData);
+                //this.listData = ens.GetEns();
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+                handler.AddPara("FrmID", frmID);
+                var html = handler.DoMethodReturnString("Fields_Init");
+
+                //data-key="Age"
+                var list = ens.GetEns();
+                var deldate = [];
+                list.data.map(function (item, index) {
+                    if (item.KeyOfEn &&  html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && index>7) {
+                        item.contralType = GetFieldType(item);
+                        deldate.push(item);
+                    }
+                });
+                this.delData = deldate;
+               
             },
             methods: {
                 Edit: function (myPK) {
@@ -74,8 +87,48 @@
                     WinOpen(url);
                 }
             }
-
         })
+
+        function GetFieldType(mapAttr) {
+
+            if (mapAttr.UIContralType == 0) {
+                //控件数据类型
+                if (mapAttr.MyDataType == "1") {
+                    return "文本框 String";
+                } else if (mapAttr.MyDataType == "2") {
+                    return "文本框 Int";
+                } else if (mapAttr.MyDataType == "3") {
+                    return "文本框 Float";
+                } else if (mapAttr.MyDataType == "4") {
+                    return "文本框 Boolean";
+                } else if (mapAttr.MyDataType == "5") {
+                    return "文本框 Double";
+                } else if (mapAttr.MyDataType == "6") {
+                    return "文本框 Date";
+                } else if (mapAttr.MyDataType == "7") {
+                    return "文本框 DateTime";
+                } else if (mapAttr.MyDataType == "8") {
+                    return "文本框 Money";
+                }
+            } else if (mapAttr.UIContralType == 1) {
+                //枚举下拉框
+                if (mapAttr.LGType == 1) {
+                    return "枚举下拉框";
+                } //外键下拉框
+                else if (mapAttr.LGType == 2) {
+                    return "外键下拉框";
+                }
+                //外部数据源
+                else if (mapAttr.LGType == 0) {
+                    return "外部数据源";
+                }
+            } else if (mapAttr.UIContralType == 2) {//复选框
+                return "复选框";
+            } else if (mapAttr.UIContralType == 3) {//单选框
+                return  "";
+            } 
+            return "其他类型";
+        }
 
     </script>
 

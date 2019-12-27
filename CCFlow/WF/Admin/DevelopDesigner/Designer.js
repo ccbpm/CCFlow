@@ -1621,6 +1621,7 @@ function SaveForm() {
     }
 
     $("#Btn_Save").val("正在保存...");
+     
 
     leipiEditor.sync();       //同步内容
 
@@ -1753,7 +1754,8 @@ function SaveForm() {
         alert(data);
         return;
     }
-    $("#Btn_Save").val("保存成功.....");
+    //$("#Btn_Save").val("保存成功.....");
+    alert("保存成功!");
     $("#Btn_Save").val("保存");
 }
 //预览

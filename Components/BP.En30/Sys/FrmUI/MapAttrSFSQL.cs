@@ -230,7 +230,7 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = attr.FK_MapData + "_" + this.KeyOfEn + "T";
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "T";
             attr.Delete();
 
             //删除相对应的rpt表中的字段

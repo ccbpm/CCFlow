@@ -79,7 +79,19 @@ namespace BP.WF.Template
                 this.SetValByKey(MapDataAttr.TableCol, value);
             }
         }
-       
+
+        public string FK_FormTree
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDataAttr.FK_FormTree);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.FK_FormTree,value);
+            }
+        }
+
         #endregion
 
         #region 权限控制.
@@ -368,6 +380,9 @@ namespace BP.WF.Template
             //else
 
             //    this.FromEventEntity = feb.ToString();
+
+            if (this.NodeID != 0)
+                this.FK_FormTree = "";
 
             return base.beforeUpdate();
         }

@@ -47,7 +47,9 @@
 		        var visable = attr.UIVisible;
 		        if (visable == 0)
 		            continue;
-                if (fk_mapData == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 && attr.AtPara.indexOf("FK_Flow="+fk_flow)==-1)
+                if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 )
+                    continue;
+                if (attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
                     continue;
 
 		        colNum++;
@@ -113,7 +115,11 @@
 
 		            var visable = attr.UIVisible;
 		            if (visable == 0)
-		                continue;
+                        continue;
+                    if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 )
+                        continue;
+                    if (attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                        continue;
 
 		            var mypk = attr.MyPK;
 		            var dataType = attr.MyDataType;

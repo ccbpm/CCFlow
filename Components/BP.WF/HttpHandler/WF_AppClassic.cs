@@ -24,14 +24,11 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_AppClassic : DirectoryPageBase
     {
-
-
         /// <summary>
         /// 构造函数
         /// </summary>
         public WF_AppClassic()
         {
-
         }
 
 

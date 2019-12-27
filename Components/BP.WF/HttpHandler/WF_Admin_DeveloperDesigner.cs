@@ -50,7 +50,7 @@ namespace BP.WF.HttpHandler
         {
             //获取html代码
             string htmlCode = this.GetRequestVal("HtmlCode");
-            if(DataType.IsNullOrEmpty(htmlCode) == false)
+            if (DataType.IsNullOrEmpty(htmlCode) == false)
             {
                 //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
                 string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
@@ -62,17 +62,18 @@ namespace BP.WF.HttpHandler
 
                 //保存到数据库中
                 BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
-               
-
                 return "保存成功";
-
             }
-
             return "保存成功.";
         }
-
-
         #endregion
+
+        public string Fields_Init()
+        {
+            string html = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", 
+                this.FrmID, "HtmlTemplateFile");
+            return html;
+        }
 
         /// <summary>
         /// 表单重置
@@ -81,7 +82,7 @@ namespace BP.WF.HttpHandler
         public string ResetFrm_Init()
         {
             //删除html
-            string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\"+this.FK_MapData+".htm";
+            string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + this.FK_MapData + ".htm";
             if (File.Exists(filePath) == true)
                 File.Delete(filePath);
 
@@ -124,14 +125,14 @@ namespace BP.WF.HttpHandler
 
             #region 复制表单
             MapData toMapData = new MapData();
-            toMapData=fromMap;
+            toMapData = fromMap;
             toMapData.No = toFrmID;
             toMapData.Name = toFrmName;
             toMapData.Insert();
             if (billCount != 0)
             {
                 FrmBill toBill = new FrmBill();
-                toBill=fromBill;
+                toBill = fromBill;
                 toBill.No = toFrmID;
                 toBill.Name = toFrmName;
                 toBill.EntityType = EntityType.FrmBill;

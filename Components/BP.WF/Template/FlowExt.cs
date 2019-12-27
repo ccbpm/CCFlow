@@ -318,13 +318,9 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 if (BP.Web.WebUser.No == "admin" || this.DesignerNo == WebUser.No)
-                {
                     uac.IsUpdate = true;
-                }
-                else
-                {
-                    uac.IsUpdate = true;
-                }
+
+
                 return uac;
             }
         }

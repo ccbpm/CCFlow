@@ -288,12 +288,13 @@ namespace BP.DA
                 {
                     string sql = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
                     DBAccess.RunSQL(sql);
+                    return;
                 }catch(Exception ex)
                 {
                     /*如果没有此列，就自动创建此列.*/
                     if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " text ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                     throw ex;

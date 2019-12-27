@@ -11,6 +11,7 @@
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
     <script type="text/javascript">
 
         $(function () {
@@ -28,8 +29,12 @@
             en.SetPKVal(thisPK);
             en.RetrieveFromDBSources();
 
+
+            en.Doc = FormatSQL(en.Doc);
+
             //给下列框赋值.
             GenerFullAllCtrlsVal(en);
+
 
         });
 
@@ -52,7 +57,6 @@
 
             var sql = $("#TB_Doc").val();
             if (sql == '') {
-
                 alert("填充主表的sql不能为空！");
                 return;
             }
@@ -85,9 +89,7 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    数据源类型
-                </td>
+                <td>数据源类型</td>
                 <td>
                     <select id="DDL_DBType" name="DDL_DBType">
                         <option value="0">执行SQL</option>
@@ -115,8 +117,14 @@
         <fieldset>
             <legend>帮助.</legend>
             <ul>
-                <li>填充主表的SQL, </li>
-                <li>必须返回一行数据.</li>
+                <li>必须返回一行数据的 SQL或者数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>
+                    实例： <font color="green">
+                        SELECT  Name as MingCheng, Tel as DianHua, Email FROM WF_EMP WHERE No='@Key'
+                    </font>
+                </li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
             </ul>
         </fieldset>
     </form>

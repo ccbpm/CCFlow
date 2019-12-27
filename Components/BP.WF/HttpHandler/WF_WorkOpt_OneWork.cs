@@ -661,7 +661,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dt);
 
                     //获得流程状态.
-                    WFState wfState = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
+                    WFState wfState = (WFState)int.Parse(dt.Select("workid=" + workid + "")[0]["wfstate"].ToString());// (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
 
                     String fk_Node = dt.Rows[0]["FK_Node"].ToString();
                     //把节点审核配置信息.

@@ -46,6 +46,11 @@
 
     <script type="text/javascript">
 
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+        handler.AddPara("FrmID", this.GetQueryString("FrmID"));
+        var html = handler.DoMethodReturnString("Fields_Init");
+
+
         var Baseinfo = new Vue({
             el: '#App',
             data: {

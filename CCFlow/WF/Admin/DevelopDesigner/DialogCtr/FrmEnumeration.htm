@@ -141,6 +141,10 @@
             handler.AddPara("KeyOfEn", KeyOfEn);
             handler.AddPara("FK_MapData", fk_mapData);
             handler.AddPara("EnumKey", UIBindKey);
+            if (dataType == "Radio")
+                handler.AddPara("UIContralType", 3);
+            else
+                 handler.AddPara("UIContralType", 1);
             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
             if (data.indexOf("err@") >= 0) {
                 alert(data);

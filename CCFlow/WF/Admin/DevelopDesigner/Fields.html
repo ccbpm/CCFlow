@@ -22,6 +22,8 @@
     <script src="../../Scripts/PinYin.js"></script>
     <script src="../../Scripts/vue.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="js/ueditor/dialogs/internal.js"></script>
+    <script src="DialogCtr/Public.js"></script>
 
 </head>
 <body>
@@ -61,17 +63,15 @@
                 var frmID = GetQueryString("FrmID");
                 var ens = new Entities("BP.Sys.MapAttrs");
                 ens.Retrieve("FK_MapData", frmID, "Idx");
-                //this.listData = ens.GetEns();
 
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
                 handler.AddPara("FrmID", frmID);
                 var html = handler.DoMethodReturnString("Fields_Init");
 
-                //data-key="Age"
                 var list = ens.GetEns();
                 var deldate = [];
                 list.data.map(function (item, index) {
-                    if (item.KeyOfEn && html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && index > 7) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1 )  && index > 7) {
                         item.contralType = GetFieldType(item);
                         deldate.push(item);
                     }
@@ -87,7 +87,7 @@
                     }
 
                     if (attr.LGType == 0) {
-                        Edit(attr.MyPK, attr.MyDataType, attr.GroupID, attr.LGType, attr.UIContralType);
+                        Edit(attr.MyPK, attr.MyDataType, attr.GroupID, attr.FK_MapData, attr.UIContralType);
                     }
 
                     if (attr.LGType == 1) {
@@ -98,10 +98,9 @@
                     }
                 },
                 Insert: function (myPK) {
-
                     var attr = new Entity("BP.Sys.MapAttr", myPK);
-                    InsertHtmlToEditorByMapAttr(attr);
-
+                    InsertHtmlToEditor(GetDataType(attr),attr.KeyOfEn,attr.Name,attr.UIBindKey,attr);
+                     dialog.close(true);
                 }
             }
         })
@@ -142,13 +141,24 @@
             } else if (mapAttr.UIContralType == 2) {//复选框
                 return "复选框";
             } else if (mapAttr.UIContralType == 3) {//单选框
-                return "";
+                return "枚举单选按钮";
+             }
+             if (mapAttr.MyDataType == 1) {
+                if (mapAttr.UIContralType == 8)//手写签字版
+                    return "手写签字版";
+                if (mapAttr.UIContralType == 11)//图片
+                    return "图片";
+                if (mapAttr.UIContralType == 4)//地图
+                    return "地图";
+                if (mapAttr.UIContralType == 101)//评分
+                    return "评分";
             }
             return "其他类型";
         }
-        function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
+        
+        function Edit(mypk, ftype, gf, fk_mapdata, uiContralType) {
 
-            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + gf;
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
             var title = '';
             if (ftype == 1) {
 
@@ -237,7 +247,6 @@
 
             });
 
-            // OpenEasyUiDialog(url, "dd", title, 730, 500);
             return;
         }
 
@@ -267,6 +276,9 @@
                 window.location.href = window.location.href;
             });
         }
+
+        
+        
 
     </script>
 

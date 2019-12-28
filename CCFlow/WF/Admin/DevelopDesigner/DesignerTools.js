@@ -41,10 +41,6 @@ function ImpFrmTemplate() {
     window.open(url);
 }
 
-//导入现有字段.
-function ImpFrmFields() {
-    var frmID = GetQueryString("FK_MapData");
-    var url = "Fields.html?FrmID=" + frmID;
-    window.open(url);
-    // alert('在实现中..');
-}
+
+  
+

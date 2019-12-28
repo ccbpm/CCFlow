@@ -18,6 +18,28 @@ UE.leipiFormDesignUrl = 'formdesign';
  * editor.execCommand( 'textfield');
  * ```
  */
+//插入回收站字段.
+UE.plugins['impfrmfields'] = function () {
+    var me = this, thePlugins = 'impfrmfields';
+    var frmID = pageParam.fk_mapdata;
+    var W = document.body.clientWidth - 80;
+    var H = document.body.clientHeight - 120;
+    me.commands[thePlugins] = {
+        execCommand: function (method, dataType) {
+            var dialog = new UE.ui.Dialog({
+                iframeUrl: './Fields.html?FrmID=' + frmID,
+                name: thePlugins,
+                editor: this,
+                title: '回收站字段',
+                cssRules: "width:" + W + "px;height:" + H + "px;",
+               
+            });
+            dialog.render();
+            dialog.open();
+
+        }
+    };
+}
 UE.plugins['text'] = function () {
     var me = this, thePlugins = 'text';
     me.commands[thePlugins] = {
@@ -1538,7 +1560,7 @@ function ExtMap() {
     OpenEasyUiDialog(url, "eudlgframe", '地图', 800, 500, "icon-edit", true, null, null, null, function () {
         var _html = "<div style='text-align:left;padding-left:0px' id='Map_" + mapAttr.KeyOfEn + "' data-type='Map' data-key='" + mapAttr.MyPK + "' leipiplugins='component'>";
         _html += "<input type='button' name='select' value='选择'  style='background: #fff;color: #545454;font - size: 12px;padding: 4px 15px;margin: 5px 3px 5px 3px;border - radius: 3px;border: 1px solid #d2cdcd;'/>";
-        _html += "<input type = text style='width:200px' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' />";
+        _html += "<input type = text style='width:200px' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' />";
         _html += "</div>";
         leipiEditor.execCommand('insertHtml', _html);
     });
@@ -1714,7 +1736,7 @@ function SaveForm() {
             var uiBindKey = "";
             if (ptag.tagName.toLowerCase() == "span" && (ptag.getAttribute('leipiplugins') == "select" || ptag.getAttribute('leipiplugins') == "enum")) {
                 sfTable = ptag.getAttribute("data-sfTable");
-                keyOfEn = ptag.getAttribute("data-key");
+                keyOfEn = tag.getAttribute("data-key");
                 uiBindKey = tag.getAttribute("data-bindKey");
             }
             var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];

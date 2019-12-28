@@ -24,6 +24,7 @@ function GenerDevelopFrm(mapData, frmData) {
         alert("开发者设计的表单内容丢失，请联系管理员");
         return;
     }
+    
 
     $("#CCForm").html(htmlContent);
 
@@ -53,6 +54,38 @@ function GenerDevelopFrm(mapData, frmData) {
             html = $(html);
             $('#CCForm').append(html);
             continue;
+        }
+        if (mapAttr.MyDataType == 1) {
+            if (mapAttr.UIContralType == 8)//手写签字版
+            {
+                var element = $("#Img" + mapAttr.KeyOfEn);
+                var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                var ondblclick = ""
+                if (mapAttr.UIIsEnable == 1) {
+                    ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + defValue + "\")'";
+                }
+
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'  value='" + defValue + "' type=hidden />";
+                var eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                element.after(eleHtml);
+                element.remove(); //移除Imge节点
+            }
+            if (mapAttr.UIContralType == 4)//地图
+            {
+                var obj = $("#TB_" + mapAttr.KeyOfEn);
+                //获取兄弟节点
+                $(obj.prev()).attr("onclick", "figure_Template_Map('" + mapAttr.KeyOfEn + "','" + mapAttr.UIIsEnable + "')");
+            }
+            if (mapAttr.UIContralType == 101)//评分
+            {
+                var scores = $(".simplestar");//获取评分的类
+                $.each(scores, function (score, idx) {
+                    $.each($(this).children("Img"), function () {
+                        $(this).attr("src", $(this).attr("src").replace("../../", "../"));
+                    });
+                });
+
+            }
         }
     }
 
@@ -275,6 +308,7 @@ function figure_Template_Image(element,frmImage) {
         } else {
             $(element).after(img);
         }
+
 
 
 
@@ -1047,7 +1081,7 @@ function figure_Template_Siganture(SigantureID, val, type) {
 //签字板
 function figure_Template_HandWrite(HandWriteID, val) {
     var url = basePath+ "/WF/CCForm/HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
-    OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
+    OpenBootStrapModal(url, "eudlgframe", '签字板', 400, 300, false);
 }
 //地图
 function figure_Template_Map(MapID, UIIsEnable) {

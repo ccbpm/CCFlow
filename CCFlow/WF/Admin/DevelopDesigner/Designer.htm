@@ -40,7 +40,7 @@
         <input type="button" onclick="SaveAs()" value="另存为" id="Btn_SaveAs" />
         <input type="button" onclick="PreviewForm()" value="预览" id="Btn_View" />
         <input type="button" onclick="ImpFrmTemplate()" value="导入表单模版" id="Btn_ImpTemplate" />
-        <input type="button" onclick="ImpFrmFields()" value="插入回收站字段" id="Btn_ImpFields" />
+        <input type="button" onclick="leipiFormDesign.exec('ImpFrmFields');" value="插入回收站字段" id="Btn_ImpFields" />
         <input type="button" onclick="FrmMobile()" value="手机表单" id="Btn_FrmMobile" />
 
     </div>
@@ -276,7 +276,7 @@
     window.onload = function () {
 
         //先判断DataUser/CCForm/HtmlTemplateFile/FK_MapData.htm是否存在
-        var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + pageParam.fk_mapdata + ".htm";
+        var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + pageParam.fk_mapdata + ".htm?r="+Math.random() ;
         var htmlobj = $.ajax({ url: filename, async: false });
         var htmlContent = "";
         if (htmlobj.status == 404) {

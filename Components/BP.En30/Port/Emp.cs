@@ -345,7 +345,13 @@ namespace BP.Port
         {
             return "执行成功.";
         }
-
+        /// <summary>
+        /// ChangePass
+        /// </summary>
+        /// <param name="oldpass"></param>
+        /// <param name="pass1"></param>
+        /// <param name="pass2"></param>
+        /// <returns></returns>
         public string ChangePass(string oldpass, string pass1, string pass2)
         {
             if (BP.Web.WebUser.No != this.No)

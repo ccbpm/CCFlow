@@ -1148,6 +1148,17 @@ namespace BP.En
                 throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStrByKey(key) + "]转换为float类型.错误信息：" + ex.Message);
             }
         }
+        public decimal GetValDecimalByKeyIsNullAsVal(string key, decimal val)
+        {
+            try
+            {
+                return GetValDecimalByKey(key);
+            }
+            catch (Exception ex)
+            {
+                return val;
+            }
+        }
         public decimal GetValDecimalByKey(string key, string items)
         {
             if (items == "" || items == null)

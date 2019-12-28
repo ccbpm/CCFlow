@@ -32,7 +32,8 @@
             <th>字段</th>
             <th>英文名</th>
             <th>类型</th>
-            <th>操作</th>
+            <th>操作1</th>
+            <th>操作2</th>
         </tr>
 
         <tr v-for="(value,index) in delData">
@@ -41,6 +42,8 @@
             <td>{{value.Name}}</td>
             <td>{{value.contralType}}</td>
             <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
+            <td> <a href="#" @click="Insert(value.MyPK);">插入</a></td>
+
         </tr>
 
     </table>
@@ -68,44 +71,42 @@
                 var list = ens.GetEns();
                 var deldate = [];
                 list.data.map(function (item, index) {
-                    if (item.KeyOfEn &&  html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && index>7) {
+                    if (item.KeyOfEn && html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && index > 7) {
                         item.contralType = GetFieldType(item);
                         deldate.push(item);
                     }
                 });
                 this.delData = deldate;
-               
+
             },
             methods: {
                 Edit: function (myPK) {
-
                     var attr = new Entity("BP.Sys.MapAttr", myPK);
                     if (attr.LGType == 0 && attr.UIContralType == 1) {
-                        EditTableSQL( attr.MyPK  ,  attr.KeyOfEn);
+                        EditTableSQL(attr.MyPK, attr.KeyOfEn);
                     }
 
                     if (attr.LGType == 0) {
                         Edit(attr.MyPK, attr.MyDataType, attr.GroupID, attr.LGType, attr.UIContralType);
                     }
 
-                    if (attr.LGType == 1)
-                    {
+                    if (attr.LGType == 1) {
                         EditEnum(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
                     }
-                    if (attr.LGType == 2)
-                    {
-                        EditTable(  attr.FK_MapData ,   attr.MyPK ,   attr.KeyOfEn);
+                    if (attr.LGType == 2) {
+                        EditTable(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
                     }
                 },
-                Insert: function () {
-                    var workid = GetQueryString("WorkID");
-                    var url = "/WF/Comm/En.htm?EnName=BP.TGK.ND14Rpt&OID=" + workid;
-                    WinOpen(url);
+                Insert: function (myPK) {
+
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    InsertHtmlToEditorByMapAttr(attr);
+
                 }
             }
         })
 
-        function GetFieldType(mapAttr) {
+         function GetFieldType(mapAttr) {
 
             if (mapAttr.UIContralType == 0) {
                 //控件数据类型
@@ -141,11 +142,10 @@
             } else if (mapAttr.UIContralType == 2) {//复选框
                 return "复选框";
             } else if (mapAttr.UIContralType == 3) {//单选框
-                return  "";
-            } 
+                return "";
+            }
             return "其他类型";
         }
-        
         function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
 
             var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + gf;

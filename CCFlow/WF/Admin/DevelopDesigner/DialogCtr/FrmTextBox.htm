@@ -15,7 +15,7 @@
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../../Scripts/PinYin.js" type="text/javascript"></script>
     <script src="../js/ueditor/dialogs/internal.js"></script>
-
+    <script src="Public.js"></script>
     <script type="text/javascript">
         var fk_mapData = GetQueryString("FK_MapData");
         var dataType = GetQueryString("DataType");
@@ -113,30 +113,9 @@
                  $.messager.alert('错误', data.replace('err@',''), 'error');
                 return false;
             }
-            var _Html = "";
-            //文本
-            if(dataType=="Text")
-                _Html = "<input type='text' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"' data-name='"+name+"' data-type='"+dataType+"'  class='form-control' leipiplugins='text' style='width:120px'/>";
-            //int型
-            if (dataType == "Int") 
-                _Html = "<input type='text' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"'  data-name='"+name+"' data-type='"+dataType+"'  class='form-control' leipiplugins='text' style='width:120px'/>";
-            //Float型
-            if (dataType == "Float")
-                 _Html = "<input type='text' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"' data-name='"+name+"' data-type='"+dataType+"'  class='form-control' leipiplugins='text' style='width:120px'/>";
-            //金额
-            if (dataType == "Money")
-                _Html = "<input type='text' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"' data-name='"+name+"' data-type='"+dataType+"'  class='form-control' leipiplugins='text' style='width:120px'/>";
-            //日期
-            if (dataType == "Date")
-               _Html = "<input type='text' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"' data-name='"+name+"' data-type='"+dataType+"'  class='form-control' onfocus='WdatePicker({dateFmt:yyyy-MM-dd})'  leipiplugins='text' style='width:120px'/>";
-            //时间
-            if (dataType == "DateTime")
-                 _Html = "<input type='text' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"' data-name='"+name+"' data-type='"+dataType+"'  class='form-control' onfocus='WdatePicker({dateFmt:yyyy-MM-dd HH:mm:ss})' leipiplugins='text' style='width:160px'/>";                 
-            //复选框
-            if (dataType == "CheckBox")
-               _Html = "<input type='CheckBox' value= '' id='TB_" + KeyOfEn + "' name='TB_" + KeyOfEn + "' data-key='"+KeyOfEn+"' data-name='"+name+"' data-type='"+dataType+"'  class='form-control' leipiplugins='text' style='width:100px'/>"+name;
-            editor.execCommand('insertHtml', _Html);
-          
+
+            //插入到html 到编辑器.
+            InsertHtmlToEditor(dataType);
            
         };
 

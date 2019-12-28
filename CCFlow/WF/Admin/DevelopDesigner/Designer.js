@@ -1651,7 +1651,7 @@ function SaveForm() {
     if (typeof type !== 'undefined') {
         type_value = type;
     }
-    formeditor = leipiEditor.getContent();
+   
 
     //比对Sys_MapAttr,如果html存在符合我们代码规则的保存到Sys_MapAttr中
     var strs = "FID,FK_Dept,FK_Emp,FK_NY,MyNum,OID,RDT,CDT,Rec"//默认的
@@ -1722,7 +1722,8 @@ function SaveForm() {
                     mapAttr.LGType = 0;
                 }
                 mapAttr.Insert();
-            }
+            } 
+
         }
     });
     var selects = leipiEditor.document.getElementsByTagName("select");
@@ -1766,6 +1767,31 @@ function SaveForm() {
         }
     });
 
+    //补充枚举值不全的情况
+    var spans = leipiEditor.document.getElementsByTagName("span");
+    for (var i = 0; i < spans.length; i++) {
+        var tag = spans[i];
+        var uiBindKey = tag.getAttribute("data-bindKey");
+        if (uiBindKey == null || uiBindKey == undefined || uiBindKey == "")
+            continue;
+        if (tag.getAttribute("data-type") != "Radio")
+            continue;
+        //获取枚举值
+        //获取枚举值
+        var enums = new Entities("BP.Sys.SysEnums");
+        enums.Retrieve("EnumKey", uiBindKey);
+        if (enums.length == 0)
+            continue;
+        var keyOfEn = tag.getAttribute("data-key");
+        $.each(enums, function (idx, obj) {
+
+            if (leipiEditor.document.getElementById("RB_" + keyOfEn + "_" + obj.IntKey) == null)
+                $(tag).append('<input type="radio" value="0" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Enum" data-bindkey="' + uiBindKey + '" class="form - control" style="width: 15px; height: 15px;">' + obj.Lab);
+        });
+
+    }
+
+    formeditor = leipiEditor.getContent();
     //保存表单的html信息
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", pageParam.fk_mapdata);

@@ -116,10 +116,6 @@ namespace BP.DA
                         if (SystemConfig.AppCenterDBType== DBType.MSSQL)
                           sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
 
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
-
-
                         BP.DA.DBAccess.RunSQL(sql);
 
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
@@ -277,11 +273,11 @@ namespace BP.DA
         /// <param name="tablePK">表主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="saveFileField">保存到字段</param>
-        public static void SaveBigTextToDB(string docs, string tableName, string tablePK, string pkVal, string saveToFileField)
+        public static void SaveBigTextToDB(string docs, string tableName, string tablePK, string pkVal, string saveToFileField,bool isSaveByte=false)
         {
 
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
-                || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
+                || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL) && isSaveByte==false)
             {
 
                 try
@@ -405,7 +401,7 @@ namespace BP.DA
                     if (!BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField))
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " image ";
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " varbinary ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                     return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);

@@ -61,7 +61,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.DataType.WriteFile(filePath, htmlCode);
 
                 //保存到数据库中
-                BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
+                BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile",true);
                 return "保存成功";
             }
             return "保存成功.";

@@ -49,7 +49,7 @@
 		            continue;
                 if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 )
                     continue;
-                if (attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                if (fk_flow!=null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
                     continue;
 
 		        colNum++;
@@ -118,7 +118,7 @@
                         continue;
                     if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 )
                         continue;
-                    if (attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                    if (fk_flow!=null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
                         continue;
 
 		            var mypk = attr.MyPK;

@@ -350,14 +350,17 @@ namespace BP.DA
         /// <param name="tablePK">主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="fileSaveField">保存字段</param>
+        /// <param name="isByte">保存字段类型是否为Blob</param>
         /// <returns></returns>
-        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
+        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField,bool isByte=false)
         {
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL) && isByte == false)
             {
                 string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
                 return DBAccess.RunSQLReturnString(getSql);
             }
+            
+
 
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
             if (byteFile == null)

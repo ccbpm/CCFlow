@@ -304,8 +304,12 @@ namespace BP.WF.HttpHandler
             attr.UIBindKey = this.GetRequestVal("EnumKey");
 
             attr.GroupID = this.GetRequestValInt("GroupFeid");
+            int uiContralType = this.GetRequestValInt("UIContralType");
 
-            attr.UIContralType = En.UIContralType.DDL;
+            if (uiContralType != 0)
+                attr.UIContralType = (UIContralType)uiContralType;
+            else
+                attr.UIContralType = En.UIContralType.DDL;
             attr.MyDataType = DataType.AppInt;
             attr.LGType = En.FieldTypeS.Enum;
 

@@ -755,26 +755,22 @@ namespace BP.WF
                 string keyOfEn = dr["KeyOfEn"].ToString();
                 if (UIIsEnable.Equals("0")) //字段未启用
                 {
-                    me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
-                    if (me == null)
-                    {
-                        continue;
-                    }
-
                     SFTable sfTable = new SFTable(uiBindKey);
+                    if (sfTable.FK_Val == uiBindKey)
+                    {
+                        String fullSQL = sfTable.SelectStatement;
+                        fullSQL = fullSQL.Replace("~", ",");
+                        fullSQL = BP.WF.Glo.DealExp(fullSQL, null, null);
 
-                    String fullSQL = sfTable.SelectStatement;
-                    fullSQL = fullSQL.Replace("~", ",");
-                    fullSQL = BP.WF.Glo.DealExp(fullSQL, null, null);
+                        DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
-                    DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+                        dt.TableName = uiBindKey;
 
-                    dt.TableName = uiBindKey;
+                        dt.Columns[0].ColumnName = "No";
+                        dt.Columns[1].ColumnName = "Name";
 
-                    dt.Columns[0].ColumnName = "No";
-                    dt.Columns[1].ColumnName = "Name";
-
-                    myds.Tables.Add(dt);
+                        myds.Tables.Add(dt);
+                    }
                     continue;
                 }
 

@@ -718,6 +718,8 @@ namespace BP.WF
 
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
+            Hashtable ht = null;
+            bool isFirst = true;
             foreach (DataRow dr in Sys_MapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
@@ -797,9 +799,20 @@ namespace BP.WF
                 // 判断是否存在.
                 if (myds.Tables.Contains(uiBindKey) == true)
                     continue;
+                if(isFirst == true)
+                {
+                    ht = en.Row;
+                    //获取URL上的参数
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
+                    {
+                        if (string.IsNullOrEmpty(key) || ht.ContainsKey(key) == true)
+                            continue;
+                        ht.Add( key, HttpContextHelper.RequestParams(key));
+                    }
+                }
 
                 // 获得数据.
-                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey,ht);
 
                 if (mydt == null)
                 {

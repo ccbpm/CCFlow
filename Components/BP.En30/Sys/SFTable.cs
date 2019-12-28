@@ -152,7 +152,7 @@ namespace BP.Sys
         /// <summary>
         /// 获得外部数据表
         /// </summary>
-        public System.Data.DataTable GenerHisDataTable()
+        public System.Data.DataTable GenerHisDataTable(Hashtable ht=null)
         {
             //创建数据源.
             SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
@@ -298,6 +298,30 @@ namespace BP.Sys
 
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                if (runObj.Contains("@") == true && ht == null)
+                    throw new Exception("@外键类型SQL错误," + runObj+"部分查询条件没有被替换.");
+
+                if (runObj.Contains("@") == true && ht!=null)
+                {
+                    foreach (string key in ht.Keys)
+                    {
+                        //值为空或者null不替换
+                        if (ht[key] == null || ht[key].Equals("") == true)
+                            continue;
+
+                        if (runObj.Contains("@" + key))
+                            runObj = runObj.Replace("@" + key, ht[key].ToString());
+
+                        //不包含@则返回SQL语句
+                        if (runObj.Contains("@") == false)
+                            break;
+                    }
+
+                }
+
+                if (runObj.Contains("@") == true)
+                    throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
 
                 DataTable dt = src.RunSQLReturnTable(runObj);
                 return dt;

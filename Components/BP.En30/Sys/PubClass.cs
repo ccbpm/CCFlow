@@ -511,7 +511,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="uiBindKey"></param>
         /// <returns></returns>
-        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey)
+        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey,Hashtable ht=null)
         {
             DataTable dt = new DataTable();
             if (uiBindKey.Contains("."))
@@ -537,7 +537,7 @@ namespace BP.Sys
             {
                 if (sf.SrcType == SrcType.Handler || sf.SrcType == SrcType.JQuery)
                     return null;
-                dt = sf.GenerHisDataTable();
+                dt = sf.GenerHisDataTable(ht);
             }
 
             if (dt == null)

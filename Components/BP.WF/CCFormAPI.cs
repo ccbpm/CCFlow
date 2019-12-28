@@ -759,7 +759,7 @@ namespace BP.WF
                 {
                     SFTable sfTable = new SFTable(uiBindKey);
                     String fullSQL = sfTable.SelectStatement;
-                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = fullSQL.Replace("~", "'");
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, null, null);
 
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);

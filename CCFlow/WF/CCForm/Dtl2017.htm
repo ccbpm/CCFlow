@@ -305,6 +305,9 @@
                 if ($(threadThObj).data().colname != undefined) {
                     var o = $(threadThObj);
                     var tmplate = figure_MapAttr_Template(o.data());
+					if(o.data().UIIsInput==1){
+                    	tmplate.attr('class', "mustInput");
+                    }
                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
                     tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
                     if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {

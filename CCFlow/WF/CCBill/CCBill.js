@@ -2,6 +2,21 @@
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  前台操作的方法： %%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
+function Port_Login(userNo) {
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+    handler.AddPara("UserNo", userNo);
+    handler.DoMethodReturnString("Portal_Login");
+
+}
+
 /* 获得可以操作的单据列表. 返回: No,Name,FrmType,TreeNo,TreeName 的 json. FrmType=是单据，还是实体.
  * 1. 该方法可以用于生成当前用户可以发起的单据列表.
  * 2. 我们提供了一个通用的百搭款的风格的页面. /WF/CCBill/Start.htm
@@ -51,14 +66,7 @@ function CCFrom_FrmOptionUrlByOID(frmID, pkval) {
  * @param {主键} pkval
  */
 function CCFrom_FrmOptionUrlByBillNo(frmID, billNo) {
-
-    var en = new Entity(frmID);
-    var i = en.Retrieve("BillNo", billNo);
-    if (i == 0) {
-        en.BillNo = billno;
-        en.Insert();
-    }
-    return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + en.OID;
+    return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&BillNo=" + billNo;
 }
 
 /**
@@ -105,8 +113,7 @@ function CCForm_SaveAsDraftByOID(frmID,oid) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", oid);
-   // var billOID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
-    //return billOID;
+
 }
 
 /**

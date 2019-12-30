@@ -690,8 +690,11 @@
                         
                         node.rBorder.attr({ "stroke": borderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
                         node.rText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
-                        node.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
-                        node.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
+                        if (node.rTrackText !=null) {
+
+                            node.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
+                            node.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor) });
+                        }
                        
 
                         if (isSubFlowNode == false) {

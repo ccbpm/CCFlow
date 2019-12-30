@@ -652,6 +652,7 @@ namespace BP.En
                         sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + this._enMap.PhysicsTable;
                         break;
                     case DBType.Oracle:
+                    case DBType.DM:
                         sql = "SELECT MAX(" + field + ") +1 AS No FROM " + this._enMap.PhysicsTable;
                         break;
                     case DBType.MySQL:
@@ -703,6 +704,7 @@ namespace BP.En
                     sql = "SELECT CONVERT(bigint, MAX([" + field + "]))+1 AS Num FROM " + this.EnMap.PhysicsTable + " WHERE " + attrGroupKey + "='" + attrGroupVal + "'";
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.Informix:
                     sql = "SELECT MAX( :f )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.HisDBVarStr + "groupKey=" + this.HisDBVarStr + "groupVal ";
                     break;
@@ -751,6 +753,7 @@ namespace BP.En
             switch (this.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.Informix:
                     sql = "SELECT   MAX(" + f + ") +1 AS No FROM " + this.EnMap.PhysicsTable;
                     break;
@@ -1283,6 +1286,7 @@ namespace BP.En
                             selectSQL += SqlBuilder.GetKeyConditionOfMS(this);
                             break;
                         case DBType.Oracle:
+                        case DBType.DM:
                         case DBType.PostgreSQL:
                             selectSQL += SqlBuilder.GetKeyConditionOfOraForPara(this);
                             break;
@@ -1502,6 +1506,7 @@ namespace BP.En
             switch (this.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.MSSQL:
                 case DBType.MySQL:
                     return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.PK + " =" + this.HisDBVarStr + pk);
@@ -2560,7 +2565,8 @@ namespace BP.En
                 switch (DBAccess.AppCenterDBType)
                 {
                     case DBType.Oracle:
-                        sql=SqlBuilder.GenerCreateTableSQLOfOra(this);
+                    case DBType.DM:
+                        sql = SqlBuilder.GenerCreateTableSQLOfOra(this);
                         break;
                     case DBType.Informix:
                         sql = SqlBuilder.GenerCreateTableSQLOfInfoMix(this);
@@ -3291,6 +3297,7 @@ namespace BP.En
                     this.CheckPhysicsTable_SQL();
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     this.CheckPhysicsTable_Ora();
                     break;
                 case DBType.MySQL:

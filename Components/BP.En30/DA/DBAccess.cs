@@ -29,6 +29,7 @@ using MySql;
 using MySql.Data.MySqlClient;
 using BP.Sys;
 using Npgsql;
+using Dm;
 
 namespace BP.DA
 {
@@ -1026,7 +1027,7 @@ namespace BP.DA
                     string[] strs = BP.Sys.SystemConfig.AppCenterDSN.Split(';');
                     foreach (string str in strs)
                     {
-                        if (str.Contains("user ") == true)
+                        if (str.ToLower().Contains("user ") == true)
                         {
                             _connectionUserID = str.Split('=')[1];
                             break;
@@ -1046,6 +1047,7 @@ namespace BP.DA
                     case DBType.MSSQL:
                         return new SqlConnection(connstr);
                     case DBType.Oracle:
+                    case DBType.DM:
                         return new OracleConnection(connstr);
                     case DBType.MySQL:
                         return new MySqlConnection(connstr);
@@ -1069,6 +1071,7 @@ namespace BP.DA
                     case DBType.MSSQL:
                         return new SqlDataAdapter();
                     case DBType.Oracle:
+                    case DBType.DM:
                         return new OracleDataAdapter();
                     case DBType.MySQL:
                         return new MySqlDataAdapter();
@@ -1092,6 +1095,8 @@ namespace BP.DA
                         return new SqlCommand();
                     case DBType.Oracle:
                         return new OracleCommand();
+                    case DBType.DM:
+                        return new DmCommand();
                     case DBType.MySQL:
                         return new MySqlCommand();
                     case DBType.PostgreSQL:
@@ -1141,6 +1146,7 @@ namespace BP.DA
                 switch (AppCenterDBType)
                 {
                     case DBType.Oracle:
+                    case DBType.DM:
                     case DBType.MSSQL:
                     case DBType.Informix:
                     case DBType.Access:
@@ -1356,6 +1362,7 @@ namespace BP.DA
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.MSSQL:
                     sql = "ALTER TABLE " + table + " DROP CONSTRAINT " + pkName;
                     break;
@@ -1553,6 +1560,7 @@ namespace BP.DA
             switch (BP.Sys.SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT text FROM user_source WHERE name=UPPER('" + proName + "') ORDER BY LINE ";
                     break;
                 default:
@@ -1736,6 +1744,9 @@ namespace BP.DA
                     case DBType.PostgreSQL:
                         result = RunSQL_201902_PSQL(sql, paras);
                         break;
+                    case DBType.DM: //为中国电子支持dm.
+                        result = RunSQL_20191230_DM(sql, paras);
+                        break;
                     //case DBType.Informix:
                     //    result = RunSQL_201205_Informix(sql, paras);
                     //    break;
@@ -1853,6 +1864,55 @@ namespace BP.DA
         /// <param name="sql">sql</param>
         /// <param name="paras">参数</param>
         /// <returns>执行的结果</returns>
+        private static int RunSQL_20191230_DM(string sql, Paras paras)
+        {
+            DmConnection conn = new DmConnection(SystemConfig.AppCenterDSN);
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.ConnectionString = SystemConfig.AppCenterDSN;
+                conn.Open();
+            }
+
+            DmCommand cmd = new DmCommand(sql, conn);
+            cmd.CommandType = CommandType.Text;
+
+            try
+            {
+                if (paras != null)
+                {
+                    foreach (Para para in paras)
+                    {
+                        DmParameter oraP = new DmParameter(para.ParaName, para.val);
+                        cmd.Parameters.Add(oraP);
+                    }
+                }
+
+                int i = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                conn.Close();
+                return i;
+            }
+            catch (System.Exception ex)
+            {
+                cmd.Dispose();
+                conn.Close();
+
+                paras.SQL = sql;
+                string msg = "";
+                if (paras.Count == 0)
+                    msg = "SQL=" + sql + ",异常信息:" + ex.Message;
+                else
+                    msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
+
+                Log.DefaultLogWriteLineInfo(msg);
+                throw new Exception(msg);
+            }
+            finally
+            {
+                cmd.Dispose();
+                conn.Close();
+            }
+        }
         private static int RunSQL_200705_SQL(string sql, Paras paras)
         {
             SqlConnection conn = new SqlConnection(SystemConfig.AppCenterDSN);
@@ -2268,6 +2328,52 @@ namespace BP.DA
         #endregion
 
         #region OracleConnection
+        private static DataTable RunSQLReturnTable_20191231_DM(string selectSQL, Paras paras)
+        {
+            DmConnection conn = new DmConnection(SystemConfig.AppCenterDSN);
+            try
+            {
+                if (conn.State !=  ConnectionState.Open)
+                    conn.Open();
+
+                DmDataAdapter ada = new DmDataAdapter(selectSQL, conn);
+                ada.SelectCommand.CommandType = CommandType.Text;
+
+                // 加入参数
+                if (paras != null)
+                {
+                    foreach (Para para in paras)
+                    {
+                        DmParameter myParameter = new DmParameter(para.ParaName, para.DATypeOfOra);
+                        myParameter.Size = para.Size;
+                        myParameter.Value = para.val;
+                        ada.SelectCommand.Parameters.Add(myParameter);
+                    }
+                }
+
+                DataTable oratb = new DataTable("otb");
+                ada.Fill(oratb);
+                ada.Dispose();
+                conn.Close();
+                return oratb;
+            }
+            catch (System.Exception ex)
+            {
+                conn.Close();
+                string msg = "@运行查询在(RunSQLReturnTable_20191231_DM with paras)出错 sql=" + selectSQL + " @异常信息：" + ex.Message;
+                msg += "@Para Num= " + paras.Count;
+                foreach (Para pa in paras)
+                {
+                    msg += "@" + pa.ParaName + "=" + pa.val;
+                }
+                Log.DebugWriteError(msg);
+                throw new Exception(msg);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
         private static DataTable RunSQLReturnTable_200705_Ora(string selectSQL, Paras paras)
         {
             OracleConnection conn = new OracleConnection(SystemConfig.AppCenterDSN);
@@ -2476,76 +2582,12 @@ namespace BP.DA
                                     break;
                                 }
                             }
-
-                            //else
-                            //{
-                            //    mysql += "?" + str;
-                            //}
-
-                            //if (str.Contains(")") == true)
-                            //    mysql += "?" + str.Substring(str.IndexOf(")"));
-                            //else
-                            //    mysql += "?" + str;
                             break;
                     }
                 }
             }
             return mysql;
         }
-
-        /*
-        /// <summary>
-        /// RunSQLReturnTable_200705_Informix
-        /// </summary>
-        /// <param name="selectSQL">要执行的sql</param>
-        /// <returns>返回table</returns>
-        private static DataTable RunSQLReturnTable_201205_Informix(string sql, Paras paras)
-        {
-            //if (paras.Count != 0 && sql.Contains("?") == false)
-            //{
-            //    sql = DealInformixSQL(sql);
-            //}
-            sql = DealInformixSQL(sql);
-
-            IfxConnection conn = new IfxConnection(SystemConfig.AppCenterDSN);
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
-
-            IfxDataAdapter ada = new IfxDataAdapter(sql, conn);
-            ada.SelectCommand.CommandType = CommandType.Text;
-
-            // 加入参数
-            foreach (Para para in paras)
-            {
-                IfxParameter myParameter = new IfxParameter(para.ParaName, para.val);
-                myParameter.Size = para.Size;
-                ada.SelectCommand.Parameters.Add(myParameter);
-            }
-
-            try
-            {
-                DataTable oratb = new DataTable("otb");
-                ada.Fill(oratb);
-                ada.Dispose();
-                conn.Close();
-                return oratb;
-            }
-            catch (Exception ex)
-            {
-                ada.Dispose();
-                conn.Close();
-                Log.DefaultLogWriteLineError(sql);
-                Log.DefaultLogWriteLineError(ex.Message);
-
-                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
-            }
-            finally
-            {
-                ada.Dispose();
-                conn.Close();
-            }
-        }
-        */
         /// <summary>
         /// RunSQLReturnTable_200705_SQL
         /// </summary>
@@ -2668,6 +2710,9 @@ namespace BP.DA
                     return RunSQLReturnTable_201612_SQL(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.Oracle:
                     return RunSQLReturnTable_201612_Ora(sql, pageSize, pageIdx, orderKey, orderType);
+                case DBType.DM:
+                    return RunSQLReturnTable_201612_Ora(sql, pageSize, pageIdx, orderKey, orderType);
+
                 case DBType.MySQL:
                     return RunSQLReturnTable_201612_MySql(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.PostgreSQL:
@@ -2817,9 +2862,9 @@ namespace BP.DA
                     case DBType.Oracle:
                         dt = RunSQLReturnTable_200705_Ora(sql, paras);
                         break;
-                    //case DBType.Informix:
-                    //    dt = RunSQLReturnTable_201205_Informix(sql, paras);
-                    //    break;
+                    case DBType.DM:
+                        dt = RunSQLReturnTable_20191231_DM(sql, paras);
+                        break;
                     case DBType.PostgreSQL:
                         dt = RunSQLReturnTable_201902_PSQL(sql, paras);
                         break;
@@ -3144,6 +3189,9 @@ namespace BP.DA
                 case DBType.Oracle:
                     dt = DBAccess.RunSQLReturnTable_200705_Ora(sql, paras);
                     break;
+                case DBType.DM:
+                    dt = DBAccess.RunSQLReturnTable_20191231_DM(sql, paras);
+                    break;
                 case DBType.MSSQL:
                     dt = DBAccess.RunSQLReturnTable_200705_SQL(sql, paras);
                     break;
@@ -3153,9 +3201,6 @@ namespace BP.DA
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, paras);
                     break;
-                //case DBType.Informix:
-                //    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, paras);
-                //    break;
                 default:
                     throw new Exception("@没有判断的数据库类型");
             }
@@ -3176,6 +3221,9 @@ namespace BP.DA
             {
                 case DBType.Oracle:
                     dt = DBAccess.RunSQLReturnTable_200705_Ora(sql, new Paras());
+                    break;
+                case DBType.DM:
+                    dt = DBAccess.RunSQLReturnTable_20191231_DM(sql, new Paras());
                     break;
                 case DBType.MSSQL:
                     dt = DBAccess.RunSQLReturnTable_200705_SQL(sql, new Paras());
@@ -3240,6 +3288,7 @@ namespace BP.DA
                     ps.Add("Tab", table);
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT constraint_name, constraint_type,search_condition, r_constraint_name  from user_constraints WHERE table_name = upper(:tab) AND constraint_type = 'P'";
                     ps.Add("Tab", table);
                     break;
@@ -3306,6 +3355,7 @@ namespace BP.DA
             switch (dbType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT TABTYPE  FROM TAB WHERE UPPER(TNAME)=:v";
                     DataTable oradt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
                     if (oradt.Rows.Count == 0)
@@ -3397,7 +3447,6 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsExitsObject(DBUrl dburl, string obj)
         {
-
             //有的同事写的表名包含dbo.导致创建失败.
             obj = obj.Replace("dbo.", "");
 
@@ -3408,6 +3457,7 @@ namespace BP.DA
             switch (AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                     if (obj.IndexOf(".") != -1)
                         obj = obj.Split('.')[1];
                     return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
@@ -3475,6 +3525,7 @@ namespace BP.DA
                     i = DBAccess.RunSQLReturnValInt(sql1);
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     if (table.IndexOf(".") != -1)
                         table = table.Split('.')[1];
                     i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) from user_tab_columns  WHERE table_name= upper(:tab) AND column_name= upper(:col) ", ps);
@@ -3510,6 +3561,7 @@ namespace BP.DA
                     sql = "SELECT column_name as FNAME, data_type as FTYPE, CHARACTER_MAXIMUM_LENGTH as FLEN , column_name as FDESC FROM information_schema.columns where table_name='" + tableName + "'";
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT COLUMN_NAME as FNAME,DATA_TYPE as FTYPE,DATA_LENGTH as FLEN,COLUMN_NAME as FDESC FROM all_tab_columns WHERE table_name = upper('" + tableName + "')";
                     break;
                 case DBType.MySQL:

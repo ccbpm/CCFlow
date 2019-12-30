@@ -1281,6 +1281,8 @@ namespace BP.Sys
                         return BP.DA.DBType.MySQL;
                     case "PostgreSQL":
                         return BP.DA.DBType.PostgreSQL;
+                    case "DM":
+                        return BP.DA.DBType.DM;
                     case "Access":
                         return BP.DA.DBType.Access;
                     case "Informix":

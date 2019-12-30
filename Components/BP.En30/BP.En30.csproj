@@ -108,6 +108,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DmProvider">
+      <HintPath>..\..\RefDLL\DmProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="FreeSql, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreeSql.1.0.0\lib\net45\FreeSql.dll</HintPath>
+    </Reference>
     <Reference Include="FtpSupport">
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>
@@ -130,6 +136,9 @@
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="SafeObjectPool, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SafeObjectPool.2.2.1\lib\net45\SafeObjectPool.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

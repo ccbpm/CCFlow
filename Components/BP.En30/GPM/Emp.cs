@@ -284,7 +284,7 @@ namespace BP.GPM
                 map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
                     "@0=不签名@1=图片签名@2=电子签名");
 
-                map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
+                map.AddTBInt(EmpAttr.Idx, DBAccess.RunSQLReturnValInt("SELECT max(Idx) From Port_Emp")+1, "序号", true, false);
                 #endregion 字段
 
                 map.AddSearchAttr(EmpAttr.SignType);
@@ -346,7 +346,12 @@ namespace BP.GPM
             //路径
             return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
         }
-
+        protected override bool beforeInsert()
+        {
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
+            return base.beforeInsert();
+        }
 
         protected override bool beforeUpdateInsertAction()
         {
@@ -387,6 +392,8 @@ namespace BP.GPM
                 depts += "@" + dept.NameOfPath;
             }
 
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
 
             return base.beforeUpdateInsertAction();
         }

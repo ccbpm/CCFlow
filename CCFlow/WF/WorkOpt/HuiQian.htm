@@ -551,16 +551,19 @@
             </div>
             <br />
             <div id="next">
-                <input type="button" id="Btn_HuiQian" value="执行会签" onclick="SaveAndClose();" />
-                <img src="../Img/Multiplayer.png"  onclick="SaveAndClose();"  style="width:27px;"/>
+
+                <img src="../Img/Multiplayer.png" onclick="SaveAndClose();" style="width:27px;" />
+                <button id="Btn_HuiQian" class="btn-info" onclick="SaveAndClose();">执行会签</button>
+                <!--<input type="button" id="Btn_HuiQian" class="btn btn-info" value="执行会签" onclick="SaveAndClose();" />-->
+                <span style="color:red">点击此按钮执行会签</span>
                 <div id="HelpInfo" style="">
                     <ul>
                         1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
                         <br />2、点击“保存会签人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有会签人的待办，在所有会签人都处理完成后，主持人才可向下一步发送工作。
-                        <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。 
+                        <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。
                         <br />4、可以使用人员名称拼音，支持全拼和简拼。
-                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
-                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
+                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
+                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
                     </ul>
                 </div>
             </div>

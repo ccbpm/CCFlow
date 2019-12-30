@@ -13,7 +13,7 @@ function GenerDevelopFrm(mapData, frmData) {
     var htmlContent = "";
     if (htmlobj.status == 404) {
         //数据库中查找
-        htmlContent = mapdata.HtmlTemplateFile;
+        htmlContent = mapData.HtmlTemplateFile;
     } else {
         htmlContent = htmlobj.responseText;
         if (htmlContent == null && htmlContent == "" && htmlContent == undefined) {

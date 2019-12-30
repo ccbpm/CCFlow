@@ -11,7 +11,7 @@
     <!--<script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
@@ -24,6 +24,8 @@
     <script type="text/javascript" src="../CCForm/FrmGener.js"></script>
     <script type="text/javascript" src="../CCForm/FrmFool.js"></script>
     <script type="text/javascript" src="../CCForm/FrmFree.js"></script>
+    <script type="text/javascript" src="../CCForm/FrmDevelop.js"></script>
+
     <!-- 引入公共的frm加载以后的业务逻辑处理.-->
     <script src="../CCForm/FrmEnd.js" type="text/javascript"></script>
     <!-- 引入用户要重写的公共js -->
@@ -48,7 +50,7 @@
     <link href="../Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />-->
     <!--UEditor-->
     <link href="../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css"
-        rel="stylesheet" />
+          rel="stylesheet" />
     <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
@@ -90,7 +92,7 @@
             generBill.SetPKVal(workID);
             if (generBill.RetrieveFromDBSources() == 0)
                 return;
-         
+
 
             //获得单据模版信息.
             var frmID = GetQueryString("FrmID");
@@ -111,9 +113,9 @@
                 return;
             }
 
-           //获取表单的操作权限
+            //获取表单的操作权限
             var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
-            handler.AddPara("FrmID",frmID);
+            handler.AddPara("FrmID", frmID);
             var power = handler.DoMethodReturnString("CCFrom_FrmPower");
             if (power.indexOf("err@") != -1) {
                 alert(power);
@@ -127,14 +129,14 @@
 
             if (power.IsSave == 1) {
                 var btnSave = generBill.BtnSaveLable;
-                if (btnSave == null || btnSave == ""|| btnSave==undefined)
+                if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
                 toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
             }
 
-             if (power.IsSubmit == 1) {
+            if (power.IsSubmit == 1) {
                 var btnSubmit = generBill.BtnSubmitLable;
-                if (btnSubmit == null || btnSubmit == ""|| btnSubmit==undefined)
+                if (btnSubmit == null || btnSubmit == "" || btnSubmit == undefined)
                     btnSubmit = "提交";
                 toolBar += "<input type=button value='" + btnSubmit + "' onclick='Submit(false);' />";
             }
@@ -302,7 +304,7 @@
 
             /*
             //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
-            // @yuanlina. 
+            // @yuanlina.
             */
 
             var data = handler.DoMethodReturnString("MyBill_SaveIt");
@@ -333,7 +335,7 @@
 
             /*
             //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
-            // @yuanlina. 
+            // @yuanlina.
             */
 
             var data = handler.DoMethodReturnString("MyBill_Submit");
@@ -418,7 +420,7 @@
 
                         }
                         break;
-                    //下拉框                  
+                    //下拉框
                     case "SELECT":
                         formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                         var tbID = name.replace("DDL_", "TB_") + 'T';
@@ -429,7 +431,7 @@
                         }
                         break;
 
-                    //文本区域                          
+                    //文本区域
                     case "TEXTAREA":
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
@@ -554,18 +556,18 @@
 
             //初始化退回窗口的SRC.
             var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
-       '<div class="modal-dialog">'
-           + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
-              + '<div class="modal-header">'
-                  + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                   + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
-               + '</div>'
-               + '<div class="modal-body" style="margin:0px;padding:0px">'
-                   + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
-               + '</div>'
-           + '</div><!-- /.modal-content -->'
-       + '</div><!-- /.modal-dialog -->'
-   + '</div>';
+                '<div class="modal-dialog">'
+                + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
+                + '<div class="modal-header">'
+                + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
+                + '</div>'
+                + '<div class="modal-body" style="margin:0px;padding:0px">'
+                + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+                + '</div>'
+                + '</div><!-- /.modal-content -->'
+                + '</div><!-- /.modal-dialog -->'
+                + '</div>';
 
             $('body').append($(html));
 
@@ -628,7 +630,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人                         
+                    //发送选择接收节点和接收人
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
@@ -645,13 +647,12 @@
         }
     </script>
     <style type="text/css">
-        h1
-        {
+        h1 {
             font-family: "微软雅黑";
             font-weight: normal;
         }
-        td
-        {
+
+        td {
             border-right-style: none;
             border-left-style: none;
             border-style: solid;
@@ -661,29 +662,28 @@
             font-size: 12px;
             border-color: lightgrey;
         }
-        .combo
-        {
+
+        .combo {
             border-color: #d4d4d4;
             background-color: #ffffff;
             height: 22px;
         }
-        
-        .combo-arrow
-        {
+
+        .combo-arrow {
             background-color: #E0ECFF;
         }
-        .textbox-text
-        {
+
+        .textbox-text {
             border: none !important;
             outline: none !important;
             height: 28px !important;
         }
-        .combo-arrow
-        {
+
+        .combo-arrow {
             height: 28px !important;
         }
-        .textbox-addon-right
-        {
+
+        .textbox-addon-right {
             float: right;
         }
     </style>
@@ -697,9 +697,9 @@
             padding: 6px 13px;
         }
 
-        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
+            .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
                 border-radius: 10px 10px 0px 0px;
-        }
+            }
 
         .errorInput {
             border: 1px red solid !important;
@@ -821,17 +821,16 @@
             border: none;
             background: #F1F1F2;
         }
-        
-        .input-group-addon 
-        {
-            <!--float:left;-->
-            width:36px;
-            height:28px;
-            margin-top:1px;
+
+        .input-group-addon {
+            <!-- float: left; -->
+            width: 36px;
+            height: 28px;
+            margin-top: 1px;
         }
-        
+
         .input-group input {
-            float:left;
+            float: left;
         }
 
         #divCurrentForm {
@@ -844,8 +843,7 @@
         }
     </style>
     <style type="text/css">
-        div.richText
-        {
+        div.richText {
             min-height: 40px;
             border: 1px solid #d4d4d4;
             cursor: text;
@@ -855,23 +853,21 @@
             box-shadow: 2px 2px 5px #d3d6da;
             background-color: #fff;
         }
-        
-        input.align_cb
-        {
+
+        input.align_cb {
             padding-left: 4px;
             cursor: pointer;
             margin: 0;
             vertical-align: middle;
         }
-        label.align_cbl
-        {
+
+        label.align_cbl {
             display: inline-block;
             vertical-align: middle;
             margin-bottom: 2px;
         }
-        
-        #topContentDiv
-        {
+
+        #topContentDiv {
             background: #fff;
             border-radius: 5px;
             padding: 8px 0px 0px 0px;
@@ -919,7 +915,8 @@
 
 
         });
-    </script>
+
+/**/</script>
 </head>
 <body onclick="hiddenDiv()">
     <div id="toolbar" style="margin-left: 10px;">

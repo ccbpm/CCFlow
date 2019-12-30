@@ -28,8 +28,10 @@
 
             var webUser = new WebUser();
             if (webUser.No == null) {
-                window.location.href = "./Portal/Login.htm?RefUrl=" + window.location.href;
-                return;
+                Port_Login("admin");
+                 webUser = new WebUser();
+               // window.location.href = "./Portal/Login.htm?RefUrl=" + window.location.href;
+               // return;
             }
 
 
@@ -190,6 +192,8 @@
                 return "傻瓜表单";
             if (frmType == 1)
                 return "自由表单";
+            if (frmType == 8)
+                return "开发者表单";
 
             return "url模式";
         }
@@ -292,10 +296,12 @@
         <button onclick="NewFrmBill(0);"> 新建单据(傻瓜表单)</button>
         <button onclick="NewFrmBill(1);"> 新建单据(自由表单)</button>
         <button onclick="NewFrmBill(3);"> 新建单据(Url表单)</button>
+        <button onclick="NewFrmBill(8);"> 新建单据(开发者表单)</button>
         -
         <button onclick="NewFrmDict(0);"> 新建实体(傻瓜表单)</button>
         <button onclick="NewFrmDict(1);"> 新建实体(自由表单)</button>
         <button onclick="NewFrmDict(3);"> 新建实体(Url表单)</button>
+        <button onclick="NewFrmDict(8);"> 新建单据(开发者表单)</button>
         <br />
         <br />
 

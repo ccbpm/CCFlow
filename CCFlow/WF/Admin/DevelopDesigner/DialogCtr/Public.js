@@ -20,10 +20,10 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
     //日期
     if (dataType == "Date")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' onfocus='WdatePicker({dateFmt:yyyy-MM-dd})'  leipiplugins='text' style='width:120px'/>";
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control Wdate' onfocus='WdatePicker({dateFmt:yyyy-MM-dd})'  leipiplugins='text' style='width:120px'/>";
     //时间
     if (dataType == "DateTime")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' onfocus='WdatePicker({dateFmt:yyyy-MM-dd HH:mm:ss})' leipiplugins='text' style='width:160px'/>";
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control Wdate' onfocus='WdatePicker({dateFmt:yyyy-MM-dd HH:mm:ss})' leipiplugins='text' style='width:160px'/>";
     //复选框
     if (dataType == "CheckBox")
         _Html = "<input type='CheckBox' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:100px'/>" + name;

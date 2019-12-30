@@ -64,7 +64,6 @@ function DFoolFrm() {
     var node = new Entity("BP.WF.Node", nodeID);
     var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
     window.open(url);
-
     //OpenEasyUiDialogExt(url, '傻瓜表单设计器', 800, 500, false);
 }
 
@@ -73,8 +72,23 @@ function DFreeFrm() {
     var nodeID = GetQueryString("FK_Node");
     var node = new Entity("BP.WF.Node", nodeID);
     var url = '../../CCFormDesigner/FormDesigner.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
-    OpenEasyUiDialogExt(url, '傻瓜表单设计器', 1100, 600, false);
+
+    window.open(url);
+
+    //OpenEasyUiDialogExt(url, '傻瓜表单设计器', 1100, 600, false);
 }
+
+
+//打开 开发者 表单设计器.
+function DDeveloper() {
+    var nodeID = GetQueryString("FK_Node");
+    var node = new Entity("BP.WF.Node", nodeID);
+    var url = '../../DevelopDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
+
+    window.open(url);
+    //OpenEasyUiDialogExt(url, '开发者表单设计器', 1100, 600, false);
+}
+
 
 function HelpOnline() {
     var url = "http://ccbpm.mydoc.io";

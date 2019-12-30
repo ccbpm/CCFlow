@@ -32,7 +32,7 @@ UE.plugins['impfrmfields'] = function () {
                 editor: this,
                 title: '回收站字段',
                 cssRules: "width:" + W + "px;height:" + H + "px;",
-               
+
             });
             dialog.render();
             dialog.open();
@@ -56,7 +56,7 @@ UE.plugins['text'] = function () {
                         label: '确定',
                         onclick: function () {
                             dialog.close(true);
-                            
+
                         }
                     },
                     {
@@ -468,9 +468,9 @@ UE.plugins['enum'] = function () {
         evt = evt || window.event;
         var el = evt.target || evt.srcElement;
         var leipiPlugins = el.getAttribute('leipiplugins');
-        if (leipiPlugins == null && $(el).parent().length>0)
+        if (leipiPlugins == null && $(el).parent().length > 0)
             leipiPlugins = $($(el).parent()[0]).attr('leipiplugins');
-       
+
         if (/select|span/ig.test(el.tagName) && leipiPlugins == thePlugins) {
             var type = el.getAttribute('data-type');
             var html = "";
@@ -627,7 +627,7 @@ UE.plugins['select'] = function () {
         evt = evt || window.event;
         var el = evt.target || evt.srcElement;
         var leipiPlugins = el.getAttribute('leipiplugins');
-        if (leipiPlugins == null && $(el).parent().length>0)
+        if (leipiPlugins == null && $(el).parent().length > 0)
             leipiPlugins = $($(el).parent()[0]).attr('leipiplugins');
         if (/select|span/ig.test(el.tagName) && leipiPlugins == thePlugins) {
             var html = popup.formatHtml(
@@ -1643,7 +1643,7 @@ function SaveForm() {
     }
 
     $("#Btn_Save").val("正在保存...");
-     
+
 
     leipiEditor.sync();       //同步内容
 
@@ -1651,7 +1651,7 @@ function SaveForm() {
     if (typeof type !== 'undefined') {
         type_value = type;
     }
-   
+
 
     //比对Sys_MapAttr,如果html存在符合我们代码规则的保存到Sys_MapAttr中
     var strs = "FID,FK_Dept,FK_Emp,FK_NY,MyNum,OID,RDT,CDT,Rec"//默认的
@@ -1722,7 +1722,7 @@ function SaveForm() {
                     mapAttr.LGType = 0;
                 }
                 mapAttr.Insert();
-            } 
+            }
 
         }
     });
@@ -1803,7 +1803,7 @@ function SaveForm() {
         return;
     }
     //$("#Btn_Save").val("保存成功.....");
-    alert("保存成功!");
+    //  alert("保存成功!");
     $("#Btn_Save").val("保存");
 }
 //预览

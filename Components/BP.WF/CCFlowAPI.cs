@@ -743,7 +743,10 @@ namespace BP.WF
                     if (me != null && myds.Tables.Contains(keyOfEn) == false)
                     {
                         string fullSQL = me.Doc.Clone() as string;
-                        fullSQL = fullSQL.Replace("~", ",");
+                        if (fullSQL == null)
+                            throw new Exception("err@字段["+ keyOfEn + "]下拉框AutoFullDLL，没有配置SQL");
+
+                        fullSQL = fullSQL.Replace("~", "'");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
                         dt = DBAccess.RunSQLReturnTable(fullSQL);
                         //重构新表

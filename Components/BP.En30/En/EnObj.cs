@@ -708,13 +708,6 @@ namespace BP.En
                 case "&nbsp;":
                     val = "";
                     break;
-                case "RDT":
-                    if (val.Length > 4)
-                    {
-                        this.SetValByKey("FK_NY", val.Substring(0, 7));
-                        this.SetValByKey("FK_ND", val.Substring(0, 4));
-                    }
-                    break;
                 default:
                     break;
             }

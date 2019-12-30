@@ -317,7 +317,17 @@ namespace BP.Sys
                         if (runObj.Contains("@") == false)
                             break;
                     }
+                }
 
+                if (runObj.Contains("@") && SystemConfig.IsBSsystem == true)
+                {
+                    /*如果是bs*/
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
+                    {
+                        if (string.IsNullOrEmpty(key))
+                            continue;
+                        runObj = runObj.Replace("@" + key, HttpContextHelper.RequestParams(key));
+                    }
                 }
 
                 if (runObj.Contains("@") == true)

@@ -60,6 +60,14 @@ namespace BP.WF.HttpHandler
                 //写入到html 中
                 BP.DA.DataType.WriteFile(filePath, htmlCode);
 
+                //保存类型。
+                MapData md = new MapData(this.FK_MapData);
+                if (md.HisFrmType != FrmType.Develop)
+                {
+                    md.HisFrmType = FrmType.Develop;
+                    md.Update();
+                }
+
                 //保存到数据库中
                 BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile",true);
                 return "保存成功";

@@ -697,6 +697,15 @@ namespace BP.WF
                     }
                 }
             }
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            {
+                // 处理传递过来的参数。
+                foreach (string k in HttpContextHelper.RequestParamKeys)
+                {
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
+                }
+            }
+
 
             #region 加载从表表单模版信息.
 
@@ -719,7 +728,6 @@ namespace BP.WF
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
             Hashtable ht = null;
-            bool isFirst = true;
             foreach (DataRow dr in Sys_MapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
@@ -751,31 +759,14 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 外键字段
                 string UIIsEnable = dr["UIIsEnable"].ToString();
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString(); //@sly.
-                if ( UIIsEnable.Equals("0") && myds.Tables.Contains(uiBindKey)==false) 
-                {
-                    SFTable sfTable = new SFTable(uiBindKey);
-                    String fullSQL = sfTable.SelectStatement;
-                    fullSQL = fullSQL.Replace("~", "'");
-                    fullSQL = BP.WF.Glo.DealExp(fullSQL, null, null);
-
-                    DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
-
-                    dt.TableName = uiBindKey;
-
-                    dt.Columns[0].ColumnName = "No";
-                    dt.Columns[1].ColumnName = "Name";
-
-                    myds.Tables.Add(dt);
-                    continue;
-                }
 
                 #region 处理下拉框数据范围. for 小杨.
-                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
-                if (me != null) //有范围限制时
+                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
+                    MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                if (me != null && myds.Tables.Contains(uiBindKey) == false) //是否存在.
                 {
                     string fullSQL = me.Doc.Clone() as string;
                     fullSQL = fullSQL.Replace("~", ",");
@@ -793,23 +784,28 @@ namespace BP.WF
                 }
                 #endregion 处理下拉框数据范围.
 
+                #region 外键字段
+                if ( UIIsEnable.Equals("0") && myds.Tables.Contains(uiBindKey)==false) 
+                {
+                    SFTable sfTable = new SFTable(uiBindKey);
+
+                    DataTable dt = sfTable.GenerHisDataTable(en.Row);
+                    
+                    dt.TableName = uiBindKey;
+
+                    dt.Columns[0].ColumnName = "No";
+                    dt.Columns[1].ColumnName = "Name";
+
+                    myds.Tables.Add(dt);
+                    continue;
+                }
+
                 // 判断是否存在.
                 if (myds.Tables.Contains(uiBindKey) == true)
                     continue;
-                if(isFirst == true)
-                {
-                    ht = en.Row;
-                    //获取URL上的参数
-                    foreach (string key in HttpContextHelper.RequestParamKeys)
-                    {
-                        if (string.IsNullOrEmpty(key) || ht.ContainsKey(key) == true)
-                            continue;
-                        ht.Add( key, HttpContextHelper.RequestParams(key));
-                    }
-                }
 
                 // 获得数据.
-                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey,ht);
+                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey,en.Row);
 
                 if (mydt == null)
                 {
@@ -828,15 +824,7 @@ namespace BP.WF
             #endregion 把从表的- 外键表/枚举 加入 DataSet.
 
             #region 把主表数据放入.
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
-            {
-                // 处理传递过来的参数。
-                foreach (string k in HttpContextHelper.RequestParamKeys)
-                {
-                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
-                }
-            }
-
+           
             //重设默认值.
             en.ResetDefaultVal();
 

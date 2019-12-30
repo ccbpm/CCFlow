@@ -281,26 +281,28 @@ namespace BP.WF
 
                     //按照时间的顺序查找出来 ids .
                     string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
+                    myFrmIDs = myFrmIDs.Replace("'", "");
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
-                        myFrmIDs = myFrmIDs.Replace("'", "");
                         sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "',FrmID) , Idx";
                     }
 
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
                     {
-                        myFrmIDs = myFrmIDs.Replace("'", "");
                         sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + myFrmIDs + "'), Idx";
                     }
 
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
-                        myFrmIDs = myFrmIDs.Replace("'", "");
                         sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
                     }
                     if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
-                        myFrmIDs = myFrmIDs.Replace("'", "");
+                        sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
+                    }
+
+                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.DM)
+                    {
                         sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
                     }
 

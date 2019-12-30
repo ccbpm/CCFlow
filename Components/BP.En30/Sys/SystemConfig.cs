@@ -1350,6 +1350,7 @@ namespace BP.Sys
                 {
                     case BP.DA.DBType.Oracle:
                     case BP.DA.DBType.PostgreSQL:
+                    case BP.DA.DBType.DM:
                         return ":";
                     case BP.DA.DBType.MySQL:
                     case BP.DA.DBType.Informix:

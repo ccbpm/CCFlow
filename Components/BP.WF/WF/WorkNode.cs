@@ -876,7 +876,7 @@ namespace BP.WF
             }
 
             if (num == 0)
-                throw new Exception("@不应该产生的结果错误.");
+                throw new Exception("@不应该产生的结果错误,没有找到接受人.");
 
             this.HisGenerWorkFlow.TodoEmpsNum = num;
             this.HisGenerWorkFlow.TodoEmps = hisEmps;

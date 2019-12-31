@@ -13,7 +13,6 @@ function GenerDevelopFrm(mapData, frmData) {
     var htmlContent = "";
     if (htmlobj.status == 404) {
         //数据库中查找
-        //数据库中查找
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
         handler.AddPara("FK_MapData", mapData.No);
         htmlContent = handler.DoMethodReturnString("Designer_Init");

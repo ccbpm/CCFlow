@@ -1,4 +1,7 @@
-﻿//  For .net 后台的调用的url ,  java的与.net的不同.
+﻿// UI风格配置. UIPlant, 为了适应不同风格的版本需要. 我们增加这个配置, UIPlant=BS,Ele.
+var uiPlant = 'BS'; //风格文件.
+
+//  For .net 后台的调用的url ,  java的与.net的不同.
 var plant = 'CCFlow'; //运行平台.
 var basePath = basePath();
 var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。

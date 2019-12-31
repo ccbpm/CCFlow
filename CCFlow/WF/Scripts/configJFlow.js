@@ -1,4 +1,7 @@
-﻿//当前项目路径
+﻿// UI风格配置. UIPlant, 为了适应不同风格的版本需要. 我们增加这个配置, UIPlant=BS,Ele.
+var uiPlant = 'BS'; //风格文件.
+
+//当前项目路径
 var basePath = basePath();
 
 function basePath()

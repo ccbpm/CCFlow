@@ -114,8 +114,8 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
 
-                        if (SystemConfig.AppCenterDBType== DBType.MSSQL)
-                          sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
 
                         BP.DA.DBAccess.RunSQL(sql);
 
@@ -266,44 +266,42 @@ namespace BP.DA
                 return;
             }
         }
+
         /// <summary>
         /// 保存文件到数据库
         /// </summary>
-        /// <param name="fullFileName">完成的文件路径</param>
-        /// <param name="tableName">表名称</param>
-        /// <param name="tablePK">表主键</param>
-        /// <param name="pkVal">主键值</param>
-        /// <param name="saveFileField">保存到字段</param>
-        public static void SaveBigTextToDB(string docs, string tableName, string tablePK, string pkVal, string saveToFileField,bool isSaveByte=false)
+        /// <param name="docs">文内容</param>
+        /// <param name="tableName">表名</param>
+        /// <param name="tablePK">主键</param>
+        /// <param name="pkVal">值</param>
+        /// <param name="saveToFileField">保存到字段</param>
+        /// <param name="isSaveByte">是否是保存byete</param>
+        public static void SaveBigTextToDB(string docs, string tableName, string tablePK,
+            string pkVal, string saveToFileField)
         {
-
-            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
-                || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL) && isSaveByte==false)
+            string sqlUpdata = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
+            try
             {
-
-                try
+                DBAccess.RunSQL(sqlUpdata);
+            }
+            catch (Exception ex)
+            {
+                /*如果没有此列，就自动创建此列.*/
+                if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                 {
-                    string sql = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
-                    DBAccess.RunSQL(sql);
+                    string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " text ";
+                    BP.DA.DBAccess.RunSQL(sql);
+                    
+                    DBAccess.RunSQL(sqlUpdata);
                     return;
-                }catch(Exception ex)
-                {
-                    /*如果没有此列，就自动创建此列.*/
-                    if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
-                    {
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " text ";
-                        BP.DA.DBAccess.RunSQL(sql);
-                    }
-                    throw ex;
                 }
+                throw ex;
             }
 
-            // System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-
-            byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
-
-            //执行保存.
-            SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
+            //// System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+            //byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
+            ////执行保存.
+            //SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
         }
         /// <summary>
         /// 保存文件到数据库
@@ -349,15 +347,15 @@ namespace BP.DA
         /// <param name="fileSaveField">保存字段</param>
         /// <param name="isByte">保存字段类型是否为Blob</param>
         /// <returns></returns>
-        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField,bool isByte=false)
+        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, 
+            string fileSaveField, bool isByte = false)
         {
-            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL) && isByte == false)
+            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
+                || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL) && isByte == false)
             {
                 string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
                 return DBAccess.RunSQLReturnString(getSql);
             }
-            
-
 
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
             if (byteFile == null)
@@ -2333,7 +2331,7 @@ namespace BP.DA
             DmConnection conn = new DmConnection(SystemConfig.AppCenterDSN);
             try
             {
-                if (conn.State !=  ConnectionState.Open)
+                if (conn.State != ConnectionState.Open)
                     conn.Open();
 
                 DmDataAdapter ada = new DmDataAdapter(selectSQL, conn);

@@ -2086,9 +2086,9 @@ function OpenOffice(isEdit) {
 
     //是否可以编辑(只读)
     if (isEdit == "True")
-        paras += "IsReadonly=1,";
-    else
         paras += "IsReadonly=0,";
+    else
+        paras += "IsReadonly=1,";
 
 
     var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;

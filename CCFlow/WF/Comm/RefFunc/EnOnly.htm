@@ -894,7 +894,7 @@
                 return operations;
             }
             $.each(data, function (i, obj) {
-                operations += "<option " + (obj[0] == defVal ? " selected='selected' " : "") + " value='" + obj[0] + "'>" + obj[1] + "</option>";
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
             return operations;
 

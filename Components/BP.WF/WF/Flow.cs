@@ -6054,6 +6054,12 @@ namespace BP.WF
                                 }
                                 gf.SetValByKey(dc.ColumnName, val);
                             }
+                            string sql = "select * from Sys_GroupField where CtrlID = '" + gf.CtrlID + "' AND FrmID='" + gf.FrmID + "'";
+                            int count = DBAccess.RunSQLReturnCOUNT(sql);
+                            if (count >0)
+                            {
+                                DBAccess.RunSQL("delete from Sys_GroupField where CtrlID = '" + gf.CtrlID + "' AND FrmID='" + gf.FrmID + "'");
+                            }
                             int oid = DBAccess.GenerOID();
                             DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID='" + oid + "' WHERE FK_MapData='" + gf.FrmID + "' AND GroupID='" + gf.OID + "'");
                             gf.InsertAsOID(oid);

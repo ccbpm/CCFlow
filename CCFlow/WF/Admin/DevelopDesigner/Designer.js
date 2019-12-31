@@ -118,6 +118,14 @@ UE.plugins['text'] = function () {
             }
         }
     });
+    me.addListener('keydown', function (t, evt) {
+        switch (evt.keyCode) {
+            case 46:
+                eval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
+                break;
+            default:
+        }
+    });
 };
 
 UE.plugins['edit'] = function () {

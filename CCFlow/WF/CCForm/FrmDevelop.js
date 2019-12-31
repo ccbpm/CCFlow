@@ -29,9 +29,9 @@ function GenerDevelopFrm(wn,fk_mapData) {
         return;
     }
 
-    if (currentURL.indexOf("FrmGener.htm")!=-1)
+    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 ||currentURL.indexOf("MyDict.htm") != -1)
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../../");
-    if (currentURL.indexOf("MyFlowGener.htm") != -1)
+    else
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../");
     $("#CCForm").html(htmlContent);
 
@@ -67,9 +67,9 @@ function GenerDevelopFrm(wn,fk_mapData) {
 
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'  value='" + defValue + "' type=hidden />";
                 var eleHtml = "";
-                if (currentURL.indexOf("FrmGener.htm") != -1)
+                if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                     eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
-                if (currentURL.indexOf("MyFlowGener.htm") != -1)
+                else
                     eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 
                 element.after(eleHtml);
@@ -86,9 +86,9 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 var scores = $(".simplestar");//获取评分的类
                 $.each(scores, function (score, idx) {
                     $.each($(this).children("Img"), function () {
-                        if (currentURL.indexOf("FrmGener.htm") != -1)
+                        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                             $(this).attr("src", $(this).attr("src").replace("../../", "../"));
-                        if (currentURL.indexOf("MyFlowGener.htm") != -1)
+                       else
                             $(this).attr("src", $(this).attr("src").replace("../../", "./"));
                     });
                 });
@@ -187,7 +187,7 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
     //在Image元素下引入IFrame文件
     var src = "";
     if (frmDtl.ListShowModel == "0") {
-        if (currentURL.indexOf("FrmGener.htm") != -1)
+        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
             src = "../CCForm/Dtl2017.htm"
         else
             src = "./CCForm/Dtl2017.htm";
@@ -196,13 +196,13 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
       
     if (frmDtl.ListShowModel == "1") {
         //卡片模式
-        if (currentURL.indexOf("FrmGener.htm") != -1)
+        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
             src = "../CCForm/DtlCard.htm"
         else
             src = "./CCForm/DtlCard.htm";
     }
         
-        src =src+ "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.isReadonly + "&Version=1";
+    src = src + "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
 
     var W = element.width();
     var eleHtml = $("<div id='Fd" + frmDtl.No + "' style='width:" + W + "px; height:auto;' ></div>");
@@ -217,11 +217,11 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
 //附件
 function figure_Develop_Ath(element, ath) {
     var src = "";
-    if (currentURL.indexOf("FrmGener.htm") != -1)
+    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
         src = "../CCForm/Ath.htm?PKVal=" + pageData.OID;
     else
-    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID;
-    src = src +"&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=" + pageData.isReadonly + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID;
+    src = src + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=" + pageData.IsReadonly + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
     var fid = GetQueryString("FID");
     var pWorkID = GetQueryString("PWorkID");
 
@@ -315,7 +315,7 @@ function figure_Develop_Image(element, frmImage) {
             imgSrc = DealJsonExp(frmData.MainTable[0], url);
         }
         var errorImg = "../DataUser/ICON/CCFlow/LogBig.png";
-        if (currentURL.indexOf("FrmGener.htm") != -1)
+        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
             errorImg = "../../DataUser/ICON/CCFlow/LogBig.png";
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
         if (imgSrc == "" || imgSrc == null) 
@@ -426,11 +426,23 @@ function figure_Develop_IFrame(element, frame) {
             }
         }
     }
-    if (urlType == 2) //轨迹表
-        url = "../WorkOpt/OneWork/Table.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
-    if (urlType == 3)//轨迹图
-        url = "../WorkOpt/OneWork/TimeBase.htm?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
+    if (urlType == 2 || urlType == 3) {
+        if (urlType == 2) { //轨迹表
+            if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+                url = "../WorkOpt/OneWork/Table.htm";
+            else
+                url = "./WorkOpt/OneWork/Table.htm";
+        } 
+        if (urlType == 3) {//轨迹图
+            if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+                url = "../WorkOpt/OneWork/TimeBase.htm";
+            else
+                url = "./WorkOpt/OneWork/TimeBase.htm";
+        }
+        url =url+"?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
 
+    }
+    
     var eleHtml = $("<div id='Frame" + frame.MyPK + "' style='width:" + frame.W + "px; height:auto;' ></div>");
 
     var eleIframe = $("<iframe class= 'Fdtl' ID = 'Frame_" + frame.MyPK + "' src = '" + url + "' frameborder=0  style='width:" + frame.W + "px;"
@@ -454,7 +466,10 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
     var sta = wf_node.SFSta;
     var w = wf_node.SF_W;
 
-    var src = "../WorkOpt/SubFlow.htm?s=2";
+    var src = "./WorkOpt/SubFlow.htm?s=2";
+    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+        src = "../WorkOpt/SubFlow.htm?s=2";
+
     var paras = '';
 
     paras += "&FID=" + pageData.FID;
@@ -536,9 +551,15 @@ function figure_Develop_FigureFrmCheck(wf_node,frmData) {
 
     var src = "";
     if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+            src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+        else
+            src = "./WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
     else
-        src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+            src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+        else
+            src = "./WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
     var paras = '';
 
     var isReadonly = GetQueryString('IsReadonly');
@@ -589,7 +610,10 @@ function figure_Develop_Siganture(SigantureID, val, type) {
         impParent.removeChild(obj);
     }
     else {
-        var src = '../../DataUser/Siganture/' + val + '.jpg';    //新图片地址
+        var src = '../DataUser/Siganture/' + val + '.jpg';    //新图片地址
+        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+            src = '../../DataUser/Siganture/' + val + '.jpg'; 
+
         document.getElementById("Img" + SigantureID).src = src;
     }
     isSigantureChecked = true;
@@ -636,7 +660,6 @@ function setHandWriteSrc(HandWriteID, imagePath) {
     imagePath = "../../" + imagePath.substring(imagePath.indexOf("DataUser"));
     document.getElementById("Img" + HandWriteID).src = "";
     $("#Img" + HandWriteID).attr("src", imagePath);
-    // document.getElementById("Img" + HandWriteID).src = imagePath;
     $("#TB_" + HandWriteID).val(imagePath);
     $('#eudlg').dialog('close');
 }

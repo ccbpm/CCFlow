@@ -18,7 +18,6 @@
         var mapAttr = mapAttrs[i];
         //设置文本框只读.
         if (mapAttr.UIVisible != 0 && (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0)) {
-            var tb = $('#TB_' + mapAttr.KeyOfEn);
             $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#RB_' + mapAttr.KeyOfEn).attr('disabled', true);
@@ -111,6 +110,13 @@
         if (mapAttr.UIContralType == 2) {
             if (val == "1")
                 $('#CB_' + mapAttr.KeyOfEn).attr("checked", "true");
+            else
+                $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+        }
+
+        //枚举
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+            $("#RB_" + mapAttr.KeyOfEn + "_" + val).attr("checked", 'checked');
         }
     }
 
@@ -122,12 +128,8 @@
         if (mapAttr.UIVisible == 0)
             continue;
 
-        if (mapAttr.LGType != 1)
+        if (mapAttr.LGType != 1 && mapAttr.MyDataType != 4)
             continue;
-
-        // if (mapAttr.UIIsEnable == 0)
-        //    continue;
-
 
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
             if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
@@ -150,8 +152,6 @@
 
                 }
                 if (mapAttr.UIContralType == 3) {
-                    /*启用了显示与隐藏.*/
-                    var rb = $("#RB_" + mapAttr.KeyOfEn);
                     //如果现在是隐藏状态就不可以设置
                     var ctrl = $("#Td_" + mapAttr.KeyOfEn);
                     if (ctrl.length > 0) {
@@ -166,6 +166,15 @@
 
                 }
             }
+        }
+
+        //复选框
+        if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            //获取复选框的值
+            if ($("#CB_" + mapAttr.KeyOfEn).checked == true)
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 1);
+            else
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 0);
         }
 
     }

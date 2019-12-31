@@ -168,15 +168,15 @@ function GenerFoolFrm(mapData, frmData) {
 
     html += "</table>";
 
-    //加入隐藏控件.
-    var mapAttrs = frmData.Sys_MapAttr;
-    for (var i = 0; i < mapAttrs.length; i++) {
-        var attr = mapAttrs[i];
-        if (attr["UIVisible"] == 0) {
-            var defval = ConvertDefVal(frmData, attr["DefVal"], attr["KeyOfEn"]);
-            html += "<input type='hidden' id='TB_" + attr["KeyOfEn"] + "' name='TB_" + attr["KeyOfEn"] + "' value='" + defval + "' />";
-        }
-    }
+    ////加入隐藏控件.
+    //var mapAttrs = frmData.Sys_MapAttr;
+    //for (var i = 0; i < mapAttrs.length; i++) {
+    //    var attr = mapAttrs[i];
+    //    if (attr["UIVisible"] == 0) {
+    //        var defval = ConvertDefVal(frmData, attr["DefVal"], attr["KeyOfEn"]);
+    //        html += "<input type='hidden' id='TB_" + attr["KeyOfEn"] + "' name='TB_" + attr["KeyOfEn"] + "' value='" + defval + "' />";
+    //    }
+    //}
 
     $('#CCForm').html("").append(html);
 

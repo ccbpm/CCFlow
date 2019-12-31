@@ -399,6 +399,7 @@ function initPageParam() {
     //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
     pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
     pageData.WorkID = GetQueryString("WorkID");
+    pageData.OID = pageData.WorkID;
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
@@ -1545,7 +1546,6 @@ function GenerWorkNode() {
 
     var node = flowData.WF_Node[0];
     var gfs = flowData.Sys_MapAttr;
-    //console.log(gfs);
 
     //设置标题.
     document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";

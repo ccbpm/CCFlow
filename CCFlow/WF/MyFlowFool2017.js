@@ -1155,6 +1155,16 @@ function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
     }
 }
 
+function changeCBEnable(obj, FK_MapData, KeyOfEn, AtPara) {
+    if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+        cleanAll(KeyOfEn);
+        if (obj.checked == true)
+            setEnable(FK_MapData, KeyOfEn, 1);
+        else
+            setEnable(FK_MapData, KeyOfEn, 0);
+    }
+}
+
 //清空所有的设置
 function cleanAll(KeyOfEn) {
     var trs = $("#CCForm  table tr .attr-group"); //如果隐藏就显示

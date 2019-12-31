@@ -296,6 +296,17 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
         return;
     }
 
+    if (shap == 'Score') {
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk;
+        CCForm_ShowDialog(url, '评分');
+        return;
+    }
+
+    if (shap == 'Map') {
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=' + mypk;
+        CCForm_ShowDialog(url, '地图');
+        return;
+    }
 
     alert('没有判断的双击类型:' + shap);
 }
@@ -1051,7 +1062,7 @@ UE.plugins['component'] = function () {
         var el = evt.target || evt.srcElement;
         var leipiPlugins = el.getAttribute('leipiplugins');
         var dataType = el.getAttribute("data-type");
-        if (/img/ig.test(el.tagName) && leipiPlugins == thePlugins) {
+        if (/img|span/ig.test(el.tagName.toLowerCase()) && leipiPlugins == thePlugins) {
             var _html;
             if (dataType == "Dtl")
                 _html = popup.formatHtml(
@@ -1071,6 +1082,9 @@ UE.plugins['component'] = function () {
             if (dataType == "Map")
                 _html = popup.formatHtml(
                     '<nobr>地图控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+            if (dataType == "Score")
+                _html = popup.formatHtml(
+                    '<nobr>评分控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
             if (dataType == "HandWriting")
                 _html = popup.formatHtml(
                     '<nobr>手写签名版控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
@@ -1612,16 +1626,16 @@ function ExtScore() {
     mapAttr.Retrieve();
     var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&MyPK=" + mapAttr.MyPK;
     OpenEasyUiDialog(url, "eudlgframe", '评分', 800, 500, "icon-edit", true, null, null, null, function () {
-        var _html = "<div style='text-align:left;padding-left:0px'  data-type='Score' data-key='" + mapAttr.MyPK + "' leipiplugins='component'>";
-        _html += "<span class='simplestar'>";
+        var _html = "<span class='score-star'style='text-align:left;padding-left:0px'  data-type='Score' data-key='" + mapAttr.MyPK + "' leipiplugins='component' id='SC_" + mapAttr.KeyOfEn + "'>";
+        _html += "<span class='simplestar' data-type='Score'  leipiplugins='component'  data-key='" + mapAttr.MyPK + "' id='Star_" + mapAttr.KeyOfEn + "'>";
 
         var num = mapAttr.Tag2;
         for (var i = 0; i < num; i++) {
 
-            _html += "<img src='../../Style/Img/star_2.png' />";
+            _html += "<img src='../../Style/Img/star_2.png' data-type='Score'  leipiplugins='component'  data-key='" + mapAttr.MyPK + "'/>";
         }
         _html += "&nbsp;&nbsp;<span class='score-tips' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + num + "  分</strong></span>";
-        _html += "</span></div>";
+        _html += "</span></span>";
         leipiEditor.execCommand('insertHtml', _html);
     });
 }

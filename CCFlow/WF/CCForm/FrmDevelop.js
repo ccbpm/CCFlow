@@ -171,8 +171,14 @@ function GenerDevelopFrm(mapData, frmData) {
 
         }
     }
+}
 
-
+function GenerBaseCCFromBasePath()
+{
+    var localhost = Window.localhost.href;
+    if (localhost.indexOf("/CCForm/") > 0)
+        return "";
+    return "../CCForm";
 }
 
 //从表
@@ -182,11 +188,11 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
     var src = "";
     if (frmDtl.ListShowModel == "0")
         //表格模式
-        src = "../CCForm/Dtl2017.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "Version=1";
+        src = GenerBaseCCFromBasePath()+"/Dtl2017.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "Version=1";
 
     if (frmDtl.ListShowModel == "1")
         //卡片模式
-        src = "../CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.isReadonly + "&Version=1";
+        src = GenerBaseCCFromBasePath() +"/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.isReadonly + "&Version=1";
 
     var W = element.width();
     var eleHtml = $("<div id='Fd" + frmDtl.No + "' style='width:" + W + "px; height:auto;' ></div>");
@@ -200,7 +206,7 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
 
 //附件
 function figure_Develop_Ath(element, ath) {
-    var src = "../CCForm/Ath.htm?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=" + pageData.isReadonly + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+    var src = GenerBaseCCFromBasePath() +"/Ath.htm?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=" + pageData.isReadonly + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
 
     var fid = GetQueryString("FID");
     var pWorkID = GetQueryString("PWorkID");

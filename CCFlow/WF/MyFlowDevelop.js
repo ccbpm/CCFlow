@@ -47,7 +47,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
             var _html = InitDDLOperation(flowData, mapAttr, null);
             $("#DDL_" + mapAttr.KeyOfEn).empty();
             $("#DDL_" + mapAttr.KeyOfEn).append(_html);
-
         }
 
         if (mapAttr.UIVisible == 0 && $("#TB_" + mapAttr.KeyOfEn).length == 0) {
@@ -86,7 +85,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
                         $(this).attr("src", $(this).attr("src").replace("../../", "./"));
                     });
                 });
-
             }
         }
     }
@@ -309,9 +307,6 @@ function figure_Develop_Image(element, frmImage) {
         } else {
             $(element).after(img);
         }
-
-
-
 
         $(element).remove(); //移除Imge节点
     } else if (frmImage.ImgAppType == 3)//二维码  手机

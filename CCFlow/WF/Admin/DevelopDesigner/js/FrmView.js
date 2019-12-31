@@ -152,7 +152,6 @@ function GenerFrm() {
    //加载开发者表单的内容
     //先判断DataUser/CCForm / HtmlTemplateFile / FK_MapData.htm是否存在
     var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + mapData.No + ".htm";
-    alert(filename);
     var htmlobj = $.ajax({ url: filename, async: false });
     var htmlContent = "";
     if (htmlobj.status == 404) {

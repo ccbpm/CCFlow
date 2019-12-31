@@ -1607,7 +1607,6 @@ function GenerWorkNode() {
     if (node.FormType == 12)
         GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
 
-
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     if (node.FormType == 11) {
         if (flowData.FrmNode[0] != null && flowData.FrmNode[0] != undefined)

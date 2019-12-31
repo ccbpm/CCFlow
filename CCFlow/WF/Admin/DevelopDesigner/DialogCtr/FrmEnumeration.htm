@@ -162,7 +162,7 @@
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)
-                            _Html += "<input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"&nbsp;&nbsp;";
+                            _Html += "<label><input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"</label>&nbsp;&nbsp;";
                     }
                     _Html += "</span>";
 

@@ -36,7 +36,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
             return;
         _Html += "<span leipiplugins='enum' id='SR_" + uiBindKey + "' title='单选' name='leipiNewField'  data-key='" + keyOfEn + "' data-type='" + dataType + "'>";
         for (var i = 0; i < enums.length; i++) {
-            _Html += "<input type='radio' value= '" + enums[i].IntKey + "' id='RB_" + keyOfEn + "_" + enums[i].IntKey + "' name='RB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + enums[i].Lab + "&nbsp;&nbsp;";
+            _Html += "<label><input type='radio' value= '" + enums[i].IntKey + "' id='RB_" + keyOfEn + "_" + enums[i].IntKey + "' name='RB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + enums[i].Lab + "</label>&nbsp;&nbsp;";
         }
         _Html += "</span>";
     }

@@ -894,7 +894,7 @@
                 return operations;
             }
             $.each(data, function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                operations += "<option " + (obj[0] == defVal ? " selected='selected' " : "") + " value='" + obj[0] + "'>" + obj[1] + "</option>";
             });
             return operations;
 
@@ -926,8 +926,6 @@
             if (window.parent && window.parent.$('#EnLayout').length == 1)
                 window.parent.$('#EnLayout').layout('remove', 'west');
             window.location.href = url; //刷新.
-
-
         }
 
         function Save() {

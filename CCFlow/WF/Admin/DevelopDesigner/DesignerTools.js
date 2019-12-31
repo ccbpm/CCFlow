@@ -1,4 +1,16 @@
-﻿//预览.
+﻿// 监听键盘按下事件
+document.onkeydown = function () {
+
+
+    //判断 Ctrl+S
+    if (event.ctrlKey == true && event.keyCode == 83) {
+        alert('触发ctrl+s');
+        event.preventDefault(); // 或者 return false;
+    }
+}
+ 
+
+//预览.
 function PreviewForm() {
     //保存表单设计内容
     SaveForm();
@@ -11,9 +23,16 @@ function PreviewForm() {
     window.open(url);
 }
 
+//表单属性.
+function FrmAttr()
+{
+    var mapdata = new Entity();
+
+
+}
+
 //移动表单
 function FrmMobile() {
-    var frmID = GetQueryString("FK_MapData");
 
     var frmID = GetQueryString("FK_MapData");
     var flowNo = GetQueryString("FK_Flow");

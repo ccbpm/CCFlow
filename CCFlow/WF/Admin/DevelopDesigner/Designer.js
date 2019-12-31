@@ -1800,7 +1800,7 @@ function SaveForm() {
         $.each(enums, function (idx, obj) {
 
             if (leipiEditor.document.getElementById("RB_" + keyOfEn + "_" + obj.IntKey) == null)
-                $(tag).append('<input type="radio" value="0" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Enum" data-bindkey="' + uiBindKey + '" class="form - control" style="width: 15px; height: 15px;">' + obj.Lab);
+                $(tag).append('<input type="radio" value="0" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Radio" data-bindkey="' + uiBindKey + '" class="form-control" style="width: 15px; height: 15px;">' + obj.Lab);
         });
 
     }

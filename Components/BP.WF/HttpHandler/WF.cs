@@ -903,7 +903,6 @@ namespace BP.WF.HttpHandler
             }
            
             json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
-
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
 

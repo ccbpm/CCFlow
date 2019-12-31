@@ -31,7 +31,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Designer_Init()
         {
-            string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile",true);
+            string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
             string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
             if (Directory.Exists(filePath) == false)
@@ -68,8 +68,8 @@ namespace BP.WF.HttpHandler
                     md.Update();
                 }
 
-                //保存到数据库中
-                BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile",true);
+                // HtmlTemplateFile 保存到数据库中
+                BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
                 return "保存成功";
             }
             return "保存成功.";
@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
         public string Fields_Init()
         {
             string html = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", 
-                this.FrmID, "HtmlTemplateFile",true);
+                this.FrmID, "HtmlTemplateFile");
             return html;
         }
 

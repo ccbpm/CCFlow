@@ -266,7 +266,6 @@ namespace BP.DA
                 return;
             }
         }
-
         /// <summary>
         /// 保存文件到数据库
         /// </summary>
@@ -277,12 +276,29 @@ namespace BP.DA
         /// <param name="saveToFileField">保存到字段</param>
         /// <param name="isSaveByte">是否是保存byete</param>
         public static void SaveBigTextToDB(string docs, string tableName, string tablePK,
-            string pkVal, string saveToFileField)
+            object pkVal, string saveToFileField)
         {
-            string sqlUpdata = "UPDATE " + tableName + " SET " + saveToFileField + "='" + docs + "' WHERE " + tablePK + "='" + pkVal + "'";
+            //对于特殊的数据库进行判断.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+                // System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
+                //执行保存.
+                SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
+                return;
+            }
+
+            //其他数据库.
+            Paras ps = new Paras();
+            ps.SQL = "UPDATE " + tableName + " SET " + saveToFileField + "=" + SystemConfig.AppCenterDBVarStr + "MyDocs WHERE " + tablePK + "=" + SystemConfig.AppCenterDBVarStr + "PKVal";
+            ps.Add("MyDocs", docs);
+            ps.Add("PKVal", pkVal);
+
             try
             {
-                DBAccess.RunSQL(sqlUpdata);
+                DBAccess.RunSQL(ps);
             }
             catch (Exception ex)
             {
@@ -291,17 +307,13 @@ namespace BP.DA
                 {
                     string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " text ";
                     BP.DA.DBAccess.RunSQL(sql);
-                    
-                    DBAccess.RunSQL(sqlUpdata);
+                    DBAccess.RunSQL(ps);
                     return;
                 }
                 throw ex;
             }
 
-            //// System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-            //byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
-            ////执行保存.
-            //SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
+
         }
         /// <summary>
         /// 保存文件到数据库
@@ -347,25 +359,41 @@ namespace BP.DA
         /// <param name="fileSaveField">保存字段</param>
         /// <param name="isByte">保存字段类型是否为Blob</param>
         /// <returns></returns>
-        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, 
-            string fileSaveField, bool isByte = false)
+        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal,
+            string fileSaveField)
         {
-            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL
-                || BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL) && isByte == false)
+            //对于特殊的数据库进行判断.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+                byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+                if (byteFile == null)
+                    return null;
+
+                string strs = System.Text.Encoding.UTF8.GetString(byteFile);
+                int idx = strs.IndexOf('$');
+                if (idx != 0)
+                    strs = strs.Substring(idx + 1);
+                return strs;
+            }
+
+            //其他的数据库类型直接从 text字段去.
+            try
             {
                 string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
                 return DBAccess.RunSQLReturnString(getSql);
             }
-
-            byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
-            if (byteFile == null)
-                return null;
-
-            string strs = System.Text.Encoding.UTF8.GetString(byteFile);
-            int idx = strs.IndexOf('$');
-            if (idx != 0)
-                strs = strs.Substring(idx + 1);
-            return strs;
+            catch (Exception ex)
+            {
+                if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                {
+                    string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " text ";
+                    DBAccess.RunSQL(sql);
+                }
+                string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
+                return DBAccess.RunSQLReturnString(getSql);
+            }
         }
         /// <summary>
         /// 从数据库里提取文件

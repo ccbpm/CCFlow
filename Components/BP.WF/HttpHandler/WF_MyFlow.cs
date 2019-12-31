@@ -824,35 +824,43 @@ namespace BP.WF.HttpHandler
                 /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-#warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
-                    GenerWorkerLists gwls = new GenerWorkerLists();
-                    string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
-                   
-                    if (DBAccess.RunSQLReturnValInt(sql) == 1 )
+                    //协作模式
+                    if (btnLab.HuiQianRole == HuiQianRole.Teamup)
                     {
-                        //修改流程会签状态
-                        gwf.HuiQianTaskSta = HuiQianTaskSta.None;
-                        isAskForOrHuiQian = false;
+                        if (gwf.HuiQianZhuChiRen.Equals(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
                     }
                     else
                     {
-                        if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                        #warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
+                        GenerWorkerLists gwls = new GenerWorkerLists();
+                        string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
+
+                        if (DBAccess.RunSQLReturnValInt(sql) == 1)
                         {
-                            if (btnLab.HuiQianLeaderRole == 0)
-                            {
-                                if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                                    isAskForOrHuiQian = true;
-                            }
-                            else
-                            {
-                                //不是主持人
-                                if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                                    isAskForOrHuiQian = true;
-                            }
+                            //修改流程会签状态
+                            gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+                            isAskForOrHuiQian = false;
                         }
+                        else
+                        {
+                            if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                            {
+                                if (btnLab.HuiQianLeaderRole == 0)
+                                {
+                                    if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                                        isAskForOrHuiQian = true;
+                                }
+                                else
+                                {
+                                    //不是主持人
+                                    if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                                        isAskForOrHuiQian = true;
+                                }
+                            }
 
+                        }
                     }
-
                    
                 }
             }

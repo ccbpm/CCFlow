@@ -1185,12 +1185,6 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.IsHuiQian = true;
                 gwlOfMe.Insert(); //插入作为待办.
 
-                //发送消息.
-                BP.WF.Dev2Interface.Port_SendMsg(emp.No,
-                    "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwlOfMe.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
-                string empStrSepc = emp.No + "," + emp.Name + ";";
-                if (gwf.TodoEmps.Contains(empStrSepc) == false)
-                    gwf.TodoEmps += empStrSepc;
             }
 
             gwf.SetPara("AddLeader", addLeader);
@@ -1217,6 +1211,7 @@ namespace BP.WF.HttpHandler
             string huiQianType = this.GetRequestVal("HuiQianType");
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            string addLeader = gwf.GetParaString("AddLeader");
 
             if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
             {
@@ -1257,10 +1252,6 @@ namespace BP.WF.HttpHandler
             }
             
 
-            //改变了节点就把会签状态去掉.
-            gwf.HuiQianSendToNodeIDStr = "";
-            gwf.Update();
-
             //求会签人.
             GenerWorkerLists gwfs = new GenerWorkerLists();
             gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
@@ -1268,12 +1259,25 @@ namespace BP.WF.HttpHandler
 
             string empsOfHuiQian = "会签人:";
             foreach (GenerWorkerList item in gwfs)
+            {
                 empsOfHuiQian += item.FK_Emp + "," + item.FK_EmpText + ";";
+
+                //发送消息
+                BP.WF.Dev2Interface.Port_SendMsg(item.FK_Emp,
+                   "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + item.FK_Emp, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + item.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+            }
+                
+
+            //改变了节点就把会签状态去掉.
+            gwf.HuiQianSendToNodeIDStr = "";
+            gwf.TodoEmps = gwf.TodoEmps + empsOfHuiQian;
+
+            gwf.Update();
 
             string sql = "";
 
             //是否启用会签待办列表, 如果启用了，主持人会签后就转到了HuiQianList.htm里面了.
-            if (BP.WF.Glo.IsEnableHuiQianList == true)
+            if (BP.WF.Glo.IsEnableHuiQianList == true )
             {
                 //设置当前操作人员的状态.
                 sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
@@ -1283,10 +1287,6 @@ namespace BP.WF.HttpHandler
             //恢复他的状态.
             sql = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND IsPass=-1";
             DBAccess.RunSQL(sql);
-
-            //删除以前执行的会签点,比如:该人多次执行会签，仅保留最后一个会签时间点.  
-            //sql = "DELETE FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.HuiQian + " AND NDFrom=" + this.FK_Node;
-            //DBAccess.RunSQL(sql);
 
             //执行会签,写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian,
@@ -3235,11 +3235,13 @@ namespace BP.WF.HttpHandler
             //判断当前是否是协作模式.
             if (nd.TodolistModel == TodolistModel.Teamup && nd.IsStartNode == false)
             {
-                string mysql = "SELECT COUNT(WORKID) AS Num FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND IsPass=0";
-                int num = DBAccess.RunSQLReturnValInt(mysql);
-                if (num != 1)
+                if (gwf.TodoEmps.Contains(WebUser.No + ","))
                 {
-                    /* 如果不是最后一位，返回发送结果. */
+                    /* 说明我是主持人之一, 我就可以选择接受人,发送到下一个节点上去. */
+                }
+                else
+                {
+                    /* 不是主持人就执行发送，返回发送结果. */
                     SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
                     return "info@" + objs.ToMsgOfHtml();
                 }
@@ -3272,15 +3274,7 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.CustomerNo == "TianYe") //天业集团，去掉00000001董事长
             {
-                //DataTable TYEmp = ds.Tables["Emps"];
-                //if (TYEmp.Rows.Count != 0)
-                //    foreach (DataRow row in TYEmp.Rows)
-                //        if (row["No"].ToString() == "00000001")
-                //        {
-                //            row.Delete();
-                //            break;
-                //        }
-                //TYEmp.AcceptChanges();
+               
             }
 
             #region 计算上一次选择的结果, 并把结果返回过去.

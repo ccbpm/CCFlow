@@ -24,31 +24,31 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="js/ueditor/dialogs/internal.js"></script>
     <script src="DialogCtr/Public.js"></script>
-
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
 </head>
 <body>
 
-    <table id="App" style="width:100%">
-        <tr>
-            <th>序</th>
-            <th>字段</th>
-            <th>英文名</th>
-            <th>类型</th>
-            <th>操作1</th>
-            <th>操作2</th>
-        </tr>
+    <center>
+        <table id="App" style="width:90%;" class="bootstrap-table">
+            <tr>
+                <th>序</th>
+                <th>字段</th>
+                <th>英文名</th>
+                <th>类型</th>
+                <th>操作1</th>
+                <th>操作2</th>
+            </tr>
 
-        <tr v-for="(value,index) in delData">
-            <td>{{index+1}}</td>
-            <td>{{value.KeyOfEn}}</td>
-            <td>{{value.Name}}</td>
-            <td>{{value.contralType}}</td>
-            <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
-            <td> <a href="#" @click="Insert(value.MyPK);">插入</a></td>
-
-        </tr>
-
-    </table>
+            <tr v-for="(value,index) in delData">
+                <td>{{index+1}}</td>
+                <td>{{value.KeyOfEn}}</td>
+                <td>{{value.Name}}</td>
+                <td>{{value.contralType}}</td>
+                <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
+                <td> <a href="#" @click="Insert(value.MyPK);">插入</a></td>
+            </tr>
+        </table>
+    </center>
 
     <script type="text/javascript">
 
@@ -68,10 +68,13 @@
                 handler.AddPara("FrmID", frmID);
                 var html = handler.DoMethodReturnString("Fields_Init");
 
+                console.log(html);
+
+
                 var list = ens.GetEns();
                 var deldate = [];
                 list.data.map(function (item, index) {
-                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1 )  && index > 7) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
                         item.contralType = GetFieldType(item);
                         deldate.push(item);
                     }
@@ -99,13 +102,13 @@
                 },
                 Insert: function (myPK) {
                     var attr = new Entity("BP.Sys.MapAttr", myPK);
-                    InsertHtmlToEditor(GetDataType(attr),attr.KeyOfEn,attr.Name,attr.UIBindKey,attr);
-                     dialog.close(true);
+                    InsertHtmlToEditor(GetDataType(attr), attr.KeyOfEn, attr.Name, attr.UIBindKey, attr);
+                    dialog.close(true);
                 }
             }
         })
 
-         function GetFieldType(mapAttr) {
+        function GetFieldType(mapAttr) {
 
             if (mapAttr.UIContralType == 0) {
                 //控件数据类型
@@ -142,8 +145,8 @@
                 return "复选框";
             } else if (mapAttr.UIContralType == 3) {//单选框
                 return "枚举单选按钮";
-             }
-             if (mapAttr.MyDataType == 1) {
+            }
+            if (mapAttr.MyDataType == 1) {
                 if (mapAttr.UIContralType == 8)//手写签字版
                     return "手写签字版";
                 if (mapAttr.UIContralType == 11)//图片
@@ -155,7 +158,7 @@
             }
             return "其他类型";
         }
-        
+
         function Edit(mypk, ftype, gf, fk_mapdata, uiContralType) {
 
             var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
@@ -277,8 +280,8 @@
             });
         }
 
-        
-        
+
+
 
     </script>
 

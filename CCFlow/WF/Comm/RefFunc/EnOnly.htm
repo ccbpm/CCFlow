@@ -897,8 +897,6 @@
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
             return operations;
-
-
         }
 
         function ChangeKeyOfEnText(obj, KeyOfEn) {
@@ -926,6 +924,8 @@
             if (window.parent && window.parent.$('#EnLayout').length == 1)
                 window.parent.$('#EnLayout').layout('remove', 'west');
             window.location.href = url; //刷新.
+
+
         }
 
         function Save() {

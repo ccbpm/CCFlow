@@ -305,8 +305,11 @@ namespace BP.DA
                 /*如果没有此列，就自动创建此列.*/
                 if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                 {
-                    string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " text ";
+                    string sql = "ALTER TABLE " + tableName + " ADD " + saveToFileField + " text ";
                     BP.DA.DBAccess.RunSQL(sql);
+
+
+                    //在执行一遍.
                     DBAccess.RunSQL(ps);
                     return;
                 }

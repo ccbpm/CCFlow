@@ -23,8 +23,8 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_Admin_DevelopDesigner()
         {
-        }
 
+        }
         /// <summary>
         /// 表单初始化
         /// </summary>

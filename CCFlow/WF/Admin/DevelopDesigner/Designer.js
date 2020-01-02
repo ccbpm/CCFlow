@@ -622,12 +622,14 @@ UE.plugins['select'] = function () {
     var me = this, thePlugins = 'select';
     me.commands[thePlugins] = {
         execCommand: function () {
+            var W = document.body.clientWidth - 120;
+            var H = document.body.clientHeight - 120;
             var dialog = new UE.ui.Dialog({
                 iframeUrl: './DialogCtr/SFList.htm?FK_MapData=' + pageParam.fk_mapdata,
                 name: thePlugins,
                 editor: this,
                 title: '下拉菜单',
-                cssRules: "width:590px;height:370px;",
+                cssRules: "width:"+W+"px;height:"+H+"px;",
                 buttons: [
                     {
                         className: 'edui-okbutton',
@@ -1831,7 +1833,7 @@ function SaveForm() {
         $.each(enums, function (idx, obj) {
 
             if (leipiEditor.document.getElementById("RB_" + keyOfEn + "_" + obj.IntKey) == null)
-                $(tag).append('<input type="radio" value="0" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Radio" data-bindkey="' + uiBindKey + '" class="form-control" style="width: 15px; height: 15px;">' + obj.Lab);
+                $(tag).append('<input type="radio" value="' + obj.IntKey+'" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Radio" data-bindkey="' + uiBindKey + '" class="form-control" style="width: 15px; height: 15px;">' + obj.Lab);
         });
 
     }

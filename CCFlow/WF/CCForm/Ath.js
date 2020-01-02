@@ -511,5 +511,13 @@ function checkReg() {
     return checkRegResult;
 }
 
+function setIframeHeight() {
+    if ($("body").height() < 260) {
+        $("body").height = 260;
+    }
+    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
+}
+
+
 
    

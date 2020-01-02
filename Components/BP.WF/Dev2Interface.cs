@@ -9839,7 +9839,7 @@ namespace BP.WF
             }
 
             // 判断当前节点的已读回执.
-            if (nd.ReadReceipts == ReadReceipts.None)
+            if (nd.ReadReceipts == ReadReceipts.None || nd.IsStartNode == true)
             {
                 return;
             }

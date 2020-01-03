@@ -144,6 +144,18 @@ function Admin_FromTemplateAttr(frmID) {
     return url;
 }
 
+/**
+ * 修改表单模版类型
+ * @param {any} frmID 表单ID 
+ * @param {any} frmType 表单类型 
+ * 0=傻瓜表单,1=自由表单,3=URL表单,4=WordFrm,5=ExcelFrm,6=VSTOForExcel,7=Entity,8=Develop
+ */
+function Admin_From_ChangeFrmType(frmID, frmType)
+{
+    var en = new Entity("BP.Sys.MapData", frmID);
+    en.FrmType = frmType; //表单类型.
+    en.Update();
+}
 
 /**
  * 删除表单、单据

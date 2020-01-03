@@ -1121,8 +1121,8 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                    ThrowMakeErrInfo("Retrieve-" + self.enName + " pkval=" + pkavl, textStatus);
+                    var url = dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + params;
+                    ThrowMakeErrInfo("Retrieve-" + self.enName + " pkval=" + pkavl, textStatus, url);
                 }
             });
             return result;
@@ -1249,8 +1249,8 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                    ThrowMakeErrInfo("Entity_RetrieveFromDBSources-" + self.enName + " pkval=" + pkavl, textStatus);
+                    var url = dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + pkavl;
+                        ThrowMakeErrInfo("Entity_RetrieveFromDBSources-" + self.enName + " pkval=" + pkavl, textStatus, url);
 
                     //alert(JSON.stringify(XMLHttpRequest));
                     //result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
@@ -2244,8 +2244,7 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
-            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
-            console.log(url);
+           
             $.ajax({
                 type: 'post',
                 async: false,
@@ -2260,8 +2259,8 @@ var HttpHandler = (function () {
                     jsonString = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus);
+                    var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
+                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus,url);
                 }
             });
 
@@ -2371,8 +2370,8 @@ var WebUser = function () {
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-            ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus);
+            var url = dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime();
+            ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus,url);
         }
     });
     var self = this;
@@ -2382,12 +2381,13 @@ var WebUser = function () {
    
 };
 
-function ThrowMakeErrInfo(funcName, obj) {
+function ThrowMakeErrInfo(funcName, obj,url) {
 
     var msg = "1. " + funcName + " err@系统发生异常.";
-    msg += "\t\n2.估计是数据库连接错误或者是系统环境问题. ";
-    msg += "\t\n3.技术信息:status: " + obj.status + " readyState: " + obj.readyState;
-    msg += "\t\n4 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
+    msg += "\t\n2.检查请求的URL连接是否错误：" + url;
+    msg += "\t\n3.估计是数据库连接错误或者是系统环境问题. ";
+    msg += "\t\n4.技术信息:status: " + obj.status + " readyState: " + obj.readyState;
+    msg += "\t\n5 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
     alert(msg);
 }
 

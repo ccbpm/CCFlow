@@ -91,7 +91,6 @@ var templates = [
         'title': lang.blank,
         'preHtml': welcome,
         "html": welcome
-
     },
     {
         "pre": "../Template/col4.png",

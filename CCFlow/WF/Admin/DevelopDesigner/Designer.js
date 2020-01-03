@@ -22,8 +22,8 @@ UE.leipiFormDesignUrl = 'formdesign';
 UE.plugins['impfrmfields'] = function () {
     var me = this, thePlugins = 'impfrmfields';
     var frmID = pageParam.fk_mapdata;
-    var W =   document.body.clientWidth - 120;
-    var H =  document.body.clientHeight - 220;
+    var W = document.body.clientWidth - 120;
+    var H = document.body.clientHeight - 220;
     me.commands[thePlugins] = {
         execCommand: function (method, dataType) {
             var dialog = new UE.ui.Dialog({
@@ -142,11 +142,17 @@ UE.plugins['text'] = function () {
         }
     });
     me.addListener('keydown', function (t, evt) {
-        switch (evt.keyCode) {
-            case 46:
-                eval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
-                break;
-            default:
+        evt = evt || window.event;
+        var el = evt.target || evt.srcElement;
+        var leipiPlugins = el.getAttribute('leipiplugins');
+        if (/input/ig.test(el.tagName) && leipiPlugins == thePlugins) {
+            switch (evt.keyCode) {
+                case 46:
+                    popup.anchorEl = el;
+                    eval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
+                    break;
+                default:
+            }
         }
     });
 };
@@ -629,7 +635,7 @@ UE.plugins['select'] = function () {
                 name: thePlugins,
                 editor: this,
                 title: '下拉菜单',
-                cssRules: "width:"+W+"px;height:"+H+"px;",
+                cssRules: "width:" + W + "px;height:" + H + "px;",
                 buttons: [
                     {
                         className: 'edui-okbutton',
@@ -1833,7 +1839,7 @@ function SaveForm() {
         $.each(enums, function (idx, obj) {
 
             if (leipiEditor.document.getElementById("RB_" + keyOfEn + "_" + obj.IntKey) == null)
-                $(tag).append('<input type="radio" value="' + obj.IntKey+'" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Radio" data-bindkey="' + uiBindKey + '" class="form-control" style="width: 15px; height: 15px;">' + obj.Lab);
+                $(tag).append('<input type="radio" value="' + obj.IntKey + '" id="RB_' + keyOfEn + '_' + obj.IntKey + '" name="RB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-type="Radio" data-bindkey="' + uiBindKey + '" class="form-control" style="width: 15px; height: 15px;">' + obj.Lab);
         });
 
     }

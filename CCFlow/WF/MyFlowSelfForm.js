@@ -681,7 +681,7 @@ function execSend(toNodeID) {
     //组织数据.
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara('ToNode', toNodeID);
-
+    handler.AddUrlData();
     var data = handler.DoMethodReturnString("Send"); //执行保存方法.
 
     if (data.indexOf('err@') == 0) { //发送时发生错误

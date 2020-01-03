@@ -263,7 +263,8 @@
         jsPlumb.bind("click", function (c) {
 
             fAlert();
-
+            $("#lineDel").unbind("click");
+            $("#lineSet").unbind("click");
             //删除节点方向连接线
             $("#lineDel").click(function () {
 

@@ -1731,7 +1731,7 @@ function SaveForm() {
             //判断是否保存在Sys_MapAttr中，没有则保存
             var keyOfEn = tag.getAttribute("data-key");
             if (dataType == "Radio")
-                keyOfEn = $(tag).parent()[0].getAttribute("data-key");//获取父级的data-key
+                keyOfEn = $($(tag).parent()[0]).parent()[0].getAttribute("data-key");//获取父级的data-key
             var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
             if (mapAttr == undefined || mapAttr == null) {
                 if (dataType == "Radio") {

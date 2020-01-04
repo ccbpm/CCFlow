@@ -1687,6 +1687,11 @@ pageParam.fk_mapdata = GetQueryString("FK_MapData");
 //保存表单的htm代码
 function SaveForm() {
 
+    //清空MapData的缓存
+    var en = new Entity("BP.Sys.MapData", pageParam.fk_mapdata);
+    en.SetPKVal(pageParam.fk_mapdata);
+    en.DoMethodReturnString("ClearCash");
+
     if (leipiEditor.queryCommandState('source'))
         leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
 

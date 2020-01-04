@@ -121,8 +121,8 @@ namespace BP.WF
                     }
 
                     //从表.
-                    series += dtlsSubFlow +"," ;
-                     
+                    series += dtlsSubFlow + ",";
+
                 }
 
                 if (DataType.IsNullOrEmpty(series) == false)
@@ -133,10 +133,10 @@ namespace BP.WF
                     json += " series:[]";
                 else
                 {
-                    json += " series:["+ series + "]";
+                    json += " series:[" + series + "]";
                 }
 
-             
+
                 if (idxNode == nds.Count)
                     json += "}";
                 else
@@ -165,8 +165,8 @@ namespace BP.WF
             json += " { id:'" + gwf.FK_Flow + "', name:'" + gwf.FlowName + "',";
 
             json += " series:[";
-            json += "{ name: \"计划时间\", start:  "+ ToData(gwf.SDTOfFlow)+ ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
-            json += "{ name: \"实际工作时间\", start: "+ ToData(gwf.RDT)+ ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
+            json += "{ name: \"计划时间\", start:  " + ToData(gwf.SDTOfFlow) + ", end: " + ToData(gwf.SDTOfFlow) + ", color: \"#f0f0f0\" },";
+            json += "{ name: \"实际工作时间\", start: " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " , color: \"#f0f0f0\" }";
             json += "]";
 
             if (gwfs.Count == 0)
@@ -174,7 +174,8 @@ namespace BP.WF
                 json += "}";
                 json += "]";
                 return json;
-            }else
+            }
+            else
             {
                 json += "},";
             }
@@ -188,10 +189,10 @@ namespace BP.WF
                 json += " { id:'" + subGWF.FK_Flow + "', name:'" + subGWF.FlowName + "',";
 
                 json += " series:[";
-                json += "{ name: \"实际工作时间\", start:  " + ToData( gwf.RDT )+ ", end: " + ToData(gwf.SendDT) + " }";
+                json += "{ name: \"实际工作时间\", start:  " + ToData(gwf.RDT) + ", end: " + ToData(gwf.SendDT) + " }";
                 json += "]";
 
-                if (idx==gwfs.Count)
+                if (idx == gwfs.Count)
                 {
                     json += "}";
                     json += "]";
@@ -200,12 +201,12 @@ namespace BP.WF
                 else
                 {
                     json += "},";
-                }                 
+                }
             }
 
             json += "]";
 
-            return json;             
+            return json;
         }
 
         public static string ToData(string dtStr)
@@ -213,8 +214,8 @@ namespace BP.WF
 
             DateTime dt = BP.DA.DataType.ParseSysDate2DateTime(dtStr);
 
-            return  "'"+dt.ToString("yyyy-MM-dd")+"'";
-             
+            return "'" + dt.ToString("yyyy-MM-dd") + "'";
+
         }
         /// <summary>
         /// 生成甘特图
@@ -258,7 +259,7 @@ namespace BP.WF
             drItem["RefPK"] = gwf.FK_Flow;
             dtSeries.Rows.Add(drItem);
 
-             
+
             //增加子流程数据.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve("PWorkID", workID);
@@ -269,7 +270,7 @@ namespace BP.WF
                 dr["id"] = subFlow.FK_Flow;
                 dr["name"] = subFlow.FlowName;
                 dtFlows.Rows.Add(dr);
-                 
+
 
                 drItem = dtSeries.NewRow();
                 drItem["name"] = "启动日期";
@@ -293,7 +294,7 @@ namespace BP.WF
             DataTable dtFlows = ds.Tables[0];
             DataTable dtSeries = ds.Tables[1];
 
-           
+
 
 
             json += "]";
@@ -555,6 +556,15 @@ namespace BP.WF
                 }
             }
 
+            //先升级脚本,就是说该文件如果被修改了就会自动升级.
+            // UpdataCCFlowVerSQLScript();
+
+            //判断数据库的版本.
+            string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
+            int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
+            if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
+                return null; //不需要升级.
+
             //检查表.
             BP.Sys.GloVar gv = new GloVar();
             gv.CheckPhysicsTable();
@@ -581,14 +591,6 @@ namespace BP.WF
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
 
-            //先升级脚本,就是说该文件如果被修改了就会自动升级.
-            UpdataCCFlowVerSQLScript();
-
-            //判断数据库的版本.
-            string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
-            int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
-            if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
-                return null; //不需要升级.
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();
@@ -598,7 +600,7 @@ namespace BP.WF
             #region 枚举值
             SysEnumMains enumMains = new SysEnumMains();
             enumMains.RetrieveAll();
-            foreach(SysEnumMain enumMain in enumMains)
+            foreach (SysEnumMain enumMain in enumMains)
             {
                 SysEnums ens = new SysEnums();
                 ens.Delete(SysEnumAttr.EnumKey, enumMain.No);
@@ -1613,7 +1615,7 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
 
             }
-           
+
 
 
             #endregion 首先创建Port类型的表.
@@ -3087,7 +3089,7 @@ namespace BP.WF
                     sql = sql.Replace("@WebUser.Name", WebUser.Name);
                     sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
                     sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-                   
+
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
@@ -3454,7 +3456,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                throw new Exception("计算参数的时候出现错误:"+ex.Message);
+                throw new Exception("计算参数的时候出现错误:" + ex.Message);
             }
         }
         /// <summary>
@@ -3476,7 +3478,7 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
-            
+
 
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
@@ -3512,18 +3514,18 @@ namespace BP.WF
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum
                             || attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            exp = exp.Replace("@" + key, row[key+"Text"].ToString());
+                            exp = exp.Replace("@" + key, row[key + "Text"].ToString());
                         }
                         else
                         {
-                            if(attr.MyDataType == DataType.AppString  && attr.UIContralType ==  UIContralType.DDL && attr.MyFieldType ==FieldType.Normal)
-                                 exp = exp.Replace("@" + key, row[key+"T"].ToString());
+                            if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                                exp = exp.Replace("@" + key, row[key + "T"].ToString());
                             else
                                 exp = exp.Replace("@" + key, row[key].ToString());
-;
+                            ;
                         }
 
-                        
+
                     }
 
                     //不包含@则返回SQL语句
@@ -3532,7 +3534,7 @@ namespace BP.WF
                 }
 
             }
-          
+
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
@@ -3576,7 +3578,7 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
-            
+
 
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);

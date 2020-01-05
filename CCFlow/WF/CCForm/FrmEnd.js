@@ -119,6 +119,18 @@
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
             $("#RB_" + mapAttr.KeyOfEn + "_" + val).attr("checked", 'checked');
         }
+
+        //枚举复选框
+        if (mapAttr.MyDataType == 1 && mapAttr.LGType == 1) {
+            var checkBoxArray = val.split(",");
+            for (var k = 0; k < checkBoxArray.length; k++) {
+                $("input[name='CB_" + mapAttr.KeyOfEn + "']").each(function () {
+                    if ($(this).val() == checkBoxArray[k]) {
+                        $(this).attr("checked", "checked");
+                    }
+                });
+            }
+        }
     }
 
     var mapAttrs = frmData.Sys_MapAttr;
@@ -401,9 +413,19 @@ function AfterBindEn_DealMapExt(frmData) {
             case "MultipleChoiceSearch":
                 if (mapAttr.UIIsEnable == 0)
                     break;
-
-
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                break;
+            case "MultipleInputSearch":
+                var defaultVal = $("#TB_" + mapAttr.KeyOfEn).val();
+                if (mapAttr.UIIsEnable == 0) {
+                    defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/] /g, "");
+                    defaultVal = defaultVal.substr(0, defaultVal.length - 1);
+                    $("#TB_" + mapAttr.KeyOfEn).val(vals);
+                    break;
+                }
+                    
+                
+                MultipleInputSearch(mapExt, defaultVal); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "BindFunction": //控件绑定函数
                 if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {

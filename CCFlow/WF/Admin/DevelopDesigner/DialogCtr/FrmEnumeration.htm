@@ -143,8 +143,10 @@
             handler.AddPara("EnumKey", UIBindKey);
             if (dataType == "Radio")
                 handler.AddPara("UIContralType", 3);
-            else
-                 handler.AddPara("UIContralType", 1);
+            else if(dataType =="Select")
+                handler.AddPara("UIContralType", 1);
+            else if (dataType == "CheckBox")
+                handler.AddPara("UIContralType", 2);
             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
             if (data.indexOf("err@") >= 0) {
                 alert(data);
@@ -178,6 +180,17 @@
                             _Html += "<option value='" + keyVal[0] + "'>" + keyVal[1] + "</option>";
                     }
                     _Html += "</select>";
+                    _Html += "</span>";
+                }
+            }
+            if (dataType == "CheckBox") {
+                if (strs.length != 0) {
+                    _Html += "<span leipiplugins='enum' id='SS_" + UIBindKey + "' title='复选框' name='leipiNewField' data-type='EnumCheckBox'   data-bindKey='" + UIBindKey + "'>";
+                    for (var i = 0; i < strs.length; i++) {
+                        var keyVal = strs[i].split("=")
+                        if (keyVal.length == 2)
+                            _Html += "<label><input type='checkbox' value= '" + keyVal[0] + "' id='CB_" + KeyOfEn + "_" + keyVal[0] + "' name='CB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"&nbsp;&nbsp;</label>";
+                    }
                     _Html += "</span>";
                 }
             }

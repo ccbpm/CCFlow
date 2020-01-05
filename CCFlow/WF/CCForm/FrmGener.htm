@@ -33,6 +33,8 @@
     <!-- 表单组件 -->
     <script src="./JS/MultipleChoiceSearch.js" type="text/javascript"></script>
     <script src="./JS/MultipleChoiceSmall.js" type="text/javascript"></script>
+    <script src="JS/comboTreePlugin.js" type="text/javascript"></script>
+    <link href="JS/comboTreePlugin.css" rel="stylesheet" />
     <script src="./JS/Pop.js" type="text/javascript"></script>
     <link href="./JS/mselector.css" rel="stylesheet" type="text/css" />
     <script src="./JS/mselector.js" type="text/javascript"></script>
@@ -182,14 +184,6 @@
     <script type="text/javascript">
 
         function setContentHeight() {
-            //            $("body").css("overflow", "hidden");
-            //            $("#divCurrentForm").css("overflow", "hidden");
-            //            $("#topContentDiv").css("overflow", "hidden");
-            //            $("#contentDiv").css("overflow", "hidden");
-            //            $("#divCCForm").css("overflow", "auto");
-            //            $("#CCForm").css("overflow", "hidden");
-            //            $("#CCForm").css("overflow-y", "hidden");
-            //            $("#CCForm").css("height", "auto");
             var bodyHeight = $("body").height();
             var bottomHeight = $("#bottomToolBar").height(); // save button
             if (($("#Btn").css("display") || "") != "block") {
@@ -203,13 +197,6 @@
             $("#divCCForm").height(height - 50);
         }
         $(function () {
-            //            $("body").css("overflow", "hidden");
-            //            $("#divCurrentForm").css("overflow", "hidden");
-            //            $("#topContentDiv").css("overflow", "hidden");
-            //            $("#contentDiv").css("overflow", "hidden");
-            //            $("#divCCForm").css("overflow", "auto");
-            //            $("#CCForm").css("overflow", "hidden");
-            //            $("#CCForm").css("overflow-y", "hidden");
             $("#CCForm").css("height", "auto");
             $(window).bind("resize", function () {
                 setTimeout(setContentHeight, 100);

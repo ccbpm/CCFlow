@@ -737,15 +737,33 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formArr = formss.split('&');
     var formArrResult = [];
     var haseExistStr = ",";
+    var mcheckboxs = "";
     $.each(formArr, function (i, ele) {
         if (ele.split('=')[0].indexOf('CB_') == 0) {
-            if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                ele = ele.split('=')[0] + '=1';
+            //如果ID获取不到值，Name获取到值为复选框多选
+            var targetId = ele.split('=')[0];
+            if ($('#' + targetId).length == 1) {
+                if ($('#' + targetId + ':checked').length == 1) {
+                    ele = targetId + '=1';
+                } else {
+                    ele = targetId + '=0';
+                }
+                formArrResult.push(ele);
             } else {
-                ele = ele.split('=')[0] + '=0';
-            }
+                if (mcheckboxs.indexOf(targetId) != -1)
+                    return false;
+                mcheckboxs += targetId + ",";
+                var str = "";
+                $("input[name='" + targetId + "']:checked").each(function (index, item) {
+                    if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
+                        str += $(this).val();
+                    } else {
+                        str += $(this).val() + ",";
+                    }
+                });
 
-            formArrResult.push(ele);
+                formArrResult.push(targetId + '=' + str);
+            }
         }
         if (ele.split('=')[0].indexOf('DDL_') == 0) {
 

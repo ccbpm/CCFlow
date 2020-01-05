@@ -1,0 +1,217 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.wrapper {
+    width: 1024px;
+    margin: 50px auto 0 auto;
+}
+
+    .wrapper > div {
+        float: left;
+        margin-right: 20px;
+    }
+
+    .wrapper::after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+
+
+.select-tree-wrap {
+    width: 400px;
+    min-height: 36px;
+    border: 1px solid #ccc;
+}
+
+.input-keyword-wrap {
+    min-height: 36px;
+    position: relative;
+    padding: 0 20px 0 0;
+}
+
+    .input-keyword-wrap .handle-arrow {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .input-keyword-wrap .select-menu-input {
+        font-size: 12px;
+        height: 100%;
+        overflow: hidden;
+        margin-bottom: 4px;
+        min-height: 36px;
+        cursor: pointer;
+    }
+
+    .input-keyword-wrap .input-tips {
+        font-size: 14px;
+        line-height: 36px;
+        padding-left: 10px;
+        color: #d6d6d6;
+    }
+
+    .input-keyword-wrap .single-keyword {
+        border: 0px !important;
+    }
+
+    .input-keyword-wrap .input-keyword-item {
+        width: auto;
+        margin-top: 4px;
+        margin-left: 5px;
+        border: 1px solid #0095e7;
+        color: #0095e7;
+        border-radius: 3px;
+        /**display: block;*/
+        float: left;
+    }
+
+        .input-keyword-wrap .input-keyword-item span:nth-child(1) {
+            line-height: 26px;
+            display: block;
+            float: left;
+            width: auto;
+            height: 26px;
+            float: left;
+            margin-left: 5px;
+            margin-right: 0px;
+            border: 0 none;
+            padding-right: 5px;
+            color: #0095e7;
+        }
+
+        .input-keyword-wrap .input-keyword-item i {
+            width: 20px;
+            height: 20px;
+            display: block;
+            padding: 0;
+            margin: 3px 8px 0px 0px;
+            float: right;
+            line-height: 20px;
+            text-align: center;
+            font-style: normal;
+            text-indent: 0px;
+            cursor: pointer;
+        }
+
+
+
+.drop-down-wrap {
+    display: none;
+}
+
+    .drop-down-wrap .noresults {
+        display: none;
+        padding: 10px 0;
+        font-size: 12px;
+        color: #ccc;
+        text-align: center;
+    }
+
+    .drop-down-wrap .handle-left-icons {
+        text-align: center;
+        display: inline-block;
+        width: 20px;
+    }
+
+    .drop-down-wrap .title-group-name {
+        display: inline-block;
+    }
+
+    .drop-down-wrap .handle-checkbox {
+        text-align: center;
+        width: 30px;
+        display: inline-block;
+    }
+
+
+    .drop-down-wrap .keyword-search {
+        padding: 10px;
+        width: 100%;
+        border-top: 1px solid #ccc;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+        .drop-down-wrap .keyword-search input {
+            width: 100%;
+            outline: 0;
+            padding: 0 30px 0 10px;
+            height: 36px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        .drop-down-wrap .keyword-search .search-icons {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            position: absolute;
+            right: 15px;
+            top: 16px;
+            color: #ccc;
+        }
+
+    .drop-down-wrap .select-tree-list {
+        padding: 0;
+        margin: 0;
+        max-height: 400px;
+        overflow-x: scroll;
+    }
+
+        .drop-down-wrap .select-tree-list li {
+            list-style-type: none;
+            cursor: pointer;
+        }
+
+    .drop-down-wrap .title-container {
+        line-height: 36px;
+        padding: 0 20px
+    }
+
+        .drop-down-wrap .title-container:hover {
+            background: #f2f2f2;
+            color: #0079fe;
+        }
+
+    .drop-down-wrap .select-tree-list li .tree-sub-body ul {
+        padding: 0;
+    }
+
+        .drop-down-wrap .select-tree-list li .tree-sub-body ul li {
+            line-height: 36px;
+        }
+
+            .drop-down-wrap .select-tree-list li .tree-sub-body ul li .title-container {
+                padding-left: 30px
+            }
+
+            .drop-down-wrap .select-tree-list li .tree-sub-body ul li .tree-sub-body ul li .title-container {
+                padding-left: 45px;
+            }
+
+
+.actived_li {
+    color: #0095e7;
+}

@@ -793,6 +793,28 @@ body table tr td {
     margin-right: 10px !important;
 }
 
+
+
+.only-print-show {
+    display: none;
+}
+
+@media print {
+    .only-print-show {
+        display: inline-block;
+    }
+}
+
+.only-print-hidden {
+    display: inline-block;
+}
+
+@media print {
+    .only-print-hidden {
+        display: none;
+    }
+}
+
 /*¹ö¶¯Ìõ*/
 ::-webkit-scrollbar-thumb {
     background-color: #b5b5b5;

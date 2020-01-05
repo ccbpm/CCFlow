@@ -274,3 +274,37 @@ function DeptEmpModelAdv0(mapExt) {
         });
     });
 }
+
+
+function MultipleInputSearch(mapExt, defaultVal,tbID) {
+    if (tbID == null || tbID == undefined) {
+        tbID = "TB_" + mapExt.AttrOfOper;
+    }
+   var tb= $("#" + tbID);
+    var width = tb.width();
+    var height = tb.height();
+    tb.hide();
+
+    var container = $("<div></div>");
+    tb.before(container);
+    container.attr("id", mapExt.AttrOfOper + "_comboTree");
+   
+    container.addClass("select-tree-wrap");
+
+    var dbSrc = mapExt.Doc;
+    var isShowSignature = mapExt.Tag=="1"?true:false;
+
+    defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
+    defaultVal = defaultVal.substr(0, defaultVal.length - 1);
+    var valArray = defaultVal.split(",");
+    $('#' + mapExt.AttrOfOper + "_comboTree").comboTree({
+        source: dbSrc,
+        isMultiple: true,
+        isFirstClassSelectable: false, //第一级是否可选
+        cascadeSelect: true,
+        selectedlength: 30,//最多可选
+        keyOfEn: mapExt.AttrOfOper,
+        selected: valArray,
+        isShowSignature: isShowSignature
+    });
+}

@@ -556,7 +556,7 @@ UE.plugins['textarea'] = function () {
     me.commands[thePlugins] = {
         execCommand: function () {
             var dialog = new UE.ui.Dialog({
-                iframeUrl: this.options.UEDITOR_HOME_URL + UE.leipiFormDesignUrl + '/textarea.html',
+                iframeUrl: './DialogCtr/FrmTextBox.htm?FK_MapData=' + pageParam.fk_mapdata + '&DataType=Textarea',
                 name: thePlugins,
                 editor: this,
                 title: '多行文本框',

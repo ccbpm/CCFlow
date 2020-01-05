@@ -37,15 +37,51 @@ function GenerDevelopFrm(wn,fk_mapData) {
 
     //解析表单中的数据
 
-    //1.加载隐藏字段，设置字段的宽度属性
+    //1.加载隐藏字段，
     var mapAttrs = frmData.Sys_MapAttr;
     var html = "";
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
-        $('#TB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth);
-       
-        $('#RB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth);
-        $('#DDL_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth);
+
+        //设置字段的宽度属性、样式属性
+        $('#TB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        $('#RB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        $('#DDL_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
+
+        //如果是时间控件
+        if (mapAttr.MyDataType == 6 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {
+            var frmDate = mapAttr.IsSupperText;
+            var dateFmt = '';
+            if (frmDate == 0) {
+                dateFmt = "yyyy-MM-dd";
+            } else if (frmDate == 3) {
+                dateFmt = "yyyy-MM";
+            } else if (frmDate == 6) {
+                dateFmt = "MM-dd";
+            }
+            $('#TB_' + mapAttr.KeyOfEn).attr("onfocus", "WdatePicker({ dateFmt:'" + dateFmt + "' })");
+
+        }
+        if (mapAttr.MyDataType == 7 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {
+            var frmDate = mapAttr.IsSupperText;
+            var dateFmt = '';
+            if (frmDate == 1) {
+                dateFmt = "yyyy-MM-dd HH:mm";
+            } else if (frmDate == 2) {
+                dateFmt = "yyyy-MM-dd HH:mm:ss";
+            } else if (frmDate == 4) {
+                dateFmt = "HH:mm";
+            } else if (frmDate == 5) {
+                dateFmt = "HH:mm:ss";
+            } 
+            
+            $('#TB_' + mapAttr.KeyOfEn).attr("onfocus", "WdatePicker({ dateFmt:'" + dateFmt + "' })");
+           
+
+        }
+
+
 
         if ((mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1)//外部数据源
             || (mapAttr.LGType == "2" && mapAttr.MyDataType == "1")) {

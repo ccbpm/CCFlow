@@ -26,7 +26,7 @@
 
             PageTransfer_value = dataType; //取出页面传至
             //给单选赋值
-            if (PageTransfer_value == "Text") {
+            if (PageTransfer_value == "Text" || PageTransfer_value=="Textarea") {
                 $("#RB_String").attr("checked", true);
             }
 
@@ -108,7 +108,7 @@
             handler.AddPara("KeyOfEn",KeyOfEn);
             handler.AddPara("Name",name);
             handler.AddPara("FType", FieldType);
-            //handler.AddPara("")
+            handler.AddPara("IsSupperText",dataType=="Textarea"?1:0 )
             var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
             if (data.indexOf("err@") != -1) {
                  $.messager.alert('错误', data.replace('err@',''), 'error');

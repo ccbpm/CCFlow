@@ -876,59 +876,59 @@ namespace BP.WF.HttpHandler
             string json = BP.Tools.Json.DataSetToJson(ds, false);
             return json;
 
-            //通用的处理器.
-            if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
-            {
-                return Start_InitTianYe();
-            }
-            string json = "";
+            ////通用的处理器.
+            //if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
+            //{
+            //    return Start_InitTianYe();
+            //}
+            //string json = "";
 
-            BP.WF.Port.WFEmp em = new WFEmp();
-            em.No = BP.Web.WebUser.No;
-            if (em.RetrieveFromDBSources() == 0)
-            {
-                em.FK_Dept = BP.Web.WebUser.FK_Dept;
-                em.Name = Web.WebUser.Name;
-                em.Insert();
-            }
+            //BP.WF.Port.WFEmp em = new WFEmp();
+            //em.No = BP.Web.WebUser.No;
+            //if (em.RetrieveFromDBSources() == 0)
+            //{
+            //    em.FK_Dept = BP.Web.WebUser.FK_Dept;
+            //    em.Name = Web.WebUser.Name;
+            //    em.Insert();
+            //}
 
-            string sql = "SELECT StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
-            json = DBAccess.RunSQLReturnString(sql);
-            if (DataType.IsNullOrEmpty(json) == false)
-                return json;
+            //string sql = "SELECT StartFlows From WF_Emp WHERE No='" + WebUser.No + "'";
+            //json = DBAccess.RunSQLReturnString(sql);
+            //if (DataType.IsNullOrEmpty(json) == false)
+            //    return json;
 
 
-            //定义容器.
-            DataSet ds = new DataSet();
+            ////定义容器.
+            //DataSet ds = new DataSet();
 
-            //流程类别.
-            FlowSorts fss = new FlowSorts();
-            fss.RetrieveAll();
+            ////流程类别.
+            //FlowSorts fss = new FlowSorts();
+            //fss.RetrieveAll();
 
-            DataTable dtSort = fss.ToDataTableField("Sort");
-            dtSort.TableName = "Sort";
-            ds.Tables.Add(dtSort);
+            //DataTable dtSort = fss.ToDataTableField("Sort");
+            //dtSort.TableName = "Sort";
+            //ds.Tables.Add(dtSort);
 
-            //获得能否发起的流程.
-            DataTable dtStart = Dev2Interface.DB_StarFlows(Web.WebUser.No);
-            dtStart.TableName = "Start";
-            ds.Tables.Add(dtStart);
+            ////获得能否发起的流程.
+            //DataTable dtStart = Dev2Interface.DB_StarFlows(Web.WebUser.No);
+            //dtStart.TableName = "Start";
+            //ds.Tables.Add(dtStart);
 
-            //返回组合
-            json = BP.Tools.Json.DataSetToJson(ds, false);
+            ////返回组合
+            //json = BP.Tools.Json.DataSetToJson(ds, false);
 
-            //把json存入数据表，避免下一次再取.
-            if (json.Length > 40)
-            {
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET StartFlows=" + ps.DBStr + "StartFlows WHERE No=" + ps.DBStr + "No";
-                ps.Add("StartFlows", json);
-                ps.Add("No", WebUser.No);
-                DBAccess.RunSQL(ps);
-            }
+            ////把json存入数据表，避免下一次再取.
+            //if (json.Length > 40)
+            //{
+            //    Paras ps = new Paras();
+            //    ps.SQL = "UPDATE WF_Emp SET StartFlows=" + ps.DBStr + "StartFlows WHERE No=" + ps.DBStr + "No";
+            //    ps.Add("StartFlows", json);
+            //    ps.Add("No", WebUser.No);
+            //    DBAccess.RunSQL(ps);
+            //}
 
-            //返回组合
-            return json;
+            ////返回组合
+            //return json;
         }
         /// <summary>
         /// 获得发起列表

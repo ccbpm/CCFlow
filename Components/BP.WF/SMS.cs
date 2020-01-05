@@ -570,6 +570,7 @@ namespace BP.WF
         /// </summary>
         protected override void afterInsert()
         {
+            return; 
             try
             {
                 CCInterface.PortalInterfaceSoapClient soap = null;

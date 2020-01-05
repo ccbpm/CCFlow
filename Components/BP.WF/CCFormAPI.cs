@@ -769,7 +769,7 @@ namespace BP.WF
                 if (me != null && myds.Tables.Contains(uiBindKey) == false) //是否存在.
                 {
                     string fullSQL = me.Doc.Clone() as string;
-                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = fullSQL.Replace("~", "'");
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);

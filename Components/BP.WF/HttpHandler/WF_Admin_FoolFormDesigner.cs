@@ -310,7 +310,10 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = (UIContralType)uiContralType;
             else
                 attr.UIContralType = En.UIContralType.DDL;
-            attr.MyDataType = DataType.AppInt;
+            if (attr.UIContralType == UIContralType.CheckBok)
+                attr.MyDataType = DataType.AppString;
+            else
+                attr.MyDataType = DataType.AppInt;
             attr.LGType = En.FieldTypeS.Enum;
 
             SysEnumMain sem = new Sys.SysEnumMain();
@@ -1012,6 +1015,7 @@ namespace BP.WF.HttpHandler
             string newNo = DataType.ParseStringForNo(no, 20);
             string newName = DataType.ParseStringForName(name, 20);
             int fType = int.Parse(this.GetRequestVal("FType"));
+            bool isSupperText = this.GetRequestValBoolen("IsSupperText");
 
             MapAttrs attrs = new MapAttrs();
             int i = attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, newNo);
@@ -1058,7 +1062,8 @@ namespace BP.WF.HttpHandler
             attr.MyPK = this.FK_MapData + "_" + newNo;
             attr.GroupID = iGroupID;
             attr.MyDataType = fType;
-            if(DataType.IsNullOrEmpty(this.GetRequestVal("FK_Flow")) == false)
+            
+            if (DataType.IsNullOrEmpty(this.GetRequestVal("FK_Flow")) == false)
                 attr.SetPara("FK_Flow", this.GetRequestVal("FK_Flow"));
 
             int colspan = attr.ColSpan;
@@ -1067,6 +1072,7 @@ namespace BP.WF.HttpHandler
 
             if (attr.MyDataType == DataType.AppString)
             {
+                attr.IsSupperText = isSupperText;
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 attr.UIVisible = true;

@@ -262,6 +262,13 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "输入内容多选";
+                rm.Title = "高级快速录入";
+                rm.ClassMethodName = this.ToString() + ".DoFastInput()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
                 #endregion 输入多选
 
                 #region Pop 自动填充.
@@ -487,6 +494,12 @@ namespace BP.Sys.FrmUI
         public string DoMultipleChoiceSearch()
         {
             return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+        }
+
+        public string DoFastInput()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/MultipleInputSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+
         }
         /// <summary>
         /// 超链接

@@ -1759,12 +1759,14 @@ namespace BP.En
 		}
 		private void AddRefAttrText(Attr attr)
 		{
+            if (attr.MyFieldType == FieldType.Enum && attr.MyDataType == DataType.AppString)
+                return;
 			if ( attr.MyFieldType==FieldType.FK 
 				||  attr.MyFieldType==FieldType.Enum 
 				||  attr.MyFieldType==FieldType.PKEnum 
 				||  attr.MyFieldType==FieldType.PKFK )
 			{
-
+                
 				Attr myattr= new Attr();
 				myattr.MyFieldType=FieldType.RefText ;
 				myattr.MyDataType=DataType.AppString ;

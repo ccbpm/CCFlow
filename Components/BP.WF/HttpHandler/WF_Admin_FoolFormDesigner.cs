@@ -1072,7 +1072,7 @@ namespace BP.WF.HttpHandler
 
             if (attr.MyDataType == DataType.AppString)
             {
-                attr.IsSupperText = isSupperText;
+                
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 attr.UIVisible = true;
@@ -1083,6 +1083,13 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.Insert();
+
+                if (isSupperText == true)
+                {
+                    Sys.FrmUI.MapAttrString attrString = new Sys.FrmUI.MapAttrString(attr.MyPK);
+                    attrString.IsSupperText = true;
+                    attrString.Update();
+                }
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + attr.MyPK;
             }
 

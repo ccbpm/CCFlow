@@ -792,5 +792,19 @@ body table tr td {
 .ccflow-tag {
     margin-right: 10px !important;
 }
+@media print {
+    .only-print-show {
+        display: inline-block;
+    }
+}
 
+.only-print-hidden {
+    display: inline-block;
+}
+
+@media print {
+    .only-print-hidden {
+        display: none;
+    }
+}
  

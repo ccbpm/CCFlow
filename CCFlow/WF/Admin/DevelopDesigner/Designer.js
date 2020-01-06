@@ -193,6 +193,13 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
         return;
     }
 
+    if (shap == 'Textarea') {
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
+        CCForm_ShowDialog(url, '字段大文本属性');
+        return;
+    }
+
+    
     if (shap == 'Date') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + fk_mapdata + '_' + mypk;
         CCForm_ShowDialog(url, '字段Date属性');
@@ -596,12 +603,21 @@ UE.plugins['textarea'] = function () {
         content: '',
         className: 'edui-bubble',
         _edittext: function () {
-            baidu.editor.plugins[thePlugins].editdom = popup.anchorEl;
-            me.execCommand(thePlugins);
+            me.execCommand("edit", "Textarea", this.anchorEl);
             this.hide();
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
+                //在Sys_MapAttr、Sys_MapExt中删除除控件属性
+                var keyOfEn = this.anchorEl.getAttribute("data-key");
+                if (keyOfEn == null || keyOfEn == undefined) {
+                    alert('字段没有获取到，请联系管理员');
+                    return false;
+                }
+                var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + keyOfEn);
+                mapAttr.Delete();
+                var mapExt = new Entities("BP.Sys.MapExts");
+                mapExt.Delete("FK_MapData", pageParam.fk_mapdata, "AttrOfOper", keyOfEn);
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -702,6 +718,16 @@ UE.plugins['select'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
+                //在Sys_MapAttr、Sys_MapExt中删除除控件属性
+                var keyOfEn = this.anchorEl.getAttribute("data-key");
+                if (keyOfEn == null || keyOfEn == undefined) {
+                    alert('字段没有获取到，请联系管理员');
+                    return false;
+                }
+                var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + keyOfEn);
+                mapAttr.Delete();
+                var mapExt = new Entities("BP.Sys.MapExts");
+                mapExt.Delete("FK_MapData", pageParam.fk_mapdata, "AttrOfOper", keyOfEn);
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -857,6 +883,7 @@ UE.plugins['qrcode'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
+               
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -942,6 +969,15 @@ UE.plugins['dtl'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
+                //在Sys_MapDtl中删除除控件属性
+                var no = this.anchorEl.getAttribute("data-key");
+                if (no == null || no == undefined) {
+                    alert('从表属性没有获取到，请联系管理员');
+                    return false;
+                }
+                var mapDtl = new Entity("BP.Sys.MapDtl", no);
+                mapDtl.Delete();
+               
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -1027,6 +1063,15 @@ UE.plugins['ath'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
+                //在Sys_FrmAttachment中删除除控件属性
+                var mypk = this.anchorEl.getAttribute("data-key");
+                if (mypk == null || mypk == undefined) {
+                    alert('附件属性没有获取到，请联系管理员');
+                    return false;
+                }
+                var ath = new Entity("BP.Sys.FrmAttachment", mypk);
+                ath.Delete();
+
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -1125,6 +1170,45 @@ UE.plugins['component'] = function () {
         },
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
+                var dataType = this.anchorEl.getAttribute("data-type");
+                var mypk = this.anchorEl.getAttribute("data-key");
+                if (mypk == null || mypk == undefined) {
+                    alert('元素属性data-key丢失，请联系管理员');
+                    return false;
+                }
+
+                if (dataType == "AthImg") {
+                    var imgAth = new Entity("BP.Sys.FrmImgAth", mypk);
+                    imgAth.Delete();
+                }
+                if (dataType == "Img") {
+                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+                    mapAttr.Delete();
+                    var en = new Entity("BP.Sys.FrmUI.ExtImg", mypk);
+                    en.Delete();
+                }
+                if (dataType == "IFrame") {
+                    var en = new Entity("BP.Sys.FrmUI.MapFrameExt", mypk);
+                    en.Delete();
+                }
+                if (dataType == "Map") {
+                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+                    mapAttr.Delete();
+                }
+                if (dataType == "Score") {
+                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+                    mapAttr.Delete();
+                }
+                if (dataType == "HandWriting") {
+                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+                    mapAttr.Delete();
+                }
+                if (dataType == "SubFlow") {
+                    var nodeID = GetQueryString("FK_Node");
+                    var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+                    subFlow.SFSta = 0;//禁用
+                    subFlow.Update();
+                }
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();

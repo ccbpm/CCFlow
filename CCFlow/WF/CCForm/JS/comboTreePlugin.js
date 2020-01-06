@@ -182,10 +182,10 @@
                 $(this).siblings('span').find('i').removeClass('fa-search').addClass('fa-close');
                 //修改选择的下拉框内容
                 var src = _this.options.source;
-                src = src.replace('@Key', event.currentTarget.value);
+                src = src.replace(/@Key/g, event.currentTarget.value);
                 var dt = DBAccess.RunDBSrc(src);
                 _this.selectul.html("");
-                ComboTree.prototype.createitem(dt, _this.selectul, _this.oliIdArray);
+                ComboTree.prototype.createitem(dt, _this.selectul,_this.oliIdArray);
 
             } else {
                 $(this).siblings('span').find('i').removeClass('fa-close').addClass('fa-search');
@@ -375,6 +375,8 @@
             //判断该节点是否被选中
             var isSelected = false;
             if (selected.join(",").indexOf(oliName) != -1)
+                isSelected = true;
+            if (selected.join(",").indexOf(oliId) != -1)
                 isSelected = true;
             // li容器
             let item = $('<li data-name="' + oliName + '" data-id="' + oliId + '"></li>');

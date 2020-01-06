@@ -37,6 +37,8 @@
     <script src="../CCForm/JS/Pop.js" type="text/javascript"></script>
     <link href="../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
     <script src="../CCForm/JS/mselector.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/comboTreePlugin.js" type="text/javascript"></script>
+    <link href="../CCForm/JS/comboTreePlugin.css" rel="stylesheet" />
     <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
     <script type="text/javascript" src="../CCForm/MapExt2019.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
@@ -57,6 +59,10 @@
     <!--时间-->
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+    <!--配置js-->
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+
     <script type="text/javascript">
 
         var frmBill = null;
@@ -64,6 +70,15 @@
         var webUser = new WebUser();
         //初始化函数
         $(function () {
+            if ("undefined" == typeof UserICon) {
+                UserICon = '../../DataUser/Siganture/';
+            } else {
+                UserICon = UserICon.replace("@basePath", basePath);
+            }
+            if ("undefined" == typeof UserIConExt) {
+                UserIConExt = '.jpg';
+            }
+
             InitToolbar();
         });
 
@@ -175,6 +190,8 @@
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
+            //toolBar += "<input type=button value='打印' onclick='wprint();' />";
+
             if (frmBill.RefBillRole != 0) {
                 if (frmBill.BtnRefBill == "") frmBill.BtnRefBill = "关联单据";
                 toolBar += "<input type='button' value='" + frmBill.BtnRefBill + "' id='Btn_BtnExpZip' onclick='RefBill(\"" + frmBill.RefBill + "\");' />";
@@ -202,6 +219,10 @@
         function OpenSetting() {
             var url = "../Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
             WinOpenFull(url);
+        }
+
+        function wprint() {
+            window.print();
         }
 
         ///执行方法.
@@ -352,16 +373,34 @@
 
             var formArr = formss.split('&');
             var formArrResult = [];
-
+            var mcheckboxs = "";
             $.each(formArr, function (i, ele) {
                 if (ele.split('=')[0].indexOf('CB_') == 0) {
-                    if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                        ele = ele.split('=')[0] + '=1';
+                    //如果ID获取不到值，Name获取到值为复选框多选
+                    var targetId = ele.split('=')[0];
+                    if ($('#' + targetId).length == 1) {
+                        if ($('#' + targetId + ':checked').length == 1) {
+                            ele = targetId + '=1';
+                        } else {
+                            ele = targetId + '=0';
+                        }
+                        formArrResult.push(ele);
                     } else {
-                        ele = ele.split('=')[0] + '=0';
+                        if (mcheckboxs.indexOf(targetId) != -1)
+                            return false;
+                        mcheckboxs += targetId + ",";
+                        var str = "";
+                        $("input[name='" + targetId + "']:checked").each(function (index, item) {
+                            if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
+                                str += $(this).val();
+                            } else {
+                                str += $(this).val() + ",";
+                            }
+                        });
+
+                        formArrResult.push(targetId + '=' + str);
                     }
 
-                    formArrResult.push(ele);
                 }
                 if (ele.split('=')[0].indexOf('DDL_') == 0) {
 

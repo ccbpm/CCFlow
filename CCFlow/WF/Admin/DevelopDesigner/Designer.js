@@ -124,7 +124,7 @@ UE.plugins['text'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25(当前：" + baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width') + ")");
+            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
             if (patrn.exec(w) == null && w != "" && w != null) {
@@ -607,7 +607,7 @@ UE.plugins['textarea'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25(当前：" + baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width') + ")");
+            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
             if (patrn.exec(w) == null && w != "" && w != null) {

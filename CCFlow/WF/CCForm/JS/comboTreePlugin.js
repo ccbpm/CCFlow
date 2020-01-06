@@ -470,13 +470,13 @@
 
                 var vals = $("#TB_" + this.options.keyOfEn).val();
                 //转换成数组
-                vals = vals.replace(new RegExp("[[]", "gm"), "").replace(/] /g, ",");
+                vals = vals.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
                 vals = vals.substr(0, vals.length-1);
                 var valArray = vals.split(",");
                 valArray.splice(i, 1);
                 $("#Img_" + oliId).remove();
 
-                $("#TB_" + this.options.keyOfEn).val("[" + valArray.join("] [") + "]");
+                $("#TB_" + this.options.keyOfEn).val("[" + valArray.join("][") + "]");
                 // console.log('删除当前的序号' + oliId + ';' + '剩下数组' + _this.oliIdArray)
             }
         }
@@ -561,7 +561,7 @@ function ChangeDataName(keyOfEn) {
     $.each(inputs, function (i, tag) {
         if (i == 0)
             vals += "[";
-        vals += tag.value + "] [";
+        vals += tag.value + "][";
     });
     vals = vals.substr(0, vals.length - 1);
     $("#TB_" + keyOfEn).val(vals);

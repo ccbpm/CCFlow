@@ -43,10 +43,13 @@ function GenerDevelopFrm(wn,fk_mapData) {
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
 
-        //设置字段的宽度属性、样式属性
-        $('#TB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
-        $('#RB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
-        $('#DDL_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        //设置字段的样式属性
+        //$('#TB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        //$('#RB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        //$('#DDL_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
+        $('#TB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
+        $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
+        $('#DDL_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
 
         //如果是时间控件

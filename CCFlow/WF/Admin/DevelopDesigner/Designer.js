@@ -122,6 +122,16 @@ UE.plugins['text'] = function () {
 
             }
             this.hide();
+        },
+        _setwidth: function () {
+            var w = prompt("请输入数值：比如25");
+
+            var patrn = /^(-)?\d+(\.\d+)?$/;
+            if (patrn.exec(w) == null || w == "") {
+                alert("不合法的输入");
+            } else {
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
+            }
         }
     });
     popup.render();
@@ -131,7 +141,7 @@ UE.plugins['text'] = function () {
         var leipiPlugins = el.getAttribute('leipiplugins');
         if (/input/ig.test(el.tagName) && leipiPlugins == thePlugins) {
             var html = popup.formatHtml(
-                '<nobr>文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+                '<nobr>文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             if (html) {
                 popup.getDom('content').innerHTML = html;
                 popup.anchorEl = el;

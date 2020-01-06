@@ -124,10 +124,10 @@ UE.plugins['text'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25");
+            var w = prompt("请输入数值：比如25(当前：" + baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width') + ")");
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
-            if (patrn.exec(w) == null || w == "") {
+            if (patrn.exec(w) == null && w != "" && w != null) {
                 alert("不合法的输入");
             } else {
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
@@ -607,12 +607,13 @@ UE.plugins['textarea'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25");
+            var w = prompt("请输入数值：比如25(当前：" + baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width') + ")");
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
-            if (patrn.exec(w) == null || w == "") {
+            if (patrn.exec(w) == null && w != "" && w != null) {
                 alert("不合法的输入");
             } else {
+                var hh = baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width');
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
             }
         }

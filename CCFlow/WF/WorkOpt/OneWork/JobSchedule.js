@@ -3,6 +3,10 @@ var step = 0;
 $(function () {
 
     var workid = GetQueryString("WorkID");
+	var oid = GetQueryString("OID");
+    if (workid==null) {
+        workid = oid;
+    }
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddPara("WorkID", workid);
     var ds = handler.DoMethodReturnJSON("JobSchedule_Init");

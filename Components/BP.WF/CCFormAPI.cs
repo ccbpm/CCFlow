@@ -772,6 +772,9 @@ namespace BP.WF
                     fullSQL = fullSQL.Replace("~", "'");
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
+                    if (DataType.IsNullOrEmpty(fullSQL) == true)
+                        throw new Exception("err@没有给AutoFullDLL配置SQL：MapExt：=" + me.MyPK+",原始的配置SQL为:"+me.Doc);
+
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
                     dt.TableName = uiBindKey;

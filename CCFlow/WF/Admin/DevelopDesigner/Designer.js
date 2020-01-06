@@ -605,6 +605,16 @@ UE.plugins['textarea'] = function () {
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
+        },
+        _setwidth: function () {
+            var w = prompt("请输入数值：比如25");
+
+            var patrn = /^(-)?\d+(\.\d+)?$/;
+            if (patrn.exec(w) == null || w == "") {
+                alert("不合法的输入");
+            } else {
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
+            }
         }
     });
     popup.render();
@@ -613,13 +623,27 @@ UE.plugins['textarea'] = function () {
         var el = evt.target || evt.srcElement;
         if (/textarea/ig.test(el.tagName)) {
             var html = popup.formatHtml(
-                '<nobr>多行文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+                '<nobr>多行文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             if (html) {
                 popup.getDom('content').innerHTML = html;
                 popup.anchorEl = el;
                 popup.showAnchor(popup.anchorEl);
             } else {
                 popup.hide();
+            }
+        }
+    });
+    me.addListener('keydown', function (t, evt) {
+        evt = evt || window.event;
+        var el = evt.target || evt.srcElement;
+        var leipiPlugins = el.getAttribute('leipiplugins');
+        if (/textarea/ig.test(el.tagName) && leipiPlugins == thePlugins) {
+            switch (evt.keyCode) {
+                case 46:
+                    popup.anchorEl = el;
+                    eval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
+                    break;
+                default:
             }
         }
     });

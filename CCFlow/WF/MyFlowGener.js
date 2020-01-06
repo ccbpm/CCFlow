@@ -11,6 +11,15 @@ var isLoadOk = false;
 
 $(function () {
 
+    if ("undefined" == typeof UserICon) {
+        UserICon = '../DataUser/Siganture/';
+    } else {
+        UserICon = UserICon.replace("@basePath", basePath);
+    }
+    if ("undefined" == typeof UserIConExt) {
+        UserIConExt = '.jpg';
+    }
+
     //动态加载css样式
     if (webUser == null)
         webUser = new WebUser();
@@ -265,7 +274,7 @@ function figure_Template_Siganture(SigantureID, val, type) {
         impParent.removeChild(obj);
     }
     else {
-        var src = '../DataUser/Siganture/' + val + '.JPG';    //新图片地址
+        var src = UserICon + oliId + UserIConExt;    //新图片地址
         document.getElementById("Img" + SigantureID).src = src;
     }
     isSigantureChecked = true;

@@ -3,6 +3,7 @@
         //定义一个存储数据的数组，用于下面重复选择判断，删除标签,
         defaults = {
             source: '',
+            listSource:'',
             isMultiple: false,
             cascadeSelect: false,
             selected: [],
@@ -32,10 +33,8 @@
     };
 
     ComboTree.prototype.init = function () {
-        var src = this.options.source;
-        src = src.replace(/@Key/g, '').replace(/~/g, "'");
+        var src = this.options.listSource;
         var dt = DBAccess.RunDBSrc(src);
-
         $.extend(true, this.copysource, dt);
         this.initstruct();
         this.initdom();
@@ -181,77 +180,90 @@
             // 判断搜索框里是否有内容，如果有则添加删除按钮
             if (event.currentTarget.value != "") {
                 $(this).siblings('span').find('i').removeClass('fa-search').addClass('fa-close');
+                //修改选择的下拉框内容
+                var src = _this.options.source;
+                src = src.replace('@Key', event.currentTarget.value);
+                var dt = DBAccess.RunDBSrc(src);
+                _this.selectul.html("");
+                ComboTree.prototype.createitem(dt, _this.selectul, _this.oliIdArray);
+
             } else {
                 $(this).siblings('span').find('i').removeClass('fa-close').addClass('fa-search');
+                //修改选择的下拉框内容
+                var src = _this.options.listSource;
+                var dt = DBAccess.RunDBSrc(src);
+                _this.selectul.html("");
+                ComboTree.prototype.createitem(dt, _this.selectul, _this.oliIdArray);
+
             }
 
-            let lis = _this.selectul.find('li'),
-                targetli = null,
-                _tempattr = null;
+            //let lis = _this.selectul.find('li'),
+            //    targetli = null,
+            //    _tempattr = null;
 
-            lis.each(function (index, item) {
-                $(item).attr('matched', '');
-            });
-            let val = $(event.target).val();
+            //lis.each(function (index, item) {
+            //    $(item).attr('matched', '');
+            //});
+            //let val = $(event.target).val();
 
-            function getChildren(parent) {
-                let lichild = parent.children('li');
+            //function getChildren(parent) {
+            //    let lichild = parent.children('li');
 
-                if (lichild.length) {
-                    for (let i = 0, _p = lichild, len = _p.length; i < len; i++) {
-                        targetli = _p.eq(i), _tempattr = targetli.attr('data-name');
+            //    if (lichild.length) {
+            //        for (let i = 0, _p = lichild, len = _p.length; i < len; i++) {
+            //            targetli = _p.eq(i), _tempattr = targetli.attr('data-name');
 
-                        if (_tempattr.indexOf(val) >= 0 && _tempattr !== ' ' && _tempattr !== '') {
-                            targetli.attr('matched', 'matched');
-                        }
+            //            if (_tempattr.indexOf(val) >= 0 && _tempattr !== ' ' && _tempattr !== '') {
+            //                targetli.attr('matched', 'matched');
+            //            }
 
-                        let subulcontainer = targetli.find('>.tree-sub-body');
+            //            let subulcontainer = targetli.find('>.tree-sub-body');
 
-                        if (subulcontainer.length > 0) {
-                            let _tempul = subulcontainer.find('>ul');
-                            getChildren(_tempul);
-                        }
-                    }
-                }
-            }
-            getChildren(_this.selectul);
+            //            if (subulcontainer.length > 0) {
+            //                let _tempul = subulcontainer.find('>ul');
+            //                getChildren(_tempul);
+            //            }
+            //        }
+            //    }
+            //}
+            //getChildren(_this.selectul);
 
-            if (val.trim() !== '') {
-                let lis1 = _this.selectul.find('li');
-                lis1.each(function (index, item) {
-                    let _item = $(item);
-                    let matched = _item.find('li[matched="matched"]');
-                    if (_item.length === 0) {
-                        return true; //相当于continue
-                    }
-                    if (matched.length === 0) {
-                        if (_item.attr('matched') === 'matched') { //如果当前元素匹配，则保留当前的删除它后面的所有元素
+            //if (val.trim() !== '') {
+            //    let lis1 = _this.selectul.find('li');
+            //    lis1.each(function (index, item) {
+            //        let _item = $(item);
+            //        let matched = _item.find('li[matched="matched"]');
+            //        if (_item.length === 0) {
+            //            return true; //相当于continue
+            //        }
+            //        if (matched.length === 0) {
+            //            if (_item.attr('matched') === 'matched') { //如果当前元素匹配，则保留当前的删除它后面的所有元素
 
-                            let _matcheditem = _item.find('>div.tree-sub-body');
-                            _matcheditem.each(function (index, item) {
-                                $(item).addClass('hide');
-                            });
-                        } else {
-                            _item.addClass('hide');
-                        }
-                    }
-                });
+            //                let _matcheditem = _item.find('>div.tree-sub-body');
+            //                _matcheditem.each(function (index, item) {
+            //                    $(item).addClass('hide');
+            //                });
+            //            } else {
+            //                _item.addClass('hide');
+            //            }
+            //        }
+            //    });
 
-                let children = _this.comboxulcontainer.find('li[matched=matched]');
+            //    let children = _this.comboxulcontainer.find('li[matched=matched]');
 
-                if (children.length === 0) {
-                    _this.selectul.hide();
-                    _this.noresults.show();
-                } else {
-                    _this.noresults.hide();
-                    _this.selectul.show();
-                }
+            //    if (children.length === 0) {
+            //        _this.selectul.hide();
+            //        _this.noresults.show();
+            //    } else {
+            //        _this.noresults.hide();
+            //        _this.selectul.show();
+            //    }
 
-            } else {
-                _this.selectul.show();
-                _this.selectul.find('.hide').removeClass('hide');
-                _this.noresults.hide();
-            }
+            //} else {
+            //    _this.selectul.show();
+            //    _this.selectul.find('.hide').removeClass('hide');
+            //    _this.noresults.hide();
+            //}
 
         });
 
@@ -299,7 +311,15 @@
                         item = $("<span data-id='" + oliId + "' class='input-keyword-item only-print-hidden'></span>");
                         namespan = $("<input type='text' style='border:0px;width:" + length * 15 + "px;margin:1px 1px !important;' value='" + targetName + "' onchange='ChangeDataName(\"" + _this.options.keyOfEn + "\")'  />");
                         checkicon = $("<i class='close' data-id='" + oliId + "' >x</i>");
-                        signature = $("<img src='../../DataUser/Siganture/" + oliId + ".jpg' class='only-print-show' id='Img_" + oliId + "'/>");
+                        if ("undefined" == typeof UserICon) {
+                            UserICon = '../../DataUser/Siganture/';
+                        } else {
+                            UserICon = UserICon.replace("@basePath", basePath);
+                        }
+                        if ("undefined" == typeof UserIConExt) {
+                            UserIConExt = '.jpg';
+                        } 
+                        signature = $("<img src='" + UserICon + oliId + UserIConExt+ "' class='only-print-show' id='Img_" + oliId + "'/>");
                     }
                     
 
@@ -434,7 +454,15 @@
             item = $("<span data-id='" + oliId + "' class='only-print-hidden input-keyword-item'></span>");
             namespan = $("<input type='text' style='border:0px;width:" + length * 15 + "px;margin:1px 1px !important;' value='" + target.attr('data-name') + "' onchange='ChangeDataName(\"" + _this.options.keyOfEn + "\")'  />");
             checkicon = $("<i class='close' data-id='" + oliId + "' >x</i>");
-            signature = $("<img src='../../DataUser/Siganture/" + oliId + ".jpg' class='only-print-show' id='Img_" + oliId + "'/>");
+            if ("undefined" == typeof UserICon) {
+                UserICon = '../../DataUser/Siganture/';
+            } else {
+                UserICon = UserICon.replace("@basePath", basePath);
+            }
+            if ("undefined" == typeof UserIConExt) {
+                UserIConExt = '.jpg';
+            }
+            signature = $("<img src='" + UserICon + oliId + UserIConExt + "' class='only-print-show' id='Img_" + oliId + "'/>");
         }
 
 

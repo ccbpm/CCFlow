@@ -15,6 +15,15 @@ document.BindEditorMapAttr = [];
 //初始化函数
 $(function () {
 
+    if ("undefined" == typeof UserICon) {
+        UserICon = '../../DataUser/Siganture/';
+    } else {
+        UserICon = UserICon.replace("@basePath", basePath);
+    }
+    if ("undefined" == typeof UserIConExt) {
+        UserIConExt = '.jpg';
+    }
+
     webUser = new WebUser();
 
     //设置不可以用.
@@ -1340,7 +1349,7 @@ function figure_Template_Siganture(SigantureID, val, type) {
         impParent.removeChild(obj);
     }
     else {
-        var src = '/DataUser/Siganture/' + val + '.jpg';    //新图片地址
+        var src = UserICon + oliId + UserIConExt;    //新图片地址
         document.getElementById("Img" + SigantureID).src = src;
     }
     isSigantureChecked = true;

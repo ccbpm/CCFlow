@@ -291,7 +291,15 @@ function MultipleInputSearch(mapExt, defaultVal,tbID) {
    
     container.addClass("select-tree-wrap");
 
-    var dbSrc = mapExt.Doc;
+    var dbSrc = mapExt.Doc; //搜索数据源
+    //处理sql，url参数.
+    dbSrc = dbSrc.replace(/~/g, "'");
+    dbSrc = DealExp(dbSrc);
+  
+    var listSrc = mapExt.Tag1;//列表数据源
+    listSrc = listSrc.replace(/~/g, "'");
+    listSrc = DealExp(listSrc);
+
     var isShowSignature = mapExt.Tag=="1"?true:false;
 
     defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
@@ -299,6 +307,7 @@ function MultipleInputSearch(mapExt, defaultVal,tbID) {
     var valArray = defaultVal.split(",");
     $('#' + mapExt.AttrOfOper + "_comboTree").comboTree({
         source: dbSrc,
+        listSource:listSrc,
         isMultiple: true,
         isFirstClassSelectable: false, //第一级是否可选
         cascadeSelect: true,

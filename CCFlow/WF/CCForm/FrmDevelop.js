@@ -649,10 +649,8 @@ function figure_Develop_Siganture(SigantureID, val, type) {
         impParent.removeChild(obj);
     }
     else {
-        var src = '../DataUser/Siganture/' + val + '.jpg';    //新图片地址
-        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
-            src = '../../DataUser/Siganture/' + val + '.jpg'; 
-
+        var src = UserICon + oliId + UserIConExt;    //新图片地址
+       
         document.getElementById("Img" + SigantureID).src = src;
     }
     isSigantureChecked = true;

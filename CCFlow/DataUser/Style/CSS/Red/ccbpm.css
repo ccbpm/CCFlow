@@ -792,6 +792,10 @@ body table tr td {
 .ccflow-tag {
     margin-right: 10px !important;
 }
+.only-print-show {
+    display: none;
+}
+
 @media print {
     .only-print-show {
         display: inline-block;

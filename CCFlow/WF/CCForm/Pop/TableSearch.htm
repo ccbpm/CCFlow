@@ -4,33 +4,33 @@
     <title></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/DatePicker/bootstrap-datepicker.min.css" rel="stylesheet"
-        type="text/css" />
-     <script src="../../Scripts/bootstrap/DatePicker/bootstrap-datepicker.min.js" type="text/javascript"></script>
+          type="text/css" />
+    <script src="../../Scripts/bootstrap/DatePicker/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="../../Scripts/bootstrap/DatePicker/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
 
     <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
 
-     <!-- 引入用户要重写的公共js -->
+    <!-- 引入用户要重写的公共js -->
     <script src="../../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
 
     <style type="text/css">
-        .row-margin-top
-        {
+        .row-margin-top {
             margin-top: 20px;
         }
-        .search-margin
-        {
+
+        .search-margin {
             margin-top: 15px;
         }
     </style>
@@ -71,24 +71,24 @@
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
-            
-            var atParas=GetQueryString("AtParas");
-          //获取列表的数据源
+
+            var atParas = GetQueryString("AtParas");
+            //获取列表的数据源
             var tableUrl = mapExt.Tag2;
-            if(atParas.indexOf('@')==0){
-            	var paras=atParas.split('@');
-            	for(i = 0,len=paras.length; i < len; i++) {
-                	var key=paras[i];
-                	if(key==""||key==null){
-                		continue;
-                	}
-                	var attrKeyOfEn=key.split('=')[0];
-                	var val=key.split('=')[1];
-                	tableUrl=tableUrl.replace("@"+attrKeyOfEn,val);
-            	}
+            if (atParas.indexOf('@') == 0) {
+                var paras = atParas.split('@');
+                for (i = 0, len = paras.length; i < len; i++) {
+                    var key = paras[i];
+                    if (key == "" || key == null) {
+                        continue;
+                    }
+                    var attrKeyOfEn = key.split('=')[0];
+                    var val = key.split('=')[1];
+                    tableUrl = tableUrl.replace("@" + attrKeyOfEn, val);
+                }
             }
 
-            
+
             if (tableUrl == "") {
                 alert('配置错误:查询数据源，初始化列表的数据源不能为空。');
                 return;
@@ -259,7 +259,7 @@
 
             //复制查询条件，排序
             condtionFieldsArry = jQuery.extend(true, [], condtionsArry);
-            //利用js中的sort方法  
+            //利用js中的sort方法
             condtionFieldsArry.sort(function (a, b) {
                 return b.FieldKey.length - a.FieldKey.length;
             });
@@ -366,9 +366,9 @@
                         select.attr("name", condtion.FieldKey);
                         searchPanel.append(select);
 
-                        var  dbSrc = condtion.Val.replace(/~/g, "'");
-//                        var reg = new RegExp("@Key", "g");
-//                        dbSrc = dbSrc.replace(reg, keyWord);
+                        var dbSrc = condtion.Val.replace(/~/g, "'");
+                        //                        var reg = new RegExp("@Key", "g");
+                        //                        dbSrc = dbSrc.replace(reg, keyWord);
                         dbSrc = DealExp(dbSrc);
 
                         var ifcData = DBAccess.RunDBSrc(dbSrc);
@@ -428,7 +428,7 @@
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
             //var keyWord = $("#TB_Key").val();
-            var keyWord = replaceAll($("#TB_Key").val(),"'","");//输入时有引号的去除掉
+            var keyWord = replaceAll($("#TB_Key").val(), "'", "");//输入时有引号的去除掉
             var dbSrc = mapExt.Tag2;
             dbSrc = dbSrc.replace(/~/g, "'");
             var reg = new RegExp("@Key", "g");
@@ -445,14 +445,14 @@
                         dbSrc = dbSrc + " WHERE 1=1";
                     if (value != "") {
                         if (obj.CtrlType.indexOf("Date") == -1) {
-                            dbSrc = dbSrc + " and " + obj.FieldKey + "='" + value+"'";
+                            dbSrc = dbSrc + " and " + obj.FieldKey + "='" + value + "'";
                         } else {
                             if (obj.CtrlType == "DateFrom")
-                                dbSrc = dbSrc + " and " + obj.FieldKey + ">='" + value+"'";
+                                dbSrc = dbSrc + " and " + obj.FieldKey + ">='" + value + "'";
                             if (obj.CtrlType == "DateTo") {
                                 var key = obj.FieldKey.replace("_DateTo", "");
                                 value = value + " 23:59";
-                                dbSrc = dbSrc + " and " + key + "<='" + value+"'";
+                                dbSrc = dbSrc + " and " + key + "<='" + value + "'";
                             }
                         }
                     }

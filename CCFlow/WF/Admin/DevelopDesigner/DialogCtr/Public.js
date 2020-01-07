@@ -31,7 +31,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
     if (dataType == "CheckBox")
         _Html = "<input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text'/>&nbsp;&nbsp;" + name ;
 
-    if (dataType == "Enum") {
+    if (dataType == "Radio") {
         //获取枚举值
         var enums = new Entities("BP.Sys.SysEnums");
         enums.Retrieve("EnumKey", uiBindKey);
@@ -150,7 +150,7 @@ function GetDataType(mapAttr) {
             return "Select";
         }
     }  else if (mapAttr.UIContralType == 3) {//单选框
-        return "Enum";
+        return "Radio";
     }
 
     if (mapAttr.MyDataType == 1) {

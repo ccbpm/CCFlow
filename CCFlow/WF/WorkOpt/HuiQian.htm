@@ -114,12 +114,10 @@
                 dept = u.FK_Dept;
             }
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
-            //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
             $('#iframeSelectEmpsForm').attr('src', url);
             $('#Btn_SelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
-            //$("section").show();
             $(".Msg").hide();
 
             //执行数据初始化工作.
@@ -554,7 +552,6 @@
 
                 <img src="../Img/Multiplayer.png" onclick="SaveAndClose();" style="width:27px;" />
                 <button id="Btn_HuiQian" class="btn-info" onclick="SaveAndClose();">执行会签</button>
-                <!--<input type="button" id="Btn_HuiQian" class="btn btn-info" value="执行会签" onclick="SaveAndClose();" />-->
                 <span style="color:red">点击此按钮执行会签</span>
                 <div id="HelpInfo" style="">
                     <ul>

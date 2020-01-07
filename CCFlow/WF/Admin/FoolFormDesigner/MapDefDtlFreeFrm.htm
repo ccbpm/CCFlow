@@ -33,9 +33,10 @@
           var fk_node = GetQueryString("FK_Node");
 
           var isFor = GetQueryString("For");
-
-          var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl+'&FK_Flow='+GetQueryString("FK_Flow") + "&For=" + isFor + "&m=" + Math.random();
-
+          var fk_flow = GetQueryString("FK_Flow");
+          var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + '&For=' + isFor + '&m=' + Math.random();
+          if (fk_flow != null && fk_flow != undefined && fk_flow != "")
+              url += '&FK_Flow=' + fk_flow;
           $(function () {
 
               $("#F").attr("src", url);

@@ -504,7 +504,10 @@ UE.plugins['enum'] = function () {
         content: '',
         className: 'edui-bubble',
         _edittext: function () {
+
             baidu.editor.plugins[thePlugins].editdom = popup.anchorEl;
+            if (this.anchorEl.tagName.toLowerCase() == "label")
+                this.anchorEl = this.anchorEl.parentNode;
             me.execCommand("edit", this.anchorEl.getAttribute("data-type"), this.anchorEl);
             this.hide();
         },
@@ -536,7 +539,7 @@ UE.plugins['enum'] = function () {
         if (leipiPlugins == null && $(el).parent().length > 0)
             leipiPlugins = $($(el).parent()[0]).attr('leipiplugins');
 
-        if (/select|span/ig.test(el.tagName) && leipiPlugins == thePlugins) {
+        if (/select|span|label/ig.test(el.tagName) && leipiPlugins == thePlugins) {
             var type = el.getAttribute('data-type');
             var html = "";
             if (type == 'EnumSelect')

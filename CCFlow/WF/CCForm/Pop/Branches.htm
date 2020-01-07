@@ -4,11 +4,11 @@
     <title></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
 
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -20,17 +20,16 @@
 
     <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
-     <!-- 引入用户要重写的公共js -->
+    <!-- 引入用户要重写的公共js -->
     <script src="../../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
 
 
     <style type="text/css">
-        .row-margin-top
-        {
+        .row-margin-top {
             margin-top: 20px;
         }
-        .search-margin
-        {
+
+        .search-margin {
             margin-top: 15px;
         }
     </style>
@@ -119,10 +118,10 @@
                 onNodeSelected: function (event, node) {
                     var tree = $('#tree');
                     if (node.state.expanded) {
-                        //处于展开状态则折叠  
+                        //处于展开状态则折叠
                         tree.treeview('collapseNode', node.nodeId);
                     } else {
-                        //展开  
+                        //展开
                         tree.treeview('expandNode', node.nodeId);
                     }
                 }
@@ -145,7 +144,7 @@
                     }
                 }
             }];
-            
+
             //显示列的中文名称.
             if (typeof columns == "string") {
                 $.each(columns.split(","), function (i, o) {
@@ -184,11 +183,11 @@
                 clickToSelect: true,
                 sortable: false,
                 maintainSelected: true,
-                singleSelect:!mapExt.ShowCheckBox,
+                singleSelect: !mapExt.ShowCheckBox,
                 uniqueId: "No",
                 columns: searchTableColumns
             });
-            
+
             var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
             if ($.isArray(json)) {
                 $('#tree_Panel').hide();
@@ -226,8 +225,8 @@
             global.selectedRows = [];
 
             var mypk = GetQueryString("MyPK");
-            var atParas=GetQueryString("AtParas");
-            
+            var atParas = GetQueryString("AtParas");
+
             mapExt = new Entity("BP.Sys.MapExt", mypk);
 
             var webUser = new WebUser();
@@ -251,19 +250,19 @@
             global.oid = GetQueryString("OID");
 
             var treeUrl = mapExt.Tag2;
-            var treeTag1=mapExt.Tag1;
-            if(atParas.indexOf('@')==0){
-            	var paras=atParas.split('@');
-            	for(i = 0,len=paras.length; i < len; i++) {
-                	var key=paras[i];
-                	if(key==""||key==null){
-                		continue;
-                	}
-                	var attrKeyOfEn=key.split('=')[0];
-                	var val=key.split('=')[1];
-                	treeUrl=treeUrl.replace("@"+attrKeyOfEn,val);
-                	treeTag1=treeTag1.replace("@"+attrKeyOfEn,val);
-            	}
+            var treeTag1 = mapExt.Tag1;
+            if (atParas.indexOf('@') == 0) {
+                var paras = atParas.split('@');
+                for (i = 0, len = paras.length; i < len; i++) {
+                    var key = paras[i];
+                    if (key == "" || key == null) {
+                        continue;
+                    }
+                    var attrKeyOfEn = key.split('=')[0];
+                    var val = key.split('=')[1];
+                    treeUrl = treeUrl.replace("@" + attrKeyOfEn, val);
+                    treeTag1 = treeTag1.replace("@" + attrKeyOfEn, val);
+                }
             }
             if (treeUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源不能为空。');

@@ -1062,7 +1062,10 @@ namespace BP.Sys
         public void ClearCash()
         {
             BP.DA.CashFrmTemplate.Remove(this.No);
+            BP.DA.Cash.SetMap(this.No, null);
             CleanObject();
+            BP.DA.Cash.SQL_Cash.Remove(this.No);
+
         }
 
         #region 基本属性.

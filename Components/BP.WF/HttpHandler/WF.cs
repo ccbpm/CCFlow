@@ -901,10 +901,15 @@ namespace BP.WF.HttpHandler
                 em.Name = Web.WebUser.Name;
                 em.Insert();
             }
-           
-            json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
-            if (DataType.IsNullOrEmpty(json) == false)
+            //TTC error 错误，oracle数据库暂时不走这
+            if (SystemConfig.AppCenterDBType != DBType.Oracle)
+            {
+
+                json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
+                if (DataType.IsNullOrEmpty(json) == false)
                 return json;
+
+            }
 
             //定义容器.
             DataSet ds = new DataSet();

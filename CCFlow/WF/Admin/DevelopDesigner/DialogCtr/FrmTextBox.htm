@@ -106,7 +106,7 @@
              var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", fk_mapData);
             handler.AddPara("KeyOfEn",KeyOfEn);
-            handler.AddPara("Name",name);
+            handler.AddPara("name",name);
             handler.AddPara("FType", FieldType);
             handler.AddPara("IsSupperText",dataType=="Textarea"?1:0 )
             var data = handler.DoMethodReturnString("FieldTypeSelect_Create");

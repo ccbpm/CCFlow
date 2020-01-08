@@ -484,12 +484,19 @@ namespace BP.DA
                 }
 
                 byte[] byteFile = null;
-                if (dr.Read())
+                //@sly 这里出现ttc错误.
+                try
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
 
-                    byteFile = (byte[])dr[0];
+                        byteFile = (byte[])dr[0];
+                    }
+                }catch(Exception ex)
+                {
+                    return null;
                 }
 
                 return byteFile;

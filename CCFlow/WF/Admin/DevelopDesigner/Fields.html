@@ -60,26 +60,7 @@
                 delData: []
             },
             created() {
-                var frmID = GetQueryString("FrmID");
-                var ens = new Entities("BP.Sys.MapAttrs");
-                ens.Retrieve("FK_MapData", frmID, "Idx");
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-                handler.AddPara("FrmID", frmID);
-                var html = handler.DoMethodReturnString("Fields_Init");
-
-                console.log(html);
-
-
-                var list = ens.GetEns();
-                var deldate = [];
-                list.data.map(function (item, index) {
-                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
-                        item.contralType = GetFieldType(item);
-                        deldate.push(item);
-                    }
-                });
-                this.delData = deldate;
+                this.delData =  InitData();
 
             },
             methods: {
@@ -108,6 +89,27 @@
             }
         })
 
+        function InitData() {
+            var frmID = GetQueryString("FrmID");
+                var ens = new Entities("BP.Sys.MapAttrs");
+                ens.Retrieve("FK_MapData", frmID, "Idx");
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+                handler.AddPara("FrmID", frmID);
+                var html = handler.DoMethodReturnString("Fields_Init");
+
+                var list = ens.GetEns();
+                var deldate = [];
+                list.data.map(function (item, index) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
+                        item.contralType = GetFieldType(item);
+                        deldate.push(item);
+                    }
+                });
+            return deldate;
+               
+        }
+        
         function GetFieldType(mapAttr) {
 
             if (mapAttr.UIContralType == 0) {
@@ -142,6 +144,8 @@
                     return "外部数据源";
                 }
             } else if (mapAttr.UIContralType == 2) {//复选框
+                if (mapAttr.MyDataType == "1")
+                    return "枚举多选框";
                 return "复选框";
             } else if (mapAttr.UIContralType == 3) {//单选框
                 return "枚举单选按钮";
@@ -245,11 +249,9 @@
             }
 
             OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-
-                window.location.href = window.location.href;
-
+                 Baseinfo.delData =  InitData();
             });
-
+           
             return;
         }
 

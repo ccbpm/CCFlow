@@ -1051,11 +1051,7 @@ namespace BP.Sys
             this.Row.SetValByKey("FrmRBs", null);
             this.Row.SetValByKey("MapAttrs", null);
             return;
-
-
-
         }
-
         /// <summary>
         /// 清空缓存
         /// </summary>
@@ -1065,7 +1061,6 @@ namespace BP.Sys
             BP.DA.Cash.SetMap(this.No, null);
             CleanObject();
             BP.DA.Cash.SQL_Cash.Remove(this.No);
-
         }
 
         #region 基本属性.
@@ -2797,6 +2792,9 @@ namespace BP.Sys
                 // attr.Save();
             }
             #endregion  检查是否有ca认证设置.
+
+            //清除缓存.
+            this.ClearCash();
 
             return base.beforeUpdateInsertAction();
         }

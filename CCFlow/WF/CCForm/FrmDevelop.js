@@ -44,9 +44,6 @@ function GenerDevelopFrm(wn,fk_mapData) {
         var mapAttr = mapAttrs[i];
 
         //设置字段的样式属性
-        //$('#TB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
-        //$('#RB_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
-        //$('#DDL_' + mapAttr.KeyOfEn).css('width', mapAttr.UIWidth).addClass(mapAttr.CSS);
         $('#TB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#DDL_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
@@ -84,15 +81,35 @@ function GenerDevelopFrm(wn,fk_mapData) {
 
         }
 
-
-
-        if ((mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1)//外部数据源
+        //外部数据源、外键的选择列表
+        if ((mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1)
             || (mapAttr.LGType == "2" && mapAttr.MyDataType == "1")) {
             var _html = InitDDLOperation(frmData, mapAttr, null);
             $("#DDL_" + mapAttr.KeyOfEn).empty();
             $("#DDL_" + mapAttr.KeyOfEn).append(_html);
 
         }
+      
+
+        //为复选框高级设置绑定事件
+        if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            $("#CB_" + mapAttr.KeyOfEn).attr("onchange", "clickEnable(this, \"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
+        }
+          //为单选按钮高级设置绑定事件
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
+            if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                if (mapAttr.UIContralType == 1)//枚举下拉框
+                    $("#CB_" + mapAttr.KeyOfEn).attr("onchange", "changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
+                if (mapAttr.UIContralType == 3) { //枚举单选
+                    var spans = $("#SR_" + mapAttr.KeyOfEn);
+                    var inputs = spans.find("input");
+                    $.each(inputs, function (i, target) {
+                        $(target).attr("onchange","clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
+                    });
+                   
+                }
+            }
+        } 
 
         if (mapAttr.MyDataType == 1) {
             if (mapAttr.UIContralType == 8)//手写签字版
@@ -700,3 +717,6 @@ function setHandWriteSrc(HandWriteID, imagePath) {
     $("#TB_" + HandWriteID).val(imagePath);
     $('#eudlg').dialog('close');
 }
+
+
+

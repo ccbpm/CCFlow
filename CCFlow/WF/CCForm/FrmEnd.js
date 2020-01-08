@@ -134,6 +134,8 @@
     }
 
     var mapAttrs = frmData.Sys_MapAttr;
+    var mapData = frmData.Sys_MapData;
+    var frmType = mapData.FrmType;
     //解析设置表单字段联动显示与隐藏.
     for (var i = 0; i < mapAttrs.length; i++) {
 
@@ -144,54 +146,117 @@
         if (mapAttr.LGType != 1 && mapAttr.MyDataType != 4)
             continue;
 
-        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
-            if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                if (mapAttr.UIContralType == 1) {
-                    /*启用了显示与隐藏.*/
-                    var ddl = $("#DDL_" + mapAttr.KeyOfEn);
-                    //如果现在是隐藏状态就不可以设置
-                    var ctrl = $("#Td_" + mapAttr.KeyOfEn);
-                    if (ctrl.length > 0) {
-                        if (ctrl.parent('tr').css('display') == "none")
-                            continue;
-                    }
-
-                    //初始化页面的值
-                    var nowKey = ddl.val();
-                    if (nowKey == null || nowKey == undefined || nowKey == "")
-                        continue;
-
-                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
-
-                }
-                if (mapAttr.UIContralType == 3) {
-                    //如果现在是隐藏状态就不可以设置
-                    var ctrl = $("#Td_" + mapAttr.KeyOfEn);
-                    if (ctrl.length > 0) {
-                        if (ctrl.parent('tr').css('display') == "none")
-                            continue;
-                    }
-
-                    var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-                    if (nowKey == null || nowKey == undefined || nowKey == "")
-                        continue;
-                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
-
-                }
-            }
+        //傻瓜表单/累加表单
+        if (frmType == 0 || frmType == 10) {
+            InitFoolLink(mapAttr, frmType); 
+            continue;
+        }
+        //开发者表单
+        if (frmType == 8) {
+            InitDevelopLink(mapAttr, frmType);
         }
 
-        //复选框
-        if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
-            //获取复选框的值
-            if ($("#CB_" + mapAttr.KeyOfEn).checked == true)
-                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 1);
-            else
-                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 0);
-        }
-
+        
     }
 
+
+}
+
+//傻瓜表单/累加表单初始化联动
+function InitFoolLink(mapAttr, frmType) {
+    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
+        if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            if (mapAttr.UIContralType == 1) {
+                /*启用了显示与隐藏.*/
+                var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                //如果现在是隐藏状态就不可以设置
+                var ctrl = $("#Td_" + mapAttr.KeyOfEn);
+                if (ctrl.length > 0) {
+                    if (ctrl.parent('tr').css('display') == "none")
+                        continue;
+                }
+
+                //初始化页面的值
+                var nowKey = ddl.val();
+                if (nowKey == null || nowKey == undefined || nowKey == "")
+                    continue;
+
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey,frmType);
+
+            }
+            if (mapAttr.UIContralType == 3) {
+                //如果现在是隐藏状态就不可以设置
+                var ctrl = $("#Td_" + mapAttr.KeyOfEn);
+                if (ctrl.length > 0) {
+                    if (ctrl.parent('tr').css('display') == "none")
+                        continue;
+                }
+
+                var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                if (nowKey == null || nowKey == undefined || nowKey == "")
+                    continue;
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
+
+            }
+        }
+    }
+
+    //复选框
+    if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+        //获取复选框的值
+        if ($("#CB_" + mapAttr.KeyOfEn).checked == true)
+            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 1, frmType);
+        else
+            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 0, frmType);
+    }
+
+}
+
+//开发者初始化联动
+function InitDevelopLink(mapAttr, frmType) {
+    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
+        if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+            if (mapAttr.UIContralType == 1) {
+                /*启用了显示与隐藏.*/
+                var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                //如果现在是隐藏状态就不可以设置
+                if (ctrl.length > 0) {
+                    if (ctrl.css('display') == "none")
+                        continue;
+                }
+                //初始化页面的值
+                var nowKey = ddl.val();
+                if (nowKey == null || nowKey == undefined || nowKey == "")
+                    continue;
+
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
+
+            }
+            if (mapAttr.UIContralType == 3) {
+                //如果现在是隐藏状态就不可以设置
+                var ctrl = $("#SR_" + mapAttr.KeyOfEn);
+                if (ctrl.length > 0) {
+                    if (ctrl.parent('tr').css('display') == "none")
+                        continue;
+                }
+
+                var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                if (nowKey == null || nowKey == undefined || nowKey == "")
+                    continue;
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
+
+            }
+        }
+    }
+
+    //复选框
+    if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+        //获取复选框的值
+        if ($("#CB_" + mapAttr.KeyOfEn).checked == true)
+            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 1, frmType);
+        else
+            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, 0, frmType);
+    }
 
 }
 

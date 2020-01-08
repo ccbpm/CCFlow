@@ -173,13 +173,13 @@ function InitFoolLink(mapAttr, frmType) {
                 var ctrl = $("#Td_" + mapAttr.KeyOfEn);
                 if (ctrl.length > 0) {
                     if (ctrl.parent('tr').css('display') == "none")
-                        continue;
+                        return;
                 }
 
                 //初始化页面的值
                 var nowKey = ddl.val();
                 if (nowKey == null || nowKey == undefined || nowKey == "")
-                    continue;
+                    return;
 
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey,frmType);
 
@@ -189,12 +189,12 @@ function InitFoolLink(mapAttr, frmType) {
                 var ctrl = $("#Td_" + mapAttr.KeyOfEn);
                 if (ctrl.length > 0) {
                     if (ctrl.parent('tr').css('display') == "none")
-                        continue;
+                        return;
                 }
 
                 var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
                 if (nowKey == null || nowKey == undefined || nowKey == "")
-                    continue;
+                    return;
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
 
             }
@@ -222,12 +222,12 @@ function InitDevelopLink(mapAttr, frmType) {
                 //如果现在是隐藏状态就不可以设置
                 if (ctrl.length > 0) {
                     if (ctrl.css('display') == "none")
-                        continue;
+                        return;
                 }
                 //初始化页面的值
                 var nowKey = ddl.val();
                 if (nowKey == null || nowKey == undefined || nowKey == "")
-                    continue;
+                    return;
 
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
 
@@ -237,12 +237,12 @@ function InitDevelopLink(mapAttr, frmType) {
                 var ctrl = $("#SR_" + mapAttr.KeyOfEn);
                 if (ctrl.length > 0) {
                     if (ctrl.parent('tr').css('display') == "none")
-                        continue;
+                        return;
                 }
 
                 var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
                 if (nowKey == null || nowKey == undefined || nowKey == "")
-                    continue;
+                    return;
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
 
             }
@@ -1070,12 +1070,40 @@ function SetCtrlVal(key, value) {
         ctrl.attr('checked', true);
     }
 
-    ctrl = $("#RB_" + key + "_" + value);
+   ctrl = $("#RB_" + key + "_" + value);
     if (ctrl.length > 0) {
         var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
-        document.getElementById("RB_" + key + "_" + checkVal).checked = false;
+        if(checkVal!=null && checkVal!=undefined)
+            document.getElementById("RB_" + key + "_" + checkVal).checked = false;
         document.getElementById("RB_" + key + "_" + value).checked = true;
         // ctrl.attr('checked', 'checked');
+    }
+}
+
+//清空值?
+function CleanCtrlVal(key) {
+    var ctrl = $("#TB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.val('');
+    }
+
+    ctrl = $("#DDL_" + key);
+    if (ctrl.length > 0) {
+        //ctrl.attr("value",'');
+        ctrl.val('');
+        // $("#DDL_"+key+" option:first").attr('selected','selected');
+    }
+
+    ctrl = $("#CB_" + key);
+    if (ctrl.length > 0) {
+        ctrl.attr('checked', false);
+    }
+
+    ctrl = $("#RB_" + key + "_" + 0);
+    if (ctrl.length > 0) {
+        var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
+        if (checkVal != null && checkVal != undefined)
+            document.getElementById("RB_" + key + "_" + checkVal).checked = false;
     }
 }
 

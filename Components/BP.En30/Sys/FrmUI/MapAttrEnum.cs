@@ -103,9 +103,26 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
+                string sql = "";
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        sql = "SELECT '-1' AS No, '无' as Name ";
+                        break;
+                    case DBType.Oracle:
+                        sql = "SELECT '-1' AS No, '无' as Name FROM DUAL ";
+                        break;
+                    case DBType.MySQL:
+                    case DBType.PostgreSQL:
+                    default:
+                        sql = "SELECT '-1' AS No, '无' as Name FROM Port_Emp WHERE 1=2 ";
+                        break;
+                }
+                sql += " union ";
+                sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'";
+
                 //默认值.
-                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",
-                    "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'", true);
+                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",sql, true);
 
                 //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 

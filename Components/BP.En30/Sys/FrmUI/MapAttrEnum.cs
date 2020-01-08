@@ -107,24 +107,24 @@ namespace BP.Sys.FrmUI
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                    case DBType.MySQL:
-                        sql = "SELECT '-1' AS No, '-无(不选择)-' as Name ";
+                        sql = "SELECT -1 AS No, '-无(不选择)-' as Name ";
                         break;
                     case DBType.Oracle:
-                        sql = "SELECT '-1' AS No, '-无(不选择)-' as Name FROM DUAL ";
+                        sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM DUAL ";
                         break;
+                    case DBType.MySQL:
                     case DBType.PostgreSQL:
                     default:
-                        sql = "SELECT '-1' AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
+                        sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
                 }
                 sql += " union ";
-                sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'";
+                sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
 
                 //默认值.
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",sql, true);
 
-                //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
+                //map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
                  "@1=下拉框@3=单选按钮");

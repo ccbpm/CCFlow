@@ -39,10 +39,11 @@
             for (var i = 0; i < enumMains.length; i++) {
 
                 var sysEnumMain = enumMains[i];
+                var cfgVal = sysEnumMain.CfgVal.replace(/ /g, "[]");
 
                 html += "<tr>";
                 html += "<td class=Idx>" + i + "</td>";
-                html += "<td><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
+                html += "<td><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + cfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
                 html += "<td>" + sysEnumMain.Name + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "');\">" + sysEnumMain.CfgVal + "</a></td>";
 
@@ -59,6 +60,7 @@
 
         var rownum = -1;
         function getTr(No, Name, CfgVal, i) {
+            CfgVal = CfgVal.replace(/[]/g, " ");
             $('#TB_Name').val(Name);
             $('#TB_KeyOfEn').val(No);
             $('#TB_UIBindKey').val(No);

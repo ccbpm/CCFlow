@@ -29,7 +29,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"  leipiplugins="text" style="width:160px"/>';
     //复选框
     if (dataType == "CheckBox")
-        _Html = "<input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text'/>&nbsp;&nbsp;" + name ;
+        _Html = "<label><input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name+"</label>" ;
 
     if (dataType == "Radio") {
         //获取枚举值

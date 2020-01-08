@@ -233,15 +233,15 @@
                 }
 
                 //判断最高级别.
-                var user = new WebUser();
-                if (user.CustomerNo == 'TianYe') {
-                    if (user.FK_Dept.indexOf('18099') == 0) {
-                        if (pageData.ParentDept.indexOf('18099') != 0) {
-                            alert('已经是最高级别了.');
-                            return;
-                        }
-                    }
-                }
+                //var user = new WebUser();
+                //if (user.CustomerNo == 'TianYe') {
+                //    if (user.FK_Dept.indexOf('18099') == 0) {
+                //        if (pageData.ParentDept.indexOf('18099') != 0) {
+                //            alert('已经是最高级别了.');
+                //            return;
+                //        }
+                //    }
+                //}
 
                 pageData.FK_Dept = pageData.ParentDept;
 

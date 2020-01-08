@@ -107,15 +107,15 @@ namespace BP.Sys.FrmUI
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        sql = "SELECT '-1' AS No, '无' as Name ";
+                    case DBType.MySQL:
+                        sql = "SELECT '-1' AS No, '-无(不选择)-' as Name ";
                         break;
                     case DBType.Oracle:
-                        sql = "SELECT '-1' AS No, '无' as Name FROM DUAL ";
+                        sql = "SELECT '-1' AS No, '-无(不选择)-' as Name FROM DUAL ";
                         break;
-                    case DBType.MySQL:
                     case DBType.PostgreSQL:
                     default:
-                        sql = "SELECT '-1' AS No, '无' as Name FROM Port_Emp WHERE 1=2 ";
+                        sql = "SELECT '-1' AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
                 }
                 sql += " union ";

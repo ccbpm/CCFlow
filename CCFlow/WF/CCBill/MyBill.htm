@@ -63,6 +63,13 @@
     <!--配置js-->
     <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
 
+    <style type="text/css">
+        @page {
+            size: auto; /* auto is the initial value */
+            margin: 0mm; /* this affects the margin in the printer settings */
+        }
+    </style>
+
     <script type="text/javascript">
 
         var frmBill = null;
@@ -190,7 +197,7 @@
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
-            //toolBar += "<input type=button value='打印' onclick='wprint();' />";
+            toolBar += "<input type=button value='打印' onclick='wprint();' />";
 
             if (frmBill.RefBillRole != 0) {
                 if (frmBill.BtnRefBill == "") frmBill.BtnRefBill = "关联单据";
@@ -221,8 +228,48 @@
             WinOpenFull(url);
         }
 
+        var hkey_root,hkey_path,hkey_key
+        hkey_root = "HKEY_CURRENT_USER";
+        hkey_path="\\Software\\Microsoft\\Internet Explorer\\PageSetup\\"
+
+        // 设置页眉页脚为空
+        function PageSetup_Null()
+        {
+         try{
+          var RegWsh = CreateObject("WScript.Shell") ;
+          hkey_key="header" ;
+          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"") ;
+          hkey_key="footer" ;
+          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"") ;
+          }
+         catch(e){}
+        }
+
+        // 设置页眉页脚为默认值
+        function PageSetup_Default()
+        {
+         try{
+          var RegWsh = CreateObject("WScript.Shell") ;
+          hkey_key="header" ;
+          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"&w&b页码，&p/&P") ;
+          hkey_key="footer" ;
+          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"&u&b&d") ;
+          }
+         catch(e){}
+}
         function wprint() {
+           // PageSetup_Null();
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body>";
+            var printData = document.getElementById("divCurrentForm").innerHTML; //获得 div 里的所有 html 数据
+            var oldstr = document.body.innerHTML;
+            document.body.innerHTML = headstr+newstr+footstr;
             window.print();
+            document.body.innerHTML = oldstr;
+            return false;
+            
+            
+            
         }
 
         ///执行方法.

@@ -300,11 +300,14 @@ function MultipleInputSearch(mapExt, defaultVal,tbID) {
     listSrc = listSrc.replace(/~/g, "'");
     listSrc = DealExp(listSrc);
 
-    var isShowSignature = mapExt.Tag=="1"?true:false;
-
-    defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
-    defaultVal = defaultVal.substr(0, defaultVal.length - 1);
-    var valArray = defaultVal.split(",");
+    var isShowSignature = mapExt.Tag == "1" ? true : false;
+    var valArray = [];
+    if (defaultVal != null && defaultVal != undefined) {
+        defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
+        defaultVal = defaultVal.substr(0, defaultVal.length - 1);
+        valArray = defaultVal.split(",");
+    }
+    
     $('#' + mapExt.AttrOfOper + "_comboTree").comboTree({
         source: dbSrc,
         listSource:listSrc,

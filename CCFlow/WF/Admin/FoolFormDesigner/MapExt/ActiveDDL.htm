@@ -164,6 +164,15 @@
 
                 $("#Msg").html("正在保存,请稍后......");
                 //组织主键.
+                if ($("#DDL_AttrsOfActive").val() == "") {
+                    alert("请选择联动下拉框的值");
+                    return;
+                }
+                if ($("#TB_Doc").val() == "") {
+                    alert("请填写执行的数据源");
+                    return;
+                }
+
                 var mypk = "ActiveDDL_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
                 var en = new Entity("BP.Sys.MapExt");
                 en.MyPK = mypk;

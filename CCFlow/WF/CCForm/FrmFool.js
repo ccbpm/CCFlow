@@ -1295,6 +1295,8 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
         for (var i = 0; i < strs.length; i++) {
 
             var str = strs[i];
+            if (str == "")
+                continue;
             var kv = str.split('=');
 
             var key = kv[0];
@@ -1495,6 +1497,11 @@ function SetDevelopCtrlHidden(key) {
         ctrl.hide();
     }
 
+    ctrl = $("#SC_" + key);
+    if (ctrl.length > 0) {
+        ctrl.show();
+    }
+
     ctrl = $("#Lab_" + key);
     if (ctrl.length > 0) {
         ctrl.hide();
@@ -1530,6 +1537,11 @@ function SetDevelopCtrlShow(key) {
         ctrl.show();
     }
 
+    ctrl = $("#SC_" + key);
+    if (ctrl.length > 0) {
+        ctrl.show();
+    }
+
     ctrl = $("#Lab_" + key);
     if (ctrl.length > 0) {
         ctrl.show();
@@ -1537,62 +1549,7 @@ function SetDevelopCtrlShow(key) {
 }
 
 
-//设置值?
-function SetCtrlVal(key, value) {
-    var ctrl = $("#TB_" + key);
-    if (ctrl.length > 0) {
-        ctrl.val(value);
-    }
 
-    ctrl = $("#DDL_" + key);
-    if (ctrl.length > 0) {
-        ctrl.val(value);
-        // ctrl.attr("value",value);
-        //$("#DDL_"+key+" option[value='"+value+"']").attr("selected", "selected");
-    }
-
-    ctrl = $("#CB_" + key);
-    if (ctrl.length > 0) {
-        ctrl.val(value);
-        if (value!=0) {
-            ctrl.prop("checked", true);
-        }
-        
-    }
-
-    ctrl = $("#RB_" + key + "_" + value);
-    if (ctrl.length > 0) {
-        var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
-        document.getElementById("RB_" + key + "_" + checkVal).checked = false;
-        document.getElementById("RB_" + key + "_" + value).checked = true;
-        // ctrl.attr('checked', 'checked');
-    }
-}
-
-//清空值?
-function CleanCtrlVal(key) {
-    var ctrl = $("#TB_" + key);
-    if (ctrl.length > 0) {
-        ctrl.val('');
-    }
-
-    ctrl = $("#DDL_" + key);
-    if (ctrl.length > 0) {
-        //ctrl.attr("value",'');
-        ctrl.val('');
-        // $("#DDL_"+key+" option:first").attr('selected','selected');
-    }
-
-    ctrl = $("#CB_" + key);
-    if (ctrl.length > 0) {
-        ctrl.attr('checked', false);
-    }
-
-    ctrl = $("#RB_" + key + "_" + 0);
-    if (ctrl.length > 0) {
-        ctrl.attr('checked', true);
-    }
-}
 
 //初始化 框架
 function Ele_Frame(frmData, gf) {

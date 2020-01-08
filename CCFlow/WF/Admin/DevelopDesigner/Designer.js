@@ -1941,7 +1941,7 @@ function Save() {
                 uiBindKey = tag.getAttribute("data-bindKey");
             }
             var mapAttr = mapAttrs[pageParam.fk_mapdata + "_" + keyOfEn];
-            if (mapAttr == undefined || mapAttr == null) {
+            if ((mapAttr == undefined || mapAttr == null) &&  keyOfEn != "" && uiBindKey != "") {
                 if (dataType == "EnumSelect") {
                     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
                     handler.AddPara("KeyOfEn", keyOfEn);

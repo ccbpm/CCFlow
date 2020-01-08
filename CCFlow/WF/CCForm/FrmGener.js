@@ -1286,11 +1286,11 @@ function GetPageParas(sArgName) {
 }
 
 // 设置值.
-function SetCtrlVal(ctrlID, val) {
-    document.getElementById('TB_' + ctrlID).value = val;
-    document.getElementById('DDL_' + ctrlID).value = val;
-    document.getElementById('CB_' + ctrlID).value = val;
-}
+//function SetCtrlVal(ctrlID, val) {
+//    document.getElementById('TB_' + ctrlID).value = val;
+//    document.getElementById('DDL_' + ctrlID).value = val;
+//    document.getElementById('CB_' + ctrlID).value = val;
+//}
 
 function To(url) {
     //window.location.href = url;

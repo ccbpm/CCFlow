@@ -162,7 +162,7 @@
             //单选按钮
             if (dataType == "Radio") {
                 if (strs.length != 0) {
-                    _Html += "<span leipiplugins='enum' id='SR_" + UIBindKey + "' title='单选' name='leipiNewField'  data-key='" + KeyOfEn + "' data-type='" + dataType + "'  data-bindKey='" + UIBindKey + "'>";
+                    _Html += "<span leipiplugins='enum' id='SR_" + KeyOfEn + "' title='单选' name='leipiNewField'  data-key='" + KeyOfEn + "' data-type='" + dataType + "'  data-bindKey='" + UIBindKey + "'>";
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)
@@ -174,7 +174,7 @@
             }
             if (dataType == "Select") {
                 if (strs.length != 0) {
-                    _Html += "<span leipiplugins='enum' id='SS_" + UIBindKey + "' title='下拉框' name='leipiNewField' data-type='EnumSelect'   data-bindKey='" + UIBindKey + "'>";
+                    _Html += "<span leipiplugins='enum' id='SS_" + KeyOfEn + "' title='下拉框' name='leipiNewField' data-type='EnumSelect'   data-bindKey='" + UIBindKey + "'>";
                     _Html += "<select id='DDL_" + KeyOfEn + "' name='DDL_" + KeyOfEn + "' data-type='EnumSelect' data-key='" + KeyOfEn + "' class='form-control' >";
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
@@ -187,7 +187,7 @@
             }
             if (dataType == "CheckBox") {
                 if (strs.length != 0) {
-                    _Html += "<span leipiplugins='enum' id='SS_" + UIBindKey + "' title='复选框' name='leipiNewField' data-type='EnumCheckBox'   data-bindKey='" + UIBindKey + "'>";
+                    _Html += "<span leipiplugins='enum' id='SC_" + KeyOfEn + "' title='复选框' name='leipiNewField' data-type='EnumCheckBox'   data-bindKey='" + UIBindKey + "'>";
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)

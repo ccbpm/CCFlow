@@ -37,12 +37,25 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         enums.Retrieve("EnumKey", uiBindKey);
         if (enums.length == 0)
             return;
-        _Html += "<span leipiplugins='enum' id='SR_" + uiBindKey + "' title='单选' name='leipiNewField'  data-key='" + keyOfEn + "' data-type='" + dataType + "'>";
+        _Html += "<span leipiplugins='enum' id='SR_" + keyOfEn + "' title='单选' name='leipiNewField'  data-key='" + keyOfEn + "' data-type='" + dataType + "'>";
         for (var i = 0; i < enums.length; i++) {
             _Html += "<label><input type='radio' value= '" + enums[i].IntKey + "' id='RB_" + keyOfEn + "_" + enums[i].IntKey + "' name='RB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + enums[i].Lab + "</label>&nbsp;&nbsp;";
         }
         _Html += "</span>";
     }
+    if (dataType == "EnumCheckBox") {
+        //获取枚举值
+        var enums = new Entities("BP.Sys.SysEnums");
+        enums.Retrieve("EnumKey", uiBindKey);
+        if (enums.length == 0)
+            return;
+        _Html += "<span leipiplugins='enum' id='SC_" + keyOfEn + "' title='复选框' name='leipiNewField' data-type='EnumCheckBox'   data-bindKey='" + uiBindKey + "'>";
+        for (var i = 0; i < enums.length; i++) {
+                _Html += "<label><input type='checkbox' value= '" + enums[i].IntKey + "' id='CB_" + keyOfEn + "_" + enums[i].IntKey + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + enums[i].Lab  + "&nbsp;&nbsp;</label>";
+        }
+        _Html += "</span>";
+    }
+
     if (dataType == "Select") {
         var sfTable = new Entity("BP.Sys.SFTable", uiBindKey);
         var srcType = sfTable.SrcType;
@@ -60,7 +73,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
             srcType = "Handler"; //Handler
         if (srcType == 6)
             srcType = "JQuery";//JQuery
-        _Html += "<span leipiplugins='select' id='SS_" + uiBindKey + "' title='下拉框' name='leipiNewField'   data-sfTable='" + uiBindKey + "'>";
+        _Html += "<span leipiplugins='select' id='SS_" + keyOfEn + "' title='下拉框' name='leipiNewField'   data-sfTable='" + uiBindKey + "'>";
         _Html += "<select id='DDL_" + keyOfEn + "' name='DDL_" + keyOfEn + "' data-type='" + srcType + "'  data-key='" + keyOfEn + "'   class='form-control'>";
         _Html += "<option value=''>" + keyOfEn + "</option>";
         _Html += "</select>";
@@ -72,7 +85,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         enums.Retrieve("EnumKey", uiBindKey);
         if (enums.length == 0)
             return;
-        _Html += "<span leipiplugins='enum' id='SS_" + uiBindKey + "' title='下拉框' name='leipiNewField' data-type='EnumSelect'   data-bindKey='" + uiBindKey + "'>";
+        _Html += "<span leipiplugins='enum' id='SS_" + keyOfEn + "' title='下拉框' name='leipiNewField' data-type='EnumSelect'   data-bindKey='" + uiBindKey + "'>";
         _Html += "<select id='DDL_" + keyOfEn + "' name='DDL_" + keyOfEn + "' data-type='EnumSelect' data-key='" + keyOfEn + "' class='form-control' >";
         for (var i = 0; i < enums.length; i++) {
                 _Html += "<option value='" + enums[i].IntKey + "'>" + enums[i].Lab + "</option>";
@@ -152,6 +165,8 @@ function GetDataType(mapAttr) {
     }  else if (mapAttr.UIContralType == 3) {//单选框
         return "Radio";
     }
+    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 2) //枚举复选框
+        return "EnumCheckBox";
 
     if (mapAttr.MyDataType == 1) {
         if (mapAttr.UIContralType == 8)//手写签字版

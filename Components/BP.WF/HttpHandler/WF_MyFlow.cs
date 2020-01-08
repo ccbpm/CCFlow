@@ -441,9 +441,6 @@ namespace BP.WF.HttpHandler
                 gwf.SetPara("SLEmp", BP.Web.WebUser.No);
                 gwf.Update();
             }
-
-
-
             #endregion 启动同级子流程的信息存储
 
             #region 处理表单类型.
@@ -2345,6 +2342,11 @@ namespace BP.WF.HttpHandler
 
             //    formTree.Url = url;
             //    appFlowFormTree.AddEntity(formTree);
+            //}]]
+
+            //if (appFlowFormTree.Count==1 && nd.FormType== NodeFormType.Tab)
+            //{
+            //    //nd.FormType
             //}
 
             //增加到数据结构上去.

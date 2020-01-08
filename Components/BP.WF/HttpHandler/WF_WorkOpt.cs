@@ -865,11 +865,11 @@ namespace BP.WF.HttpHandler
                 {
                     if (SystemConfig.CustomerNo == "TianYe") // 只改了oracle的
                     {
-                        string endSql = "";
-                        if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
-                            endSql = " AND B.No LIKE '18099%' ";
-                        else
-                            endSql = " AND B.No NOT LIKE '18099%' ";
+                        //string endSql = "";
+                        //if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
+                        //    endSql = " AND B.No LIKE '18099%' ";
+                        //else
+                        //    endSql = " AND B.No NOT LIKE '18099%' ";
 
                         string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
                         if (specFlowNos == "" || specFlowNos == null)
@@ -879,7 +879,7 @@ namespace BP.WF.HttpHandler
                         if (specFlowNos.Contains(this.FK_Node.ToString() + ",") == false)
                             specEmpNos = " AND a.No!='00000001' ";
 
-                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 " + specEmpNos + " " + endSql;
+                        sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 " + specEmpNos;
                     }
                     else
                     {
@@ -895,11 +895,11 @@ namespace BP.WF.HttpHandler
                 {
                     if (SystemConfig.CustomerNo == "TianYe")  //只改了oracle的
                     {
-                        string endSql = "";
-                        if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
-                            endSql = " AND B.No LIKE '18099%' ";
-                        else
-                            endSql = " AND B.No NOT LIKE '18099%' ";
+                        //string endSql = "";
+                        //if (Web.WebUser.FK_Dept.IndexOf("18099") == 0)
+                        //    endSql = " AND B.No LIKE '18099%' ";
+                        //else
+                        //    endSql = " AND B.No NOT LIKE '18099%' ";
 
                         string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
                         if (specFlowNos == "" || specFlowNos == null)
@@ -913,11 +913,11 @@ namespace BP.WF.HttpHandler
                         //启用搜索范围限定.
                         if (sa.IsEnableStaRange == true || sa.IsEnableDeptRange == true)
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " + specEmpNos + " " + endSql;
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a, Port_Dept b, WF_NodeDept c WHERE  C.FK_Node='" + GetRequestVal("ToNode") + "' AND C.FK_Dept=b.No AND (a.fk_dept=b.no) AND (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " + specEmpNos;
                         }
                         else
                         {
-                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " + specEmpNos + " " + endSql;
+                            sql = "SELECT a.No,a.Name || '/' || b.FullName as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   " + specEmpNos;
                         }
                     }
                     else
@@ -1237,11 +1237,10 @@ namespace BP.WF.HttpHandler
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
             if(nd.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
-                if(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
-                {
+                
                     gwf.HuiQianZhuChiRen = WebUser.No;
                     gwf.HuiQianZhuChiRenName = WebUser.Name;
-                }
+               
                
             }
             else
@@ -3157,8 +3156,8 @@ namespace BP.WF.HttpHandler
             sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx";
 
             //如果是节水公司的.
-            if (SystemConfig.CustomerNo == "TianYe" && WebUser.FK_Dept.IndexOf("18099") == -1)
-                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE  No='" + fk_dept + "'  OR (ParentNo='" + fk_dept + "' AND No!='18099') ORDER BY Idx ";
+            //if (SystemConfig.CustomerNo == "TianYe" && WebUser.FK_Dept.IndexOf("18099") == -1)
+            //    sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE  No='" + fk_dept + "'  OR (ParentNo='" + fk_dept + "' AND No!='18099') ORDER BY Idx ";
 
 
             DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);

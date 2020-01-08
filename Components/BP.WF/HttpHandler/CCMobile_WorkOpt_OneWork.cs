@@ -37,8 +37,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TimeBase_UnSend()
         {
-            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
-            return en.OP_UnSend();
+            //获取撤销到的节点
+            int unSendToNode = this.GetRequestValInt("FK_Node");
+            return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, unSendToNode, this.FID);
+            //WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
+            //return en.OP_UnSend();
         }
         public string TimeBase_OpenFrm()
         {

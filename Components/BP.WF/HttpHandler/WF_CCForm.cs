@@ -1195,6 +1195,7 @@ namespace BP.WF.HttpHandler
                 nd = new Node(this.FK_Node);
                 nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
                 //if (nd.HisFormType== NodeFormType.FoolTruck)
+
                 fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
                 isLoadData = fn.IsEnableLoadData;
             }

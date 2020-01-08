@@ -245,9 +245,9 @@
 
                 //审批人
                 var todoEmps = en.TodoEmps;
-                if (todoEmps == null || todoEmps == undefined)
-                    todoEmps = "";
-                var emp = "";
+				if (todoEmps == null || todoEmps == undefined)
+                    todoEmps = "";               
+				 var emp = "";
                 var todoEmp = todoEmps.split(";");
                 for (j = 0; j < todoEmp.length; j++) {
                     if (todoEmp[j] == '' || todoEmp[j] == null || todoEmp[j] == undefined)
@@ -290,7 +290,7 @@
                 htmlbox += "<td ><font color='" + color + "'>" + emp + "</font></td>";
 
                 if (en.SDTOfNode == null)
-                    htmlbox += "<td><font color='" + color + "'>" + en.RDT.substring(5) + "</font></td>";
+                    htmlbox += "<td><font color='" + color + "'>无</font></td>";
                 else
                     htmlbox += "<td><font color='" + color + "'>" + en.SDTOfNode.substring(5) + "</font></td>";
 

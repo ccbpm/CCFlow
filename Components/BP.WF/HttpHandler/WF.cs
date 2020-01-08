@@ -656,7 +656,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
-            string orgNos = "'18099','103'"; //空的数据.
+            string orgNos = "'0','18099','103'"; //空的数据.
             foreach (DataRow dr in dt.Rows)
             {
                 string deptNo = dr[0].ToString();
@@ -776,10 +776,10 @@ namespace BP.WF.HttpHandler
             }
 
             //如果是节水公司的，就特别处理.
-            //if (WebUser.FK_Dept.IndexOf("18099") == 0)
-            //{
-            //    return Start_InitTianYe_JieShui();
-            //}
+            if (WebUser.FK_Dept.IndexOf("18099") == 0)
+            {
+                return Start_InitTianYe_JieShui();
+            }
 
             //获得当前人员的部门,根据部门获得该人员的组织集合.
             Paras ps = new Paras();
@@ -901,15 +901,10 @@ namespace BP.WF.HttpHandler
                 em.Name = Web.WebUser.Name;
                 em.Insert();
             }
-            //TTC error 错误，oracle数据库暂时不走这
-            if (SystemConfig.AppCenterDBType != DBType.Oracle)
-            {
-
-                json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
-                if (DataType.IsNullOrEmpty(json) == false)
+           
+            json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
+            if (DataType.IsNullOrEmpty(json) == false)
                 return json;
-
-            }
 
             //定义容器.
             DataSet ds = new DataSet();

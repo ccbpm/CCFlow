@@ -216,7 +216,7 @@ namespace BP.Frm
             rpt.SetValByKey("BillState", (int)BillState.Over);
             rpt.Update();
 
-            string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+            string str = BP.Frm.Dev2Interface.SubmitWork(this.FrmID, this.WorkID);
             return str;
         }
 

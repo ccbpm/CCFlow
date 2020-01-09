@@ -473,12 +473,14 @@ UE.plugins['enum'] = function () {
     var me = this, thePlugins = 'enum';
     me.commands[thePlugins] = {
         execCommand: function (method, dataType) {
+            var W = document.body.clientWidth - 160;
+            var H = document.body.clientHeight - 220;
             var dialog = new UE.ui.Dialog({
                 iframeUrl: './DialogCtr/FrmEnumeration.htm?FK_MapData=' + pageParam.fk_mapdata + "&DataType=" + dataType,
                 name: thePlugins,
                 editor: this,
                 title: '单选框',
-                cssRules: "width:590px;height:370px;",
+                cssRules: "width:"+W+"px;height:"+H+"px;",
                 buttons: [
                     {
                         className: 'edui-okbutton',

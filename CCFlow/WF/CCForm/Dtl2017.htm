@@ -373,7 +373,7 @@
                 }
             });
 
-            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer; transform:scale(0.6);width:30px;" title="移除"/></td>'));
+            insertTr.append($('<td> <a href=\"javascript:deleteRow(this)\" >移除</a></td>'));
 
             var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {

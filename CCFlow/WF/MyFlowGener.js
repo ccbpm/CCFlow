@@ -885,7 +885,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 
     // 处理没有选择的文本框.
     //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
-    var ids = GenerCheckIDs();
+    var ids = GenerCheckNames();
 
     if (ids) {
         var scores = ids.split(",");
@@ -896,7 +896,10 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             var field = scores[i];
             var index = formdataResultStr.indexOf(field);
             if (index == -1) {
-                formdataResultStr += '&' + field + '=0';
+                if ($("input[name='" + field + "'").length == 1)
+                    formdataResultStr += '&' + field + '=0';
+                else
+                    formdataResultStr += '&' + field + '= ';
             }
         }
     }

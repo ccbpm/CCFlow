@@ -160,6 +160,25 @@ function GenerCheckIDs() {
     return checkBoxIDs;
 }
 
+function GenerCheckNames() {
+
+    var checkBoxIDs = "";
+    var arrObj = document.all;
+
+    for (var i = 0; i < arrObj.length; i++) {
+
+        if (arrObj[i].type != 'checkbox')
+            continue;
+
+        var cid = arrObj[i].name;
+        if (cid == null || cid == "" || cid == '')
+            continue;
+        if (checkBoxIDs.indexOf(arrObj[i].name) == -1)
+            checkBoxIDs += arrObj[i].name + ',';
+    }
+    return checkBoxIDs;
+}
+
 //填充下拉框.
 function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, filterVal1) {
 
@@ -1333,7 +1352,8 @@ var Entity = (function () {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus);
+                    var url = dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName="+ self.enName + "&PKVal="+ pkval+ "&MethodName=" + methodName + "&t=" + new Date().getTime();
+                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus,url);
 
                     //    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     //  alert(string);

@@ -101,8 +101,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 if (mapAttr.UIContralType == 1)//枚举下拉框
                     $("#CB_" + mapAttr.KeyOfEn).attr("onchange", "changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
                 if (mapAttr.UIContralType == 3) { //枚举单选
-                    var spans = $("#SR_" + mapAttr.KeyOfEn);
-                    var inputs = spans.find("input");
+                    var inputs =$("input[name='RB_"+mapAttr.KeyOfEn+"']");
                     $.each(inputs, function (i, target) {
                         $(target).attr("onchange","clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
                     });

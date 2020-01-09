@@ -184,6 +184,62 @@ namespace BP.Frm
 
             return "保存成功...";
         }
+
+        /// <summary>
+        /// 提交
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="workID">工作ID</param>
+        /// <returns>返回保存结果</returns>
+        public static string SubmitWork(string frmID, Int64 workID)
+        {
+            FrmBill fb = new FrmBill(frmID);
+
+            GenerBill gb = new GenerBill();
+            gb.WorkID = workID;
+            int i = gb.RetrieveFromDBSources();
+            if (i == 0)
+                return "";
+            gb.BillState = BillState.Over;
+
+            //创建rpt.
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(gb.FrmID, workID);
+
+            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
+            {
+
+                gb.Title = rpt.Title;
+                gb.Update();
+                return "提交成功...";
+            }
+
+            //单据编号.
+            if (DataType.IsNullOrEmpty(gb.BillNo) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict))
+            {
+                gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
+                //更新单据里面的billNo字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + workID);
+            }
+
+            //标题.
+            if (DataType.IsNullOrEmpty(gb.Title) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict))
+            {
+                gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+                //更新单据里面的 Title 字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "Title") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + workID);
+            }
+
+            gb.Update();
+
+            //把通用的字段更新到数据库.
+            rpt.Title = gb.Title;
+            rpt.BillNo = gb.BillNo;
+            rpt.Update();
+
+            return "提交成功...";
+        }
         /// <summary>
         /// 保存
         /// </summary>

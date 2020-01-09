@@ -1454,6 +1454,28 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 上移流程类别
+        /// </summary>
+        /// <returns></returns>
+        public String MoveUpFlowSort()
+        {
+            String fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
+            FlowSort fsSub = new FlowSort(fk_flowSort); //传入的编号多出F符号，需要替换掉
+            fsSub.DoUp();
+		    return "F" + fsSub.No;
+	    }
+        /// <summary>
+        /// 下移流程类别
+        /// </summary>
+        /// <returns></returns>
+        public String MoveDownFlowSort()
+        {
+            String fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
+            FlowSort fsSub = new FlowSort(fk_flowSort); //传入的编号多出F符号，需要替换掉
+            fsSub.DoDown();
+		    return "F" + fsSub.No;
+	    }
+        /// <summary>
         /// 上移流程
         /// </summary>
         /// <returns></returns>

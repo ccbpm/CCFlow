@@ -245,23 +245,24 @@
 
                 //审批人
                 var todoEmps = en.TodoEmps;
-				if (todoEmps == null || todoEmps == undefined)
-                    todoEmps = "";               
-				 var emp = "";
-                var todoEmp = todoEmps.split(";");
-                for (j = 0; j < todoEmp.length; j++) {
-                    if (todoEmp[j] == '' || todoEmp[j] == null || todoEmp[j] == undefined)
-                        continue;
-                    if (todoEmp[j].indexOf(',') != -1) {
-                        var aa = todoEmp[j].split(",")[1] + "、";
-                        emp += aa;
+                var emp = "";
+                if (todoEmps != null && todoEmps != undefined) {
 
-                    } else {
-                        emp += todoEmp[j] + "、";
+                    var todoEmp = todoEmps.split(";");
+                    for (j = 0; j < todoEmp.length; j++) {
+                        if (todoEmp[j] == '' || todoEmp[j] == null || todoEmp[j] == undefined)
+                            continue;
+                        if (todoEmp[j].indexOf(',') != -1) {
+                            var aa = todoEmp[j].split(",")[1] + "、";
+                            emp += aa;
+
+                        } else {
+                            emp += todoEmp[j] + "、";
+                        }
+
                     }
-
+                    emp = emp.substring(0, emp.lastIndexOf("、"));
                 }
-                emp = emp.substring(0, emp.lastIndexOf("、"));
 
                 //是否可以执行当前工作?
                 var isCanDo = false;

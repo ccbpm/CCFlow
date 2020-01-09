@@ -99,34 +99,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flowlist_Init()
         {
-            //获得当前人员的部门,根据部门获得该人员的组织集合.
-            Paras ps = new Paras();
-            ps.SQL = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.AddFK_Emp();
-            DataTable dt1 = DBAccess.RunSQLReturnTable(ps);
-
-            //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
-            string orgNos = "'0'";
-            if (BP.Sys.SystemConfig.CustomerNo == "TianYe" && WebUser.FK_Dept.IndexOf("18099") == 0)
-            {
-                orgNos = "'0','18099','103'"; ;
-            }
-            foreach (DataRow dr in dt1.Rows)
-            {
-                string deptNo = dr[0].ToString();
-                orgNos += ",'" + deptNo + "'";
-            }
-            string sql = "";
-            if (orgNos.Contains(",") == false)
-            {
-                sql = "SELECT No,Name,ParentNo FROM WF_FlowSort where OrgNo='0' or OrgNo ='' ORDER BY No, Idx";
-            }
-            else
-            {
-                sql = "SELECT No,Name,ParentNo FROM WF_FlowSort where OrgNo in ("+ orgNos + ") ORDER BY No, Idx";
-            }
             DataSet ds = new DataSet();
-            //string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY No, Idx";
+            string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY No, Idx";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sort";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)

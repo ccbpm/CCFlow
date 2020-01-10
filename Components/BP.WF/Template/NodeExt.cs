@@ -1452,7 +1452,8 @@ namespace BP.WF.Template
             }
             #endregion 审核组件.
 
-
+            BtnLab btnLab = new BtnLab(this.NodeID);
+            btnLab.RetrieveFromDBSources();
             //清除所有的缓存.
             BP.DA.CashEntity.DCash.Clear();
 
@@ -1469,13 +1470,72 @@ namespace BP.WF.Template
                 fl.SetPara("IsYouLiTai", 0);
             fl.Update();
 
-            BtnLab btnLab = new BtnLab(this.NodeID);
+            BtnLab btnLab = new BtnLab();
+            btnLab.NodeID = this.NodeID;
             btnLab.RetrieveFromDBSources();
             Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
+
+            BtnLabExtWebOffice btnLabExtWebOffice = new BtnLabExtWebOffice();
+            btnLabExtWebOffice.NodeID = this.NodeID;
+            btnLabExtWebOffice.RetrieveFromDBSources();
+            Cash2019.UpdateRow(btnLabExtWebOffice.ToString(), this.NodeID.ToString(), btnLabExtWebOffice.Row);
+
+            CC cc = new CC();
+            cc.NodeID = this.NodeID;
+            cc.RetrieveFromDBSources();
+            Cash2019.UpdateRow(cc.ToString(), this.NodeID.ToString(), cc.Row);
+
+            FrmNodeComponent frmNodeComponent = new FrmNodeComponent();
+            frmNodeComponent.NodeID = this.NodeID;
+            frmNodeComponent.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmNodeComponent.ToString(), this.NodeID.ToString(), frmNodeComponent.Row);
+
+            FrmThread frmThread = new FrmThread();
+            frmThread.NodeID = this.NodeID;
+            frmThread.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmThread.ToString(), this.NodeID.ToString(), frmThread.Row);
+
+            FrmTrack frmTrack = new FrmTrack();
+            frmTrack.NodeID = this.NodeID;
+            frmTrack.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmTrack.ToString(), this.NodeID.ToString(), frmTrack.Row);
+
+            FrmTransferCustom frmTransferCustom = new FrmTransferCustom();
+            frmTransferCustom.NodeID = this.NodeID;
+            frmTransferCustom.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmTransferCustom.ToString(), this.NodeID.ToString(), frmTransferCustom.Row);
+
+            FrmWorkCheck frmWorkCheck = new FrmWorkCheck();
+            frmWorkCheck.NodeID = this.NodeID;
+            frmWorkCheck.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmWorkCheck.ToString(), this.NodeID.ToString(), frmWorkCheck.Row);
+
+            NodeSheet nodeSheet = new NodeSheet();
+            nodeSheet.NodeID = this.NodeID;
+            nodeSheet.RetrieveFromDBSources();
+            Cash2019.UpdateRow(nodeSheet.ToString(), this.NodeID.ToString(), nodeSheet.Row);
+
+            NodeSimple nodeSimple = new NodeSimple();
+            nodeSimple.NodeID = this.NodeID;
+            nodeSimple.RetrieveFromDBSources();
+            Cash2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
+
+            FrmSubFlow frmSubFlow = new FrmSubFlow();
+            frmSubFlow.NodeID = this.NodeID;
+            frmSubFlow.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmSubFlow.ToString(), this.NodeID.ToString(), frmSubFlow.Row);
+
+            GetTask getTask = new GetTask();
+            getTask.NodeID = this.NodeID;
+            getTask.RetrieveFromDBSources();
+            Cash2019.UpdateRow(getTask.ToString(), this.NodeID.ToString(), getTask.Row);
+
             //如果是组长会签模式，通用选择器只能单项选择
             if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader && this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
             {
-                Selector selector = new Selector(this.NodeID);
+                Selector selector = new Selector();
+                selector.NodeID = this.NodeID;
+                selector.RetrieveFromDBSources();
                 selector.IsSimpleSelector = true;
                 selector.Update();
 

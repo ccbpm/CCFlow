@@ -649,6 +649,34 @@ namespace BP.WF
                 this.SetValByKey(BtnAttr.ReturnRole, (int)ReturnRole.CanNotReturn);
                 this.SetValByKey(BtnAttr.ShiftEnable, 0);
                 this.SetValByKey(BtnAttr.EndFlowEnable, 0);
+
+                Node oldN = new Node(this.NodeID);
+                if (this.Name.Equals(oldN.Name) == false)
+                {
+                    //清空WF_Emp中的StartFlows 的内容
+                    try
+                    {
+                        DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                    }
+                    catch (Exception e)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+                        {
+                            string sql = "";
+                            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+                                sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
+                            else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
+                            else
+                                sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
+
+                            BP.DA.DBAccess.RunSQL(sql);
+                            
+                        }
+
+                    }
+                }
             }
 
             //给icon设置默认值.
@@ -747,39 +775,6 @@ namespace BP.WF
                 workCheckAth.Insert();
             }
             return base.beforeUpdate();
-        }
-
-        /// <summary>
-        /// 清空WFEmp中的StartFlows文件
-        /// </summary>
-        protected override void afterInsertUpdateAction()
-        {
-            if (this.IsStartNode == true)
-            {
-                try
-                {
-                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-                }
-                catch(Exception e)
-                {
-                    /*如果没有此列，就自动创建此列.*/
-                    if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
-                    {
-                        string sql = "";
-                        if(BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
-                          sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
-                        else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
-                       else
-                            sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
-
-                        BP.DA.DBAccess.RunSQL(sql);
-                        return;
-                    }
-
-                }
-            }
-            base.afterInsertUpdateAction();
         }
         #endregion
 

@@ -744,7 +744,7 @@ function saveNodeName(activeId) {
 
     //alert(text);
 
-    var node = new Entity("BP.WF.Node", activeId);
+    var node = new Entity("BP.WF.Template.NodeExt", activeId);
     node.Name = text;
     node.Update();
 

@@ -682,7 +682,7 @@ namespace BP.WF
             Node.CheckFlow(fl);
             this.FlowName = fl.Name;
 
-            DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='ND" + this.NodeID + "'");
+            DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='ND" + this.NodeID + "' AND name=''");
             switch (this.HisRunModel)
             {
                 case RunModel.Ordinary:
@@ -756,7 +756,28 @@ namespace BP.WF
         {
             if (this.IsStartNode == true)
             {
-                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                try
+                {
+                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                }
+                catch(Exception e)
+                {
+                    /*如果没有此列，就自动创建此列.*/
+                    if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+                    {
+                        string sql = "";
+                        if(BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+                          sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
+                        else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
+                       else
+                            sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
+
+                        BP.DA.DBAccess.RunSQL(sql);
+                        return;
+                    }
+
+                }
             }
             base.afterInsertUpdateAction();
         }

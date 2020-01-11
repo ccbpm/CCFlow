@@ -517,12 +517,13 @@
             ur.SetPara("RecCount", count);
             var i = ur.Save();
 
-            var url = window.location.href;
-            if (url.indexOf("PageIdx") != -1)
-                url = replaceParamVal(url, "PageIdx", 1);
+            //var url = window.location.href;
+            //if (url.indexOf("PageIdx") != -1)
+            //    url = replaceParamVal(url, "PageIdx", 1);
 
 
-            window.location.href = url;
+            //window.location.href = url;
+            SearchData();
         }
 
 

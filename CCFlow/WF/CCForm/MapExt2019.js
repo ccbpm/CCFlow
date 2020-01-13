@@ -840,6 +840,8 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 
     //遍历属性，给属性赋值.
     var valID;
+    var tbs;
+    var selects;
     for (var key in data) {
 
         var val = data[key];
@@ -888,7 +890,23 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 
         //获取表单中所有的字段
         if (valID.length == 0) {
-            var tbs = $('input');
+            if (tbs == undefined || tbs=="") {
+                if (endId != "") {
+                    //获取所在的行
+                    tbs = $("#" + ctrlIdBefore).parent().parent().find("input")
+                }
+                else
+                   tbs = $('input');
+            }
+            if (selects == undefined || selects == "") {
+                if (endId != "") {
+                    //获取所在的行
+                    selects = $("#" + ctrlIdBefore).parent().parent().find("select")
+                }
+                else
+                    selects = $('select');
+            }
+            
             $.each(tbs, function (i, tb) {
                 var name = $(tb).attr("id");
                 if (name == null || name == undefined)
@@ -907,8 +925,6 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
                     return false;
                 }
             });
-
-            var selects = $('select');
             $.each(selects, function (i, select) {
                 var name = $(select).attr("id");
                 if (name.toUpperCase().indexOf(key) >= 0) {

@@ -257,6 +257,8 @@
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(mapAttr);
+                if (mapAttr.DefValType == 0 && mapAttr.DefVal =="10002")
+                    defValue = "";
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (defValue == null || defValue == "null")
@@ -873,8 +875,7 @@
 
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(flowData, mapAttr, defVal) {
-
-            var operations = '';
+            var operations = "";
             var data = flowData[mapAttr.KeyOfEn];
             if (data == undefined)
                 data = flowData[mapAttr.UIBindKey];

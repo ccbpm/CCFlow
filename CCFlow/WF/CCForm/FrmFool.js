@@ -1215,6 +1215,7 @@ function changeEnable(obj, FK_MapData, KeyOfEn, AtPara,frmType) {
         var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
         cleanAll(KeyOfEn, frmType);
         setEnable(FK_MapData, KeyOfEn, selecedval, frmType);
+        $(obj).val(selectval);
     }
 }
 function clickEnable(obj, FK_MapData, KeyOfEn, AtPara, frmType) {
@@ -1222,16 +1223,22 @@ function clickEnable(obj, FK_MapData, KeyOfEn, AtPara, frmType) {
         var selectVal = $(obj).val();
         cleanAll(KeyOfEn, frmType);
         setEnable(FK_MapData, KeyOfEn, selectVal, frmType);
+        document.getElementById("RB_" + KeyOfEn + "_" + selectVal).checked = true
     }
 }
 
 function changeCBEnable(obj, FK_MapData, KeyOfEn, AtPara, frmType) {
     if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
         cleanAll(KeyOfEn, frmType);
-       if(obj.checked == true)
-           setEnable(FK_MapData, KeyOfEn, 1, frmType);
-        else
-           setEnable(FK_MapData, KeyOfEn, 0, frmType);
+        if (obj.checked == true) {
+            setEnable(FK_MapData, KeyOfEn, 1, frmType);
+            obj.checked = true;
+        }
+        else {
+            setEnable(FK_MapData, KeyOfEn, 0, frmType);
+            obj.checked = false;
+        }
+           
     }
 }
 
@@ -1253,8 +1260,15 @@ function cleanAll(KeyOfEn, frmType) {
             else
                 SetCtrlShow(mapAttrs[i]);
             SetCtrlEnable(mapAttrs[i]);
-            CleanCtrlVal(mapAttrs[i]);
+            //CleanCtrlVal(mapAttrs[i]);
         }
+    }
+
+    if (frmAttrData != undefined && frmAttrData.length != 0) {
+        $.each(frmAttrData, function (i, obj) {
+            SetCtrlVal(obj.KeyOfEn, obj.Val);
+        });
+
     }
    
 

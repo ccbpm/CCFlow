@@ -170,6 +170,29 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node
     }
 }
 
+function isFileExist(url) {
+    var xmlHttpReq = null;
+    if (window.ActiveXObject) {
+        xmlHttpReq = new ActiveXObject('Microsoft.XMLHTTP');
+    } else if (window.XMLHttpRequest) {
+        xmlHttpReq = new XMLHttpRequest();
+    }
+    var isExist = true;
+    xmlHttpReq.open('GET', url, true);
+    //此处为服务器端脚本文件的地址
+    xmlHttpReq.onreadystatechange = RequestCallBack;
+    xmlHttpReq.send();
+    function RequestCallBack() {
+        if (xmlHttpReq.readyState === 4) {
+            if (xmlHttpReq.status === 404) {
+                isExist = false;
+            }
+        }
+    }
+} 
+
+
+
 var frmData = null;
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单.
 function GenerFrm() {
@@ -261,23 +284,32 @@ function GenerFrm() {
 
     // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = frmData.Sys_MapData[0].No;
+
+  
+
     try {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
+        if (isFileExist("../../DataUser/JSLibData/" + enName + "_Self.js") == true) {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
+            var tmp = document.getElementsByTagName('script')[0];
+            tmp.parentNode.insertBefore(s, tmp);
+        }
+       
     }
     catch (err) {
 
     }
 
     try {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../../DataUser/JSLibData/" + enName + ".js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
+        if (isFileExist("../../DataUser/JSLibData/" + enName + ".js") == true) {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = "../../DataUser/JSLibData/" + enName + ".js";
+            var tmp = document.getElementsByTagName('script')[0];
+            tmp.parentNode.insertBefore(s, tmp);
+        }
+       
     }
     catch (err) {
 

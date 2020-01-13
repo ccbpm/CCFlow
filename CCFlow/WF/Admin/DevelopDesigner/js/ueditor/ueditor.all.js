@@ -11240,8 +11240,8 @@ UE.plugins['justify']=function(){
         },
         queryCommandState:function () {
             var start = this.selection.getStart(),
-                cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
-
+                //cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
+                cell = start && domUtils.findParentByTagName(start, ["caption"], true);
             return cell? -1:0;
         }
 

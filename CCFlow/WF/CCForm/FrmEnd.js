@@ -1,4 +1,5 @@
-﻿function LoadFrmDataAndChangeEleStyle(frmData) {
+﻿var frmAttrData = [];
+function LoadFrmDataAndChangeEleStyle(frmData) {
 
     //加入隐藏控件.
     var mapAttrs = frmData.Sys_MapAttr;
@@ -40,6 +41,9 @@
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+        if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002"||val=="10002.0000")
+            val = "";
+        frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 
         if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
             var uiBindKey = mapAttr.UIBindKey;
@@ -126,7 +130,7 @@
             for (var k = 0; k < checkBoxArray.length; k++) {
                 $("input[name='CB_" + mapAttr.KeyOfEn + "']").each(function () {
                     if ($(this).val() == checkBoxArray[k]) {
-                        $(this).attr("checked", "checked");
+                        $(this).attr("checked", true);
                     }
                 });
             }
@@ -551,6 +555,10 @@ function AfterBindEn_DealMapExt(frmData) {
                     $('#CB_' + mapExt.AttrOfOper).bind(DynamicBind(mapExt, "CB_"));
                     break;
                 }
+                if ($('input[name="CB_' + mapExt.AttrOfOper + '"]').length > 1) {
+                    $('input[name="CB_' + mapExt.AttrOfOper + '"]').bind(DynamicBind(mapExt, "CB_"));
+                    break;
+                }
                 if ($('input[name="RB_' + mapExt.AttrOfOper + '"]').length > 0) {
                     $('input[name="RB_' + mapExt.AttrOfOper + '"]').bind(DynamicBind(mapExt, "RB_"));
                     break;
@@ -860,7 +868,12 @@ function DynamicBind(mapExt, ctrlType) {
         $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
             DBAccess.RunFunctionReturnStr(mapExt.Doc);
         });
-    } else {
+    } else if (ctrlType == "CB_") {
+        $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
+            DBAccess.RunFunctionReturnStr(mapExt.Doc);
+        });
+    }
+    else {
         $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
             DBAccess.RunFunctionReturnStr(mapExt.Doc);
         });
@@ -1056,27 +1069,45 @@ function SetCtrlVal(key, value) {
     var ctrl = $("#TB_" + key);
     if (ctrl.length > 0) {
         ctrl.val(value);
+        return;
     }
 
     ctrl = $("#DDL_" + key);
     if (ctrl.length > 0) {
         ctrl.val(value);
-
+        return;
     }
 
-    ctrl = $("#CB_" + key);
-    if (ctrl.length > 0) {
+  
+    ctrl = $("input[name='CB_" + key + "']");
+    if (ctrl.length == 1) {
         ctrl.val(value);
-        ctrl.attr('checked', true);
+        if (parseInt(value) <= 0)
+            ctrl.attr('checked', false);
+        else
+            ctrl.attr('checked', true);
+        return;
+    }
+    if (ctrl.length > 1) {
+        var checkBoxArray = value.split(",");
+        ctrl.attr("checked", false);
+
+        for (var k = 0; k < checkBoxArray.length; k++) {
+            if (checkBoxArray[k] == "")
+                continue;
+            document.getElementById("CB_" + key + "_" + checkBoxArray[k]).checked = true;
+        }
+        return;
     }
 
-   ctrl = $("#RB_" + key + "_" + value);
+    ctrl = $('input:radio[name=RB_' + key + ']');
     if (ctrl.length > 0) {
         var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
         if(checkVal!=null && checkVal!=undefined)
             document.getElementById("RB_" + key + "_" + checkVal).checked = false;
-        document.getElementById("RB_" + key + "_" + value).checked = true;
-        // ctrl.attr('checked', 'checked');
+        if ($("#RB_" + key + "_" + value).length==1)
+            document.getElementById("RB_" + key + "_" + value).checked = true;
+        return;
     }
 }
 
@@ -1085,18 +1116,20 @@ function CleanCtrlVal(key) {
     var ctrl = $("#TB_" + key);
     if (ctrl.length > 0) {
         ctrl.val('');
+        return;
     }
 
     ctrl = $("#DDL_" + key);
     if (ctrl.length > 0) {
         //ctrl.attr("value",'');
         ctrl.val('');
-        // $("#DDL_"+key+" option:first").attr('selected','selected');
+        return;
     }
 
     ctrl = $("#CB_" + key);
     if (ctrl.length > 0) {
         ctrl.attr('checked', false);
+        return;
     }
 
     ctrl = $("#RB_" + key + "_" + 0);
@@ -1104,6 +1137,7 @@ function CleanCtrlVal(key) {
         var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
         if (checkVal != null && checkVal != undefined)
             document.getElementById("RB_" + key + "_" + checkVal).checked = false;
+        return;
     }
 }
 

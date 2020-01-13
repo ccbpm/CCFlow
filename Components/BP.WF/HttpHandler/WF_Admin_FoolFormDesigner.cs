@@ -50,7 +50,7 @@ namespace BP.WF.HttpHandler
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
             {
-                #region  
+                #region  检查完整性.
                 if (this.FK_MapData.Contains("BP.") == true)
                 {
                     /*如果是类的实体.*/
@@ -59,6 +59,8 @@ namespace BP.WF.HttpHandler
 
                     MapData mymd = new MapData();
                     mymd.No = this.FK_MapData;
+                    mymd.ClearCash(); //清除缓存。
+
                     int i = mymd.RetrieveFromDBSources();
                     if (i == 0)
                         en.DTSMapToSys_MapData(this.FK_MapData); //调度数据到
@@ -66,7 +68,6 @@ namespace BP.WF.HttpHandler
                     mymd.RetrieveFromDBSources();
                     mymd.HisFrmType = FrmType.FoolForm;
                     mymd.Update();
-
                 }
                 #endregion
 
@@ -79,7 +80,6 @@ namespace BP.WF.HttpHandler
             //清缓存
             md.ClearCash();
             ds.Tables.Add(md.ToDataTableField("Sys_MapData").Copy());
-
 
             // 字段属性.
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
@@ -97,7 +97,6 @@ namespace BP.WF.HttpHandler
 
             MapFrames frms = new MapFrames(this.FK_MapData);
             ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
-
 
 
             //附件表.

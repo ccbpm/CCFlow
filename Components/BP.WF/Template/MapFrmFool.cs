@@ -511,7 +511,7 @@ namespace BP.WF.Template
                 gf.CtrlID = dtl.No;
                 gf.CtrlType = "Dtl";
                 gf.FrmID = dtl.FK_MapData;
-                gf.DirectSave();
+                gf.Save();
                 str += "@为从表" + dtl.Name + " 增加了分组.";
             }
 

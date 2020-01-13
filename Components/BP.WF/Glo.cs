@@ -927,6 +927,15 @@ namespace BP.WF
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
+            //先升级脚本,就是说该文件如果被修改了就会自动升级.
+            UpdataCCFlowVerSQLScript();
+
+            //判断数据库的版本.
+            string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
+            int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
+            if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
+                return null; //不需要升级.
+
             //检查子流程表.
             if (BP.DA.DBAccess.IsExitsObject("WF_NodeSubFlow") == true)
             {
@@ -937,8 +946,6 @@ namespace BP.WF
                     sub.CheckPhysicsTable();
                 }
             }
-
-
 
             //检查表.
             BP.Sys.GloVar gv = new GloVar();
@@ -965,15 +972,6 @@ namespace BP.WF
             //修复数据表.
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
-
-            //先升级脚本,就是说该文件如果被修改了就会自动升级.
-            UpdataCCFlowVerSQLScript();
-
-            //判断数据库的版本.
-            string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
-            int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
-            if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
-                return null; //不需要升级.
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();
@@ -2115,6 +2113,9 @@ namespace BP.WF
             #region 3, 执行基本的 sql
             string sqlscript = "";
 
+            BP.GPM.Emp empGPM = new BP.GPM.Emp();
+            empGPM.CheckPhysicsTable();
+
             sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
             BP.DA.DBAccess.RunSQLScript(sqlscript);
 
@@ -2151,7 +2152,6 @@ namespace BP.WF
             BP.WF.Data.CH ch = new CH();
             ch.CheckPhysicsTable();
             #endregion 先创建表，否则列的顺序就会变化.
-
 
             #region 1, 创建or修复表
             foreach (Object obj in al)
@@ -2273,7 +2273,6 @@ namespace BP.WF
 
             if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
                 DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
-
 
             #region 4, 创建视图与数据.
             //执行必须的sql.

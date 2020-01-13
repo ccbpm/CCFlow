@@ -14,8 +14,6 @@ namespace BP.Sys
     /// </summary>
     public class Glo
     {
-        
-
         /// <summary>
         /// 获得真实的数据类型
         /// </summary>

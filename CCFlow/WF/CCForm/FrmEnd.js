@@ -41,7 +41,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002"||val=="10002.0000")
+        if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002"||val=="10002.0000"))
             val = "";
         frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 
@@ -138,7 +138,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
     }
 
     var mapAttrs = frmData.Sys_MapAttr;
-    var mapData = frmData.Sys_MapData;
+    var mapData = frmData.Sys_MapData[0];
     var frmType = mapData.FrmType;
     //解析设置表单字段联动显示与隐藏.
     for (var i = 0; i < mapAttrs.length; i++) {
@@ -224,8 +224,8 @@ function InitDevelopLink(mapAttr, frmType) {
                 /*启用了显示与隐藏.*/
                 var ddl = $("#DDL_" + mapAttr.KeyOfEn);
                 //如果现在是隐藏状态就不可以设置
-                if (ctrl.length > 0) {
-                    if (ctrl.css('display') == "none")
+                if (ddl.length > 0) {
+                    if (ddl.css('display') == "none")
                         return;
                 }
                 //初始化页面的值

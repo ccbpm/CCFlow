@@ -897,6 +897,19 @@ namespace CCFlow.WF.CCForm
             try
             {
                 string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+
+                string str = "WordFile";
+                if (BP.DA.DBAccess.IsExitsTableCol(tableName, str) == false)
+                {
+                    /*如果没有此列，就自动创建此列.*/
+                    string sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+
+                    BP.DA.DBAccess.RunSQL(sql);
+                }
+
                 byte[] bytes = BP.DA.DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
 
                 if (bytes == null)

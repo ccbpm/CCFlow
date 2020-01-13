@@ -901,22 +901,27 @@ namespace CCFlow.WF.CCForm
 
                 if (bytes == null)
                 {
-                    Spire.Doc.Document spire_Doc = new Spire.Doc.Document();
-                    Spire.Doc.Section spire_Section = spire_Doc.AddSection();
+                    Microsoft.Office.Interop.Word.Application docApp = new Microsoft.Office.Interop.Word.Application();
+                    Microsoft.Office.Interop.Word.Document doc;
+                    object miss = System.Reflection.Missing.Value;
+                    string strContext; //文档内容  
+                    doc = docApp.Documents.Add(ref miss, ref miss, ref miss, ref miss);
+                    docApp.Selection.ParagraphFormat.LineSpacing = 15;
+                    //页眉    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryHeader;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页眉内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+                    //页尾    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryFooter;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页尾内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
 
-                    Spire.Doc.Documents.Paragraph parag = spire_Section.AddParagraph();
-                    parag.AppendText("欢迎使用ccflow word");
-
-                    //将第一段作为标题，设置标题格式
-                    Spire.Doc.Documents.ParagraphStyle style = new Spire.Doc.Documents.ParagraphStyle(spire_Doc);
-                    style.Name = "titleStyle";
-                    style.CharacterFormat.Bold = true;
-                    style.CharacterFormat.TextColor = Color.Purple;
-                    style.CharacterFormat.FontName = "宋体";
-                    style.CharacterFormat.FontSize = 12f;
-                    spire_Doc.Styles.Add(style);
-                    parag.ApplyStyle("titleStyle");
-
+                    strContext = "欢迎使用ccflow word";
+                    doc.Paragraphs.Last.Range.Text = strContext;
 
                     string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
 
@@ -926,11 +931,15 @@ namespace CCFlow.WF.CCForm
                     string fileName = userNo + "_" + flowNo + "_" + workId + ".docx";
                     string fullFilePath = rootPath + fileName;
 
-                    spire_Doc.SaveToFile(fullFilePath, Spire.Doc.FileFormat.Docx2013);
+                    //保存文件    
+                    doc.SaveAs(fullFilePath, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+                    doc.Close(ref miss, ref miss, ref miss);
+                    docApp.Quit(ref miss, ref miss, ref miss);
 
                     bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
 
-                    spire_Doc.Dispose();
+                    WordDoc_SaveWordFile(flowNo, nodeId, userNo, workId, bytes);
+
                     File.Delete(fullFilePath);
                 }
 

@@ -1300,8 +1300,7 @@ namespace BP.Sys
         {
             get
             {
-                if (_AppCenterDBDatabase == null)
-                {
+               
                     switch (BP.DA.DBAccess.AppCenterDBType)
                     {
                         case DA.DBType.MSSQL:
@@ -1311,10 +1310,23 @@ namespace BP.Sys
                             _AppCenterDBDatabase = connMSSQL.Database;
                             break;
                         case DA.DBType.Oracle:
-                            OracleConnection connOra = new OracleConnection(SystemConfig.AppCenterDSN);
-                            if (connOra.State != ConnectionState.Open)
-                                connOra.Open();
-                            _AppCenterDBDatabase = connOra.Database;
+
+                        string[] strs = SystemConfig.AppCenterDSN.Split(';');
+                        foreach (string str in strs)
+                        {
+
+                            if (str.ToLower().Contains("user id") == false)
+                                continue;
+
+                            string[] mystrs = str.Split('=');
+                            return mystrs[1];
+
+                        }
+
+                            //OracleConnection connOra = new OracleConnection(SystemConfig.AppCenterDSN);
+                            //if (connOra.State != ConnectionState.Open)
+                            //    connOra.Open();
+                            //_AppCenterDBDatabase = connOra.Database;
                             break;
                         case DA.DBType.MySQL:
                             MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
@@ -1333,8 +1345,7 @@ namespace BP.Sys
                             throw new Exception("@没有判断的数据类型.");
                             break;
                     }
-                }
-
+                
                 // 返回database.
                 return _AppCenterDBDatabase;
             }

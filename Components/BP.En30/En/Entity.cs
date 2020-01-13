@@ -3648,7 +3648,7 @@ namespace BP.En
                 return;
 
             string fields = dt.Rows[0][0].ToString();
-
+            fields = fields.ToUpper();
             //如果不存在.
             foreach (Attr attr in this.EnMap.Attrs)
             {

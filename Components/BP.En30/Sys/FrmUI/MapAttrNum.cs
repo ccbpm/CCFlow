@@ -119,8 +119,9 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 2, "数据类型", true, false);
 
-                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值/小数位数", true, false, 0, 200, 20);
-
+                map.AddTBString(MapAttrAttr.DefVal, MapAttrAttr.DefaultVal, "默认值/小数位数", true, false, 0, 200, 20);
+ 
+                map.AddDDLSysEnum(MapAttrAttr.DefValType,1,"默认值选择方式",true,true,"DefValType","@0=默认值为空@1=按照设置的默认值设置",false);
                 string help = "给该字段设置默认值:\t\r";
 
                 help += "\t\r 1. 如果是整形就设置一个整形的数字作为默认值.";
@@ -213,11 +214,22 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.DefVal, value);
             }
         }
+        public int DefValType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.DefValType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefValType, value);
+            }
+        }
         protected override bool beforeUpdateInsertAction()
         {
             //如果没默认值.
-            if (this.DefVal == "")
-                this.DefVal = "0";
+            if (this.DefVal == "" && this.DefValType==0)
+                this.DefVal =MapAttrAttr.DefaultVal;
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
@@ -225,9 +237,6 @@ namespace BP.Sys.FrmUI
 
             //是否显示合计
             attr.IsSum = this.GetValBooleanByKey("ExtIsSum");
-
-            //增加保留小数位数.
-            //attr.SetPara("DecimalDigits", this.GetValIntByKey("DecimalDigits"));
 
             attr.Update();
 

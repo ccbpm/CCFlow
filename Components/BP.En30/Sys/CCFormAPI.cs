@@ -1249,7 +1249,10 @@ namespace BP.Sys
             BP.DA.CashFrmTemplate.Remove(frmID);
             BP.DA.Cash.SetMap(frmID, null);
 
-            MapData mapdata = new MapData(frmID);
+            MapData mapdata = new MapData();
+            mapdata.No = frmID;
+            mapdata.RetrieveFromDBSources();
+            Cash2019.UpdateRow(mapdata.ToString(), frmID, mapdata.Row);
             mapdata.CleanObject();
             return;
         }

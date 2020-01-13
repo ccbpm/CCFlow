@@ -121,13 +121,15 @@ namespace BP.Sys.FrmUI
                 sql += " union ";
                 sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
 
+
                 //默认值.
-                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",sql, true);
+                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）", sql, true);
+
 
                 //map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
-                 "@1=下拉框@3=单选按钮");
+                 "@1=下拉框@2=复选框@3=单选按钮");
 
                 map.AddDDLSysEnum("RBShowModel", 0, "单选按钮的展现方式", true, true, "RBShowModel",
             "@0=竖向@3=横向");
@@ -209,8 +211,10 @@ namespace BP.Sys.FrmUI
             }
         }
 
+
         protected override bool beforeUpdateInsertAction()
         {
+            
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();

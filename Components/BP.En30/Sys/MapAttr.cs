@@ -264,6 +264,13 @@ namespace BP.Sys
         public const string IsEnableInAPP = "IsEnableInAPP";
         public const string IsSupperText = "IsSupperText";
         public const string IsRichText = "IsRichText";
+
+        /// <summary>
+        /// 默认值设置方式
+        /// </summary>
+        public const string DefValType = "DefValType";
+
+        public const string DefaultVal = "10002";
     }
     /// <summary>
     /// 实体属性
@@ -488,6 +495,7 @@ namespace BP.Sys
                 attr.Key = this.KeyOfEn;
                 attr.Desc = this.Name;
 
+
                 string s = this.DefValReal;
                 if (DataType.IsNullOrEmpty(s))
                     attr.DefaultValOfReal = null;
@@ -498,6 +506,7 @@ namespace BP.Sys
                     //this.DefValReal;
                 }
 
+                attr.DefValType = this.DefValType;
 
                 attr.Field = this.Field;
                 attr.MaxLength = this.MaxLen;
@@ -692,6 +701,18 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
+
+        public int DefValType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.DefValType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefValType, value);
             }
         }
         /// <summary>
@@ -1441,7 +1462,7 @@ namespace BP.Sys
 
                 map.AddTBString(MapAttrAttr.Name, null, "描述", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", false, false, 0, 400, 20);
-
+                map.AddTBInt(MapAttrAttr.DefValType, 0, "默认值类型", true, false);
 
                 map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
                 map.AddTBInt(MapAttrAttr.MyDataType, 1, "数据类型", true, false);

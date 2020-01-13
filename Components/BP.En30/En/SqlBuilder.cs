@@ -910,7 +910,10 @@ namespace BP.En
                         }
                         else
                         {
-                            sql += attr.Field + " INT DEFAULT " + attr.DefaultVal + " COMMENT '" + attr.Desc + "',";
+                            if (attr.DefValType == 0 && attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal)==true)
+                                sql += attr.Field + " INT  NULL COMMENT '" + attr.Desc + "',";
+                            else
+                                sql += attr.Field + " INT DEFAULT " + attr.DefaultVal + " COMMENT '" + attr.Desc + "',";
                         }
                         break;
                     default:
@@ -2448,7 +2451,12 @@ namespace BP.En
                                 if (strInt == null || strInt == "" || strInt == "null")
                                     ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
                                 else
-                                    ps.Add(attr.Key, int.Parse(strInt));
+                                    if (attr.DefValType == 0
+                                        && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
+                                        && en.GetValIntByKey(attr.Key) == Int32.Parse(MapAttrAttr.DefaultVal))
+                                        ps.Add(attr.Key, null);
+                                    else
+                                         ps.Add(attr.Key, int.Parse(strInt));
                             }
                             break;
                         //@YLN
@@ -2465,7 +2473,12 @@ namespace BP.En
                             }
                             else
                             {
-                                ps.Add(attr.Key, decimal.Parse(str));
+                                if (attr.DefValType == 0
+                                       && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
+                                       && en.GetValIntByKey(attr.Key) == Int64.Parse(MapAttrAttr.DefaultVal))
+                                    ps.Add(attr.Key, null);
+                                else
+                                    ps.Add(attr.Key, decimal.Parse(str));
                             }
                             break;
                         case DataType.AppMoney:
@@ -2480,8 +2493,12 @@ namespace BP.En
                                 str = str.Replace("￥", "");
                                 str = str.Replace(",", "");
                             }
-
-                            ps.Add(attr.Key, double.Parse(str, System.Globalization.NumberStyles.Any));
+                            if (attr.DefValType == 0
+                                       && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
+                                       && str.Equals(MapAttrAttr.DefaultVal))
+                                ps.Add(attr.Key, null);
+                            else
+                                ps.Add(attr.Key, double.Parse(str, System.Globalization.NumberStyles.Any));
 
                             break;
                         case DataType.AppDate: // 如果是日期类型。

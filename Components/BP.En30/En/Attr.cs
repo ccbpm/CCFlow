@@ -194,6 +194,7 @@ namespace BP.En
                 attr.UIBindKey = this.UIBindKey;
                 attr.UIIsLine = this.UIIsLine;
                 attr.UIHeight = 0;
+                attr.DefValType = this.DefValType;
 
                 if (this.MaxLength > 3000)
                     attr.UIHeight = 10;
@@ -513,11 +514,26 @@ namespace BP.En
                 if (value != null)
                     this._field = value.Trim();
 			}
-		}		
-		/// <summary>
-		/// 字段默认值
-		/// </summary>
-		private object _defaultVal=null;
+		}
+
+        private int _DefValType = 0;
+        public int DefValType
+        {
+            get
+            {
+                return this._DefValType;
+            }
+            set
+            {
+                if (value != null)
+                    this._DefValType = value;
+            }
+        }
+
+        /// <summary>
+        /// 字段默认值
+        /// </summary>
+        private object _defaultVal=null;
         public string DefaultValOfReal
         {
             get
@@ -1676,6 +1692,7 @@ namespace BP.En
                     mattr.MinLen = item.MinLength;
                     mattr.UIVisible = item.UIVisible;
                     mattr.DefValReal = item.DefaultValOfReal;
+                    mattr.DefValType = item.DefValType;
 
                     mattr.UIIsEnable = item.UIIsReadonly;
 

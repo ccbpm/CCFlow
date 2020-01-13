@@ -146,8 +146,8 @@ namespace BP.Sys.FrmUI
 
                 attr.SetValByKey(MapAttrAttr.Name, this.GetValStrByKey(FrmImgAttr.Name)); //名称.
 
-                attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); //名称.
-                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); //名称.
+                attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); 
+                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); 
                 attr.Update();
             }
 

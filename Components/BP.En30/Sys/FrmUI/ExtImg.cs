@@ -53,6 +53,17 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
             }
         }
+        public string FK_MapData
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.FK_MapData);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.FK_MapData, value);
+            }
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -147,6 +158,7 @@ namespace BP.Sys.FrmUI
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
             attr.MyPK = this.MyPK;
+            attr.FK_MapData = this.FK_MapData;
             attr.Delete();
 
             base.afterDelete();

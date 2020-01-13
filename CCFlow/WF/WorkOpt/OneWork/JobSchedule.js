@@ -2,6 +2,10 @@
 var step = 0;
 $(function () {
 
+    var v = $("#JobSchedule");
+    if (v == null || v == undefined)
+        return;
+
     var workid = GetQueryString("WorkID");
 	var oid = GetQueryString("OID");
     if (workid==null) {

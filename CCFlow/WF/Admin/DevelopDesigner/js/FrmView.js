@@ -163,7 +163,7 @@ function GenerFrm() {
             htmlContent = "";
         }
     }
-    if (htmlContent == "") {
+    if (htmlContent == "" || htmlContent == null ) {
         alert("开发者设计的表单内容丢失，请联系管理员");
         return;
     }

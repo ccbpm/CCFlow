@@ -39,6 +39,18 @@ function CCFrom_GenerFrmListBySpecTreeNo(specTreeNo) {
 }
 
 /**
+ * 获得单据状态,一个单据编号下面有多个单据.
+ * 返回的数据就是查询的 SELECT * FROM Frm_GenerBill WHERE BillNo='@BillNo';
+ * 单据的状态为: @0=空白@1=草稿@2=编辑中@100=归档.
+ * @param {单据编号} billNo
+ */
+function CCFrom_GenerBillsByBillNo(billNo) {
+    var ens = new Entities("BP.Frm.GenerBills");
+    ens.Retrieve("BillNo", billNo);
+    return ens;
+}
+
+/**
  * 获得一个表单的操作权限.
  * @param {any} frmID
  * 返回 IsView, IsNew, IsSubmit, IsUpdate IsDelete 的json.
@@ -109,7 +121,7 @@ function CCForm_CreateBlankOID(frmID) {
  * @param {表单ID} frmID
  * @param {主键} oid
  */
-function CCForm_SaveAsDraftByOID(frmID,oid) {
+function CCForm_SaveAsDraftByOID(frmID, oid) {
     var handler = new HttpHandler("BP.Frm.WF_CCBill");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", oid);
@@ -129,7 +141,7 @@ function CCForm_SaveAsDraftByBillNo(frmID, billNo) {
     //return billOID;
 }
 
- 
+
 
 /**
  * 创建表单实例. 说明:指定表单的ID, specID,与参数创建表单实例.

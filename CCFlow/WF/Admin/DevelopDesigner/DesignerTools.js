@@ -6,19 +6,19 @@ document.onkeydown = function () {
 
         SaveForm();
 
-       // alert('触发ctrl+s');
+        // alert('触发ctrl+s');
         event.preventDefault(); // 或者 return false;
     }
 }
- 
+
 
 //预览.
 function PreviewForm() {
     //保存表单设计内容
     SaveForm();
 
-  //  var en = new Entity(pageParam.fk_mapdata);
-   // var da = en.DoMethodReturnString("CheckPhysicsTable");
+    //  var en = new Entity(pageParam.fk_mapdata);
+    // var da = en.DoMethodReturnString("CheckPhysicsTable");
     //alert(da);
 
 
@@ -28,8 +28,7 @@ function PreviewForm() {
 }
 
 //表单属性.
-function FrmAttr()
-{
+function FrmAttr() {
     var frmID = GetQueryString("FK_MapData");
     //var mapdata = new Entity("BP.WF.Template.MapFrmFool", frmID);
 
@@ -68,5 +67,5 @@ function ImpFrmTemplate() {
 }
 
 
-  
+
 

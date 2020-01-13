@@ -29,14 +29,13 @@
 <body>
 
     <center>
-        <table id="App" style="width:90%;" class="bootstrap-table">
+        <table id="App" style="width:90%;" class="table mt-3">
             <tr>
                 <th>序</th>
                 <th>字段</th>
                 <th>英文名</th>
                 <th>类型</th>
-                <th>操作1</th>
-                <th>操作2</th>
+                <th colspan="3">操作1</th>
             </tr>
 
             <tr v-for="(value,index) in delData">
@@ -46,6 +45,7 @@
                 <td>{{value.contralType}}</td>
                 <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
                 <td> <a href="#" @click="Insert(value.MyPK);">插入</a></td>
+                <td> <a href="#" @click="Delete(value.MyPK);">删除</a></td>
             </tr>
         </table>
     </center>
@@ -62,6 +62,28 @@
             created() {
                 this.delData =  InitData();
 
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+                handler.AddPara("FrmID", frmID);
+                var html = handler.DoMethodReturnString("Fields_Init");
+             //   console.log(html);
+
+                var list = ens.GetEns();
+                var deldate = [];
+                list.data.map(function (item, index) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
+                        item.contralType = GetFieldType(item);
+
+                        if (item.UIVisable != 0
+                            && item.KeyOfEn != 'Emps'
+                            && item.KeyOfEn != 'FK_NY'
+                            && item.KeyOfEn != 'FK_Dept'
+                             && item.KeyOfEn != 'MyNum'
+                            && item.KeyOfEn != 'Rec') {
+                            deldate.push(item);
+                        }
+                    }
+                });
+                this.delData = deldate;
             },
             methods: {
                 Edit: function (myPK) {
@@ -85,6 +107,15 @@
                     var attr = new Entity("BP.Sys.MapAttr", myPK);
                     InsertHtmlToEditor(GetDataType(attr), attr.KeyOfEn, attr.Name, attr.UIBindKey, attr);
                     dialog.close(true);
+                },
+                Delete: function (myPK) {
+                    if (window.confirm('您确定要删除吗?') == false)
+                        return;
+
+                     var attr = new Entity("BP.Sys.MapAttr", myPK);
+                     attr.Delete();
+                     alert('删除成功,需要手工刷新');
+                     window.location.href = window.location.href;
                 }
             }
         })

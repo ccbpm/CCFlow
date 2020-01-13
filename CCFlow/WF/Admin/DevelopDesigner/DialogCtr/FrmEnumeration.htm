@@ -45,7 +45,7 @@
                 html += "<td class=Idx>" + i + "</td>";
                 html += "<td><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + cfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
                 html += "<td>" + sysEnumMain.Name + "</td>";
-                html += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "');\">" + sysEnumMain.CfgVal + "</a></td>";
+                html += "<td style='white-space: nowrap;text-overflow: ellipsis;overflow: hidden;' ><a href=\"javascript:Edit('" + sysEnumMain.No + "');\">" + sysEnumMain.CfgVal + "</a></td>";
 
                 html += "<td><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
 

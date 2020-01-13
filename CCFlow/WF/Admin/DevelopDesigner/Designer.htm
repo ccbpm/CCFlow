@@ -45,7 +45,7 @@
         <input type="button" onclick="leipiFormDesign.exec('impfrm')" value="导入表单模版" id="Btn_ImpTemplate" />
         <input type="button" onclick="leipiFormDesign.exec('ImpFrmFields');" value="插入回收站字段" id="Btn_ImpFields" />
         <input type="button" onclick="FrmMobile()" value="手机表单" id="Btn_FrmMobile" />
-
+        <div id="msg"></div>
     </div>
     <!--左边导航-->
     <div class="main-sidebar">
@@ -274,7 +274,15 @@
         textarea: 'design_content',
         //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
         toolbars: [[
-            'fullscreen', 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'removeformat', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', '|', 'fontfamily', 'fontsize', '|', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|', 'simpleupload', 'horizontal', 'spechars', 'wordimage', '|', 'inserttable', 'deletetable', 'mergecells', 'splittocells', '|', 'template']],
+            'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline',
+            'fontborder', 'strikethrough', 'removeformat',
+            '|', 'forecolor', 'backcolor', 'insertorderedlist',
+            'insertunorderedlist', '|', 'fontfamily', 'fontsize', '|', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+            'link', 'unlink', '|', 'simpleupload', 'horizontal', 'spechars',
+            'wordimage', '|', 'inserttable', 'deletetable', 'mergecells',
+            'splittocells', '|', 'template']],
         //focus时自动清空初始化时的内容
         //autoClearinitialContent:true,
         //关闭字数统计

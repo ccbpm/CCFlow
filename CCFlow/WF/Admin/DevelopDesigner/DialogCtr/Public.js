@@ -15,7 +15,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
     //Float型
     if (dataType == "Float")
         _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
-    //浮点型型
+    //浮点型
     if (dataType == "Double")
         _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
     //金额
@@ -140,7 +140,7 @@ function GetDataType(mapAttr) {
         } else if (mapAttr.MyDataType == "3") {
             return "Float";
         } else if (mapAttr.MyDataType == "4") {
-            return "Money";
+            return "CheckBox";
         } else if (mapAttr.MyDataType == "5") {
             return "Double";
         } else if (mapAttr.MyDataType == "6") {

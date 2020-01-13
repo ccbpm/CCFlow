@@ -116,10 +116,32 @@
             }
 
             //插入到html 到编辑器.
+            if (dataType!="Textarea") {
+                dataType = GetFieldType(FieldType);
+            }
             InsertHtmlToEditor(dataType,KeyOfEn,name);
            
         };
-
+        //类型转换
+        function GetFieldType(FieldType) {
+            if (FieldType == "1") {
+                return"Text";
+            } else if (FieldType == "2") {
+                return "Int";
+            } else if (FieldType == "3") {
+                return "Float";
+            } else if (FieldType == "4") {
+                return "CheckBox";
+            } else if (FieldType == "5") {
+                return "Double";
+            } else if (FieldType == "6") {
+                return "Date";
+            } else if (FieldType == "7") {
+                return "DateTime";
+            } else if (FieldType == "8") {
+                return "Money";
+            }
+        }
       
         //在这里把返回值获取到，放入到对应的文本框里.
         function SelectOne() {

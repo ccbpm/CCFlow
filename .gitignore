@@ -255,3 +255,6 @@ ModelManifest.xml
 /.idea/ccflow.iml
 /.idea/modules.xml
 /.idea/vcs.xml
+misc.xml
+Project_Default.xml
+jshint.xml

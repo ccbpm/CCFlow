@@ -3642,7 +3642,7 @@ namespace BP.En
         {
             #region 检查字段是否存在
             //string sql = "SELECT * FROM " + this.EnMap.PhysicsTable + " WHERE 1=2 ";
-            string sql = "SELECT WMSYS.WM_CONCAT(DISTINCT(column_name)) AS Column_Name  FROM all_tab_cols WHERE table_name = '" + this.EnMap.PhysicsTable.ToUpper() + "' AND owner='"+SystemConfig.AppCenterDBDatabase + "'";
+            string sql = "SELECT WMSYS.WM_CONCAT(DISTINCT(column_name)) AS Column_Name  FROM all_tab_cols WHERE table_name = '" + this.EnMap.PhysicsTable.ToUpper() + "'";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 return;

@@ -55,7 +55,7 @@
         btnClose = $("<button type='button' id='closeModal' style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>X</button>");
    
     //标题
-    var titleHead = $("<h4 class='modal-title'></h4>");
+    var titleHead = $("<h4 class='modal-title' style='color:white;'></h4>");
 
     titleHead.text(dlgTitle);
     modalHead.append(btnClose);

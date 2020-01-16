@@ -13,7 +13,8 @@ PAUSE
 COLOR F
 
 
--- 更新GPM
+
+--更新GPM
 xcopy  /e /k /y D:\ccflow\CCFlow\GPM  D:\JFlow\jflow-web\src\main\webapp\GPM 
 xcopy  /e /k /y D:\ccflow\CCFlow\WF  D:\JFlow\jflow-web\src\main\webapp\WF  
 

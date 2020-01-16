@@ -1833,7 +1833,7 @@ var Entities = (function () {
 
         DoMethodReturnJSON: function (methodName, params) {
 
-            var jsonString = this.DoMethodReturnString(methodName, params);
+            var jsonString = this.DoMethodReturnString(methodName);
 
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);

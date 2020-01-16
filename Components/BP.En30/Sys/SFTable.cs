@@ -290,6 +290,8 @@ namespace BP.Sys
                     runObj = string.Empty;
 
                 runObj = runObj.Replace("~", "'");
+                runObj = runObj.Replace("/#", "+"); //为什么？
+                runObj = runObj.Replace("/$", "-"); //为什么？
                 if (runObj.Contains("@WebUser.No"))
                     runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
 

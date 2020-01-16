@@ -1382,9 +1382,10 @@ namespace BP.WF.HttpHandler
             //关键字.
             string keyWord = ur.SearchKey;
             QueryObject qo = new QueryObject(ens);
+            bool isFirst = true;
 
             #region 关键字字段.
-            if(DataType.IsNullOrEmpty(map.SearchFields) == false)
+            if (DataType.IsNullOrEmpty(map.SearchFields) == false)
             {
                 string field = "";//字段名
                 string fieldValue = "";//字段值
@@ -1409,6 +1410,7 @@ namespace BP.WF.HttpHandler
                     idx++;
                     if (idx == 1)
                     {
+                        isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
@@ -1476,6 +1478,7 @@ namespace BP.WF.HttpHandler
                         i++;
                         if (i == 1)
                         {
+                            isFirst = false;
                             /* 第一次进来。 */
                             qo.addLeftBracket();
                             if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
@@ -1501,9 +1504,9 @@ namespace BP.WF.HttpHandler
                     qo.AddHD();
                 }
             }
-            
-            #endregion
 
+            #endregion
+           
             if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
             {
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
@@ -1512,7 +1515,10 @@ namespace BP.WF.HttpHandler
                 //按日期查询
                 if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     dtTo += " 23:59:59";
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
@@ -1533,8 +1539,11 @@ namespace BP.WF.HttpHandler
 
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
 
-                    qo.addAnd();
                     qo.addLeftBracket();
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -1550,7 +1559,10 @@ namespace BP.WF.HttpHandler
             {
                 if (attr.IsHidden)
                 {
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
 
                     //获得真实的数据类型.
@@ -1579,7 +1591,10 @@ namespace BP.WF.HttpHandler
                     opkey = attr.DefaultSymbol;
                 }
 
-                qo.addAnd();
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
                 qo.addLeftBracket();
 
                 if (attr.DefaultVal.Length >= 8)
@@ -1619,7 +1634,12 @@ namespace BP.WF.HttpHandler
                 var val = ap.GetValStrByKey(str);
                 if (val.Equals("all"))
                     continue;
-                qo.addAnd();
+
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
+                isFirst = false;
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
@@ -1799,6 +1819,7 @@ namespace BP.WF.HttpHandler
             else
             {
                 qo.AddHD();
+               
             }
             #endregion
 

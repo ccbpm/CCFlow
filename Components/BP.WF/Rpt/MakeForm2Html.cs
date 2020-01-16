@@ -1628,8 +1628,6 @@ namespace BP.WF
             if (resultMsg.IndexOf("err@") != -1)
                 return resultMsg;
 
-
-
             //获取表单的信息执行打印
             string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + bill.No + "\\" + workid + "\\" + "index.htm";
             resultMsg = MakeHtmlDocument(bill.No, workid, null, fileNameFormat, urlIsHostUrl, path, billUrl, frmId, basePath);
@@ -1644,7 +1642,7 @@ namespace BP.WF
                 System.IO.Directory.CreateDirectory(pdfPath);
 
             fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
-            string pdfFormFile = pdfPath + "\\" + bill.Name + ".pdf";
+            string pdfFormFile = pdfPath + "\\" + bill.Name + ".pdf";  //生成的路径.
             string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
             try
             {
@@ -1653,8 +1651,6 @@ namespace BP.WF
                     ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + bill.Name + ".pdf");
                 else
                     ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + bill.Name + ".pdf");
-
-
             }
             catch (Exception ex)
             {
@@ -1682,11 +1678,7 @@ namespace BP.WF
             {
                 ht.Add("zip", "err@生成zip文件遇到权限问题:" + ex.Message + " @Path:" + pdfPath);
             }
-
-
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
-
-
         }
 
         public static string MakeFormToPDF(string frmId, string frmName, Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)

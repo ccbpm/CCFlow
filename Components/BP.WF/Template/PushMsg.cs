@@ -703,8 +703,8 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(PushMsgAttr.SMSDoc, null, "短消息内容模版", true, false, true);
                 map.AddTBString(PushMsgAttr.SMSNodes, null, "SMS节点s", true, false, 0, 100, 10);
 
-                //@0=站内消息@1=短信@2=钉钉@3=微信@4=即时通
-                map.AddTBString(PushMsgAttr.SMSPushModel, null, "短消息发送设置", true, false, 0, 50, 10);
+                // 邮件,站内消息,短信,钉钉,微信,WebServices.
+                map.AddTBString(PushMsgAttr.SMSPushModel, "Email", "短消息发送设置", true, false, 0, 50, 10);
                 #endregion 短消息.
 
                 #region 邮件.

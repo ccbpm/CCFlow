@@ -1382,7 +1382,7 @@ namespace BP.WF.HttpHandler
             //关键字.
             string keyWord = ur.SearchKey;
             QueryObject qo = new QueryObject(ens);
-            bool isFirst = true;
+            bool isFirst = true; //是否第一次拼接SQL
 
             #region 关键字字段.
             if (DataType.IsNullOrEmpty(map.SearchFields) == false)
@@ -1758,6 +1758,7 @@ namespace BP.WF.HttpHandler
             //关键字.
             string keyWord = ur.SearchKey;
             QueryObject qo = new QueryObject(ens);
+            bool isFirst = true; //是否第一次拼接SQL
 
             #region 关键字字段.
             if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length > 1)
@@ -1796,6 +1797,7 @@ namespace BP.WF.HttpHandler
                     i++;
                     if (i == 1)
                     {
+                        isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@")
@@ -1830,7 +1832,11 @@ namespace BP.WF.HttpHandler
 
                 if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
-                    qo.addAnd();
+                    dtTo += " 24:00";
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     //设置开始查询时间
                     dtFrom += " 00:00:00";
@@ -1855,7 +1861,11 @@ namespace BP.WF.HttpHandler
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
 
-                    qo.addAnd();
+                   
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -1871,7 +1881,11 @@ namespace BP.WF.HttpHandler
             {
                 if (attr.IsHidden)
                 {
-                    qo.addAnd();
+                    
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
                     qo.addRightBracket();
@@ -1889,7 +1903,10 @@ namespace BP.WF.HttpHandler
                     opkey = attr.DefaultSymbol;
                 }
 
-                qo.addAnd();
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
                 qo.addLeftBracket();
 
                 if (attr.DefaultVal.Length >= 8)
@@ -1929,7 +1946,10 @@ namespace BP.WF.HttpHandler
                 var val = ap.GetValStrByKey(str);
                 if (val.Equals("all"))
                     continue;
-                qo.addAnd();
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
                 qo.addLeftBracket();
                 qo.AddWhere(str, ap.GetValStrByKey(str));
                 qo.addRightBracket();

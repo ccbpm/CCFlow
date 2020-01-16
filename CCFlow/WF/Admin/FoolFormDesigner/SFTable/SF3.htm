@@ -107,6 +107,12 @@
             var en = new Entity("BP.Sys.SFTable");
             en.CopyForm();
 
+            var doc = $("#TB_SelectStatement").val();
+            doc = doc.replace(/[+]/g, "/#");
+            doc = doc.replace(/-/g, '/$');
+            en.SelectStatement = doc;
+            //替换
+
             if (en.IsExits() == true) {
                 alert("编号已经存在[" + en.No + "]请使用其他的编号.");
                 return;

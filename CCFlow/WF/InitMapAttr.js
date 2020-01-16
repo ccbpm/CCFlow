@@ -1,4 +1,4 @@
-﻿/**
+﻿/** 
  * 解析字段通用方法
  * @param {any} mainTable  字段表单的数据
  * @param {any} mapAttr 字段属性

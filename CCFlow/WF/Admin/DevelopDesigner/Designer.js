@@ -1191,8 +1191,6 @@ UE.plugins['component'] = function () {
                     imgAth.Delete();
                 }
                 if (dataType == "Img") {
-                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
-                    mapAttr.Delete();
                     var en = new Entity("BP.Sys.FrmUI.ExtImg", mypk);
                     en.Delete();
                 }

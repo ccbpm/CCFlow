@@ -1205,6 +1205,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("IsShowSearchKey", 0);
 
             ht.Add("SearchFields", map.SearchFields);
+            ht.Add("SearchFieldsOfNum", map.SearchFieldsOfNum);
 
             //按日期查询.
             ht.Add("DTSearchWay", (int)map.DTSearchWay);
@@ -1506,7 +1507,63 @@ namespace BP.WF.HttpHandler
             }
 
             #endregion
-           
+            #region 增加数值型字段的查询
+            if (DataType.IsNullOrEmpty(map.SearchFieldsOfNum) == false)
+            {
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFieldsOfNum = map.SearchFieldsOfNum.Split('@');
+                foreach (String str in searchFieldsOfNum)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    //字段名
+                    field = str.Split('=')[1];
+                    if (DataType.IsNullOrEmpty(field) == true)
+                        continue;
+
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    string[] strVals = fieldValue.Split(',');
+
+                    //判断是否是第一次进入
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
+                    qo.addLeftBracket();
+                    if (DataType.IsNullOrEmpty(strVals[0]) == false)
+                    {
+
+                        if (DataType.IsNullOrEmpty(strVals[1]) == true)
+                            qo.AddWhere(field, ">=", strVals[0]);
+                        else
+                        {
+                            qo.AddWhere(field, ">=", strVals[0], field+"1");
+                            qo.addAnd();
+                            qo.AddWhere(field, "<=", strVals[1], field+"2");
+                        }
+                            
+                    }
+                    else
+                    {
+                        qo.AddWhere(field, "<=", strVals[1]);
+                    }
+
+                    qo.addRightBracket();
+
+                }
+                
+                   
+            }
+            #endregion
+
             if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
             {
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");

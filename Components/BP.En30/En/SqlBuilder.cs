@@ -2816,7 +2816,7 @@ namespace BP.En
                 case DBType.MySQL:
                     return " IFNULL(" + expression + "," + isNullBack + ")";
                 case DBType.PostgreSQL:
-                    return " COALESCE(" + expression + ",'" + isNullBack + "')";
+                    return " COALESCE(" + expression + "," + isNullBack + ")";
                 default:
                     throw new Exception("GetIsNullInSQL未涉及的数据库类型");
             }

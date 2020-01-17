@@ -3647,7 +3647,7 @@ namespace BP.En
             if (dt.Rows.Count == 0)
                 return;
 
-            string fields = dt.Rows[0][0].ToString();
+            string fields = "," + dt.Rows[0][0].ToString() + ",";
             fields = fields.ToUpper();
             //如果不存在.
             foreach (Attr attr in this.EnMap.Attrs)
@@ -3661,11 +3661,11 @@ namespace BP.En
                 if (fields.Contains(","+attr.Key.ToUpper() + ",") == true)
                     continue;
 
-                if (fields.Contains(attr.Key.ToUpper() + ",") == true)
-                    continue;
+                //if (fields.Contains(attr.Key.ToUpper() + ",") == true)
+                //    continue;
 
-                if (fields.Contains(","+attr.Key.ToUpper()) == true)
-                    continue;
+                //if (fields.Contains(","+attr.Key.ToUpper()) == true)
+                //    continue;
 
                 if (attr.Key == "AID")
                 {

@@ -1500,10 +1500,7 @@ namespace BP.WF.HttpHandler
                     qo.addRightBracket();
 
                 }
-                else
-                {
-                    qo.AddHD();
-                }
+               
             }
 
             #endregion

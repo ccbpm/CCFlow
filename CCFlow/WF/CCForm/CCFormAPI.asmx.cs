@@ -518,7 +518,8 @@ namespace CCFlow.WF.CCForm
                             foreach (DataRow dr in dt.Rows)
                             {
                                 GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-                                daDtl.OID = int.Parse(dr["OID"].ToString());
+                                string oid = dr["OID"].ToString();
+                                daDtl.OID = int.Parse(string.IsNullOrWhiteSpace(oid) ? "0" : oid);
                                 if (daDtl.OID > 100)
                                     daDtl.RetrieveFromDBSources();
 

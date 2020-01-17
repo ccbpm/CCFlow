@@ -226,6 +226,31 @@
                 }
             }
 
+            //数值型的查询增加
+            var searchFieldsOfNum = mapBase.SearchFieldsOfNum;
+            if (searchFieldsOfNum != null && searchFieldsOfNum != undefined && searchFieldsOfNum != "") {
+                var strs = searchFieldsOfNum.split("@");
+                var str;
+                var fieldV = "";
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+
+                    str = strs[i].split("=");
+                    if (str.length < 2 || str[0] == "" || str[1] == "")
+                        continue;
+                    fields.push(str[1]);
+                    fieldV = ur.GetPara(str[1]);
+                    if (fieldV == null || fieldV == undefined)
+                        fieldV = "";
+
+                    html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":&nbsp;&nbsp</label>"
+                    html += "&nbsp;&nbsp;<label>>=</label>&nbsp;&nbsp<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' />";
+                    html += "&nbsp;&nbsp;<label><=</label>&nbsp;&nbsp<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' />";
+                    barCount += 2;
+                }
+            }
+
 
             if (mapBase.DTSearchWay != "0") {
                 barCount += 2;
@@ -368,6 +393,41 @@
                 }
             }
 
+            //数值型的查询增加
+            var searchFieldsOfNum = mapBase.SearchFieldsOfNum;
+            var val1 = "";
+            var val2 = "";
+            if (searchFieldsOfNum != null && searchFieldsOfNum != undefined && searchFieldsOfNum != "") {
+                var strs = searchFieldsOfNum.split("@");
+                var str;
+                var fieldV = "";
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+
+                    str = strs[i].split("=");
+                    if (str.length < 2 || str[0] == "" || str[1] == "")
+                        continue;
+                    fields.push(str[1]);
+                    fieldV = ur.GetPara(str[1]);
+                    if (fieldV == null || fieldV == undefined || fieldV=="") {
+                        val1 = "";
+                        val2 = "";
+                    } else {
+                        val1 = fieldV.split(',')[0];
+                        val2 = fieldV.split(',')[1];
+                    }
+                       
+
+
+                    html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
+                    html += "<td align='left'><input style='width:80px;' type=text id='TB_" + str[1]+ "_0' name='TB_" + str[1] + "' value='" + val1 + "' class='form-control' />";
+                    html += "<label>&nbsp;&nbsp;～&nbsp;&nbsp</label><input style='width:80px;' type=text id='TB_" + str[1] + "_1' name='TB_" + str[1] + "' value='" + val2 + "' class='form-control' /></td>";
+                   
+                   
+                }
+            }
+
             if (mapBase.DTSearchWay != "0") {
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + ":</label></td>";
 
@@ -489,10 +549,20 @@
                 ur.SearchKey = "";
 
             //增加字段查询
+            var val = "";
             for (var i = 0; i < fields.length; i++) {
                 var field = fields[i];
-                if ($("#TB_" + field).length == 1 && $("#TB_" + field).val() != "")
+                var strs = $("input[name='TB_" + field + "']");
+                if (strs.length == 1) {
                     ur.SetPara(field, $("#TB_" + field).val());
+                } else {
+                    if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
+                        ur.SetPara(field, "");
+                    else
+                        ur.SetPara(field, $("#TB_" + field+"_0").val()+","+$("#TB_" + field+"_1").val());
+                }
+                
+
             }
 
             //设置查询时间.

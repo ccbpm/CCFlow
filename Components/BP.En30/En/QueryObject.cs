@@ -58,7 +58,7 @@ namespace BP.En
                 else
                 {
                     if (selecSQL.Contains(" WHERE "))
-                        sql = selecSQL + "  AND ( " + this._sql + " ) " + _groupBy + this._orderBy;
+                         sql = selecSQL + "  AND ( " + this._sql + " ) " + _groupBy + this._orderBy;
                     else
                         sql = selecSQL + " WHERE   ( " + this._sql + " ) " + _groupBy + this._orderBy;
                 }
@@ -67,7 +67,12 @@ namespace BP.En
                 sql = sql.Replace("  ", " ");
                 sql = sql.Replace("  ", " ");
 
-                sql = sql.Replace("WHERE AND", "WHERE");
+                sql = sql.Replace("AND ( AND )", "AND");
+                sql = sql.Replace("WHERE(1 = 1) AND ( AND )", "WHERE(1 = 1)");
+
+
+
+                 sql = sql.Replace("WHERE AND", "WHERE");
                 sql = sql.Replace("WHERE  AND", "WHERE");
 
                 sql = sql.Replace("WHERE ORDER", "ORDER");

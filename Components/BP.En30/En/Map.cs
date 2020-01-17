@@ -1006,7 +1006,13 @@ namespace BP.En
         /// @名称=No@名称=Name@件号=JianHao
         /// </summary>
         public string SearchFields = null;
-
+        /// <summary>
+        /// 查询的数值 @年龄=Age@薪水=XinShui
+        /// </summary>
+        public string SearchFieldsOfNum = null;
+        /// <summary>
+        /// 数值查询范围.
+        /// </summary>
         public BP.Sys.DTSearchWay DTSearchWay = BP.Sys.DTSearchWay.None;
         public string DTSearchLable = "日期从";
         public string DTSearchKey = null;

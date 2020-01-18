@@ -305,7 +305,8 @@ namespace BP.Demo.BPFramework
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
 
                 //外键字段.
-                map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
+                //map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
+                map.AddTBString(StudentAttr.FK_BanJi, null, "班级", true, false, 0, 200, 100, true);
 
                 //增加checkbox属性.
                 map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true, true);
@@ -323,16 +324,31 @@ namespace BP.Demo.BPFramework
 
                 #endregion 字段映射 - 普通字段.
 
-                //map.AddHidden("XB", " = ", "0");
+                map.AddMyFile("简历");//上传单附件
 
-                map.AddMyFile("简历");
+                #region 设置查询条件。
 
-                //map.AddMyFileS("简历");
+                //String字段类型的模糊查询：定义方式map.SearchFields,其赋值格式是@名称=字段英文名
+                //如果不设置该字段则进行关键字查询即所有string字段的模糊查询
+                map.SearchFields = "@名称=Name@地址=Addr@电话=Tel";
 
-                //设置查询条件。
-                map.AddSearchAttr(StudentAttr.XB);
+                //数值型字段查询：定义方式map.SearchFieldsOfNum，其赋值格式是@名称=字段英文名
+                //查询方式是从Age1到Age2阶段查询：
+                //①如果Age1有值，Age2无值，则查询大于等于Age1的结果集
+                //②如果Age1无值，Age2有值，则查询小于等于Age2的结果集
+                //③如果Age1有值，Age2有值，则查询大于等于Age1小于等于Age2的结果集
+                map.SearchFieldsOfNum = "@年龄=Age";
+
+               
+                //设置SearchBS.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
+                map.AddSearchAttr(StudentAttr.XB,4000);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
-                // map.AddSearchAttr(StudentAttr.ZZMM);
+
+                //隐藏条件的查询
+                map.AddHidden(StudentAttr.ZZMM, " = ", "1");
+               
+
+                #endregion 设置查询条件
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
@@ -473,7 +489,6 @@ namespace BP.Demo.BPFramework
 
         protected override bool beforeDelete()
         {
-
             return base.beforeDelete();
         }
 

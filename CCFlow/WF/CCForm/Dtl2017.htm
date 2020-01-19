@@ -105,31 +105,31 @@
                 return;
             }
             //DoType换为DoMethod
-            var method =  param["DoType"];
-    		delete param["DoType"];
-   			var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-    		handler.AddJson(param);
-    		var data = handler.DoMethodReturnString(method);
-    		if(data.indexOf("err@")!=-1){
-        		alert('保存数据出错');
-        		return;
-    		}else{
-        	    if (saveAll) {
-            	    alerdaySaveCount++;
-        	    } else {
-            	    callback(data, scope);
-        	    }
-        	    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
-            	    $('#Msg').hide();
-            	    $('#ContentDtlDiv').show();
-            	    alerdaySaveCount = 0;
-            	    needSaveCount = 0;
-            	    saveAll = false;
+            var method = param["DoType"];
+            delete param["DoType"];
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddJson(param);
+            var data = handler.DoMethodReturnString(method);
+            if (data.indexOf("err@") != -1) {
+                alert('保存数据出错');
+                return;
+            } else {
+                if (saveAll) {
+                    alerdaySaveCount++;
+                } else {
+                    callback(data, scope);
+                }
+                if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
+                    $('#Msg').hide();
+                    $('#ContentDtlDiv').show();
+                    alerdaySaveCount = 0;
+                    needSaveCount = 0;
+                    saveAll = false;
 
-            	    InitPage();
-            	    BindMapExt();
-        	    }
-    	    }
+                    InitPage();
+                    BindMapExt();
+                }
+            }
         }
 
         //保存数据
@@ -211,27 +211,36 @@
             linkUrl = linkUrl.replace("@FK_Node", GetQueryString("FK_Node"));
             linkUrl = linkUrl.replace("@FK_Flow", GetQueryString("FK_Flow"));
             if (linkUrl.indexOf('&OID=') == -1)
-                linkUrl += '&OID' + en.OID;
-            if (linkUrl.indexOf('&WorkID=') == -1)
-                linkUrl += '&WorkID' + GetQueryString("WorkID");
-            if (linkUrl.indexOf('&FK_Node=') == -1)
-                linkUrl += '&FK_Node' + GetQueryString("FK_Node");
-            if (linkUrl.indexOf('&FK_Flow=') == -1)
-                linkUrl += '&FK_Flow' + GetQueryString("FK_Flow");
-            if (linkUrl.indexOf('&EnsName=') == -1)
-                linkUrl += '&EnsName' + GetQueryString("EnsName");
-            if (linkUrl.indexOf('&RefPKVal=') == -1)
-                linkUrl += '&RefPKVal' + GetQueryString("RefPKVal");
-            if (linkUrl.indexOf('&FK_MapData=') == -1)
-                linkUrl += '&FK_MapData' + GetQueryString("FK_MapData");
+                linkUrl += '&OID=' + en.OID;
+            if (linkUrl.indexOf('&WorkID=') == -1 && GetQueryString("WorkID") != null)
+                linkUrl += '&WorkID=' + GetQueryString("WorkID");
 
-            if (sys_MapDtl.LinkTarget == "_self")
+            if (linkUrl.indexOf('&FK_Node=') == -1 && GetQueryString("FK_Node") != null)
+                linkUrl += '&FK_Node=' + GetQueryString("FK_Node");
+
+            if (linkUrl.indexOf('&FK_Flow=') == -1 && GetQueryString("FK_Flow") != null)
+                linkUrl += '&FK_Flow=' + GetQueryString("FK_Flow");
+
+            if (linkUrl.indexOf('&EnsName=') == -1 && GetQueryString("EnsName") != null)
+                linkUrl += '&EnsName=' + GetQueryString("EnsName");
+
+            if (linkUrl.indexOf('&RefPKVal=') == -1 && GetQueryString("RefPKVal") != null)
+                linkUrl += '&RefPKVal=' + GetQueryString("RefPKVal");
+
+            if (linkUrl.indexOf('&FK_MapData=') == -1 && GetQueryString("FK_MapData") != null)
+                linkUrl += '&FK_MapData=' + GetQueryString("FK_MapData");
+
+            if (sys_MapDtl.LinkTarget == "_self") {
                 window.location.href = linkUrl;
-            else if (sys_MapDtl.LinkTarget == "_blank")
-                window.open(linkUrl);
-            else
-                parent.OpenEasyUiDialogExt(linkUrl, sys_MapDtl.LinkLabel, 800, 500, false);
+                return;
+            }
 
+            if (sys_MapDtl.LinkTarget == "_blank") {
+                window.open(linkUrl);
+                return;
+            }
+
+            parent.OpenEasyUiDialogExt(linkUrl, sys_MapDtl.LinkLabel, 800, 500, false);
         }
 
         //打开附件.
@@ -305,8 +314,8 @@
                 if ($(threadThObj).data().colname != undefined) {
                     var o = $(threadThObj);
                     var tmplate = figure_MapAttr_Template(o.data());
-					if(o.data().UIIsInput==1){
-                    	tmplate.attr('class', "mustInput");
+                    if (o.data().UIIsInput == 1) {
+                        tmplate.attr('class', "mustInput");
                     }
                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
                     tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
@@ -420,9 +429,9 @@
         }
 
         function setIframeHeight() {
-        	if($("body").height()<260){
-        		$("body").height=260;
-        	}
+            if ($("body").height() < 260) {
+                $("body").height = 260;
+            }
             $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
         }
 
@@ -572,14 +581,14 @@
 
                 //超链接
                 if (sys_MapDtl.IsEnableLink == 1) {
-                    var linkTh = $('<th style="width:50px;">超链接</th>');
+                    var linkTh = $('<th style="width:50px;">链接</th>');
                     var target = sys_MapDtl.LinkTarget;
                     var LinkLabel = sys_MapDtl.LinkLabel;
                     var linkThData;
                     linkThData = {
                         custom: true,
                         customcontent: 1,
-                        customcontent1: "a@href='javaScript:void(0);' onclick='OpenLink(this)' titile='超链接' target='" + target + "'@" + LinkLabel,
+                        customcontent1: "a@href='javaScript:void(0);' onclick='OpenLink(this)' titile='链接' @" + LinkLabel,
                         coltype: 'Operation1'
 
                     };
@@ -1328,9 +1337,9 @@
                         //AppString
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                                
+
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + " onChange='ChangeValue(this)'>" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
-                              	eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
+                                eleHtml += "<input type='hidden'  name='TB_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn + "T") + "' />";
                             } else if (mapAttr.IsSupperText == "1") {
                                 eleHtml += "<textarea id='TB_" + mapAttr.KeyOfEn + "' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                             } else {
@@ -1803,7 +1812,7 @@
         function AfterBindEn_DealMapExt(tr, rowIndex) {
             var workNode = workNodeData;
             var mapExtArr = workNode.Sys_MapExt; // 扩展信息
-             //表示从表还没有数据
+            //表示从表还没有数据
             var OID = 0;
             if ($(tr).data().data == undefined)
                 return;
@@ -1827,15 +1836,15 @@
                     mapExt.Delete();
                     continue;
                 }
-				if(mapAttr.UIIsEnable=="0")
-					continue;
+                if (mapAttr.UIIsEnable == "0")
+                    continue;
                 //处理Pop弹出框
                 var PopModel = mapAttr.GetPara("PopModel");
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                     var tbID = tbAuto.attr('id');
-                   
-                    PopDtlMapExt(mapAttr, mapExt, tbID, rowIndex, OID,tr);
+
+                    PopDtlMapExt(mapAttr, mapExt, tbID, rowIndex, OID, tr);
                     continue;
                 }
                 //处理文本自动填充
@@ -1960,9 +1969,9 @@
                             continue;
                         //获取ctr是否包含Wdate的class,有则是时间控件
                         if (ctrl.hasClass("Wdate")) {
-                            var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                            var mapAttr = new Entity("BP.Sys.MapAttr", mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
 
-                            var minDate =ctrl.attr("data-info");
+                            var minDate = ctrl.attr("data-info");
                             ctrl.attr("data-funcionPK", mapExt.MyPK); // 记录绑定事件的MyPK
                             ctrl.removeAttr("onfocus");
                             ctrl.unbind("focus");
@@ -1990,14 +1999,14 @@
                                 if (minDate == "" || minDate == undefined)
                                     WdatePicker({
                                         dateFmt: dateFmt, onpicked: function (dp) {
-                                            $(this).blur(); //失去焦点 
+                                            $(this).blur(); //失去焦点
                                             DBAccess.RunFunctionReturnStr(mapextDoc);
                                         }
                                     });
                                 else
                                     WdatePicker({
                                         dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-                                            $(this).blur(); //失去焦点 
+                                            $(this).blur(); //失去焦点
                                             DBAccess.RunFunctionReturnStr(mapextDoc);
                                         }
                                     });
@@ -2017,7 +2026,7 @@
                         });
                         break;
                     case "DataFieldInputRole": //时间限制
-                       
+
                         //判断是否已经增加了函数
                         var ctrl = $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']');
                         if (ctrl.length == 0)
@@ -2026,7 +2035,7 @@
                         if (mapExt.DoWay == 1) {
                             var tag1 = mapExt.Tag1;
                             if (tag1 == 1) {
-                                var mapAttr = new Entity("BP.Sys.MapAttr",mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
+                                var mapAttr = new Entity("BP.Sys.MapAttr", mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
                                 ctrl.removeAttr("onfocus");
                                 var frmDate = mapAttr.IsSupperText; //获取日期格式
                                 var dateFmt = '';
@@ -2048,7 +2057,7 @@
 
                                 var minDate = '%y-%M-#{%d}';
                                 ctrl.attr("data-info", minDate); //绑定时间大小限制的记录
-                                var functionPK =ctrl.attr("data-funcionPK");
+                                var functionPK = ctrl.attr("data-funcionPK");
                                 if (functionPK == null || functionPK == undefined || functionPK == "") {
                                     ctrl.bind("focus", function () {
                                         WdatePicker({ dateFmt: dateFmt, minDate: minDate });
@@ -2063,15 +2072,15 @@
                                         }
                                     }
                                     if (bindFunctionExt == null)
-                                         ctrl.bind("focus", function () {
+                                        ctrl.bind("focus", function () {
                                             WdatePicker({ dateFmt: dateFmt, minDate: minDate });
-                                         });
+                                        });
                                     else
                                         ctrl.bind("focus", function () {
 
                                             WdatePicker({
                                                 dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
-                                                    $(this).blur(); //失去焦点 
+                                                    $(this).blur(); //失去焦点
                                                     DBAccess.RunFunctionReturnStr(bindFunctionExt.Doc);
                                                 }
                                             });
@@ -2201,14 +2210,14 @@
         }
 
         /**Pop弹出框的处理**/
-        function PopDtlMapExt(mapAttr, mapExt, targetId, index, OID,objtr) {
+        function PopDtlMapExt(mapAttr, mapExt, targetId, index, OID, objtr) {
             var val = $("#" + targetId).val();
             switch (mapAttr.GetPara("PopModel")) {
                 case "PopBranchesAndLeaf": //树干叶子模式.
-                    PopBranchesAndLeaf(mapExt, val, targetId, index, OID,objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    PopBranchesAndLeaf(mapExt, val, targetId, index, OID, objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
                     break;
                 case "PopBranches": //树干简单模式.
-                    PopBranches(mapExt, val, targetId, index, OID,objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    PopBranches(mapExt, val, targetId, index, OID, objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
                     break;
                 case "PopBindSFTable": //绑定字典表，外部数据源.
                     PopBindSFTable(mapExt, val, targetId, index, OID); //调用 /CCForm/JS/Pop.js 的方法来完成.
@@ -2226,7 +2235,7 @@
                     SelfUrl(mapExt, targetId, index, OID); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                     break;
                 case "PopTableSearch": //表格查询.
-                    PopTableSearch(mapExt, val, targetId, index, OID,objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                    PopTableSearch(mapExt, val, targetId, index, OID, objtr); //调用 /CCForm/JS/Pop.js 的方法来完成.
                     break;
                 default: break;
             }

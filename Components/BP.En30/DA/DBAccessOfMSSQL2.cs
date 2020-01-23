@@ -20,13 +20,13 @@ using System.Data.SqlClient;
 using System.Collections;
 using System.ComponentModel;
 using System.Collections.Specialized;
-using System.EnterpriseServices;
+//using System.EnterpriseServices;
 using System.Data.OleDb;
 using System.Web;
 using System.Data.Odbc;
 using System.IO;
 using BP.Sys;
-
+using BP.Web;
 
 namespace BP.DA
 {
@@ -110,11 +110,11 @@ namespace BP.DA
             {
                 if (SystemConfig.IsBSsystem_Test)
                 {
-                    SqlConnection conn = HttpContext.Current.Session["DBAccessOfMSSQL2"] as SqlConnection;
+                    SqlConnection conn = HttpContextHelper.SessionGet("DBAccessOfMSSQL2") as SqlConnection;
                     if (conn == null)
                     {
                         conn = new SqlConnection(SystemConfig.AppSettings["DBAccessOfMSSQL2"]);
-                        HttpContext.Current.Session["DBAccessOfMSSQL2"] = conn;
+                        HttpContextHelper.SessionSet("DBAccessOfMSSQL2", conn);
                     }
                     return conn;
                 }

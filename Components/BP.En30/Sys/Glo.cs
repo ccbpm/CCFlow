@@ -405,13 +405,13 @@ namespace BP.Sys
             en.Update();
         }
 
-        public static System.Web.HttpRequest Request
-        {
-            get
-            {
-                return System.Web.HttpContext.Current.Request;
-            }
-        }
+        //public static System.Web.HttpRequest Request
+        //{
+        //    get
+        //    {
+        //        return System.Web.HttpContext.Current.Request;
+        //    }
+        //}
 
 
         /// <summary>

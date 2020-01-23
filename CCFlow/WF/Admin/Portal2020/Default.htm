@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>后台登录-X-admin2.2</title>
+    <title>驰骋BPM</title>
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -25,52 +25,27 @@
     <script src="Default.js"></script>
     <script>
         // 是否开启刷新记忆tab功能
-        // var is_remember = false;
+        var is_remember = false;
+
+
     </script>
 </head>
 <body class="index">
     <!-- 顶部开始 -->
     <div class="container">
-        <div class="logo">
-            <a href="./index.html">驰骋 <font color="red">BPM</font></a>
-        </div>
+
         <div class="left_open">
             <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
         </div>
+            
+        <div class="logo">
+            <a href="http://ccflow.org/from=ccbpm" target="_blank">驰骋 <font color="red">BPM</font></a>
+        </div>
 
-        <ul class="layui-nav left fast-add" lay-filter="">
-            <li class="layui-nav-item">
-                <a href="javascript:;">流程树</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">表单树</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">系统维护</a>
-            </li>
-        </ul>
-        <ul class="layui-nav right" lay-filter="">
-            <li class="layui-nav-item">
-                <a href="javascript:;">admin</a>
-                <dl class="layui-nav-child">
-                    <!-- 二级菜单 -->
-                    <dd>
-                        <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a>
-                    </dd>
-                    <dd>
-                        <a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a>
-                    </dd>
-                    <dd>
-                        <a href="./login.html">退出</a>
-                    </dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item to-index">
-                <a href="/">前台首页</a>
-            </li>
-        </ul>
     </div>
     <!-- 顶部结束 -->
+
+
     <!-- 中部开始 -->
     <!-- 左侧菜单开始 -->
     <div class="left-nav">
@@ -86,7 +61,7 @@
                         <li>
                             <a onclick="xadmin.add_tab('统计页面','welcome1.html')">
                                 <i class="iconfont">&#xe6a7;</i>
-                                <cite>统计页面</cite>
+                                <cite>统计页面9999999999999999999999999999</cite>
                             </a>
                         </li>
                         <li>
@@ -126,8 +101,8 @@
                 </li>
                 <li>
                     <a href="javascript:;">
-                        <i class="iconfont left-nav-li" lay-tips="流程树">&#xe723;</i>
-                        <cite>订单管理</cite>
+                        <i class="iconfont left-nav-li" lay-tips="表单树">&#xe723;</i>
+                        <cite>表单树</cite>
                         <i class="iconfont nav_right">&#xe697;</i>
                     </a>
                     <ul class="sub-menu">
@@ -145,13 +120,12 @@
                         </li>
                     </ul>
                 </li>
-                 
+
             </ul>
         </div>
     </div>
     <!-- <div class="x-slide_left"></div> -->
     <!-- 左侧菜单结束 -->
-
     <!-- 右侧主体开始 -->
     <div class="page-content">
         <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
@@ -169,18 +143,24 @@
             </div>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <iframe src='./welcome.html' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                    <iframe src='./welcome.html' id="welcome" frameborder="0" scrolling="yes" class="x-iframe"></iframe>
                 </div>
             </div>
             <div id="tab_show"></div>
+
         </div>
+
+        <ul class="layui-tab-title">
+            <li class="home">
+                <i class="layui-icon">&#xe68e;</i>我的桌面
+            </li>
+        </ul>
     </div>
     <div class="page-content-bg"></div>
     <style id="theme_style"></style>
     <!-- 右侧主体结束 -->
-
     <!-- 中部结束 -->
-    
+
 </body>
 
 </html>

@@ -38,11 +38,17 @@ $(function () {
     var msg = data.Msg;
     var content = null;
 
+    var wel = document.getElementById("welcome");
+
+    //if (runModelType == 0)
+    //    xadmin.add_tab('222','../../../DataUser/AppCoder/FlowDesignerWelcome.htm');
+    //else
+    //    xadmin.add_tab('222', '../../../DataUser/AppCoder/FlowDesignerWelcomeSimple.htm');
 
     if (runModelType == 0)
-        xadmin.add_tab('222','../../../DataUser/AppCoder/FlowDesignerWelcome.htm');
+        wel.src = '../../../DataUser/AppCoder/FlowDesignerWelcome.htm';
     else
-        xadmin.add_tab('222','../../../DataUser/AppCoder/FlowDesignerWelcomeSimple.htm');
+        wel.src = '../../../DataUser/AppCoder/FlowDesignerWelcomeSimple.htm';
 
     //$('#tabs').tabs('add', {
     //    title: '首页',
@@ -1238,7 +1244,7 @@ if (webUser.No == "") {
     alert("登录信息丢失, 请重新登录.");
     window.location.href = "./Login.htm";
 }
-    
+
 
 $(function () {
 

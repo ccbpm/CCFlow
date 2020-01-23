@@ -30,6 +30,13 @@
             var data = handler.DoMethodReturnJSON("FlowDesignerWelcome_Init");
             GenerFullAllDivVal(data);
 
+            //绑定- 流程发起数
+            data = handler.DoMethodReturnJSON("FlowDesignerWelcome_DataSet");
+
+            //里面有三个数据源, 分别绑定前三个chart.
+
+
+
             $("#Msg").html("");
         });
 
@@ -44,6 +51,7 @@
     <![endif]-->
 </head>
 <body>
+    <div id="Msg"></div>
     <div class="layui-fluid">
 
         <div class="layui-col-md12">
@@ -55,7 +63,7 @@
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>流程模版</h3>
                                 <p>
-                                    <cite id="FlowNum"> 33 </cite>
+                                    <cite id="FlowNum"> 0 </cite>
                                 </p>
                             </a>
                         </li>
@@ -63,7 +71,7 @@
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>节点数</h3>
                                 <p>
-                                    <cite id="NodeNum" >0</cite>
+                                    <cite id="NodeNum">0</cite>
                                 </p>
                             </a>
                         </li>
@@ -170,7 +178,7 @@
                 <div class="layui-card">
                     <div class="layui-card-header">流程发起数</div>
                     <div class="layui-card-body" style="min-height: 280px;">
-                        <div id="main1" class="layui-col-sm12" style="height: 300px;"></div>
+                        <div id="DTNY" class="layui-col-sm12" style="height: 300px;"></div>
 
                     </div>
                 </div>
@@ -179,7 +187,7 @@
                 <div class="layui-card">
                     <div class="layui-card-header">待办数量</div>
                     <div class="layui-card-body" style="min-height: 280px;">
-                        <div id="main2" class="layui-col-sm12" style="height: 300px;"></div>
+                        <div id="chartDeptNums" class="layui-col-sm12" style="height: 300px;"></div>
 
                     </div>
                 </div>
@@ -188,7 +196,7 @@
                 <div class="layui-card">
                     <div class="layui-card-header">流程实例类型分布</div>
                     <div class="layui-card-body" style="min-height: 280px;">
-                        <div id="main3" class="layui-col-sm12" style="height: 300px;"></div>
+                        <div id="chartFlowNums" class="layui-col-sm12" style="height: 300px;"></div>
 
                     </div>
                 </div>
@@ -212,7 +220,7 @@
                         <ul>
                             <li>驰骋工作流引擎研发与2003年，具有.net与java两个版本，它们代码结构、数据库结构、设计思想、功能组成、操作手册完全相同。流程表单模版两个版本完全通用。</li>
                             <li>CCFlow是.net版本的简称，由济南团队负责研发。JFlow是在java版本的简称，由深圳研发团队研发。两款产品核心代码向社会100%开源，十多年来，我们一直践行自己的诺言，努力提高产品质量，真心服务中国IT产业，成为了国内知名的老牌工作流引擎，在国内开源BPM领域稳坐第一位。</li>
-                            <li>驰骋工作流引擎操作简单、概念通俗易懂、操作手册完善（计:14万字）、代码注释完整、案例丰富翔实、单元测试覆盖面广。</li>
+                            <li>驰骋工作流引擎操作简单、概念通俗易懂、操作手册完善（计:20万字）、代码注释完整、案例丰富翔实、单元测试覆盖面广。</li>
                             <li>驰骋工作流引擎包含表单引擎与流程引擎两大部分，并且两块完美结合，协同高效工作。流程与表单界面可视化的设计，可配置程度高，适应于中国国情的多种场景的需要。</li>
                             <li>驰骋工作流引擎发展与2003年，历经十多年的发展，在国内拥有最广泛的研究群体与应用客户群，是大型集团企业IT部门、软件公司、研究院、高校研究与应用的产品。</li>
                             <li>驰骋工作流引擎不仅仅能够满足中小企业的需要，也能满足通信级用户的应用，先后在西门子、海南航空、中国船舶、山东省国土资源厅、华电国际、江苏测绘院、厦门证券、天津港、大连华信、北京软通动力、浙商银行、华夏银行、新疆天业集团、中航工业、中国航天等国内外大型企业政府单位应用。</li>
@@ -247,7 +255,7 @@
     <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main1'));
+        var myChart = echarts.init(document.getElementById('DTNY'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -281,7 +289,7 @@
         myChart.setOption(option);
 
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main2'));
+        var myChart = echarts.init(document.getElementById('chartDeptNums'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -338,7 +346,7 @@
 
 
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main3'));
+        var myChart = echarts.init(document.getElementById('chartFlowNums'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -349,7 +357,7 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                data: ['请假', '报销', '入职申请', '离职申请', '项目审批']
             },
             series: [
                 {
@@ -358,11 +366,11 @@
                     radius: '55%',
                     center: ['50%', '60%'],
                     data: [
-                        { value: 335, name: '直接访问' },
-                        { value: 310, name: '邮件营销' },
-                        { value: 234, name: '联盟广告' },
-                        { value: 135, name: '视频广告' },
-                        { value: 1548, name: '搜索引擎' }
+                        { value: 335, name: '请假' },
+                        { value: 310, name: '报销' },
+                        { value: 234, name: '入职申请' },
+                        { value: 135, name: '离职申请' },
+                        { value: 1548, name: '项目审批' }
                     ],
                     itemStyle: {
                         emphasis: {

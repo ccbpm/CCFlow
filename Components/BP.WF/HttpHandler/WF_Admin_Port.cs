@@ -18,8 +18,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_Port : DirectoryPageBase
     {
-
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -59,6 +57,16 @@ namespace BP.WF.HttpHandler
             return "";
         }
         #endregion xxx 界面方法.
+
+        /// <summary>
+        /// 获得流程树
+        /// </summary>
+        /// <returns></returns>
+        public string Default_GenerFlowTree()
+        {
+            WF_Admin_CCBPMDesigner en = new WF_Admin_CCBPMDesigner();
+            return en.GetFlowTreeTable2019();
+        }
 
     }
 }

@@ -798,7 +798,7 @@ namespace BP.WF.HttpHandler
                 {
                     myparas = str;
                 }
-                
+
             }
 
 
@@ -988,8 +988,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Entities_DoMethodReturnString()
         {
+
             //创建类实体.
-            BP.En.Entities ens = ClassFactory.GetEns(this.EnsName); // Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
+            BP.En.Entities ens = ClassFactory.GetEns(this.EnsName);
+            // Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
 
             string methodName = this.GetRequestVal("MethodName");
 
@@ -999,7 +1001,7 @@ namespace BP.WF.HttpHandler
                 return "err@没有找到类[" + this.EnsName + "]方法[" + methodName + "].";
 
             string paras = this.GetRequestVal("paras");
-            if ("un".Equals(paras) == true)
+            if ("un".Equals(paras) == true || "undefined".Equals(paras) == true)
                 paras = "";
 
             //执行该方法.
@@ -1010,6 +1012,7 @@ namespace BP.WF.HttpHandler
 
             string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
+
         }
         #endregion
 
@@ -1326,7 +1329,7 @@ namespace BP.WF.HttpHandler
             Map map = en.EnMapInTime;
 
             MapAttrs attrs = new MapAttrs(); ;
-           
+
 
             MapData md = new MapData();
             md.No = this.EnsName;
@@ -1394,7 +1397,7 @@ namespace BP.WF.HttpHandler
 
                 //获取查询的字段
                 string[] searchFields = map.SearchFields.Split('@');
-                foreach(String str in searchFields)
+                foreach (String str in searchFields)
                 {
                     if (DataType.IsNullOrEmpty(str) == true)
                         continue;
@@ -1415,23 +1418,23 @@ namespace BP.WF.HttpHandler
                         /* 第一次进来。 */
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field+",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field +"+'%'"));
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field +"||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
                         qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
                     qo.addAnd();
 
                     if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field +",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field+ "+'%'"));
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr +field+ "||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
                     qo.MyParas.Add(field, fieldValue);
-                    
+
 
                 }
-                if(idx!=0)
+                if (idx != 0)
                     qo.addRightBracket();
             }
             else
@@ -1500,7 +1503,7 @@ namespace BP.WF.HttpHandler
                     qo.addRightBracket();
 
                 }
-               
+
             }
 
             #endregion
@@ -1542,11 +1545,11 @@ namespace BP.WF.HttpHandler
                             qo.AddWhere(field, ">=", strVals[0]);
                         else
                         {
-                            qo.AddWhere(field, ">=", strVals[0], field+"1");
+                            qo.AddWhere(field, ">=", strVals[0], field + "1");
                             qo.addAnd();
-                            qo.AddWhere(field, "<=", strVals[1], field+"2");
+                            qo.AddWhere(field, "<=", strVals[1], field + "2");
                         }
-                            
+
                     }
                     else
                     {
@@ -1556,8 +1559,8 @@ namespace BP.WF.HttpHandler
                     qo.addRightBracket();
 
                 }
-                
-                   
+
+
             }
             #endregion
 
@@ -1875,7 +1878,7 @@ namespace BP.WF.HttpHandler
             else
             {
                 qo.AddHD();
-               
+
             }
             #endregion
 
@@ -1915,7 +1918,7 @@ namespace BP.WF.HttpHandler
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
 
-                   
+
                     if (isFirst == false)
                         qo.addAnd();
                     else
@@ -1935,7 +1938,7 @@ namespace BP.WF.HttpHandler
             {
                 if (attr.IsHidden)
                 {
-                    
+
                     if (isFirst == false)
                         qo.addAnd();
                     else
@@ -2121,7 +2124,7 @@ namespace BP.WF.HttpHandler
 
             if (pk == null)
                 return "err@错误pkval 没有值。";
-            
+
             en.PKVal = pk;
             en.Retrieve();
 
@@ -3142,7 +3145,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("IsAuthorize", "0");
             }
             Port.WFEmp emp = new Port.WFEmp(WebUser.No);
-            ht.Add("Theme",emp.GetParaString("Theme"));
+            ht.Add("Theme", emp.GetParaString("Theme"));
             return BP.Tools.Json.ToJson(ht);
         }
 
@@ -3961,7 +3964,7 @@ namespace BP.WF.HttpHandler
             {
                 where += "1=1";
             }
-           
+
 
 
             //其余查询条件
@@ -4019,7 +4022,7 @@ namespace BP.WF.HttpHandler
                 where = where.Substring(0, where.Length - " AND ".Length);
                 whereOfLJ = whereOfLJ.Substring(0, whereOfLJ.Length - " AND ".Length);
             }
-           
+
 
             #endregion
 
@@ -4379,7 +4382,7 @@ namespace BP.WF.HttpHandler
 
 
             }
- 
+
             return BP.DA.DataTableConvertJson.DataTable2Json(ds.Tables["MainTable"], int.Parse(ds.Tables["DataCount"].Rows[0][0].ToString()));
             //return BP.Tools.Json.ToJson(ds);
         }

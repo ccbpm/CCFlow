@@ -3,10 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <title>演示帮助</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
 
     <fieldset>
+        <legend> 前后调用的API </legend>
+        <ul>
+            <li>前台调用的API /WF/CCBill/CCBill.js </li>
+            <li>后台调用的API /WF/CCBill/CCBillAdmin.js </li>
+            <li>说明都在js文档里.</li>
+        </ul>
+
         <legend>如何部署？</legend>
         <ul>
             <li>ccform分为独立部署与代码集成模式部署两类.</li>
@@ -14,10 +23,7 @@
             <li>代码集成部署: 就是把ccform的代码与您框架的代码放在一起工作. 这种模式就是把ccform做为一个中间件植入到您的开发架构作为一个模块独立工作使用.</li>
             <li>不管哪种模式，首先都需要统一组织结构，统一权限。如何实现ccform的组织结构集成请参考<a href=''>ccform的组织结构集成</a></li>
         </ul>
-    </fieldset>
 
-
-    <fieldset>
         <legend> 独立部署模式 </legend>
         <ul>
             <li>这种模式简洁，清爽，两个系统互不干扰，系统之间的交互通过参数与接口协同工作. </li>
@@ -29,9 +35,7 @@
             <li>新建一个单据: http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&UserNo=zhangsan&SID=xxxxx </li>
             <li>打开一个单据: http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&OID=123&UserNo=zhangsan&SID=xxxxx </li>
         </ul>
-    </fieldset>
 
-    <fieldset>
         <legend> 代码集成部署 </legend>
         <ul>
             <li>这种模式需要把ccform的前后端代码与您的前后端代码放在一起工作,这种模式下有两个框架在一起工作,在开发的时候注意如下事项. </li>
@@ -48,7 +52,6 @@
             <li>打开一个单据: http://127.0.0.1/jflow-web/WF/CCBill/Port.htm?DoWhat=NewBill&FrmID=myFrmID&OID=123&UserNo=zhangsan&SID=xxxxx </li>
         </ul>
     </fieldset>
-
 
 </body>
 </html>

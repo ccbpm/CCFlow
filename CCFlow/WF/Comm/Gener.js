@@ -538,7 +538,6 @@ function GenerFullAllDivVal(data) {
         var val = json[attr]; //值
 
         var div = document.getElementById(attr);
-
         if (div != null) {
             div.innerHTML = val;
             continue;
@@ -910,7 +909,7 @@ var Entity = (function () {
                 params = getParams1(self);
 
             var result = "";
-           
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -958,7 +957,7 @@ var Entity = (function () {
                 params = getParams1(self);
 
             var result = "";
-           
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1003,7 +1002,7 @@ var Entity = (function () {
             var self = this;
             var params = getParams(self);
             var result;
-           
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1040,7 +1039,7 @@ var Entity = (function () {
             var self = this;
             var params = getParams(self);
             var result;
-            
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1077,7 +1076,7 @@ var Entity = (function () {
 
 
             var result;
-           
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1269,7 +1268,7 @@ var Entity = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var url = dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + pkavl;
-                        ThrowMakeErrInfo("Entity_RetrieveFromDBSources-" + self.enName + " pkval=" + pkavl, textStatus, url);
+                    ThrowMakeErrInfo("Entity_RetrieveFromDBSources-" + self.enName + " pkval=" + pkavl, textStatus, url);
 
                     //alert(JSON.stringify(XMLHttpRequest));
                     //result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
@@ -1352,8 +1351,8 @@ var Entity = (function () {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    var url = dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName="+ self.enName + "&PKVal="+ pkval+ "&MethodName=" + methodName + "&t=" + new Date().getTime();
-                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus,url);
+                    var url = dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime();
+                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus, url);
 
                     //    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     //  alert(string);
@@ -2264,7 +2263,7 @@ var HttpHandler = (function () {
             var self = this;
             var jsonString;
 
-           
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -2280,7 +2279,7 @@ var HttpHandler = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
-                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus,url);
+                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
                 }
             });
 
@@ -2373,7 +2372,7 @@ var WebUser = function () {
         dataType: 'html',
         success: function (data) {
 
-            if (data.indexOf("err@") != -1 ) {
+            if (data.indexOf("err@") != -1) {
                 if (data.indexOf('登录信息丢失') != -1) {
                     alert("登录信息丢失，请重新登录。");
                 } else {
@@ -2384,24 +2383,24 @@ var WebUser = function () {
 
             try {
                 webUserJsonString = JSON.parse(data);
-                
+
             } catch (e) {
                 alert("json解析错误: " + data);
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             var url = dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime();
-            ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus,url);
+            ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus, url);
         }
     });
     var self = this;
     $.each(webUserJsonString, function (n, o) {
         self[n] = o;
     });
-   
+
 };
 
-function ThrowMakeErrInfo(funcName, obj,url) {
+function ThrowMakeErrInfo(funcName, obj, url) {
 
     var msg = "1. " + funcName + " err@系统发生异常.";
     msg += "\t\n2.检查请求的URL连接是否错误：" + url;

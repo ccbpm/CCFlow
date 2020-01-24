@@ -23,9 +23,11 @@
                             <input type='text' placeholder="请输入关键词" id='TB_Key' class="form-control" />
                         </div>
                         <button class="btn btn-success" type="button" onclick="javascript:SearchKey();">
-                            <i class="fa fa-search"></i>查询</button>
+                            <i class="fa fa-search"></i>查询
+                        </button>
                         <button class="btn btn-success" type="button" onclick="javascript:New();">
-                            <i class="fa fa-new"></i>新建</button>
+                            <i class="fa fa-new"></i>新建
+                        </button>
                     </div>
                 </div>
             </div>
@@ -142,7 +144,7 @@
         function OpenFrm(frmID) {
 
             var url = "SearchBill.htm?FrmID=" + frmID;
-             
+
             WinOpenFull(url);
         }
 
@@ -153,7 +155,7 @@
                 return "";
 
             if (BillState == 2 && isCanDo == true)
-                return "";
+                return " - ";
 
             if (BillState == 3)
                 return "<a href=''>轨迹</a>";
@@ -252,7 +254,7 @@
             if (BillState == 3)
                 icon = "../Img/BillState/Complete.png";  //已经完成.
             else if (BillState == 2)
-                icon = "../Img/BillState/Runing.png"; //运行中. 
+                icon = "../Img/BillState/Runing.png"; //运行中.
             else if (BillState == 5)
                 icon = "../Img/BillState/ReturnSta.png"; //退回.
             else

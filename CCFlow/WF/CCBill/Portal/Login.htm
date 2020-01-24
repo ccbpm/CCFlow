@@ -43,46 +43,46 @@
                 // return;
             }
 
-            $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
+           // $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录/自动升级做准备.</font>");
 
-            document.getElementById("Btn_Login").disabled = 'disabled';
+           // document.getElementById("Btn_Login").disabled = 'disabled';
             // document.getElementById("Btn_LoginSimple").disabled = 'disabled';
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-            var data = handler.DoMethodReturnJSON("Login_InitInfo");
-            document.title = data.SysName;
+            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            //var data = handler.DoMethodReturnJSON("Login_InitInfo");
+            //document.title = data.SysName;
 
-            //执行更新检查..
-            var doType = GetQueryString("DoType");
-            if (doType == null)
-                doType = "Login_Init";
-            handler.AddUrlData();
-            data = handler.DoMethodReturnString(doType);
+            ////执行更新检查..
+            //var doType = GetQueryString("DoType");
+            //if (doType == null)
+            //    doType = "Login_Init";
+            //handler.AddUrlData();
+            //data = handler.DoMethodReturnString(doType);
 
-            if (data.indexOf('err@') == 0) {
+            //if (data.indexOf('err@') == 0) {
 
-                $("#Msg").html("<font color=red>" + data + ". 也许是: java/.net/phtyon 运行环境没有准备好导致的. 请确认运行环境</font>");
-                return;
-            }
+            //    $("#Msg").html("<font color=red>" + data + ". 也许是: java/.net/phtyon 运行环境没有准备好导致的. 请确认运行环境</font>");
+            //    return;
+            //}
 
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
+            //if (data.indexOf('url@') == 0) {
+            //    var url = data.replace('url@', '');
+            //    window.location.href = url;
+            //    return;
+            //}
 
-            document.getElementById("Btn_Login").disabled = false;
-            // document.getElementById("Btn_LoginSimple").disabled = false;
+            //document.getElementById("Btn_Login").disabled = false;
+            //// document.getElementById("Btn_LoginSimple").disabled = false;
 
-            $("body").keydown(function () {
-                if (event.keyCode == 13) {
-                    event.cancelBubble = true;
-                    event.returnValue = false;
-                    Login();
-                }
-            });
+            //$("body").keydown(function () {
+            //    if (event.keyCode == 13) {
+            //        event.cancelBubble = true;
+            //        event.returnValue = false;
+            //        Login();
+            //    }
+            //});
 
-            $("#Msg").html("<font color=green>" + data + "</font>");
+            //$("#Msg").html("<font color=green>" + data + "</font>");
 
         });
 

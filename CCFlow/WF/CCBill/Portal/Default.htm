@@ -30,6 +30,15 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
+
+            var webUser = new WebUser();
+            if (webUser.No == null)
+            {
+                window.location.href = "login.htm";
+                return;
+            }
+
+
             //树目录.
             var dirs = new Entities("BP.Sys.FrmTrees");
             dirs.RetrieveAll();

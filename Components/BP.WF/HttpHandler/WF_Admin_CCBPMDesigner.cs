@@ -21,7 +21,10 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
-
+        /// <summary>
+        /// 生成流程树
+        /// </summary>
+        /// <returns></returns>
         public string GetFlowTreeTable2019()
         {
             string sql = @"SELECT * FROM (SELECT 'F'+No as No,'F'+ParentNo ParentNo, Name, IDX, 1 IsParent,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
@@ -85,7 +88,6 @@ namespace BP.WF.HttpHandler
                 if (drs.Length > 0 && !Equals(drs[0]["PARENTNO"], "F0"))
                     drs[0]["ParentNo"] = "F0";
             }
-
 
             if (WebUser.No != "admin")
             {

@@ -114,11 +114,6 @@ namespace BP.WF.HttpHandler
         public string GetRequestVal(string key)
         {
             string val = HttpContextHelper.RequestParams(key);
-            if (val == null)
-            {
-                val = HttpContextHelper.Request.Form[key];
-                return val;
-            }
             return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }
         /// <summary>

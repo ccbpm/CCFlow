@@ -135,7 +135,8 @@
             var data = handler.DoMethodReturnString("FlowSearch_Init");
 
             if (data.indexOf("err@") != -1) {
-                alert("错误", data, "icon-error");
+                alert( data);
+                //alert("错误", data, "icon-error");
                 return;
             }
 
@@ -605,7 +606,8 @@
             handler.AddPara("pageIdx", pageIdx);
             var data = handler.DoMethodReturnString("FlowSearch_Done");
             if (data.indexOf("err@") != -1) {
-                alert("错误", data, "icon-error");
+                alert( data);
+                //alert("错误", data, "icon-error");
                 return;
             }
 
@@ -715,7 +717,8 @@
             handler.AddPara("pageIdx", param.pageIdx);
             var data = handler.DoMethodReturnString("FlowSearch_Done");
             if (data.indexOf("err@") != -1) {
-                alert("错误", data, "icon-error");
+                alert( data);
+               // alert("错误", data, "icon-error");
                 return;
             }
 

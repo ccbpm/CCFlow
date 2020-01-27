@@ -23,6 +23,15 @@
 
         });
 
+        //返回类型.
+        function GenerRptMark()
+        {
+            var rptNo = unescape(GetQueryString("RptNo"));
+            var flowNo = unescape(GetQueryString("FK_Flow"));
+            var rptMark = rptNo.substr(('ND' + parseInt(flowNo) + 'Rpt').length);
+            return rptMark;
+        }
+
         function InitPage() {
 
             var rptNo = unescape(GetQueryString("RptNo"));
@@ -42,7 +51,7 @@
             var Sys_MapAttrOfAll = jsData["Sys_MapAttrOfAll"]; //所有的列.
             var Sys_MapAttrOfSelected = jsData["Sys_MapAttrOfSelected"]; //已经选择的列.
             var Sys_MapAttrOfSystem = jsData["Sys_MapAttrOfSystem"]; //系统字段.
-            var rptMark = rptNo.substr(('ND' + parseInt(flowNo) + 'Rpt').length);
+            var rptMark = GenerRptMark(); //rptNo.substr(('ND' + parseInt(flowNo) + 'Rpt').length);
             var dis = ' disabled="disabled"';
             var tsysAppend = "",
                         tallAppend = "";
@@ -56,13 +65,17 @@
                     tsysAppend += "<tr>";
                 }
 
-                tsysAppend += "<td nowrap style='width: 33%'>";
+                tsysAppend += "<td nowrap style='width:33%'>";
                 var flag = false;
                 var disstr = '';
 
                 switch (rptMark) {
                     case "My":
                         if (item.KeyOfEn == "FlowStarter") {
+                            flag = true;
+                            disstr = dis;
+                        }
+                        if (item.KeyOfEn == "FlowEmps") {
                             flag = true;
                             disstr = dis;
                         }
@@ -74,7 +87,6 @@
                         }
                         break;
                     case "MyJoin":
-
                         break;
                 }
 
@@ -137,6 +149,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
             handler.AddPara("RptNo", GetQueryString("RptNo"));
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+
             handler.AddPara("Fields", checkBoxIDs);
 
             var data = handler.DoMethodReturnString("S2ColsChose_Save");

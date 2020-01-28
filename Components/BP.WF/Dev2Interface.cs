@@ -8628,6 +8628,8 @@ namespace BP.WF
 
                 if (htWork != null)
                 {
+                    Attrs attrs = wk.EnMap.Attrs;
+
                     foreach (string str in htWork.Keys)
                     {
                         switch (str)
@@ -8648,7 +8650,27 @@ namespace BP.WF
 
                         if (wk.Row.ContainsKey(str))
                         {
-                            wk.SetValByKey(str, htWork[str]);
+                           
+                            if (nd.IsStartNode == true)
+                            {
+                                Attr attr = attrs.GetAttrByKey(str);
+                                string defVal = attrs.GetAttrByKey(str).DefaultValOfReal;
+                                if (attr.UIIsReadonly == true && defVal != null && defVal.Equals("@RDT") == true)
+                                {
+                                    if (attr.MyDataType == DataType.AppDate)
+                                        wk.SetValByKey(attr.Key, DataType.CurrentData);
+
+                                    if (attr.MyDataType == DataType.AppDateTime)
+                                        wk.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                }
+                                else
+                                {
+                                    wk.SetValByKey(str, htWork[str]);
+                                }
+                            }
+                              
+                            else
+                              wk.SetValByKey(str, htWork[str]);
                         }
                         else
                         {

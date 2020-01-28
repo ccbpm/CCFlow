@@ -220,6 +220,12 @@
                             moveUpDept(treeNode, item);
                         } else if (item == "moveDownDept") {
                             moveDownDept(treeNode, item);
+                        }else if (item == "edit") {
+                            Edit(treeNode);
+                        }else if (item == "newSameLevel") {
+                            NewSameLevel(treeNode);
+                        }else if (item == "newNextLevel") {
+                            NewNextLevel(treeNode);
                         }
 
                     }
@@ -241,7 +247,50 @@
             var data = dept.DoMethodReturnString("DoDown");
             window.location.reload();
         }
+        //增加同级部门
+        function NewSameLevel(treeNode) {
 
+            var val = prompt("请输入部门名称", "");
+            if (val == null || val == '') {
+                return false;
+            }
+
+            var dept = new Entity("BP.GPM.Dept");
+            dept.Name = val;
+            dept.ParentNo = treeNode.pid;
+            dept.Insert();
+
+            window.location.reload();
+        }
+
+        //增加下级部门
+        function NewNextLevel(treeNode) {
+             var val = prompt("请输入部门名称", "");
+            if (val == null || val == '') {
+                return false;
+            }
+
+            var dept = new Entity("BP.GPM.Dept");
+            dept.Name = val;
+            dept.ParentNo = treeNode.id;
+            dept.Insert();
+
+            window.location.reload();
+        }
+        //编辑部门
+        function Edit(treeNode) {
+             var val = prompt("请输入部门名称", treeNode.name);
+            if (val == null || val == '') {
+                //alert('必须输入名称.');
+                return false;
+            }
+
+            var dept = new Entity("BP.GPM.Dept",treeNode.id);
+            dept.Name = val;
+            dept.Update();
+
+            window.location.reload();
+        }
 
         //初始化
         $(function () {
@@ -484,6 +533,9 @@
         <ul id="menu" class="small-menu">
             <li class="moveUpDept"><a href="#">上移</a></li>
             <li class="moveDownDept"><a href="#">下移</a></li>
+            <li class="newSameLevel"><a href="#">增加同级</a></li>
+            <li class="newNextLevel"><a href="#">增加子级</a></li>
+            <li class="edit"><a href="#">编辑</a></li>
             <!-- <li class="copy"><a href="#">删除</a></li>
              <li class="small-menu-separator"></li>
              <li class="delete"><a href="#"><span class="icon icon-edit"></span>Zoom Out</a></li>-->

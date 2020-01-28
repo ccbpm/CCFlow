@@ -448,6 +448,9 @@
             var en = new Entity("BP.GPM.Emp", no);
             en.Delete();
 
+            //取消人员部门岗位管理关系
+            var sql = "delete from Port_DeptEmpStation where FK_Emp='"+ no +"' and FK_Dept='"+ deptNo + "'";
+            DBAccess.RunSQL(sql);
             //   var en = new Entity("BP.GPM.DeptEmpStation");
             //  en.Delete("FK_Dept",);
             // SELECT * FROM Port_DeptEmpStation WHERE FK_Dept+'_'+FK_Emp not in (select MyPK FROM PORT_DEPTEMP)

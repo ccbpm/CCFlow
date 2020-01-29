@@ -2406,7 +2406,16 @@ function ThrowMakeErrInfo(funcName, obj, url) {
     msg += "\t\n2.检查请求的URL连接是否错误：" + url;
     msg += "\t\n3.估计是数据库连接错误或者是系统环境问题. ";
     msg += "\t\n4.技术信息:status: " + obj.status + " readyState: " + obj.readyState;
-    msg += "\t\n5 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
+    msg += "\t\n5.您要打开执行的handler查看错误吗？ ";
+    // msg += "\t\n5 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
+
+    if (url != null) {
+        if (window.confirm(msg) == true) {
+            WinOpen(url);
+            return;
+        }
+        return;
+    }
     alert(msg);
 }
 

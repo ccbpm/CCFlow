@@ -256,7 +256,6 @@ namespace BP.WF.Port.SubInc
                 //map.AddDDLEntities(EmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), true);
                 //map.AddDDLEntities(EmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), true);
                 //map.AddDDLEntities(EmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), true);
-                map.AddTBMyNum();
 
 
                 RefMethod rm = new RefMethod();

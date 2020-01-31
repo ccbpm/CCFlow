@@ -749,8 +749,6 @@ namespace BP.WF.Data
 
                 map.AddDDLEntities(GenerWorkFlowViewAttr.FK_NY, null, "月份", new GenerWorkFlowViewNYs(), false);
 
-                map.AddTBMyNum();
-
                 //map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Dept);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);

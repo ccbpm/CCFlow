@@ -731,7 +731,7 @@ namespace BP.WF.Data
                 map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
                 map.AddTBStringDoc(MyDeptFlowAttr.FlowNote, null, "备注", true, false,true);
-                map.AddTBMyNum();
+               
 
                 //工作ID
                 map.AddTBIntPK(MyDeptFlowAttr.WorkID, 0, "工作ID", true, true);

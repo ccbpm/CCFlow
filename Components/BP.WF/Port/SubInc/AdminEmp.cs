@@ -259,7 +259,6 @@ namespace BP.WF.Port.SubInc
                 map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), false);
                 map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), false);
                  
-                map.AddTBMyNum();
 
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);

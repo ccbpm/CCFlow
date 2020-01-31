@@ -2632,14 +2632,6 @@ namespace BP.En
         {
             this.AddTBIntPKOID("OID", "OID");
         }
-        public void AddTBMyNum(string desc)
-        {
-            this.AddTBInt("MyNum", 1, desc, true, true);
-        }
-        public void AddTBMyNum()
-        {
-            this.AddTBInt("MyNum", 1, "个数", true, true);
-        }
         /// <summary>
         /// 增加  AtParas字段.
         /// </summary>

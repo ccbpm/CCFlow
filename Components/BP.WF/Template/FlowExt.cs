@@ -842,6 +842,14 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "图形分析";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.ClassMethodName = this.ToString() + ".DoDataManger_DataCharts()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "流程监控";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "综合查询";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Search()";
@@ -856,6 +864,10 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
+
+             
+
+                
 
                 //rm = new RefMethod();
                 //rm.Title = "实例增长分析";

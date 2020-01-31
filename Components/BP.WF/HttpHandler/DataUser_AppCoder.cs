@@ -115,13 +115,13 @@ namespace BP.WF.HttpHandler
             //逾期的 - 流程分组.
             sql = "SELECT FlowName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
             DataTable OverTime = DBAccess.RunSQLReturnTable(sql);
-            flowNums.TableName = "OverTime";
+            OverTime.TableName = "OverTime";
             ds.Tables.Add(OverTime);
 
             //逾期的 - 部门分组.
             sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY DeptName";
             DataTable OverTimeDept = DBAccess.RunSQLReturnTable(sql);
-            flowNums.TableName = "OverTimeDept";
+            OverTimeDept.TableName = "OverTimeDept";
             ds.Tables.Add(OverTimeDept);
             #endregion 逾期。
 

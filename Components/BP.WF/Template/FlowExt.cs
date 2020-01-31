@@ -1020,6 +1020,12 @@ namespace BP.WF.Template
 
         #region 流程监控.
 
+        public string DoDataManger_DataCharts()
+        {
+            return "../../Admin/AttrFlow/DataCharts.htm?FK_Flow=" + this.No;
+           // return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
+        }
+        
 
         public string DoDataManger_Search()
         {

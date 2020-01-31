@@ -329,14 +329,14 @@ function Login2App() {
 
     //表单引擎.
     var url = window.location.href;
-    if (url.indexOf("DefaultFrm.htm") != 0) {
+    if (url.indexOf("DefaultFrm.htm") != -1) {
         window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
         return;
     }
 
     //简洁版.
-    if (url.indexOf("DefaultSimple.htm") != 0) {
-        window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
+    if (url.indexOf("DefaultSimple.htm") != -1) {
+        window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
         return;
     }
 

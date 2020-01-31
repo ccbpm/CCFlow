@@ -3121,7 +3121,7 @@ namespace BP.WF.HttpHandler
 
                 ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
                 ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
-                ht.Add("IsAdmin", false);
+                ht.Add("IsAdmin", 0);
                 return BP.Tools.Json.ToJson(ht);
             }
 
@@ -3132,7 +3132,7 @@ namespace BP.WF.HttpHandler
             ht.Add("FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
             ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
-            ht.Add("IsAdmin", WebUser.IsAdmin);
+            ht.Add("IsAdmin", WebUser.IsAdmin==true?1:0);
             ht.Add("SID", WebUser.SID);
 
             //检查是否是授权状态.

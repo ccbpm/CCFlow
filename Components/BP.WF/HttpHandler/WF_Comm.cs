@@ -1145,24 +1145,29 @@ namespace BP.WF.HttpHandler
             int i = 1;
             string html = "";
 
-            //DataTable dt = new DataTable();
-            //dt.Columns.Add("No", typeof(string));
-            //dt.Columns.Add("Name", typeof(string));
-            //dt.Columns.Add("Icon", typeof(string));
-            //dt.Columns.Add("Note", typeof(string));
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Icon", typeof(string));
+            dt.Columns.Add("Note", typeof(string));
 
+            DataRow dr;
             foreach (BP.En.Method en in al)
             {
                 if (en.IsCanDo == false
                     || en.IsVisable == false)
                     continue;
 
-                //DataRow dr = dt.NewRow();
+                 dr = dt.NewRow();
+                dr["Name"] = en.ToString();
+                dr["Title"] = en.Title;
+                dr["Icon"] = en.Icon;
+                dr["Note"] = en.Help;
+                dt.Rows.Add(dr);
 
-                html += "<li><a href=\"javascript:ShowIt('" + en.ToString() + "');\"  >" + en.GetIcon("/") + en.Title + "</a><br><font size=2 color=Green>" + en.Help + "</font><br><br></li>";
             }
 
-            return html;
+            return BP.Tools.Json.ToJson(dt);
         }
         #endregion
 

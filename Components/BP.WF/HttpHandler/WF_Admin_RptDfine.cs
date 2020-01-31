@@ -135,6 +135,13 @@ namespace BP.WF.HttpHandler
             //保存的字段,从外面传递过来的值. 用逗号隔开的: 比如:  ,Name,Tel,Addr,
             string fields = "," + this.GetRequestVal("Fields") + ",";
 
+            //增加上必要的字段.
+            if (rptNo.Contains("My") == true && fields.Contains(",FlowEmps,") == false)
+                fields += "FlowEmps,";
+
+            if (rptNo.Contains("MyDept") == true && fields.Contains(",FK_Dept,") == false)
+                fields += "FK_Dept,";
+
             //构造一个空的集合.
             MapAttrs mrattrsOfRpt = new MapAttrs();
             mrattrsOfRpt.Delete(MapAttrAttr.FK_MapData, rptNo);
@@ -146,6 +153,7 @@ namespace BP.WF.HttpHandler
             foreach (MapAttr attr in allAttrs)
             {
                 attr.UIVisible = true;
+
                 #region 处理特殊字段.
                 if (attr.KeyOfEn == "FK_NY")
                 {

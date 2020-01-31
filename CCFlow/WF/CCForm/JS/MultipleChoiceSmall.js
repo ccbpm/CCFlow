@@ -36,8 +36,12 @@ function MultipleChoiceSmall(mapExt, mapAttr, tbID, rowIndex, OID) {
             //data = enums;
             break;
         case 3:
-            var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
-            data = en.DoMethodReturnJSON("GenerDataOfJson");
+            data = frmData[mapExt.Tag3];
+            if (data == undefined) {
+                var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
+                data = en.DoMethodReturnJSON("GenerDataOfJson");
+                frmData[mapExt.Tag3] = data;
+            }
             break;
         case 4:
             var tag4SQL = mapExt.Tag4;

@@ -340,7 +340,7 @@ namespace BP.Demo.BPFramework
                 map.SearchFieldsOfNum = "@年龄=Age";
 
                
-                //设置SearchBS.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
+                //设置Search.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
                 map.AddSearchAttr(StudentAttr.XB,4000);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
 

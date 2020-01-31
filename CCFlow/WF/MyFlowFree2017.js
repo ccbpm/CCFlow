@@ -644,7 +644,7 @@ function figure_Template_HyperLink(frmLin) {
         SID = "";
     if (url.indexOf("?") == -1)
         url = url + "?1=1";
-    if (url.indexOf("SearchBS.htm") != -1)
+    if (url.indexOf("Search.htm") != -1)
         url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
     else
         url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;

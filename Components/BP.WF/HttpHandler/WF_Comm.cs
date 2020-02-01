@@ -4020,9 +4020,9 @@ namespace BP.WF.HttpHandler
                     {
                         continue;
                     }
-                    where += " " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                    where += "  and " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
                     if (str != "FK_NY")
-                        whereOfLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                        whereOfLJ += "  and " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
 
                     myps.Add(str, val);
 

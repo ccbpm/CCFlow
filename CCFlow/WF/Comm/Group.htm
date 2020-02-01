@@ -236,7 +236,7 @@
                 html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
                 html += "</td>";
                 html += "<td style='font-size:12px;text-align:right'>";
-                html += "<select style='width:80%' class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<select style='width:80%' class='form-control' name='DDL_Aly_" + analyAtts[i].Field + "' ID='DDL_Aly_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 html += "</td>";
                 html += "</tr>";
                 $("#AnalyGroup").append(html);
@@ -266,7 +266,7 @@
             $('input[name="groupAnaly"]:checked').each(function () {
                 var key = $(this).val();
                 //获取下拉框的值
-                var defVal = $("#DDL_" + key).val();
+                var defVal = $("#DDL_Aly_" + key).val();
 
                 stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中
             });

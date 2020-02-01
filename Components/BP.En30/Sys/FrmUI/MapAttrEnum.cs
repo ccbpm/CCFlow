@@ -56,6 +56,20 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.UIBindKey, value);
             }
         }
+        /// <summary>
+        /// 控件类型
+        /// </summary>
+        public UIContralType UIContralType
+        {
+            get
+            {
+                return (UIContralType)this.GetValIntByKey(MapAttrAttr.UIContralType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -107,12 +121,13 @@ namespace BP.Sys.FrmUI
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
+                    case DBType.MySQL:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name ";
                         break;
                     case DBType.Oracle:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM DUAL ";
                         break;
-                    case DBType.MySQL:
+                    
                     case DBType.PostgreSQL:
                     default:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
@@ -224,6 +239,11 @@ namespace BP.Sys.FrmUI
 
             //单选按钮的展现方式.
             attr.RBShowModel = this.GetValIntByKey("RBShowModel");
+
+            if (this.UIContralType == UIContralType.DDL || this.UIContralType == UIContralType.RadioBtn)
+                attr.MyDataType = DataType.AppInt;
+            else
+                attr.MyDataType = DataType.AppString;
 
             //执行保存.
             attr.Save();

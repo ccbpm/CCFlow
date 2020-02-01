@@ -2587,8 +2587,9 @@ namespace BP.WF.HttpHandler
                 #endregion  查询出来实体数据.
 
                 #region 保存新加行.
+                string newPKVal = this.GetRequestVal("NewPKVal");
                 //没有新增行
-                if (this.GetRequestValBoolen("InsertFlag") == false)
+                if (this.GetRequestValBoolen("InsertFlag") == false || DataType.IsNullOrEmpty(newPKVal) == true )
                     return "保存成功.";
 
                 string valValue = "";
@@ -2602,28 +2603,28 @@ namespace BP.WF.HttpHandler
                         if (attr.UIIsReadonly == false)
                             continue;
 
-                        valValue = this.GetValFromFrmByKey("TB_" + 0 + "_" + attr.Key, null);
+                        valValue = this.GetValFromFrmByKey("TB_" + newPKVal + "_" + attr.Key, null);
                         en.SetValByKey(attr.Key, valValue);
                         continue;
                     }
 
                     if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
                     {
-                        valValue = this.GetValFromFrmByKey("TB_" + 0 + "_" + attr.Key);
+                        valValue = this.GetValFromFrmByKey("TB_" + newPKVal + "_" + attr.Key);
                         en.SetValByKey(attr.Key, valValue);
                         continue;
                     }
 
                     if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
                     {
-                        valValue = this.GetValFromFrmByKey("DDL_" + 0 + "_" + attr.Key);
+                        valValue = this.GetValFromFrmByKey("DDL_" + newPKVal + "_" + attr.Key);
                         en.SetValByKey(attr.Key, valValue);
                         continue;
                     }
 
                     if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
                     {
-                        valValue = this.GetValFromFrmByKey("CB_" + 0 + "_" + attr.Key, "-1");
+                        valValue = this.GetValFromFrmByKey("CB_" + newPKVal + "_" + attr.Key, "-1");
                         if (valValue == "-1")
                             en.SetValByKey(attr.Key, 0);
                         else
@@ -2652,7 +2653,7 @@ namespace BP.WF.HttpHandler
                 {
                     //异常处理..
                     Log.DebugWriteInfo(ex.Message);
-                    //msg += "<hr>" + ex.Message;
+                    return ex.Message;
                 }
 
 

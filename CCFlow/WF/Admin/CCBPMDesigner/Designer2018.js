@@ -1,5 +1,6 @@
 ﻿var flow = null;
 $(function () {
+
     var flowNo = GetQueryString("FK_Flow");
     flow = new Entity("BP.WF.Flow", flowNo);
 
@@ -294,6 +295,7 @@ $(function () {
                 $(".mymask").hide();
             },
             "cmSave": function (t) {
+
                 var processInfo = _canvas.getProcessInfo(); //连接信息
 
                 /*重要提示 start*/
@@ -510,125 +512,6 @@ $(function () {
 
 });
 
-function SaveFlow2018(_canvas) {
-
-    //获取所有节点信息.
-    try {
-
-        var nodes = new Entities("BP.WF.Template.NodeSimples");
-        nodes.Retrieve("FK_Flow", flowNo);
-
-        // 保存x,y位置.
-        var processInfo = _canvas.getProcessInfo(); //连接信息.
-        processInfo = JSON.parse(processInfo);
-
-        for (var nodeID in processInfo) {
-
-            var nodeIDStr = JSON.stringify(nodeID);
-
-            var nodeJSON = processInfo[nodeID];
-
-            for (var idx = 0; idx < nodes.length; idx++) {
-
-                var node = nodes[idx];
-                var myID = "\"" + node.NodeID + "\"";
-                if (myID != nodeIDStr)
-                    continue;
-
-                node = new Entity("BP.WF.Template.NodeSimple", node);
-                node.Y = nodeJSON.top;
-                node.X = nodeJSON.left;
-                node.Update();
-                break;
-            }
-        }
-
-        //删除原来的连接线.
-        DBAccess.RunSQL("DELETE FROM WF_Direction WHERE FK_Flow='" + flowNo + "' ");
-
-        //创建一个实体.
-        var dir = new Entity("BP.WF.Template.Direction");
-
-        //保存方向.
-        for (var nodeID in processInfo) {
-
-            //获得toNode.
-            var nodeJSON = processInfo[nodeID];
-            var strs = JSON.stringify(nodeJSON);
-
-            //获得toNode.
-            var toNodes = nodeJSON.process_to;
-            if (toNodes == "")
-                continue;
-
-            if (nodeID == undefined
-                || nodeID == null
-                || nodeID == "undefined"
-                || nodeID == 'undefined') {
-                continue;
-            }
-
-            for (var i = 0; i < toNodes.length; i++) {
-
-                var toNodeID = toNodes[i];
-
-                if (toNodeID == undefined
-                    || toNodeID == null
-                    || toNodeID == "undefined"
-                    || toNodeID == 'undefined') {
-
-                    var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
-                    alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');
-                    $("#Btn_Save").attr("disabled", false);
-                    $("#Btn_Save").html("保存");
-                    continue;
-                }
-
-                dir.FK_Flow = flowNo;
-                dir.Node = nodeID;
-                dir.ToNode = toNodeID;
-                dir.MyPK = dir.FK_Flow + "_" + dir.Node + "_" + dir.ToNode;
-                dir.DirType = 2;
-
-                try {
-                    dir.Insert();
-                } catch (e) {
-                }
-
-            }
-
-        }
-
-        //标签
-        var labNoteInfo = _canvas.getLabNoteInfo(); //标签信息.
-        labNoteInfo = JSON.parse(labNoteInfo);
-
-        for (var lab in labNoteInfo) {
-
-            var labJSON = labNoteInfo[lab];
-
-            var lb = new Entity("BP.WF.Template.LabNote", lab);
-            lb.Y = labJSON.top;
-            lb.X = labJSON.left;
-            lb.Update();
-        }
-
-        // 清除流程缓存，并修复数据.
-        var flow = new Entity("BP.WF.Flow", flowNo);
-        flow.DoMethodReturnString("DoCheck");
-
-    }
-    catch (e) {
-        alert(e);
-    }
-
-    //alert('保存成功!');
-
-    $("#Btn_Save").attr("disabled", false);
-    $("#Btn_Save").html("保存");
-    return;
-}
-
 ///保存方法
 function SaveFlow(_canvas) {
 
@@ -754,7 +637,7 @@ function saveNodeName(activeId) {
         mapData.Name = text;
         mapData.Update();
     }
-   
+
 
     //修改分组名称.
     var groups = new Entities("BP.Sys.GroupFields");

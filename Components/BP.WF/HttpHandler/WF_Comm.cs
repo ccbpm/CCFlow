@@ -3648,7 +3648,7 @@ namespace BP.WF.HttpHandler
             {
                 if (attr.IsPK || attr.IsNum == false)
                     continue;
-                if (attr.UIContralType == UIContralType.TB == false)
+                if (attr.UIContralType != UIContralType.TB )
                     continue;
                 if (attr.UIVisible == false)
                     continue;
@@ -3803,7 +3803,7 @@ namespace BP.WF.HttpHandler
                     dataType = attr.MyDataType;
                 }
 
-                if (this.GetRequestVal("DDL_" + paras[0]) == null)
+                if (this.GetRequestVal("DDL_Aly_" + paras[0]) == null)
                 {
                     ActiveAttr aa = (ActiveAttr)aas.GetEnByKey(ActiveAttrAttr.AttrKey, paras[0]);
                     if (aa == null)
@@ -4027,7 +4027,8 @@ namespace BP.WF.HttpHandler
                     myps.Add(str, val);
 
                 }
-                where = where.Substring(0, where.Length - " AND ".Length);
+                if(where.EndsWith(" AND ") ==true)
+                    where = where.Substring(0, where.Length - " AND ".Length);
                 whereOfLJ = whereOfLJ.Substring(0, whereOfLJ.Length - " AND ".Length);
             }
 

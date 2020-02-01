@@ -11,7 +11,12 @@
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
+          type="text/css" />
+    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
+          media="all" />
 
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -29,10 +34,11 @@
             height: 24px;
             background-color: rgba(255, 255, 255, 0.77);
         }
-        .form-control{
-            width:200px;
-            margin-right:15px;
-            display:inline;
+
+        .form-control {
+            width: 200px;
+            margin-right: 15px;
+            display: inline;
         }
     </style>
 
@@ -892,14 +898,14 @@
 </head>
 <body class="easyui-layout">
    <form  id="cc">
-        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:true" style="padding: 5px">
+        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:true" style="border:none">
             <div class="easyui-layout"  data-options="fit:true">
-                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 35px; background-color: #E0ECFF; line-height: 30px">
+                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 40px; background-color: #F5F5F6; line-height: 30px">
                      <a href="#" style="margin-bottom:5px; margin-left:10px;" class="btn btn-default btn-sm" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
                       <a href="#" style="margin-bottom:5px;margin-left:10px;" class="btn btn-default btn-sm" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
-                <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
-                    <div class="easyui-panel" title="显示内容" style=" Contentpadding: 5px; margin-bottom: 5px">
+                <div data-options="region:'west',title:'分组条件',split:false" style="padding: 5px; width: 250px;">
+                    <div class="fixed-table-header" title="显示内容">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
                     <div class="easyui-panel" title="分析项目" style="padding: 5px; margin-bottom: 5px">
@@ -931,7 +937,7 @@
                         </table>
                     </div>
                 </div>
-                <div id="Content" data-options="region:'center'" style="padding: 5px;"></div>
+                <div id="Content" data-options="region:'center'" style="padding: 5px; "></div>
            </div>
         </div>
     </form>

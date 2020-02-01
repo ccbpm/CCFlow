@@ -84,45 +84,45 @@ namespace BP.WF.HttpHandler
             #region  实例分析
             //月份分组.
             string sql = "SELECT FK_NY, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 GROUP BY FK_NY ";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "DTNY";
-            ds.Tables.Add(dt);
+            DataTable FlowsByNY = DBAccess.RunSQLReturnTable(sql);
+            FlowsByNY.TableName = "FlowsByNY";
+            ds.Tables.Add(FlowsByNY);
 
             //部门分组.
             sql = "SELECT DeptName, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 GROUP BY DeptName ";
-            DataTable DT_DeptName = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "DT_DeptName";
-            ds.Tables.Add(DT_DeptName);
+            DataTable FlowsByDept = DBAccess.RunSQLReturnTable(sql);
+            FlowsByDept.TableName = "FlowsByDept";
+            ds.Tables.Add(FlowsByDept);
             #endregion 实例分析。
 
 
             #region 待办 分析
             //待办 - 部门分组.
             sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY DeptName";
-            DataTable deptNums = DBAccess.RunSQLReturnTable(sql);
-            deptNums.TableName = "DeptNums";
-            ds.Tables.Add(deptNums);
+            DataTable TodolistByDept = DBAccess.RunSQLReturnTable(sql);
+            TodolistByDept.TableName = "TodolistByDept";
+            ds.Tables.Add(TodolistByDept);
 
             //待办的 - 流程分组.
-            sql = "SELECT FlowName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
-            DataTable flowNums = DBAccess.RunSQLReturnTable(sql);
-            flowNums.TableName = "FlowNums";
-            ds.Tables.Add(flowNums);
+            sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
+            DataTable TodolistByFlow = DBAccess.RunSQLReturnTable(sql);
+            TodolistByFlow.TableName = "TodolistByFlow";
+            ds.Tables.Add(TodolistByFlow);
             #endregion 待办。
 
 
             #region 逾期 分析.
             //逾期的 - 流程分组.
-            sql = "SELECT FlowName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
-            DataTable OverTime = DBAccess.RunSQLReturnTable(sql);
-            OverTime.TableName = "OverTime";
-            ds.Tables.Add(OverTime);
+            sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
+            DataTable OverTimeByFlow = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByFlow.TableName = "OverTimeByFlow";
+            ds.Tables.Add(OverTimeByFlow);
 
             //逾期的 - 部门分组.
             sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY DeptName";
-            DataTable OverTimeDept = DBAccess.RunSQLReturnTable(sql);
-            OverTimeDept.TableName = "OverTimeDept";
-            ds.Tables.Add(OverTimeDept);
+            DataTable OverTimeByDept = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByDept.TableName = "OverTimeByDept";
+            ds.Tables.Add(OverTimeByDept);
             #endregion 逾期。
 
 

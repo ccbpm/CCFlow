@@ -1056,7 +1056,8 @@
                 }
                 expVal = sum;
 
-                sum = formatNumber(sum, 2, ',');
+                
+                //sum = formatNumber(sum, 2, ',');
 
                 template.val(sum);
             } else if (exp == "Avg") {	// 平均数
@@ -2307,6 +2308,8 @@
 
 
                     $.each(enums, function (i, obj) {
+                        if (obj.IntKey == -1)
+                            return false;
                         operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
                     });
                 }

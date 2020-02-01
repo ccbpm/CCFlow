@@ -410,17 +410,33 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
 
 function InitMapAttrOfCtrlFool(mapAttr) {
     var elemHtml = "";
-    if (mapAttr.UIContralType == "1") {
+  
+    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 2) {
+        var rbHtmls = "";
         var ses = new Entities("BP.Sys.SysEnums");
-        ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey")
-        var operations = '';
-        $.each(ses, function (i, obj) {
-            operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-        });
-        elemHtml += "<div id='DIV_" + mapAttr.KeyOfEn + "'> <select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
-        return elemHtml;
-    }
+        ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
 
+        //显示方式,默认为横向展示.
+        var RBShowModel = 0;
+        if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+            RBShowModel = 1;
+
+        for (var i = 0; i < ses.length; i++) {
+            var se = ses[i];
+
+            var br = "";
+            if (RBShowModel == 1)
+                br = "<br>";
+
+            var checked = "";
+            if (se.IntKey == mapAttr.DefVal)
+                checked = " checked=true";
+
+            rbHtmls += "<label style='font-weight:normal;'><input type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + se.Lab + " </label>&nbsp;" + br;
+        }
+
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
+    }
     if (mapAttr.MyDataType == "1") {
         if (mapAttr.UIContralType == 6) {
             return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
@@ -513,7 +529,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
 
 
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
-        if (mapAttr.UIContralType == 2) {
+        if (mapAttr.UIContralType == 1) { //下拉框
             var ses = new Entities("BP.Sys.SysEnums");
             ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
             var operations = "";
@@ -523,7 +539,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
 
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
 
-        } else {
+        } else if (mapAttr.UIContralType == 3){ //单选按钮
 
             var rbHtmls = "";
             var ses = new Entities("BP.Sys.SysEnums");

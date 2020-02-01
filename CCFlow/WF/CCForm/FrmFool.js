@@ -823,6 +823,51 @@ function InitMapAttrOfCtrl(mapAttr) {
         }
     }
 
+
+    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == "2") {//枚举复选框
+
+        var rbHtmls = "";
+        var ses = frmData[mapAttr.KeyOfEn];
+        if (ses == undefined)
+            ses = frmData[mapAttr.UIBindKey];
+        if (ses == undefined) {
+            //枚举类型的.
+            if (mapAttr.LGType == 1) {
+                var ses = frmData.Sys_Enum;
+                ses = $.grep(ses, function (value) {
+                    return value.EnumKey == mapAttr.UIBindKey;
+                });
+            }
+
+        }
+        var enableAttr = "";
+        if (mapAttr.UIIsEnable == 1)
+            enableAttr = "";
+        else
+            enableAttr = "disabled='disabled'";
+
+        //显示方式,默认为横向展示.
+        var RBShowModel = 0;
+        if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+            RBShowModel = 1;
+
+        for (var i = 0; i < ses.length; i++) {
+            var se = ses[i];
+
+            var br = "";
+            if (RBShowModel == 1)
+                br = "<br>";
+
+            var checked = "";
+            if ("," + defValue + ",".indexOf("," + se.IntKey + ",") == true)
+                checked = " checked=true";
+
+            rbHtmls += "<label style='font-weight:normal;'><input type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + enableAttr + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + se.Lab + " </label>&nbsp;" + br;
+        }
+        return rbHtmls;
+    }
+
+
     if (mapAttr.MyDataType == "1") {
 
         //附件
@@ -1876,7 +1921,7 @@ function GetLab(frmData, attr) {
         forID = "RB_" + attr.KeyOfEn;
     }
     //文本框，下拉框，单选按钮
-    if (contralType == 0 || contralType == 1 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 101) {
+    if (contralType == 0 || contralType == 1 || contralType == 2 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 101) {
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }

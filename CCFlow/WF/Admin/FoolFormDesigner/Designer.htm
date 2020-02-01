@@ -133,26 +133,12 @@
             data = JSON.parse(data);
 
 
-            //var frmBill = new Entity("BP.Frm.FrmBill", fk_mapData);
-            //if (frmBill.EntityType == 1)
-            //{
-            //    $("#toolbar").append("sdsdsds");
-            //}
-
-
-            //实体类型.
-            // alert(data["Sys_MapData"][0].EntityType);
-
-
-            // var mapAttrs = data.Sys_MapAttrs;
-
             //拼接 TABLE
             //按分组拼接
             var groupFields = data.Sys_GroupField;
             var tbody = $('<tbody></tbody>');
 
             var frmName = data.Sys_MapData[0].Name;
-            //alert(frmName);
 
             var tableCol = data.Sys_MapData[0].TableCol;
             if (tableCol == 0)

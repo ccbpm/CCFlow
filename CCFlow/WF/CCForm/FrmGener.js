@@ -791,19 +791,19 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 }
                 formArrResult.push(ele);
             } else {
-                if (mcheckboxs.indexOf(targetId) != -1)
-                    return false;
-                mcheckboxs += targetId + ",";
-                var str = "";
-                $("input[name='" + targetId + "']:checked").each(function (index, item) {
-                    if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
-                        str += $(this).val();
-                    } else {
-                        str += $(this).val() + ",";
-                    }
-                });
+                if (mcheckboxs.indexOf(targetId + ",") == -1) {
+                    mcheckboxs += targetId + ",";
+                    var str = "";
+                    $("input[name='" + targetId + "']:checked").each(function (index, item) {
+                        if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
+                            str += $(this).val();
+                        } else {
+                            str += $(this).val() + ",";
+                        }
+                    });
 
-                formArrResult.push(targetId + '=' + str);
+                    formArrResult.push(targetId + '=' + str);
+                }
             }
         }
         if (ele.split('=')[0].indexOf('DDL_') == 0) {

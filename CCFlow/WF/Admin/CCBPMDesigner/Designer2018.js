@@ -468,9 +468,10 @@ $(function () {
             //点击修改名称方法
             var activeId = _canvas.getActiveId(); //右键当前的ID
             var windowtext = $("#window" + activeId).text();
-            var baocunbut = $("#alertModal1 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
-            var saveNodeName = $("#alertModal1 div:eq(2) button").attr("onclick", "saveNodeName(\"" + activeId + "\")");
-
+            var baocunbut = $("#alertModal1 div:eq(2) button:eq(0)").attr("class", "btn btn-primary savetext" + activeId);
+            var saveNodeName = $("#alertModal1 div:eq(2) button:eq(0)").attr("onclick", "saveNodeName(\"" + activeId + "\")");
+            var baocunbut = $("#alertModal1 div:eq(2) button:eq(1)").attr("class", "btn btn-primary savetext" + activeId);
+            var saveNodeName = $("#alertModal1 div:eq(2) button:eq(1)").attr("onclick", "saveAndUpdateNodeName(\"" + activeId + "\")");
             windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
 
 
@@ -637,6 +638,43 @@ function saveNodeName(activeId) {
         mapData.Name = text;
         mapData.Update();
     }
+
+
+    //修改分组名称.
+    var groups = new Entities("BP.Sys.GroupFields");
+    groups.Retrieve("FrmID", "ND" + activeId);
+
+    //  alert(groups.length);
+
+    if (groups.length == 1) {
+
+        var group = groups[0];
+
+        var groupEn = new Entity("BP.Sys.GroupField", group.OID);
+        groupEn.Lab = text;
+        groupEn.Update();
+    }
+
+
+    //更新节点名称与显示
+    $("#span_" + activeId).text(text);
+}
+
+//修改并更新节点表单名称
+function saveAndUpdateNodeName(activeId) {
+    var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+
+    //alert(text);
+
+    var node = new Entity("BP.WF.Template.NodeExt", activeId);
+    node.Name = text;
+    node.Update();
+
+    //修改表单名称.
+    var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
+    mapData.Name = text;
+    mapData.Update();
+    
 
 
     //修改分组名称.

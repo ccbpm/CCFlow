@@ -19,7 +19,10 @@ namespace BP.GPM
             get
             {
                 string str= BP.Sys.SystemConfig.AppSettings["IsEnableRegUser"];
-                if (DataType.IsNullOrEmpty(str) && str.Equals("1"))
+                if (DataType.IsNullOrEmpty(str)==true)
+                    return false;
+
+                if (str.Equals("1") == true)
                     return true;
 
                 return false;

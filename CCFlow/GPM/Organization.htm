@@ -220,11 +220,11 @@
                             moveUpDept(treeNode, item);
                         } else if (item == "moveDownDept") {
                             moveDownDept(treeNode, item);
-                        }else if (item == "edit") {
+                        } else if (item == "edit") {
                             Edit(treeNode);
-                        }else if (item == "newSameLevel") {
+                        } else if (item == "newSameLevel") {
                             NewSameLevel(treeNode);
-                        }else if (item == "newNextLevel") {
+                        } else if (item == "newNextLevel") {
                             NewNextLevel(treeNode);
                         }
 
@@ -265,7 +265,7 @@
 
         //增加下级部门
         function NewNextLevel(treeNode) {
-             var val = prompt("请输入部门名称", "");
+            var val = prompt("请输入部门名称", "");
             if (val == null || val == '') {
                 return false;
             }
@@ -279,13 +279,13 @@
         }
         //编辑部门
         function Edit(treeNode) {
-             var val = prompt("请输入部门名称", treeNode.name);
+            var val = prompt("请输入部门名称", treeNode.name);
             if (val == null || val == '') {
                 //alert('必须输入名称.');
                 return false;
             }
 
-            var dept = new Entity("BP.GPM.Dept",treeNode.id);
+            var dept = new Entity("BP.GPM.Dept", treeNode.id);
             dept.Name = val;
             dept.Update();
 
@@ -304,7 +304,15 @@
             zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
             fillter(zTreeObj); //设置展开前三级
             //绑定帮助信息.
-            var html = " <h1 style='padding-left:5px'>请点击左侧节点显示数据。</h1>";
+            var html = "<br><br> <h3 style='padding-left:5px'>驰骋组织结构管理</h3>";
+
+            html += "<ul>";
+            html += "<li>该组织结构可以与您的系统集成,<a href='http://ccbpm.mydoc.io/?v=5404&t=15928' target=_blank >如何集成请参考集成手册.</a></li>";
+            html += "<li>本功能维护了人员信息Port_Emp, 部门信息Port_Dept, 一人多部门(我们成为兼职Port_DeptEmp), 一人多部门多岗位(Port_DeptEmpStation)</li>";
+            html += "<li>维护部门在节点上点击右键,可以新建，保存，修改。</li>";
+            html += "</ul>";
+
+
             $("#Emps").html(html);
             $("#pageloading").hide();
             //鼠标移开时右键菜单消失
@@ -371,6 +379,8 @@
             emps.Retrieve("FK_Dept", dept.No, "Idx");
 
 
+
+
             var empNos = ",";
             html += "<tbody>";
             for (var i = 0; i < emps.length; i++) {
@@ -388,6 +398,13 @@
                 empNos += emp.No + ',';
             }
 
+            //取消人员部门岗位管理关系. @不能出现sql.
+            var sql = "DELETE FROM Port_DeptEmp WHERE FK_Emp= NOT IN (SELECT No FROM Port_Emp)";
+            DBAccess.RunSQL(sql);
+            var sql = "DELETE FROM Port_DeptEmpStation WHERE FK_Emp= NOT IN (SELECT No FROM Port_Emp)";
+            DBAccess.RunSQL(sql);
+
+            //查询出来兼职人员.
             var deptEmps = new Entities("BP.GPM.DeptEmps");
             deptEmps.Retrieve("FK_Dept", deptNo);
 
@@ -399,7 +416,12 @@
                 if (empNos.indexOf(',' + deptEmp.FK_Emp + ',') != -1)
                     continue;
 
-                var emp = new Entity("BP.GPM.Emp", deptEmp.FK_Emp);
+                var emp = new Entity("BP.GPM.Emp");
+                emp.No = deptEmp.FK_Emp;
+                //if (emp.RetrieveFromDBSources() == 0) {
+                if (emp.Retrieve() == 0) {
+                    continue;
+                }
 
                 html += "<tr ondblclick=\"EditEmp('" + emp.No + "')\" >";
                 html += "<td class='Idx' >" + num + "</td>";
@@ -498,7 +520,7 @@
             en.Delete();
 
             //取消人员部门岗位管理关系
-            var sql = "delete from Port_DeptEmpStation where FK_Emp='"+ no +"' and FK_Dept='"+ deptNo + "'";
+            var sql = "delete from Port_DeptEmpStation where FK_Emp='" + no + "' and FK_Dept='" + deptNo + "'";
             DBAccess.RunSQL(sql);
             //   var en = new Entity("BP.GPM.DeptEmpStation");
             //  en.Delete("FK_Dept",);

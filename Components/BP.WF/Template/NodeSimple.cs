@@ -152,8 +152,6 @@ namespace BP.WF.Template
         }
         #endregion
 
-       
-
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

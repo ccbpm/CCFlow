@@ -51,6 +51,21 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
+        /// 最大长度
+        /// </summary>
+        public int MaxLen
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.MaxLen);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.MaxLen, value);
+            }
+        }
+        
+        /// <summary>
         /// 字段
         /// </summary>
         public string KeyOfEn
@@ -174,13 +189,15 @@ namespace BP.Sys.FrmUI
 
                 #region 傻瓜表单
                 //单元格数量 2013-07-24 增加
-                map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrDT",
+                map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "TextBox单元格数量", true, true, "ColSpanAttrDT",
                     "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨5个单元格@6=跨6个单元格");
-                map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段横跨的宽度,占的单元格数量.");
+                map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
+                map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
+
 
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
@@ -595,9 +612,11 @@ namespace BP.Sys.FrmUI
             }
 
 
-            #region 自动扩展字段长度.  @杜. 需要翻译.
-            if (attr.MaxLen < 4000)
+            #region 自动扩展字段长度. 需要翻译.
+            if (attr.MaxLen < this.MaxLen )
             {
+                attr.MaxLen = this.MaxLen;
+
                 string sql = "";
                 MapData md = new MapData();
                 md.No = this.FK_MapData;
@@ -609,13 +628,14 @@ namespace BP.Sys.FrmUI
                             sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
 
                         if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
 
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                            sql = "alter table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle
+                            || SystemConfig.AppCenterDBType == DBType.DM )
+                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
 
                         if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "alter table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
+                            sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
 
                         DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }

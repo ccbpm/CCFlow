@@ -116,6 +116,7 @@
     <Compile Include="GPM\App.cs" />
     <Compile Include="UserData\Group.cs" />
     <Compile Include="UserData\VGPMEmpMenu.cs" />
+    <Compile Include="HttpHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">

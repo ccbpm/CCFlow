@@ -499,6 +499,14 @@ $(function () {
 
 
     });
+    /*保存*/
+    $("#Btn_SaveToColud").bind('click', function () {
+
+        alert('开发中');
+        return;
+        $("#Btn_Save").attr("disabled", true);
+
+    });
     /*清除连接线，用不到.*/
     $("#leipi_clear").bind('click', function () {
         return;

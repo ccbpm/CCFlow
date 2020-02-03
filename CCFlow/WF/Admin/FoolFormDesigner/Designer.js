@@ -198,6 +198,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
         if (colSpan == 0) {
 
             if (textColSpan == tableCol) {
+                rowSpan = 1;
                 html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + GenerLabel(attr) + "</td>";
                 isDropTR = true;
                 continue;

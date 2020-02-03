@@ -361,6 +361,7 @@ function InitThreeColMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         if (colSpan == 0) {
 
             if (textColSpan == tableCol) {
+                rowSpan = 1;
                 html += "<td  class='LabelFDesc' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
                 isDropTR = true;
                 continue;
@@ -395,6 +396,7 @@ function InitThreeColMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         }
         //解析占一行的情况
         if (colSpan == tableCol) {
+            rowSpan = 1;
             html += "<tr>";
             html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
             html += InitMapAttrOfCtrl(attr);
@@ -520,6 +522,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             //占一行
             if (textColSpan == tableCol) {
                 isDropTR = true;
+                rowSpan = 1;
                 html += "<tr>";
                 html += "<td  colSpan=" + textColSpan + " rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
                 html += "</tr>";
@@ -618,6 +621,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         //线性展示并且colspan=4
         if (colSpan == tableCol) {
             isDropTR = true;
+            rowSpan = 1;
             html += "<tr>";
             html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
             html += "</tr>";
@@ -631,7 +635,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
 
         var sumColSpan = colSpan + textColSpan;
         if (sumColSpan == tableCol) {
-
+            rowSpan = 1;
             isDropTR = true;
             html += "<tr >";
             html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";

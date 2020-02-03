@@ -2381,6 +2381,21 @@ namespace BP.Sys
                             try
                             {
                                 en.DirectInsert();
+                                //判断该字段是否是大文本 例如注释、说明
+                                if(en.UIContralType == UIContralType.BigText)
+                                {
+                                    //判断原文件是否存在
+                                    string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + oldMapID + ".htm";
+                                    //若文件存在，则复制                                  
+                                    if (System.IO.File.Exists(file) == true)
+                                    {
+                                        string newFile = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + fk_mapdata + ".htm";
+                                        if (System.IO.File.Exists(newFile) == true)
+                                             System.IO.File.Delete(newFile);
+                                        System.IO.File.Copy(file, newFile);
+                                    }
+                                       
+                                }
                             }
                             catch
                             {

@@ -109,7 +109,11 @@ namespace BP.En
         /// <summary>
         /// 流程进度图
         /// </summary>
-        JobSchedule=50
+        JobSchedule=50,
+        /// <summary>
+        /// 大块文本Html(说明性文字)
+        /// </summary>
+        BigText = 60
 
     }
     /// <summary>

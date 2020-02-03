@@ -68,8 +68,24 @@ namespace BP.WF.HttpHandler
             //退回数.
             ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 "));
 
-            //说有逾期的数量. @sly  应该根据 WF_GenerWorkerList的 SDT 字段来求.
-            ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 "));
+            //说有逾期的数量. 应该根据 WF_GenerWorkerList的 SDT 字段来求.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now()"));
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0";
+
+                sql += "UNION SELECT* FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 )";
+
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt(sql));
+            }
+            else
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120)"));
+            }
 
             return BP.Tools.Json.ToJson(ht);
         }

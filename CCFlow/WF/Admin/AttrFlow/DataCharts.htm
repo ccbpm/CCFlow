@@ -148,7 +148,16 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">逾期数-人员</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="OverTimeByEmp" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
             <div class="layui-col-sm12 layui-col-md6">
                 <div class="layui-card">
                     <div class="layui-card-header">逾期数-部门</div>
@@ -173,6 +182,8 @@
             var FlowsByDept_Y = new Array();
             var TodolistByDept_X = new Array();
             var TodolistByDept_Y = new Array();
+            var OverTimeByEmp_X = new Array();
+            var OverTimeByEmp_Y = new Array();
             var OverTimeByDept_X = new Array();
             var OverTimeByDept_Y = new Array();
 
@@ -211,7 +222,13 @@
             })
             queryChart_TodolistByDept(TodolistByDept_X, TodolistByDept_Y);
 
-
+            //逾期-按人员.
+            var OverTimeByEmps = data.OverTimeByEmp;
+            $.each(OverTimeByEmps, function (i, OverTimeByEmp) {
+                OverTimeByEmp_X[i] = OverTimeByEmp.name;
+                OverTimeByEmp_Y[i] = OverTimeByEmp.Num;
+            })
+            queryChart_OverTimeByEmp(OverTimeByEmp_X, OverTimeByEmp_Y);
             //逾期-按部门.
             var OverTimeByDepts = data.OverTimeByDept;
             $.each(OverTimeByDepts, function (i, OverTimeByDept) {
@@ -335,7 +352,44 @@
             // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
         }
-        
+
+        //逾期-按人员.
+        function queryChart_OverTimeByEmp(OverTimeByEmp_X, OverTimeByEmp_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('OverTimeByEmp'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: OverTimeByEmp_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '流程数',
+                    data: OverTimeByEmp_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
         //逾期-按部门.
         function queryChart_OverTimeByDept(OverTimeByDept_X, OverTimeByDept_Y) {
 

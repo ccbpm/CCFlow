@@ -807,6 +807,24 @@ namespace BP.WF.HttpHandler
             TodolistByDept.TableName = "TodolistByDept";
             ds.Tables.Add(TodolistByDept);
 
+            //逾期的 - 人员分组.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT (SELECT name from Port_Emp where No = FK_Emp) AS name, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY FK_Emp";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT (SELECT name from Port_Emp where No = FK_Emp) AS name, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY FK_Emp";
+                sql += "UNION SELECT (SELECT name from Port_Emp where No = FK_Emp) AS name, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY FK_Emp";
+            }
+            else
+            {
+                sql = "SELECT (SELECT name from Port_Emp where No = FK_Emp) AS name, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY FK_Emp";
+            }
+            DataTable OverTimeByEmp = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByEmp.TableName = "OverTimeByEmp";
+            ds.Tables.Add(OverTimeByEmp);
             //逾期的 - 部门分组.
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {

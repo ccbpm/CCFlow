@@ -223,6 +223,8 @@
                             NewSameLevel(treeNode);
                         } else if (item == "newNextLevel") {
                             NewNextLevel(treeNode);
+                        }else if (item == "delete") {
+                            Delete(treeNode);
                         }
 
                     }
@@ -285,6 +287,15 @@
             var dept = new Entity("BP.GPM.Dept", treeNode.id);
             dept.Name = val;
             dept.Update();
+
+            window.location.reload();
+        }
+         //删除部门
+        function Delete(treeNode) {
+            if (confirm("你确定删除该部门吗？") == false)
+                    return;
+            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            dept.Delete();
 
             window.location.reload();
         }
@@ -562,11 +573,12 @@
             <ul id="regionZTree" class="ztree" data-options="animate:false,dnd:false"></ul>
         </div>
         <ul id="menu" class="small-menu">
-            <li class="moveUpDept"><a href="#">上移</a></li>
-            <li class="moveDownDept"><a href="#">下移</a></li>
-            <li class="newSameLevel"><a href="#">增加同级</a></li>
-            <li class="newNextLevel"><a href="#">增加子级</a></li>
-            <li class="edit"><a href="#">编辑</a></li>
+            <li class="newSameLevel"><a href="#"><img src="../WF/Admin/Portal/Img/ico-flow-pic.png">增加同级</a></li>
+            <li class="newNextLevel"><a href="#"><img src="../WF/Admin/Portal/Img/ico-flow-delete.png">增加子级</a></li>
+            <li class="edit"><a href="#"><img src="../WF/Admin/Portal/Img/ico-flow-delete.png">编辑</a></li>
+            <li class="delete"><a href="#"><img src="../WF/Admin/Portal/Img/ico-flow-delete.png">删除</a></li>
+            <li class="moveUpDept"><a href="#"><img src="../WF/Admin/Portal/Img/ico-flow-up.png">上移</a></li>
+            <li class="moveDownDept"><a href="#"><img src="../WF/Admin/Portal/Img/ico-flow-down.png">下移</a></li>
             <!-- <li class="copy"><a href="#">删除</a></li>
              <li class="small-menu-separator"></li>
              <li class="delete"><a href="#"><span class="icon icon-edit"></span>Zoom Out</a></li>-->

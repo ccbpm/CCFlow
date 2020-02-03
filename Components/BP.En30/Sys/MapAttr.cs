@@ -1578,6 +1578,19 @@ namespace BP.Sys
             BP.DA.DataType.WriteFile(file, text);
             return "保存成功！";
         }
+        //删除大块文本信息
+        public string DeleteBigNoteHtmlText()
+        {
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            
+            if (System.IO.File.Exists(file) == true)
+                System.IO.File.Delete(file);
+
+            this.Delete();
+            
+
+            return "删除成功！";
+        }
         /// <summary>
         /// 读取大块html文本
         /// </summary>

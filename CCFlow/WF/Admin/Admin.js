@@ -22,6 +22,13 @@
  */
 
 $(document).ready(function () {
+    //动态添加新风格  @lz
+    SetNewCSS();
+    
+    //设置帮助页面内容 @lz
+   // SetHelpPage();
+
+    HelpDiv();
 
     //设置自动提示.
     initToggle();
@@ -31,17 +38,48 @@ $(document).ready(function () {
 
     //设置SQL脚本编辑器.
     CheckSQLTextArea();
-
-    //check HelpDiv
-    HelpDiv();
+   
 
 })
+//动态添加新风格  @lz
+function SetNewCSS() {
+    //body下添加一个父Div
+    var div = document.createElement('div');
+    $(div).attr('class', 'cs-content-box');
+    $('body').wrap(div);
+    //帮助ul风格
+    div = document.createElement('div');
+    $(div).attr('class', 'cs-help');
+    $('ul').wrap(div);
+    var div2 = "<div id='help1' class='help-title'> <img src='../Img/ico-help.png' alt='帮助' class='ico-help' />帮助 </div>";
+    $(".cs-help").append(div2);
+    //bar风格
+    $('#bar').attr('class', 'cs-tr cs-bar');
+}
+//设置帮助页面内容 @lz
+function SetHelpPage() {
 
-
+    var legends = $("legend#help");
+    //隐藏所有兄弟级元素
+    legends.siblings().hide();
+    ////增加font  以便监听单击
+    //var font = document.createElement('font');
+    //$(font).attr('id', 'cl');
+    //legends.wrap('#cl');
+    //legends.wrap(font);
+    $("font").on("click", function () {
+        alert("1234");
+        legends.siblings().show();
+        
+    });
+}
+function showPage() {
+    var legends = $("legend#help");
+    //隐藏所有兄弟级元素
+    legends.siblings().show();
+}
 function HelpDiv() {
-
     $("form").find("div").each(function () {
-
         if (this.className.toLowerCase() == "help") {
 
             //var msg = "请输入SQL语句,支持ccbpm的表达式.";

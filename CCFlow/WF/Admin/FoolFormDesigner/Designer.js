@@ -188,7 +188,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
             if (htmlobj.status == 404)
                 str = filename + "这个文件不存在，请联系管理员";
             html += "<tr>";
-            html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'>" + str + "</td>";
+            html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'><a href='#' onclick='EditBigText(\""+attr.MyPK+"\",\""+attr.FK_MapData+"\")'>" + str + "</a></td>";
             html += "</tr>";
             isDropTR = true;
             UseColSpan = 0;

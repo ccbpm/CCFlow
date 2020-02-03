@@ -34,33 +34,42 @@
         }
 
         var webUser = new WebUser();
-        var flow = null;
+        var flowNo = null;
 
         //页面启动函数.
         $(function () {
-
-            var flowNo = GetQueryString("FK_Flow");
-            flow = new Entity("BP.WF.Flow", flowNo);
+            flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
             $("#SearchLab").html(flow.Name);
-
-            var gwfs = new Entities("BP.WF.GenerWorkFlows");
-            gwfs.Retrieve("FK_Flow", flowNo);
-
-            var timeKey = "";
+            InitPage();
+        });
+        function InitPage() {
             var searchKey = $("#TB_Key").val();
 
+            var gwfs = new Entities("BP.WF.GenerWorkFlows");
+            var data = gwfs.DoMethodReturnString("QueryByLike", flowNo, searchKey);
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            gwfs = JSON.parse(data);
+
+            var timeKey = "";
+            
+
             var html = '';
+            $('#Table1').html("");
             //增加处理.
             var idx = 0;
             for (var i = 0; i < gwfs.length; i++) {
 
-                idx++;
+               
                 var gwf = gwfs[i];
 
                 if (gwf.Emps.indexOf(webUser.No) == -1)
                     continue;
 
-                //if (searchKey.content)
+                idx++;
 
                 var paras = gwf.AtPara; //参数.
                 if (paras != '' && paras != null) {
@@ -91,22 +100,36 @@
                 html += "<td>" + gwf.WFStateText + "</td>";
 
                 html += "<td>";
-                html += "<a href=\"javascript:Delete('" + flowNo + "','" + gwf.WorkID + "')\">删除</a>";
+                html += "<a href=\"javascript:Delete('" + flowNo + "'," +gwf.FK_Node+",'"+ gwf.WorkID + "')\">删除</a>";
                 html += "</td>";
                 html += "</tr>";
 
                 $('#Table1').append(html);
             }
-        });
+        }
 
 
         function Search() {
-
+            InitPage();
         }
 
         function Start() {
             var url = "MyFlow.htm?FK_Flow=" + GetQueryString("FK_Flow");
             window.open(url);
+        }
+         //物理删除流程
+        function Delete(flowNo,fkNode,workid) {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FK_Node", fkNode);
+            handler.AddPara("WorkID", workid);
+            handler.DoMethodReturnString("DeleteFlow");
+            window.location.href = window.location.href;
+           
+        
         }
 
 

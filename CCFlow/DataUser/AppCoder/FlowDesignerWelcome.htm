@@ -17,13 +17,10 @@
     <script type="text/javascript" src="../../WF/Comm/Gener.js"></script>
 
     <script src="../../WF/Admin/Portal2020/lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../../WF/Admin/Portal2020/js/xadmin.js"></script>
+    <script src="../../WF/Scripts/echartsjs/echarts.min.js"></script>
     <script src="../../WF/Admin/Portal2020/js/echartsjs/echarts.min.js"></script>
 
-    <!--[if lt IE 9]>
-      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    
 </head>
 <body>
     <div id="Msg"></div>
@@ -256,10 +253,8 @@
             var FlowsByDept_Y = new Array();
             var TodolistByDept_X = new Array(); 
             var TodolistByDept_Y = new Array(); 
-            //var TodolistByFlow_X = new Array(); 
-            //var TodolistByFlow_Y = new Array();
-            //var OverTimeByFlow_X = new Array(); 
-            //var OverTimeByFlow_Y = new Array();
+            var TodolistByFlow_Pie = new Array(); 
+            var TodolistByFlow_Select = {};
             var OverTimeByDept_X = new Array(); 
             var OverTimeByDept_Y = new Array();
 
@@ -298,19 +293,15 @@
             queryChart_TodolistByDept(TodolistByDept_X, TodolistByDept_Y);
 
             //待办-按流程.
-            var TodolistByFlows = data.TodolistByFlow;
-            //$.each(TodolistByFlows,function(i,TodolistByFlow) {
-            //    TodolistByFlow_X[i]=TodolistByFlow.DeptName;
-            //    TodolistByFlow_Y[i]=TodolistByFlow.Num;
-            //})
-            queryChart_TodolistByFlow(TodolistByFlows);
+            var TodolistByFlows = data.TodolistByFlow; 
+            $.each(TodolistByFlows,function(i,TodolistByFlow) {
+                TodolistByFlow_Pie[i]=TodolistByFlow.name;
+                TodolistByFlow_Select[TodolistByFlow.name] = i<6;
+            })
+            queryChart_TodolistByFlow(TodolistByFlow_Pie,TodolistByFlow_Select,TodolistByFlows);
 
             //逾期-按流程.
             var OverTimeByFlows = data.OverTimeByFlow;
-            //$.each(OverTimeByFlows,function(i,OverTimeByFlow) {
-            //    OverTimeByFlow_X[i]=OverTimeByFlow.DeptName;
-            //    OverTimeByFlow_Y[i]=OverTimeByFlow.Num;
-            //})
             queryChart_OverTimeByFlow(OverTimeByFlows);
 
             //逾期-按部门.
@@ -437,40 +428,34 @@
             myChart.setOption(option);
         }
         //待办-按流程.
-        function queryChart_TodolistByFlow(TodolistByFlows) {
+        function queryChart_TodolistByFlow(TodolistByFlow_Pie,TodolistByFlow_Select,TodolistByFlows) {
 
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('TodolistByFlow'));
 
             // 指定图表的配置项和数据
             var option = {
-                grid: {
-                    top: '5%',
-                    right: '1%',
-                    left: '1%',
-                    bottom: '10%',
-                    containLabel: true
-                },
+                
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
                 },
-               
+               legend: {
+                    type: 'scroll',
+                    orient: 'vertical',
+                    right: 0,
+                    top: 20,
+                    bottom: 20,
+                    data: TodolistByFlow_Pie,
+                    selected: TodolistByFlow_Select
+                    
+                },
                 series: [{
                     type: 'pie',
                     name: '待办数',
-                    radius: '25%',
-                    center: ['50%', '50%'],
+                    radius: '45%',
+                    center: ['20%', '50%'],
                     data: TodolistByFlows,
-                    animation: false,
-                    label: {
-                        position: 'outer',
-                        alignTo: 'none',
-                        bleedMargin: 5
-                    },
-                    left: 0,
-                    right: '66.6667%',
-                    top: 0,
-                    bottom: 0,
                     
                 }]
             };
@@ -487,15 +472,10 @@
 
             // 指定图表的配置项和数据
             var option = {
-                grid: {
-                    top: '5%',
-                    right: '1%',
-                    left: '1%',
-                    bottom: '10%',
-                    containLabel: true
-                },
+                
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
                 },
                 series: [{
                     type: 'pie',
@@ -503,16 +483,7 @@
                     radius: '25%',
                     center: ['50%', '50%'],
                     data: OverTimeByFlows,
-                    animation: false,
-                    label: {
-                        position: 'outer',
-                        alignTo: 'none',
-                        bleedMargin: 5
-                    },
-                    left: 0,
-                    right: '66.6667%',
-                    top: 0,
-                    bottom: 0,
+                    
                     
                 }]
             };
@@ -560,64 +531,6 @@
         }
        
 
-        //// 指定图表的配置项和数据
-        //var option = {
-        //    tooltip: {
-        //        trigger: 'item',
-        //        formatter: "{a} <br/>{b} : {c} ({d}%)"
-        //    },
-        //    legend: {
-        //        orient: 'vertical',
-        //        left: 'left',
-        //        data: ['请假', '报销', '入职申请', '离职申请', '项目审批']
-        //    },
-        //    series: [
-        //        {
-        //            name: '访问来源',
-        //            type: 'pie',
-        //            radius: '55%',
-        //            center: ['50%', '60%'],
-        //            data: [
-        //                { value: 335, name: '请假' },
-        //                { value: 310, name: '报销' },
-        //                { value: 234, name: '入职申请' },
-        //                { value: 135, name: '离职申请' },
-        //                { value: 1548, name: '项目审批' }
-        //            ],
-        //            itemStyle: {
-        //                emphasis: {
-        //                    shadowBlur: 10,
-        //                    shadowOffsetX: 0,
-        //                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-        //                }
-        //            }
-        //        }
-        //    ]
-        //};
-
-
-        //// 使用刚指定的配置项和数据显示图表。
-        //myChart.setOption(option);
-
-        //// 基于准备好的dom，初始化echarts实例
-        //var myChart = echarts.init(document.getElementById('main4'));
-
-        //// 指定图表的配置项和数据
-        //var option = {
-        //    tooltip: {
-        //        formatter: "{a} <br/>{b} : {c}%"
-        //    },
-        //    series: [
-        //        {
-        //            name: '实例总数',
-        //            type: 'gauge',
-        //            detail: { formatter: '{value}%' },
-        //            data: [{ value: 88, name: '待办&逾期' }]
-        //        }
-        //    ]
-        //};
-        //// 使用刚指定的配置项和数据显示图表。
-        //myChart.setOption(option);
     </script>
 
 </body>

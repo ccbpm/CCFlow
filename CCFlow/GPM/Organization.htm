@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
 
     <link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
-    <link href="../../DataUser/Style/admin/skins/context.standalone.css" rel="stylesheet"
-          type="text/css" />
-    <script src="../WF/Admin/CCBPMDesigner/js/context.js" type="text/javascript"></script>
     <script type="text/javascript" src="../WF/Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
     <script src="../WF/Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
@@ -328,10 +325,7 @@
             var nodeList = zTreeObj.getNodes();　　　　　　 //展开第一个根节点
             for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
                 zTreeObj.expandNode(nodeList[i], true, false, true);
-                //					var nodespan = nodeList[i].children;
-                //					for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
-                //						zTreeObj.expandNode(nodespan[j], true, false, true);
-                //					}
+              
             }
         }
         //转换ztree需要的数据格式
@@ -390,8 +384,14 @@
                 html += "<td>" + emp.No + "</td>";
                 html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                 html += "<td>" + dept.Name + "</td>";
-                html += "<td>" + emp.Email + "</td>";
-                html += "<td>" + emp.Tel + "</td>";
+                if (emp.Email == null || emp.Email == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Email + "</td>";
+                 if (emp.Tel == null || emp.Tel == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Tel+ "</td>";
                 html += "<td><a href=\"javascript:Del('" + emp.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
                 html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
                 html += "</tr>";
@@ -399,10 +399,12 @@
             }
 
             //取消人员部门岗位管理关系. @不能出现sql.
-            var sql = "DELETE FROM Port_DeptEmp WHERE FK_Emp= NOT IN (SELECT No FROM Port_Emp)";
-            DBAccess.RunSQL(sql);
-            var sql = "DELETE FROM Port_DeptEmpStation WHERE FK_Emp= NOT IN (SELECT No FROM Port_Emp)";
-            DBAccess.RunSQL(sql);
+            var deptEmps = new Entities("BP.GPM.DeptEmps");
+            deptEmps.DoMethodReturnString("DelteNotInEmp");
+             var deptEmpStas = new Entities("BP.GPM.DeptEmpStations");
+            deptEmpStas.DoMethodReturnString("DelteNotInEmp");
+           
+           
 
             //查询出来兼职人员.
             var deptEmps = new Entities("BP.GPM.DeptEmps");
@@ -418,8 +420,9 @@
 
                 var emp = new Entity("BP.GPM.Emp");
                 emp.No = deptEmp.FK_Emp;
-                //if (emp.RetrieveFromDBSources() == 0) {
-                if (emp.Retrieve() == 0) {
+                emp.SetPKVal(emp.No);
+                if (emp.RetrieveFromDBSources() == 0) {
+                //if (emp.Retrieve() == 0) {
                     continue;
                 }
 
@@ -428,8 +431,14 @@
                 html += "<td>" + emp.No + "</td>";
                 html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                 html += "<td>兼职</td>";
-                html += "<td>" + emp.Email + "</td>";
-                html += "<td>" + emp.Tel + "</td>";
+               if (emp.Email == null || emp.Email == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Email + "</td>";
+                 if (emp.Tel == null || emp.Tel == "")
+                    html += "<td>-</td>";
+                else
+                    html += "<td>" + emp.Tel+ "</td>";
                 html += "<td><a href=\"javascript:Remove('" + emp.No + "')\" >移除<img src='../WF/Img/Btn/Delete.gif'></a></td>";
                 html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
                 html += "</tr>";

@@ -195,7 +195,7 @@ namespace BP.GPM
         #region 删除方法
         public void DelteNotInEmp()
         {
-            string sql = "DELETE FROM Port_DeptEmpStation WHERE FK_Emp= NOT IN (SELECT No FROM Port_Emp)";
+            string sql = "DELETE FROM Port_DeptEmpStation WHERE FK_Emp NOT IN (SELECT No FROM Port_Emp)";
             DBAccess.RunSQL(sql);
         }
         #endregion

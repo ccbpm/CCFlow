@@ -894,7 +894,7 @@ function EditCCFormSort() {
         target: currCCFormSort.target,
         text: val
     });
-    $('#formTree').tree('select', $('#formTree').tree('find', data).target);
+    $('#formTree').tree('select', currCCFormSort.target);
 
 }
 //删除表单树类别

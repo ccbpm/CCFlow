@@ -192,5 +192,12 @@ namespace BP.GPM
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+        #region 删除方法
+        public void DelteNotInEmp()
+        {
+            string sql = "DELETE FROM Port_DeptEmpStation WHERE FK_Emp= NOT IN (SELECT No FROM Port_Emp)";
+            DBAccess.RunSQL(sql);
+        }
+        #endregion
+    }
 }

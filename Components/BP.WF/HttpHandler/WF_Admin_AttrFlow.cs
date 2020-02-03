@@ -738,5 +738,98 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
+        #region 欢迎页面初始化.
+        /// <summary>
+        /// 欢迎页面初始化-获得数量.
+        /// </summary>
+        /// <returns></returns>
+        public string GraphicalAnalysis_Init()
+        {
+            Hashtable ht = new Hashtable();
+            string fk_flow = GetRequestVal("FK_Flow");
+            //所有的实例数量.
+            ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '"+ fk_flow +"'")); //实例数.
+
+            //所有的待办数量.
+            ht.Add("TodolistNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=2 AND Fk_flow = '" + fk_flow + "'"));
+
+            //退回数.
+            ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 AND Fk_flow = '" + fk_flow + "'"));
+
+            //说有逾期的数量.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "'"));
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "'";
+
+                sql += "UNION SELECT* FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "')";
+
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt(sql));
+            }
+            else
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "'"));
+            }
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        /// <summary>
+        /// 获得数量  流程饼图，部门柱状图，月份折线图.
+        /// </summary>
+        /// <returns></returns>
+        public string GraphicalAnalysis_DataSet()
+        {
+            DataSet ds = new DataSet();
+            string fk_flow = GetRequestVal("FK_Flow");
+            #region  实例分析
+            //月份分组.
+            string sql = "SELECT FK_NY, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY FK_NY";
+            DataTable FlowsByNY = DBAccess.RunSQLReturnTable(sql);
+            FlowsByNY.TableName = "FlowsByNY";
+            ds.Tables.Add(FlowsByNY);
+
+            //部门分组.
+            sql = "SELECT DeptName, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
+            DataTable FlowsByDept = DBAccess.RunSQLReturnTable(sql);
+            FlowsByDept.TableName = "FlowsByDept";
+            ds.Tables.Add(FlowsByDept);
+            #endregion 实例分析。
+
+
+            #region 待办 分析
+            //待办 - 部门分组.
+            sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            DataTable TodolistByDept = DBAccess.RunSQLReturnTable(sql);
+            TodolistByDept.TableName = "TodolistByDept";
+            ds.Tables.Add(TodolistByDept);
+
+            //逾期的 - 部门分组.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+                sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            }
+            else
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            }
+            DataTable OverTimeByDept = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByDept.TableName = "OverTimeByDept";
+            ds.Tables.Add(OverTimeByDept);
+            #endregion 逾期。
+
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 欢迎页面初始化.
     }
 }

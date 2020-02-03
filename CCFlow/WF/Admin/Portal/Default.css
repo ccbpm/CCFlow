@@ -132,9 +132,9 @@
 }
 
 .panel-header {
-    height: 36px;
+    height: 42px;
+    padding-top: 7px;
 }
-
 .logpanel {
     height: 50px;
 }

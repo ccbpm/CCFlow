@@ -118,70 +118,71 @@
     </script>
 </head>
 <body>
-
-    <div id="bar"> </div>
-
-    <fieldset>
-        <legend>
-            <input type="radio" value="0" id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')" name="RefFrm" />
-            <label for="RB_CurrentForm">当前节点表单 </label>
-        </legend>
-        <ul>
-            <li>每个节点都有一个独立表单</li>
-            <li>在创建节点的时候默认的为当前节点表单.</li>
-            <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a></li>
-            <li><font color="green"><b>该表单风格可以通过改变\DataUser\Style\ccbpm.css文件改变</b></font></li>
-        </ul>
-    </fieldset>
-
-
-    <fieldset>
-        <legend>
-            <input type="radio" value="1" id="RB_OtherForms" onclick="SetDDLEnable('DDL_Frm','disable')" name="RefFrm" />
-            <label for="RB_OtherForms">关联引用其他节点表单</label>
-        </legend>
-
-        选择节点: <select id="DDL_Frm" name="DDL_Frm"> </select>
-        <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
+    <div class="cs-content-box">
+        <div id="bar" class="cs-tr cs-bar"> </div>
 
         <fieldset>
-            <legend id="help1"> 帮助 </legend>
+            <legend>
+                <input type="radio" value="0" id="RB_CurrentForm" checked="true" onclick="SetDDLEnable('DDL_Frm','enable')" name="RefFrm" />
+                <label for="RB_CurrentForm">当前节点表单 </label>
+            </legend>
             <ul>
-                <li>当前节点可以引用其他节点的表单.</li>
-                <li>一般流程都符合1，2规律. 这个1，2规律是:开始节点填写表单, 第2个节点是只读的，第2个以后都是审批节点。</li>
-                <li>对于符合1，2规律的流程模式设计步骤如下</li>
-                <li>1: 设计开始表单. </li>
-                <li>2: 把该表单导入到第2个节点上去，然后把字段设置为只读。 </li>
-                <li>3: 在第2个节点上拖入一个审核组件，并设置为启用状态(审核组件有禁用，启用，只读三个状态) </li>
-                <li>4: 在第3个节点以及第3个节点以后，设置为引用第2个节点的表单,并把审核组件启用起来.</li>
+                <li>每个节点都有一个独立表单</li>
+                <li>在创建节点的时候默认的为当前节点表单.</li>
+                <li><a href="javascript:DFoolFrm()">设计傻瓜表单</a></li>
+                <li class="cs-green">该表单风格可以通过改变\DataUser\Style\ccbpm.css文件改变</li>
             </ul>
         </fieldset>
 
-    </fieldset>
 
-    <fieldset>
-        <legend>
-            <input type="radio" value="2" id="RB_Pri" name="RefFrm" />
-            <label for="RB_Pri">有上一个节点表单来确定</label> - <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
-        </legend>
-        <ul>
-            <li>1.当前节点可以引用其上一个节点的表单.</li>
-            <li>2.如果上一个节点表单也是引用的上一个节点表单，那么系统就会依次类推的去寻找第一个当前节点表单.</li>
-        </ul>
-    </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="1" id="RB_OtherForms" onclick="SetDDLEnable('DDL_Frm','disable')" name="RefFrm" />
+                <label for="RB_OtherForms">关联引用其他节点表单</label>
+            </legend>
+            <div class="fieldset-main">
+                <div class="clearfix"><span class="choice-node">选择节点: </span><select id="DDL_Frm" name="DDL_Frm" style="width: auto"> </select></div>
+                <div><a href="javascript:ShowFWCAttr()">节点表单组件属性</a></div>
 
-    <fieldset>
-        <legend id="help">表单样式说明</legend>
-        <ul>
-            <li>PC该表单有4个列,设计简单方便.</li>
-            <li><img src='../Img/Col4Frm.JPG' style="width:80%;" class="help" /> </li>
-            <li>PC该表单6列,展示效果</li>
-            <li><img src='../Img/Col6Frm.JPG' style="width:80%;" class="help" /> </li>
-            <li>手机端展现有2个列,手机端自动适应,一次性设计</li>
-            <li><img src='../Img/Col2Frm.JPG'  class="help" /> </li>
-        </ul>
-    </fieldset>
+                <div class="cs-help">
+                    <div id="help1" class="help-title"> <img src="../Img/ico-help.png" alt="帮助" class="ico-help" />帮助 </div>
+                    <ul>
+                        <li>当前节点可以引用其他节点的表单.</li>
+                        <li>一般流程都符合1，2规律. 这个1，2规律是:开始节点填写表单, 第2个节点是只读的，第2个以后都是审批节点。</li>
+                        <li>对于符合1，2规律的流程模式设计步骤如下</li>
+                        <li>1: 设计开始表单. </li>
+                        <li>2: 把该表单导入到第2个节点上去，然后把字段设置为只读。 </li>
+                        <li>3: 在第2个节点上拖入一个审核组件，并设置为启用状态(审核组件有禁用，启用，只读三个状态) </li>
+                        <li>4: 在第3个节点以及第3个节点以后，设置为引用第2个节点的表单,并把审核组件启用起来.</li>
+                    </ul>
+                </div>
+            </div>
 
+        </fieldset>
 
+        <fieldset>
+            <legend>
+                <input type="radio" value="2" id="RB_Pri" name="RefFrm" />
+                <label for="RB_Pri">有上一个节点表单来确定</label> - <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
+            </legend>
+            <ul>
+                <li>1.当前节点可以引用其上一个节点的表单.</li>
+                <li>2.如果上一个节点表单也是引用的上一个节点表单，那么系统就会依次类推的去寻找第一个当前节点表单.</li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend id="help" class="form-instructor">表单样式说明</legend>
+            <ul>
+                <li>PC该表单有4个列,设计简单方便.</li>
+                <li><img src='../Img/Col4Frm.JPG' style="width:80%;" class="help" /> </li>
+                <li>PC该表单6列,展示效果</li>
+                <li><img src='../Img/Col6Frm.JPG' style="width:80%;" class="help" /> </li>
+                <li>手机端展现有2个列,手机端自动适应,一次性设计</li>
+                <li><img src='../Img/Col2Frm.JPG'  class="help" /> </li>
+            </ul>
+        </fieldset>
+
+    </div>
 </body>
 </html>

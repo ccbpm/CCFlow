@@ -168,7 +168,12 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
         colSpan = attr.ColSpan;
         textColSpan = attr.TextColSpan;
         if (tableCol == 4) {
-            colWidth = 35 * parseInt(colSpan) + "%";
+            if (colSpan == 1)
+                colWidth = "35%";
+            else if (colSpan == 2)
+                colWidth ="50%";
+            else if (colSpan == 3)
+                colWidth = "85%";
             textWidth = 15 * parseInt(textColSpan) + "%";
         } else {
             colWidth = 25 * parseInt(colSpan) + "%";
@@ -287,6 +292,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
         }
         //解析占一行的情况
         if (colSpan == tableCol) {
+            rowSpan = 1;
             html += "<tr>";
             html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + GenerLabel(attr) + "</br>";
             html += "</tr>";
@@ -303,6 +309,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
         if (sumColSpan == tableCol) {
             isDropTR = true;
             UseColSpan = 0;
+            rowSpan = 1;
             html += "<tr >";
             html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
             html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";

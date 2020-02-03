@@ -4,8 +4,6 @@
 -- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.
 update WF_Direction set mypk=replace(mypk, '_0','');
 
-update sys_groupfield set frmID=enName where frmid is  null;
-
 UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS NULL ) AND MyDataType=7;
 
 UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';

@@ -1482,6 +1482,30 @@ namespace BP.WF
 			return DBAccess.RunSQLReturnTable(sql);
 		}
 
+        /// <summary>
+        /// 根据流程编号，标题模糊查询
+        /// </summary>
+        /// <param name="flowNo"></param>
+        /// <param name="likeKey"></param>
+        /// <returns></returns>
+        public string QueryByLike(string flowNo,string likeKey)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere("FK_Flow", flowNo);
+            if(DataType.IsNullOrEmpty(likeKey) == false)
+            {
+                qo.addAnd();
+                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                    qo.AddWhere("Title", " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "Title" + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "Title" + "+'%'"));
+                else
+                    qo.AddWhere("Title", " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "Title" + "||'%'");
+                qo.MyParas.Add("Title", likeKey);
+            }
+           
+            qo.addOrderBy("WorkID");
+            qo.DoQuery();
+            return BP.Tools.Json.ToJson(this.ToDataTableField("WF_GenerWorkFlow"));
+        }
 		#region 方法
 		/// <summary>
 		/// 得到它的 Entity 

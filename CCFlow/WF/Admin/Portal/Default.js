@@ -549,20 +549,33 @@ function newFlowSort(isSub) {
     var data = handler.DoMethodReturnString(doWhat);
 
     var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
-
-    $('#flowTree').tree('append', {
-        parent: parentNode.target,
-        data: [{
-            id: data,
-            text: val,
-            attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
-            checked: false,
-            iconCls: 'icon-tree_folder',
-            state: 'open',
-            children: []
-        }]
-    });
-
+    if (parentNode) {
+        $('#flowTree').tree('append', {
+            parent: parentNode.target,
+            data: [{
+                id: data,
+                text: val,
+                attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
+                checked: false,
+                iconCls: 'icon-tree_folder',
+                state: 'open',
+                children: []
+            }]
+        });
+    } else {
+        $('#flowTree').tree('append', {
+            parent: null,
+            data: [{
+                id: data,
+                text: val,
+                attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
+                checked: false,
+                iconCls: 'icon-tree_folder',
+                state: 'open',
+                children: []
+            }]
+        });
+    }
     $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
 }
 
@@ -843,9 +856,8 @@ function newCCFormSort(isSub) {
         data = en.DoMethodReturnString("DoCreateSameLevelNodeIt", val);
 
     var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
-
     $('#formTree').tree('append', {
-        parent: parentNode.target,
+        parent: parentNode == null ? null : parentNode.target,
         data: [{
             id: data,
             text: val,

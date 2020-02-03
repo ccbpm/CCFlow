@@ -268,10 +268,15 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
             }
 
             var re = $.parseJSON(data);
-
             //将所有获取的数据转换为Node
-
             var roots = Find(re, nd.ColParentId, nd.RootParentId);
+            if (oFuncTree.Id == "flowTree" && oParentNode == null && nd.RootParentId == "F0") {
+                roots = Find(re, nd.ColParentId, roots[0][nd.ColId]);
+            }
+
+            if (oFuncTree.Id == "formTree" && oParentNode == null && nd.RootParentId == "0") {
+                roots = Find(re, nd.ColParentId, roots[0][nd.ColId]);
+            }
 
             //此处如果是惰性加载时，非第一次加载，要去除第一次加载时生成的Nodes
             if (oFuncTree.IsLazyLoading && oParentNode.Nodes && oParentNode.Nodes.length > 0) {

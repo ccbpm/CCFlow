@@ -1186,25 +1186,170 @@
         .btn-default {
             border: 0px;
         }
-
-        .btn {
-            background: white !important;
-            color: #337ab7 !important;
+        .cs-btn-group {
+            width: auto!important;
+            text-align: right;
         }
+        .cs-btn-group .l-btn-icon {
+            display: none;
+        }
+        .cs-btn-group .l-btn-text {
+            margin: 0;
+        }
+        .layout-panel {
+            position: absolute;
+            right: 0;
+            top: 0!important;
+        }
+        .layout-panel-north {
+            width: auto!important;
+            left: auto!important;
+        }
+        .btn {
+            padding: 2px 22px;
+            color: #fff!important;
+            border-radius: 3px!important;
+            border: 0;
+            height: 30px;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            padding: 2px 22px;
+            border: 0;
+        }
+        .btn-light-green {
+            background-color: #50b6ac!important;
+        }
+
+        .btn-light-green:hover {
+            background-color: #50b6ac;
+        }
+
+        .btn-light-blue {
+            background-color: #62cae3!important;
+        }
+
+        .btn-light-blue:hover {
+            background-color: #62cae3;
+        }
+
+        .btn-light-yellow {
+            background-color: #f3ba20!important;
+        }
+
+        .btn-light-yellow:hover {
+            background-color: #f3ba20;
+        }
+
+        .btn-light-red {
+            background-color: #f74f52!important;
+        }
+
+        .btn-light-red:hover {
+            background-color: #f74f52;
+        }
+        .btn-white {
+            border: 1px solid #031f5d;
+            background-color: #fff!important;;
+            color: #031f5d!important;
+        }
+        .btn-white:hover {
+            border: 1px solid #031f5d;
+        }
+        .tabs-wrap .tabs,.tabs-panels,.tabs li a.tabs-inner,.tabs-panels table,td.FDesc, td.FContext,td {
+            border: 0;
+        }
+        .tabs-wrap table {
+            width: 100%!important;
+        }
+        .tabs-wrap .tabs {
+            display: inline-block;
+            padding-left: 0;
+            width: auto;
+            border-bottom: 1px solid #0a2561;
+        }
+        .tabs li a.tabs-inner {
+            padding: 0 16px;
+            background: none;
+        }
+        .tabs li a.tabs-inner:hover {
+            background: none;
+            font-weight: bold;
+        }
+        .tabs li.tabs-selected a.tabs-inner {
+            border: 1px solid #0a2561;
+            border-bottom-color: #fff;
+            background: #fff;
+        }
+        .tabs-panels {
+            margin-top: 20px;
+        }
+        td {
+            box-sizing: border-box;
+        }
+        td a {
+            color: #15398b;
+            font-size: 13px;
+        }
+        td a img {
+            vertical-align: -2px;
+        }
+        td.FContext {
+            width: 30%;
+        }
+        td.FContext:nth-child(2) {
+            padding-right: 30px;
+        }
+        td.FContext > *:only-child {
+            width: 100%!important;
+            font-size: 13px;
+            color: #282828;
+            box-sizing: border-box;
+        }
+        td.FContext[colspan] {
+            padding-right: 0;
+        }
+        
+        select[disabled], input[type=text]:disabled,.form-control,.form-control[disabled], .form-control[readonly], fieldset[disabled] {
+            background-color: #f7f6f9;
+            border: 1px solid #ccc!important;
+            text-align: left!important;
+            height: 32px;
+            box-sizing: border-box;
+        }
+        td input[type="checkbox"] {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+        }
+        td label {
+            font-size: 13px;
+        }
+        /*td.FDesc {
+           padding-right: 10px;
+            text-align: right;
+            box-sizing: border-box;
+        }*/
+        /*td.FDesc:first-child {
+            width: 81px!important;
+        }
+        td:nth-child(3)[class="FDesc"] {
+            width: 130px!important;
+        }*/
     </style>
 </head>
 <body class="easyui-layout" data-options="fit:true">
     <!--<div class="easyui-layout" data-options="region:'center'" border="false">-->
         <!--<div class="easyui-layout" data-options="fit:true">-->
-            <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false"
-                 style="height: 30px; padding: 2px; background-color: #d3d3d34a">
-                <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'"
-                   onclick="New()">新建</a> <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton"
+            <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
+                <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
+                   onclick="New()">新建</a> 
+                <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
                                              data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
-                <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'"
+                <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-red" data-options="plain:true,iconCls:'icon-delete'"
                    onclick="Delete()">删除</a>
 
-                <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'"
+                <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton btn btn-white" data-options="plain:true,iconCls:'icon-reset'"
                    onclick="Setting()">设置</a>
 
 

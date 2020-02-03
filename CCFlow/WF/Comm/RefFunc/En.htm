@@ -38,12 +38,94 @@
     <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>   
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script> 
     <style type="text/css">
+        .navlist {
+            padding: 0;
+        }
         .navlist li a {
-            line-height: 24px;
-            color: gray;
+            line-height: 40px;
+            padding-left: 20px;
+            color: #031f5d;
             display: block;
-            width: 100%;
+            width: auto;
             text-decoration: none;
+        }
+        .navlist li img {
+            vertical-align: -3px;
+            margin-right: 20px;
+        }
+        .navlist li a:hover {
+            background-color: #e4eef8;
+        }
+        .cs-easyui-layout .panel-tool {
+            right: -22px;
+            top: 0;
+        }
+        .cs-easyui-layout {
+	        position: relative;
+	        padding: 14px 22px;
+	        background-color: #f7f6f9;
+        }
+        .cs-easyui-layout .layout-button-left,.cs-easyui-layout .layout-button-right {
+            margin-left: 0;
+            width: 21px;
+            height: 42px;
+            opacity: 1;
+            background: url(../CSS/images/ico-side-collapse.png) no-repeat center;
+        }
+        .cs-easyui-layout .layout-button-right {
+            background-image: url(../CSS/images/ico-side-expand.png)
+        }
+        .cs-easyui-layout .layout-expand {
+            background: none;
+        }
+        .cs-easyui-layout .layout-expand .panel-tool {
+            left: 0;
+        }
+        .layout-expand .panel-header,.layout-expand .panel-body,.accordion-body {
+            border: 0;
+        }
+        .cs-easyui-layout .layout-panel-west {
+            padding-right: 30px;
+	        top: 20px !important;
+	        left: 22px !important;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
+        }
+
+        .cs-easyui-layout .layout-panel-center {
+	        top: 20px !important;
+	        /*left: 290px !important;*/
+        }
+
+        .cs-easyui-layout .accordion-header {
+	        padding: 15px 20px;
+	        background-color: #fff;
+            border: 0;
+        }
+
+        .cs-easyui-layout .accordion-collapse,.cs-easyui-layout .accordion-expand {
+            right: 20px;
+	        top: 50%;
+	        transform: translateY(-50%);
+        }
+
+        .cs-easyui-layout .accordion-collapse {
+	        background-image: url(../css/images/ico-menu-show.png);
+        }
+        .cs-easyui-layout .accordion-expand {
+	        background-image: url(../css/images/ico-menu-hide.png);
+        }
+
+        .cs-funtion-list {
+	        /*width: 268px !important;*/
+            border: 0;
+        }
+        .cs-function-main {
+            position: relative;
+            margin-left: 22px;
+            padding: 20px 60px 20px 30px;
+            border: 0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
     </style>
 
@@ -293,13 +375,13 @@
 </head> 
 <body class="easyui-layout" data-options="fit:true">
 	
-	<div id="EnLayout" class="easyui-layout" data-options="region:'center'" border="false">
+	<div id="EnLayout" class="easyui-layout cs-easyui-layout" data-options="region:'center'" border="false">
 
-		<div id="Left" data-options="region:'west',title:'功能列表',split:true" style="width:195px; padding: 5px" ></div>
+		<div id="Left" data-options="region:'west',title:'test',split:true" class="cs-funtion-list" style="width:268px;" ></div>
        
-    	<div id="rightFrame" data-options="region:'center',noheader:true">
+    	<div id="rightFrame" class="cs-function-main" data-options="region:'center',noheader:true">
             <div class="easyui-layout" data-options="fit:true">
-                <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false" style="height: 30px;padding: 2px; background-color: #E0ECFF">
+                <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false" class="cs-btn-group" style="height: 30px;padding: 2px; background-color: #E0ECFF">
                     <a id="Btn_New" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
                     <a id="Btn_Save" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
                     <a id="Btn_Delete" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>

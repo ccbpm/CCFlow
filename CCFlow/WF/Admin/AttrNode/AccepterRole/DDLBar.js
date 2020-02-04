@@ -22,7 +22,7 @@ function InitBar(optionKey) {
         isSatrtNode = true;
 
     // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
-    var html = "<div style='padding:5px' >访问规则: ";
+    var html = "<div style='padding:5px' >接受人规则: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 

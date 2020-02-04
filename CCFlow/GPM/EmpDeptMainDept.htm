@@ -191,11 +191,11 @@
             deptEmp.FK_Emp = emp.No;
             deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
             deptEmp.Save();
-            window.history.go(-1);
+            parent.location.reload();
         }
         //返回.
         function Return() {
-            window.history.go(-1);
+            parent.location.reload();
         }
     </script>
 

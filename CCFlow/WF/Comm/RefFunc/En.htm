@@ -42,21 +42,24 @@
             padding: 0;
         }
         .navlist li a {
-            line-height: 40px;
-            padding-left: 20px;
+            padding: 10px 10px 10px 20px;
             color: #031f5d;
             display: block;
             width: auto;
             text-decoration: none;
+            line-height: 22px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
         .navlist li img {
             vertical-align: -3px;
-            margin-right: 20px;
+            margin-right: 14px;
         }
         .navlist li a:hover {
             background-color: #e4eef8;
         }
-        .cs-easyui-layout .panel-tool {
+        .cs-easyui-layout .layout-panel-west .panel-header:not(.accordion-header) .panel-tool {
             right: -22px;
             top: 0;
         }
@@ -90,6 +93,14 @@
 	        left: 22px !important;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
+        .cs-easyui-layout .layout-panel-west .panel-header:not(.accordion-header) {
+            padding: 0;
+            background: #fff none;
+            border: 0;
+        }
+        .cs-easyui-layout .layout-panel-west .panel-header:not(.accordion-header) .panel-title {
+            text-indent: -9999px;
+        }
 
         .cs-easyui-layout .layout-panel-center {
 	        top: 20px !important;
@@ -101,10 +112,16 @@
 	        background-color: #fff;
             border: 0;
         }
+        .cs-easyui-layout .accordion-header .panel-tool {
+            top: 50%;
+            transform: translateY(-50%);
+        }
 
         .cs-easyui-layout .accordion-collapse,.cs-easyui-layout .accordion-expand {
+            position:absolute;
             right: 20px;
 	        top: 50%;
+            margin-left: 0;
 	        transform: translateY(-50%);
         }
 
@@ -114,7 +131,10 @@
         .cs-easyui-layout .accordion-expand {
 	        background-image: url(../css/images/ico-menu-hide.png);
         }
+        .accordion .accordion-header.accordion-header {
 
+            background: none;
+        }
         .cs-funtion-list {
 	        /*width: 268px !important;*/
             border: 0;
@@ -377,7 +397,7 @@
 	
 	<div id="EnLayout" class="easyui-layout cs-easyui-layout" data-options="region:'center'" border="false">
 
-		<div id="Left" data-options="region:'west',title:'test',split:true" class="cs-funtion-list" style="width:268px;" ></div>
+		<div id="Left" data-options="region:'west',title:' ',split:true" class="cs-funtion-list" style="width:268px;" ></div>
        
     	<div id="rightFrame" class="cs-function-main" data-options="region:'center',noheader:true">
             <div class="easyui-layout" data-options="fit:true">

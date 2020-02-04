@@ -8,18 +8,24 @@ body
     font-size: 14px;
     direction: ltr;
 }
-
+/* 图片放大鼠标样式 */
+img.help:hover {
+    cursor: zoom-in;
+}
+/* 图片缩小鼠标样式 */
+#bigimg {
+    cursor: zoom-out;
+}
 /* 按钮风格 */
-input[type="button"], input[type="submit"], input[type="file"]
-{
+input[type="button"], input[type="submit"], input[type="file"] {
     border: 0; /*background: #4D77A7;*/
-    background: #fff;
+    background: #62CAE3;
     color: #545454;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-    border:1px solid #d2cdcd;
+    border: 1px solid #d2cdcd;
 }
 input:hover[type="button"]
 {

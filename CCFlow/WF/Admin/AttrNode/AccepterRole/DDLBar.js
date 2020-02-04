@@ -3,7 +3,7 @@
     jQuery.getScript(basePath + "/WF/Admin/Admin.js")
         .done(function () {
             /* 耶，没有问题，这里可以干点什么 */
-            // alert('ok');
+             //alert('ok');
         })
         .fail(function () {
             /* 靠，马上执行挽救操作 */
@@ -11,11 +11,9 @@
         });
 });
 
-
 var optionKey = 0;
-function InitBar(key) {
+function InitBar(optionKey) {
 
-    optionKey = key;
 
     var nodeID = GetQueryString("FK_Node");
     var str = nodeID.substr(nodeID.length - 2);
@@ -97,9 +95,11 @@ function InitBar(key) {
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
     }
     html += "</select >";
-    html += "<input  id='Btn_Save' type=button onclick='SaveIt()' value='保存' />";
-    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
+    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    //html += "<input  id='Btn_Save' type=button onclick='SaveIt()' value='保存' />";
+    html += "<input id='Btn' type=button onclick='AdvSetting()' value='高级设置' />";
     //  html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    html += "<input  id='Btn_Help' type=button onclick='Help()' value='在线帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
@@ -275,3 +275,4 @@ function AdvSetting() {
     var url = "AdvSetting.htm?FK_Node=" + nodeID + "&M=" + Math.random();
     OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
 }
+

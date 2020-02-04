@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -15,7 +15,7 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-    <script  type="text/javascript">
+    <script type="text/javascript">
 
         $(function () {
             InitBar(DeliveryWay.BySetDeptAsSubthread);
@@ -27,7 +27,7 @@
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                html += "<li>" + en.FK_DeptText+"</li>";
+                html += "<li>" + en.FK_DeptText + "</li>";
             }
 
             html += "</ul>";
@@ -47,17 +47,17 @@
         function OpenNew() {
             var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
             var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID; ;
+            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;;
             OpenEasyUiDialogExt(url, '设置部门', 800, 500, true);
         }
 
-       
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.BySetDeptAsSubthread;
-           node.Update();
-       }
+
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.BySetDeptAsSubthread;
+            node.Update();
+        }
     </script>
 </head>
 <body >

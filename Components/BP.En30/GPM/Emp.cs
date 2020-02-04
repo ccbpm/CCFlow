@@ -332,7 +332,7 @@ namespace BP.GPM
 
         public string DoEditMainDept()
         {
-            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
         
 

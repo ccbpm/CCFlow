@@ -35,8 +35,6 @@
         textarea, input[type=text] {
             width: 100%;
         }
-    </style>
-    <style type="text/css">
         body {
             font-size: .80em;
             font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
@@ -59,7 +57,106 @@
         }
 
         th {
-            background-color: InfoBackground;
+            /*background-color: InfoBackground;*/
+            background-color: #f1f1f1;
+        }
+        .cs-btn-group {
+            background-color: #f7f6f9;
+            border: 0;
+            text-align: right;
+        }
+        .cs-btn-group a {
+            margin-right: 6px;
+            padding: 6px 22px 4px;
+            color: #fff;
+            font-size: 13px;
+            line-height: 14px;
+            height: 30px;
+            border: 0 none;
+            border-radius: 3px;
+            background-image: none;
+            box-sizing: border-box;
+        }
+        .cs-btn-group span.l-btn-left.l-btn-left {
+            padding: 0;
+            background-image: none;
+        }
+
+        .btn-light-green {
+            background-color: #50b6ac;
+        }
+
+        .btn-light-green:hover {
+            background-color: #50b6ac;
+        }
+
+        .btn-light-blue {
+            background-color: #62cae3;
+        }
+
+        .btn-light-blue:hover {
+            background-color: #62cae3;
+        }
+
+        .btn-light-yellow {
+            background-color: #f3ba20;
+        }
+
+        .btn-light-yellow:hover {
+            background-color: #f3ba20;
+        }
+
+        .btn-light-red {
+            background-color: #f74f52;
+        }
+
+        .btn-light-red:hover {
+            background-color: #f74f52;
+        }
+        .cs-easyui-layout {
+            background: #f7f6f9;
+        }
+        .cs-panel-body {
+            padding: 20px 0;
+            background-color: #fff;
+            border: 0;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
+        }
+        .cs-table {
+            width: 100%;
+        }
+        .cs-table td a {
+            color: #15398b;
+        }
+        .cs-table th a {
+            height: 30px;
+            color: #282828;
+            vertical-align: middle;
+        }
+        .cs-table th a:hover {
+            padding: 0 5px 0 0;
+            background-color: transparent;
+            border-color: transparent;
+            text-decoration: none;
+        }
+        .cs-table td,.cs-table th {
+            line-height: 30px;
+        }
+        .cs-table td {
+            padding: 7px;
+        }
+        .cs-table th {
+            padding-left: 20px;
+        }
+        .cs-table input, .cs-table select,.cs-table textarea {
+            margin: 0!important;
+            width: 100%!important;
+            background-color: #f7f6f9;
+        }
+        .cs-order {
+            float: right;
+            height: 30px;
         }
     </style>
     <script type="text/javascript">
@@ -152,9 +249,9 @@
 
             var html = "";
 
-            html += "<tr>";
-            html += "<td colspan=" + tableCol + " ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
-            html += "</tr>";
+            //html += "<tr>";
+            //html += "<td colspan=" + tableCol + " ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
+            //html += "</tr>";
 
             for (var k = 0; k < groupFields.length; k++) {
 
@@ -591,7 +688,7 @@
 
 
                 //右边的按钮都一样.
-                var rightBtn = "<div style='text-align:right; float:right'>" + midBtn;
+                var rightBtn = "<div class='cs-order'>" + midBtn;
                 rightBtn += "<a href=\"javascript:GFDoUp('" + groupEn.OID + "' )\"  class='easyui-linkbutton l-btn l-btn-plain'  data-options='iconCls:icon-up,plain:true' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>";
                 rightBtn += "<a href=\"javascript:GFDoDown('" + groupEn.OID + "');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-down,plain:true'><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
                 rightBtn += "</div>";
@@ -1372,55 +1469,52 @@
 </head>
 <body onkeypress="Esc();" class="easyui-layout layout panel-noscroll" topmargin="0" leftmargin="0">
 
-    <div class="easyui-layout layout" data-options="fit:true" style="width: 100%; height: 628px;">
-        <div class="panel layout-panel layout-panel-north" style="left: 0px; top: 0px; width: 100%;">
-            <div data-options="region:'north'" id="toolbar" style="padding: 5px; overflow-y: hidden;" title="表单设计器-工具栏"
-                 class="panel-body panel-body-noheader layout-body">
-                <a href="javascript:MapDataEdit();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
+    <div class="easyui-layout layout cs-easyui-layout" data-options="fit:true" style="width: 100%; height: 628px;">
+        <div class="panel layout-panel layout-panel-north" style="position:static">
+            <div data-options="region:'north'" id="toolbar" style="padding: 8px; overflow-y: hidden;" title="表单设计器-工具栏"
+                 class="panel-body panel-body-noheader layout-body cs-btn-group">
+                <a href="javascript:MapDataEdit();" class="easyui-linkbutton btn-light-green">
                     表单属性
                 </a>
 
 
-                <a href="javascript:ExpImp();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'">
+                <a href="javascript:ExpImp();" class="easyui-linkbutton btn-light-blue">
                     导入/导出
                 </a>
 
-                <a href="javascript:AddF();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">
+                <a href="javascript:AddF();" class="easyui-linkbutton btn-light-yellow">
                     新建字段
                 </a> 
                 <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
                     隐藏字段
                 </a>-->
-                <a href="javascript:GroupFieldNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">
+                <a href="javascript:GroupFieldNew();" class="easyui-linkbutton btn-light-green">
                     新建字段分组
-                </a> <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-checkGroup'">
-    &nbsp;&nbsp;新建审核分组
-</a> <a href="javascript:NewMapDtl();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">
+                </a> 
+                <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton btn-light-red">
+                    &nbsp;&nbsp;新建审核分组
+                </a> 
+                <a href="javascript:NewMapDtl();" class="easyui-linkbutton btn-light-blue">
                     新建从表
-                </a> <a href="javascript:NewAth();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
+                </a> <a href="javascript:NewAth();" class="easyui-linkbutton btn-light-green">
                     新建附件
-                </a><a href="javascript:NewFrame();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">
+                </a><a href="javascript:NewFrame();" class="easyui-linkbutton btn-light-yellow">
                     新建框架
-                </a> <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" id="FrmNodeComponent"
-                        data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
-                <a href="javascript:MobileFrm();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-telephone'">
+                </a>
+                <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent"
+                        >节点表单组件</a>
+                <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
                     手机表单
                 </a>
 
             </div>
         </div>
-        <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 36px;
-                    width: 100%;">
-            <div data-options="region:'center'" style="padding-top: 10px; padding-bottom: 10px;
-                        width: 100%; height: 570px; background-color: rgb(208, 208, 208);" title=""
-                 class="panel-body panel-body-noheader layout-body">
-                <div style="width: 900px; background-color: white; border: 1px solid #666; padding: 5px;
-                            margin: auto;" align="center">
+        <div class="panel layout-panel layout-panel-center" style="position:static">
+            <div data-options="region:'center'" title="" class="panel-body panel-body-noheader layout-body cs-panel-body">
 
-                    <table style="border: 1px; padding: 5px; padding-top: 11px; width: 100%;" id="contentTable">
-                    </table>
+                <table id="contentTable" class="cs-table">
+                </table>
 
-                </div>
             </div>
         </div>
     </div>

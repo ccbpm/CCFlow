@@ -3129,51 +3129,51 @@
 /*.cs-content-box legend ~ ul {
     margin-top: 48px
 }*/
-    .navbar .btn, .cs-bar input[type="button"], .cs-bar input[type="button"]:hover {
-        margin-right: 6px;
-        padding: 0 22px;
-        height: 30px;
-        color: #fff;
-        font-size: 13px;
-        line-height: 14px;
-        border: 0 none;
-        border-radius: 3px;
-        background-image: none;
-        box-shadow: none;
-        text-shadow: none;
-        box-sizing: border-box;
-    }
+.navbar .btn, .cs-bar input[type="button"], .cs-bar input[type="button"]:hover {
+    margin-right: 6px;
+    padding: 0 22px;
+    height: 30px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 14px;
+    border: 0 none;
+    border-radius: 3px;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    box-sizing: border-box;
+}
 
 .btn-light-green {
-    background-color: #50b6ac;
+    background-color: #50b6ac!important;
 }
 
 .btn-light-green:hover {
-    background-color: #50b6ac;
+    background-color: #50b6ac !important;
 }
 
 .btn-light-blue {
-    background-color: #62cae3;
+    background-color: #62cae3 !important;
 }
 
 .btn-light-blue:hover {
-    background-color: #62cae3;
+    background-color: #62cae3 !important;
 }
 
 .btn-light-yellow {
-    background-color: #f3ba20;
+    background-color: #f3ba20 !important;
 }
 
 .btn-light-yellow:hover {
-    background-color: #f3ba20;
+    background-color: #f3ba20 !important;
 }
 
 .btn-light-red {
-    background-color: #f74f52;
+    background-color: #f74f52 !important;
 }
 
 .btn-light-red:hover {
-    background-color: #f74f52;
+    background-color: #f74f52 !important;
 }
 
 .navbar .btn-white {

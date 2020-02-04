@@ -12,7 +12,7 @@
     <!--引入easyui-->
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script src="../../Scripts/EasyUIUtility.js"></script>
-    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css?v123" rel="stylesheet" />
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
 
     <!--引入CSS样式 begin-->
@@ -35,40 +35,115 @@
     <script src="DesignerTools.js"></script>
     <script src="../../Comm/JS/Calendar/WdatePicker.js"></script>
     <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" />
+    <style>
+        body {
+            padding-right: 22px!important;
+            background-color: #f7f6f9;
+        }
+        .cs-sidebar {
+            padding-left: 8px;
+            top: 46px;
+            left: 14px;
+            width: 260px;
+            font-size: 13px;
+            border: 0;
+            background-color: #fff;
+            box-shadow: 0 0 12px rgba(0,0,0,.1);
+            border-radius: 4px;
+        }
+        .cs-sidebar .figurePanel {
+            position: relative;
+            padding: 10px 20px 10px 18px;
+            background-color: #fff;
+            border: 0;
+        }
+        .cs-sidebar .figurePanel img {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .cs-sidebar .navlist li {
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .cs-sidebar .navlist li:hover {
+            background-color: #e4eef8;
+        }
+        .cs-sidebar .navlist li div {
+            padding: 10px 0 10px 20px;
+            height: 38px;
+            width: 100%;
+            border: 0;
+            background-position: left 22px center;
+            background-size: 16px 16px;
+            box-sizing: border-box;
+        }
+        .cs-tree .content-wrapper {
+            margin-left: 298px;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
+        }
+        .cs-tree .tab-content {
+            border: 0;
+        }
+        .cs-btn-group {
+            padding: 8px 0 8px 8px;
+            background-color: #f7f6f9;
+            border: 0;
+            text-align: right;
+        }
+        .cs-btn-group input[type="button"] {
+            margin: 0 0 0 6px;
+            padding: 5px 22px 5px;
+            color: #fff;
+            font-size: 13px;
+            line-height: 14px;
+            height: 30px;
+            border: 0 none;
+            border-radius: 3px;
+            background-image: none;
+            box-sizing: border-box;
+        }
+        .cs-btn-group span.l-btn-left.l-btn-left {
+            padding: 0;
+            background-image: none;
+        }
+
+    </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini" style="overflow:hidden;">
-    <div>
-        <input type="button" onclick="FrmAttr()" value="表单属性" id="Btn_FrmAttr" />
-        <input type="button" onclick="SaveForm()" value="保存" id="Btn_Save" />
-        <input type="button" onclick="SaveAs()" value="另存为" id="Btn_SaveAs" />
-        <input type="button" onclick="PreviewForm()" value="预览" id="Btn_View" />
-        <input type="button" onclick="leipiFormDesign.exec('impfrm')" value="导入表单模版" id="Btn_ImpTemplate" />
-        <input type="button" onclick="leipiFormDesign.exec('ImpFrmFields');" value="插入回收站字段" id="Btn_ImpFields" />
-        <input type="button" onclick="FrmMobile()" value="手机表单" id="Btn_FrmMobile" />
+<body class="hold-transition skin-blue sidebar-mini cs-tree" style="overflow:hidden;">
+    <div class="cs-btn-group">
+        <input type="button" onclick="FrmAttr()" value="表单属性" class="btn-light-green" id="Btn_FrmAttr" />
+        <input type="button" onclick="SaveForm()" value="保存" class="btn-light-blue" id="Btn_Save" />
+        <input type="button" onclick="SaveAs()" value="另存为" class="btn-light-yellow" id="Btn_SaveAs" />
+        <input type="button" onclick="PreviewForm()" value="预览" class="btn-light-green" id="Btn_View" />
+        <input type="button" onclick="leipiFormDesign.exec('impfrm')" class="btn-light-blue" value="导入表单模版" id="Btn_ImpTemplate" />
+        <input type="button" onclick="leipiFormDesign.exec('ImpFrmFields');" class="btn-light-red" value="插入回收站字段" id="Btn_ImpFields" />
+        <input type="button" onclick="FrmMobile()" value="手机表单" class="btn-light-yellow" id="Btn_FrmMobile" />
         <div id="msg"></div>
     </div>
     <!--左边导航-->
-    <div class="main-sidebar">
+    <div class="main-sidebar cs-sidebar">
         <div class="sidebar">
             <div id="sidebar-menu" style="height:600px;">
                 <div id="figures" style="height: 100%; overflow: auto; position: relative;">
                     <div class="figurePanel">
-                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="basicimg" />
+                        <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="basicimg" />
                         <div>基本控件</div>
                     </div>
                     <div id="basic">
                         <ul class="navlist">
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="Button" style="background-image: url(../CCFormDesigner/Controls/basic/Button.png);">
                                     <span class="navlistspan">按钮</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="HyperLink" style="background-image: url(../CCFormDesigner/Controls/basic/HyperLink.png);">
                                     <span class="navlistspan">超链接</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="HyperLink" style="background-image: url(../CCFormDesigner/Controls/basic/Img.png);" onclick="leipiFormDesign.exec('component','Img');">
                                     <span class="navlistspan">图片</span>
                                 </div>
@@ -77,68 +152,68 @@
                         </ul>
                     </div>
                     <div class="figurePanel">
-                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="Dataimg" />
+                        <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="Dataimg" />
                         <div>字段控件</div>
                     </div>
                     <div id="Data">
                         <ul class="navlist">
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="TextBox" style="background-image: url(../CCFormDesigner/Controls/Data/TextBox.png);" class="" onclick="leipiFormDesign.exec('text','Text');">
                                     <span class="navlistspan">文本类型</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
-                                <div id="TextBox" style="background-image: url(../CCFormDesigner/Controls/Data/TextBox.png);" class="" onclick="leipiFormDesign.exec('textarea');">
+                            <li>
+                                <div id="TextBox" style="        background-image: url(../CCFormDesigner/Controls/Data/TextBox.png);" class="" onclick="leipiFormDesign.exec('textarea');">
                                     <span class="navlistspan">大文本类型</span>
                                 </div>
                             </li>
 
-                            <li style="cursor: pointer; margin-top: 2px;">
-                                <div id="TextBoxInt" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxInt.png);" class="" onclick="leipiFormDesign.exec('text','Int');">
+                            <li>
+                                <div id="TextBoxInt" style="        background-image: url(../CCFormDesigner/Controls/Data/TextBoxInt.png);" class="" onclick="leipiFormDesign.exec('text','Int');">
                                     <span class="navlistspan">数值类型</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="TextBoxMoney" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxMoney.png);" class="" onclick="leipiFormDesign.exec('text','Money');">
                                     <span class="navlistspan">金额类型</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="TextBoxFloat" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxFloat.png);" class="" onclick="leipiFormDesign.exec('text','Float');">
                                     <span class="navlistspan">浮点类型</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="Date" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxDate.png);" class="" onclick="leipiFormDesign.exec('text','Date');">
                                     <span class="navlistspan">日期类型</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="DateTime" style="background-image: url(../CCFormDesigner/Controls/Data/TextBoxDateTime.png);" class="" onclick="leipiFormDesign.exec('text','DateTime');">
                                     <span class="navlistspan">日期时间类型</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="CheckBox" style="background-image: url(../CCFormDesigner/Controls/Data/Checkbox.png);" class="" onclick="leipiFormDesign.exec('text','CheckBox');">
                                     <span class="navlistspan">选择框</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="RadioButton" style="background-image: url(../CCFormDesigner/Controls/Data/Radiobutton.png);" class="" onclick="leipiFormDesign.exec('enum','Radio');">
                                     <span class="navlistspan">枚举单选按钮</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="DropDownListEnum" style="background-image: url(../CCFormDesigner/Controls/Data/DropDownListEnum.png);" class="" onclick="leipiFormDesign.exec('enum','Select');">
                                     <span class="navlistspan">枚举下拉框</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="DropDownCheckEnum" style="background-image: url(../CCFormDesigner/Controls/Data/Checkbox.png);" class="" onclick="leipiFormDesign.exec('enum','CheckBox');">
                                     <span class="navlistspan">枚举复选框</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="DropDownListTable" class="" style="background-image: url(../CCFormDesigner/Controls/Data/DropDownListTable.png);" onclick="leipiFormDesign.exec('select');">
                                     <span class="navlistspan">外键下拉框</span>
                                 </div>
@@ -146,33 +221,33 @@
                         </ul>
                     </div>
                     <div class="figurePanel">
-                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="Componentsimg" />
+                        <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="Componentsimg" />
                         <div>组件类</div>
                     </div>
                     <div id="Components">
                         <ul class="navlist">
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="Dtl" class="" style="background-image: url(../CCFormDesigner/Controls/Components/Dtl.png);" onclick="leipiFormDesign.exec('dtl');">
                                     <span class="navlistspan">明细表/从表</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="AthMulti" style="background-image: url(../CCFormDesigner/Controls/Components/AthMulti.png);" onclick="leipiFormDesign.exec('ath');">
                                     <span class="navlistspan">多附件</span>
                                 </div>
                             </li>
 
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="AthImg" style="background-image: url(../CCFormDesigner/Controls/Components/AthImg.png);" onclick="leipiFormDesign.exec('component','AthImg');">
                                     <span class="navlistspan">图片附件</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="HandSiganture" style="background-image: url(../CCFormDesigner/Controls/Components/HandSiganture.png);" onclick="leipiFormDesign.exec('component','HandWriting');">
                                     <span class="navlistspan">签字板</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="iFrame" style="background-image: url(../CCFormDesigner/Controls/Components/iFrame.png);" onclick="leipiFormDesign.exec('component','IFrame');">
                                     <span class="navlistspan">框架</span>
                                 </div>
@@ -180,37 +255,37 @@
                         </ul>
                     </div>
                     <div class="figurePanel">
-                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="mobileimg" />
+                        <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="mobileimg" />
                         <div>控件</div>
                     </div>
                     <div id="mobile">
                         <ul class="navlist">
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="Map" style="background-image: url(../CCFormDesigner/Controls/mobile/Map.png);" onclick="leipiFormDesign.exec('component','Map');">
                                     <span class="navlistspan">地图控件</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="Map" style="background-image: url(../CCFormDesigner/Controls/mobile/Map.png);" onclick="leipiFormDesign.exec('component','Score');">
                                     <span class="navlistspan">评分控件</span>
                                 </div>
                             </li>
-                            <!--<li style="cursor: pointer; margin-top: 2px;">
+                            <!--<li>
                                 <div id="Camera" style="background-image: url(../CCFormDesigner/Controls/mobile/Camera.png);">
                                     <span class="navlistspan">拍照上传</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="SoundRecord" style="background-image: url(../CCFormDesigner/Controls/mobile/SoundRecord.png);">
                                     <span class="navlistspan">录音</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="VideoRecord" style="background-image: url(../CCFormDesigner/Controls/mobile/VideoRecord.png);">
                                     <span class="navlistspan">录像</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="QRCode" style="background-image: url(../CCFormDesigner/Controls/mobile/QRCode.png);">
                                     <span class="navlistspan">二维码</span>
                                 </div>
@@ -218,22 +293,22 @@
                         </ul>
                     </div>
                     <div class="figurePanel">
-                        <img src="../CCFormDesigner/Img/Min.png" align="middle" id="ccbpmimg" />
+                        <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="ccbpmimg" />
                         <div>流程组件</div>
                     </div>
                     <div id="ccbpm">
                         <ul class="navlist">
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="FlowChart" style="background-image: url(../CCFormDesigner/Controls/ccbpm/FlowChart.png);" onclick="leipiFormDesign.exec('component','JobSchedule');">
                                     <span class="navlistspan">进度图</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="FrmCheck" style="background-image: url(../CCFormDesigner/Controls/ccbpm/FrmCheck.png);" onclick="leipiFormDesign.exec('component','WorkCheck');">
                                     <span class="navlistspan">审核组件</span>
                                 </div>
                             </li>
-                            <li style="cursor: pointer; margin-top: 2px;">
+                            <li>
                                 <div id="SubFlowDtl" style="background-image: url(../CCFormDesigner/Controls/ccbpm/SubFlowDtl.png);" onclick="leipiFormDesign.exec('component','SubFlow');">
                                     <span class="navlistspan">子流程</span>
                                 </div>

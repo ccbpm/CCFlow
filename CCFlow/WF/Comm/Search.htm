@@ -458,7 +458,7 @@
             }
 
             //增加按钮.
-            html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:10px" id="search_btn" onclick="Search()">查询</a>  ';
 
             var btnLab1 = cfg.GetPara("BtnLab1");
             var btnLab2 = cfg.GetPara("BtnLab2");
@@ -1206,29 +1206,95 @@
             font-size: 13px;
         }
 
-            .pagination .controls {
-                float: left;
-                border: 0;
-                padding: 7px 0 0 15px;
-                color: #777;
-            }
+        .pagination .controls {
+            float: left;
+            border: 0;
+            padding: 7px 0 0 15px;
+            color: #777;
+        }
+        .cs-search-html {
+            background-color: #f7f6f9;
+            padding: 18px 22px;
+            color: #282828;
+            font-size: 13px;
+        }
+        .cs-table .ibox-content {
+            background-color: transparent;
+        }
+        .cs-shadow-box {
+            margin-bottom: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 12px rgba(0,0,0,.1);
+            border-radius: 4px;
+        }
+        .cs-table .panel-default {
+            padding: 10px 30px 10px 10px;
+            margin-bottom: 10px;
+        }
+        .cs-table .panel-default .btn {
+            padding: 4px 15px;
+            background-color: #fff;
+            color: #031f5d;
+            border-color: currentColor;
+            vertical-align: 2px;
+        }
+        .cs-table label {
+            margin: 0 10px 0 20px!important;
+            font-size: 13px;
+            font-weight: normal;
+        }
+        .cs-table input, .cs-table select {
+            min-width: 160px;
+            height: 30px;
+            border-radius: 3px;
+        }
+        .cs-table tbody td {
+            padding: 7px 0!important;
+        }
+        .cs-table tbody td {
+            border-bottom: 1px solid #ddd!important;
+        }
+        .fixed-table-container thead th .th-inner {
+            padding: 6px 0;
+        }
+        .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+            background-color: #ddd;
+            font-size: 13px;
+        }
+         .bootstrap-table .table,.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+            border: 0;
+            font-size: 13px;
+        }
+        .cs-pagination {
+            text-align: right;
+        }
+        .cs-pagination ul {
+            display: inline-block;
+        }
+        .cs-pagination .controls {
+            padding: 0 4px;
+            vertical-align: 4px;
+        }
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            color: #15398b;
+        }
     </style>
 </head>
-<body id="SearchHtml">
-    <div class="wrapper wrapper-content animated fadeInRight" style="padding: 0px 10px 0px 10px">
+<body id="SearchHtml" class="cs-search-html">
+    <div class="wrapper wrapper-content animated fadeInRight cs-table" style="padding: 0px 10px 0px 10px">
         <div class="ibox-content">
-            <div class="row">
+            <div class="row cs-shadow-box">
                 <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
                     <div id="toolbar" style="width: 100%">
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row cs-shadow-box">
                 <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
                 </table>
             </div>
             <!-- 显示分页信息 -->
-            <div class="row" style="text-align: left;">
+            <div class="row cs-pagination">
                 <ul class="pagination" id="page_nav">
                 </ul>
                 <ul class="pagination controls" id="page_info">

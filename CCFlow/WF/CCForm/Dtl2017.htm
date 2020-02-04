@@ -382,9 +382,7 @@
                 }
             });
 
-            insertTr.append($('<td> <a href=\"javascript:deleteRow(this)\" >移除</a></td>'));
-
-            var trData = { data: {} };
+             var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {
                 var defVal = undefined;
                 //设置新增时的默认值
@@ -399,6 +397,10 @@
 
             trData.data["OID"] = 0;
             insertTr.data(trData);
+
+            insertTr.append($('<td> <a href="#" onclick="deleteRow(this)" >移除</a></td>'));
+
+           
 
             // 生成统计行
             if (window.columnExp && !statisticsFlag) {
@@ -1703,15 +1705,16 @@
                 window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitPage, FK_MapData, FK_Node, fid, true);
             }
         }
-        function deleteRow(index) {
+        function deleteRow(obj) {
 
             isDelRowAlert = true;
             var result = parent.window.confirm('确定要删除吗?');
             if (result == false)
                 return;
 
-            var rowData = $(index).parent().parent().data().data;
-            var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+           
+            var rowData = $(obj).parent().parent().data().data;
+            var rowCurrentIndex = parseInt($($(obj).parent().parent().children()[0]).text()) - 1;
             pageData.currentRowIndex = rowCurrentIndex;
             if (rowData.OID > 0) {
                 rowData.DoType = "Dtl_DeleteRow";
@@ -1725,7 +1728,7 @@
                 $('#Msg').hide();
 
             } else { //移除  新增的 尚未入库
-                var tr = $(index).parent().parent();
+                var tr = $(obj).parent().parent();
                 updateTableSn(tr);
                 tr.remove();
                 triggerStatistics(); // 重新计算
@@ -1837,8 +1840,7 @@
                     mapExt.Delete();
                     continue;
                 }
-                if (mapAttr.UIIsEnable == "0")
-                    continue;
+               
                 //处理Pop弹出框
                 var PopModel = mapAttr.GetPara("PopModel");
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
@@ -2181,6 +2183,7 @@
                                             });
                                         }
 
+                                        
 
 
 
@@ -2203,6 +2206,7 @@
 
                                     }
                                 }
+                                
                             }
                         }
                         break;

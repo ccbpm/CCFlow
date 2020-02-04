@@ -462,27 +462,27 @@
 
             //找一下 Port_DeptEmpStation 里面有的数据，但是在 Port_DeptEmp没有的就，插入进去.
 
-            var deptEmpStations = new Entities("BP.GPM.DeptEmpStations");
-            deptEmpStations.Retrieve("FK_Dept", deptNo);
-            var isHave = false;
-            for (var i = 0; i < deptEmpStations.length; i++) {
+            //var deptEmpStations = new Entities("BP.GPM.DeptEmpStations");
+            //deptEmpStations.Retrieve("FK_Dept", deptNo);
+            //var isHave = false;
+            //for (var i = 0; i < deptEmpStations.length; i++) {
 
-                var en = deptEmpStations[i];
+            //    var en = deptEmpStations[i];
 
-                if (empNos.indexOf(',' + en.FK_Emp + ',') == -1) {
-                    /*插入里面去.*/
+            //    if (empNos.indexOf(',' + en.FK_Emp + ',') == -1) {
+            //        /*插入里面去.*/
 
-                    var deptEmp = new Entity("BP.GPM.DeptEmp");
-                    deptEmp.SetPKVal(en.FK_Dept + "_" + en.FK_Emp);
-                    deptEmp.FK_Emp = en.FK_Emp;
-                    deptEmp.FK_Dept = en.FK_Dept;
-                    deptEmp.Insert();
-                    isHave = true;
-                }
-            }
+            //        var deptEmp = new Entity("BP.GPM.DeptEmp");
+            //        deptEmp.SetPKVal(en.FK_Dept + "_" + en.FK_Emp);
+            //        deptEmp.FK_Emp = en.FK_Emp;
+            //        deptEmp.FK_Dept = en.FK_Dept;
+            //        deptEmp.Insert();
+            //        isHave = true;
+            //    }
+            //}
 
-            if (isHave)
-                BindEmps();
+            //if (isHave)
+            //    BindEmps();
 
             html += "</tbody>";
             html += "</table>";

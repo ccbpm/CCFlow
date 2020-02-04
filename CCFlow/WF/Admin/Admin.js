@@ -46,7 +46,8 @@ function SetNewCSS() {
     //body下添加一个父Div
     var div = document.createElement('div');
     $(div).attr('class', 'cs-content-box');
-    $('body').wrap(div);
+    $('#bar').wrap(div);
+    $('fieldset').wrapAll(div);
     //帮助ul风格
     div = document.createElement('div');
     $(div).attr('class', 'cs-help');
@@ -55,6 +56,12 @@ function SetNewCSS() {
     $(".cs-help").append(div2);
     //bar风格
     $('#bar').attr('class', 'cs-tr cs-bar');
+    //删除重复的说明标题
+    var leg = $("legend");
+    for (var i = 0; i < leg.length; i++) {
+        if (leg.eq(i).text() == "说明")
+            leg.eq(i).remove();
+    }
 }
 //设置帮助页面内容 @lz
 function SetHelpPage() {

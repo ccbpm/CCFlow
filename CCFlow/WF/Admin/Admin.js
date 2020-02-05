@@ -44,7 +44,6 @@ $(document).ready(function () {
 })
 //动态添加新风格  @lz
 function SetNewCSS() {
-    debugger
     //body下添加一个父Div
     var div = document.createElement('div');
     $(div).attr('class', 'cs-content-box');

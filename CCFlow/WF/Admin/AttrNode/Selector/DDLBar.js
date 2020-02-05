@@ -3,7 +3,7 @@
     jQuery.getScript(basePath + "/WF/Admin/Admin.js")
         .done(function () {
             /* 耶，没有问题，这里可以干点什么 */
-            // alert('ok');
+            //alert('ok');
         })
         .fail(function () {
             /* 靠，马上执行挽救操作 */

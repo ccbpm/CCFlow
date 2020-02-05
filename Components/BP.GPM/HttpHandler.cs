@@ -51,11 +51,14 @@ namespace BP.GPM
             if (emp.RetrieveFromDBSources() == 1)
                 return "err@用户名已经存在.";
 
-            emp.Name = this.GetRequestVal("TB_Name");
-            emp.FK_Dept = this.GetRequestVal("DDL_FK_Dept");
-            emp.Email = this.GetRequestVal("TB_Email");
-            emp.Pass = this.GetRequestVal("TB_PW");
-            emp.Tel = this.GetRequestVal("TB_Tel");
+            //从Request对象中复制数据.
+            PubClass.CopyFromRequest(emp);
+
+            //emp.Name = this.GetRequestVal("TB_Name");
+            //emp.FK_Dept = this.GetRequestVal("DDL_FK_Dept");
+            //emp.Email = this.GetRequestVal("TB_Email");
+            //emp.Pass = this.GetRequestVal("TB_PW");
+            //emp.Tel = this.GetRequestVal("TB_Tel");
             emp.Insert();
 
             return "注册成功";

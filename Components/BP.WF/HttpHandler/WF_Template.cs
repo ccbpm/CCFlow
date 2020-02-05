@@ -24,6 +24,7 @@ namespace BP.WF.HttpHandler
         public WF_Template()
         {
         }
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法

@@ -512,10 +512,11 @@ function checkReg() {
 }
 
 function setIframeHeight() {
-    if ($("body").height() < 260) {
-        $("body").height = 260;
+    var h = $("body").height();
+    if ($("body").height() < 100) {
+        h = 100;
     }
-    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
+    $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
 }
 
 

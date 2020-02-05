@@ -392,7 +392,9 @@
                     defVal = workNodeData.Blank[0][mapAttr.KeyOfEn];
                 }
 
-                trData.data[mapAttr.KeyOfEn] = defVal;
+               if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (defVal == "10002" || defVal == "10002.0000"))
+                    defVal = "";
+               trData.data[mapAttr.KeyOfEn] = defVal;
             })
 
             trData.data["OID"] = 0;
@@ -431,10 +433,11 @@
         }
 
         function setIframeHeight() {
+            var h = $("body").height();
             if ($("body").height() < 260) {
-                $("body").height = 260;
+                h = 260;
             }
-            $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
+            $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
         }
 
         //行最后的保存按钮

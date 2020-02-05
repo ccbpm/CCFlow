@@ -5,7 +5,7 @@
  *  3. 目前增加了两个模式的操作。 
  *     3.1 fieldset 的 legend 的ID 包含 help 就是帮助内容页面. 出现的效果是加载后，是隐藏的，用户点击文字就要显示里面的内容
  *     3.2 对于textArea 如果在 class='SQL' 系统就认为是表达式sql文本输入框.
- *     3.3 对于标记 class="Help" 的图片绑定事件，在click 让其可以全屏打开.
+ *     3.3 对于标记 class="HelpImg" 的图片绑定事件，在click 让其可以全屏打开.
  *     3.4 class=Help 的div都是帮助用的div. 比如下面，想办法，让其点击隐藏与显示. 
  *     http://localhost:2207/WF/Admin/AttrNode/Selector/3.SQL.htm?FK_Node=1702
  *       <div id="DivHelp1" class="help">
@@ -107,7 +107,7 @@ function HelpDiv() {
 //设置  class="HelpImg" 的图片 点击直接可以全屏放大打开.  @lz
 function SetHelpImg() {
     $(function () {
-        $("img.help").click(function () {
+        $(".HelpImg").click(function () {
             var _this = $(this);//将当前的pimg元素作为_this传入函数  
             imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
         });

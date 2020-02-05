@@ -395,7 +395,9 @@
                             mapAttr.TextColSpan = 1; //
                             mapAttr.UIWidth = 150;
                             mapAttr.UIHeight = 170;
+                            mapAttr.IsEnableInAPP = 0;
                             mapAttr.Insert(); //插入字段.
+
                             mapAttr.Retrieve();
 
                             var en = new Entity("BP.Sys.FrmAttachment");
@@ -407,6 +409,7 @@
                             en.UploadType = 1; //多附件.
                             en.IsVisable = 0; //让其不可见.
                             en.CtrlWay = 4; // 按流程WorkID计算
+                            en.SetPara("IsShowMobile", 1);
                             en.Insert(); //插入到数据库.
                             window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
                         }

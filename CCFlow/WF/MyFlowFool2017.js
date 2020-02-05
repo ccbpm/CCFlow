@@ -524,6 +524,11 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
         if (colSpan == 0) {
             //占一行
             if (textColSpan == tableCol) {
+                if (isDropTR == false) {
+                    var unUseColSpan = tableCol - UseColSpan;
+                    html += "<td colspan=" + unUseColSpan + "></td>";
+                    html += "</tr>";
+                }
                 isDropTR = true;
                 rowSpan = 1;
                 html += "<tr>";
@@ -623,8 +628,15 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
 
         //线性展示并且colspan=4
         if (colSpan == tableCol) {
+            if (isDropTR == false) {
+                var unUseColSpan = tableCol - UseColSpan;
+                html += "<td colspan=" + unUseColSpan + "></td>";
+                html += "</tr>";
+            }
+
             isDropTR = true;
             rowSpan = 1;
+
             html += "<tr>";
             html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
             html += "</tr>";
@@ -639,6 +651,11 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
         }
         var sumColSpan = colSpan + textColSpan;
         if (sumColSpan == tableCol) {
+            if (isDropTR == false) {
+                var unUseColSpan = tableCol - UseColSpan;
+                html += "<td colspan=" + unUseColSpan + "></td>";
+                html += "</tr>";
+            }
             rowSpan = 1;
             isDropTR = true;
             html += "<tr >";

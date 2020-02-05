@@ -45,12 +45,12 @@ UE.plugins['impfrm'] = function () {
     var me = this, thePlugins = 'impfrm';
     var frmID = pageParam.fk_mapdata;
     var W = document.body.clientWidth - 120;
-    var H = document.body.clientHeight - 220;
+    var H = document.body.clientHeight - 80;
     var url = "../FoolFormDesigner/ImpExp/Imp.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&FrmID=" + GetQueryString("FK_MapData") + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
     me.commands[thePlugins] = {
         execCommand: function (method, dataType) {
             var dialog = new UE.ui.Dialog({
-                iframeUrl: './Fields.html?FrmID=' + frmID,
+                iframeUrl: url,
                 name: thePlugins,
                 editor: this,
                 title: '回收站字段',

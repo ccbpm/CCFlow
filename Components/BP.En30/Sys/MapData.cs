@@ -4,6 +4,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BP.Sys
 {
@@ -2049,11 +2050,14 @@ namespace BP.Sys
 
             // 定义在最后执行的sql.
             string endDoSQL = "";
-
+           
             //检查是否存在OID字段.
             MapData mdOld = new MapData();
             mdOld.No = fk_mapdata;
             mdOld.RetrieveFromDBSources();
+
+            //现在表单的类型
+            FrmType frmType = mdOld.HisFrmType;
             mdOld.Delete();
 
             // 求出dataset的map.
@@ -2075,6 +2079,7 @@ namespace BP.Sys
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
 
 
+           
 
             #region 表单元素
             foreach (DataTable dt in ds.Tables)
@@ -2131,10 +2136,39 @@ namespace BP.Sys
                                 md.Name = mdOld.Name;
 
                             md.HisFrmType = mdOld.HisFrmType;
+                            if (frmType == FrmType.Develop)
+                                md.HisFrmType = FrmType.Develop;
                             //表单应用类型保持不变
                             md.AppType = mdOld.AppType;
-
                             md.DirectInsert();
+
+                            //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
+                            if (frmType == FrmType.Develop)
+                            {
+                                string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
+                                if (DataType.IsNullOrEmpty(htmlCode) == false)
+                                {
+                                    //保存到数据库，存储html文件
+                                    //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    if (Directory.Exists(filePath) == false)
+                                        Directory.CreateDirectory(filePath);
+                                    filePath = filePath + md.No + ".htm";
+                                    //写入到html 中
+                                    BP.DA.DataType.WriteFile(filePath, htmlCode);
+                                    // HtmlTemplateFile 保存到数据库中
+                                    BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                }
+                                else
+                                {
+                                    //如果htmlCode是空的需要删除当前节点的html文件
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\"+md.No+".htm";
+                                    if (File.Exists(filePath) == true)
+                                        File.Delete(filePath);
+                                    BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                }
+                            }
+
                         }
                         break;
                     case "Sys_FrmBtn":

@@ -577,6 +577,19 @@ function newFlowSort(isSub) {
         });
     }
     $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
+    $($('#flowTree').tree('find', data).target).tooltip({
+        position: 'right',
+        content: '<span style="color:#fff" class="__tooltip"></span>',
+        onShow: function () {
+            var tree_title = this;
+            //设定提示框中的信息为节点中的内容
+            $('.__tooltip').text("右键创建流程，修改名称");
+            $(this).tooltip('tip').css({
+                backgroundColor: '#666',
+                borderColor: '#666'
+            });
+        }
+    });
 }
 
 //修改流程类别

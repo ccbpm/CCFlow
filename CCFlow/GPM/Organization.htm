@@ -37,11 +37,11 @@
             position: absolute;
             width: 120px;
             z-index: 99999;
-            border: solid 1px #CCC;
+            border: 0px;
             background: #FFF;
             padding: 0px;
             display: none;
-            
+            box-shadow: 0 0 6px rgba(0,0,0,.2);
         }
 
         .small-menu div {
@@ -199,7 +199,7 @@
                     }
                     ,
                     _unBindItemClick: function () {
-                        $currMenu.find('li').each(function (index, obj) {
+                        $currMenu.find('div').each(function (index, obj) {
                             $(obj).unbind();
                         });
                     }
@@ -240,14 +240,24 @@
         function moveUpDept(treeNode, item) {
             var dept = new Entity("BP.GPM.Dept", treeNode.id);
             var data = dept.DoMethodReturnString("DoUp");
-            window.location.reload();
+            //树节点直接更新
+            var before = $("#"+ treeNode.tId).prev();
+            if (before.length == 0 ) {
+                return;
+            }
+            $("#"+ treeNode.tId).insertBefore(before);
         }
 
         //下移部门
         function moveDownDept(treeNode, item) {
             var dept = new Entity("BP.GPM.Dept", treeNode.id);
             var data = dept.DoMethodReturnString("DoDown");
-            window.location.reload();
+            //树节点直接更新
+            var next = $("#"+ treeNode.tId).next();
+            if (next.length == 0 ) {
+                return;
+            }
+            $("#"+ treeNode.tId).insertAfter(next);
         }
         //增加同级部门
         function NewSameLevel(treeNode) {
@@ -261,8 +271,12 @@
             dept.Name = val;
             dept.ParentNo = treeNode.pid;
             dept.Insert();
-
-            window.location.reload();
+            //更新树节点
+            var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
+            var parentNode = treeObj.getNodeByTId(treeNode.parentTId);
+            var newNode = { name: val };
+            //把这个新节点添加到当前选中的节点下，作为它的子节点
+    	    newNode = treeObj.addNodes(parentNode, newNode);
         }
 
         //增加下级部门
@@ -276,12 +290,16 @@
             dept.Name = val;
             dept.ParentNo = treeNode.id;
             dept.Insert();
-
-            window.location.reload();
+            //更新树节点
+            var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
+            var newNode = { name: val };
+            //把这个新节点添加到当前选中的节点下，作为它的子节点
+    	    newNode = treeObj.addNodes(treeNode, newNode);
         }
         //编辑部门
         function Edit(treeNode) {
-            var val = prompt("请输入部门名称", treeNode.name);
+            var name = $("#" + treeNode.tId + "_span").text()
+            var val = prompt("请输入部门名称", name);
             if (val == null || val == '') {
                 //alert('必须输入名称.');
                 return false;
@@ -290,8 +308,8 @@
             var dept = new Entity("BP.GPM.Dept", treeNode.id);
             dept.Name = val;
             dept.Update();
-
-            window.location.reload();
+            //更新树节点
+            $("#" + treeNode.tId + "_span").text(val);
         }
          //删除部门
         function Delete(treeNode) {
@@ -299,8 +317,10 @@
                     return;
             var dept = new Entity("BP.GPM.Dept", treeNode.id);
             dept.Delete();
-
-            window.location.reload();
+            //树节点删除
+            var my = document.getElementById(treeNode.tId);
+            if (my != null)
+                my.parentNode.removeChild(my);
         }
 
         //初始化

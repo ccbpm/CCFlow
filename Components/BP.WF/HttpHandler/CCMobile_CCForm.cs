@@ -59,8 +59,9 @@ namespace BP.WF.HttpHandler
             GEDtls dtls = new GEDtls(this.EnsName);
             GEDtl dtl = dtls.GetNewEntity as GEDtl;
             dtls.Retrieve("RefPK", this.GetRequestVal("RefPKVal"));
+            MapDtl mdtl = new MapDtl(this.EnsName);
             Map map = dtl.EnMap;
-            foreach (Entity item in dtls)
+            foreach (GEDtl item in dtls)
             {
                 string pkval = item.GetValStringByKey(dtl.PK);
                 foreach (Attr attr in map.Attrs)
@@ -79,21 +80,22 @@ namespace BP.WF.HttpHandler
                     }
 
 
-                    if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                    if (attr.UIContralType == UIContralType.TB)
                     {
+                       
                         string val = this.GetValFromFrmByKey("TB_" + attr.Key + "_" + pkval, null);
-                        item.SetValByKey(attr.Key, val);
+                        item.SetValByKey(attr.Key, HttpUtility.UrlDecode(val, Encoding.UTF8));
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == false)
+                    if (attr.UIContralType == UIContralType.DDL)
                     {
                         string val = this.GetValFromFrmByKey("DDL_" + attr.Key + "_" + pkval);
-                        item.SetValByKey(attr.Key, val);
+                        item.SetValByKey(attr.Key, HttpUtility.UrlDecode(val, Encoding.UTF8));
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
+                    if (attr.UIContralType == UIContralType.CheckBok)
                     {
                         string val = this.GetValFromFrmByKey("CB_" + attr.Key + "_" + pkval, "-1");
                         if (val == "0")
@@ -104,6 +106,23 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 item.SetValByKey("OID",pkval);
+                //关联主赋值.
+                item.RefPK = this.RefPKVal;
+                switch (mdtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        item.RefPK = this.RefPKVal;
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        item.RefPK = this.RefPKVal;
+                        item.FID = long.Parse(this.RefPKVal);
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        item.RefPK = this.RefPKVal;
+                        item.FID = this.FID;
+                        break;
+                }
+                item.Rec = WebUser.No;
                 item.Update(); //执行更新.
             }
             return "保存成功.";

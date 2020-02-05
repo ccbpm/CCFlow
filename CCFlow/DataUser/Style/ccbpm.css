@@ -9,7 +9,7 @@ body
     direction: ltr;
 }
 /* 图片放大鼠标样式 */
-img.help:hover {
+.HelpImg:hover {
     cursor: zoom-in;
 }
 /* 图片缩小鼠标样式 */

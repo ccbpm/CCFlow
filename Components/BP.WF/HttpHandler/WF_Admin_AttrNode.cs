@@ -773,13 +773,24 @@ namespace BP.WF.HttpHandler
                         att.IsEnableInAPP = false;
                     att.Update();
 
-                    if (atts.Contains("," + FK_MapData + "_" + attr.KeyOfEn + ",") == true)
-                    {
-                        FrmAttachment ath = new FrmAttachment(FK_MapData + "_" + attr.KeyOfEn);
-                        ath.SetPara("IsShowMobile", 1);
-                        ath.Update();
+                    //if (atts.Contains("," + FK_MapData + "_" + attr.KeyOfEn + ",") == true)
+                    //{
+                    //    FrmAttachment ath = new FrmAttachment(FK_MapData + "_" + attr.KeyOfEn);
+                    //    ath.SetPara("IsShowMobile", 1);
+                    //    ath.Update();
                         
-                    }
+                    //}
+                }
+                //获取附件
+                FrmAttachments aths = new FrmAttachments();
+                aths.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.FK_Node, 0);
+                foreach(FrmAttachment ath in aths)
+                {
+                    if (atts.Contains("," + ath.MyPK  + ",") == true)
+                        ath.SetPara("IsShowMobile", 1);
+                    else
+                        ath.SetPara("IsShowMobile", 0);
+                    ath.Update();
                 }
                 return "保存成功！";
             }

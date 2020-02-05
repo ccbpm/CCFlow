@@ -6062,7 +6062,7 @@ namespace BP.WF
                         string[] timeStrs = str.Split('-');
                         string tFrom = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[0].Trim();
                         string tTo = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[1].Trim();
-                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && DataType.ParseSysDateTime2DateTime(tTo) >= dtNow)
                             return true;
                     }
                     return false;

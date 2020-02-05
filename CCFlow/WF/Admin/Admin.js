@@ -44,17 +44,28 @@ $(document).ready(function () {
 })
 //动态添加新风格  @lz
 function SetNewCSS() {
+    debugger
     //body下添加一个父Div
     var div = document.createElement('div');
     $(div).attr('class', 'cs-content-box');
     $('#bar').wrap(div);
     $('fieldset').wrapAll(div);
     //帮助ul风格
-    div = document.createElement('div');
-    $(div).attr('class', 'cs-help');
-    $('ul').wrap(div);
-    var div2 = "<div id='help1' class='help-title'> <img src='../Img/ico-help.png' alt='帮助' class='ico-help' />帮助 </div>";
-    $(".cs-help").append(div2);
+    
+   
+    $.each($("legend"), function (i,obj) {
+        div = document.createElement('div');
+        $(div).attr('class', 'cs-help');
+        $(obj).parent().find("ul").wrap(div);
+        var _html = $(obj).html();
+        if (obj.id.indexOf("help") != -1) {
+            $(obj).html("");
+            var div2 = "<div id='help1' class='help-title'> <img src='../Img/ico-help.png' alt='帮助' class='ico-help' />" + _html + " </div>";
+            $($(obj).parent().find("ul").parent()[0]).append(div2)
+        } 
+    })
+    
+   
     //bar风格
     $('#bar').attr('class', 'cs-tr cs-bar');
     //删除重复的说明标题
@@ -260,7 +271,7 @@ function initToggle() {
 
         //   en.toggle();
 
-        en.innerHTML = "<font color=green><b><img src='" + basePath + "/WF/Img/Help.png' >" + en.innerHTML + "</b></font>";
+        en.innerHTML = "<font color=green><b>" + en.innerHTML + "</b></font>";
         en.onclick = function () {
 
             // 绑定事件

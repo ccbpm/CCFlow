@@ -177,6 +177,8 @@ namespace BP.Sys
             ath.Name = name;
             ath.X = x;
             ath.Y = y;
+            //默认在移动端显示
+            ath.SetPara("IsShowMobile", 1);
             ath.Save();
         }
         /// <summary>

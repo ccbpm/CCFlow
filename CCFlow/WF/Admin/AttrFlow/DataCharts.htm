@@ -30,8 +30,8 @@
 
                 <div class="layui-card-body ">
                     <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
-                        
-                        <li class="layui-col-md2 layui-col-xs6">
+
+                        <li class="layui-col-md2 layui-col-xs2">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>实例总数</h3>
                                 <p>
@@ -39,7 +39,15 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="layui-col-md2 layui-col-xs6">
+                        <li class="layui-col-md2 layui-col-xs2">
+                            <a href="javascript:;" class="x-admin-backlog-body">
+                                <h3>运行中</h3>
+                                <p>
+                                    <cite id="RunNum">0</cite>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="layui-col-md2 layui-col-xs2">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>待办数</h3>
                                 <p>
@@ -47,15 +55,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="layui-col-md2 layui-col-xs6">
-                            <a href="javascript:;" class="x-admin-backlog-body">
-                                <h3>退回数</h3>
-                                <p>
-                                    <cite id="ReturnNum">0</cite>
-                                </p>
-                            </a>
-                        </li>
-                        <!--<li class="layui-col-md2 layui-col-xs6 ">
+                        <li class="layui-col-md2 layui-col-xs2">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>逾期数</h3>
                                 <p>
@@ -63,56 +63,14 @@
                                 </p>
                             </a>
                         </li>
-
-                        <li class="layui-col-md2 layui-col-xs6 ">
+                        <li class="layui-col-md2 layui-col-xs2">
                             <a href="javascript:;" class="x-admin-backlog-body">
-                                <h3>完成数</h3>
+                                <h3>退回数</h3>
                                 <p>
-                                    <cite>0</cite>
+                                    <cite id="ReturnNum">0</cite>
                                 </p>
                             </a>
                         </li>
-
-
-                        <li class="layui-col-md2 layui-col-xs6 ">
-                            <a href="javascript:;" class="x-admin-backlog-body">
-                                <h3>考勤数</h3>
-                                <p>
-                                    <cite>0</cite>
-                                </p>
-                            </a>
-                        </li>
-
-
-                        <li class="layui-col-md2 layui-col-xs6 ">
-                            <a href="javascript:;" class="x-admin-backlog-body">
-                                <h3>人员数</h3>
-                                <p>
-                                    <cite>0</cite>
-                                </p>
-                            </a>
-                        </li>
-
-
-                        <li class="layui-col-md2 layui-col-xs6 ">
-                            <a href="javascript:;" class="x-admin-backlog-body">
-                                <h3>岗位数</h3>
-                                <p>
-                                    <cite>0</cite>
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="layui-col-md2 layui-col-xs6 ">
-                            <a href="javascript:;" class="x-admin-backlog-body">
-                                <h3>部门数</h3>
-                                <p>
-                                    <cite>0</cite>
-                                </p>
-                            </a>
-                        </li>-->
-
-
                     </ul>
                 </div>
             </div>
@@ -167,6 +125,15 @@
                     </div>
                 </div>
             </div>
+            <div class="layui-col-sm12 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">逾期数-节点</div>
+                    <div class="layui-card-body" style="min-height: 280px;">
+                        <div id="OverTimeByNode" class="layui-col-sm12" style="height: 300px;"></div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -186,6 +153,8 @@
             var OverTimeByEmp_Y = new Array();
             var OverTimeByDept_X = new Array();
             var OverTimeByDept_Y = new Array();
+            var OverTimeByNode_X = new Array();
+            var OverTimeByNode_Y = new Array();
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
@@ -236,6 +205,13 @@
                 OverTimeByDept_Y[i] = OverTimeByDept.Num;
             })
             queryChart_OverTimeByDept(OverTimeByDept_X, OverTimeByDept_Y);
+            //逾期-按节点.
+            var OverTimeByDepts = data.OverTimeByNode;
+            $.each(OverTimeByDepts, function (i, OverTimeByNode) {
+                OverTimeByNode_X[i] = OverTimeByNode.NodeName;
+                OverTimeByNode_Y[i] = OverTimeByNode.Num;
+            })
+            queryChart_OverTimeByNode(OverTimeByNode_X, OverTimeByNode_Y);
 
             $("#Msg").html("");
         });
@@ -428,7 +404,43 @@
             myChart.setOption(option);
         }
 
+        //逾期-按节点.
+        function queryChart_OverTimeByNode(OverTimeByNode_X, OverTimeByNode_Y) {
 
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('OverTimeByNode'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: OverTimeByNode_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '流程数',
+                    data: OverTimeByNode_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
     </script>
 
 </body>

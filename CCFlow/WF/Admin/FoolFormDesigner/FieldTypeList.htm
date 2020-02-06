@@ -520,42 +520,10 @@
                         function ExtBigNoteHtmlText() {
 
                             var frmID = GetQueryString("FK_MapData");
-                            var id = "BigNoteHtmlText";
-
-                            var myPK = frmID + "_" + id;
-
-                            var en = new Entity("BP.Sys.MapAttr");
-                            en.SetPKVal(myPK);
-                            var num = en.RetrieveFromDBSources();
-                            if (num != 0) {
-                                //alert('该字段已经存在.');
-                                window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
+                            //增加大文本
+                             if (window.confirm('您确认要创建吗？') == false)
                                 return;
-                            }
-
-                            if (window.confirm('您确认要创建吗？') == false)
-                                return;
-
-                            //en.FK_MapData = GetQueryString("FK_MapData");
-                            en.Name = "大块提示文本";
-                            //en.KeyOfEn = "BigNoteHtmlText";
-
-                            en.UIContralType = 60; //大块文本.
-                            en.MyPK = myPK;
-                            en.FK_MapData = frmID;
-                            en.KeyOfEn = id;
-                            //en.Name = name;
-                            en.GroupID = groupID;
-                            en.MyDataType = 1;
-                            en.LGType = 0;
-                            en.ColSpan = 4; //
-                            en.UIWidth = 0;
-                            en.UIHeight = 100;
-                            en.Idx = 0;
-                            en.Insert(); //插入字段.
-                            en.Retrieve();
-                            window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID+"&MyPK="+en.MyPK;
-                            // window.location.href; //"../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
+                            window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
                         }
 
                         //手写签名版.

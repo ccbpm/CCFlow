@@ -98,7 +98,7 @@
             //分析项目
             GroupAnalysis(data);
             //分析结果显示
-            doPostBack();
+            doPostBack(null,true);
         }
 
         function InitToolBar(data) {
@@ -206,7 +206,7 @@
                 }
                 html += "<tr>";
                 html += "<td>";
-                html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + groupAttrs[i].Field + "'/><label for='" + groupAttrs[i].Field + "'>" + groupAttrs[i].Name + "</label>";
+                html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + groupAttrs[i].Field + "'/><label for='" + groupAttrs[i].Field + "'>" + groupAttrs[i].Name + "</label>";
                 html += "</td>";
                 html += "</tr>";
                 $("#CheckBoxList").append(html);
@@ -226,28 +226,35 @@
                 }
                 html += "<tr>";
                 html += "<td>";
-                html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
+                html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
                 html += "</td>";
                 html += "<td style='font-size:12px;text-align:right'>";
-                html += "<select style='width:80%' class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<select style='width:80%' class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,true)'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 html += "</td>";
                 html += "</tr>";
                 $("#AnalyGroup").append(html);
             }
         }
 
-        function doPostBack() {
-            var groupCount = $('input[name="groupContent"]:checked').length;
-            if (groupCount > 1)
-                $("#CB_IsShowPict").attr("disabled", "disabled");
-            else
-                $("#CB_IsShowPict").attr("disabled", false);
-
+        function doPostBack(scorp, ispost) {
             //给注册表信息重新赋值
             var myPK = webUser.No + rptNo + "_GroupAttrs";
             ur = new Entity("BP.Sys.UserRegedit", myPK);
-            if (ur && ur.IsPic == 1)
+            if (ur && ur.IsPic == 1 && ispost == true) {
                 document.getElementById("CB_IsShowPict").checked = "checked";
+            }
+
+            var groupCount = $('input[name="groupContent"]:checked').length;
+            if (groupCount > 1) {
+                if (ispost == true) {
+                    ur.IsPic = 0;
+                    document.getElementById("CB_IsShowPict").checked = "";
+                }
+                $("#CB_IsShowPict").attr("disabled", "disabled");
+            }
+            else {
+                $("#CB_IsShowPict").attr("disabled", false);
+            }
             var selectedGroupKey = "";
             $('input[name="groupContent"]:checked').each(function () {
                 selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中
@@ -264,11 +271,13 @@
 
             ur.Vals = "SelectedGroupKey=" + selectedGroupKey + "@StateNumKey" + stateNumKey + '@';
 
-            if ($("#CB_IsShowPict").is(":checked") == true)
-                ur.IsPic = 1;
-            else
-                ur.IsPic = 0;
-
+            if (ispost == false) {
+                if ($("#CB_IsShowPict").is(":checked") == true) {
+                    ur.IsPic = 1;
+                } else {
+                    ur.IsPic = 0;
+                }
+            }
             ur.SetPKVal(ur.MyPK);
             ur.FK_Emp = webUser.No;
             ur.CfgKy = ensName;
@@ -305,9 +314,9 @@
             var AttrsOfGroup = data["AttrsOfGroup"];
             var ActiveAttr = data["ActiveAttr"];
             var noShowSum = "";
-
+            
             //生成表格
-            if (ur.IsPic == 0) {
+            if ($("#CB_IsShowPict").is(":checked") == false) {
                 GenerTable("Content", groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum);
                 //生成图表
             } else {
@@ -602,7 +611,8 @@
             html += "<td class='TDNum' nowrap ></td>";
             html += "</tr>";
             html += "</table>";
-            $("#" + divId).html("").append(html);
+            $("#" + divId).html("");
+            $("#" + divId).html(html);
         }
 
 
@@ -647,7 +657,9 @@
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
             }
-            categories = categories.substr(0, categories.length - 1);
+            if (groupSearch.length > 0) {
+                categories = categories.substr(0, categories.length - 1);
+            }
             categories += "]}]";
             categories = JSON.parse(categories);
             var dataSet = "[";
@@ -658,7 +670,9 @@
                 for (var j = 0; j < groupSearch.length; j++) {
                     dataSet += "{\"value\":\"" + +groupSearch[j][AttrsOfNum[i].KeyOfEn] + "\"},";
                 }
-                dataSet = dataSet.substr(0, dataSet.length - 1);
+                if (groupSearch.length > 0) {
+                    dataSet = dataSet.substr(0, dataSet.length - 1);
+                }
                 dataSet += "]},";
             }
             dataSet = dataSet.substr(0, dataSet.length - 1);
@@ -701,15 +715,18 @@
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
             }
-            categories = categories.substr(0, categories.length - 1);
+            if (groupSearch.length > 0) {
+                categories = categories.substr(0, categories.length - 1);
+            }
             categories += "]}]";
             categories = JSON.parse(categories);
             var dataSet = "[{\"data\":[";
             for (var j = 0; j < groupSearch.length; j++) {
                 dataSet += "{\"label\":\"" + groupSearch[j][KeyOfEn + "T"] + "\",\"value\":\"" + +groupSearch[j][firstKey.KeyOfEn] + "\" },";
             }
-
-            dataSet = dataSet.substr(0, dataSet.length - 1);
+            if (groupSearch.length > 0) {
+                dataSet = dataSet.substr(0, dataSet.length - 1);
+            }
             dataSet += "]}]";
             dataSet = JSON.parse(dataSet);
             var dataSource = {
@@ -752,7 +769,9 @@
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
             }
-            categories = categories.substr(0, categories.length - 1);
+            if (groupSearch.length > 0) {
+                categories = categories.substr(0, categories.length - 1);
+            }
             categories += "]}]";
             categories = JSON.parse(categories);
             var dataSet = "[";
@@ -763,7 +782,9 @@
                 for (var j = 0; j < groupSearch.length; j++) {
                     dataSet += "{\"value\":\"" + +groupSearch[j][AttrsOfNum[i].KeyOfEn] + "\"},";
                 }
-                dataSet = dataSet.substr(0, dataSet.length - 1);
+                if (groupSearch.length) {
+                    dataSet = dataSet.substr(0, dataSet.length - 1);
+                }
                 dataSet += "]},";
             }
             dataSet = dataSet.substr(0, dataSet.length - 1);
@@ -867,7 +888,7 @@
                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
-                <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
+                <div data-options="region:'west',title:'分组条件',split:true" style="width: 280px;">
                     <div class="easyui-panel" title="显示内容" style=" Contentpadding: 5px; margin-bottom: 5px">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
@@ -889,7 +910,7 @@
                             <tr>
                                 <td colspan="2">
                                     <span class="aspNetDisabled" title="注意：仅当“显示内容”选择1项时，图表功能才可用！" style="float: left">
-                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack()" />
+                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack(this,false)" />
                                         <label for="CB_IsShowPict">显示图表</label>
                                     </span>
                                     <span style="float: right">

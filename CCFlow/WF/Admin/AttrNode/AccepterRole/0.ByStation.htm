@@ -15,65 +15,96 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/vue.js"></script>
 
+</head>
+<body>
+    <div id="App">
+        <div id="bar">
+        </div>
+        <div id="AdminModel">
+            <fieldset v-show="adminModel===1" >
+                <legend>设置岗位</legend>
+                <ul>
+                    <li><a href="#" @click="OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+                    <li><a href="#" @click="OpenNew()">设置/更改岗位（左右树结构）</a> </li>
+
+                </ul>
+            </fieldset>
+        </div>
+        <div id="OrgModel">
+            <fieldset  v-show="orgModel===1">
+                <legend>设置（组织管理员）</legend>
+                <ul>
+                    <li><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
+                    <li><a href="#" @click="SetOrgStations()">设置本组织岗位</a> </li>
+                </ul>
+            </fieldset>
+        </div>
+        <fieldset>
+            <legend>已经设置的岗位</legend>
+            <div id="stas">
+               
+                    <ul>
+                        <li v-show="stas.length===0">未设置</li>
+                        <li v-for="sta in stas">{{sta.FK_StationText}}</li>
+                    </ul>
+               
+               
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend id="help">找人算法</legend>
+            <ul>
+                <li>第0步：首先从本级部门内的人员寻找，该节点绑定的岗位，如果找不到人就进入下一步寻找。 </li>
+                <li>第1步：直线上级寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
+                <li>第2步：直线上级的平级部门寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
+                <li>第3步：当前部门的下一级所有的部门寻找。</li>
+                <li>第4步：查找全局岗位人员。</li>
+            </ul>
+        </fieldset>
+    </div>
     <script type="text/javascript">
-        //初始化页面
-        $(function () {
+       var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                adminModel: 1,
+                orgModel:0,
+                stas: [],
+                webuser:null
+           },
+           methods: {
+               OpenDot2DotStations: function () {
+                   OpenDot2DotStations();
+               },
+               OpenNew: function () {
+                   var nodeID = GetQueryString("FK_Node");
+                   var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                   OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+               },
+               SetGroupStations: function () {
+                    OpenNodStationGroup(this.webuser.GroupNo);
+                  
+               },
+               SetOrgStations: function () {
+                    OpenNodStationGroup(this.webuser.FK_Dept);
+               }
+           },
+            created() {
+                InitBar(DeliveryWay.ByStation);
 
-            InitBar(DeliveryWay.ByStation);
+                 var ens = new Entities("BP.WF.Template.NodeStations");
+                ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+                this.stas = ens;
+               
+                //根据用户的信息，判断是否启用那个设置工具。
+                this.webuser = new WebUser();
+                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+               
+           }
+       });
 
-            var ens = new Entities("BP.WF.Template.NodeStations");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-            var html = "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                html += "<li>" + en.FK_StationText + "</li>";
-            }
-            if (ens.length == 0)
-                html += "<li>未设置</li>";
-
-            html += "<ul>";
-
-            document.getElementById("stas").innerHTML = html;
-
-            //根据用户的信息，判断是否启用那个设置工具。
-            var user = new WebUser();
-
-            $("#OrgModel").hide();
-            $("#AdminModel").hide();
-
-            if (user.No == "admin") {
-                /*调用通用的.*/
-                $("#AdminModel").show();
-
-            } else {
-                /*调用集团模式的.*/
-                $("#OrgModel").show();
-            }
-
-        });
-
-
-        function OpenNew() {
-            var nodeID = GetQueryString("FK_Node");
-            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
-        }
-
-
-        //设置本组织岗位.
-        function SetOrgStations() {
-            var user = new WebUser();
-            OpenNodStationGroup(user.FK_Dept);
-        }
-
-        //设置集团岗位.
-        function SetGroupStations() {
-            var user = new WebUser();
-            OpenNodStationGroup(user.GroupNo);
-        }
-
-        function OpenNodStationGroup(orgNo) {
+         function OpenNodStationGroup(orgNo) {
             var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
             OpenEasyUiDialogExt(url, "绑定岗位", 500, 600, true);
         }
@@ -85,46 +116,6 @@
             node.DeliveryWay = DeliveryWay.ByStation;
             node.Update();
         }
-    </script>
-</head>
-<body>
-    <div id="bar">
-    </div>
-    <div id="AdminModel">
-        <fieldset>
-            <legend>设置岗位</legend>
-            <ul>
-                <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
-                <li><a href="javascript:OpenNew()">设置/更改岗位（左右树结构）</a> </li>
-
-            </ul>
-        </fieldset>
-    </div>
-    <div id="OrgModel">
-        <fieldset>
-            <legend>设置（组织管理员）</legend>
-            <ul>
-                <li><a href="javascript:SetGroupStations()">设置集团岗位</a> </li>
-                <li><a href="javascript:SetOrgStations()">设置本组织岗位</a> </li>
-            </ul>
-        </fieldset>
-    </div>
-    <fieldset>
-        <legend>已经设置的岗位</legend>
-        <div id="stas">
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend id="help">找人算法</legend>
-        <ul>
-            <li>第0步：首先从本级部门内的人员寻找，该节点绑定的岗位，如果找不到人就进入下一步寻找。 </li>
-            <li>第1步：直线上级寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
-            <li>第2步：直线上级的平级部门寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
-            <li>第3步：当前部门的下一级所有的部门寻找。</li>
-            <li>第4步：查找全局岗位人员。</li>
-        </ul>
-    </fieldset>
-
-</body>
-</html>
+   </script>
+</body >
+</html >

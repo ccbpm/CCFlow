@@ -105,15 +105,16 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
         var tpo = {};
+        
+        //Hide_IsOpenFrm:是否隐藏该条信息,CommonShowConfig.js中定义
+        if ("undefined" == typeof Hide_IsOpenFrm) {
+            var Hide_IsOpenFrm = true;
+        };
+        //Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
+        if ("undefined" == typeof Hide_IsRead) {
+            var Hide_IsRead = true;
+        }
         $(function () {
-             //Hide_IsOpenFrm:是否隐藏该条信息,CommonShowConfig.js中定义
-            if ("undefined" == typeof Hide_IsOpenFrm) {
-                var Hide_IsOpenFrm = true;
-            };
-            //Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
-            if ("undefined" == typeof Hide_IsRead) {
-                var Hide_IsRead = true;
-            }
             InitPage();
         });
 

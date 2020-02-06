@@ -21,6 +21,8 @@
 
     <script type="text/javascript" language="javascript">
         var editor = "";
+        var mypk = "";
+        var frmID = "";
         //页面启动函数.
         $(function () {
 
@@ -32,47 +34,77 @@
                 'initialFrameHeight': '240',
             });
 
+            frmID = GetQueryString("FrmID");
+
             var id = "BigNoteHtmlText";
-            var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + id);
+            var en = new Entity("BP.Sys.MapAttr");
+            en.SetPKVal(frmID + "_" + id);
+            var num = en.RetrieveFromDBSources();
+            if (num !=0) 
+                mypk = en.MyPK;
+            
+            if (mypk == "") {
+                 //初始化富文本框的内容
+                editor.setContent("");
+                $("#deleteBtn").attr("disabled", "disabled");
+                $("#deleteBtn").css("background-color","#d2cdcd");
+                return;
+            } 
+            
+            var en = new Entity("BP.Sys.MapAttr", mypk);
             var doc = en.DoMethodReturnString("ReadBigNoteHtmlText");
             //初始化富文本框的内容
             editor.setContent(doc);
+            
+            
 
         });
         function Save() {
 
-            var id = "BigNoteHtmlText";
-            var frmID = GetQueryString("FrmID");
             //获取富文本的内容
             var html = editor.getContent();
             if (html == "") {
                 alert("内容不能为空！");
                 return;
             }
-            var en = new Entity("BP.Sys.MapAttr", frmID + "_" + id);
+            //MyPK不存在创建大文本字段，保存html文件
+            if (mypk == "") {
+                var id = "BigNoteHtmlText";
+                mypk = frmID + "_" + id;
+                var en = new Entity("BP.Sys.MapAttr");
+                en.MyPK = mypk;
+                en.Name = "大块提示文本";
+
+                en.UIContralType = 60; //大块文本.
+                en.FK_MapData = frmID;
+                en.KeyOfEn = id;
+                en.MyDataType = 1;
+                en.LGType = 0;
+                en.ColSpan = 4; //
+                en.UIWidth = 0;
+                en.UIHeight = 100;
+                en.Idx = 0;
+                en.Insert(); //插入字段.
+                en.Retrieve();
+            }
+            
+           var en = new Entity("BP.Sys.MapAttr", mypk);
             //执行保存富文本的内容
             var msg = en.DoMethodReturnString("SaveBigNoteHtmlText", html);
-
             alert(msg);
+  
             window.location.href = window.location.href;
 
         }
         function Delete() {
-            var mypk = GetQueryString("MyPK");
-            if (mypk == null || mypk == "" || mypk == undefined) {
-                alert("还没有保存创建的大文本，不用删除");
-                return;
-            }
+            
             //删除字段、文件
             var en = new Entity("BP.Sys.MapAttr", mypk);
-            var data = en.DoMethodReturnString("DeleteBigNoteHtmlText");
+           en.DoMethodReturnString("DeleteBigNoteHtmlText");
 
-            if (data.indexOf("err@") == -1) {
-                //关闭页面
-                parent.$("#eudlg").dialog("close");
-            }
-            alert(data);
+            window.close();
+            parent.$("#eudlg").dialog('close');
+            parent.parent.$("#eudlg").dialog('close');
 
         }
 
@@ -91,7 +123,7 @@
     </div>
     <br />
     <input type="button" value="保存" onclick="Save();" />
-    <input type="button" value="删除" onclick="Delete();" />
+    <input type="button" value="删除" id="deleteBtn" onclick="Delete();" />
 
 
 </body>

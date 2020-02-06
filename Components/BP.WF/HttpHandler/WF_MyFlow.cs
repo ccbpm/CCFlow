@@ -1120,8 +1120,7 @@ namespace BP.WF.HttpHandler
                 if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
                 {
                     /* 启用了数据重置功能 */
-                    string urlr3 = appPath + "WF/MyFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
-                    toolbar += "<input type=button  value='数据重置' enable=true onclick=\"To('" + urlr3 + "','ds'); \" />";
+                    toolbar += "<input type=button  value='数据重置' enable=true  id='reset' name='reset' onclick=\"resetData(); \" />";
                 }
 
                 //if (btnLab.SubFlowEnable == true )

@@ -4886,12 +4886,14 @@ namespace BP.WF
                         fl.No = oldFlowNo;
                         fl.DoDelData();
                         fl.DoDelete(); /*删除可能存在的垃圾.*/
+                        
                     }
                     break;
                 case ImpFlowTempleteModel.OvrewaiteCurrFlowNo: /*覆盖当前的流程.*/
                     fl.No = oldFlowNo;
                     fl.DoDelData();
                     fl.DoDelete(); /*删除可能存在的垃圾.*/
+                    
                     break;
                 case ImpFlowTempleteModel.AsSpecFlowNo:
                     if (SpecialFlowNo.Length <= 0)
@@ -4900,6 +4902,7 @@ namespace BP.WF
                     fl.No = SpecialFlowNo.ToString();
                     fl.DoDelData();
                     fl.DoDelete(); /*删除可能存在的垃圾.*/
+                    fl.Insert();
                     break;
                 default:
                     throw new Exception("@没有判断");

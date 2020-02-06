@@ -40,7 +40,7 @@ UE.plugins['impfrmfields'] = function () {
         }
     };
 }
-//插入回收站字段.
+//导入表单模板..
 UE.plugins['impfrm'] = function () {
     var me = this, thePlugins = 'impfrm';
     var frmID = pageParam.fk_mapdata;

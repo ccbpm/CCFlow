@@ -182,7 +182,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
         //大文本备注信息 独占一行
         if (attr.UIContralType == 60) {
             //获取文本信息
-            var filename = basePath + "/DataUser/CCForm/BigNoteHtmlText/" + attr.FK_MapData + ".htm";
+            var filename = basePath + "/DataUser/CCForm/BigNoteHtmlText/" + attr.FK_MapData + ".htm?r=" + Math.random();
             var htmlobj = $.ajax({ url: filename, async: false });
             var str = htmlobj.responseText;
             if (htmlobj.status == 404)

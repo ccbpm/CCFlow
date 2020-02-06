@@ -84,12 +84,15 @@
             font-size: 13px;
         }
 
-            .pagination .controls {
-                float: left;
-                border: 0;
-                padding: 7px 0 0 15px;
-                color: #777;
-            }
+        .pagination .controls {
+            float: left;
+            border: 0;
+            padding: 7px 0 0 15px;
+            color: #777;
+        }
+        .info{
+            background-color:#e7eaec;
+        }
     </style>
     <script type="text/javascript">
 
@@ -565,6 +568,7 @@
                 height: tableH,
                 singleSelect: true,
                 clickToSelect: true,
+
                 maintainSelected: true,
                 sidePagination: "client",
                 pageNumber: 1,
@@ -584,7 +588,11 @@
                     };
                     return temp;
                 },
-
+                onClickRow:function (row,$element) {
+                    $('.info').removeClass('info');
+                    
+                    $($element).addClass('info').attr("data-val",row.OID);
+                },
                 onDblClickRow: function (row, $element) {
                     var pkval = row["OID"];
                     var paras = "&OID" + "=" + pkval;
@@ -699,19 +707,18 @@
 
         function Delete(workid) {
             if (workid == null || workid == undefined || workid == "") {
-
-                if (confirm("您确定要删除吗？") == false)
-                    return;
+                
                 //删除选中的行
-                var selectRow = $('#dg').bootstrapTable('getSelections');
+                var workid = $('.info').attr('data-val');
 
-                if (selectRow.length == 0) {
+                if (workid=="") {
                     alert("没有选择行，不能删除");
                     return;
                 }
-                workid = selectRow["WorkID"];
+                
             }
-
+            if (confirm("您确定要删除吗？") == false)
+                    return;
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
@@ -721,7 +728,7 @@
                 alert(data);
             }
 
-            window.location.href = window.location.href;
+            window.location.reload();
         }
         function GenerColor(BillState, isCanDo) {
 

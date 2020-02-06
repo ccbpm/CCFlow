@@ -128,8 +128,9 @@
                 alert(data);
                 return;
             }
-
             alert(data);
+            window.location.href = "FieldTypeList.htm?DoType=AddF&FK_MapData="+GetQueryString("FK_MapData");
+            
 
         }
 

@@ -1125,7 +1125,8 @@
 
         function CloseIt() {
             parent.$("#eudlg").dialog('close');
-            parent.parent.$("#eudlg").dialog('close');
+            if (parent.parent != undefined && parent.parent.$("#eudlg").length==1 )
+                parent.parent.$("#eudlg").dialog('close');
         }
 
         $(function () {

@@ -1811,6 +1811,10 @@ function GenerWorkNode() {
 }
 
 
+function resetData() {
+    //装载表单数据与修改表单元素风格.
+    LoadFrmDataAndChangeEleStyle(flowData);
+}
 
 function SetFrmReadonly() {
 

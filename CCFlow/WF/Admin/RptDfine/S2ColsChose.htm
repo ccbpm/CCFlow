@@ -107,8 +107,11 @@
             $("#tsys").append(tsysAppend);
 
             //2.列出业务字段
-            $.grep(Sys_MapAttrOfAll, function (item) {
-                var flag = false;
+           $.grep(Sys_MapAttrOfAll, function (item) {
+               var flag = false;
+               if (item.UIContralType == 4 || item.UIContralType == 6 || item.UIContralType == 8 || item.UIContralType == 9
+                   || item.UIContralType == 11  || item.UIContralType == 50|| item.UIContralType == 60 || item.UIContralType == 101)
+                    return true;
                 for (var i = 0, length = Sys_MapAttrOfSystem.length; i < length; i++) {
                     if (item.KeyOfEn == Sys_MapAttrOfSystem[i].KeyOfEn && item.Name == Sys_MapAttrOfSystem[i].Name) {
                         flag = true;

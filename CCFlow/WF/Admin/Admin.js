@@ -50,12 +50,12 @@ function SetNewCSS() {
     $('#bar').wrap(div);
     $('fieldset').wrapAll(div);
     //帮助ul风格
-    
+    div = document.createElement('div');
+    $(div).attr('class', 'cs-help');
+    $('ul').wrap(div);
    
     $.each($("legend"), function (i,obj) {
-        div = document.createElement('div');
-        $(div).attr('class', 'cs-help');
-        $(obj).parent().find("ul").wrap(div);
+
         var _html = $(obj).html();
         if (obj.id.indexOf("help") != -1) {
             $(obj).html("");

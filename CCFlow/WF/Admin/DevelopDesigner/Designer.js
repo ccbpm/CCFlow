@@ -53,7 +53,7 @@ UE.plugins['impfrm'] = function () {
                 iframeUrl: url,
                 name: thePlugins,
                 editor: this,
-                title: '回收站字段',
+                title: '导入表单模板',
                 cssRules: "width:" + W + "px;height:" + H + "px;",
 
             });

@@ -1214,7 +1214,7 @@
         }
         .cs-search-html {
             background-color: #f7f6f9;
-            padding: 18px 22px;
+            padding: 12px;
             color: #282828;
             font-size: 13px;
         }
@@ -1228,7 +1228,7 @@
             border-radius: 4px;
         }
         .cs-table .panel-default {
-            padding: 10px 30px 10px 10px;
+            padding: 6px 30px 6px 10px;
             margin-bottom: 10px;
         }
         .cs-table .panel-default .btn {
@@ -1248,14 +1248,19 @@
             height: 30px;
             border-radius: 3px;
         }
-        .cs-table tbody td {
-            padding: 7px 0!important;
+        .cs-table select {
+            appearance: none;  
+            -moz-appearance: none;  
+            -webkit-appearance: none;
+        }
+        .cs-table tbody td,.JColResizer > tbody > tr > td, .JColResizer > tbody > tr > th {
+            padding: 6px 0 6px 6px!important;
         }
         .cs-table tbody td {
             border-bottom: 1px solid #ddd!important;
         }
         .fixed-table-container thead th .th-inner {
-            padding: 6px 0;
+            padding: 6px 0 6px 6px!important;
         }
         .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
             background-color: #ddd;
@@ -1263,6 +1268,7 @@
         }
          .bootstrap-table .table,.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
             border: 0;
+            border-right: 1px solid #ddd;
             font-size: 13px;
         }
         .cs-pagination {
@@ -1278,6 +1284,17 @@
         .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
             color: #15398b;
         }
+        .fixed-table-border {
+            display: none;
+        }
+        .fixed-table-body {
+            height: auto;
+            overflow: hidden;
+        }
+        .fixed-table-container {
+            height: auto!important;
+            padding-bottom: 0!important;
+        }
     </style>
 </head>
 <body id="SearchHtml" class="cs-search-html">
@@ -1292,14 +1309,14 @@
             <div class="row cs-shadow-box">
                 <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
                 </table>
-            </div>
-            <!-- 显示分页信息 -->
-            <div class="row cs-pagination">
-                <ul class="pagination" id="page_nav">
-                </ul>
-                <ul class="pagination controls" id="page_info">
-                </ul>
-                <div style="clear: both;">
+                <!-- 显示分页信息 -->
+                <div class="row cs-pagination">
+                    <ul class="pagination" id="page_nav">
+                    </ul>
+                    <ul class="pagination controls" id="page_info">
+                    </ul>
+                    <div style="clear: both;">
+                    </div>
                 </div>
             </div>
         </div>

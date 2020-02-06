@@ -1189,6 +1189,7 @@
         }
         .cs-btn-group {
             width: auto!important;
+            min-height: 34px;
             text-align: right;
         }
         .cs-btn-group .l-btn-icon {
@@ -1198,24 +1199,26 @@
             margin: 0;
         }
         .layout-panel {
-            position: absolute;
+            /*position: absolute;
             right: 0;
-            top: 0!important;
+            top: 0!important;*/
+            box-shadow: none;
         }
-        .layout-panel-north {
+        /*.layout-panel-north {
             width: auto!important;
             left: auto!important;
-        }
+        }*/
         .btn {
-            padding: 2px 22px;
+            padding: 1px 22px 0;
             color: #fff!important;
             border-radius: 3px!important;
             border: 0;
-            height: 30px;
+            height: 26px;
+            line-height: 26px;
             box-sizing: border-box;
         }
         .btn:hover {
-            padding: 2px 22px;
+            padding: 1px 22px 0;
             border: 0;
         }
         .btn-light-green {
@@ -1282,9 +1285,6 @@
             border-bottom-color: #fff;
             background: #fff;
         }
-        .tabs-panels {
-            margin-top: 20px;
-        }
         td {
             box-sizing: border-box;
         }
@@ -1318,6 +1318,10 @@
             height: 32px;
             box-sizing: border-box;
         }
+            select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+                background-color: #fff;
+                border: 0!important;
+            }
         td input[type="checkbox"] {
             margin-right: 5px;
             width: 16px;

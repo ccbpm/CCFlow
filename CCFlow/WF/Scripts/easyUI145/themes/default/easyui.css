@@ -861,10 +861,10 @@
   border-left: 5px solid #E6EEF8;
 }
 .layout-expand {
-  background-color: #E0ECFF;
+  background-color: #ddd;
 }
 .layout-expand-over {
-  background-color: #E0ECFF;
+  background-color: #eee;
 }
 .tabs-container {
   overflow: hidden;
@@ -911,9 +911,10 @@
   position: relative;
   left: 0;
   overflow: hidden;
-  width: 100%;
-  margin: 0;
   padding: 0;
+}
+.cs-header .tabs-wrap {
+    padding-top: 28px;
 }
 .tabs-scrolling {
   margin-left: 18px;
@@ -932,6 +933,7 @@
   border-style: solid;
   border-width: 0 0 1px 0;
 }
+
 .tabs li {
     display: inline-block;
     margin: 0 4px -1px 0;
@@ -2945,8 +2947,8 @@
 .tree-node {
     position: relative;
     padding: 0 0 0 16px;
-    height: 48px;
-    line-height: 48px;
+    height: 40px;
+    line-height: 40px;
     cursor: pointer;
 }
 .tree-expanded, .tree-collapsed {
@@ -2979,13 +2981,14 @@
     background-color: #fff;
 }
 .cs-header .tabs {
-    margin-top: 29px;
     padding-left: 0;
+    border: 0;
 }
 .cs-header .tabs li {
     background-color: #fff;
 }
 .cs-header .tabs li a.tabs-inner {
+    padding: 4px 10px;
     background: #fff none;
     border-color: currentColor;
 }
@@ -2996,10 +2999,13 @@
     padding-left: 0;
 }
 .cs-header .tabs-tool {
-    top: 0;
+    top: 16px;
     background-color: transparent;
     border: 0;
     box-sizing: border-box;
+}
+.cs-header .tabs-header {
+    border: 1px solid #bbb;
 }
 .cs-header .l-btn {
     padding: 0;
@@ -3008,8 +3014,8 @@
     margin-right: 22px;
 }
 .cs-header .tabs-tool .l-btn-text {
-    height: 54px;
-    line-height: 54px;
+    height: 32px;
+    line-height: 32px;
     color: #15398b;
 }
 .cs-header .l-btn-plain:hover {
@@ -3056,15 +3062,15 @@
     font-size: 13px;
 }
 .cs-content-box fieldset {
-    padding: 0 28px 4px;
+    padding: 0 28px 12px;
     margin: -6px 0 10px;
     border: 0;
     font-size: 13px;
 }
 .cs-content-box legend {
     position: relative;
-    top: 30px;
-    margin-bottom: 32px;
+    top: 20px;
+    margin-bottom: 12px;
     font-size: 16px;
     font-weight: bold;
 }
@@ -3077,11 +3083,11 @@
     text-decoration: none;
 }
 .cs-content-box .fieldset-main {
-    padding: 0 23px 30px;
+    padding: 0 23px;
 }
 .cs-content-box .cs-help {
     position: relative;
-    margin-top: 28px;
+    margin-top: 18px;
     padding-top: 18px;
     border: 1px solid #ccc;
 }

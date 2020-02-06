@@ -30,6 +30,7 @@
             font-family: 宋体;
             text-align: center;
             width: 90%;*/
+            background-color: #f7f6f9;
         }
 
         textarea, input[type=text] {
@@ -66,12 +67,12 @@
             text-align: right;
         }
         .cs-btn-group a {
-            margin-right: 6px;
-            padding: 6px 22px 4px;
+            margin-left: 6px;
+            padding: 5px 14px;
             color: #fff;
             font-size: 13px;
-            line-height: 14px;
-            height: 30px;
+            line-height: 28px;
+            height: 26px;
             border: 0 none;
             border-radius: 3px;
             background-image: none;
@@ -114,10 +115,11 @@
             background-color: #f74f52;
         }
         .cs-easyui-layout {
+            margin: auto;
+            width: 950px!important;
             background: #f7f6f9;
         }
         .cs-panel-body {
-            padding: 20px 0;
             background-color: #fff;
             border: 0;
             border-radius: 4px;
@@ -127,7 +129,17 @@
             width: 100%;
         }
         .cs-table td a {
+            padding-right:0;
             color: #15398b;
+            width: 24px;
+            height: 24px;
+            box-sizing: border-box;
+        }
+            .cs-table td a:hover.l-btn-plain {
+                padding: 0;
+            }
+        a.l-btn span span span.l-btn-empty {
+            background-position: center
         }
         .cs-table th a {
             height: 30px;
@@ -1472,7 +1484,7 @@
 
     <div class="easyui-layout layout cs-easyui-layout" data-options="fit:true" style="width: 100%; height: 628px;">
         <div class="panel layout-panel layout-panel-north" style="position:static">
-            <div data-options="region:'north'" id="toolbar" style="padding: 8px; overflow-y: hidden;" title="表单设计器-工具栏"
+            <div data-options="region:'north'" id="toolbar" style="padding: 8px 0; overflow-y: hidden;" title="表单设计器-工具栏"
                  class="panel-body panel-body-noheader layout-body cs-btn-group">
                 <a href="javascript:MapDataEdit();" class="easyui-linkbutton btn-light-green">
                     表单属性

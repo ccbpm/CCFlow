@@ -559,6 +559,16 @@ function DtlFoolFrm(dtl, refPK, refOID) {
 //保存
 function Save(scope) {
 
+    //保存从表数据
+    $("[name=Dtl]").each(function (i, obj) {
+        var contentWidow = obj.contentWindow;
+        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+            IsSaveTrue = contentWidow.SaveAll();
+
+        }
+    });
+
+
     //必填项和正则表达式检查
     var formCheckResult = true;
     if (CheckBlanks() == false) {

@@ -11,6 +11,29 @@
         });
 });
 
+Vue.component('model-component', {
+    template: '\
+            <div>\
+                <button @click="handleIncrease">+1</button>\
+                <button @click="handleReduce">-1</button>\
+            </div> ',
+    data: function () {
+        return {
+            nodeID: GetQueryString("FK_Node"),
+        }
+    },
+    methods: {
+        handleIncrease: function () {
+            this.counter++;
+            this.$emit('input', this.counter);
+        },
+        handleReduce: function () {
+            this.counter--;
+            this.$emit('input', this.counter);
+        }
+    }
+
+});
 var optionKey = 0;
 function InitBar(optionKey) {
 

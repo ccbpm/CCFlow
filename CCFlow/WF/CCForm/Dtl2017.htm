@@ -568,12 +568,12 @@
                 });
 
                 //增加附件.
-                var athTh = $('<th style="width:30px;">附件</th>');
+                var athTh = $('<th style="width:50px;">附件</th>');
                 var athThData;
                 athThData = {
                     custom: true,
                     customcontent: 1,
-                    customcontent1: "a@href='javaScript:void(0);' onclick='Ath(this)' titile=附件 @附件",
+                    customcontent1: "a@href='javaScript:void(0);' onclick='Ath(this)' style='margin-left:20px' titile=附件 @<i class='fa fa-upload' aria-hidden='true'></i>",
                     coltype: 'Operation1'
 
                 };
@@ -593,7 +593,7 @@
                     linkThData = {
                         custom: true,
                         customcontent: 1,
-                        customcontent1: "a@href='javaScript:void(0);' onclick='OpenLink(this)' titile='链接' @" + LinkLabel,
+                        customcontent1: "a@href='javaScript:void(0);' onclick='OpenLink(this)'  titile='链接' @" + LinkLabel,
                         coltype: 'Operation1'
 
                     };
@@ -1518,7 +1518,7 @@
         var isDelRowAlert = false;
 
         //从表全部数据保存 还有问题 需要调整
-        function SaveAll(obj) {
+        function SaveAll() {
             // 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
             if (window.EditModel == 1 || window.EditModel == 2) {
                 return;

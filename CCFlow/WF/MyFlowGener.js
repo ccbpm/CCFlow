@@ -491,6 +491,14 @@ function CheckMinMaxLength() {
 
 //保存 0单保存 1发送的保存
 function Save(saveType) {
+    //保存从表数据
+    $("[name=Dtl]").each(function (i, obj) {
+        var contentWidow = obj.contentWindow;
+        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+            IsSaveTrue = contentWidow.SaveAll();
+
+        }
+    });
     //保存前事件
     if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
         if (beforeSave() == false)
@@ -1063,6 +1071,15 @@ function execSend(toNodeID) {
     var iframe = document.getElementById("FWC");
     if (iframe)
         iframe.contentWindow.SaveWorkCheck();
+
+    //保存从表数据
+    $("[name=Dtl]").each(function (i, obj) {
+        var contentWidow = obj.contentWindow;
+        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+            IsSaveTrue = contentWidow.SaveAll();
+
+        }
+    });
 
 
     //组织数据.

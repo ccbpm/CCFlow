@@ -63,6 +63,29 @@ UE.plugins['impfrm'] = function () {
         }
     };
 }
+//手机模板..
+UE.plugins['frmmobile'] = function () {
+    var me = this, thePlugins = 'frmmobile';
+    var frmID = pageParam.fk_mapdata;
+    var W = document.body.clientWidth - 120;
+    var H = document.body.clientHeight - 80;
+    var url = '../AttrNode/SortingMapAttrs.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
+    me.commands[thePlugins] = {
+        execCommand: function (method, dataType) {
+            var dialog = new UE.ui.Dialog({
+                iframeUrl: url,
+                name: thePlugins,
+                editor: this,
+                title: '手机模板',
+                cssRules: "width:" + W + "px;height:" + H + "px;",
+
+            });
+            dialog.render();
+            dialog.open();
+
+        }
+    };
+}
 UE.plugins['text'] = function () {
     var me = this, thePlugins = 'text';
     me.commands[thePlugins] = {

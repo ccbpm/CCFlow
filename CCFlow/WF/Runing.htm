@@ -62,7 +62,20 @@
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
     <script src="../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script language="javascript" type="text/javascript">
-        
+
+        var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
+        var isContainFuture = GetQueryString("IsContainFuture");
+        if (isContainFuture == null || isContainFuture == undefined || isContainFuture == "")
+            isContainFuture = "0";
+        //Hide_HastenWork:是否隐藏该条信息,CommonShowConfig.js中定义
+        if ("undefined" == typeof Hide_HastenWork) {
+            var Hide_HastenWork = true;
+        }
+        //页面启动函数.
+        $(function () {
+            InitPage();
+        });
+
         function GroupBarClick(groupName) {
 
             var alt = document.getElementById('Img' + groupName).alert;
@@ -260,19 +273,7 @@
 
         }
 
-        //页面启动函数.
-        $(function () {
-            //Hide_HastenWork:是否隐藏该条信息,CommonShowConfig.js中定义
-            if ("undefined" == typeof Hide_HastenWork) {
-                var Hide_HastenWork = true;
-            }
-            InitPage();
-        });
-
-        var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
-        var isContainFuture = GetQueryString("IsContainFuture");
-        if (isContainFuture == null || isContainFuture == undefined || isContainFuture == "")
-            isContainFuture = "0";
+        
 
         //初始化数据.
         function InitPage() {

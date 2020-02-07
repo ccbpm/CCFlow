@@ -85,7 +85,7 @@
                 }
             },
             created() {
-                InitBar(DeliveryWay.ByStation);
+                InitBar(DeliveryWay.ByDept);
 
                var ens = new Entities("BP.WF.Template.NodeDepts");
                ens.Retrieve("FK_Node", GetQueryString("FK_Node"));

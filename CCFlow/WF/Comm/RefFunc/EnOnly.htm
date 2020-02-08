@@ -276,11 +276,10 @@
 
                     var uiBindKey = mapAttr.UIBindKey;
 
-                    if (uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
+                    if (uiBindKey.toLowerCase().indexOf("select")==-1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
 
                         var webUser = new WebUser();
 
-                        //   alert(uiBindKey);
 
                         var ens = new Entities(uiBindKey);
                         ens.RetrieveAll();

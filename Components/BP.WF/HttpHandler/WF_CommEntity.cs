@@ -1103,7 +1103,12 @@ namespace BP.WF.HttpHandler
                 return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不能是普通字段，必须是外键或者枚举.";
 
             Entities trees = attr.HisFKEns;
-            trees.RetrieveAll();
+            //判断改类是否存在Idx
+            Entity tree = trees.GetNewEntity;
+            if(DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable,"Idx") == true && tree.EnMap.Attrs.Contains("Idx") == true)
+                trees.RetrieveAll("Idx");
+            else
+                trees.RetrieveAll();
 
             DataTable dt = trees.ToDataTableField("DBTrees");
             //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.

@@ -2399,6 +2399,129 @@
     top: 50%;
     margin-top: -8px;
 }
+/*周升雨  把以下样式写成公共的样式则会乱掉*/
+#mFormSort .menu-line, #mFormSort .menu-sep {
+    display: none;
+}
+
+#mFormSort .menu {
+    border: 0;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(0,0,0,.2);
+}
+
+#mFormSort .menu-text {
+    margin-left: 20px;
+    margin-top: 10px;
+    float: none;
+    padding: 0 0 0 10px;
+    line-height: 38px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+    #mFormSort .menu-text img {
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+#mFormSort .menu-item {
+    height: 38px !important;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+#mFormSort .menu-active {
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+
+
+
+#mForm .menu-line, #mForm .menu-sep {
+    display: none;
+}
+
+#mForm .menu {
+    border: 0;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(0,0,0,.2);
+}
+
+#mForm .menu-text {
+    margin-left: 20px;
+    margin-top: 10px;
+    float: none;
+    padding: 0 0 0 10px;
+    line-height: 38px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+    #mForm .menu-text img {
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+#mForm .menu-item {
+    height: 38px !important;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+#mForm .menu-active {
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+
+
+#mFlowSort .menu-line, #mFlowSort .menu-sep {
+    display: none;
+}
+
+#mFlowSort .menu {
+    border: 0;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(0,0,0,.2);
+}
+
+#mFlowSort .menu-text {
+    margin-left: 20px;
+    margin-top: 10px;
+    float: none;
+    padding: 0 0 0 10px;
+    line-height: 38px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+    #mFlowSort .menu-text img {
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+#mFlowSort .menu-item {
+    height: 38px !important;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+#mFlowSort .menu-active {
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+/*周升雨*/
 .m-btn-active,
 .s-btn-active {
   background: #eaf2ff;

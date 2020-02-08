@@ -914,7 +914,7 @@
   padding: 0;
 }
 .cs-header .tabs-wrap {
-    padding-top: 28px;
+    padding-top: 18px;
 }
 .tabs-scrolling {
   margin-left: 18px;
@@ -3109,6 +3109,7 @@
 .cs-header .tabs {
     padding-left: 0;
     border: 0;
+    height: 36px!important;
 }
 .cs-header .tabs li {
     background-color: #fff;
@@ -3117,6 +3118,8 @@
     padding: 4px 10px;
     background: #fff none;
     border-color: currentColor;
+    height: 36px!important;
+    box-sizing: border-box;
 }
 .cs-header .tabs .tabs-icon {
     display: none;

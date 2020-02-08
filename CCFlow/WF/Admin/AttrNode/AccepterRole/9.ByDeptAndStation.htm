@@ -14,140 +14,134 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+
+        <table style="width:100%;border-width:0px;">
+
+            <tr>
+                <td style="width:50%; " valign=top>
+                    <fieldset>
+                        <legend>设置岗位 </legend>
+                        <ul>
+                            <li> <a href="javascript:void(0)" @click="OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
+                            <li> <a href="javascript:void(0)" @click="OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
+                        </ul>
+                    </fieldset>
+                </td>
+
+                <td style="width:50%;" valign=top>
+                    <fieldset>
+                        <legend>设置部门 </legend>
+                        <ul>
+                            <li> <a href="javascript:void(0)" @click="OpenNew()">设置/更改部门</a> </li>
+                        </ul>
+                    </fieldset>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td valign=top>
+
+                    <fieldset>
+                        <legend>已经设置的岗位 </legend>
+                        <div id="stas" style="margin-top:15px">
+                            <span >合计:(<font color=red>{{stas.length}}</font>)条</span>
+                                <ul>
+                                    <li v-show="stas.length===0">未设置</li>
+                                    <template v-for="sta in stas">
+                                        <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                                    </template>
+
+                                </ul>
+                         </div>
+                    </fieldset>
+
+                </td>
+
+                <td valign=top>
+                    <fieldset>
+                        <legend>已经设置的部门 </legend>
+                        <div id="dept"style="margin-top:15px">
+                            <span >合计:(<font color=red>{{depts.length}}</font>)条</span>
+                            <ul>
+                                <li v-show="depts.length===0">未设置</li>
+                                <template v-for="dept in depts">
+                                    <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                                </template>
+                            </ul>
+                        </div>
+                    </fieldset>
+
+                </td>
+
+            </tr>
+        </table>
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>ccBPM会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受人员。</li>
+                <li>部门人员是一个集合，岗位人员是一个集合，两个集合相交的人员集合就是当前节点要投递的对象。</li>
+
+            </ul>
+        </fieldset>
+
+    </div>
     <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                stas: [],
+                depts: [],
+                webuser: null,
+                deliverWay: DeliveryWay.ByDeptAndStation
+            },
+            methods: {
+                OpenStation: function () {
+                     var nodeID = GetQueryString("FK_Node");
+                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
+                        Baseinfo.stas = getStas();
+                    });
 
-        $(function () {
+                },
+                OpenDot2DotStations: function () {
+                    OpenDot2DotStations();
+                },
+                OpenNew: function () {
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 800, 600, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
 
-            InitBar(DeliveryWay.ByDeptAndStation);
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.stas = getStas();
+                this.depts = getDepts();
 
-            //获取节点岗位
-            var ens = new Entities("BP.WF.Template.NodeStations");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+                //根据用户的信息，判断是否启用那个设置工具。
+                this.webuser = new WebUser();
 
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
 
-            html += "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                console.log(en);
-                html += "<li>" + en.FK_StationText + "</li>";
             }
-            html += "</ul>";
-
-            document.getElementById("stas").innerHTML = html;
-
-            //获取节点部门
-            ens = new Entities("BP.WF.Template.NodeDepts");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-            var html = "合计:(<font color=red>" + ens.length + "</font>)条";
-
-            html += "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                console.log(en);
-                html += "<li>" + en.FK_DeptText + "</li>";
-            }
-            html += "</ul>";
-
-            document.getElementById("dept").innerHTML = html;
         });
 
-        function OpenStation11() {
-            var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
-        }
-
-        function OpenStation() {
-            var nodeID = GetQueryString("FK_Node");
-            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
-        }
-
-        function OpenNew() {
-            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
-            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
-        }
-        function OpenOld() {
-            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
-            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
-        }
+        //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByDeptAndStation;
+            node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
     </script>
-</head>
-<body>
-
-    <div id="bar"> </div>
-
-    <table style="width:100%;border-width:0px;">
-
-        <tr>
-            <td style="width:50%; " valign=top>
-                <fieldset>
-                    <legend>设置岗位 </legend>
-                    <ul>
-                        <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
-                        <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
-                    </ul>
-                </fieldset>
-            </td>
-
-            <td style="width:50%;" valign=top>
-                <fieldset>
-                    <legend>设置部门 </legend>
-                    <ul>
-                        <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
-                        <!--<li>  <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a> </li>-->
-                    </ul>
-                </fieldset>
-            </td>
-        </tr>
-
-
-        <tr>
-            <td valign=top>
-
-                <fieldset>
-                    <legend>已经设置的岗位 </legend>
-                    <div id="stas"> </div>
-                </fieldset>
-
-            </td>
-
-            <td valign=top>
-
-
-                <fieldset>
-                    <legend>已经设置的部门 </legend>
-                    <div id="dept"> </div>
-                </fieldset>
-
-            </td>
-
-        </tr>
-    </table>
-
-
-    <fieldset>
-        <legend id="help">说明</legend>
-        <ul>
-            <li>ccBPM会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受人员。</li>
-            <li>部门人员是一个集合，岗位人员是一个集合，两个集合相交的人员集合就是当前节点要投递的对象。</li>
-
-        </ul>
-    </fieldset>
-
-
 </body>
 </html>

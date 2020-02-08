@@ -303,6 +303,10 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
     });
 }
 
+function OpenEasyUiDialogExtCloseFunc(url, title, w, h, closeFunc) {
+    OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, closeFunc);
+}
+
 function OpenEasyUiConfirm(msg, okBtnFunc, okBtnFuncArgs) {
     InitOKCancelText();
 

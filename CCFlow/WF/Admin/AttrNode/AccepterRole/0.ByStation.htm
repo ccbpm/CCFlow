@@ -18,10 +18,11 @@
 </head>
 <body>
     <div id="App">
+        <!--<model-component></model-component>-->
         <div id="bar">
         </div>
         <div id="AdminModel">
-            <fieldset v-show="adminModel===1" >
+            <fieldset v-show="adminModel===1">
                 <legend>设置岗位</legend>
                 <ul>
                     <li><a href="#" @click="OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
@@ -31,7 +32,7 @@
             </fieldset>
         </div>
         <div id="OrgModel">
-            <fieldset  v-show="orgModel===1">
+            <fieldset v-show="orgModel===1">
                 <legend>设置（组织管理员）</legend>
                 <ul>
                     <li><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
@@ -42,13 +43,16 @@
         <fieldset>
             <legend>已经设置的岗位</legend>
             <div id="stas">
-               
-                    <ul>
-                        <li v-show="stas.length===0">未设置</li>
-                        <li v-for="sta in stas">{{sta.FK_StationText}}</li>
-                    </ul>
-               
-               
+
+                <ul>
+                    <li v-show="stas.length===0">未设置</li>
+                    <template  v-for="sta in stas">
+                        <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                    </template>
+                    
+                </ul>
+
+
             </div>
         </fieldset>
 
@@ -70,7 +74,8 @@
                 adminModel: 1,
                 orgModel:0,
                 stas: [],
-                webuser:null
+                webuser: null,
+                deliverWay:DeliveryWay.ByStation
            },
            methods: {
                OpenDot2DotStations: function () {
@@ -79,7 +84,9 @@
                OpenNew: function () {
                    var nodeID = GetQueryString("FK_Node");
                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-                   OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
+                   OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500,function () {
+                        Baseinfo.stas = getStas();
+                    });
                },
                SetGroupStations: function () {
                     OpenNodStationGroup(this.webuser.GroupNo);
@@ -90,30 +97,28 @@
                }
            },
             created() {
-                InitBar(DeliveryWay.ByStation);
-
-                 var ens = new Entities("BP.WF.Template.NodeStations");
-                ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-                this.stas = ens;
+                InitBar(this.deliverWay);
+                this.stas = getStas();
                
                 //根据用户的信息，判断是否启用那个设置工具。
                 this.webuser = new WebUser();
                 this.adminModel = this.webuser.No == "admin" ? 1 : 0;
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
-               
            }
        });
 
          function OpenNodStationGroup(orgNo) {
             var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-            OpenEasyUiDialogExt(url, "绑定岗位", 500, 600, true);
+             OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, 600,function () {
+                Baseinfo.stas = getStas();
+            });
         }
 
         //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByStation;
+            node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
    </script>

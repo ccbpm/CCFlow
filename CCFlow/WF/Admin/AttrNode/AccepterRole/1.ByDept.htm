@@ -30,7 +30,7 @@
             </fieldset>
         </div>
         <div id="OrgModel">
-            <fieldset  v-show="orgModel===0">
+            <fieldset  v-show="orgModel===1">
                 <legend>设置（组织管理员）</legend>
                 <ul>
                     <li><a href="#" @click="SetGroupDepts()">设置集团部门</a> </li>
@@ -44,7 +44,9 @@
             <div id="dept">
                 <ul>
                     <li v-show="depts.length===0">未设置</li>
-                    <li v-for="dept in depts">{{dept.FK_DeptText}}</li>
+                    <template v-for="dept in depts">
+                        <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                    </template>
                 </ul>
 
             </div>
@@ -64,7 +66,8 @@
                 adminModel: 1,
                 orgModel: 0,
                 depts: [],
-                webuser:null
+                webuser: null,
+                deliverWay:DeliveryWay.ByDept
             },
             methods: {
                 OpenNew: function () {
@@ -74,7 +77,9 @@
 
                     url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
 
-                    OpenEasyUiDialogExt(url, "绑定部门", 800, 600, true);
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 800, 600,function () {
+                        Baseinfo.depts = getDepts();
+                    });
                 },
                 SetGroupDepts: function () {
                     OpenNodDeptGroup(this.webuser.GroupNo);
@@ -85,11 +90,8 @@
                 }
             },
             created() {
-                InitBar(DeliveryWay.ByDept);
-
-               var ens = new Entities("BP.WF.Template.NodeDepts");
-               ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-               this.depts = ens;
+                InitBar(this.deliverWay);
+               this.depts = getDepts();
 
                 //根据用户的信息，判断是否启用那个设置工具。
                 this.webuser = new WebUser();
@@ -100,7 +102,9 @@
         });
         function OpenNodDeptGroup(orgNo) {
             var url = "NodeDeptGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-            OpenEasyUiDialogExt(url, "绑定部门", 500, 600, true);
+             OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600,function () {
+                Baseinfo.depts = getDepts();
+            });
         }
 
         //保存
@@ -108,7 +112,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByDept;
+            node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
     </script>

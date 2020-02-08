@@ -14,52 +14,54 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <legend>请在文本框里输入SQL.</legend>
+            <textarea id="TB_BySQLAsSubThreadEmpsAndData" style="width:95%;height:50px" v-model="sql"></textarea>
+        </fieldset>
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>此方法与分合流相关，只有当前节点是子线程才有意义，当前节点模式为：<label id="hisRunModel">{{runModel}}</label>。</li>
+            </ul>
+        </fieldset>
+    </div>
     <script type="text/javascript">
-
-        $(function () {
-            InitBar(DeliveryWay.BySQLAsSubThreadEmpsAndData);
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            document.getElementById("hisRunModel").innerHTML = getRunModelName(parseInt(node.RunModel));
-
-            if (node.RunModel == RunModel.SubThread) {
-                //    document.getElementById("RB_BySQLAsSubThreadEmpsAndData").disabled = false
-            } else {
-                alert("该模式不适合当前的节点类型.");
-                //  document.getElementById("RB_BySQLAsSubThreadEmpsAndData").disabled = true
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.BySQLAsSubThreadEmpsAndData,
+                sql: '',
+                nodeId: GetQueryString("FK_Node"),
+                runModel:''
+            },
+            created() {
+                InitBar(this.deliverWay);
+                var node = new Entity("BP.WF.Node", this.nodeId);
+                if (node.DeliveryWay == DeliveryWay.BySQLAsSubThreadEmpsAndData) {
+                    this.sql = node.DeliveryParas;
+                }
+                this.runModel = node.RunModel;
+                if (node.RunModel == RunModel.SubThread) {
+                } else {
+                    alert("该模式不适合当前的节点类型.");
+                }
             }
-
-            if (node.DeliveryWay == DeliveryWay.BySQLAsSubThreadEmpsAndData) {
-                document.getElementById("RB_BySQLAsSubThreadEmpsAndData").value = node.DeliveryParas;
-            }
-
         });
-
         function Save() {
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.BySQLAsSubThreadEmpsAndData;
-            var DeliveryParas = document.getElementById("RB_BySQLAsSubThreadEmpsAndData").value;
-            node.DeliveryParas = DeliveryParas;
+            var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            if (CheckIsSQL(Baseinfo.sql) == false) {
+                alert("请输入合法的SQL.");
+                return;
+            }
+            node.DeliveryParas = Baseinfo.sql;
             node.Update();
         }
     </script>
-</head>
-<body>
-
-    <div id="bar"> </div>
-
-    <fieldset>
-        <legend>请在文本框里输入SQL.</legend>
-        <textarea id="RB_BySQLAsSubThreadEmpsAndData" rows="" cols="" style="width:95%;height:50px"></textarea>
-    </fieldset>
-
-    <fieldset>
-        <legend id="help">说明</legend>
-        <ul>
-            <li>此方法与分合流相关，只有当前节点是子线程才有意义，当前节点模式为：<label id="hisRunModel"></label>。</li>
-        </ul>
-    </fieldset>
-
 </body>
 </html>

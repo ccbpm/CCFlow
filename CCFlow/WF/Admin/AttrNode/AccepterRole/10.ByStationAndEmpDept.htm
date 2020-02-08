@@ -14,144 +14,127 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"   type="text/javascript"></script>
+ 
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <table style="width:100%; border:0px;">
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend>设置岗位</legend>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" @click="OpenStation()"> 设置与更改岗位</a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </td>
+                <td >
+                    <fieldset>
+                        <legend>设置部门</legend>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" @click="OpenNew()"> 设置/更改部门</a>
+                            </li>
+
+
+                        </ul>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td valign=top>
+                    <fieldset>
+                        <legend>已经绑定的岗位 </legend>
+                        <div id="stas">
+                            <ul>
+                                <li v-show="stas.length===0">未设置</li>
+                                <template v-for="sta in stas">
+                                    <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                                </template>
+
+                            </ul>
+                        </div>
+                    </fieldset>
+                </td>
+                <td valign=top>
+                    <fieldset>
+                        <legend>已经绑定的部门 </legend>
+                        <div id="dept">
+                            <ul>
+                                <li v-show="depts.length===0">未设置</li>
+                                <template v-for="dept in depts">
+                                    <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                                </template>
+                            </ul>
+                        </div>
+                    </fieldset>
+                </td>
+
+            </tr>
+        </table>
+
+
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>该操作需要设置部门与设置岗位，两个设置。</li>
+                <li>当前节点的处理人员需要求两个集合的交集。</li>
+                <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
+                <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
+                <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
+            </ul>
+        </fieldset>
+    </div>
     <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                stas: [],
+                depts:[],
+                deliverWay: DeliveryWay.ByStationAndEmpDept
+            },
+            methods: {
+                OpenStation: function () {
+                     var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+                     OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500,function () {
+                        Baseinfo.stas = getStas();
+                    });
+                    
+                },
+                OpenNew: function () {
+                   var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 800, 600,function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
+               
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.stas = getStas();
+                this.depts = getDepts();
 
-        $(function () {
-
-            InitBar(DeliveryWay.ByStationAndEmpDept);
-
-            //获取节点岗位
-            var ens = new Entities("BP.WF.Template.NodeStations");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-            var html = "<ul>";
-            var idx = 0;
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                html += "<li>" + en.FK_StationText + "</li>";
             }
-
-            html += "</ul>";
-            document.getElementById("stas").innerHTML = html;
-
-
-
-            //获取节点部门
-            ens = new Entities("BP.WF.Template.NodeDepts");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-
-            var html = "<ul>";
-            var idx = 0;
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                html += "<li>" + en.FK_DeptText + "</li>";
-            }
-
-            html += "</ul>";
-            document.getElementById("dept").innerHTML = html;
-
         });
 
+       
 
-        function OpenStation() {
-            var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
-        }
-
-        function OpenNew() {
-            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
-            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
-        }
-        function OpenOld() {
-            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
-            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
-        }
-
+        //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByStationAndEmpDept;
+            node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
     </script>
-</head>
-<body>
-
-    <div id="bar"> </div>
-
-    <table style="width:100%; border:0px;">
-        <tr>
-
-            <td style="width:50%;">
-
-                <fieldset>
-                    <legend>设置岗位</legend>
-                    <ul>
-                        <li>
-                            <a href="javascript:OpenStation()"> 设置与更改岗位</a>
-                        </li>
-                    </ul>
-                </fieldset>
-            </td>
-
-
-
-            <td style="width:50%;">
-                <fieldset>
-                    <legend>设置部门</legend>
-
-                    <ul>
-                        <li>
-                            <a href="javascript:OpenNew()"> 设置/更改部门</a>
-                        </li>
-                        <!-- <li>
-                             <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
-                         </li>-->
-
-                    </ul>
-                </fieldset>
-            </td>
-
-        </tr>
-        <tr>
-
-
-            <td valign=top>
-                <fieldset>
-                    <legend>已经绑定的岗位 </legend>
-                    <div id="stas"> </div>
-                </fieldset>
-            </td>
-
-            <td valign=top>
-                <fieldset>
-                    <legend>已经绑定的部门 </legend>
-                    <div id="dept"> </div>
-                </fieldset>
-            </td>
-
-        </tr>
-    </table>
-
-
-    <fieldset>
-        <legend id="help">说明</legend>
-        <ul>
-            <li>该操作需要设置部门与设置岗位，两个设置。</li>
-            <li>当前节点的处理人员需要求两个集合的交集。</li>
-            <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
-            <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
-            <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
-        </ul>
-    </fieldset>
-
 
 </body>
 </html>

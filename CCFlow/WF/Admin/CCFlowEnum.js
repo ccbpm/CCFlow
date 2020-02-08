@@ -75,6 +75,8 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySQLTemplate = 17,
         // 从人员到人员
         DeliveryWay.ByFromEmpToEmp = 18,
+        //找本部门范围内的岗位集合里面的人员
+        DeliveryWay.FindSpecDeptEmps=19,
         //按项目组内的岗位计算
         DeliveryWay.ByStationForPrj = 20,
         //由上一节点发送人通过“人员选择器”选择接受人

@@ -1176,6 +1176,10 @@
 
         /**/</script>
     <style type="text/css">
+        /*body.easyui-layout {
+            top: 20px;
+            left: 40px;
+        }*/
         .panel-body {
             padding: 0px;
         }
@@ -1191,6 +1195,7 @@
             width: auto!important;
             min-height: 34px;
             text-align: right;
+            background-color: transparent;
         }
         .cs-btn-group .l-btn-icon {
             display: none;
@@ -1199,26 +1204,27 @@
             margin: 0;
         }
         .layout-panel {
-            /*position: absolute;
+            position: absolute;
             right: 0;
-            top: 0!important;*/
+            top: 0!important;
             box-shadow: none;
         }
-        /*.layout-panel-north {
+        .layout-panel-north {
             width: auto!important;
             left: auto!important;
-        }*/
+            background-color: transparent;
+        }
         .btn {
-            padding: 1px 22px 0;
+            padding: 0 10px;
             color: #fff!important;
             border-radius: 3px!important;
             border: 0;
-            height: 26px;
-            line-height: 26px;
+            height: 24px;
+            line-height: 24px;
             box-sizing: border-box;
         }
         .btn:hover {
-            padding: 1px 22px 0;
+            padding:0 10px;
             border: 0;
         }
         .btn-light-green {
@@ -1267,7 +1273,6 @@
             width: 100%!important;
         }
         .tabs-wrap .tabs {
-            display: inline-block;
             padding-left: 0;
             width: auto;
             border-bottom: 1px solid #0a2561;
@@ -1275,6 +1280,7 @@
         .tabs li a.tabs-inner {
             padding: 0 16px;
             background: none;
+            border-radius: 5px 5px 0 0;
         }
         .tabs li a.tabs-inner:hover {
             background: none;
@@ -1290,7 +1296,7 @@
         }
         td a {
             color: #15398b;
-            font-size: 13px;
+            font-size: 12px;
         }
         td a img {
             vertical-align: -2px;
@@ -1312,16 +1318,18 @@
         }
         
         select[disabled], input[type=text]:disabled,.form-control,.form-control[disabled], .form-control[readonly], fieldset[disabled] {
-            background-color: #f7f6f9;
+            background-color: #fff;
             border: 1px solid #ccc!important;
             text-align: left!important;
             height: 32px;
             box-sizing: border-box;
         }
-            select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
-                background-color: #fff;
-                border: 0!important;
-            }
+        select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+            background-color: #f7f6f9;
+        }
+        td input[type="text"],td input[type="number"],td input[type="date"],td input[type="tel"] {
+            height: 32px;
+        }
         td input[type="checkbox"] {
             margin-right: 5px;
             width: 16px;
@@ -1330,6 +1338,7 @@
         td label {
             font-size: 13px;
         }
+        
         /*td.FDesc {
            padding-right: 10px;
             text-align: right;
@@ -1341,9 +1350,16 @@
         td:nth-child(3)[class="FDesc"] {
             width: 130px!important;
         }*/
+        .cs-form-import>.layout-panel-center {
+            padding: 36px 0 0 16px;
+        }
+        .cs-form-import > .layout-panel-north {
+            top: 6px!important;
+            padding-right: 21px;
+        }
     </style>
 </head>
-<body class="easyui-layout" data-options="fit:true">
+<body class="easyui-layout cs-form-import" data-options="fit:true">
     <!--<div class="easyui-layout" data-options="region:'center'" border="false">-->
         <!--<div class="easyui-layout" data-options="fit:true">-->
             <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">

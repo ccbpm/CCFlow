@@ -952,9 +952,6 @@
   white-space: nowrap;
   border-width: 1px;
   border-style: solid;
-  -moz-border-radius: 5px 5px 0 0;
-  -webkit-border-radius: 5px 5px 0 0;
-  border-radius: 5px 5px 0 0;
 }
 .tabs li.tabs-selected a.tabs-inner {
   font-weight: bold;
@@ -3039,12 +3036,18 @@
 .switchbutton-readonly {
   cursor: default;
 }
+.bar-menu .panel-body {
+    background-color: #ddd;
+}
 .bar-menu .tabs {
     margin-left: -4px;
     background-color: #031f5d;
     width: auto;
-    height: 50px!important;
+    height: 50px !important;
     line-height: 50px;
+}
+.bar-menu .easyui-tree {
+    background-color: #ddd;
 }
 .bar-menu .tabs li {
     margin: 0;
@@ -3070,8 +3073,8 @@
 .tree-node {
     position: relative;
     padding: 0 0 0 16px;
-    height: 40px;
-    line-height: 40px;
+    height: 32px;
+    line-height: 32px;
     cursor: pointer;
 }
 .tree-expanded, .tree-collapsed {
@@ -3134,9 +3137,10 @@
     padding: 0;
 }
 .cs-header .l-btn {
-    margin-right: 22px;
+    margin-right: 0;
 }
 .cs-header .tabs-tool .l-btn-text {
+    margin: 0 4px 0 0;
     height: 32px;
     line-height: 32px;
     color: #15398b;
@@ -3146,7 +3150,6 @@
     border: 0;
 }
 .cs-header .l-btn .ico {
-    margin-right: 4px;
     width: 22px;
     height: 22px;
     vertical-align: -7px;

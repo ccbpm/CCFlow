@@ -31,6 +31,7 @@
             text-align: center;
             width: 90%;*/
             background-color: #f7f6f9;
+            overflow: auto!important;
         }
 
         textarea, input[type=text] {
@@ -62,7 +63,6 @@
             background-color: #f1f1f1;
         }
         .cs-btn-group {
-            background-color: #f7f6f9;
             border: 0;
             text-align: right;
         }
@@ -116,14 +116,32 @@
         }
         .cs-easyui-layout {
             margin: auto;
+            background: #d0d0d0;
+            overflow: auto;
+        }
+        .cs-panel-center {
+            position:static; 
+            margin: 42px auto 0!important;
             width: 950px!important;
-            background: #f7f6f9;
+            /*overflow:auto*/
         }
         .cs-panel-body {
             background-color: #fff;
             border: 0;
             border-radius: 4px;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
+        }
+        .cs-panel-north {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background-color: #F7F6F9;
+            border-bottom: 1px solid #ddd;
+        }
+        .cs-panel-north .cs-btn-group {
+            margin: auto;
+            width: 950px!important;
+            background-color: #F7F6F9;
         }
         .cs-table {
             width: 100%;
@@ -135,9 +153,9 @@
             height: 24px;
             box-sizing: border-box;
         }
-            .cs-table td a:hover.l-btn-plain {
-                padding: 0;
-            }
+        .cs-table td a:hover.l-btn-plain {
+            padding: 0;
+        }
         a.l-btn span span span.l-btn-empty {
             background-position: center
         }
@@ -165,6 +183,19 @@
             margin: 0!important;
             width: 100%!important;
             background-color: #f7f6f9;
+        }
+        .cs-table input[type="radio"], .cs-table input[type="checkbox"] {
+            position: static;
+            padding-left: 0;
+            width: 16px!important;
+            height: 16px;
+            vertical-align: -4px;
+        }
+        .checkbox, .radio {
+            margin-left: 0!important;
+        }
+        .checkbox label, .radio label {
+            padding-left: 0;
         }
         .cs-order {
             float: right;
@@ -261,9 +292,9 @@
 
             var html = "";
 
-            //html += "<tr>";
-            //html += "<td colspan=" + tableCol + " ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:50px;' >" + frmName + "</h2></td>";
-            //html += "</tr>";
+            html += "<tr>";
+            html += "<td colspan=" + tableCol + " ><div style='float:left;margin-top:1px' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;margin-top:8px' >" + frmName + "</h2></td>";
+            html += "</tr>";
 
             for (var k = 0; k < groupFields.length; k++) {
 
@@ -1483,8 +1514,10 @@
 <body onkeypress="Esc();" class="easyui-layout layout panel-noscroll" topmargin="0" leftmargin="0">
 
     <div class="easyui-layout layout cs-easyui-layout" data-options="fit:true" style="width: 100%; height: 628px;">
-        <div class="panel layout-panel layout-panel-north" style="position:static">
-            <div data-options="region:'north'" id="toolbar" style="padding: 8px 0; overflow-y: hidden;" title="表单设计器-工具栏"
+        <div class="panel layout-panel layout-panel-north cs-panel-north">
+            <div data-options="region:'north'" id="toolbar" style="        padding: 8px 0;
+        overflow-y: hidden;
+" title="表单设计器-工具栏"
                  class="panel-body panel-body-noheader layout-body cs-btn-group">
                 <a href="javascript:MapDataEdit();" class="easyui-linkbutton btn-light-green">
                     表单属性
@@ -1522,7 +1555,7 @@
 
             </div>
         </div>
-        <div class="panel layout-panel layout-panel-center" style="position:static">
+        <div class="panel layout-panel layout-panel-center cs-panel-center">
             <div data-options="region:'center'" title="" class="panel-body panel-body-noheader layout-body cs-panel-body">
 
                 <table id="contentTable" class="cs-table">

@@ -1615,7 +1615,6 @@
     <Content Include="WF\Admin\Portal\Flows.htm" />
     <Content Include="WF\Admin\Portal\FuncTrees.js" />
     <Content Include="WF\Admin\Portal\Guide.htm" />
-    <Content Include="WF\Admin\Portal\Handler.ashx" />
     <Content Include="WF\Admin\Portal\Img\loading_small.gif" />
     <Content Include="WF\Admin\Portal\Login.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
@@ -7668,9 +7667,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Portal\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
       <DependentUpon>CCFormAPI.asmx</DependentUpon>

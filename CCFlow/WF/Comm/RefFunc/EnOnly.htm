@@ -745,8 +745,8 @@
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
                         html += '<div class="input-group">';
                         html += "<span class='input-group-addon' style='border-radius:0;border-color:#d2d6de;background-color:#fff'><i id='menuIconIcon' class='icon-settings'></i></span>";
-                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
-                        html += "<span class='input-group-btn' style='padding-left:3px'><a id='menuIconButton' href='javascript:void(0)' class='btn btn-default'  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='fa fa-search'></i></a></span>";
+                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;margin:0px 0px' type='text'  " + enableAttr + " />";
+                        html += "<span class='input-group-btn' style='padding-left:3px;border:1px solid #d2d6de;'><a id='menuIconButton' href='javascript:void(0)' class='btn btn-default'  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='fa fa-search'></i></a></span>";
                         html += "</div>";
                         return html;
                     }
@@ -1214,11 +1214,11 @@
             background-color: transparent;
         }
         .btn {
-            padding: 0 10px;
+            /**padding: 0 10px;*/
             color: #fff!important;
-            border-radius: 3px!important;
+            border-radius: 0px!important;
             border: 0;
-            height: 24px;
+            height: 29px;
             line-height: 24px;
             box-sizing: border-box;
         }

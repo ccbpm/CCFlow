@@ -1072,28 +1072,17 @@ function CalculateJS(sCode) {
 }
 
 //公共方法
-function ajaxService(param, callback, scope, levPath) { 
-	if(plant=="JFlow")
-		Handler = basePath+"/WF/Admin/CCBPMDesigner/ProcessRequest.do"
-    $.ajax({
-        type: "GET", //使用GET或POST方法访问后台
-        dataType: "text", //返回json格式的数据
-        contentType: "text/plain; charset=utf-8",
-        url: Handler, //要访问的后台地址
-        data: param, //要发送的数据
-        async: true,
-        cache: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        crossDomain: true,
-        complete: function () { }, //AJAX请求完成时隐藏loading提示
-        error: function (XMLHttpRequest, errorThrown) {
-            callback(XMLHttpRequest);
-        },
-        success: function (msg) {//msg为返回的数据，在这里做数据绑定
-            var data = msg;
-            callback(data, scope);
+function ajaxService(param, callback, scope, levPath) {
+    if (param && param.action && param.action != null && param.action != "" && param.action != undefined) {
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+        handler.AddJson(param);
+        var data = handler.DoMethodReturnString(param.action);
+        if (data.indexOf('err@') == 0) {
+            alert(data);
+            return;
         }
-    });
+        callback(data, scope);
+    } else {
+        alert("参数错误，缺少action项。");
+    }
 }

@@ -174,10 +174,10 @@ function CCFormLoaded() {
     else {
         //新加
         //计算高度，展示滚动条
-        var height = $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto");
+        var height = $("#CCForm").height($(window).height() - 135 + "px").css("overflow-y", "auto");
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto");
+            $("#CCForm").height($(window).height() - 135 + "px").css("overflow-y", "auto");
         });
     }
 
@@ -2214,6 +2214,8 @@ function initModal(modalType, toNode) {
         switch (modalType) {
             case "returnBack":
                 $('#modalHeader').text("提示信息");
+                //按百分比自适应
+                SetPageSize(50, 60);
                 modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             case "Send":

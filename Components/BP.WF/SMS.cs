@@ -663,14 +663,14 @@ namespace BP.WF
                 //钉钉
                 if (this.PushModel.Contains("DingDing") == true)
                 {
-                    httpUrl = messageUrl + "?DoType=SendToDingDing";
+                    httpUrl = messageUrl + "?DoType=SendToDingDing&sendTo=" + this.SendToEmpNo + "&title="+this.Title+"&msgConten=" + this.MobileInfo;
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
                 //微信
                 if (this.PushModel.Contains("WeiXin") == true)
                 {
-                    httpUrl = messageUrl + "?DoType=SendToWeiXin";
+                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo="+this.SendToEmpNo+"&msgConten="+ this.MobileInfo;
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
                 }

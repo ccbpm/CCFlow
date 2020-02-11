@@ -19,8 +19,8 @@ body
 /* °´Å¥·ç¸ñ */
 input[type="button"], input[type="submit"], input[type="file"] {
     border: 0;
-    background: #1d7dd4;
-    color: #fff;
+    background: #fff;
+    color: #555;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;

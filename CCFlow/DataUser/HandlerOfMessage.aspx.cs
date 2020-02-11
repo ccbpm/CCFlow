@@ -42,29 +42,37 @@ namespace CCFlow.DataUser
                     string openUrl = dictionary["openUrl"].ToString(); //要打开的url.
                     break;
                 case "SendToWeiXin":
-                    string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
-                    if (agentId != null)
+                    try
                     {
-                        string accessToken = new BP.EAI.Plugins.WXin.WeiXin().getAccessToken();//获取 AccessToken
+                        string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+                        if (agentId != null)
+                        {
+                            string accessToken = new BP.EAI.Plugins.WXin.WeiXin().getAccessToken();//获取 AccessToken
 
-                        News_Articles newArticle = new News_Articles();
-                        newArticle.description = this.Request.QueryString["msgConten"];
+                            News_Articles newArticle = new News_Articles();
+                            newArticle.description = this.Request.QueryString["msgConten"];
 
-                        string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                            + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
-                        newArticle.url = New_Url;
+                            newArticle.title = "您有一条待办消息";
+                            string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
+                                + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+                            newArticle.url = New_Url;
 
-                        //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-                        newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/ccicon.png";
+                            //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
+                            newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/ccicon.png";
 
-                        WX_Msg_News wxMsg = new WX_Msg_News();
-                        wxMsg.Access_Token = accessToken;
-                        wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
-                        wxMsg.touser = this.Request.QueryString["sendTo"];
-                        wxMsg.articles.Add(newArticle);
-                        //执行发送
-                        WeiXinMessage.PostMsgOfNews(wxMsg);
+                            BP.GPM.Emp emp = new BP.GPM.Emp(this.Request.QueryString["sendTo"]);
+
+                            WX_Msg_News wxMsg = new WX_Msg_News();
+                            wxMsg.Access_Token = accessToken;
+                            wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                            wxMsg.touser = emp.Tel;
+                            wxMsg.articles.Add(newArticle);
+                            //执行发送
+                            WeiXinMessage.PostMsgOfNews(wxMsg);
+                        }
                     }
+                    catch (Exception ex)
+                    { }
                     break;
                 case "SendToDingDing":
                     //企业应用必须存在

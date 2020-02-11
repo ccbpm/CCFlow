@@ -37,12 +37,13 @@
     <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" />
     <style>
         body {
-            padding-right: 22px!important;
-            background-color: #f7f6f9;
+            padding-right: 18px !important;
+            background-color: #e8e8e8;
         }
+
         .cs-sidebar {
             padding-left: 8px;
-            top: 46px;
+            top: 41px;
             left: 14px;
             width: 260px;
             font-size: 13px;
@@ -51,41 +52,49 @@
             box-shadow: 0 0 12px rgba(0,0,0,.1);
             border-radius: 4px;
         }
-        .cs-sidebar .figurePanel {
-            position: relative;
-            padding: 10px 20px 10px 18px;
-            background-color: #fff;
-            border: 0;
-        }
-        .cs-sidebar .figurePanel img {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .cs-sidebar .navlist li {
-            background-color: #fff;
-            cursor: pointer;
-        }
-        .cs-sidebar .navlist li:hover {
-            background-color: #e4eef8;
-        }
-        .cs-sidebar .navlist li div {
-            padding: 10px 0 10px 20px;
-            height: 38px;
-            width: 100%;
-            border: 0;
-            background-position: left 22px center;
-            background-size: 16px 16px;
-            box-sizing: border-box;
-        }
+
+            .cs-sidebar .figurePanel {
+                position: relative;
+                padding: 10px 20px 10px 18px;
+                background-color: #fff;
+                border: 0;
+            }
+
+                .cs-sidebar .figurePanel img {
+                    position: absolute;
+                    left: 215px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+
+            .cs-sidebar .navlist li {
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+                .cs-sidebar .navlist li:hover {
+                    background-color: #e4eef8;
+                }
+
+                .cs-sidebar .navlist li div {
+                    padding: 10px 0 10px 20px;
+                    height: 38px;
+                    width: 100%;
+                    border: 0;
+                    background-position: left 22px center;
+                    background-size: 16px 16px;
+                    box-sizing: border-box;
+                }
+
         .cs-tree .content-wrapper {
             margin-left: 298px;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
+
         .cs-tree .tab-content {
             border: 0;
         }
+
         .cs-btn-group {
             padding: 8px 0 8px 8px;
             background-color: #f7f6f9;
@@ -93,23 +102,33 @@
             text-align: right;
         }
 
-        .cs-btn-group input[type="button"] {
-            margin: 0 0 0 6px;
-            padding: 0 14px;
-            color: #fff;
-            font-size: 13px;
-            line-height: 14px;
-            height: 26px;
-            border: 0 none;
-            border-radius: 3px;
-            background-image: none;
-            box-sizing: border-box;
-        }
-        .cs-btn-group span.l-btn-left.l-btn-left {
-            padding: 0;
-            background-image: none;
-        }
+            .cs-btn-group input[type="button"] {
+                margin: 0 0 0 6px;
+                padding: 0 12px;
+                color: #fff;
+                font-size: 13px;
+                line-height: 14px;
+                height: 26px;
+                border: 0 none;
+                border-radius: 3px;
+                background-image: none;
+                box-sizing: border-box;
+            }
 
+            .cs-btn-group span.l-btn-left.l-btn-left {
+                padding: 0;
+                background-image: none;
+            }
+
+        .edui-editor, #edui11_iframeholder {
+            width: 100% !important;
+        }
+        .figurePanel {
+            cursor: pointer;
+        }
+        .figurePanel + div {
+            display: none;
+        }
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini cs-tree" style="overflow:hidden;">
@@ -121,6 +140,7 @@
         <input type="button" onclick="leipiFormDesign.exec('impfrm')" class="btn-light-blue" value="导入表单模版" id="Btn_ImpTemplate" />
         <input type="button" onclick="leipiFormDesign.exec('ImpFrmFields');" class="btn-light-red" value="插入回收站字段" id="Btn_ImpFields" />
         <input type="button" onclick="leipiFormDesign.exec('FrmMobile');" class="btn-light-yellow" value="手机表单" id="Btn_FrmMobile" />
+        <input type="button" class="btn-light-blue" value="全屏"/>
         <div id="msg"></div>
     </div>
     <!--左边导航-->
@@ -128,7 +148,7 @@
         <div class="sidebar">
             <div id="sidebar-menu" style="height:600px;">
                 <div id="figures" style="height: 100%; overflow: auto; position: relative;">
-                    <div class="figurePanel">
+                    <div class="figurePanel J_treeMenu" @click="menuToggle()">
                         <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="basicimg" />
                         <div>基本控件</div>
                     </div>
@@ -152,7 +172,7 @@
 
                         </ul>
                     </div>
-                    <div class="figurePanel">
+                    <div class="figurePanel J_treeMenu" @click="menuToggle()">
                         <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="Dataimg" />
                         <div>字段控件</div>
                     </div>
@@ -195,7 +215,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div id="CheckBox" style="background-image: url(../CCFormDesigner/Controls/Data/Checkbox.png);" class="" onclick="leipiFormDesign.exec('text','CheckBox');">
+                                <div id="CheckBox" style="        background-image: url(../CCFormDesigner/Controls/Data/Checkbox.png);" class="" onclick="leipiFormDesign.exec('text','CheckBox');">
                                     <span class="navlistspan">选择框</span>
                                 </div>
                             </li>
@@ -221,7 +241,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="figurePanel">
+                    <div class="figurePanel J_treeMenu" @click="menuToggle()">
                         <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="Componentsimg" />
                         <div>组件类</div>
                     </div>
@@ -255,7 +275,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="figurePanel">
+                    <div class="figurePanel J_treeMenu" @click="menuToggle()">
                         <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="mobileimg" />
                         <div>控件</div>
                     </div>
@@ -293,7 +313,7 @@
                             </li>-->
                         </ul>
                     </div>
-                    <div class="figurePanel">
+                    <div class="figurePanel J_treeMenu" @click="menuToggle()">
                         <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="ccbpmimg" />
                         <div>流程组件</div>
                     </div>
@@ -586,5 +606,16 @@
         }
     };
 
+    // 菜单折叠显示
+    $('body').on('click', '.J_treeMenu', function () {
+        if ($(this).next('div').is(':hidden')) {
+            $(this).find('img').attr('src','../CCFormDesigner/Img/ico-menu-show.png')
+            $(this).next('div').show();
+        } else {
+            $(this).find('img').attr('src','../CCFormDesigner/Img/ico-menu-hide.png')
+            $(this).next('div').hide();
+        }
+            
+    })
 </script>
 </html>

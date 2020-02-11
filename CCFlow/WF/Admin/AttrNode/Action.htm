@@ -114,14 +114,22 @@
             window.open(url);
         }
     </script>
+    <style>
+        .cs-btn-help[type="button"] {
+            background-color:#fff;
+            color: #666;
+            border-color: #ddd;
+
+        }
+    </style>
 </head>
 <body>
     <form id="cc">
     <div id="Msg">
     </div>
     <br />
-    <input type="button" value="+新建节点事件" onclick="javascript:New()" />
-    <input type="button" value="什么是节点事件？" onclick="javascript:Help()" />
+    <input type="button" value="+新建节点事件" class="cs-btn-new" onclick="javascript:New()" />
+    <input type="button" value="什么是节点事件？" class="cs-btn-help" onclick="javascript:Help()" />
     </form>
 </body>
 </html>

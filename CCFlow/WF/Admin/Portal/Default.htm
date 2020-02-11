@@ -74,44 +74,46 @@
             刷新
         </div>
     </div>
+    <img src="../../Scripts/easyUI145/themes/icons/open.png" />
     <div id="mFlowSort" class="easyui-menu" style="width: 120px;">
-        <div onclick="newFlow()" data-options="iconCls:'icon-add'">
-            新建流程
+        <div onclick="newFlow()">
+            <img src="../../Scripts/easyUI145/themes/icons/edit_add.png">新建流程
         </div>
-        <div onclick="ImpFlowBySort()" data-options="iconCls:'icon-redo'">
-            导入流程模板
-        </div>
-        <div class="menu-sep">
-        </div>
-        <div onclick="newFlowSort(false)" data-options="iconCls:'icon-tree_folder'">
-            新建同级类别
-        </div>
-        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-tree_folder'">
-            新建子级类别
-        </div>
-        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
-            编辑
+        
+        <div onclick="ImpFlowBySort()">
+            <img src="../../Scripts/easyUI145/themes/icons/redo.png">导入流程模板
         </div>
         <div class="menu-sep">
         </div>
-        <div onclick="deleteFlowSort()" data-options="iconCls:'icon-Delete'">
-            删除
+        <div onclick="newFlowSort(false)">
+            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建同级类别
+        </div>
+        <div onclick="newFlowSort(true)">
+            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建子级类别
+        </div>
+        <div onclick="editFlowSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/pencil.png">编辑
         </div>
         <div class="menu-sep">
         </div>
-        <div onclick="moveUpFlowSort()" data-options="iconCls:'icon-up'">
-            上移
-        </div>
-        <div onclick="moveDownFlowSort()" data-options="iconCls:'icon-down'">
-            下移
+        <div onclick="deleteFlowSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/delete.png">删除
         </div>
         <div class="menu-sep">
         </div>
-        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">
-            刷新
+        <div onclick="moveUpFlowSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/up.gif">上移
         </div>
-        <div onclick="viewFlowSort()" data-options="iconCls:'icon-config'">
-            树节点属性
+        <div onclick="moveDownFlowSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/down.gif">下移
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="RefreshNode('flowTree', 'F99')">
+            <img src="../../Scripts/easyUI145/themes/icons/reload.png">刷新
+        </div>
+        <div onclick="viewFlowSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/tip.png">树节点属性
         </div>
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
@@ -162,77 +164,77 @@
         <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
-        <div onclick="newFrm(0)" data-options="iconCls:'icon-excel'">
-            新建独立表单
+        <div onclick="newFrm(0)">
+            <img src="../../Scripts/easyUI145/themes/icons/excel.gif">新建独立表单
         </div>
-        <div onclick="newFrm(1)" data-options="iconCls:'icon-sheet'">
-            新建单据表单
+        <div onclick="newFrm(1)">
+            <img src="../../Scripts/easyUI145/themes/icons/sheet.png">新建单据表单
         </div>
-        <div onclick="newFrm(2)" data-options="iconCls:'icon-add'">
-            新建实体表单
-        </div>
-        <div class="menu-sep">
-        </div>
-        <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-tree_folder'">
-            新建同级类别
-        </div>
-        <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-tree_folder'">
-            新建子级类别
+        <div onclick="newFrm(2)">
+            <img src="../../Scripts/easyUI145/themes/icons/edit_add.png">新建实体表单
         </div>
         <div class="menu-sep">
         </div>
-        <div onclick="EditCCFormSort()" data-options="iconCls:'icon-edit'">
-            编辑
+        <div onclick="newCCFormSort(false)">
+            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建同级类别
         </div>
-        <div onclick="DeleteCCFormSort()" data-options="iconCls:'icon-cancel'">
-            删除
-        </div>
-        <div class="menu-sep">
-        </div>
-        <div onclick="moveUpCCFormSort()" data-options="iconCls:'icon-up'">
-            上移
-        </div>
-        <div onclick="moveDownCCFormSort()" data-options="iconCls:'icon-down'">
-            下移
+        <div onclick="newCCFormSort(true)">
+            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建子级类别
         </div>
         <div class="menu-sep">
         </div>
-        <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">
-            刷新
+        <div onclick="EditCCFormSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/pencil.png">编辑
+        </div>
+        <div onclick="DeleteCCFormSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/delete.png">删除
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="moveUpCCFormSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/up.gif">上移
+        </div>
+        <div onclick="moveDownCCFormSort()">
+            <img src="../../Scripts/easyUI145/themes/icons/down.gif">下移
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div onclick="RefreshNode('formTree', '1')">
+            <img src="../../Scripts/easyUI145/themes/icons/reload.png">刷新
         </div>
     </div>
     <div id="mForm" class="easyui-menu" style="width: 120px;">
-        <div onclick="Bill_CCForm()" data-options="iconCls:'icon-property'">
-            表单属性
+        <div onclick="Bill_CCForm()">
+            <img src="../../Scripts/easyUI145/themes/icons/property.png">表单属性
         </div>
-        <div onclick="Bill_Open()" data-options="iconCls:'icon-property'">
-            数据查询
+        <div onclick="Bill_Open()">
+            <img src="../../Scripts/easyUI145/themes/icons/property.png">数据查询
         </div>
         <div class="menu-sep">
         </div>
         <!--  <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
             表单属性</div>-->
-        <div onclick="designFoolFrm()" data-options="iconCls:'icon-sheet'">
-            设计傻瓜表单
+        <div onclick="designFoolFrm()">
+            <img src="../../Scripts/easyUI145/themes/icons/sheet.png">设计傻瓜表单
         </div>
-        <div onclick="designFreeFrm()" data-options="iconCls:'icon-library'">
-            设计自由表单
+        <div onclick="designFreeFrm()">
+            <img src="../../Scripts/easyUI145/themes/icons/library.png">设计自由表单
         </div>
         <!--<div onclick="CopyFrm()" data-options="iconCls:'icon-copy'">复制表单</div>-->
         <div class="menu-sep">
         </div>
-        <div onclick="moveUpCCFormTree()" data-options="iconCls:'icon-up'">
-            上移
+        <div onclick="moveUpCCFormTree()">
+            <img src="../../Scripts/easyUI145/themes/icons/up.gif">上移
         </div>
-        <div onclick="moveDownCCFormTree()" data-options="iconCls:'icon-down'">
-            下移
+        <div onclick="moveDownCCFormTree()">
+            <img src="../../Scripts/easyUI145/themes/icons/down.gif">下移
         </div>
-        <div onclick="deleteCCFormTreeMapData()" data-options="iconCls:'icon-Delete'">
-            删除
+        <div onclick="deleteCCFormTreeMapData()">
+            <img src="../../Scripts/easyUI145/themes/icons/delete.png">删除
         </div>
 
-        <div onclick="CopyFrm()" data-options="iconCls:'icon-Copy'">
-            复制
+        <div onclick="CopyFrm()">
+            <img src="../../Scripts/easyUI145/themes/icons/copy.png">复制
         </div>
         <!--<div class="menu-sep"></div>
         <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">刷新</div>-->

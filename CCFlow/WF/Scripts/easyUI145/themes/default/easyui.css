@@ -3059,6 +3059,14 @@
     color: #282828;
     font-size: 13px;
 }
+.cs-bar #Btn, .cs-bar #Btn_Adv {
+    border: 1px solid #888;
+    color: #333;
+}
+
+.cs-bar #Btn:hover, .cs-bar #Btn_Adv:hover {
+    background-color: #fff;
+}
 .cs-bar #Btn_Save {
     background-color: #50b6ac;
 }
@@ -3165,35 +3173,35 @@
 }
 
 .btn-light-green {
-    background-color: #50b6ac!important;
+    background-color: #50b6ac;
 }
 
-.btn-light-green:hover {
-    background-color: #50b6ac !important;
+.btn-light-green:hover, .btn-light-green:active, .btn-light-green:focus {
+    background-color: #50b6ac;
 }
 
 .btn-light-blue {
-    background-color: #62cae3 !important;
+    background-color: #62cae3;
 }
 
-.btn-light-blue:hover {
-    background-color: #62cae3 !important;
+.btn-light-blue:hover, .btn-light-blue:active, .btn-light-blue:focus {
+    background-color: #62cae3;
 }
 
 .btn-light-yellow {
-    background-color: #f3ba20 !important;
+    background-color: #f3ba20;
 }
 
-.btn-light-yellow:hover {
-    background-color: #f3ba20 !important;
+.btn-light-yellow:hover, .btn-light-yellow:active, .btn-light-yellow:focus {
+    background-color: #f3ba20;
 }
 
 .btn-light-red {
-    background-color: #f74f52 !important;
+    background-color: #f74f52;
 }
 
-.btn-light-red:hover {
-    background-color: #f74f52 !important;
+.btn-light-red:hover, .btn-light-red:active, .btn-light-red:focus {
+    background-color: #f74f52;
 }
 
 .navbar .btn-white {
@@ -3202,6 +3210,6 @@
     color: #031f5d;
 }
 
-.btn-white:hover {
+.btn-white:hover, .btn-white:active, .btn-white:focus {
     background-color: white;
 }

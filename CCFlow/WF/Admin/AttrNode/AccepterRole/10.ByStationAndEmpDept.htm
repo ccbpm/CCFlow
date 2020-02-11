@@ -22,8 +22,8 @@
         <div id="bar"> </div>
         <table style="width:100%; border:0px;">
             <tr>
-                <td>
-                    <fieldset>
+                <td style="width:100%; " valign=top>
+                    <fieldset style="width:44%;display:inline;margin-right:10px;">
                         <legend>设置岗位</legend>
                         <ul>
                             <li>
@@ -31,9 +31,7 @@
                             </li>
                         </ul>
                     </fieldset>
-                </td>
-                <td >
-                    <fieldset>
+                    <fieldset style="width:44%;display:inline;">
                         <legend>设置部门</legend>
                         <ul>
                             <li>
@@ -43,11 +41,7 @@
 
                         </ul>
                     </fieldset>
-                </td>
-            </tr>
-            <tr>
-                <td valign=top>
-                    <fieldset>
+                    <fieldset style="width:44%;display:inline;margin-right:10px;">
                         <legend>已经绑定的岗位 </legend>
                         <div id="stas">
                             <ul>
@@ -59,9 +53,7 @@
                             </ul>
                         </div>
                     </fieldset>
-                </td>
-                <td valign=top>
-                    <fieldset>
+                    <fieldset style="width:44%;display:inline;">
                         <legend>已经绑定的部门 </legend>
                         <div id="dept">
                             <ul>
@@ -72,22 +64,19 @@
                             </ul>
                         </div>
                     </fieldset>
+                    <fieldset style="width:92%">
+                        <legend id="help">说明</legend>
+                        <ul>
+                            <li>该操作需要设置部门与设置岗位，两个设置。</li>
+                            <li>当前节点的处理人员需要求两个集合的交集。</li>
+                            <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
+                            <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
+                            <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
+                        </ul>
+                    </fieldset>
                 </td>
-
             </tr>
         </table>
-
-
-        <fieldset>
-            <legend id="help">说明</legend>
-            <ul>
-                <li>该操作需要设置部门与设置岗位，两个设置。</li>
-                <li>当前节点的处理人员需要求两个集合的交集。</li>
-                <li>比如:在岗位里设置部门经理岗位，在部门里设置财务与人力资源两个部门。</li>
-                <li>系统就会得到两个人员集合，第一个集合是所有具有部门经理岗位的人员，第2个集合就是财务部，人力资源部所有的人员。</li>
-                <li>两个的交集就是一个财务部经理于一个人力资源部经理。</li>
-            </ul>
-        </fieldset>
     </div>
     <script type="text/javascript">
         var Baseinfo = new Vue({

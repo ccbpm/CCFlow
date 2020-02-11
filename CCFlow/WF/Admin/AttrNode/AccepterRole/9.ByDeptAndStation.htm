@@ -24,51 +24,38 @@
         <table style="width:100%;border-width:0px;">
 
             <tr>
-                <td style="width:50%; " valign=top>
-                    <fieldset>
+                <td style="width:100%; " valign=top>
+                    <fieldset style="width:44%;display:inline;margin-right:10px;">
                         <legend>设置岗位 </legend>
                         <ul>
                             <li> <a href="javascript:void(0)" @click="OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
                             <li> <a href="javascript:void(0)" @click="OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
                         </ul>
                     </fieldset>
-                </td>
-
-                <td style="width:50%;" valign=top>
-                    <fieldset>
+                    <fieldset style="width:44%;display:inline;">
                         <legend>设置部门 </legend>
                         <ul>
                             <li> <a href="javascript:void(0)" @click="OpenNew()">设置/更改部门</a> </li>
+                            <br />
                         </ul>
                     </fieldset>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td valign=top>
-
-                    <fieldset>
+                    <fieldset style="width:44%;display:inline;margin-right:10px;">
                         <legend>已经设置的岗位 </legend>
                         <div id="stas" style="margin-top:15px">
-                            <span >合计:(<font color=red>{{stas.length}}</font>)条</span>
-                                <ul>
-                                    <li v-show="stas.length===0">未设置</li>
-                                    <template v-for="sta in stas">
-                                        <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
-                                    </template>
+                            <span>合计:(<font color=red>{{stas.length}}</font>)条</span>
+                            <ul>
+                                <li v-show="stas.length===0">未设置</li>
+                                <template v-for="sta in stas">
+                                    <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                                </template>
 
-                                </ul>
-                         </div>
+                            </ul>
+                        </div>
                     </fieldset>
-
-                </td>
-
-                <td valign=top>
-                    <fieldset>
+                    <fieldset style="width:44%;display:inline;">
                         <legend>已经设置的部门 </legend>
-                        <div id="dept"style="margin-top:15px">
-                            <span >合计:(<font color=red>{{depts.length}}</font>)条</span>
+                        <div id="dept" style="margin-top:15px">
+                            <span>合计:(<font color=red>{{depts.length}}</font>)条</span>
                             <ul>
                                 <li v-show="depts.length===0">未设置</li>
                                 <template v-for="dept in depts">
@@ -77,19 +64,18 @@
                             </ul>
                         </div>
                     </fieldset>
+                    <fieldset style="width:92%">
+                        <legend id="help">说明</legend>
+                        <ul>
+                            <li>ccBPM会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受人员。</li>
+                            <li>部门人员是一个集合，岗位人员是一个集合，两个集合相交的人员集合就是当前节点要投递的对象。</li>
 
+                        </ul>
+                    </fieldset>
                 </td>
-
             </tr>
         </table>
-        <fieldset>
-            <legend id="help">说明</legend>
-            <ul>
-                <li>ccBPM会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受人员。</li>
-                <li>部门人员是一个集合，岗位人员是一个集合，两个集合相交的人员集合就是当前节点要投递的对象。</li>
-
-            </ul>
-        </fieldset>
+       
 
     </div>
     <script type="text/javascript">

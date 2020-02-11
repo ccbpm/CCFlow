@@ -18,9 +18,9 @@ body
 }
 /* °´Å¥·ç¸ñ */
 input[type="button"], input[type="submit"], input[type="file"] {
-    border: 0; /*background: #4D77A7;*/
-    background: #62CAE3;
-    color: #545454;
+    border: 0;
+    background: #1d7dd4;
+    color: #fff;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
@@ -29,7 +29,7 @@ input[type="button"], input[type="submit"], input[type="file"] {
 }
 input:hover[type="button"]
 {
-    border: 0; /*background: #4D77A7;*/
+    border: 0;
     background: #1d7dd4;
     color: #fff;
     font-size: 12px;

@@ -6218,6 +6218,27 @@ namespace BP.WF
                     //throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
                 }
             }
+
+            // 配置的sql,执行后,返回结果是 0 .
+            if (role == StartLimitRole.ResultIsZero)
+            {
+                sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
+                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    return true;
+                else
+                    return false;
+            }
+
+            // 配置的sql,执行后,返回结果是 <> 0 .
+            if (role == StartLimitRole.ResultIsNotZero)
+            {
+                sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
+                if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
+                    return true;
+                else
+                    return false;
+            }
+
             return true;
         }
 

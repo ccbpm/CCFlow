@@ -3,7 +3,7 @@
     jQuery.getScript(basePath + "/WF/Admin/Admin.js")
         .done(function () {
             /* 耶，没有问题，这里可以干点什么 */
-             //alert('ok');
+            //alert('ok');
         })
         .fail(function () {
             /* 靠，马上执行挽救操作 */
@@ -119,8 +119,8 @@ function InitBar(optionKey) {
     }
     html += "</select >";
     html += "<input  id='Btn_Save' type=button onclick='SaveRole()' value='保存' />";
-    html += "<input id='Btn' type=button onclick='AdvSetting()' value='高级设置' />";
-    html += "<input  id='Btn_Help' type=button onclick='Help()' value='在线帮助' />";
+    html += "<input  id='Btn_Adv' type=button onclick='AdvSetting()' value='高级设置' />";
+  //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='在线帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
@@ -176,7 +176,7 @@ function OpenDot2DotStations() {
     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
     url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
     url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500,function () {
+    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
         Baseinfo.stas = getStas();
     });
 
@@ -191,7 +191,7 @@ function getStas() {
         return obj.FK_Node != undefined
     });
     return ens;
-   
+
 }
 /*
  * 获取节点绑定的部门
@@ -329,7 +329,7 @@ function SaveIt() {
 // 保存之后要做的事情.
 function AfterSave() {
     //清除.
-    DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows=''");
+    alert("未实现. UPDATE WF_Emp SET StartFlows=''");
 }
 
 //打开窗体.

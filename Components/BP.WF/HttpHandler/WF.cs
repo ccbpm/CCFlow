@@ -456,9 +456,10 @@ namespace BP.WF.HttpHandler
                             return "info@此工作已经被别人处理或者此流程已删除";
                         }
 
+                        GenerWorkFlow gwf = new GenerWorkFlow(wl.WorkID);
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
                         Web.WebUser.SignInOfGener(empOF);
-                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
+                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID+"&PWorkID="+gwf.PWorkID;
 
                         return "url@" + u;
                     case "ExitAuth":

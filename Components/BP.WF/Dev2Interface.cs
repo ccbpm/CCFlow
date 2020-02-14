@@ -2033,7 +2033,7 @@ namespace BP.WF
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
+            ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + WebUser.No + "@%' OR  T.Emps LIKE '%@" + WebUser.No + ",%') AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
             dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -2120,7 +2120,7 @@ namespace BP.WF
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + userNo + "@%' OR  T.Emps LIKE '%@" + userNo + ",%') AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
 
         }
@@ -2135,7 +2135,7 @@ namespace BP.WF
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FK_Flow='" + flowNo + "' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + userNo + "@%' OR  T.Emps LIKE '%@" + userNo + ",%') AND T.FK_Flow='" + flowNo + "' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>

@@ -490,6 +490,7 @@ $(function () {
     });
 
     /*新建*/
+    
     $("#Btn_NewFlow").bind('click', function () {
 
         var flow = new Entity("BP.WF.Flow", flowNo);
@@ -497,7 +498,7 @@ $(function () {
         var dgId = "iframDg";
        
         url = "NewFlow.htm?sort=" + flowSort + "&s=" + Math.random();
-        OpenEasyUiDialog(url, dgId, '新建流程', 650, 350, 'icon-new', true, function () {
+        OpenBootStrapModal(url, dgId, '新建流程', 650, 350, 'icon-new', true, function () {
 
             var win = document.getElementById(dgId).contentWindow;
             var newFlowInfo = win.getNewFlowInfo();

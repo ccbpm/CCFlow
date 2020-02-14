@@ -1096,15 +1096,8 @@ function execSend(toNodeID) {
         } else {
             handler.AddPara(objectKey, "");
         }
-        //        var param = o.split("=");
-        //        if (param.length == 2 && validate(param[1])) {
-        //            handler.AddPara(param[0], param[1]);
-        //        } else {
-        //            handler.AddPara(param[0], "");
-        //        }
     });
-    //handler.AddUrlData(dataStrs);
-
+    handler.AddUrlData();
     var data = handler.DoMethodReturnString("Send"); //执行保存方法.
 
     if (data.indexOf('err@') == 0) { //发送时发生错误
@@ -2303,9 +2296,9 @@ function initModal(modalType, toNode) {
                 break;
 
             //发送选择接收节点和接收人                
-            case "sendAccepter":
+            case "sendAccepter": 
                 $('#modalHeader').text("选择接受人");
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + +"&PWorkID="+GetQueryString("PWorkID")+"&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");

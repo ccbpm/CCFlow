@@ -15,6 +15,7 @@
     <meta name="author" content="leipi.org" />
     <link href="Public/css/bootstrap/css/bootstrap.css?2025" rel="stylesheet" type="text/css" />
     <link href="Public/css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    
     <!--[if lte IE 6]>
     <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/bootstrap-ie6.css?2025">
     <![endif]-->
@@ -28,8 +29,10 @@
     <!--JL.plus-->
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script type="text/javascript" src="Public/js/jquery-1.7.2.min.js?2025"></script>
+    <!--<script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>-->
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="Public/css/bootstrap/js/bootstrap.min.js?2025"></script>
-    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
     <script type="text/javascript" src="Public/js/jquery-ui/jquery-ui-1.9.2-min.js?2025"></script>
 
     <script type="text/javascript" src="Public/js/jsPlumb/bak/jquery.jsPlumb-1.4.0-all.js?2025"></script>
@@ -39,7 +42,6 @@
     <script type="text/javascript" src="Public/js/jquery.multiselect2side/js/jquery.multiselect2side.js?2025"></script>
     <!--flowdesign-->
     <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
-    <!--<script src="Public/Designer2018.js" type="text/javascript"></script>-->
     <script src="Designer2018.js" type="text/javascript"></script>
     <style>
         body {
@@ -193,7 +195,7 @@
         <div class="navbar-inner">
             <div class="container">
                 <div class="pull-right">
-                    <button class="btn btn-light-blue" type="button" id="Btn_NewFlow">
+                    <button class="btn btn-light-blue" style="display:none"  type="button" id="Btn_NewFlow">
                         新建
                     </button>
                     <button class="btn btn-light-green" type="button" id="Btn_Save">

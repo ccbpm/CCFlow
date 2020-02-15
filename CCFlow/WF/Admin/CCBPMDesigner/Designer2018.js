@@ -498,7 +498,7 @@ $(function () {
         var dgId = "iframDg";
        
         url = "NewFlow.htm?sort=" + flowSort + "&s=" + Math.random();
-        OpenBootStrapModal(url, dgId, '新建流程', 650, 350, 'icon-new', true, function () {
+        OpenBootStrapModal(url, dgId, '新建流程', 550, 350, 'icon-new', true, function () {
 
             var win = document.getElementById(dgId).contentWindow;
             var newFlowInfo = win.getNewFlowInfo();
@@ -532,10 +532,10 @@ $(function () {
                 }
             }
 
-            var html = $("#ShowMsg").html();
-            $("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
-            $("#ShowMsg").css({ "width": "320px" });
-            $(".mymask").show();
+            var html = $("#ShowMsg", window.parent.document).html();
+            $("#ShowMsg", window.parent.document).html(html + " ccbpm 正在创建流程请稍后....");
+            $("#ShowMsg", window.parent.document).css({ "width": "320px" });
+            $(".mymask", window.parent.document).show();
 
             newFlowInfo.FlowSort = flowSort;
 
@@ -543,9 +543,9 @@ $(function () {
             handler.AddJson(newFlowInfo);
             var data = handler.DoMethodReturnString("Defualt_NewFlow");
 
-            $(".mymask").hide();
-            $("#ShowMsg").html(html);
-            $("#ShowMsg").css({ "width": "32px" });
+            $(".mymask", window.parent.document).hide();
+            $("#ShowMsg", window.parent.document).html(html);
+            $("#ShowMsg", window.parent.document).css({ "width": "32px" });
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -559,8 +559,8 @@ $(function () {
             //todo:此处还有问题，类别id与流程id可能重复，重复就会出问题，解决方案有待进一步确定
             var sort = "F" + newFlowInfo.FlowSort;
 
-            var parentNode = $('#flowTree').tree('find', sort);
-            var node = $('#flowTree').tree('append', {
+            var parentNode = $('#flowTree', window.parent.document).tree('find', sort);
+            var node = $('#flowTree', window.parent.document).tree('append', {
                 parent: parentNode.target,
                 data: [{
                     id: flowNo,
@@ -578,8 +578,8 @@ $(function () {
                 checked: false
             };
             //展开到指定节点
-            $('#flowTree').tree('expandTo', $('#flowTree').tree('find', flowNo).target);
-            $('#flowTree').tree('select', $('#flowTree').tree('find', flowNo).target);
+            $('#flowTree', window.parent.document).tree('expandTo', $('#flowTree', window.parent.document).tree('find', flowNo).target);
+            $('#flowTree', window.parent.document).tree('select', $('#flowTree', window.parent.document).tree('find', flowNo).target);
 
             //在右侧流程设计区域打开新建的流程
             RefreshFlowJson();
@@ -588,10 +588,66 @@ $(function () {
             //OpenFlowToCanvas(nodeData, flowNo, nodeData.text);
 
 
-        }, null);
+        }, null,null,true);
 
 
     });
+    //重新装载流程图
+    function RefreshFlowJson() {
+
+        var node = $('#flowTree', window.parent.document).tree('getSelected');
+        if (!node || node.attributes.ISPARENT != '0')
+            return;
+
+        //首先关闭tab
+        //closeTab(node.text);
+        $('#tabs', window.parent.document).tabs('close', node.text);
+        $(".mymask", window.parent.document).show();
+
+        addTab(node.id, node.text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        //延时3秒, 为什么要延迟？
+        //setTimeout(DesignerLoaded, 1000);
+    }
+    function addTab(id, title, url, iconCls, refresh) {
+        //此处为适应原有GPM中的编辑系统菜单页面的打开新tab，那个只传了2个参数addTab(title,url)，edited by liuxc,2015-11-05
+        if (arguments.length < 3) {
+            url = title;
+            title = id;
+            id = Math.random().toString();
+
+            url = '../../../GPM/' + url;
+
+        }
+
+        if ($('#tabs', window.parent.document).tabs('exists', title)) {
+            $('#tabs', window.parent.document).tabs('select', title);
+            var currTab = $('#tabs', window.parent.document).tabs('getSelected').panel('options');
+
+            if (currTab.id != id) {
+                $('#tabs', window.parent.document).tabs('update', {
+                    tab: $('#tabs', window.parent.document).tabs('getSelected'),
+                    options: {
+                        id: id,
+                        content: createFrame(url)
+                    }
+                });
+            }
+        } else {
+            var content = createFrame(url);
+            $('#tabs', window.parent.document).tabs('add', {
+                title: title,
+                id: id,
+                content: content,
+                iconCls: iconCls,
+                closable: true
+            });
+        }
+        tabClose();
+    }
+    function createFrame(url) {
+        var s = '<iframe scrolling="auto" frameborder="0" Onblur="OnTabChange(this)"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+        return s;
+    }
     /*保存*/
     $("#Btn_Save").bind('click', function () {
 

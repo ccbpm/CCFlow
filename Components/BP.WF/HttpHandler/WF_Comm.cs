@@ -825,9 +825,15 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Entities_RetrieveAll()
         {
-            Entities ens = ClassFactory.GetEns(this.EnsName);
-            ens.RetrieveAll();
-            return ens.ToJson();
+            try
+            {
+                Entities ens = ClassFactory.GetEns(this.EnsName);
+                ens.RetrieveAll();
+                return ens.ToJson();
+            }catch(Exception e)
+            {
+                return "err@[Entities_RetrieveAll][" + this.EnsName + "]类名错误，或者其他异常:" + e.Message;
+            }
         }
         /// <summary>
         /// 获得实体集合s
@@ -3108,6 +3114,28 @@ namespace BP.WF.HttpHandler
                 return en.DoMethod(en, methodName);
             }
         }
+
+        /// <summary>
+        /// 当前登录人员信息
+        /// </summary>
+        /// <returns></returns>
+        public string GuestUser_Init()
+        {
+            Hashtable ht = new Hashtable();
+
+            string userNo = Web.GuestUser.No;
+            if (DataType.IsNullOrEmpty(userNo) == true)
+            {
+                ht.Add("No", "");
+                ht.Add("Name", "");
+                return BP.Tools.Json.ToJson(ht);
+            }
+
+            ht.Add("No", GuestUser.No);
+            ht.Add("Name", GuestUser.Name);
+            return BP.Tools.Json.ToJson(ht);
+        }
+        
         /// <summary>
         /// 当前登录人员信息
         /// </summary>
@@ -3162,20 +3190,6 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Port_Login(WebUser.Auth);
             return "登录成功";
         }
-        /// <summary>
-        /// 当前登录人员信息
-        /// </summary>
-        /// <returns></returns>
-        public string GuestUser_Init()
-        {
-            Hashtable ht = new Hashtable();
-            ht.Add("No", GuestUser.No);
-            ht.Add("Name", GuestUser.Name);
-            ht.Add("DeptNo", GuestUser.DeptNo);
-            ht.Add("DeptName", GuestUser.DeptName);
-            return BP.Tools.Json.ToJson(ht);
-        }
-
 
         /// <summary>
         /// 实体Entity 文件上传

@@ -133,13 +133,17 @@
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
             //修改页面样式
-            
-           var li = $("<li style='float:right !important;z-index:999' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
-           li.append($("#Btns").children());
-            $("ul.tabs").append(li);
-            $("#Btns").parent().remove();
-             $("#Btns").remove();
+            if ($("ul.tabs").length != 0) {
+                var li = $("<li style='float:right !important;z-index:999' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
+                li.append($("#Btns").children());
+                $("ul.tabs").append(li);
+                $("#Btns").parent().remove();
+                $("#Btns").remove();
 
+            } else {
+                $($("#CCFormTabs").parent()[0]).css("cssText", "top:20px!important");
+            }
+          
 
         })
 

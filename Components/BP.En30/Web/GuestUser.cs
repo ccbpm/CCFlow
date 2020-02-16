@@ -61,7 +61,6 @@ namespace BP.Web
                 em.Name = "客人";
                 em.Insert();
             }
-
             BP.Web.WebUser.SignInOfGener(em);
             return;
         }
@@ -167,7 +166,7 @@ namespace BP.Web
                     string token = WebUser.Token;
 
                     HttpContextHelper.ResponseCookieDelete(new string[] {
-                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                        "GuestNo", "GuestName" },
                     "CCS");
 
                     BP.Port.Current.Session.Clear();
@@ -193,7 +192,7 @@ namespace BP.Web
                 {
                     BP.Port.Current.Session.Clear();
                     HttpContextHelper.ResponseCookieDelete(new string[] {
-                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                        "GuestNo", "GuestName"},
                        "CCS");
 
                     HttpContextHelper.SessionClear();

@@ -52,8 +52,7 @@ namespace BP.Web
             //记录客人信息.
             GuestUser.No = guestNo;
             GuestUser.Name = guestName;
-            GuestUser.DeptNo = deptNo;
-            GuestUser.DeptName = deptName;
+          
 
             //记录内部客户信息.
             BP.Port.Emp em = new Emp();
@@ -241,13 +240,11 @@ namespace BP.Web
                 try
                 {
                     BP.Port.Current.Session.Clear();
-
                     HttpContextHelper.ResponseCookieDelete(new string[] {
                         "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
                        "CCS");
 
                     HttpContextHelper.SessionClear();
-
                     /* 2019-07-25 张磊 注释掉，CCSGuest 不再使用 
                     // Guest  信息.
                     cookie = new HttpCookie("CCSGuest");
@@ -264,30 +261,6 @@ namespace BP.Web
                 }
             }
         }
-        public static string GetValFromCookie(string valKey, string isNullAsVal, bool isChinese)
-        {
-            if (IsBSMode == false)
-                return BP.Port.Current.GetSessionStr(valKey, isNullAsVal);
-
-            try
-            {
-                string val = HttpContextHelper.RequestCookieGet(valKey, "CCS");
-                /*
-                if (isChinese)
-                    val = HttpUtility.UrlDecode(hc[valKey]);
-                else
-                    val = hc.Values[valKey];
-                */
-                if (DataType.IsNullOrEmpty(val))
-                    return isNullAsVal;
-                return val;
-            }
-            catch
-            {
-                return isNullAsVal;
-            }
-            throw new Exception("@err-001 登录信息丢失。");
-        }
         /// <summary>
         /// 编号
         /// </summary>
@@ -295,26 +268,11 @@ namespace BP.Web
         {
             get
             {
-                //return GetValFromCookie("GuestNo", null, false);
-                string no = null; // GetSessionByKey("No", null);
-                if (no == null || no == "")
-                {
-                    if (IsBSMode == false)
-                        return "admin";
-
-                    GuestUser.No = HttpContextHelper.RequestCookieGet("No", "CCS");
-                    GuestUser.Name = HttpContextHelper.RequestCookieGet("Name", "CCS");
-
-                    if (String.IsNullOrEmpty(GuestUser.No))
-                        throw new Exception("@err-002 Guest 登录信息丢失。");
-
-                    return GuestUser.No;
-                }
-                return no;
+                return BP.Web.WebUser.GetValFromCookie("GuestNo", null, true);
             }
             set
             {
-                SetSessionByKey("GuestNo", value);
+                BP.Web.WebUser.SetSessionByKey("GuestNo", value.Trim()); //@祝梦娟.
             }
         }
         /// <summary>
@@ -324,62 +282,14 @@ namespace BP.Web
         {
             get
             {
-                string val = GetValFromCookie("GuestName", null, true);
+                string val = BP.Web.WebUser.GetValFromCookie("GuestName", null, true);
                 if (val == null)
                     throw new Exception("@err-001 GuestName 登录信息丢失。");
                 return val;
             }
             set
             {
-                SetSessionByKey("GuestName", value);
-            }
-        }
-        /// <summary>
-        /// 部门名称
-        /// </summary>
-        public static string DeptNo
-        {
-            get
-            {
-                string val = GetValFromCookie("DeptNo", null, true);
-                if (val == null)
-                    throw new Exception("@err-003 DeptNo 登录信息丢失。");
-                return val;
-            }
-            set
-            {
-                SetSessionByKey("DeptNo", value);
-            }
-        }
-        /// <summary>
-        /// 部门名称
-        /// </summary>
-        public static string DeptName
-        {
-            get
-            {
-                string val = GetValFromCookie("DeptName", null, true);
-                if (val == null)
-                    throw new Exception("@err-002 DeptName 登录信息丢失。");
-                return val;
-            }
-            set
-            {
-                SetSessionByKey("DeptName", value);
-            }
-        }
-        /// <summary>
-        /// 风格
-        /// </summary>
-        public static string Style
-        {
-            get
-            {
-                return GetSessionByKey("Style", "0");
-            }
-            set
-            {
-                SetSessionByKey("Style", value);
+                BP.Web.WebUser.SetSessionByKey("GuestName", value);
             }
         }
     }

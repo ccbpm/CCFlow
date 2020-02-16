@@ -356,6 +356,9 @@ namespace BP.GPM
         protected override bool beforeUpdateInsertAction()
         {
             //增加拼音，以方便查找.
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("err@名称不能为空.");
+
             string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name).ToLower();
             string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
             this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";

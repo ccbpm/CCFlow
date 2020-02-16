@@ -52,7 +52,6 @@ namespace BP.Web
             //记录客人信息.
             GuestUser.No = guestNo;
             GuestUser.Name = guestName;
-          
 
             //记录内部客户信息.
             BP.Port.Emp em = new Emp();
@@ -62,56 +61,9 @@ namespace BP.Web
                 em.Name = "客人";
                 em.Insert();
             }
-            WebUser.No = em.No;
-            WebUser.Name = em.Name;
-            WebUser.FK_Dept = em.FK_Dept;
-            WebUser.FK_DeptName = em.FK_DeptText;
-            WebUser.SysLang = lang;
-            if (BP.Sys.SystemConfig.IsBSsystem)
-            {
-                // Guest  信息.
-                /*HttpCookie cookie = new HttpCookie("CCSGuest");
-                //cookie.Expires = DateTime.Now.AddMonths(10);
-                cookie.Expires = DateTime.Now.AddDays(2);
-                cookieValues.Add("GuestNo", guestNo);
-                cookieValues.Add("GuestName", HttpUtility.UrlEncode(guestName));
-                cookieValues.Add("DeptNo", deptNo);
-                cookieValues.Add("DeptName", HttpUtility.UrlEncode(deptName));
 
-                //System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-                HttpContextHelper.ResponseCookieAdd(cookie);
-                */
-
-                Dictionary<string, string> cookieValues = new Dictionary<string, string>();
-                // HttpCookie cookie = new HttpCookie("CCS");
-                //cookie.Expires = DateTime.Now.AddDays(2);
-
-                // Guest  信息.
-                cookieValues.Add("GuestNo", guestNo);
-                cookieValues.Add("GuestName", HttpUtility.UrlEncode(guestName));
-
-                cookieValues.Add("DeptNo", deptNo);
-                cookieValues.Add("DeptName", HttpUtility.UrlEncode(deptName));
-
-                cookieValues.Add("No", "Guest");
-                cookieValues.Add("Name", HttpUtility.UrlEncode(em.Name));
-
-                if (isRememberMe)
-                    cookieValues.Add("IsRememberMe", "1");
-                else
-                    cookieValues.Add("IsRememberMe", "0");
-
-                cookieValues.Add("FK_Dept", em.FK_Dept);
-                cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
-
-                cookieValues.Add("Token", HttpContextHelper.CurrentSessionID);
-                cookieValues.Add("SID", HttpContextHelper.CurrentSessionID);
-
-                cookieValues.Add("Lang", lang);
-                cookieValues.Add("Style", "0");
-                cookieValues.Add("Auth", ""); //授权人.
-                HttpContextHelper.ResponseCookieAdd(cookieValues, DateTime.Now.AddDays(2), "CCS");
-            }
+            BP.Web.WebUser.SignInOfGener(em);
+            return;
         }
 
         #region 静态方法

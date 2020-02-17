@@ -307,7 +307,7 @@ namespace BP.WF.HttpHandler
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
-                return "";
+                return "登陆成功";
             }
             catch (Exception ex)
             {

@@ -478,13 +478,13 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         }
 
         if (mapAttr.UIHeight <= 40)
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:95%;' value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:95%;' value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
 
         if (mapAttr.UIHeight > 23) {
             var uiHeight = mapAttr.UIHeight;
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
         }
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
     }
 
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 0) {

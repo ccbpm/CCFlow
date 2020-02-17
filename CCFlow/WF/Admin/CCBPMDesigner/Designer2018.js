@@ -180,6 +180,7 @@ $(function () {
     var alertModal1 = $('#alertModal1'), attributeModal = $("#attributeModal");
     var alertModal2 = $('#alertModal2'), attributeModal = $("#attributeModal");
     var alertModal3 = $('#alertModal3'), attributeModal = $("#attributeModal");
+    var alertModal4 = $('#alertModal4'), attributeModal = $("#attributeModal");
     //消息提示
     mAlert = function (messages, s) {
         if (!messages) messages = "";
@@ -211,6 +212,14 @@ $(function () {
 
         alertModal2.modal('toggle');
         setTimeout(function () { alertModal2.modal("hide") }, s);
+    }
+    //新建流程演示
+    ShowNewFlowGif = function (s) {
+
+        if (!s) s = 200000;
+
+        alertModal4.modal('toggle');
+        setTimeout(function () { alertModal4.modal("hide") }, s);
     }
     //消息弹出（线）
     fAlert = function (messages, s) {
@@ -854,7 +863,15 @@ function ShowGif() {
 function HideGif() {
     $("#Msg").css('display', 'none');
 }
+function ShowNewFlowGif() {
+    alert("请在流程树右键菜单新建流程！请看演示");
 
+    $("#Msg").css('display', 'block');
+    setTimeout("HideGif()", 7000);
+}
+function HideNewFlowGif() {
+    $("#Msg").css('display', 'none');
+}
 //全局变量
 function WinOpen(url) {
     window.open(url);

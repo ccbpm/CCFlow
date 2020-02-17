@@ -96,8 +96,8 @@
 <table  style="width:100%;">
 
 <tr>
-    <td style="width:100%;" valign=top>
-        <fieldset style="width:40%;display:inline;margin-right:10px;">
+    <td style="width:50%;" valign=top>
+        <fieldset>
             <legend>设置岗位</legend>
 
             <ul>
@@ -105,29 +105,52 @@
                 <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
             </ul>
         </fieldset>
-        <fieldset style="width:40%;display:inline;">
+
+    </td>
+
+    <td style="width:50%;" valign=top>
+
+        <fieldset>
             <legend>设置部门</legend>
 
             <ul>
                 <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
             </ul>
         </fieldset>
-        <fieldset style="width:40%;display:inline;margin-right:10px;">
-            <legend>已经设置的岗位 </legend>
-            <div id="stas"> </div>
-        </fieldset>
-        <fieldset style="width:40%;display:inline;">
-            <legend>已经设置的部门 </legend>
-            <div id="dept"> </div>
-        </fieldset>
-        <fieldset style="width:88%">
-            <legend id="help">说明</legend>
-            <ul>
-                <li>ccbpm会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受选择范围。</li>
-            </ul>
-        </fieldset>
     </td>
 </tr>
+
+
+
+
+<tr>
+<td valign=top> 
+    <fieldset>
+        <legend>已经设置的岗位 </legend>
+        <div id="stas"> </div>
+    </fieldset>
+</td>
+
+<td valign=top>
+
+    <fieldset>
+        <legend>已经设置的部门 </legend>
+        <div id="dept"> </div>
+    </fieldset>
+
+</td>
+
+</tr>
 </table>
+
+
+<fieldset>
+    <legend id="help" >说明</legend>
+    <ul>
+        <li>ccbpm会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受选择范围。</li>
+    </ul>
+</fieldset>
+
+
 </body>
 </html>

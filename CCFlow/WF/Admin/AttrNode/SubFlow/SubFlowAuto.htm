@@ -120,9 +120,15 @@
     </script>
 </head>
 <body>
+    <div style="float:right; margin-right:30px;">
+        <input type="button" value="增加集团子流程" onclick="AddGroup()" />
+        <input type="button" value="增加本组织子流程" onclick="AddOrg()" />
+        <input type="button" value="我需要帮助" onclick="Help()" />
+    </div>
     <table id="Table1" style="width: 100%">
         <caption>
-            自动触发子流程</caption>
+            自动触发子流程
+        </caption>
         <tr>
             <th>
                 序
@@ -151,18 +157,16 @@
         </tr>
     </table>
     <br />
-    <input type="button" value="增加集团子流程" onclick="AddGroup()" />
-    <input type="button" value="增加本组织子流程" onclick="AddOrg()" />
-    <input type="button" value="我需要帮助" onclick="Help()" />
+
     <div id="Msg">
     </div>
     <!--
     <fieldset>
-					<legend>填写帮助</legend>
-					<ul>
-						<li>延续流程就是当前的子流程.</li>
-						<li>延续流程是子流程的一种,该子流程只能被发起一次.</li>
-					</ul>
-				</fieldset>-->
+                    <legend>填写帮助</legend>
+                    <ul>
+                        <li>延续流程就是当前的子流程.</li>
+                        <li>延续流程是子流程的一种,该子流程只能被发起一次.</li>
+                    </ul>
+                </fieldset>-->
 </body>
 </html>

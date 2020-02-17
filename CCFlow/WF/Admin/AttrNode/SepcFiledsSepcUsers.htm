@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <title>驰骋工作流</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/style.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
     <script type="text/javascript" language="javascript">
 
         var nodeID = 0;
@@ -114,52 +120,46 @@
 </head>
 <body>
     <form id="cc">
-    <table style="width: 100%;">
-        <caption>
-            特别控件特别用户权限</caption>
-        <tr>
-            <td style="width:50%;">
-                <table style="width: 100%;" id="Table1">
-                    <tr>
-                        <th>
-                            #
-                        </th>
-                        <th>
-                            字段/名称
-                        </th>
-                        <!--   <th>类型</th>
-                <th>业务类型</th>-->
-                        <!-- <th>操作</th>-->
-                    </tr>
-                </table>
-                <input type="button" value="设置字段的特别权限" onclick="SaveField()" />
-            </td>
-            <td valign="top">
-                <table id="History" name="History">
-                    <tr>
-                        <th>
-                           指定的字段集合 
-                        </th>
-                        <th>
-                            指定的人员集合
-                        </th>
-                        <th>
-                            操作
-                        </th>
-                    </tr>
-                </table>
 
-                <fieldset>
-                <legend>帮助</legend>
-                <ul>
+        <div style="float:right;">
+            <input type="button" value="设置字段的特别权限" onclick="SaveField()" />
+        </div>
+        <table class="table table-hover" id="Table1">
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    字段/名称
+                </th>
+                <!--   <th>类型</th>
+            <th>业务类型</th>-->
+                <!-- <th>操作</th>-->
+            </tr>
+        </table>
+        <table class="table table-hover" id="History" name="History">
+            <tr>
+                <th>
+                    指定的字段集合
+                </th>
+                <th>
+                    指定的人员集合
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </table>
+
+        <fieldset>
+            <legend>帮助</legend>
+            <ul>
                 <li>1.该功能是当前节点当前表单上控制指定的字段，让指定的人员可以编辑。</li>
                 <li>2.多用于会签而不使用审核组件的应用环境。</li>
                 <li>3.比如一个节点上需要n个人处理，每个人只能对指定的字段有填写的权限，就要按照人员为每个人设定指定的字段范围设置可以编辑的权限。</li>
-                </ul>
-                </fieldset>
-            </td>
-        </tr>
-    </table>
+            </ul>
+        </fieldset>
+
     </form>
 </body>
 </html>

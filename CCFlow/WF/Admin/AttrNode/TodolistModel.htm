@@ -3,6 +3,8 @@
 <head>
     <title>多人处理规则</title>
     <meta charset="UTF-8" />
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -10,6 +12,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -44,116 +47,114 @@
 </head>
 <body>
     <form id="cc">
-    <div id="Msg">
-    </div>
-    <table>
-        <caption>
-            多人处理规则</caption>
-        <tr>
-            <td>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="0" id="RB_TodolistModel_0" name="RB_TodolistModel" />
-                        <label for="RB_TodolistModel_0">
-                            抢办模式
-                        </label>
-                    </legend>
-                    <ul>
-                        <li style="color: Gray">A发送到B ，B节点上有n个人可以处理。这n个人都可以看到待办，当其中一个人处理后，其他人的待办就消失了。</li>
-                        <li style="color: Gray">这样的工作模式属于抢办，这n个人可以同时打开，当一个人发送后，其他人都不能在发送了。</li>
-                        <li style="color: Gray">通俗的说，也就是谁抢到了这件工作，就是谁处理的。</li>
-                        <li style="color: Gray">抢办模式是一个默认的处理模式。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="1" id="RB_TodolistModel_1" name="RB_TodolistModel" />
-                        <label for="RB_TodolistModel_1">
-                            协作模式
-                        </label>
-                    </legend>
-                    <ul style="color: Gray">
-                        <li>A发送到B ，B节点上有n个人可以处理。这个n个人都可以去处理，都可以去发送，有最后一个处理人发送到下一个节点上去，这n个人的处理不分顺序。这样的模式我们叫做协作模式。</li>
-                        <li>协作模式通常用在具有审核组件的表单中，每个人都可以填写自己的意见，发表自己的看法，在审核组件里审核每个人在一个节点上只能写入一条数据，也就是说只能表达一次意见。</li>
-                        <li>也经常用在传阅的情况下，必须这些人都读取了，知道了才能向下运动。它与抄送不同的地方是，抄送可以不看，就可以向下运行，但是他必须处理才能向下运行。</li>
-                        <li>通常的协作模式，就是多人都要点击一下发送功能按钮，来确认自己处理了，确认自己同意了或者认可了。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="2" id="RB_TodolistModel_2" name="RB_TodolistModel" />
-                        <label for="RB_TodolistModel_2">
-                            队列模式
-                        </label>
-                    </legend>
-                    <ul style="color: Gray">
-                        <li>A发送到B ，B节点上有n个人可以处理。这个n个人按照设置的先后顺序去处理，在同一个时间点必须有一个人待办，其他人看不到。</li>
-                        <li>应用场景: 一个公文发送给一个部门，该部门下n个人可以接受（注意这是一个节点），按照国内的行政制度，这n个人会从小到达排一个队列，有最小的级别的工作人员审批，然后依次类推，走到最后由最后一个人发送到下一个节点去。这n个人都是该节点的处理人，这n个人的审核步骤是由他们的顺序确定的，所以在设置该节点的接受人时，要按照顺序执行。</li>
-                        <li>通常这样的模式也与审核组件一起使用，每个人按照顺序表达意见后，就发送到下一个节点。</li>
-                        <li>在退回的时候，第一个人退回的是上一个节点，其他人则是依次退回。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="3" id="RB_TodolistModel_3" name="RB_TodolistModel" />
-                        <label for="RB_TodolistModel_3">
-                            共享模式
-                        </label>
-                    </legend>
-                    <ul style="color: Gray">
-                        <li>A发送到B ，B节点上有n个人可以处理， ccbpm就会把这个任务放入到任务池，这n个人都可以看到。</li>
-                        <li>其中一个人要处理这件工作需要从任务池里申请取出来放入自己的待办，他取出来以后，其他人都看不到了。</li>
-                        <li>如果该人不想处理这件工作他可以再把这个工作放入任务池，其他人又可以申请了。</li>
-                        <li>更多信息，请参考操作手册。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="4" id="RB_TodolistModel_4" name="RB_TodolistModel" />
-                        <label for="RB_TodolistModel_4">
-                            协作组长模式
-                        </label>
-                    </legend>
-                    <ul style="color: Gray">
-                        <li>这个模式与协作模式区别在于，如果当前的人员中有一个是组长（领导），他在执行发送的时候就标记这个流程结束。</li>
-                        <li>这种模式有如下3中情况：</li>
-                        <li>第一种：接受人员列表里没有领导/组长，这种模式与协作模式是一样的，就是所有的成员都表态（举手）才能向下发送。</li>
-                        <li>第二种：只有一个领导/组长的情况，领导/组长向下发送的时候，标识该节点完成。比如: 当前节点是一个采样节点，采样组有1个组长n个组员，只有组长向下发送的时候才标记次该工作完成。</li>
-                        <li>第三种：有n个领导/组长的情况，n>=1 任何一个领导/组长向下发送的时候标记该流程完成。比如：当前节点的采样任务交给了两个采样组负责，有两个组长n个成员，任何一个组长向下发送，标记该工作结束。</li>
-                        <li>组长确认方式：<select name="DDL_TeamLeaderConfirmRole" id="DDL_TeamLeaderConfirmRole">
-                            <option value="0">按照Port_Dept中的Leader字段, 来确定处理人集合的组长。 </option>
-                            <option value="1">按照SQL表达式作为接受人集合的组长。 </option>
-                            <option value="2">会签节点的主持人模式。 </option>
-                        </select>
-                        </li>
-                        <li>内容(对于按照SQL方式填写才有效)：<input type="text" id="TB_TeamLeaderConfirmDoc" name="TB_TeamLeaderConfirmDoc" />
-                        </li>
-                    </ul>
-                </fieldset>
-            </td>
-        </tr>
-    </table>
-    <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
-    <input type="button" value="我需要帮助" onclick="Help()" />
-    <script type="text/javascript">
+        <div id="Msg">
+        </div>
+        <div id="bar" class="cs-tr cs-bar">
+            <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+            <input type="button" value="我需要帮助" onclick="Help()" />
+        </div>
+        <fieldset>
+            <legend>
+                <input type="radio" value="0" id="RB_TodolistModel_0" name="RB_TodolistModel" />
+                <label for="RB_TodolistModel_0">
+                    抢办模式
+                </label>
+            </legend>
+            <ul>
+                <li style="color: Gray">A发送到B ，B节点上有n个人可以处理。这n个人都可以看到待办，当其中一个人处理后，其他人的待办就消失了。</li>
+                <li style="color: Gray">这样的工作模式属于抢办，这n个人可以同时打开，当一个人发送后，其他人都不能在发送了。</li>
+                <li style="color: Gray">通俗的说，也就是谁抢到了这件工作，就是谁处理的。</li>
+                <li style="color: Gray">抢办模式是一个默认的处理模式。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="1" id="RB_TodolistModel_1" name="RB_TodolistModel" />
+                <label for="RB_TodolistModel_1">
+                    协作模式
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>A发送到B ，B节点上有n个人可以处理。这个n个人都可以去处理，都可以去发送，有最后一个处理人发送到下一个节点上去，这n个人的处理不分顺序。这样的模式我们叫做协作模式。</li>
+                <li>协作模式通常用在具有审核组件的表单中，每个人都可以填写自己的意见，发表自己的看法，在审核组件里审核每个人在一个节点上只能写入一条数据，也就是说只能表达一次意见。</li>
+                <li>也经常用在传阅的情况下，必须这些人都读取了，知道了才能向下运动。它与抄送不同的地方是，抄送可以不看，就可以向下运行，但是他必须处理才能向下运行。</li>
+                <li>通常的协作模式，就是多人都要点击一下发送功能按钮，来确认自己处理了，确认自己同意了或者认可了。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="2" id="RB_TodolistModel_2" name="RB_TodolistModel" />
+                <label for="RB_TodolistModel_2">
+                    队列模式
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>A发送到B ，B节点上有n个人可以处理。这个n个人按照设置的先后顺序去处理，在同一个时间点必须有一个人待办，其他人看不到。</li>
+                <li>应用场景: 一个公文发送给一个部门，该部门下n个人可以接受（注意这是一个节点），按照国内的行政制度，这n个人会从小到达排一个队列，有最小的级别的工作人员审批，然后依次类推，走到最后由最后一个人发送到下一个节点去。这n个人都是该节点的处理人，这n个人的审核步骤是由他们的顺序确定的，所以在设置该节点的接受人时，要按照顺序执行。</li>
+                <li>通常这样的模式也与审核组件一起使用，每个人按照顺序表达意见后，就发送到下一个节点。</li>
+                <li>在退回的时候，第一个人退回的是上一个节点，其他人则是依次退回。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="3" id="RB_TodolistModel_3" name="RB_TodolistModel" />
+                <label for="RB_TodolistModel_3">
+                    共享模式
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>A发送到B ，B节点上有n个人可以处理， ccbpm就会把这个任务放入到任务池，这n个人都可以看到。</li>
+                <li>其中一个人要处理这件工作需要从任务池里申请取出来放入自己的待办，他取出来以后，其他人都看不到了。</li>
+                <li>如果该人不想处理这件工作他可以再把这个工作放入任务池，其他人又可以申请了。</li>
+                <li>更多信息，请参考操作手册。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="4" id="RB_TodolistModel_4" name="RB_TodolistModel" />
+                <label for="RB_TodolistModel_4">
+                    协作组长模式
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>这个模式与协作模式区别在于，如果当前的人员中有一个是组长（领导），他在执行发送的时候就标记这个流程结束。</li>
+                <li>这种模式有如下3中情况：</li>
+                <li>第一种：接受人员列表里没有领导/组长，这种模式与协作模式是一样的，就是所有的成员都表态（举手）才能向下发送。</li>
+                <li>第二种：只有一个领导/组长的情况，领导/组长向下发送的时候，标识该节点完成。比如: 当前节点是一个采样节点，采样组有1个组长n个组员，只有组长向下发送的时候才标记次该工作完成。</li>
+                <li>第三种：有n个领导/组长的情况，n>=1 任何一个领导/组长向下发送的时候标记该流程完成。比如：当前节点的采样任务交给了两个采样组负责，有两个组长n个成员，任何一个组长向下发送，标记该工作结束。</li>
+                <li>
+                    组长确认方式：<select name="DDL_TeamLeaderConfirmRole" id="DDL_TeamLeaderConfirmRole">
+                        <option value="0">按照Port_Dept中的Leader字段, 来确定处理人集合的组长。 </option>
+                        <option value="1">按照SQL表达式作为接受人集合的组长。 </option>
+                        <option value="2">会签节点的主持人模式。 </option>
+                    </select>
+                </li>
+                <li>
+                    内容(对于按照SQL方式填写才有效)：<input type="text" id="TB_TeamLeaderConfirmDoc" name="TB_TeamLeaderConfirmDoc" />
+                </li>
+            </ul>
+        </fieldset>
 
-        function Save() {
 
-            var nodeID = GetQueryString("FK_Node");
+        <script type="text/javascript">
 
-            var node = new Entity("BP.WF.Node");
-            node.SetPKVal(nodeID);
-            node.Retrieve();
+            function Save() {
 
-            node.TodolistModel = $('input:radio[name="RB_TodolistModel"]:checked').val();
-            node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole").val();
-            node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
-            node.Update();
+                var nodeID = GetQueryString("FK_Node");
 
-            window.location.href = window.location.href;
-            return;
-        }
-    </script>
+                var node = new Entity("BP.WF.Node");
+                node.SetPKVal(nodeID);
+                node.Retrieve();
+
+                node.TodolistModel = $('input:radio[name="RB_TodolistModel"]:checked').val();
+                node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole").val();
+                node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
+                node.Update();
+
+                window.location.href = window.location.href;
+                return;
+            }
+        </script>
     </form>
 </body>
 </html>

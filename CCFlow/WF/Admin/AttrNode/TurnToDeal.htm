@@ -1,16 +1,21 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>驰骋工作流</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/style.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
-    <script type="text/javascript" language="javascript" >
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -69,7 +74,7 @@
                 $("#TB_SpecMsg").val("");
                 node.TurnToDealDoc = $("#TB_SpecURL").val();
             }
-            
+
             if (node.TurnToDeal == 0 || node.TurnToDeal == 3) {
                 $("#TB_SpecMsg").val("");
                 $("#TB_SpecURL").val("");
@@ -89,148 +94,140 @@
         }
 
         function rb_onchange(obj) {
-            
+
             if (obj == 1) {
-               
+
                 document.getElementById("TB_SpecURL").readOnly = true;
                 document.getElementById("TB_SpecMsg").readOnly = false;
             } else if (obj == 2) {
-                
+
                 document.getElementById("TB_SpecMsg").readOnly = true;
                 document.getElementById("TB_SpecURL").readOnly = false;
             } else {
                 document.getElementById("TB_SpecMsg").readOnly = true;
                 document.getElementById("TB_SpecURL").readOnly = true;
             }
-        } 
+        }
     </script>
 </head>
 <body  >
 
-<form id="cc">
- 
- <table style="width: 100%">
-        <caption>
-            发送后转向处理规则
-            <tr>
-                <td valign="top" style="width:70%">
-                    <fieldset>
-                        <legend>
-                            <input type="radio" ID="RB_TurnToDeal_0" name="TurnToDeal" runat="server" value="0"
-                                onclick="rb_onchange(0)" /><label for="RB_TurnToDeal_0"> 提示ccflow默认信息</label></legend>
-                        <ul style="color: Gray">
-                            <li>默认为不设置，按照机器自动生成的语言提示，这是标准的信息提示。</li>
-                            <li>比如：您的当前的工作已经处理完成。下一步工作自动启动，已经提交给xxx处理。 </li>
-                        </ul>
-                    </fieldset>
-                    <fieldset>
-                        <legend>
-                            <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal"  value="1"
-                                onClick="rb_onchange(1)" /><label for="RB_TurnToDeal_1">提示指定信息 </label> - <a href="javascript:ShowHidden('SpecMsg')">帮助:</a>
-                        </legend>
-                        <div id="SpecMsg" style="display: none">
-                            <ul style="color: Gray">
-                                <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
-                                <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
-                                <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
-                                <li>发送后系统变量如下: </li>
-                                <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
-                                <li>例如：您的请假申请单，已经提交给 @VarAcceptersName ，提交到：  @VarToNodeName , 请假了@QingJiaTianTianShu天.</li>
-                            </ul>
-                           
-                        </div>
-                        <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3  style="width:90%"/>
-                    </fieldset>
-                    <fieldset>
-                        <legend>
-                            <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
-                                onClick="rb_onchange(2)" /><label for="RB_TurnToDeal_2"> 转向指定的URL </label>- <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
-                        </legend>
-                        <div id="SpecUrl" style="display: none">
-                            <ul style="color: Gray">
-                                <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
-                                <li>比如：URL为MyFlow.htm页面或www.baidu.com。 </li>
-                                <li>该URL支持ccbpm参数形式，具体传值参考右侧帮助。 </li>
-                                <li>启动子流程实例: /WF/MyFlow.htm?FK_Flow=003&PFlowNo=002 </li>
-                            </ul>
-                        </div>
-                        <input type="text" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%"/>
-                    </fieldset>
+    <form id="cc">
+        <div id="bar" class="cs-tr cs-bar">
+            <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+        </div>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_0" name="TurnToDeal" runat="server" value="0"
+                       onclick="rb_onchange(0)" /><label for="RB_TurnToDeal_0"> 提示ccflow默认信息</label>
+            </legend>
+            <ul style="color: Gray">
+                <li>默认为不设置，按照机器自动生成的语言提示，这是标准的信息提示。</li>
+                <li>比如：您的当前的工作已经处理完成。下一步工作自动启动，已经提交给xxx处理。 </li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal" value="1"
+                       onClick="rb_onchange(1)" /><label for="RB_TurnToDeal_1">提示指定信息 </label> - <a href="javascript:ShowHidden('SpecMsg')">帮助:</a>
+            </legend>
+            <br>
+            <div id="SpecMsg" style="display: none">
+                <ul style="color: Gray">
+                    <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
+                    <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
+                    <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
+                    <li>发送后系统变量如下: </li>
+                    <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
+                    <li>例如：您的请假申请单，已经提交给 @VarAcceptersName ，提交到：  @VarToNodeName , 请假了@QingJiaTianTianShu天.</li>
+                </ul>
 
-                     <fieldset>
-                        <legend>
-                            <input type="radio" ID="RB_TurnToDeal_3" name="TurnToDeal" runat="server" value="3"
-                                onClick="rb_onchange(3)" /><label for="RB_TurnToDeal_3"> 发送完毕就关闭，不提示任何信息。 </label>
-                        </legend>
+            </div>
+            <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3 style="width:90%" />
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
+                       onClick="rb_onchange(2)" /><label for="RB_TurnToDeal_2"> 转向指定的URL </label>- <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
+            </legend>
+            <br />
+            <div id="SpecUrl" style="display: none">
+                <ul style="color: Gray">
+                    <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
+                    <li>比如：URL为MyFlow.htm页面或www.baidu.com。 </li>
+                    <li>该URL支持ccbpm参数形式，具体传值参考右侧帮助。 </li>
+                    <li>启动子流程实例: /WF/MyFlow.htm?FK_Flow=003&PFlowNo=002 </li>
+                </ul>
+            </div>
+            <input type="text" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%" />
+        </fieldset>
 
-                          <ul style="color: Gray">
-                                <li>发送之后，不提示任何信息，直接关闭窗口。</li>
-                            </ul>
-                    </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_TurnToDeal_3" name="TurnToDeal" runat="server" value="3"
+                       onClick="rb_onchange(3)" /><label for="RB_TurnToDeal_3"> 发送完毕就关闭，不提示任何信息。 </label>
+            </legend>
 
-                </td>
-                <td valign="top" style="width:28%">
-                    <fieldset>
-                        <legend>帮助</legend>
-                        <ul style="color: Gray">
-                            <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">提示ccflow默认信息</a></li>
-                            <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">提示指定信息</a></li>
-                            <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">转向指定的URL</a></li>
-                        </ul>
-                    </fieldset>
+            <ul style="color: Gray">
+                <li>发送之后，不提示任何信息，直接关闭窗口。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>帮助</legend>
+            <ul style="color: Gray">
+                <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">提示ccflow默认信息</a></li>
+                <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">提示指定信息</a></li>
+                <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">转向指定的URL</a></li>
+            </ul>
+        </fieldset>
 
 
-                     <fieldset>
-                        <legend>发送后系统参数</legend>
-                        <table>
-                            <tr> <th>变量名</th> <th>中文名</th> </tr>
-                            <tr> 
-                            <td>VarCurrNodeID</td>	 
-                            <td>当前节点ID</td>	 
-                            </tr> 
+        <fieldset>
+            <legend>发送后系统参数</legend>
+            <br>
+            <table class="table table-hover">
+                <tr> <th>变量名</th> <th>中文名</th> </tr>
+                <tr>
+                    <td>VarCurrNodeID</td>
+                    <td>当前节点ID</td>
+                </tr>
 
-                             <tr> 
-                            <td>VarCurrNodeName</td>	 
-                            <td>当前节点名称</td>	 
-                            </tr> 
+                <tr>
+                    <td>VarCurrNodeName</td>
+                    <td>当前节点名称</td>
+                </tr>
 
-                             <tr> 
-                            <td>VarToNodeID</td>	 
-                            <td>到达节点ID</td>	 
-                            </tr> 
+                <tr>
+                    <td>VarToNodeID</td>
+                    <td>到达节点ID</td>
+                </tr>
 
-                             <tr> 
-                            <td>VarToNodeName</td>	 
-                            <td>到达节点名称</td>	 
-                            </tr> 
+                <tr>
+                    <td>VarToNodeName</td>
+                    <td>到达节点名称</td>
+                </tr>
 
-                             <tr> 
-                            <td>VarAcceptersName</td>	 
-                            <td>接受人集合的名称(用逗号分开)</td>	 
-                            </tr> 
+                <tr>
+                    <td>VarAcceptersName</td>
+                    <td>接受人集合的名称(用逗号分开)</td>
+                </tr>
 
-                             <tr> 
-                            <td>VarAcceptersID</td>	 
-                            <td>接受人集合的ID(用逗号分开)</td>	 
-                            </tr> 
+                <tr>
+                    <td>VarAcceptersID</td>
+                    <td>接受人集合的ID(用逗号分开)</td>
+                </tr>
 
-                             <tr> 
-                            <td>VarAcceptersNID</td>	 
-                            <td>接受人集合的ID&Name(用逗号分开)</td>	 
-                            </tr> 
-                            </table>
-                    </fieldset>
+                <tr>
+                    <td>VarAcceptersNID</td>
+                    <td>接受人集合的ID&Name(用逗号分开)</td>
+                </tr>
+            </table>
+        </fieldset>
 
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
-                </td>
-            </tr>
-    </table>
+        
 
-</form>
+
+    </form>
 
 </body>
 </html>

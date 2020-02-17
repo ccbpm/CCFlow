@@ -1,17 +1,20 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>超时处理规则</title>
-     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -55,113 +58,107 @@
 <body >
 
 <form id="cc">
+    <div id="bar" class="cs-tr cs-bar">
+        <input type="button" value="保存" onclick="Save()" />
+    </div>
+    <fieldset>
+        <legend><input type="radio" value="0"  id="RB_OutTimeDeal_0" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_0">不处理 </label> </legend>
+        <ul style=" color:Gray">
+            <li>超时的时候一直处理超时的状态。</li>
+        </ul>
+    </fieldset>
 
-<table style="width:100%;">
- <caption>超时处理规则</caption>
-  
+    <fieldset>
+        <legend><input type="radio" value="1"  id="RB_OutTimeDeal_1" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_1">自动向下运动 </label> </legend>
 
-<tr>
-<td>
-<fieldset>
-<legend><input type="radio" value="0"  id="RB_OutTimeDeal_0" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_0">不处理 </label> </legend>
-<ul style=" color:Gray">
-<li>超时的时候一直处理超时的状态。</li>
-</ul>
-</fieldset>
-
-<fieldset>
-<legend><input type="radio" value="1"  id="RB_OutTimeDeal_1" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_1">自动向下运动 </label> </legend>
-
-<ul style=" color:Gray">
-<li>超时了当前节点自动运动到下一个环节，如果要控制特定的条件下不向下运动，就需要在当前节点的发送前事件里编写相关的业务逻辑。</li>
-<li>自动向下运动需要明确下一个节点的接受人，与到达的节点，所以一下两种行为不能自动向下运动。</li>
-<li>1. 当前节点的方向条件控制规则是选择的模式.</li>
-<li>2. 到达的节点的接受人规则是上一个节点选择的.</li>
-</ul>
-</fieldset>
+        <ul style=" color:Gray">
+            <li>超时了当前节点自动运动到下一个环节，如果要控制特定的条件下不向下运动，就需要在当前节点的发送前事件里编写相关的业务逻辑。</li>
+            <li>自动向下运动需要明确下一个节点的接受人，与到达的节点，所以一下两种行为不能自动向下运动。</li>
+            <li>1. 当前节点的方向条件控制规则是选择的模式.</li>
+            <li>2. 到达的节点的接受人规则是上一个节点选择的.</li>
+        </ul>
+    </fieldset>
 
 
-<fieldset>
-<legend><input type="radio" value="2"  id="RB_OutTimeDeal_2" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_2">跳转到指定的节点 </label> </legend>
+    <fieldset>
+    <legend><input type="radio" value="2"  id="RB_OutTimeDeal_2" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_2">跳转到指定的节点 </label> </legend>
  
-    <ul style=" color:Gray">
-    <li> 要跳转到的节点: <select id="DDL_Nodes" name="DDL_Nodes" > </select>
-    </li>
-    </ul>
-</fieldset>
+        <ul style=" color:Gray">
+        <li> 要跳转到的节点: <select id="DDL_Nodes" name="DDL_Nodes" > </select>
+        </li>
+        </ul>
+    </fieldset>
 
 
 
-<fieldset>
-<legend><input type="radio" value="3"  id="RB_OutTimeDeal_3" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_3">移交给指定的人员 </label> </legend>
-
-     <a href="javascript:ShowHidden('shift');" > 请输入要移交的工作人员：</a>
- <div id="shift" style="display:none">
-  <ul>
-   <li>接受输入的必须是人员的工作帐号。</li>
-   <li>如果有多个人元用半角的逗号分开，比如: zhangsan,lisi。</li>
-   <li>超时后就自动的移交给指定的工作人员。</li>
-  </ul>
-  </div>
+    <fieldset>
+    <legend><input type="radio" value="3"  id="RB_OutTimeDeal_3" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_3">移交给指定的人员 </label> </legend>
+        <br />
+         <a href="javascript:ShowHidden('shift');" > 请输入要移交的工作人员：</a>
+        <br />
+         <div id="shift" style="display:none">
+            <ul>
+                <li>接受输入的必须是人员的工作帐号。</li>
+                <li>如果有多个人元用半角的逗号分开，比如: zhangsan,lisi。</li>
+                <li>超时后就自动的移交给指定的工作人员。</li>
+            </ul>
+          </div>
       
-  <input id="TB_Shift" name="TB_Shift"  type="text"  />
-</fieldset>
+      <input id="TB_Shift" name="TB_Shift"  type="text"  />
+    </fieldset>
 
 
-<fieldset>
-<legend><input type="radio" value="4"  id="RB_OutTimeDeal_4" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_4">给指定的人员发送消息. </label> </legend>
+    <fieldset>
+        <legend><input type="radio" value="4" id="RB_OutTimeDeal_4" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_4">给指定的人员发送消息. </label> </legend>
+        <br />
+        <a href="javascript:ShowHidden('emps');"> 请输入要发送的工作人员：</a>
+        <br />
+        <div id="emps" style="display:none">
+            <ul>
+                <li>接受输入的必须是人员的工作帐号。</li>
+                <li>如果有多个人元用半角的逗号分开，比如: zhangsan,lisi。</li>
+                <li>超时后，系统就会向这些人员发送消息。</li>
+            </ul>
+        </div>
+        <input id="TB_SendEmps" name="TB_SendEmps" type="text" />
 
-     <a href="javascript:ShowHidden('emps');" > 请输入要发送的工作人员：</a>
- <div id="emps" style="display:none">
-  <ul>
-   <li>接受输入的必须是人员的工作帐号。</li>
-   <li>如果有多个人元用半角的逗号分开，比如: zhangsan,lisi。</li>
-   <li>超时后，系统就会向这些人员发送消息。</li>
-  </ul>
-  </div>
-  <input id="TB_SendEmps" name="TB_SendEmps"  type="text"  />
-   
-</fieldset>
-
-
-<fieldset>
-<legend><input type="radio" value="5"  id="RB_OutTimeDeal_5" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_5">删除流程 </label> </legend>
-
- <ul style=" color:Gray">
-  <li>超时后就自动删除当前的流程。</li>
-</ul>
-</fieldset>
+    </fieldset>
 
 
-<fieldset>
-<legend><input type="radio" value="6"  id="RB_OutTimeDeal_6" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_6">执行SQL </label> </legend>
+    <fieldset>
+        <legend><input type="radio" value="5"  id="RB_OutTimeDeal_5" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_5">删除流程 </label> </legend>
 
-  <a href="javascript:ShowHidden('sql');" > 请输入要执行的SQL：</a>
- <div id="sql" style="display:none">
-  <ul>
-   <li>当前的的sql支持ccbpm的表达式.</li>
-   <li>执行相关的SQL，处理相关的业务逻辑。</li>
-  </ul>
-  </div>
-
-  <textarea id="TB_SQL" name="TB_SQL" rows="3"> </textarea>
-</fieldset>
+         <ul style=" color:Gray">
+            <li>超时后就自动删除当前的流程。</li>
+        </ul>
+    </fieldset>
 
 
-<fieldset>
-<legend>其他选项 </legend>
-<input type="checkbox" id="CB_IsEval" name="CB_IsEval" /><label for="CB_IsEval">是否质量考核点</label>  
-</fieldset>
-</td>
-</tr>
+    <fieldset>
+        <legend><input type="radio" value="6" id="RB_OutTimeDeal_6" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_6">执行SQL </label> </legend>
+        <br />
+        <a href="javascript:ShowHidden('sql');"> 请输入要执行的SQL：</a>
+        <br />
+        <div id="sql" style="display:none">
+            <ul>
+                <li>当前的的sql支持ccbpm的表达式.</li>
+                <li>执行相关的SQL，处理相关的业务逻辑。</li>
+            </ul>
+        </div>
 
-<tr>
-<td valign="top" >
-<input type="button" value="保存" onclick="Save()" /> <div style="float:right" id="Msg"> </div>
-</td>
-</tr>
+        <textarea id="TB_SQL" name="TB_SQL" rows="3"> </textarea>
+    </fieldset>
 
-</table>
+
+    <fieldset>
+        <legend>其他选项 </legend>
+        <br />
+        <input type="checkbox" id="CB_IsEval" name="CB_IsEval" /><label for="CB_IsEval">是否质量考核点</label>
+    </fieldset>
+
+
+    <div style="float:right" id="Msg"> </div>
+
 
 <script type="text/javascript">
 
@@ -228,3 +225,4 @@
 
 </body>
 </html>
+

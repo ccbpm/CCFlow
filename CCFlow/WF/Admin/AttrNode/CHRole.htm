@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>考核规则</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -10,6 +12,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -28,7 +31,7 @@
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(node);
             var chWay = node.CHWay;
-            $("input[name='RB_CHWay'][value="+chWay+"]").attr("checked", true);
+            $("input[name='RB_CHWay'][value=" + chWay + "]").attr("checked", true);
 
         });
 
@@ -41,7 +44,7 @@
             node.CopyForm(); //复制表单数据.
 
             //节假日计算方式.
-//            node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
+            //            node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
 
             //是否是时效考核.
             if (document.getElementById("CB_IsEval").checked == true)
@@ -55,69 +58,64 @@
             return;
         }
         function SetCHRoleDtl() {
-            var url = "CHRoleDtl.htm?FK_Node="+GetQueryString("FK_Node");
+            var url = "CHRoleDtl.htm?FK_Node=" + GetQueryString("FK_Node");
             window.location.href = url;
         }
     </script>
 </head>
 <body>
     <form id="cc">
-    <table style="width: 100%;">
-        <caption>
-            设置考核规则</caption>
-        <tr>
-            <td>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="0" id="RB_CHWay_0" name="RB_CHWay">
-                        <label for="RB_CHWay_0">
-                            不考核
-                        </label>
-                    </legend>
-                    <ul>
-                        <li style="color: Gray">默认为不考核，当前节点不设置任何形式的考核。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="1" id="RB_CHWay_1" name="RB_CHWay">
-                        <label for="RB_CHWay_1">
-                            按时效考核</label></legend>
-                    <ul  style="color: Gray">
-                        <li>按时间点计算，或者说按照设置的时间区间计算。 </li>
-                        <li>这个方式有：1. 设置天数，比如设置应该在几天几小时完成。 </li>
-                        <li>2. 按表单的表单字段，选择时间字段，按其设置的时间计算。 </li>
-                        <li>3. 流转自定义。 </li>
-                        <li><a href="javascript:SetCHRoleDtl();">设置时效考核的计算方式</a> </li>
-                    </ul>
+        <div id="bar" class="cs-tr cs-bar">
+            <input type="button" value="保存" onclick="Save()" />
+        </div>
+        <fieldset>
+            <legend>
+                <input type="radio" value="0" id="RB_CHWay_0" name="RB_CHWay">
+                <label for="RB_CHWay_0">
+                    不考核
+                </label>
+            </legend>
+            <ul>
+                <li style="color: Gray">默认为不考核，当前节点不设置任何形式的考核。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="1" id="RB_CHWay_1" name="RB_CHWay">
+                <label for="RB_CHWay_1">
+                    按时效考核</label></legend>
+            <ul  style="color: Gray">
+                <li>按时间点计算，或者说按照设置的时间区间计算。 </li>
+                <li>这个方式有：1. 设置天数，比如设置应该在几天几小时完成。 </li>
+                <li>2. 按表单的表单字段，选择时间字段，按其设置的时间计算。 </li>
+                <li>3. 流转自定义。 </li>
+                <li><a href="javascript:SetCHRoleDtl();">设置时效考核的计算方式</a> </li>
+            </ul>
 
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <input type="radio" value="2" id="RB_CHWay_2" name="RB_CHWay">
-                        <label for="RB_CHWay_2">
-                            按工作量考核
-                        </label>
-                    </legend>
-                    <ul style="color: Gray">
-                        <li>按照处理工作的多少进行考核。</li>
-                        <li>这样的节点，一般都是多人处理的节点。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>是否是质量考核点？</legend>
-                    <ul style="color: Gray">
-                        <li>质量考核，是当前节点对上一步的工作进行一个工作好坏的一个考核。</li>
-                        <li>考核的方式是对上一个节点进行打分，该分值记录到WF_CHEval的表里，开发人员对WF_CHEval的数据根据用户的需求进行二次处理。</li>
-                    </ul>
-                    <input type="checkbox" id="CB_IsEval" name="CB_IsEval" value="1" />
-                    <label for="CB_IsEval">
-                        是否是质量考核点?</label>
-                </fieldset>
-                <input type="button" value="保存" onclick="Save()" />
-            </td>
-        </tr>
-    </table>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" value="2" id="RB_CHWay_2" name="RB_CHWay">
+                <label for="RB_CHWay_2">
+                    按工作量考核
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>按照处理工作的多少进行考核。</li>
+                <li>这样的节点，一般都是多人处理的节点。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>是否是质量考核点？</legend>
+            <ul style="color: Gray">
+                <li>质量考核，是当前节点对上一步的工作进行一个工作好坏的一个考核。</li>
+                <li>考核的方式是对上一个节点进行打分，该分值记录到WF_CHEval的表里，开发人员对WF_CHEval的数据根据用户的需求进行二次处理。</li>
+            </ul>
+            <input type="checkbox" id="CB_IsEval" name="CB_IsEval" value="1" />
+            <label for="CB_IsEval">
+                是否是质量考核点?</label>
+        </fieldset>
+               
     </form>
 </body>
 </html>

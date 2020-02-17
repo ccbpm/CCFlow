@@ -134,48 +134,52 @@
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
-    id="form1">
-    <div style="margin: 8px">
-        <table id="Table1" style="width: 100%">
-            <caption>
-                消息事件
-            </caption>
-            <tr>
-                <th>
-                    序
-                </th>
-                <th>
-                    消息发生事件
-                </th>
-                <th>
-                    消息接收规则
-                </th>
-                <th>
-                   发送形式
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </table>
-        <fieldset style="border: 0px;">
-            <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-            <div id="state" style="display: none; color: Gray">
-                <ul>
-                    <li><a href="javascript:PushMessageEntity('WorkArrive');">工作到达</a> </li>
-                    <li><a href="javascript:PushMessageEntity('SendSuccess');">节点发送成功时</a> </li>
-                    <li><a href="javascript:PushMessageEntity('ReturnAfter');">当节点退回后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('UndoneAfter');">当节点撤销发送后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('ShitAfter');">当节点移交后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('FlowOverAfter');">流程结束后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('AfterFlowDel');">流程删除后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('NodeWarning');">节点处理预警</a> </li>
-                    <li><a href="javascript:PushMessageEntity('NodeOverDue');">节点处理逾期</a> </li>
-                </ul>
-            </div>
-            <input type="button" value="我需要帮助" onclick="Help()" />
-        </fieldset>
-    </div>
+          id="form1">
+        <div style="float:right; margin-right:5px;">
+            <fieldset style="border: 0px;">
+                <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
+                <div id="state" style="width:auto; position:absolute; z-index:10;background-color:wheat; display: none; color: Gray">
+                    <ul>
+                        <li><a href="javascript:PushMessageEntity('WorkArrive');">工作到达</a> </li>
+                        <li><a href="javascript:PushMessageEntity('SendSuccess');">节点发送成功时</a> </li>
+                        <li><a href="javascript:PushMessageEntity('ReturnAfter');">当节点退回后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('UndoneAfter');">当节点撤销发送后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('ShitAfter');">当节点移交后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('FlowOverAfter');">流程结束后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('AfterFlowDel');">流程删除后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('NodeWarning');">节点处理预警</a> </li>
+                        <li><a href="javascript:PushMessageEntity('NodeOverDue');">节点处理逾期</a> </li>
+                    </ul>
+                </div>
+                <input type="button" value="我需要帮助" onclick="Help()" />
+            </fieldset>
+        </div>
+        <div style="margin: 8px">
+            <table id="Table1" style="width: 100%">
+                <caption>
+                    消息事件
+                </caption>
+
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        消息发生事件
+                    </th>
+                    <th>
+                        消息接收规则
+                    </th>
+                    <th>
+                        发送形式
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+            </table>
+            
+        </div>
     </form>
 </body>
 </html>

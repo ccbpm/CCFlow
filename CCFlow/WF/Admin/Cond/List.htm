@@ -153,23 +153,27 @@
 </head>
 <body>
     <form id="cc">
-    <div id="Msg">
-    </div>
-    <br />
-    <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
-    <div id="state" style="display: none; color: Gray">
-        <ul>
-            <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
-            <li><a href="javascript:NewCond('StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
-            <li><a href="javascript:NewCond('CondStation');">按指定操作员的岗位条件</a></li>
-            <li><a href="javascript:NewCond('CondDept');">按指定操作员的部门条件</a> </li>
-            <li><a href="javascript:NewCond('CondBySQL');">按SQL条件计算</a> </li>
-            <li><a href="javascript:NewCond('CondBySQLTemplate');">按SQL模版条件计算</a> </li>
-            <li><a href="javascript:NewCond('CondByPara');">按开发者参数计算</a> </li>
-            <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
-        </ul>
-    </div>
-    <input type="button" value="什么是条件？" onclick="javascript:Help()" />
+        <div style="float:right; margin-right:30px;">
+            <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
+            <div id="state" style="position:absolute; z-index:10;background-color:wheat; display: none; color: Gray">
+                <ul>
+                    <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
+                    <li><a href="javascript:NewCond('StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
+                    <li><a href="javascript:NewCond('CondStation');">按指定操作员的岗位条件</a></li>
+                    <li><a href="javascript:NewCond('CondDept');">按指定操作员的部门条件</a> </li>
+                    <li><a href="javascript:NewCond('CondBySQL');">按SQL条件计算</a> </li>
+                    <li><a href="javascript:NewCond('CondBySQLTemplate');">按SQL模版条件计算</a> </li>
+                    <li><a href="javascript:NewCond('CondByPara');">按开发者参数计算</a> </li>
+                    <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
+                </ul>
+            </div>
+            <input type="button" value="什么是条件？" onclick="javascript:Help()" />
+        </div>
+        <div id="Msg">
+        </div>
+        <br />
+        
+        
     </form>
 </body>
 </html>

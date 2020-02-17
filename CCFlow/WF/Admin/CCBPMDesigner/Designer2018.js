@@ -489,6 +489,15 @@ $(function () {
         }
     });
 
+    /*新建*/
+    
+    $("#Btn_NewFlow").bind('click', function () {
+
+        alert("请在流程树右键菜单新建流程！");
+
+
+    });
+   
     /*保存*/
     $("#Btn_Save").bind('click', function () {
 

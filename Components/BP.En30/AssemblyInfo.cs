@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("济南驰骋信息技术有限公司")]
 [assembly: AssemblyProduct("BP.En30")]
-[assembly: AssemblyCopyright("驰骋软件2003-2018")]
+[assembly: AssemblyCopyright("驰骋软件2003-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]	
 

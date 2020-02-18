@@ -1442,7 +1442,14 @@ namespace BP.DA
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT " + tab + "pk PRIMARY KEY(" + pk.ToUpper() + ")";
                     break;
             }
-            DBAccess.RunSQL(sql);
+
+            //这个地方不应该出现异常, 需要处理一下  @yln. 在向日库计划流程中出现.
+            try
+            {
+                DBAccess.RunSQL(sql);
+            }catch(Exception ex)
+            {
+            }
         }
         public static void CreatePK(string tab, string pk1, string pk2, DBType db)
         {

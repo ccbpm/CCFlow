@@ -27,7 +27,7 @@ namespace BP.Web
         /// <param name="guestName"></param>
         /// <param name="lang"></param>
         /// <param name="isRememberMe"></param>
-        public static void SignInOfGener(string guestNo, string guestName, string lang, bool isRememberMe)
+        public static void SignInOfGener(string guestNo, string guestName, string lang="CH", bool isRememberMe=true)
         {
             SignInOfGener(guestNo, guestName, "deptNo", "deptName", lang, isRememberMe);
         }

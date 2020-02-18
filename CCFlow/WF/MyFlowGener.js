@@ -2298,7 +2298,7 @@ function initModal(modalType, toNode) {
             //发送选择接收节点和接收人                
             case "sendAccepter": 
                 $('#modalHeader').text("选择接受人");
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + +"&PWorkID="+GetQueryString("PWorkID")+"&ToNode=" + toNode + "&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&PWorkID="+GetQueryString("PWorkID")+"&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");

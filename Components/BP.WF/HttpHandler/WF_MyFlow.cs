@@ -1246,6 +1246,625 @@ namespace BP.WF.HttpHandler
             return toolbar;
         }
 
+
+        /// <summary>
+        /// 工具栏
+        /// </summary>
+        /// <returns></returns>
+        public string InitToolBarForVue()
+        {
+            //创建一个DataTable，返回按钮信息
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+            dt.Columns.Add("Role", typeof(int));
+            #region 处理是否是加签，或者是否是会签模式.
+            bool isAskForOrHuiQian = false;
+            BtnLab btnLab = new BtnLab(this.FK_Node);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (this.FK_Node.ToString().EndsWith("01") == false)
+            {
+                if (gwf.WFState == WFState.Askfor)
+                    isAskForOrHuiQian = true;
+
+                /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮.*/
+                /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
+                if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
+                {
+                    //协作模式
+                    if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                    {
+                        if (gwf.HuiQianZhuChiRen.Equals(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
+                    }
+                    else
+                    {
+#warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
+                        GenerWorkerLists gwls = new GenerWorkerLists();
+                        string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
+
+                        if (DBAccess.RunSQLReturnValInt(sql) == 1)
+                        {
+                            //修改流程会签状态
+                            gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+                            isAskForOrHuiQian = false;
+                        }
+                        else
+                        {
+                            if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                            {
+                                if (btnLab.HuiQianLeaderRole == 0)
+                                {
+                                    if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                                        isAskForOrHuiQian = true;
+                                }
+                                else
+                                {
+                                    //不是主持人
+                                    if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                                        isAskForOrHuiQian = true;
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+            }
+            #endregion 处理是否是加签，或者是否是会签模式，.
+            DataRow dr = dt.NewRow();
+
+            string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
+            string toolbar = "";
+            try
+            {
+                #region 是否是会签？.
+                if (isAskForOrHuiQian == true && SystemConfig.CustomerNo == "LIMS")
+                    return "";
+
+                if (isAskForOrHuiQian == true)
+                {
+                    dr["No"] = "Send";
+                    dr["Name"] = "确定/完成";
+                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAllSend()";
+                    dt.Rows.Add(dr);
+                    if (btnLab.PrintZipEnable == true)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "PackUp";
+                        dr["Name"] = btnLab.PrintZipLab;
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+
+                    if (btnLab.TrackEnable)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Track";
+                        dr["Name"] = btnLab.TrackLab;
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+
+                    return BP.Tools.Json.ToJson(dt);
+                }
+                #endregion 是否是会签.
+
+                #region 是否是抄送.
+                if (this.IsCC)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Track";
+                    dr["Name"] = "流程运行轨迹";
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                    // 判断审核组件在当前的表单中是否启用，如果启用了.
+                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
+                    {
+                        dr = dt.NewRow();
+                        /*如果不等于启用, */
+                        dr["No"] = "CCWorkCheck";
+                        dr["Name"] = "填写审核意见";
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+
+                        //toolbar += "<input type=button  value='填写审核意见' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CCCheckNote.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
+                    }
+                    return toolbar;
+                }
+                #endregion 是否是抄送.
+
+                #region 如果当前节点启用了协作会签.
+                if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "SendHuiQian";
+                    dr["Name"] = "会签发送";
+                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SendIt(true);";
+                    dt.Rows.Add(dr);
+                  
+                }
+                #endregion 如果当前节点启用了协作会签
+
+                #region 加载流程控制器 - 按钮
+                if (this.currND.HisFormType == NodeFormType.SelfForm)
+                {
+                    /*如果是嵌入式表单.*/
+                    if (currND.IsEndNode)
+                    {
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            dr = dt.NewRow();
+                            /*如果启用了发送按钮.*/
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if (SendSelfFrom()==false) return false; this.disabled=true;";
+                            dt.Rows.Add(dr); 
+                        }
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if ( SendSelfFrom()==false) return false; this.disabled=true;";
+                            dt.Rows.Add(dr);
+                        }
+                    }
+
+                    /*处理保存按钮.*/
+                    if (btnLab.SaveEnable)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Save";
+                        dr["Name"] = btnLab.SaveLab;
+                        dr["Oper"] = "SaveSelfFrom();";
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (this.currND.HisFormType != NodeFormType.SelfForm)
+                {
+                    /*启用了其他的表单.*/
+                    if (currND.IsEndNode)
+                    {
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                            dr = dt.NewRow();
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send();";
+                            dt.Rows.Add(dr);
+
+                        }
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了发送按钮.
+                             * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
+                             */
+                            dr = dt.NewRow();
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send();";
+                            dt.Rows.Add(dr);
+                        }
+                    }
+
+                    /* 处理保存按钮.*/
+                    if (btnLab.SaveEnable)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Save";
+                        dr["Name"] = btnLab.SaveLab;
+                        dr["Oper"] ="if (SysCheckFrm() == false) return false; Save(); ";
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (btnLab.WorkCheckEnable)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "workcheckBtn";
+                    dr["Name"] = btnLab.WorkCheckLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);/*审核*/
+                }
+
+                if (btnLab.ThreadEnable)
+                {
+                    /*如果要查看子线程.*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Thread";
+                    dr["Name"] = btnLab.ThreadLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                   
+                }
+
+                if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
+                {
+                    /*如果要查看父流程.*/
+                    dr = dt.NewRow();
+                    dr["No"] = "ParentForm";
+                    dr["Name"] = btnLab.ShowParentFormLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.TCEnable == true)
+                {
+                    /*流转自定义..*/
+                    dr = dt.NewRow();
+                    dr["No"] = "TransferCustom";
+                    dr["Name"] = btnLab.TCLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.HelpRole != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Help";
+                    dr["Name"] = btnLab.HelpLab;
+                    dr["Oper"] = "HelpAlter()";
+                    dr["Role"] = btnLab.HelpRole;
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.JumpWayEnable && 1 == 2)
+                {
+                    /*跳转*/
+                    dr = dt.NewRow();
+                    dr["No"] = "JumpWay";
+                    dr["Name"] = btnLab.JumpWayLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.ReturnEnable)
+                {
+                    /*退回*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Return";
+                    dr["Name"] = btnLab.ReturnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                //  if (btnLab.HungEnable && this.currND.IsStartNode == false)
+                if (btnLab.HungEnable)
+                {
+                    /*挂起*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Hung";
+                    dr["Name"] = btnLab.HungLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                  
+                }
+
+                if (btnLab.ShiftEnable)
+                {
+                    /*移交*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Shift";
+                    dr["Name"] = btnLab.ShiftLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                  
+                }
+
+                if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
+                {
+
+                    // 抄送 
+                    dr = dt.NewRow();
+                    dr["No"] = "CC";
+                    dr["Name"] = btnLab.CCLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.DeleteEnable != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Delete";
+                    dr["Name"] = btnLab.DeleteLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                   
+                }
+
+                if (btnLab.EndFlowEnable && this.currND.IsStartNode == false)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "EndFlow";
+                    dr["Name"] = btnLab.EndFlowLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                // @李国文.
+                if (btnLab.PrintDocEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PrintDoc";
+                    dr["Name"] = btnLab.PrintDocLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                   
+                }
+
+                if (btnLab.TrackEnable)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Track";
+                    dr["Name"] = btnLab.TrackLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+
+                if (btnLab.SearchEnable)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Search";
+                    dr["Name"] = btnLab.SearchLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.BatchEnable)
+                {
+                    /*批量处理*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Batch";
+                    dr["Name"] = btnLab.BatchLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                   
+                }
+
+                if (btnLab.AskforEnable)
+                {
+                    /*加签 */
+                    dr = dt.NewRow();
+                    dr["No"] = "Askfor";
+                    dr["Name"] = btnLab.AskforLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                   
+                }
+
+                if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                {
+                    /*会签 */
+                    dr = dt.NewRow();
+                    dr["No"] = "HuiQian";
+                    dr["Name"] = btnLab.HuiQianLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                   
+                }
+
+                //原始会签主持人可以增加组长
+                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true && gwf.TodoEmps.Contains(WebUser.No) == true) || gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
+                {
+                    /*增加组长 */
+                    dr = dt.NewRow();
+                    dr["No"] = "AddLeader";
+                    dr["Name"] = btnLab.AddLeaderLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+
+                if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
+                {
+                    /*公文正文 */
+                    dr = dt.NewRow();
+                    dr["No"] = "WebOffice";
+                    dr["Name"] = btnLab.WebOfficeLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                  
+                }
+
+                // 需要翻译.
+                if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
+                {
+                    /* 启用了数据重置功能 */
+                    dr = dt.NewRow();
+                    dr["No"] = "ReSet";
+                    dr["Name"] = "数据重置";
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+              
+
+                if (btnLab.CHRole != 0)
+                {
+                    /* 节点时限设置 */
+                    dr = dt.NewRow();
+                    dr["No"] = "CH";
+                    dr["Name"] = btnLab.CHLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                   
+                }
+
+                if (btnLab.NoteEnable != 0)
+                {
+                    /* 备注设置 */
+                    dr = dt.NewRow();
+                    dr["No"] = "Note";
+                    dr["Name"] = btnLab.NoteLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+
+                if (btnLab.PRIEnable == true)
+                {
+                    /* 优先级设置 */
+                    dr = dt.NewRow();
+                    dr["No"] = "PR";
+                    dr["Name"] = btnLab.PRILab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 关注 */
+                if (btnLab.FocusEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Focus";
+                    if (HisGenerWorkFlow.Paras_Focus == true)
+                        dr["Name"] = "取消关注";
+                    else
+                        dr["Name"] = btnLab.FocusLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 分配工作 */
+                if (btnLab.AllotEnable == true)
+                {
+                    /*分配工作*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Allot";
+                    dr["Name"] = btnLab.AllotLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 确认 */
+                if (btnLab.ConfirmEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Confirm";
+                    if (HisGenerWorkFlow.Paras_Confirm == true)
+                        dr["Name"] = "取消确认";
+                    else
+                        dr["Name"] = btnLab.ConfirmLab;
+                     
+                       dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                }
+
+                // 需要翻译.
+
+                /* 打包下载zip */
+                if (btnLab.PrintZipEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载html */
+                if (btnLab.PrintHtmlEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载pdf */
+                if (btnLab.PrintPDFEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (this.currND.IsStartNode == true)
+                {
+                    if (this.currFlow.IsDBTemplate == true)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "DBTemplate";
+                        dr["Name"] = "模版";
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                /* 公文标签 */
+                if (btnLab.OfficeBtnEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Btn_Office";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                #endregion
+
+
+                #region  加载自定义的button.
+                BP.WF.Template.NodeToolbars bars = new NodeToolbars();
+                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);
+                foreach (NodeToolbar bar in bars)
+                {
+                    if (bar.ShowWhere != ShowWhere.Toolbar)
+                        continue;
+
+                    if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Btn_Office";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
+                    }
+                    else
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Btn_Office";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
+
+                        //string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        //toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
+                    }
+                }
+                #endregion  //加载自定义的button.
+
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex);
+                new Exception("err@" + ex.Message);
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+
         /// <summary>
         /// 工具栏
         /// </summary>

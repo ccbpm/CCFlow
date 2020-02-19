@@ -13,6 +13,9 @@ function basePath() {
     var curPath = window.document.location.href;
     //获取主机地址之后的目录，如： jflow-web/index.jsp  
     var pathName = window.document.location.pathname;
+    if (pathName == "/") { //说明不存在项目名
+        return curPath;
+    }
     var pos = curPath.indexOf(pathName);
     //获取主机地址，如： http://localhost:80  
     var localhostPath = curPath.substring(0, pos);

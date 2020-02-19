@@ -972,7 +972,7 @@ function newFrm(frmType) {
         } else if (node.attributes.TType == "FORMTYPE") {
             //在表单类别上单击，则传递表单类别
             var pnode = $('#formTree').tree('getParent', node.target);
-            if (pnode != null) {
+            //if (pnode != null) {
                 url += "&FK_FrmSort=" + node.id;
 
                 while (pnode && pnode.attributes) {
@@ -982,7 +982,7 @@ function newFrm(frmType) {
                     }
                     pnode = $('#formTree').tree('getParent', pnode.target);
                 }
-            }
+            //}
         }
     }
     //如果右侧有打开该表单，则关闭

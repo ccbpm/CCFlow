@@ -179,6 +179,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string HuiQianRole = "HuiQianRole";
         /// <summary>
+        /// 协作模式被加签的人处理规则
+        /// </summary>
+        public const string IsCanAddHuiQianer = "IsCanAddHuiQianer";
+        /// <summary>
         /// 会签组长模式
         /// </summary>
         public const string HuiQianLeaderRole = "HuiQianLeaderRole";

@@ -174,8 +174,17 @@
             }
 
             pushData = ToJson(pushData);
+            var parentNo = GetQueryString("ParentNo");
+            if (parentNo == null || parentNo == undefined || parentNo == "")
+                parentNo = "0";
+            else {
+                //获取这个元素的父节点
+                var ensName = GetQueryString("EnsName");
+                var en = new Entity(ensName.substr(0, ensName.length - 1), parentNo);
+                parentNo = en.ParentNo;
+            }
 
-            var jsonTree = findChildren(pushData, '0');
+            var jsonTree = findChildren(pushData, parentNo);
 
             //绑定树结构.
             // var pushData = eval('(' + treeJson + ')');

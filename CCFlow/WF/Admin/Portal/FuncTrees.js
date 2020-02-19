@@ -84,7 +84,7 @@ functrees.push({
             Defines: [{
                 Value: "F0", IconCls: "icon-flowtree", MenuId: "mFlowRoot", Opened: true
             }, {
-                IconCls: "icon-tree_folder", MenuId: "mFlowSort", HelpTitle: "右键创建流程，修改名称"
+                IconCls: "icon-tree_folder", MenuId: "mFlowSort"
             }]
         }, {
             Value: "FLOW", ColDefine: "DTYPE",
@@ -339,8 +339,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
                         Url: nd.ColUrl ? roots[i][nd.ColUrl] : nd.Url,
                         Opened: nd.Opened,
                         Inherits: nd.Inherits,
-                        Target: nd.Target,
-                        HelpTitle: nd.HelpTitle
+                        Target: nd.Target
                     };
 
                     if (oFuncTree.AttrCols && oFuncTree.AttrCols.length > 0) {
@@ -360,7 +359,6 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
                         nextND.ColDefine = nd.ColDefine;
                         nextND.Opened = define.Opened;
                         nextND.Target = define.Target || nd.Target;
-                        nextND.HelpTitle = define.HelpTitle;
 
                         if (define.Inherits) {
                             if (typeof nextND.Inherits == "undefined") {
@@ -763,8 +761,7 @@ function LoadServiceSubNode(aServiceNodes, oNode, oParentNode, oServiceNode, oFu
             Name: this[oServiceNode.ColName],
             Opened: oNode.Opened,
             Inherits: oNode.Inherits,
-            Target: oNode.Target,
-            HelpTitle: oNode.HelpTitle
+            Target: oNode.Target
         };
 
         if (oFuncTree.AttrCols && oFuncTree.AttrCols.length > 0) {
@@ -866,7 +863,7 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
         return true;
     }
 
-    var attrs = { MenuId: oNode.MenuId, Url: oNode.Url, Target: oNode.Target, LazyLoad: oNode.LazyLoad, ColDefine: oNode.ColDefine, DefineValue: oNode[oNode.ColDefine], InheritForChild: GetNewInheritForChild(oNode.InheritForChild), Inherits: oNode.Inherits, Node: oNode, HelpTitle: oNode.HelpTitle };
+    var attrs = { MenuId: oNode.MenuId, Url: oNode.Url, Target: oNode.Target, LazyLoad: oNode.LazyLoad, ColDefine: oNode.ColDefine, DefineValue: oNode[oNode.ColDefine], InheritForChild: GetNewInheritForChild(oNode.InheritForChild), Inherits: oNode.Inherits, Node: oNode };
 
     if (oFuncTree.AttrCols) {
         $.each(oFuncTree.AttrCols, function () {
@@ -897,21 +894,6 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
 
     //设置可以继承的属性值
     var node = $("#" + oFuncTree.Id).tree("find", oNode.Id);
-    if (node && node.attributes && node.attributes.HelpTitle && node.attributes.HelpTitle != "undefined") {
-        $(node.target).tooltip({
-            position: 'right',
-            content: '<span style="color:#fff" class="__tooltip"></span>',
-            onShow: function () {
-                var tree_title = this;
-                //设定提示框中的信息为节点中的内容
-                $('.__tooltip').text(node.attributes.HelpTitle);
-                $(this).tooltip('tip').css({
-                    backgroundColor: '#666',
-                    borderColor: '#666'
-                });
-            }
-        });
-    }
     if (node.attributes.InheritForChild) {
         $.each(node.attributes.InheritForChild, function () {
             node.attributes[this.To] = ReplaceParams(this.From, node, oFuncTree);

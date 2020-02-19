@@ -14,23 +14,23 @@ function InitAth(frmData, gf) {
     
 
 
-    //判断是否设置了附件权限
-    var node = frmData.WF_Node[0];
-    var frmNode = frmData["FrmNode"];
-    if (node.FormType == 11 && frmNode != null) {
-        frmNode = frmNode[0];
-        if (frmNode.FrmSln == 1) {
-            pageData.IsReadOnly = 1;
-        }
-        //自定义权限
-        if (frmNode.FrmSln == 2) {
-            var myPk = ath.MyPk + "_" + node.No;
-            var NodeAth = new Entity("BP.Sys.FrmAttachment", myPk);
-            var count = NodeAth.RetrieveFromDBSources();
-            if (count != 0)
-                ath = NodeAth;
-        }
-    }
+    ////判断是否设置了附件权限
+    //var node = frmData.WF_Node[0];
+    //var frmNode = frmData["FrmNode"];
+    //if (node.FormType == 11 && frmNode != null) {
+    //    frmNode = frmNode[0];
+    //    if (frmNode.FrmSln == 1) {
+    //        pageData.IsReadOnly = 1;
+    //    }
+    //    //自定义权限
+    //    if (frmNode.FrmSln == 2) {
+    //        var myPk = ath.MyPk + "_" + node.No;
+    //        var NodeAth = new Entity("BP.Sys.FrmAttachment", myPk);
+    //        var count = NodeAth.RetrieveFromDBSources();
+    //        if (count != 0)
+    //            ath = NodeAth;
+    //    }
+    //}
 
 
     var athDBs = frmData.Sys_FrmAttachmentDB;

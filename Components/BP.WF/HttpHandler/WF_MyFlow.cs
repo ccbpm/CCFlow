@@ -822,9 +822,9 @@ namespace BP.WF.HttpHandler
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
                     //协作模式
-                    if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                    if (btnLab.HuiQianRole == HuiQianRole.Teamup && btnLab.IsCanAddHuiQianer == 0)
                     {
-                        if (gwf.HuiQianZhuChiRen.Equals(WebUser.No + ",") == false)
+                        if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false)
                             isAskForOrHuiQian = true;
                     }
                     else

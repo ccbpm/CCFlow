@@ -308,11 +308,11 @@
                         if (groupOfAthMents.length == 0)
                             continue;
                         if (groupOfAthMents[0].IsVisable == "0" || groupOfAthMents[0].IsVisable == false) {
-                            //如果是字段附件就显示
+                            //如果是字段附件就不显示
                             var athAttr = new Entity("BP.Sys.MapAttr");
                             athAttr.SetPKVal(groupOfAthMents[0].MyPK)
                             var count = athAttr.RetrieveFromDBSources();
-                            if (count == 0)
+                            if (count > 0)
                                 continue;
                         }
                         if (dtGroups.length == 1) {

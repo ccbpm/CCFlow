@@ -64,7 +64,7 @@
         }
         .cs-btn-group {
             border: 0;
-            text-align: right;
+            text-align: left;
         }
         .cs-btn-group a {
             margin-left: 6px;
@@ -140,7 +140,7 @@
         }
         .cs-panel-north .cs-btn-group {
             margin: auto;
-            width: 950px!important;
+            width: 1100px!important;
             background-color: #F7F6F9;
         }
         .cs-table {
@@ -299,7 +299,20 @@
             for (var k = 0; k < groupFields.length; k++) {
 
                 var groupObj = groupFields[k];
-
+                //附件类的控件.
+                if (groupObj.CtrlType == 'Ath') {
+                     //获取附件的主键
+                    var MyPK = groupObj.CtrlID;
+                    if (MyPK == "")
+                        continue;
+                    //创建附件描述信息.
+                    var ath = new Entity("BP.Sys.FrmAttachment");
+                    ath.MyPK = groupObj.CtrlID;
+                    if (ath.RetrieveFromDBSources() == 0)
+                        continue;
+                    if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
+                        continue;
+                }
                 //生成工具栏.
                 html += GenerGroupTR(groupObj, tableCol, data);
 
@@ -808,6 +821,19 @@
             var url = 'FieldTypeList.htm?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
+        }
+        function BatchAddF() {
+            var url = 'FieldTypeListBatch.htm?DoType=BatchAddF&FK_MapData=' + pageParam.fk_mapdata;
+
+            var h = 800;
+            var w = 1000;
+            var l = (screen.width - w) / 2;
+            var t = (screen.height - h) / 2;
+            var s = 'width=' + w + ', height=' + h + ', top=' + t + ', left=' + l;
+            s += ', toolbar=no, scrollbars=no, menubar=no, location=no, resizable=no';
+            OpenEasyUiDialog(url, "eudlgframe", '增加字段', 1000, 600, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
         function AddF() {
             //var url = 'Do.htm?DoType=AddF&MyPK=' + mypk;
@@ -1530,16 +1556,19 @@
 
                 <a href="javascript:AddF();" class="easyui-linkbutton btn-light-yellow">
                     新建字段
-                </a> 
+                </a>
+                <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
+                    批量新建字段
+                </a>
                 <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
                     隐藏字段
                 </a>-->
                 <a href="javascript:GroupFieldNew();" class="easyui-linkbutton btn-light-green">
                     新建字段分组
-                </a> 
+                </a>
                 <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton btn-light-red">
                     &nbsp;&nbsp;新建审核分组
-                </a> 
+                </a>
                 <a href="javascript:NewMapDtl();" class="easyui-linkbutton btn-light-blue">
                     新建从表
                 </a> <a href="javascript:NewAth();" class="easyui-linkbutton btn-light-green">
@@ -1547,8 +1576,7 @@
                 </a><a href="javascript:NewFrame();" class="easyui-linkbutton btn-light-yellow">
                     新建框架
                 </a>
-                <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent"
-                        >节点表单组件</a>
+                <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent">节点表单组件</a>
                 <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
                     手机表单
                 </a>

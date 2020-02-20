@@ -3,28 +3,28 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.WF;
-using BP.Port; 
+using BP.Port;
 
 namespace BP.WF
 {
-	/// <summary>
-	/// 退回轨迹
-	/// </summary>
-	public class ReturnWorkAttr 
-	{
-		#region 基本属性
-		/// <summary>
-		/// 工作ID
-		/// </summary>
-		public const  string WorkID="WorkID";
-		/// <summary>
-		/// 工作人员
-		/// </summary>
-		public const  string Worker="Worker";
-		/// <summary>
-		/// 退回原因
-		/// </summary>
-		public const  string BeiZhu="BeiZhu";
+    /// <summary>
+    /// 退回轨迹
+    /// </summary>
+    public class ReturnWorkAttr
+    {
+        #region 基本属性
+        /// <summary>
+        /// 工作ID
+        /// </summary>
+        public const string WorkID = "WorkID";
+        /// <summary>
+        /// 工作人员
+        /// </summary>
+        public const string Worker = "Worker";
+        /// <summary>
+        /// 退回原因
+        /// </summary>
+        public const string BeiZhu = "BeiZhu";
         /// <summary>
         /// 退回日期
         /// </summary>
@@ -57,11 +57,15 @@ namespace BP.WF
         /// 退回后是否需要原路返回？
         /// </summary>
         public const string IsBackTracking = "IsBackTracking";
-		#endregion
-	}
-	/// <summary>
-	/// 退回轨迹
-	/// </summary>
+        /// <summary>
+        /// frm格式化的数据.
+        /// </summary>
+        public const string FrmDB = "FrmDB";
+        #endregion
+    }
+    /// <summary>
+    /// 退回轨迹
+    /// </summary>
     public class ReturnWork : EntityMyPK
     {
         #region 基本属性
@@ -235,11 +239,15 @@ namespace BP.WF
                 map.AddTBInt(ReturnWorkAttr.ReturnToNode, 0, "ReturnToNode", true, true);
                 map.AddTBString(ReturnWorkAttr.ReturnToEmp, null, "退回给", true, true, 0, 4000, 10);
 
+                //如果是frm类型，就是格式化的json数据.
                 map.AddTBString(ReturnWorkAttr.BeiZhu, null, "退回原因", true, true, 0, 4000, 10);
-                map.AddTBDateTime(ReturnWorkAttr.RDT, null, "退回日期", true, true);
 
+                map.AddTBDateTime(ReturnWorkAttr.RDT, null, "退回日期", true, true);
                 map.AddTBInt(ReturnWorkAttr.IsBackTracking, 0, "是否要原路返回?", true, true);
-                map.AddAttrsFromMapData("BP.WF.ReturnWorks");
+
+             //   map.AddTBString(ReturnWorkAttr.FrmDB, null, "退回的Frm格式化数据", true, true, 0, 3999, 10);
+
+                // map.AddAttrsFromMapData("BP.WF.ReturnWorks");
                 this._enMap = map;
                 return this._enMap;
             }
@@ -252,33 +260,33 @@ namespace BP.WF
             this.Returner = BP.Web.WebUser.No;
             this.ReturnerName = BP.Web.WebUser.Name;
 
-            this.RDT =DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDataTime;
             return base.beforeInsert();
         }
     }
-	/// <summary>
-	/// 退回轨迹s 
-	/// </summary>
-	public class ReturnWorks : Entities
-	{	 
-		#region 构造
-		/// <summary>
-		/// 退回轨迹s
-		/// </summary>
-		public ReturnWorks()
-		{
-		}
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new ReturnWork();
-			}
-		}
-		#endregion
+    /// <summary>
+    /// 退回轨迹s 
+    /// </summary>
+    public class ReturnWorks : Entities
+    {
+        #region 构造
+        /// <summary>
+        /// 退回轨迹s
+        /// </summary>
+        public ReturnWorks()
+        {
+        }
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new ReturnWork();
+            }
+        }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -303,6 +311,6 @@ namespace BP.WF
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
-	
+    }
+
 }

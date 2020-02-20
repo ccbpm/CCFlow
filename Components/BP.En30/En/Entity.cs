@@ -773,6 +773,47 @@ namespace BP.En
                 str = dt.Rows[0][0].ToString();
             return str.PadLeft(int.Parse(this.EnMap.CodeStruct), '0');
         }
+        /// <summary>
+        /// 按照两列查生顺序号码。
+        /// </summary>
+        /// <param name="attrKey">字段</param>
+        /// <param name="attrGroupKey1"></param>
+        /// <param name="attrGroupKey2"></param>
+        /// <param name="attrGroupKey3"></param>
+        /// <param name="attrGroupVal1"></param>
+        /// <param name="attrGroupVal2"></param>
+        /// <param name="attrGroupVal3"></param>
+        /// <returns></returns>
+        public string GenerNewNoByKey(string attrKey, string attrGroupKey1, string attrGroupKey2, string attrGroupKey3, object attrGroupVal1, object attrGroupVal2, object attrGroupVal3)
+        {
+            string f = this.EnMap.GetFieldByKey(attrKey);
+            Paras ps = new Paras();
+            //   ps.Add("f", f);
+
+            string sql = "";
+            switch (this.EnMap.EnDBUrl.DBType)
+            {
+                case DBType.Oracle:
+                case DBType.DM:
+                case DBType.Informix:
+                    sql = "SELECT   MAX(" + f + ") +1 AS No FROM " + this.EnMap.PhysicsTable;
+                    break;
+                case DBType.MSSQL:
+                    sql = "SELECT CONVERT(INT, MAX(" + this.EnMap.GetFieldByKey(attrKey) + ") )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetFieldByKey(attrGroupKey1) + "='" + attrGroupVal1 + "' AND " + this.EnMap.GetFieldByKey(attrGroupKey2) + "='" + attrGroupVal2 + "'  AND " + this.EnMap.GetFieldByKey(attrGroupKey3) + "='" + attrGroupVal3 + "'";
+                    break;
+                case DBType.Access:
+                    sql = "SELECT CONVERT(INT, MAX(" + this.EnMap.GetFieldByKey(attrKey) + ") )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetFieldByKey(attrGroupKey1) + "='" + attrGroupVal1 + "' AND " + this.EnMap.GetFieldByKey(attrGroupKey2) + "='" + attrGroupVal2 + "'  AND " + this.EnMap.GetFieldByKey(attrGroupKey3) + "='" + attrGroupVal3 + "'";
+                    break;
+                default:
+                    break;
+            }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);
+            string str = "1";
+            if (dt.Rows.Count != 0)
+                str = dt.Rows[0][0].ToString();
+            return str.PadLeft(int.Parse(this.EnMap.CodeStruct), '0');
+        }
         #endregion
 
         #region 构造方法

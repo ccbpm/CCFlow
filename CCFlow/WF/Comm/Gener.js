@@ -2358,9 +2358,6 @@ var WebUser = function () {
     return;
     }*/
 
-
-
-
     $.ajax({
         type: 'post',
         async: false,
@@ -2395,6 +2392,66 @@ var WebUser = function () {
     });
     var self = this;
     $.each(webUserJsonString, function (n, o) {
+        self[n] = o;
+    });
+};
+
+var guestUserJsonString = null;
+var GuestUser = function () {
+    if (dynamicHandler == "")
+        return;
+    if (guestUserJsonString != null) {
+        var self = this;
+        $.each(guestUserJsonString, function (n, o) {
+            self[n] = o;
+        });
+        return;
+    }
+
+
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
+
+
+    $.ajax({
+        type: 'post',
+        async: false,
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
+        url: dynamicHandler + "?DoType=GuestUser_Init&t=" + new Date().getTime(),
+        dataType: 'html',
+        success: function (data) {
+
+            if (data.indexOf("err@") != -1) {
+                if (data.indexOf('登录信息丢失') != -1) {
+                    alert("登录信息丢失，请重新登录。");
+                } else {
+                    alert(data);
+                }
+                return;
+            }
+
+            try {
+                guestUserJsonString = JSON.parse(data);
+
+            } catch (e) {
+                alert("json解析错误: " + data);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            var url = dynamicHandler + "?DoType=GuestUser_Init&t=" + new Date().getTime();
+            ThrowMakeErrInfo("GuestUser_Init", textStatus, url);
+        }
+    });
+    var self = this;
+    $.each(guestUserJsonString, function (n, o) {
         self[n] = o;
     });
 

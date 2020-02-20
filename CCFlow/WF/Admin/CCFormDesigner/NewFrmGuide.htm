@@ -18,7 +18,12 @@
 
             var frmType = GetQueryString("FrmType");
             if (frmType == null || frmType == "")
-                frmType = '0';
+                frmType = 0;
+
+            //{
+            //    alert("FrmType参数没有传递过来.");
+            //    return;
+            //}
 
             //实体类型.
             entityType = GetQueryString("EntityType");

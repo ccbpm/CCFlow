@@ -106,12 +106,20 @@
                     return;
                 }
             }
+
+            //创建handler实体. 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
-
-            handler.AddPara("TB_No", userNo);
+            //加入参数.
+            handler.AddPara("TB_No", userNo); 
             handler.AddPara("TB_PW", userPass);
-
+            //调用服务.
             var data = handler.DoMethodReturnString("Login_Submit");
+            //分析处理返回值.
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
 
             if (data.indexOf('err@') == 0) {
                 layer.msg(data, { time: 3000, icon: 2 });

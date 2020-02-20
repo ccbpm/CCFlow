@@ -6,7 +6,7 @@ var plant = 'CCFlow'; //运行平台.
 var basePath = basePath();
 var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
 var MyFlow = "MyFlow.ashx"; //工作处理器.
-var webUser = null;//定义通用变量用户信息
+var webUser = null; //定义通用变量用户信息
 
 function basePath() {
     //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  

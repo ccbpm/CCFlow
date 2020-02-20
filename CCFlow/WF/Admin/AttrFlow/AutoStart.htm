@@ -1,16 +1,20 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>自动发起</title>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
+    <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -47,7 +51,7 @@
                 flow.RunObj = $("#TB_SpecEmp").val();
             }
 
-            if (flow.FlowRunWay == "2" ) {
+            if (flow.FlowRunWay == "2") {
                 flow.RunObj = $("#TB_DataModel").val();
             }
             flow.Update();
@@ -56,10 +60,230 @@
 
         }
     </script>
+    <style type="text/css">
+        /*body.easyui-layout {
+            top: 20px;
+            left: 40px;
+        }*/
+        .panel-body {
+            padding: 0px;
+        }
 
+        .tabs {
+            border-width: 1px 0 1px 0;
+        }
+
+        .btn-default {
+            border: 0px;
+        }
+
+        .cs-btn-group {
+            width: auto !important;
+            min-height: 34px;
+            text-align: right;
+            background-color: transparent;
+        }
+
+            .cs-btn-group .l-btn-icon {
+                display: none;
+            }
+
+            .cs-btn-group .l-btn-text {
+                margin: 0;
+            }
+
+        .layout-panel {
+            position: absolute;
+            right: 0;
+            top: 0 !important;
+            box-shadow: none;
+        }
+
+        .layout-panel-north {
+            width: auto !important;
+            left: auto !important;
+            background-color: transparent;
+        }
+
+        .btn {
+            padding: 0 10px;
+            color: #fff !important;
+            border-radius: 0px !important;
+            border: 0;
+            height: 24px;
+            line-height: 24px;
+            box-sizing: border-box;
+        }
+
+            .btn:hover {
+                padding: 0 10px;
+                border: 0;
+            }
+
+        .btn-light-green {
+            background-color: #50b6ac !important;
+        }
+
+            .btn-light-green:hover {
+                background-color: #50b6ac;
+            }
+
+        .btn-light-blue {
+            background-color: #62cae3 !important;
+        }
+
+            .btn-light-blue:hover {
+                background-color: #62cae3;
+            }
+
+        .btn-light-yellow {
+            background-color: #f3ba20 !important;
+        }
+
+            .btn-light-yellow:hover {
+                background-color: #f3ba20;
+            }
+
+        .btn-light-red {
+            background-color: #f74f52 !important;
+        }
+
+            .btn-light-red:hover {
+                background-color: #f74f52;
+            }
+
+        .btn-white {
+            border: 1px solid #031f5d;
+            background-color: #fff !important;
+            ;
+            color: #031f5d !important;
+        }
+
+            .btn-white:hover {
+                border: 1px solid #031f5d;
+            }
+
+        .tabs-wrap .tabs, .tabs-panels, .tabs li a.tabs-inner, .tabs-panels table, td.FDesc, td.FContext, td {
+            border: 0;
+        }
+
+        .tabs-wrap table {
+            width: 100% !important;
+        }
+
+        .tabs-wrap .tabs {
+            padding-left: 0;
+            width: auto;
+            border-bottom: 1px solid #0a2561;
+        }
+
+        .tabs li a.tabs-inner {
+            padding: 0 16px;
+            background: none;
+            border-radius: 5px 5px 0 0;
+        }
+
+            .tabs li a.tabs-inner:hover {
+                background: none;
+                font-weight: bold;
+            }
+
+        .tabs li.tabs-selected a.tabs-inner {
+            border: 1px solid #0a2561;
+            border-bottom-color: #fff;
+            background: #fff;
+        }
+
+        td {
+            box-sizing: border-box;
+        }
+
+            td a {
+                color: #15398b;
+                font-size: 12px;
+            }
+
+                td a img {
+                    vertical-align: -2px;
+                }
+
+            td.FContext {
+                width: 30%;
+            }
+
+                td.FContext:nth-child(2) {
+                    padding-right: 30px;
+                }
+
+                td.FContext > *:only-child {
+                    width: 100% !important;
+                    font-size: 13px;
+                    color: #282828;
+                    box-sizing: border-box;
+                }
+
+                td.FContext[colspan] {
+                    padding-right: 0;
+                }
+
+        select[disabled], input[type=text]:disabled, .form-control, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+            background-color: #fff;
+            border: 1px solid #ccc !important;
+            text-align: left !important;
+            height: 32px;
+            box-sizing: border-box;
+        }
+
+            select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+                background-color: #f7f6f9;
+            }
+
+        td input[type="text"], td input[type="number"], td input[type="date"], td input[type="tel"] {
+            height: 32px;
+        }
+
+        td input[type="checkbox"] {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+        }
+
+        td label {
+            font-size: 13px;
+        }
+
+        /*td.FDesc {
+           padding-right: 10px;
+            text-align: right;
+            box-sizing: border-box;
+        }*/
+        /*td.FDesc:first-child {
+            width: 81px!important;
+        }
+        td:nth-child(3)[class="FDesc"] {
+            width: 130px!important;
+        }*/
+        .cs-form-import > .layout-panel-center {
+            padding: 16px 0 0 16px;
+        }
+
+        .cs-form-import > .layout-panel-north {
+            top: 6px !important;
+            padding-right: 21px;
+            border-radius: 0;
+        }
+    </style>
 </head>
 <body>
  <form id="cc">
+     <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
+        
+        <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
+           data-options="plain:true,iconCls:'icon-save'" onclick="Save()" style="margin-right:5px;">保存</a>
+      
+
+   
+    </div>
  <table style="width: 100%">
         <caption>自动发起</caption>
         <tr>
@@ -153,7 +377,7 @@
                     </font>                 
                 </fieldset>
 
-                <input type=button value="保存" onclick="Save();" />
+                <!--<input type=button value="保存" onclick="Save();" />-->
                <!--<asp:Button  class="easyui-linkbutton" ID="Btn_Save" runat="server" Text="保存" OnClick="BtnSave_Click" /> --> 
               
 <!--

@@ -1103,7 +1103,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //原始会签主持人可以增加组长
-                if (btnLab.AddLeaderEnable == true)
+                if (btnLab.AddLeaderEnable == true && (btnLab.HuiQianRole== HuiQianRole.Teamup || btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader))
                 {
                     /*增加组长 */
                     toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";

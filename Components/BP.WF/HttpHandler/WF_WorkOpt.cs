@@ -975,20 +975,23 @@ namespace BP.WF.HttpHandler
             if (btnLab.HuiQianRole != HuiQianRole.TeamupGroupLeader || (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole!= HuiQianLeaderRole.OnlyOne)) { 
                 foreach (GenerWorkerList item in ens)
                 {
-                    if(btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                    
+                    if ((gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true 
+                        ||(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true
+                            && gwf.GetParaString("AddLeader").Contains(item.FK_Emp+",") == false
+                           && gwf.TodoEmps.Contains(item.FK_Emp + ",") == true))
+                         && item.FK_Emp != BP.Web.WebUser.No)
                     {
-                        if ((gwf.TodoEmps.Contains(item.FK_Emp + ",") == true || gwf.HuiQianZhuChiRen.Contains(item.FK_Emp + ",") == true) && item.FK_Emp != BP.Web.WebUser.No)
-                        {
-                            item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
-                            item.FK_EmpText = item.FK_EmpText;
-                            if (item.IsPass == true)
-                                item.IsPassInt = 1001;
-                            else
-                                item.IsPassInt = 100;
-                            continue;
-                        }
-
+                        item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
+                        item.FK_EmpText = item.FK_EmpText;
+                        if (item.IsPass == true)
+                            item.IsPassInt = 1001;
+                        else
+                            item.IsPassInt = 100;
+                        continue;
                     }
+
+                   
 
                     //标记为自己.
                     if (item.FK_Emp == BP.Web.WebUser.No)
@@ -1203,15 +1206,59 @@ namespace BP.WF.HttpHandler
             return AccepterOfGener_SelectEmps();
         }
         /// <summary>
+        /// 增加主持人
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQian_AddLeader()
+        {
+            //生成变量.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+            if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
+            {
+                /*只有一个人的情况下, 并且是会签完毕状态，就执行 */
+                return "info@当前工作已经到您的待办理了,会签工作已经完成.";
+            }
+            string leaders = gwf.GetParaString("AddLeader");
+           
+            //获取加签的人
+            GenerWorkerLists gwfs = new GenerWorkerLists();
+            gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
+                GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, -1);
+            string empsLeader = "新增主持人:";
+           
+
+            foreach (GenerWorkerList item in gwfs)
+            {
+                if(leaders.Contains(item.FK_Emp + ","))
+                {
+                    empsLeader += item.FK_Emp + "," + item.FK_EmpText + ";";
+                    //发送消息
+                    BP.WF.Dev2Interface.Port_SendMsg(item.FK_Emp,
+                       "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + item.FK_Emp, BP.Web.WebUser.Name + "邀请您作为工作｛" + gwf.Title + "｝的主持人,请您在{" + item.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+                }
+               
+            }
+            if (DataType.IsNullOrEmpty(empsLeader) == true)
+                return "没有增加新的主持人";
+            leaders = "('" + leaders.Substring(0, leaders.Length - 1).Replace(",", "','") + "')";
+            //恢复他的状态.
+            string sql = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND IsPass=-1 AND FK_Emp In"+ leaders;
+            DBAccess.RunSQL(sql);
+
+            gwf.TodoEmps = gwf.TodoEmps + empsLeader;
+            gwf.Update();
+            return "主持人增加成功";
+
+        }
+        /// <summary>
         /// 保存并关闭
         /// </summary>
         /// <returns></returns>
         public string HuiQian_SaveAndClose()
         {
-            string huiQianType = this.GetRequestVal("HuiQianType");
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            string addLeader = gwf.GetParaString("AddLeader");
 
             if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
             {

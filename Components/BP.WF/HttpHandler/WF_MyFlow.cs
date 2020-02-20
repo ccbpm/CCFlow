@@ -821,10 +821,11 @@ namespace BP.WF.HttpHandler
                 /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
+                    
                     //协作模式
-                    if (btnLab.HuiQianRole == HuiQianRole.Teamup && btnLab.IsCanAddHuiQianer == 0)
+                    if (btnLab.HuiQianRole == HuiQianRole.Teamup)
                     {
-                        if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false)
+                        if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                             isAskForOrHuiQian = true;
                     }
                     else
@@ -1102,7 +1103,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //原始会签主持人可以增加组长
-                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true && gwf.TodoEmps.Contains(WebUser.No) == true) || gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
+                if (btnLab.AddLeaderEnable == true)
                 {
                     /*增加组长 */
                     toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";

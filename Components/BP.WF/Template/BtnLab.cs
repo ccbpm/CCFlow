@@ -787,13 +787,13 @@ namespace BP.WF.Template
             }
         }
         
-         public int IsCanAddHuiQianer
-        {
-            get
-            {
-                return this.GetValIntByKey(BtnAttr.IsCanAddHuiQianer);
-            }
-        }
+        // public int IsCanAddHuiQianer
+        //{
+        //    get
+        //    {
+        //        return this.GetValIntByKey(BtnAttr.IsCanAddHuiQianer);
+        //    }
+        //}
         public HuiQianLeaderRole HuiQianLeaderRole
         {
             get
@@ -1247,14 +1247,14 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole,
                     "@0=不启用@1=协作模式@4=组长模式");
-                map.AddDDLSysEnum(BtnAttr.IsCanAddHuiQianer, 0, "协作模式被加签的人处理规则", true, true, BtnAttr.IsCanAddHuiQianer,
-                     "0=不允许增加其他协作人@1=允许增加协作人", false);
+                //map.AddDDLSysEnum(BtnAttr.IsCanAddHuiQianer, 0, "协作模式被加签的人处理规则", true, true, BtnAttr.IsCanAddHuiQianer,
+                 //    "0=不允许增加其他协作人@1=允许增加协作人", false);
 
 
                 map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "会签组长规则", true, true, BtnAttr.HuiQianLeaderRole,
-                     "0=只有一个组长@1=最后一个组长发送@2=任意组长发送",false);
+                     "0=只有一个组长@1=最后一个组长发送@2=任意组长发送",true);
 
-                map.AddTBString(BtnAttr.AddLeaderLab, "加组长", "加组长", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.AddLeaderLab, "加主持人", "加主持人", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.AddLeaderEnable, false, "是否启用", true, true);
 
                 //map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);

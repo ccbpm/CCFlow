@@ -359,6 +359,41 @@
             return;
         }
 
+        //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
+        function AddLeader() {
+            $("#Btn_HuiQian").attr("disabled", "disabled");
+            $("#Btn_HuiQian").val("执行中...");
+            $("#Btn_SelectEmps").attr("disabled", "disabled");
+            var trs = $("tbody tr");
+            var flag = true;
+            if (trs.length >= 2) {
+                $.each(trs, function (i, tr) {
+                    if (tr.innerHTML.indexOf("新增") > 0) {
+
+                        flag = false;
+                        return;
+                    };
+                    
+                })
+                if (flag) {
+                    alert("表中会签人已审批，请选择新的会签人再发送！");
+                    $("#Btn_HuiQian").attr("disabled", false);
+                    $("#Btn_HuiQian").val("执行会签");
+                    $("#Btn_SelectEmps").attr("disabled", false);
+                    return;
+                }
+
+            }
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("HuiQian_AddLeader");
+            alert(data);
+             window.location.href = window.location.href;
+            window.close();
+            return;
+        }
+
         //执行发送.
         function SendIt() {
 
@@ -465,15 +500,9 @@
         }
 
         $(function () {
-
-            //  $("#TB_Emps").plac
             //人员选择
             $("#TB_Emps").bind('input propertychange', function () {
-
-               
                 if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
-                    //alert("输入内容为空！");
-                    //return;
                     $("#SelectEmp").hide().html("");
                     return;
                 }
@@ -490,15 +519,22 @@
                 }
 
                 data = JSON.parse(data);
-                //$("#SelectEmp").hide().html("");
                 var html = "";
                 for (var i = 0; i < data.length; i++) {
-                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
                     html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
                 }
                 $("#SelectEmp").show().html(html);
                 
             });
+
+            //如果是加主持人，变更按钮名称
+            var huiQianType = GetQueryString("HuiQianType");
+            if (huiQianType != null && huiQianType != undefined && huiQianType == "AddLeader") {
+                 $("#Btn_HuiQian").html("增加主持人");
+                $("#Btn_HuiQian").attr("onclick", "AddLeader()");
+            }
+               
+
         });
 
         function selectAdd(No) {

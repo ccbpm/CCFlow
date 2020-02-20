@@ -2272,7 +2272,7 @@ function initModal(modalType, toNode) {
 
                 break;
             case "AddLeader":
-                $('#modalHeader').text("加组长");
+                $('#modalHeader').text("加主持人");
                 SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random()
 

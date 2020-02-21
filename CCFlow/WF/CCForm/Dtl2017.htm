@@ -606,12 +606,18 @@
                 //添加删除,保存列
                 var delTh = "";
                 var impModel = sys_MapDtl.ImpModel;
-                if (impModel != 0)
-                    delTh = $('<th style="width:60px;"><img title="选项" style="width: 50px;height: 30px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /><img title="保存" style="width: 45px;height: 30px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" /></th>');
-                else
-                    delTh = $('<th style="width:60px;"><img title="保存" style="width: 45px;height: 30px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" /></th>');
+                var IsExp = sys_MapDtl.IsImp;//导出
+                var th = "<th style='width:60px;'></th>";
+                var imgStr = '<img title="保存" style="width: 40px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
+                if (IsExp==1 ) {
 
-                //var delTh = $("<th style="width:20px;" onclick= ></th>");
+                    imgStr += '<th style="width:60px;"><img title="选项" style="width: 40px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
+                } 
+                if (impModel != 0) {
+
+                    imgStr += '<img title="选项" style="width: 40px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
+                }
+                var delTh = $($(th).append(imgStr));
 
                 var delThData;
 
@@ -1194,6 +1200,23 @@
             }
 
             window.location.href = url;
+        }
+         //选项 导出功能.
+        function ExpOption() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            //查询集合
+            var data = handler.DoMethodReturnString("Search_Exp");
+            var url = "";
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            data = basePath + data;
+
+            window.open(data);
+            return;
+
         }
 
         //根据表格中编辑过的值，设置表格TR 的 data

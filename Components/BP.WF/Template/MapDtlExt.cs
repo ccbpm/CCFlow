@@ -28,6 +28,20 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否可以导出
         /// </summary>
+        public bool IsImp
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.IsImp, value);
+            }
+        }
+        /// <summary>
+        /// 是否可以导入
+        /// </summary>
         public bool IsExp
         {
             get
@@ -976,7 +990,7 @@ namespace BP.WF.Template
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
-                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？(导出到Excel,Txt,html类型文件.)", true, true);
+                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导入？", true, true);
 
                 //导入模式.
                 map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
@@ -989,6 +1003,7 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false, true);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
+                map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", true, true);
                 #endregion 导入导出填充.
 
                 #region 多表头.

@@ -53,6 +53,8 @@ $(function () {
     if (data.CustomerNo == "TianYe" || data.CustomerNo == "TianYe1") {
         $("#Login2App").html("");
     }
+
+     
 });
 
 function closeTab(title) {
@@ -1273,6 +1275,8 @@ $(function () {
     treesObj.loadTrees();
     $(".mymask").hide();
 
+    //修改流程类别
+    $(".icon-tree_folder").prev().filter(".tree-indent").addClass("tree-hit").removeClass("tree-indent");
 });
 
 

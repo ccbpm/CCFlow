@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>自动发起</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -14,6 +16,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -276,20 +279,14 @@
 </head>
 <body>
  <form id="cc">
-     <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
-        
-        <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
-           data-options="plain:true,iconCls:'icon-save'" onclick="Save()" style="margin-right:5px;">保存</a>
-      
+     
+     <div id="bar" class="cs-tr cs-bar">
+         
+         <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Save()" />
+     </div>
 
-   
-    </div>
- <table style="width: 100%">
-        <caption>自动发起</caption>
-        <tr>
-            <td valign="top" style="width: 20%;">
                 <fieldset>
-                    <legend>帮助</legend>
+                    <legend id="help"></legend>
                     <ul>
                     <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
                     <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
@@ -300,8 +297,7 @@
 
                     </ul>
                 </fieldset>
-            </td>
-            <td valign="top">
+
                 <fieldset>
                     <legend>
                     <input id="RB_FlowRunWay_0" type="radio" name="RB_FlowRunWay" value="0"  /><label for="RB_FlowRunWay_0">手工启动（默认）</label>
@@ -383,9 +379,7 @@
 <!--
                 <a style=" float:right" href="javascript: if ( confirm('您确定要执行吗? 注意:对于数据量交大的数据因为web上执行时间的限时问题，会造成执行失败。') ) { WinOpen('/WF/Comm/RefMethod.htm?Index=7&EnsName=BP.WF.Template.FlowSheets&No=<%=FK_Flow %>&r=1208095548','_blank') }" tooltip="">手动启用定时任务</a>
 -->
-            </td>
-        </tr>
-    </table>
+
 
 <div id="Msg"> </div>
 

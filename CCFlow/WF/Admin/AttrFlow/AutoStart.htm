@@ -311,51 +311,51 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                    <input id="RB_FlowRunWay_1" type="radio" name="RB_FlowRunWay" value="1"  /><label for="RB_FlowRunWay_1">指定人员按时启动</label>
+                        <input id="RB_FlowRunWay_1" type="radio" name="RB_FlowRunWay" value="1" /><label for="RB_FlowRunWay_1">指定人员按时启动</label>
                     </legend>
+                    <br />
+                    <a href="javascript:ShowHidden('emps')">操作员参数设置帮助:</a>
 
-                         <a href="javascript:ShowHidden('emps')">操作员参数设置帮助:</a>
+                    <div id="emps" style=" display:none;color:Gray">
+                        <ul>
+                            <li>说明：指定的人员指定的发起时间点自动启动流程。</li>
+                            <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
+                            <li>一个人启动的参数格式：人员编号@时间点1@时间点2@时间点n  </li>
 
-              <div id="emps" style=" display:none;color:Gray">
-               <ul>
-               <li>说明：指定的人员指定的发起时间点自动启动流程。</li>
-               <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
-               <li>一个人启动的参数格式：人员编号@时间点1@时间点2@时间点n  </li>
+                            <li>n个人启动的参数格式：人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n</li>
+                            <li>比如：zhangshan@01:01@12:01  让张三在每天的 1点零1分，与12点零1分发起此流程。</li>
+                            <li>比如：zhangshan@-01 01:01  让张三在每月1号的1点零1分发起此流程。</li>
+                            <li>比如：zhangshan@06-01 01:01  让张三在每年的6月1号的1点零1分发起此流程。</li>
+                            <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
+                        </ul>
+                    </div>
 
-               <li>n个人启动的参数格式：人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n</li>
-               <li>比如：zhangshan@01:01@12:01  让张三在每天的 1点零1分，与12点零1分发起此流程。</li>
-               <li>比如：zhangshan@-01 01:01  让张三在每月1号的1点零1分发起此流程。</li>
-               <li>比如：zhangshan@06-01 01:01  让张三在每年的6月1号的1点零1分发起此流程。</li>
-               <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
-               </ul>
-               </div>
+                    <br />
 
-               <br />
-               
-               <input type="text" style="width:95%"  id="TB_SpecEmp" name="TB_SpecEmp" />
+                    <input type="text" style="width:95%" id="TB_SpecEmp" name="TB_SpecEmp" />
                 </fieldset>
 
                 <fieldset>
                     <legend>
 
-                    <input id="RB_FlowRunWay_2" type="radio" name="RB_FlowRunWay" value="2"  /><label for="RB_FlowRunWay_2">数据集按时启动</label>
+                        <input id="RB_FlowRunWay_2" type="radio" name="RB_FlowRunWay" value="2" /><label for="RB_FlowRunWay_2">数据集按时启动</label>
 
                     </legend>
+                    <br />
 
+                    <a href="javascript:ShowHidden('sql')">SQL参数设置帮助:</a>
+                    <div id="sql" style=" display:none;color:Gray">
+                        <ul>
+                            <li>请设置一个SQL语句，该语句返回一个数据源。</li>
+                            <li>系统就会对每一条数据发起一条流程，这就是按照数据源的模式自动发起流程。</li>
+                            <li>该数据源的列名如果与开始节点表单的字段名一致，就会自动赋值。</li>
+                            <li>该参数支持ccbpm的表达式。</li>
+                            <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
+                        </ul>
+                    </div>
+                    <br />
 
-                        <a href="javascript:ShowHidden('sql')">SQL参数设置帮助:</a>
-              <div id="sql" style=" display:none;color:Gray">
-               <ul>
-               <li>请设置一个SQL语句，该语句返回一个数据源。</li>
-               <li>系统就会对每一条数据发起一条流程，这就是按照数据源的模式自动发起流程。</li>
-               <li>该数据源的列名如果与开始节点表单的字段名一致，就会自动赋值。</li>
-               <li>该参数支持ccbpm的表达式。</li>
-               <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
-               </ul>
-               </div>
-               <br />
-
-               <input type=text style="width:95%"  id="TB_DataModel" name="TB_DataModel" />
+                    <input type=text style="width:95%" id="TB_DataModel" name="TB_DataModel" />
                 </fieldset>
 
                 <fieldset>

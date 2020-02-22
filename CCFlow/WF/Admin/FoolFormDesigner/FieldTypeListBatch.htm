@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <script src="../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table tr:gt(0)").hover(
+                function () { $(this).addClass("tr_hover"); },
+                function () { $(this).removeClass("tr_hover"); });
+        });
+
+        //上移,暂时不用
+        function up(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var prevTR = objParentTR.prev();
+            var currTrId;
+            var prevTrId;
+            if (prevTR.length > 0 && !isNaN(prevTR.children(":eq(0)").text())) {
+                prevTR.insertAfter(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                prevTrId = Number(prevTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(prevTrId);
+                prevTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(prevTrId);
+                prevTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            } else {
+                return;
+            }
+        }
+        //下移，暂时不用
+        function down(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var nextTR = objParentTR.next();
+            var currTrId;
+            var nextTrId;
+            if (nextTR.length > 0 && !isNaN(nextTR.children(":eq(0)").text())) {
+                nextTR.insertBefore(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                nextTrId = Number(nextTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(nextTrId);
+                nextTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(nextTrId);
+                nextTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            } else {
+                return;
+            }
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+        var fk_MapData = GetQueryString("FK_MapData");
+        function InitPage() {
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", fk_MapData, "Idx");
+            ////输出列.
+            for (var i = 0; i < mapAttrs.length; i++) {
+
+                var attr = mapAttrs[i];
+                if (attr.KeyOfEn == "Title" || attr.KeyOfEn == "OID" || attr.KeyOfEn == "RDT" || attr.KeyOfEn == "FID"
+                    || attr.KeyOfEn == "CDT" || attr.KeyOfEn == "Rec" || attr.KeyOfEn == "Emps"||attr.KeyOfEn == "FK_Dept"||attr.KeyOfEn == "FK_NY"||attr.KeyOfEn == "MyNum") {
+                    continue;
+                }
+               
+                var str = "<tr>";
+                str += "<td style='display:none'><input type='hidden' value='" + attr.MyPK + "'></input></td>";
+                //判断是否string
+                if (attr.MyDataType == 1 || attr.MyDataType == '1') {
+                    str += "<td><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
+                } else {
+                    str += "<td>" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
+                }
+                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:100px;' /></td>";
+
+                str += "<td ><select id=\"TB_MyDataType_" + (i + 1) + "\"   style='width:80px;'><option value ='1'>字符型</option><option value ='2'>整数型</option><option value ='3'>浮点型</option><option value ='4'>Boolean型(是/否)</option>";
+                str +="<option value = '5'>双精度型</option><option value='6'>日期型</option><option value='7'>日期时间型</option> <option value='8'>金额型</option></select ></td > ";
+                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+                str += "<td ><select  id=\"TB_UIIsEnable_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+                str += "<td ><select id=\"TB_UIVisible_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+                str += "<td ><select id=\"TB_UIIsInput_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+
+                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + attr.Idx + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
+
+                str +="<td><a class='easyui-linkbutton' data-options='iconCls:&#39;icon-delete&#39;' href=\"javascript:Delete('" + attr.MyPK + "');\" >删除</a></td>";
+                //str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a> - " + del;
+
+                //str += "</td>";
+                str += "</tr>";
+                $("table").append(str);
+                //给select框赋值
+                $("#TB_MyDataType_" + (i + 1)).val(attr.MyDataType);
+                $("#TB_UIIsEnable_" + (i + 1)).val(attr.UIIsEnable);
+                $("#TB_UIVisible_"+ (i + 1) ).val(attr.UIVisible);
+                $("#TB_UIIsInput_"+ (i + 1)).val(attr.UIIsInput);
+            }
+            
+        }
+        //已经存表的删除
+        function Delete(mypk) {
+            
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var attr = new Entity("BP.Sys.MapAttr");
+            attr.SetPKVal(mypk);
+            attr.Delete();
+            window.location.href = window.location.href;
+        }
+        //还没存表的删除
+        function Remove(obj) {
+            
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+           $(obj).parent().parent().remove();
+        }
+
+        function Btn_Save_Click() {
+
+            //获取数据列表
+            var trs = $("#table1").find("tr");
+            $.each(trs, function (i, tr) {
+                if (i > 0) {
+                    var tdArr = $(this).children();
+                    var myPK = tdArr.eq(0).find('input').val();
+                    if (myPK != undefined) {//mypk有值，则更新
+                        var mapAttr = new Entity("BP.Sys.MapAttr", myPK);
+                        mapAttr.Name = tdArr.eq(2).find('input').val();
+                        mapAttr.MyDataType = tdArr.eq(3).find('select').val();
+                        mapAttr.MaxLen = tdArr.eq(4).find('input').val();
+                        mapAttr.UIIsEnable = tdArr.eq(5).find('select').val();
+                        mapAttr.UIVisible = tdArr.eq(6).find('select').val();
+                        mapAttr.UIIsInput = tdArr.eq(7).find('select').val();
+                        mapAttr.Idx = tdArr.eq(8).find('input').val();
+                        mapAttr.Update();
+                        
+                    } else {//mypk没有值，则新增
+                        var mapAttr = new Entity("BP.Sys.MapAttr");
+                        mapAttr.MyPK = fk_MapData + "_" + tdArr.eq(1).find('input').val();
+                        var i = mapAttr.Retrieve();
+                        if (i!=0) {
+                            alert('字段[' + tdArr.eq(1).find('input').val() + "]已经存在");
+                            return;
+                        }
+                        mapAttr.KeyOfEn = tdArr.eq(1).find('input').val();
+                        mapAttr.Name = tdArr.eq(2).find('input').val();
+                        mapAttr.MyDataType = tdArr.eq(3).find('select').val();
+                        mapAttr.MaxLen = tdArr.eq(4).find('input').val();
+                        mapAttr.UIIsEnable = tdArr.eq(5).find('select').val();
+                        mapAttr.UIVisible = tdArr.eq(6).find('select').val();
+                        mapAttr.UIIsInput = tdArr.eq(7).find('select').val();
+                        mapAttr.Idx = tdArr.eq(8).find('input').val();
+                        mapAttr.FK_MapData = fk_MapData;
+                        mapAttr.UIWidth = 100;
+                        mapAttr.UIHeight = 23;
+                        mapAttr.ColSpan = 1;
+                        mapAttr.MinLen = 0;
+                        
+                        if (mapAttr.MyDataType == 4) {
+                            mapAttr.DefVal = "0";
+                            mapAttr.UIContralType = 2;
+                        } else {
+                            mapAttr.UIContralType = 0;  
+
+                        }
+                        mapAttr.Insert();
+                    }
+                    
+                }
+            });
+            window.location.href = window.location.href;
+
+        }
+
+        //设置字段宽度
+        function setWidth(url) {
+            url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=" + url;
+            OpenEasyUiDialog(url, "eudlgframe", '设置字段属性', 700, 470, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function  addRow() {
+            var str = "<tr>";
+                str += "<td style='display:none'></td>";
+                //判断是否string
+                str += "<td ><input type='text' ></input></td>";
+                str += "<td ><input name=\"TB_\" type=\"text\" value=\"\" id=\"TB_\"   style='width:100px;' /></td>";
+                str += "<td ><select id=\"TB_MyDataType_\"   style='width:80px;'><option value ='1'>字符型</option><option value ='2'>整数型</option><option value ='3'>浮点型</option><option value ='4'>Boolean型(是/否)</option>";
+                str +="<option value = '5' > 双精度型</option> <option value='6'>日期型</option> <option value='7'>日期时间型</option> <option value='8'>金额型</option></select ></td > ";
+                str += "<td ><input  type=\"text\" value=\"50\" id=\"TB_\"   style='width:60px;' /></td>";
+                str += "<td ><select   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+                str += "<td ><select   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+                str += "<td ><select   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+
+                str += "<td ><input name=\"TB_\" type=\"text\" value=\"\" id=\"TB__Idx\"   style='width:30px;' /></td>";
+
+            str += "<td><a class='easyui-linkbutton' data-options='iconCls:&#39;icon-delete&#39;' href='javascript:void(0);' onclick='Remove(this); '>删除</a></td>";
+                //str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a> - " + del;
+
+                //str += "</td>";
+                str += "</tr>";
+                $("table").append(str);
+        }
+       
+    </script>
+    <base target="_self" />
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center',border:false" style="padding:5px;height:auto">
+        <div style="text-align:right;margin:0px 7px 9px 0px" >
+            
+            <a id="Btn_addRow" class="easyui-linkbutton" data-options="iconCls:&#39;icon-add&#39;" href="javascript:addRow()">新增一行</a>
+            <a id="ContentPlaceHolder1_Btn_Save1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:Btn_Save_Click()">保存</a>
+            <!--<a id="ContentPlaceHolder1_Btn_Cancel1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-undo&#39;" href="javascript:Cancel()">取消</a>-->
+        </div>
+        <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'>
+            <TR>
+                <!--<TD class='GroupTitle' style='text-align:center;width:50px'>序</TD>-->
+                <TD class='GroupTitle'>字段</TD>
+                <TD class='GroupTitle'>中文名</TD>
+                <TD class='GroupTitle'>类型</TD>
+                <TD class='GroupTitle'>最大长度</TD>
+                <TD class='GroupTitle'>是否只读</TD>
+                <TD class='GroupTitle'>是否可见</TD>
+                <TD class='GroupTitle'>是否必填</TD>
+                <TD class='GroupTitle'>顺序号</TD>
+                <TD class='GroupTitle'>操作</TD>
+            </TR>
+        </Table>
+
+    </div>
+</body>
+</html>

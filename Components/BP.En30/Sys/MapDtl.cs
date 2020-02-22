@@ -245,6 +245,10 @@ namespace BP.Sys
 
         #region 导入导出属性.
         /// <summary>
+        /// 是否可以导入
+        /// </summary>
+        public const string IsImp = "IsImp";
+        /// <summary>
         /// 是否可以导出
         /// </summary>
         public const string IsExp = "IsExp";

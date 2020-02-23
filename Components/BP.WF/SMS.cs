@@ -10,147 +10,147 @@ using System.Threading.Tasks;
 
 namespace BP.WF
 {
-	/// <summary>
-	/// 消息类型
-	/// </summary>
-	public class SMSMsgType
-	{
-		/// <summary>
-		/// 自定义消息
-		/// </summary>
-		public const string Self = "Self";
-		/// <summary>
-		/// 抄送消息
-		/// </summary>
-		public const string CC = "CC";
-		/// <summary>
-		/// 待办消息
-		/// </summary>
-		public const string SendSuccess = "SendSuccess";
-		/// <summary>
-		/// 其他
-		/// </summary>
-		public const string Etc = "Etc";
-		/// <summary>
-		/// 退回消息
-		/// </summary>
-		public const string ReturnAfter = "ReturnAfter";
-		/// <summary>
-		/// 移交消息
-		/// </summary>
-		public const string Shift = "Shift";
-		/// <summary>
-		/// 加签消息
-		/// </summary>
-		public const string AskFor = "AskFor";
-		/// <summary>
-		/// 挂起消息
-		/// </summary>
-		public const string HungUp = "HangUp";
-		/// <summary>
-		/// 催办消息
-		/// </summary>
-		public const string DoPress = "DoPress";
-		/// <summary>
-		/// 错误信息
-		/// </summary>
-		public const string Err = "Err";
-	}
-	/// <summary>
-	/// 消息状态
-	/// </summary>
-	public enum MsgSta
-	{
-		/// <summary>
-		/// 未开始
-		/// </summary>
-		UnRun,
-		/// <summary>
-		/// 成功
-		/// </summary>
-		RunOK,
-		/// <summary>
-		/// 失败
-		/// </summary>
-		RunError,
-		/// <summary>
-		/// 禁止发送
-		/// </summary>
-		Disable
-	}
-	/// <summary>
-	/// 消息属性
-	/// </summary>
-	public class SMSAttr : EntityMyPKAttr
-	{
-		/// <summary>
-		/// 消息标记（有此标记的不在发送）
-		/// </summary>
-		public const string MsgFlag = "MsgFlag";
-		/// <summary>
-		/// 状态 0 未发送， 1 发送成功，2发送失败.
-		/// </summary>
-		public const string EmailSta = "EmailSta";
-		/// <summary>
-		/// 邮件
-		/// </summary>
-		public const string Email = "Email";
-		/// <summary>
-		/// 邮件标题
-		/// </summary>
-		public const string EmailTitle = "EmailTitle";
-		/// <summary>
-		/// 邮件内容
-		/// </summary>
-		public const string EmailDoc = "EmailDoc";
-		/// <summary>
-		/// 发送人
-		/// </summary>
-		public const string Sender = "Sender";
-		/// <summary>
-		/// 发送给
-		/// </summary>
-		public const string SendTo = "SendTo";
-		/// <summary>
-		/// 插入日期
-		/// </summary>
-		public const string RDT = "RDT";
-		/// <summary>
-		/// 发送日期
-		/// </summary>
-		public const string SendDT = "SendDT";
-		/// <summary>
-		/// 是否读取
-		/// </summary>
-		public const string IsRead = "IsRead";
-		/// <summary>
-		/// 状态 0 未发送， 1 发送成功，2发送失败.
-		/// </summary>
-		public const string MobileSta = "MobileSta";
-		/// <summary>
-		/// 手机
-		/// </summary>
-		public const string Mobile = "Mobile";
-		/// <summary>
-		/// 手机信息
-		/// </summary>
-		public const string MobileInfo = "MobileInfo";
-		/// <summary>
-		/// 是否提示过了
-		/// </summary>
-		public const string IsAlert = "IsAlert";
-		/// <summary>
-		/// 消息类型
-		/// </summary>
-		public const string MsgType = "MsgType";
-		/// <summary>
-		/// 其他参数.
-		/// </summary>
-		public const string Paras = "Paras";
-		/// <summary>
-		/// 打开的连接
-		/// </summary>
-		public const string OpenUrl = "OpenUrl";
+    /// <summary>
+    /// 消息类型
+    /// </summary>
+    public class SMSMsgType
+    {
+        /// <summary>
+        /// 自定义消息
+        /// </summary>
+        public const string Self = "Self";
+        /// <summary>
+        /// 抄送消息
+        /// </summary>
+        public const string CC = "CC";
+        /// <summary>
+        /// 待办消息
+        /// </summary>
+        public const string SendSuccess = "SendSuccess";
+        /// <summary>
+        /// 其他
+        /// </summary>
+        public const string Etc = "Etc";
+        /// <summary>
+        /// 退回消息
+        /// </summary>
+        public const string ReturnAfter = "ReturnAfter";
+        /// <summary>
+        /// 移交消息
+        /// </summary>
+        public const string Shift = "Shift";
+        /// <summary>
+        /// 加签消息
+        /// </summary>
+        public const string AskFor = "AskFor";
+        /// <summary>
+        /// 挂起消息
+        /// </summary>
+        public const string HungUp = "HangUp";
+        /// <summary>
+        /// 催办消息
+        /// </summary>
+        public const string DoPress = "DoPress";
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        public const string Err = "Err";
+    }
+    /// <summary>
+    /// 消息状态
+    /// </summary>
+    public enum MsgSta
+    {
+        /// <summary>
+        /// 未开始
+        /// </summary>
+        UnRun,
+        /// <summary>
+        /// 成功
+        /// </summary>
+        RunOK,
+        /// <summary>
+        /// 失败
+        /// </summary>
+        RunError,
+        /// <summary>
+        /// 禁止发送
+        /// </summary>
+        Disable
+    }
+    /// <summary>
+    /// 消息属性
+    /// </summary>
+    public class SMSAttr : EntityMyPKAttr
+    {
+        /// <summary>
+        /// 消息标记（有此标记的不在发送）
+        /// </summary>
+        public const string MsgFlag = "MsgFlag";
+        /// <summary>
+        /// 状态 0 未发送， 1 发送成功，2发送失败.
+        /// </summary>
+        public const string EmailSta = "EmailSta";
+        /// <summary>
+        /// 邮件
+        /// </summary>
+        public const string Email = "Email";
+        /// <summary>
+        /// 邮件标题
+        /// </summary>
+        public const string EmailTitle = "EmailTitle";
+        /// <summary>
+        /// 邮件内容
+        /// </summary>
+        public const string EmailDoc = "EmailDoc";
+        /// <summary>
+        /// 发送人
+        /// </summary>
+        public const string Sender = "Sender";
+        /// <summary>
+        /// 发送给
+        /// </summary>
+        public const string SendTo = "SendTo";
+        /// <summary>
+        /// 插入日期
+        /// </summary>
+        public const string RDT = "RDT";
+        /// <summary>
+        /// 发送日期
+        /// </summary>
+        public const string SendDT = "SendDT";
+        /// <summary>
+        /// 是否读取
+        /// </summary>
+        public const string IsRead = "IsRead";
+        /// <summary>
+        /// 状态 0 未发送， 1 发送成功，2发送失败.
+        /// </summary>
+        public const string MobileSta = "MobileSta";
+        /// <summary>
+        /// 手机
+        /// </summary>
+        public const string Mobile = "Mobile";
+        /// <summary>
+        /// 手机信息
+        /// </summary>
+        public const string MobileInfo = "MobileInfo";
+        /// <summary>
+        /// 是否提示过了
+        /// </summary>
+        public const string IsAlert = "IsAlert";
+        /// <summary>
+        /// 消息类型
+        /// </summary>
+        public const string MsgType = "MsgType";
+        /// <summary>
+        /// 其他参数.
+        /// </summary>
+        public const string Paras = "Paras";
+        /// <summary>
+        /// 打开的连接
+        /// </summary>
+        public const string OpenUrl = "OpenUrl";
         /// <summary>
         /// 接受消息的工具 丁丁、微信
         /// </summary>
@@ -158,292 +158,292 @@ namespace BP.WF
 
 
     }
-	/// <summary>
-	/// 消息
-	/// </summary> 
-	public class SMS : EntityMyPK
-	{
-		#region 新方法 2013
-		/// <summary>
-		/// 发送消息
-		/// </summary>
-		/// <param name="userNo">接受人</param>
-		/// <param name="msgTitle">标题</param>
-		/// <param name="msgDoc">内容</param>
-		/// <param name="msgFlag">标记</param>
-		/// <param name="msgType">类型</param>
-		/// <param name="paras">扩展参数</param>
-		public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
-			string msgType, string paras)
-		{
+    /// <summary>
+    /// 消息
+    /// </summary> 
+    public class SMS : EntityMyPK
+    {
+        #region 新方法 2013
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="userNo">接受人</param>
+        /// <param name="msgTitle">标题</param>
+        /// <param name="msgDoc">内容</param>
+        /// <param name="msgFlag">标记</param>
+        /// <param name="msgType">类型</param>
+        /// <param name="paras">扩展参数</param>
+        public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
+            string msgType, string paras)
+        {
 
-			SMS sms = new SMS();
-			sms.MyPK = DBAccess.GenerGUID();
-			sms.HisEmailSta = MsgSta.UnRun;
+            SMS sms = new SMS();
+            sms.MyPK = DBAccess.GenerGUID();
+            sms.HisEmailSta = MsgSta.UnRun;
 
-			sms.Sender = WebUser.No;
-			sms.SendToEmpNo = userNo;
+            sms.Sender = WebUser.No;
+            sms.SendToEmpNo = userNo;
 
-			sms.Title = msgTitle;
-			sms.DocOfEmail = msgDoc;
+            sms.Title = msgTitle;
+            sms.DocOfEmail = msgDoc;
 
-			sms.Sender = BP.Web.WebUser.No;
-			sms.RDT = BP.DA.DataType.CurrentDataTime;
+            sms.Sender = BP.Web.WebUser.No;
+            sms.RDT = BP.DA.DataType.CurrentDataTime;
 
-			sms.MsgFlag = msgFlag; // 消息标志.
-			sms.MsgType = msgType; // 消息类型.'
+            sms.MsgFlag = msgFlag; // 消息标志.
+            sms.MsgType = msgType; // 消息类型.'
 
-			sms.AtPara = paras;
-			sms.Insert();
-		}
-		#endregion 新方法
+            sms.AtPara = paras;
+            sms.Insert();
+        }
+        #endregion 新方法
 
-		#region 手机短信属性
-		/// <summary>
-		/// 手机号码
-		/// </summary>
-		public string Mobile
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.Mobile);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.Mobile, value);
-			}
-		}
-		/// <summary>
-		/// 手机状态
-		/// </summary>
-		public MsgSta HisMobileSta
-		{
-			get
-			{
-				return (MsgSta)this.GetValIntByKey(SMSAttr.MobileSta);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.MobileSta, (int)value);
-			}
-		}
-		/// <summary>
-		/// 手机信息
-		/// </summary>
-		public string MobileInfo
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.MobileInfo);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.MobileInfo, value);
-			}
-		}
-		#endregion
+        #region 手机短信属性
+        /// <summary>
+        /// 手机号码
+        /// </summary>
+        public string Mobile
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.Mobile);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.Mobile, value);
+            }
+        }
+        /// <summary>
+        /// 手机状态
+        /// </summary>
+        public MsgSta HisMobileSta
+        {
+            get
+            {
+                return (MsgSta)this.GetValIntByKey(SMSAttr.MobileSta);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.MobileSta, (int)value);
+            }
+        }
+        /// <summary>
+        /// 手机信息
+        /// </summary>
+        public string MobileInfo
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.MobileInfo);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.MobileInfo, value);
+            }
+        }
+        #endregion
 
-		#region  邮件属性
-		/// <summary>
-		/// 参数
-		/// </summary>
-		public string AtPara
-		{
-			get
-			{
-				return this.GetValStrByKey("AtPara", "");
-			}
-			set
-			{
-				this.SetValByKey("AtPara", value);
-			}
-		}
-		/// <summary>
-		/// 邮件状态
-		/// </summary>
-		public MsgSta HisEmailSta
-		{
-			get
-			{
-				return (MsgSta)this.GetValIntByKey(SMSAttr.EmailSta);
-			}
-			set
-			{
-				this.SetValByKey(SMSAttr.EmailSta, (int)value);
-			}
-		}
-		/// <summary>
-		/// Email
-		/// </summary>
-		public string Email
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.Email);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.Email, value);
-			}
-		}
-		/// <summary>
-		/// 发送给
-		/// </summary>
-		public string SendToEmpNo
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.SendTo);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.SendTo, value);
-			}
-		}
-		public int IsRead
-		{
-			get
-			{
-				return this.GetValIntByKey(SMSAttr.IsRead);
-			}
-			set
-			{
-				this.SetValByKey(SMSAttr.IsRead, (int)value);
-			}
-		}
-		public int IsAlert
-		{
-			get
-			{
-				return this.GetValIntByKey(SMSAttr.IsAlert);
-			}
-			set
-			{
-				this.SetValByKey(SMSAttr.IsAlert, (int)value);
-			}
-		}
-		/// <summary>
-		/// 消息标记(可以用它来避免发送重复)
-		/// </summary>
-		public string MsgFlag
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.MsgFlag);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.MsgFlag, value);
-			}
-		}
-		/// <summary>
-		/// 类型
-		/// </summary>
-		public string MsgType
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.MsgType);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.MsgType, value);
-			}
-		}
-		/// <summary>
-		/// 发送人
-		/// </summary>
-		public string Sender
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.Sender);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.Sender, value);
-			}
-		}
-		/// <summary>
-		/// 记录日期
-		/// </summary>
-		public string RDT
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.RDT);
-			}
-			set
-			{
-				this.SetValByKey(SMSAttr.RDT, value);
-			}
-		}
-		/// <summary>
-		/// 标题
-		/// </summary>
-		public string Title
-		{
-			get
-			{
-				return this.GetValStringByKey(SMSAttr.EmailTitle);
-			}
-			set
-			{
-				SetValByKey(SMSAttr.EmailTitle, value);
-			}
-		}
-		/// <summary>
-		/// 邮件内容
-		/// </summary>
-		public string DocOfEmail
-		{
-			get
-			{
-				string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
-				if (DataType.IsNullOrEmpty(doc))
-					return this.Title;
+        #region  邮件属性
+        /// <summary>
+        /// 参数
+        /// </summary>
+        public string AtPara
+        {
+            get
+            {
+                return this.GetValStrByKey("AtPara", "");
+            }
+            set
+            {
+                this.SetValByKey("AtPara", value);
+            }
+        }
+        /// <summary>
+        /// 邮件状态
+        /// </summary>
+        public MsgSta HisEmailSta
+        {
+            get
+            {
+                return (MsgSta)this.GetValIntByKey(SMSAttr.EmailSta);
+            }
+            set
+            {
+                this.SetValByKey(SMSAttr.EmailSta, (int)value);
+            }
+        }
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string Email
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.Email);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.Email, value);
+            }
+        }
+        /// <summary>
+        /// 发送给
+        /// </summary>
+        public string SendToEmpNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.SendTo);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.SendTo, value);
+            }
+        }
+        public int IsRead
+        {
+            get
+            {
+                return this.GetValIntByKey(SMSAttr.IsRead);
+            }
+            set
+            {
+                this.SetValByKey(SMSAttr.IsRead, (int)value);
+            }
+        }
+        public int IsAlert
+        {
+            get
+            {
+                return this.GetValIntByKey(SMSAttr.IsAlert);
+            }
+            set
+            {
+                this.SetValByKey(SMSAttr.IsAlert, (int)value);
+            }
+        }
+        /// <summary>
+        /// 消息标记(可以用它来避免发送重复)
+        /// </summary>
+        public string MsgFlag
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.MsgFlag);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.MsgFlag, value);
+            }
+        }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public string MsgType
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.MsgType);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.MsgType, value);
+            }
+        }
+        /// <summary>
+        /// 发送人
+        /// </summary>
+        public string Sender
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.Sender);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.Sender, value);
+            }
+        }
+        /// <summary>
+        /// 记录日期
+        /// </summary>
+        public string RDT
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.RDT);
+            }
+            set
+            {
+                this.SetValByKey(SMSAttr.RDT, value);
+            }
+        }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.GetValStringByKey(SMSAttr.EmailTitle);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.EmailTitle, value);
+            }
+        }
+        /// <summary>
+        /// 邮件内容
+        /// </summary>
+        public string DocOfEmail
+        {
+            get
+            {
+                string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
+                if (DataType.IsNullOrEmpty(doc))
+                    return this.Title;
 
-				return doc.Replace('~', '\'');
-			}
-			set
-			{
-				SetValByKey(SMSAttr.EmailDoc, value);
-			}
-		}
-		/// <summary>
-		/// 邮件内容.
-		/// </summary>
-		public string Doc
-		{
-			get
-			{
-				string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
-				if (DataType.IsNullOrEmpty(doc))
-					return this.Title;
-				return doc.Replace('~', '\'');
+                return doc.Replace('~', '\'');
+            }
+            set
+            {
+                SetValByKey(SMSAttr.EmailDoc, value);
+            }
+        }
+        /// <summary>
+        /// 邮件内容.
+        /// </summary>
+        public string Doc
+        {
+            get
+            {
+                string doc = this.GetValStringByKey(SMSAttr.EmailDoc);
+                if (DataType.IsNullOrEmpty(doc))
+                    return this.Title;
+                return doc.Replace('~', '\'');
 
-				return this.DocOfEmail;
-			}
-			set
-			{
-				SetValByKey(SMSAttr.EmailDoc, value);
-			}
-		}
-		/// <summary>
-		/// 打开的连接
-		/// </summary>
-		public string OpenURL
-		{
-			get
-			{
-				return this.GetParaString(SMSAttr.OpenUrl);
-			}
-			set
-			{
-				this.SetPara(SMSAttr.OpenUrl, value);
-			}
-		}
-		#endregion
+                return this.DocOfEmail;
+            }
+            set
+            {
+                SetValByKey(SMSAttr.EmailDoc, value);
+            }
+        }
+        /// <summary>
+        /// 打开的连接
+        /// </summary>
+        public string OpenURL
+        {
+            get
+            {
+                return this.GetParaString(SMSAttr.OpenUrl);
+            }
+            set
+            {
+                this.SetPara(SMSAttr.OpenUrl, value);
+            }
+        }
+        #endregion
 
         public string PushModel
         {
@@ -458,144 +458,142 @@ namespace BP.WF
         /// UI界面上的访问控制
         /// </summary>
         public override UAC HisUAC
-		{
-			get
-			{
-				UAC uac = new UAC();
-				uac.OpenAll();
-				return uac;
-			}
-		}
-		/// <summary>
-		/// 消息
-		/// </summary>
-		public SMS()
-		{
-		}
-		/// <summary>
-		/// Map
-		/// </summary>
-		public override Map EnMap
-		{
-			get
-			{
-				if (this._enMap != null)
-					return this._enMap;
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenAll();
+                return uac;
+            }
+        }
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public SMS()
+        {
+        }
+        /// <summary>
+        /// Map
+        /// </summary>
+        public override Map EnMap
+        {
+            get
+            {
+                if (this._enMap != null)
+                    return this._enMap;
 
-				Map map = new Map("Sys_SMS", "消息");
+                Map map = new Map("Sys_SMS", "消息");
 
-				map.AddMyPK();
+                map.AddMyPK();
 
-				map.AddTBString(SMSAttr.Sender, null, "发送人(可以为空)", false, true, 0, 200, 20);
-				map.AddTBString(SMSAttr.SendTo, null, "发送给(可以为空)", false, true, 0, 200, 20);
-				map.AddTBDateTime(SMSAttr.RDT, "写入时间", true, false);
+                map.AddTBString(SMSAttr.Sender, null, "发送人(可以为空)", false, true, 0, 200, 20);
+                map.AddTBString(SMSAttr.SendTo, null, "发送给(可以为空)", false, true, 0, 200, 20);
+                map.AddTBDateTime(SMSAttr.RDT, "写入时间", true, false);
 
-				map.AddTBString(SMSAttr.Mobile, null, "手机号(可以为空)", false, true, 0, 30, 20);
-				map.AddTBInt(SMSAttr.MobileSta, (int)MsgSta.UnRun, "消息状态", true, true);
-				map.AddTBString(SMSAttr.MobileInfo, null, "短信信息", false, true, 0, 1000, 20);
+                map.AddTBString(SMSAttr.Mobile, null, "手机号(可以为空)", false, true, 0, 30, 20);
+                map.AddTBInt(SMSAttr.MobileSta, (int)MsgSta.UnRun, "消息状态", true, true);
+                map.AddTBString(SMSAttr.MobileInfo, null, "短信信息", false, true, 0, 1000, 20);
 
-				map.AddTBString(SMSAttr.Email, null, "Email(可以为空)", false, true, 0, 200, 20);
-				map.AddTBInt(SMSAttr.EmailSta, (int)MsgSta.UnRun, "EmaiSta消息状态", true, true);
-				map.AddTBString(SMSAttr.EmailTitle, null, "标题", false, true, 0, 3000, 20);
-				map.AddTBStringDoc(SMSAttr.EmailDoc, null, "内容", false, true);
-				map.AddTBDateTime(SMSAttr.SendDT, null, "发送时间", false, false);
+                map.AddTBString(SMSAttr.Email, null, "Email(可以为空)", false, true, 0, 200, 20);
+                map.AddTBInt(SMSAttr.EmailSta, (int)MsgSta.UnRun, "EmaiSta消息状态", true, true);
+                map.AddTBString(SMSAttr.EmailTitle, null, "标题", false, true, 0, 3000, 20);
+                map.AddTBStringDoc(SMSAttr.EmailDoc, null, "内容", false, true);
+                map.AddTBDateTime(SMSAttr.SendDT, null, "发送时间", false, false);
 
-				map.AddTBInt(SMSAttr.IsRead, 0, "是否读取?", true, true);
-				map.AddTBInt(SMSAttr.IsAlert, 0, "是否提示?", true, true);
+                map.AddTBInt(SMSAttr.IsRead, 0, "是否读取?", true, true);
+                map.AddTBInt(SMSAttr.IsAlert, 0, "是否提示?", true, true);
 
-				map.AddTBString(SMSAttr.MsgFlag, null, "消息标记(用于防止发送重复)", false, true, 0, 200, 20);
-				map.AddTBString(SMSAttr.MsgType, null, "消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...)", false, true, 0, 200, 20);
+                map.AddTBString(SMSAttr.MsgFlag, null, "消息标记(用于防止发送重复)", false, true, 0, 200, 20);
+                map.AddTBString(SMSAttr.MsgType, null, "消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...)", false, true, 0, 200, 20);
 
-				//其他参数.
-				map.AddTBAtParas(500);
+                //其他参数.
+                map.AddTBAtParas(500);
 
-				this._enMap = map;
-				return this._enMap;
-			}
-		}
-		#endregion
+                this._enMap = map;
+                return this._enMap;
+            }
+        }
+        #endregion
 
-		/// <summary>
-		/// 发送邮件
-		/// </summary>
-		/// <param name="mail"></param>
-		/// <param name="mailTitle"></param>
-		/// <param name="mailDoc"></param>
-		/// <returns></returns>
-		public static async Task<bool> SendEmailNowAsync(string mail, string mailTitle, string mailDoc)
-		{
-			return await Task.Run(() =>
-			{
-				try
-				{
-					System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
-
-					//邮件地址.
-					string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
-					if (emailAddr == null)
-						emailAddr = "ccbpmtester@tom.com";
-
-					string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
-					if (emailPassword == null)
-						emailPassword = "ccbpm123";
-
-					string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+        /// <summary>
+        /// 发送邮件
+        /// </summary>
+        /// <param name="mail"></param>
+        /// <param name="mailTitle"></param>
+        /// <param name="mailDoc"></param>
+        /// <returns></returns>
+        public static async Task<bool> SendEmailNowAsync(string mail, string mailTitle, string mailDoc)
+        {
+            return await Task.Run(() =>
+            {
+                #warning 以下方法发送邮件导致出现错误,导致iis死机，为了临时解决此问题，目前先注释掉了.
+                return true; 
 
 
-					myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
+                System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
 
-					myEmail.To.Add(mail);
-					myEmail.Subject = mailTitle;
-					myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
+                //邮件地址.
+                string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+                if (emailAddr == null)
+                    emailAddr = "ccbpmtester@tom.com";
 
-					myEmail.IsBodyHtml = true;
+                string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+                if (emailPassword == null)
+                    emailPassword = "ccbpm123";
 
-					mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
+                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
 
-					myEmail.Body = mailDoc;
-					myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
-					myEmail.IsBodyHtml = true;//是否是HTML邮件
-					myEmail.Priority = MailPriority.High; // 邮件优先级
 
-					SmtpClient client = new SmtpClient();
+                myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
-					//是否启用ssl? 
-					bool isEnableSSL = false;
-					string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
-					if (emailEnableSSL == null || emailEnableSSL == "0")
-						isEnableSSL = false;
-					else
-						isEnableSSL = true;
+                myEmail.To.Add(mail);
+                myEmail.Subject = mailTitle;
+                myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
 
-					client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
+                myEmail.IsBodyHtml = true;
 
-					//上述写你的邮箱和密码
-					client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-					client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
+                mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
 
-					// 经过ssl加密. 
-					if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
-						client.EnableSsl = true;  //经过ssl加密.
-					else
-						client.EnableSsl = false; //经过ssl加密.
+                myEmail.Body = mailDoc;
+                myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
+                myEmail.IsBodyHtml = true;//是否是HTML邮件
+                myEmail.Priority = MailPriority.High; // 邮件优先级
 
-					object userState = myEmail;
-					client.SendAsync(myEmail, userState);
-					return true;
-				}
-				catch (Exception)
-				{
-					return false;
-				}
-			});
-		}
-		/// <summary>
-		/// 插入之后执行的方法.
-		/// </summary>
-		protected override void afterInsert()
-		{
-			try
-			{
+                SmtpClient client = new SmtpClient();
+
+                //是否启用ssl? 
+                bool isEnableSSL = false;
+                string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
+                if (emailEnableSSL == null || emailEnableSSL == "0")
+                    isEnableSSL = false;
+                else
+                    isEnableSSL = true;
+
+                client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
+
+                //上述写你的邮箱和密码
+                client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
+                client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
+
+                // 经过ssl加密. 
+                if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
+                    client.EnableSsl = true;  //经过ssl加密.
+                else
+                    client.EnableSsl = false; //经过ssl加密.
+
+                object userState = myEmail;
+                client.SendAsync(myEmail, userState);
+                return true;
+
+            });
+        }
+        /// <summary>
+        /// 插入之后执行的方法.
+        /// </summary>
+        protected override void afterInsert()
+        {
+            try
+            {
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
 
@@ -622,7 +620,7 @@ namespace BP.WF
                     {   //单个邮箱
                         SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
                     }
-                   
+
                 }
                 #endregion 发送邮件
 
@@ -639,17 +637,17 @@ namespace BP.WF
 
                 string json = "{";
                 json += " \"sender\": \"" + WebUser.No + "\",";
-                json += " \"sendTo\": \""+ this.SendToEmpNo+"\",";
+                json += " \"sendTo\": \"" + this.SendToEmpNo + "\",";
                 json += " \"tel\": \"" + this.Mobile + "\",";
                 json += " \"title\":\"" + this.Title + "\",";
-                json += " \"content\":\"" + this.MobileInfo+" \",";
+                json += " \"content\":\"" + this.MobileInfo + " \",";
                 json += " \"openUrl\":\"" + this.OpenURL + " \"}";
-              
+
                 //soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
                 //站内消息
                 if (this.PushModel.Contains("CCMsg") == true)
                 {
-                    httpUrl =messageUrl+ "?DoType=SendToCCMSG";
+                    httpUrl = messageUrl + "?DoType=SendToCCMSG";
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //soap.SendToCCMSG(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
@@ -663,14 +661,14 @@ namespace BP.WF
                 //钉钉
                 if (this.PushModel.Contains("DingDing") == true)
                 {
-                    httpUrl = messageUrl + "?DoType=SendToDingDing&sendTo=" + this.SendToEmpNo + "&title="+this.Title+"&msgConten=" + this.MobileInfo;
+                    httpUrl = messageUrl + "?DoType=SendToDingDing&sendTo=" + this.SendToEmpNo + "&title=" + this.Title + "&msgConten=" + this.MobileInfo;
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
                 //微信
                 if (this.PushModel.Contains("WeiXin") == true)
                 {
-                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo="+this.SendToEmpNo+"&msgConten="+ this.MobileInfo;
+                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo=" + this.SendToEmpNo + "&msgConten=" + this.MobileInfo;
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
                 }
@@ -684,54 +682,54 @@ namespace BP.WF
                 #endregion 发送短消息 调用接口
 
             }
-			catch (Exception ex)
-			{
-				BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
-			}
-			base.afterInsert();
-		}
-	}
-	/// <summary>
-	/// 消息s
-	/// </summary> 
-	public class SMSs : Entities
-	{
-		/// <summary>
-		/// 获得实体
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new SMS();
-			}
-		}
-		public SMSs()
-		{
-		}
+            catch (Exception ex)
+            {
+                BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
+            }
+            base.afterInsert();
+        }
+    }
+    /// <summary>
+    /// 消息s
+    /// </summary> 
+    public class SMSs : Entities
+    {
+        /// <summary>
+        /// 获得实体
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new SMS();
+            }
+        }
+        public SMSs()
+        {
+        }
 
-		#region 为了适应自动翻译成java的需要,把实体转换成List.
-		/// <summary>
-		/// 转化成 java list,C#不能调用.
-		/// </summary>
-		/// <returns>List</returns>
-		public System.Collections.Generic.IList<SMS> ToJavaList()
-		{
-			return (System.Collections.Generic.IList<SMS>)this;
-		}
-		/// <summary>
-		/// 转化成list
-		/// </summary>
-		/// <returns>List</returns>
-		public System.Collections.Generic.List<SMS> Tolist()
-		{
-			System.Collections.Generic.List<SMS> list = new System.Collections.Generic.List<SMS>();
-			for (int i = 0; i < this.Count; i++)
-			{
-				list.Add((SMS)this[i]);
-			}
-			return list;
-		}
-		#endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+        #region 为了适应自动翻译成java的需要,把实体转换成List.
+        /// <summary>
+        /// 转化成 java list,C#不能调用.
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.IList<SMS> ToJavaList()
+        {
+            return (System.Collections.Generic.IList<SMS>)this;
+        }
+        /// <summary>
+        /// 转化成list
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.List<SMS> Tolist()
+        {
+            System.Collections.Generic.List<SMS> list = new System.Collections.Generic.List<SMS>();
+            for (int i = 0; i < this.Count; i++)
+            {
+                list.Add((SMS)this[i]);
+            }
+            return list;
+        }
+        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
+    }
 }

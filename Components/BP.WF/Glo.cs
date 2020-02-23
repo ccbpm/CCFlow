@@ -787,7 +787,6 @@ namespace BP.WF
             if (BP.Web.WebUser.SysLang.Equals("zh-cn") || BP.Web.WebUser.SysLang.Equals("CH"))
                 return String.Format(defaultMsg, paramList);
 
-
             DataTable dt = getMultilingual_DT(className);
 
             string val = "";

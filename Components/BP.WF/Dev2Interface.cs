@@ -7644,6 +7644,7 @@ namespace BP.WF
                 }
             }
 
+
             SendReturnObjs objs;
             //执行流程发送.
             WorkNode wn = new WorkNode(sw, nd);
@@ -7660,6 +7661,8 @@ namespace BP.WF
             {
                 objs = wn.NodeSend(ndOfToNode, toEmps);
             }
+            return null;
+
 
             #region 更新发送参数.
             if (htWork != null)

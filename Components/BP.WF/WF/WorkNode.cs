@@ -6373,6 +6373,7 @@ namespace BP.WF
             }
             #endregion 安全性检查.
 
+
             //加入系统变量.
             this.addMsg(SendReturnMsgFlag.VarCurrNodeID, this.HisNode.NodeID.ToString(), this.HisNode.NodeID.ToString(), SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarCurrNodeName, this.HisNode.Name, this.HisNode.Name, SendReturnMsgType.SystemMsg);
@@ -6724,6 +6725,8 @@ namespace BP.WF
                 if (gwfMain.WFState == WFState.ReturnSta)
                     throw new Exception(BP.WF.Glo.multilingual("err@发送错误:当前流程已经被退回，您不能执行发送操作。技术信息:当前工作节点是子线程状态，主线程是退回状态。", "WorkNode", "send_error_1"));
             }
+
+
 
             // 启动事务, 这里没有实现.
             DBAccess.DoTransactionBegin();
@@ -7535,6 +7538,8 @@ namespace BP.WF
                 }
                 #endregion 设置流程的标记.
 
+
+
                 //执行时效考核.
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
 
@@ -7593,6 +7598,7 @@ namespace BP.WF
 
                 #endregion 计算未来处理人.
 
+
                 #region 判断当前处理人员，可否处理下一步工作.
                 if (this.town != null
                     && this.HisRememberMe != null
@@ -7606,8 +7612,10 @@ namespace BP.WF
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
 
+
                 //处理事件.
                 this.Deal_Event();
+
 
                 //返回这个对象.
                 return this.HisMsgObjs;
@@ -7620,7 +7628,6 @@ namespace BP.WF
                 BP.DA.Log.DebugWriteError(ex.StackTrace);
 
                 throw new Exception(ex.Message);
-
 
                 //throw new Exception(ex.Message + "  tech@info:" + ex.StackTrace);
             }
@@ -7961,6 +7968,8 @@ namespace BP.WF
             }
             #endregion 处理节点到达事件.
 
+
+
             #region 处理发送成功后事件.
             try
             {
@@ -7979,6 +7988,7 @@ namespace BP.WF
                 //执行发送.
                 string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
                     this.HisNode, this.rptGe, null, this.HisMsgObjs);
+
 
                 //string SendSuccess = this.HisNode.MapData.FrmEvents.DoEventNode(EventListOfNode.SendSuccess, this.HisWork);
                 if (sendSuccess != null)

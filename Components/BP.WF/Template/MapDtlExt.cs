@@ -25,20 +25,7 @@ namespace BP.WF.Template
                 return uac;
             }
         }
-        /// <summary>
-        /// 是否可以导出
-        /// </summary>
-        public bool IsImp
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsImp, value);
-            }
-        }
+      
         /// <summary>
         /// 是否可以导入
         /// </summary>
@@ -911,7 +898,6 @@ namespace BP.WF.Template
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapDtlAttr.FK_MapData;
 
-
                 #region 基础信息.
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
@@ -1616,7 +1602,6 @@ namespace BP.WF.Template
                 FrmAttachment ath = new FrmAttachment();
                 ath.Delete(FrmAttachmentAttr.MyPK, this.No + "_AthMDtl");
             }
-               
 
             base.afterDelete();
         }

@@ -25,7 +25,20 @@ namespace BP.WF.Template
                 return uac;
             }
         }
-      
+        /// <summary>
+        /// 是否可以导出
+        /// </summary>
+        public bool IsImp
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.IsImp, value);
+            }
+        }
         /// <summary>
         /// 是否可以导入
         /// </summary>

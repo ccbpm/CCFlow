@@ -1046,6 +1046,17 @@ namespace BP.Sys.FrmUI
             ath.MyPK = this.MyPK;
             ath.RetrieveFromDBSources();
             ath.Update();
+          
+
+            //判断是否是字段附件
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            if (mapAttr.RetrieveFromDBSources() != 0 && mapAttr.Name.Equals(this.Name) == false)
+            {
+                mapAttr.Name = this.Name;
+                mapAttr.Update();
+            }
+
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 

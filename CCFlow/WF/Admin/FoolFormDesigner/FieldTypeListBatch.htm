@@ -151,8 +151,7 @@
                     } else {//mypk没有值，则新增
                         var mapAttr = new Entity("BP.Sys.MapAttr");
                         mapAttr.MyPK = fk_MapData + "_" + tdArr.eq(1).find('input').val();
-                        var i = mapAttr.Retrieve();
-                        if (i!=0) {
+                        if (mapAttr.IsExits() == true) {
                             alert('字段[' + tdArr.eq(1).find('input').val() + "]已经存在");
                             return;
                         }

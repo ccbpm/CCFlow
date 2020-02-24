@@ -3,15 +3,17 @@
 <head>
     <title>流程字段列表</title>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-
+    <script src="../Admin.js"></script>
     <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
+
     <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
     <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
@@ -399,7 +401,7 @@
                data-options="plain:true,iconCls:'icon-save'" onclick="SaveEn()" style="margin-right:5px;">保存</a>
             <a id="Buton1" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
                onclick="Help()" style="margin-right:5px;">我需要帮助</a>
-            | <span id="dtsbt" style="margin-right:20px;">
+             <span id="dtsbt" style="margin-right:20px;">
                 <a href="../TestFlow.htm?FK_Flow=flowNo&SID=userId&Lang=CH" target="_blank">
                     运行测试
                 </a>
@@ -424,12 +426,12 @@
             </td>-->
                 <td valign="top">
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;" >
                             <input id="RB_StartGuideWay_0" type="radio" name="RB_StartGuideWay" value="0" /><label for="RB_StartGuideWay_0">无（默认）</label>
                         </legend><font color="gray">不设置任何前置导航，发起流程直接进入开始节点表单。</font>
                     </fieldset>
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_5" type="radio" name="RB_StartGuideWay" value="5" /><label for="RB_StartGuideWay_5">从历史发起的流程Copy数据(查询历史记录)</label>
                         </legend><a href="javascript:ShowHidden('ByHistoryUrl')">请设置SQL</a>:
                         <div id="ByHistoryUrl" style="display: none; color: gray">
@@ -452,7 +454,7 @@
 
                     <!--自定义url模式  -->
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_10" type="radio" name="RB_StartGuideWay" value="10" /><label for="RB_StartGuideWay_10">按自定义的Url</label>
                         </legend><a href="javascript:ShowHidden('ByUrl')">请设置URL:</a>
                         <div id="ByUrl" style="display: none; color: gray">
@@ -471,7 +473,7 @@
 
                     <!--父子流程模式  -->
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_12" type="radio" name="RB_StartGuideWay" value="12" /><label for="RB_StartGuideWay_12">父子流程模式</label>   - <a href="javascript:NewPart();">新建</a> - <a href="javascript:ShowHidden('ByFPlow')">帮助</a>
                         </legend>
                         <div id="ByFPlow" style="display: none; color: gray">
@@ -487,7 +489,7 @@
 
                     <!--按设置的SQL-单条模式  -->
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_1" type="radio" name="RB_StartGuideWay" value="1" /><label for="RB_StartGuideWay_1">按设置的SQL-单条模式</label> - <a href="http://ccbpm.mydoc.io/?v=5404&t=340507" target=_blank><img src='../../Img/Help.gif' />帮助</a>
                         </legend><a href="javascript:ShowHidden('Paras1')">查询参数:</a>
                         <div id="Paras1" style="display: none; color: gray">
@@ -538,7 +540,7 @@
                         </div>
                     </fieldset>
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_6" type="radio" name="RB_StartGuideWay" value="6" /><label for="RB_StartGuideWay_6">按设置的SQL-多条模式(用于批量发起)</label>
                         </legend><a href="javascript:ShowHidden('ParasMulti1')">查询参数:</a>
                         <div id="ParasMulti1" style="display: none; color: gray">
@@ -581,7 +583,7 @@
                         </div>
                     </fieldset>
                     <fieldset>
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_4" type="radio" name="RB_StartGuideWay" value="4" /><label for="RB_StartGuideWay_4">子流程实例列表模式-多条</label>
                         </legend><a href="javascript:ShowHidden('SubFlowParas1')">查询参数:</a>
                         <div id="SubFlowParas1" style="display: none; color: gray">
@@ -623,7 +625,7 @@
                         </div>
                     </fieldset>
                     <fieldset id="isShow">
-                        <legend>
+                        <legend  style="padding-bottom:5px;">
                             <input id="RB_StartGuideWay_90" type="radio" name="RB_StartGuideWay" value="90" /><label for="RB_StartGuideWay_90">开始节点绑定的独立表单列表</label>
                         </legend><font color="gray">
                             <ul>

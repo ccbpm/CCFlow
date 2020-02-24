@@ -7661,7 +7661,6 @@ namespace BP.WF
             {
                 objs = wn.NodeSend(ndOfToNode, toEmps);
             }
-            return null;
 
 
             #region 更新发送参数.

@@ -249,7 +249,7 @@
             }
             msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
-            $("#msgModalContent").html(msg.replace(/@/g, '<br/>'));
+            $("#msgModalContent").html(msg.replace("@null","").replace(/@/g, '<br/>'));
             var trackA = $('#msgModalContent a:contains("工作轨迹")');
             var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
             trackA.remove();

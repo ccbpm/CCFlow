@@ -5859,9 +5859,17 @@ namespace BP.WF
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
-                qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                {
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                }
+                else
+                {
+                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                }
+                
                 if (isContantSelf == false)
                 {
                     qo.addAnd();

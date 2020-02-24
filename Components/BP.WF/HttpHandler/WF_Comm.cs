@@ -1838,73 +1838,183 @@ namespace BP.WF.HttpHandler
 
             //获得关键字.
             AtPara ap = new AtPara(ur.Vals);
-
             //关键字.
             string keyWord = ur.SearchKey;
             QueryObject qo = new QueryObject(ens);
             bool isFirst = true; //是否第一次拼接SQL
 
             #region 关键字字段.
-            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length > 1)
+            if (DataType.IsNullOrEmpty(map.SearchFields) == false)
             {
-                Attr attrPK = new Attr();
-                foreach (Attr attr in map.Attrs)
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFields = map.SearchFields.Split('@');
+                foreach (String str in searchFields)
                 {
-                    if (attr.IsPK)
-                    {
-                        attrPK = attr;
-                        break;
-                    }
-                }
-                int i = 0;
-                foreach (Attr attr in map.Attrs)
-                {
-                    switch (attr.MyFieldType)
-                    {
-                        case FieldType.Enum:
-                        case FieldType.FK:
-                        case FieldType.PKFK:
-                            continue;
-                        default:
-                            break;
-                    }
-
-                    if (attr.MyDataType != DataType.AppString)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
-                    if (attr.MyFieldType == FieldType.RefText)
+                    //字段名
+                    field = str.Split('=')[1];
+                    if (DataType.IsNullOrEmpty(field) == true)
                         continue;
 
-                    if (attr.Key == "FK_Dept")
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
                         continue;
-
-                    i++;
-                    if (i == 1)
+                    idx++;
+                    if (idx == 1)
                     {
                         isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
-                    qo.addOr();
+                    qo.addAnd();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                    qo.MyParas.Add(field, fieldValue);
+
 
                 }
-                qo.MyParas.Add("SKey", keyWord);
-                qo.addRightBracket();
-
+                if (idx != 0)
+                    qo.addRightBracket();
             }
             else
             {
-                qo.AddHD();
+                if (map.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+                {
+                    Attr attrPK = new Attr();
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        if (attr.IsPK)
+                        {
+                            attrPK = attr;
+                            break;
+                        }
+                    }
+                    int i = 0;
+                    string enumKey = ","; //求出枚举值外键.
+                    foreach (Attr attr in map.Attrs)
+                    {
+                        switch (attr.MyFieldType)
+                        {
+                            case FieldType.Enum:
+                                enumKey = "," + attr.Key + "Text,";
+                                break;
+                            case FieldType.FK:
+                                // case FieldType.PKFK:
+                                continue;
+                            default:
+                                break;
+                        }
+
+                        if (attr.MyDataType != DataType.AppString)
+                            continue;
+
+                        //排除枚举值关联refText.
+                        if (attr.MyFieldType == FieldType.RefText)
+                        {
+                            if (enumKey.Contains("," + attr.Key + ",") == true)
+                                continue;
+                        }
+
+                        if (attr.Key == "FK_Dept")
+                            continue;
+
+                        i++;
+                        if (i == 1)
+                        {
+                            isFirst = false;
+                            /* 第一次进来。 */
+                            qo.addLeftBracket();
+                            if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                                qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                            else
+                                qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            continue;
+                        }
+                        qo.addOr();
+
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        else
+                            qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+
+                    }
+                    qo.MyParas.Add("SKey", keyWord);
+                    qo.addRightBracket();
+
+                }
+
+            }
+
+            #endregion
+            #region 增加数值型字段的查询
+            if (DataType.IsNullOrEmpty(map.SearchFieldsOfNum) == false)
+            {
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFieldsOfNum = map.SearchFieldsOfNum.Split('@');
+                foreach (String str in searchFieldsOfNum)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    //字段名
+                    field = str.Split('=')[1];
+                    if (DataType.IsNullOrEmpty(field) == true)
+                        continue;
+
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    string[] strVals = fieldValue.Split(',');
+
+                    //判断是否是第一次进入
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
+                    qo.addLeftBracket();
+                    if (DataType.IsNullOrEmpty(strVals[0]) == false)
+                    {
+
+                        if (DataType.IsNullOrEmpty(strVals[1]) == true)
+                            qo.AddWhere(field, ">=", strVals[0]);
+                        else
+                        {
+                            qo.AddWhere(field, ">=", strVals[0], field + "1");
+                            qo.addAnd();
+                            qo.AddWhere(field, "<=", strVals[1], field + "2");
+                        }
+
+                    }
+                    else
+                    {
+                        qo.AddWhere(field, "<=", strVals[1]);
+                    }
+
+                    qo.addRightBracket();
+
+                }
+
 
             }
             #endregion
@@ -1914,17 +2024,14 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
+                //按日期查询
                 if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
-                    dtTo += " 24:00";
                     if (isFirst == false)
                         qo.addAnd();
                     else
                         isFirst = false;
                     qo.addLeftBracket();
-                    //设置开始查询时间
-                    dtFrom += " 00:00:00";
-                    //结束查询时间
                     dtTo += " 23:59:59";
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -1944,12 +2051,11 @@ namespace BP.WF.HttpHandler
 
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
-
-
                     if (isFirst == false)
                         qo.addAnd();
                     else
                         isFirst = false;
+
                     qo.addLeftBracket();
                     qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -1965,13 +2071,23 @@ namespace BP.WF.HttpHandler
             {
                 if (attr.IsHidden)
                 {
-
                     if (isFirst == false)
                         qo.addAnd();
                     else
                         isFirst = false;
                     qo.addLeftBracket();
-                    qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+
+                    //获得真实的数据类型.
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                            attr.RefAttrKey, attr.DefaultValRun);
+                        qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
+                    }
+                    else
+                    {
+                        qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+                    }
                     qo.addRightBracket();
                     continue;
                 }
@@ -2024,22 +2140,46 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            #region 获得查询数据.
+            #region 隐藏字段的查询.
             foreach (string str in ap.HisHT.Keys)
             {
                 var val = ap.GetValStrByKey(str);
                 if (val.Equals("all"))
                     continue;
+
                 if (isFirst == false)
                     qo.addAnd();
                 else
                     isFirst = false;
+                isFirst = false;
                 qo.addLeftBracket();
-                qo.AddWhere(str, ap.GetValStrByKey(str));
+
+                //获得真实的数据类型.
+                var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                    str, ap.GetValStrByKey(str));
+
+                qo.AddWhere(str, valType);
                 qo.addRightBracket();
             }
+            #endregion 隐藏字段的查询
 
-            #endregion 获得查询数据.
+            //获取配置信息
+            EnCfg encfg = new EnCfg(this.EnsName);
+            //增加排序
+            if (encfg != null)
+            {
+                string orderBy = encfg.GetParaString("OrderBy");
+                bool isDesc = encfg.GetParaBoolen("IsDeSc");
+
+                if (DataType.IsNullOrEmpty(orderBy) == false)
+                {
+                    if (isDesc)
+                        qo.addOrderByDesc(encfg.GetParaString("OrderBy"));
+                    else
+                        qo.addOrderBy(encfg.GetParaString("OrderBy"));
+                }
+
+            }
             return qo.DoQueryToTable();
 
 

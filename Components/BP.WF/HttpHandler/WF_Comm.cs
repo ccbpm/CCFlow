@@ -1824,8 +1824,23 @@ namespace BP.WF.HttpHandler
             return ds;
 
         }
+        private DataTable SearchDtl_Data(Entities ens, Entity en,string workId,string fid)
+        {
+            //获得.
+            Map map = en.EnMapInTime;
 
-        private DataTable Search_Data(Entities ens, Entity en)
+            MapAttrs attrs = map.Attrs.ToMapAttrs;
+
+            QueryObject qo = new QueryObject(ens);
+
+            qo.AddWhere("RefPK","=",workId);
+            //qo.addAnd();
+            //qo.AddWhere("FID", "=", fid);
+
+            #endregion 获得查询数据.
+            return qo.DoQueryToTable();
+        }
+            private DataTable Search_Data(Entities ens, Entity en)
         {
             //获得.
             Map map = en.EnMapInTime;
@@ -2271,7 +2286,23 @@ namespace BP.WF.HttpHandler
 
             return filePath;
         }
-        #endregion 查询.
+        /// <summary>
+        /// 从表执行导出
+        /// </summary>
+        /// <returns></returns>
+        public string SearchDtl_Exp()
+        {
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            string workId = this.GetRequestVal("WorkId");
+            string fid = this.GetRequestVal("FID");
+            string name = "从表数据导出";
+            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
+            string filePath = ExportDGToExcel(SearchDtl_Data(ens, en, workId, fid), en, name);
+
+            return filePath;
+        }
+        
 
         #region Refmethod.htm 相关功能.
         public string Refmethod_Init()

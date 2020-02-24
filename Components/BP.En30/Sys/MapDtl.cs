@@ -308,6 +308,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 是否可以导入
+        /// </summary>
+        public bool IsImp
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.IsImp, value);
+            }
+        }
+        /// <summary>
         /// 是否可以导出
         /// </summary>
         public bool IsExp
@@ -1387,6 +1401,7 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "字段中文名", true, false, 0, 900, 20);
+                map.AddBoolean(MapDtlAttr.IsImp, false, "IsImp", true, true);
                 #endregion 导入导出填充.
 
 

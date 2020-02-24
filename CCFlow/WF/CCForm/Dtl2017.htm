@@ -1205,8 +1205,10 @@
         function ExpOption() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddPara("WorkId", GetQueryString("WorkId"));
+            handler.AddPara("FID", GetQueryString("FID"));
             //查询集合
-            var data = handler.DoMethodReturnString("Search_Exp");
+            var data = handler.DoMethodReturnString("SearchDtl_Exp");
             var url = "";
             if (data.indexOf('err@') == 0) {
                 alert(data);

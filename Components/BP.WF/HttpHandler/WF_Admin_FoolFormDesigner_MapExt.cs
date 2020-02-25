@@ -331,7 +331,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (dtl.No != fk_mapdtl)
                         continue;
-                    dtl.MTR = sql.Trim();
+                    //dtl.MTR = sql.Trim();
                 }
             }
 
@@ -1144,7 +1144,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (dtl.No != fk_mapdtl)
                         continue;
-                    dtl.MTR = sql.Trim();
+                    //dtl.MTR = sql.Trim();//多表头去掉了
                 }
             }
 

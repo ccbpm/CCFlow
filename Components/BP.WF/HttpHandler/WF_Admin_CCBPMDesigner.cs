@@ -121,7 +121,6 @@ namespace BP.WF.HttpHandler
 
             if (DataType.IsNullOrEmpty(fk_flowsort) == true || fk_flowsort.Equals("undefined") == true)
                 fk_flowsort = "99";
-
             DataSet ds = new DataSet();
 
             string sql = "";

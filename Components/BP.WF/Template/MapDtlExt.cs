@@ -862,25 +862,25 @@ namespace BP.WF.Template
         /// <summary>
         /// 多表头
         /// </summary>
-        public string MTR
-        {
-            get
-            {
-                string s = this.GetValStrByKey(MapDtlAttr.MTR);
-                s = s.Replace("《", "<");
-                s = s.Replace("》", ">");
-                s = s.Replace("‘", "'");
-                return s;
-            }
-            set
-            {
-                string s = value;
-                s = s.Replace("<", "《");
-                s = s.Replace(">", "》");
-                s = s.Replace("'", "‘");
-                this.SetValByKey(MapDtlAttr.MTR, value);
-            }
-        }
+        //public string MTR
+        //{
+        //    get
+        //    {
+        //        string s = this.GetValStrByKey(MapDtlAttr.MTR);
+        //        s = s.Replace("《", "<");
+        //        s = s.Replace("》", ">");
+        //        s = s.Replace("‘", "'");
+        //        return s;
+        //    }
+        //    set
+        //    {
+        //        string s = value;
+        //        s = s.Replace("<", "《");
+        //        s = s.Replace(">", "》");
+        //        s = s.Replace("'", "‘");
+        //        this.SetValByKey(MapDtlAttr.MTR, value);
+        //    }
+        //}
         #endregion
 
         #region 构造方法
@@ -1007,7 +1007,7 @@ namespace BP.WF.Template
 
                 #region 多表头.
                 //MTR 多表头列.
-                map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
+                //map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
                 #endregion 多表头.
 
                 #region 超链接.
@@ -1015,7 +1015,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
                 map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
                 map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
-                #endregion 多表头.
+                #endregion 超链接.
 
                 #region 工作流相关.
                 //add 2014-02-21.

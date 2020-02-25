@@ -403,7 +403,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDown()
         {
-            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "2", SubFlowAutoAttr.Idx);
+            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "1", SubFlowAutoAttr.Idx);
             return "执行成功";
         }
         #endregion 移动.

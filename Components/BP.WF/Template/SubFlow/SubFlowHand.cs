@@ -259,7 +259,28 @@ namespace BP.WF.Template
             this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_0";
             return base.beforeInsert();
         }
+        #region 移动.
+        /// <summary>
+        /// 上移
+        /// </summary>
+        /// <returns></returns>
+        public string DoUp()
+        {
+            this.DoOrderUp(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "0", SubFlowAutoAttr.Idx);
+            return "执行成功";
+        }
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <returns></returns>
+        public string DoDown()
+        {
+            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "0", SubFlowAutoAttr.Idx);
+            return "执行成功";
+        }
+        #endregion 移动.
     }
+    
     /// <summary>
     /// 手工启动子流程集合
     /// </summary>

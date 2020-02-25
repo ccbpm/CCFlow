@@ -71,9 +71,9 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.FrmAttachmentExt',
 @DeleteWay=权限控制,控制附件的下载与上传权限.@IsRowLock=WebOffice属性,设置与公文有关系的属性配置.
 @IsToHeLiuHZ=流程相关,控制节点附件的分合流.');
 
--- 2016.07.20 升级明细表维护分组;
+-- 2020.02.25 升级明细表维护分组.;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDtlExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDtlExt','@No=基础信息,基础信息权限信息.@IsExp=数据导入导出,数据导入导出.@MTR=多表头,实现多表头.@IsEnableLink=超链接,显示在从表的右边.@IsCopyNDData=流程相关,与流程相关的配置非流程可以忽略.');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDtlExt','@No=基础信息,基础信息权限信息.@IsExp=数据导入导出,数据导入导出.@IsEnableLink=超链接,显示在从表的右边.@IsCopyNDData=流程相关,与流程相关的配置非流程可以忽略.');
 
 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FrmNodeComponent';

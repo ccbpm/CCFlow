@@ -1884,12 +1884,13 @@ namespace BP.WF
         /// </summary>
         public static void UpdataCCFlowVerSQLScript()
         {
+
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
             string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
 
             string sqlScript = SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql";
             System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
-            string myVer = fi.LastWriteTime.ToString("MMddHHmmss");
+            string myVer = fi.LastWriteTime.ToString("yyyyMMddHH");
 
             //判断是否可以执行，当文件发生变化后，才执行。
             if (currDBVer == "" || int.Parse(currDBVer) < int.Parse(myVer))

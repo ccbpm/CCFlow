@@ -25,19 +25,66 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            return;
 
 
+            Int64 workid = 0;
+            BP.WF.Dev2Interface.Port_Login("zhoupeng");
+            workid = BP.WF.Dev2Interface.Node_CreateBlankWork("001");
+            BP.WF.Dev2Interface.Node_SendWork("001", workid, 102, "liping");
+            this.Response.Write("执行成功.");   
             return;
-            // BP.WF.Dev2Interface.Port_SendMsg
-            // qo.DoQuery
-            // BP.DA.DBAccessOfMSSQL1.RunSQL("UPDATA  xxx set xxx");
-            //DataTable dt= BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT * FROM PORT_EMP");
-            //  ？、  return;
-            BP.Sys.FrmRBs rbs = new FrmRBs();
-            BP.En.QueryObject qo = new QueryObject(rbs);
-            qo.AddWhere("FK_MapData", "ss");
-            qo.DoQuery();
+
+
+            BP.WF.Dev2Interface.Port_Login("liping");
+            BP.WF.Dev2Interface.Node_SendWork("001", workid, 103, "liping");
+
+            this.Response.Write("执行成功.");
             return;
+
+            //// BP.WF.Dev2Interface.Port_SendMsg
+            //// BP.GPM.Emp emp11 = new BP.GPM.Emp();
+            ////   emp11.CheckPhysicsTable();
+            ////  BP.Sys.MapData
+            ////BP.wf
+            //return;
+            //BP.Sys.FrmUI.MapAttrString en = new BP.Sys.FrmUI.MapAttrString();
+            //en.CheckPhysicsTable();
+            //// BP.Sys.SystemConfig.AppCenterDBVarStr
+            //return;
+            //DBAccess.IsView("Port_Emp");
+
+            //if (DBAccess.IsExitsObject("Port_Emp"))
+            //    BP.DA.DBAccess.RunSQL("DROP TABLE Port_Emp");
+
+            //BP.Port.Emp emp = new Emp();
+            //emp.CheckPhysicsTable();
+            //return;
+
+            ////BP.DA.DBAccess.RunSQL("SELECT * FROM Port_Emp");
+            ////BP.DA.DataType.AppBoolean
+            //// BP.Port.Emp
+            //// BP.WF.Flow fl = new Flow();
+            //// fl.No = "001";
+            //// fl.Retrieve();
+            //// BP.Sys.FrmType
+            ////BP.Frm.CtrlModel cm = new BP.Frm.CtrlModel();
+            //// cm.CheckPhysicsTable();
+            //// BP.Sys.FrmTree
+            ////  BP.Sys.MapData
+            ////  BP.Sys.MapDatas
+            ////BP.Sys.fo.Sys.FormTrees
+            //return;
+            //// BP.WF.Dev2Interface.Port_SendMsg
+            //// qo.DoQuery
+            //// BP.DA.DBAccessOfMSSQL1.RunSQL("UPDATA  xxx set xxx");
+            ////DataTable dt= BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT * FROM PORT_EMP");
+            ////  ？、  return;
+            //BP.Sys.FrmRBs rbs = new FrmRBs();
+            //BP.En.QueryObject qo = new QueryObject(rbs);
+            //qo.AddWhere("FK_MapData", "ss");
+            //qo.DoQuery();
+            //return;
 
             //rb.CheckPhysicsTable();
             //rb.MyPK = "2323";
@@ -56,44 +103,44 @@ namespace CCFlow
             //   BP.DA.DBAccess.IsExitsTableCol("ND154Track", "FrmDB");
             return;
 
-            BP.WF.Template.PowerModel pm = new BP.WF.Template.PowerModel();
-            pm.CheckPhysicsTable();
-            // BP.WF.Data.Delays
-            // BP.Sys.Glo.GenerRealType(
-            //BP.WF.Rpt.RptDfine.
-            return;
-            BP.WF.Template.NodeExt ext = new BP.WF.Template.NodeExt();
-            ext.NodeID = 101;
-            ext.RetrieveFromDBSources();
-            return;
+            //BP.WF.Template.PowerModel pm = new BP.WF.Template.PowerModel();
+            //pm.CheckPhysicsTable();
+            //// BP.WF.Data.Delays
+            //// BP.Sys.Glo.GenerRealType(
+            ////BP.WF.Rpt.RptDfine.
+            //return;
+            //BP.WF.Template.NodeExt ext = new BP.WF.Template.NodeExt();
+            //ext.NodeID = 101;
+            //ext.RetrieveFromDBSources();
+            //return;
 
-            BP.WF.Dev2Interface.Port_Login("admin");
-            for (int i = 0; i < 10; i++)
-            {
+            //BP.WF.Dev2Interface.Port_Login("admin");
+            //for (int i = 0; i < 10; i++)
+            //{
 
-            }
-            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork("057", WebUser.No);
-            string msg = BP.WF.Dev2Interface.Node_SendWork("057", workid, 0, "admin").ToMsgOfHtml();
-            this.Response.Write(msg);
-
-
-            //BP.WF.Node nd = new Node(12801);
-            // nd.FormType
-            // nd.FormType = NodeFormType.SDKForm;
-            // nd.DirectUpdate();
-            return;
-
-            BP.WF.Flow fe2 = new Flow();
-            fe2.No = "128";
-            fe2.Retrieve();
-            fe2.DoCheck();
-            return;
+            //}
+            //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork("057", WebUser.No);
+            //string msg = BP.WF.Dev2Interface.Node_SendWork("057", workid, 0, "admin").ToMsgOfHtml();
+            //this.Response.Write(msg);
 
 
-            BP.WF.Template.FlowExt fe = new BP.WF.Template.FlowExt();
-            fe.CheckPhysicsTable();
-            fe.No = "128";
-            fe.Retrieve();
+            ////BP.WF.Node nd = new Node(12801);
+            //// nd.FormType
+            //// nd.FormType = NodeFormSlnType.SDKForm;
+            //// nd.DirectUpdate();
+            //return;
+
+            //BP.WF.Flow fe2 = new Flow();
+            //fe2.No = "128";
+            //fe2.Retrieve();
+            //fe2.DoCheck();
+            //return;
+
+
+            //BP.WF.Template.FlowExt fe = new BP.WF.Template.FlowExt();
+            //fe.CheckPhysicsTable();
+            //fe.No = "128";
+            //fe.Retrieve();
 
 
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");

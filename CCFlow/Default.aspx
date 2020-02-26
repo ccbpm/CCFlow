@@ -28,7 +28,8 @@
                 </a>
                 <div  style=" float:right;text-align:center">
                     <br />
-                    <h1>驰骋BPM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h1></div>
+                    <h1>驰骋BPM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
+                 
             </td>
         </tr>
 
@@ -38,7 +39,7 @@
                 <ul>
                     <li><font size="30" color="green"><a href="WF/Admin/CCBPMDesigner/Login.htm" ><b>进入流程设计器</b></a></font>用户名:admin 密码:123 </li>
                     <li><a href='./WF/AppClassic/Login.htm'>前台登录-经典模式</a> </li>
-                    <li><a href="javascript:alert('请在微信里查找公众号chichengsoft，点关注，底部菜单就可以看到。')" >手机端演示</a>  </li>
+                    <li>  手机端演示,扫描关注：=》开发者=》手机端 </li>
                 </ul>
                     </div>
 
@@ -48,7 +49,6 @@
                     <li>商务问题 QQ:<span class="style4">793719823</span> 电话:<span class="style5">0531-82374939 , 18660153393</span>  - <a href="http://ccflow.org/WeiXin/About.htm" target="_blank">常见问题</a> </li>
                 </ul>
                     </div>
-
             </td>
         </tr>
 

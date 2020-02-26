@@ -165,11 +165,13 @@
             handler.AddPara("ToNode", toNode);
             var data = handler.DoMethodReturnString("Accepter_Init");
 
-            if (data.indexOf('err@') == 0) {
+            //如果返回错误，就直接提示.
+            if (data.indexOf('err@') == 0) { 
                 alert(data);
                 return;
             }
 
+            //返回信息就提示并关闭.
             if (data.indexOf('info@') == 0) {
                 alert(data);
                 this.close();
@@ -191,9 +193,10 @@
                 return;
             }
 
+
             var selDataArr = initData.Nodes;
-            var dtgArr = initData.Depts;
-            var dteArr = initData.Emps;
+            var dtgArr = initData.Depts; //部门集合
+            var dteArr = initData.Emps; //人员集合.
 
             //增加了: 默认选择接收人，与强制选择接收人的数据源,让其在打开的时候，可以把默认值选择上.
             // 有可能值是空的.

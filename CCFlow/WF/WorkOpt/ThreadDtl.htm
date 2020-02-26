@@ -4,7 +4,7 @@
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
     <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
-        type="text/javascript"></script>
+            type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
@@ -28,6 +28,9 @@
 
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
             gwfs.Retrieve("FID", workID);
+
+            var gwls = new Entities("BP.WF.GenerWorkerLists");
+            gwls.Retrieve("FID", workID);
 
             var html = "<table style='width:100%;' >";
             html += "<caption>子线程信息</caption>";
@@ -53,7 +56,7 @@
 
 
                 html += "<tr>";
-                html += "<td colspan=5 > " + GenerHtml(gwf) + " </td>";
+                html += "<td colspan=5 > " + GenerHtml(gwf, gwls) + " </td>";
                 html += "</tr>";
             }
 
@@ -61,34 +64,34 @@
 
         })
 
-        function GenerHtml(gwf) {
-
-            //该子线程下面的 generworkerlist.
-            var gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", gwf.WorkID, "IsEnable", 1);
+        function GenerHtml(gwf, gwls) {
 
             var strs = "<table style='width:100%;'>";
 
-            strs += "<tr >";
+            strs += "<tr>";
             strs += "<td>序</td>";
             strs += "<td>节点</td>";
             strs += "<td>处理人</td>";
-            strs += "<td>名称</td>";
+            // strs += "<td>名称</td>";
             strs += "<td>状态</td>";
             strs += "<td>应完成日期</td>";
             strs += "<td>实际完成日期</td>";
-            strs += "<td></td>";
+            strs += "<td>操作</td>";
             strs += "</tr>";
 
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
 
+                if (gwl.WorkID != gwf.WorkID)
+                    continue;
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+
                 strs += "<tr>";
                 strs += "<td>" + i + "</td>";
                 strs += "<td>" + gwl.FK_NodeText + "</td>";
-                strs += "<td>" + gwl.FK_Emp + "</td>";
-                strs += "<td>" + gwl.FK_EmpText + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + gwl.IsPass + "</td>";
 
                 if (gwl.IsPass == 1) {
 
@@ -103,7 +106,7 @@
 
                 } else {
 
-                    strs += "<td>未完成</td>";
+                    strs += "<td> - </td>";
                     strs += "<td>" + gwl.SDT + "</td>";
                     strs += "<td>无</td>";
 
@@ -171,11 +174,11 @@
 </head>
 <body>
     <form id="cc">
-    <center>
-        <div id="Msg">
-            <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。
-        </div>
-    </center>
+        <center>
+            <div id="Msg">
+                <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。
+            </div>
+        </center>
     </form>
 </body>
 </html>

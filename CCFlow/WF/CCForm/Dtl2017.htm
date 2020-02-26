@@ -607,15 +607,15 @@
                 var delTh = "";
                 var impModel = sys_MapDtl.ImpModel;
                 var IsExp = sys_MapDtl.IsImp;//导出
-                var th = "<th style='width:60px;'></th>";
-                var imgStr = '<img title="保存" style="width: 40px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
+                var th = "<th style='width:100px;'></th>";
+                var imgStr = '<img title="保存" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
                 if (IsExp==1 ) {
 
-                    imgStr += '<th style="width:60px;"><img title="选项" style="width: 40px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
+                    imgStr += '<th style="width:60px;"><img title="导出" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
                 } 
                 if (impModel != 0) {
 
-                    imgStr += '<img title="选项" style="width: 40px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
+                    imgStr += '<img title="选项" style="width: 40px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
                 }
                 var delTh = $($(th).append(imgStr));
 

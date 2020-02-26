@@ -18,6 +18,7 @@
         var node = null; //公共变量.
 
         $(function () {
+
             //   alert(html);
             $("#Msg").html('正在加载，请稍候...');
 
@@ -31,6 +32,8 @@
 
             var gwls = new Entities("BP.WF.GenerWorkerLists");
             gwls.Retrieve("FID", workID);
+
+            //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
 
             var html = "<table style='width:100%;' >";
             html += "<caption>子线程信息</caption>";
@@ -85,34 +88,40 @@
 
                 if (gwl.WorkID != gwf.WorkID)
                     continue;
-                if (gwl.IsPass == -2)
+
+                if (gwl.IsPass == -2 )
                     continue; //这个节点是干流程发起的人员.
 
                 strs += "<tr>";
                 strs += "<td>" + i + "</td>";
                 strs += "<td>" + gwl.FK_NodeText + "</td>";
-                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + gwl.IsPass + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+
+                var openStr = "";
+                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">表单</a>";
 
                 if (gwl.IsPass == 1) {
 
                     strs += "<td>已完成</td>";
                     strs += "<td>" + gwl.SDT + "</td>";
                     strs += "<td>" + gwl.RDT + "</td>";
-
-                    if (node.ThreadKillRole == 1)
-                        strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a></td>";
-                    else
-                        strs += "<td>无</td>";
+                    openStr += "-<a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a>";
 
                 } else {
 
-                    strs += "<td> - </td>";
+                    if (gwl.IsRead == 0)
+                        strs += "<td> 未读 </td>";
+                    else
+                        strs += "<td> 已读,未处理 </td>";
                     strs += "<td>" + gwl.SDT + "</td>";
                     strs += "<td>无</td>";
-
-                    strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">打开表单</a>";
-                    strs += " - <a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a></td>";
                 }
+
+                if (node.ThreadKillRole == 1)
+                    openStr += "-<a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a>";
+
+                strs += "<td>" + openStr + "</td>";
+
                 strs += "<tr>";
             }
 

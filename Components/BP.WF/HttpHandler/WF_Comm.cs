@@ -4221,9 +4221,9 @@ namespace BP.WF.HttpHandler
                     {
                         continue;
                     }
-                    where += "  and " + str + "=" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                    where += "  and " + str + "=" + SystemConfig.AppCenterDBVarStr + str ;
                     if (str != "FK_NY")
-                        whereOfLJ += "  and " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                        whereOfLJ += "  and " + str + " =" + SystemConfig.AppCenterDBVarStr + str ;
 
                     myps.Add(str, val);
 

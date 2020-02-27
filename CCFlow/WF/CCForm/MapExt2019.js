@@ -807,7 +807,7 @@ function FullIt(selectVal, refPK, elementId) {
 function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
     var dbSrc = mapExt.Doc;
     if (dbSrc == null || dbSrc == "") {
-        alert("没有配置填充主表的信息");
+       // alert("没有配置填充主表的信息");
         return;
     }
     var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType);

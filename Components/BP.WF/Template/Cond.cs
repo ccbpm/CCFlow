@@ -1043,7 +1043,7 @@ namespace BP.WF.Template
                             return false;
                     case ">":
                     case "dayu":
-                        if (en.GetValStringByKey(this.AttrKey).CompareTo(this.OperatorValue.ToString()) == 1)
+                        if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
@@ -1060,7 +1060,7 @@ namespace BP.WF.Template
                             return false;
                     case "<":
                     case "xiaoyu":
-                        if (en.GetValStringByKey(this.AttrKey).CompareTo(this.OperatorValue.ToString()) == -1)
+                        if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;

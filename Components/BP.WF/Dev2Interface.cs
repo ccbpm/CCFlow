@@ -2506,12 +2506,12 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FutureTodolist()
         {
-            string sql = "SELECT A.* FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID=B.WorkID AND B.FK_Emp='"+BP.Web.WebUser.No+"'";
+            string sql = "SELECT A.* FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + BP.Web.WebUser.No + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return dt;
         }
-            
+
         /// <summary>
         /// 获得指定流程挂起工作列表
         /// </summary>
@@ -2829,7 +2829,7 @@ namespace BP.WF
                         DataTable mydt = DBAccess.RunSQLReturnTable(sql);
 
                         if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                        { 
+                        {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
                             dt.Columns["REC"].ColumnName = "Rec";
@@ -2991,7 +2991,7 @@ namespace BP.WF
         /// <param name="fk_flow">流程编号</param>
         /// <param name="isMyStarter">是否仅仅查询我发起的在途流程</param>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false, string domain = null,bool isContainFuture = false)
+        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false, string domain = null, bool isContainFuture = false)
         {
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
@@ -3049,7 +3049,7 @@ namespace BP.WF
                     if (isMyStarter == true)
                     {
                         sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
-                        if(isContainFuture == true)
+                        if (isContainFuture == true)
                         {
 
                             sql += futureSQL;
@@ -3060,7 +3060,7 @@ namespace BP.WF
                     }
                     else
                     {
-                       sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
                         if (isContainFuture == true)
                         {
                             sql += futureSQL;
@@ -3079,7 +3079,7 @@ namespace BP.WF
                             sql += futureSQL;
                         }
                         ps.SQL = sql;
-                       ps.Add("FK_Flow", fk_flow);
+                        ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                         ps.Add("Starter", userNo);
                     }
@@ -3377,9 +3377,9 @@ namespace BP.WF
         /// 获取未完成的流程(也称为在途流程:我参与的但是此流程未完成)
         /// </summary>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(bool isContainFuture= false)
+        public static DataTable DB_GenerRuning(bool isContainFuture = false)
         {
-            DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null,false,null, isContainFuture);
+            DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null, false, null, isContainFuture);
 
             /*暂时屏蔽type的拼接，拼接后转json会报错 于庆海修改*/
             /*dt.Columns.Add("Type");
@@ -4196,7 +4196,7 @@ namespace BP.WF
             Node nd = new Node(currNodeID);
             if (nd.IsStartNode == false)
             {
-                if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing && gwf.HuiQianZhuChiRen!=BP.Web.WebUser.No)
+                if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing && gwf.HuiQianZhuChiRen != BP.Web.WebUser.No)
                 {
                     nodeName = nd.Name + "(会签)";
                 }
@@ -4935,7 +4935,7 @@ namespace BP.WF
                     info += wf.DoFix(msg);
                     GenerWorkFlows subgwfs = new GenerWorkFlows();
                     subgwfs.Retrieve(GenerWorkFlowAttr.PWorkID, item.WorkID);
-                    foreach (GenerWorkFlow subitem in subgwfs) 
+                    foreach (GenerWorkFlow subitem in subgwfs)
                     {
                         try
                         {
@@ -5016,7 +5016,7 @@ namespace BP.WF
                         if (pgwf.FK_Node != gwf.PNodeID)
                             return "";
 
-                        
+
                         if (pgwf.WFState == WFState.Complete)
                             return "";
 
@@ -5026,14 +5026,14 @@ namespace BP.WF
                         //主流程自动运行到一下节点
                         SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
 
-                        return "父流程自动运行到下一个节点,"+returnObjs.ToMsgOfHtml();
+                        return "父流程自动运行到下一个节点," + returnObjs.ToMsgOfHtml();
                     }
                     //结束父流程
                     if (subFlow.IsAutoSendSubFlowOver == 2)
                     {
                         if (pgwf.WFState == WFState.Complete)
                             return "";
-                            Flow fl = new Flow(gwf.PFlowNo);
+                        Flow fl = new Flow(gwf.PFlowNo);
                         string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.PFlowNo, gwf.PWorkID, "父流程[" + fl.Name + "],WorkID为[" + gwf.PWorkID + "]成功结束");
                         return flowOver;
                     }
@@ -6466,7 +6466,7 @@ namespace BP.WF
             sql += " ORDER BY A.RDT ";
 
             DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType== DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dtTrack.Columns["NDFROM"].ColumnName = "NDFrom";
                 dtTrack.Columns["NDFROMT"].ColumnName = "NDFromT";
@@ -6489,7 +6489,7 @@ namespace BP.WF
 
             foreach (DataRow drTrack in dtTrack.Rows)
             {
-               
+
                 DataRow dr = dtHistory.NewRow();
                 dr["FK_Node"] = drTrack["NDFrom"];
                 //dr["ActionType"] = drTrack["NDFrom"];
@@ -8613,9 +8613,7 @@ namespace BP.WF
         public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID, Hashtable htWork, DataSet dsDtls)
         {
             if (htWork == null)
-            {
-                return "参数错误，保存失败。";
-            }
+                throw new Exception("参数错误，htWork 不能为空, 保存失败。");
 
             try
             {
@@ -8628,58 +8626,50 @@ namespace BP.WF
                 }
                 wk.ResetDefaultVal();
 
-                if (htWork != null)
+                #region 赋值.
+                Attrs attrs = wk.EnMap.Attrs;
+                foreach (string str in htWork.Keys)
                 {
-                    Attrs attrs = wk.EnMap.Attrs;
-
-                    foreach (string str in htWork.Keys)
+                    switch (str)
                     {
-                        switch (str)
-                        {
-                            case StartWorkAttr.OID:
-                            case StartWorkAttr.CDT:
-                            case StartWorkAttr.MD5:
-                            case StartWorkAttr.Emps:
-                            case StartWorkAttr.FID:
-                            case StartWorkAttr.FK_Dept:
-                            case StartWorkAttr.PRI:
-                            case StartWorkAttr.Rec:
-                            case StartWorkAttr.Title:
-                                continue;
-                            default:
-                                break;
-                        }
+                        case StartWorkAttr.OID:
+                        case StartWorkAttr.CDT:
+                        case StartWorkAttr.MD5:
+                        case StartWorkAttr.Emps:
+                        case StartWorkAttr.FID:
+                        case StartWorkAttr.FK_Dept:
+                        case StartWorkAttr.PRI:
+                        case StartWorkAttr.Rec:
+                        case StartWorkAttr.RDT:
+                        case StartWorkAttr.Title:
+                            continue;
+                        default:
+                            break;
+                    }
 
-                        if (wk.Row.ContainsKey(str))
-                        {
-                           
-                            if (nd.IsStartNode == true)
-                            {
-                                Attr attr = attrs.GetAttrByKey(str);
-                                string defVal = attrs.GetAttrByKey(str).DefaultValOfReal;
-                                if (attr.UIIsReadonly == true && defVal != null && defVal.Equals("@RDT") == true)
-                                {
-                                    if (attr.MyDataType == DataType.AppDate)
-                                        wk.SetValByKey(attr.Key, DataType.CurrentData);
-
-                                    if (attr.MyDataType == DataType.AppDateTime)
-                                        wk.SetValByKey(attr.Key, DataType.CurrentDataTime);
-                                }
-                                else
-                                {
-                                    wk.SetValByKey(str, htWork[str]);
-                                }
-                            }
-                              
-                            else
-                              wk.SetValByKey(str, htWork[str]);
-                        }
-                        else
-                        {
-                            wk.Row.Add(str, htWork[str]);
-                        }
+                    if (wk.Row.ContainsKey(str))
+                    {
+                        //if (nd.IsStartNode == true)
+                        //{
+                        //    Attr attr = attrs.GetAttrByKey(str);
+                        //    string defVal = attrs.GetAttrByKey(str).DefaultValOfReal;
+                        //    if (attr.UIIsReadonly == true && defVal != null && defVal.Equals("@RDT") == true)
+                        //    {
+                        //        if (attr.MyDataType == DataType.AppDate)
+                        //            wk.SetValByKey(attr.Key, DataType.CurrentData);
+                        //        if (attr.MyDataType == DataType.AppDateTime)
+                        //            wk.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                        //        continue;
+                        //    }
+                        //}
+                        wk.SetValByKey(str, htWork[str]);
+                    }
+                    else
+                    {
+                        wk.Row.Add(str, htWork[str]);
                     }
                 }
+                #endregion 赋值.
 
                 wk.Rec = WebUser.No;
                 wk.RecText = WebUser.Name;
@@ -8969,10 +8959,11 @@ namespace BP.WF
                 #endregion 为开始工作创建待办
 
                 return "保存成功.";
+
             }
             catch (Exception ex)
             {
-                return "err@保存失败:" + ex.Message;
+                throw new Exception("err@Node_SaveWork保存错误:" + ex.Message + ", 技术信息：" + ex.StackTrace);
             }
         }
         /// <summary>
@@ -9704,9 +9695,9 @@ namespace BP.WF
         /// <param name="isBackToThisNode">退回后是否要原路返回？</param>
         /// <returns>执行结果，此结果要提示给用户。</returns>
         public static string Node_ReturnWork(string fk_flow, Int64 workID, Int64 fid, int currentNodeID, int returnToNodeID,
-            string returnToEmp, string msg = "无", bool isBackToThisNode = false,string pageData=null)
+            string returnToEmp, string msg = "无", bool isBackToThisNode = false, string pageData = null)
         {
-            WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg,pageData);
+            WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg, pageData);
             return wr.DoIt();
         }
         /// <summary>

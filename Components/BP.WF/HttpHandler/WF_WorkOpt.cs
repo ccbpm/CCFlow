@@ -781,24 +781,6 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
-        /// 删除.
-        /// </summary>
-        /// <returns></returns>
-        public string AccepterOfGener_Delete()
-        {
-            //删除指定的人员.
-            Paras ps = new Paras();
-            ps.SQL = "DELETE FROM WF_SelectAccper WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.Add("WorkID", this.WorkID);
-            ps.AddFK_Emp(this.FK_Emp);
-            BP.DA.DBAccess.RunSQL(ps);
-            int toNodeID = this.GetRequestValInt("ToNode");
-            //查询出来,已经选择的人员.
-            SelectAccpers sas = new SelectAccpers();
-            sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.Idx);
-            return sas.ToJson();
-        }
-        /// <summary>
         /// 执行发送.
         /// </summary>
         /// <returns></returns>

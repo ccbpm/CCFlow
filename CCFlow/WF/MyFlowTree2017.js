@@ -37,8 +37,14 @@ function FlowFormTree_Init() {
     }
 
     var pushData = eval('(' + data + ')');
-
-    ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+    var flowDatas = [];
+    for (var i = 0; i < pushData[0].children.length; i++) {
+        var pushDataChi = pushData[0].children[i];
+        for (var j = 0; j < pushDataChi.children.length; j++) {
+            flowDatas.push(pushDataChi.children[j]);
+        }
+    }
+    //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = "ND" + GetQueryString("FK_Node");
     if (enName == null || enName == "")
         enName = "ND" + parseInt(GetQueryString("FK_Flow")) + "01";
@@ -70,74 +76,32 @@ function FlowFormTree_Init() {
     var isSelect = false;
 
     var urlExt = urlExtFrm();
+    //生成左侧目录.
+    var html = "<div class='panel'><div class='panel-header accordion-header accordion-header-selected'><div class='panel-title'>目录</div class='panel-tool'><div><a class='accordion-collapse' href='javascript: void (0)'><a/></div></div></div>";
+    html += "<div class='easyui-accordion' data-options='fit:true' id='accordion' style='border:0'>";
+    html += "<ul class='navlist' >";
+    for (var i = 0; i < flowDatas.length; i++) {
+        var flowData = flowDatas[i];
+        var isEdit = flowData.attributes.IsEdit;
+        if ((IsCC && IsCC == "1") || IsReadonly == "1")
+            isEdit = "0";
 
-    //加载类别树
-    $("#flowFormTree").tree({
-        data: pushData,
-        iconCls: 'tree-folder',
-        collapsed: true,
-        lines: true,
-        formatter: function (node) {
-            if (i == 0) {
-                if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
-                    i++;
-                    var isEdit = node.attributes.IsEdit;
-                    if ((IsCC && IsCC == "1") || IsReadonly == "1")
-                        isEdit = "0";
+        if (isEdit == "0")
+            urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
+        var url = "./CCForm/Frm.htm?FK_MapData=" + flowData.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
 
-                    if (isEdit == "0")
-                        urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
-
-                    var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
-                    addTab(node.id, node.text, url);
-                }
-            }
-            return node.text;
-        },
-        onClick: function (node) {
-            if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") { /*普通表单和必填表单*/
-                var isEdit = node.attributes.IsEdit;
-
-                if ((IsCC && IsCC == "1") || IsReadonly == "1")
-                    isEdit = "0";
-
-                if (isEdit == "0")
-                    urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
-                else
-                    urlExt = urlExt.replace('IsReadonly=1', 'IsReadonly=0');
-                var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
-
-                addTab(node.id, node.text, url, node.attributes.IsCloseEtcFrm);
-
-            } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
-                var url = node.attributes.Url;
-                while (url.indexOf('|') >= 0) {
-                    url = url.replace('|', '/');
-                }
-                if (url.indexOf('?') > 0) {
-                    url = url + "&FK_MapData=" + node.id + "&" + urlExt;
-                }
-                else {
-                    url = url + "?FK_MapData=" + node.id + "&" + urlExt;
-                }
-                addTab(node.id, node.text, url, node.attributes.IsCloseEtcFrm);
-            } else if (node.attributes.NodeType == "tools|1") {/*工具栏按钮打开新窗体*/
-                var url = node.attributes.Url;
-                while (url.indexOf('|') >= 0) {
-                    url = url.replace('|', '/');
-                }
-                if (url.indexOf('?') > 0) {
-                    url = url + "&FK_MapData=" + node.id + "&" + urlExt;
-                }
-                else {
-                    url = url + "?FK_MapData=" + node.id + "&" + urlExt;
-                }
-                WinOpenPage("_blank", url, node.text);
-            }
+        //打开第一个表单
+        if (i==0) {
+            addTab(flowData.id, flowData.text, url, flowData.attributes.IsCloseEtcFrm);
         }
-    });
+        
+        html += "<li><a href='javascript:addTab(\"" + flowData.id + "\",\"" + flowData.text + "\",\"" + url + "\",\"" + flowData.attributes.IsCloseEtcFrm +"\");'><img src='Img/Home.gif' border=0 style='width:16px;height:16px;' />" + flowData.text + "</a></li>";
+        
+    }
+    html += "</div>";
 
-
+    $("#flowFormTree").append(html);
+    $.parser.parse("#flowFormTree");
     $("#pageloading").hide();
 }
 

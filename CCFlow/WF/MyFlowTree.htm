@@ -191,6 +191,50 @@
             word-wrap: break-word;
             color: red;
         }
+        .navlist {
+            padding: 0;
+        }
+        .navlist li a {
+            padding: 5px 10px 5px 20px;
+            color: #031f5d;
+            display: block;
+            width: auto;
+            text-decoration: none;
+            line-height: 22px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .navlist li img {
+            vertical-align: -3px;
+            margin-right: 14px;
+        }
+        .navlist li a:hover {
+            background-color: #e4eef8;
+        }
+        .accordion-collapse {
+             position:absolute;
+            right: 20px;
+	        top: 50%;
+            margin-left: 0;
+	        transform: translateY(-50%);
+	        background-image: url(/Comm/css/images/ico-menu-show.png);
+        }
+        .accordion-expand {
+	        background-image: url(/Comm/css/images/ico-menu-hide.png);
+        }
+        .accordion-header.accordion-header {
+            background: none;
+        }
+       .accordion-header {
+	        padding: 10px 15px;
+	        background-color: #fff;
+            border: 0;
+        }
+       .accordion-header .panel-tool {
+            top: 50%;
+            transform: translateY(-50%);
+        }
     </style>
     <script type="text/javascript">
         window.onbeforeunload = function close() {

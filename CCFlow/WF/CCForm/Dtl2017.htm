@@ -769,25 +769,30 @@
                                     });
                                 } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0 || (tmplate.length > 1 && $(tmplate[1]).attr('name') != undefined && $(tmplate[1]).attr('name').indexOf('DDL_') == 0)) {
                                     //对于只读的下拉框做如下处理  为只读的下拉框赋值.
-                                    if (o.data().UIIsEnable == "0") {
-                                        var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
-                                        var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
-                                        if (tmplate.length > 1)
-                                            ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"];
-                                        var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
-                                        if (tmplate.length > 1) {
-                                            $(tmplate[1]).children().remove();
-                                            $(tmplate[1]).append(option);
-                                        } else {
-                                            $(tmplate).children().remove();
-                                            $(tmplate).append(option);
-                                        }
-                                    } else {
-                                        $(tmplate).bind('change', function (obj) {
-                                            $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
+                                    
 
-                                        });
-                                    }
+                                        if (o.data().UIIsEnable == "0") {
+                                            if ($(tbodyTrObj).data().hasOwnProperty('data')) {//没有数据时会报错,导致发送失败
+                                                var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
+                                                var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
+                                                if (tmplate.length > 1)
+                                                    ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"];
+                                                var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
+                                                if (tmplate.length > 1) {
+                                                    $(tmplate[1]).children().remove();
+                                                    $(tmplate[1]).append(option);
+                                                } else {
+                                                    $(tmplate).children().remove();
+                                                    $(tmplate).append(option);
+                                                }
+                                            }
+                                        } else {
+                                            $(tmplate).bind('change', function (obj) {
+                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
+
+                                            });
+                                        }
+                                    
                                 } else if (tmplate.attr('name') == undefined && tmplate.find('[name^=CB_]').length == 1) {
                                     $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
                                         $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] = $(tmplate).find('[name^=CB_]')[0].checked == true ? 1 : 0;

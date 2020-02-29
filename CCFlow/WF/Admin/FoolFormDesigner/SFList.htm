@@ -223,7 +223,8 @@
 
             //获取页面的大小
             var W = document.body.clientWidth - 120;
-            var H = document.body.clientHeight - 40;
+            //var H = document.body.clientHeight - 40;
+            var H = parent.document.body.clientHeight -200;
             OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, W, H, 'icon-edit');
 
         }

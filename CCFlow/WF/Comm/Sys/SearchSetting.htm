@@ -41,6 +41,7 @@
                 en.SetPara("IsDeSc", 1);
                 en.SetPara("IsEnableLazyload", 0); //是否启用懒加载,对树形解构有效.
                 en.SetPara("OpenModel", 0);
+                en.SetPara("IsRefreshParentPage", 1);
 
                 en.Url = "";
                 en.Insert();
@@ -66,6 +67,11 @@
 
             //设置标题.
             en.GroupTitle = myen.GroupTitle;
+            if (en.GetPara("IsRefreshParentPage") == null || en.GetPara("IsRefreshParentPage") == undefined) {
+                en.SetPara("IsRefreshParentPage", 1);
+                en.Update();
+            }
+                
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
@@ -221,10 +227,15 @@
             </tr>
             <tr>
                 <td>页面打开方式</td>
-                <td colspan=3><select name="DDLPara_OpenModel" id="DDLPara_OpenModel">
+                <td >
+                    <select name="DDLPara_OpenModel" id="DDLPara_OpenModel">
                         <option value="0">弹出新窗口</option>
                         <option value="1">新窗口打开</option>
                     </select>
+                </td>
+                <td>关闭后是否刷新本页面</td>
+                <td>
+                    <label><input id="CBPara_IsRefreshParentPage" type="checkbox" name="CBPara_IsRefreshParentPage" />关闭后是否刷新本页面</label>
                 </td>
             </tr>
             <tr>

@@ -971,12 +971,26 @@
             var openModel = cfg.GetPara("OpenModel");
             if (openModel == 0) {
                 OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null, null, function () {
-                    SearchData(1);
-                    Paginator(pages, 1);
+                    if (flag == 0 || cfg.GetPara("IsRefreshParentPage") == 1) {
+                         SearchData();
+                         Paginator(pages);
+                    }
+                   
 
                 }, null, 'black');
             } else {
-                 window.open(url);
+                var windowObj = window.open(url);
+                if (flag == 0 || cfg.GetPara("IsRefreshParentPage") == 1) {
+                    var loop = setInterval(function() {
+                          if(windowObj.closed) {
+                             clearInterval(loop);
+                              SearchData();
+                              Paginator(pages);
+
+                          }
+
+                    }, 1000);
+                }
             }
 
             

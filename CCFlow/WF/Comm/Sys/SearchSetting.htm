@@ -40,6 +40,7 @@
                 en.SetPara("OrderBy", "");
                 en.SetPara("IsDeSc", 1);
                 en.SetPara("IsEnableLazyload", 0); //是否启用懒加载,对树形解构有效.
+                en.SetPara("OpenModel", 0);
 
                 en.Url = "";
                 en.Insert();
@@ -171,8 +172,7 @@
             <tr bgcolor='white'>
                 <td>移动到显示方式</td>
                 <td>
-                    <select name="DDLPara_MoveToShowWay" id="DDLPara_MoveToShowWay">
-                    </select>
+                    <select name="DDLPara_MoveToShowWay" id="DDLPara_MoveToShowWay"></select>
                 </td>
                 <td>关键字Label(默认为:关键字:)</td>
                 <td><input name="TBPara_KeyLabel" type="text" id="TBPara_KeyLabel" style="width:100%" /> </td>
@@ -205,8 +205,7 @@
             <tr bgcolor='white'>
                 <td>大块文本编辑器</td>
                 <td>
-                    <select name="DDLPara_EditerType" id="DDLPara_EditerType">
-                    </select>
+                    <select name="DDLPara_EditerType" id="DDLPara_EditerType"></select>
                 </td>
 
                 <td>双击行打开内容</td>
@@ -220,14 +219,20 @@
                     </select>
                 </td>
             </tr>
-
+            <tr>
+                <td>页面打开方式</td>
+                <td colspan=3><select name="DDLPara_OpenModel" id="DDLPara_OpenModel">
+                        <option value="0">弹出新窗口</option>
+                        <option value="1">新窗口打开</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
                 <td>URL(当为自定义url的时候有效)</td>
-                <td colspan=3><input name="TB_Url" type="text" value="" id="TB_Url" style="width:100%;" /></td>
+                <td colspan=3><input name="TB_UrlExt" type="text" value="" id="TB_UrlExt" style="width:100%;" /></td>
             </tr>
 
-            <tr>
-            </tr>
+            <tr></tr>
 
             <!-- 卡片的分组显示 -->
             <tr>

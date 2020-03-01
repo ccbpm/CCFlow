@@ -968,12 +968,18 @@
             if (windowH == "" || windowH == undefined)
                 windowH = 500;
 
+            var openModel = cfg.GetPara("OpenModel");
+            if (openModel == 0) {
+                OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null, null, function () {
+                    SearchData(1);
+                    Paginator(pages, 1);
 
-            OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null, null, function () {
-                SearchData(1);
-                Paginator(pages, 1);
+                }, null, 'black');
+            } else {
+                 window.open(url);
+            }
 
-            }, null, 'black');
+            
         }
 
         function New() {

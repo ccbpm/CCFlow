@@ -540,11 +540,11 @@ namespace BP.En
         {
             if (this._orderBy.IndexOf("ORDER BY") != -1)
             {
-                this._orderBy += " , " + attr2Field(attr);
+                this._orderBy += " , " + attr;
             }
             else
             {
-                this._orderBy = " ORDER BY " + attr2Field(attr);
+                this._orderBy = " ORDER BY " + attr;
             }
         }
 

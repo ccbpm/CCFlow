@@ -335,7 +335,7 @@ namespace BP.GPM
             this.No = no;
             this.Retrieve();
         }
- 
+
         protected override bool beforeDelete()
         {
             if (this.Flag.Contains("FlowSort") || this.Flag.Contains("Flow"))
@@ -384,9 +384,10 @@ namespace BP.GPM
 
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
-                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay,
+                    "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBString(MenuAttr.Url, null, "连接", false, false, 0, 3900, 200, true);
+                //map.AddTBString(MenuAttr.Url, null, "连接", false, false, 0, 3900, 200, true);
                 map.AddTBString(MenuAttr.UrlExt, null, "连接", true, false, 0, 3900, 200, true);
 
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
@@ -395,15 +396,11 @@ namespace BP.GPM
                     "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
 
                 map.AddTBString(MenuAttr.Flag, null, "标记", true, false, 0, 500, 20, false);
-                map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
-                map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
-                map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
-
-                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
-
+                //map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
+                //map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
+                //map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
                 //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
-
-                map.AddMyFile("图标");  //附件.
+                //  map.AddMyFile("图标");  //附件.
 
                 map.AddSearchAttr(MenuAttr.FK_App);
                 map.AddSearchAttr(MenuAttr.MenuType);
@@ -504,7 +501,7 @@ namespace BP.GPM
                 fb.Update();
 
                 //执行绑定.
-                fb.DoBindMenu(this.No,name);
+                fb.DoBindMenu(this.No, name);
 
                 return "<a href='../Comm/En.htm?EnName=BP.Frm.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
             }
@@ -519,7 +516,7 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoAddRight3()
         {
-            if (this.Url.Contains("Search.htm") == false && this.Url.Contains("SearchBS.htm") == false)
+            if (this.Url.Contains("Search.htm") == false && this.Url.Contains("Search.htm") == false)
                 return "该功能非Search组件，所以您不能增加功能权限.";
 
             Menu en = this.DoCreateSubNode() as Menu;

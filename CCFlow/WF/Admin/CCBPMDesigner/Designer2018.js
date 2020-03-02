@@ -499,14 +499,14 @@ $(function () {
     });
 
     /*新建*/
-    
+
     $("#Btn_NewFlow").bind('click', function () {
 
         alert("请在流程树右键菜单新建流程！");
 
 
     });
-   
+
     /*保存*/
     $("#Btn_Save").bind('click', function () {
 
@@ -700,7 +700,7 @@ function saveAndUpdateNodeName(activeId) {
     var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
     mapData.Name = text;
     mapData.Update();
-    
+
 
 
     //修改分组名称.
@@ -936,9 +936,10 @@ function FlowRun2020() {
     var flow = new Entity("BP.WF.Flow", flowNo);
     flow.DoMethodReturnString("ClearCash");
 
-    var url = "../TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    var url = "../TestingStep/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
+
     //WinOpen(url);
-    window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
+    window.parent.addTab(flowNo + "_YXLH", "运行流程2020" + flowNo, url);
 }
 
 //运行流程

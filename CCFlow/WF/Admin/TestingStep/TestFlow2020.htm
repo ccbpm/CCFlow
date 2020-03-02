@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>流程发起测试</title>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../Scripts/config.js" type="text/javascript"></script>
-    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
         var fk_flow = GetQueryString('FK_Flow');
@@ -19,7 +19,7 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载可以<font color=red>发起该流程</font>的人员列表, 请稍后......");
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载可以<font color=red>发起该流程</font>的人员列表, 请稍后......");
 
             var doType = GetQueryString("DoType");
             if (doType == "" || doType == null)
@@ -38,16 +38,16 @@
                 return;
             }
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-            var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
-            var urlHost = "";
-            if (plant == "jeesite") {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
 
-                urlHost = getContextPath() + "/a/logout";
-                //$("#Table1").attr("caption", "&nbsp;&nbsp;演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a>");
-                document.getElementById("Table1").caption.innerHTML = "演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a> - <font color=red><a href=\"javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');\" >提示</font>";
-                //$("#demoPass").html("&nbsp;&nbsp;");
-            }
+            //var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
+            //var urlHost = "";
+            //if (plant == "jeesite") {
+            //    urlHost = getContextPath() + "/a/logout";
+            //    //$("#Table1").attr("caption", "&nbsp;&nbsp;演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a>");
+            //    document.getElementById("Table1").caption.innerHTML = "演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a> - <font color=red><a href=\"javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');\" >提示</font>";
+            //    //$("#demoPass").html("&nbsp;&nbsp;");
+            //}
 
             //debugger;
             handler.AddUrlData();
@@ -61,7 +61,7 @@
                 }
 
                 if (data.indexOf('管理员') > 0) {
-                    window.location.href = './CCBPMDesigner/Login.htm';
+                    window.location.href = './../CCBPMDesigner/Login.htm';
                     return;
                 }
 
@@ -94,7 +94,7 @@
                 else
                     newRow += "<td>" + emp.Name + "</td>";
 
-                var url = "<a  href=\"javascript:StartIt('" + emp.No + "');\"  ><img src='./../Img/ie.gif' border=0 />发起流程</a>";
+                var url = "<a  href=\"javascript:StartIt('" + emp.No + "');\"  ><img src='./../../Img/ie.gif' border=0 />发起流程</a>";
                 if (emp.No == "admin")
                     newRow += "<td><font color=green><b>" + url + "</b></font></td>";
                 else
@@ -112,14 +112,19 @@
 
         //发起流程。
         function StartIt(empNo) {
-           // alert(empNo);
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("UserNo", empNo);
-            var url = handler.DoMethodReturnString("TestFlow2020_StartIt");
+            var data = handler.DoMethodReturnString("TestFlow2020_StartIt");
+
+            if (data.indexOf('访问规则') > 0) {
+                alert(data);
+                return;
+            }
+
             //alert(url);
-            WinOpenFull(url);
+            WinOpenFull(data); //启动测试容器.
         }
 
 

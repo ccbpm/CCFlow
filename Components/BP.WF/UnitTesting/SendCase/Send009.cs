@@ -328,10 +328,6 @@ namespace BP.UnitTesting.SendCase
                         if ( val != "zhoupeng")
                             throw new Exception("@应该是 zhoupeng 是 FlowStarter, 现在是:"+val);
                         break;
-                    case GERptAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("@ MyNum 应当是1, 现在是:"+val);
-                        break;
                     case GERptAttr.PFlowNo:
                         if (val != "")
                             throw new Exception("@ PFlowNo 应当是 '' 现在是:"+val);

@@ -42,7 +42,6 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere(EntityTreeAttr.No, parentNo);
                 qo.addOrderBy(EntityTreeAttr.Idx);
                 qo.DoQuery();
-
             }
             else
             {
@@ -1246,7 +1245,7 @@ namespace BP.WF.HttpHandler
         }
         /// <summary>
         /// 外键或者枚举的查询.
-        /// </summary>
+        /// </summary>  
         /// <returns></returns>
         public string Search_SearchAttrs()
         {

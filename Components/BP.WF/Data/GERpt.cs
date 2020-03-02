@@ -120,10 +120,6 @@ namespace BP.WF.Data
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
-        /// <summary>
-        /// 数量
-        /// </summary>
-        public const string MyNum = "MyNum";
     }
     /// <summary>
     /// 报表
@@ -154,17 +150,6 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(GERptAttr.FlowDaySpan, value);
-            }
-        }
-        public int MyNum
-        {
-            get
-            {
-                return this.GetValIntByKey(GERptAttr.MyNum);
-            }
-            set
-            {
-                this.SetValByKey(GERptAttr.MyNum, value);
             }
         }
         /// <summary>
@@ -527,11 +512,6 @@ namespace BP.WF.Data
                       || attr.Key.Equals("Name"))
                     continue;
 
-                if (attr.Key == GERptAttr.MyNum)
-                {
-                    this.SetValByKey(attr.Key, 1);
-                    continue;
-                }
 
                 try
                 {
@@ -585,11 +565,6 @@ namespace BP.WF.Data
                     continue;
 
 
-                if (attr.Key== GERptAttr.MyNum)
-                {
-                    this.SetValByKey(attr.Key, 1);
-                    continue;
-                }
                 this.SetValByKey(attr.Key, fromEn.GetValByKey(attr.Key));
             }
         }

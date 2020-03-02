@@ -77,27 +77,6 @@ namespace BP.WF
                 this.SetValByKey(StartWorkAttr.FK_Dept, value);
             } 
 		}
-        //public string FK_DeptOf2Code
-        //{
-        //    get
-        //    {
-        //        return this.FK_Dept.Substring(6);
-        //    } 
-        //}
-		/// <summary>
-		/// FK_XJ
-		/// </summary>
-        //public string FK_XJ
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey(StartWorkAttr.FK_Dept);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(StartWorkAttr.FK_Dept, value);
-        //    }
-        //}
 		#endregion
 
 		#region 基本属性

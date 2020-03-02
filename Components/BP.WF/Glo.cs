@@ -3070,7 +3070,6 @@ namespace BP.WF
                 str += GERptAttr.GuestName + ",";
                 str += GERptAttr.GuestNo + ",";
                 str += GERptAttr.GUID + ",";
-                str += GERptAttr.MyNum + ",";
                 str += GERptAttr.PEmp + ",";
                 str += GERptAttr.PFID + ",";
                 str += GERptAttr.PFlowNo + ",";

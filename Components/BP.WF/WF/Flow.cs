@@ -674,7 +674,6 @@ namespace BP.WF
                 IsNewWorkID = true;
 
             string errInfo = "";
-
             try
             {
                 //从报表里查询该数据是否存在？
@@ -745,7 +744,7 @@ namespace BP.WF
                     {
                         wk.DirectInsert();
                     }
-                    catch
+                    catch(Exception ex)
                     {
                         wk.CheckPhysicsTable();
                         //    wk.DirectInsert();
@@ -764,7 +763,6 @@ namespace BP.WF
                         rpt.RetrieveFromDBSources();
                         rpt.FID = 0;
                         rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
-                        rpt.MyNum = 0;
                         rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, wk);
                         //WebUser.No + "," + BP.Web.WebUser.Name + "在" + DataType.CurrentDataCNOfShort + "发起.";
                         rpt.WFState = WFState.Blank;
@@ -796,7 +794,6 @@ namespace BP.WF
                         rpt.FID = 0;
                         rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
                         rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
-                        rpt.MyNum = 0;
 
                         rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, wk);
                         // rpt.Title = WebUser.No + "," + BP.Web.WebUser.Name + "在" + DataType.CurrentDataCNOfShort + "发起.";
@@ -834,7 +831,6 @@ namespace BP.WF
                     rpt.FID = 0;
                     rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
                     rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
-                    rpt.MyNum = 1;
 
                     //在发送的时候有更新.
                     //   rpt.DirectUpdate();
@@ -1074,7 +1070,6 @@ namespace BP.WF
                     rpt.SetValByKey(GERptAttr.FID, 0);
                     rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
                     rpt.SetValByKey(GERptAttr.FlowEnderRDT, BP.DA.DataType.CurrentDataTime);
-                    rpt.SetValByKey(GERptAttr.MyNum, 0);
                     rpt.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
                     rpt.SetValByKey(GERptAttr.FlowStarter, emp.No);
                     rpt.SetValByKey(GERptAttr.FlowEnder, emp.No);
@@ -3250,7 +3245,6 @@ namespace BP.WF
                 rpt.FlowEnder = endWK.Rec;
                 rpt.FlowEnderRDT = endWK.RDT;
                 rpt.FlowEndNode = endWK.NodeID;
-                rpt.MyNum = 1;
 
                 //修复标题字段。
                 WorkNode wn = new WorkNode(startWork, this.HisStartNode);
@@ -3802,25 +3796,7 @@ namespace BP.WF
             }
 
 
-            if (attrs.Contains(md.No + "_MyNum") == false)
-            {
-                /* MyNum */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "MyNum";
-                attr.Name = "条";
-                attr.MyDataType = DataType.AppInt;
-                attr.DefVal = "1";
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.HisEditType = EditType.UnDel;
-                attr.Idx = -101;
-                attr.Insert();
-            }
+         
 
             if (attrs.Contains(md.No + "_" + GERptAttr.AtPara) == false)
             {
@@ -3936,7 +3912,7 @@ namespace BP.WF
                     flowGF.Idx = -1;
                     flowGF.Insert();
                 }
-                sql = "UPDATE Sys_MapAttr SET GroupID='" + flowGF.OID + "' WHERE  FK_MapData='" + fk_mapData + "'  AND KeyOfEn IN('" + GERptAttr.PFlowNo + "','" + GERptAttr.PWorkID + "','" + GERptAttr.MyNum + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FK_NY + "','" + GERptAttr.FlowDaySpan + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEnder + "','" + GERptAttr.FlowEnderRDT + "','" + GERptAttr.FlowEndNode + "','" + GERptAttr.FlowStarter + "','" + GERptAttr.FlowStartRDT + "','" + GERptAttr.WFState + "')";
+                sql = "UPDATE Sys_MapAttr SET GroupID='" + flowGF.OID + "' WHERE  FK_MapData='" + fk_mapData + "'  AND KeyOfEn IN('" + GERptAttr.PFlowNo + "','" + GERptAttr.PWorkID + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FK_NY + "','" + GERptAttr.FlowDaySpan + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEnder + "','" + GERptAttr.FlowEnderRDT + "','" + GERptAttr.FlowEndNode + "','" + GERptAttr.FlowStarter + "','" + GERptAttr.FlowStartRDT + "','" + GERptAttr.WFState + "')";
                 DBAccess.RunSQL(sql);
             }
             catch (Exception ex)

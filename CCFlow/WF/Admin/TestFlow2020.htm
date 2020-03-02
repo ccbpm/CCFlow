@@ -21,17 +21,9 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载可以<font color=red>发起该流程</font>的人员列表, 请稍后......");
 
-            InitPage();
-
-            $("#Msg").html("");
-        });
-
-        //初始化数据.
-        function InitPage() {
-
             var doType = GetQueryString("DoType");
             if (doType == "" || doType == null)
-                doType = "TestFlow_Init";
+                doType = "TestFlow2020_Init";
 
 
             var fk_flow = GetQueryString("FK_Flow");
@@ -47,7 +39,6 @@
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-
             var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
             var urlHost = "";
             if (plant == "jeesite") {
@@ -58,7 +49,7 @@
                 //$("#demoPass").html("&nbsp;&nbsp;");
             }
 
-            debugger;
+            //debugger;
             handler.AddUrlData();
             var data = handler.DoMethodReturnString(doType);
 
@@ -79,14 +70,13 @@
             }
 
 
-
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
                 window.location.href = url;
                 return;
             }
 
-
+            //转化为Json.
             data = JSON.parse(data);
 
             //增加处理.
@@ -104,25 +94,34 @@
                 else
                     newRow += "<td>" + emp.Name + "</td>";
 
-                var url = "<a target='_blank' href='" + urlHost + "?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
-
-                url = "<a target='_blank' href='" + urlHost + "?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
-
+                var url = "<a  href=\"javascript:StartIt('" + emp.No + "');\"  ><img src='./../Img/ie.gif' border=0 />发起流程</a>";
                 if (emp.No == "admin")
                     newRow += "<td><font color=green><b>" + url + "</b></font></td>";
                 else
                     newRow += "<td>" + url + "</td>";
 
-
-                url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/ie.gif' border=0 />手机模式</a>";
-                // newRow += "<td>" + url + "</td>";
                 newRow += "<td>无</td>";
 
                 newRow += "<td>" + emp.FK_DeptText + "</td>";
                 newRow += "</tr>";
                 $("#Table1 tr:last").after(newRow);
             }
+
+            $("#Msg").html("");
+        });
+
+        //发起流程。
+        function StartIt(empNo) {
+           // alert(empNo);
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("UserNo", empNo);
+            var url = handler.DoMethodReturnString("TestFlow2020_StartIt");
+            //alert(url);
+            WinOpenFull(url);
         }
+
 
         function ToParaTest() {
             var url = "TestCase.htm?FK_Flow=" + GetQueryString("FK_Flow");
@@ -133,20 +132,20 @@
 </head>
 <body onkeypress="Esc()">
 
+    <center>
+        <table id="Table1" cellpadding="0" cellspacing="0" border="0" style="width: 90%; padding:10px; margin:10px;">
+            <caption>流程发起测试,能够发起该流程的人员列表.(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</a></font>) - <a href="javascript:ToParaTest();">参数测试</a></caption>
+            <tr>
+                <th> 序 </th>
+                <th> 可登录用户编号</th>
+                <th> 名称</th>
+                <th> 经典模式</th>
+                <th> 手机模式</th>
+                <th> 所在部门</th>
+            </tr>
+        </table>
+    </center>
 
-    <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 90%; padding:10px; margin:10px;">
-        <caption>流程发起测试,能够发起该流程的人员列表.(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</a></font>) - <a href="javascript:ToParaTest();">参数测试</a></caption>
-
-        <tr>
-            <th> 序 </th>
-            <th> 可登录用户编号</th>
-            <th> 名称</th>
-            <!--  <th> ACE模式</th>-->
-            <th> 经典模式</th>
-            <th> 手机模式</th>
-            <th> 所在部门</th>
-        </tr>
-    </table>
     <center>
         <div id="Info"></div>
         <div id="Msg"></div>

@@ -49,22 +49,26 @@
                 FK_Flow: GetQueryString("FK_Flow")
             };
 
+            //如果有退回信息字段，就让其绑定到，退回原因的文本框里.
             if (pageData.Message != undefined && pageData.Message != '') {
                 $('#TB_Doc').val(pageData.Message);
             }
 
+            //调用接口，传入url的参数。
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
+            handler.AddUrlData(); //FK_Flow, FK_Node,WorkID,Info info=退回信息字段.
 
+            //初始化数据.
             var data = handler.DoMethodReturnString("Return_Init");
             if (data.indexOf('info@') == 0) {
+
+                //这种情况下，有可能是自动退回，自动退回就提示退回消息.
 
                 //设置弹出框的大小
                 $(".modal-content", parent.document).css("width", "");
                 $(".modal-content", parent.document).css("height", "300px");
 
                 $("#iframeReturnWorkForm", parent.document).css("height", "300px");
-
 
                 data = data.replace('info@', '');
                 data = data.replace(/null/g, '');
@@ -78,10 +82,10 @@
                 return;
             }
 
-
+            //对与非法的调用，系统会提示，比如：不应该退回而退回，已经发送到下一个节点还要执行退回等等.
             if (data.indexOf('err@') == 0) {
 
-                console.error("退回窗口错误信息" + data);
+                //console.error("退回窗口错误信息" + data);
 
                 data = data.replace('err@', '');
                 data = "<font color=red>" + data + "</font>";
@@ -90,8 +94,8 @@
                 return;
             }
 
+            //启用了退回扩展字段,  退回的考核信息，就是扩充了其他的字段，这里不翻译了.
             var node = new Entity("BP.WF.Node", pageData.FK_Node);
-            //启用了退回扩展字段
             if (node.ReturnCHEnable == 1) {
                 var mapAttrs = new Entities("BP.Sys.MapAttrs");
                 mapAttrs.Retrieve("FK_MapData", "BP.WF.ReturnWorks", "Idx");
@@ -102,70 +106,69 @@
                     html += "<table style='width:100%;'>";
                     for (var i = 0; i < mapAttrs.length; i++) {
                         if (mapAttrs[i].AtPara.indexOf("FK_Flow=" + pageData.FK_Flow) != -1) {
-                                 idx++;
-                        if ((idx+1)% 2 == 0)
-                            html += "<tr>";
-                        html += "<td>" + mapAttrs[i].Name + "</td>";
-                        html += "<td  style='text-align:left'>";
-                        html += InitAthMapAttrOfCtrlFool(null, mapAttrs[i],null);
-                        html += "</td>";
-                        if (idx % 2 == 0)
-                            html += "</tr>";
+                            idx++;
+                            if ((idx + 1) % 2 == 0)
+                                html += "<tr>";
+                            html += "<td>" + mapAttrs[i].Name + "</td>";
+                            html += "<td  style='text-align:left'>";
+                            html += InitAthMapAttrOfCtrlFool(null, mapAttrs[i], null);
+                            html += "</td>";
+                            if (idx % 2 == 0)
+                                html += "</tr>";
                         }
-                       
+
                     }
                     html += "</table>";
                     if (idx != 0) {
-                         $("#ReturnCH").html(html);
+                        $("#ReturnCH").html(html);
                     }
-                   
                 }
             }
 
+            //获得可以退回的节点集合。
             var returnNodeArr = JSON.parse(data);
             var nodeListHtml = '';
 
             $.each(returnNodeArr, function (i, returnNode) {
 
                 if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') >= 0) {
-                    return true;
+                    return true; //退回这个字段里包含 IsHuiQian=1的字符，就排除掉.
                 }
 
                 nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
             });
 
-
+            //绑定退回到节点的数据.
             $('#DDL_Nodes').html(nodeListHtml);
 
-            //获取当前节点属性
+            //获取当前节点属性,是否可以执行退回并原路返回的按钮？
             var node = new Entity("BP.WF.Node", pageData.FK_Node)
             if (node.IsBackTracking == "0")
                 $('#btnIsBackTracking').css('display', 'none');
-
 
             $("section").show();
             $(".wait").hide();
 
             Common.MaxLengthError();
         });
-
-
-
-        //确定 退回 执行退回操作
+        //确定 退回 执行退回操作 
+        // isBack=0 是退回按钮调用， =1是退回并原路返回按钮调用.
         function ReturnWork(isBack) {
+
+            //获得选择退回的节点.
             var selectedNodeID = $('#DDL_Nodes').val();
+            if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID == "") {
+                alert('请选择要退回的节点');
+                return;
+            }
 
-
+            //获得退回原因.
             var val = escape($('#TB_Doc').val());
             if (val == null || val == "" || val == undefined) {
                 alert("请输入退回原因.");
                 return;
             }
 
-            if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID == "") {
-                alert('请选择要退回的节点');
-                return;
-            }
 
             $('.foot input').attr('disabled', 'disabled');
             $('.foot input').css('background', 'gray');
@@ -175,6 +178,8 @@
             } else {
                 doc = $('#TB_Doc').val();
             }
+
+            //调动退回接口.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddPara("FK_Flow", pageData.FK_Flow);
             handler.AddPara("WorkID", pageData.WorkID);
@@ -183,11 +188,15 @@
             handler.AddPara("ReturnToNode", selectedNodeID);
             handler.AddPara("ReturnInfo", doc);
             handler.AddPara("IsBack", isBack);
-            //增加字段属性
-            var parasData = $("form").serialize();
-            handler.AddPara("PageData",parasData);
 
-            var data = handler.DoMethodReturnString("DoReturnWork");
+            //增加字段属性, 这部分，vue可以不翻译.
+            var parasData = $("form").serialize();
+            handler.AddPara("PageData", parasData);
+
+            //调用退回方法.
+            var data = handler.DoMethodReturnString("DoReturnWork"); //执行方法.
+
+            //提示退回消息， 并关闭窗口，刷新父父窗口.
             data = data.replace(/null/g, '');
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose(data);
@@ -215,7 +224,7 @@
         }
 
 
-</script>
+    </script>
 </head>
 <body>
 
@@ -229,7 +238,7 @@
         <div id="ReturnCH" style="display:none;margin:30px;">
         </div>
     </form>
-   
+
     <div style=" margin:30px;" id="DIV_Doc">
         退回原因：
         <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%; height:150px;" maxlength="500"></textarea>

@@ -82,11 +82,9 @@
                 FK_Node: GetQueryString('FK_Node'),
                 WorkID: GetQueryString('WorkID'),
                 FID: GetQueryString('FID'),
-                Message: GetQueryString('Info'),
                 FK_Flow: GetQueryString("FK_Flow")
             };
 
-            $('#Msg').val(param.Message);
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +

@@ -59,14 +59,14 @@
     <script type="text/javascript">
         var param = {};
         $(function () {
-            var IsSend = GetQueryString("IsSend");
+
+            var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
             if (IsSend == null || IsSend == undefined || IsSend == "")
                 IsSend = "1";
             if (IsSend == "0")
-                $("#Btn_Send").hide();
+                $("#Btn_Send").hide(); //如果是ToNodes.htm调用的就隐藏发送.
 
             $("#HelpInfo").toggle(); //没有起作用。
-
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="SelectEmpsModal">' +
@@ -85,6 +85,7 @@
 
             $('body').append($(selectEmpModalHtml));
 
+            //获得部门编号.
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
             if (dept == null || dept == '' || dept == undefined) {
                 dept = $.cookie('FK_Dept');
@@ -104,7 +105,6 @@
 
             //为天业集团做的特殊判断.
             url = url.replace('=101&', '=10102&');
-
             //url = url.replace('=101&', '=10102&');
 
             $('#iframeSelectEmpsForm').attr('src', url);
@@ -116,24 +116,18 @@
             //$("#HelpInfo").hide();
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
+            handler.AddUrlData(); //参数:ToNode,FK_Flow,FK_Node,WorkID
             var data = handler.DoMethodReturnString("AccepterOfGener_Init");
-
             // alert(data);
-
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 window.parent.close();
                 return;
             }
-
-            if (data.indexOf('url@') == 0) {
-                window.location.href = data.replace('url@', '');
-                return;
-            }
-
+            //获得结果集.该结果集有如下数据: SELECT * FROM WF_SelectAccper
             var sas = JSON.parse(data);
-            BindTable(sas);
+
+            BindTable(sas);  //开始渲染列表.
             var int = setInterval("clock()", 1000);
 
         });
@@ -144,8 +138,8 @@
             var isDel = true;
             var toNodeID = GetQueryString("ToNode");
             var sa = new Entity("BP.WF.Template.Selector", toNodeID);
-            if (sa.IsSimpleSelector == 1)
-                isDel = false;
+            if (sa.IsSimpleSelector == 1) //是否单项选择.
+                isDel = false; //如果是单项选择，就可以有移除按钮.
 
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];
@@ -159,7 +153,7 @@
                 row += "<td style='width:40px;'><a href=\"javascript:Down('" + sa.MyPK + "');\" >下移</a></td>";
 
                 if (isDel == true)
-                    row += "<td style='width:40px;'><a href=\"javascript:DeleteIt('" + sa.FK_Emp + "','" + sa.EmpName + "');\" >移除</a></td>";
+                    row += "<td style='width:40px;'><a href=\"javascript:DeleteIt('" + sa.MyPK + "');\" >移除</a></td>";
                 else
                     row += "<td style='width:40px;'> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
 
@@ -196,29 +190,16 @@
             window.location.href = window.location.href;
         }
         function Down(mypk) {
-              var en = new Entity("BP.WF.Template.SelectAccper", mypk);
+            var en = new Entity("BP.WF.Template.SelectAccper", mypk);
             en.DoMethodReturnString("DoDown");
             window.location.href = window.location.href;
         }
-
-        function DeleteIt(empNo, empName) {
-
-            //            if (window.confirm('您确定要移除[' + empNo +' , '+ empName + ']') == false)
-            //                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
-            handler.AddPara("FK_Emp", empNo);
-
-            var data = handler.DoMethodReturnString("AccepterOfGener_Delete");
-            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
-                alert(data);
-                return;
-            }
+        function DeleteIt(mypk) {
+            var en = new Entity("BP.WF.Template.SelectAccper", mypk);
+            en.Delete();
             window.location.href = window.location.href;
             return;
         }
-
 
         //确定 执行下一步接受人员列表操作.
         function AddEmps(isSend) {
@@ -231,10 +212,9 @@
         }
 
         function AddEmpsExt(isSend, emps) {
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
-            handler.AddPara("AddEmps", emps);
+            handler.AddUrlData(); //参数ToNode, WorkID,FK_Node,FK_Flow
+            handler.AddPara("AddEmps", emps); //要增加的人员，多个可以用逗号分开.
             var data = handler.DoMethodReturnString("AccepterOfGener_AddEmps");
 
             if (data.indexOf('err@') == 0) {
@@ -248,31 +228,26 @@
                 $(".Msg").html(data);
                 return;
             }
-
-
             //是否执行发送?
             if (isSend == true) {
                 SendIt();
                 return;
             }
-
             ClearTable();
-
             var gwls = JSON.parse(data);
-
             BindTable(gwls);
-
-            document.getElementById("TB_Emps").value = "";
+            document.getElementById("TB_Emps").value = ""; //把人员的文本框清空.
             return;
 
             $(".foot").hide();
         }
 
+        //执行发送.
         function Send() {
 
             var emps = this.document.getElementById("TB_Emps").value;
             if (emps != "") {
-                this.AddEmps(true);
+                this.AddEmps(true); //如果人员不为空，把人员代
                 return;
             }
 
@@ -282,16 +257,16 @@
         function SendIt() {
 
             var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            httphandler.AddUrlData();
+            httphandler.AddUrlData(); //FK_Flow,FK_Node,WorkID,FID,ToNode 等参数.
 
-            $("#Btn_Send").attr("disabled", "disabled");
+            $("#Btn_Send").attr("disabled", "disabled"); //把发送按钮设置不可用.
             $("#Btn_Send").val("正在发送请稍候...");
-            $("#Btn_Close").attr("disabled", "disabled");
-            $("#Btn_SelectEmps").attr("disabled", "disabled");
+            $("#Btn_Close").attr("disabled", "disabled"); //关闭按钮设置不可以用.
+            $("#Btn_SelectEmps").attr("disabled", "disabled"); //选择人按钮不可以用.
 
             var data = httphandler.DoMethodReturnString("AccepterOfGener_Send");
 
-            if (data.indexOf('err@') == 0) {
+            if (data.indexOf('err@') == 0) {  //如果发送失败.
                 $(".Msg").show();
                 $(".Msg").html(data);
                 $(".Msg").css("color", "red");
@@ -303,6 +278,7 @@
                 return;
             }
 
+            //发送成功处理.
             $(".Msg").css("color", "");
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
             data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
@@ -395,10 +371,11 @@
                 return;
             }
 
+            //返回的人员编号.
             var val = frames["iframeSelectEmpsForm"].window.returnVal.No;
 
             // alert(val);
-            AddEmpsExt(false, val)
+            AddEmpsExt(false, val); //调用增加接受人方法，  fase=不让其发送.  val= 选择的人员编号.
             //$('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
 
@@ -426,9 +403,8 @@
 
         //事件
         $(function () {
-            //人员选择
+            //人员选择,输入框拼写补全.
             $("#TB_Emps").bind('input propertychange', function () {
-                //if (e.keyCode == 13) {
 
                 if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
                     //alert("输入内容为空！");
@@ -440,18 +416,16 @@
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
                 handler.AddPara("FK_Node", GetQueryString("FK_Node"));
                 handler.AddPara("WorkID", GetQueryString("WorkID"));
-                handler.AddPara("ToNode", GetQueryString("ToNode"));
-                handler.AddPara("TB_Emps", $("#TB_Emps").val());
+                handler.AddPara("ToNode", GetQueryString("ToNode")); //要到达的节点.
+                handler.AddPara("TB_Emps", $("#TB_Emps").val());    //文本框的值
                 var data = handler.DoMethodReturnString("AccepterOfGener_SelectEmps");
 
-                if (data.indexOf('err@') == 0) {
+                if (data.indexOf('err@') == 0) { //如果有错误.
                     alert(data);
                     return;
                 }
-                //SelectEmp
-                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
-                data = JSON.parse(data);
-                //$("#SelectEmp").hide().html("");
+
+                data = JSON.parse(data); //返回 No,Name 两个列的值.
                 var html = "";
                 for (var i = 0; i < data.length; i++) {
                     //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
@@ -462,6 +436,7 @@
             });
         });
 
+        //弹窗要调用的接口.
         function selectAdd(No) {
             $("#TB_Emps").val(No);
         }
@@ -476,8 +451,8 @@
         function getCon(no) {
 
             //  $("#TB_Emps").val(no);
-            $("#SelectEmp").hide().html("");
-            AddEmpsExt(false, no);
+            $("#SelectEmp").hide().html(""); //关闭掉人员列表。
+            AddEmpsExt(false, no); //调用增加人员的方法，fase=不发送.
         }
 
         function Help() {
@@ -487,7 +462,9 @@
 
 </head>
 <body>
-    <div class="Msg" style="text-align: left;padding-left:25px; display:none;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
+    <div class="Msg" style="text-align: left;padding-left:25px; display:none;">
+        <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
+    </div>
 
     <table id="Table1" style="width:90%;margin:0px 20px">
         <!-- <caption>下一步接受人员列表</caption>-->
@@ -498,7 +475,6 @@
                 <td style="width:60px; font-weight:bolder">姓名</td>
                 <td style="font-weight:bolder">所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></td>
                 <td style="width:40px; font-weight:bolder" colspan="3">操作</td>
-
             </tr>
         </thead>
         <tbody>
@@ -522,7 +498,6 @@
             <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
 
             <a href="javascript:Help()">查询帮助?</a>
-
             <div id="HelpInfo">
                 <ul>
                     <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
@@ -530,10 +505,7 @@
                     <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
                 </ul>
             </div>
-
         </div>
-
     </div>
-
 </body>
 </html>

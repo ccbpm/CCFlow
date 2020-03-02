@@ -930,6 +930,18 @@ function FlowRun() {
     window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
 }
 //运行流程
+function FlowRun2020() {
+
+    //执行流程检查.
+    var flow = new Entity("BP.WF.Flow", flowNo);
+    flow.DoMethodReturnString("ClearCash");
+
+    var url = "../TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    //WinOpen(url);
+    window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
+}
+
+//运行流程
 function FlowRunAdmin() {
 
     //执行流程检查.

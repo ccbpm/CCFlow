@@ -280,7 +280,8 @@
                     edt = new Date(Date.parse(edt.replace(/-/g, "/")));
                     passTime = GetSpanTime(date, edt);
                     //判断流程是否逾期
-                    if (date.getTime() > edt.getTime() && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT && paras.indexOf("&IsCC=1") == -1) {
+                    if (date.getTime() > edt.getTime() && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT
+                        && paras.indexOf("&IsCC=1") == -1) {
                         listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
                     }
                     else {
@@ -289,7 +290,6 @@
                         } else {
                             listbox += "<td><font color=green>" + window.lang.zhengchang + "</font></td>";
                         }
-
                     }
 
                     listbox += "<td>" + GetState(work.WFState) + "</td>";

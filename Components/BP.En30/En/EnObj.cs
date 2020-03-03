@@ -231,7 +231,6 @@ namespace BP.En
                 if (v == null || v.IndexOf('@') == -1)
                     continue;
 
-
                 // 设置默认值.
                 if (v.Equals("@WebUser.No"))
                 {
@@ -269,10 +268,7 @@ namespace BP.En
                         this.SetValByKey(attr.Key, DataType.CurrentDataTime);
                     continue;
                 }
-                else
-                {
-                    continue;
-                }
+               
             }
         }
         /// <summary>

@@ -6,7 +6,7 @@ var workNode = null;
 var IsReadonly = GetQueryString("IsReadonly");
 var IsCC = "0";
 var webUser = new WebUser();
-
+var flowDatas = [];
 
 function GenerTreeFrm(wn) {
     workNode = wn;
@@ -37,12 +37,18 @@ function FlowFormTree_Init() {
     }
 
     var pushData = eval('(' + data + ')');
-    var flowDatas = [];
     for (var i = 0; i < pushData[0].children.length; i++) {
         var pushDataChi = pushData[0].children[i];
-        for (var j = 0; j < pushDataChi.children.length; j++) {
-            flowDatas.push(pushDataChi.children[j]);
+        if (pushDataChi.attributes.NodeType == "folder") {
+            flowDatas.push(pushDataChi);
+            for (var j = 0; j < pushDataChi.children.length; j++) {
+                if (pushDataChi.children[j].attributes.NodeType == "folder") {
+
+                    flowDatas.push(pushDataChi.children[j]);
+                }
+            }
         }
+        
     }
     //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = "ND" + GetQueryString("FK_Node");
@@ -77,34 +83,42 @@ function FlowFormTree_Init() {
 
     var urlExt = urlExtFrm();
     //生成左侧目录.
-    var html = "<div class='panel'><div class='panel-header accordion-header accordion-header-selected'><div class='panel-title'>目录</div class='panel-tool'><div><a class='accordion-collapse' href='javascript: void (0)'><a/></div></div></div>";
-    html += "<div class='easyui-accordion' data-options='fit:true' id='accordion' style='border:0'>";
-    html += "<ul class='navlist' >";
+
+    var html = "<div class='easyui-accordion' data-options='multiple:true,selected:false' id='accordion' style='border:0px;height:auto'>";
     for (var i = 0; i < flowDatas.length; i++) {
+
         var flowData = flowDatas[i];
-        var isEdit = flowData.attributes.IsEdit;
-        if ((IsCC && IsCC == "1") || IsReadonly == "1")
-            isEdit = "0";
 
-        if (isEdit == "0")
-            urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
-        var url = "./CCForm/Frm.htm?FK_MapData=" + flowData.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+        html += "<div title='" + flowData.text + "' style='overflow:auto;'>";
+        html += "<ul class='navlist' >";
+        for (var j = 0; j < flowData.children.length; j++) {
+            var formData = flowData.children[j];
+            var isEdit = formData.attributes.IsEdit;
+            if ((IsCC && IsCC == "1") || IsReadonly == "1")
+                isEdit = "0";
 
-        //打开第一个表单
-        if (i==0) {
-            addTab(flowData.id, flowData.text, url, flowData.attributes.IsCloseEtcFrm);
+            if (isEdit == "0")
+                urlExt = urlExt.replace('IsReadonly=0', 'IsReadonly=1');
+            var url = "./CCForm/Frm.htm?FK_MapData=" + formData.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+
+            //默认打开第一个表单
+            if (i==0&&j==0) {
+                addTab(formData.id, formData.text, url, formData.attributes.IsCloseEtcFrm);
+            }
+        
+            html += "<li><a href='javascript:addTab(\"" + formData.id + "\",\"" + formData.text + "\",\"" + url + "\",\"" + formData.attributes.IsCloseEtcFrm + "\");'><img src='Img/Home.gif' border=0 style='width:16px;height:16px;' />" + formData.text + "</a></li>";
+        
         }
-        
-        html += "<li><a href='javascript:addTab(\"" + flowData.id + "\",\"" + flowData.text + "\",\"" + url + "\",\"" + flowData.attributes.IsCloseEtcFrm +"\");'><img src='Img/Home.gif' border=0 style='width:16px;height:16px;' />" + flowData.text + "</a></li>";
-        
+        html += "</ul>";
+        html += "</div>";
     }
     html += "</div>";
 
     $("#flowFormTree").append(html);
     $.parser.parse("#flowFormTree");
     $("#pageloading").hide();
+    $(".easyui-accordion .panel-header").click();//左侧菜单全部展开
 }
-
 $(function () {
     var pageName = GetLocalPageName();
 

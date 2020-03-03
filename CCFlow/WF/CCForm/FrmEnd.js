@@ -14,24 +14,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         }
     }
 
-    //设置为只读的字段.
-    for (var i = 0; i < mapAttrs.length; i++) {
-        var mapAttr = mapAttrs[i];
-        //设置文本框只读.
-        if (mapAttr.UIVisible != 0 && (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")) {
-            $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-            $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
-            $('#RB_' + mapAttr.KeyOfEn).attr('disabled', true);
-            $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-            $('#TB_' + mapAttr.KeyOfEn).removeClass("form-control");
-            $('#CB_' + mapAttr.KeyOfEn).removeClass("form-control");
-            $('#RB_' + mapAttr.KeyOfEn).removeClass("form-control");
-            $('#DDL_' + mapAttr.KeyOfEn).removeClass("form-control");
-            if (mapAttr.MyDataType == "8")
-                $('#TB_' + mapAttr.KeyOfEn).css("text-align", "");
-        }
-    }
-
+ 
     //为控件赋值.
     for (var i = 0; i < mapAttrs.length; i++) {
 
@@ -134,6 +117,25 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                     }
                 });
             }
+        }
+    }
+
+
+    //设置为只读的字段.
+    for (var i = 0; i < mapAttrs.length; i++) {
+        var mapAttr = mapAttrs[i];
+        //设置文本框只读.
+        if (mapAttr.UIVisible != 0 && (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")) {
+            $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#RB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('#TB_' + mapAttr.KeyOfEn).removeClass("form-control");
+            $('#CB_' + mapAttr.KeyOfEn).removeClass("form-control");
+            $('#RB_' + mapAttr.KeyOfEn).removeClass("form-control");
+            $('#DDL_' + mapAttr.KeyOfEn).removeClass("form-control");
+            if (mapAttr.MyDataType == "8")
+                $('#TB_' + mapAttr.KeyOfEn).css("text-align", "");
         }
     }
 
@@ -461,6 +463,8 @@ function AfterBindEn_DealMapExt(frmData) {
 
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
+                if (mapExt.DoWay == 0)
+                    break;
                 if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
                     var oid = (pageData.WorkID || pageData.OID || "");
                     var ens = new Entities("BP.Sys.FrmEleDBs");

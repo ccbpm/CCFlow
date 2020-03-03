@@ -319,16 +319,18 @@
             width: 200px;
         }
 
-        .btn {
-            display: inline-block;
-            height: 20px;
-            background-color: #0099ff;
-            text-decoration: none;
-            color: #fff;
-            padding: 3px 15px;
-            margin: 10px 10px;
+        #Btn_Save1,#Btn_Delete,#Btn_Back {
+            border: 0px solid #031f5d;
+            background-color:#fff;
+            color: #031f5d;
         }
-
+        #Btn_Save1:hover,#Btn_Delete:hover,#Btn_Back:hover {
+            border: 0;
+            background: #1d7dd4;
+            color:#fff;
+            cursor:pointer;
+            border: 1px solid #1d7dd4;
+        }
         .lbls span {
             width: 80px;
         }
@@ -337,9 +339,9 @@
 <body>
     <form id="cc">
         <div id="bar" class="cs-tr cs-bar">
-            <input type=button value="保存" onclick="Btn_Save_Click()" />
-            <input type=button value="删除" onclick="Btn_Delete_Click()" />
-            <input type=button value="返回" onclick="Back()" />
+            <input id="Btn_Save1" type=button value="保存"  onclick="Btn_Save_Click()" />
+            <input id="Btn_Delete" type=button value="删除"  onclick="Btn_Delete_Click()" />
+            <input id="Btn_Back" type=button value="返回"  onclick="Back()" />
         </div>
 
         <fieldset id="AdminModel">

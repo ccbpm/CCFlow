@@ -1037,8 +1037,7 @@ namespace BP.WF.Template
                     {
                         if (DataType.IsNullOrEmpty(empNo))
                             continue;
-                        if (empNo == WebUser.No)
-                            continue;
+                        
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                         string smsDocReal = smsDoc.Clone() as string;
                         smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);

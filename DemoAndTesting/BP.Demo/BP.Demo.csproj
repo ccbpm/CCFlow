@@ -44,24 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Car\BaoYang.cs" />
-    <Compile Include="Car\CarChuBao.cs" />
-    <Compile Include="Car\CarFeiYongGuanLi.cs" />
-    <Compile Include="Car\CarInfo.cs" />
-    <Compile Include="Car\CarRecord.cs" />
-    <Compile Include="Car\CarRuBao.cs" />
-    <Compile Include="Car\CarWeiZhang.cs" />
-    <Compile Include="Car\Driver.cs" />
-    <Compile Include="Car\FullMoney.cs" />
-    <Compile Include="Car\NianJian.cs" />
-    <Compile Include="Car\WeiHu.cs" />
-    <Compile Include="Car\ZhiBiao.cs" />
     <Compile Include="Demo\BPFramework\BPUser.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Demo\BPFramework\EmpCent.cs" />
     <Compile Include="Demo\BPFramework\BanJi.cs" />
-    <Compile Include="Demo\BPFramework\GDZC.cs" />
     <Compile Include="Demo\BPFramework\StudentKeMu.cs" />
     <Compile Include="Demo\BPFramework\Student.cs" />
     <Compile Include="Demo\BPFramework\KeMu.cs" />

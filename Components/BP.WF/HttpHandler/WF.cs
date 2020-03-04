@@ -1193,7 +1193,6 @@ namespace BP.WF.HttpHandler
 
             // gwf.atPara.HisHT
 
-
             DataTable ndrpt = DBAccess.RunSQLReturnTable("SELECT PFlowNo,PWorkID FROM " + fl.PTable + " WHERE OID=" + workid);
             if (ndrpt.Rows.Count == 0)
             {
@@ -1256,11 +1255,7 @@ namespace BP.WF.HttpHandler
                 err += "当前的节点数据已经被篡改，请报告管理员。";
                 return "err@" + err;
             }
-
             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
-
-
-
             if (nd.HisFormType == NodeFormType.FreeForm)
             {
                 MapData md = new MapData(nd.NodeFrmID);

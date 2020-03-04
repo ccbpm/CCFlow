@@ -3416,7 +3416,8 @@ namespace BP.WF.HttpHandler
                 selectEmps = selectEmps.Replace(";", ",");
 
                 //执行发送.
-                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, selectEmps);
+                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow,
+                    this.WorkID, toNodeID, selectEmps);
                 return objs.ToMsgOfHtml();
             }
             catch (Exception ex)

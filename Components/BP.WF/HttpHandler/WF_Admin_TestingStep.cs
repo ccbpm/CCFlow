@@ -40,12 +40,26 @@ namespace BP.WF.HttpHandler
         public string Default_Init()
         {
             string userNo = this.GetRequestVal("UserNo");
-            if (WebUser.No.Equals(userNo)==false)
+            if (WebUser.No.Equals(userNo) == false)
                 BP.WF.Dev2Interface.Port_Login(userNo);
 
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             return workid.ToString();
         }
+
+        public string Default_LetAdminerLogin()
+        {
+            string adminer = this.GetRequestVal("Adminer");
+            string sid = this.GetRequestVal("SID");
+            BP.WF.Dev2Interface.Port_LoginBySID(adminer, sid);
+
+            return "登录成功.";
+            //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
+            //return workid.ToString();
+        }
+
+
+
 
         #region TestFlow2020_Init
         /// <summary>

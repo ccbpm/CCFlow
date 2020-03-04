@@ -25,6 +25,8 @@
         });
 
         function InitPage() {
+            if (GetQueryString("RptNo").indexOf("RptMyDept") == -1)
+                $("#LevelDiv").hide();
 
             var checkBoxIDs = GetSelectedCheckIDs();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_RptDfine");
@@ -43,6 +45,8 @@
             var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
             //关键字查询.
             document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+
+             document.getElementById("CB_NextLeavel").checked = (md.AtPara.indexOf("@IsSearchNextLeavel=1@") != -1);
 
             var js = md.AtPara.split("@");
             var RptSearchKeys = null;
@@ -107,6 +111,8 @@
             handler.AddPara("DTSearchWay", DTSearchWay); //日期查询方式?
             handler.AddPara("DTSearchKey", DTSearchKey); //日期字段
 
+            handler.AddPara("IsSearchNextLeavel",document.getElementById("CB_NextLeavel").checked ? 1 : 0)
+
             var data = handler.DoMethodReturnString("S5SearchCond_Save");
             alert(data);
 
@@ -134,44 +140,55 @@
 <body class="easyui-layout">
 
     <form id="cc">
-    <div data-options="region:'center',title:'4. 设置报表查询条件',border:false" style="padding: 5px;
+        <div data-options="region:'center',title:'4. 设置报表查询条件',border:false" style="padding: 5px;
         height: auto">
-        <div style='width: 100%'>
-            <div class='easyui-panel' title='是否增加关键字查询' data-options="iconCls:'icon-tip',fit:true"
-                style='height: auto; padding: 10px'>
-                关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br>
-                <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label></div>
-        </div>
-        <br>
-        <div style='width: 100%'>
-            <div id='FKeys' class='easyui-panel' title='外键与枚举类型' data-options="iconCls:'icon-tip',fit:false"
-                style='height: auto; padding: 10px'>
-                外键、枚举类型的数据可以添加到查询条件中，请选择要添加的查询条件：<br>
-
+            <div style='width: 100%' id="LevelDiv">
+                <div class='easyui-panel' title='是否查询子级部门' data-options="iconCls:'icon-tip',fit:true"
+                     style='height: auto; padding: 10px' >
+                    子级部门查询是查询这个子级部门的下一级<br />
+                    <input id="CB_NextLeavel" type="checkbox" name="CB_NextLeavel" /><label for="CB_NextLeavel">是否查询子级部门</label>
+                </div>
             </div>
-        </div>
-        <br>
-        <div style='width: 100%'>
-            <div class='easyui-panel' title='时间段' data-options="iconCls:'icon-tip',fit:true"
-                style='height: auto; padding: 10px'>
-                对数据按照时间段进行查询，比如：按流程的发起时间，在指定时间段内进行查询。<br>
-                选择方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
-                    <option selected="selected" value="0">不启用</option>
-                    <option value="1">按日期</option>
-                    <option value="2">按日期时间</option>
-                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字段：<select name="DDL_DTSearchKey"
-                    id="DDL_DTSearchKey">
-                    <!--<option value="FlowEnderRDT">FlowEnderRDT 结束时间</option>
-                    <option selected="selected" value="FlowStartRDT">FlowStartRDT 发起时间</option>-->
-                </select></div>
-        </div>
 
-        <br/>
-        <br/>
-        <a id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;"
-            href="javascript:Save()">
-            保存</a> 
-    </div>
+            <div style='width: 100%'>
+                <div class='easyui-panel' title='是否增加关键字查询' data-options="iconCls:'icon-tip',fit:true"
+                     style='height: auto; padding: 10px'>
+                    关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br />
+                    <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
+                </div>
+            </div>
+            <br />
+            <div style='width: 100%'>
+                <div id='FKeys' class='easyui-panel' title='外键与枚举类型' data-options="iconCls:'icon-tip',fit:false"
+                     style='height: auto; padding: 10px'>
+                    外键、枚举类型的数据可以添加到查询条件中，请选择要添加的查询条件：<br />
+
+                </div>
+            </div>
+            <br />
+            <div style='width: 100%'>
+                <div class='easyui-panel' title='时间段' data-options="iconCls:'icon-tip',fit:true"
+                     style='height: auto; padding: 10px'>
+                    对数据按照时间段进行查询，比如：按流程的发起时间，在指定时间段内进行查询。<br />
+                    选择方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
+                        <option selected="selected" value="0">不启用</option>
+                        <option value="1">按日期</option>
+                        <option value="2">按日期时间</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字段：<select name="DDL_DTSearchKey"
+                                                                            id="DDL_DTSearchKey">
+                        <!--<option value="FlowEnderRDT">FlowEnderRDT 结束时间</option>
+                <option selected="selected" value="FlowStartRDT">FlowStartRDT 发起时间</option>-->
+                    </select>
+                </div>
+            </div>
+
+            <br />
+            <br />
+            <a id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;"
+               href="javascript:Save()">
+                保存
+            </a>
+        </div>
     </form>
 
 

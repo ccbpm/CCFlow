@@ -199,7 +199,7 @@ if (typeof FrmType == "undefined") {
         /// <summary>
         /// 开发者表单
         /// </summary>
-        FrmType.WebOffice = 8
+        FrmType.Develop = 8
 }
 
 //节点表单方案

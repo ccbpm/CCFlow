@@ -402,6 +402,10 @@ namespace BP.WF.HttpHandler
             //日期字段.
             string DTSearchKey = this.GetRequestVal("DTSearchKey");
             md.RptDTSearchKey = DTSearchKey;
+
+
+            //是否查询自己部门发起
+            md.SetPara("IsSearchNextLeavel", this.GetRequestValBoolen("IsSearchNextLeavel"));
             md.Save();
 
             Cash.Map_Cash.Remove(this.RptNo);

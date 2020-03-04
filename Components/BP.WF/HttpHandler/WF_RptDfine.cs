@@ -460,7 +460,20 @@ namespace BP.WF.HttpHandler
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
                     break;
                 case "MyDept": //我部门发起的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    //只查本部门及兼职部门
+                    if (md.GetParaBoolen("IsSearchNextLeavel") == false)
+                    {
+                        qo.AddWhereInSQL(BP.WF.Data.GERptAttr.FK_Dept, "SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "'");
+                    }
+                    else
+                    {
+                        //查本部门及子级
+                        string sql = "SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "'";
+                        sql += " UNION ";
+                        sql += "SELECT No AS FK_Dept From Port_Dept Where ParentNo IN(SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "')";
+                        qo.AddWhereInSQL(BP.WF.Data.GERptAttr.FK_Dept, sql);
+
+                    }
                     break;
                 case "MyJoin": //我参与的.
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");

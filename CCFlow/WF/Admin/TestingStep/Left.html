@@ -53,6 +53,17 @@
             WinOpenFull(url, "right");
             //window.location.href = url;
         }
+            //如果关闭的时候，就让admin登录.
+        function LetAdminerLogin() {
+            var adminer = GetQueryString("Adminer"); //管理员.
+            var sid = GetQueryString("SID"); //管理员SID.
+
+            //访问后台，获得一个工作ID.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+            alert(data);
+        }
     </script>
 </head>
 <body>
@@ -61,6 +72,7 @@
 
     <div id="Info"></div>
 
+    <h4> <a href="javascript:LetAdminerLogin()" >安全退出</a> </h4>
 
 </body>
 </html>

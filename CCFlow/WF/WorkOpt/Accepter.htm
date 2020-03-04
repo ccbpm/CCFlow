@@ -176,7 +176,7 @@
             }
 
             //获得三个数据源.
-            var depts = data.Depts; //部门集合. 这个集合也可能为空.
+            var depts = data.Depts; //部门集合. 这个集合也可能为空，如果为空就不要分组.
             var emps = data.Emps; //人员集合.
             var selected = data.Selected; //已经选择的人员集合.
 
@@ -274,6 +274,7 @@
 
         });
 
+        //保存接受人的方法.
         function SaveNodeEmps() {
             //生成选择的人员.
             var checked = $('input:checked');
@@ -292,10 +293,10 @@
                 return;
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
-            handler.AddPara("SelectEmps", selectedEmps);
-            var data = handler.DoMethodReturnString("Accepter_Save");
-            Close(false);
+            handler.AddUrlData();  //WorkID,FK_Flow,FK_Node,ToNode 参数.
+            handler.AddPara("SelectEmps", selectedEmps); //多个人员用逗号分开： 比如 zhangsan,lisi
+            var data = handler.DoMethodReturnString("Accepter_Save"); //执行保存
+            Close(false);  //关闭窗口.
         }
 
         //复选框全选反选
@@ -342,10 +343,11 @@
             $("#Msg").html("<font color=green>正在发送请稍候...</font>");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
-            handler.AddPara("SelectEmps", encodeURI(selectedEmps));
-            var data = handler.DoMethodReturnString("Accepter_Send");
+            handler.AddUrlData(); //FK_Flow,WorkID,FK_Node,ToNode 参数.
 
+            //多个参数用逗号分开的比如： zhangsan,lisi,wangwu
+            handler.AddPara("SelectEmps", encodeURI(selectedEmps)); 
+            var data = handler.DoMethodReturnString("Accepter_Send"); //执行发送方法.
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;

@@ -1,5 +1,6 @@
 ﻿
 function InitPage() {
+
     var isMobile = GetQueryString('IsMobile');
     if (isMobile == null || isMobile == undefined || isMobile == "")
         isMobile = 0;
@@ -7,11 +8,6 @@ function InitPage() {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("TimeBase_Init");
-    if (data.indexOf('err@') == 0) {
-        alert(data);
-        return;
-    }
-
     if (data.indexOf('err@') == 0) {
         alert(data);
         return;
@@ -154,7 +150,6 @@ function InitPage() {
             doc += "<font color=green><br>" + msg + "</font><br>";
             doc += "</p>";
         }
-
 
         //输出row
         var newRow = "";

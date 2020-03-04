@@ -2722,6 +2722,10 @@ $(function () {
             return;
         }
 
+        //要排除的目录.
+        if (url.indexOf("/admin/TestingStep/") == -1)
+            return;
+
         //如果进入了管理员目录.
         if (url.indexOf("/admin/") != -1 && loadWebUser.IsAdmin != 1) {
             dynamicHandler = "";

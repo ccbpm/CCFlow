@@ -962,7 +962,8 @@ namespace BP.WF.HttpHandler
                         ||(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true
                             && gwf.GetParaString("AddLeader").Contains(item.FK_Emp+",") == false
                            && gwf.TodoEmps.Contains(item.FK_Emp + ",") == true))
-                         && item.FK_Emp != BP.Web.WebUser.No)
+                         && item.FK_Emp != BP.Web.WebUser.No
+                         && item.IsHuiQian == false)
                     {
                         item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
                         item.FK_EmpText = item.FK_EmpText;

@@ -1279,7 +1279,7 @@ function changeEnable(obj, FK_MapData, KeyOfEn, AtPara,frmType) {
         var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
         cleanAll(KeyOfEn, frmType);
         setEnable(FK_MapData, KeyOfEn, selecedval, frmType);
-        $(obj).val(selectval);
+        $(obj).val(selecedval);
     }
 }
 function clickEnable(obj, FK_MapData, KeyOfEn, AtPara, frmType) {

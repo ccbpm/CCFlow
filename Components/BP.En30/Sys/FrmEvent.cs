@@ -943,7 +943,7 @@ namespace BP.Sys
             foreach (Attr attr in attrs)
             {
                 if (doc.Contains("@" + attr.Key) == false)
-                    break;
+                    continue ;
                 if (attr.MyDataType == DataType.AppString
                     || attr.MyDataType == DataType.AppDateTime
                     || attr.MyDataType == DataType.AppDate)

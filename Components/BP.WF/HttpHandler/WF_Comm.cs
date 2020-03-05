@@ -1241,6 +1241,10 @@ namespace BP.WF.HttpHandler
             ht.Add("DTSearchLable", map.DTSearchLable);
             ht.Add("DTSearchKey", map.DTSearchKey);
 
+
+            //把实体类中的主键放在hashtable中
+            ht.Add("EntityPK", en.PKField);
+
             return BP.Tools.Json.ToJson(ht);
         }
         /// <summary>

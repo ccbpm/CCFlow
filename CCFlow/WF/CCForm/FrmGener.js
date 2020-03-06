@@ -288,13 +288,13 @@ function GenerFrm() {
   
 
     try {
-        if (isFileExist("../../DataUser/JSLibData/" + enName + "_Self.js") == true) {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
-            var tmp = document.getElementsByTagName('script')[0];
-            tmp.parentNode.insertBefore(s, tmp);
-        }
+        
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+        
        
     }
     catch (err) {
@@ -302,13 +302,11 @@ function GenerFrm() {
     }
 
     try {
-        if (isFileExist("../../DataUser/JSLibData/" + enName + ".js") == true) {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = "../../DataUser/JSLibData/" + enName + ".js";
-            var tmp = document.getElementsByTagName('script')[0];
-            tmp.parentNode.insertBefore(s, tmp);
-        }
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../../DataUser/JSLibData/" + enName + ".js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
        
     }
     catch (err) {

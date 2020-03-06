@@ -346,7 +346,11 @@
             // 取得父页面URL，用于判断是否是来自测试流程
             var pareUrl = window.top.document.referrer;
            // alert(pareUrl+"***"+pareUrl.indexOf("test") ==-1 +"&&&&"+ pareUrl.indexOf("Test") ==-1);
-            
+            if (pareUrl.indexOf("test") !=-1 || pareUrl.indexOf("Test") !=-1) {
+                // 测试流程时，发送成功刷新测试容器页面右侧
+                window.parent.parent.refreshRight();
+            }
+           
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.close();
                 if (window.parent.parent != null && window.parent.parent != undefined
@@ -354,7 +358,8 @@
                     window.parent.parent.close();
                 window.parent.returnWorkWindowClose();
             }
-            window.close();
+
+             window.close();
         }
 
         //关闭model.

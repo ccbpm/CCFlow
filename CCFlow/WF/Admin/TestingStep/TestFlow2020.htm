@@ -25,18 +25,16 @@
             if (doType == "" || doType == null)
                 doType = "TestFlow2020_Init";
 
-
             var fk_flow = GetQueryString("FK_Flow");
             var doWhat = GetQueryString("DoWhat");
             var userNo = getQueryStringByName("UserNo");
 
-            var webUser = new WebUser();
-            if (webUser.No != "admin") {
-
-                var url = "TestCase.htm?FK_Flow=" + fk_flow;
-                window.location.href = url;
-                return;
-            }
+            //var webUser = new WebUser();
+            //if (webUser.No != "admin") {
+            //    var url = "TestCase.htm?FK_Flow=" + fk_flow;
+            //    window.location.href = url;
+            //    return;
+            //}
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
 
@@ -123,8 +121,13 @@
                 return;
             }
 
-            //alert(url);
-            WinOpenFull(data); //启动测试容器.
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //启动测试容器.
+            WinOpenFull(data); 
         }
 
 

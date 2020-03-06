@@ -31,6 +31,7 @@
 
             var html = "<ul>";
             html += "<li><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
+            html += "<li><a href='DBInfo.html?1=2" + urlEnd + "' target=right >数据库信息</a></li>";
             //html += "<li><a href=\"javascript: Track()\" >流程轨迹</a></li>";
             //html += "<li><a href=\"javascript: Chart()\" >流程图</a></li>";
             html += "</ul>";
@@ -53,7 +54,7 @@
             WinOpenFull(url, "right");
             //window.location.href = url;
         }
-            //如果关闭的时候，就让admin登录.
+        //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
             var adminer = GetQueryString("Adminer"); //管理员.
             var sid = GetQueryString("SID"); //管理员SID.
@@ -72,7 +73,7 @@
 
     <div id="Info"></div>
 
-    <h4> <a href="javascript:LetAdminerLogin()" >安全退出</a> </h4>
+    <h4> <a href="javascript:LetAdminerLogin()">安全退出</a> </h4>
 
 </body>
 </html>

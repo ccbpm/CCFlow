@@ -1,29 +1,35 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>测试容器</title>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript">
 
-        //window.οnunlοad = onclose;
-        //function onclose() {
-        //    LetAdminerLogin();
-        //}
+    <head>
+        <meta charset="utf-8" />
+        <title>测试容器</title>
+        <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+        <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+        <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+        <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+        <script src="../../Scripts/config.js" type="text/javascript"></script>
+        <script src="../../Comm/Gener.js" type="text/javascript"></script>
+        <script language="javascript" type="text/javascript">
 
-        function onbeforeunload()
-        {
-            alert("关闭窗口");
-            LetAdminerLogin();
-        }
+            //window.onunload = onclose;
+            //function onclose() {
+            //    LetAdminerLogin();
+            //}
 
-        //负责人：@qfl
-        $(function () {
+            //关闭页面登录admin
+            $(window).on('beforeunload', function () {
+                console.log("关闭窗口123");
+                LetAdminerLogin();
+                return 'Your own message goes here...';
+            });
+            //关闭页面登录admin
+            function onbeforeunload() {
+                console.log(1);
+                LetAdminerLogin();
+            }
+
+            // 当前页面失去焦点登录admin
 
             //获得参数.
             var flowNo = ""; // this.GetQueryString("FK_Flow");
@@ -42,28 +48,33 @@
             var workid = handler.DoMethodReturnString("Default_Init");
             var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&UserNo=" + userNo + "&Adminer=" + adminer + "&SID=" + sid;
 
-            document.getElementById("left").src = "Left.html?1=2" + urlEnd;
-            document.getElementById("right").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workid;
-        });
+            //负责人：@qfl
+            $(function () {
+                document.getElementById("left").src = "Left.html?1=2" + urlEnd;
+                document.getElementById("right").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workid;
+            });
+            // 发送成功后刷新页面进入切换用户页面
+            function refreshRight() {
+                 document.getElementById("right").src = "SelectOneUser.html?1=2" + urlEnd;
+            }
 
+            //如果关闭的时候，就让admin登录.
+            function LetAdminerLogin() {
+                var adminer = GetQueryString("Adminer"); //管理员.
+                var sid = GetQueryString("AdminerSID"); //管理员SID.
 
-        //如果关闭的时候，就让admin登录.
-        function LetAdminerLogin() {
-            var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("SID"); //管理员SID.
+                //访问后台，获得一个工作ID.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+                handler.AddUrlData();
+                var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+               // alert(data);
+            }
+        </script>
 
-            //访问后台，获得一个工作ID.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
-            alert(data);
-        }
-    </script>
-
-</head>
-
-<frameset cols="10%,90%">
-    <frame name="left" id="left" src="Left.html" />
-    <frame name="right" id="right" src="Welcome.html" />
-</frameset>
+    </head>
+    
+        <frameset cols="10%,90%">
+            <frame name="left" id="left" src="Left.html" />
+            <frame name="right" id="right" src="Welcome.html" />
+        </frameset>
 </html>

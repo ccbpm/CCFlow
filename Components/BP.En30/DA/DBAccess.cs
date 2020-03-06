@@ -3526,20 +3526,6 @@ namespace BP.DA
                     throw new Exception("没有识别的数据库编号");
             }
 
-
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
-            //    return DBAccessOfMSSQL1.IsExitsObject(obj);
-
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfODBC)
-            //    return DBAccessOfODBC.IsExitsObject(obj);
-
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfOLE)
-            //    return DBAccessOfOLE.IsExitsObject(obj);
-
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfOracle2)
-            //    return DBAccessOfOracle2.IsExitsObject(obj);
-
-            //throw new Exception("@没有判断的数据库类型:" + dburl);
         }
         /// <summary>
         /// 表中是否存在指定的列

@@ -3550,18 +3550,17 @@ namespace BP.WF
             if (WebUser.No == userNo)
                 return;
 
-
             BP.WF.Port.WFEmp emp = new Port.WFEmp(userNo);
-
-            string key = "SID_" + deviceNo + "" + userNo;
-            string guid = emp.GetParaString(key);
-            if (guid.Equals(sid) == false)
-                throw new Exception("err@非法的sid.");
+            //string key = "SID_" + deviceNo + "" + userNo;
+            //string guid = emp.GetParaString(key);
+            //if (guid.Equals(sid) == false)
+            //    throw new Exception("err@非法的sid.");
 
             BP.Port.Emp myEmp = new BP.Port.Emp(userNo);
             WebUser.SignInOfGener(myEmp);
             return;
         }
+      
         /// <summary>
         /// 登录
         /// </summary>

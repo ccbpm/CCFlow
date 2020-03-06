@@ -253,7 +253,7 @@ namespace BP.WF.Port.SubInc
                 map.AddDDLEntities(AdminEmpAttr.OrgNo, null, "组织", new BP.WF.Port.Incs(), true);
 
                 map.AddDDLSysEnum(AdminEmpAttr.UseSta, 3, "用户状态", true, true, AdminEmpAttr.UseSta, "@0=禁用@1=启用");
-                map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户状态", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");
+                map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户类型", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");
 
                 map.AddDDLEntities(AdminEmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), false);
                 map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), false);
@@ -263,7 +263,6 @@ namespace BP.WF.Port.SubInc
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);
                 map.AddSearchAttr(AdminEmpAttr.UserType);
-                map.AddSearchAttr(AdminEmpAttr.OrgNo);
 
 
                 RefMethod rm = new RefMethod();
@@ -386,6 +385,11 @@ namespace BP.WF.Port.SubInc
         public string DoSetPassword(string password)
         {
             string str = BP.Tools.Cryptography.EncryptString(password);
+
+            BP.Port.Emp en = new BP.Port.Emp(this.No);
+            en.Pass = str;
+            en.Update();
+
             DBAccess.RunSQLReturnVal("UPDATE Port_Emp SET Pass='" + str + "' WHERE No='" + this.No + "'");
             return "设置成功..";
         }

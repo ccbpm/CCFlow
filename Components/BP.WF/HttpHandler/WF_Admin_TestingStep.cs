@@ -52,12 +52,31 @@ namespace BP.WF.HttpHandler
             string adminer = this.GetRequestVal("Adminer");
             string sid = this.GetRequestVal("SID");
             BP.WF.Dev2Interface.Port_LoginBySID(adminer, sid);
-
             return "登录成功.";
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             //return workid.ToString();
         }
 
+        public string SelectOneUser_ChangUser()
+        {
+            //string adminer = this.GetRequestVal("Adminer");
+            //string sid = this.GetRequestVal("SID");
+            //BP.WF.Dev2Interface.Port_LoginBySID(adminer, sid);
+            //string empNo = this.GetRequestVal("FK_Emp");
+
+            try
+            {
+                BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
+                return "登录成功.";
+            }catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+            //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
+            //return workid.ToString();
+        }
+        
 
 
 

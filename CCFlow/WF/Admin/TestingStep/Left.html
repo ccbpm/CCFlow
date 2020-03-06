@@ -53,8 +53,6 @@
         }
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
-            var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("SID"); //管理员SID.
 
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
@@ -66,7 +64,6 @@
                 return;
             }
 
-            window.close();
             return;
         }
     </script>

@@ -39,14 +39,14 @@
             document.title = "测试容器:" + flow.Name;
 
             var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("SID"); //管理员SID.
+            var adminerSID = GetQueryString("AdminerSID"); //管理员SID.
             var userNo = GetQueryString("UserNo"); //要登录的用户
 
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddUrlData();
             var workid = handler.DoMethodReturnString("Default_Init");
-            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&UserNo=" + userNo + "&Adminer=" + adminer + "&SID=" + sid;
+            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&UserNo=" + userNo + "&Adminer=" + adminer + "&AdminerSID=" + adminerSID;
 
             //负责人：@qfl
             $(function () {

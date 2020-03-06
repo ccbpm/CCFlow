@@ -43,9 +43,6 @@
         // 选择接收人.
         function SelectOneUser() {
 
-
-
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddUrlData();
             var workid = handler.DoMethodReturnString("Default_Init");
@@ -63,7 +60,14 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
-            alert(data);
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            window.close();
+            return;
         }
     </script>
 </head>

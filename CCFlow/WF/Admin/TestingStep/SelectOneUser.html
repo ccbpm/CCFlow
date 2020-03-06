@@ -10,6 +10,12 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
+
+        var flowNo = GetQueryString("FK_Flow");
+        var workID = GetQueryString("WorkID");
+        var adminer = GetQueryString("Adminer");
+        var adminerSID = GetQueryString("AdminerSID");
+
         //页面启动函数.
         $(function () {
 
@@ -53,13 +59,14 @@
         });
 
         function ChangUser(empNo) {
-            //当这个人登录。
 
-            var handler = new HttpHandler("sss");
+            //当这个人登录。
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddPara("FK_Emp", empNo);
-            handler.AddPara("WorkID", GetQueryString("WorkID"));
-            handler.AddPara("Adminer", GetQueryString("Adminer"));
-            handler.AddPara("AdminerSID", GetQueryString("AdminerSID"));
+            handler.AddPara("WorkID", workID);
+
+            handler.AddPara("Adminer", adminer);
+            handler.AddPara("AdminerSID", adminerSID);
 
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
             if (data.indexOf('err@') == 0) {
@@ -67,7 +74,7 @@
                 return;
             }
 
-            window.location.url = "../../MyFlow.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow");
+            window.location.url = "../../MyFlow.htm?WorkID=" +workID + "&FK_Flow=" +flowNo;
 
         }
 

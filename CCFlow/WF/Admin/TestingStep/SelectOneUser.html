@@ -14,9 +14,62 @@
         $(function () {
 
             var webUser = new WebUser();
-            $("#userInfo").html("<h3>"+webUser.No + "," + webUser.Name+"</h3>");
+            $("#userInfo").html("<h3>" + webUser.No + "," + webUser.Name + "</h3>");
+
+            var workid = GetQueryString("WorkID");
+            var ens = new Entities("BP.WF.GenerWorkerLists");
+            ens.Retrieve("WorkID", workid);
+
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>Idx</th>";
+            html += "<th>人员编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>状态</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                html += "<tr>";
+                html += "<td>Idx</td>";
+                html += "<td>" + en.FK_Emp + "</td>";
+                html += "<td>" + en.FK_EmpText + "</td>";
+                if (en.IsPass == 0) {
+                    html += "<td>待办</td>";
+                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "')\">切换用户执行工作</a></td>";
+                } else {
+                    html += "<td>已处理</td>";
+                    html += "<td> - </td>";
+                }
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            //绑定数据.
+            $("#list").html(html);
 
         });
+
+        function ChangUser(empNo) {
+            //当这个人登录。
+
+            var handler = new HttpHandler("sss");
+            handler.AddPara("FK_Emp", empNo);
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("Adminer", GetQueryString("Adminer"));
+            handler.AddPara("AdminerSID", GetQueryString("AdminerSID"));
+
+            var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            window.location.url = "../../MyFlow.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow");
+
+        }
 
         // 选择接收人.
         function SelectOneUser() {
@@ -32,5 +85,11 @@
         <legend> 当前登录人员</legend>
         <div id="userInfo"></div>
     </fieldset>
+
+    <fieldset>
+        <legend> 工作人员列表</legend>
+        <div id="list"></div>
+    </fieldset>
+
 </body>
 </html>

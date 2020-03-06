@@ -18,13 +18,7 @@
         th {
             background-color: #F5F5F6;
         }
-
-        label {
-             display: inline-block; 
-             max-width: 100%; 
-            margin-bottom: 0px;
-            margin-left:5px;
-        }
+      
     </style>
     <script type="text/javascript" language="javascript">
         //枚举值
@@ -74,15 +68,15 @@
                         htm += "<tr>";
                         htm += "<td>" + idx + "</td>";
                         htm += "<td>" + (dt.getMonth() + 1) + "月</td>";
-                        htm += "<td ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " /><label for='" + id + "'>" + text + "</label></td>";
+                        htm += "<td ><label ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " />" + text + "</label></td>";
 
                         break;
                     case DayOfWeek.Saturday:
-                        htm += "<td><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " /><label for='" + id + "'>" + text + "</label></td>";
+                        htm += "<td><label ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " />" + text + "</label></td>";
                         htm += "</tr>";
                         break;
                     default:
-                        htm += "<td><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " /><label for='" + id + "'>" + text + "</label></td>";
+                        htm += "<td><label ><input id='" + id + "' type='checkbox' name='" + id + "'" + checked + " />" + text + "</label></td>";
                         break;
                 }
 

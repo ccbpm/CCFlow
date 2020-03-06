@@ -21,7 +21,7 @@
             $(window).on('beforeunload', function () {
                 console.log("关闭窗口123");
                 LetAdminerLogin();
-                return 'Your own message goes here...';
+                return "您已经安全退出了。";
             });
             //关闭页面登录admin
             function onbeforeunload() {
@@ -66,8 +66,9 @@
                 //访问后台，获得一个工作ID.
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
                 handler.AddUrlData();
+                handler.AddPara("AdminerSID", sid);
                 var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
-               // alert(data);
+                
             }
         </script>
 

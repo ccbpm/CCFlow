@@ -54,15 +54,18 @@
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
 
-            //访问后台，获得一个工作ID.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+            window.parent.LetAdminerLogin();
 
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
+
+            ////访问后台，获得一个工作ID.
+            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            //handler.AddUrlData();
+            //var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+
+            //if (data.indexOf('err@') == 0) {
+            //    alert(data);
+            //    return;
+            //}
 
             return;
         }

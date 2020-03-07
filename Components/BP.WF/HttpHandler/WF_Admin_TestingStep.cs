@@ -46,6 +46,58 @@ namespace BP.WF.HttpHandler
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             return workid.ToString();
         }
+        /// <summary>
+        /// 数据库信息
+        /// </summary>
+        /// <returns></returns>
+        public string DBInfo_Init()
+        {
+            //数据容器，用于盛放数据，并返回json.
+            DataSet ds = new DataSet();
+
+            //流程引擎控制表.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
+
+            //流程引擎人员列表.
+            GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.RDT);
+            ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
+
+
+            //获得Track数据.
+            string table = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string sql = "SELECT * FROM " + table + " WHERE WorkID=" + this.WorkID;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Track";
+            //把列大写转化为小写.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                Track tk = new Track();
+                foreach (Attr attr in tk.EnMap.Attrs)
+                {
+                    if (dt.Columns.Contains(attr.Key.ToUpper()) == true)
+                    {
+                        dt.Columns[attr.Key.ToUpper()].ColumnName = attr.Key;
+
+                    }
+                }
+            }
+            ds.Tables.Add(dt);
+
+            //获得NDRpt表
+            string rpt = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            GEEntity en = new GEEntity(rpt);
+            en.PKVal = this.WorkID;
+            en.RetrieveFromDBSources();
+            ds.Tables.Add(en.ToDataTableField("NDRpt"));
+
+
+            //转化为json ,返回出去.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+
 
         public string Default_LetAdminerLogin()
         {
@@ -68,7 +120,8 @@ namespace BP.WF.HttpHandler
             {
                 BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
                 return "登录成功.";
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -76,7 +129,7 @@ namespace BP.WF.HttpHandler
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             //return workid.ToString();
         }
-        
+
 
 
 

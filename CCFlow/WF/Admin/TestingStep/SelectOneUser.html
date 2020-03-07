@@ -73,14 +73,13 @@
                 alert(data);
                 return;
             }
-
-            window.location.url = "../../MyFlow.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+            window.open('../../MyFlow.htm?FK_Flow='+ flowNo + '&WorkID=' + workID,'_self');
 
         }
 
         // 选择接收人.
         function SelectOneUser() {
-            alert();
+            alert(54);
             var url = "SelectOneUser.html";
             WinOpen(url, "right");
             //window.location.href = url;

@@ -4728,7 +4728,7 @@ namespace BP.WF
                     qury.addAnd();
                     qury.AddWhere(FrmNodeAttr.FK_Node, this.HisNode.NodeID);
                     qury.addAnd();
-                    qury.AddWhere(FrmNodeAttr.FK_Node,"In", frms);
+                    qury.AddWhere(FrmNodeAttr.FK_Node,"In", "("+frms+")");
                     qury.addOrderBy(FrmNodeAttr.Idx);
                     qury.DoQuery();
                    

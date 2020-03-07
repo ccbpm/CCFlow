@@ -4723,7 +4723,15 @@ namespace BP.WF
                     //设置前置导航，选择表单的操作
                     frms = "'" + frms.Replace(",", "','")+"'";
                     nds = new FrmNodes();
-                    nds.RetrieveIn(FrmNodeAttr.FK_Frm, frms);
+                    QueryObject qury = new QueryObject(nds);
+                    qury.AddWhere(FrmNodeAttr.FK_Flow, this.HisNode.FK_Flow);
+                    qury.addAnd();
+                    qury.AddWhere(FrmNodeAttr.FK_Node, this.HisNode.NodeID);
+                    qury.addAnd();
+                    qury.AddWhere(FrmNodeAttr.FK_Node,"In", frms);
+                    qury.addOrderBy(FrmNodeAttr.Idx);
+                    qury.DoQuery();
+                   
                 }
                    
                 else

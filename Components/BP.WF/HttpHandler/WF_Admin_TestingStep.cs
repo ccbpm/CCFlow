@@ -108,9 +108,22 @@ namespace BP.WF.HttpHandler
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             //return workid.ToString();
         }
-
+        /// <summary>
+        /// 切换用户
+        /// </summary>
+        /// <returns></returns>
         public string SelectOneUser_ChangUser()
         {
+
+            string adminer = this.GetRequestVal("Adminer");
+            string adminerSID = this.GetRequestVal("AdminerSID");
+
+            string userNo = DBAccess.RunSQLReturnString("SELECT No FROM Port_Emp where SID='" + adminerSID + "'");
+            if (userNo.Equals(adminer) == false)
+                return "err@非法用户.";
+
+            //判断当前人员是否归属这个admin管理.  @hy. 以后在判断.
+
             //string adminer = this.GetRequestVal("Adminer");
             //string sid = this.GetRequestVal("SID");
             //BP.WF.Dev2Interface.Port_LoginBySID(adminer, sid);

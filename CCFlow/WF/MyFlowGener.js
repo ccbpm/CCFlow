@@ -91,8 +91,14 @@ function closeWindow() {
         setToobarEnable();
         $("#msgModal").modal("hidden");
     }
-
-    if (window.parent != null && window.parent != undefined) {
+    // 取得父页面URL，用于判断是否是来自测试流程
+    var pareUrl = window.top.document.referrer;
+    if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
+        // 测试流程时，发送成功刷新测试容器页面右侧
+        window.parent.parent.refreshRight();
+    }
+    if (window.parent != null && window.parent != undefined
+        && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1) {
         window.parent.close();
     }
 }

@@ -494,10 +494,6 @@ namespace BP.WF.WeiXin
         /// 关注状态: 1=已关注，2=已冻结，4=未关注 
         /// </summary>
         public string status { get; set; }
-        /// <summary>
-        /// 扩展属性
-        /// </summary>
-        public string extattr { get; set; }
     }
     #endregion
 }

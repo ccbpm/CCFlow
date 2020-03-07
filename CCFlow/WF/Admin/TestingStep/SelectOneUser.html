@@ -27,10 +27,12 @@
             ens.Retrieve("WorkID", workid);
 
             var html = "<table>";
+            
             html += "<tr>";
             html += "<th>Idx</th>";
             html += "<th>人员编号</th>";
             html += "<th>名称</th>";
+            html += "<th>处理时间</th>";
             html += "<th>状态</th>";
             html += "<th>操作</th>";
             html += "</tr>";
@@ -42,6 +44,7 @@
                 html += "<td>Idx</td>";
                 html += "<td>" + en.FK_Emp + "</td>";
                 html += "<td>" + en.FK_EmpText + "</td>";
+                html += "<td>" + en.RDT + "</td>";
                 if (en.IsPass == 0) {
                     html += "<td>待办</td>";
                     html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "')\">切换用户执行工作</a></td>";
@@ -74,7 +77,7 @@
                 return;
             }
             window.open('../../MyFlow.htm?FK_Flow='+ flowNo + '&WorkID=' + workID,'_self');
-
+            window.parent.refreshLeft();
         }
 
         // 选择接收人.

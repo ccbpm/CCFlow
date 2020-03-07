@@ -19,16 +19,11 @@
 
             //关闭页面登录admin
             $(window).on('beforeunload', function () {
-                console.log("关闭窗口123");
+                //console.log("关闭窗口123");
                 LetAdminerLogin();
-                return "您已经安全退出了。";
+              //  return "您已经安全退出了。";
 
             });
-            //关闭页面登录admin
-            function onbeforeunload() {
-                console.log(1);
-                LetAdminerLogin();
-            }
 
             // 当前页面失去焦点登录admin
 
@@ -58,7 +53,10 @@
             function refreshRight() {
                  document.getElementById("right").src = "SelectOneUser.html?1=2" + urlEnd;
             }
-
+            // 切换用户后刷新左侧
+             function refreshLeft() {
+                  document.getElementById("left").src = "Left.html?1=2" + urlEnd;
+            }
             //如果关闭的时候，就让admin登录.
             function LetAdminerLogin() {
                 var adminer = GetQueryString("Adminer"); //管理员.
@@ -67,7 +65,7 @@
                 //访问后台，获得一个工作ID.
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
                 handler.AddUrlData();
-                handler.AddPara("AdminerSID", sid);
+                
                 var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
                 
             }

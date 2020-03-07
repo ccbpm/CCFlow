@@ -17,9 +17,9 @@
         var userNo = GetQueryString("UserNo"); //管理员SID.
         $(function () {
 
-            var flowNo = ""; // this.GetQueryString("FK_Flow");
+            var flowNo = GetQueryString("FK_Flow");
             if (flowNo == null || flowNo == undefined || flowNo == "")
-                flowNo = "001";
+                 alert("流程类别为空，无法测试！");
 
             var webUser = new WebUser();
             $("#userInfo").html(webUser.No + "," + webUser.Name);

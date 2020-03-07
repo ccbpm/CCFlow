@@ -28,9 +28,9 @@
             // 当前页面失去焦点登录admin
 
             //获得参数.
-            var flowNo = ""; // this.GetQueryString("FK_Flow");
+            var flowNo = this.GetQueryString("FK_Flow");
             if (flowNo == null || flowNo == undefined || flowNo == "")
-                flowNo = "001";
+               alert("流程类别为空，无法测试！");
             var flow = new Entity("BP.WF.Flow", flowNo);
             document.title = "测试容器:" + flow.Name;
 
@@ -51,6 +51,7 @@
             });
             // 发送成功后刷新页面进入切换用户页面
             function refreshRight() {
+                
                  document.getElementById("right").src = "SelectOneUser.html?1=2" + urlEnd;
             }
             // 切换用户后刷新左侧

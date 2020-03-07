@@ -102,8 +102,9 @@ namespace BP.WF.HttpHandler
         public string Default_LetAdminerLogin()
         {
             string adminer = this.GetRequestVal("Adminer");
-            string sid = this.GetRequestVal("AdminerSID");
+            string sid = this.GetRequestVal("SID");
             BP.WF.Dev2Interface.Port_LoginBySID(adminer, sid);
+
             return "登录成功.";
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             //return workid.ToString();
@@ -116,11 +117,12 @@ namespace BP.WF.HttpHandler
         {
 
             string adminer = this.GetRequestVal("Adminer");
-            string adminerSID = this.GetRequestVal("AdminerSID");
+            string SID = this.GetRequestVal("SID");
 
-            string userNo = DBAccess.RunSQLReturnString("SELECT No FROM Port_Emp where SID='" + adminerSID + "'");
-            if (userNo.Equals(adminer) == false)
-                return "err@非法用户.";
+
+            //string userNo = DBAccess.RunSQLReturnString("SELECT No FROM Port_Emp where SID='" + SID + "'");
+            //if (userNo.Equals(adminer) == false)
+            //    return "err@非法用户.";
 
             //判断当前人员是否归属这个admin管理.  @hy. 以后在判断.
 
@@ -162,7 +164,7 @@ namespace BP.WF.HttpHandler
             //判断是否可以测试该流程？ 
 
             //组织url发起该流程.
-            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&Adminer=" + WebUser.No + "&AdminerSID=" + WebUser.SID + "&UserNo=" + userNo;
+            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&Adminer=" + WebUser.No + "&SID=" + WebUser.SID + "&UserNo=" + userNo;
             return url;
         }
         /// <summary>

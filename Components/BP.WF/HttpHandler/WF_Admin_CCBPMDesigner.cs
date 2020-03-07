@@ -717,7 +717,11 @@ namespace BP.WF.HttpHandler
             string pass = this.GetRequestVal("TB_PW").Trim();
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
+
             //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
+
+            //BP.WF.Port.WFEmp emp = new Port.WFEmp();
+            //emp.No = emp.No;
 
             //让其登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);

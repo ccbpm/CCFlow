@@ -92,7 +92,8 @@ namespace BP.Web
         /// <param name="auth">授权人</param>
         /// <param name="isRememberMe">是否记录cookies</param>
         /// <param name="IsRecSID">是否记录SID</param>
-        public static void SignInOfGener(Emp em, string lang = "CH", bool isRememberMe = false, bool IsRecSID = false, string authNo = null, string authName = null)
+        public static void SignInOfGener(Emp em, string lang = "CH", bool isRememberMe = false, bool IsRecSID = false,
+            string authNo = null, string authName = null)
         {
             if (HttpContextHelper.Current == null)
                 SystemConfig.IsBSsystem = false;
@@ -175,9 +176,9 @@ namespace BP.Web
                 if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
                 {
                     /*如果记录sid*/
-                    string sid1 = DateTime.Now.ToString("MMddHHmmss");
-                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid1 + "' WHERE No='" + WebUser.No + "'");
-                    WebUser.SID = sid1;
+                    string sid = DBAccess.GenerGUID(); // = DateTime.Now.ToString("MMddHHmmss");
+                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + WebUser.No + "'");
+                    WebUser.SID = sid;
                 }
             }
 

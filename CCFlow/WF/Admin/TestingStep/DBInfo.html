@@ -37,86 +37,99 @@
             var gwf = data["WF_GenerWorkFlow"][0]; //流程引擎控制表.
             var gwls = data["WF_GenerWorkerList"]; //工作人员列表.
             var track = data["Track"]; //日志表..
-            var ndrpt = data["NDRpt"]; //流程数据表..
-            //首先输出流程引擎控制表。
+            var ndrpt = data["NDRpt"][0]; //流程数据表..
+
+            // **************************************** gwf 流程引擎控制表 ************************
+
+            //。
             var html = "<table width='980px'>";
             html += "<caption>流程引擎控制表</caption>";
-            html += "<tr>"; 
+            html += "<tr>";
 
             // 输出列名
-            for (var m in gwf)
-            { html += "<th>" + m + "</th>";}
+            for (var m in gwf) {
+                html += "<th>" + m + "</th>";
+            }
             html += "</tr>";
 
             // 输出列值
-            html += "<tr>"; 
-            for (var m in gwf)
-            { html += "<th>" + gwf[m] + "</th>"; }
+            html += "<tr>";
+            for (var m in gwf) {
+                html += "<td nowarp=true>" + gwf[m] + "</td>";
+            }
             html += "</tr>";
 
             $("#GenerWorkFlow").html(html);
 
-            //输出工作人员列表.
-            var html = "<table width='980px'>";
+            // **************************************** gwls 输出工作人员列表 ************************
+            var html = "<table width='1300px'>";
             html += "<caption>工作人员列表</caption>";
             html += "<tr>";
-           
             // 输出列名
-            for (var m in gwls[0])
-            { html += "<th>" + m + "</th>";}
+            for (var m in gwls[0]) {
+                html += "<th>" + m + "</th>";
+            }
             html += "</tr>";
 
             // 输出列值
-            var arr = Object.keys(gwls); 
+            var arr = Object.keys(gwls);
 
             for (var n = 0; n < arr.length; n++) {
-                 html += "<tr>"; 
-                for (var m in gwls[n])
-                { html += "<th>" + gwls[n][m] + "</th>"; }
+                html += "<tr>";
+                for (var m in gwls[n]) { html += "<td>" + gwls[n][m] + "</td>"; }
                 html += "</tr>";
             }
-            
             $("#GenerWorkerList").html(html);
 
-            var html = "<table width='980px'>";
+
+
+            // **************************************** Track列表 ************************
+            var html = "<table  width='980px'>";
             html += "<caption>Track列表</caption>";
             html += "<tr>";
-           
+
             // 输出列名
             for (var m in track[0])
-            { html += "<th>" + m + "</th>";}
+            {
+                html += "<th>" + m + "</th>";
+            }
             html += "</tr>";
 
             // 输出列值
-            var arr = Object.keys(track); 
+            var arr = Object.keys(track);
 
-            html += "<tr>"; 
-            for (var m in track[0])
-            { html += "<th>" + track[0][m] + "</th>"; }
+            html += "<tr>";
+            for (var m in track[0]) {
+                if (m == "FrmDB")
+                {
+                    track[0][m] = "...";
+                }
+
+                html += "<td>" + track[0][m] + "</td>";
+            }
             html += "</tr>";
-           
+
             $("#Track").html(html);
 
+
+            // **************************************** NDxxxRpt 流程数据表  ************************
             var html = "<table width='980px'>";
             html += "<caption>流程数据表</caption>";
             html += "<tr>";
-           
+
             // 输出列名
-            for (var m in ndrpt[0])
-            { html += "<th>" + m + "</th>";}
+            for (var m in ndrpt) { html += "<th>" + m + "</th>"; }
             html += "</tr>";
 
             // 输出列值
-            var arr = Object.keys(ndrpt); 
+            var arr = Object.keys(ndrpt);
 
-            html += "<tr>"; 
-            for (var m in ndrpt[0])
-            { html += "<th>" + ndrpt[0][m] + "</th>"; }
+            html += "<tr>";
+            for (var m in ndrpt[0]) {
+                html += "<td>" + ndrpt[m] + "</td>";
+            }
             html += "</tr>";
-           
             $("#NDxxRpt").html(html);
-            //绑定数据.
-            $("#list").html(html);
 
         });
 

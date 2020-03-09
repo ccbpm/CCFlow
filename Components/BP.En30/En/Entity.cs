@@ -5737,9 +5737,11 @@ namespace BP.En
             }
             return dt;
         }
-        public DataTable ToDataTableDescField()
+        public DataTable ToDataTableDescField(string tableName="dt")
         {
             DataTable dt = this.ToEmptyTableDescField();
+            dt.TableName = tableName;
+
             Entity en = this.GetNewEntity;
 
             dt.TableName = en.EnMap.PhysicsTable;

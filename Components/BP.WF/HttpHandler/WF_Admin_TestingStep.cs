@@ -46,6 +46,8 @@ namespace BP.WF.HttpHandler
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             return workid.ToString();
         }
+
+       
         /// <summary>
         /// 数据库信息
         /// </summary>

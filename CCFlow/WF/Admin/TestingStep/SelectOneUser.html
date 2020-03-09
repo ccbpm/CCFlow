@@ -14,7 +14,7 @@
         var flowNo = GetQueryString("FK_Flow");
         var workid = GetQueryString("WorkID");
         var adminer = GetQueryString("Adminer");
-        var adminerSID = GetQueryString("AdminerSID");
+        var SID = GetQueryString("SID");
 
         //页面启动函数.
         $(function () {
@@ -70,7 +70,7 @@
             handler.AddPara("WorkID", workid);
 
             handler.AddPara("Adminer", adminer);
-            handler.AddPara("AdminerSID", adminerSID);
+            handler.AddPara("SID", SID);
 
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
             if (data.indexOf('err@') == 0) {

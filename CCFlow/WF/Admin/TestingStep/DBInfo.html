@@ -15,7 +15,7 @@
         var flowNo = GetQueryString("FK_Flow");
         var workID = GetQueryString("WorkID");
         var adminer = GetQueryString("Adminer");
-        var adminerSID = GetQueryString("AdminerSID");
+        var SID = GetQueryString("SID");
 
         //页面启动函数.
         $(function () {
@@ -24,7 +24,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddPara("WorkID", workID);
             handler.AddPara("Adminer", adminer);
-            handler.AddPara("AdminerSID", adminerSID);
+            handler.AddPara("SID", SID);
             handler.AddPara("FK_Flow", flowNo);
 
             var data = handler.DoMethodReturnString("DBInfo_Init");

@@ -875,6 +875,16 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 是否使用微信企业号中的通讯录帐号登录
+        /// </summary>
+        public static string OZType
+        {
+            get
+            {
+                return AppSettings["OZType"];
+            }
+        }
+        /// <summary>
         /// 帐号钥匙
         /// </summary>
         public static string WX_AppSecret

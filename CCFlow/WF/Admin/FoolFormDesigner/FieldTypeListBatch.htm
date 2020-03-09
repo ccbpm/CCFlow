@@ -72,7 +72,8 @@
 
                 var attr = mapAttrs[i];
                 if (attr.KeyOfEn == "Title" || attr.KeyOfEn == "OID" || attr.KeyOfEn == "RDT" || attr.KeyOfEn == "FID"
-                    || attr.KeyOfEn == "CDT" || attr.KeyOfEn == "Rec" || attr.KeyOfEn == "Emps"||attr.KeyOfEn == "FK_Dept"||attr.KeyOfEn == "FK_NY"||attr.KeyOfEn == "MyNum") {
+                    || attr.KeyOfEn == "CDT" || attr.KeyOfEn == "Rec" || attr.KeyOfEn == "Emps" || attr.KeyOfEn == "FK_Dept"
+                    || attr.KeyOfEn == "FK_NY" || attr.KeyOfEn == "MyNum"|| attr.KeyOfEn == "AtPara"|| attr.KeyOfEn == "BillState"|| attr.KeyOfEn == "Starter"|| attr.KeyOfEn == "StarterName") {
                     continue;
                 }
                
@@ -86,9 +87,16 @@
                 }
                 str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:100px;' /></td>";
 
-                str += "<td ><select id=\"TB_MyDataType_" + (i + 1) + "\"   style='width:80px;'><option value ='1'>字符型</option><option value ='2'>整数型</option><option value ='3'>浮点型</option><option value ='4'>Boolean型(是/否)</option>";
-                str +="<option value = '5'>双精度型</option><option value='6'>日期型</option><option value='7'>日期时间型</option> <option value='8'>金额型</option></select ></td > ";
-                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+                str += "<td ><select disabled='true' id=\"TB_MyDataType_" + (i + 1) + "\"   style='width:80px;'><option value ='1'>字符型</option><option value ='2'>整数型</option><option value ='3'>浮点型</option><option value ='4'>Boolean型(是/否)</option>";
+                str += "<option value = '5'>双精度型</option><option value='6'>日期型</option><option value='7'>日期时间型</option> <option value='8'>金额型</option></select ></td > ";
+
+                if (attr.MyDataType == '1') {
+
+                    str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+                } else {
+                    str += "<td ><input disabled='true' name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+                
+                }
                 str += "<td ><select  id=\"TB_UIIsEnable_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
                 str += "<td ><select id=\"TB_UIVisible_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
                 str += "<td ><select id=\"TB_UIIsInput_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";

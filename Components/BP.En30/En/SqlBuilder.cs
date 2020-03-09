@@ -162,9 +162,9 @@ namespace BP.En
                 if (attr.MyFieldType == FieldType.PK || attr.MyFieldType == FieldType.PKFK || attr.MyFieldType == FieldType.PKEnum)
                 {
                     if (dbStr == "?")
-                        sql = sql + " AND " + attr.Field + "=" + dbStr;
+                        sql = sql + " AND " + en.EnMap.PhysicsTable + "." + attr.Field + "=" + dbStr;
                     else
-                        sql = sql + " AND " + attr.Field + "=" + dbStr + attr.Field;
+                        sql = sql + " AND " + en.EnMap.PhysicsTable + "." + attr.Field + "=" + dbStr + attr.Field;
                 }
             }
             return sql;

@@ -888,7 +888,7 @@ namespace BP.Sys
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
 
                 //为了适应cloud 需要增加的两个字段.
-                map.AddTBStringPK(SFTableAttr.RealNo, null, "RealNo", true, false, 1, 200, 20);
+                map.AddTBString(SFTableAttr.RealNo, null, "RealNo", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
 
                 //查找.

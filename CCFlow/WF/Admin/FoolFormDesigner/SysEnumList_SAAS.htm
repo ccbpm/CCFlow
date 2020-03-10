@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>枚举值列表</title>
+
+        <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+        <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+        <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+        <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+        <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+        <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+        <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+        <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
+        <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+        <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
+        <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
+        <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
+        <base target="_self" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript" >
+        
+		closeWhileEscUp();
+
+          //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+         });
+
+         //初始化数据.
+         function InitPage() {
+
+             var fk_mapData = GetQueryString("FK_MapData");
+
+             var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
+             sysEnumMains.RetrieveAll();
+
+             var fields =null; // = data["Fields"];
+             var numEnum = 0;
+
+             //增加处理.
+             for (var i = 0; i < sysEnumMains.length; i++) {
+
+                 var sysEnumMain = sysEnumMains[i];
+
+                 //如果需要字段从集合里选择，排除没有的字段.
+                 if (fields != null) {
+
+                     var isHave = false; //是否存在.
+                     for (var idx = 0; idx < fields.length; idx++) {
+
+                         var field = fields[idx];
+
+                         if (field.FType.indexOf('int') == -1) {
+                             continue;
+                         }
+
+                         if (field.FName != sysEnumMain.No) {
+                             continue;
+                         }
+
+                         isHave = true;
+                         break;
+                     }
+                     if (isHave == false)
+                         continue;
+                 }
+
+                 numEnum++;
+
+                 var newRow = "";
+                 newRow += "<tr>";
+                 newRow += "<td class=Idx>" + i + "</td>";
+
+                 if (fk_mapData != null)
+                     newRow += "<td><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                 else
+                     newRow += "<td>" + sysEnumMain.No + "</td>";
+
+                 newRow += "<td>" + sysEnumMain.Name + "</td>";
+
+                 //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
+                 //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
+
+                 newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                 newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
+
+                 newRow += "</tr>";
+
+                 $("#Table1 tr:last").after(newRow);
+             }
+
+         }
+
+         function AddFrm(enumID, fk_mapdata) {
+
+             var url = '';
+             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
+
+             if (str == null)
+                 return;
+
+             var groupField = GetQueryString("GroupField");
+             if (groupField == null)
+                 groupField = "0";
+
+             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+             handler.AddPara("KeyOfEn", str);
+             handler.AddPara("FK_MapData", fk_mapdata);
+             handler.AddPara("GroupFeid", groupField);
+             handler.AddPara("EnumKey", enumID);
+             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
+
+            url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + data;
+            window.location.href = url;
+
+         }
+
+        function NewEnum() {
+
+            var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?s=' + Math.random();
+            OpenEasyUiDialog(url, "eudlgframe", "新建枚举", 600, 400, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function Edit(enumKey,name,cfgKeys) {
+
+            var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", "修改枚举值", 600, 400, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function Del(key, name) {
+
+            if (key == null || key == "") {
+                alert('您没有选择行.');
+                return;
+            }
+
+            var v = window.confirm("您确定要删除枚举值[" + name + " " + key + "]吗？");
+            if (v == false)
+                return;
+
+            //检查该枚举值是否被其他表单字段引用.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("UIBindKey", key);
+
+            var info = '';
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                info += "\t\n" + i + ",表单编号:" + attr.FK_MapData + " , 字段:" + attr.KeyOfEn + ", 名称:" + attr.Name;
+            }
+
+            if (info != '') {
+
+                info = "如下表单引用了该字段您不能删除:" + info;
+                alert(info);
+                return;
+            }
+
+            //执行删除.
+            var enumMain = new Entity("BP.Sys.SysEnumMain", key);
+            enumMain.Delete();
+
+            window.location.href = window.location.href;
+
+        }
+
+        function Ref(key) {
+            alert('查看该枚举值，被那些表单字段引用功能尚未完成.');
+        }
+
+    </script>
+</head>
+<body onkeypress="Esc()" >
+
+<table id="Table1" style=" width:100%;">
+<caption>枚举值列表  <a href="javascript:NewEnum()">新建枚举</a>  </caption>
+<tr>
+<th>序</th>
+<th>枚举值</th>
+<th>名称</th>
+<th>枚举信息</th>
+<th >操作</th>
+</tr>
+</table>
+
+<div id="Msg"></div>
+
+</body>
+</html>

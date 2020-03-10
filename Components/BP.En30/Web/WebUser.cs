@@ -443,7 +443,7 @@ namespace BP.Web
 
                     string sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
                     string dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
-                    if (dept == null && SystemConfig.OSModel == OSModel.OneMore)
+                    if (dept == null )
                     {
                         sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
                         dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);

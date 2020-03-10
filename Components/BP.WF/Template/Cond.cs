@@ -733,8 +733,7 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
-                    if (SystemConfig.OSModel == OSModel.OneMore)
-                    {
+                   
                         sts.Retrieve(BP.GPM.DeptEmpAttr.FK_Emp, this.SpecOper);
 
                         //@于庆海.
@@ -746,16 +745,7 @@ namespace BP.WF.Template
                             de.FK_Dept = emp.FK_Dept;
                             sts.AddEntity(de);
                         }
-                    }
-                    else
-                    {
-                        BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
-
-                        BP.GPM.DeptEmp myen = new BP.GPM.DeptEmp();
-                        myen.FK_Dept = emp.FK_Dept;
-                        myen.FK_Emp = emp.No;
-                        sts.AddEntity(myen);
-                    }
+                   
 
                     string strs1 = "";
                     foreach (BP.GPM.DeptEmp st in sts)

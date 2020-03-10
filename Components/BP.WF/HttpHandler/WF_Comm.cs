@@ -3425,8 +3425,14 @@ namespace BP.WF.HttpHandler
             {
                 ht.Add("IsAuthorize", "0");
             }
+
+            //每次访问表很消耗资源.
             Port.WFEmp emp = new Port.WFEmp(WebUser.No);
             ht.Add("Theme", emp.GetParaString("Theme"));
+
+            //增加运行模式. add by zhoupeng 2020.03.10 适应saas模式.
+            ht.Add("CCBPMRunModel", BP.Sys.SystemConfig.GetValByKey("CCBPMRunModel", "0"));
+
             return BP.Tools.Json.ToJson(ht);
         }
 

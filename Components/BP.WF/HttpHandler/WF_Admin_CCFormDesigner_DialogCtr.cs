@@ -24,6 +24,75 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 保存枚举值.
+        /// </summary>
+        /// <returns></returns>
+        public string EnumerationNew_SAAS_Save()
+        {
+
+            SysEnumMain sem = new SysEnumMain();
+
+            if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                sem.No = this.No;
+                if (sem.RetrieveFromDBSources()==0)
+                {
+                    //SDSDSDS.
+
+                }
+
+                string no = this.No;
+
+                return "保存成功.";
+            }
+
+            //给主键赋值.
+            sem.No = this.No;
+            if (sem.RetrieveFromDBSources() == 0)
+            {
+                sem.Name = this.Name;
+                sem.CfgVal = this.GetRequestVal("CfgVal");
+                sem.Insert();
+            }else
+            {
+                sem.Name = this.Name;
+                sem.CfgVal = this.GetRequestVal("CfgVal");
+                sem.Update();
+            }
+
+            //初始化从表信息.
+            sem.DoInitDtls();
+
+            return "保存成功.";
+        }
+
+        public string EnumerationNew_Save()
+        {
+            SysEnumMain sem = new SysEnumMain();
+
+            //给主键赋值.
+            sem.No = this.No;
+            if (sem.RetrieveFromDBSources() == 0)
+            {
+                sem.Name = this.Name;
+                sem.CfgVal = this.GetRequestVal("CfgVal");
+                sem.Insert();
+            }
+            else
+            {
+                sem.Name = this.Name;
+                sem.CfgVal = this.GetRequestVal("CfgVal");
+                sem.Update();
+            }
+
+            //初始化从表信息.
+            sem.DoInitDtls();
+
+            return "保存成功.";
+        }
+
+
+        /// <summary>
         /// 获取隐藏字段
         /// </summary>
         /// <returns></returns>

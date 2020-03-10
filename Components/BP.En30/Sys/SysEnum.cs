@@ -208,8 +208,10 @@ namespace BP.Sys
         {
             if (this.Lang == null && this.Lang == "")
                 this.Lang = BP.Web.WebUser.SysLang;
+            
 
             this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+
             return base.beforeUpdateInsertAction();
         }
 
@@ -226,7 +228,6 @@ namespace BP.Sys
                 base.afterInsert();
                 return;
             }
-
 
             foreach (System.Data.DataRow dr in dt.Rows)
             {

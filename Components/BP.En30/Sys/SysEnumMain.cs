@@ -6,12 +6,18 @@ using BP.En;
 
 namespace BP.Sys
 {
-	/// <summary>
-	/// sss
-	/// </summary>
+    /// <summary>
+    /// sss
+    /// </summary>
     public class SysEnumMainAttr : EntityNoNameAttr
-	{
+    {
+        /// <summary>
+        /// 配置的值
+        /// </summary>
         public const string CfgVal = "CfgVal";
+        /// <summary>
+        /// 语言
+        /// </summary>
         public const string Lang = "Lang";
         /// <summary>
         /// 组织解构编码
@@ -28,6 +34,9 @@ namespace BP.Sys
     public class SysEnumMain : EntityNoName
     {
         #region 实现基本的方方法
+        /// <summary>
+        /// 配置的值
+        /// </summary>
         public string CfgVal
         {
             get
@@ -39,6 +48,9 @@ namespace BP.Sys
                 this.SetValByKey(SysEnumMainAttr.CfgVal, value);
             }
         }
+        /// <summary>
+        /// 语言
+        /// </summary>
         public string Lang
         {
             get
@@ -50,6 +62,9 @@ namespace BP.Sys
                 this.SetValByKey(SysEnumMainAttr.Lang, value);
             }
         }
+        /// <summary>
+        /// 枚举值
+        /// </summary>
         public string EnumKey
         {
             get
@@ -135,10 +150,10 @@ namespace BP.Sys
                 if (this._enMap != null) return this._enMap;
                 Map map = new Map("Sys_EnumMain", "枚举");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
-               
+
                 /*
                  * 为了能够支持cloud 我们做了如下变更.
                  * 1. 增加了OrgNo, EnumKey 字段.
@@ -157,33 +172,79 @@ namespace BP.Sys
                 //组织编号.
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
 
-               
+
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        #region 业务操作。
+        public string DoInitDtls()
+        {
+            if (DataType.IsNullOrEmpty(this.CfgVal) == true)
+                return "err@没有cfg数据.";
+
+            //首先删除原来的数据.
+            SysEnums ses = new SysEnums();
+            ses.Delete(SysEnumAttr.EnumKey, this.No);
+
+            //创建对象.
+            SysEnum se = new SysEnum();
+
+            //CfgVal = @0=病假@1=事假
+            string[] strs = this.CfgVal.Split('@');
+            foreach (string str in strs)
+            {
+                string[] kvs = str.Split('=');
+
+                se.EnumKey = this.No;
+                se.IntKey = int.Parse(kvs[0]);
+                se.Lab = kvs[1].Trim();
+                se.Lang = "CH";
+                se.Insert();
+             //   se.MyPK = this.No+"_"+se
+            }
+
+            return "执行成功.";
+        }
+        #endregion 业务操作。
+
     }
-	/// <summary>
-	/// 纳税人集合 
-	/// </summary>
-	public class SysEnumMains : EntitiesNoName
-	{
-		/// <summary>
-		/// SysEnumMains
-		/// </summary>
-		public SysEnumMains(){}
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new SysEnumMain();
-			}
-		}
+    /// <summary>
+    /// 纳税人集合 
+    /// </summary>
+    public class SysEnumMains : EntitiesNoName
+    {
+        /// <summary>
+        /// SysEnumMains
+        /// </summary>
+        public SysEnumMains() { }
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new SysEnumMain();
+            }
+        }
+        /// <summary>
+        /// 查询所有枚举值，根据不同的运行平台.
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAll()
+        {
+            // 获取平台的类型. 0=单机版, 1=集团版，2=SAAS。
+            int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+            if (val != 2)
+                return base.RetrieveAll(); 
+
+            // 返回他组织下的数据.
+            return this.Retrieve(SysEnumMainAttr.OrgNo, BP.Web.WebUser.FK_Dept);
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -209,5 +270,5 @@ namespace BP.Sys
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

@@ -61,8 +61,7 @@ namespace BP.WF.HttpHandler
             //部门名称.
             ht.Add("DeptName", emp.FK_DeptText);
 
-            if (SystemConfig.OSModel == OSModel.OneMore)
-            {
+          
                 BP.GPM.DeptEmpStations des = new BP.GPM.DeptEmpStations();
                 des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
 
@@ -96,7 +95,6 @@ namespace BP.WF.HttpHandler
 
                 ht.Add("Depts", depts);
                 ht.Add("Stations", stas);
-            }
 
 
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);

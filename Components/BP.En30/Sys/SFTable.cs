@@ -1182,6 +1182,21 @@ namespace BP.Sys
         }
         #endregion
 
+        /// <summary>
+        /// 查询所有枚举值，根据不同的运行平台.
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAll()
+        {
+            // 获取平台的类型. 0=单机版, 1=集团版，2=SAAS。
+            int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+            if (val != 2)
+                return base.RetrieveAll();
+
+            // 返回他组织下的数据.
+            return this.Retrieve(SysEnumMainAttr.OrgNo, BP.Web.WebUser.FK_Dept);
+        }
+
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

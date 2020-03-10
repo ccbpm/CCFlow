@@ -901,6 +901,56 @@ namespace BP.WF
         public static Plant Plant = WF.Plant.CCFlow;
         #endregion 公共属性.
 
+        /// <summary>
+        /// 升级满足云需要.
+        /// </summary>
+        public void UpdateCloud()
+        {
+            if (1 == 1)
+                return;
+
+            #region 为了适应云服务的要求.
+            if (BP.DA.DBAccess.IsExitsTableCol("Sys_Enum", "OrgNo") == false)
+            {
+                //检查数据表.
+                SysEnum se = new SysEnum();
+                se.CheckPhysicsTable();
+
+                //更新值.
+                DBAccess.RunSQL("UPDATE Sys_Enum SET OrgNo='CCS'");
+
+                //更新.
+                DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK= EnumKey+'_'+Lang+'_'+IntKey+'_'+OrgNo");
+            }
+            if (BP.DA.DBAccess.IsExitsTableCol("Sys_EnumMain", "OrgNo") == false)
+            {
+                //检查数据表.
+                SysEnumMain se = new SysEnumMain();
+                se.CheckPhysicsTable();
+
+                //更新值.
+                DBAccess.RunSQL("UPDATE Sys_EnumMain SET OrgNo='CCS'");
+
+                //更新.
+                DBAccess.RunSQL("UPDATE Sys_EnumMain SET No= No+'_'+OrgNo ");
+            }
+
+            if (BP.DA.DBAccess.IsExitsTableCol("Sys_SFTable", "OrgNo") == false)
+            {
+                //检查数据表.
+                SFTable se = new SFTable();
+                se.CheckPhysicsTable();
+
+                //更新值.
+                DBAccess.RunSQL("UPDATE Sys_SFTable SET OrgNo='CCS',EnumKey=No");
+
+                //更新.
+                DBAccess.RunSQL("UPDATE Sys_SFTable SET No= No+'_'+OrgNo ");
+            }
+
+            #endregion 为了适应云服务的要求.
+        }
+
         #region 执行安装/升级.
         /// <summary>
         /// 当前版本号-为了升级使用.
@@ -3315,6 +3365,27 @@ namespace BP.WF
                 }
             }
         }
+        /// <summary>
+        /// 运行模式
+        /// </summary>
+        public static CCBPMRunModel CCBPMRunModel
+        {
+            get
+            {
+                int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+                if (val == 0)
+                    return CCBPMRunModel.Single;
+
+                if (val == 1)
+                    return CCBPMRunModel.GroupInc;
+
+                if (val == 2)
+                    return CCBPMRunModel.SAAS;
+
+                return CCBPMRunModel.Single;
+            }
+        }
+        
         /// <summary>
         /// 短信时间发送到
         /// 默认到 20 点结束.

@@ -603,7 +603,7 @@
 
 
         function SearchData(orderBy, orderWay) {
-
+             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
              ur.RetrieveFromDBSources();
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
@@ -625,8 +625,9 @@
             data = JSON.parse(data);
             //当前用户页面信息.
             
-           
-
+            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.SetPKVal(ur.MyPK);
+            ur.RetrieveFromDBSources();
             count = ur.GetPara("RecCount");
             if (count % pageSize != 0)
                 pages = parseInt(count / pageSize) + 1;

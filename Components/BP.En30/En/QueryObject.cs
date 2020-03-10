@@ -1384,6 +1384,47 @@ namespace BP.En
             }
         }
 
+
+        public DataTable GetSumOrAvg(string oper)
+        {
+            string sql = this.SQL;
+            string ptable = this.En.EnMap.PhysicsTable;
+            string pk = this.En.PKField;
+
+            switch (this.En.EnMap.EnDBUrl.DBType)
+            {
+                case DBType.Oracle:
+                    if (this._sql == "" || this._sql == null)
+                        sql = "SELECT "+oper +" FROM " + ptable;
+                    else
+                        sql = "SELECT "+oper + sql.Substring(sql.IndexOf("FROM "));
+                    break;
+                default:
+                    if (this._sql == "" || this._sql == null)
+                        sql = "SELECT  " + oper + "  FROM " + ptable;
+                    else
+                    {
+                        sql = sql.Substring(sql.IndexOf("FROM "));
+                        if (sql.IndexOf("ORDER BY") >= 0)
+                            sql = sql.Substring(0, sql.IndexOf("ORDER BY") - 1);
+                        sql = "SELECT " +oper +" "+ sql;
+                    }
+                    
+                    break;
+            }
+            try
+            {
+ 
+                return this.En.RunSQLReturnTable(sql, this.MyParas);
+                
+            }
+            catch (Exception ex)
+            {
+                this.En.CheckPhysicsTable();
+                throw ex;
+            }
+        }
+
         public DataTable DoGroupQueryToTable(string selectSQl, string groupBy, string orderBy)
         {
             string sql = this.SQL;

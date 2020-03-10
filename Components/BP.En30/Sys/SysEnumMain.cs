@@ -12,13 +12,19 @@ namespace BP.Sys
     public class SysEnumMainAttr : EntityNoNameAttr
 	{
         public const string CfgVal = "CfgVal";
-
         public const string Lang = "Lang";
-
-	}
-	/// <summary>
-	/// SysEnumMain
-	/// </summary>
+        /// <summary>
+        /// 组织解构编码
+        /// </summary>
+        public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 真实的编号
+        /// </summary>
+        public const string EnumKey = "EnumKey";
+    }
+    /// <summary>
+    /// SysEnumMain
+    /// </summary>
     public class SysEnumMain : EntityNoName
     {
         #region 实现基本的方方法
@@ -42,6 +48,17 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(SysEnumMainAttr.Lang, value);
+            }
+        }
+        public string EnumKey
+        {
+            get
+            {
+                return this.GetValStrByKey(SysEnumMainAttr.EnumKey);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumMainAttr.EnumKey, value);
             }
         }
         #endregion
@@ -121,10 +138,27 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
+               
+                /*
+                 * 为了能够支持cloud 我们做了如下变更.
+                 * 1. 增加了OrgNo, EnumKey 字段.
+                 * 2. 如果是单机版用户,原来的业务逻辑不变化.
+                 * 3. 如果是SAAS模式, No=  EnumKey+"_"+OrgNo 
+                 */
+
                 map.AddTBStringPK(SysEnumMainAttr.No, null, "编号", true, false, 1, 40, 8);
+
                 map.AddTBString(SysEnumMainAttr.Name, null, "名称", true, false, 0, 40, 8);
                 map.AddTBString(SysEnumMainAttr.CfgVal, null, "配置信息", true, false, 0, 1500, 8);
                 map.AddTBString(SysEnumMainAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
+
+                //枚举值.
+                map.AddTBString(SysEnumMainAttr.EnumKey, null, "EnumKey", true, false, 0, 40, 8);
+                //组织编号.
+                map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
+
+               
+
                 this._enMap = map;
                 return this._enMap;
             }

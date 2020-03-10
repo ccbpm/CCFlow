@@ -72,6 +72,10 @@ namespace BP.Sys
     public class SFTableAttr : EntityNoNameAttr
     {
         /// <summary>
+        /// 真实的编号
+        /// </summary>
+        public const string RealNo = "RealNo";
+        /// <summary>
         /// 是否可以删除
         /// </summary>
         public const string IsDel = "IsDel";
@@ -103,6 +107,10 @@ namespace BP.Sys
         /// 字典表类型
         /// </summary>
         public const string CodeStruct = "CodeStruct";
+        /// <summary>
+        /// OrgNo
+        /// </summary>
+        public const string OrgNo = "OrgNo";
 
         #region 链接到其他系统获取数据的属性。
         /// <summary>
@@ -152,7 +160,7 @@ namespace BP.Sys
         /// <summary>
         /// 获得外部数据表
         /// </summary>
-        public System.Data.DataTable GenerHisDataTable(Hashtable ht=null)
+        public System.Data.DataTable GenerHisDataTable(Hashtable ht = null)
         {
             //创建数据源.
             SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
@@ -302,9 +310,9 @@ namespace BP.Sys
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
                 if (runObj.Contains("@") == true && ht == null)
-                    throw new Exception("@外键类型SQL错误," + runObj+"部分查询条件没有被替换.");
+                    throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
 
-                if (runObj.Contains("@") == true && ht!=null)
+                if (runObj.Contains("@") == true && ht != null)
                 {
                     foreach (string key in ht.Keys)
                     {
@@ -408,67 +416,67 @@ namespace BP.Sys
         public object InvokeWebService(string url, string methodname, object[] args)
         {
             return null;
-/* TODO 2019-07-25 为了合并core，注释掉
-            //这里的namespace是需引用的webservices的命名空间，在这里是写死的，大家可以加一个参数从外面传进来。
-            string @namespace = "BP.RefServices";
-            try
-            {
-                if (url.EndsWith(".asmx"))
-                    url += "?wsdl";
-                else if (url.EndsWith(".svc"))
-                    url += "?singleWsdl";
+            /* TODO 2019-07-25 为了合并core，注释掉
+                        //这里的namespace是需引用的webservices的命名空间，在这里是写死的，大家可以加一个参数从外面传进来。
+                        string @namespace = "BP.RefServices";
+                        try
+                        {
+                            if (url.EndsWith(".asmx"))
+                                url += "?wsdl";
+                            else if (url.EndsWith(".svc"))
+                                url += "?singleWsdl";
 
-                //获取WSDL
-                WebClient wc = new WebClient();
-                Stream stream = wc.OpenRead(url);
-                ServiceDescription sd = ServiceDescription.Read(stream);
-                string classname = sd.Services[0].Name;
-                ServiceDescriptionImporter sdi = new ServiceDescriptionImporter();
-                sdi.AddServiceDescription(sd, "", "");
-                CodeNamespace cn = new CodeNamespace(@namespace);
+                            //获取WSDL
+                            WebClient wc = new WebClient();
+                            Stream stream = wc.OpenRead(url);
+                            ServiceDescription sd = ServiceDescription.Read(stream);
+                            string classname = sd.Services[0].Name;
+                            ServiceDescriptionImporter sdi = new ServiceDescriptionImporter();
+                            sdi.AddServiceDescription(sd, "", "");
+                            CodeNamespace cn = new CodeNamespace(@namespace);
 
-                //生成客户端代理类代码
-                CodeCompileUnit ccu = new CodeCompileUnit();
-                ccu.Namespaces.Add(cn);
-                sdi.Import(cn, ccu);
-                CSharpCodeProvider csc = new CSharpCodeProvider();
-                ICodeCompiler icc = csc.CreateCompiler();
+                            //生成客户端代理类代码
+                            CodeCompileUnit ccu = new CodeCompileUnit();
+                            ccu.Namespaces.Add(cn);
+                            sdi.Import(cn, ccu);
+                            CSharpCodeProvider csc = new CSharpCodeProvider();
+                            ICodeCompiler icc = csc.CreateCompiler();
 
-                //设定编译参数
-                CompilerParameters cplist = new CompilerParameters();
-                cplist.GenerateExecutable = false;
-                cplist.GenerateInMemory = true;
-                cplist.ReferencedAssemblies.Add("System.dll");
-                cplist.ReferencedAssemblies.Add("System.XML.dll");
-                cplist.ReferencedAssemblies.Add("System.Web.Services.dll");
-                cplist.ReferencedAssemblies.Add("System.Data.dll");
+                            //设定编译参数
+                            CompilerParameters cplist = new CompilerParameters();
+                            cplist.GenerateExecutable = false;
+                            cplist.GenerateInMemory = true;
+                            cplist.ReferencedAssemblies.Add("System.dll");
+                            cplist.ReferencedAssemblies.Add("System.XML.dll");
+                            cplist.ReferencedAssemblies.Add("System.Web.Services.dll");
+                            cplist.ReferencedAssemblies.Add("System.Data.dll");
 
-                //编译代理类
-                CompilerResults cr = icc.CompileAssemblyFromDom(cplist, ccu);
-                if (true == cr.Errors.HasErrors)
-                {
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (System.CodeDom.Compiler.CompilerError ce in cr.Errors)
-                    {
-                        sb.Append(ce.ToString());
-                        sb.Append(System.Environment.NewLine);
-                    }
-                    throw new Exception(sb.ToString());
-                }
+                            //编译代理类
+                            CompilerResults cr = icc.CompileAssemblyFromDom(cplist, ccu);
+                            if (true == cr.Errors.HasErrors)
+                            {
+                                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                                foreach (System.CodeDom.Compiler.CompilerError ce in cr.Errors)
+                                {
+                                    sb.Append(ce.ToString());
+                                    sb.Append(System.Environment.NewLine);
+                                }
+                                throw new Exception(sb.ToString());
+                            }
 
-                //生成代理实例，并调用方法
-                System.Reflection.Assembly assembly = cr.CompiledAssembly;
-                Type t = assembly.GetType(@namespace + "." + classname, true, true);
-                object obj = Activator.CreateInstance(t);
-                System.Reflection.MethodInfo mi = t.GetMethod(methodname);
+                            //生成代理实例，并调用方法
+                            System.Reflection.Assembly assembly = cr.CompiledAssembly;
+                            Type t = assembly.GetType(@namespace + "." + classname, true, true);
+                            object obj = Activator.CreateInstance(t);
+                            System.Reflection.MethodInfo mi = t.GetMethod(methodname);
 
-                return mi.Invoke(obj, args);
-            }
-            catch
-            {
-                return null;
-            }
-*/
+                            return mi.Invoke(obj, args);
+                        }
+                        catch
+                        {
+                            return null;
+                        }
+            */
         }
         #endregion
 
@@ -485,6 +493,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(SFTableAttr.FK_SFDBSrc, value);
+            }
+        }
+        /// <summary>
+        /// OrgNo
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SFTableAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(SFTableAttr.OrgNo, value);
             }
         }
         public string FK_SFDBSrcT
@@ -833,9 +855,15 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_SFTable", "字典表");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+
+                /*
+                * 为了能够支持 cloud 我们做了如下变更.
+                * 1. 增加了RealNo, OrgNo 字段. RealNo=定义的编号.
+                * 2. 如果是单机版用户,原来的业务逻辑不变化.
+                * 3. 如果是SAAS模式, No= RealNo+"_"+OrgNo;
+                */
+
 
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
@@ -846,22 +874,22 @@ namespace BP.Sys
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
 
-
                 map.AddTBString(SFTableAttr.FK_Val, null, "默认创建的字段名", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
 
-
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-
                 map.AddTBString(SFTableAttr.SrcTable, null, "数据源表", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ColumnValue, null, "显示的值(编号列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", true, false, 0, 1000, 600, true);
-
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
+
+                //为了适应cloud 需要增加的两个字段.
+                map.AddTBStringPK(SFTableAttr.RealNo, null, "RealNo", true, false, 1, 200, 20);
+                map.AddTBString(SFTableAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
 
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);

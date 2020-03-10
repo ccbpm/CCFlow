@@ -186,18 +186,6 @@ namespace BP.Sys
         #endregion
 
         #region 组织结构的配置.
-
-        /// <summary>
-        /// OS结构
-        /// </summary>
-        public static OSModel OSModel
-        {
-            get
-            {
-                return Sys.OSModel.OneMore;
-                //return (OSModel)SystemConfig.GetValByKeyInt("OSModel", 0);
-            }
-        }
         public static OSDBSrc OSDBSrc
         {
             get

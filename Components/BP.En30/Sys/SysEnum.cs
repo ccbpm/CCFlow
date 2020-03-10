@@ -174,17 +174,28 @@ namespace BP.Sys
 		{
             get
             {
-                if (this._enMap != null) return this._enMap;
+                if (this._enMap != null) 
+                    return this._enMap;
+
                 Map map = new Map("Sys_Enum", "枚举数据");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
-                map.AddMyPK();
 
+              /*
+              * 为了能够支持 cloud 我们做了如下变更.
+              * 1. 增加了OrgNo 字段.
+              * 2. 如果是单机版用户,原来的业务逻辑不变化. MyPK= EnumKey+"_"+IntKey+'_'+Lang 
+              * 3. 如果是SAAS模式, MyPK= EnumKey+"_"+IntKey+'_'+Lang +"_"+OrgNo 
+              */
+
+                map.AddMyPK();
                 map.AddTBString(SysEnumAttr.Lab, null, "Lab", true, false, 1, 300, 8);
                 map.AddTBString(SysEnumAttr.EnumKey, null, "EnumKey", true, false, 1, 100, 8);
                 map.AddTBInt(SysEnumAttr.IntKey, 0, "Val", true, false);
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
+
+                map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
 
                 this._enMap = map;
                 return this._enMap;

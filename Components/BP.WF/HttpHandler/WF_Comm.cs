@@ -1743,6 +1743,61 @@ namespace BP.WF.HttpHandler
 
             //获取配置信息
             EnCfg encfg = new EnCfg(this.EnsName);
+            string fieldSet = encfg.FieldSet;
+            string oper = "";
+            if (DataType.IsNullOrEmpty(fieldSet) == false)
+            {
+                string ptable = en.EnMap.PhysicsTable;
+                DataTable dt = new DataTable("Search_HeJi");
+                dt.Columns.Add("Field");
+                dt.Columns.Add("Type");
+                dt.Columns.Add("Value");
+                DataRow dr;
+                string[] strs = fieldSet.Split('@');
+                foreach(string str in strs)
+                {
+                    string[]item = str.Split('=');
+                    if (item.Length == 2)
+                    {
+                       if(item[1].Contains(",") == true)
+                        {
+                            string[] ss = item[1].Split(',');
+                            foreach (string s in ss)
+                            {
+                                dr = dt.NewRow();
+                                dr["Field"] = s[0];
+                                dr["Type"] = item[0];
+                                dt.Rows.Add(dr);
+
+                                oper += item[0] + "(" + ptable+"."+ s[0] + ")" + ",";
+                            }
+                        }
+                        else
+                        {
+                            dr = dt.NewRow();
+                            dr["Field"] = item[1];
+                            dr["Type"] = item[0];
+                            dt.Rows.Add(dr);
+
+                            oper += item[0] + "(" + ptable + "." + item[1] + ")" + ",";
+                        }
+                    }
+                }
+                oper = oper.Substring(0, oper.Length - 1);
+                DataTable dd = qo.GetSumOrAvg(oper);
+
+                for(int i= 0;i < dt.Rows.Count;i++)
+                {
+                    DataRow ddr = dt.Rows[i];
+                    ddr["Value"] = dd.Rows[0][i];
+                }
+                ds.Tables.Add(dt);
+            }
+            
+
+            //
+
+           
             //增加排序
             if (encfg != null)
             {

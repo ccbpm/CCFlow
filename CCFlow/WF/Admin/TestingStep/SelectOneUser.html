@@ -31,7 +31,7 @@
             //    $("#userInfo").html("<h3>用户信息：<font color=green>" + webUser.No + "," + webUser.Name + " </font> 部门编号:<font color=green>" + webUser.FK_Dept + "</font> 部门名称: <font color=green>" + webUser.FK_DeptName + "</font></h3>");
 
             var ens = new Entities("BP.WF.GenerWorkerLists");
-            ens.Retrieve("WorkID", workID, 'RDT'); //第3个属性是排序的.
+            ens.Retrieve("WorkID", workID, 'RDT,CDT'); //第3个属性是排序的.
 
 
             var html = "<table style='width:900px;'>";
@@ -40,7 +40,9 @@
             html += "<th>Idx</th>";
             html += "<th>人员编号</th>";
             html += "<th>名称</th>";
+            html += "<th>节点ID</th>";
             html += "<th>节点名称</th>";
+
 
             html += "<th>下达时间</th>";
             html += "<th>处理时间</th>";
@@ -64,7 +66,9 @@
                 html += "<td>" + i + "</td>";
                 html += "<td>" + en.FK_Emp + "</td>";
                 html += "<td>" + en.FK_EmpText + "</td>";
+                html += "<td>" + en.FK_Node + "</td>";
                 html += "<td>" + en.FK_NodeText + "</td>";
+
                 html += "<td>" + en.RDT + "</td>";
 
                 if (en.IsPass == 0) {
@@ -150,6 +154,10 @@
             WinOpen(url, "right");
             //window.location.href = url;
         }
+        function OpenRpt() {
+            var url = "../../WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+            WinOpen(url);
+        }
     </script>
 </head>
 <body>
@@ -160,6 +168,16 @@
 
         <div id="gwls"></div>
 
+        <!--<fieldset>
+            <legend> 其他操作</legend>-->
+
+        <!--<ul>
+            <li> <a href="javascript:OpenRpt()">  轨迹图/表单/时间轴 </a> </li>
+            <li> <a href="javascript:OpenRpt()">  安全退出 </a> </li>
+            <li> <a href="javascript:OpenRpt()">  流程表控制信息 </a> </li>
+            <li> <a href="javascript:OpenRpt()">  重新启动 </a> </li>
+        </ul>-->
+        <!--</fieldset>-->
     </center>
 
 

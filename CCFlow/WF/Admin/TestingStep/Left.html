@@ -27,11 +27,9 @@
             var html = "<ul>";
             html += "<li><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
             html += "<li><a href='DBInfo.html?1=2" + urlEnd + "' target=right >数据库信息</a></li>";
-
+            html += "<li><a href='../../WFRpt.html?1=2" + urlEnd + "' target=right >轨迹图</a></li>";
             html += "<li><a href='javascript:Restart();' >重新启动 </a></li>";
-
-            //html += "<li><a href=\"javascript: Track()\" >流程轨迹</a></li>";
-            //html += "<li><a href=\"javascript: Chart()\" >流程图</a></li>";
+            html += "<li><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
             html += "</ul>";
 
             $("#Info").html(html);
@@ -57,7 +55,7 @@
             // 进入流程页面
             var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&Adminer=" + webUser.No + "&SID=" + webUser.SID + "&UserNo=" + userNo;
             window.parent.location.href = url;
-          
+
         }
 
         // 选择接收人.
@@ -101,7 +99,6 @@
 
     <div id="Info"></div>
 
-    <h4> <a href="javascript:LetAdminerLogin()">安全退出</a> </h4>
 
 </body>
 </html>

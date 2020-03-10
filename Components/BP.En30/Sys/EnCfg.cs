@@ -202,6 +202,15 @@ namespace BP.Sys
         /// Search,Group,设置.
         /// </summary>
         public const string UI = "UI";
+
+        /// <summary>
+        /// 字段颜色设置
+        /// </summary>
+        public const string ColorSet = "ColorSet";
+        /// <summary>
+        /// 字段求和求平均设置
+        /// </summary>
+        public const string FieldSet = "FieldSet";
     }
     /// <summary>
     /// EnCfgs
@@ -320,6 +329,18 @@ namespace BP.Sys
                 this.SetPara("PageSizeOfSearch", value);
             }
         }
+
+        public string FieldSet
+        {
+            get
+            {
+                return this.GetValStringByKey(EnCfgAttr.FieldSet);
+            }
+            set
+            {
+                this.SetValByKey(EnCfgAttr.FieldSet, value);
+            }
+        }
         #endregion 参数属性.
 
         #region 构造方法
@@ -368,6 +389,11 @@ namespace BP.Sys
                 map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, false, 0, 100, 60);
                 map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, false, 0, 200, 60);
                 map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
+
+                //字段颜色设置
+                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60);
+                //对字段求总和平均
+                map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, false, 0, 500, 60);
 
 
                 map.AddTBAtParas(3000);  //参数属性.

@@ -7,10 +7,10 @@ using BP.Web;
 using BP.Sys;
 using BP.Port;
 using BP.WF;
-using BP.EAI.Plugins.WXin;
+using BP.GPM.WeiXin;
 using BP.WF.Data;
-using BP.EAI.Plugins.DINGTalk;
-using BP.EAI.Plugins;
+using BP.GPM.DTalk.DINGTalk;
+using BP.GPM.DTalk;
 using System.Collections;
 
 namespace BP.GPM
@@ -128,7 +128,7 @@ namespace BP.GPM
             if (agentId != null)
             {
                 //获取 AccessToken
-                string accessToken = new BP.EAI.Plugins.WXin.WeiXin().getAccessToken();
+                string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
 
                 //当前业务
                 GenerWorkFlow gwf = new GenerWorkFlow();

@@ -43,15 +43,21 @@
 
             if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
                 return;
-
-
+            // 使用最初用户登录
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
-            handler.AddUrlData();
-            var workID = handler.DoMethodReturnString("Default_Init");
+            handler.AddPara("FK_Emp", userNo);
+            handler.AddPara("WorkID", workID);
 
-            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Adminer=" + adminer + "&SID=" + sid;
-            var url = "../../MyFlow.htm?1=2" + urlEnd;
-            //alert('ss');
+            handler.AddPara("Adminer", adminer);
+            handler.AddPara("SID", sid);
+
+            var webUser = new WebUser();
+            $("#userInfo").html(webUser.No + "," + webUser.Name);
+            var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
+            // 进入流程页面
+            var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&Adminer=" + webUser.No + "&SID=" + webUser.SID + "&UserNo=" + userNo;
+            window.parent.location.href = url;
+          
         }
 
         // 选择接收人.

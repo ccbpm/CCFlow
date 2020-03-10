@@ -16,7 +16,7 @@
             //function onclose() {
             //    LetAdminerLogin();
             //}
-
+           
             //关闭页面登录admin
             $(window).on('beforeunload', function () {
                 //console.log("关闭窗口123");
@@ -25,12 +25,18 @@
 
             });
 
-            // 当前页面失去焦点登录admin
-
+            /*// 当前页面失去焦点登录admin
+            window.onblur  = function () {
+                var adminer = GetQueryString("Adminer"); //管理员.
+                var sid = GetQueryString("AdminerSID"); //管理员SID.
+                //访问后台，管理员登录.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+                handler.AddUrlData();
+                var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+            }*/
             //获得参数.
             var flowNo = this.GetQueryString("FK_Flow");
-            if (flowNo == null || flowNo == undefined || flowNo == "")
-               alert("流程类别为空，无法测试！");
+            
             var flow = new Entity("BP.WF.Flow", flowNo);
             document.title = "测试容器:" + flow.Name;
 
@@ -41,13 +47,13 @@
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
             handler.AddUrlData();
-            var workid = handler.DoMethodReturnString("Default_Init");
-            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&UserNo=" + userNo + "&Adminer=" + adminer + "&AdminerSID=" + adminerSID;
+            var workID = handler.DoMethodReturnString("Default_Init");
+            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Adminer=" + adminer + "&AdminerSID=" + adminerSID;
 
             //负责人：@qfl
             $(function () {
                 document.getElementById("left").src = "Left.html?1=2" + urlEnd;
-                document.getElementById("right").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workid;
+                document.getElementById("right").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
             });
             // 发送成功后刷新页面进入切换用户页面
             function refreshRight() {

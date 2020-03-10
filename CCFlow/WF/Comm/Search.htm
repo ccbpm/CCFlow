@@ -375,6 +375,7 @@
             } else {
                 var strs = searchFields.split("@");
                 var fieldV = "";
+                var count = 0;
                 for (var i = 0; i < strs.length; i++) {
                     if (strs[i] == "")
                         continue;
@@ -387,9 +388,14 @@
                     fieldV = ur.GetPara(str[1]);
                     if (fieldV == null || fieldV == undefined)
                         fieldV = "";
-
+                    count++;
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
                     html += "<td align='left'><input style='width:100%;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' /></td>";
+                    if (count == 4) {
+                        count = 0;
+                        html += "</tr>";
+                        html += "<tr>";
+                    }
                 }
             }
 
@@ -585,7 +591,7 @@
             ur.Vals = str;
             ur.FK_MapData = ensName;
             ur.SetPara("RecCount", count);
-            var i = ur.Save();
+            var i = ur.Update();
 
             var url = window.location.href;
             if (url.indexOf("PageIdx") != -1)
@@ -596,14 +602,19 @@
         }
 
 
-        function SearchData() {
+        function SearchData(orderBy, orderWay) {
+
+             ur.RetrieveFromDBSources();
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData()
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("PageSize", pageSize);
-            //handler.AddPara("EnsName", GetQueryString("EnsName"));
-
+            if (orderBy != null && orderBy != undefined)
+                ur.OrderBy = orderBy;
+            if (orderWay != null && orderWay != undefined)
+                ur.OrderWay = orderWay;
+            ur.Update();
             //查询集合
             var data = handler.DoMethodReturnString("Search_SearchIt");
             if (data.indexOf('err@') == 0) {
@@ -613,9 +624,8 @@
 
             data = JSON.parse(data);
             //当前用户页面信息.
-            var ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
-            ur.RetrieveFromDBSources();
+            
+           
 
             count = ur.GetPara("RecCount");
             if (count % pageSize != 0)
@@ -643,6 +653,20 @@
                 });
                 return;
             }
+
+            //设置查询总数居的合计、平均等信息
+            var heji = data["Search_HeJi"];
+            var _html = "";
+            if (heji != null && heji != undefined) {
+                $.each(heji, function (i, item) {
+                    if (item.Type == "Sum")
+                        _html += item.Field + "总合计：" + item.Value +" ";
+                    if (item.Type == "Avg")
+                        _html += item.Field + "总平均：" + item.Value+" ";
+                });
+            }
+            
+             $("#JsResult").html("").html(_html);
             return data;
         }
 
@@ -685,6 +709,9 @@
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
             });
+            //颜色设置
+            var colorSet = cfg.ColorSet;
+           
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
 
@@ -697,7 +724,8 @@
                     keyOfEn = attr.KeyOfEn
                     continue;
                 }
-
+                
+               
 
                 var field = attr.KeyOfEn;
                 
@@ -718,6 +746,7 @@
                         title: title,
                         fixed: false,
                         width: width,
+                        sortable:true,
                         cellStyle: {
                             css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
                         }
@@ -730,6 +759,7 @@
                         title: title,
                         width: width,
                         fixed: false,
+                        sortable:true,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
                             if (value == "1") return "是";
@@ -739,11 +769,26 @@
                 }
                 if (width == null || width == "" || width == undefined)
                     width = 100;
+
                 columns.push({
                     field: field,
                     title: title,
                     width: width,
-                    fixed: false
+                    fixed: false,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                         var fieldColor = [];
+                         if (colorSet.indexOf("@" + this.field + ":") != -1) {
+                            fieldColor = getFieldColor(colorSet, this.field);
+                        }
+                        if (fieldColor.length == 0)
+                            return value;
+                        for (var i = 0; i < fieldColor.length; i++) {
+                            var color = fieldColor[i];
+                            if (color.From <= value && color.To >= value)
+                                return "<div style='width:20px;height:20px;text-align:center;background:" + color.Color + "'>"+value+"</div>";
+                        }
+                    }
 
                 });
             }
@@ -834,9 +879,17 @@
                 striped: true,
                 height: tableH,
                 singleSelect: true,
-                sidePagination: "server",
+                sidePagination: "client",
                 pageNumber: 1,
                 strictSearch: true,
+                showMultiSort: true, // 多列排序
+                rememberOrder:true,//记住每个列的排序
+                onSort: function (name, order) {
+                    pageIdx = 1;
+                    SearchData(name, order);
+                    Paginator(pages, 1)
+                },
+                showMultiSort: true, // 多列排序
                 //得到查询的参数
                 queryParams: function (params) {
                     //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
@@ -996,6 +1049,40 @@
             
         }
 
+        /**
+         * 获取字段的设置
+         * @param colorSet  颜色总体设置
+         * @param keyOfEn 字段
+         */
+        function getFieldColor(colorSet, keyOfEn) {
+            var fieldColor = [];
+            var colorSets = colorSet.split('@');
+            for (var i = 0; i < colorSets.length; i++) {
+                var strs = colorSets[i].split(':');
+                if (strs.length == 0 || strs.length == 1)
+                    continue;
+                if (strs[0] != keyOfEn)
+                    continue;
+                var ss = strs[1].split(';');
+                for (var k = 0; k < ss.length; k++) {
+                    var ts = ss[k].split(',');
+                    if (ts.length < 3) {
+                        alert('字段' + keyOfEn + '范围颜色设置格式错误');
+                        break;
+                    }
+
+                    fieldColor.push({
+                        "From": parseInt(ts[0].replace("From=", "")),
+                        "To": parseInt(ts[1].replace("To=", "")),
+                        "Color":ts[2].replace("Color=", "")
+                    });
+                }
+               
+
+                
+            }
+            return fieldColor;
+        }
         function New() {
             OpenEn("", "", 0);
         }
@@ -1328,14 +1415,18 @@
                 <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
                 </table>
                 <!-- 显示分页信息 -->
-                <div class="row cs-pagination">
-                    <ul class="pagination" id="page_nav">
-                    </ul>
-                    <ul class="pagination controls" id="page_info">
-                    </ul>
-                    <div style="clear: both;">
+                <div>
+                    <div class="row cs-pagination" style="float:left;width:20%;text-align: left;">
+                        <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult">xxx</li></ul>
+                    </div>
+                    <div class="row cs-pagination" style="float:left;width:80%">
+                        <ul class="pagination" id="page_nav"></ul>
+                        <ul class="pagination controls" id="page_info"></ul>
+                        <div style="clear: both;">
+                        </div>
                     </div>
                 </div>
+                
             </div>
         </div>
         <div id="Msg">

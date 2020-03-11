@@ -1,0 +1,15 @@
+-----------------------------------------------------------------------------------------------------
+22日18时47分46秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCents
+22日18时47分49秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCent
+22日18时48分10秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCent
+22日18时48分20秒Info:System');"SQL=INSERT INTO Demo_EmpCent ([MyPK],[FK_Emp],[FK_Dept],[FK_NY],[Cent] ) VALUES ( '','小','12312','1231',10),异常信息:违反了 PRIMARY KEY 约束 'Demo_EmpCentpk'。不能在对象 'dbo.Demo_EmpCent' 中插入重复键。
+语句已终止。
+22日18时48分25秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCents
+22日18时48分28秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCent
+22日18时48分30秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCents
+22日18时48分31秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCent
+22日18时48分33秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCents
+22日18时53分44秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCent
+22日18时53分47秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCents
+22日18时53分48秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCent
+22日18时53分50秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Demo.BPFramework.EmpCents

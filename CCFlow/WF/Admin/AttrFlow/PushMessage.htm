@@ -112,50 +112,57 @@
             border-bottom:none;
             margin-bottom:10px;
         }
+        li{
+            font-size:14px;
+        }
     </style>
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
-    id="form1">
-    <div style="margin: 8px">
-        <table class="table table-bordered table-striped table-hover table-condensed" id="Table1" style="width: 100%">
-            <caption>
-                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />消息事件
-            </caption>
-            <tr>
-                <th>
-                    序
-                </th>
-                <th>
-                    消息发生事件
-                </th>
-                <th>
-                    启用邮件
-                </th>
-                <th>
-                    邮件标题
-                </th>
-                <th>
-                    启用短信
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </table>
-        <fieldset style="border: 0px;">
-            <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-            <div id="state" style="display: none; color: Gray">
-                <ul>
-                    <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('FlowFix');">流程冻结后</a> </li>
-                    <li><a href="javascript:PushMessageEntity('FlowWarning');">流程处理预警</a> </li>
-                    <li><a href="javascript:PushMessageEntity('FlowOverDue');">流程处理逾期</a> </li>
-                </ul>
-            </div>
-            <input type="button" value="我需要帮助" onclick="Help()" />
-        </fieldset>
-    </div>
+          id="form1">
+
+        <div style="right:30px; position:absolute; z-index:100; ">
+            <fieldset style="border: 0px;">
+                <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
+                <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:wheat; display: none; color: Gray">
+                    <ul>
+                        <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('FlowFix');">流程冻结后</a> </li>
+                        <li><a href="javascript:PushMessageEntity('FlowWarning');">流程处理预警</a> </li>
+                        <li><a href="javascript:PushMessageEntity('FlowOverDue');">流程处理逾期</a> </li>
+                    </ul>
+                </div>
+                <input type="button" value="我需要帮助" onclick="Help()" />
+            </fieldset>
+        </div>
+        <div style="position:relative;top:10px; margin: 8px">
+            <table class="table table-bordered table-striped table-hover table-condensed" id="Table1" style="width: 100%">
+                <caption>
+                    <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />消息事件
+                </caption>
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        消息发生事件
+                    </th>
+                    <th>
+                        启用邮件
+                    </th>
+                    <th>
+                        邮件标题
+                    </th>
+                    <th>
+                        启用短信
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+            </table>
+            
+        </div>
     </form>
 </body>
 </html>

@@ -2,17 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!-- 于庆海  -->
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>流程轨迹查看权限</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-     <base target="_self" /> 
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" />
+
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
-    <script language="javascript" type="text/javascript" >
+    <script src="../Admin.js"></script>
+    <script language="javascript" type="text/javascript">
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -52,7 +55,7 @@
 
             $("#Msg").html("");
         });
-       
+
 
 
         function onSave() {
@@ -65,103 +68,96 @@
             en.Update();
 
             window.location.href = window.location.href;
-        }  
-     </script>
+        }
+    </script>
 </head>
-<body onkeypress="Esc()" >
-<form id="cc">
-<table style=" width:100%; padding-left:19px;" >
-<caption>流程轨迹查看权限</caption>
+<body onkeypress="Esc()">
+    <form id="cc">
+        <div id="bar" class="cs-tr cs-bar">
+            <label style="float:left; font-size :15px;font-weight:bolder;padding-top:10px;">流程轨迹查看权限</label>
+            <input type="button" ID="Btn_Save" value="保存" onclick="onSave()" />
+        </div>
+        <table style=" width:100%; padding-left:19px;">
 
- 
-<tr>
-<td colspan="1"  valign="top" rowspan="9" style="width:25%;">
+            <tr>
+                <td>
+                    <input type="checkbox" ID="CB_PStarter" name="CB_PStarter" /><label for="CB_PStarter">发起人可见</label>
+                </td>
+                <td>
+                    <input type="checkbox" ID="CB_PWorker" name="CB_PWorker" /><label for="CB_PWorker">参与人可见</label>
+                </td>
+                <td>
+                    <input type="checkbox" ID="CB_PCCer" name="CB_PCCer" /><label for="CB_PCCer">被抄送人可见</label>
+                </td>
+                <td>
+                </td>
+            </tr>
 
-<fieldset> 
-<legend>帮助</legend>
-<ol>
-<li>该设置为了控制该流程的流程实例是可以被那些范围的人可查询，可见。</li>
-<li>该控制在工作流程查看器里校验，就是说在操作员要打开工作查看器的时候检查当前的人员是否有权限查看该流程。</li>
-<li>与流程相关的人员是必选项，也就是说，流程相关的人员是可以查看轨迹图的，</li>
-</ol>
+            <tr>
+                <th colspan="4"> 按照部门划分 </th>
+            </tr>
 
-</fieldset>
+            <tr>
+                <td>
+                    <input type="checkbox" ID="CB_PMyDept" name="CB_PMyDept" /> <label for="CB_PMyDept">本部门人可看 </label>
+                </td>
+                <td>
+                    <input type="checkbox" ID="CB_PPMyDept" name="CB_PPMyDept" /><label for="CB_PPMyDept">直属上级部门可看(比如:我是)</label>
+                </td>
+                <td>
+                    <input type="checkbox" ID="CB_PPDept" name="CB_PPDept" /><label for="CB_PPDept"> 上级部门可看</label>
+                </td>
+                <td>
+                    <input type="checkbox" ID="CB_PSameDept" name="CB_PSameDept" /> <label for="CB_PSameDept">平级部门可看</label>
+                </td>
+            </tr>
 
-</td>
+            <tr>
+                <td>
+                    <input type="checkbox" ID="CB_PSpecDept" name="CB_PSpecDept" /><label for="CB_PSpecDept">指定的部门可见</label>
+                </td>
+                <td colspan="3">
+                    部门编号&nbsp&nbsp<input type=text ID="TB_PSpecDeptExt" name="TB_PSpecDeptExt" />
+                </td>
+            </tr>
 
-<th colspan="4">必选项</th>
-
-</tr>
-
-<tr>
-<td> 
-    <input type="checkbox" ID="CB_PStarter" name="CB_PStarter"/><label for="CB_PStarter">发起人可见</label> </td>
-<td>
-    <input type="checkbox" ID="CB_PWorker" name="CB_PWorker"/><label for="CB_PWorker">参与人可见</label> </td>
-<td>
-    <input type="checkbox" ID="CB_PCCer" name="CB_PCCer"/><label for = "CB_PCCer">被抄送人可见</label></td>
-<td>
-     </td>
-</tr>
-
-<tr>
-<th colspan="4"> 按照部门划分 </th>
-</tr>
-
-<tr>
-<td> 
-    <input type="checkbox" ID="CB_PMyDept" name="CB_PMyDept"  /> <label for="CB_PMyDept">本部门人可看 </label>
-    </td>
-<td>
-     <input type="checkbox" ID="CB_PPMyDept" name="CB_PPMyDept"  /><label for="CB_PPMyDept">直属上级部门可看(比如:我是)</label>
-    </td>
-<td>
-     <input type="checkbox" ID="CB_PPDept" name="CB_PPDept"/><label for="CB_PPDept"> 上级部门可看</label>
-    </td>
-<td>
-   <input type="checkbox" ID="CB_PSameDept" name="CB_PSameDept" /> <label for="CB_PSameDept">平级部门可看</label>
-    </td> 
-</tr>
-
-<tr>
-<td> 
-    <input type="checkbox" ID="CB_PSpecDept"  name="CB_PSpecDept"  /><label for="CB_PSpecDept">指定的部门可见</label> </td>
-<td colspan="3">
-    部门编号&nbsp&nbsp<input type=text ID="TB_PSpecDeptExt" name="TB_PSpecDeptExt" />
-      </td>
-</tr>
-
-<tr>
-<th colspan="4">按照其他方式指定 </th>
-</tr>
+            <tr>
+                <th colspan="4">按照其他方式指定 </th>
+            </tr>
 
 
-<tr>
-<td> <input type="checkbox" ID="CB_PSpecSta" name="CB_PSpecSta"  /><label for="CB_PSpecSta"> 指定的岗位可见 </label></td>
-<td colspan="3">
-    岗位编号&nbsp&nbsp<input type=text ID="TB_PSpecStaExt" name="TB_PSpecStaExt" />
-      </td>
-</tr>
+            <tr>
+                <td> <input type="checkbox" ID="CB_PSpecSta" name="CB_PSpecSta" /><label for="CB_PSpecSta"> 指定的岗位可见 </label></td>
+                <td colspan="3">
+                    岗位编号&nbsp&nbsp<input type=text ID="TB_PSpecStaExt" name="TB_PSpecStaExt" />
+                </td>
+            </tr>
 
-<tr>
-<td>  <input type="checkbox" ID="CB_PSpecGroup" name="CB_PSpecGroup"  /> <label for="CB_PSpecGroup">指定的权限组可看</label> </td>
-<td colspan="3">
-    权限组&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text ID="TB_PSpecGroupExt" name="TB_PSpecGroupExt" />
-      </td>
-</tr>
+            <tr>
+                <td>  <input type="checkbox" ID="CB_PSpecGroup" name="CB_PSpecGroup" /> <label for="CB_PSpecGroup">指定的权限组可看</label> </td>
+                <td colspan="3">
+                    权限组&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text ID="TB_PSpecGroupExt" name="TB_PSpecGroupExt" />
+                </td>
+            </tr>
 
-<tr>
-<td> <input type="checkbox" ID="CB_PSpecEmp" name="CB_PSpecEmp"   /> <label for="CB_PSpecEmp">指定的人员可看 </label></td>
-<td colspan="3">
-    指定人员编号&nbsp&nbsp&nbsp<input type=text ID="TB_PSpecEmpExt" name="TB_PSpecEmpExt" />
-      </td>
-</tr>
-</table>
+            <tr>
+                <td> <input type="checkbox" ID="CB_PSpecEmp" name="CB_PSpecEmp" /> <label for="CB_PSpecEmp">指定的人员可看 </label></td>
+                <td colspan="3">
+                    指定人员编号&nbsp&nbsp&nbsp<input type=text ID="TB_PSpecEmpExt" name="TB_PSpecEmpExt" />
+                </td>
+            </tr>
+        </table>
+        <fieldset>
+            <legend>帮助</legend>
+            <ol>
+                <li>该设置为了控制该流程的流程实例是可以被那些范围的人可查询，可见。</li>
+                <li>该控制在工作流程查看器里校验，就是说在操作员要打开工作查看器的时候检查当前的人员是否有权限查看该流程。</li>
+                <li>与流程相关的人员是必选项，也就是说，流程相关的人员是可以查看轨迹图的，</li>
+            </ol>
 
-<div style=" text-align:center">
-    <input type="button" ID="Btn_Save"  value="保存" onclick="onSave()" />
-</div>
-</form>
+        </fieldset>
+
+    </form>
 </body>
 <script type="text/javascript">
     //动态修改参数

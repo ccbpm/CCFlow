@@ -408,16 +408,17 @@
 </head>
 <body>
     <div id="bar" class="cs-tr cs-bar">
+        <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">发起限时规则</label>
         <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Save()" />
         <input type="button" id="Button1" runat="server" value="我需要帮助" onclick="Help()" />
-        
+
     </div>
 
     <fieldset>
         <legend>
             <input type="radio" name="xzgz" id="RB_None" value="RB_None">
             <!-- checked="checked"> -->
-            <label for="RB_None">
+            <label style="font-size:15px;font-weight:bolder;" for="RB_None">
                 不限制（默认）
             </label>
         </legend>
@@ -427,8 +428,9 @@
     </fieldset>
     <fieldset>
         <legend>
+            <br />
             <input type="radio" name="xzgz" id="RB_ByTime">
-            <label for="RB_ByTime">
+            <label style="font-size:15px;font-weight:bolder;" for="RB_ByTime">
                 按时间规则计算
             </label>
             <br />
@@ -476,7 +478,7 @@
     <fieldset>
         <legend>
             <input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
-            <label for="RB_OnlyOneSubFlow">
+            <label  style="font-size:15px;font-weight:bolder;" for="RB_OnlyOneSubFlow">
                 为子流程时的规则.
             </label>
         </legend>
@@ -492,7 +494,7 @@
     <fieldset>
         <legend>
             <input type="radio" name="xzgz" id="RB_ColNotExit">
-            <label for="RB_ColNotExit">
+            <label style="font-size:15px;font-weight:bolder;" for="RB_ColNotExit">
                 按照发起字段不能重复规则
             </label>
             <br />
@@ -510,8 +512,9 @@
     </fieldset>
     <fieldset>
         <legend>
+            <br />
             <input type="radio" name="xzgz" id="RB_SQL">
-            <label for="RB_SQL">
+            <label style="font-size:15px;font-weight:bolder;" for="RB_SQL">
                 按SQL规则
             </label>
             <br />

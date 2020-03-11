@@ -1,11 +1,10 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <title></title>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -13,11 +12,11 @@
     <script src="../../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>  
-    <script src="../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
-    <script  type="text/javascript">
+    <script type="text/javascript">
 
         $(function () {
 
@@ -30,10 +29,11 @@
             if (flow.StartGuideWay == StartGuideWay.BySQLOne) {
                 GenerFullAllCtrlsVal(flow);
             }
-            
+
         });
 
         function Save() {
+
             var fk_flow = GetQueryString("FK_Flow");
             var data = new Entity("BP.WF.Flow", fk_flow);
             data.StartGuideWay = StartGuideWay.BySQLOne;
@@ -44,91 +44,97 @@
 
             window.location.href = window.location.href;
         }
-        
+
     </script>
 </head>
-<body >
+<body>
 
-<div id="bar"></div>
+    <div id="bar"></div>
 
- <fieldset>
+    <fieldset>
 
- <form id="cc">
-    <table id="table" style="width: 100%;">
-        <tr>
-            <th class="Sum" colspan="2">
-                <a href="javascript:ShowHidden('Paras1')">查询参数:</a>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                
-                <div id="Paras1" style="display: none; color: gray">
-                        <ul>
-                            <li>比如:SELECT No, Name, No as EmpNo,Name as EmpName,Email FROM WF_Emp WHERE No LIKE
-                                '%@key%' </li>
-                            <li>初始化列表参数，该查询语句必须有No,Name两个列，注意显示数量限制。</li>
-                            <li>很多场合下需要用到父子流程，在启动子流程的时候需要选择一个父流程。</li>
-                            <li>实例:SELECT a.WorkID as No, a.Title as Name, a.Starter, a.WorkID As PWorkID, '011'
-                                as PFlowNo, a.FK_Node as PNodeID FROM WF_GenerWorkflow a, WF_GenerWorkerlist b WHERE
-                                A.WorkID=b.WorkID AND B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.FK_Flow='011'
-                                AND a.Title Like '%@Key%'</li>
-                        </ul>
-                    </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="width: 100%;">
-                <textarea id="TB_StartGuidePara1" name="TB_StartGuidePara1" rows="3" style="width: 98%; height: 51px"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <th class="Sum" colspan="2">
-                <a href="javascript:ShowHidden('ByParas2')">初始化列表参数:</a>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                
-                <div id="ByParas2" style="display: none; color: gray">
-                    <ul>
-                        <li>比如:SELECT top 15 No,Name ,No as EmpNo,Name as EmpName ,Email FROM WF_Emp </li>
-                        <li>或者:SELECT No,Name ,No as EmpNo,Name as EmpName ,Email FROM WF_Emp WHERE ROWID <
-                            15 </li>
-                        <li>该数据源必须有No,Name两个列, 其他的列要与开始节点表单字段对应。</li>
-                        <li>注意查询的数量，避免太多影响效率。</li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="width: 100%;">
-                <textarea id="TB_StartGuidePara2" name="TB_StartGuidePara2" rows="3" runat="server" style="width: 98%;height: 51px"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <th class="Sum" colspan="2">
-                <a href="javascript:ShowHidden('ByParas3')">装载一行的数据SQL:</a>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                
-                <div id="ByParas3" style="display: none; color: gray">
-                    <ul>
-                        <li>比如:SELECT No as EmpNo,Name as EmpName ,Email FROM WF_Emp WHERE No='@Key' </li>
-                        <li>该数据源返回的列名大小写与开始节点表单的字段名匹配， 只有匹配成功的才能赋值.</li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="width: 100%;">
-                <textarea id="TB_StartGuidePara3" name="TB_StartGuidePara3" rows="3" style="width: 98%; height: 51px"></textarea>
-            </td>
-        </tr>
-    </table>
-    </form>
- </fieldset>
+        <form id="cc">
+            <table id="table" style="width: 100%;">
+                <tr>
+                    <th class="Sum" colspan="2">
+                        <a href="javascript:ShowHidden('Paras1')">查询参数:</a>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+
+                        <div id="Paras1" style="display: none; color: gray">
+                            <ul>
+                                <li>
+                                    比如:SELECT No, Name, No as EmpNo,Name as EmpName,Email FROM WF_Emp WHERE No LIKE
+                                    '%@key%'
+                                </li>
+                                <li>初始化列表参数，该查询语句必须有No,Name两个列，注意显示数量限制。</li>
+                                <li>很多场合下需要用到父子流程，在启动子流程的时候需要选择一个父流程。</li>
+                                <li>
+                                    实例:SELECT a.WorkID as No, a.Title as Name, a.Starter, a.WorkID As PWorkID, '011'
+                                    as PFlowNo, a.FK_Node as PNodeID FROM WF_GenerWorkflow a, WF_GenerWorkerlist b WHERE
+                                    A.WorkID=b.WorkID AND B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.FK_Flow='011'
+                                    AND a.Title Like '%@Key%'
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width: 100%;">
+                        <textarea id="TB_StartGuidePara1" name="TB_StartGuidePara1" rows="3" style="width: 98%; height: 51px"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="Sum" colspan="2">
+                        <a href="javascript:ShowHidden('ByParas2')">初始化列表参数:</a>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+
+                        <div id="ByParas2" style="display: none; color: gray">
+                            <ul>
+                                <li>比如:SELECT top 15 No,Name ,No as EmpNo,Name as EmpName ,Email FROM WF_Emp </li>
+                                <li>
+                                    或者:SELECT No,Name ,No as EmpNo,Name as EmpName ,Email FROM WF_Emp WHERE ROWID <
+                                    15
+                                </li>
+                                <li>该数据源必须有No,Name两个列, 其他的列要与开始节点表单字段对应。</li>
+                                <li>注意查询的数量，避免太多影响效率。</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width: 100%;">
+                        <textarea id="TB_StartGuidePara2" name="TB_StartGuidePara2" rows="3" runat="server" style="width: 98%;height: 51px"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="Sum" colspan="2">
+                        <a href="javascript:ShowHidden('ByParas3')">装载一行的数据SQL:</a>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+
+                        <div id="ByParas3" style="display: none; color: gray">
+                            <ul>
+                                <li>比如:SELECT No as EmpNo,Name as EmpName ,Email FROM WF_Emp WHERE No='@Key' </li>
+                                <li>该数据源返回的列名大小写与开始节点表单的字段名匹配， 只有匹配成功的才能赋值.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width: 100%;">
+                        <textarea id="TB_StartGuidePara3" name="TB_StartGuidePara3" rows="3" style="width: 98%; height: 51px"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
 </body>
 </html>

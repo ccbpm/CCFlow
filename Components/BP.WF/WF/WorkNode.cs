@@ -5131,6 +5131,12 @@ namespace BP.WF
                             this.rptGe = new GERpt("ND" + int.Parse(this.HisFlow.No) + "Rpt", this.WorkID);
                         pk = this.rptGe.PWorkID;
                         break;
+                    case WhoIsPK.PPWorkID:
+                        //获取PPWorkID
+                        GenerWorkFlow gwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
+                        if (gwf != null && gwf.PWorkID != 0)
+                            pk = gwf.PWorkID;
+                        break;
                     default:
                         throw new Exception(BP.WF.Glo.multilingual("@未判断的类型:{0}.", "WorkNode", "not_found_value", item.WhoIsPK.ToString()));
                 }

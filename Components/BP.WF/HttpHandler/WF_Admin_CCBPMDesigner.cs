@@ -13,7 +13,6 @@ using BP.WF;
 using BP.WF.Template;
 using LitJson;
 using BP.WF.XML;
-
 namespace BP.WF.HttpHandler
 {
     /// <summary>

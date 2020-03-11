@@ -284,7 +284,12 @@
                         var groupID = GetQueryString("GroupField");
 
                         function Enum(doType) {
-                            window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                            var webUser = new WebUser();
+                            if (webUser.CCBPMRunModel == 2) {
+                                window.location.href = 'SysEnumListSAAS.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                            } else {
+                                window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                                }
                         }
 
                         function Table(doType) {

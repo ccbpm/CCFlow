@@ -17,7 +17,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -28,7 +28,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <TargetFrameworkProfile />
     <TypeScriptToolsVersion>3.6</TypeScriptToolsVersion>
   </PropertyGroup>
@@ -292,6 +292,8 @@
     <Content Include="DataUser\OfficeTemplate\readme.txt" />
     <Content Include="DataUser\OverrideFiles\Ath.htm" />
     <Content Include="DataUser\OverrideFiles\Ath.js" />
+    <Content Include="DataUser\OverrideFiles\FlowAttrExt.htm" />
+    <Content Include="DataUser\OverrideFiles\FlowAttrExts.html" />
     <Content Include="DataUser\OverrideFiles\Timer.htm" />
     <Content Include="DataUser\PrjData\Data\readme.txt" />
     <Content Include="DataUser\PrjData\Readme.txt" />

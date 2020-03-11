@@ -96,6 +96,7 @@ function closeWindow() {
     if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
         // 测试流程时，发送成功刷新测试容器页面右侧
         window.parent.parent.refreshRight();
+        window.parent.parent.refreshLeft();
     }
     if (window.parent != null && window.parent != undefined
         && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1) {

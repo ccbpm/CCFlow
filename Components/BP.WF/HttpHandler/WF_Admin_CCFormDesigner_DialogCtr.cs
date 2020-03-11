@@ -24,75 +24,6 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// 保存枚举值.
-        /// </summary>
-        /// <returns></returns>
-        public string EnumerationNew_SAAS_Save()
-        {
-
-            SysEnumMain sem = new SysEnumMain();
-
-            if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
-            {
-                sem.No = this.No;
-                if (sem.RetrieveFromDBSources()==0)
-                {
-                    //SDSDSDS.
-
-                }
-
-                string no = this.No;
-
-                return "保存成功.";
-            }
-
-            //给主键赋值.
-            sem.No = this.No;
-            if (sem.RetrieveFromDBSources() == 0)
-            {
-                sem.Name = this.Name;
-                sem.CfgVal = this.GetRequestVal("CfgVal");
-                sem.Insert();
-            }else
-            {
-                sem.Name = this.Name;
-                sem.CfgVal = this.GetRequestVal("CfgVal");
-                sem.Update();
-            }
-
-            //初始化从表信息.
-            sem.DoInitDtls();
-
-            return "保存成功.";
-        }
-
-        public string EnumerationNew_Save()
-        {
-            SysEnumMain sem = new SysEnumMain();
-
-            //给主键赋值.
-            sem.No = this.No;
-            if (sem.RetrieveFromDBSources() == 0)
-            {
-                sem.Name = this.Name;
-                sem.CfgVal = this.GetRequestVal("CfgVal");
-                sem.Insert();
-            }
-            else
-            {
-                sem.Name = this.Name;
-                sem.CfgVal = this.GetRequestVal("CfgVal");
-                sem.Update();
-            }
-
-            //初始化从表信息.
-            sem.DoInitDtls();
-
-            return "保存成功.";
-        }
-
-
-        /// <summary>
         /// 获取隐藏字段
         /// </summary>
         /// <returns></returns>
@@ -118,17 +49,17 @@ namespace BP.WF.HttpHandler
                     ps.SQL = "SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
                     ps.Add("FK_MapData", this.FK_MapData);
                     //sql = "SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_MapData + "'";
-                    num = DBAccess.RunSQLReturnValInt(ps)+1;
+                    num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", this.FK_MapData + "Dtl" + num);
-                    ht.Add("Name", "从表"+num);
+                    ht.Add("Name", "从表" + num);
                     break;
                 case "AthMulti":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
                     ps.Add("FK_MapData", this.FK_MapData);
                     //sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
-                    num = DBAccess.RunSQLReturnValInt(ps)+1;
-                    ht.Add("No",  "AthMulti" + num );
-                    ht.Add("Name", "多附件"+num);
+                    num = DBAccess.RunSQLReturnValInt(ps) + 1;
+                    ht.Add("No", "AthMulti" + num);
+                    ht.Add("Name", "多附件" + num);
                     break;
                 case "ImgAth":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
@@ -142,26 +73,26 @@ namespace BP.WF.HttpHandler
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
                     ps.Add("FK_MapData", this.FK_MapData);
                     //sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
-                    num = DBAccess.RunSQLReturnValInt(ps)+1;
-                    ht.Add("No", "AthSingle" + num );
-                    ht.Add("Name", "单附件"+num);
+                    num = DBAccess.RunSQLReturnValInt(ps) + 1;
+                    ht.Add("No", "AthSingle" + num);
+                    ht.Add("Name", "单附件" + num);
                     break;
                 case "AthImg":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
                     ps.Add("FK_MapData", this.FK_MapData);
                     //sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "'";
-                    num = DBAccess.RunSQLReturnValInt(ps)+1;
-                    ht.Add("No", "AthImg" + num );
-                    ht.Add("Name", "图片附件"+num);
+                    num = DBAccess.RunSQLReturnValInt(ps) + 1;
+                    ht.Add("No", "AthImg" + num);
+                    ht.Add("Name", "图片附件" + num);
                     break;
                 case "HandSiganture": //手写板.
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData" + " AND EleType=" + SystemConfig.AppCenterDBVarStr + "EleType";
                     ps.Add("FK_MapData", this.FK_MapData);
                     ps.Add("EleType", ctrlType);
                     //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='"+ctrlType+"'";
-                    num = DBAccess.RunSQLReturnValInt(ps)+1;
+                    num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "HandSiganture" + num);
-                    ht.Add("Name", "签字板"+num);
+                    ht.Add("Name", "签字板" + num);
                     break;
                 case "iFrame": //框架
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData" + " AND EleType=" + SystemConfig.AppCenterDBVarStr + "EleType";
@@ -169,8 +100,8 @@ namespace BP.WF.HttpHandler
                     ps.Add("EleType", ctrlType);
                     //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='" + ctrlType + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
-                    ht.Add("No", "iFrame" + num );
-                    ht.Add("Name", "框架"+num);
+                    ht.Add("No", "iFrame" + num);
+                    ht.Add("Name", "框架" + num);
                     break;
                 case "Fieldset": //分组
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData" + " AND EleType=" + SystemConfig.AppCenterDBVarStr + "EleType";
@@ -182,8 +113,8 @@ namespace BP.WF.HttpHandler
                     ht.Add("Name", "分组" + num);
                     break;
                 default:
-                    ht.Add("No", ctrlType +1);
-                    ht.Add("Name", ctrlType+1);
+                    ht.Add("No", ctrlType + 1);
+                    ht.Add("Name", ctrlType + 1);
                     break;
             }
 
@@ -212,11 +143,11 @@ namespace BP.WF.HttpHandler
         protected override string DoDefaultMethod()
         {
             //找不不到标记就抛出异常.
-            throw new Exception("@标记["+this.DoType+"]，没有找到.");
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.");
         }
         #endregion 执行父类的重写方法.
 
-         
+
         #region 功能界面 .
         /// <summary>
         /// 转化拼音 @李国文.
@@ -225,7 +156,7 @@ namespace BP.WF.HttpHandler
         public string FrmTextBox_ParseStringToPinyin()
         {
             string name = GetRequestVal("name");
-         
+
             string flag = this.GetRequestVal("flag");
             flag = DataType.IsNullOrEmpty(flag) == true ? "true" : flag.ToLower();
 

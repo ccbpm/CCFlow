@@ -72,10 +72,6 @@ namespace BP.Sys
     public class SFTableAttr : EntityNoNameAttr
     {
         /// <summary>
-        /// 真实的编号
-        /// </summary>
-        public const string RealNo = "RealNo";
-        /// <summary>
         /// 是否可以删除
         /// </summary>
         public const string IsDel = "IsDel";
@@ -107,10 +103,6 @@ namespace BP.Sys
         /// 字典表类型
         /// </summary>
         public const string CodeStruct = "CodeStruct";
-        /// <summary>
-        /// OrgNo
-        /// </summary>
-        public const string OrgNo = "OrgNo";
 
         #region 链接到其他系统获取数据的属性。
         /// <summary>
@@ -495,20 +487,6 @@ namespace BP.Sys
                 this.SetValByKey(SFTableAttr.FK_SFDBSrc, value);
             }
         }
-        /// <summary>
-        /// OrgNo
-        /// </summary>
-        public string OrgNo
-        {
-            get
-            {
-                return this.GetValStringByKey(SFTableAttr.OrgNo);
-            }
-            set
-            {
-                this.SetValByKey(SFTableAttr.OrgNo, value);
-            }
-        }
         public string FK_SFDBSrcT
         {
             get
@@ -855,15 +833,9 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_SFTable", "字典表");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
-
-                /*
-                * 为了能够支持 cloud 我们做了如下变更.
-                * 1. 增加了RealNo, OrgNo 字段. RealNo=定义的编号.
-                * 2. 如果是单机版用户,原来的业务逻辑不变化.
-                * 3. 如果是SAAS模式, No= RealNo+"_"+OrgNo;
-                */
-
 
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
@@ -874,22 +846,22 @@ namespace BP.Sys
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
 
+
                 map.AddTBString(SFTableAttr.FK_Val, null, "默认创建的字段名", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
 
+
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
+
                 map.AddTBString(SFTableAttr.SrcTable, null, "数据源表", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ColumnValue, null, "显示的值(编号列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", true, false, 0, 1000, 600, true);
-                map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
 
-                //为了适应cloud 需要增加的两个字段.
-                map.AddTBString(SFTableAttr.RealNo, null, "RealNo", true, false, 0, 200, 20);
-                map.AddTBString(SFTableAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
+                map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
 
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
@@ -1181,21 +1153,6 @@ namespace BP.Sys
             }
         }
         #endregion
-
-        /// <summary>
-        /// 查询所有枚举值，根据不同的运行平台.
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveAll()
-        {
-            // 获取平台的类型. 0=单机版, 1=集团版，2=SAAS。
-            int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
-            if (val != 2)
-                return base.RetrieveAll();
-
-            // 返回他组织下的数据.
-            return this.Retrieve(SysEnumMainAttr.OrgNo, BP.Web.WebUser.FK_Dept);
-        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

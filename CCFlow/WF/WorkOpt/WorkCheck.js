@@ -86,7 +86,7 @@ function InitPage() {
         nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
         html += nodeName;
         html += "</td>";
-
+        //获取自定义常用短语
         var DuanYu = fwcs[0].FWCNewDuanYu;
         var NewDuanYu = DuanYu.split("@");
         //审核意见

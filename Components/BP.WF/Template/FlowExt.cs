@@ -1166,7 +1166,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowAttrExt()
         {
-            return "../../../DataUser/OverrideFiles/FlowAttrExt.htm?FK_Flow=" + this.No;
+            return "../../../DataUser/OverrideFiles/FlowAttrExts.html?FK_Flow=" + this.No;
         }
         public string DoVer()
         {

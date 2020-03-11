@@ -22,7 +22,7 @@
             var adminer = GetQueryString("Adminer"); //管理员.
             var sid = GetQueryString("AdminerSID"); //管理员SID.
             //访问后台，获得一个工作ID.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
 
@@ -131,7 +131,7 @@
         function ChangUser(empNo) {
 
             //当这个人登录。
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Emp", empNo);
             handler.AddPara("WorkID", workID);
 

@@ -19,14 +19,26 @@
         $(function () {
 
             var webUser = new WebUser();
-            $("#userInfo").html(webUser.No + "," + webUser.Name);
+
+            var icon = "<h5>当前用户</h5>";
+
+            var icon = "<center><b>当前用户</b><br>";
+
+            icon += "<img border=1 src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
+            icon += "</center>";
+            icon += "帐号:" + webUser.No;
+            icon += "<br>用户:" + webUser.Name;
+            // icon += "<br>部门编号:" + webUser.FK_Dept;
+            icon += "<br>部门:" + webUser.FK_DeptName;
+
+            $("#userInfo").html(icon);
 
             var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Adminer=" + adminer + "&SID=" + sid;
 
             var html = "<ul>";
             html += "<li><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
             html += "<li><a href='DBInfo.html?1=2" + urlEnd + "' target=right >数据库信息</a></li>";
-            html += "<li><a href='../../WFRpt.html?1=2" + urlEnd + "' target=right >轨迹图</a></li>";
+            html += "<li><a href='../../WFRpt.htm?1=2" + urlEnd + "' target=right >轨迹图</a></li>";
             html += "<li><a href='javascript:Restart();' >重新启动 </a></li>";
             html += "<li><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
             html += "</ul>";
@@ -41,7 +53,7 @@
             if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
                 return;
             // 使用最初用户登录
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Emp", userNo);
             handler.AddPara("WorkID", workID);
 
@@ -60,7 +72,7 @@
         // 选择接收人.
         function SelectOneUser() {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
             var workid = handler.DoMethodReturnString("Default_Init");
 
@@ -79,7 +91,7 @@
             window.parent.window.close();
 
             ////访问后台，获得一个工作ID.
-            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             //handler.AddUrlData();
             //var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
 
@@ -93,9 +105,10 @@
     </script>
 </head>
 <body>
-    <h4> 当前测试登录用户 </h4>
+
     <div id="userInfo"></div>
 
+    <hr />
     <div id="Info"></div>
 
 

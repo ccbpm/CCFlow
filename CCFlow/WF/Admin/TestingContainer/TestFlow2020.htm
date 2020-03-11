@@ -36,7 +36,7 @@
             //    return;
             //}
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
 
             //var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
             //var urlHost = "";
@@ -111,7 +111,7 @@
         //发起流程。
         function StartIt(empNo) {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingStep");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("UserNo", empNo);
             var data = handler.DoMethodReturnString("TestFlow2020_StartIt");

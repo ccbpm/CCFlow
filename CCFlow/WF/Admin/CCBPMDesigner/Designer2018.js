@@ -936,7 +936,7 @@ function FlowRun2020() {
     var flow = new Entity("BP.WF.Flow", flowNo);
     flow.DoMethodReturnString("ClearCash");
 
-    var url = "../TestingStep/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    var url = "../TestingContainer/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
 
     //WinOpen(url);
     window.parent.addTab(flowNo + "_YXLH", "运行流程2020" + flowNo, url);

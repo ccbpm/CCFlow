@@ -2723,7 +2723,7 @@ $(function () {
         }
 
         //要排除的目录.
-        if (url.indexOf("/admin/TestingStep/") == -1)
+        if (url.indexOf("/admin/TestingContainer/") == -1)
             return;
 
         //如果进入了管理员目录.

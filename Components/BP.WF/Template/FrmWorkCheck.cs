@@ -190,6 +190,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FWCFields = "FWCFields";
         /// <summary>
+        /// 自定短语
+        /// </summary>
+        public const string FWCNewDuanYu = "FWCNewDuanYu";
+        /// <summary>
         /// 是否显示未审核的轨迹
         /// </summary>
         public const string FWCIsShowTruck = "FWCIsShowTruck";
@@ -549,6 +553,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 自定义常用短语
+        /// </summary>
+        public string FWCNewDuanYu
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmWorkCheckAttr.FWCNewDuanYu);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCNewDuanYu, value);
+            }
+        }
+        /// <summary>
         /// 是否显示数字签名？
         /// </summary>
         public bool SigantureEnabel
@@ -739,6 +757,7 @@ namespace BP.WF.Template
                 map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "宽度(0=100%)", true, false);
 
                 map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 50, 10, true);
+                map.AddTBString(FrmWorkCheckAttr.FWCNewDuanYu, null, "自定义常用短语(使用@分隔)", true, false, 0, 100, 10, true);
 
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);

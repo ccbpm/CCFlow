@@ -44,7 +44,7 @@
 
             var ens = new Entities("BP.WF.Template.PushMsgs");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-            
+
             for (var i = 0; i < ens.length; i++) {
                 var emailCheck = "";
                 var ccmsg = ""
@@ -61,25 +61,25 @@
                 newRow += "<td>"
                 //发送形式
                 var pushModel = en.SMSPushModel;
-                
+
                 if (pushModel.indexOf('Email') != -1)
                     emailCheck = "checked=checked"
-                 if (pushModel.indexOf('CCMsg') != -1)
+                if (pushModel.indexOf('CCMsg') != -1)
                     ccmsg = "checked=checked"
-                 if (pushModel.indexOf('SMS') != -1)
+                if (pushModel.indexOf('SMS') != -1)
                     sms = "checked=checked"
-                 if (pushModel.indexOf('DingDing') != -1)
+                if (pushModel.indexOf('DingDing') != -1)
                     dingding = "checked=checked"
                 if (pushModel.indexOf('WeiXin') != -1)
                     weixin = "checked=checked"
                 if (pushModel.indexOf('WS') != -1)
-                    tm ="checked=checked"
-                newRow += "<label><input id='CB_SMSPushModel_Email' type='checkbox' name='CB_SMSPushModel' value='Email' disabled "+emailCheck+"/>邮件</label>";
-                newRow += "<label><input id='CB_SMSPushModel_CCMsg' type='checkbox' name='CB_SMSPushModel' value='CCMsg' disabled  "+ccmsg+"/>站内消息</label>";
-                newRow += "<label><input id='CB_SMSPushModel_SMS' type='checkbox' name='CB_SMSPushModel' value='SMS' disabled "+sms+"/>短信</label>";
-                newRow += "<label><input id='CB_SMSPushModel_DingDing' type='checkbox' name='CB_SMSPushModel' value='DingDing' disabled "+dingding+"/>钉钉</label>";
-                newRow += "<label><input id='CB_SMSPushModel_WeiXin' type='checkbox' name='CB_SMSPushModel' value='WeiXin' disabled "+weixin+"/>微信</label>";
-                newRow += "<label><input id='CB_SMSPushModel_WS' type='checkbox' name='CB_SMSPushModel' value='WS' disabled "+tm+"/>WebServices</label>";
+                    tm = "checked=checked"
+                newRow += "<label><input id='CB_SMSPushModel_Email' type='checkbox' name='CB_SMSPushModel' value='Email' disabled " + emailCheck + "/>邮件</label>";
+                newRow += "<label><input id='CB_SMSPushModel_CCMsg' type='checkbox' name='CB_SMSPushModel' value='CCMsg' disabled  " + ccmsg + "/>站内消息</label>";
+                newRow += "<label><input id='CB_SMSPushModel_SMS' type='checkbox' name='CB_SMSPushModel' value='SMS' disabled " + sms + "/>短信</label>";
+                newRow += "<label><input id='CB_SMSPushModel_DingDing' type='checkbox' name='CB_SMSPushModel' value='DingDing' disabled " + dingding + "/>钉钉</label>";
+                newRow += "<label><input id='CB_SMSPushModel_WeiXin' type='checkbox' name='CB_SMSPushModel' value='WeiXin' disabled " + weixin + "/>微信</label>";
+                newRow += "<label><input id='CB_SMSPushModel_WS' type='checkbox' name='CB_SMSPushModel' value='WS' disabled " + tm + "/>WebServices</label>";
                 newRow += "</td>";
                 newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
@@ -92,15 +92,16 @@
 
         function PushWayText(EventListOfNode, PushWay) {
 
-            var ret = { "WorkArrive": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "SendSuccess": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "ReturnAfter": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "UndoneAfter": ["不发送", "撤销工作后通知的节点接受人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "ShitAfter": ["不发送", "发送给被移交的节点接受人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "FlowOverAfter": ["不发送", "流程结束通知的所有流程的参与人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "AfterFlowDel": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "NodeWarning": ["不发送",  "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"],
-                "NodeOverDue": ["不发送",  "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人","按照SQL计算","发给指定的人"]
+            var ret = {
+                "WorkArrive": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "SendSuccess": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "ReturnAfter": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "UndoneAfter": ["不发送", "撤销工作后通知的节点接受人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "ShitAfter": ["不发送", "发送给被移交的节点接受人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "FlowOverAfter": ["不发送", "流程结束通知的所有流程的参与人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "AfterFlowDel": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "NodeWarning": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
+                "NodeOverDue": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"]
             };
 
             return ret[EventListOfNode][PushWay];
@@ -131,14 +132,15 @@
         }
 
     </script>
+    
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
           id="form1">
-        <div style="float:right; margin-right:5px;">
+        <div style="right:30px; position:absolute; z-index:100; ">
             <fieldset style="border: 0px;">
                 <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-                <div id="state" style="width:auto; position:absolute; z-index:10;background-color:wheat; display: none; color: Gray">
+                <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:wheat; display: none; color: Gray">
                     <ul>
                         <li><a href="javascript:PushMessageEntity('WorkArrive');">工作到达</a> </li>
                         <li><a href="javascript:PushMessageEntity('SendSuccess');">节点发送成功时</a> </li>
@@ -154,7 +156,7 @@
                 <input type="button" value="我需要帮助" onclick="Help()" />
             </fieldset>
         </div>
-        <div style="margin: 8px">
+        <div style="position:relative;top:10px; margin: 8px">
             <table id="Table1" style="width: 100%">
                 <caption>
                     消息事件

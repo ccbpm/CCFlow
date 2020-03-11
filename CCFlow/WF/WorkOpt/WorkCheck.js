@@ -88,7 +88,12 @@ function InitPage() {
         html += "</td>";
         //获取自定义常用短语
         var DuanYu = fwcs[0].FWCNewDuanYu;
-        var NewDuanYu = DuanYu.split("@");
+        if (DuanYu != null && DuanYu != undefined) {
+
+            var NewDuanYu = DuanYu.split("@");  
+        } else {
+            var NewDuanYu = "";
+        }
         //审核意见
         if (this.IsDoc == "1" && isReadonly == false) {
 

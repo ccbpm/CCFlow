@@ -86,7 +86,12 @@ function InitPage() {
         html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
         //获取自定义常用短语
         var DuanYu = fwcs[0].FWCNewDuanYu;
-        var NewDuanYu = DuanYu.split("@");
+        if (DuanYu != null && DuanYu != undefined) {
+
+            var NewDuanYu = DuanYu.split("@");
+        } else {
+            var NewDuanYu = "";
+        }
         //当前节点审核意见可编辑
         if (this.IsDoc == "1" && isReadonly == false) {
 

@@ -511,6 +511,7 @@ namespace BP.Frm
             Attrs attrs = rpts.GetNewEntity.EnMap.Attrs;
 
             QueryObject qo = new QueryObject(rpts);
+            bool isFirst = true; //是否第一次拼接SQL
 
             #region 关键字字段.
             string keyWord = ur.SearchKey;
@@ -557,6 +558,7 @@ namespace BP.Frm
                     i++;
                     if (i == 1)
                     {
+                        isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
@@ -575,6 +577,52 @@ namespace BP.Frm
                 }
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
+            }else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false){
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFields = md.GetParaString("RptStringSearchKeys").Split('*');
+                foreach (String str in searchFields)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    //字段名
+                    string[] items  = str.Split(',');
+                    if (items.Length==2 && DataType.IsNullOrEmpty(items[0]) == true)
+                        continue;
+                    field = items[0];
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    idx++;
+                    if (idx == 1)
+                    {
+                        isFirst = false;
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        else
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.MyParas.Add(field, fieldValue);
+                        continue;
+                    }
+                    qo.addAnd();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    else
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                    qo.MyParas.Add(field, fieldValue);
+
+
+                }
+                if (idx != 0)
+                    qo.addRightBracket();
             }
             else
             {
@@ -591,7 +639,10 @@ namespace BP.Frm
                 //按日期查询
                 if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDate)
                 {
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     dtTo += " 23:59:59";
                     qo.SQL = md.GetParaString("DTSearchKey") + " >= '" + dtFrom + "'";
@@ -613,7 +664,10 @@ namespace BP.Frm
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
 
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     qo.SQL = md.GetParaString("DTSearchKey") + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -632,7 +686,11 @@ namespace BP.Frm
                 var val = ap.GetValStrByKey(str);
                 if (val.Equals("all"))
                     continue;
-                qo.addAnd();
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
+
                 qo.addLeftBracket();
 
 
@@ -653,7 +711,11 @@ namespace BP.Frm
 
             #endregion 查询语句
 
-            qo.addAnd();
+            if (isFirst == false)
+                qo.addAnd();
+            else
+                isFirst = false;
+
             qo.AddWhere("BillState", "!=", 0);
             //获得行数.
             ur.SetPara("RecCount", qo.GetCount());

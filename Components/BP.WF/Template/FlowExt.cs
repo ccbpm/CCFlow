@@ -845,7 +845,7 @@ namespace BP.WF.Template
                 rm.Title = "图形分析";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_DataCharts()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
@@ -853,7 +853,7 @@ namespace BP.WF.Template
                 rm.Title = "综合查询";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Search()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
@@ -861,7 +861,7 @@ namespace BP.WF.Template
                 rm.Title = "综合分析";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Group()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
@@ -916,13 +916,13 @@ namespace BP.WF.Template
                 rm.Visable = false;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "流程轨迹表单";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoBindFlowExt()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "流程轨迹表单";
+                //rm.Icon = "../../WF/Img/Btn/DTS.gif";
+                //rm.ClassMethodName = this.ToString() + ".DoBindFlowExt()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "实验中的功能";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "批量设置节点";

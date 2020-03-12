@@ -27,7 +27,7 @@
             ens.Retrieve("FK_Node", nodeID);
 
             var html = "<table style='width:98%;'>";
-            html += "<caption><img src='../../Img/Event.png' />节点事件 </caption>";
+            html += "<caption><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />节点事件 </caption>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>事件标记</th>";
@@ -117,7 +117,7 @@
 </head>
 <body>
     <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
+        <div style="right:30px; position:absolute; z-index:100; top:-4px">
             <input type="button" value="新建节点事件" onclick="javascript:New()" />
             <input type="button" value="什么是节点事件？" onclick="javascript:Help()" />
 

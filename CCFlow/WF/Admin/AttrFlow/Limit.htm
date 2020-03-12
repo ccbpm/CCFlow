@@ -398,7 +398,7 @@
         .cs-form-import > .layout-panel-center {
             padding: 16px 0 0 16px;
         }
-
+        
         .cs-form-import > .layout-panel-north {
             top: 6px !important;
             padding-right: 21px;
@@ -408,7 +408,7 @@
 </head>
 <body>
     <div id="bar" class="cs-tr cs-bar">
-        <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">发起限时规则</label>
+        <label style="float:left;font-size:13px;font-weight:bolder;padding-top:10px;">发起限时规则</label>
         <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Save()" />
         <input type="button" id="Button1" runat="server" value="我需要帮助" onclick="Help()" />
 
@@ -418,19 +418,20 @@
         <legend>
             <input type="radio" name="xzgz" id="RB_None" value="RB_None">
             <!-- checked="checked"> -->
-            <label style="font-size:15px;font-weight:bolder;" for="RB_None">
+            <label style="font-size:13px;font-weight:bolder;" for="RB_None">
                 不限制（默认）
             </label>
         </legend>
         <ul style="color: Gray">
             <li>不限制发起次数，比如报销流程、请款流程。</li>
+            <br />
         </ul>
     </fieldset>
     <fieldset>
         <legend>
             <br />
             <input type="radio" name="xzgz" id="RB_ByTime">
-            <label style="font-size:15px;font-weight:bolder;" for="RB_ByTime">
+            <label style="font-size:13px;font-weight:bolder;" for="RB_ByTime">
                 按时间规则计算
             </label>
             <br />
@@ -442,6 +443,7 @@
                     规则模式：
                 </td>
                 <td>
+                    <br />
                     <select id="DDL_ByTime">
                         <option value="0">每人每天一次</option>
                         <option value="1">每人每周一次</option>
@@ -449,15 +451,9 @@
                         <option value="3">每人每季一次</option>
                         <option value="4">每人每年一次</option>
                     </select>
+                    <br />
                 </td>
-                <td class="style2">
-                    <font color="gray">
-                        <ul>
-                            <li>按照选择的时间频率进行设置发起限制</li>
-                            <li><a href="javascript:WinOpen('http://bbs.ccflow.org/showtopic-3711.aspx')">更多规则模式与参数设置</a></li>
-                        </ul>
-                    </font>
-                </td>
+               
             </tr>
             <tr>
                 <td colspan="3">
@@ -469,6 +465,7 @@
                             <li>用来限制该流程可以在什么时间段内发起。</li>
                             <li>例如:按照每人每天一次设置时间范围，规则参数：@08:30-09:00@18:00-18:30，解释：该流程只能在08:30-09:00与18:00-18:30两个时间段发起且只能发起一次。</li>
                         </ul>
+                       
                     </div>
                     <input type="text" class="input" id="TB_ByTimePara">
                 </td>
@@ -478,7 +475,7 @@
     <fieldset>
         <legend>
             <input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
-            <label  style="font-size:15px;font-weight:bolder;" for="RB_OnlyOneSubFlow">
+            <label  style="font-size:13px;font-weight:bolder;" for="RB_OnlyOneSubFlow">
                 为子流程时的规则.
             </label>
         </legend>
@@ -487,14 +484,14 @@
             <li><label> <input type="checkbox" /> 如果当前为子流程，需要等到指定的子流程结束以后才能启动该流程。</label></li>
 
             <li>指定的流程编号:<input type=text />多个子流程用逗号分开.比如:001,003</li>
-
+            <br />
         </ul>
     </fieldset>
 
     <fieldset>
         <legend>
             <input type="radio" name="xzgz" id="RB_ColNotExit">
-            <label style="font-size:15px;font-weight:bolder;" for="RB_ColNotExit">
+            <label style="font-size:13px;font-weight:bolder;" for="RB_ColNotExit">
                 按照发起字段不能重复规则
             </label>
             <br />
@@ -514,7 +511,7 @@
         <legend>
             <br />
             <input type="radio" name="xzgz" id="RB_SQL">
-            <label style="font-size:15px;font-weight:bolder;" for="RB_SQL">
+            <label style="font-size:13px;font-weight:bolder;" for="RB_SQL">
                 按SQL规则
             </label>
             <br />

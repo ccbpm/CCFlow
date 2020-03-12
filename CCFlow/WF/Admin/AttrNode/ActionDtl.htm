@@ -110,70 +110,78 @@
 </head>
 <body>
     <form id="cc">
-    <table style="width: 80%;" id="Table2">
-        <caption>
-            新增事件
-        </caption>
-        <tr>
-            <td>
-                事件类型
-            </td>
-            <td>
-                <select id="DDL_FK_Event" name="DDL_FK_Event">
-                    <option value="WorkArrive">工作到达</option>
-                    <option value="SendWhen" selected="selected">当节点发送前</option>
-                    <option value="SendSuccess">节点发送成功时</option>
-                    <option value="SendError">节点发送失败时</option>
-                    <option value="ReturnBefore">当节点退回前</option>
-                    <option value="ReturnAfter">当节点退回后</option>
-                    <option value="UndoneBefore">当节点撤销发送前</option>
-                    <option value="UndoneAfter">当节点撤销发送后</option>
-                    <option value="WhenReadWork">工作打开后</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                执行内容类型
-            </td>
-            <td>
-                <select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)">
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                执行内容<br>
-                支持ccbpm表达式
-            </td>
-            <td>
-                <textarea id="TB_Doc" name="TB_Doc" style="display: none; width: 98%;"></textarea>
-                <!-- 其它事件 -->
-                <select id="DDL_Doc" name="DDL_Doc" style="display: none;">
-                </select>
-                <!-- 业务单元 -->
-            </td>
-        </tr>
-        <tr>
-            <td colspan="1">
-                执行成功信息提示(可为空)
-            </td>
-            <td colspan="1">
-                <input type="text" id="MsgOK" name="MsgOK" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="1">
-                执行失败时提示(可为空)
-            </td>
-            <td>
-                <input type="text" id="MsgError" name="MsgError" />
-            </td>
-        </tr>
-    </table>
-    <input id="Btn_Save" name="Btn_Save" value="保存" onclick="Save();" type="button" />
-    <input id="Button1" name="Button1" value="返回" onclick="Back();" type="button" />
-    <input id="Button2" name="Button1" value="帮助" onclick="Help();" type="button" />
+        <div style="right:30px; position:absolute; z-index:100; top:-3px">
+            <input id="Btn_Save" name="Btn_Save" value="保存" onclick="Save();" type="button" />
+            <input id="Button1" name="Button1" value="返回" onclick="Back();" type="button" />
+            <input id="Button2" name="Button1" value="帮助" onclick="Help();" type="button" />
+        </div>
+        <div style="position:relative;">
+            <table style="width: 100%;" id="Table2">
+                <caption>
+                    <img style="vertical-align:middle" src='../../Img/Event.png' />
+                    新增事件
+                </caption>
+                <tr>
+                    <td>
+                        事件类型
+                    </td>
+                    <td>
+                        <select id="DDL_FK_Event" name="DDL_FK_Event">
+                            <option value="WorkArrive">工作到达</option>
+                            <option value="SendWhen" selected="selected">当节点发送前</option>
+                            <option value="SendSuccess">节点发送成功时</option>
+                            <option value="SendError">节点发送失败时</option>
+                            <option value="ReturnBefore">当节点退回前</option>
+                            <option value="ReturnAfter">当节点退回后</option>
+                            <option value="UndoneBefore">当节点撤销发送前</option>
+                            <option value="UndoneAfter">当节点撤销发送后</option>
+                            <option value="WhenReadWork">工作打开后</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        执行内容类型
+                    </td>
+                    <td>
+                        <select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        执行内容<br />
+                        支持ccbpm表达式
+                    </td>
+                    <td>
+                        <textarea id="TB_Doc" name="TB_Doc" style="display: none; width: 98%;"></textarea>
+                        <!-- 其它事件 -->
+                        <select id="DDL_Doc" name="DDL_Doc" style="display: none;">
+                        </select>
+                        <!-- 业务单元 -->
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1">
+                        执行成功信息提示(可为空)
+                    </td>
+                    <td colspan="1">
+                        <input type="text" id="MsgOK" name="MsgOK" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1">
+                        执行失败时提示(可为空)
+                    </td>
+                    <td>
+                        <input type="text" id="MsgError" name="MsgError" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+           
+        
     </form>
 </body>
 </html>

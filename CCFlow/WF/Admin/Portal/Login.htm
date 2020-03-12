@@ -12,7 +12,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link href="../../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <style>
+        #DDL_System::-ms-expand {
+            display: none;
+        }
 
+        #DDL_System {
+            padding: 5px 10px;
+            border: 1px solid #dcd8d8;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none; /*去掉下拉箭头*/
+        }
+    </style>
     <script type="text/javascript">
 
         document.onkeydown = function (e) {
@@ -91,8 +103,7 @@
             }
             //判断验证码是否正确
             var node = $("#validate");
-            if(node.is(':visible'))
-            {
+            if (node.is(':visible')) {
                 if (!validateCode()) {
                     return;
                 }
@@ -185,7 +196,7 @@
             <div class="login-form">
                 <div class="form-group">
                     <b>您要登录的系统:</b>
-                    <select class="form-control" style="width:auto;display:inline" id="DDL_System" onchange="SelectChange()">
+                    <select class="form-control" style=" width:auto;display:inline" id="DDL_System" onchange="SelectChange()">
                         <option value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋BPM专业版 </option>
                         <option value="DefaultSimple" onclick="setCookie('username', $(this).val(), 30)">驰骋BPM极简版(beta)</option>
                         <option value="DefaultFrm" onclick="setCookie('username', $(this).val(), 30)"> 驰骋表单引擎(beta)</option>
@@ -207,7 +218,7 @@
                 </div>
                 <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
                 <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
-        // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
+                // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
 
                 <div class="row login-nav">
                     <div class="col-xs-6">默认密码：123</div>
@@ -222,7 +233,7 @@
                     <div id="Msg" style=" float:right;margin-right:14px">
                     </div>
                 </div>
-            </div>   
+            </div>
         </div>
     </form>
 

@@ -484,7 +484,7 @@ $(function () {
             windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
 
 
-            var xiuNodename = '修改名称：<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
+            var xiuNodename = '<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
             var spanaa = $("#window" + activeId + " span").html();
 
             cAlert(xiuNodename);

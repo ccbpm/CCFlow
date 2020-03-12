@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>流程事件类</title>
-     <meta charset="UTF-8"/>
-     <title>节点-事件</title>
+    <meta charset="UTF-8" />
+    <title>节点-事件</title>
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
@@ -38,8 +38,8 @@
                 return;
             }
 
-           // 业务单元
-           var BuessUnits = JSON.parse(data);    
+            // 业务单元
+            var BuessUnits = JSON.parse(data);
             GenerBindDDL("DDL_Doc", BuessUnits, "No", "Name", "");
 
         });
@@ -61,7 +61,7 @@
                     return vals[1];
             }
 
-            return doType+'ss';
+            return doType + 'ss';
         }
 
         function Save() {
@@ -82,7 +82,7 @@
                 return;
             }
 
-            en.SetPKVal( en.FK_Event + Math.random() );
+            en.SetPKVal(en.FK_Event + Math.random());
             en.Insert();
             Back();
 
@@ -107,63 +107,66 @@
     </script>
 </head>
 <body>
-<form id="cc">
+    <form id="cc">
+        <div style="right:30px; position:absolute; z-index:100; top:-3px">
+            <input id="Btn_Save" name="Btn_Save" value="保存" onclick="Save();" type="button" />
+            <input id="Button1" name="Button1" value="返回" onclick="Back();" type="button" />
+        </div>
+        <div style="position:relative;">
+            <table style="width:100%;" id="Table2">
 
-<table style="width:80%;" id="Table2">
+                <caption> <img style="vertical-align:middle" src='../../Img/Event.png' />新增事件 </caption>
 
-<caption> 新增事件 </caption>
+                <tr>
+                    <td>事件类型</td>
+                    <td>
+                        <select id="DDL_FK_Event" name="DDL_FK_Event">
+                            <option value="FlowOnCreateWorkID">  创建工作ID后 </option>
+                            <option value="FlowOverBefore" selected="selected">  流程结束前</option>
+                            <option value="FlowOverAfter">  流程结束后</option>
+                            <option value="BeforeFlowDel">  流程删除前</option>
+                            <option value="AfterFlowDel">  流程删除后</option>
+                        </select>
+                    </td>
+                </tr>
 
-<tr>
-<td>事件类型</td>
-<td><select id="DDL_FK_Event" name="DDL_FK_Event" >
-<option value="FlowOnCreateWorkID">  创建工作ID后 </option>
-<option value="FlowOverBefore"  selected="selected"  >  流程结束前</option>
-<option value="FlowOverAfter">  流程结束后</option>
-<option value="BeforeFlowDel">  流程删除前</option>
-<option value="AfterFlowDel">  流程删除后</option>
-</select></td>
-</tr>
+                <tr>
+                    <td>执行内容类型</td>
+                    <td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
+                </tr>
 
-<tr>
-<td>执行内容类型</td>
-<td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
-</tr>
+                <tr>
+                    <td>执行内容</td>
+                    <td>
 
-<tr>
-<td>执行内容</td>
-<td>
+                        <textarea id="TB_Doc" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
+                        <select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
+                    </td>
+                </tr>
 
-<textarea id="TB_Doc" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
-<select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
-</td>
-</tr>
+                <tr>
+                    <td colspan=1>
+                        执行成功信息提示(可为空)
+                    </td>
+                    <td colspan=1>
+                        <input type=text id="MsgOK" name="MsgOK" />
+                    </td>
+                </tr>
 
-<tr>
-<td colspan=1>
-执行成功信息提示(可为空)
-</td>
-<td colspan=1>
- <input type=text  id="MsgOK" name="MsgOK" />
-</td>
-</tr>
+                <tr>
+                    <td colspan=1>
+                        执行失败时提示(可为空)
+                    </td>
 
-<tr>
-<td colspan=1>
-执行失败时提示(可为空)
-</td>
+                    <td>
+                        <input type=text id="MsgError" name="MsgError" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
 
-<td>
- <input type=text  id="MsgError"  name="MsgError" />
-</td>
-</tr>
-</table>
-
-<input id="Btn_Save"  name="Btn_Save" value="保存" onclick="Save();"  type="button"  />
-<input id="Button1"  name="Button1" value="返回" onclick="Back();"  type="button"  />
-
-
-
-</form>
+    </form>
 
 </body>
 </html>

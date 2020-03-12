@@ -24,8 +24,8 @@
             var flow = new Entity("BP.WF.Flow", flowNo);
             var dt = flow.DoMethodReturnJSON("DoCheck2018");
 
-            var html = "<table class='table table-bordered table-striped table-hover table-condensed' style='width:80%;'>";
-            html += "<caption>" + flow.Name + ":模拟测试运行</caption>";
+            var html = "<table class='table table-bordered table-hover table-condensed' style='width:80%;'>";
+            html += "<caption><img style='vertical-align:middle' src='../../Img/Event.png' />" + flow.Name + ":模拟测试运行</caption>";
             html += "<tr>";
             html += "<th>节点ID</th>";
             html += "<th>名称</th>";

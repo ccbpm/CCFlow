@@ -33,8 +33,8 @@
             var data = en.DoMethodReturnJSON("VerGenerVerList");
 
             var html = "";
-            html += "<table class='table table-bordered table-striped table-hover table-condensed' style='width:100%;'>";
-            html += "<caption>版本管理</caption>";
+            html += "<table class='table table-bordered  table-hover table-condensed' style='width:100%;'>";
+            html += "<caption><img style='vertical-align:middle' src='../../Img/Event.png' />版本管理</caption>";
             html += "<tr>";
             html += "<th>版本号</th>";
             html += "<th>流程编号</th>";
@@ -167,10 +167,13 @@
 <body>
 
     <div id="docs"></div>
-    <input type="button" value="新建版本" onclick="NewVer();" />
-    <input type="button" value="帮助" onclick="More();" />
+    <div style="right:30px; position:absolute; z-index:100; top:-3px">
+        <input type="button" value="新建版本" onclick="NewVer();" />
+        <input type="button" value="帮助" onclick="More();" />
+    </div>
+    
 
-    <div id="Msg"></div>
+    <div style="position:relative;" id="Msg"></div>
 
 </body>
 </html>

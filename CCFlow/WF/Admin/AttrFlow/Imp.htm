@@ -95,6 +95,56 @@
     </div>
     
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+
+
+        <fieldset>
+            <legend>从本机导入 </legend>
+            <ul>
+                <li>从本机导入：请您选择本机的一个xml格式文件 点击导入按钮完成导入。</li>
+                <li>
+                    请选择文件:
+                    <input style="background-color:white" type="file" id="File_Upload" name="File_Upload" />
+                </li>
+                <li>
+                    导入的方式:
+                    <ul>
+                        <li>
+                            <input id="Import_0" type="radio" name="RB_ImpType" value="0" checked="true" /><label for="Import_0">作为新流程导入(由ccbpm自动生成新的流程编号).</label>
+                        </li>
+                        <li>
+                            <input id="Import_1" type="radio" name="RB_ImpType" value="1" /><label for="Import_1">作为新流程导入(使用流程模版里面的流程编号，如果该编号已经存在系统则会提示错误).</label>
+                        </li>
+                        <li>
+                            <input id="Import_2" type="radio" name="RB_ImpType" value="2" /><label for="Import_2">作为新流程导入(使用流程模版里面的流程编号，如果该编号已经存在系统则会覆盖此流程).</label>
+                        </li>
+                        <li>
+                            <input id="Import_3" type="radio" name="RB_ImpType" value="3" /><label for="Import_3">按指定流程编号导入.</label>
+                            请输入指定的流程编号:
+                            <input type="text" id="TB_SpecFlowNo" />
+                        </li>
+                    </ul>
+                    <br />
+                </li>
+            </ul>
+            <div style="text-align: left; padding: 5px;">
+                <input type="button" id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>从云服务器导入(暂停开放) </legend>
+            <ul>
+                <li>
+                    <a href="#">
+                        <img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入
+                    </a>
+                </li>
+            </ul>
+        </fieldset>
         <fieldset>
             <legend>
                 <img src="../../Img/Btn/Help.gif" />关于流程模版
@@ -119,56 +169,6 @@
                 <li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
             </ol>
         </fieldset>
-
-        <fieldset>
-            <legend>从本机导入 </legend>
-            <ul>
-                <li>从本机导入：请您选择本机的一个xml格式文件 点击导入按钮完成导入。</li>
-                <li>
-                    请选择文件:
-                    <input type="file" id="File_Upload" name="File_Upload" />
-                </li>
-                <li>
-                    导入的方式:
-                    <ul>
-                        <li>
-                            <input id="Import_0" type="radio" name="RB_ImpType" value="0" checked="true" /><label for="Import_0">作为新流程导入(由ccbpm自动生成新的流程编号).</label>
-                        </li>
-                        <li>
-                            <input id="Import_1" type="radio" name="RB_ImpType" value="1" /><label for="Import_1">作为新流程导入(使用流程模版里面的流程编号，如果该编号已经存在系统则会提示错误).</label>
-                        </li>
-                        <li>
-                            <input id="Import_2" type="radio" name="RB_ImpType" value="2" /><label for="Import_2">作为新流程导入(使用流程模版里面的流程编号，如果该编号已经存在系统则会覆盖此流程).</label>
-                        </li>
-                        <li>
-                            <input id="Import_3" type="radio" name="RB_ImpType" value="3" /><label for="Import_3">按指定流程编号导入.</label>
-                            请输入指定的流程编号:
-                            <input type="text" id="TB_SpecFlowNo" />
-                        </li>
-                    </ul>
-                    <br />
-                </li>
-            </ul>
-            <div style="text-align: center; padding: 5px;">
-                <input type="button" id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>从云服务器导入(暂停开放) </legend>
-            <ul>
-                <li>
-                    <a href="#">
-                        <img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入
-                    </a>
-                </li>
-            </ul>
-        </fieldset>
-
 
     </form>
 </body>

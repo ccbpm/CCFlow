@@ -71,21 +71,6 @@
         //初始化,信息.
         $(function () {
 
-            var webUser = new WebUser();
-
-            alert(webUser.CCBPMRunModel);
-
-            if (webUser.CCBPMRunModel == "2")
-            {
-            alert(webUser.CCBPMRunModel);
-
-                var url = windows.location.href;
-                url = url.replace('EnumerationNew.htm', 'EnumerationNew_SAAS.htm');
-                window.location.href = url;
-                return;
-            }
-
-
             var enumKey = GetQueryString('EnumKey');
 
             if (enumKey == null) {

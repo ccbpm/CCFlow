@@ -379,100 +379,11 @@ function GenerFrm() {
     //装载表单数据与修改表单元素风格.
     LoadFrmDataAndChangeEleStyle(frmData);
 
-
-    ////设置默认值
-    //for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
-
-    //    var mapAttr = frmData.Sys_MapAttr[j];
-
-    //    //添加 label
-    //    //如果是整行的需要添加  style='clear:both'.
-    //    var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-
-    //    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-    //        var uiBindKey = mapAttr.UIBindKey;
-    //        if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-    //            var sfTable = new Entity("BP.Sys.SFTable");
-    //            sfTable.SetPKVal(uiBindKey);
-    //            var count = sfTable.RetrieveFromDBSources();
-    //            if (count != 0 && sfTable.CodeStruct == "1") {
-    //                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-    //                handler.AddPara("EnsName", uiBindKey);  //增加参数.
-    //                //获得map基本信息.
-    //                var pushData = handler.DoMethodReturnString("Tree_Init");
-    //                if (pushData.indexOf("err@") != -1) {
-    //                    alert(pushData);
-    //                    continue;
-    //                }
-    //                pushData = ToJson(pushData);
-    //                $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
-    //                if (mapAttr.UIIsEnable == 0)
-    //                    $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
-
-    //                $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-
-    //                continue;
-    //            }
-    //        }
-    //    }
-
-    //    if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-    //        if (mapAttr.MyDataType == 8) {
-    //            if (!/\./.test(defValue))
-    //                defValue += '.00';
-
-    //            //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
-    //            var attrdefVal = mapAttr.DefVal;
-    //            var bit;
-    //            if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
-    //                bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
-    //            else
-    //                bit = 2;
-    //            if (bit == 2)
-    //                defValue = formatNumber(defValue, 2, ",");
-
-    //        }
-    //        $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-    //    }
-
-    //    if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-    //        // 判断下拉框是否有对应option, 若没有则追加
-    //        if (defValue != "" && $("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-    //            var mainTable = frmData.MainTable[0];
-    //            var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-    //            if (selectText == null || selectText == undefined || selectText == "")
-    //                selectText = mainTable[mapAttr.KeyOfEn + "T"];
-
-    //            if (selectText != null && selectText != undefined && selectText != "")
-    //                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
-    //        }
-    //        if (defValue != "")
-    //            $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
-    //    }
-
-    //    if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
-    //        if (defValue == "1")
-    //            $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
-    //        else
-    //            $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
-    //    }
-
-    //    //枚举
-    //    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
-    //        $("#RB_" + mapAttr.KeyOfEn + "_" + defValue).attr("checked", 'checked');
-    //    }
-
-    //    //只读或者属性为不可编辑时设置
-    //    if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
-
-    //        $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-    //        $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-    //        $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
-    //    }
-    //}
-
     //处理下拉框级联等扩展信息(小范围多选)
-    AfterBindEn_DealMapExt(frmData);
+    if (pageData.IsReadonly == null || pageData.IsReadonly == "0") {
+        AfterBindEn_DealMapExt(frmData);
+    }
+    
 
     
     ////表单联动设置

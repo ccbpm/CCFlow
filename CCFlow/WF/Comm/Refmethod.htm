@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <title>功能执行</title>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -66,7 +68,7 @@
 
                 data = data.replace('close@', '');
                 var title = GetQueryString("title")
-                if (title=="轨迹") {
+                if (title == "轨迹") {
 
                     //window.open(data);
                     window.location.href = data;
@@ -481,11 +483,15 @@
 </head>
 <body>
     <form id="cc">
-    <div id="CCForm">
-    </div>
-    <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" />
-    <div id="Msg">
-    </div>
+        <div style="right:30px; position:absolute; z-index:100; ">
+            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" />
+        </div>
+
+        <div style="position:relative;" id="CCForm">
+        </div>
+
+        <div id="Msg">
+        </div>
     </form>
     <script type="text/javascript">
 

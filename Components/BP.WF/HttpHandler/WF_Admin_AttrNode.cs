@@ -69,6 +69,57 @@ namespace BP.WF.HttpHandler
         #endregion 事件基类.
 
 
+        #region    公文维护
+        public string DocTemp_Init()
+        {
+            int nodeId = int.Parse(this.GetRequestVal("pkval"));
+
+            DocTemplates dcs = new DocTemplates();
+            dcs.Retrieve(DocTemplateAttr.NodeID, nodeId );
+
+
+            return dcs.ToJson();
+        }
+        public string DelTemp_Init()
+        {
+            int no = int.Parse(this.GetRequestVal("no"));
+
+            DocTemplate dc = new DocTemplate();
+            dc.Retrieve(DocTemplateAttr.No, no);
+            dc.Delete();
+
+            return dc.ToJson();
+        }
+        public string DocTemp_Upload()
+        {
+            if (HttpContextHelper.RequestFilesCount == 0)
+                return "err@请上传模版.";
+
+            int nodeId = int.Parse(this.GetRequestVal("pkval"));
+            //上传附件
+            var file = HttpContextHelper.RequestFiles(0);
+            var fileName = file.FileName;
+            string path = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\DocTemp\\" + nodeId;
+            string fileFullPath = path + "\\" + fileName;
+
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+
+            HttpContextHelper.UploadFile(file, fileFullPath);
+
+            DocTemplate dc = new DocTemplate();
+            dc.NodeID = nodeId;
+            dc.No = DA.DBAccess.GenerOID().ToString();
+            dc.Name = fileName;
+            dc.TempFilePath = fileFullPath; //路径
+
+            dc.CheckPhysicsTable();
+            dc.Save();
+
+            return dc.ToJson();
+        }
+        #endregion
+
         #region  单据模版维护
         /// <summary>
         /// @李国文.
@@ -211,7 +262,7 @@ namespace BP.WF.HttpHandler
             msg.SMSDoc_Real = HttpContextHelper.RequestParams("TB_SMS");
 
             //节点预警
-            if(this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
+            if (this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
             {
                 int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
                 msg.SetPara("NoticeType", noticeType);
@@ -667,7 +718,7 @@ namespace BP.WF.HttpHandler
                     dtNodes.TableName = "dtNodes";
                     ds.Tables.Add(dtNodes);
                 }
-               
+
                 #endregion
 
                 ds.Tables.Add(mapdatas.ToDataTableField("mapdatas"));
@@ -682,7 +733,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(athMents.ToDataTableField("athMents"));
                 ds.Tables.Add(btns.ToDataTableField("btns"));
                 ds.Tables.Add(isDtl);
-               
+
                 //ds.Tables.Add(nodes.ToDataTableField("nodes"));
             }
         }
@@ -765,7 +816,7 @@ namespace BP.WF.HttpHandler
                 foreach (MapAttr attr in attrs)
                 {
                     att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
-                    if (atts.Contains(","+attr.KeyOfEn+","))
+                    if (atts.Contains("," + attr.KeyOfEn + ","))
                     {
                         att.IsEnableInAPP = true;
                     }
@@ -778,15 +829,15 @@ namespace BP.WF.HttpHandler
                     //    FrmAttachment ath = new FrmAttachment(FK_MapData + "_" + attr.KeyOfEn);
                     //    ath.SetPara("IsShowMobile", 1);
                     //    ath.Update();
-                        
+
                     //}
                 }
                 //获取附件
                 FrmAttachments aths = new FrmAttachments();
                 aths.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.FK_Node, 0);
-                foreach(FrmAttachment ath in aths)
+                foreach (FrmAttachment ath in aths)
                 {
-                    if (atts.Contains("," + ath.MyPK  + ",") == true)
+                    if (atts.Contains("," + ath.MyPK + ",") == true)
                         ath.SetPara("IsShowMobile", 1);
                     else
                         ath.SetPara("IsShowMobile", 0);

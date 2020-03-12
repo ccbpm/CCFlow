@@ -714,7 +714,19 @@ namespace BP.WF.Template
 
                 #endregion 基础功能.
 
+
                 #region 字段相关功能（不显示在菜单里）
+                rm = new RefMethod();
+                rm.Title = "上传公文模板";
+                rm.ClassMethodName = this.ToString() + ".DocTemp";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
+                //设置相关字段.
+                rm.RefAttrKey = BtnAttr.OfficeBtnEnable;
+                rm.RefAttrLinkLabel = "公文模板维护";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "可退回的节点(当退回规则设置可退回指定的节点时,该设置有效.)"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCanReturnNodes";
@@ -1165,6 +1177,14 @@ namespace BP.WF.Template
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
         }
+        /// <summary>
+        /// 公文模板
+        /// </summary>
+        /// <returns></returns>
+        public string DocTemp()
+        {
+            return "../../Admin/AttrNode/DocTemp.htm?PKVal=" + this.NodeID;
+        } 
         /// <summary>
         /// 抄送规则
         /// </summary>

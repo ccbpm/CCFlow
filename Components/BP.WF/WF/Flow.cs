@@ -4871,14 +4871,15 @@ namespace BP.WF
                         fl.No = oldFlowNo;
                         fl.DoDelData();
                         fl.DoDelete(); /*删除可能存在的垃圾.*/
-                        
+                        fl.Insert();
+
                     }
                     break;
                 case ImpFlowTempleteModel.OvrewaiteCurrFlowNo: /*覆盖当前的流程.*/
                     fl.No = oldFlowNo;
                     fl.DoDelData();
                     fl.DoDelete(); /*删除可能存在的垃圾.*/
-                    
+                    fl.Insert();
                     break;
                 case ImpFlowTempleteModel.AsSpecFlowNo:
                     if (SpecialFlowNo.Length <= 0)

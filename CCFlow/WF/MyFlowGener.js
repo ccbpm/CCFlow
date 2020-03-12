@@ -467,13 +467,6 @@ function setToobarEnable() {
     $('.Bar input').css('background', '');
     $('.Bar input').removeAttr('disabled');
 }
-//设置表单元素不可用
-function setFormEleDisabled() {
-    //文本框等设置为不可用
-    $('#divCCForm textarea').attr('disabled', 'disabled');
-    $('#divCCForm select').attr('disabled', 'disabled');
-    $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
-}
 
 function CheckMinMaxLength() {
 
@@ -1696,7 +1689,12 @@ function GenerWorkNode() {
     var h = flowData.Sys_MapData[0].FrmH;
     var w = flowData.Sys_MapData[0].FrmW;
 
-    // $('#topContentDiv').height(h);
+    //傻瓜表单的名称居中的问题
+    if ($(".form-unit-title img").length > 0) {
+        var width = $(".form-unit-title img")[0].width;
+        $(".form-unit-title center h4 b").css("margin-left", "-" + width + "px");
+    }
+
     $('#topContentDiv').width(w);
     $('.Bar').width(w + 15);
     $('#lastOptMsg').width(w + 15);

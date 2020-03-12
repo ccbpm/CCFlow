@@ -31,7 +31,7 @@ function GenerFoolFrm(wn) {
     var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
-    html += "<td colspan='" + tableCol + "' class='TitleFDesc'><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div class='form-unit-title' style='float:right;padding:10px;width:70%;font-size: 18px;'  ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
+    html += "<td colspan='" + tableCol + "' class='TitleFDesc'></div><div class='form-unit-title' style='padding:10px;font-size: 18px;text-align:center'  ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px; float:left;margin-top:-8px;' /><center><h4><b>" + frmName + "</b></h4></center></div></td>";
     html += "</tr>";
     if (frmShowType == 1) {
         html += "</table>";

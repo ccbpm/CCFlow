@@ -24,25 +24,24 @@
 
         function InitPage() {
 
-            var checkBoxIDs = GetSelectedCheckIDs();
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID);
 
             var mapData = new Entity("BP.Sys.MapData", frmID);
 
-            // var md = jsData["Main"][0]; //主表数据.
-            // var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
-            // var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
 
             //关键字查询.
             document.getElementById("CB_Key").checked = true; //  (mapData.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
 
             var js = mapData.AtPara.split("@");
+            var RptStringSearchKeys = null;
             var RptSearchKeys = null;
             var RptDTSearchWay = null;
             var RptDTSearchKey = null;
             for (var i = 0; i < js.length; i++) {
+                 if (js[i].indexOf("RptStringSearchKeys") != -1)
+                    RptStringSearchKeys = js[i].replace("RptStringSearchKeys=", "")
                 if (js[i].indexOf("RptSearchKeys") != -1)
                     RptSearchKeys = js[i].replace("RptSearchKeys=", "")
                 if (js[i].indexOf("DTSearchWay") != -1)
@@ -51,8 +50,11 @@
                     RptDTSearchKey = js[i].replace("DTSearchKey=", "")
             }
 
+
+
             //绑定外键字段.
             var dateMapAttrs = [];
+            var count = 0;
             for (var i = 0, length = mapAttrs.length; i < length; i++) {
 
                 var attr = mapAttrs[i];
@@ -61,12 +63,29 @@
                     continue;
                 }
 
-                if (attr.UIBindKey == ""   ) {
-                    continue;
-                }
+               
                 if ( attr.UIVisible == 0) {
                     continue;
                 }  
+                //文本字段
+                if (attr.MyDataType == 1 && attr.UIContralType == 0) {
+                    count++;
+                    flag = false;
+                    if (RptStringSearchKeys) {
+                        flag = (RptStringSearchKeys.indexOf("*" + attr.KeyOfEn + ",") != -1);
+                    }
+
+                    $("#StringKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "'  data-name='"+attr.Name+"'/><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label>&nbsp;&nbsp;&nbsp;");
+                    if (count == 3) {
+                        $("#StringKeys").append("<br/>");
+                        count = 0;
+                    }
+                       
+                    continue;
+                }
+                if (attr.UIBindKey == ""   ) {
+                    continue;
+                }
 
                 flag = false;
                 if (RptSearchKeys) {
@@ -106,28 +125,24 @@
             }
 
             mapData.SetPara("RptSearchKeys", fields + "*");
+
+            fields = "";
+            oChecks = document.getElementById("StringKeys").getElementsByTagName("input");
+            for (var i = 0, len = oChecks.length; i < len; i++) {
+                var item = oChecks[i];
+                if (item.checked) {
+                    fields += "*" + item.id+","+item.getAttribute("data-name");
+                }
+            }
+            mapData.SetPara("RptStringSearchKeys", fields + "*");
+
             mapData.Update();
 
             window.location.href = window.location.href;
 
         }
 
-        //获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
-        function GetSelectedCheckIDs() {
-
-            var checkBoxIDs = "";
-            var arrObj = document.getElementsByTagName("input");
-
-            for (var i = 0, len = arrObj.length; i < len; i++) {
-
-                if (arrObj[i].type == 'checkbox') {
-                    if (arrObj[i].checked)
-                        checkBoxIDs += arrObj[i].id + ',';
-                }
-            }
-            return checkBoxIDs;
-        }
-
+        
     </script>
     <base target="_self" />
 </head>
@@ -143,9 +158,13 @@
         </tr>
         <tr>
             <td>
-                关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br>
+                关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br />
                 <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
                 <br />
+                按照选择字段模糊查询,不选择字段按照关键字查询
+                <div id="StringKeys">
+                </div>
+                <br/>
                 关键字搜索提示
                 <input id="TB_Alert" name="TB_Alert" type="text" value="" />,默认为:请输入关键字...
             </td>

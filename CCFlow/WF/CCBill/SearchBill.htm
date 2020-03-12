@@ -32,68 +32,8 @@
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <style type="text/css">
-        .fixed-table-container thead th .th-inner {
-            padding: 8px;
-            line-height: 24px;
-            vertical-align: top;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap; /**background-color: #eaf2ff;**/
-            width: 100%;
-        }
 
-        .fixed-table-header {
-            background-color: #f2f2f2;
-        }
-
-        td {
-            word-break: keep-all; /* 不换行 */
-            white-space: nowrap; /* 不换行 */
-            overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
-            text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
-            -o-text-overflow: ellipsis;
-            -icab-text-overflow: ellipsis;
-            -khtml-text-overflow: ellipsis;
-            -moz-text-overflow: ellipsis;
-            -webkit-text-overflow: ellipsis;
-        }
-
-        body {
-            margin: 0px;
-        }
-
-        .panel-header, .panel-body {
-            border-width: 1px;
-            border-top: 0px;
-            border-left: 0px;
-            border-right: 0px;
-        }
-
-        .table {
-            table-layout: fixed;
-        }
-
-        table > td {
-            width: 100%;
-        }
-
-        .pagination {
-            margin: 8px 0;
-            display: block;
-            font-size: 13px;
-        }
-
-        .pagination .controls {
-            float: left;
-            border: 0;
-            padding: 7px 0 0 15px;
-            color: #777;
-        }
-        .info{
-            background-color:#e7eaec;
-        }
-    </style>
+    <link href="../Comm/Style/Search.css" rel="stylesheet" />
     <script type="text/javascript">
 
         var webUser = null;
@@ -101,6 +41,7 @@
         var frmID;
         var ur;//当前用户的查询信息
         var pageIdx = 1;
+        var fields = []; //字符型字段查询的集合
 
         //分页信息
         var count = 0;//总条数
@@ -177,24 +118,46 @@
 
             var html = "";
 
-            if (attrs.length == 0)
-                html += "<table style='' >";
-
-            if (attrs.length == 1)
-                html += "<table style='width:50%;' >";
-
-            if (attrs.length > 1)
-                html += "<table style='width:100%;' >";
-
+            
 
             html += "<tr>";
             var atPara = mapData[0].AtPara;
 
-            if (GetPara(atPara, "IsSearchKey") == "1") {
+            var count = 0;//计算是否换行
+
+            var stringSearchKeys = GetPara(atPara, "RptStringSearchKeys");
+            if (stringSearchKeys != null && stringSearchKeys != undefined && stringSearchKeys != "") {
+                var strs = stringSearchKeys.split("*");
+                var fieldV=""
+                $.each(strs, function (i, str) {
+                    if (str != "") {
+                        var item = str.split(",");
+                        fieldV = ur.GetPara(fields[0]);
+                        if (fieldV == null || fieldV == undefined)
+                            fieldV = "";
+                        if (item.length == 2) {
+                            
+                            fields.push(item[0]);
+                             html +="<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+item[0]+"'>" + item[1] + ":&nbsp;&nbsp</label></td>"
+                             html += "<td align='left'><input style='width:100%;' type=text id='TB_"+item[0]+"'  name='TB_"+item[0]+"' value='" + fieldV + "' class='form-control' /></td>";
+                            count++;
+                            if (count == 4) {
+                                html += "</tr>";
+                                html += "<tr>";
+                                count = 0;
+                            }
+                        }
+                    }
+                });
+               
+
+            }else if (GetPara(atPara, "IsSearchKey") == "1") {
 
                 var keyLabel = GetPara(atPara, "DTSearchLabel");
                 var keyLabel = "关键字";
+                html +="<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":&nbsp;&nbsp</label></td>"
                 html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' placeholder='请输入关键字...' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+                count++;
             }
 
             if (GetPara(atPara, "DTSearchWay") != "0") {
@@ -212,6 +175,12 @@
                     html += "<td align='left' style='width:160px'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:160px;' class='form-control Wdate' /></td>";
                     html += "<td align='right'><label>到&nbsp;&nbsp;</label></td><td align='left'><input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:160px;' class='form-control Wdate' /></td>";
                 }
+                count = count+2
+                if (count == 4 || count > 4) {
+                    html += "</tr>";
+                    html += "<tr>";
+                    count = 0;
+                }
             }
 
             //格式为: @WFSta=0@FK_Dept=02
@@ -227,10 +196,16 @@
                 }
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
                 html += "<td align='left'><select class='form-control' style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
+                count++
+                if (count == 4) {
+                    html += "</tr>";
+                    html += "<tr>";
+                    count = 0;
+                }
             }
 
             //增加按钮.
-            html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
+            html += '<td align="left" colspan=2 style="padding-top:4px"><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
 
             //获得配置的按钮.
             var fb = new Entity("BP.Frm.FrmBill", frmID);
@@ -241,7 +216,7 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
-             var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
             handler.AddPara("FrmID", frmID);
             var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
             if (powerData.indexOf("err@") != -1) {
@@ -251,7 +226,7 @@
             powerData = JSON.parse(powerData);
 
             //权限判断按钮.
-            if (parseInt(powerData.IsInsert) ==1)
+            if (parseInt(powerData.IsInsert) == 1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">' + fb.BtnNewLable + '</a>';
 
             if (parseInt(powerData.IsDelete) == 1)
@@ -272,9 +247,6 @@
             var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);
             for (var i = 0; i < fms.length; i++) {
                 var fm = fms[i];
-
-                //   alert( fm.IsSearchBar);
-
                 if (fm.IsSearchBar != 1)
                     continue;
 
@@ -321,7 +293,7 @@
             ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
-            if ($("#TB_Key") != null && $("#TB_Key").val() != "")
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length==0)
                 ur.SearchKey = $("#TB_Key").val();
             else
                 ur.SearchKey = "";
@@ -340,6 +312,20 @@
                 id = id.replace("DDL_", "");
                 str += "@" + id + "=" + $(this).val();
             });
+
+            //增加字段查询
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var strs = $("input[name='TB_" + field + "']");
+                if (strs.length == 1) {
+                    ur.SetPara(field, $("#TB_" + field).val());
+                } else {
+                    if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
+                        ur.SetPara(field, "");
+                    else
+                        ur.SetPara(field, $("#TB_" + field+"_0").val()+","+$("#TB_" + field+"_1").val());
+                }
+            }
 
             ur.FK_Emp = webUser.No;
             ur.CfgKey = "SearchAttrs";
@@ -482,7 +468,7 @@
                     continue;
                 }
 
-                if (attr.UIContralType == 1 || attr.UIContralType == 3 || GetPara(attr.AtPara,"MultipleChoiceSmall" )=="1") {
+                if (attr.UIContralType == 1 || attr.UIContralType == 3 || GetPara(attr.AtPara, "MultipleChoiceSmall") == "1") {
                     if (width == null || width == "" || width == undefined)
                         width = 180;
                     if (attr.LGType == 0)
@@ -520,7 +506,7 @@
 
                 if (width == null || width == "" || width == undefined)
                     width = 100;
-                 
+
                 columns.push({
                     field: field,
                     title: title,
@@ -545,16 +531,16 @@
                     if (deleteWay == "1") { //可以删除我本部门人员编辑创建的数据
                         var depts = new Entities("BP.GPM.DeptEmps");
                         depts.Retrieve("FK_Dept", webUser.FK_Dept, "FK_Emp", starter);
-                        if (depts.length >0)
+                        if (depts.length > 0)
                             IsDelete = true;
                     }
-                    if (deleteWay != "1" && webUser.No == starter) //只能删除自己创建的   
+                    if (deleteWay != "1" && webUser.No == starter) //只能删除自己创建的
                         IsDelete = true;
 
                     if (IsDelete == true)
-                        _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
-                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\''+frmID+'\')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
-                    _Html +='<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"]+ ',\''+frmID+'\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
+                        _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
+                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
+                    _Html += '<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
                     return _Html;
                 }
             });
@@ -588,10 +574,10 @@
                     };
                     return temp;
                 },
-                onClickRow:function (row,$element) {
+                onClickRow: function (row, $element) {
                     $('.info').removeClass('info');
-                    
-                    $($element).addClass('info').attr("data-val",row.OID);
+
+                    $($element).addClass('info').attr("data-val", row.OID);
                 },
                 onDblClickRow: function (row, $element) {
                     var pkval = row["OID"];
@@ -699,26 +685,25 @@
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
             OpenIt(workID, frmID);
-            //var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
-            // window.location.href=url;
+
             return;
 
         }
 
         function Delete(workid) {
             if (workid == null || workid == undefined || workid == "") {
-                
+
                 //删除选中的行
                 var workid = $('.info').attr('data-val');
 
-                if (workid=="") {
+                if (workid == "") {
                     alert("没有选择行，不能删除");
                     return;
                 }
-                
+
             }
             if (confirm("您确定要删除吗？") == false)
-                    return;
+                return;
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
@@ -826,51 +811,28 @@
             window.location.href = url;
         }
     </script>
-    <style>
-        /* 按钮风格 */
-        input[type="button"], input[type="submit"], input[type="file"] {
-            border: 0; /*background: #4D77A7;*/
-            background: #fff;
-            color: #545454;
-            font-size: 12px;
-            padding: 4px 15px;
-            margin: 5px 3px 5px 3px;
-            border-radius: 3px;
-            border: 1px solid #1d7dd4;
-        }
 
-        input:hover[type="button"] {
-            border: 0; /*background: #4D77A7;*/
-            background: #1d7dd4;
-            color: #fff;
-            font-size: 12px;
-            padding: 4px 15px;
-            margin: 5px 3px 5px 3px;
-            border-radius: 3px;
-            border: 1px solid #1d7dd4;
-        }
-    </style>
 </head>
-<body id="SearchHtml">
-    <div class="wrapper wrapper-content animated fadeInRight" style="padding: 0px 10px 0px 10px">
+<body id="SearchHtml" class="cs-search-html">
+    <div class="wrapper wrapper-content animated fadeInRight cs-table" style="padding: 0px 10px 0px 10px">
         <div class="ibox-content">
-            <div class="row">
+            <div class="row cs-shadow-box">
                 <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
                     <div id="toolBar" style="width: 100%">
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row cs-shadow-box">
                 <table id="dg" class="table table-hover JColResizer" style="word-wrap: break-word; word-break: break-all;">
                 </table>
-            </div>
-            <!-- 显示分页信息 -->
-            <div class="row" style="text-align: left;">
-                <ul class="pagination" id="page_nav">
-                </ul>
-                <ul class="pagination controls" id="page_info">
-                </ul>
-                <div style="clear: both;">
+                <!-- 显示分页信息 -->
+                <div class="row cs-pagination">
+                    <ul class="pagination" id="page_nav">
+                    </ul>
+                    <ul class="pagination controls" id="page_info">
+                    </ul>
+                    <div style="clear: both;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -878,53 +840,5 @@
         </div>
     </div>
 </body>
-<!--<body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="ibox-content">
-            <div class="row search-padding" style="float: left" id="toolBar">
-                
-                <input type='text' placeholder="请输入关键字..." id='TB_Key' />
-              
 
-                <input type="button" id="Btn_Search" onclick="javascript:SearchKey();" value="查询" />
-                <input type="button" id="Btn_New" onclick="javascript:New();" value="新建" />
-                <input type="button" id="Btn_Del" onclick="javascript:Delete();" value="删除" />
-                <input type="button" id="Btn_Imp" onclick="javascript:Imp();" value="导入" />
-                <input type="button" id="Button1" onclick="javascript:Group();" value="分析" />
-            </div>
-            <table class="table table-striped">
-                <thead id="Table2">
-                    <tr>
-                        <th>
-                            #
-                        </th>
-                        <th>
-                            标题
-                        </th>
-                        <th>
-                            单号
-                        </th>
-                        <th width='60'>
-                            创建人
-                        </th>
-                        <th>
-                            创建日期
-                        </th>
-                        <th>
-                            编辑日期
-                        </th>
-                        <th width='60'>
-                            状态
-                        </th>
-                        <th width='60'>
-                            操作
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="Table1">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>-->
 </html>

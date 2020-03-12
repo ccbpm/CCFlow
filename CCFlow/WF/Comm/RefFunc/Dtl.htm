@@ -74,28 +74,28 @@
 
         function OpenEn(pkVal) {
             var pEnName = GetQueryString("EnName");
-             var ensName = GetQueryString("EnsName");
-             var enName = ensName.substring(0, ensName.length - 1);
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
             if (pEnName == null && pEnName == undefined && pEnName == "") {
-                
-                  var url = "En.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
-                  OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 650, 600, "icon-edit", false, function () { }, null, function () {
+                var url = "En.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
-                        window.location.href = window.location.href
+                OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 650, 600, "icon-edit", false, function () { }, null, function () {
 
-                  });
+                    window.location.href = window.location.href
+
+                });
                 return;
             }
 
             //否则按照Search.htm设置的方式打开详情页面
             var cfg = new Entity("BP.Sys.EnCfg");
-            cfg.No =pEnName+"s";
+            cfg.No = pEnName + "s";
             cfg.RetrieveFromDBSources();
 
-              //当前URL参数
+            //当前URL参数
             var currUrl = window.location.search.substring(1);
-    
+
             var url = cfg.UrlExt;
             var urlOpenType = cfg.GetPara("SearchUrlOpenType");
 
@@ -105,7 +105,7 @@
             if (urlOpenType == 1)
                 url = "./EnOnly.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
-           
+
             var windowW = cfg.GetPara("WinCardW");
             if (windowW == "" || windowW == undefined)
                 windowW = 900;
@@ -114,16 +114,16 @@
             if (windowH == "" || windowH == undefined)
                 windowH = 500;
 
-             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', windowW, windowH, "icon-edit", false, function () { }, null, function () {
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', windowW, windowH, "icon-edit", false, function () { }, null, function () {
 
-                        window.location.href = window.location.href
+                window.location.href = window.location.href
 
-                  });
-
-
+            });
 
 
-          
+
+
+
         }
 
         //设置按钮
@@ -621,15 +621,15 @@
 </head>
 <body>
 
-     <div id="Btns">
-      <!--  <input type='button' value='保存' id='Btn_Save' onclick='Save()' />-->
-     </div>
-     <div id="Msg"></div>
-       
-                <form id="divCCForm"  method="post">
-                   <div id="mytable"> </div>
-                </form>
-     
+    <div style="right:30px; position:absolute; z-index:100; " id="Btns">
+        <!--  <input type='button' value='保存' id='Btn_Save' onclick='Save()' />-->
+    </div>
+
+    <form style="position:relative; top:40px;" id="divCCForm" method="post">
+        <div id="mytable"> </div>
+    </form>
+    <div id="Msg"></div>
+
 </body>
 
 </html>

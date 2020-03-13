@@ -288,6 +288,13 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "Tab顺序键"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoTabIdx";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "模板打印";
                 rm.ClassMethodName = this.ToString() + ".DoBill";
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
@@ -410,6 +417,10 @@ namespace BP.WF.Template
             base.afterUpdate();
         }
         #region 节点表单方法.
+        public string DoTabIdx()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
+        }
         /// <summary>
         /// 单据打印
         /// </summary>

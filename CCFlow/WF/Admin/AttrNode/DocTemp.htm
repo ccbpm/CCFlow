@@ -25,7 +25,7 @@
             InitDocTemp();
             $("#pageloading").hide();
         });
-        //流程导入.
+         
         function Imp_Done() {
             var pkval = GetQueryString("pkval");
             var fileValue = $("#File_Upload").val();
@@ -62,6 +62,7 @@
                     } else {
                         var json = eval('(' + data + ')');
                         $('#docTempList').append('<li><span>' + json.Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json.No + '\")\'>删除</a></li>');
+                        $("#File_Upload").val('');
                     }
                 }
             });

@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>模版导入</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet"
+          type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            $("#pageloading").show();
+            InitDocTemp();
+            $("#pageloading").hide();
+        });
+        //流程导入.
+        function Imp_Done() {
+            var pkval = GetQueryString("pkval");
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择公文模板。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".docx") {
+                $.messager.alert("提示", "所选文件不符合格式，请重新选择。");
+                return;
+            }
+
+            $("#pageloading").show();
+            //提交数据
+            var doMethod = "DocTemp_Upload";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkval=" + pkval,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                },
+                success: function (data) {
+                    $("#pageloading").hide();
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    } else {
+                        var json = eval('(' + data + ')');
+                        $('#docTempList').append('<li><span>' + json.Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json.No + '\")\'>删除</a></li>');
+                    }
+                }
+            });
+        }
+        function InitDocTemp() {
+            var pkval = GetQueryString("pkval");
+            if (pkval == "") {
+                $.messager.alert("提示", "参数错误。");
+                return;
+            }
+
+            $("#pageloading").show();
+            //提交数据
+            var doMethod = "DocTemp_Init";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkval=" + pkval,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                },
+                success: function (data) {
+                    $("#pageloading").hide();
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    } else {
+                        var json = eval('(' + data + ')');
+
+                        for (var i = 0; i < json.length; i++) {
+                            $('#docTempList').append('<li id="doc_' + json[i].No + '"><span>' + json[i].Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json[i].No + '\")\'>删除</a></li>');
+                        }
+                    }
+                }
+            });
+        }
+        function DelDocTemp(id) {
+            if (confirm("确认删除吗？") == true) {
+                $("#pageloading").show();
+                //提交数据
+                var doMethod = "DocTemp_Del";
+                var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+                $("#cc").form("submit", {
+                    type: 'POST',
+                    dataType: 'html',
+                    url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&no=" + id,
+                    onSubmit: function (param) {
+                        //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                    },
+                    success: function (data) {
+                        $("#pageloading").hide();
+
+                        if (data.indexOf('err@') == 0) {
+                            alert(data);
+                            return;
+                        } else {  
+                            var o = $('#doc_' + id).remove();// 
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="bar" class="cs-tr cs-bar">
+        <label style="float:left; font-size :15px; font-weight:bolder;padding-top:10px ;">模板导入</label>
+        <input type="button" id="Btn_Save" style="background-color:#F7F6F9" />
+    </div>
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+        <fieldset>
+            <legend>从本机导入 </legend>
+            <ul>
+                <li>从本机导入：请您选择本机的一个.docx格式文件 点击导入按钮完成导入。</li>
+                <li>
+                    请选择文件:
+                    <input type="file" id="File_Upload" name="File_Upload" />
+                </li>
+                <li>
+                    模板列表:
+                    <ul id="docTempList">
+                    </ul>
+                </li>
+            </ul>
+            <div style="text-align: center; padding: 5px;">
+                <input type="button" id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
+            </div>
+        </fieldset>
+    </form>
+</body>
+</html>

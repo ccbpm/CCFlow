@@ -1,0 +1,480 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程设计器</title>
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+
+    <!--JL.plus-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="author" content="leipi.org" />
+    <link href="Public/css/bootstrap/css/bootstrap.css?2025" rel="stylesheet" type="text/css" />
+    <link href="Public/css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/bootstrap-ie6.css?2025">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="Public/css/bootstrap/css/ie.css?2025">
+    <![endif]-->
+    <link href="Public/css/site.css?2025" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="Public/js/flowdesign/flowdesign.css" />
+    <!--select 2-->
+    <link rel="stylesheet" type="text/css" href="Public/js/jquery.multiselect2side/css/jquery.multiselect2side.css" />
+    <!--JL.plus-->
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Public/js/jquery-1.7.2.min.js?2025"></script>
+    <!--<script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>-->
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Public/css/bootstrap/js/bootstrap.min.js?2025"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
+    <script type="text/javascript" src="Public/js/jquery-ui/jquery-ui-1.9.2-min.js?2025"></script>
+
+    <script type="text/javascript" src="Public/js/jsPlumb/bak/jquery.jsPlumb-1.4.0-all.js?2025"></script>
+
+    <script type="text/javascript" src="Public/js/jquery.contextmenu.r2.js?2025"></script>
+    <!--select 2-->
+    <script type="text/javascript" src="Public/js/jquery.multiselect2side/js/jquery.multiselect2side.js?2025"></script>
+    <!--flowdesign-->
+    <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
+    <script src="Designer2018SAAS.js" type="text/javascript"></script>
+    <style>
+        body {
+            background-color: #f7f6f9;
+        }
+
+        .navbar-fixed-top .navbar-inner {
+            background-color: #f7f6f9;
+            background-image: none;
+            border: 0 none;
+            font-size: 14px;
+            box-shadow: none;
+        }
+
+        .navbar-fixed-top .container {
+            width: auto;
+            padding: 7px 6px 0 0;
+            background-color: #f7f6f9;
+        }
+
+        .navbar .btn, .navbar .btn-group {
+            margin-top: 0;
+        }
+
+        .navbar .btn {
+            margin-right: 6px;
+            padding: 0 12px;
+            height: 26px;
+            color: #fff;
+            font-size: 12px;
+            line-height: 14px;
+            border: 0 none;
+            border-radius: 3px;
+            background-image: none;
+            box-shadow: none;
+            text-shadow: none;
+            box-sizing: border-box;
+        }
+
+        .btn-light-green {
+            background-color: #50b6ac;
+        }
+
+            .btn-light-green:hover, .btn-light-green:active, .btn-light-green:focus {
+                background-color: #50b6ac;
+            }
+
+        .btn-light-blue {
+            background-color: #62cae3;
+        }
+
+            .btn-light-blue:hover, .btn-light-blue:active, .btn-light-blue:focus {
+                background-color: #62cae3;
+            }
+
+        .btn-light-yellow {
+            background-color: #f3ba20;
+        }
+
+            .btn-light-yellow:hover, .btn-light-yellow:active, .btn-light-yellow:focus {
+                background-color: #f3ba20;
+            }
+
+        .btn-light-red {
+            background-color: #f74f52;
+        }
+
+            .btn-light-red:hover, .btn-light-red:active, .btn-light-red:focus {
+                background-color: #f74f52;
+            }
+
+        .navbar .btn-white {
+            border: 1px solid #031f5d;
+            background-color: #fff;
+            color: #031f5d;
+        }
+
+        .btn-white:hover, .btn-white:active, .btn-white:focus {
+            background-color: white;
+        }
+
+        .cs-main-box {
+            position: absolute;
+            top: 41px;
+            left: 12px;
+            right: 12px;
+            bottom: 30px;
+            width: calc(100% - 24px);
+            background-color: #fff;
+            box-shadow: 0 0 14px rgba(0,0,0,.1);
+        }
+
+        .modal {
+            position: absolute;
+        }
+
+        .cs-main-box .mini-layout {
+            height: auto;
+        }
+
+        .btn .badge {
+            margin-right: 3px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            top: -3px;
+            padding: 0;
+            background-color: #031f5d;
+            border-radius: 10px;
+        }
+
+            .btn .badge i {
+                transform: scale(0.8);
+            }
+
+        btn-small [class^="icon-"], .btn-small [class*=" icon-"] {
+            margin: 2px 0 0 0;
+        }
+
+        .process-step {
+            background: #fff none;
+            border-color: #031f5d;
+        }
+
+            .process-step span, .process-lab span {
+                color: #031f5d;
+            }
+
+        .container.mini-layout path {
+            stroke: #839ace;
+            fill: #839ace;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: none;
+        width: 320px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
+        font-weight: bold;">
+        <img alt="" src="Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
+        正在创建，请稍后...
+    </div>
+    <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;
+        z-index: 21006;">
+    </div>
+    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;" id="Msg">
+        <img src="./Img/DemoLine.gif" alt="正在加载....." />
+    </div>
+    <!-- fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <div class="pull-right">
+                    <button class="btn btn-light-blue" type="button" onclick="ShowNewFlowGif()">
+                        新建
+                    </button>
+                    <button class="btn btn-light-green" type="button" id="Btn_Save">
+                        保存
+                    </button>
+                    <button class="btn btn-light-yellow" type="button" id="Btn_SaveToColud">
+                        保存到云
+                    </button>
+
+                    <button class="btn btn-light-blue" type="button" id="Btn_FlowAttr" onclick="FlowProperty()">
+                        流程属性
+                    </button>
+                    <!--<button class="btn btn-info" type="button" id="Btn_Rpt" onclick="FlowRpt()">
+                        定义报表
+                    </button>-->
+                    <button class="btn btn-light-yellow" type="button" id="Btn_Check" onclick="FlowCheck()">
+                        检查流程
+                    </button>
+                    <button class="btn btn-light-green" type="button" id="Btn_Run" onclick="FlowRun2020()">
+                        测试容器
+                    </button>
+                    <button class="btn btn-light-green" type="button" id="Btn_Run" onclick="FlowRun()">
+                        测试
+                    </button>
+                    <button class="btn btn-light-red" type="button" id="Btn_RunIt" onclick="FlowRunAdmin()">
+                        admin测试运行
+                    </button>
+
+                    <button class="btn btn-white" type="button" id="Btn_Frm" onclick="Frm()">
+                        设计表单
+                    </button>
+
+                    <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
+                    <!--<button class="btn btn-info" type="button" id="Btn_OldVer" onclick="OldVer()" >旧版本</button>-->
+                    <button class="btn btn-white" type="button" id="Btn_Reload" onclick="Reload()">
+                        刷新
+                    </button>
+                    <button class="btn btn-white" type="button" id="Btn_Help" onclick="Help()">
+                        帮助
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!--<div class="cs-main-box">-->
+    <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                消息提示
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                我知道了
+            </button>
+        </div>
+    </div>
+    <!-- 修改节点名称 -->
+    <div id="alertModal1" style="width:300px;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h4>
+                修改节点名称
+            </h4>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button style="float:left" class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
+                保存&更新节点表单名称
+            </button>
+        </div>
+    </div>
+    <!-- 连接线提示 -->
+    <div id="alertModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                消息提示
+            </h3>
+        </div>
+        <div class="modal-body">
+            <img src="Img/DemoLine.gif" />
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                我知道了
+            </button>
+        </div>
+    </div>
+    <!-- 新建流程提示 -->
+    <div id="alertModal4" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                消息提示
+            </h3>
+        </div>
+        <div class="modal-body">
+            <img src="Img/NewFlow.gif" />
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                我知道了
+            </button>
+        </div>
+    </div>
+    <!-- 修改标签名称 -->
+    <div id="alertModal3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                修改标签名称
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
+                保存
+            </button>
+        </div>
+    </div>
+    <!-- 点击线的提示 -->
+    <div id="LineModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×
+            </button>
+            <h3>
+                修改方向
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                提示内容
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" id="lineDel" aria-hidden="true">
+                删除
+            </button>
+            <button class="btn btn-primary savetext" data-dismiss="modal_fx" id="lineSet" aria-hidden="true">
+                设置方向条件
+            </button>
+        </div>
+    </div>
+    <!-- attributeModal -->
+    <div id="attributeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" style="width: 800px; margin-left: -350px">
+        <div class="modal-body" style="max-height: 500px;" >
+            <!-- body -->
+        </div>
+        <div class="modal-footer" style="padding: 5px;">
+            <!--a href="#" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><i class="icon-remove icon-white"></i></a-->
+        </div>
+
+    </div>
+    <!--contextmenu div-->
+    <style type="text/css">
+        /*#mainul {
+                padding: 1px 0px !important;
+            }
+                #mainul li {
+                    padding: 1px 2px !important;
+                }*/
+    </style>
+    <div id="processMenu" style="display: none;">
+        <ul id="mainul">
+            <li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
+            <li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
+            <li id="pmFrmD"><i class="icon-comment"></i>&nbsp;<span class="_label">设计节点表单</span></li>
+            <!--<li id="pmFrmPower"><i class="icon-comment"></i>&nbsp;<span class="_label">表单权限</span></li>-->
+
+            <li id="pmfun"><i class="icon-wrench"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
+
+            <li id="pmNodeAccepterRole"><i class="icon-user"></i>&nbsp;<span class="_label">接收人规则</span></li>
+            <li id="pmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除节点</span></li>
+            <li id="pmCondDir"><i class="icon-share"></i>&nbsp;<span class="_label">方向条件</span></li>
+            <li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif()">增加连接线</span></li>
+        </ul>
+    </div>
+    <div id="nodeMenu" style="padding: 3px;
+        position: absolute;
+        background: #fff;
+        display: none;
+        font-family: verdana, helvetica, arial, sans-serif;
+        font-size: 12px;
+        z-index: 501;
+">
+        <ul id="mainul2" style="margin: 3px 3px;">
+            <li id="Node_Ordinary"><i class="icon-tag"></i>&nbsp;<span class="_label">普通</span></li>
+            <li id="Node_FL"><i class="icon-tags"></i>&nbsp;<span class="_label">分流</span></li>
+            <li id="Node_HL"><i class="icon-tags"></i>&nbsp;<span class="_label">合流</span></li>
+            <li id="Node_FHL"><i class="icon-tags"></i>&nbsp;<span class="_label">分合流</span></li>
+            <li id="Node_SubThread0"><i class="icon-tag"></i>&nbsp;<span class="_label">同表单子线程</span></li>
+            <li id="Node_SubThread1"><i class="icon-tag"></i>&nbsp;<span class="_label">异表单子线程</span></li>
+        </ul>
+    </div>
+    <div id="canvasMenu" style="display: none;">
+        <ul>
+            <li id="cmNewNode"><i class="icon-plus"></i>&nbsp;<span class="_label">新建节点</span></li>
+            <li id="cmNewLabel"><i class="icon-plus"></i>&nbsp;<span class="_label">添加标签</span></li>
+            <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
+            <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
+            <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
+            <li id="Li3"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif();">增加连接线</span></li>
+            <li id="cmHelp"><i class="icon-search"></i>&nbsp;<span class="_label">获得帮助</span></li>
+        </ul>
+    </div>
+    <div id="canvasLabMenu" style="display: none;">
+        <ul>
+            <li id="clmNewName"><i class="icon-wrench"></i>&nbsp;<span class="_label">修改标签</span></li>
+            <li id="clmDelete"><i class="icon-trash"></i>&nbsp;<span class="_label">删除标签</span></li>
+        </ul>
+    </div>
+    <!--end div-->
+    <div class="container mini-layout cs-main-box" id="flowdesign_canvas">
+        <!--div class="process-step btn" style="left: 189px; top: 340px;"><span class="process-num badge badge-inverse"><i class="icon-star icon-white"></i>3</span> 步骤3</div-->
+    </div>
+
+    <style>
+        li {
+            list-style: none;
+        }
+
+        #nodeMenu li {
+            padding: 0px 0px 1px 5px;
+        }
+
+            #nodeMenu li:hover {
+                background-color: #2980b9;
+                cursor: pointer;
+            }
+        /****给弹出框URL写的样式*/
+        .ui-icon-closethick {
+            background-position: 0;
+        }
+
+        .ui-widget-header .ui-icon {
+            top: 30% !important;
+        }
+
+        .ui-dialog .ui-dialog-titlebar-close {
+            background-image: url(Public/css/images/ui-icons_444444_256x240.png);
+            background-repeat: no-repeat;
+            background-position: 1px;
+        }
+    </style>
+
+    <!--</div>-->
+</body>
+</html>

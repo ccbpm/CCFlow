@@ -104,7 +104,7 @@
             if (confirm("确认删除吗？") == true) {
                 $("#pageloading").show();
                 //提交数据
-                var doMethod = "DelTemp_Init";
+                var doMethod = "DocTemp_Del";
                 var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
                 $("#cc").form("submit", {
                     type: 'POST',
@@ -120,7 +120,7 @@
                             alert(data);
                             return;
                         } else {  
-                            var o = $('#doc_' + id).remove();//111
+                            var o = $('#doc_' + id).remove();// 
                         }
                     }
                 });

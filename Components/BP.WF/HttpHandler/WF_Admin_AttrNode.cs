@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF.Template;
 using BP.WF.XML;
 using System.IO;
+using BP.Tools;
 
 namespace BP.WF.HttpHandler
 {
@@ -70,25 +71,176 @@ namespace BP.WF.HttpHandler
 
 
         #region    公文维护
+        public string CreateBlankDocTemp()
+        {
+            try
+            {
+
+                string docTemp = BP.Sys.SystemConfig.PathOfDataUser + "\\Temp\\" + DBAccess.GenerGUID() + ".docx";
+                byte[] bytes = null;
+
+                if (!System.IO.File.Exists(docTemp))
+                {
+                    File.Create(docTemp).Close();
+                }
+
+                bytes = BP.DA.DataType.ConvertFileToByte(docTemp);
+
+                int workId = int.Parse(this.GetRequestVal("workId"));
+                string flowNo = this.GetRequestVal("fk_flow");
+
+                BP.DA.DBAccess.SaveBytesToDB(bytes, "ND" + int.Parse(flowNo) + "Rpt", "OID", workId, "WordFile");
+
+                File.Delete(docTemp);
+                return "空白公文创建成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public string ImportDocTemp()
+        {
+            int nodeId = int.Parse(this.GetRequestVal("nodeId"));
+            Node node = new Node(nodeId);
+
+            if (!node.IsStartNode)
+            {
+                return "err@不是开始节点不可以执行模板导入.";
+            }
+
+
+            int docTempNo = int.Parse(this.GetRequestVal("no"));
+            int workId = int.Parse(this.GetRequestVal("workId"));
+            string flowNo = this.GetRequestVal("fk_flow");
+
+            DocTemplate docTemplate = new DocTemplate();
+            if (docTemplate.Retrieve(DocTemplateAttr.No, docTempNo) > 0)
+            {
+                if (File.Exists(docTemplate.TempFilePath))
+                {
+                    var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.TempFilePath);
+                    BP.DA.DBAccess.SaveBytesToDB(bytes, "ND" + int.Parse(flowNo) + "Rpt", "OID", workId, "WordFile");
+
+                    return "模板导入成功.";
+                }
+                else
+                {
+                    return "err@选择的模版文件不存在.";
+                }
+            }
+            else
+            {
+                return "err@选择的模版记录不存在.";
+            }
+        }
+
+        public string GetDocTemp()
+        {
+            return DocTemp_Init();
+        }
+
+        public string FlowDocInit()
+        {
+            MethodReturnMessage<string> msg = new MethodReturnMessage<string>
+            {
+                Success = true
+            };
+
+            try
+            {
+                int nodeId = int.Parse(this.GetRequestVal("nodeId"));
+                int workId = int.Parse(this.GetRequestVal("workId"));
+                string flowNo = this.GetRequestVal("fk_flow");
+                string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+
+                string str = "WordFile";
+                if (BP.DA.DBAccess.IsExitsTableCol(tableName, str) == false)
+                {
+                    /*如果没有此列，就自动创建此列.*/
+                    string sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+
+                    BP.DA.DBAccess.RunSQL(sql);
+                }
+
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
+                Node node = new Node(nodeId);
+
+                if (!node.IsStartNode)
+                {
+                    if (bytes == null)
+                    {
+                        msg.Message = "{\"IsStartNode\":0,\"IsExistFlowData\":0,\"IsExistTempData\":0}";
+                    }
+                    else
+                    {
+                        msg.Message = "{\"IsStartNode\":0,\"IsExistFlowData\":1,\"IsExistTempData\":0}";
+                    }
+                }
+                else//开始节点
+                {
+                    DocTemplates dts = new DocTemplates();
+                    int count = dts.Retrieve(DocTemplateAttr.NodeID, nodeId);
+
+                    if (bytes == null)
+                    {
+                        if (count == 0)
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":0,\"IsExistTempData\":0}";
+                            msg.Data = null;
+                        }
+                        else
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":0,\"IsExistTempData\":" + count + "}";
+                            msg.Data = dts.ToJson();
+                        }
+                    }
+                    else
+                    {
+                        if (count == 0)
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":1,\"IsExistTempData\":0}";
+                            msg.Data = null;
+                        }
+                        else
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":1,\"IsExistTempData\":" + count + "}";
+                            msg.Data = dts.ToJson();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                msg.Success = false;
+                msg.Message = ex.Message;
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
         public string DocTemp_Init()
         {
             int nodeId = int.Parse(this.GetRequestVal("pkval"));
 
-            DocTemplates dcs = new DocTemplates();
-            dcs.Retrieve(DocTemplateAttr.NodeID, nodeId );
+            DocTemplates dts = new DocTemplates();
+            dts.Retrieve(DocTemplateAttr.NodeID, nodeId);
 
 
-            return dcs.ToJson();
+            return dts.ToJson();
         }
-        public string DelTemp_Init()
+        public string DocTemp_Del()
         {
             int no = int.Parse(this.GetRequestVal("no"));
 
-            DocTemplate dc = new DocTemplate();
-            dc.Retrieve(DocTemplateAttr.No, no);
-            dc.Delete();
+            DocTemplate dt = new DocTemplate();
+            dt.Retrieve(DocTemplateAttr.No, no);
+            dt.Delete();
 
-            return dc.ToJson();
+            return "操作成功";
         }
         public string DocTemp_Upload()
         {
@@ -107,16 +259,16 @@ namespace BP.WF.HttpHandler
 
             HttpContextHelper.UploadFile(file, fileFullPath);
 
-            DocTemplate dc = new DocTemplate();
-            dc.NodeID = nodeId;
-            dc.No = DA.DBAccess.GenerOID().ToString();
-            dc.Name = fileName;
-            dc.TempFilePath = fileFullPath; //路径
+            DocTemplate dt = new DocTemplate();
+            dt.NodeID = nodeId;
+            dt.No = DA.DBAccess.GenerOID().ToString();
+            dt.Name = fileName;
+            dt.TempFilePath = fileFullPath; //路径
 
-            dc.CheckPhysicsTable();
-            dc.Save();
+            dt.CheckPhysicsTable();
+            dt.Save();
 
-            return dc.ToJson();
+            return dt.ToJson();
         }
         #endregion
 

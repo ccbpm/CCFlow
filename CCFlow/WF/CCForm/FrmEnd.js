@@ -67,7 +67,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                     $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + val + "'>" + selectText + "</option>");
             }
             if (val != "")
-                $('#DDL_' + mapAttr.KeyOfEn).val(val);
+                $('#DDL_' + mapAttr.KeyOfEn).attr("value", val);
             continue;
         }
 
@@ -89,7 +89,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                     if (bit == 2)
                         val = formatNumber(val, 2, ",");
                 }
-                $('#TB_' + mapAttr.KeyOfEn).val(val);
+                $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
             }
             continue;
         }
@@ -128,7 +128,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIVisible != 0 && (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")) {
             $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
-            $('#RB_' + mapAttr.KeyOfEn).attr('disabled', true);
+            $('input[name=CB_' + mapAttr.KeyOfEn + ']').attr("disabled", "disabled");
+            $('input[name=RB_' + mapAttr.KeyOfEn + ']').attr("disabled", "disabled");
             $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
             $('#TB_' + mapAttr.KeyOfEn).removeClass("form-control");
             $('#CB_' + mapAttr.KeyOfEn).removeClass("form-control");
@@ -412,6 +413,7 @@ function AfterBindEn_DealMapExt(frmData) {
         var PopModel = mapAttr.GetPara("PopModel");
 
         if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
+            
             PopMapExt(mapAttr, mapExt, frmData);
             continue;
         }

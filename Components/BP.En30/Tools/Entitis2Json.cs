@@ -9,6 +9,25 @@ using BP.DA;
 
 namespace BP.Tools
 {
+    /// <summary>
+    /// 返回信息格式
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class MethodReturnMessage<T>
+    {
+        /// <summary>
+        /// 是否运行成功
+        /// </summary>
+        public bool Success { get; set; }
+        /// <summary>
+        /// 信息    
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 返回的数据
+        /// </summary>
+        public T Data { get; set; }
+    }
     public class Entitis2Json
     {
         private volatile static Entitis2Json _instance = null;

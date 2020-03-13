@@ -60,12 +60,12 @@ namespace BP.En
         public void OpenAllForStation(string fk_station)
         {
             Paras ps = new Paras();
-            ps.Add("user", Web.WebUser.No);
+            ps.Add("FK_Emp", Web.WebUser.No);
             ps.Add("st", fk_station);
 
             bool bl;
            
-                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
+                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
 
             if (bl)
                 this.OpenAll();

@@ -153,13 +153,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
     }
 
 
-    //外键、外部数据源增加选择项option
-    var selects = $("select");
-    $.each(selects, function (obj, i) {
-        var _html = InitDDLOperation(frmData, mapAttr, null)
-    })
-
-
+   
 
     //2.解析控件 从表、附件、附件图片、框架、地图、签字版、父子流程
     var frmDtls = frmData.Sys_MapDtl;
@@ -223,13 +217,16 @@ function GenerDevelopFrm(wn,fk_mapData) {
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
         if (nodeComponents != null) {
-            var element = $("Img[data-key=" + nodeComponents.NodeID + "]");
-            if (element.length != 0)
-                figure_Develop_FigureSubFlowDtl(nodeComponents,element);
-            //如果有审核组件，增加审核组件的HTML
-            var _html = figure_Develop_FigureFrmCheck(nodeComponents, frmData);
-            $("#CCForm").append(_html);
-
+            var elements = $("Img[data-key=" + nodeComponents.NodeID + "]");
+            $.each(elements, function (i, element) {
+                //父子流程
+                if (element.getAttribute("data-type") == "SubFlow")
+                    figure_Develop_FigureSubFlowDtl(nodeComponents, element);
+                //如果有审核组件，增加审核组件的HTML
+                if (element.getAttribute("data-type") == "WorkCheck")
+                    figure_Develop_FigureFrmCheck(nodeComponents, element, frmData);
+            })
+            
         }
     }
 
@@ -556,7 +553,7 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
 
 
 //审核组件
-function figure_Develop_FigureFrmCheck(wf_node,frmData) {
+function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
 
 
 
@@ -572,38 +569,14 @@ function figure_Develop_FigureFrmCheck(wf_node,frmData) {
     if (frmNode != undefined)
         frmNode = frmNode[0];
 
-    if (node == null || frmNode == null)
+    if (node == null)
         return $('');
-    if (node.FormType == 5 && frmNode.IsEnableFWC != 1)
+    if (frmNode !=null && node.FormType == 5 && frmNode.IsEnableFWC != 1)
         return $('');
 
-    var pos = PreaseFlowCtrls(frmData.Sys_MapData[0].FlowCtrls, "FrmCheck");
 
-    var x = 0, y = 0, h = 0, w = 0;
-    if (pos == null) {
-        x = wf_node.FWC_X;
-        y = wf_node.FWC_Y;
-        h = wf_node.FWC_H;
-        w = wf_node.FWC_W;
-    }
-
-    if (pos != null) {
-        x = parseFloat(pos.X);
-        y = parseFloat(pos.Y);
-        h = parseFloat(pos.H);
-        w = parseFloat(pos.W);
-    }
-    if (x <= 10)
-        x = 100;
-    if (y <= 10)
-        y = 100;
-
-    if (h <= 10)
-        h = 100;
-
-    if (w <= 10)
-        w = 300;
-
+    var w = wf_node.FWC_W;
+   
     var src = "";
     if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
@@ -641,11 +614,16 @@ function figure_Develop_FigureFrmCheck(wf_node,frmData) {
     }
     src += "&r=q" + paras;
 
-    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
+    
+    var eleHtml = $("<div id='WorkCheck" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' ></div>");
 
-    eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
-    return eleHtml;
+    var eleIframe = $("<iframe id='FWC' src = '" + src + "' frameborder=0  style='width:" + w + "px; height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+
+
+    eleHtml.append(eleIframe);
+    $(element).after(eleHtml);
+    $(element).remove(); //移除SubFlow节点
+
 }
 
 

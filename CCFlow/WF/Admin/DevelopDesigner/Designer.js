@@ -323,8 +323,8 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
         return;
     }
 
-    if (shap == 'FrmCheck') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=子线程组件';
+    if (shap == 'WorkCheck') {
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=审核组件';
         CCForm_ShowDialog(url, '审核组件');
         return;
     }
@@ -1171,11 +1171,29 @@ UE.plugins['component'] = function () {
             if (dataType == "HandWriting") {//手写签字版
                 ExtHandWriting();
             }
+            if (dataType == "WorkCheck") { //审核组件
+                var mypk = GetQueryString("FK_Node");
+
+                if (mypk == null || mypk == undefined) {
+                    alert('非节点表单,不能添加审核组件');
+                    return;
+                }
+                var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + mypk + '&tab=审核组件';
+                OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
+                    //加载js
+                    // $("<script type='text/javascript' src='../../WorkOpt/SubFlow.js'></script>").appendTo("head");
+                    var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component' data-key='" + mypk + "'  data-type='WorkCheck'/>"
+                    leipiEditor.execCommand('insertHtml', _html);
+                    return;
+
+                });
+
+            }
             if (dataType == "SubFlow") {//父子流程
                 var mypk = GetQueryString("FK_Node");
 
                 if (mypk == null || mypk == undefined) {
-                    alert('非节点表单');
+                    alert('非节点表单,不能添加父子流程');
                     return;
                 }
                 var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
@@ -1239,6 +1257,13 @@ UE.plugins['component'] = function () {
                     subFlow.SFSta = 0;//禁用
                     subFlow.Update();
                 }
+
+                if (dataType == "WorkCheck") {
+                    var nodeID = GetQueryString("FK_Node");
+                    var frmCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                    frmCheck.FWCSta = 0;//禁用
+                    frmCheck.Update();
+                }
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -1276,6 +1301,9 @@ UE.plugins['component'] = function () {
             if (dataType == "HandWriting")
                 _html = popup.formatHtml(
                     '<nobr>手写签名版控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+            if (dataType == "WorkCheck")
+                _html = popup.formatHtml(
+                    '<nobr>审核组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
             if (dataType == "SubFlow")
                 _html = popup.formatHtml(
                     '<nobr>父子流程控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');

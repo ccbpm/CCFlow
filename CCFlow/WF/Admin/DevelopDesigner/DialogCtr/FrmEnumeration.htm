@@ -33,7 +33,7 @@
             html += "<th>编号</th>";
             html += "<th>名称</th>";
             html += "<th>配置值</th>";
-            html += "<th></th>";
+            html += "<th>操作</th>";
             html += "</tr>";
 
             for (var i = 0; i < enumMains.length; i++) {
@@ -42,12 +42,12 @@
                 var cfgVal = sysEnumMain.CfgVal.replace(/ /g, "[]");
 
                 html += "<tr>";
-                html += "<td class=Idx>" + i + "</td>";
-                html += "<td><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + cfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
-                html += "<td>" + sysEnumMain.Name + "</td>";
-                html += "<td style='white-space: nowrap;text-overflow: ellipsis;overflow: hidden;' ><a href=\"javascript:Edit('" + sysEnumMain.No + "');\">" + sysEnumMain.CfgVal + "</a></td>";
+                html += "<td style='width:3%' class=Idx>" + i + "</td>";
+                html += "<td style='width:10%'><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + cfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
+                html += "<td style='width:20%'>" + sysEnumMain.Name + "</td>";
+                html += "<td style='width:50%;text-overflow: ellipsis;overflow: hidden;' ><a href=\"javascript:Edit('" + sysEnumMain.No + "');\">" + sysEnumMain.CfgVal + "</a></td>";
 
-                html += "<td><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
+                html += "<td style='width:10%'><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
 
                 html += "</tr>";
             }

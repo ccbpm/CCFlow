@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>选择字段放入表单</title>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -167,7 +167,7 @@
         <table id="tsys" class='Table' style="width: 90%" cellpadding='2' cellspacing='2'>
             <tr>
                 <th class='GroupTitle' colspan="3">
-                <div id="Div1" style="float:left" >选择字段</div>  <div id="Btn" style="float:right" ><a href=''>常用字段</a></div></td>
+                <div id="Div1" style="float:left" >选择字段</div>  <div id="Btn" style="float:right" ><a href=''>未映射字段</a></div></td>
             </tr>
             <tr>
                 <td>
@@ -179,6 +179,19 @@
         <br />
         <a id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;"
             href="javascript:Save()">确定并返回</a>
+
+
+            <table>
+                <caption>常用字段 </caption>
+                <tr>
+                    <th>Idx</th>
+                    <th>表单ID</th>
+                    <th>表单名称</th>
+                    <th>字段名</th>
+                    <th>字段中文名</th>
+                </tr>
+
+            </table>
         <br />
         <br />
     </div>

@@ -16,60 +16,21 @@
 
         $(function () {
 
-            InitBar("Main");
-
             //查询出来数据.
-            var frmID = GetQueryString("FK_MapData");
-            var refPK = GetQueryString("RefPK");
+            var frmID = GetQueryString("FrmID");
+            var keyOfEn = GetQueryString("KeyOfEn");
 
-            var thisPK = refPK + "_FullData";
+            var mypk = frmID + '_' + keyOfEn;
+            var mapattr = new Entity("BP.Sys.MapAttr", mypk);
 
-            var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = refPK + "_FullData";
-            en.SetPKVal(thisPK);
-            en.RetrieveFromDBSources();
-
-
-            en.Doc = FormatSQL(en.Doc);
-
-            //给下列框赋值.
-            GenerFullAllCtrlsVal(en);
+          //  if (mapattr.IsGener)
 
 
         });
 
         function Save() {
 
-            //更新节点表单类型.
-            var frmID = GetQueryString("FK_MapData");
-            var refPK = GetQueryString("RefPK");
-
-            var thisPK = refPK + "_FullData";
-
-            var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = refPK + "_FullData";
-            en.SetPKVal(en.MyPK);
-            var i = en.RetrieveFromDBSources();
-
-            en.FK_MapData = frmID;
-            en.ExtType = "FullData";
-            en.DBType = $("#DDL_DBType").val(); //获得选择的值.
-
-            var sql = $("#TB_Doc").val();
-            if (sql == '') {
-                alert("常用字段的sql不能为空！");
-                return;
-            }
-            en.Doc = sql; //设置主表的SQL.
-            var tag2 = $("#TB_Tag2").val();
-            en.Tag2 = tag2; //设置主表的SQL.
-            en.AttrOfOper = GetQueryString("KeyOfEn");
-            if (i == 0)
-                en.Insert();
-            else
-                en.Update();
-
-            window.location.href = window.location.href;
+            
         }
     </script>
 </head>
@@ -78,42 +39,14 @@
         <div id="bar">
         </div>
         <table style="width: 99%;">
+            <caption>设置常用字段</caption>
             <tr>
-                <td colspan="2">
-                    常用字段数据SQL
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>数据源类型</td>
-                <td>
-                    <select id="DDL_DBType" name="DDL_DBType">
-                        <option value="0">执行SQL</option>
-                        <option value="1">执行url返回JSON</option>
-                        <option value="2">执行CCFromRef.js返回JSON</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>,可以为空.
-                    <div id="backFunction" style="color: Gray; display: none">
-                        <ul>
-                            <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法().</li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <input type="text" id="TB_Tag2" name="TB_Tag2" style="width: 99%;" />
+                <td >
+                    <div id="info"></div>
                 </td>
             </tr>
         </table>
+
         <fieldset>
             <legend>帮助.</legend>
             <ul>

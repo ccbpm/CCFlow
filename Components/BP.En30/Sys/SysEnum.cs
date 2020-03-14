@@ -44,7 +44,7 @@ namespace BP.Sys
 			return en.Lab;
 		}
 
-		#region 实现基本的方方法
+		#region 实现基本的方法
 		/// <summary>
 		/// 标签
 		/// </summary>
@@ -101,21 +101,6 @@ namespace BP.Sys
 				this.SetValByKey(SysEnumAttr.EnumKey,value);
 			}
 		}
-        ///// <summary>
-        ///// 风格
-        ///// </summary>
-        //public  string  Style
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey(SysEnumAttr.Style);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(SysEnumAttr.Style,value);
-        //    }
-        //}
-		 
 		#endregion 
 
 		#region 构造方法

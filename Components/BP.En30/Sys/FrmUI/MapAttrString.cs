@@ -277,6 +277,12 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "常用字段";
+                rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 #endregion 基本功能.
 
                 #region 输入多选.
@@ -470,6 +476,14 @@ namespace BP.Sys.FrmUI
         public string DoPop2019()
         {
             return "../../Admin/FoolFormDesigner/Pop/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 设置常用字段
+        /// </summary>
+        /// <returns></returns>
+        public string DoGeneralField()
+        {
+            return "../../Admin/FoolFormDesigner/General/GeneralField.htm?FrmID=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 全局默认值

@@ -197,6 +197,10 @@ namespace BP.Sys
         /// 流程控件
         /// </summary>
         public const string FlowCtrls = "FlowCtrls";
+        /// <summary>
+        ///组织解构.
+        /// </summary>
+        public const string OrgNo = "OrgNo";
 
 
         #region 报表属性(参数的方式存储).
@@ -667,6 +671,17 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapDataAttr.Ver, value);
+            }
+        }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDataAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.OrgNo, value);
             }
         }
         /// <summary>
@@ -1677,6 +1692,9 @@ namespace BP.Sys
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 #endregion
+
+                map.AddTBString(MapDataAttr.OrgNo, null, "OrgNo", true, false, 0, 30, 20);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -2810,6 +2828,9 @@ namespace BP.Sys
 
             //更新版本号.
             this.Ver = DataType.CurrentDataTimess;
+
+            //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
+            this.OrgNo = BP.Web.WebUser.FK_Dept;
 
             #region  检查是否有ca认证设置.
             bool isHaveCA = false;

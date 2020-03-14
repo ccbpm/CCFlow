@@ -667,6 +667,23 @@ namespace BP.Web
             }
         }
         /// <summary>
+        /// 所在的组织
+        /// </summary>
+        public static string OrgNo
+        {
+            get
+            {
+                string val = GetValFromCookie("OrgNo", null, true);
+                if (val == null)
+                    throw new Exception("@err-004 OrgNo 登录信息丢失。");
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("OrgNo", value);
+            }
+        }
+        /// <summary>
         /// 域
         /// </summary>
         public static string Domain

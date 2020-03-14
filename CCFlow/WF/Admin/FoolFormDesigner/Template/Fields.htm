@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
 <head>
     <title>字段模版</title>
     <link rel="stylesheet" type="text/css" href="../../../Scripts/easyUI/themes/default/easyui.css" />
@@ -42,18 +42,28 @@
                 var en = ens[i];
 
                 var list = "<ul>";
+                //查询模板字段
+                var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                mapAttrs.Retrieve("FK_MapData", en.No);
+                //查询模板字段扩展
                 var mapExts = new Entities("BP.Sys.MapExts");
                 mapExts.Retrieve("FK_MapData", en.No);
-
-                for (var idx = 0; idx < mapExts.length; idx++) {
-                    var mapExt = mapExts[idx];
-                    list += "<li><a href=\"javascript:AddMapExt('" + mapExt.MyPK + "','" + mapExt.AttrOfOper + "','" + mapExt.FK_MapData + "')\" >" + mapExt.AttrOfOper + " - " + mapExt.Tag1 + " - " + mapExt.ExtType + "</a></li>";
+                for (var j = 0; j < mapAttrs.length; j++) {
+                    var mapAttr = mapAttrs[j];
+                    list += "<li><a href=\"javascript:AddMapAttr('" + mapAttr.KeyOfEn + "','" + mapAttr.FK_MapData + "')\" >" + mapAttr.KeyOfEn + "-" + mapAttr.Name ;
+                    for (var i = 0; i < mapExts.length; i++) {
+                        if (mapAttr.KeyOfEn == mapExts[i].AttrOfOper) {
+                            list += "-" + mapExts[i].ExtType;
+                        }
+                    }
+                     list += "</a></li>";
                 }
+
                 list += "</ul>";
 
                 var edit = "<a href='../Designer.htm?FK_MapData=" + en.No + "' target=_blank>编辑模版</a>";
 
-                html += "<li>" + en.Name + "(" + mapExts.length + ")  - " + edit + list + "</li>";
+                html += "<li>" + en.Name + " - " + edit + list + "</li>";
             }
             html += "</ul>";
 
@@ -61,9 +71,8 @@
 
         });
 
-
         //把这个字段增加到里面去.
-        function AddMapExt(mypk, keyOfEn, fk_mapdata) {
+        function AddMapAttr(keyOfEn, fk_mapdata) {
 
             //首先判断该字段是否存在？如果存在就让其修改名称.
             var mypkOfMapAttr = fk_mapdata + "_" + keyOfEn;
@@ -91,23 +100,27 @@
             en.Insert();
             alert('字段插入成功' + en.MyPK);
 
-            //取出来扩展数据.
-            var en = new Entity("BP.Sys.MapExt", mypk);
-            en.FK_MapData = GetQueryString("FK_MapData");
-            en.MyPK = en.MyPK.replace(fk_mapdata, GetQueryString("FK_MapData"));
-            en.MyPK = en.MyPK.replace(keyOfEn, field); //替换字段.
-
-            en.AttrOfOper = field;
-            en.SetPKVal(en.MyPK);
-            en.Insert();
-            alert('已经加入成功');
-
+            var MapExts = new Entities("BP.Sys.MapExts");
+	        MapExts.Retrieve("FK_MapData", fk_mapdata);
+            for (var i = 0; i < MapExts.length; i++) {
+                var mapExt = MapExts[i];
+                var en = new Entity("BP.Sys.MapExt",mapExt);
+                en.FK_MapData = GetQueryString("FK_MapData");
+                en.MyPK = mapExt.MyPK;
+                en.MyPK = en.MyPK.replace(fk_mapdata, GetQueryString("FK_MapData"));
+                en.MyPK = en.MyPK.replace(keyOfEn, field); //替换字段.
+                en.AttrOfOper = field;
+                en.SetPKVal(en.MyPK);
+                en.Insert();
+            }
+            
             if (window.parent != null) {
                 window.parent.location.href = window.parent.location.href + "&IsFirst=1";
             }
 
             window.close();
         }
+        
 
         //创建模版.
         function CreateFrm() {
@@ -127,7 +140,7 @@
             en.Insert();
 
             var url = "../Designer.htm?FK_MapData=" + en.No;
-            window.location.href = url;
+            window.open(url);
         }
 
         //字段分组.
@@ -148,9 +161,13 @@
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h3>
-        <a href="javascript:Fields();">字段模版</a> -字段群模版</h3>
-    <div id="info">
+    <div style="padding-left:30px">
+        <h3><a href="javascript:Fields();">字段模版</a> -字段群模版</h3>
+        <div id="info">
+        </div>
     </div>
+    
+
+    
 </body>
 </html>

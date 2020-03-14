@@ -47,7 +47,10 @@
                 alert("参数FK_MapData为空.");
                 return;
             }
-
+            //如果是常用字段模板，就隐藏这个功能入口
+            if (fk_mapData == "Temp0") {
+                $("#Temp0").hide();
+            }
             var fType = GetQueryString("FType");
             if (fType == null || fType == "")
                 fType = 1;
@@ -185,9 +188,9 @@
                     <div style="float: left">
                         新增普通类型的字段
                     </div>
-                    <div style="float: right">
+                    <div style="float: right" id="Temp0">
                         <a href="javascript:HidAttr();">隐藏字段</a>|
-                        <a href="javascript:ToTemplate();">模版</a>
+                        <a href="javascript:ToTemplate();">常用字段模版</a>
                     </div>
                 </th>
             </tr>

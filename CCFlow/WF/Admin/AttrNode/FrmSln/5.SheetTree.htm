@@ -83,11 +83,6 @@
 
             node.Update();
 
-            //更新表单类型.
-            //            var frmID = "ND" + nodeID;
-            //            var mapData = new Entity("BP.Sys.MapData", frmID);
-            //            mapData.FrmType = node.FormType;
-            //            mapData.Update();
 
             alert("保存成功.");
         }
@@ -109,6 +104,11 @@
             var node = new Entity("BP.WF.Node", nodeID);
             var NodeNote = node.GetPara("NodeNote");//获取的设置的摘要字段
             var flowNo = node.FK_Flow;
+
+            //该节点绑定的表单
+            var frmNodes = new Entities("BP.WF.Template.FrmNodes");
+            frmNodes.Retrieve("FK_Flow", flowNo, "FK_Node",nodeID);
+
             var nds = new Entities("BP.WF.Nodes");
             nds.Retrieve("FK_Flow", flowNo);
 
@@ -116,6 +116,8 @@
 
                 var jsNode = nds[i];
 
+                if (jsNode.NodeID == nodeID)
+                    continue;
 
                 var node = new Entity("BP.WF.Node", jsNode);
 
@@ -125,6 +127,18 @@
                     node.SetPara("NodeNote", NodeNote);//赋值摘要字段
                 }
                 node.Update();
+
+
+                var currfrmNodes = new Entities("BP.WF.Template.FrmNodes");
+                currfrmNodes.Retrieve("FK_Flow", flowNo, "FK_Node", node.NodeID);
+                if (currfrmNodes.length == 0) {
+                    $.each(frmNodes, function (idx, Obj) {
+                        var item = new Entity("BP.WF.Template.FrmNode", Obj);
+                        item.FK_Node = node.NodeID;
+                        item.MyPK = item.FK_Frm + "_" + item.FK_Node + "_" + item.FK_Flow;
+                        item.Insert();
+                    })
+                }
 
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;

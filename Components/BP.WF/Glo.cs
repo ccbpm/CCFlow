@@ -5847,64 +5847,38 @@ namespace BP.WF
         {
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
-            if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+            //查询使用的workId
+            string ctrlWayId = "";
+            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
             {
-                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pworkid, 0).ToString();
-                if (pWorkID == null || pWorkID == "0")
-                    pWorkID = pkval;
-
-                if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                {
-                    /* 继承模式 */
-                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-
-                    if (pWorkID.Equals(pkval) == true)
-                    {
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
-                    }
-                    else
-                    {
-                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + pWorkID + "','" + pkval + "')");
-                    }
-                    qo.addOrderBy("RDT");
-                    qo.DoQuery();
-                }
-
-                if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                {
-                    /*协作模式*/
-                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
-                }
-                return dbs;
+                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
+                ctrlWayId = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                if (ctrlWayId == null || ctrlWayId == "0")
+                    ctrlWayId = pkval;
             }
 
-            if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
             {
-                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pkval, 0).ToString();
-                if (pWorkID == null || pWorkID == "0")
-                    pWorkID = pkval;
+                ctrlWayId = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pworkid, 0).ToString();
+                if (ctrlWayId == null || ctrlWayId == "0")
+                    ctrlWayId = pkval;
+            }
+            if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                ctrlWayId = pworkid.ToString();
 
-                if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            {
+                /* 继承模式 */
+                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+
+                //workID相同或者是协作模式
+                if (pkval.Equals(ctrlWayId) ==true || athDesc.AthUploadWay == AthUploadWay.Interwork)
+                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
+                else if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                 {
-                    /* 继承模式 */
-                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-
-                    if (pWorkID.Equals(pkval) == true)
-                    {
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
-                    }
-                    else
-                    {
-                        qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + pWorkID + "','" + pkval + "')");
-                    }
+                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
-                }
-
-                if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                {
-                    /*共享模式*/
-                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                 }
                 return dbs;
             }
@@ -5978,8 +5952,6 @@ namespace BP.WF
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
 
-                    //dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
-                    //   FrmAttachmentDBAttr.RefPKVal, pkval, "RDT");
                 }
                 return dbs;
             }

@@ -86,7 +86,6 @@ namespace BP.WF.HttpHandler
             {
                 return "成功获取数据.";
             }
-
         }
 
         public string SetDocTempFields()
@@ -146,7 +145,7 @@ namespace BP.WF.HttpHandler
             }
 
 
-            int docTempNo = int.Parse(this.GetRequestVal("no"));
+            string docTempNo = this.GetRequestVal("no");
             int workId = int.Parse(this.GetRequestVal("workId"));
             string flowNo = this.GetRequestVal("fk_flow");
 
@@ -157,6 +156,23 @@ namespace BP.WF.HttpHandler
                 {
                     var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.TempFilePath);
                     BP.DA.DBAccess.SaveBytesToDB(bytes, "ND" + int.Parse(flowNo) + "Rpt", "OID", workId, "WordFile");
+
+                    //模板与业务的绑定
+                    DocTempFlow dtf = new DocTempFlow();
+                    dtf.CheckPhysicsTable();
+
+                    if (dtf.IsExit(DocTempFlowAttr.WorkID, workId))
+                    {
+                        dtf.TempNo = docTempNo;
+                        dtf.Update();
+                    }
+                    else
+                    {
+                        dtf.WorkID = workId;
+                        dtf.TempNo = docTempNo;
+                        dtf.Insert();
+                    }
+                     
 
                     return "模板导入成功.";
                 }

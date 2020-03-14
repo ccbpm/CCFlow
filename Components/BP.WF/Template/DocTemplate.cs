@@ -19,9 +19,13 @@ namespace BP.WF.Template
         /// NodeID
         /// </summary>
         public const string NodeID = "NodeID";
+        /// <summary>
+        /// 要填充的字段
+        /// </summary>
+        public const string FillTempFields = "FillTempFields";
     }
     /// <summary>
-    /// 单据模板
+    /// 
     /// </summary>
     public class DocTemplate : EntityNoName
     {
@@ -45,28 +49,21 @@ namespace BP.WF.Template
         {
             get
             {
-                string no = this.GetValStrByKey("No");
-                no = no.Replace("\n", "");
-                no = no.Replace(" ", "");
-                return no;
+               return  this.GetValStrByKey(DocTemplateAttr.No);
             }
             set
             {
-                this.SetValByKey("No", value);
-                this.SetValByKey(DocTemplateAttr.TempFilePath, value);
+                this.SetValByKey(DocTemplateAttr.No, value);
             }
         }
         /// <summary>
-        /// 打开的连接
+        /// 路径
         /// </summary>
         public string TempFilePath
         {
             get
             {
-                string s = this.GetValStrByKey(DocTemplateAttr.TempFilePath);
-                if (s == "" || s == null)
-                    return this.No;
-                return s;
+                return this.GetValStrByKey(DocTemplateAttr.TempFilePath);
             }
             set
             {
@@ -74,14 +71,17 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 节点名称
+        /// 要填充的字段
         /// </summary>
-        public string NodeName
+        public new string FillTempFields
         {
             get
             {
-                Node nd = new Node(this.NodeID);
-                return nd.Name;
+                return this.GetValStrByKey(DocTemplateAttr.FillTempFields);
+            }
+            set
+            {
+                this.SetValByKey(DocTemplateAttr.FillTempFields, value);
             }
         }
         /// <summary>
@@ -110,25 +110,6 @@ namespace BP.WF.Template
         {
         }
         /// <summary>
-        /// 获得单据文件流
-        /// </summary>
-        /// <param name="oid"></param>
-        /// <returns></returns>
-        public byte[] GenerTemplateFile()
-        {
-            byte[] bytes = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
-            if (bytes != null)
-                return bytes;
-
-            //如果没有找到，就看看默认的文件是否有.
-            string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\" + this.No + ".rtf";
-            if (System.IO.File.Exists(tempExcel) == false)
-                tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\Word单据模版定义演示.docx";
-
-            bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
-            return bytes;
-        }
-        /// <summary>
         /// 重写基类方法
         /// </summary>
         public override Map EnMap
@@ -145,6 +126,7 @@ namespace BP.WF.Template
                 map.AddTBString(DocTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
                 map.AddTBString(DocTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(DocTemplateAttr.NodeID, 0, "NodeID", true, false);
+                map.AddTBString(DocTemplateAttr.FillTempFields, null, "填充字段", true, false, 0, 2000, 200);
 
                 this._enMap = map;
                 return this._enMap;
@@ -153,7 +135,7 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// 单据模板s
+    /// 
     /// </summary>
     public class DocTemplates : EntitiesNoName
     {
@@ -175,44 +157,6 @@ namespace BP.WF.Template
         {
         }
         #endregion
-
-        #region 查询与构造
-        /// <summary>
-        /// 按节点查询
-        /// </summary>
-        /// <param name="nd"></param>
-        public DocTemplates(Node nd)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(DocTemplateAttr.NodeID, nd.NodeID);
-            if (nd.IsStartNode)
-            {
-                qo.addOr();
-                qo.AddWhere("No", "SLHZ");
-            }
-            qo.DoQuery();
-        }
-        /// <summary>
-        /// 按流程查询
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        public DocTemplates(string fk_flow)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhereInSQL(DocTemplateAttr.NodeID, "SELECT NodeID FROM WF_Node WHERE fk_flow='" + fk_flow + "'");
-            qo.DoQuery();
-        }
-        /// <summary>
-        /// 按节点查询
-        /// </summary>
-        /// <param name="fk_node">节点ID</param>
-        public DocTemplates(int fk_node)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(DocTemplateAttr.NodeID, fk_node);
-            qo.DoQuery();
-        }
-        #endregion 查询与构造
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

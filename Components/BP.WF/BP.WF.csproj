@@ -290,9 +290,10 @@
     <Compile Include="Rpt\WaterImage.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\RptDfine.cs" />
+    <Compile Include="Template\DocTempFlow.cs" />
+    <Compile Include="Template\DocTemplate.cs" />
     <Compile Include="Template\BillTemplate2019.cs" />
     <Compile Include="Template\Direction.cs" />
-    <Compile Include="Template\DocTemplate.cs" />
     <Compile Include="Template\ExtJobSchedule.cs" />
     <Compile Include="Template\FindWorkerRole.cs">
       <SubType>Code</SubType>

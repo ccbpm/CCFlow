@@ -12,6 +12,7 @@ using BP.WF.Template;
 using BP.WF.XML;
 using System.IO;
 using BP.Tools;
+using System.Threading;
 
 namespace BP.WF.HttpHandler
 {
@@ -71,11 +72,45 @@ namespace BP.WF.HttpHandler
 
 
         #region    公文维护
+        public string IsExitNodeTempData()
+        {
+            int workId = int.Parse(this.GetRequestVal("workId"));
+            string flowNo = this.GetRequestVal("fk_flow");
+            byte[] bytes = BP.DA.DBAccess.GetByteFromDB("ND" + int.Parse(flowNo) + "Rpt", "OID", workId.ToString(), "WordFile");
+
+            if (bytes == null)
+            {
+                return "err@公文数据不存在.";
+            }
+            else
+            {
+                return "成功获取数据.";
+            }
+
+        }
+
+        public string SetDocTempFields()
+        {
+            string no = this.GetRequestVal("pkVal");
+            string jsonStr = this.GetRequestVal("jsonStr");
+
+            DocTemplate docTemplate = new DocTemplate();
+            if (docTemplate.Retrieve(DocTemplateAttr.No, no) > 0)
+            {
+                docTemplate.FillTempFields = jsonStr;
+                docTemplate.Update();
+
+                return "操作成功.";
+            }
+            else
+            {
+                return "err@选择的模版记录不存在.";
+            }
+        }
         public string CreateBlankDocTemp()
         {
             try
             {
-
                 string docTemp = BP.Sys.SystemConfig.PathOfDataUser + "\\Temp\\" + DBAccess.GenerGUID() + ".docx";
                 byte[] bytes = null;
 

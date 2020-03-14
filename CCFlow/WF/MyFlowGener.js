@@ -2132,65 +2132,7 @@ function OpenOffice(isEdit) {
     var workId = GetQueryString("WorkID");
     var fk_flow = GetQueryString("FK_Flow");
 
-    //提交数据
-    var doMethod = "FlowDocInit";
-    var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
-
-    $.ajax({
-        url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&nodeId=" + nodeId +
-            "&workId=" + workId + "&fk_flow=" + fk_flow,
-        async: false,
-        success: function (result, status, xhr) {
-            var json = eval('(' + result + ')');
-            var msg = eval('(' + json.Message + ')');
-            var data = eval('(' + json.Data + ')');
-
-            if (json.Success) {
-
-                if (msg.IsStartNode == 1) {
-                    if (msg.IsExistFlowData == 1) {
-
-                        if (msg.IsExistTempData > 0) {
-                            if (confirm("公文数据已经存在，是否重新选择模板？") == true) {
-                                //重新选择模板，覆盖旧的数据
-                                WinOpen("Admin/AttrNode/SelectDocTemp.htm?FK_Node=" + nodeId + "&WorkID=" + workId + "&FK_Flow=" + fk_flow, "重新模板选择")
-                            }
-                        } else {//数据存在，但是没有配置模板的情况暂时不考虑
-
-                        }
-
-                    } else {
-
-                        if (msg.IsExistTempData > 0) {
-                            if (confirm("有" + msg.IsExistTempData + "个公文模板可供选择。【确定】打开模板列表，【取消】创建空白公文!") == true) {
-
-                                //选择模板进行创建
-                                WinOpen("Admin/AttrNode/SelectDocTemp.htm?FK_Node=" + nodeId + "&WorkID=" + workId + "&FK_Flow=" + fk_flow, "模板选择")
-
-                            } else {
-                                //创建空白的模板
-                                CreateBlankDocTemp(nodeId, workId, fk_flow);
-                            }
-                        } else {
-                            if (confirm("公文模板不存在，是否创建空白公文？") == true) {
-                                //创建空白的模板
-                                CreateBlankDocTemp(nodeId, workId, fk_flow);
-                            }
-                        }
-
-                    }
-                } else {//不是开始节点，不做任何操作
-
-                }
-
-            } else {
-                alert(json.Message);
-                return;
-            }
-        }
-    });
-
-
+    //插件参数
     var paras = "WorkID=" + workId + ",";
     paras += "FK_Flow=" + fk_flow + ",";
     paras += "FK_Node=" + nodeId + ",";
@@ -2209,11 +2151,84 @@ function OpenOffice(isEdit) {
 
     var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
     var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
-    //alert(url);
-    window.open(url);
+
+    //提交数据
+    var doMethod = "FlowDocInit";
+    var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+
+    $.ajax({
+        url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&nodeId=" + nodeId +
+            "&workId=" + workId + "&fk_flow=" + fk_flow,
+        async: false,
+        success: function (result, status, xhr) {
+            var json = eval('(' + result + ')');
+            var msg = eval('(' + json.Message + ')');
+            var data = eval('(' + json.Data + ')');
+
+            if (json.Success) {
+                if (msg.IsStartNode == 1) {
+                    if (msg.IsExistFlowData == 1) {
+
+                        if (msg.IsExistTempData > 0) {//数据存在，有模板
+                            if (confirm("公文数据已经存在，是否重新选择模板？") == true) {
+                                //重新选择模板，覆盖旧的数据
+                                WinOpen("Admin/AttrNode/SelectDocTemp.htm?FK_Node=" + nodeId + "&WorkID=" + workId + "&FK_Flow=" + fk_flow + "&op=" + url, "重新模板选择");
+                            } else {
+                                OpVsto(url);
+                            }
+                        } else {//数据存在，没有模板
+
+                            OpVsto(url);
+                        }
+
+                    } else {
+
+                        if (msg.IsExistTempData > 0) {
+                            if (confirm("有" + msg.IsExistTempData + "个公文模板可供选择。【确定】打开模板列表，【取消】创建空白公文!") == true) {
+
+                                //选择模板进行创建
+                                WinOpen("Admin/AttrNode/SelectDocTemp.htm?FK_Node=" + nodeId + "&WorkID=" + workId + "&FK_Flow=" + fk_flow + "&op=" + url, "模板选择")
+                            } else {
+                                //创建空白的模板
+                                CreateBlankDocTemp(nodeId, workId, fk_flow, url);
+                            }
+                        } else {
+                            if (confirm("公文模板不存在，是否创建空白公文？") == true) {
+                                //创建空白的模板
+                                CreateBlankDocTemp(nodeId, workId, fk_flow, url);
+                            } else {
+                                return;
+                            }
+                        }
+
+                    }
+                } else {//不是开始节点
+                    doMethod = "IsExitNodeTempData";
+                    $.ajax({
+                        url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName +
+                            "&workId=" + workId + "&fk_flow=" + fk_flow,
+                        async: false,
+                        success: function (result, status, xhr) {
+                            if (result.indexOf('err@') == 0) {
+                                alert(result);
+                                return false;
+                            } else {
+                                OpVsto(url);
+                            }
+                        }
+                    });
+                }
+
+            } else {
+                alert(json.Message);
+                return;
+            }
+        }
+    });
 }
 
-function CreateBlankDocTemp(nodeId, workId, fk_flow) {
+
+function CreateBlankDocTemp(nodeId, workId, fk_flow, vstourl) {
     var doMethod = "CreateBlankDocTemp";
     var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
 
@@ -2222,14 +2237,24 @@ function CreateBlankDocTemp(nodeId, workId, fk_flow) {
             "&workId=" + workId + "&fk_flow=" + fk_flow,
         async: false,
         success: function (result, status, xhr) {
-            if (data.indexOf('err@') == 0) {
-                alert(data);
+            if (result.indexOf('err@') == 0) {
+                alert(result);
                 return false;
             } else {
                 return true;
             }
         }
     });
+
+    OpVsto(vstourl);
+}
+
+function OpVsto(vstourl) {
+    $('body').append('<a id="opvsto" hidden  href="">vsto操作</a>');
+    $('#opvsto').attr('href', vstourl);
+    $('#opvsto')[0].click();
+
+    $('#opvsto').remove();
 }
 function setModalMax() {
     //设置bootstrap最大化窗口

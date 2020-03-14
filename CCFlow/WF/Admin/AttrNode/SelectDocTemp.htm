@@ -79,8 +79,16 @@
                     },
                     success: function (data) {
                         $("#pageloading").hide();
+                        if (data.indexOf('err@') == 0) {
+                            alert(data);
+                        } else {
+                            $('body').append('<a id="opvsto"    href="">vsto操作</a>');
+                            $('#opvsto').attr('href', GetQueryString("op"));
+                            $('#opvsto')[0].click();
+
+                            //$('#opvsto').remove();
+                        }
                         window.close();
-                        alert(data);
                     }
                 });
             }
@@ -91,6 +99,7 @@
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
         <fieldset>
             <legend>模板列表</legend>
+            <a id="sasasas"></a>
             <ul>
                 <li>
                     模板列表:

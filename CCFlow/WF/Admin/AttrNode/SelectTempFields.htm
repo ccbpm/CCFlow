@@ -58,12 +58,13 @@
                     "&jsonStr=" + jsonStr ,
                 async: false,
                 success: function (result, status, xhr) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    alert(result);
+                    //if (data.indexOf('err@') == 0) {
+                    //    alert(result);
+                    //    return false;
+                    //} else {
+                    //    return true;
+                    //}
                 }
             });
         }

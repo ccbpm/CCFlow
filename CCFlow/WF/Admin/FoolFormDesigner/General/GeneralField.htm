@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>常用字段</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitBar("Main");
+
+            //查询出来数据.
+            var frmID = GetQueryString("FK_MapData");
+            var refPK = GetQueryString("RefPK");
+
+            var thisPK = refPK + "_FullData";
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = refPK + "_FullData";
+            en.SetPKVal(thisPK);
+            en.RetrieveFromDBSources();
+
+
+            en.Doc = FormatSQL(en.Doc);
+
+            //给下列框赋值.
+            GenerFullAllCtrlsVal(en);
+
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var frmID = GetQueryString("FK_MapData");
+            var refPK = GetQueryString("RefPK");
+
+            var thisPK = refPK + "_FullData";
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = refPK + "_FullData";
+            en.SetPKVal(en.MyPK);
+            var i = en.RetrieveFromDBSources();
+
+            en.FK_MapData = frmID;
+            en.ExtType = "FullData";
+            en.DBType = $("#DDL_DBType").val(); //获得选择的值.
+
+            var sql = $("#TB_Doc").val();
+            if (sql == '') {
+                alert("常用字段的sql不能为空！");
+                return;
+            }
+            en.Doc = sql; //设置主表的SQL.
+            var tag2 = $("#TB_Tag2").val();
+            en.Tag2 = tag2; //设置主表的SQL.
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            if (i == 0)
+                en.Insert();
+            else
+                en.Update();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div id="bar">
+        </div>
+        <table style="width: 99%;">
+            <tr>
+                <td colspan="2">
+                    常用字段数据SQL
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>数据源类型</td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>,可以为空.
+                    <div id="backFunction" style="color: Gray; display: none">
+                        <ul>
+                            <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法().</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" id="TB_Tag2" name="TB_Tag2" style="width: 99%;" />
+                </td>
+            </tr>
+        </table>
+        <fieldset>
+            <legend>帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的 SQL或者数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>
+                    实例： <font color="green">
+                        SELECT  Name as MingCheng, Tel as DianHua, Email FROM WF_EMP WHERE No='@Key'
+                    </font>
+                </li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+        </fieldset>
+    </form>
+</body>
+</html>

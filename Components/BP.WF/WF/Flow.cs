@@ -4717,7 +4717,6 @@ namespace BP.WF
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
-
               
 
                 this._enMap = map;

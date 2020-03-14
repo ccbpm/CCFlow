@@ -123,6 +123,11 @@ namespace BP.Frm
             {
                 Int64 workid = BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, WebUser.No, ap.HisHT, billNo);
                 en = new GEEntity(this.FrmID, workid);
+                if (DataType.IsNullOrEmpty(paras) == false)
+                {
+                    en.Copy(ap.HisHT);
+                    en.Update();
+                }
                 if (DataType.IsNullOrEmpty(title) == false)
                 {
                     en.SetValByKey("Title", title);

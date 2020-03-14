@@ -35,16 +35,7 @@ namespace BP.WF.HttpHandler
 
                 //查询出来数据实体.
                 string pkVal = this.PKVal;
-                if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                    pkVal = this.FID.ToString();
-
-                if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
-                {
-                    //根据流程的PWorkID获取他的爷爷流程
-                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
-                    pkVal = pWorkID;
-                }
-
+                
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
 
                 #region 如果图片显示.(先不考虑.)
@@ -650,21 +641,21 @@ namespace BP.WF.HttpHandler
                 if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {
                     //太爷孙关系
-                    if (fn.WhoIsPK == WhoIsPK.PPPWorkID)
+                    if (fn.WhoIsPK == WhoIsPK.P3WorkID)
                     {
-                        //根据PWorkID 获取PPPWorkID
+                        //根据PWorkID 获取P3WorkID
                         string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                        string pppworkID = DBAccess.RunSQLReturnString(sql);
-                        if (DataType.IsNullOrEmpty(pppworkID) == true || pppworkID == "0")
+                        string p3workID = DBAccess.RunSQLReturnString(sql);
+                        if (DataType.IsNullOrEmpty(p3workID) == true || p3workID == "0")
                             throw new Exception("err@不存在太爷孙流程关系，请联系管理员检查流程设计是否正确");
 
-                        Int64 PPPWorkID = Int64.Parse(pppworkID);
-                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + PPPWorkID);
-                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + PPPWorkID);
-                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + PPPWorkID);
+                        Int64 workID = Int64.Parse(p3workID);
+                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + workID);
+                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + workID);
+                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + workID);
                     }
 
-                    if (fn.WhoIsPK == WhoIsPK.PPWorkID)
+                    if (fn.WhoIsPK == WhoIsPK.P2WorkID)
                     {
                         //根据PWorkID 获取PPWorkID
                         GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
@@ -3194,8 +3185,7 @@ namespace BP.WF.HttpHandler
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);
-            string msg = null;
-
+            string msg = "";
             //求出来实体记录，方便执行事件.
             GEEntity en = new GEEntity(athDesc.FK_MapData);
             en.PKVal = pkVal;
@@ -3228,16 +3218,28 @@ namespace BP.WF.HttpHandler
                         pkVal = this.PWorkID.ToString();
                     if (fn.WhoIsPK == WhoIsPK.OID)
                     {
-                        if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                            pkVal = this.FID.ToString();
-                        if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                            pkVal = this.PWorkID.ToString();
+                        //如果是继承模式(AthUploadWay.Inherit)，上传附件使用本流程的WorkID,pkVal不做处理
 
-                        if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+                        //如果是协作模式(AthUploadWay.Interwork),上传附件就是用控制呈现模式
+                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
                         {
-                            //根据流程的PWorkID获取他的爷爷流程
-                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
-                            pkVal = pWorkID;
+                            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                                pkVal = this.FID.ToString();
+                            if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                                pkVal = this.PWorkID.ToString();
+                            if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
+                            {
+                                //根据流程的PWorkID获取他的P2流程
+                                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                                pkVal = pWorkID;
+                            }
+                            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
+                            {
+                                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                                //根据流程的PWorkID获取他的P2流程
+                                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                                pkVal = pWorkID;
+                            }
                         }
                     }
                 }
@@ -3245,19 +3247,31 @@ namespace BP.WF.HttpHandler
                 //自定义方案.
                 if (fn.FrmSln == FrmSln.Self)
                 {
-                    athDesc = new FrmAttachment(attachPk + "_" + this.FK_Node);
-                    if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                        pkVal = this.FID.ToString();
-
-                    if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                        pkVal = this.PWorkID.ToString();
-
-                    if (athDesc.HisCtrlWay == AthCtrlWay.PPWorkID)
+                    athDesc = new FrmAttachment();
+                    athDesc.MyPK = attachPk + "_" + this.FK_Node;
+                    if (athDesc.RetrieveFromDBSources() != 0)
                     {
-                        //根据流程的PWorkID获取他的爷爷流程
-                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
-                        pkVal = pWorkID;
+                        if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                            pkVal = this.FID.ToString();
+
+                        if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                            pkVal = this.PWorkID.ToString();
+
+                        if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
+                        {
+                            //根据流程的PWorkID获取他的爷爷流程
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                            pkVal = pWorkID;
+                        }
+                        if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
+                        {
+                            string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                            //根据流程的PWorkID获取他的P2流程
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                            pkVal = pWorkID;
+                        }
                     }
+                    
                 }
             }
 
@@ -3440,7 +3454,6 @@ namespace BP.WF.HttpHandler
                     {
 
                         string strtmp = SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
-                        //file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
                         HttpContextHelper.UploadFile(file, strtmp);
                         EncHelper.EncryptDES(strtmp, temp);//加密
                         File.Delete(strtmp);//删除临时文件
@@ -3448,7 +3461,6 @@ namespace BP.WF.HttpHandler
                     else
                     {
                         //文件保存的路径
-                        //file.SaveAs(temp);
                         HttpContextHelper.UploadFile(file, temp);
                     }
 
@@ -3478,24 +3490,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.FID = this.FID; //流程id.
                     if (fileEncrypt == true)
                         dbUpload.SetPara("IsEncrypt", 1);
-                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                    {
-                        /*如果是继承，就让他保持本地的PK. */
-                        dbUpload.RefPKVal = pkVal.ToString();
-                    }
 
-                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    {
-                        /*如果是协同，就让他是PWorkID. */
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-                        ps.Add("WorkID", pkVal);
-                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
-                        if (pWorkID == null || pWorkID == "0")
-                            pWorkID = pkVal;
-                        dbUpload.RefPKVal = pWorkID;
-                    }
-
+                    dbUpload.RefPKVal = pkVal.ToString();
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FileName = file.FileName;
@@ -4618,13 +4614,16 @@ namespace BP.WF.HttpHandler
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, fk_mapdata);
-                    if (fn.FrmSln == FrmSln.Default)
+                    /*if (fn.FrmSln == FrmSln.Default)
                     {
                         if (fn.WhoIsPK == WhoIsPK.FID)
                             athDesc.HisCtrlWay = AthCtrlWay.FID;
 
                         if (fn.WhoIsPK == WhoIsPK.PWorkID)
                             athDesc.HisCtrlWay = AthCtrlWay.PWorkID;
+
+                        if (fn.WhoIsPK == WhoIsPK.P2WorkID)
+                            athDesc.HisCtrlWay = AthCtrlWay.P2WorkID;
 
 
                     }
@@ -4642,7 +4641,7 @@ namespace BP.WF.HttpHandler
                         athDesc.IsDownload = true;
                         athDesc.MyPK = this.FK_FrmAttachment;
                         return athDesc;
-                    }
+                    }*/
 
                     if (fn.FrmSln == FrmSln.Self)
                     {

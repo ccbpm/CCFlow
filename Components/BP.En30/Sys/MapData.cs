@@ -150,6 +150,10 @@ namespace BP.Sys
         /// </summary>
         public const string FrmType = "FrmType";
         /// <summary>
+        /// 业务类型
+        /// </summary>
+        public const string EntityType = "EntityType";
+        /// <summary>
         /// 表单展示方式
         /// </summary>
         public const string FrmShowType = "FrmShowType";
@@ -1253,6 +1257,19 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FrmType, (int)value);
             }
         }
+
+
+        public int HisEntityType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDataAttr.EntityType);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.EntityType, value);
+            }
+        }
         /// <summary>
         /// 表单类型名称
         /// </summary>
@@ -1670,6 +1687,10 @@ namespace BP.Sys
 
                 map.AddTBInt(MapDataAttr.FrmShowType, 0, "表单展示方式", true, true);
 
+                map.AddDDLSysEnum(MapDataAttr.EntityType, 0, "业务类型", true, false, MapDataAttr.EntityType,
+                  "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
+                map.SetHelperAlert(MapDataAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
+
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);
                 map.AddTBString(MapDataAttr.DBSrc, "local", "数据源", true, false, 0, 100, 20);
@@ -2076,6 +2097,10 @@ namespace BP.Sys
 
             //现在表单的类型
             FrmType frmType = mdOld.HisFrmType;
+
+            //业务类型
+            int entityType = mdOld.HisEntityType;
+
             mdOld.Delete();
 
             // 求出dataset的map.
@@ -2156,9 +2181,14 @@ namespace BP.Sys
                             md.HisFrmType = mdOld.HisFrmType;
                             if (frmType == FrmType.Develop)
                                 md.HisFrmType = FrmType.Develop;
+
+                            if (entityType != md.HisEntityType)
+                                md.HisEntityType = entityType;
+
                             //表单应用类型保持不变
                             md.AppType = mdOld.AppType;
                             md.DirectInsert();
+                            Cash2019.UpdateRow(md.ToString(), md.No.ToString(), md.Row);
 
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
                             if (frmType == FrmType.Develop)
@@ -2243,8 +2273,6 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
-                            //  en.FK_MapData = fk_mapdata; 删除此行解决从表lab的问题。
-                            //en.MyPK = "LB_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
                             en.Insert();
                         }

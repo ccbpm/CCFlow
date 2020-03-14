@@ -122,11 +122,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 爷爷流程ID是主键
         /// </summary>
-        PPWorkID,
+        P2WorkID,
         /// <summary>
         /// 太爷爷流程ID是主键
         /// </summary>
-        PPPWorkID
+        P3WorkID
 
     }
     /// <summary>
@@ -620,7 +620,6 @@ namespace BP.WF.Template
                 this.IsPrint = false;
                 //不可以编辑.
                 this.FrmSln = Template.FrmSln.Default;
-                // this.IsEdit = false;
                 Node node = new Node(fk_node);
                 if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
@@ -628,7 +627,6 @@ namespace BP.WF.Template
 
                 }
                 return;
-               // throw new Exception("@表单关联信息已被删除。");
             }
         }
         /// <summary>

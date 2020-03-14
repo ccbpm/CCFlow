@@ -558,7 +558,7 @@ namespace BP.WF.HttpHandler
                 //打印单据实体、单据表单
                 if (DataType.IsNullOrEmpty(sourceType) == false && sourceType.Equals("Bill"))
                 {
-                    return MakeForm2Html.MakeBillToPDF(this.GetRequestVal("FrmID"), this.WorkID, this.GetRequestVal("BasePath"), false);
+                    return MakeForm2Html.MakeBillToPDF(this.GetRequestVal("FrmID"), this.WorkID, this.GetRequestVal("BasePath"), false,this.GetRequestVal("html"));
                 }
                 int nodeID = this.FK_Node;
                 if (this.FK_Node == 0)

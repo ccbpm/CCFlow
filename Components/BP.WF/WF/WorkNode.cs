@@ -4759,13 +4759,17 @@ namespace BP.WF
                         pkVal = this.HisGenerWorkFlow.FID;
                     if (item.WhoIsPK == WhoIsPK.PWorkID)
                         pkVal = this.HisGenerWorkFlow.PWorkID;
-                    if (item.WhoIsPK == WhoIsPK.PPWorkID)
+                    if (item.WhoIsPK == WhoIsPK.P2WorkID)
                     {
                         GenerWorkFlow gwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
                         if (gwf != null && gwf.PWorkID != 0)
                             pkVal = gwf.PWorkID;
                     }
-
+                    if (item.WhoIsPK == WhoIsPK.P3WorkID)
+                    {
+                        string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.HisGenerWorkFlow.PWorkID + ")";
+                        pkVal = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+                    }
 
 
                     MapAttrs mapAttrs = md.MapAttrs;
@@ -5131,11 +5135,17 @@ namespace BP.WF
                             this.rptGe = new GERpt("ND" + int.Parse(this.HisFlow.No) + "Rpt", this.WorkID);
                         pk = this.rptGe.PWorkID;
                         break;
-                    case WhoIsPK.PPWorkID:
-                        //获取PPWorkID
+                    case WhoIsPK.P2WorkID:
+                        //获取P2WorkID
                         GenerWorkFlow gwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
                         if (gwf != null && gwf.PWorkID != 0)
                             pk = gwf.PWorkID;
+                        break;
+                    case WhoIsPK.P3WorkID:
+                        string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.HisGenerWorkFlow.PWorkID + ")";
+                        pk = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+
+
                         break;
                     default:
                         throw new Exception(BP.WF.Glo.multilingual("@未判断的类型:{0}.", "WorkNode", "not_found_value", item.WhoIsPK.ToString()));
@@ -7754,6 +7764,8 @@ namespace BP.WF
                         //创建workid.
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
+                        //设置父子关系.
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, WebUser.No, nd.NodeID);
 
                         //执行保存.
                         BP.WF.Dev2Interface.Node_SaveWork(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID, this.rptGe.Row);
@@ -7762,9 +7774,6 @@ namespace BP.WF
                         //为开始节点设置待办.
                         BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
 
-
-                        //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, WebUser.No, nd.NodeID);
 
                         BP.WF.Dev2Interface.Flow_ReSetFlowTitle(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID);
 
@@ -7920,6 +7929,9 @@ namespace BP.WF
                         //创建workid.
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
+                        //设置父子关系.
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID);
+
                         //执行保存.
                         BP.WF.Dev2Interface.Node_SaveWork(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID, this.rptGe.Row);
 
@@ -7927,8 +7939,7 @@ namespace BP.WF
                         BP.WF.Dev2Interface.Node_AddTodolist(subWorkID, WebUser.No);
 
                         BP.WF.Dev2Interface.Flow_ReSetFlowTitle(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID);
-                        //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID);
+                        
 
                         //增加启动该子流程的同级子流程信息
                         GenerWorkFlow gwf = new GenerWorkFlow(subWorkID);

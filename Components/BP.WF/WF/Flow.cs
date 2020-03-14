@@ -2583,13 +2583,19 @@ namespace BP.WF
         {
             if (Directory.Exists(path) == false)
                 Directory.CreateDirectory(path);
-
-            DataSet ds = GetFlow(path);
+            DataSet ds;
+            try
+            {
+                ds = GetFlow(path);
+            }catch(Exception e)
+            {
+                throw new Exception("err@流程模板导出失败："+e.Message);
+            }
+            
             if (ds != null)
             {
                 string name = this.Name;
                 name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
-                // name = name + "." + this.Ver.Replace(":", "_") + ".xml";
                 name = name + ".xml";
                 string filePath = path + name;
                 ds.WriteXml(filePath);

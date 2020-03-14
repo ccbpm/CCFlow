@@ -97,7 +97,12 @@ namespace BP.Sys
         /// <summary>
         /// 父工作ID
         /// </summary>
-        ForPWorkID
+        ForPWorkID,
+
+        ForP2WorkID,
+
+        ForP3WorkID
+
     }
     /// <summary>
     /// 明细表工作方式

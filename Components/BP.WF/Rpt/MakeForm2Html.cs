@@ -1594,7 +1594,7 @@ namespace BP.WF
 
         }
 
-        public static string MakeBillToPDF(string frmId, Int64 workid, string basePath, bool urlIsHostUrl = false)
+        public static string MakeBillToPDF(string frmId, Int64 workid, string basePath, bool urlIsHostUrl = false,string htmlString=null)
         {
 
             string resultMsg = "";
@@ -1630,7 +1630,7 @@ namespace BP.WF
 
             //获取表单的信息执行打印
             string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + bill.No + "\\" + workid + "\\" + "index.htm";
-            resultMsg = MakeHtmlDocument(bill.No, workid, null, fileNameFormat, urlIsHostUrl, path, billUrl, frmId, basePath);
+            resultMsg = MakeHtmlDocument(bill.No, workid, null, fileNameFormat, urlIsHostUrl, path, billUrl, frmId, basePath, htmlString);
 
             if (resultMsg.IndexOf("err@") != -1)
                 return resultMsg;
@@ -1929,7 +1929,7 @@ namespace BP.WF
         public static string CCFlowAppPath = "/";
 
         public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo, string fileNameFormat,
-           bool urlIsHostUrl, string path, string indexFile, string nodeID, string basePath)
+           bool urlIsHostUrl, string path, string indexFile, string nodeID, string basePath,string htmlString=null)
         {
             try
             {
@@ -1939,7 +1939,6 @@ namespace BP.WF
 
                 //#region 定义变量做准备.
                 //生成表单信息.
-                Node nd = new Node(nodeID);
                 MapData mapData = new MapData(frmID);
 
                 if (mapData.HisFrmType == FrmType.Url)
@@ -2000,6 +1999,16 @@ namespace BP.WF
                         docs1 = docs1.Replace("@Title", gwf.Title);
                     BP.DA.DataType.WriteFile(indexFile, pageHtml);
                     return indexFile;
+                }else if(mapData.HisFrmType == FrmType.Develop)
+                {
+                    string ddocs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexDevelop.htm");
+                    ddocs = ddocs.Replace("@Docs", htmlString);
+
+                    ddocs = ddocs.Replace("@Height", mapData.FrmH.ToString() + "px");
+                    ddocs = ddocs.Replace("@Title", mapData.Name);
+                   
+                    BP.DA.DataType.WriteFile(indexFile, ddocs);
+                    return indexFile;
                 }
                 GEEntity en = new GEEntity(frmID, workid);
 
@@ -2015,7 +2024,7 @@ namespace BP.WF
                 }
                 //先判断节点中水印的设置
                 string words = "";
-
+                Node nd = null;
                 if (gwf != null)
                 {
                     nd = new Node(gwf.FK_Node);

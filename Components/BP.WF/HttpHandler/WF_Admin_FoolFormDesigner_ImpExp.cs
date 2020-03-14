@@ -8,6 +8,7 @@ using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
+using BP.Frm;
 
 namespace BP.WF.HttpHandler
 {
@@ -134,11 +135,10 @@ namespace BP.WF.HttpHandler
 
                 //创建临时文件.
                 string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
-                //this.context.Request.Files[0].SaveAs(temp);
                 HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 string fk_mapData = this.FK_MapData;
+                MapData mapData = new MapData(fk_mapData);
                 DataSet ds = new DataSet();
-                //ds.ReadXml(path);
                 ds.ReadXml(temp);
 
                 //执行装载.
@@ -151,6 +151,37 @@ namespace BP.WF.HttpHandler
                 //清空缓存
                 MapData mymd = new MapData(fk_mapData);
                 mymd.RepairMap();
+                if (mymd.HisEntityType == (int)EntityType.FrmBill)
+                {
+                    BP.Frm.FrmBill bill = new FrmBill(mymd.No);
+                    bill.EntityType = EntityType.FrmBill;
+                    bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
+
+                    //设置默认的查询条件.
+                    bill.SetPara("IsSearchKey", 1);
+                    bill.SetPara("DTSearchWay", 0);
+
+                    bill.Update();
+                    bill.CheckEnityTypeAttrsFor_Bill();
+                }
+                #endregion 如果是单据.
+
+                #region 如果是实体 EnityNoName .
+                if (mymd.HisEntityType == (int)EntityType.FrmDict)
+                {
+                    BP.Frm.FrmDict entityDict = new FrmDict(mymd.No);
+                    entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
+                    entityDict.BtnNewModel = 0;
+
+                    //设置默认的查询条件.
+                    entityDict.SetPara("IsSearchKey", 1);
+                    entityDict.SetPara("DTSearchWay", 0);
+
+                    entityDict.EntityType = EntityType.FrmDict;
+
+                    entityDict.Update();
+                    entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+                }
                 BP.Sys.SystemConfig.DoClearCash();
                 return "执行成功.";
             }
@@ -178,6 +209,37 @@ namespace BP.WF.HttpHandler
                     //清空缓存
                     MapData mymd = new MapData(fk_mapData);
                     mymd.RepairMap();
+                    if (mymd.HisEntityType == (int)EntityType.FrmBill)
+                    {
+                        BP.Frm.FrmBill bill = new FrmBill(mymd.No);
+                        bill.EntityType = EntityType.FrmBill;
+                        bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
+
+                        //设置默认的查询条件.
+                        bill.SetPara("IsSearchKey", 1);
+                        bill.SetPara("DTSearchWay", 0);
+
+                        bill.Update();
+                        bill.CheckEnityTypeAttrsFor_Bill();
+                    }
+                    #endregion 如果是单据.
+
+                    #region 如果是实体 EnityNoName .
+                    if (mymd.HisEntityType == (int)EntityType.FrmDict)
+                    {
+                        BP.Frm.FrmDict entityDict = new FrmDict(mymd.No);
+                        entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
+                        entityDict.BtnNewModel = 0;
+
+                        //设置默认的查询条件.
+                        entityDict.SetPara("IsSearchKey", 1);
+                        entityDict.SetPara("DTSearchWay", 0);
+
+                        entityDict.EntityType = EntityType.FrmDict;
+
+                        entityDict.Update();
+                        entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+                    }
                     BP.Sys.SystemConfig.DoClearCash();
                     return "执行成功.";
                 }
@@ -240,8 +302,39 @@ namespace BP.WF.HttpHandler
                     nd.RepareMap(nd.HisFlow);
                 }
                 //清空缓存
-                MapData mymd = new MapData(fromMapData);
+                MapData mymd = new MapData(this.FK_MapData);
                 mymd.RepairMap();
+                if (mymd.HisEntityType == (int)EntityType.FrmBill)
+                {
+                    BP.Frm.FrmBill bill = new FrmBill(mymd.No);
+                    bill.EntityType = EntityType.FrmBill;
+                    bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
+
+                    //设置默认的查询条件.
+                    bill.SetPara("IsSearchKey", 1);
+                    bill.SetPara("DTSearchWay", 0);
+
+                    bill.Update();
+                    bill.CheckEnityTypeAttrsFor_Bill();
+                }
+                #endregion 如果是单据.
+
+                #region 如果是实体 EnityNoName .
+                if (mymd.HisEntityType == (int)EntityType.FrmDict)
+                {
+                    BP.Frm.FrmDict entityDict = new FrmDict(mymd.No);
+                    entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
+                    entityDict.BtnNewModel = 0;
+
+                    //设置默认的查询条件.
+                    entityDict.SetPara("IsSearchKey", 1);
+                    entityDict.SetPara("DTSearchWay", 0);
+
+                    entityDict.EntityType = EntityType.FrmDict;
+
+                    entityDict.Update();
+                    entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+                }
                 BP.Sys.SystemConfig.DoClearCash();
                 return "执行成功.";
             }

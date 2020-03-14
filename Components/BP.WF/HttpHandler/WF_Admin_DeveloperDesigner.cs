@@ -70,6 +70,10 @@ namespace BP.WF.HttpHandler
 
                 // HtmlTemplateFile 保存到数据库中
                 BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
+
+                //检查数据完整性
+                GEEntity en = new GEEntity(this.FK_MapData);
+                en.CheckPhysicsTable();
                 return "保存成功";
             }
             return "保存成功.";

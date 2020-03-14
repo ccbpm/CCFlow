@@ -111,7 +111,10 @@ namespace BP.Sys
                     return false;
             }
         }
-
+        /// <summary>
+        /// 删除之前要做的工作
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeDelete()
         {
             MapAttrs attrs = new MapAttrs();

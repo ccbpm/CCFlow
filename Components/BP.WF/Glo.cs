@@ -5872,7 +5872,7 @@ namespace BP.WF
 
                 if (athDesc.AthUploadWay == AthUploadWay.Interwork)
                 {
-                    /*共享模式*/
+                    /*协作模式*/
                     dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                 }
                 return dbs;

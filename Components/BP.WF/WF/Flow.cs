@@ -255,7 +255,18 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.FlowMark, value);
             }
         }
-
+        public string OrgNo
+        {
+            get
+            {
+                string str = this.GetValStringByKey(FlowAttr.OrgNo);
+                return str;
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.OrgNo, value);
+            }
+        }
         /// <summary>
         /// 节点图形类型
         /// </summary>
@@ -4678,6 +4689,8 @@ namespace BP.WF
                 //设计类型 .
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
 
+                map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 30, 10);
+
                 //参数.
                 map.AddTBAtParas(1000);
 
@@ -6429,6 +6442,13 @@ namespace BP.WF
         public void CheckRpt()
         {
             this.DoCheck_CheckRpt(this.HisNodes);
+        }
+        protected override bool beforeInsert()
+        {
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.OrgNo = WebUser.FK_Dept;
+
+            return base.beforeInsert();
         }
         /// <summary>
         /// 更新之前做检查

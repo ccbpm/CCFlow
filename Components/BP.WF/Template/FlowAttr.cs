@@ -296,6 +296,10 @@ namespace BP.WF.Template
         /// 子流程结束时，让父流程自动运行到下一步
         /// </summary>
         public const string IsToParentNextNode = "IsToParentNextNode";
+        /// <summary>
+        /// OrgNo
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion 父子流程
 
         #region 数据同步方式.

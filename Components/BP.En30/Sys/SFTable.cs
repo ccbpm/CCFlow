@@ -860,7 +860,6 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", true, false, 0, 1000, 600, true);
-
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
 
                 //查找.

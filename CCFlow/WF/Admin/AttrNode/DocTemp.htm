@@ -25,7 +25,7 @@
             InitDocTemp();
             $("#pageloading").hide();
         });
-         
+
         function Imp_Done() {
             var pkval = GetQueryString("pkval");
             var fileValue = $("#File_Upload").val();
@@ -61,7 +61,7 @@
                         return;
                     } else {
                         var json = eval('(' + data + ')');
-                        $('#docTempList').append('<li><span>' + json.Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json.No + '\")\'>删除</a></li>');
+                        $('#docTempList').append('<li><span>' + json.Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json.No + '\")\'>删除</a>&nbsp;&nbsp;&nbsp;<a href=\'javascript:SelectField(\"' + json.No + '\")\'>选择填充字段</a></li>');
                         $("#File_Upload").val('');
                     }
                 }
@@ -95,11 +95,15 @@
                         var json = eval('(' + data + ')');
 
                         for (var i = 0; i < json.length; i++) {
-                            $('#docTempList').append('<li id="doc_' + json[i].No + '"><span>' + json[i].Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json[i].No + '\")\'>删除</a></li>');
+                            $('#docTempList').append('<li id="doc_' + json[i].No + '"><span>' + json[i].Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json[i].No + '\")\'>删除</a>&nbsp;&nbsp;&nbsp;<a href=\'javascript:SelectField(\"' + json[i].No + '\")\'>选择填充字段</a></li>');
                         }
                     }
                 }
             });
+        }
+        function SelectField(id) {
+            var newWindow = window.open("SelectTempFields.htm?pkval="+id+"&FK_MapData=ND" + GetQueryString("pkval"), "选择填充字段", 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=false,toolbar=false,location=false,center=yes,center: yes;');
+            newWindow.focus();
         }
         function DelDocTemp(id) {
             if (confirm("确认删除吗？") == true) {
@@ -120,8 +124,8 @@
                         if (data.indexOf('err@') == 0) {
                             alert(data);
                             return;
-                        } else {  
-                            var o = $('#doc_' + id).remove();// 
+                        } else {
+                            var o = $('#doc_' + id).remove();//
                         }
                     }
                 });

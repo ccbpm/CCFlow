@@ -158,21 +158,20 @@ namespace BP.WF.HttpHandler
                     BP.DA.DBAccess.SaveBytesToDB(bytes, "ND" + int.Parse(flowNo) + "Rpt", "OID", workId, "WordFile");
 
                     //模板与业务的绑定
+
                     DocTempFlow dtf = new DocTempFlow();
                     dtf.CheckPhysicsTable();
 
                     if (dtf.IsExit(DocTempFlowAttr.WorkID, workId))
                     {
-                        dtf.TempNo = docTempNo;
-                        dtf.Update();
+                        dtf.Delete();
                     }
-                    else
-                    {
-                        dtf.WorkID = workId;
-                        dtf.TempNo = docTempNo;
-                        dtf.Insert();
-                    }
-                     
+                    
+                    
+                    dtf.WorkID = workId;
+                    dtf.TempNo = docTempNo;
+                    dtf.MyPK = workId + "_" + docTempNo;
+                    dtf.Insert();
 
                     return "模板导入成功.";
                 }

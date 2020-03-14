@@ -121,11 +121,11 @@ function FlowFormTree_Init() {
 }
 $(function () {
     var pageName = GetLocalPageName();
-
-    if (pageName == "MyFlowTreeReadonly.htm") {
-        IsReadonly = "1";
-        FlowFormTree_Init();
-    }
+    //变化左侧树的方式，此处去掉
+    //if (pageName == "MyFlowTreeReadonly.htm") {
+    //    IsReadonly = "1";
+    //    FlowFormTree_Init();
+    //}
 });
 
 function addTab(id, title, url, IsCloseEtcFrm) {

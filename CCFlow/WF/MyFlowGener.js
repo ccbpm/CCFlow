@@ -2146,6 +2146,7 @@ function OpenOffice(isEdit) {
                 //插件参数
                 var paras = "WorkID=" + workId + ",";
                 paras += "FK_Flow=" + fk_flow + ",";
+                paras += "TempNo=" + json.Data + ",";
                 paras += "FK_Node=" + nodeId + ",";
 
                 var webUser = new WebUser();

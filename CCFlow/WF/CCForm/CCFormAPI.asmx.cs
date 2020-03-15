@@ -891,6 +891,23 @@ namespace CCFlow.WF.CCForm
         }
 
         #region       公文主文件
+
+        [WebMethod]
+        public DataSet WordDoc_GetTempDocMainData(string userNo, string sid, string frmID, string pkValue, string atParas, string tempNo)
+        {
+            //让他登录.
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
+            //解析这个表单.
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, pkValue, atParas);
+
+            string sql = "SELECT * from wf_DocTemplate WHERE No='" + tempNo + "' ";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "TempFields";
+            ds.Tables.Add(dt);
+
+            return ds;
+        }
         [WebMethod]
         public string WordDoc_GetWordFile(string flowNo, int nodeId, string userNo, long workId)
         {

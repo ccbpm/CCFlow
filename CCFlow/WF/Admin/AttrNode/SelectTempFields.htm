@@ -41,6 +41,25 @@
                 }
                 t += 1;
             }
+            GetSelectedFields();
+        }
+
+        function GetSelectedFields() {
+            $("input[name='tempField']").attr("checked", false);
+            var doMethod = "GetSelectedFields";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $.ajax({
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkVal=" + pkVal,
+                async: false,
+                success: function (result, status, xhr) {
+                    if (result != "") {
+                        var fieldsList = result.split(',');
+                        for (var i = 0; i < fieldsList.length; i++) {
+                            $("#"+fieldsList[i]).prop("checked",true);
+                        }
+                    }
+                }
+            });
         }
         function save() {
             var fieldList = new Array();
@@ -50,12 +69,12 @@
                 }
             });
 
-            var jsonStr = JSON.stringify(fieldList);
+            var jsonStr = fieldList.length == 0 ? "" : fieldList.toString();
             var doMethod = "SetDocTempFields";
             var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
             $.ajax({
                 url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkVal=" + pkVal +
-                    "&jsonStr=" + jsonStr ,
+                    "&jsonStr=" + jsonStr,
                 async: false,
                 success: function (result, status, xhr) {
                     alert(result);

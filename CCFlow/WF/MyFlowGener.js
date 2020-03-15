@@ -2132,6 +2132,10 @@ function OpenOffice(isEdit) {
     var workId = GetQueryString("WorkID");
     var fk_flow = GetQueryString("FK_Flow");
 
+    if (!CheckDocTempFields(workId, fk_flow)) {
+        return;
+    }
+
     //插件参数
     var paras = "WorkID=" + workId + ",";
     paras += "FK_Flow=" + fk_flow + ",";
@@ -2227,7 +2231,28 @@ function OpenOffice(isEdit) {
     });
 }
 
+//检测与模板上的对应的字段是否都有数据
+function CheckDocTempFields(workId, fk_flow) {
+    var doMethod = "CheckDocTempFields";
+    var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+    $.ajax({
+        url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName +
+            "&workId=" + workId + "&fk_flow=" + fk_flow,//+ "&no=" + no,
+        async: false,
+        success: function (result, status, xhr) {
+            var json = eval('(' + result + ')');
 
+            if (json.Success) {
+                return true;
+            } else {
+                alert(json.Message);
+                return false;
+            }
+        }
+    });
+}
+
+//创建空白模板数据
 function CreateBlankDocTemp(nodeId, workId, fk_flow, vstourl) {
     var doMethod = "CreateBlankDocTemp";
     var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";

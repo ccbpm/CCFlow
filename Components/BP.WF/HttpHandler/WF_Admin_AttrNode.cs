@@ -13,6 +13,8 @@ using BP.WF.XML;
 using System.IO;
 using BP.Tools;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BP.WF.HttpHandler
 {
@@ -72,6 +74,92 @@ namespace BP.WF.HttpHandler
 
 
         #region    公文维护
+        /// <summary>
+        /// 打开公文之前对字段的检验（必填等）
+        /// </summary>
+        /// <returns></returns>
+        public string CheckDocTempFields()
+        {
+            MethodReturnMessage<string> msg = new MethodReturnMessage<string>
+            {
+                Success = false
+            };
+
+            try
+            {
+                int workId = int.Parse(this.GetRequestVal("workId"));
+                string flowNo = this.GetRequestVal("fk_flow");
+
+                DocTempFlow dtf = new DocTempFlow();
+                int count = dtf.Retrieve(DocTempFlowAttr.WorkID, workId);
+
+                if (count == 0)
+                {
+                    msg.Success = true;
+                    msg.Message = "当前业务:" + workId + "没有绑定模板";
+                }
+                else
+                {
+                    DocTemplate dt = new DocTemplate();
+                    count = dt.Retrieve(DocTemplateAttr.No, dtf.TempNo);
+
+                    if (count == 0)
+                    {
+                        msg.Message = "业务:" + workId + "绑定的模板：" + dt.Name + "不存在.";
+                    }
+                    else
+                    {
+                        string fieldsStr = dt.FillTempFields;
+
+                        if (string.IsNullOrWhiteSpace(dt.FillTempFields))
+                        {
+                            msg.Success = true;
+                            msg.Message = "业务:" + workId + "绑定的模板：" + dt.Name + "没有设置需要验证的表单字段.";
+                        }
+                        else
+                        {
+                            DataTable dTable = DBAccess.RunSQLReturnTable("select " + dt.FillTempFields + " from ND" + int.Parse(flowNo) + "Rpt where oid=" + workId);
+                            if (dTable.Rows.Count == 0)
+                            {
+                                msg.Message = "业务:" + workId + "数据丢失";
+                            }
+                            else
+                            {
+                                bool isPass = true;
+                                for (int i = 0; i < dTable.Columns.Count; i++)
+                                {
+                                    string colName = dTable.Columns[i].ColumnName;
+                                    string colVal = dTable.Rows[0][colName].ToString();
+
+                                    if (string.IsNullOrWhiteSpace(colVal))
+                                    {
+                                        isPass = false;
+                                        msg.Message = "字段：" + colName + "不可以为空";
+                                        break;
+                                    }
+                                }
+
+                                if (isPass)
+                                {
+                                    msg.Success = true;
+                                    msg.Message = "字段“" + dt.FillTempFields + "”验证通过";
+                                }
+
+                            }
+                        }
+
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                msg.Message = ex.Message;
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
         public string IsExitNodeTempData()
         {
             int workId = int.Parse(this.GetRequestVal("workId"));
@@ -87,7 +175,21 @@ namespace BP.WF.HttpHandler
                 return "成功获取数据.";
             }
         }
+        public string GetSelectedFields()
+        {
 
+            string no = this.GetRequestVal("pkVal");
+
+            DocTemplate docTemplate = new DocTemplate();
+            if (docTemplate.Retrieve(DocTemplateAttr.No, no) > 0)
+            {
+                return docTemplate.FillTempFields;
+            }
+            else
+            {
+                return "err@选择的模版记录不存在.";
+            }
+        }
         public string SetDocTempFields()
         {
             string no = this.GetRequestVal("pkVal");
@@ -166,8 +268,8 @@ namespace BP.WF.HttpHandler
                     {
                         dtf.Delete();
                     }
-                    
-                    
+
+
                     dtf.WorkID = workId;
                     dtf.TempNo = docTempNo;
                     dtf.MyPK = workId + "_" + docTempNo;

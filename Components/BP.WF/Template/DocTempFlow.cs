@@ -99,7 +99,7 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
                 map.AddTBInt(DocTempFlowAttr.WorkID, 0, "业务号", true, true);
-                map.AddTBInt(DocTempFlowAttr.TempNo, 0, "模板编号", true, false);
+                map.AddTBString(DocTempFlowAttr.TempNo, null, "模板编号", true, false, 0, 20, 200);
 
                 this._enMap = map;
                 return this._enMap;

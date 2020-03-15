@@ -3576,7 +3576,6 @@ namespace BP.WF
             emp.No = userNo;
             emp.RetrieveFromDBSources();
             WebUser.SignInOfGener(emp);
-
         }
         /// <summary>
         /// 注销当前登录

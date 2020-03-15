@@ -270,6 +270,7 @@ namespace BP.Web
         {
             if (val == null)
                 return;
+
             //2019-07-25 zyt改造
             if (IsBSMode == true
                 && HttpContextHelper.Current != null

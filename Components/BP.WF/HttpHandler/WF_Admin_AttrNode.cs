@@ -142,6 +142,7 @@ namespace BP.WF.HttpHandler
                                 if (isPass)
                                 {
                                     msg.Success = true;
+                                    msg.Data = dt.FillTempFields;
                                     msg.Message = "字段“" + dt.FillTempFields + "”验证通过";
                                 }
 

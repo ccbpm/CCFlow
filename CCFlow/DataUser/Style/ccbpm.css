@@ -25,10 +25,10 @@ input[name="Btn_Back"] {
 #bigimg {
     cursor: zoom-out;
 }
-/* 按钮风格 */
+/* 按钮风格  edit by zhoupeng 我们就使用白色的背景颜色了，不要变动了,不然影响全局. */
 input[type="button"], input[type="submit"], input[type="file"] {
     border: 0; /*background: #4D77A7;*/
-    background: #62CAE3;
+    background:  white;
     color: #545454;
     font-size: 12px;
     padding: 4px 15px;

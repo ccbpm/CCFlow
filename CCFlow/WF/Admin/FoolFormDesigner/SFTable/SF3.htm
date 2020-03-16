@@ -86,7 +86,7 @@
 
             if ($("#DDL_CodeStruct").val() == CONST_STRUCTS[1].No) {
 
-                var rootValue = $("#TB_RootValue").val() || "";
+                var rootValue = $("#TB_RootVal").val() || "";
                 if (rootValue == "") {
                     alert("根节点值必须填写！");
                     return;
@@ -175,7 +175,7 @@
             </tr>
             <tr id="rootTr" style="display: none;">
                 <td>根节点值</td>
-                <td class="style1"><input type="text" id="TB_RootValue" name="TB_RootValue" /></td>
+                <td class="style1"><input type="text" id="TB_RootVal" name="TB_RootVal" /></td>
                 <td>填写此树的根节点值,也可是一个表达式 比如:WebUser.FK_Dept </td>
             </tr>
             <tr>

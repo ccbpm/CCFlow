@@ -67,8 +67,37 @@ function PrintHtml() {
 function PrintPDF() {
     var W = document.body.clientWidth - 40;
     var H = document.body.clientHeight - 40;
-    var url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=pdf";
-    OpenBootStrapModal(url, "eudlgframe", "打印PDF",600, 500, "icon-property", null, null, null, null, null, "black");
+    $("#Btn_PrintPdf").val("PDF打印中...");
+    $("#Btn_PrintPdf").attr("disabled", true);
+    var _html = document.getElementById("divCurrentForm").innerHTML;
+    _html = _html.replace("height: " + $("#topContentDiv").height() + "px", "");
+    _html = _html.replace("height: " + $("#contentDiv").height() + "px", "");
+    _html = _html.replace("height: " + $("#divCCForm").height() + "px", "");
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+    handler.AddPara("html", _html);
+    handler.AddPara("FrmID", GetQueryString("FrmID"));
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+    handler.AddPara("SourceType", "Bill");
+    var data = handler.DoMethodReturnString("Packup_Init");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+    } else {
+        $("#Btn_PrintPdf").val("PDF打印成功");
+        $("#Btn_PrintPdf").attr("disabled", false);
+        $("#Btn_PrintPdf").val("打印pdf");
+        var urls = JSON.parse(data);
+        for (var i = 0; i < urls.length; i++) {
+            if (urls[i].No == "pdf") {
+                window.open(urls[i].Name);
+                break;
+            }
+               
+        }
+    }
+    
+    //var url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=pdf";
+   // OpenBootStrapModal(url, "eudlgframe", "打印PDF",600, 500, "icon-property", null, null, null, null, null, "black");
 
 }
 

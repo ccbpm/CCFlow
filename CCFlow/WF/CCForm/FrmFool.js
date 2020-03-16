@@ -795,6 +795,10 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
+        //判断外键是否为树形结构
+        if (mapAttr.AtPara.indexOf("@CodeStruct=1") != -1)
+            return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:60%'></select>";
+
         return "<select style='width:100%' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
     }
 
@@ -808,15 +812,8 @@ function InitMapAttrOfCtrl(mapAttr) {
             enableAttr = "disabled='disabled'";
 
         //判断外键是否为树形结构
-        var uiBindKey = mapAttr.UIBindKey;
-        if (uiBindKey != null && uiBindKey != undefined && uiBindKey != "") {
-            var sfTable = new Entity("BP.Sys.SFTable");
-            sfTable.SetPKVal(uiBindKey);
-            var count = sfTable.RetrieveFromDBSources();
-            if (count != 0 && sfTable.CodeStruct == "1") {
-                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:60%'></select>";
-            }
-        }
+        if (mapAttr.AtPara.indexOf("@CodeStruct=1") != -1)
+            return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:60%'></select>";
 
         return "<select style='width:100%' id='DDL_" + mapAttr.KeyOfEn + "'  name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
     }

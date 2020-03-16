@@ -848,7 +848,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         var data = tree.tree('getSelected');
         if (data != null) {
             formArrResult.push(name + '=' + data.id);
-            formArrResult.push(name + 'T=' + data.text);
+            formArrResult.push(name.replace("DDL_","TB_") + 'T=' + data.text);
         }
     });
 

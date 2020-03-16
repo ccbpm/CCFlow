@@ -34,6 +34,7 @@
 
     ComboTree.prototype.init = function () {
         var src = this.options.listSource;
+        src = src.replace(/@Key/g, '');
         var dt = DBAccess.RunDBSrc(src);
         $.extend(true, this.copysource, dt);
         this.initstruct();
@@ -128,7 +129,7 @@
             }
 
             //点击x关闭事件处理
-            if ($(event.target).attr('class') === 'close') {
+            if ($(event.target).attr('class').indexOf('close')!=-1) {
                 _this.uncheckrow($(event.target).attr('data-id'));
             }
 
@@ -306,11 +307,11 @@
                     if (_this.options.isShowSignature == false) {
                         item = $("<span data-id='" + oliId + "' class='input-keyword-item'></span>");
                         namespan = $("<input type='text' style='border:0px;width:" + length * 15 + "px;margin:1px 1px !important;' value='" + targetName + "' onchange='ChangeDataName(\"" + _this.options.keyOfEn + "\")'  />");
-                        checkicon = $("<i class='close' data-id='" + oliId + "' >x</i>");
+                        checkicon = $("<i class='close only-print-hidden' data-id='" + oliId + "' >x</i>");
                     } else {
                         item = $("<span data-id='" + oliId + "' class='input-keyword-item only-print-hidden'></span>");
                         namespan = $("<input type='text' style='border:0px;width:" + length * 15 + "px;margin:1px 1px !important;' value='" + targetName + "' onchange='ChangeDataName(\"" + _this.options.keyOfEn + "\")'  />");
-                        checkicon = $("<i class='close' data-id='" + oliId + "' >x</i>");
+                        checkicon = $("<i class='close only-print-hidden' data-id='" + oliId + "' >x</i>");
                         if ("undefined" == typeof UserICon) {
                             UserICon = '../../DataUser/Siganture/';
                         } else {
@@ -351,7 +352,7 @@
             '</div>' +
             '<i class="fa fa-caret-down handle-arrow only-print-hidden"></i>' +
             '</div>' +
-            '<div class="drop-down-wrap">' +
+            '<div class="drop-down-wrap" style="position: absolute;background-color: rgb(255, 255, 255);z-index: 2014;width: 400px;box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);">'+
             '<div _id="comboxinputcontainer" class="comboxinputcontainer keyword-search">' +
             '<input _id="comboxinput" placeholder="输入关键词搜索" type="text">' +
             '<span tag="search" class="search-icons"><i class="fa fa-search"></i></span>' +
@@ -451,11 +452,11 @@
         if (_this.options.isShowSignature == false) {
             item = $("<span data-id='" + oliId + "' class='input-keyword-item'></span>");
             namespan = $("<input type='text' style='border:0px;width:" + length * 15 + "px;margin:1px 1px !important;' value='" + target.attr('data-name') + "' onchange='ChangeDataName(\"" + _this.options.keyOfEn + "\")'  />");
-            checkicon = $("<i class='close' data-id='" + oliId + "' >x</i>");
+            checkicon = $("<i class='close only-print-hidden' data-id='" + oliId + "' >x</i>");
         } else {
             item = $("<span data-id='" + oliId + "' class='only-print-hidden input-keyword-item'></span>");
             namespan = $("<input type='text' style='border:0px;width:" + length * 15 + "px;margin:1px 1px !important;' value='" + target.attr('data-name') + "' onchange='ChangeDataName(\"" + _this.options.keyOfEn + "\")'  />");
-            checkicon = $("<i class='close' data-id='" + oliId + "' >x</i>");
+            checkicon = $("<i class='close only-print-hidden' data-id='" + oliId + "' >x</i>");
             if ("undefined" == typeof UserICon) {
                 UserICon = '../../DataUser/Siganture/';
             } else {

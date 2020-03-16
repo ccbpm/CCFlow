@@ -288,9 +288,36 @@ function MultipleInputSearch(mapExt, defaultVal,tbID) {
     var width = tb.width();
     var height = tb.height();
     tb.hide();
+    //获取当前元素是否在P标签内
+    var parent;
+    var container;
+    if(tb.parent().length == 1 && tb.parent()[0].tagName.toUpperCase()=="P"){
+        parent = tb.parent()[0];
+        var ptext = $(parent).text();
+        if(ptext.indexOf(tb.attr("data-name"))!=-1){
+            var _html = $(parent).html();
+            $(parent).html(_html.replace(ptext,""));
+            tb= $("#" + tbID);
+            tb.before($("<div style='float:left'>"+ptext+"</div>"));
 
-    var container = $("<div></div>");
-    tb.before(container);
+            container = $("<div style='float:left'></div>");
+            tb.before(container);
+            tb.before($("<div style='clear:both'></div>"));
+
+        }else{
+            container = $("<div></div>");
+            tb.before(container);
+        }
+
+
+    }else{
+        container = $("<div></div>");
+        tb.before(container);
+    }
+
+
+
+
     container.attr("id", mapExt.AttrOfOper + "_comboTree");
    
     container.addClass("select-tree-wrap");

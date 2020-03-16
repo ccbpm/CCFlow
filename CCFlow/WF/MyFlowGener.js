@@ -1718,7 +1718,10 @@ function GenerWorkNode() {
         }
     } else {
         //处理下拉框级联等扩展信息
-        AfterBindEn_DealMapExt(flowData);
+        if (pageData.IsReadonly == null || pageData.IsReadonly == "0") {
+            AfterBindEn_DealMapExt(flowData);
+        }
+
     }
 
     Common.MaxLengthError();

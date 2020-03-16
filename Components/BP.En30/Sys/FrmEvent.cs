@@ -944,12 +944,12 @@ namespace BP.Sys
             {
                 if (doc.Contains("@" + attr.Key) == false)
                     continue ;
-                if (attr.MyDataType == DataType.AppString
-                    || attr.MyDataType == DataType.AppDateTime
-                    || attr.MyDataType == DataType.AppDate)
-                    doc = doc.Replace("@" + attr.Key, "'" + en.GetValStrByKey(attr.Key) + "'");
-                else
-                    doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                //if (attr.MyDataType == DataType.AppString
+                //    || attr.MyDataType == DataType.AppDateTime
+                //    || attr.MyDataType == DataType.AppDate)
+                //    doc = doc.Replace("@" + attr.Key, "'" + en.GetValStrByKey(attr.Key) + "'");
+                //else
+                doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
             }
 
             doc = doc.Replace("~", "'");

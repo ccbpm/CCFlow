@@ -126,18 +126,13 @@
                 if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
                 toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
-
                 toolBar += "<input type=button value='" + btnSave + "&关闭' onclick='SaveIt(true);' />";
-
             }
 
             if (power.IsSave == 1 && power.IsInsert == 1) {
-                //var btnSave = frmBill.BtnSaveLable;
-                //if (btnSave == null || btnSave == "" || btnSave == undefined)
                 btnSave = "保存&新建";
                 toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
             }
-
 
             if (power.IsSubmit == 1) {
                 var btnSubmit = frmBill.BtnSubmitLable;
@@ -553,8 +548,7 @@
         }
 
         function SaveItAndClose() {
-
-            SaveIt();
+            Save();
             window.close();
         }
 

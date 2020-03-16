@@ -152,6 +152,13 @@
                 if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
                 toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
+
+                toolBar += "<input type=button value='" + btnSave + "&关闭' onclick='SaveIt(true);' />";
+            }
+
+            if (power.IsSave == 1 && power.IsInsert == 1) {
+                btnSave = "保存&新建";
+                toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
             }
 
             if (power.IsSubmit == 1) {
@@ -228,37 +235,35 @@
             WinOpenFull(url);
         }
 
-        var hkey_root,hkey_path,hkey_key
+        var hkey_root, hkey_path, hkey_key
         hkey_root = "HKEY_CURRENT_USER";
-        hkey_path="\\Software\\Microsoft\\Internet Explorer\\PageSetup\\"
+        hkey_path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\"
 
         // 设置页眉页脚为空
-        function PageSetup_Null()
-        {
-         try{
-          var RegWsh = CreateObject("WScript.Shell") ;
-          hkey_key="header" ;
-          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"") ;
-          hkey_key="footer" ;
-          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"") ;
-          }
-         catch(e){}
+        function PageSetup_Null() {
+            try {
+                var RegWsh = CreateObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+            }
+            catch (e) { }
         }
 
         // 设置页眉页脚为默认值
-        function PageSetup_Default()
-        {
-         try{
-          var RegWsh = CreateObject("WScript.Shell") ;
-          hkey_key="header" ;
-          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"&w&b页码，&p/&P") ;
-          hkey_key="footer" ;
-          RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"&u&b&d") ;
-          }
-         catch(e){}
-}
+        function PageSetup_Default() {
+            try {
+                var RegWsh = CreateObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "&w&b页码，&p/&P");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "&u&b&d");
+            }
+            catch (e) { }
+        }
         function wprint() {
-           // PageSetup_Null();
+            // PageSetup_Null();
             //var headstr = "<html><head><title></title></head><body>";
             //var footstr = "</body>";
             //var printData = document.getElementById("divCurrentForm").innerHTML; //获得 div 里的所有 html 数据
@@ -270,9 +275,9 @@
 
 
             window.print();
-            
-            
-            
+
+
+
         }
 
         ///执行方法.
@@ -350,11 +355,28 @@
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_SaveAsDraft");
-
             var url = "Draft.htm?FrmID=" + GetQueryString("FrmID");
             window.location.href = url;
         }
-        function SaveIt() {
+
+        function SaveIt(isClose) {
+
+            var data = Save(); //保存.
+            if (data != null
+                && data != undefined
+                && data.indexOf('err@') == 0)
+                return;
+
+            if (isClose == true) {
+                window.close();
+                return;
+            }
+
+            window.location.href = window.location.href;
+        }
+
+
+        function Save() {
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
@@ -379,10 +401,8 @@
             var data = handler.DoMethodReturnString("MyBill_SaveIt");
             if (data.indexOf('err@') == 0) {
                 alert(data);
-                return;
+                return data;
             }
-
-            window.location.href = window.location.href;
         }
 
         function Submit() {
@@ -436,7 +456,7 @@
                         }
                         formArrResult.push(ele);
                     } else {
-                        if (mcheckboxs.indexOf(targetId+",") == -1) {
+                        if (mcheckboxs.indexOf(targetId + ",") == -1) {
                             mcheckboxs += targetId + ",";
                             var str = "";
                             $("input[name='" + targetId + "']:checked").each(function (index, item) {
@@ -449,7 +469,7 @@
 
                             formArrResult.push(targetId + '=' + str);
                         }
-                        
+
                     }
 
                 }
@@ -582,7 +602,7 @@
             }
 
             // 处理没有选择的文本框.
-           var ids = GenerCheckNames();
+            var ids = GenerCheckNames();
 
             if (ids) {
                 var scores = ids.split(",");
@@ -593,7 +613,7 @@
                     var field = scores[i];
                     var index = formdataResultStr.indexOf(field);
                     if (index == -1) {
-                        if($("input[name='"+field+"'").length == 1)
+                        if ($("input[name='" + field + "'").length == 1)
                             formdataResultStr += '&' + field + '=0';
                         else
                             formdataResultStr += '&' + field + '= ';
@@ -625,12 +645,17 @@
 
         }
 
-        function SaveItAndClose() {
-
-            SaveIt();
-            window.close();
+        //保存并新建.
+        function SaveItAndNew() {
+            Save();
+            NewIt();
+            //window.close();
         }
 
+        function SaveItAndClose() {
+            Save();
+            window.close();
+        }
         function NewIt() {
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
@@ -1006,7 +1031,7 @@
 
         });
 
-/**/</script>
+        /**/</script>
 </head>
 <body onclick="hiddenDiv()">
     <div id="toolbar" style="margin-left: 10px;">
@@ -1023,25 +1048,25 @@
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 5px 2px; margin: 0px auto;">
-            <!-- <div id="Title"> 
-     <div style=" float:right ">
-      <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" /> 
-     </div>
-      </div>-->
+            <!-- <div id="Title">
+            <div style=" float:right ">
+             <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" />
+            </div>
+             </div>-->
             <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">
-                <div id="CCForm" style="">
-                    <br />
-                    <img src='./../Img/loading.gif' alt="正在初始化表单模板及数据，请耐心等待。。。" />
-                    ccbpm - 正在初始化表单模板及数据,请耐心等待...
-                    <br />
-                    <br />
-                </div>
-                <!--DIVINFO-->
-                <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
+                    <div id="CCForm" style="">
+                        <br />
+                        <img src='./../Img/loading.gif' alt="正在初始化表单模板及数据，请耐心等待。。。" />
+                        ccbpm - 正在初始化表单模板及数据,请耐心等待...
+                        <br />
+                        <br />
+                    </div>
+                    <!--DIVINFO-->
+                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
                     align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
-                </div>
+                    </div>
                 </form>
             </div>
         </div>

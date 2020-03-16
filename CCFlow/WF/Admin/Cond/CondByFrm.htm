@@ -203,12 +203,12 @@
                 document.getElementById("DDL_Val").style.display = "";
             }
 
-            if (mapattr.LGType == "2") {
+            if (mapattr.LGType == "2" ||(mapattr.LGType == "0" && mapattr.MyDataType == "1" && mapattr.UIContralType == 1) ) {
                 document.getElementById("TB_Text").style.display = "inline";
                 $("#opts").html("<input type='button' onclick=\"javascript:SelectFKData('" + mapattr.MyPK + "');\" value='请选择数据' />");
             }
 
-            if (mapattr.LGType == "0") {
+            if (mapattr.LGType == "0" && mapattr.UIContralType != 1) {
                 document.getElementById("TB_Val").style.display = "";
             }
 

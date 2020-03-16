@@ -316,6 +316,11 @@
             if (searchFields != "")
                 len = searchFields.split("@").length;
             len = parseInt(attrs.len) + length;
+            var searchFieldsOfNum = mapBase.SearchFieldsOfNum;
+            var countNum = 5;
+            if (searchFieldsOfNum != null && searchFieldsOfNum != undefined && searchFieldsOfNum != "")
+                countNum = 4;
+            
             if (mapBase.DTSearchWay == "0") {
                 if (len == 0)
                     html += "<table style='width:30%;' >";
@@ -363,7 +368,7 @@
                     count++;
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
                     html += "<td align='left'><input style='width:100%;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' /></td>";
-                    if (count == 5) {
+                    if (count == countNum) {
                         count = 0;
                         html += "</tr>";
                         html += "<tr>";
@@ -372,7 +377,7 @@
             }
 
             //数值型的查询增加
-            var searchFieldsOfNum = mapBase.SearchFieldsOfNum;
+            
             var val1 = "";
             var val2 = "";
             if (searchFieldsOfNum != null && searchFieldsOfNum != undefined && searchFieldsOfNum != "") {
@@ -399,9 +404,14 @@
 
 
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
-                    html += "<td align='left'><input style='width:80px;' type=text id='TB_" + str[1]+ "_0' name='TB_" + str[1] + "' value='" + val1 + "' class='form-control' />";
-                    html += "<label>&nbsp;&nbsp;～&nbsp;&nbsp</label><input style='width:80px;' type=text id='TB_" + str[1] + "_1' name='TB_" + str[1] + "' value='" + val2 + "' class='form-control' /></td>";
-                   
+                    html += "<td align='left'><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1]+ "_0' name='TB_" + str[1] + "' value='" + val1 + "' class='form-control' />";
+                    html += "<label>&nbsp;&nbsp;～&nbsp;&nbsp</label><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_1' name='TB_" + str[1] + "' value='" + val2 + "' class='form-control' /></td>";
+                    count ++;
+                   if (count >=countNum) {
+                        count = 0;
+                        html += "</tr>";
+                        html += "<tr>";
+                    }
                    
                 }
             }
@@ -1277,7 +1287,7 @@
                 <!-- 显示分页信息 -->
                 <div>
                     <div class="row cs-pagination" style="float:left;width:20%;text-align: left;">
-                        <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult">xxx</li></ul>
+                        <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
                     </div>
                     <div class="row cs-pagination" style="float:left;width:80%">
                         <ul class="pagination" id="page_nav"></ul>

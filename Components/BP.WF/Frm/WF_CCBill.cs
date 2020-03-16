@@ -624,10 +624,7 @@ namespace BP.Frm
                 if (idx != 0)
                     qo.addRightBracket();
             }
-            else
-            {
-                qo.AddHD();
-            }
+           
             #endregion 关键字段查询
 
             #region 时间段的查询

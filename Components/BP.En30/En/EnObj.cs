@@ -1389,7 +1389,7 @@ namespace BP.En
         {
             get
             {
-                if (this.PK == "ID")
+                if (this.GetType().BaseType.FullName.Equals("BP.En.EntityTree") ==true)
                     return true;
                 return false;
             }

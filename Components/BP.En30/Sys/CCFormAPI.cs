@@ -252,7 +252,11 @@ namespace BP.Sys
 
             attr.UIContralType = BP.En.UIContralType.DDL;
             attr.UIBindKey = fk_SFTable; //绑定信息.
-            //   attr.LGType = FieldTypeS.FK;
+            //如果绑定的外键是树形结构的，在AtPara中增加标识
+            if (sf.CodeStruct == CodeStruct.Tree)
+                attr.SetPara("CodeStruct", 1);
+            if(DataType.IsNullOrEmpty(sf.RootVal)==false)
+                attr.SetPara("ParentNo", sf.RootVal);
             attr.X = x;
             attr.Y = y;
 
@@ -281,6 +285,9 @@ namespace BP.Sys
             {
                 MapAttr attrH = new MapAttr();
                 attrH.Copy(attr);
+                attrH.UIBindKey = "";
+                attrH.SetPara("CodeStruct", "");
+                attrH.SetPara("ParentNo", "");
                 attrH.KeyOfEn = attr.KeyOfEn + "T";
                 attrH.Name = attr.Name;
                 attrH.UIContralType = BP.En.UIContralType.TB;

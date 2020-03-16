@@ -2240,10 +2240,19 @@ namespace BP.WF.HttpHandler
                 {
 
                     string val = HttpContextHelper.RequestParams(key);
+                            
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                     {
                         val = HttpUtility.UrlDecode(val, Encoding.UTF8);
                         htMain.Add(key.Replace("TB_", ""), val);
+
+                    }
+                    else
+                    {
+                        htMain.Remove(key.Replace("TB_", ""));
+                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
+                        htMain.Add(key.Replace("TB_", ""), val);
+
                     }
                     continue;
                 }

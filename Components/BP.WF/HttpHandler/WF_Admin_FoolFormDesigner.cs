@@ -861,7 +861,6 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
             ps.Add("FrmID", this.FK_MapData);
-            //string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND (CtrlType='' OR CtrlType IS NULL) ORDER BY OID DESC ";
             attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
             attr.Update();
 

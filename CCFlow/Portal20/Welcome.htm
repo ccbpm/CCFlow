@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="fonts/font-icons.min.css" rel="Stylesheet" />
+    <link href="../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script src="../WF/Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../WF/Style/skin/js/mp.mansory.min.js" type="text/javascript"></script>
+    <script src="../WF/Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            window.location.href = '../App/Welcome.htm';
+            return;
+            InitPage();
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var webUser = new WebUser();
+            var barEmps = new Entities("BP.GPM.BarEmps");
+            barEmps.Retrieve("FK_Emp", webUser.No, "IsShow", 1, "Idx");
+            if (barEmps.length == 0) {
+                window.location.href = 'PersonalBars.htm?DoType=';
+                return;
+            }
+
+            var html = "";
+            //获取宽度
+            var width = $(document).innerWidth();
+            var height = $(document).innerHeight() - 60;
+            $("#infoContent").css({ "height": height + "px" });
+            var divWidth = (width - 140) / 2
+            var divHeight = (height - 30) / 2;
+            for (var i = 0; i < barEmps.length; i++) {
+                html = "";
+                var bar = new Entity("BP.GPM.Bar", barEmps[i].FK_Bar);
+
+                var data = bar.DoMethodReturnString("GetDocument");
+                if (bar.Height != null && bar.Height != "")
+                    divHeight = bar.Height;
+
+                if (bar.IsLine == '0') {
+                    html += '<div class="col-sm-6 col-md-6">';
+                    html += '<div class="ibox">';
+                    html += '<div class="ibox-title">';
+                    html += '<h5>' + bar.Name + '</h5>';
+                    html += '<h5 style="float:right">' + bar.MoreUrl.replace(/~/g, "'") + '<h5>';
+                    html += '</div>';
+                    html += '<div class="ibox-contents chartsleft">';
+                    html += '<div class="list-group mb0">';
+                    html += '<table table-striped notab><tbody>';
+                    html += data;
+                    html += '</tbody></table>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                if (bar.IsLine == '1') {
+                    html += '<div class="col-sm-12 col-md-12">';
+                    html += '<div class="ibox">';
+                    html += '<div class="ibox-title">';
+                    html += '<h5>' + bar.Name + '</h5>';
+                    html += '<h5 style="float:right">' + bar.MoreUrl.replace(/~/g, "'") + '<h5>';
+                    html += '</div>';
+                    html += '<div class="ibox-contents chartsleft">';
+                    html += '<div class="list-group mb0">';
+                    html += '<table table-striped notab><tbody>';
+                    html += data;
+                    html += '</tbody></table>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+
+                $("#infoContent").append(html);
+            }
+        }
+    </script>
+    <style type="text/css">
+        td
+        {
+            border: none;
+            line-height: 1.42857;
+            padding: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <!--模块化信息-->
+        <div class="row c" id="infoContent">
+        </div>
+    </div>
+    <div style="text-align: right; margin-right: 5px; margin-top: 5px; margin-bottom: 20px">
+        <a href="PersonalBars.htm"><i class="icon-settings"></i>模块设置</a></div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+.webuploader-container {
+	position: relative;
+}
+.webuploader-element-invisible {
+	position: absolute !important; clip: rect(1px, 1px, 1px, 1px);
+}
+.webuploader-pick {
+	background: rgb(0, 183, 238); padding: 10px 15px; border-radius: 3px; text-align: center; color: rgb(255, 255, 255); overflow: hidden; display: inline-block; position: relative; cursor: pointer;
+}
+.webuploader-pick-hover {
+	background: rgb(0, 162, 212);
+}
+.webuploader-pick-disable {
+	opacity: 0.6; pointer-events: none;
+}

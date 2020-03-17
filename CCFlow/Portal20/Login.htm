@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html PUBLIC "" "">
+<html style="-ms-overflow-x: auto; -ms-overflow-y: auto;">
+<head>
+    
+    <meta content="IE=10.0000" http-equiv="X-UA-Compatible">
+
+    <title>科技项目管理系统 登录</title>	 
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"> 
+    <meta name="author" content="http://www.jeeplus.org/"> 
+    <meta name="renderer" content="webkit"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=9,IE=10"> 
+    <meta http-equiv="Expires" content="0"> 
+    <meta http-equiv="Cache-Control" content="no-cache"> 
+    <meta http-equiv="Cache-Control" content="no-store"> 
+    <script>    var d = "";</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="/dcdb/static/favicon.ico" rel="shortcut icon"> <!-- 引入jeeplus ajax版本库文件，该文件压缩了jQuery，datatime等常用js文件以提高加载速度 --> 
+    <link href="login_files/vendor.css" rel="stylesheet"> 
+    <script src="login_files/vendor.js"></script>
+     <!-- 引入依赖的第三方插件 -->
+    <link href="login_files/font-awesome.min.css" rel="stylesheet"> 
+    <script src="login_files/jquery.validate.js" type="text/javascript"></script>
+ 
+    <script src="login_files/messages_zh.min.js" type="text/javascript"></script>
+ 
+    <script src="login_files/validation-methods.js" type="text/javascript"></script>
+     <link href="login_files/_all.css" rel="stylesheet"> 
+    <script src="login_files/icheck.js"></script>
+    
+    <!--省市区三级联动插件--> 
+    <link href="login_files/city-picker.css" rel="stylesheet" type="text/css"> 
+    <script src="login_files/city-picker.data.js" type="text/javascript"></script>
+ 
+    <script src="login_files/city-picker.js" type="text/javascript"></script>
+     <!-- 引入layer插件,当做独立组件使用，不使用layui模块，该版本修复了chrome下花屏的bug --> 
+    <script src="login_files/layer.js"></script>
+    <script src="login_files/laytpl.js"></script>
+    <!--引入webuploader--> 
+    <link href="login_files/webuploader.css" rel="stylesheet" type="text/css"> 
+    <link href="login_files/demo.css" rel="stylesheet" type="text/css"> 
+    <script src="login_files/webuploader.js" type="text/javascript"></script>
+    <!-- 引入toastr --> 
+    <link href="login_files/toastr.css" rel="stylesheet" type="text/css"> 
+    <script src="login_files/toastr.min.js" type="text/javascript"></script>
+    <!--引入select2--> 
+    <link href="login_files/select2.min.css" rel="stylesheet" type="text/css"> 
+    <link href="login_files/select2-bootstrap.css" rel="stylesheet" type="text/css"> 
+    <script src="login_files/select2.min.js" type="text/javascript"></script>
+ 
+    <script src="login_files/zh-CN.js" type="text/javascript"></script>
+     <!-- 引入自定义文件 --> 
+    <script type="text/javascript">    var ctx = '/dcdb/a', ctxStatic = '/dcdb/static';</script>
+    <link id="theme" href="login_files/app-blue.css" rel="stylesheet"> 
+    <script src="login_files/jeeplus.js"></script>
+		 
+    <meta name="decorator" content="ani">	
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+		 
+    <style type="text/css">
+			* {font-family: "Verdana", "Tahoma", "Lucida Grande", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;}
+			body {
+				background: url(login_files/loginbg_01.jpg) no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+			}
+			a:link {color: #285e8e;}
+			.main_box {
+				position: absolute; top:50%; left:50%; margin-top:-260px; margin-left: -300px; padding: 30px; width:600px; height:360px;
+				background: #FAFAFA; background: rgba(255,255,255,0.5); border: 1px #DDD solid;
+				border-radius: 5px;
+				-webkit-box-shadow: 1px 5px 8px #888888; -moz-box-shadow: 1px 5px 8px #888888; box-shadow: 1px 5px 8px #888888;
+			}
+			/*.main_box .setting {position: absolute; top: 5px; right: 10px; width: 10px; height: 10px;}*/
+			/*.main_box .setting a {color: #FF6600;}*/
+			/*.main_box .setting a:hover {color: #555;}*/
+			.login_logo {margin-bottom: 20px;  text-align: center;}
+			/*.login_logo img {height: 60px;}*/
+			.login_msg {text-align: center; font-size: 16px;}
+			.login_form {padding-top: 20px; font-size: 16px;}
+			.login_box .form-control {display: inline-block; *display: inline; zoom: 1; width: auto; font-size: 18px;}
+			.login_box .form-control.x319 {width: 319px;}
+			.login_box .form-control.x164 {width: 164px;}
+			.login_box .form-group {margin-bottom: 20px;}
+			.login_box .form-group label.t {width: 120px; text-align: right; cursor: pointer;}
+			.login_box .form-group.space {padding-top: 15px; border-top: 1px #FFF dotted;}
+			.login_box .form-group img {margin-top: 1px; height: 32px; vertical-align: top;}
+			.login_box .m {cursor: pointer;}
+			.bottom {text-align: center; font-size: 12px;}
+	</style>
+
+    <link href="../WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="config.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+
+                Login();
+                return false;
+            }
+        }
+    </script>
+    <meta name="GENERATOR" content="MSHTML 11.00.10570.1001">
+</head>
+<body >
+<div class="main_box">
+    <div class="login_box">
+        <div class="login_logo"><img src="login_files/dcdb-logo.png"></div>
+        <div class="login_form">
+            <form id="Form1">
+                <div class="form-group">
+                    <label class="t" for="TB_No">用户名：</label> 
+                    <input name="TB_No" class="form-control x319 in" id="TB_No" type="text" autocomplete="off" lay-verify="required">
+				</div>
+                <div class="form-group">
+                    <label class="t" for="TB_PW">密　码：</label> 
+                    <input name="TB_PW" class="form-control x319 in" id="TB_PW" type="password" lay-verify="required">
+			    </div>
+                <div class="form-group space"><label class="t"></label>
+                    <input class="btn btn-default btn-lg" id="login_ok" type="button" lay-submit lay-filter="formDemo" value="&nbsp;登&nbsp;录&nbsp;">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<input class="btn btn-default btn-lg " type="reset" value="&nbsp;重&nbsp;置&nbsp;">
+				</div>
+            </form>
+        </div>
+     </div>
+ </div>
+    <script type="text/javascript" src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Style/skin/layui/layui.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+
+        layui.use(['form', 'layer'], function () {
+            
+            //从后台获取当前登录会话的信息.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var data = handler.DoMethodReturnString("Login_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            data = JSON.parse(data);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
+            var userNo = document.getElementById("TB_No").value;
+            if (userNo == "")
+                document.getElementById("TB_PW").value = "";
+
+            var form = layui.form, layer = layui.layer, $ = layui.jquery;
+            $("#TB_No").focus();
+            form.on('submit(formDemo)', function (data) {
+
+                Login();
+
+            })
+        });
+
+        function Login() {
+
+            var userNo = $("#TB_No").val();
+            var userPass = $("#TB_PW").val();
+
+            if (userNo == "" || userPass == "") {
+                alert('请输入用户名与密码');
+                return false;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+
+            handler.AddPara("TB_No", userNo);
+            handler.AddPara("TB_PW", userPass);
+
+            var data = handler.DoMethodReturnString("Login_Submit");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data, { time: 3000, icon: 2 });
+                return;
+            }
+
+            var url = GetQueryString("FromUrl");
+            if (url == null || url == undefined)
+                url = "Home.htm";
+
+            layer.msg(data, { time: 10, icon: 1 }, function () {
+                location.href = url;
+            });
+        }
+        
+    </script>
+</body>
+</html>

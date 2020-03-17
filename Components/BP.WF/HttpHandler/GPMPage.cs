@@ -20,6 +20,15 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class GPMPage : DirectoryPageBase
     {
+        #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public GPMPage()
+        {
+        }
+        #endregion 构造函数
+
         #region 签名.
         /// <summary>
         /// 图片签名初始化
@@ -70,20 +79,10 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
 
-            //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg");
             HttpContextHelper.UploadFile(f, BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg");
-
-            // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
-
-            //f.PostedFile.InputStream.Close();
-            //f.PostedFile.InputStream.Dispose();
-            //f.Dispose();
-
-            //   this.Response.Redirect(this.Request.RawUrl, true);
             return "上传成功！";
         }
         #endregion
-
         
         #region 组织结构维护.
         /// <summary>
@@ -192,61 +191,97 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-
-      //  #endregion 组织结构维护.
-
-
-
-        public string StationToDeptEmp_Init()
-        {
-            return "";
-        }
-
+        #region 获取菜单权限.
         /// <summary>
-        /// 处理系统编辑菜单.
+        /// 获得菜单数据.
         /// </summary>
         /// <returns></returns>
-        public string AppMenu_Init()
+        public string GPM_DB_Menus()
         {
-            //BP.GPM.App app = new BP.GPM.App();
-            //app.No = "CCFlowBPM";
-            //if (app.RetrieveFromDBSources() == 0)
-            //{
-            //    BP.GPM.App.InitBPMMenu();
-            //    app.Retrieve();
-            //}
-            return "";
-        }
+            var appNo = this.GetRequestVal("AppNo");
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public GPMPage()
-        {
-        }
+            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            sql1 += " FROM V_GPM_EmpMenu ";
+            sql1 += " WHERE FK_Emp = '" + WebUser.No+ "' ";
+            sql1 += " AND MenuType = '3' ";
+            sql1 += " AND FK_App = '" + appNo + "' ";
+            sql1 += " UNION ";  //加入不需要权限控制的菜单.
+            sql1 += "SELECT No,Name, No as FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx";
+            sql1 += " FROM GPM_Menu ";
+            sql1 += " WHERE MenuCtrlWay=1 ";
+            sql1 += " AND MenuType = '3' ";
+            sql1 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
+            var dirs = DBAccess.RunSQLReturnTable(sql1);
+            dirs.TableName = "Dirs"; //获得目录.
 
-        #region 执行父类的重写方法.
+            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            sql2 += " FROM V_GPM_EmpMenu ";
+            sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
+            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND FK_App = '" + appNo + "' ";
+            sql2 += " UNION ";  //加入不需要权限控制的菜单.
+            sql2 += "SELECT No,Name, No as FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
+            sql2 += " WHERE MenuCtrlWay=1 ";
+            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
+
+            var menus = DBAccess.RunSQLReturnTable(sql2);
+            menus.TableName = "Menus"; //获得菜单.
+
+            //组装数据.
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dirs);
+            ds.Tables.Add(menus);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
         /// <summary>
-        /// 默认执行的方法
+        /// 是否可以执行当前工作
         /// </summary>
         /// <returns></returns>
-        protected override string DoDefaultMethod()
+        public string GPM_IsCanExecuteFunction()
         {
-            switch (this.DoType)
+            var dt = GPM_GenerFlagDB(); //获得所有的标记.
+            var funcNo = this.GetRequestVal("FuncNo");
+            foreach (DataRow dr in dt.Rows)
             {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
+                if (dr[0].ToString().Equals(funcNo) == true)
+                    return "1";
             }
-
-            //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
+            return "0";
         }
-        #endregion 执行父类的重写方法.
-
-        #region xxx 界面 .
-        #endregion xxx 界面方法.
+        /// <summary>
+        /// 获得所有的权限标记.
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GPM_GenerFlagDB()
+        {
+            var appNo = this.GetRequestVal("AppNo");
+            var sql2 = "SELECT Flag ";
+            sql2 += " FROM V_GPM_EmpMenu ";
+            sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
+            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND FK_App = '" + appNo + "' ";
+            sql2 += " UNION ";  //加入不需要权限控制的菜单.
+            sql2 += "SELECT Flag ";
+            sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
+            sql2 += " WHERE MenuCtrlWay=1 ";
+            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql2);
+            return dt;
+        }
+        /// <summary>
+        /// 获得所有权限的标记
+        /// </summary>
+        /// <returns></returns>
+        public string GPM_AutoHidShowPageElement()
+        {
+            var dt = GPM_GenerFlagDB(); //获得所有的标记.
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
 
     }
 }

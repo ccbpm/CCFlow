@@ -1,51 +1,54 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
-<head >
+<head>
     <title>开源驰骋工作流</title>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
     <link href="../WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
     <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-	<script src="config.js" type="text/javascript"></script>
+    <script src="config.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
-         document.onkeydown = function (e) {
-             e = e || window.event;
-             if (e.keyCode == 13) {
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
 
-                 Login();
-                 return false;
-                 //this.forms["Form1"].submit();
-                 //return false;
-             }
-         }
-     </script>
+                Login();
+                return false;
+                //this.forms["Form1"].submit();
+                //return false;
+            }
+        }
+    </script>
 </head>
 <body class="login-bg">
-<div class="login-box">
-           <h1 class="logo-name">开源驰骋OA</h1>
-           <div class="login-form">
-             <form id="Form1" >
+    <div class="login-box">
+        <h1 class="logo-name">开源驰骋OA</h1>
+        <div class="login-form">
+            <form id="Form1">
                 <div class="form-group">
-                    <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"  class="form-control" />
+                    <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
                 </div>
-                <input type="button" class="btn btn-primary btn-block" value="操作员登录" lay-submit lay-filter="formDemo" />
-            </form> 
+                <input type="button" id="Btn_Login" class="btn btn-primary btn-block" value="操作员登录" lay-submit lay-filter="formDemo" />
+                <div id="msg"></div>
+            </form>
         </div>
-   </div>
+    </div>
     <script type="text/javascript" src="../WF/Scripts/QueryString.js"></script>
 
-  
+
     <script src="../WF/Style/skin/layui/layui.js" type="text/javascript"></script>
     <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../WF/Scripts/config.js"></script>
     <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
-    //页面启动函数.
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
 
         layui.use(['form', 'layer'], function () {
+
+            $("#msg").html("正在加载请稍候...");
 
             //从后台获取当前登录会话的信息.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
@@ -56,7 +59,9 @@
             }
             data = JSON.parse(data);
 
-            //调用公共类库的方法:执行批量主表赋值
+            $("#msg").html("欢迎登陆.");
+
+            //调用公共类库的方法:执行批量主表赋值.
             GenerFullAllCtrlsVal(data);
             var userNo = document.getElementById("TB_No").value;
             if (userNo == "")
@@ -102,7 +107,7 @@
                 location.href = url;
             });
         }
-        
-        </script>
+
+    </script>
 </body>
 </html>

@@ -278,12 +278,12 @@ namespace BP.WF.HttpHandler
                         if (i == 0)
                             return "err@用户名或者密码错误.";
                     }
-                    else if (DBAccess.IsExitsTableCol("Port_Emp", "Name") == true)
+                    else if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
                     {
                         /*如果包含Name列,就检查Name是否存在.*/
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE Name=" + SystemConfig.AppCenterDBVarStr + "Name";
-                        ps.Add("Name", userNo);
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "Tel";
+                        ps.Add("Tel", userNo);
                         string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                         if (no == null)
                             return "err@用户名或者密码错误.";

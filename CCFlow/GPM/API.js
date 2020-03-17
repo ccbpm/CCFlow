@@ -27,7 +27,7 @@
 function GPM_GenerMenumsDB(appNo) {
     var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
     handler.AddPara("AppNo", appNo);
-    var data = handler.DoMethodReturnJSON("DB_Menus"); //获得菜单.
+    var data = handler.DoMethodReturnJSON("GPM_DB_Menus"); //获得菜单.
     return data;
 }
 

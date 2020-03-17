@@ -360,7 +360,14 @@
         }
 
         function SaveIt(isClose) {
+               //保存从表数据
+            $("[name=Dtl]").each(function (i, obj) {
+                var contentWidow = obj.contentWindow;
+                if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+                    IsSaveTrue = contentWidow.SaveAll();
 
+                }
+            });
             var data = Save(); //保存.
             if (data != null
                 && data != undefined

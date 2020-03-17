@@ -18,8 +18,9 @@
  
  说明：
  1. 系统返回两个API接口. 目录与菜单，分别是两个数据集合。
- 2. 目录的数据结构：dirs No=编号,Name=标签, Icon=图标
- 3. 菜单的数据结构：menus No=编号,Name=标签, Icon=图标，URL=连接, Target=打开方式0=新窗口,1=本窗口,2=覆盖新窗口.
+ 2. 目录的数据结构：dirs   No=编号,Name=标签, Icon=图标
+ 3. 菜单的数据结构：menus  No=编号,Name=标签, Icon=图标，URL=连接, 
+    Target=打开方式0=新窗口,1=本窗口,2=覆盖新窗口. ParentNo=目录编码
  4. 您可以自己组织这些数据根据自己的需要生成菜单框架.
  5. ccbpm提供了两套风格，您可以参考 /Portal/GPMMenus.js ， /Portal20/GPMMenus.js
  */
@@ -43,7 +44,7 @@ function GPM_GenerMenumsDB(appNo) {
  * 2. IsCanDeleteUser 是在新建菜单的时候做的标记.
  * 3. 调用接口true,false 用于显示隐藏功能按钮.
  * 
- *  var isCanDeleteUser=GPM_IsCanExecuteFunction('CCOA','NewUser');
+ *  var isCanDeleteUser=GPM_IsCanExecuteFunction('CCOA','DeleteUser');
  *  
  *  if (isCanDeleteUser==false)
  *     $("#Btn_Delete").hid(); 
@@ -75,7 +76,6 @@ function GPM_IsCanExecuteFunction(appNo, funcFlag) {
 function GPM_AutoHidShowPageElement(appNo) {
     var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
     handler.AddPara("AppNo", appNo);
-    handler.AddPara("FuncFlag", funcFlag);
     var data = handler.DoMethodReturnJSON("GPM_AutoHidShowPageElement"); //获得所有的标记数据.
 
     for (var i = 0; i < data.length; i++) {

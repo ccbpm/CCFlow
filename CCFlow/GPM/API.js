@@ -63,7 +63,7 @@ function GPM_IsCanExecuteFunction(appNo, funcFlag) {
 }
 
 /**
- * 自动显示或者隐藏页面元素(批量控制页面元素的显示隐藏.)
+ * 自动显示隐藏页面元素(批量控制页面元素的显示隐藏元素.)
  * 
  * @param {系统编号} appNo
  * 

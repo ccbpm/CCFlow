@@ -1336,7 +1336,27 @@ namespace BP.WF.HttpHandler
                         fullSQL = fullSQL.Replace("~", ",");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
                         DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
-                        dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        {
+                            if(dt.Columns.Contains("NO") == true)
+                                dt.Columns["NO"].ColumnName = "No";
+                            if (dt.Columns.Contains("NAME") == true)
+                                dt.Columns["NAME"].ColumnName = "Name";
+                            if (dt.Columns.Contains("PARENTNO") == true)
+                                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                        }
+
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        {
+                            if (dt.Columns.Contains("no") == true)
+                                dt.Columns["no"].ColumnName = "No";
+                            if (dt.Columns.Contains("name") == true)
+                                dt.Columns["name"].ColumnName = "Name";
+                            if (dt.Columns.Contains("parentno") == true)
+                                dt.Columns["parentno"].ColumnName = "ParentNo";
+                        }
+
+                            dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
                         ds.Tables.Add(dt);
                         continue;
                     }

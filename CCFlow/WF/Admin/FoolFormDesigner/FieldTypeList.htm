@@ -288,8 +288,8 @@
 
                         function Enum(doType) {
                             var webUser = new WebUser();
-                            if (webUser.CCBPMRunModel == 2) {
-                                window.location.href = 'SysEnumListSAAS.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                            if (webUser.CCBPMRunModel != 0) {
+                                window.location.href = '../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
                             } else {
                                 window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
                                 }

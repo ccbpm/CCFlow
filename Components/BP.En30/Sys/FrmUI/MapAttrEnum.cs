@@ -143,7 +143,6 @@ namespace BP.Sys.FrmUI
                 //默认值.
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）", sql, true);
 
-
                 //map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",

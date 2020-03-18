@@ -500,11 +500,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s))
                     attr.DefaultValOfReal = null;
                 else
-                {
-                    // attr.DefaultVal
                     attr.DefaultValOfReal = this.DefValReal;
-                    //this.DefValReal;
-                }
 
                 attr.DefValType = this.DefValType;
 
@@ -525,6 +521,7 @@ namespace BP.Sys
                 attr.MyFieldType = FieldType.Normal; //普通类型的字段.
                 if (this.IsPK)
                     attr.MyFieldType = FieldType.PK;
+
                 switch (this.LGType)
                 {
                     case FieldTypeS.Enum:
@@ -566,6 +563,9 @@ namespace BP.Sys
                         break;
                 }
 
+                //外部数据源
+                if (this.LGType == FieldTypeS.Normal && this.MyDataType == DataType.AppString && this.UIContralType == UIContralType.DDL)
+                    attr.UIDDLShowType = BP.Web.Controls.DDLShowType.BindSQL;
                 //attr.AutoFullWay = this.HisAutoFull;
                 //attr.AutoFullDoc = this.AutoFullDoc;
                 //attr.MyFieldType = FieldType

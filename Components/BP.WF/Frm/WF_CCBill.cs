@@ -419,12 +419,11 @@ namespace BP.Frm
                     ds.Tables.Add(dtEn);
                 }
                 //绑定SQL的外键
-                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
+                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL 
+                    && DataType.IsNullOrEmpty(attr.UIBindKey)==false
+                    && ds.Tables.Contains(attr.Key) == false)
                 {
-                    //获取SQl
-                    string sql = attr.UIBindKey;
-                    sql = BP.WF.Glo.DealExp(sql, null, null);
-                    DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
+                    DataTable dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
                     foreach (DataColumn col in dtSQl.Columns)
                     {
                         string colName = col.ColumnName.ToLower();
@@ -444,8 +443,7 @@ namespace BP.Frm
                         }
                     }
                     dtSQl.TableName = attr.Key;
-                    if (ds.Tables.Contains(attr.Key) == false)
-                        ds.Tables.Add(dtSQl);
+                    ds.Tables.Add(dtSQl);
 
                 }
 

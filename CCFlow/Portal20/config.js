@@ -4,7 +4,7 @@
 */
 
 var appNo = "CCOA";
-var appName = "恒业国际";
-var appNameOfSmall = "恒业国际";
-var appNameOfSmaller = "恒业";
+var appName = "驰骋OA";
+var appNameOfSmall = "驰骋OA";
+var appNameOfSmaller = "驰骋";
  

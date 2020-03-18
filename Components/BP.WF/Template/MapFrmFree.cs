@@ -178,13 +178,22 @@ namespace BP.WF.Template
 
                 #region 基本属性.
                 map.AddTBStringPK(MapFrmFreeAttr.No, null, "表单编号", true, true, 1, 190, 20);
-                map.AddTBString(MapFrmFreeAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+
+                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                    map.AddTBString(MapFrmFreeAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                else
+                    map.AddTBString(MapFrmFreeAttr.PTable, null, "存储表", true, true, 0, 100, 20);
+
                 map.AddTBString(MapFrmFreeAttr.Name, null, "表单名称", true, false, 0, 200, 20,true);
                 map.AddTBString(MapDataAttr.FormEventEntity, null, "事件实体", true, true, 0, 100, 20, true);
                  
                 //数据源.
                 map.AddDDLEntities(MapFrmFreeAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-                map.AddDDLEntities(MapFrmFreeAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+
+                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                    map.AddDDLEntities(MapFrmFreeAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                else
+                    map.AddDDLEntities(MapFrmFreeAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), false);
 
                 //宽度高度.
                 map.AddTBInt(MapFrmFreeAttr.FrmW, 900, "自由表单-宽度", true, false);

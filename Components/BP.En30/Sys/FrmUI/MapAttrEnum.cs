@@ -127,15 +127,18 @@ namespace BP.Sys.FrmUI
                     case DBType.Oracle:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM DUAL ";
                         break;
-                    
+
                     case DBType.PostgreSQL:
                     default:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
                 }
                 sql += " union ";
-                sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
 
+                if (SystemConfig.CCBPMRunModel == 0)
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
+                else
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' and OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
 
                 //默认值.
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）", sql, true);
@@ -179,7 +182,7 @@ namespace BP.Sys.FrmUI
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
                 #endregion 傻瓜表单。
@@ -229,7 +232,7 @@ namespace BP.Sys.FrmUI
 
         protected override bool beforeUpdateInsertAction()
         {
-            
+
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();
@@ -301,7 +304,7 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
         }
-        
+
         public string DoDDLFullCtrl2019()
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);

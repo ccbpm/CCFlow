@@ -676,8 +676,7 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("OrgNo", null, true);
                 if (val == null)
-                    return "";
-                    //throw new Exception("@err-004 OrgNo 登录信息丢失。");
+                    throw new Exception("@err-004 OrgNo 登录信息丢失，或者在 CCBPMRunModel=0 的模式下不能读取该节点.");
                 return val;
             }
             set

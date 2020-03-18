@@ -28,7 +28,7 @@ namespace BP.WF.Template
                 if (this.No.Contains("Rpt") == true)
                     return false;
 
-                if (this.No.Substring(0, 2) == "ND" && this.No.Contains("Dtl") ==false)
+                if (this.No.Substring(0, 2) == "ND" && this.No.Contains("Dtl") == false)
                     return true;
 
                 return false;
@@ -60,7 +60,7 @@ namespace BP.WF.Template
                 return int.Parse(this.No.Replace("ND", ""));
             }
         }
-       
+
         /// <summary>
         /// 表格显示的列
         /// </summary>
@@ -88,7 +88,7 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(MapDataAttr.FK_FormTree,value);
+                this.SetValByKey(MapDataAttr.FK_FormTree, value);
             }
         }
 
@@ -145,21 +145,32 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
 
-                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                    map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                else
+                    map.AddTBString(MapDataAttr.PTable, null, "存储表", true, true, 0, 100, 20);
+
+
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
                 map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, "显示方式",
                     "@0=4列@1=6列@2=上下模式3列");
 
-              //  map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
-               // map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
+                //  map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
+                // map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
 
                 map.AddTBInt(MapDataAttr.FrmW, 900, "表单宽度", true, false);
                 map.AddTBInt(MapDataAttr.FrmH, 900, "表单高度", true, false);
 
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+
+                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                else
+                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), false);
+
+
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
                     true, false, MapDataAttr.FrmType);
@@ -175,9 +186,9 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-               // map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+                // map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
 
-                map.AddTBString(MapDataAttr.Note, null, "备注", true, false,0,400,100, true);
+                map.AddTBString(MapDataAttr.Note, null, "备注", true, false, 0, 400, 100, true);
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
@@ -230,7 +241,7 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-              //  map.AddRefMethod(rm);
+                //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
@@ -277,7 +288,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 rm.Icon = "../../WF/Img/ReName.png";
                 map.AddRefMethod(rm);
-              
+
                 rm = new RefMethod();
                 rm.Title = "表单检查"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
@@ -555,7 +566,7 @@ namespace BP.WF.Template
                 int i = gf.Retrieve(GroupFieldAttr.CtrlID, ath.MyPK, GroupFieldAttr.FrmID, this.No);
                 if (i == 1)
                     continue;
-                 
+
                 gf.Lab = ath.Name;
                 gf.CtrlID = ath.MyPK;
                 gf.CtrlType = "Ath";
@@ -740,7 +751,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
         }
-     
+
         public string DoPageLoadFull()
         {
             return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
@@ -765,7 +776,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/CCFormDesigner/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
-    
+
         /// <summary>
         /// 导出表单
         /// </summary>

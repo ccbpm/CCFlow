@@ -253,7 +253,16 @@ namespace BP.Sys
             }
             #endregion
         }
-
+        /// <summary>
+        /// 运行模式0=单机版，1=集团模式, 2=SAAS模式
+        /// </summary>
+        public static int CCBPMRunModel
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyInt("CCBPMRunModel",0);
+            }
+        }
 
         #region 用户配置信息
         /// <summary>

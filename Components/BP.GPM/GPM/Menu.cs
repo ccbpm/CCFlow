@@ -406,7 +406,6 @@ namespace BP.GPM
                 map.AddSearchAttr(MenuAttr.MenuType);
                 map.AddSearchAttr(MenuAttr.OpenWay);
 
-
                 //map.AddDDLSysEnum(AppAttr.CtrlWay, 1, "控制方式", true, true, AppAttr.CtrlWay,
                 //    "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
                 // map.AddTBString(MenuAttr.CtrlObjs, null, "控制内容", false, false, 0, 4000, 20);

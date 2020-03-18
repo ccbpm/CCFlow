@@ -26,11 +26,19 @@ namespace BP.Sys
 		/// Language
 		/// </summary>
 		public const string Lang="Lang";
-	}
-	/// <summary>
-	/// SysEnum
-	/// </summary>
-	public class SysEnum : EntityMyPK
+        /// <summary>
+        /// OrgNo
+        /// </summary>
+        public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 关联主键
+        /// </summary>
+        public const string RefPK = "RefPK";
+    }
+    /// <summary>
+    /// SysEnum
+    /// </summary>
+    public class SysEnum : EntityMyPK
 	{
 		/// <summary>
 		/// 得到一个String By LabKey.
@@ -44,11 +52,36 @@ namespace BP.Sys
 			return en.Lab;
 		}
 
-		#region 实现基本的方法
-		/// <summary>
-		/// 标签
-		/// </summary>
-		public  string  Lab
+        #region 实现基本的方法
+        /// <summary>
+        /// 关联外键
+        /// </summary>
+        public string RefPK
+        {
+            get
+            {
+                return this.GetValStringByKey(SysEnumAttr.RefPK);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.RefPK, value);
+            }
+        }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SysEnumAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.OrgNo, value);
+            }
+        }
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public  string  Lab
 		{
 			get
 			{
@@ -196,6 +229,8 @@ namespace BP.Sys
             
 
             this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+
+            this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
 
             return base.beforeUpdateInsertAction();
         }

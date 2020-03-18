@@ -160,19 +160,9 @@ namespace BP.WF.HttpHandler
             //清除缓存.
             BP.Sys.SystemConfig.DoClearCash();
 
-            if (1 == 2 && BP.Web.WebUser.IsAdmin == false)
+            if (BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";
 
-            // 让admin 登录.
-            //   BP.WF.Dev2Interface.Port_Login("admin");
-
-            if (this.RefNo != null)
-            {
-                Emp emp = new Emp(this.RefNo);
-                BP.Web.WebUser.SignInOfGener(emp);
-                HttpContextHelper.SessionSet("FK_Flow", this.FK_Flow); //设置当前的流程.
-                return "url@../MyFlow.htm?FK_Flow=" + this.FK_Flow;
-            }
 
             FlowExt fl = new FlowExt(this.FK_Flow);
 
@@ -195,7 +185,6 @@ namespace BP.WF.HttpHandler
                 return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
             }
             #endregion 测试人员.
-
 
 
             #region 从配置里获取-测试人员.

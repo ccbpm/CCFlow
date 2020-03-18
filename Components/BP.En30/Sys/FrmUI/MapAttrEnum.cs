@@ -138,7 +138,7 @@ namespace BP.Sys.FrmUI
                 if (SystemConfig.CCBPMRunModel == 0)
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
                 else
-                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' and OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE RefPK='@UIBindKey' ";
 
                 //默认值.
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）", sql, true);

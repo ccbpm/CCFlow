@@ -681,7 +681,14 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("OrgNo", null, true);
                 if (val == null)
-                    throw new Exception("@err-004 OrgNo 登录信息丢失，或者在 CCBPMRunModel=0 的模式下不能读取该节点.");
+                {
+                    if (WebUser.No == null)
+                        throw new Exception("@err-004 OrgNo 登录信息丢失，或者在 CCBPMRunModel=0 的模式下不能读取该节点.");
+
+                    string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
+                    SetSessionByKey("OrgNo", no);
+                    return no;
+                }
                 return val;
             }
             set

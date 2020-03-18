@@ -4171,6 +4171,9 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
+            if (Glo.CCBPMRunModel!= CCBPMRunModel.Single)
+                exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
+                
             if (exp.Contains("@") == false)
                 return exp;
 

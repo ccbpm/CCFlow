@@ -638,7 +638,6 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 把外键与枚举放入里面去.
 
-
                 #region 增加 上方法.
                 DataTable dtM = new DataTable("dtM");
                 dtM.Columns.Add("No");

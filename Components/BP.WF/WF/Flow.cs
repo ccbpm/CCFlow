@@ -2253,14 +2253,14 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 执行一次保存.
-                NodeExts nes = new NodeExts();
-                nes.Retrieve(NodeAttr.FK_Flow, this.No);
-                foreach (NodeExt item in nes)
-                {
-                    item.Update(); // 调用里面的业务逻辑执行检查.
-                }
-                #endregion
+                //#region 执行一次保存.(暂时注释，在保存节点的时候已经更新缓存 yln修改）
+                //NodeExts nes = new NodeExts();
+                //nes.Retrieve(NodeAttr.FK_Flow, this.No);
+                //foreach (NodeExt item in nes)
+                //{
+                 //   item.Update(); // 调用里面的业务逻辑执行检查.
+                //}
+                //#endregion
 
                 #region 检查越轨流程,子流程发起。
                 SubFlowYanXus ygflows = new SubFlowYanXus();
@@ -6261,7 +6261,7 @@ namespace BP.WF
                 pm.FK_Flow = this.No;
 
                 pm.SMSPushWay = 1;  // 发送短消息.
-                pm.MailPushWay = 0; //不发送邮件消息.
+                pm.SMSPushModel = "Email";
                 pm.MyPK = DBAccess.GenerGUID();
                 pm.Insert();
             }

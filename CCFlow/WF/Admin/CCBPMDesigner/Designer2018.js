@@ -1,12 +1,14 @@
 ﻿var flow = null;
+var ccbpmRunModel = 0;
+var flowNo = GetQueryString("FK_Flow");
+flow = new Entity("BP.WF.Flow", flowNo);
+
+var webUser = new WebUser();
+var basepath = "";
 $(function () {
 
-    var flowNo = GetQueryString("FK_Flow");
-    flow = new Entity("BP.WF.Flow", flowNo);
-
-    var webUser = new WebUser();
     ccbpmRunModel = webUser.CCBPMRunModel;
-    var basepath = "";
+   
     if (ccbpmRunModel == 2) {
         basepath = "../../WF/Admin/";
     } else {

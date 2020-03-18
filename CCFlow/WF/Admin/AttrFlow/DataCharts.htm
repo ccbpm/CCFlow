@@ -18,11 +18,32 @@
 
     <script src="../../Portal2020/lib/layui/layui.js" charset="utf-8"></script>
     <script src="../../Scripts/echartsjs/echarts.min.js"></script>
+    <script>
+        $(function () {
+            var FlowName = null;
+            var FK_flowNo = GetQueryString("FK_Flow");
+            var ens = new Entities("BP.WF.GenerWorkFlows", "FK_Flow", FK_flowNo);
+            for (var i = 0; i < ens.length; i++) {
+                 //通过json访问属性.
+                var jsonEn = ens[i];
 
-
+                var en = new Entity("BP.WF.GenerWorkFlow", jsonEn);
+                FlowName = en.FlowName;
+                break;
+            }
+            $("#flowName").html("<h2 style='margin-left:15px;'>流程名称："+FlowName+"</h2>");
+            
+        });
+    </script>
+    <style>
+        h2{
+            
+        }
+    </style>
 </head>
 <body>
     <div id="Msg"></div>
+    <h3 id="flowName"></h3>
     <div class="layui-fluid">
 
         <div class="layui-col-md12">

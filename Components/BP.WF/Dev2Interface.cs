@@ -3547,6 +3547,16 @@ namespace BP.WF
         /// </summary>
         /// <param name="userNo">用户名</param>
         /// <param name="SID">安全ID,请参考流程设计器操作手册</param>
+        public static void Port_LoginBySID(string userNo, string sid)
+        {
+            if (WebUser.No == userNo)
+                return;
+            Port_LoginBySID(sid);
+        }
+        /// <summary>
+        /// 用户登陆,此方法是在开发者校验好用户名与密码后执行
+        /// </summary>
+        /// <param name="SID">安全ID,请参考流程设计器操作手册</param>
         public static void Port_LoginBySID(string sid)
         {
             if (DataType.IsNullOrEmpty(sid))
@@ -3561,7 +3571,7 @@ namespace BP.WF
                 throw new Exception("err@非法的SID，SID不正确.");
 
             WebUser.SignInOfGener(myEmp);
-           
+
             return;
         }
 

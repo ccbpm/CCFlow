@@ -94,13 +94,13 @@ namespace BP.WF.HttpHandler
             en.RetrieveFromDBSources();
             ds.Tables.Add(en.ToDataTableField("NDRpt"));
 
-
             //转化为json ,返回出去.
             return BP.Tools.Json.ToJson(ds);
         }
-
-
-
+        /// <summary>
+        /// 让adminer登录.
+        /// </summary>
+        /// <returns></returns>
         public string Default_LetAdminerLogin()
         {
             string adminer = this.GetRequestVal("Adminer");

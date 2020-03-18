@@ -57,8 +57,7 @@
         });
 
 
-
-        function onSave() {
+        function Save() {
 
             var fk_flow = GetQueryString("FK_Flow");
 
@@ -73,12 +72,9 @@
 </head>
 <body onkeypress="Esc()">
     <form id="cc">
-        <div id="bar" class="cs-tr cs-bar">
-            <label style="float:left; font-size :15px;font-weight:bolder;padding-top:10px;">流程轨迹查看权限</label>
-            <input type="button" ID="Btn_Save" value="保存" onclick="onSave()" />
-        </div>
+            
         <table style=" width:100%; padding-left:19px;">
-
+            <caption> 流程轨迹查看权限  <input type="button" style="float:right"  ID="Btn_Save" value="保存" onclick="Save()" /></caption>
             <tr>
                 <td>
                     <input type="checkbox" ID="CB_PStarter" name="CB_PStarter" /><label for="CB_PStarter">发起人可见</label>

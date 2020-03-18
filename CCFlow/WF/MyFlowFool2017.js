@@ -1134,7 +1134,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             tip = "<span style='color: #C0C0C0;'>(" + mapAttr.Tip + ")</span>";
 
 
-        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + tip + "</label>";
+        return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='changeCBEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/> &nbsp;" + mapAttr.Name + tip + "</label>";
     }
 
     //枚举类型.

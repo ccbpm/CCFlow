@@ -1199,7 +1199,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
 
-        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='changeCBEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
     }
 
     //枚举类型.

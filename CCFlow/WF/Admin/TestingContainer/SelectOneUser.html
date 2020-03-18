@@ -76,10 +76,7 @@
                 } else {
                     html += "<td>" + en.CDT + "</td>";
                 }
-
-
                 html += "<td>" + en.IsRead + "</td>";
-
 
                 if (en.IsPass == 0) {
                     html += "<td><b><font color=green>待办</font></b></td>";
@@ -103,30 +100,24 @@
             html += "<td colspan=6>" + gwf.Title + "</td>";
             html += "</tr>";
 
-
             html += "<tr>";
             html += "<th>工作ID</th>";
             html += "<td>" + gwf.WorkID + "</td>";
-
             html += "<th>状态</th>";
             html += "<td>" + gwf.WFStateText + "</td>";
-
             html += "<th>发起人</th>";
             html += "<td>" + gwf.Starter + "," + gwf.StarterName + "</td>";
             html += "</tr>";
 
-
             html += "<tr>";
             html += "<th>停留节点ID</th>";
-            html += "<td>" + gwf.FK_Node +","+ gwf.NodeName + "</td>";
-            html += "<th>停留节点</th>";
-            html += "<td>" + gwf.NodeName + "</td>";
-
+            html += "<td>" + gwf.FK_Node + "," + gwf.NodeName + "</td>";
+            html += "<th>当前待办人员</th>";
+            html += "<td>" + gwf.TodoEmps + "</td>";
             html += "</tr>";
 
             html += "</table>";
             $("#gwf").html(html);
-
 
         });
 

@@ -171,7 +171,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
             if (colSpan == 1)
                 colWidth = "35%";
             else if (colSpan == 2)
-                colWidth ="50%";
+                colWidth = "50%";
             else if (colSpan == 3)
                 colWidth = "85%";
             textWidth = 15 * parseInt(textColSpan) + "%";
@@ -188,7 +188,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
             if (htmlobj.status == 404)
                 str = filename + "这个文件不存在，请联系管理员";
             html += "<tr>";
-            html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'><a href='#' onclick='EditBigText(\""+attr.MyPK+"\",\""+attr.FK_MapData+"\")'>" + str + "</a></td>";
+            html += "<td  ColSpan='" + tableCol + "' class='FDesc' style='text-align:left:height:auto'><a href='#' onclick='EditBigText(\"" + attr.MyPK + "\",\"" + attr.FK_MapData + "\")'>" + str + "</a></td>";
             html += "</tr>";
             isDropTR = true;
             UseColSpan = 0;
@@ -418,7 +418,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
 
 function InitMapAttrOfCtrlFool(mapAttr) {
     var elemHtml = "";
-  
+
     if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 2) {
         var rbHtmls = "";
         var ses = new Entities("BP.Sys.SysEnums");
@@ -538,8 +538,17 @@ function InitMapAttrOfCtrlFool(mapAttr) {
 
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
         if (mapAttr.UIContralType == 1) { //下拉框
-            var ses = new Entities("BP.Sys.SysEnums");
-            ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
+
+            var ses = null;
+            if (webUser.CCBPMRunModel == 0) {
+                ses = new Entities("BP.Sys.SysEnums");
+                ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
+            }
+            else {
+                ses = new Entities("BP.Cloud.Sys.SysEnums");
+                ses.Retrieve("RefPK", mapAttr.UIBindKey, "IntKey");
+            }
+
             var operations = "";
             $.each(ses, function (i, obj) {
                 operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
@@ -547,7 +556,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
 
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
 
-        } else if (mapAttr.UIContralType == 3){ //单选按钮
+        } else if (mapAttr.UIContralType == 3) { //单选按钮
 
             var rbHtmls = "";
             var ses = new Entities("BP.Sys.SysEnums");

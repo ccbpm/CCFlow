@@ -134,7 +134,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-
+                map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
                 map.SetHelperAlert("ExtIsSum", "如果是从表，就需要显示该从表的合计,在从表的底部.");
 

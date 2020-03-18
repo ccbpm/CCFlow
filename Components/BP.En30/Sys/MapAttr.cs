@@ -264,6 +264,7 @@ namespace BP.Sys
         public const string IsEnableInAPP = "IsEnableInAPP";
         public const string IsSupperText = "IsSupperText";
         public const string IsRichText = "IsRichText";
+        public const string IsSecret = "IsSecret";
 
         /// <summary>
         /// 默认值设置方式
@@ -1486,7 +1487,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 1, "是否启用", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsLine, 0, "是否单独栏显示", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsInput, 0, "是否必填字段", true, true);
-
+                map.AddTBInt(MapAttrAttr.IsSecret, 0, "是否保密", true, true);
                 map.AddTBInt(MapAttrAttr.IsRichText, 0, "富文本", true, true);
                 map.AddTBInt(MapAttrAttr.IsSupperText, 0, "富文本", true, true);
                 map.AddTBInt(MapAttrAttr.FontSize, 0, "富文本", true, true);

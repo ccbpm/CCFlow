@@ -200,7 +200,7 @@ namespace BP.WF.HttpHandler
         {
             var appNo = this.GetRequestVal("AppNo");
 
-            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
             sql1 += " FROM V_GPM_EmpMenu ";
             sql1 += " WHERE FK_Emp = '" + WebUser.No+ "' ";
             sql1 += " AND MenuType = '3' ";
@@ -214,7 +214,7 @@ namespace BP.WF.HttpHandler
             var dirs = DBAccess.RunSQLReturnTable(sql1);
             dirs.TableName = "Dirs"; //获得目录.
 
-            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND MenuType = '4' ";
@@ -243,7 +243,7 @@ namespace BP.WF.HttpHandler
         public string GPM_IsCanExecuteFunction()
         {
             var dt = GPM_GenerFlagDB(); //获得所有的标记.
-            var funcNo = this.GetRequestVal("FuncNo");
+            var funcNo = this.GetRequestVal("FuncFlag");
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr[0].ToString().Equals(funcNo) == true)
@@ -258,16 +258,16 @@ namespace BP.WF.HttpHandler
         public DataTable GPM_GenerFlagDB()
         {
             var appNo = this.GetRequestVal("AppNo");
-            var sql2 = "SELECT Flag ";
+            var sql2 = "SELECT Flag,Idx";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
-            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND MenuType = '5' ";
             sql2 += " AND FK_App = '" + appNo + "' ";
             sql2 += " UNION ";  //加入不需要权限控制的菜单.
-            sql2 += "SELECT Flag ";
+            sql2 += "SELECT Flag,Idx ";
             sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
             sql2 += " WHERE MenuCtrlWay=1 ";
-            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND MenuType = '5' ";
             sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql2);
             return dt;

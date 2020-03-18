@@ -105,7 +105,7 @@ namespace BP.WF.HttpHandler
         {
             string adminer = this.GetRequestVal("Adminer");
             string sid = this.GetRequestVal("SID");
-            BP.WF.Dev2Interface.Port_LoginBySID(adminer, sid);
+            BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
             return "登录成功.";
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);

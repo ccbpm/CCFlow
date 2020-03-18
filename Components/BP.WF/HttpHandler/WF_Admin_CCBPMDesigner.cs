@@ -541,7 +541,7 @@ namespace BP.WF.HttpHandler
                 {
                     string userNo = this.GetRequestVal("UserNo");
                     string sid = this.GetRequestVal("SID");
-                    BP.WF.Dev2Interface.Port_LoginBySID(userNo, sid);
+                    BP.WF.Dev2Interface.Port_LoginBySID(sid);
                 }
 
                 if (BP.Web.WebUser.IsAdmin == false)
@@ -640,7 +640,7 @@ namespace BP.WF.HttpHandler
                 {
                     string str = BP.WF.Glo.UpdataCCFlowVer();
 
-                    BP.WF.Dev2Interface.Port_LoginBySID(userNo, sid);
+                    BP.WF.Dev2Interface.Port_LoginBySID(sid);
                     if (this.FK_Flow == null)
                         return "url@Default.htm?UserNo=" + userNo + "&Key=" + DateTime.Now.ToBinary();
                     else

@@ -613,14 +613,14 @@ namespace BP.WF.Template
                 #endregion 时限规则
 
                 #region 模拟测试.
-                rm = new RefMethod();
-                rm.GroupName = "模拟测试";
-                rm.Title = "调试运行"; // "设计检查报告";
-                //rm.ToolTip = "检查流程设计的问题。";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
-                rm.ClassMethodName = this.ToString() + ".DoRunIt";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "模拟测试";
+                //rm.Title = "调试运行"; // "设计检查报告";
+                ////rm.ToolTip = "检查流程设计的问题。";
+                //rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
+                //rm.ClassMethodName = this.ToString() + ".DoRunIt";
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "模拟测试";

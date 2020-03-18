@@ -206,7 +206,7 @@ namespace BP.WF.HttpHandler
             sql1 += " AND MenuType = '3' ";
             sql1 += " AND FK_App = '" + appNo + "' ";
             sql1 += " UNION ";  //加入不需要权限控制的菜单.
-            sql1 += "SELECT No,Name, No as FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx";
+            sql1 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx";
             sql1 += " FROM GPM_Menu ";
             sql1 += " WHERE MenuCtrlWay=1 ";
             sql1 += " AND MenuType = '3' ";
@@ -220,7 +220,7 @@ namespace BP.WF.HttpHandler
             sql2 += " AND MenuType = '4' ";
             sql2 += " AND FK_App = '" + appNo + "' ";
             sql2 += " UNION ";  //加入不需要权限控制的菜单.
-            sql2 += "SELECT No,Name, No as FK_Menu,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            sql2 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
             sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
             sql2 += " WHERE MenuCtrlWay=1 ";
             sql2 += " AND MenuType = '4' ";

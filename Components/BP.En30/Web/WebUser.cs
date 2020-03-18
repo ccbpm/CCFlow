@@ -105,7 +105,12 @@ namespace BP.Web
 
             WebUser.No = em.No;
             WebUser.Name = em.Name;
-            
+
+            //增加他的orgNo @sly.
+            if (SystemConfig.CCBPMRunModel != 0)
+                WebUser.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
+
+
             if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.

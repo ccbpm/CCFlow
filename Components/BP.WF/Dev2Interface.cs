@@ -2771,7 +2771,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        sql = "SELECT A.NDFrom AS No, A.NDFromT AS Name, A.EmpFrom AS Rec, A.EmpFromT AS RecName, B.IsBackTracking, A.Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track A, WF_Node B WHERE A.NDFrom=B.NodeID AND A.WorkID = " + workid + " AND A.ActionType in(" +(int)ActionType.Start + "," + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND A.NDFrom != " + fk_node + " ORDER BY A.RDT DESC";
+                        sql = "SELECT A.NDFrom AS No, A.NDFromT AS Name, A.EmpFrom AS Rec, A.EmpFromT AS RecName, B.IsBackTracking, A.Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track A, WF_Node B WHERE A.NDFrom=B.NodeID AND A.WorkID = " + workid + " AND A.ActionType in(" + (int)ActionType.Start + "," + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND A.NDFrom != " + fk_node + " ORDER BY A.RDT DESC";
 
                         //sql = "SELECT A.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND ( A.AtPara NOT LIKE '%@IsHuiQian=1%' OR a.AtPara IS NULL) ORDER BY a.RDT DESC";
                     }
@@ -3547,22 +3547,24 @@ namespace BP.WF
         /// </summary>
         /// <param name="userNo">用户名</param>
         /// <param name="SID">安全ID,请参考流程设计器操作手册</param>
-        public static void Port_LoginBySID(string userNo, string sid, string deviceNo = "PC")
+        public static void Port_LoginBySID(string sid)
         {
-            if (WebUser.No == userNo)
-                return;
+            if (DataType.IsNullOrEmpty(sid))
+                throw new Exception("err@SID不能为空.");
 
-            BP.WF.Port.WFEmp emp = new Port.WFEmp(userNo);
-            //string key = "SID_" + deviceNo + "" + userNo;
-            //string guid = emp.GetParaString(key);
-            //if (guid.Equals(sid) == false)
-            //    throw new Exception("err@非法的sid.");
+            if (sid.Contains(" "))
+                throw new Exception("err@非法的SID.");
 
-            BP.Port.Emp myEmp = new BP.Port.Emp(userNo);
+            BP.Port.Emp myEmp = new BP.Port.Emp();
+            int i = myEmp.Retrieve("SID", sid);
+            if (i == 0)
+                throw new Exception("err@非法的SID，SID不正确.");
+
             WebUser.SignInOfGener(myEmp);
+           
             return;
         }
-      
+
         /// <summary>
         /// 登录
         /// </summary>
@@ -5194,21 +5196,21 @@ namespace BP.WF
                         num = DBAccess.RunSQLReturnValInt(ps);
                         break;
                     case DeliveryWay.ByDept:
-                        
-                            ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+
+                        ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                        ps.Add("FK_Node", nd.NodeID);
+                        ps.Add("FK_Emp", userNo);
+                        num = DBAccess.RunSQLReturnValInt(ps);
+
+                        if (num == 0)
+                        {
+                            ps.Clear();
+                            ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_Emp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.No=" + dbstr + "FK_Emp";
                             ps.Add("FK_Node", nd.NodeID);
                             ps.Add("FK_Emp", userNo);
                             num = DBAccess.RunSQLReturnValInt(ps);
+                        }
 
-                            if (num == 0)
-                            {
-                                ps.Clear();
-                                ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_Emp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.No=" + dbstr + "FK_Emp";
-                                ps.Add("FK_Node", nd.NodeID);
-                                ps.Add("FK_Emp", userNo);
-                                num = DBAccess.RunSQLReturnValInt(ps);
-                            }
-                         
                         break;
                     case DeliveryWay.ByBindEmp:
                         ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
@@ -5218,14 +5220,14 @@ namespace BP.WF
                         break;
                     case DeliveryWay.ByDeptAndStation:
 
-                       
-                            string sql = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B, WF_NodeStation C, " + Glo.EmpStation + " D";
-                            sql += " WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp=" + dbstr + "FK_Emp";
-                            ps.SQL = sql;
-                            ps.Add("FK_Node", nd.NodeID);
-                            ps.Add("FK_Emp", userNo);
-                            num = DBAccess.RunSQLReturnValInt(ps);
-                         
+
+                        string sql = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B, WF_NodeStation C, " + Glo.EmpStation + " D";
+                        sql += " WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp=" + dbstr + "FK_Emp";
+                        ps.SQL = sql;
+                        ps.Add("FK_Node", nd.NodeID);
+                        ps.Add("FK_Emp", userNo);
+                        num = DBAccess.RunSQLReturnValInt(ps);
+
                         break;
                     case DeliveryWay.BySelected:
                         num = 1;

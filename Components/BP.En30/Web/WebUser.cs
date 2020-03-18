@@ -676,7 +676,8 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("OrgNo", null, true);
                 if (val == null)
-                    throw new Exception("@err-004 OrgNo 登录信息丢失。");
+                    return "";
+                    //throw new Exception("@err-004 OrgNo 登录信息丢失。");
                 return val;
             }
             set

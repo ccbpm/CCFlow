@@ -40,7 +40,7 @@
                 newRow += "<td>" + node.NodeID + "</td>";
                 newRow += "<td>" + node.Name + "</td>";
                 newRow += "<td><img src='../ClientBin/NodeIcon/" + node.ICON + ".png' style='width:40px'  onerror=\"src='../ClientBin/NodeIcon/Default.jpg' \" />" + node.ICON + "</td>";
-                newRow += "<td><a class='btn btn-default btn-sm' href=\"javascript:Chenge('" + node.NodeID + "');\" >更换</a></td>";
+                newRow += "<td><a class='btn btn-xs' href=\"javascript:Chenge('" + node.NodeID + "');\" >更换</a></td>";
                 newRow += "</tr>";
 
                 $("#Table1 tr:last").after(newRow);

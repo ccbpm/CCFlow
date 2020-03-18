@@ -57,7 +57,7 @@
                 newRow += "<td>" + PushWayText(en.FK_Event, en.MailPushWay) + "</td>";
                 newRow += "<td>" + en.MailTitle + "</td>";
                 newRow += "<td>" + PushWayText(en.FK_Event, en.SMSPushWay) + "</td>";
-                newRow += "<td><a class='btn btn-default btn-sm' href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "<td><a  href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
 
                 newRow += "</tr>";
@@ -124,7 +124,7 @@
         <div style="right:30px; position:absolute; z-index:100; ">
             <fieldset style="border: 0px;">
                 <input type="button" value="+新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-                <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:#62CAE3; display: none; color: bl">
+                <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: bl">
                     <ul>
                         <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>
                         <li><a href="javascript:PushMessageEntity('FlowFix');">流程冻结后</a> </li>

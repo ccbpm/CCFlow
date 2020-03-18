@@ -20,17 +20,33 @@
 
             var webUser = new WebUser();
 
-            var icon = "<h5>当前用户</h5>";
 
-            var icon = "<center><b>当前用户</b><br>";
-            icon += "<img src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
-            icon += "</center>";
-            icon += "帐号:" + webUser.No;
-            icon += "<br>用户:" + webUser.Name;
-            // icon += "<br>部门编号:" + webUser.FK_Dept;
-            icon += "<br>部门:" + webUser.FK_DeptName;
+            var html = "<table style='width:100%;'>";
+            html += "<caption>当前用户</caption>";
 
-            $("#userInfo").html(icon);
+            html += "<tr>";
+            html += "<td colspan=2>";
+            html += "<img style='width:95%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
+            html += "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>帐号</td>";
+            html += "<td>" + webUser.No + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>用户</td>";
+            html += "<td>" + webUser.Name + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>部门</td>";
+            html += "<td>" + webUser.FK_DeptName + "</td>";
+            html += "</tr>";
+            html += "</table>";
+
+            $("#userInfo").html(html);
 
             var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Adminer=" + adminer + "&SID=" + sid;
 
@@ -106,8 +122,6 @@
 <body>
 
     <div id="userInfo"></div>
-
-    <hr />
     <div id="Info"></div>
 
 

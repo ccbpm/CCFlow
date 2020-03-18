@@ -100,7 +100,7 @@
             html += "<caption>流程信息</caption>";
             html += "<tr>";
             html += "<th>标题</th>";
-            html += "<td colspan=3>" + gwf.Title + "</td>";
+            html += "<td colspan=6>" + gwf.Title + "</td>";
             html += "</tr>";
 
 
@@ -110,16 +110,18 @@
 
             html += "<th>状态</th>";
             html += "<td>" + gwf.WFStateText + "</td>";
-            html += "</tr>";
 
+            html += "<th>发起人</th>";
+            html += "<td>" + gwf.Starter + "," + gwf.StarterName + "</td>";
+            html += "</tr>";
 
 
             html += "<tr>";
             html += "<th>停留节点ID</th>";
-            html += "<td>" + gwf.FK_Node + "</td>";
-
+            html += "<td>" + gwf.FK_Node +","+ gwf.NodeName + "</td>";
             html += "<th>停留节点</th>";
             html += "<td>" + gwf.NodeName + "</td>";
+
             html += "</tr>";
 
             html += "</table>";
@@ -170,7 +172,6 @@
 
         <!--<fieldset>
             <legend> 其他操作</legend>-->
-
         <!--<ul>
             <li> <a href="javascript:OpenRpt()">  轨迹图/表单/时间轴 </a> </li>
             <li> <a href="javascript:OpenRpt()">  安全退出 </a> </li>

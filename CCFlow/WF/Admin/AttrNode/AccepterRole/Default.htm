@@ -12,11 +12,10 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-
-            var node = new Entity("BP.WF.Node");
-            node.NodeID = GetQueryString("FK_Node");
-            node.Retrieve();
-            var str = node.NodeID.substr(node.NodeID.length - 2);
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node",nodeID);
+          
+            var str =nodeID.substr(nodeID.length - 2);
             if (str == "01") {
                 node.DeliveryWay = DeliveryWay.BySelected_1;
             }

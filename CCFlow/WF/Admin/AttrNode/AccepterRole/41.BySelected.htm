@@ -49,7 +49,7 @@
         });
         function Save() {
             var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
-            node.DeliveryWay = Baseinfo.deliverWay;
+            node.DeliveryWay =DeliveryWay.BySelected;
            
             node.Update();
              var node = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);

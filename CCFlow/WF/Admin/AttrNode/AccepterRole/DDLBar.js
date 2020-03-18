@@ -107,7 +107,7 @@ function InitBar(optionKey) {
 
     if (isSatrtNode == true) {
 
-        html += "<option value=" + DeliveryWay.BySelected + " >&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
+        html += "<option value=" + DeliveryWay.BySelected_1 + ">&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
 
     } else {
         html += "<option value=" + DeliveryWay.BySelected + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人</option>";
@@ -242,6 +242,9 @@ function changeOption() {
             break;
         case DeliveryWay.BySelected:
             roleName = "4.BySelected.htm";
+            break;
+        case DeliveryWay.BySelected_1:
+            roleName = "41.BySelected.htm";
             break;
         case DeliveryWay.ByPreviousNodeFormEmpsField:
             roleName = "5.ByPreviousNodeFormEmpsField.htm";

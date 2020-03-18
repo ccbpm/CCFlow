@@ -13,7 +13,7 @@ function InitLeftMenuComm() {
     }
 
     //通过API获得两个数据源.
-    var data = GPM_GenerMenumsDB();
+    var data = GPM_GenerMenumsDB(appNo);
     var dirs = data["Dirs"]; //获得目录.
     var menus = data["Menus"]; //获得菜单.
 
@@ -29,9 +29,9 @@ function InitLeftMenuComm() {
         if (icon != null && icon != "")
             firstIcon = icon;
 
-        var url = dir.Url;
+        var url = dir.UrlExt;
         if (url == undefined)
-            url = dir.URL;
+            url = dir.URLEXT;
 
         var name = dir.Name;
         if (name == undefined)
@@ -76,9 +76,9 @@ function InitLeftMenuComm() {
                 if (icon != null && icon != "")
                     secondIcon = icon;
 
-                var url = menu.Url;
+                var url = menu.UrlExt;
                 if (url == undefined)
-                    url = menu.URL;
+                    url = menu.URLEXT;
 
                 var name = menu.Name;
                 if (name == undefined)

@@ -79,7 +79,7 @@ function GPM_AutoHidShowPageElement(appNo) {
     var data = handler.DoMethodReturnJSON("GPM_AutoHidShowPageElement"); //获得所有的标记数据.
 
     for (var i = 0; i < data.length; i++) {
-        var ctrl = data[i][0];
+        var ctrl = data[i].Flag;
         var ctl = $("#" + ctrl);
         if (ctl == null)
             continue;

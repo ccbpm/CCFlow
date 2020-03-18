@@ -317,17 +317,11 @@
             //生成选择的人员.
             var checked = $('input:checked');
             var selectedEmps = [];
-            var selectedEmpLab = "";
             for (var i = 0; i < checked.length; i++) {
                 if (checked[i].id == "selectAll") {
                     continue;
                 }
                 selectedEmps.push(checked[i].id);
-
-                var ctrl = checked[i];
-
-                //录制人员名称.
-                selectedEmpLab += ctrl.id + "," + ctrl.value + ';';
             }
 
             selectedEmps = selectedEmps.join(';');
@@ -336,15 +330,13 @@
                 return;
             }
 
-            //            if (window.confirm("您确定要执行发送给如下人员[ " + selectedEmpLab + " ]吗？") == false)
-            //                return;
 
             $("#Msg").html("<font color=green>正在发送请稍候...</font>");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData(); //FK_Flow,WorkID,FK_Node,ToNode 参数.
 
-            //多个参数用逗号分开的比如： zhangsan,lisi,wangwu
+            //多个参数用逗号分开的比如： zhangsan;lisi;wangwu
             handler.AddPara("SelectEmps", encodeURI(selectedEmps)); 
             var data = handler.DoMethodReturnString("Accepter_Send"); //执行发送方法.
             if (data.indexOf('err@') == 0) {

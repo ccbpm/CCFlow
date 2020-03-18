@@ -2,7 +2,7 @@
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
 
 -- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.
-update WF_Direction set mypk=replace(mypk, '_0','');
+update WF_Direction set mypk=replace(mypk, '_0','') ;
 
 UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS NULL ) AND MyDataType=7;
 

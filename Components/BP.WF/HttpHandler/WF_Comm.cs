@@ -1287,18 +1287,19 @@ namespace BP.WF.HttpHandler
             //把外键枚举增加到里面.
             foreach (AttrSearch item in attrs)
             {
-                if (item.HisAttr.IsEnum == true)
+                Attr attr = item.HisAttr;
+                if (attr.IsEnum == true)
                 {
-                    SysEnums ses = new SysEnums(item.HisAttr.UIBindKey);
+                    SysEnums ses = new SysEnums(attr.UIBindKey);
                     DataTable dtEnum = ses.ToDataTableField();
                     dtEnum.TableName = item.Key;
                     ds.Tables.Add(dtEnum);
                     continue;
                 }
 
-                if (item.HisAttr.IsFK == true)
+                if (attr.IsFK == true)
                 {
-                    Entities ensFK = item.HisAttr.HisFKEns;
+                    Entities ensFK = attr.HisFKEns;
                     ensFK.RetrieveAll();
 
                     DataTable dtEn = ensFK.ToDataTableField();
@@ -1306,11 +1307,12 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dtEn);
                 }
                 //绑定SQL的外键
-                if (item.HisAttr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
+                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL
+                    && DataType.IsNullOrEmpty(attr.UIBindKey) == false
+                    && ds.Tables.Contains(attr.Key) == false)
                 {
                     //获取SQl
-                    string sql = item.HisAttr.UIBindKey;
-                    sql = BP.WF.Glo.DealExp(sql, null, null);
+                    string sql = BP.WF.Glo.DealExp(attr.UIBindKey, null, null);
                     DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataColumn col in dtSQl.Columns)
                     {
@@ -1318,12 +1320,15 @@ namespace BP.WF.HttpHandler
                         switch (colName)
                         {
                             case "no":
+                            case "NO":
                                 col.ColumnName = "No";
                                 break;
                             case "name":
+                            case "NAME":
                                 col.ColumnName = "Name";
                                 break;
                             case "parentno":
+                            case "PARENTNO":
                                 col.ColumnName = "ParentNo";
                                 break;
                             default:
@@ -1331,8 +1336,7 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     dtSQl.TableName = item.Key;
-                    if (ds.Tables.Contains(item.Key) == false)
-                        ds.Tables.Add(dtSQl);
+                    ds.Tables.Add(dtSQl);
                 }
 
             }

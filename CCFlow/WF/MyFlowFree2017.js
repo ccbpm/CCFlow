@@ -357,7 +357,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 return eleHtml;
             }
 
-            eleHtml += "<input class='form-control " + mapAttr.CSS + "' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            var type = " type='text' ";
+            if (mapAttr.IsSecret)
+                type = " type='password' ";
+
+            eleHtml += "<input class='form-control " + mapAttr.CSS + "' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'"+type+" placeholder='" + (mapAttr.Tip || '') + "' />";
 
             return eleHtml;
         }
@@ -464,13 +468,22 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ "  id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     // int 类型.
     if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
-        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ "  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -485,7 +498,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         else
             bit = 2;
 
-        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type+"  id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 

@@ -743,7 +743,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 return eleHtml;
             }
 
-            eleHtml += "<input style='display:inline' class='form-control " + mapAttr.CSS + "' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            var type = " type='text' ";
+            if (mapAttr.IsSecret)
+                type = " type='password' ";
+
+            eleHtml += "<input style='display:inline' class='form-control " + mapAttr.CSS + "' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'" + type+" placeholder='" + (mapAttr.Tip || '') + "' />";
 
             return eleHtml;
         }
@@ -833,14 +837,21 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value));limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value));limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type+" id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     // int 类型.
     if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
 
-        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;' onblur='valitationAfter(this, \"int\")' onkeydown='valitationBefore(this, \"int\")' onkeyup=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;' onblur='valitationAfter(this, \"int\")' onkeydown='valitationBefore(this, \"int\")' onkeyup=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -854,7 +865,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         else
             bit = 2;
 
-        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); limitLength(this," + bit + ");FormatMoney(this, " + bit + ", ',');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); limitLength(this," + bit + ");FormatMoney(this, " + bit + ", ',');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 

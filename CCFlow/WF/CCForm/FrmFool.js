@@ -1076,7 +1076,12 @@ function InitMapAttrOfCtrl(mapAttr) {
             if (mapAttr.UIIsEnable == 0)
                 enableAttr = "disabled='disabled'";
 
-            return "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:28px;' type='text'  " + enableAttr + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+            var type = " type='text' ";
+            if (mapAttr.IsSecret)
+                type = " type='password' ";
+
+
+            return "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:28px;'"+type + enableAttr + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         }
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
@@ -1230,18 +1235,23 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        // alert(mapAttr.KeyOfEn);
-        return "<input  onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");'  style='text-align:right;width:100%'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        return "<input  onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");'  style='text-align:right;width:100%'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type  + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
         var enableAttr = '';
         if (mapAttr.UIIsEnable != 1) {
-            enableAttr = "disabled='disabled'";
+            enableAttr = " disabled='disabled'";
         }
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
 
-        //return "<input onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);'  style='text-align:right;;width:100%' onkeyup=" + '"' + "limitLength(this," + bit + ");valitationAfter(this, 'int');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
-        return "<input  onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);' value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "limitLength(this," + bit + ");valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn +"' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);' value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "limitLength(this," + bit + ");valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn +"' placeholder='" + (mapAttr.Tip || '') + "'/>";
     
     }
 
@@ -1262,7 +1272,11 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             bit = 2;
 
-        return "<input onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");numberFormat (this, " + bit + ")' style='text-align:right;width:100%' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";    }
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        return "<input onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");numberFormat (this, " + bit + ")' style='text-align:right;width:100%' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";    }
 
     alert(mapAttr.Name + "的类型没有判断.");
     return;

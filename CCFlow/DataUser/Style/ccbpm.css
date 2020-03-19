@@ -8,15 +8,6 @@ body
     font-size: 14px;
     direction: ltr;
 }
-input[name="Btn_Save"],#Btn_Save {
-    background: #50B6AC !important;
-}
-input[name="Btn_Back"] {
-    background: #F74F52 !important;
-}
-#Btn_Export {
-    background: #F3BA20 !important;
-}
 /* 图片放大鼠标样式 */
 .HelpImg:hover {
     cursor: zoom-in;
@@ -28,24 +19,15 @@ input[name="Btn_Back"] {
 /* 按钮风格  edit by zhoupeng 我们就使用白色的背景颜色了，不要变动了,不然影响全局. */
 input[type="button"], input[type="submit"], input[type="file"] {
     border: 0; /*background: #4D77A7;*/
-    background:  white;
-    color: #545454;
+    background-color: #62CAE3;
+    color: white;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
     border: 1px solid #d2cdcd;
 }
-input:hover[type="button"] {
-    border: 0; /*background: #4D77A7;*/
-    background: #62CAE3;
-    color: #fff;
-    font-size: 12px;
-    padding: 4px 15px;
-    margin: 5px 3px 5px 3px;
-    border-radius: 3px;
-    border: 1px solid #1d7dd4;
-}
+
 .form-control[disabled],
 .form-control[readonly],
     fieldset[disabled] {

@@ -494,7 +494,7 @@ $(function () {
             windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
 
 
-            var xiuNodename = '<input id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
+            var xiuNodename = '<input style="width:90%" id="TB_' + activeId + '" type="text" value="' + windowtext + '">'
             var spanaa = $("#window" + activeId + " span").html();
 
             cAlert(xiuNodename);

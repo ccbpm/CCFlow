@@ -185,37 +185,47 @@
 </head>
 <body>
     <form id="cc">
-    <div style="overflow: auto">
-        <div style="width: 100%; max-height: 600px; overflow: auto">
-            <table id="t1" style="width: 100%;">
-                <caption>
-                    <a href="javascript:Back();">
-                        <img src='../../Img/Btn/back.gif'>返回</a> 方向条件-按部门</caption>
-            </table>
+        <div style="right:30px; position:absolute; z-index:100; ">
+            <fieldset style="border: 0px;">
+                <input type="button" onclick="Btn_Save_Click()" value="保存" id="Save" />
+                <input type="button" onclick="Btn_Delete_Click()" value="删除" id="Button1" />
+                <input type="button" onclick="Back()" value="返回" id="Button2" />
+            </fieldset>
         </div>
-        <br />
-        <div>
-            指定的操作员：<select id="DDL_SpecOperWay" name="DDL_SpecOperWay" onchange="selChange()">
-                <option selected="selected" value="0">当前操作员</option>
-                <option value="1">指定节点的操作员</option>
-                <option value="2">指定表单字段作为操作员</option>
-                <option value="3">指定操作员编号</option>
-            </select>
-            <input type="hidden" name="initDDL_SpecOperWay" id="initDDL_SpecOperWay" value=" " />
-            <input type="hidden" name="initTB_SpecOperPara" id="initTB_SpecOperPara" value=" " />
+        <div style="position:relative;top:10px; margin: 8px; width:100%">
+            <div style="width: 100%; max-height: 600px; overflow: auto">
+                <table id="t1" style="width: 100%;">
+                    <caption>
+                        <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />
+                        方向条件-按部门
+                    </caption>
+                </table>
+            </div>
             <br />
-            <br />
-            <span class="lbls"><span id="span0">参数：</span> <span id="span1" style="display: none">
-                节点编号：</span> <span id="span2" style="display: none">表单字段：</span> <span id="span3"
-                    style="display: none">操作员编号：</span> </span>
-            <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled"
-                style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
-            <br />
-            <input type="button" onclick="Btn_Save_Click()" value="保存" id="Save" />
-            <input type="button" onclick="Btn_Delete_Click()" value="删除" id="Button1" />
-            <input type="button" onclick="Back()" value="返回" id="Button2" />
+            <div>
+                指定的操作员：<select id="DDL_SpecOperWay" name="DDL_SpecOperWay" onchange="selChange()">
+                    <option selected="selected" value="0">当前操作员</option>
+                    <option value="1">指定节点的操作员</option>
+                    <option value="2">指定表单字段作为操作员</option>
+                    <option value="3">指定操作员编号</option>
+                </select>
+                <input type="hidden" name="initDDL_SpecOperWay" id="initDDL_SpecOperWay" value=" " />
+                <input type="hidden" name="initTB_SpecOperPara" id="initTB_SpecOperPara" value=" " />
+                <br />
+                <br />
+                <span class="lbls">
+                    <span id="span0">参数：</span> <span id="span1" style="display: none">
+                        节点编号：
+                    </span> <span id="span2" style="display: none">表单字段：</span> <span id="span3"
+                                                                                      style="display: none">操作员编号：</span>
+                </span>
+                <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled"
+                       style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
+                <br />
+               
+                <!--<input type="button" onclick="Back()" value="返回" id="Button2" />-->
+            </div>
         </div>
-    </div>
     </form>
 </body>
 </html>

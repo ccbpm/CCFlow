@@ -173,40 +173,46 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-    <table style="width: 90%;">
-        <caption>
-            <a href="javascript:Back();">
-                <img src='../../Img/Btn/back.gif'>返回</a> 方向条件-按照URL</caption>
-        <tr>
-            <td style="width: 20%;">
-                请输入url
-            </td>
-            <td>
-                <input type="text" id="TB_Docs" name="TB_Docs" style="width: 95%;">
-                </textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                备注(不为空):
-            </td>
-            <td>
-                <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
-            </td>
-        </tr>
-    </table>
-    <input type="button" value="加载模版" onclick="LoadTemplate()" />
-    <input type="button" value="保存" onclick="Save()" />
-    <input type="button" value="删除" onclick="Delete()" />
-    <input type="button" onclick="Back()" value="返回" id="Button2" />
-    <div style="text-align: left">
-        <h4>
-            &nbsp; &nbsp; &nbsp; &nbsp;帮助</h4>
-        <ul>
-            <li>格式: http://xxxx/xxx.xxx?s=sss , 此url返回小于等于0是不通过，大于等于1是通过。</li>
-            <li>系统在调用此url时会向它传入4大参数:FK_Flow,FK_Node,WorkID,FID您通过这四个参数,您可以获得当前流程数据。</li>
-        </ul>
-    </div>
+        <div style="right:30px; position:absolute; z-index:100; ">
+            <fieldset style="border: 0px;">
+                <input type="button" value="加载模版" onclick="LoadTemplate()" />
+                <input type="button" value="保存" onclick="Save()" />
+                <input type="button" value="删除" onclick="Delete()" />
+                <input type="button" onclick="Back()" value="返回" id="Button2" />
+            </fieldset>
+        </div>
+        <table style="position:relative;top:10px; margin: 8px; width:100%">
+            <caption>
+                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' /> 方向条件-按照URL
+            </caption>
+            <tr>
+                <td style="width: 20%;">
+                    请输入url
+                </td>
+                <td>
+                    <input type="text" id="TB_Docs" name="TB_Docs" style="width: 95%;" />
+                    </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    备注(不为空):
+                </td>
+                <td>
+                    <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
+                </td>
+            </tr>
+        </table>
+        
+        <div style="text-align: left">
+            <h4>
+                &nbsp; &nbsp; &nbsp; &nbsp;帮助
+            </h4>
+            <ul>
+                <li>格式: http://xxxx/xxx.xxx?s=sss , 此url返回小于等于0是不通过，大于等于1是通过。</li>
+                <li>系统在调用此url时会向它传入4大参数:FK_Flow,FK_Node,WorkID,FID您通过这四个参数,您可以获得当前流程数据。</li>
+            </ul>
+        </div>
     </form>
     <center>
         <div id="Msg" />

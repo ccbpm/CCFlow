@@ -236,85 +236,91 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-    <table style="width: 90%;">
-        <caption>
-            <a href="javascript:Back();">
-                <img src='../../Img/Btn/back.gif'>返回</a> 按照独立表单做方向条件</caption>
-        <tr>
-            <td style="width: 20%;">
-                选择独立表单:
-            </td>
-            <td>
-                <select id="DDL_Frms" name="DDL_Frms" style="width: 400px;" onchange="changeForm(this)">
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 20%;">
-                选择表单字段:
-            </td>
-            <td>
-                <select id="DDL_Fields" name="DDL_Fields" style="width: 400px;" onchange="changeCond(this)">
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 20%;">
-                操作符:
-            </td>
-            <td>
-                <select id="DDL_Operator" name="DDL_Operator" style="width: 100px;">
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 20%;">
-                值:
-            </td>
-            <td>
-                <input type="text" value="" style="width: 100px;" id="TB_Val" name="TB_Val" />
-                <br />
-                <select id="DDL_Val" name="DDL_Val" style="width: 100px;">
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td colspan="1">
-                <input type="button" value="保存为AND条件" onclick="Save('AND');" />
-                <input type="button" value="保存为OR条件" onclick="Save('OR');" />
-            </td>
-        </tr>
-    </table>
-    <table id="Table1" name="Table1" style="width: 90%;">
-        <tr>
-            <th>
-                序
-            </th>
-            <th>
-                字段的英文名
-            </th>
-            <th>
-                中文名
-            </th>
-            <th>
-                操作符
-            </th>
-            <th>
-                值
-            </th>
-            <th>
-                标签
-            </th>
-            <th>
-                运算关系
-            </th>
-            <th>
-                操作
-            </th>
-        </tr>
-    </table>
+        <div style="right:30px; position:absolute; z-index:100; ">
+            <fieldset style="border: 0px;">
+
+                <input type="button" onclick="Back()" value="返回" id="Button2" />
+            </fieldset>
+        </div>
+        <table style="position:relative;top:10px; margin: 8px; width:100%">
+            <caption>
+                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' /> 按照独立表单做方向条件
+            </caption>
+            <tr>
+                <td style="width: 20%;">
+                    选择独立表单:
+                </td>
+                <td>
+                    <select id="DDL_Frms" name="DDL_Frms" style="width: 400px;" onchange="changeForm(this)">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">
+                    选择表单字段:
+                </td>
+                <td>
+                    <select id="DDL_Fields" name="DDL_Fields" style="width: 400px;" onchange="changeCond(this)">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">
+                    操作符:
+                </td>
+                <td>
+                    <select id="DDL_Operator" name="DDL_Operator" style="width: 100px;">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">
+                    值:
+                </td>
+                <td>
+                    <input type="text" value="" style="width: 100px;" id="TB_Val" name="TB_Val" />
+                    <br />
+                    <select id="DDL_Val" name="DDL_Val" style="width: 100px;">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td colspan="1">
+                    <input type="button" value="保存为AND条件" onclick="Save('AND');" />
+                    <input type="button" value="保存为OR条件" onclick="Save('OR');" />
+                </td>
+            </tr>
+        </table>
+        <table id="Table1" name="Table1" style="width: 90%;">
+            <tr>
+                <th>
+                    序
+                </th>
+                <th>
+                    字段的英文名
+                </th>
+                <th>
+                    中文名
+                </th>
+                <th>
+                    操作符
+                </th>
+                <th>
+                    值
+                </th>
+                <th>
+                    标签
+                </th>
+                <th>
+                    运算关系
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </table>
     </form>
     <center>
         <div id="Msg" />

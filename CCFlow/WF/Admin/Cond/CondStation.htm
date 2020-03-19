@@ -165,7 +165,9 @@
             if (orgNo == undefined)
                 orgNo = 0;
             var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&emps=" + emps + "&SelectType=" + selectType;
+            document.getElementById("stationFrame").style.width = "100%";
             document.getElementById("stationFrame").src = url;
+            
             $("#win").window("open");
 
         }

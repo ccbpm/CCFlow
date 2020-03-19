@@ -601,6 +601,7 @@ namespace BP.GPM
                 Menu en = new Menu(this.ParentNo);
                 if (en.HisMenuType != MenuType.App)
                     throw new Exception("err@当前菜单类型是目录，但是父节点不是系统，选择不正确.");
+
             }
 
             if (this.HisMenuType == MenuType.Menu)

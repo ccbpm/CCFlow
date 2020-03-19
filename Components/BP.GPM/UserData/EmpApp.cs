@@ -92,15 +92,15 @@ namespace BP.GPM
         /// <summary>
         /// 超链接
         /// </summary>
-        public string Url
+        public string UrlExt
         {
             get
             {
-                return this.GetValStringByKey(AppAttr.Url);
+                return this.GetValStringByKey(AppAttr.UrlExt);
             }
             set
             {
-                this.SetValByKey(AppAttr.Url, value);
+                this.SetValByKey(AppAttr.UrlExt, value);
             }
         }
         #endregion
@@ -142,7 +142,7 @@ namespace BP.GPM
 
                 map.AddTBString(AppAttr.Name, null, "系统-名称", true, false, 0, 3900, 20);
                 
-                map.AddTBString(AppAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
+                map.AddTBString(AppAttr.UrlExt, null, "连接", true, false, 0, 3900, 20, true);
 
                 map.AddMyFile("图标");
 

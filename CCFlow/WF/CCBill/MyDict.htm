@@ -127,13 +127,13 @@
                 if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
                 toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
-                toolBar += "<input type=button value='" + btnSave + "&关闭' onclick='SaveIt(true);' />";
+                //toolBar += "<input type=button value='" + btnSave + "&关闭' onclick='SaveIt(true);' />";
             }
 
-            if (power.IsSave == 1 && power.IsInsert == 1) {
-                btnSave = "保存&新建";
-                toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
-            }
+            //if (power.IsSave == 1 && power.IsInsert == 1) {
+            //    btnSave = "保存&新建";
+            //    toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
+            //}
 
             if (power.IsSubmit == 1) {
                 var btnSubmit = frmBill.BtnSubmitLable;
@@ -184,7 +184,7 @@
                 if (fm.IsMyBillToolBar != 1)
                     continue;
 
-                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.MethodName + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "');\" />";
+                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.MethodName + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "'," + fm.RefMethodType +");\" />";
             }
 
             if (webUser.No == 'admin') {
@@ -200,8 +200,26 @@
         }
 
         ///执行方法.
-        function Done(msg, funMyPK, methodName, afterOper, w, h) {
-
+        function Done(msg, funMyPK, methodName, afterOper, w, h, methodType) {
+            //打开链接
+            if (methodType != 0) {
+                var mlink = new Entity("BP.Frm.MethodLink", funMyPK);
+                var linkUrl = mlink.MethodDoc_Url;
+                if (linkUrl != null && linkUrl != undefined && linkUrl != "") {
+                    linkUrl = linkUrl.replace("@basePath", basePath);
+                    linkUrl = DealJsonExp(frmData.MainTable[0], linkUrl);
+                    var openType = mlink.RefMethodType;
+                    //模态窗口打开
+                    if (openType == 0) {
+                        OpenBootStrapModal(url, "MethodeLink", methodName, w, h, null, true, null, null, null);
+                    }
+                    //新窗口打开
+                    if (openType == 1 || openType == 2) {
+                        window.open(linkUrl);
+                    }
+                }
+                return;
+            }
             var isHaveAttr = false;
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
             for (var i = 0; i < attrs.length; i++) {

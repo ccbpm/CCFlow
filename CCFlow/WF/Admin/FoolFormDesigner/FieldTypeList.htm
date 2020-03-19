@@ -344,7 +344,7 @@
                             mapAttr.KeyOfEn = id;
                             mapAttr.Name = name;
                             mapAttr.GroupID = groupID;
-                            mapAttr.UIContralType = 11; //FrmImg 类型的控件.
+                            mapAttr.UIContralType = 11; //FrmImg 类型的控件
                             mapAttr.MyDataType = 1;
                             mapAttr.ColSpan = 0; //单元格.
                             mapAttr.LGType = 0;
@@ -365,6 +365,57 @@
                             en.Insert(); //插入到数据库.
                             window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK;
                         }
+
+                        //图片附件.
+                        function ExtImgAth() {
+
+                            var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON', '肖像');
+                            if (name == null || name == undefined)
+                                return;
+
+                            var frmID = GetQueryString("FK_MapData");
+                            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                            mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+                            if (mapAttrs.length >= 1) {
+                                alert('名称：[' + name + "]已经存在.");
+                                ExtImg();
+                                return;
+                            }
+
+                            //获得ID.
+                            var id = StrToPinYin(name);
+
+                            var mypk = frmID + "_" + id;
+                            var mapAttr = new Entity("BP.Sys.MapAttr");
+                            mapAttr.MyPK = mypk;
+                            if (mapAttr.IsExits == true) {
+                                alert('名称：[' + name + "]已经存在.");
+                                return;
+                            }
+                            mapAttr.FK_MapData = frmID;
+                            mapAttr.KeyOfEn = id;
+                            mapAttr.Name = name;
+                            mapAttr.GroupID = groupID;
+                            mapAttr.UIContralType = 12; //FrmImgAth 类型的控件.
+                            mapAttr.MyDataType = 1;
+                            mapAttr.ColSpan = 0; //单元格.
+                            mapAttr.LGType = 0;
+                            mapAttr.UIWidth = 150;
+                            mapAttr.UIHeight = 170;
+                            mapAttr.Insert(); //插入字段.
+                            mapAttr.Retrieve();
+
+                            var en = new Entity("BP.Sys.FrmUI.FrmImgAth");
+                            en.MyPK = frmID + "_" + id;
+                            en.FK_MapData = frmID;
+                            en.CtrlID = id;
+                            en.Name = name;
+                            en.GroupID = mapAttr.GroupID; //设置分组列.
+                           
+                            en.Insert(); //插入到数据库.
+                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + en.MyPK;
+                        }
+
                         //附件.
                         function ExtAth() {
 
@@ -715,6 +766,7 @@
                 <td colspan="2">
                     <ul>
                         <li><a href="javascript:ExtImg();"><b>装饰类图片</b></a> &nbsp;&nbsp;用于显示icon、头像、作业示意图等.</li>
+                        <li><a href="javascript:ExtImgAth();"><b>图片附件</b></a> &nbsp;&nbsp;用于显示头像等图片.</li>
                         <li><a href="javascript:ExtAth();"><b>多附件</b></a> &nbsp;&nbsp;上传多附件.</li>
                         <li><a href="javascript:ExtLink();"><b>超链接</b></a> &nbsp;&nbsp;用于解析把字段做为超链接展现.</li>
                         <li><a href="javascript:ExtHandWriting();"><b>写字板</b></a> &nbsp;&nbsp;手写签名版，画图等.</li>

@@ -168,6 +168,10 @@ function GenerFoolFrm(mapData, frmData) {
 
     html += "</table>";
 
+    if (frmData.Sys_FrmImgAth.length > 0) {
+        html += "<input type='hidden' id='imgSrc'/>";
+    }
+
     ////加入隐藏控件.
     //var mapAttrs = frmData.Sys_MapAttr;
     //for (var i = 0; i < mapAttrs.length; i++) {
@@ -1956,9 +1960,6 @@ function GetLab(frmData, attr) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
         lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
-//        if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
-//            lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
-//        }
         return lab;
     }
     //附件控件
@@ -2081,7 +2082,48 @@ function GetLab(frmData, attr) {
         return "";
 
     }
+    //图片附件
+    if (contralType == 12) {
+        //获取图片控件的信息
+        var frmImgs = $.grep(frmData.Sys_FrmImgAth, function (item, i) {
+            return item.MyPK == attr.MyPK;
+        });
+        if (frmImgs.length == 0) {
+            alert("主键为" + attr.MyPK + "名称为" + attr.Name + "的图片控件信息丢失，请联系管理员");
+            return "";
+        }
 
+        var frmImg = frmImgs[0];
+        var imgSrc = basePath + "/WF/Data/Img/LogH.PNG";
+
+        //获取数据
+        if (frmImg.FK_MapData.indexOf("ND") != -1)
+            imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImg.CtrlID + "_" + pageData.OID + ".png";
+        else
+            imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImg.FK_MapData + "_" + frmImg.CtrlID + "_" + pageData.OID + ".png";
+        
+
+        var _html = "";
+        if (frmImg.IsEdit == "1" && pageData.IsReadonly != "1") {
+            var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImg.W + "&H=" + frmImg.H + "&FK_MapData=" + frmData.Sys_MapData[0].No + "&RefPKVal=" + pageData.OID + "&CtrlID=" + frmImg.CtrlID;
+            _html += "<div>";
+            _html += "<fieldset>";
+            _html += "<legend style='margin-bottom:0px'>";
+            _html += "<a href='javaScript:void(0)' onclick='ImgAth(\"" + url + "\",\"" + frmImg.MyPK + "\");'>编辑</a>";
+            _html += "</legend>";
+            _html += "<img class='pimg' id='Img" + frmImg.MyPK + "' name='Img" + frmImg.MyPK + "' src='" + imgSrc + "' onerror=\"this.src='" + basePath +"/DataUser/ICON/CCFlow/LogBig.png'\" style='width:" + frmImg.W + "px;height:" + frmImg.H + "px;'/>";
+            _html += "</fieldset>";
+            _html += "</div>";
+            return _html;
+        } else {
+            _html += "<div>";
+            _html += "<img class='pimg' id='Img" + frmImg.MyPK + "' name='Img" + frmImg.MyPK + "' src='" + imgSrc + "' onerror=\"this.src='" + basePath +"/DataUser/ICON/CCFlow/LogBig.png'\" style='width:" + frmImg.W + "px;height:" + frmImg.H + "px;'/>";
+            _html += "</div>";
+            return _html;
+        }
+
+
+    }
     return lab;
 }
 

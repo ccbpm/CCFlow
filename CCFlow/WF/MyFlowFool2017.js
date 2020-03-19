@@ -301,6 +301,9 @@ function GenerFoolFrm(wn) {
     }
 
     html += "</table>";
+    if (flowData.Sys_FrmImgAth.length > 0) {
+        html += "<input type='hidden' id='imgSrc'/>";
+    }
 
     $('#CCForm').html(html);
 
@@ -452,6 +455,7 @@ function InitThreeColMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             continue;
         }
     }
+  
     return html;
 }
 
@@ -2124,6 +2128,47 @@ function GetLab(flowData, attr) {
         }
         return "";
 
+    }
+    //图片附件
+    if (contralType == 12) {
+        //获取图片控件的信息
+        var frmImgs = $.grep(flowData.Sys_FrmImgAth, function (item, i) {
+            return item.MyPK == attr.MyPK;
+        });
+        if (frmImgs.length == 0) {
+            alert("主键为" + attr.MyPK + "名称为" + attr.Name + "的图片控件信息丢失，请联系管理员");
+            return "";
+        }
+        
+        var frmImg = frmImgs[0];
+        var imgSrc = basePath + "/DataUser/ICON/CCFlow/LogBig.png";
+
+        //获取数据
+        if (frmImg.FK_MapData.indexOf("ND") != -1)
+            imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImg.CtrlID + "_" + pageData.WorkID + ".png";
+        else
+            imgSrc = basePath + "/DataUser/ImgAth/Data/" + frmImg.FK_MapData + "_" + frmImg.CtrlID + "_" + pageData.WorkID + ".png";
+
+        var _html = "";
+        if (frmImg.IsEdit == "1" && pageData.IsReadonly != "1") {
+            var url = basePath + "/WF/CCForm/ImgAth.htm?W=" + frmImg.W + "&H=" + frmImg.H + "&FK_MapData=" + flowData.Sys_MapData[0].No + "&RefPKVal=" + pageData.WorkID + "&CtrlID=" + frmImg.CtrlID;
+            _html += "<div>";
+            _html += "<fieldset>";
+            _html += "<legend style='margin-bottom:0px'>";
+            _html += "<a href='javaScript:void(0)' onclick='ImgAth(\"" + url + "\",\"" + frmImg.MyPK + "\");'>编辑</a>"; 
+            _html += "</legend>";
+            _html += "<img class='pimg' id='Img" + frmImg.MyPK + "' name='Img" + frmImg.MyPK + "' src='" + imgSrc + "' onerror=\"this.src='" + basePath+"/DataUser/ICON/CCFlow/LogBig.png'\" style='width:" + frmImg.W + "px;height:" + frmImg.H + "px;'/>";
+            _html += "</fieldset>";
+            _html += "</div>";
+            return _html;
+        } else {
+            _html += "<div>";
+            _html += "<img class='pimg' id='Img" + frmImg.MyPK + "' name='Img" + frmImg.MyPK + "' src='" + imgSrc + "' \"this.src='" + basePath +"/DataUser/ICON/CCFlow/LogBig.png'\" style='width:" + frmImg.W + "px;height:" + frmImg.H + "px;'/>";
+            _html += "</div>";
+            return _html;
+        }
+
+        
     }
 
     return lab;

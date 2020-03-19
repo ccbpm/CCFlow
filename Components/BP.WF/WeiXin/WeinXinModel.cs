@@ -494,6 +494,10 @@ namespace BP.WF.WeiXin
         /// 关注状态: 1=已关注，2=已冻结，4=未关注 
         /// </summary>
         public string status { get; set; }
+        /// <summary>
+        /// 是否是上级，1=是，0=不是
+        /// </summary>
+        public int[] is_leader_in_dept { get; set; }
     }
     #endregion
 }

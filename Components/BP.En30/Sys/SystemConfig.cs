@@ -881,6 +881,13 @@ namespace BP.Sys
                 return AppSettings["OZType"];
             }
         }
+		public static string OZParentNo
+        {
+            get
+            {
+                return AppSettings["OZParentNo"];
+            }
+        }
         /// <summary>
         /// 帐号钥匙
         /// </summary>

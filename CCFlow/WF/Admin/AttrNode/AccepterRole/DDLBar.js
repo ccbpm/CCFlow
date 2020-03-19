@@ -120,7 +120,6 @@ function InitBar(optionKey) {
     html += "</select >";
     html += "<input  id='Btn_Save' type=button onclick='SaveRole()' value='保存' />";
     html += "<input id='Btn' type=button onclick='AdvSetting()' value='高级设置' />";
-    html += "<input  id='Btn_Help' type=button onclick='Help()' value='在线帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;

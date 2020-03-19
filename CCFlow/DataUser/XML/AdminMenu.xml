@@ -38,7 +38,7 @@
   <Item No="504" GroupNo="Org" Name="权限组" For="admin" Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />
 
   <Group No="GPM" Name="菜单权限" />
-  <Item No="901" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Ens.htm?EnsName=BP.GPM.AppSorts"  />
+  <Item No="901" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
   <Item No="902" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
   <Item No="903" GroupNo="GPM" Name="权限组" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
   <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />

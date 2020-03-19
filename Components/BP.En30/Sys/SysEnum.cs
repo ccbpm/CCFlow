@@ -5,27 +5,27 @@ using BP.En;
 
 namespace BP.Sys
 {
-	/// <summary>
-	/// sss
-	/// </summary>
-	public class SysEnumAttr 
-	{
-		/// <summary>
-		/// 标题  
-		/// </summary>
-		public const string Lab="Lab";
-		/// <summary>
-		/// Int key
-		/// </summary>
-		public const string IntKey="IntKey";
-		/// <summary>
-		/// EnumKey
-		/// </summary>
-		public const string EnumKey="EnumKey";
-		/// <summary>
-		/// Language
-		/// </summary>
-		public const string Lang="Lang";
+    /// <summary>
+    /// sss
+    /// </summary>
+    public class SysEnumAttr
+    {
+        /// <summary>
+        /// 标题  
+        /// </summary>
+        public const string Lab = "Lab";
+        /// <summary>
+        /// Int key
+        /// </summary>
+        public const string IntKey = "IntKey";
+        /// <summary>
+        /// EnumKey
+        /// </summary>
+        public const string EnumKey = "EnumKey";
+        /// <summary>
+        /// Language
+        /// </summary>
+        public const string Lang = "Lang";
         /// <summary>
         /// OrgNo
         /// </summary>
@@ -39,18 +39,18 @@ namespace BP.Sys
     /// SysEnum
     /// </summary>
     public class SysEnum : EntityMyPK
-	{
-		/// <summary>
-		/// 得到一个String By LabKey.
-		/// </summary>
-		/// <param name="EnumKey"></param>
-		/// <param name="intKey"></param>
-		/// <returns></returns>
-		public static string GetLabByPK(string EnumKey, int intKey)
-		{
-			SysEnum en = new SysEnum(EnumKey,intKey);
-			return en.Lab;
-		}
+    {
+        /// <summary>
+        /// 得到一个String By LabKey.
+        /// </summary>
+        /// <param name="EnumKey"></param>
+        /// <param name="intKey"></param>
+        /// <returns></returns>
+        public static string GetLabByPK(string EnumKey, int intKey)
+        {
+            SysEnum en = new SysEnum(EnumKey, intKey);
+            return en.Lab;
+        }
 
         #region 实现基本的方法
         /// <summary>
@@ -81,70 +81,70 @@ namespace BP.Sys
         /// <summary>
         /// 标签
         /// </summary>
-        public  string  Lab
-		{
-			get
-			{
-			  return this.GetValStringByKey(SysEnumAttr.Lab);
-			}
-			set
-			{
-				this.SetValByKey(SysEnumAttr.Lab,value);
-			}
-		}
-		/// <summary>
-		/// 标签
-		/// </summary>
-		public  string  Lang
-		{
-			get
-			{
-				return this.GetValStringByKey(SysEnumAttr.Lang);
-			}
-			set
-			{
-				this.SetValByKey(SysEnumAttr.Lang,value);
-			}
-		}
-		/// <summary>
-		/// Int val
-		/// </summary>
-		public int IntKey
-		{
-			get
-			{
-				return this.GetValIntByKey(SysEnumAttr.IntKey);
-			}
-			set
-			{
-				this.SetValByKey(SysEnumAttr.IntKey,value);
-			}
-		}
-		/// <summary>
-		/// EnumKey
-		/// </summary>
-		public  string  EnumKey
-		{
-			get
-			{
-				return this.GetValStringByKey(SysEnumAttr.EnumKey);
-			}
-			set
-			{
-				this.SetValByKey(SysEnumAttr.EnumKey,value);
-			}
-		}
-		#endregion 
+        public string Lab
+        {
+            get
+            {
+                return this.GetValStringByKey(SysEnumAttr.Lab);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.Lab, value);
+            }
+        }
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public string Lang
+        {
+            get
+            {
+                return this.GetValStringByKey(SysEnumAttr.Lang);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.Lang, value);
+            }
+        }
+        /// <summary>
+        /// Int val
+        /// </summary>
+        public int IntKey
+        {
+            get
+            {
+                return this.GetValIntByKey(SysEnumAttr.IntKey);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.IntKey, value);
+            }
+        }
+        /// <summary>
+        /// EnumKey
+        /// </summary>
+        public string EnumKey
+        {
+            get
+            {
+                return this.GetValStringByKey(SysEnumAttr.EnumKey);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.EnumKey, value);
+            }
+        }
+        #endregion
 
-		#region 构造方法
-		/// <summary>
-		/// SysEnum
-		/// </summary>
-		public SysEnum(){}
-		/// <summary>
-		/// 税务编号
-		/// </summary>
-		/// <param name="_No">编号</param>
+        #region 构造方法
+        /// <summary>
+        /// SysEnum
+        /// </summary>
+        public SysEnum() { }
+        /// <summary>
+        /// 税务编号
+        /// </summary>
+        /// <param name="_No">编号</param>
         public SysEnum(string enumKey, int val)
         {
             this.EnumKey = enumKey;
@@ -185,27 +185,27 @@ namespace BP.Sys
                     throw new Exception("@ EnumKey=" + enumKey + " Val=" + val + " Lang=" + Lang + " Error");
             }
         }
-		/// <summary>
-		/// Map
-		/// </summary>
-		public override Map EnMap
-		{
+        /// <summary>
+        /// Map
+        /// </summary>
+        public override Map EnMap
+        {
             get
             {
-                if (this._enMap != null) 
+                if (this._enMap != null)
                     return this._enMap;
 
                 Map map = new Map("Sys_Enum", "枚举数据");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
-              /*
-              * 为了能够支持 cloud 我们做了如下变更.
-              * 1. 增加了OrgNo 字段.
-              * 2. 如果是单机版用户,原来的业务逻辑不变化. MyPK= EnumKey+"_"+IntKey+'_'+Lang 
-              * 3. 如果是SAAS模式, MyPK= EnumKey+"_"+IntKey+'_'+Lang +"_"+OrgNo 
-              */
+                /*
+                * 为了能够支持 cloud 我们做了如下变更.
+                * 1. 增加了OrgNo 字段.
+                * 2. 如果是单机版用户,原来的业务逻辑不变化. MyPK= EnumKey+"_"+IntKey+'_'+Lang 
+                * 3. 如果是SAAS模式, MyPK= EnumKey+"_"+IntKey+'_'+Lang +"_"+OrgNo 
+                */
 
                 map.AddMyPK();
                 map.AddTBString(SysEnumAttr.Lab, null, "Lab", true, false, 1, 300, 8);
@@ -213,24 +213,27 @@ namespace BP.Sys
                 map.AddTBInt(SysEnumAttr.IntKey, 0, "Val", true, false);
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
 
-               // map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
+                map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
 
                 this._enMap = map;
                 return this._enMap;
             }
-		}		 
-		#endregion 
+        }
+        #endregion
 
-         
+
         protected override bool beforeUpdateInsertAction()
         {
             if (this.Lang == null && this.Lang == "")
                 this.Lang = BP.Web.WebUser.SysLang;
-            
+
 
             this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
 
-            this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
+            if (SystemConfig.CCBPMRunModel != 0)
+                this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
+                                                              //  else
+                                                              //    this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
 
             return base.beforeUpdateInsertAction();
         }
@@ -241,7 +244,7 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             //获取引用枚举的表单
-            string sql =" select  distinct(FK_MapData)from Sys_FrmRB where EnumKey='"+this.EnumKey+"'";
+            string sql = " select  distinct(FK_MapData)from Sys_FrmRB where EnumKey='" + this.EnumKey + "'";
             System.Data.DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
@@ -266,12 +269,12 @@ namespace BP.Sys
                 MapAttr mapAttr = new MapAttr();
                 mapAttr.MyPK = fk_mapdata + "_" + this.EnumKey;
                 int i = mapAttr.RetrieveFromDBSources();
-                if (i!=0)
+                if (i != 0)
                 {
 
                     int RBShowModel = mapAttr.GetParaInt("RBShowModel");
                     FrmRB frmrb1 = new FrmRB();
-                    frmrb1.MyPK = fk_mapdata + "_" + this.EnumKey + "_"+ this.IntKey;
+                    frmrb1.MyPK = fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey;
 
 
                     frmrb.FK_MapData = fk_mapdata;
@@ -282,26 +285,26 @@ namespace BP.Sys
                     if (RBShowModel == 0)
                     {
                         frmrb.X = frmrb1.X;
-                        frmrb.Y = frmrb1.Y+40;
+                        frmrb.Y = frmrb1.Y + 40;
                     }
                     if (RBShowModel == 3)
                     {
-                        frmrb.X = frmrb1.X+100;
-                        frmrb.Y = frmrb1.Y ;
+                        frmrb.X = frmrb1.X + 100;
+                        frmrb.Y = frmrb1.Y;
                     }
                     frmrb.Insert();
                 }
 
             }
-            
-             base.afterInsert();
+
+            base.afterInsert();
         }
-	}
-	/// <summary>
-	/// 纳税人集合 
-	/// </summary>
-	public class SysEnums : Entities
-	{
+    }
+    /// <summary>
+    /// 纳税人集合 
+    /// </summary>
+    public class SysEnums : Entities
+    {
         /// <summary>
         /// 此枚举类型的个数
         /// </summary>
@@ -317,7 +320,7 @@ namespace BP.Sys
         }
         public string GenerCaseWhenForOracle(string enName, string mTable, string key, string field, string enumKey, int def)
         {
-            string sql = (string)Cash.GetObjFormApplication("ESQL" + enName +mTable+ key + "_" + enumKey, null);
+            string sql = (string)Cash.GetObjFormApplication("ESQL" + enName + mTable + key + "_" + enumKey, null);
             // string sql = "";
             if (sql != null)
                 return sql;
@@ -325,7 +328,7 @@ namespace BP.Sys
             if (this.Count == 0)
                 throw new Exception("@枚举值" + enumKey + "已被删除。");
 
-            sql = " CASE NVL(" + mTable + field+","+def+")";
+            sql = " CASE NVL(" + mTable + field + "," + def + ")";
             foreach (SysEnum se1 in this)
             {
                 sql += " WHEN " + se1.IntKey + " THEN '" + se1.Lab + "'";
@@ -415,10 +418,10 @@ namespace BP.Sys
             foreach (BP.Sys.XML.EnumInfoXml xml in xmls)
                 ses.RegIt(xml.Key, xml.Vals);
         }
-		/// <summary>
-		/// SysEnums
-		/// </summary>
-		/// <param name="EnumKey"></param>
+        /// <summary>
+        /// SysEnums
+        /// </summary>
+        /// <param name="EnumKey"></param>
         public SysEnums(string enumKey)
         {
             this.LoadIt(enumKey);
@@ -451,8 +454,8 @@ namespace BP.Sys
                     string[] vk = s.Split('=');
                     SysEnum se = new SysEnum();
                     se.IntKey = int.Parse(vk[0]);
-                   //杨玉慧
-                   //解决当  枚举值含有 ‘=’号时，保存不进去的方法
+                    //杨玉慧
+                    //解决当  枚举值含有 ‘=’号时，保存不进去的方法
                     string[] kvsValues = new string[vk.Length - 1];
                     for (int i = 0; i < kvsValues.Length; i++)
                     {
@@ -535,34 +538,34 @@ namespace BP.Sys
                 return en.RunSQL(ps);
             }
         }
-		/// <summary>
-		/// SysEnums
-		/// </summary>
-		public SysEnums(){}
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new SysEnum();
-			}
-		}
-		/// <summary>
-		/// 通过int 得到Lab
-		/// </summary>
-		/// <param name="val">val</param>
-		/// <returns>string val</returns>
-		public string GetLabByVal(int val)
-		{
-			foreach(SysEnum en in this)
-			{
-				if (en.IntKey == val)
-					return en.Lab;
-			}
-			return null;
-		}
+        /// <summary>
+        /// SysEnums
+        /// </summary>
+        public SysEnums() { }
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new SysEnum();
+            }
+        }
+        /// <summary>
+        /// 通过int 得到Lab
+        /// </summary>
+        /// <param name="val">val</param>
+        /// <returns>string val</returns>
+        public string GetLabByVal(int val)
+        {
+            foreach (SysEnum en in this)
+            {
+                if (en.IntKey == val)
+                    return en.Lab;
+            }
+            return null;
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -587,5 +590,5 @@ namespace BP.Sys
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

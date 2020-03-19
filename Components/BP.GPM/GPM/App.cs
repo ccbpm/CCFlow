@@ -20,9 +20,9 @@ namespace BP.GPM
         /// </summary>
         public const string AppModel = "AppModel";
         /// <summary>
-        /// Url
+        /// UrlExt
         /// </summary>
-        public const string Url = "Url";
+        public const string UrlExt = "UrlExt";
         /// <summary>
         /// SubUrl
         /// </summary>
@@ -118,10 +118,10 @@ namespace BP.GPM
         {
             get
             {
-                string url = this.GetValStrByKey(AppAttr.Url);
+                string url = this.GetValStrByKey(AppAttr.UrlExt);
                 if (DataType.IsNullOrEmpty(url)) return "";
 
-                if (this.SSOType.Equals("0") )//SID验证
+                if (this.SSOType.Equals("0"))//SID验证
                 {
                     string SID = DBAccess.RunSQLReturnStringIsNull("SELECT SID FROM Port_Emp WHERE No='" + Web.WebUser.No + "'", null);
                     if (url.Contains("?"))
@@ -133,7 +133,7 @@ namespace BP.GPM
             }
             set
             {
-                this.SetValByKey(AppAttr.Url, value);
+                this.SetValByKey(AppAttr.UrlExt, value);
             }
         }
         /// <summary>
@@ -147,7 +147,7 @@ namespace BP.GPM
             }
             set
             {
-                this.SetValByKey(AppAttr.Url, value);
+                this.SetValByKey(AppAttr.UrlExt, value);
             }
         }
         /// <summary>
@@ -299,25 +299,28 @@ namespace BP.GPM
                 map.EnDesc = "系统";
                 map.EnType = EnType.Sys;
 
-                map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 100);
+                map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 150);
                 map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel, "@0=BS系统@1=CS系统");
-                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 150, true);
+                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 300, true);
                 map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), true);
                 map.AddBoolean(AppAttr.IsEnable, true, "是否启用", true, true);
 
-                map.AddTBString(AppAttr.Url, null, "默认连接", true, false, 0, 3900, 100, true);
-                map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 100, true);
-                map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 100);
-                map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 100);
+                map.AddTBString(AppAttr.UrlExt, null, "默认连接", true, false, 0, 3900, 300, true);
+                map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 300, true);
+                map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 300);
+                map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 300);
                 map.AddDDLSysEnum(AppAttr.ActionType, 0, "提交类型", true, true, AppAttr.ActionType, "@0=GET@1=POST");
                 map.AddDDLSysEnum(AppAttr.SSOType, 0, "登录方式", true, true, AppAttr.SSOType, "@0=SID验证@1=连接@2=表单提交@3=不传值");
                 map.AddDDLSysEnum(AppAttr.OpenWay, 0, "打开方式", true, true, AppAttr.OpenWay,
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 3900, 100);
-                map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 500,true);
+                map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 300, 300);
+                map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 200, true);
                 map.AddTBInt(AppAttr.Idx, 0, "显示顺序", true, false);
                 map.AddMyFile("ICON");
+
+                //增加查询条件.
+                map.AddSearchAttr(AppAttr.FK_AppSort);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "编辑菜单";
@@ -340,7 +343,7 @@ namespace BP.GPM
                 rm.Title = "第二连接";
                 //rm.Title = "第二连接：登录方式为不传值、连接不设置用户名密码转为第二连接。";
                 rm.ClassMethodName = this.ToString() + ".About";
-               // map.AddRefMethod(rm);
+                // map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -369,7 +372,8 @@ namespace BP.GPM
 
         protected override bool beforeUpdate()
         {
-          
+            CheckIt();
+
             if (DataType.IsNullOrEmpty(this.RefMenuNo) == false)
             {
                 //系统类别
@@ -384,14 +388,28 @@ namespace BP.GPM
             return base.beforeUpdate();
         }
 
+        public void CheckIt()
+        {
+            AppSort sort = new AppSort();
+            sort.CheckPhysicsTable();
+            App app = new App();
+            app.CheckPhysicsTable();
+            Menu en = new Menu();
+            en.CheckPhysicsTable();
+        }
+
         protected override bool beforeInsert()
         {
-            AppSort sort = new AppSort(this.FK_AppSort);
+            CheckIt();
 
-            // 求系统类别的菜单 .
+            AppSort sort = new AppSort();
+            sort.No = this.FK_AppSort;
+            sort.Retrieve();
+
+            //求系统类别的菜单.
             Menu menu = new Menu(sort.RefMenuNo);
 
-            // 创建子菜单.
+            // 创建子菜单. 系统的根目录. 
             Menu appMenu = menu.DoCreateSubNode() as Menu;
             appMenu.FK_App = this.No;
             appMenu.Name = this.Name;
@@ -402,44 +420,68 @@ namespace BP.GPM
             this.RefMenuNo = appMenu.No;
 
             #region 为该系统创建几个空白菜单
-            //Menu en = appMenu.DoCreateSubNode() as Menu;
-            //en.FK_App = this.No;
-            //en.Name = this.Name;
-            //en.MenuType = 2;
-            //en.IsDir = true;
-            //en.Update();
-
             Menu dir = appMenu.DoCreateSubNode() as Menu;
             dir.FK_App = this.No;
-            dir.Name = "功能目录1";
-            dir.MenuType =  MenuType.Dir;
+            dir.Name = "流程管理";
+            dir.MenuType = MenuType.Dir;
             dir.Update();
 
-            Menu func = dir.DoCreateSubNode() as Menu;
-            func.Name = "xxx管理1";
-            func.FK_App = this.No;
-            func.MenuType = MenuType.Menu;
-            func.Url = "http://ccflow.org";
-            func.Update();
+            menu = dir.DoCreateSubNode() as Menu;
+            menu.Name = "发起";
+            menu.FK_App = this.No;
+            menu.MenuType = MenuType.Menu;
+            menu.UrlExt = "/WF/Start.htm";
+            menu.ParentNo = dir.No;
+            menu.Update();
 
-            Menu funcDot = func.DoCreateSubNode() as Menu;
-            funcDot.Name = "查看";
-            funcDot.MenuType =  MenuType.Function;
-            funcDot.FK_App = this.No;
-            funcDot.Update();
+            menu = dir.DoCreateSubNode() as Menu;
+            menu.Name = "待办";
+            menu.FK_App = this.No;
+            menu.MenuType = MenuType.Menu;
+            menu.UrlExt = "/WF/Todolist.htm";
+            menu.ParentNo = dir.No;
+            menu.Update();
 
-            funcDot = func.DoCreateSubNode() as Menu;
-            funcDot.Name = "增加";
-            funcDot.MenuType = MenuType.Function;
-            funcDot.FK_App = this.No;
-            funcDot.Update();
+            menu = dir.DoCreateSubNode() as Menu;
+            menu.Name = "在途";
+            menu.FK_App = this.No;
+            menu.MenuType = MenuType.Menu;
+            menu.UrlExt = "/WF/Runing.htm";
+            menu.ParentNo = dir.No;
 
-            funcDot = func.DoCreateSubNode() as Menu;
-            funcDot.Name = "删除";
-            funcDot.MenuType = MenuType.Function;
-            funcDot.FK_App = this.No;
-            funcDot.Update();
+            menu.Update();
             #endregion
+
+
+            Menu dir2 = appMenu.DoCreateSubNode() as Menu;
+            dir2.FK_App = this.No;
+            dir2.Name = "系统管理";
+            dir2.MenuType = MenuType.Dir;
+            dir2.Update();
+
+            menu = dir2.DoCreateSubNode() as Menu;
+            menu.Name = "部门";
+            menu.FK_App = this.No;
+            menu.MenuType = MenuType.Menu;
+            menu.UrlExt = "/WF/Comm/Tree.htm?EnsName=BP.GPM.Depts";
+            menu.ParentNo = dir2.No;
+            menu.Update();
+
+            menu = dir2.DoCreateSubNode() as Menu;
+            menu.Name = "人员";
+            menu.FK_App = this.No;
+            menu.MenuType = MenuType.Menu;
+            menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.GPM.Emps";
+            menu.ParentNo = dir2.No;
+            menu.Update();
+
+            menu = dir2.DoCreateSubNode() as Menu;
+            menu.Name = "岗位";
+            menu.FK_App = this.No;
+            menu.MenuType = MenuType.Menu;
+            menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.GPM.Stations";
+            menu.ParentNo = dir2.No;
+            menu.Update();
 
             return base.beforeInsert();
         }
@@ -480,7 +522,7 @@ namespace BP.GPM
         {
             return "../../../GPM/WhoCanUseApp.aspx?FK_App=" + this.No;
 
-           // PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No + "&IsRef=1", 500, 700);
+            // PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No + "&IsRef=1", 500, 700);
             //return null;
         }
         /// <summary>
@@ -497,7 +539,7 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoMenu()
         {
-            return "../../../GPM/AppMenu.htm?FK_App=" + this.No;
+            return "../../../WF/Comm/Tree.htm?EnsName=BP.GPM.Menus&ParentNo=" + this.RefMenuNo;
         }
         /// <summary>
         /// 刷新数据.

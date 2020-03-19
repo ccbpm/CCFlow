@@ -382,8 +382,12 @@ namespace BP.GPM
                 map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
                     "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能/界面@5=功能控制点");
 
+                //map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, "MenuTypeExt",
+                // "@3=目录@4=功能/界面@5=功能控制点");
+
+
                 // @0=系统根目录@1=系统类别@2=系统.
-                map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), true);
+                map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
                 map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay,
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
@@ -561,7 +565,68 @@ namespace BP.GPM
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
+            //判断选择的类型是否正确.
+            if (this.HisMenuType == MenuType.Root && this.ParentNo.Equals("0") == false)
+            {
+                Menu en = new Menu(this.ParentNo);
+                if (en.HisMenuType == MenuType.Dir)
+                    this.HisMenuType = MenuType.Menu;
+
+
+                if (en.HisMenuType == MenuType.App)
+                    this.HisMenuType = MenuType.Dir;
+
+                if (en.HisMenuType == MenuType.AppSort)
+                    this.HisMenuType = MenuType.App;
+            }
+
+            //如果是菜单类别.
+            if (this.HisMenuType == MenuType.AppSort)
+            {
+                Menu en = new Menu(this.ParentNo);
+
+                if (en.HisMenuType != MenuType.Root)
+                    throw new Exception("err@当前菜单类型是系统类别，但是父节点不是root，选择不正确.");
+            }
+
+            if (this.HisMenuType == MenuType.App)
+            {
+                Menu en = new Menu(this.ParentNo);
+                if (en.HisMenuType != MenuType.AppSort)
+                    throw new Exception("err@当前菜单类型是系统，但是父节点不是系统类别，选择不正确.");
+            }
+
+            if (this.HisMenuType == MenuType.Dir)
+            {
+                Menu en = new Menu(this.ParentNo);
+                if (en.HisMenuType != MenuType.App)
+                    throw new Exception("err@当前菜单类型是目录，但是父节点不是系统，选择不正确.");
+            }
+
+            if (this.HisMenuType == MenuType.Menu)
+            {
+                if (DataType.IsNullOrEmpty(this.UrlExt) == true)
+                    throw new Exception("err@请设置页面链接.");
+            }
+
+            if (this.HisMenuType == MenuType.Function)
+            {
+                if (DataType.IsNullOrEmpty(this.Flag) == true)
+                    throw new Exception("err@请设置功能点标记.");
+            }
+
+
             this.WebPath = this.WebPath.Replace("//", "/");
+
+            //设置他的系统编号.
+            if (DataType.IsNullOrEmpty(this.ParentNo) == false
+                && (this.MenuType == MenuType.Menu
+                || this.MenuType == MenuType.Dir
+                || this.MenuType == MenuType.Function))
+            {
+                Menu en = new Menu(this.ParentNo);
+                this.FK_App = en.FK_App;
+            }
 
             this.Url = this.UrlExt;
             return base.beforeUpdateInsertAction();

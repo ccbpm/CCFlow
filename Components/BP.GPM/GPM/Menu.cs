@@ -581,40 +581,40 @@ namespace BP.GPM
             }
 
             //如果是菜单类别.
-            if (this.HisMenuType == MenuType.AppSort)
-            {
-                Menu en = new Menu(this.ParentNo);
+            //if (this.HisMenuType == MenuType.AppSort)
+            //{
+            //    Menu en = new Menu(this.ParentNo);
 
-                if (en.HisMenuType != MenuType.Root)
-                    throw new Exception("err@当前菜单类型是系统类别，但是父节点不是root，选择不正确.");
-            }
+            //    if (en.HisMenuType != MenuType.Root)
+            //        throw new Exception("err@当前菜单类型是系统类别，但是父节点不是root，选择不正确.");
+            //}
 
-            if (this.HisMenuType == MenuType.App)
-            {
-                Menu en = new Menu(this.ParentNo);
-                if (en.HisMenuType != MenuType.AppSort)
-                    throw new Exception("err@当前菜单类型是系统，但是父节点不是系统类别，选择不正确.");
-            }
+            //if (this.HisMenuType == MenuType.App)
+            //{
+            //    Menu en = new Menu(this.ParentNo);
+            //    if (en.HisMenuType != MenuType.AppSort)
+            //        throw new Exception("err@当前菜单类型是系统，但是父节点不是系统类别，选择不正确.");
+            //}
 
-            if (this.HisMenuType == MenuType.Dir)
-            {
-                Menu en = new Menu(this.ParentNo);
-                if (en.HisMenuType != MenuType.App)
-                    throw new Exception("err@当前菜单类型是目录，但是父节点不是系统，选择不正确.");
+            //if (this.HisMenuType == MenuType.Dir)
+            //{
+            //    Menu en = new Menu(this.ParentNo);
+            //    if (en.HisMenuType != MenuType.App)
+            //        throw new Exception("err@当前菜单类型是目录，但是父节点不是系统，选择不正确.");
 
-            }
+            //}
 
-            if (this.HisMenuType == MenuType.Menu)
-            {
-                if (DataType.IsNullOrEmpty(this.UrlExt) == true)
-                    throw new Exception("err@请设置页面链接.");
-            }
+            //if (this.HisMenuType == MenuType.Menu)
+            //{
+            //    if (DataType.IsNullOrEmpty(this.UrlExt) == true)
+            //        throw new Exception("err@请设置页面链接.");
+            //}
 
-            if (this.HisMenuType == MenuType.Function)
-            {
-                if (DataType.IsNullOrEmpty(this.Flag) == true)
-                    throw new Exception("err@请设置功能点标记.");
-            }
+            //if (this.HisMenuType == MenuType.Function)
+            //{
+            //    if (DataType.IsNullOrEmpty(this.Flag) == true)
+            //        throw new Exception("err@请设置功能点标记.");
+            //}
 
 
             this.WebPath = this.WebPath.Replace("//", "/");

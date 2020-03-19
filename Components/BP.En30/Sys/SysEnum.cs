@@ -227,7 +227,6 @@ namespace BP.Sys
             if (this.Lang == null && this.Lang == "")
                 this.Lang = BP.Web.WebUser.SysLang;
 
-
             this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
 
             if (SystemConfig.CCBPMRunModel != 0)

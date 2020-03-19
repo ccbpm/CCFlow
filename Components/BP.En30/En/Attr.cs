@@ -106,6 +106,10 @@ namespace BP.En
         /// 图片
         /// </summary>
         FrmImg = 11,
+		/// <summary>
+		/// 图片附件
+		/// </summary>
+		FrmImgAth = 12,
         /// <summary>
         /// 流程进度图
         /// </summary>

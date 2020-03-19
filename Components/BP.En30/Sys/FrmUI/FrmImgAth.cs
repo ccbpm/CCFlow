@@ -199,6 +199,16 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(FrmImgAthAttr.IsEdit, true, "是否可编辑", true, true);
                 //map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
                 map.AddBoolean(FrmImgAthAttr.IsRequired, false, "是否必填项", true, true);
+                //显示的分组.
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
+
+                //跨单元格
+                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
+                //跨行
+                map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
+                   "@1=跨1个行@2=跨2行@3=跨3行");
                 //map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
                 //map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, true, 0, 128, 20);
 

@@ -33,23 +33,8 @@ namespace BP.WF.HttpHandler
             if (ens == null)
                 return "err@该实体[" + this.EnsName + "]不是一个树形实体.";
             //获取ParentNo
-            string parentNo = this.GetRequestVal("ParentNo");
-            if(DataType.IsNullOrEmpty(parentNo) == false)
-            {
-                QueryObject qo = new QueryObject(ens);
-                qo.AddWhere(EntityTreeAttr.ParentNo, parentNo);
-                qo.addOr();
-                qo.AddWhere(EntityTreeAttr.No, parentNo);
-                qo.addOrderBy(EntityTreeAttr.Idx);
-                qo.DoQuery();
-            }
-            else
-            {
-                ens.RetrieveAll(EntityTreeAttr.Idx);
+             ens.RetrieveAll(EntityTreeAttr.Idx);
 
-            }
-
-            //return ens.ToJsonOfTree();
             return BP.Tools.Json.ToJson(ens.ToDataTableField("TreeTable"));
         }
         #endregion 树的实体

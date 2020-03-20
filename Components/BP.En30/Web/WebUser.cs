@@ -625,17 +625,28 @@ namespace BP.Web
             {
                 if (BP.Web.WebUser.No == "admin")
                     return true;
-                try
+
+                if (SystemConfig.CCBPMRunModel == 0)
+                    return false; //单机版.
+
+                //SAAS版本.
+                if (SystemConfig.CCBPMRunModel == 2)
+                {
+                    string sql = "SELECT NO from Port_Org where adminer='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
+                        return false;
+                    return true;
+                }
+
+                //集团版.
+                if (SystemConfig.CCBPMRunModel == 1)
                 {
                     string sql = "SELECT No FROM WF_Emp WHERE UserType=1 AND No='" + WebUser.No + "'";
                     if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 1)
                         return true;
                     return false;
                 }
-                catch
-                {
-                    return false;
-                }
+                return false;
             }
         }
         /// <summary>

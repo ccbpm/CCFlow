@@ -1427,28 +1427,44 @@ namespace BP.WF.HttpHandler
                     fieldValue = ur.GetParaString(field);
                     if (DataType.IsNullOrEmpty(fieldValue) == true)
                         continue;
+                    fieldValue = fieldValue.Trim();
+                    fieldValue = fieldValue.Replace(",", ";").Replace(" ", ";");
+                    string[] fieldValues = fieldValue.Split(';');
+                    int valIdx = 0;
                     idx++;
-                    if (idx == 1)
+                    foreach (String val in fieldValues)
                     {
-                        isFirst = false;
-                        /* 第一次进来。 */
-                        qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        valIdx++;
+                        
+                        if (idx == 1&& valIdx == 1)
+                        {
+                            isFirst = false;
+                            /* 第一次进来。 */
+                            qo.addLeftBracket();
+                            if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                                qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + valIdx + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + valIdx + "+'%'"));
+                            else
+                                qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field+ valIdx + "||'%'");
+                            qo.MyParas.Add(field+ valIdx, val);
+                            continue;
+                        }
+                        if (valIdx == 1 && idx != 1)
+                        {
+                            qo.addAnd();
+                            qo.addLeftBracket();
+                        } 
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
-                        qo.MyParas.Add(field, fieldValue);
-                        continue;
+                            qo.addOr();
+
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + valIdx + "+'%'"));
+                        else
+                            qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field+ valIdx + "||'%'");
+                        qo.MyParas.Add(field+ valIdx, val);
+
+                        if (valIdx == fieldValues.Length && idx != 1)
+                            qo.addRightBracket();
                     }
-                    qo.addAnd();
-
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
-                    else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
-                    qo.MyParas.Add(field, fieldValue);
-
-
                 }
                 if (idx != 0)
                     qo.addRightBracket();
@@ -1468,6 +1484,8 @@ namespace BP.WF.HttpHandler
                     }
                     int i = 0;
                     string enumKey = ","; //求出枚举值外键.
+                    keyWord= keyWord.Replace(",", ";").Replace(" ", ";");
+                    string[] strVals = keyWord.Split(';');
                     foreach (Attr attr in map.Attrs)
                     {
                         switch (attr.MyFieldType)
@@ -1494,28 +1512,33 @@ namespace BP.WF.HttpHandler
 
                         if (attr.Key == "FK_Dept")
                             continue;
+                        int valIdx = 0;
+                        foreach(string val in strVals) { 
+                            i++;
+                            valIdx++;
+                            if (i == 1)
+                            {
+                                isFirst = false;
+                                /* 第一次进来。 */
+                                qo.addLeftBracket();
+                                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                                    qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx+", '%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx +"+'%'"));
+                                else
+                                    qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx +"|| '%'");
+                                continue;
+                            }
+                            qo.addOr();
 
-                        i++;
-                        if (i == 1)
-                        {
-                            isFirst = false;
-                            /* 第一次进来。 */
-                            qo.addLeftBracket();
                             if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                                qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                                qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx+", '%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx +"+'%'"));
                             else
-                                qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
-                            continue;
-                        }
-                        qo.addOr();
+                                qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx +"|| '%'");
 
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
-                        else
-                            qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.MyParas.Add("SKey"+ valIdx, val);
+                        }
 
                     }
-                    qo.MyParas.Add("SKey", keyWord);
+                   
                     qo.addRightBracket();
 
                 }

@@ -586,8 +586,8 @@ namespace BP.WF.HttpHandler
 
                     if (attr.UIIsReadonly == true)
                         continue;
-
-                    if (attr.UIBindKey.Contains("SELECT") == true || attr.UIBindKey.Contains("select") == true)
+                    
+                    if (attr.UIBindKey.ToUpper().Contains("SELECT") == true)
                     {
                         /*是一个sql*/
                         string sqlBindKey = attr.UIBindKey.Clone() as string;

@@ -1049,7 +1049,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBlockModel()
         {
-            return "../../Admin/AttrNode/BlockModel.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 发送后转向规则

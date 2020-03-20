@@ -1305,15 +1305,12 @@ namespace BP.WF.HttpHandler
                         switch (colName)
                         {
                             case "no":
-                            case "NO":
                                 col.ColumnName = "No";
                                 break;
                             case "name":
-                            case "NAME":
                                 col.ColumnName = "Name";
                                 break;
                             case "parentno":
-                            case "PARENTNO":
                                 col.ColumnName = "ParentNo";
                                 break;
                             default:
@@ -3792,7 +3789,7 @@ namespace BP.WF.HttpHandler
 
                 if (attr.IsFK == true)
                 {
-                    Entities ensFK = attr.HisFKEns;
+                    Entities ensFK = item.HisAttr.HisFKEns;
                     ensFK.RetrieveAll();
 
                     DataTable dtEn = ensFK.ToDataTableField();
@@ -3814,15 +3811,12 @@ namespace BP.WF.HttpHandler
                         switch (colName)
                         {
                             case "no":
-                            case "NO":
                                 col.ColumnName = "No";
                                 break;
                             case "name":
-                            case "NAME":
                                 col.ColumnName = "Name";
                                 break;
                             case "parentno":
-                            case "PARENTNO":
                                 col.ColumnName = "ParentNo";
                                 break;
                             default:

@@ -3802,9 +3802,19 @@ namespace BP.WF.HttpHandler
                     && DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
-                    //获取SQl
-                    string sql = BP.WF.Glo.DealExp(attr.UIBindKey, null, null);
-                    DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
+                    string sql = attr.UIBindKey;
+                    DataTable dtSQl=null;
+                    //说明是实体类绑定的外部数据源
+                    if (sql.ToUpper().Contains("SELECT") == true)
+                    {
+                        //sql数据
+                        sql = BP.WF.Glo.DealExp(attr.UIBindKey, null, null);
+                        dtSQl = DBAccess.RunSQLReturnTable(sql);
+                    }
+                    else
+                    {
+                        dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+                    }
                     foreach (DataColumn col in dtSQl.Columns)
                     {
                         string colName = col.ColumnName.ToLower();

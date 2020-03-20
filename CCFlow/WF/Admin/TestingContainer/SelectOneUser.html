@@ -19,8 +19,6 @@
         //页面启动函数.
         $(function () {
 
-            var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("AdminerSID"); //管理员SID.
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
@@ -128,7 +126,7 @@
             handler.AddPara("FK_Emp", empNo);
             handler.AddPara("WorkID", workID);
 
-            handler.AddPara("Adminer", adminer);
+          //  handler.AddPara("Adminer", adminer);
             handler.AddPara("SID", SID);
 
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");

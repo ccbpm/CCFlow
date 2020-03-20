@@ -11,10 +11,10 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         //页面启动函数.
-        var adminer = GetQueryString("Adminer"); //管理员.
+        //var adminer = GetQueryString("Adminer"); //管理员.
         var sid = GetQueryString("SID"); //管理员SID.
-        var workID = GetQueryString("WorkID"); //管理员SID.
-        var userNo = GetQueryString("UserNo"); //管理员SID.
+        var workID = GetQueryString("WorkID"); 
+        var userNo = GetQueryString("UserNo"); 
         var flowNo = GetQueryString("FK_Flow");
         $(function () {
 
@@ -48,7 +48,7 @@
 
             $("#userInfo").html(html);
 
-            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Adminer=" + adminer + "&SID=" + sid;
+            var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + sid;
 
             var html = "<ul>";
             html += "<li><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
@@ -72,14 +72,14 @@
             handler.AddPara("FK_Emp", userNo);
             handler.AddPara("WorkID", workID);
 
-            handler.AddPara("Adminer", adminer);
+            //handler.AddPara("Adminer", adminer);
             handler.AddPara("SID", sid);
 
             var webUser = new WebUser();
             $("#userInfo").html(webUser.No + "," + webUser.Name);
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
             // 进入流程页面
-            var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&Adminer=" + webUser.No + "&SID=" + webUser.SID + "&UserNo=" + userNo;
+            var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&SID=" + sid + "&UserNo=" + userNo;
             window.parent.location.href = url;
 
         }

@@ -15,7 +15,7 @@
 
         var fk_flow = GetQueryString('FK_Flow');
         var fk_node = GetQueryString('FK_Node');
-
+        var SID = GetQueryString("SID");
         //页面启动函数.
         $(function () {
 
@@ -114,6 +114,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("UserNo", empNo);
+            handler.AddPara("SID", SID);
             var data = handler.DoMethodReturnString("TestFlow2020_StartIt");
 
             if (data.indexOf('访问规则') > 0) {

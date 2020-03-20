@@ -104,8 +104,8 @@ namespace BP.WF.HttpHandler
         public string Default_LetAdminerLogin()
         {
             string adminer = this.GetRequestVal("Adminer");
-            string sid = this.GetRequestVal("SID");
-            BP.WF.Dev2Interface.Port_LoginBySID(sid);
+            string SID = this.GetRequestVal("SID");
+            BP.WF.Dev2Interface.Port_LoginBySID(SID);
 
             return "登录成功.";
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
@@ -120,7 +120,7 @@ namespace BP.WF.HttpHandler
 
             string adminer = this.GetRequestVal("Adminer");
             string SID = this.GetRequestVal("SID");
-          
+
             try
             {
                 BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
@@ -139,6 +139,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TestFlow2020_StartIt()
         {
+
+            string sid = this.GetRequestVal("SID");
             if (WebUser.IsAdmin == false)
                 return "err@非管理员无法测试";
 
@@ -146,9 +148,13 @@ namespace BP.WF.HttpHandler
             string userNo = this.GetRequestVal("UserNo");
 
             //判断是否可以测试该流程？ 
+            BP.Port.Emp myEmp = new BP.Port.Emp();
+            int i = myEmp.Retrieve("SID", sid);
+            if (i == 0)
+                throw new Exception("err@非法的SID，SID不正确.");
 
             //组织url发起该流程.
-            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&Adminer=" + WebUser.No + "&SID=" + WebUser.SID + "&UserNo=" + userNo;
+            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&SID=" + sid + "&UserNo=" + userNo;
             return url;
         }
         /// <summary>

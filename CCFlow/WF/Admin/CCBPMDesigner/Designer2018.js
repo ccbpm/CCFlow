@@ -948,12 +948,18 @@ function FlowRun() {
 }
 //运行流程
 function FlowRun2020() {
+    var baseurl = "";
+    if (ccbpmRunModel == 2) {
+        baseurl = "../../Admin/";
+    } else {
+        baseurl = "../";
+    }
 
     //执行流程检查.
     var flow = new Entity("BP.WF.Flow", flowNo);
     flow.DoMethodReturnString("ClearCash");
 
-    var url = basepath + "TestingContainer/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
+    var url = baseurl + "TestingContainer/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH";
 
     //WinOpen(url);
     window.parent.addTab(flowNo + "_YXLH", "运行流程2020" + flowNo, url);

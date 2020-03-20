@@ -48,7 +48,7 @@
 
         layui.use(['form', 'layer'], function () {
 
-            $("#msg").html("正在加载请稍候...");
+            //$("#msg").html("正在加载请稍候...");
 
             //从后台获取当前登录会话的信息.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
@@ -59,7 +59,7 @@
             }
             data = JSON.parse(data);
 
-            $("#msg").html("欢迎登陆.");
+            //$("#msg").html("欢迎登陆.");
 
             //调用公共类库的方法:执行批量主表赋值.
             GenerFullAllCtrlsVal(data);

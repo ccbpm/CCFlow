@@ -24,7 +24,7 @@
  4. 您可以自己组织这些数据根据自己的需要生成菜单框架.
  5. ccbpm提供了两套风格，您可以参考 /Portal/GPMMenus.js ， /Portal20/GPMMenus.js
  */
-function GPM_GenerMenumsDB(appNo) {
+function GPM_GenerMenumsDB() {
     var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
     handler.AddPara("AppNo", appNo);
     var data = handler.DoMethodReturnJSON("GPM_DB_Menus"); //获得菜单.

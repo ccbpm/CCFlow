@@ -13,7 +13,7 @@ function InitLeftMenuComm() {
     }
 
     //通过API获得两个数据源.
-    var data = GPM_GenerMenumsDB(appNo);
+    var data = GPM_GenerMenumsDB();
     var dirs = data["Dirs"]; //获得目录.
     var menus = data["Menus"]; //获得菜单.
 

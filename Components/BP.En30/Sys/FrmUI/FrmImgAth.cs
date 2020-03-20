@@ -149,8 +149,9 @@ namespace BP.Sys.FrmUI
             get
             {
                 UAC uac = new UAC();
-                uac.Readonly();
+                uac.IsInsert = false;
                 uac.IsUpdate = true;
+                uac.IsDelete = true;
                 return uac;
             }
         }

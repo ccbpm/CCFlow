@@ -2315,7 +2315,7 @@ namespace BP.WF
                         string attrKey = "";
                         foreach (Attr attr in wk.EnMap.Attrs)
                         {
-                            if (attr.UIVisible == true && attr.UIIsDoc && attr.UIIsReadonly == false)
+                            if (attr.UIVisible == true && attr.UIIsDoc && attr.UIIsReadonly == false &&(attr.Key.Contains("Check") || attr.Key.Contains("Note")))
                                 attrKey = attr.Desc + ":@" + attr.Key;
                         }
                         if (attrKey == "")

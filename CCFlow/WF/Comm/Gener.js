@@ -1621,7 +1621,7 @@ var Entities = (function () {
                 length = args.length;
             }
             for (var i = 1; i < length; i += 3) { //args[i+1]是操作符
-                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2];
+                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2].replace(/%/g,'[%]');
             }
             if (typeof orderBy !== "undefined") {
                 params += "@OrderBy||" + orderBy;
@@ -1746,7 +1746,8 @@ var Entities = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName  + "&t=" + new Date().getTime(),
+                data: { "Paras": self.Paras},
                 dataType: 'html',
                 success: function (data) {
 
@@ -2279,7 +2280,17 @@ var HttpHandler = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
-                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
+                    if (confirm('您确定要执行请求的URL吗?') == false) {
+                        ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
+                    } else {
+                        window.open(url);
+                        //if(plant=="CCForm")
+                        //    window.open(basePath + "/Default.aspx");
+                        //else if (plant == "JFlow")
+                        //    window.open(basePath + "/Default.aspx");
+                    }
+                       
+                   
                 }
             });
 

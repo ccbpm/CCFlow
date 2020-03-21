@@ -327,7 +327,8 @@
         $(function () {
 
             $("#pageloading").show();
-            $("#searchEmp").val("");
+            Reset();//加载重置查询条件
+            
             var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
             var ens = handler.DoMethodReturnJSON("Organization_Init");
 
@@ -585,11 +586,15 @@
         }
         //按人员查询
         function SearchEmp() {
-            var dept = $("#searchDept").val();
-            var emp = $("#searchEmp").val();
+            var searchDept = $("#searchDept").val();
+            var searchEmp = $("#searchEmp").val();
+            var searchNo = $("#searchNo").val();
+            var searchTel = $("#searchTel").val();
             var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-            handler.AddPara("SearchDept",dept);
-            handler.AddPara("SearchEmp",emp);
+            handler.AddPara("SearchDept",searchDept);
+            handler.AddPara("SearchEmp",searchEmp);
+            handler.AddPara("SearchNo",searchNo);
+            handler.AddPara("SearchTel",searchTel);
             var emps = handler.DoMethodReturnJSON("GPM_Search");
 
             var html = "";
@@ -631,20 +636,36 @@
             $("#Emps").html(html);
             
         }
+        function Reset() {
+            $("#searchNo").val("");
+            $("#searchDept").val("");
+            $("#searchEmp").val("");
+            $("#searchTel").val("");
+        }
 
     </script>
     <style type="text/css">
-       
+        #SearchBtn,#ResetBtn{
+            border-radius:5px !important;
+            background:#fff !important;
+            color:#031f5d;
+            border:1px solid #031f5d;
+        }
     </style>
 </head>
 <body class="easyui-layout">
 
     <div id="pageloading">
+       
     </div>
     
     <div data-options="region:'north',split:true" style="padding:6px 0 6px 6px">
-        人员:<input id="searchEmp" name="searchEmp" type="text" />
-        <button  class="btn btn-default btn-sm SearchBtn" id="SearchBtn" onclick="SearchEmp()">查询</button>
+        编号:<input id="searchNo" name="searchNo" type="text" />
+        名称:<input id="searchEmp" name="searchEmp" type="text" />
+        部门:<input id="searchDept" name="searchDept" type="text" />
+        电话:<input id="searchTel" name="searchTel" type="text" />
+        <button class="btn btn-default btn-sm" id="SearchBtn" onclick="SearchEmp()" >查询</button>
+        <button class="btn btn-default btn-sm" id="ResetBtn" onclick="Reset()">重置</button>
 
     </div>
     <div data-options="region:'west',split:true" style="width: 240px; padding: 1px; overflow: hidden;">

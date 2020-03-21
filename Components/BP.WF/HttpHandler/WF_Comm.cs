@@ -941,7 +941,7 @@ namespace BP.WF.HttpHandler
                     return "0";
 
                 QueryObject qo = new QueryObject(ens);
-                string[] myparas = this.Paras.Split('@');
+                string[] myparas = this.Paras.Replace("[%]","%").Split('@');
 
                 Attrs attrs = ens.GetNewEntity.EnMap.Attrs;
 
@@ -968,14 +968,26 @@ namespace BP.WF.HttpHandler
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                         typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
 
-                    if (idx == 0)
+                    string[] keys = key.Trim().Split(',');
+                    int count = 0;
+                    foreach(string str in keys)
                     {
-                        qo.AddWhere(key, oper, typeVal);
-                    }
-                    else
-                    {
-                        qo.addAnd();
-                        qo.AddWhere(key, oper, typeVal);
+                        count++;
+                        if (DataType.IsNullOrEmpty(str) == true)
+                            continue;
+                        if (idx == 0 && count == 1)
+                        {
+                            qo.AddWhere(str, oper, typeVal);
+                        }
+                        else
+                        {
+                            if (count != 1)
+                                qo.addOr();
+                            else
+                                qo.addAnd();
+                            qo.AddWhere(str, oper, typeVal);
+                        }
+
                     }
                     idx++;
                 }
@@ -1525,6 +1537,9 @@ namespace BP.WF.HttpHandler
                                     qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx+", '%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx +"+'%'"));
                                 else
                                     qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey"+ valIdx +"|| '%'");
+
+                                qo.MyParas.Add("SKey" + valIdx, val);
+
                                 continue;
                             }
                             qo.addOr();

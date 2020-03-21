@@ -78,7 +78,7 @@ if (typeof DeliveryWay == "undefined") {
         // 从人员到人员
         DeliveryWay.ByFromEmpToEmp = 18,
         //找本部门范围内的岗位集合里面的人员
-        DeliveryWay.FindSpecDeptEmps=19,
+        DeliveryWay.FindSpecDeptEmps = 19,
         //按项目组内的岗位计算
         DeliveryWay.ByStationForPrj = 20,
         //由上一节点发送人通过“人员选择器”选择接受人
@@ -104,7 +104,42 @@ if (typeof SelectorModel == "undefined") {
         SelectorModel.AccepterOfDeptStationEmp = 8,
         SelectorModel.AccepterOfDeptStationOfCurrentOper = 9
 }
-
+//发送阻塞规则.
+if (typeof BlockModel == "undefined") {
+    var BlockModel = {}
+    /// <summary>
+    /// 不阻塞
+    /// </summary>
+    BlockModel.None = 0,
+        /// <summary>
+        /// 当前节点有未完成的子流程时
+        /// </summary>
+        BlockModel.IncompleteBlock = 1,
+        /// <summary>
+        /// 按约定格式阻塞未完成子流程
+        /// </summary>
+        BlockModel.AppointmentBlock = 2,
+        /// <summary>
+        /// 是否启用为父流程时，子流程未运行到指定的节点
+        /// </summary>
+        BlockModel.ByParentBlock = 3,
+        /// <summary>
+        /// 是否启用为平级子流程时，子流程未运行到指定的节点
+        /// </summary>
+        BlockModel.ByChildBlock = 4,
+        /// <summary>
+        /// 按照SQL阻塞
+        /// </summary>
+        BlockModel.BySQLBlock = 5,
+        /// <summary>
+        /// 按照表达式阻塞
+        /// </summary>
+        BlockModel.ByExpressionBlock = 6,
+        /// <summary>
+        /// 其他选项设置
+        /// </summary>
+        BlockModel.ByOtherBlock = 7 
+}
 //前置导航
 if (typeof StartGuideWay == "undefined") {
     var StartGuideWay = {}
@@ -253,7 +288,7 @@ if (typeof FormSlnType == "undefined") {
         /// 表单库的表单
         /// </summary>
         FormSlnType.RefOneFrmTree = 11,
-         /// <summary>
+        /// <summary>
         /// 开发者表单
         /// </summary>
         FormSlnType.Developer = 12,

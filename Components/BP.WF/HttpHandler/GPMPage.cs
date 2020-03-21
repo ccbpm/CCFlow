@@ -281,6 +281,17 @@ namespace BP.WF.HttpHandler
             var dt = GPM_GenerFlagDB(); //获得所有的标记.
             return BP.Tools.Json.ToJson(dt);
         }
+        /// <summary>
+        /// 组织结构查询
+        /// </summary>
+        /// <returns></returns>
+        public string GPM_Search()
+        {
+            var SearchEmp = this.GetRequestVal("SearchEmp");
+            var sql = "SELECT e.No AS No,e.Name AS Name,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e where d.No=e.FK_Dept AND e.NAME LIKE '%" + SearchEmp + "%'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
         #endregion
 
     }

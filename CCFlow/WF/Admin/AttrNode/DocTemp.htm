@@ -75,6 +75,9 @@
             }
 
             $("#pageloading").show();
+
+            //var handler = new handler(");
+
             //提交数据
             var doMethod = "DocTemp_Init";
             var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
@@ -95,41 +98,57 @@
                         var json = eval('(' + data + ')');
 
                         for (var i = 0; i < json.length; i++) {
-                            $('#docTempList').append('<li id="doc_' + json[i].No + '"><span>' + json[i].Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json[i].No + '\")\'>删除</a>&nbsp;&nbsp;&nbsp;<a href=\'javascript:SelectField(\"' + json[i].No + '\")\'>选择填充字段</a></li>');
+                            $('#docTempList').append('<li id="doc_' + json[i].No + '"><span>' + json[i].Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json[i].No + '\")\'><img src=../../Img/Btn/Delete.png />删除</a>&nbsp;&nbsp;&nbsp;<a href=\'javascript:SelectField(\"' + json[i].No + '\")\'>选择填充字段</a></li>');
+                        }
+                    }
+                }
+            });
+        }
+        function InitDocTemp_Old() {
+            var pkval = GetQueryString("pkval");
+            if (pkval == "") {
+                $.messager.alert("提示", "参数错误。");
+                return;
+            }
+
+            $("#pageloading").show();
+
+            //提交数据
+            var doMethod = "DocTemp_Init";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkval=" + pkval,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                },
+                success: function (data) {
+                    $("#pageloading").hide();
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    } else {
+                        var json = eval('(' + data + ')');
+
+                        for (var i = 0; i < json.length; i++) {
+                            $('#docTempList').append('<li id="doc_' + json[i].No + '"><span>' + json[i].Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json[i].No + '\")\'><img src=../../Img/Btn/Delete.png />删除</a>&nbsp;&nbsp;&nbsp;<a href=\'javascript:SelectField(\"' + json[i].No + '\")\'>选择填充字段</a></li>');
                         }
                     }
                 }
             });
         }
         function SelectField(id) {
-            var newWindow = window.open("SelectTempFields.htm?pkval="+id+"&FK_MapData=ND" + GetQueryString("pkval"), "选择填充字段", 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=false,toolbar=false,location=false,center=yes,center: yes;');
+            var newWindow = window.open("SelectTempFields.htm?pkval=" + id + "&FK_MapData=ND" + GetQueryString("pkval"), "选择填充字段", 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=false,toolbar=false,location=false,center=yes,center: yes;');
             newWindow.focus();
         }
         function DelDocTemp(id) {
-            if (confirm("确认删除吗？") == true) {
-                $("#pageloading").show();
-                //提交数据
-                var doMethod = "DocTemp_Del";
-                var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
-                $("#cc").form("submit", {
-                    type: 'POST',
-                    dataType: 'html',
-                    url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&no=" + id,
-                    onSubmit: function (param) {
-                        //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
-                    },
-                    success: function (data) {
-                        $("#pageloading").hide();
-
-                        if (data.indexOf('err@') == 0) {
-                            alert(data);
-                            return;
-                        } else {
-                            var o = $('#doc_' + id).remove();//
-                        }
-                    }
-                });
-            }
+            if (confirm("确认删除吗？") == false)
+                return;
+            var en = new Entity("BP.WF.Template.DocTemplate", id);
+            en.Delete();
+            var o = $('#doc_' + id).remove();//
         }
     </script>
 </head>

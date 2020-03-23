@@ -121,49 +121,55 @@
 </head>
 <body onkeypress="Esc();" style="font-size: smaller">
     <form method="post" id="form1">
-    <div style="margin: 8px">
-        <table id="Table1" style="width: 100%">
-            <caption>
-                <div style="float: left">
-                    控件绑定function</div>
-                <div style="float: right">
-                    <a href="http://ccbpm.mydoc.io" target="_blank">帮助</a>
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="新建消息" id="Btn_Save" onclick="ShowHidden('state')" />
+        </div>
+        <div style="margin: 8px">
+            <table id="Table1" style="width: 100%">
+                <caption>
+                    <div style="float: left">
+                        控件绑定function
+                        <a href="http://ccbpm.mydoc.io" target="_blank"> <img src="../../../Img/Btn/Help.gif" />帮助</a>
+                    </div>
+                    <div style="float: right">
+                        
+                    </div>
+                </caption>
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        事件标记
+                    </th>
+                    <th>
+                        函数名称
+                    </th>
+                    <th>
+                        备注
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+            </table>
+            <fieldset style="border: 0px;">
+                &nbsp;&nbsp;
+                <div id="state" style="display: none; color: Gray">
+                    <ul>
+                        <li><a href="javascript:BindFunctionEntity('blur');">onblur - 失去焦点</a> </li>
+                        <li><a href="javascript:BindFunctionEntity('change');">onchange - 内容变化</a> </li>
+                        <li><a href="javascript:BindFunctionEntity('click');">onclick - 单击</a> </li>
+                        <li><a href="javascript:BindFunctionEntity('dblclick');">ondblclick - 双击</a> </li>
+                        <li><a href="javascript:BindFunctionEntity('keypress');">onkeypress - 按下键盘</a> </li>
+                        <li><a href="javascript:BindFunctionEntity('keyup');">onkeyup - 按上键盘</a> </li>
+                        <li>
+                            <a href="javascript:BindFunctionEntity('input');">oninput - readonly值改变</a>
+                        </li>
+                    </ul>
                 </div>
-            </caption>
-            <tr>
-                <th>
-                    序
-                </th>
-                <th>
-                    事件标记
-                </th>
-                <th>
-                    函数名称
-                </th>
-                <th>
-                    备注
-                </th>
-                <th>
-                    操作
-                </th>
-            </tr>
-        </table>
-        <fieldset style="border: 0px;">
-            <input type="button" value="新建消息" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-            <div id="state" style="display: none; color: Gray">
-                <ul>
-                    <li><a href="javascript:BindFunctionEntity('blur');">onblur - 失去焦点</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('change');">onchange - 内容变化</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('click');">onclick - 单击</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('dblclick');">ondblclick - 双击</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('keypress');">onkeypress - 按下键盘</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('keyup');">onkeyup - 按上键盘</a> </li>
-                    <li><a href="javascript:BindFunctionEntity('input');">oninput - readonly值改变</a>
-                    </li>
-                </ul>
-            </div>
-        </fieldset>
-    </div>
+            </fieldset>
+        </div>
     </form>
 </body>
 </html>

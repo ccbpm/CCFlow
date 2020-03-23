@@ -82,51 +82,55 @@
 </head>
 <body>
     <form id="cc">
-    <table id="table" style="width: 95%;">
-        <caption>
-            自动计算表达式
-        </caption>
-        <tr>
-            <td colspan="3" style="width: 95%;">
-                <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
-                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+            
+        </div>
+        <table id="table" style="width: 100%;">
+            <caption>
+                自动计算表达式
                 <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />填充表达式帮助:</a>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <div id='sqlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>1.如果是从表: 表达式就是列之间的计算，比如: @A+@B </li>
-                        <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia*@ShuLiang 或者 @单价*@数量 </li>
-                        <li>3.仅仅支持数值类型的计算，比如：float,int,decimal类型的数据字段。 </li>
-                    </ul>
+            </caption>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>1.如果是从表: 表达式就是列之间的计算，比如: @A+@B </li>
+                            <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia*@ShuLiang 或者 @单价*@数量 </li>
+                            <li>3.仅仅支持数值类型的计算，比如：float,int,decimal类型的数据字段。 </li>
+                        </ul>
 
-                    <fieldset>
-                        <legend>显示实例-主表</legend>
-                        <img src="AutoFull-1.png" />
-                    </fieldset>
+                        <fieldset>
+                            <legend>显示实例-主表</legend>
+                            <img src="AutoFull-1.png" />
+                        </fieldset>
 
-                    <fieldset>
-                        <legend>显示实例-从表</legend>
-                        <img src="AutoFull-2.png" />
-                    </fieldset>
+                        <fieldset>
+                            <legend>显示实例-从表</legend>
+                            <img src="AutoFull-2.png" />
+                        </fieldset>
 
-                </div>
+                    </div>
 
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
 
 
-    <div id="Msg">
-    </div>
+        <div id="Msg">
+        </div>
 
 
     </form>

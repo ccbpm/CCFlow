@@ -126,81 +126,90 @@
 </head>
 <body>
     <form id="cc">
-    <table id="table" style="width: 100%;">
-        <caption>
-            对从表数值列自动计算</caption>
-        <tr>
-            <td colspan="3" style="width: 100%;">
-                选择从表:<select id="DDL_Dtl" name="DDL_Dtl"></select>
-                选择列:<select id="DDL_Field" name="DDL_Field"></select>
-                选择计算方式:<select id="DDL_JSFS" name="DDL_JSFS">
-                    <option value="Sum">求和</option>
-                    <option value="Avg">求平均</option>
-                    <option value="Max">求最大</option>
-                    <option value="Min">求最小</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-		    <td colspan="3" >
-		    
-		  <label> <input type="checkbox" id="CB_Tag" name="CB_Tag" />
-		       计算后要触发的脚本函数(比如:求和以后要激活的function)，该脚本要求写入到:\DataUser\JSLab\MyFromID_Self.js </label>
-		    </td>
-		 </tr>
-         <tr> 
-		    <td>函数名称 </td>
-		    <td> 
-		    <input type="text" id="TB_Tag1" name="TB_Tag1" style="width:99%" />
-		     </td>
-		    <td>比如: MyFunc() </td>
-		 </tr>
-		
-		    
-		 <tr >
-		    <td>备注 </td>
-		    <td> 
-		    <input type="text" id="TB_Tag2" name="TB_Tag2"  style="width:99%"/>
-		     </td>
-		    <td>对该函数的说明</td>
-    	</tr>
-
-
-           <tr>
-		    <td colspan="1" >
-                 <label> <input type="checkbox" id="CB_Tag3" name="CB_Tag3" />
-		       对其他string字段进行大写转换 </label>
-
-		    </td>
-            <td colspan="2" > 要转化大写的字段名:<select  id="DDL_Fileds" name="DDL_Fileds" /> </td>
-		 </tr>
-
-
-        <tr>
-            <td colspan="3">
-                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+            
+        </div>
+        <table id="table" style="width: 100%;">
+            <caption>
+                对从表数值列自动计算
                 <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />帮助:</a>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <div id='sqlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>1.对从表的里，进行求和，求平均计算。 </li>
-                        <li>2.当从表的对应列发生变化的时候，就调用这个规则把数据数据存储到主表里去。</li>
-                        <li>3.比如：在报销表单里，费用合计是对从表的小计列求和。</li>
-                        <li>4.配置信息存储格式为:Sys_MapExt的Doc 字段 ND101Dtl1.XiaoJi.Sum </li>
-                        <li>
-                          <a href="javascript:WinOpen('./Img/AutoFullDtlField.png');" >  <img src='./Img/AutoFullDtlField.png' alt="yangshi" /></a>
-                        </li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-    </table>
-    <div id="Msg">
-    </div>
+            </caption>
+            <tr>
+                <td colspan="3" style="width: 100%;">
+                    选择从表:<select id="DDL_Dtl" name="DDL_Dtl"></select>
+                    选择列:<select id="DDL_Field" name="DDL_Field"></select>
+                    选择计算方式:<select id="DDL_JSFS" name="DDL_JSFS">
+                        <option value="Sum">求和</option>
+                        <option value="Avg">求平均</option>
+                        <option value="Max">求最大</option>
+                        <option value="Min">求最小</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+
+                    <label>
+                        <input type="checkbox" id="CB_Tag" name="CB_Tag" />
+                        计算后要触发的脚本函数(比如:求和以后要激活的function)，该脚本要求写入到:\DataUser\JSLab\MyFromID_Self.js
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>函数名称 </td>
+                <td>
+                    <input type="text" id="TB_Tag1" name="TB_Tag1" style="width:99%" />
+                </td>
+                <td>比如: MyFunc() </td>
+            </tr>
+
+
+            <tr>
+                <td>备注 </td>
+                <td>
+                    <input type="text" id="TB_Tag2" name="TB_Tag2" style="width:99%" />
+                </td>
+                <td>对该函数的说明</td>
+            </tr>
+
+
+            <tr>
+                <td colspan="1">
+                    <label>
+                        <input type="checkbox" id="CB_Tag3" name="CB_Tag3" />
+                        对其他string字段进行大写转换
+                    </label>
+
+                </td>
+                <td colspan="2"> 要转化大写的字段名:<select id="DDL_Fileds" name="DDL_Fileds" /> </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="3">
+                   
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>1.对从表的里，进行求和，求平均计算。 </li>
+                            <li>2.当从表的对应列发生变化的时候，就调用这个规则把数据数据存储到主表里去。</li>
+                            <li>3.比如：在报销表单里，费用合计是对从表的小计列求和。</li>
+                            <li>4.配置信息存储格式为:Sys_MapExt的Doc 字段 ND101Dtl1.XiaoJi.Sum </li>
+                            <li>
+                                <a href="javascript:WinOpen('./Img/AutoFullDtlField.png');">  <img src='./Img/AutoFullDtlField.png' alt="yangshi" /></a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
     </form>
 </body>
 </html>

@@ -49,94 +49,99 @@
 </head>
 <body>
     <form id="cc">
-    <table id="table" style="width:99%;">
-        <caption>
-            为下拉框设置显示过滤</caption>
-        <tr>
-            <td>
-                执行SQL的数据源
-            </td>
-            <td>
-                <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
-                </select>
-            </td>
-            <td>
-                ccform允许从其他数据源中取数据
-                <!--,<a href="../../../Comm/Sys/SFDBSrcNewGuide.aspx" ><img src='/WF/Img/Setting.png' border=0 />设置/新建数据源</a>-->
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                执行的SQL
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" style="width:95%;">
-                <textarea rows="4" name="TB_Doc" id="TB_Doc"  style="width:98%;"> </textarea>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
-                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+            
+        </div>
+        <table id="table" style="width:99%;">
+            <caption>
+                为下拉框设置显示过滤
                 <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" /> 填充SQL帮助:</a>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <div id='sqlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>该SQL必须返回No,Name 两个列.</li>
-                        <li>至此ccbpm表达式.</li>
-                        <li>比如:该下拉框是一个人员，您需要仅仅显示本部门人员.</li>
-                        <li>SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' </li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-    </table>
-    <div id="Msg">
-    </div>
-    <script type="text/javascript">
+            </caption>
+            <tr>
+                <td>
+                    执行SQL的数据源
+                </td>
+                <td>
+                    <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
+                    </select>
+                </td>
+                <td>
+                    ccform允许从其他数据源中取数据
+                    <!--,<a href="../../../Comm/Sys/SFDBSrcNewGuide.aspx" ><img src='/WF/Img/Setting.png' border=0 />设置/新建数据源</a>-->
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    执行的SQL
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width:95%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>该SQL必须返回No,Name 两个列.</li>
+                            <li>至此ccbpm表达式.</li>
+                            <li>比如:该下拉框是一个人员，您需要仅仅显示本部门人员.</li>
+                            <li>SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
+        <script type="text/javascript">
 
-        function Save() {
+            function Save() {
 
-            $("#Msg").html("正在保存,请稍后......");
+                $("#Msg").html("正在保存,请稍后......");
 
-            var frmData = $("#cc").serialize();
+                var frmData = $("#cc").serialize();
 
-            //        var myurl = Handler + "?DoType=AutoFullDLL_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
+                //        var myurl = Handler + "?DoType=AutoFullDLL_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-            handler.AddFormData();
-            var data = handler.DoMethodReturnString("AutoFullDLL_Save");
-            if (data.indexOf('err@') != -1) {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+                handler.AddFormData();
+                var data = handler.DoMethodReturnString("AutoFullDLL_Save");
+                if (data.indexOf('err@') != -1) {
 
-                $("#Msg").html("<font color=red>" + data + "</font>");
+                    $("#Msg").html("<font color=red>" + data + "</font>");
+                    return;
+                }
+
+                $("#Msg").html("<font color=green>" + data + "</font>");
                 return;
             }
 
-            $("#Msg").html("<font color=green>" + data + "</font>");
-            return;
-        }
+            function Delete() {
 
-        function Delete() {
+                if (window.confirm('您确定要删除吗？') == false)
+                    return false;
 
-            if (window.confirm('您确定要删除吗？') == false)
-                return false;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-            var data = handler.DoMethodReturnString("AutoFullDLL_Delete");
-            alert(data);
-            window.location.href = window.location.href;
-            return;
-        }
-    </script>
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+                var data = handler.DoMethodReturnString("AutoFullDLL_Delete");
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
+        </script>
     </form>
 </body>
 </html>

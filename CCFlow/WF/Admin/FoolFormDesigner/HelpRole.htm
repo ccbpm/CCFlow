@@ -16,7 +16,11 @@
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.js"></script>
     <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
 
-
+    <style>
+        .body{
+            overflow-x:hidden;
+        }
+    </style>
     <script type="text/javascript" language="javascript">
         var editor = "";
         //页面启动函数.
@@ -26,7 +30,7 @@
             editor = UM.getEditor('container', {
                 'autoHeightEnabled': false,
                 'fontsize': [10, 12, 16, 18, 24, 36],
-                'initialFrameWidth': '100%',
+                'initialFrameWidth': '98%',
                 'initialFrameHeight': '240',
             });
 
@@ -68,7 +72,7 @@
 
     </div>
     
-    <input type="button" value="保存" onclick="Save();" />
+    <input type="button" value="确定" onclick="Save();" />
 
 
 </body>

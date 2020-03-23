@@ -4,9 +4,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>ccform正在加载请稍候...</title>
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
 
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    
     <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
@@ -71,7 +73,7 @@
         var webUser = new WebUser();
         $(function () {
             pkVal = GetPKVal();
-            
+
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1 && pkVal == null)
                 window.parent.$('#EnLayout').layout('remove', 'west');
@@ -134,17 +136,17 @@
             GenerFoolFrm(mapData, mainData, frmData);
             //修改页面样式
             if ($("ul.tabs").length != 0) {
-                var li = $("<li style='float:right !important;z-index:999' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
+                var li = $("<li style='float:right !important;z-index:999; top:-6px' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
                 li.append($("#Btns").children());
                 $("ul.tabs").append(li);
-                $(".tabs-panels").css("padding-bottom","30px");
+                $(".tabs-panels").css("padding-bottom", "30px");
                 $("#Btns").parent().remove();
                 $("#Btns").remove();
 
             } else {
-               $("#CCFormTabs").parent().parent().parent().css("cssText", "top:20px!important");
+                $("#CCFormTabs").parent().parent().parent().css("cssText", "top:20px!important");
             }
-          
+
 
         })
 
@@ -269,7 +271,7 @@
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(mapAttr);
-                if (mapAttr.DefValType == 0 && mapAttr.DefVal =="10002")
+                if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002")
                     defValue = "";
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
@@ -288,7 +290,7 @@
 
                     var uiBindKey = mapAttr.UIBindKey;
 
-                    if (uiBindKey.toLowerCase().indexOf("select")==-1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
+                    if (uiBindKey.toLowerCase().indexOf("select") == -1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
 
                         var webUser = new WebUser();
 
@@ -309,10 +311,10 @@
                         var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
                         if (target != null) {
                             target = target.target;
-                             $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
                         }
-                           
-                       
+
+
 
                         //$('#DDL_' + mapAttr.KeyOfEn).combotree('select', defValue);
                     } else {
@@ -645,8 +647,8 @@
                 icon = "../" + rm.Icon;
             }
             var html = "";
-            var W = document.body.clientWidth-80;
-            var H = document.body.clientHeight-20;
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 20;
             if (W > rm.W)
                 W = rm.W;
             if (H > rm.H)
@@ -660,9 +662,9 @@
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel) {
-                 html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",\"" + H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",\"" + H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
-               
+
 
             if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
@@ -1136,7 +1138,7 @@
 
         function CloseIt() {
             parent.$("#eudlg").dialog('close');
-            if (parent.parent != undefined && parent.parent.$("#eudlg").length==1 )
+            if (parent.parent != undefined && parent.parent.$("#eudlg").length == 1)
                 parent.parent.$("#eudlg").dialog('close');
         }
 
@@ -1202,155 +1204,181 @@
         .btn-default {
             border: 0px;
         }
+
         .cs-btn-group {
-            width: auto!important;
+            width: auto !important;
             min-height: 34px;
             text-align: right;
             background-color: transparent;
         }
-        .cs-btn-group .l-btn-icon {
-            display: none;
-        }
-        .cs-btn-group .l-btn-text {
-            margin: 0;
-        }
+
+            .cs-btn-group .l-btn-icon {
+                display: none;
+            }
+
+            .cs-btn-group .l-btn-text {
+                margin: 0;
+            }
+
         .layout-panel {
             position: absolute;
             right: 0;
-            top: 0!important;
+            top: 0 !important;
             box-shadow: none;
         }
+
         .layout-panel-north {
-            width: auto!important;
-            left: auto!important;
+            width: auto !important;
+            left: auto !important;
             background-color: transparent;
         }
+
         .btn {
             padding: 0 10px;
-            color: #fff!important;
-            border-radius: 0px!important;
+            color: #fff !important;
+            border-radius: 0px !important;
             border: 0;
             height: 24px;
             line-height: 24px;
             box-sizing: border-box;
         }
-        .btn:hover {
-            padding:0 10px;
-            border: 0;
-        }
+
+            .btn:hover {
+                padding: 0 10px;
+                border: 0;
+            }
+
         .btn-light-green {
-            background-color: #50b6ac!important;
+            background-color: #50b6ac !important;
         }
 
-        .btn-light-green:hover {
-            background-color: #50b6ac;
-        }
+            .btn-light-green:hover {
+                background-color: #50b6ac;
+            }
 
         .btn-light-blue {
-            background-color: #62cae3!important;
+            background-color: #62cae3 !important;
         }
 
-        .btn-light-blue:hover {
-            background-color: #62cae3;
-        }
+            .btn-light-blue:hover {
+                background-color: #62cae3;
+            }
 
         .btn-light-yellow {
-            background-color: #f3ba20!important;
+            background-color: #f3ba20 !important;
         }
 
-        .btn-light-yellow:hover {
-            background-color: #f3ba20;
-        }
+            .btn-light-yellow:hover {
+                background-color: #f3ba20;
+            }
 
         .btn-light-red {
-            background-color: #f74f52!important;
+            background-color: #f74f52 !important;
         }
 
-        .btn-light-red:hover {
-            background-color: #f74f52;
-        }
+            .btn-light-red:hover {
+                background-color: #f74f52;
+            }
+
         .btn-white {
             border: 1px solid #031f5d;
-            background-color: #fff!important;
-            color: #031f5d!important;
+            background-color: #fff !important;
+            color: #031f5d !important;
         }
-        .btn-white:hover {
-            border: 1px solid #031f5d;
-        }
-        .tabs-wrap .tabs,.tabs-panels,.tabs li a.tabs-inner,.tabs-panels table,td.FDesc, td.FContext,td {
+
+            .btn-white:hover {
+                border: 1px solid #031f5d;
+            }
+
+        .tabs-wrap .tabs, .tabs-panels, .tabs li a.tabs-inner, .tabs-panels table, td.FDesc, td.FContext, td {
             border: 0;
         }
 
         .tabs-wrap table {
-            width: 100%!important;
+            width: 100% !important;
         }
+
         .tabs-wrap .tabs {
             padding-left: 0;
             width: auto;
             border-bottom: 1px solid #0a2561;
         }
+
         .tabs li a.tabs-inner {
             padding: 0 16px;
             background: none;
             border-radius: 5px 5px 0 0;
         }
-        .tabs li a.tabs-inner:hover {
-            background: none;
-            font-weight: bold;
-        }
+
+            .tabs li a.tabs-inner:hover {
+                background: none;
+                font-weight: bold;
+            }
+
         .tabs li.tabs-selected a.tabs-inner {
             border: 1px solid #0a2561;
             border-bottom-color: #fff;
             background: #fff;
         }
+
         td {
             box-sizing: border-box;
         }
-        td a {
-            color: #15398b;
-            font-size: 12px;
-        }
-        td a img {
-            vertical-align: -2px;
-        }
-        td.FContext {
-            width: 30%;
-        }
-        td.FContext:nth-child(2) {
-            padding-right: 30px;
-        }
-        td.FContext > *:only-child {
-            width: 100%!important;
-            font-size: 13px;
-            color: #282828;
-            box-sizing: border-box;
-        }
-        td.FContext[colspan] {
-            padding-right: 0;
-        }
-        
-        select[disabled], input[type=text]:disabled,.form-control,.form-control[disabled], .form-control[readonly], fieldset[disabled] {
+
+            td a {
+                color: #15398b;
+                font-size: 12px;
+            }
+
+                td a img {
+                    vertical-align: -2px;
+                }
+
+            td.FContext {
+                width: 30%;
+            }
+
+                td.FContext:nth-child(2) {
+                    padding-right: 30px;
+                }
+
+                td.FContext > *:only-child {
+                    width: 100% !important;
+                    font-size: 13px;
+                    color: #282828;
+                    box-sizing: border-box;
+                }
+
+                td.FContext[colspan] {
+                    padding-right: 0;
+                }
+
+        select[disabled], input[type=text]:disabled, .form-control, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
             background-color: #fff;
-            border: 1px solid #ccc!important;
-            text-align: left!important;
+            border: 1px solid #ccc !important;
+            text-align: left !important;
             height: 32px;
             box-sizing: border-box;
         }
-        select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
-            background-color: #f7f6f9;
-        }
-        td input[type="text"],td input[type="number"],td input[type="date"],td input[type="tel"] {
+
+            select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+                background-color: #f7f6f9;
+            }
+
+        td input[type="text"], td input[type="number"], td input[type="date"], td input[type="tel"] {
             height: 32px;
         }
+
         td input[type="checkbox"] {
             margin-right: 5px;
             width: 16px;
             height: 16px;
         }
+
         td label {
             font-size: 13px;
         }
-        
+
         /*td.FDesc {
            padding-right: 10px;
             text-align: right;
@@ -1362,11 +1390,12 @@
         td:nth-child(3)[class="FDesc"] {
             width: 130px!important;
         }*/
-        .cs-form-import>.layout-panel-center {
+        .cs-form-import > .layout-panel-center {
             padding: 16px 0 0 16px;
         }
+
         .cs-form-import > .layout-panel-north {
-            top: 6px!important;
+            top: 6px !important;
             padding-right: 21px;
             border-radius: 0;
         }
@@ -1374,15 +1403,20 @@
 </head>
 <body class="easyui-layout cs-form-import" data-options="fit:true">
     <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
-        <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
-           onclick="New()" style="margin-right:5px;">新建</a>
-        <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
-           data-options="plain:true,iconCls:'icon-save'" onclick="Update()" style="margin-right:5px;">保存</a>
-        <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-red" data-options="plain:true,iconCls:'icon-delete'"
-           onclick="Delete()" style="margin-right:5px;">删除</a>
+        <!--<a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
+    onclick="New()" style="margin-right:5px;">新建</a>-->
+        <input type="button" id="Btn_New" value="新建" onclick="New()" />
+        <!--<a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
+    data-options="plain:true,iconCls:'icon-save'" onclick="Update()" style="margin-right:5px;">保存</a>-->
 
-        <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton btn btn-white" data-options="plain:true,iconCls:'icon-reset'"
-           onclick="Setting()" style="margin-right:5px;">设置</a>
+        <input type="button" id="Btn_Save" value="保存" onclick="Update()" />
+
+        <!--<a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-red" data-options="plain:true,iconCls:'icon-delete'"
+       onclick="Delete()" style="margin-right:5px;">删除</a>-->
+        <input type="button" id="Btn_Delete" value="删除" onclick="Delete()" />
+        <!--<a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton btn btn-white" data-options="plain:true,iconCls:'icon-reset'"
+           onclick="Setting()" style="margin-right:5px;">设置</a>-->
+        <input type="button" id="Btn_Setting" value="设置" onclick="Setting()" />
     </div>
             <div class="easyui-layout" data-options="region:'center'" style="margin: 0px;overflow: auto">
                 <div class="easyui-layout" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;

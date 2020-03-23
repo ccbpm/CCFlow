@@ -1102,6 +1102,17 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+        public string Runing_UnSendCC()
+        {
+            string checkboxs = GetRequestVal("CCPKs");
+            CCLists ccs = new CCLists();
+            ccs.RetrieveIn("MyPK", "'"+checkboxs.Replace(",","','")+"'");
+            ccs.Delete();
+            return "撤销抄送成功";
+
+
+        }
         /// <summary>
         /// 执行催办
         /// </summary>

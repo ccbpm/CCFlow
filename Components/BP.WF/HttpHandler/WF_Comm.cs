@@ -4440,7 +4440,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") == -1)
                         continue;
-
+                   
                     switch (attr.MyDataType)
                     {
                         case DataType.AppInt:
@@ -4502,10 +4502,9 @@ namespace BP.WF.HttpHandler
             }
             foreach (Attr attr in AttrsOfGroup)
             {
-                if (attr.UIBindKey.IndexOf(".") == -1)
+                /* 说明它是枚举类型 */
+                if (attr.MyFieldType == FieldType.Enum && DataType.IsNullOrEmpty(attr.UIBindKey)==false)
                 {
-                    /* 说明它是枚举类型 */
-                    SysEnums ses = new SysEnums(attr.UIBindKey);
                     foreach (DataRow dr in dt.Rows)
                     {
                         int val = 0;
@@ -4518,49 +4517,103 @@ namespace BP.WF.HttpHandler
                             dr[attr.Key + "T"] = " ";
                             continue;
                         }
-
-                        foreach (SysEnum se in ses)
-                        {
-                            if (se.IntKey == val)
-                                dr[attr.Key + "T"] = se.Lab;
-                        }
+                        SysEnum se = new SysEnum(attr.UIBindKey,val);
+                        dr[attr.Key + "T"] = se.Lab;                      
                     }
                     continue;
                 }
-                foreach (DataRow dr in dt.Rows)
+                /**是外键*/
+                if (attr.MyFieldType == FieldType.FK)
                 {
-                    Entity myen = attr.HisFKEn;
-                    string val = dr[attr.Key].ToString();
-                    myen.SetValByKey(attr.UIRefKeyValue, val);
-                    try
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        myen.Retrieve();
-                        dr[attr.Key + "T"] = myen.GetValStrByKey(attr.UIRefKeyText);
-                    }
-                    catch
-                    {
-                        if (val == null || val.Length <= 1)
+                        Entity myen = attr.HisFKEn;
+                        string val = dr[attr.Key].ToString();
+                        myen.SetValByKey(attr.UIRefKeyValue, val);
+                        try
                         {
-                            dr[attr.Key + "T"] = val;
+                            myen.Retrieve();
+                            dr[attr.Key + "T"] = myen.GetValStrByKey(attr.UIRefKeyText);
                         }
-                        else if (val.Substring(0, 2) == "63")
+                        catch
                         {
-                            try
+                            if (val == null || val.Length <= 1)
                             {
-                                BP.Port.Dept Dept = new BP.Port.Dept(val);
-                                dr[attr.Key + "T"] = Dept.Name;
+                                dr[attr.Key + "T"] = val;
                             }
-                            catch
+                            else if (val.Substring(0, 2) == "63")
+                            {
+                                try
+                                {
+                                    BP.Port.Dept Dept = new BP.Port.Dept(val);
+                                    dr[attr.Key + "T"] = Dept.Name;
+                                }
+                                catch
+                                {
+                                    dr[attr.Key + "T"] = val;
+                                }
+                            }
+                            else
                             {
                                 dr[attr.Key + "T"] = val;
                             }
                         }
-                        else
+                    }
+                    continue;
+                }
+                /**外部数据源*/
+               if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL && DataType.IsNullOrEmpty(attr.UIBindKey) == false)
+                {
+                    string sqlKey= attr.UIBindKey;
+                    DataTable dtSQl = null;
+                    if (sqlKey.ToUpper().Contains("SELECT") == true)
+                    {
+                        //sql数据
+                        sqlKey = BP.WF.Glo.DealExp(attr.UIBindKey, null, null);
+                        dtSQl = DBAccess.RunSQLReturnTable(sqlKey);
+                    }
+                    else
+                    {
+                        dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+                    }
+                    foreach (DataColumn col in dtSQl.Columns)
+                    {
+                        string colName = col.ColumnName.ToLower();
+                        switch (colName)
                         {
-                            dr[attr.Key + "T"] = val;
+                            case "no":
+                                col.ColumnName = "No";
+                                break;
+                            case "name":
+                                col.ColumnName = "Name";
+                                break;
+                            case "parentno":
+                                col.ColumnName = "ParentNo";
+                                break;
+                            default:
+                                break;
                         }
                     }
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Object val = dr[attr.Key];
+                        if(val == null || DataType.IsNullOrEmpty(val.ToString()) == true)
+                        {
+                            dr[attr.Key + "T"] = "";
+                            continue;
+                        }
+                        foreach(DataRow ddr in dtSQl.Rows)
+                        {
+                            if(ddr["No"].ToString() == val.ToString())
+                            {
+                                dr[attr.Key + "T"] = ddr["Name"];
+                                break;
+                            }
+                        }
+                    }
+                    continue;
                 }
+
             }
             ds.Tables.Add(dt);
             ds.Tables.Add(AttrsOfNum.ToMapAttrs.ToDataTableField("AttrsOfNum"));

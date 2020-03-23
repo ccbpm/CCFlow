@@ -28,7 +28,8 @@
             var nodeAppType = flow.NodeAppType;
 
             if (nodeAppType == "" || nodeAppType == undefined) {
-                alert('您没有在流程属性里定义NodeAppType枚举值,无法设置节点属性.');
+                $("#errtext").html('警告：您没有在流程属性里定义NodeAppType枚举值,无法设置节点属性.');
+                
                 return;
             }
 
@@ -73,6 +74,8 @@
 
             </table>
         </div>
+        <br />
+        <label style="color:red" id="errtext"></label>
     </form>
 
 </body>

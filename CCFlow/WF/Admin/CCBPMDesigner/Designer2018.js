@@ -467,12 +467,10 @@ $(function () {
 
                 windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
 
-                alert(windowtext);
-
 
                 var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
                 var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
-                var xiuNodename = '修改名称:<input id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
+                var xiuNodename = '<input style="width:90%" id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
                 var spanaa = $("#lab" + activeId + " span").html();
 
                 labAlert(xiuNodename);

@@ -80,10 +80,14 @@
 </head>
 <body>
     <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
+            <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
 
+        </div>
 
         <table style="width:100%;">
-            <caption>文本框搜索多选 </caption>
+            <caption>文本框搜索多选 <a href="javascript:ShowHidden('help')"> <img src="../../../Img/Btn/Help.gif" /> 帮助:</a></caption>
 
             <tr>
                 <td>数据源类型 </td>
@@ -126,10 +130,8 @@
         </table>
 
 
-        <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
-        <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
-
-        <a href="javascript:ShowHidden('help')"> <img src="../../../Img/Btn/Help.gif" /> 帮助:</a>
+       
+        
         <div id="help" style="color:Gray; display:none">
             <ul>
                 <li>SQL格式为:</li>

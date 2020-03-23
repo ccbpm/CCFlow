@@ -89,7 +89,11 @@
 </head>
 <body>
     <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
 
+        </div>
         <table id="table" style="width: 98%;">
             <caption>快速输入 </caption>
             <tr>
@@ -116,9 +120,7 @@
                 </td>
             </tr>
         </table>
-        <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-        <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-
+       
         <fieldset>
             <legend>帮助</legend>
             <ul>

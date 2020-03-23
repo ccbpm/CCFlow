@@ -7,8 +7,10 @@
     <!--引用样式. -->
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -45,7 +47,7 @@
                 var mapDtl = mapDtls[i];
 
                 html += "<tr>";
-                html += "<th>填充从表:" + mapDtl.No + " " + mapDtl.Name +"<br>"+ GenerFields(mapDtl.No) + "</th>";
+                html += "<th>填充从表:" + mapDtl.No + " " + mapDtl.Name + "<br>" + GenerFields(mapDtl.No) + "</th>";
                 html += "</tr>";
 
                 var sqlVal = '';
@@ -108,8 +110,8 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
             mapExt.Tag = document.getElementById("TB_Tag").value;
-            
-            if (mapExt.Tag!=null && mapExt.Tag!="" && CheckIsSQL(mapExt.Tag) == false) {
+
+            if (mapExt.Tag != null && mapExt.Tag != "" && CheckIsSQL(mapExt.Tag) == false) {
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
                 return;
             }
@@ -127,7 +129,7 @@
                 var mapDtl = mapDtls[i];
                 var val = $("#TB_" + mapDtl.No).val();
 
-                if(val!=null && val!="" && CheckIsSQL(val) == false) {
+                if (val != null && val != "" && CheckIsSQL(val) == false) {
                     alert('请输入合法的查询SQL' + val);
                     return;
                 }
@@ -139,7 +141,7 @@
             mapExt.Save();
 
             alert("保存成功.");
-            
+
         }
         function Delete() {
 
@@ -163,35 +165,28 @@
 </head>
 <body>
     <form method="post" action="" id="form1">
-        <table style='width:100%'>
-            <caption>装载填充</caption>
-            <tr>
-                <th>
-                    主表SQL设置<br />
-                    <div id="fields"></div>
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <textarea name="TB_Tag" class="SQL" rows="7" cols="70" id="TB_Tag" style="width: 99%;">
-</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 95%;">
-                    <div id="dtls">
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
-                    <input id="Btn_Delete" type="button" value="删除" onclick="Delete()" />
-                </td>
-            </tr>
-        </table>
+        <div id="bar" class="cs-tr cs-bar">
+            <label style="float:left;font-size:15px;font-weight:bolder;">装载填充</label>
+            <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
+            <!--<input id="Btn_Delete" type="button" value="删除" onclick="Delete()" />-->
+        </div>
+
+
         <fieldset>
-            <legend id="help1">帮助</legend>
+
+            <legend>主表SQL设置</legend>
+            <br />
+            <div id="fields"></div>
+            <textarea name="TB_Tag" class="SQL" rows="7" cols="70" id="TB_Tag" style="width: 99%;"></textarea>
+
+            <div id="dtls">
+            </div>
+
+
+        </fieldset>
+
+        <fieldset>
+            <legend id="Help">帮助</legend>
             <ul>
                 <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式.</li>
                 <li> 比如1: SELECT No,Name,Tel FROM Port_Emp WHERE No='@WebUser.No' </li>
@@ -200,8 +195,8 @@
                 <li> 注意：sql查询返回的列名要区分大小写,为了避免字段输入拼写错误，我们为您列出了本表单的字段信息. </li>
                 <!--<li><font color="green">  </font> </li>-->
             </ul>
-
         </fieldset>
+
     </form>
 </body>
 </html>

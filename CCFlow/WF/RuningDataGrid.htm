@@ -1,56 +1,59 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>在途</title>
-		<link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-		<link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
-		<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-		<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-		<link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-         <style type="text/css">
-        .pagination
-        {
-            margin: 8px 0;
-            display: block;
-            font-size: 13px;
-        }
-        .pagination .controls
-        {
-            float: left;
-            border: 0;
-            padding: 7px 0 0 15px;
-            color: #777;
-        }
-        .search-padding {
-            padding-bottom: 1px;
-        }
-        .row {
-            margin-right: -15px;
-            margin-left: 0px;
-        }
-        .table {
-            width: 100%;
-            max-width: 100%;
-            margin-bottom: 0px;
-            table-layout: fixed;
-        }
-       
-        .tdHidden
-        {
-            word-break: keep-all; /* 不换行 */
-            white-space: nowrap; /* 不换行 */
-            overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
-            text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
-            -o-text-overflow: ellipsis;
-            -icab-text-overflow: ellipsis;
-            -khtml-text-overflow: ellipsis;
-            -moz-text-overflow: ellipsis;
-            -webkit-text-overflow: ellipsis;
-        }
-    </style>
-	</head>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>在途</title>
+	<link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+	<link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+	<script src="Scripts/bootstrap/js/bootstrap.min.js"></script>
+	<script src="Scripts/bootstrap/BootstrapUIDialog.js"></script>
+	<style type="text/css">
+		.pagination {
+			margin: 8px 0;
+			display: block;
+			font-size: 13px;
+		}
+
+			.pagination .controls {
+				float: left;
+				border: 0;
+				padding: 7px 0 0 15px;
+				color: #777;
+			}
+
+		.search-padding {
+			padding-bottom: 1px;
+		}
+
+		.row {
+			margin-right: -15px;
+			margin-left: 0px;
+		}
+
+		.table {
+			width: 100%;
+			max-width: 100%;
+			margin-bottom: 0px;
+			table-layout: fixed;
+		}
+
+		.tdHidden {
+			word-break: keep-all; /* 不换行 */
+			white-space: nowrap; /* 不换行 */
+			overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+			text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+			-o-text-overflow: ellipsis;
+			-icab-text-overflow: ellipsis;
+			-khtml-text-overflow: ellipsis;
+			-moz-text-overflow: ellipsis;
+			-webkit-text-overflow: ellipsis;
+		}
+	</style>
+</head>
 	<body class="gray-bg">
 		<div class="wrapper wrapper-content animated fadeInRight">
 			<div class="ibox-content">
@@ -472,9 +475,10 @@
 			        //listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
                     listbox += "<a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a>";
                     if (work.RunType == 0) {
-                        listbox += "&nbsp;&nbsp;<a href =\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销发送</a>";
-                        listbox += "&nbsp;&nbsp;<a href =\"javascript:UnCC('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销抄送</a>";
-                        listbox += "&nbsp;&nbsp;<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
+						listbox += "&nbsp;&nbsp;&nbsp; <a href =\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销发送</a>";
+                        listbox += "&nbsp;&nbsp;&nbsp; <a href =\"javascript:UnSendCC('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销抄送</a>";
+
+                        listbox += "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
                     }
                     
                     listbox += "</td>";
@@ -486,6 +490,39 @@
 			}
 			
 
+        }
+		//撤销抄送
+        function UnSendCC(fk_flow, workid, fid, unSendToNode) {
+			var url = "CCList.htm?WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FK_Node=" + unSendToNode + "&FID=" + fid;
+            var W = document.body.clientWidth - 300;
+            var H = document.body.clientHeight - 140;
+            OpenBootStrapModal(url,"CC", "抄送信息", W, H);
+			return;
+            if (window.confirm('您确定要撤销本次抄送吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
+            handler.AddPara("UnSendToNode", unSendToNode);
+            var data = handler.DoMethodReturnString("Runing_UnSendCC");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            $("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
+            if (data.indexOf("KillSubThared") == 0) {
+                alert(data.replace("KillSubThared@", ""));
+                return;
+            }
+            alert(data);
+            var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid + '&FID=' + fid;
+            window.open(url);
+            
+            return;
         }
 
         //查询

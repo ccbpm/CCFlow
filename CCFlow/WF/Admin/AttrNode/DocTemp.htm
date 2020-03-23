@@ -41,7 +41,7 @@
                 $.messager.alert("提示", "所选文件不符合格式，请重新选择。");
                 return;
             }
-
+            
             $("#pageloading").show();
             //提交数据
             var doMethod = "DocTemp_Upload";
@@ -58,10 +58,12 @@
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
+                        
                         return;
                     } else {
+                        
                         var json = eval('(' + data + ')');
-                        $('#docTempList').append('<li><span>' + json.Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json.No + '\")\'>删除</a>&nbsp;&nbsp;&nbsp;<a href=\'javascript:SelectField(\"' + json.No + '\")\'>选择填充字段</a></li>');
+                        $('#docTempList').append('<li><span>' + json.Name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:DelDocTemp(\"' + json.No + '\")\'>删除</a></li>');
                         $("#File_Upload").val('');
                     }
                 }
@@ -93,6 +95,7 @@
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
+                        
                         return;
                     } else {
                         var json = eval('(' + data + ')');
@@ -164,7 +167,7 @@
                 <li>从本机导入：请您选择本机的一个.docx格式文件 点击导入按钮完成导入。</li>
                 <li>
                     请选择文件:
-                    <input type="file" id="File_Upload" name="File_Upload" />
+                    <input style="background-color:white" type="file" id="File_Upload" name="File_Upload" />
                 </li>
                 <li>
                     模板列表:
@@ -172,7 +175,7 @@
                     </ul>
                 </li>
             </ul>
-            <div style="text-align: center; padding: 5px;">
+            <div style="text-align: left; padding: 5px;">
                 <input type="button" id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
             </div>
         </fieldset>

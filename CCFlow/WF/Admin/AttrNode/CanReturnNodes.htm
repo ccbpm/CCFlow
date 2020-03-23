@@ -59,7 +59,6 @@
                 newRow += "</tr>";
                 $("#table1 tr:last").after(newRow);
             }
-            var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD>&nbsp;</TD><TD><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD>";
             $("#table1 tr:last").after(newBtn);
             return;
         }
@@ -97,19 +96,21 @@
 </head>
 <body>
     <form id="cc">
-    <table width='100%' id="table1">
-        <caption style="text-align: center">
-            为'<span id="titl"></span>', 设置退回的节点。</caption>
-        <tr>
-        </tr>
-    </table>
-    <fieldset>
-        <legend>&nbsp;特别说明:&nbsp;</legend>
-        <ul>
-            <li>只有节点属性的退回规则被设置成退回制订的节点，此功能才有效。 </li>
-            <li>设置退回的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，退回时才做检查。</li>
-        </ul>
-    </fieldset>
+        <div style="right:30px; position:absolute; z-index:100;top:-3px ">
+            <input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()' />
+        </div>
+        <table width='100%' id="table1">
+            <caption><img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />为'<span id="titl"></span>', 设置退回的节点</caption>
+            <tr>
+            </tr>
+        </table>
+        <fieldset>
+            <legend>&nbsp;特别说明:&nbsp;</legend>
+            <ul>
+                <li>只有节点属性的退回规则被设置成退回制订的节点，此功能才有效。 </li>
+                <li>设置退回的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，退回时才做检查。</li>
+            </ul>
+        </fieldset>
     </form>
 </body>
 </html>

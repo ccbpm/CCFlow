@@ -389,7 +389,7 @@ namespace BP.WF.HttpHandler
         {
             int no = int.Parse(this.GetRequestVal("no"));
 
-            DocTemplate dt = new DocTemplate();
+          BP.WF.Template.DocTemplate dt = new DocTemplate();
             dt.Retrieve(DocTemplateAttr.No, no);
             dt.Delete();
 

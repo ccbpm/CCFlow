@@ -439,23 +439,23 @@ namespace BP.WF.Template
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(AddGroupPanelModel)", StationAttr.FK_StationType);
+                    BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组模式)", StationAttr.FK_StationType);
 
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(AddGroupListModel)", StationAttr.FK_StationType);
+                  BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组列表模式)", StationAttr.FK_StationType);
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.CCDepts(), new BP.Port.Depts(),
                    BP.WF.Template.NodeDeptAttr.FK_Node,
-                   BP.WF.Template.NodeDeptAttr.FK_Dept, "抄送部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "抄送部门(树模式)", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.CCEmps(), new BP.Port.Emps(),
                    BP.WF.Template.NodeEmpAttr.FK_Node,
-                   BP.WF.Template.NodeEmpAttr.FK_Emp, "抄送接受人(AddBranchesAndLeaf)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeEmpAttr.FK_Emp, "抄送接受人(树干叶子模式)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 #endregion 对应关系
 

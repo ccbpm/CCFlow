@@ -22,7 +22,7 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(NodeAttr.NodeID,value);
+                this.SetValByKey(NodeAttr.NodeID, value);
             }
         }
         /// <summary>
@@ -81,15 +81,25 @@ namespace BP.WF.Template
 
 
                 //节点绑定部门. 节点绑定部门.
-                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
-                   BP.WF.Template.NodeDeptAttr.FK_Node,
-                   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                string defDeptVal = "@WebUser.FK_Dept";
+                if (SystemConfig.CCBPMRunModel != 0)
+                {
+                    defDeptVal = "@WebUser.OrgNo";
+                }
 
+                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(),
+  BP.WF.Template.NodeDeptAttr.FK_Node,
+  BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches",
+  EmpAttr.Name, EmpAttr.No, defDeptVal);
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
-                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(),
+                    new BP.Port.Emps(),
                    BP.WF.Template.NodeEmpAttr.FK_Node,
-                   BP.WF.Template.NodeEmpAttr.FK_Emp, "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeEmpAttr.FK_Emp,
+                   "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name,
+                   EmpAttr.No, defDeptVal);
+
 
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 

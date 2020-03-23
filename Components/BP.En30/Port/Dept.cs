@@ -17,6 +17,7 @@ namespace BP.Port
         /// </summary>
         public const string ParentNo = "ParentNo";
         public const string Idx = "Idx";
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 部门
@@ -105,6 +106,8 @@ namespace BP.Port
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 50, 20);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 100, 30);
+                map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 100, 30);
+
                 map.AddTBInt(DeptAttr.Idx, 0, "序号", false, true);
 
 
@@ -238,10 +241,12 @@ namespace BP.Port
                 QueryObject.InitEntitiesByDataTable(this, dt, null);
                 return dt.Rows.Count;
             }
-            else
-            {
-                return base.RetrieveAll();
-            }
+
+            if (SystemConfig.CCBPMRunModel == 0)
+                return this.RetrieveAll();
+
+            //按照orgNo查询.
+           return this.Retrieve("OrgNo", WebUser.OrgNo);
         }
         /// <summary>
         /// 重写重数据源查询全部适应从WS取数据需要
@@ -262,10 +267,12 @@ namespace BP.Port
                 QueryObject.InitEntitiesByDataTable(this, dt, null);
                 return dt.Rows.Count;
             }
-            else
-            {
-                return base.RetrieveAllFromDBSource();
-            }
+
+            if (SystemConfig.CCBPMRunModel == 0)
+                return this.RetrieveAllFromDBSource();
+
+            //按照orgNo查询.
+           return this.Retrieve("OrgNo", WebUser.OrgNo);
         }
         #endregion 重写查询.
 

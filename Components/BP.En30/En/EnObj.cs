@@ -84,7 +84,8 @@ namespace BP.En
         }
         public UAC OpenForAppAdmin()
         {
-            if (BP.Web.WebUser.No != null && BP.Web.WebUser.No.Contains("admin") == true)
+            if (BP.Web.WebUser.No != null 
+                && BP.Web.WebUser.No.Contains("admin") == true)
             {
                 this.OpenAll();
             }

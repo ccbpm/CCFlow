@@ -118,6 +118,14 @@ namespace BP.GPM
                 return new StationType();
 			}
 		}
+        public override int RetrieveAll()
+        {
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+                return base.RetrieveAll();
+
+            //按照orgNo查询.
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

@@ -10,6 +10,7 @@ namespace BP.WF.Port
     /// </summary>
     public class StationTypeAttr : EntityNoNameAttr
     {
+        public const string OrgNo = "OrgNo";
     }
 	/// <summary>
     ///  岗位类型
@@ -48,6 +49,8 @@ namespace BP.WF.Port
 
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 2, 2, 2);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
+                map.AddTBString(StationTypeAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -72,6 +75,15 @@ namespace BP.WF.Port
                 return new StationType();
 			}
 		}
+
+        public override int RetrieveAll()
+        {
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+                return base.RetrieveAll();
+
+            //按照orgNo查询.
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+        }
 
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

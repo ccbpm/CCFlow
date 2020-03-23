@@ -322,9 +322,27 @@ namespace BP.GPM
         }
         public override int RetrieveAll()
         {
-            QueryObject qo = new QueryObject(this);
-            qo.addOrderBy(GPM.DeptAttr.Idx);
-            return qo.DoQuery();
+
+            if (BP.Web.WebUser.No == "admin")
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.addOrderBy(GPM.DeptAttr.Idx);
+                return qo.DoQuery();
+            }
+
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOr();
+                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOrderBy(GPM.DeptAttr.Idx);
+                return qo.DoQuery();
+            }
+
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, GPM.DeptAttr.Idx);
+
+          
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成IList, c#代码调用会出错误。

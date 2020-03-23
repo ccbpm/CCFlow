@@ -1104,7 +1104,8 @@ namespace BP.WF.HttpHandler
             Entities trees = attr.HisFKEns;
             //判断改类是否存在Idx
             Entity tree = trees.GetNewEntity;
-            if(DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable,"Idx") == true && tree.EnMap.Attrs.Contains("Idx") == true)
+            if(DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable,"Idx") == true
+                && tree.EnMap.Attrs.Contains("Idx") == true)
                 trees.RetrieveAll("Idx");
             else
                 trees.RetrieveAll();
@@ -1158,13 +1159,10 @@ namespace BP.WF.HttpHandler
             dtSelected = dot2Dots.ToDataTableField("DBMMs");
            
 
-
-
             string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
             string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
 
             dtSelected.Columns[attrOfMInMM].ColumnName = "No";
-           
 
             if (dtSelected.Columns.Contains(attrOfMInMM + "Text") == false && saveType == false)
                 return "err@MM实体类字段属性需要按照外键属性编写:" + dot2DotEnsName + " - " + attrOfMInMM;

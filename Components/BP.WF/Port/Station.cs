@@ -4,10 +4,10 @@ using BP.DA;
 using BP.En;
 
 namespace BP.WF.Port
-{	 
-	/// <summary>
-	/// 岗位属性
-	/// </summary>
+{
+    /// <summary>
+    /// 岗位属性
+    /// </summary>
     public class StationAttr : EntityNoNameAttr
     {
         /// <summary>
@@ -19,9 +19,9 @@ namespace BP.WF.Port
         /// </summary>
         public const string OrgNo = "OrgNo";
     }
-	/// <summary>
-	/// 岗位
-	/// </summary>
+    /// <summary>
+    /// 岗位
+    /// </summary>
     public class Station : EntityNoName
     {
         #region 实现基本的方方法
@@ -63,14 +63,14 @@ namespace BP.WF.Port
 
                 Map map = new Map("Port_Station", "岗位");
                 map.Java_SetEnType(EnType.Admin);
-             
+
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetCodeStruct("4"); // 最大级别是7.
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
-                
+
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
 
                 //查询条件.
@@ -82,25 +82,34 @@ namespace BP.WF.Port
         }
         #endregion
     }
-	 /// <summary>
-	 /// 岗位s
-	 /// </summary>
-	public class Stations : EntitiesNoName
-	{
-		/// <summary>
-		/// 岗位
-		/// </summary>
+    /// <summary>
+    /// 岗位s
+    /// </summary>
+    public class Stations : EntitiesNoName
+    {
+        /// <summary>
+        /// 岗位
+        /// </summary>
         public Stations() { }
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new Station();
-			}
-		}
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new Station();
+            }
+        }
+
+        public override int RetrieveAll()
+        {
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+                return base.RetrieveAll();
+
+            //按照orgNo查询.
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -126,5 +135,5 @@ namespace BP.WF.Port
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
 
-	}
+    }
 }

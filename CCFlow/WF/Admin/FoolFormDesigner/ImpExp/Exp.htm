@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <title>表单模版导出</title>
     <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
@@ -13,6 +14,7 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../../Scripts/download.js"></script>
+    <script src="../../Admin.js"></script>
     <script language="javascript" type="text/javascript">
         //初始化页面函数.....
         $(function () {
@@ -53,71 +55,73 @@
     </script>
 </head>
 <body>
-    <table style="width: 100%">
-        <caption>
-            表单模版导出
-        </caption>
-        <tr>
-            <td valign="top" style="width: 30%;">
-                <fieldset>
-                    <legend>
-                        <img src="../../../Img/Btn/Help.gif" alt="" />关于表单模版</legend>
-                    <ol>
-                        <li>ccbpm生成的流程模版是一个特定格式的xml文件。</li>
-                        <li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
-                        <li>ccbpm的jflow与ccflow的流程引擎导出的流程模版通用。</li>
-                        <li>流程模版用于流程设计者的作品交换。</li>
-                        <li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
-                    </ol>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <img src="../../../Img/Btn/Help.gif" />关于流程模版云</legend>
-                    <ol>
-                        <li>ccbpm团队为各位爱好者提供了云储存</li>
-                        <li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
-                        <li>ccbpm的jflow与ccflow的流程引擎导出的流程模版通用。</li>
-                        <li>流程模版用于流程设计者的作品交换。</li>
-                        <li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
-                    </ol>
-                </fieldset>
-            </td>
-            <td valign="top">
-                <fieldset>
-                    <legend>下载到本机 </legend>
-                    <ul>
-                        <li id="downli"></li>
-                        <li>该xml格式的流程模版文件可以通过，软盘交换到其它ccbpm系统中去。</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <img src="../../CCBPMDesigner/Img/FlowPublic.png" />共享到共有云服务器(暂停开放)</legend>
-                    <div style='color: Gray; margin-top: 10px; margin-bottom: 10px'>
-                        请先注册ccbpm私有云账号
-                        <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>-->
-                        <div />
-                        <ul>
-                            <li>感谢您共享该文件.</li>
-                            <li>导出到公有云的流程模版需要经过审核才能发布。 </li>
-                            <li>选择模版类别： </li>
-                        </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <img src="../../CCBPMDesigner/Img/FlowPrivate.png" />上传到私云服务器(暂停开放)</legend>
-                    <div style='color: Gray; margin-top: 10px; margin-bottom: 10px'>
-                        请先注册ccbpm私有云账号
-                        <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>
--->
-                        <div />
-                        <ul>
-                            <li>您可以把此模版放入到您的私有云里，我们会好好的为您永久的保管。.</li>
-                            <li>选择模版类别： </li>
-                        </ul>
-                </fieldset>
-            </td>
-        </tr>
-    </table>
+    <div id="bar" class="cs-tr cs-bar">
+        <label style="float:left; font-size :15px;font-weight:bolder;padding-top:10px;">模板导出</label>
+        <input type="button" id="Btn_Save" style="background-color:#F7F6F9" />
+    </div>
+    <fieldset>
+        <legend>下载到本机 </legend>
+        <ul>
+            <li id="downli"></li>
+            <li>该xml格式的流程模版文件可以通过，软盘交换到其它ccbpm系统中去。</li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>
+            <img src="../../CCBPMDesigner/Img/FlowPublic.png" />共享到共有云服务器(暂停开放)
+        </legend>
+        <div style='color: Gray; margin-top: 10px; margin-bottom: 10px'>
+            请先注册ccbpm私有云账号
+            <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>-->
+            <div />
+            <ul>
+                <li>感谢您共享该文件.</li>
+                <li>导出到公有云的流程模版需要经过审核才能发布。 </li>
+                <li>选择模版类别： </li>
+            </ul>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <img src="../../CCBPMDesigner/Img/FlowPrivate.png" />上传到私云服务器(暂停开放)
+        </legend>
+        <div style='color: Gray; margin-top: 10px; margin-bottom: 10px'>
+            请先注册ccbpm私有云账号
+            <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>
+            -->
+            <div />
+            <ul>
+                <li>您可以把此模版放入到您的私有云里，我们会好好的为您永久的保管。.</li>
+                <li>选择模版类别： </li>
+            </ul>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <img src="../../../Img/Btn/Help.gif" alt="" />关于表单模版
+        </legend>
+        <ol>
+            <li>ccbpm生成的流程模版是一个特定格式的xml文件。</li>
+            <li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
+            <li>ccbpm的jflow与ccflow的流程引擎导出的流程模版通用。</li>
+            <li>流程模版用于流程设计者的作品交换。</li>
+            <li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
+        </ol>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <img src="../../../Img/Btn/Help.gif" />关于流程模版云
+        </legend>
+        <ol>
+            <li>ccbpm团队为各位爱好者提供了云储存</li>
+            <li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
+            <li>ccbpm的jflow与ccflow的流程引擎导出的流程模版通用。</li>
+            <li>流程模版用于流程设计者的作品交换。</li>
+            <li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
+        </ol>
+    </fieldset>
+
 </body>
 </html>

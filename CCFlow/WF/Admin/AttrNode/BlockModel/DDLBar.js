@@ -70,7 +70,8 @@ function InitBar(optionKey) {
     //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
 
     //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
-    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+    
+    html += "<input id='Btn' type=button onclick='AdvSetting()' value='高级设置' />";
 
 
     document.getElementById("bar").innerHTML = html;
@@ -92,6 +93,13 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
     window.location.href = url + "?FK_Node=" + nodeID;
+}
+//高级设置.
+function AdvSetting() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var url = "7.ByOtherBlock.htm?FK_Node=" + nodeID + "&M=" + Math.random();
+    OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
 }
 function GetUrl(optionKey) {
     switch (parseInt(optionKey)) {

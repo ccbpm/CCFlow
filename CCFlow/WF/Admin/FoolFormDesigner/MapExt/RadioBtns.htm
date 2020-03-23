@@ -55,7 +55,7 @@
             $('#ulListValues').html(ulListValuesLiHtml);
 
             $('[name=' + pageData.KeyOfEn + ']').bind('change', function (obj) {
-               
+
                 SaveCurrentConfig();
                 pageData.selectIntKey = $(obj.target).val();
                 BindConfig();
@@ -185,13 +185,13 @@
                 return value.IntKey == pageData.selectIntKey;
             });
             if (selectRb.length == 0) {
-                 $(':text').val(""); //转换之前的文本框设置值清空
+                $(':text').val(""); //转换之前的文本框设置值清空
                 $('select').val(''); //转换之前的下拉框设置值清空
                 $('#TB_Script').val("");
                 $('#TB_Tip').val("");
                 return;
             }
-                
+
             $(':text').val(""); //转换之前的文本框设置值清空
             $('select').val(''); //转换之前的下拉框设置值清空
             $('#TB_Script').val(selectRb[0].Script);
@@ -286,11 +286,18 @@
     </script>
 </head>
 <body>
+    <div style="right:10px; position:absolute; z-index:100; top:-3px">
+        <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+        <!--<input type="button" value="保存并关闭" onclick="SaveAndClose()" />
+        <input type="button" value="关闭" onclick="Close()" />-->
+        
+    </div>
     <table style="width: 100%;">
         <caption>
             <label id="lb_EnName">
             </label>
             字段的高级设置
+            <a style="margin-right:180px;" href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />帮助:</a>
         </caption>
         <tr>
             <td valign="top">
@@ -365,10 +372,6 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
-                <!--<input type="button" value="保存并关闭" onclick="SaveAndClose()" />
-                <input type="button" value="关闭" onclick="Close()" />-->
-                <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />帮助:</a>
             </td>
         </tr>
     </table>
@@ -379,7 +382,7 @@
             <li>当下拉框或者radionbuttn选择的值改变时,需要联动其他的控件也要跟着隐藏与显示.</li>
             <li>该功能为每个枚举值的展现都设置为状态.</li>
         </ul>
-         
+
     </div>
 
 </body>

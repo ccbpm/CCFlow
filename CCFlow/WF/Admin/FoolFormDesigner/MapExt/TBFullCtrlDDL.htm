@@ -73,121 +73,129 @@
 </head>
 <body>
     <form id="cc">
-    <table id="table" style="width: 100%; border-width: 0px;">
-        <caption>
-            为文本框填充其它控件 - 从表
-        </caption>
-        <tr style="border-width: 0px;">
-            <td colspan="3" style="border-width: 0px;">
-                <label id="Lab_1">
-                    执行的SQL</label>
-                <label id="Lab_2">
-                    <a href="javascript:ShowHidden('sqlexp')">填充SQL帮助: </a>
-                </label>
-                <div id='sqlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>1. 设置一个查询的SQL语句，该SQL返回一个结果集，用于自动填充当前下拉框的选择范围. </li>
-                        <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                        <li>3. SQL返回的列与该从表字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                        <li>4. 比如:SELECT NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu FROM Demo_Resume WHERE FK_Student='@Key'
-                        </li>
-                        <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
-                        <li>
-                            <img alt="" src="../Img/TBCtrlFull.png" /></li>
-                    </ul>
-                </div>
-                <div id='urlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>1. 设置一个查询的API接口，该接口返回一个结果集，用于自动填充当前下拉框的选择范围. </li>
-                        <li>2. 该接口URL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                        <li>3. 接口URL返回的列与该从表字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                        <li>4. 比如:/jflow-web/WF/DemoTest/ProcessRequest.do?DoType=ReqDeptsByKey&FK_Emp=@Key
-                        </li>
-                        <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
-                        <li>
-                            <img alt="" src="../Img/TBCtrlFull.png" /></li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" style="width: 100%; border-width: 0px;">
-                <div id="tbs">
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                <input type="button" value="返回" onclick="Back()" id="Btn_Back" title="" />
-            </td>
-        </tr>
-    </table>
-    <div id="Msg">
-    </div>
-    <script type="text/javascript">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="返回" onclick="Back()" id="Btn_Back" title="" />
+        </div>
+        <table id="table" style="width: 100%; border-width: 0px;">
+            <caption>
+                为文本框填充其它控件 - 从表
+            </caption>
+            <tr style="border-width: 0px;">
+                <td colspan="3" style="border-width: 0px;">
+                    <label id="Lab_1">
+                        执行的SQL
+                    </label>
+                    <label id="Lab_2">
+                        <a href="javascript:ShowHidden('sqlexp')">填充SQL帮助: </a>
+                    </label>
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>1. 设置一个查询的SQL语句，该SQL返回一个结果集，用于自动填充当前下拉框的选择范围. </li>
+                            <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                            <li>3. SQL返回的列与该从表字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                            <li>
+                                4. 比如:SELECT NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu FROM Demo_Resume WHERE FK_Student='@Key'
+                            </li>
+                            <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
+                            <li>
+                                <img alt="" src="../Img/TBCtrlFull.png" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div id='urlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>1. 设置一个查询的API接口，该接口返回一个结果集，用于自动填充当前下拉框的选择范围. </li>
+                            <li>2. 该接口URL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                            <li>3. 接口URL返回的列与该从表字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                            <li>
+                                4. 比如:/jflow-web/WF/DemoTest/ProcessRequest.do?DoType=ReqDeptsByKey&FK_Emp=@Key
+                            </li>
+                            <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
+                            <li>
+                                <img alt="" src="../Img/TBCtrlFull.png" />
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 100%; border-width: 0px;">
+                    <div id="tbs">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                   
+                </td>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
+        <script type="text/javascript">
 
-        function Back() {
-            var myPK = GetQueryString('MyPK');
+            function Back() {
+                var myPK = GetQueryString('MyPK');
 
-            var fromPage = GetQueryString('FromPage');
-            var url = '';
-            if (fromPage == null)
-                url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
-            else
-                url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
+                var fromPage = GetQueryString('FromPage');
+                var url = '';
+                if (fromPage == null)
+                    url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
+                else
+                    url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
 
-            window.location.href = url;
-            return;
-        }
-
-        function Save() {
-
-            $("#Msg").html("正在保存,请稍后......");
-
-            var str = "";
-            var frmData = $("#cc").serialize();
-            // alert(frmData);
-            //            var myurl = Handler + "?DoType=TBFullCtrlDDL_Save&MyPK=" + GetQueryString("MyPK") + "&FK_MapData=" + GetQueryString('FK_MapData') + "&Tag=" + str + "&m=" + Math.random();
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            handler.AddPara("Tag", str);
-            handler.AddPara("MyPK", GetQueryString("MyPK"));
-            handler.AddFormData();
-            var data = handler.DoMethodReturnString("TBFullCtrlDDL_Save");
-            if (data.indexOf('err@') != -1) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
+                window.location.href = url;
                 return;
             }
 
-            alert(data);
+            function Save() {
 
-            var mypk = GetQueryString('MyPK');
-            var fromPage = GetQueryString('FromPage');
-            var url = '';
-            if (fromPage == null)
-                url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
-            else
-                url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
+                $("#Msg").html("正在保存,请稍后......");
 
-            window.location.href = url;
-            return;
-        }
+                var str = "";
+                var frmData = $("#cc").serialize();
+                // alert(frmData);
+                //            var myurl = Handler + "?DoType=TBFullCtrlDDL_Save&MyPK=" + GetQueryString("MyPK") + "&FK_MapData=" + GetQueryString('FK_MapData') + "&Tag=" + str + "&m=" + Math.random();
 
-        function Delete() {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+                handler.AddPara("Tag", str);
+                handler.AddPara("MyPK", GetQueryString("MyPK"));
+                handler.AddFormData();
+                var data = handler.DoMethodReturnString("TBFullCtrlDDL_Save");
+                if (data.indexOf('err@') != -1) {
+                    $("#Msg").html("<font color=red>" + data + "</font>");
+                    return;
+                }
 
-            if (window.confirm('您确定要删除吗？') == false)
-                return false;
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-            var data = handler.DoMethodReturnString("TBFullCtrl_Delete");
-            alert(data);
-            window.location.href = window.location.href;
-            return;
-        }
-    </script>
+                alert(data);
+
+                var mypk = GetQueryString('MyPK');
+                var fromPage = GetQueryString('FromPage');
+                var url = '';
+                if (fromPage == null)
+                    url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
+                else
+                    url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
+
+                window.location.href = url;
+                return;
+            }
+
+            function Delete() {
+
+                if (window.confirm('您确定要删除吗？') == false)
+                    return false;
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+                var data = handler.DoMethodReturnString("TBFullCtrl_Delete");
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
+        </script>
     </form>
 </body>
 </html>

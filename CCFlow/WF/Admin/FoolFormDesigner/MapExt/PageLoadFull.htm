@@ -121,7 +121,7 @@
 
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
-            mapExt.Tag = document.getElementById("TB_Tag").value;
+            mapExt.Tag = document.getElementById("TB_SQL").value;
 
             if (mapExt.Tag != null && mapExt.Tag != "" && CheckIsSQL(mapExt.Tag) == false) {
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
@@ -190,7 +190,7 @@
             <legend>主表SQL设置</legend>
             <br />
             <div id="fields"></div>
-            <textarea name="TB_Tag" class="SQL" rows="7" cols="70" id="TB_Tag" style="width: 99%;"></textarea>
+            <textarea name="TB_SQL" class="SQL" rows="7" cols="70" id="TB_SQL" style="width: 99%;"></textarea>
 
             <div id="dtls">
             </div>

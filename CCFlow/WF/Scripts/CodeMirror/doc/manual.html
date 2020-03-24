@@ -69,7 +69,7 @@
 <section class=first id=overview>
     <h2 style="position: relative">
       User manual and reference guide
-      <span style="color: #888; font-size: 1rem; position: absolute; right: 0; bottom: 0">version 5.44.1</span>
+      <span style="color: #888; font-size: 1rem; position: absolute; right: 0; bottom: 0">version 5.52.2</span>
     </h2>
 
     <p>CodeMirror is a code-editor component that can be embedded in
@@ -223,9 +223,10 @@
       first mode that was loaded. It may be a string, which either
       simply names the mode or is
       a <a href="http://en.wikipedia.org/wiki/MIME">MIME</a> type
-      associated with the mode. Alternatively, it may be an object
-      containing configuration options for the mode, with
-      a <code>name</code> property that names the mode (for
+      associated with the mode. The value <code>"null"</code>
+      indicates no highlighting should be applied. Alternatively, it
+      may be an object containing configuration options for the mode,
+      with a <code>name</code> property that names the mode (for
       example <code>{name: "javascript", json: true}</code>). The demo
       pages for each mode contain information about what configuration
       parameters the mode supports. You can ask CodeMirror which modes
@@ -284,7 +285,7 @@
       should be replaced by a
       special <a href="#option_specialCharPlaceholder">placeholder</a>.
       Mostly useful for non-printing special characters. The default
-      is <code>/[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff]/</code>.</dd>
+      is <code>/[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/</code>.</dd>
       <dt id="option_specialCharPlaceholder"><code><strong>specialCharPlaceholder</strong>: function(char) → Element</code></dt>
       <dd>A function that, given a special character identified by
       the <a href="#option_specialChars"><code>specialChars</code></a>
@@ -371,16 +372,16 @@
       passed the line number, and should return a string that will be
       shown in the gutter.</dd>
 
-      <dt id="option_gutters"><code><strong>gutters</strong>: array&lt;string&gt;</code></dt>
+      <dt id="option_gutters"><code><strong>gutters</strong>: array&lt;string | {className: string, style: ?string}&gt;</code></dt>
       <dd>Can be used to add extra gutters (beyond or instead of the
-      line number gutter). Should be an array of CSS class names, each
-      of which defines a <code>width</code> (and optionally a
-      background), and which will be used to draw the background of
-      the gutters. <em>May</em> include
-      the <code>CodeMirror-linenumbers</code> class, in order to
-      explicitly set the position of the line number gutter (it will
-      default to be to the right of all other gutters). These class
-      names are the keys passed
+      line number gutter). Should be an array of CSS class names or
+      class name / CSS string pairs, each of which defines
+      a <code>width</code> (and optionally a background), and which
+      will be used to draw the background of the gutters. <em>May</em>
+      include the <code>CodeMirror-linenumbers</code> class, in order
+      to explicitly set the position of the line number gutter (it
+      will default to be to the right of all other gutters). These
+      class names are the keys passed
       to <a href="#setGutterMarker"><code>setGutterMarker</code></a>.</dd>
 
       <dt id="option_fixedGutter"><code><strong>fixedGutter</strong>: boolean</code></dt>
@@ -1674,13 +1675,21 @@ editor.setOption("extraKeys", {
         <dt id="mark_inclusiveRight"><code><strong>inclusiveRight</strong>: boolean</code></dt>
         <dd>Like <code>inclusiveLeft</code>,
         but for the right side.</dd>
+        <dt id="mark_selectLeft"><code><strong>selectLeft</strong>: boolean</code></dt>
+        <dd>For atomic ranges, determines whether the cursor is allowed
+        to be placed directly to the left of the range. Has no effect on
+        non-atomic ranges.</dd>
+        <dt id="mark_selectRight"><code><strong>selectRight</strong>: boolean</code></dt>
+        <dd>Like <code>selectLeft</code>,
+        but for the right side.</dd>
         <dt id="mark_atomic"><code><strong>atomic</strong>: boolean</code></dt>
         <dd>Atomic ranges act as a single unit when cursor movement is
         concerned—i.e. it is impossible to place the cursor inside of
-        them. In atomic ranges, <code>inclusiveLeft</code>
-        and <code>inclusiveRight</code> have a different meaning—they
-        will prevent the cursor from being placed respectively
-        directly before and directly after the range.</dd>
+        them. You can control whether the cursor is allowed to be placed
+        directly before or after them using <code>selectLeft</code>
+        or <code>selectRight</code>. If <code>selectLeft</code>
+        (or right) is not provided, then <code>inclusiveLeft</code> (or
+        right) will control this behavior.</dd>
         <dt id="mark_collapsed"><code><strong>collapsed</strong>: boolean</code></dt>
         <dd>Collapsed ranges do not show up in the display. Setting a
         range to be collapsed will automatically make it atomic.</dd>
@@ -1872,6 +1881,9 @@ editor.setOption("extraKeys", {
           position (zero for the top, N to put it after the Nth other
           widget). Note that this only has effect once, when the
           widget is created.
+          <dt><code><strong>className</strong>: string</code></dt>
+          <dd>Add an extra CSS class name to the wrapper element
+          created for the widget.</dd>
         </dl>
       Note that the widget node will become a descendant of nodes with
       CodeMirror-specific CSS classes, and those classes might in some
@@ -2555,10 +2567,14 @@ editor.setOption("extraKeys", {
         and <code>CodeMirror.fold.xml</code>, for XML-style languages,
         and <code>CodeMirror.fold.comment</code>, for folding comment
         blocks.</dd>
-        <dt><code><strong>widget</strong>: string|Element</code></dt>
+        <dt><code><strong>widget</strong>: string | Element | fn(from: Pos, to: Pos) → string|Element</code></dt>
         <dd>The widget to show for folded ranges. Can be either a
         string, in which case it'll become a span with
-        class <code>CodeMirror-foldmarker</code>, or a DOM node.</dd>
+        class <code>CodeMirror-foldmarker</code>, or a DOM node.
+        To dynamically generate the widget, this can be a function 
+        that returns a string or DOM node, which will then render
+        as described. The function will be invoked with parameters
+        identifying the range to be folded.</dd>
         <dt><code><strong>scanUp</strong>: boolean</code></dt>
         <dd>When true (default is false), the addon will try to find
         foldable ranges on the lines above the current one if there
@@ -2812,8 +2828,13 @@ editor.setOption("extraKeys", {
       and <code>attrs</code> (an object mapping attribute names
       to <code>null</code> for free-form attributes, and an array of
       valid values for restricted
-      attributes). <a href="../demo/xmlcomplete.html">Demo
-      here.</a></dd>
+      attributes).<br>The hint options accept an additional property:
+      <dl>
+        <dt><code><strong>matchInMiddle</strong>: boolean</code></dt>
+        <dd>Determines whether typed characters are matched anywhere in
+        completions, not just at the beginning. Defaults to false.</dd>
+      </dl>
+      <a href="../demo/xmlcomplete.html">Demo here</a>.</dd>
 
       <dt id="addon_html-hint"><a href="../addon/hint/html-hint.js"><code>hint/html-hint.js</code></a></dt>
       <dd>Provides schema info to
@@ -2890,6 +2911,7 @@ editor.setOption("extraKeys", {
       will only be executed when the promise resolves.
       By default, the linter will run (debounced) whenever the document is changed.
       You can pass a <code>lintOnChange: false</code> option to disable that.
+      You can pass a <code>selfContain: true</code> option to render the tooltip inside the editor instance.
       Depends on <code>addon/lint/lint.css</code>. A demo can be
       found <a href="../demo/lint.html">here</a>.</dd>
 
@@ -3157,14 +3179,14 @@ editor.setOption("extraKeys", {
 
       <dt id="addon_tern"><a href="../addon/tern/tern.js"><code>tern/tern.js</code></a></dt>
       <dd>Provides integration with
-      the <a href="http://ternjs.net">Tern</a> JavaScript analysis
+      the <a href="https://ternjs.net">Tern</a> JavaScript analysis
       engine, for completion, definition finding, and minor
       refactoring help. See the <a href="../demo/tern.html">demo</a>
       for a very simple integration. For more involved scenarios, see
       the comments at the top of
       the <a href="../addon/tern/tern.js">addon</a> and the
       implementation of the
-      (multi-file) <a href="http://ternjs.net/doc/demo.html">demonstration
+      (multi-file) <a href="https://ternjs.net/doc/demo/index.html">demonstration
       on the Tern website</a>.</dd>
     </dl>
 </section>

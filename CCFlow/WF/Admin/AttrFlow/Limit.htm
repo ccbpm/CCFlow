@@ -25,6 +25,15 @@
     <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <script src="../Admin.js"></script>
+    <!--SQL编辑器-->
+    <link href="../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../LoadSql.js"></script>
     <script type="text/javascript">
         //全局变量
         var FK_Flow; 	//流程id
@@ -96,12 +105,12 @@
                     break;
                 case 7: 	//<=0
                     $("#RB_SQL").attr("checked", true);
-                    $("#TB_SQL_Para").val(dat.StartLimitPara);
+                    $("#TB_SQL").val(dat.StartLimitPara);
                     $("#DDL_SQL").val(0);
                     break;
                 case 8: //>0
                     $("#RB_SQL").attr("checked", true);
-                    $("#TB_SQL_Para").val(dat.StartLimitPara);
+                    $("#TB_SQL").val(dat.StartLimitPara);
                     $("#DDL_SQL").val(1);
                     break;
                 case 9: 	//为子流程时仅仅只能被调用1此
@@ -155,7 +164,7 @@
                 case "RB_SQL":
                     var DDL_SQL = $("#DDL_SQL").val();
                     startLimitRole = DDL_SQL == 0 ? "7" : "8";
-                    startLimitPara = $("#TB_SQL_Para").val();
+                    startLimitPara = $("#TB_SQL").val();
                     break;
                 default:
                     break;
@@ -398,7 +407,7 @@
         .cs-form-import > .layout-panel-center {
             padding: 16px 0 0 16px;
         }
-        
+
         .cs-form-import > .layout-panel-north {
             top: 6px !important;
             padding-right: 21px;
@@ -532,7 +541,7 @@
                 <li>该参数支持ccbpm的表达式。</li>
             </ul>
         </div>
-        <textarea class="input" id="TB_SQL_Para" rows="3" style="height: 45px;"></textarea>
+        <textarea class="input" id="TB_SQL" name="TB_SQL" rows="3" style="height: 45px;"></textarea>
     </fieldset>
     <fieldset>
         <legend><a href="javascript:ShowHidden('msgAlert')">限制提示信息:</a></legend>

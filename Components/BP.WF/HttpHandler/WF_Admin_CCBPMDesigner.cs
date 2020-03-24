@@ -717,8 +717,23 @@ namespace BP.WF.HttpHandler
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
 
-            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
+            if (DBAccess.IsView("Port_Emp")==false)
+            {
+                string sid = BP.DA.DBAccess.GenerGUID();
+                BP.DA.DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
+                WebUser.SID = sid;
+                emp.SID = sid;
+            }
 
+            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
+            //BP.WF.Port.WFEmp emp = new Port.WFEmp();
+            //emp.No = emp.No;
+
+            //让其登录.
+            BP.WF.Dev2Interface.Port_Login(emp.No);
+            return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+
+            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
             //BP.WF.Port.WFEmp emp = new Port.WFEmp();
             //emp.No = emp.No;
 

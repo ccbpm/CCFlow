@@ -4752,9 +4752,7 @@ namespace BP.WF
             gwf.WorkID = workID;
             gwf.RetrieveFromDBSources();
             if (gwf.Starter != WebUser.No && WebUser.IsAdmin == false)
-            {
                 return "err@流程不是您发起的，或者您不是管理员所以您不能删除该草稿。";
-            }
 
             //删除流程。
             gwf.Delete();

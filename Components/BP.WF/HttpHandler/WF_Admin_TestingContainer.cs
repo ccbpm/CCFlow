@@ -47,7 +47,7 @@ namespace BP.WF.HttpHandler
             return workid.ToString();
         }
 
-       
+
         /// <summary>
         /// 数据库信息
         /// </summary>
@@ -142,7 +142,7 @@ namespace BP.WF.HttpHandler
 
             string sid = this.GetRequestVal("SID");
             if (WebUser.IsAdmin == false)
-                return "err@非管理员无法测试";
+                return "err@非管理员无法测试,关闭后重新登录。";
 
             //用户编号.
             string userNo = this.GetRequestVal("UserNo");

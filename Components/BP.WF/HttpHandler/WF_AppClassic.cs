@@ -307,6 +307,14 @@ namespace BP.WF.HttpHandler
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
+                if (DBAccess.IsView("Port_Emp") == false)
+                {
+                    string sid = BP.DA.DBAccess.GenerGUID();
+                    BP.DA.DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
+                    WebUser.SID = sid;
+                    emp.SID = sid;
+                }
+
                 return "登陆成功";
             }
             catch (Exception ex)

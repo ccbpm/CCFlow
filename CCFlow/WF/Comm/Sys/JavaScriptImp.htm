@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta charset="UTF-8"/>
-<title> 脚本导入</title>
+    <meta charset="UTF-8" />
+    <title> 脚本导入</title>
 
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -13,37 +13,37 @@
     <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
     <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-       <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
         $(function () {
-        	init_Page();
+            init_Page();
         });
-        function init_Page(){
-        	var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
-        	var data = handler.DoMethodReturnJSON("javaScriptFiles");
-        	if(data=="") $("#tableContent").html("还没有上传脚本文件");
-        	else{
-        		var htm = "";
-        		htm +="<table>";
-        		htm +="<thead><th>脚本名称</th><th>最后修改时间</th></thead>"
-        		for(var i =0 ;i<data.length;i++){
-        			htm +="<tr>";
-        			htm +="<td>"+data[i].FileName+"</td>";
-        			htm +="<td>"+data[i].ChangeTime+"</td>";
-        			htm +="</tr>";
-        		}
-        		htm +="</table>";
-        		$("#tableContent").html(htm);
-        	}
+        function init_Page() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+            var data = handler.DoMethodReturnJSON("javaScriptFiles");
+            if (data == "") $("#tableContent").html("还没有上传脚本文件");
+            else {
+                var htm = "";
+                htm += "<table>";
+                htm += "<thead><th>脚本名称</th><th>最后修改时间</th></thead>"
+                for (var i = 0; i < data.length; i++) {
+                    htm += "<tr>";
+                    htm += "<td>" + data[i].FileName + "</td>";
+                    htm += "<td>" + data[i].ChangeTime + "</td>";
+                    htm += "</tr>";
+                }
+                htm += "</table>";
+                $("#tableContent").html(htm);
+            }
         }
-        
+
         //流程导入.
         function Imp_Done() {
-           
+
             var fileValue = $("#File_Upload").val();
             //必须要选择文件
             if (fileValue == "") {
@@ -57,7 +57,7 @@
                 $.messager.alert("提示", "所选不是JS脚本文件，请重新选择。");
                 return;
             }
-            
+
             //获取发送请求时的参数
             var queryString = document.location.search.substr(1);
 
@@ -65,66 +65,66 @@
             var doMethod = "javaScriptImp_Done";
             var httpHandlerName = "BP.WF.HttpHandler.WF_Comm_Sys";
             var URL = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
-//           	var URL = Handler + "?DoType=javaScriptImp_Done";
-           	
-           	if(queryString!=null&&queryString.length>0)		
-           		URL += URL+"&"+queryString;
-            
+            //           	var URL = Handler + "?DoType=javaScriptImp_Done";
+
+            if (queryString != null && queryString.length > 0)
+                URL += URL + "&" + queryString;
+
             //提交数据
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
                 url: URL,
                 onSubmit: function (param) {
-                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
                 },
                 success: function (data) {
-                      alert(data);
-                      init_Page();
+                    alert(data);
+                    init_Page();
                 }
             });
         }
     </script>
 </head>
 <body>
-<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
-<table style=" width:100%">
-<caption>脚本导入 </caption>
-<tr>
-<td valign="top" style="width:30%;">
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+        <table style=" width:100%">
+            <caption>脚本导入 </caption>
+            <tr>
+                <td valign="top" style="width:30%;">
 
-<fieldset>
-<legend><img src="../../Img/Btn/Help.gif" />关于脚本导入</legend>
-<ol>
-<li>脚本默认的格式为XML。</li>
-<li>重复导入的脚本则覆盖。</li>
-<li>脚本的主要作用是处理表单提交时复杂的校验功能。</li>
-</ol>
-</fieldset>
-<fieldset>
-<legend>已导入的脚本</legend>
-	<div id="tableContent">
-	</div>
-</fieldset>
- </td>
+                    <fieldset>
+                        <legend><img src="../../Img/Btn/Help.gif" />关于脚本导入</legend>
+                        <ol>
+                            <li>脚本默认的格式为XML。</li>
+                            <li>重复导入的脚本则覆盖。</li>
+                            <li>脚本的主要作用是处理表单提交时复杂的校验功能。</li>
+                        </ol>
+                    </fieldset>
+                    <fieldset>
+                        <legend>已导入的脚本</legend>
+                        <div id="tableContent">
+                        </div>
+                    </fieldset>
+                </td>
 
-<td  valign="top">
-<fieldset>
-<legend> 从本机导入  </legend>
-<ul>
-<li>从本机导入：请您选择本机的一个JS格式文件 点击导入按钮完成导入。</li>
-<li> 请选择文件:  <input type="file" id="File_Upload" name="File_Upload"  /></li>
-</ul>
-<div style=" text-align:center; padding:5px;">
-<input type=button id="Btn_Do"  value="执行导入" onclick="Imp_Done();" />
- </div>
-</fieldset>
+                <td valign="top">
+                    <fieldset>
+                        <legend> 从本机导入  </legend>
+                        <ul>
+                            <li>从本机导入：请您选择本机的一个JS格式文件 点击导入按钮完成导入。</li>
+                            <li> 请选择文件:  <input type="file" id="File_Upload" name="File_Upload" /></li>
+                        </ul>
+                        <div style=" text-align:center; padding:5px;">
+                            <input type=button id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
+                        </div>
+                    </fieldset>
 
 
- </td>
-</tr>
-</table>
-</form>
+                </td>
+            </tr>
+        </table>
+    </form>
 
 </body>
 </html>

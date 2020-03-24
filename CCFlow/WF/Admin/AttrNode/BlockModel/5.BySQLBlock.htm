@@ -14,16 +14,26 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/vue.js"></script>
+
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../LoadSql.js"></script>
     <script>
         $(function () {
             InitBar(BlockModel.BySQLBlock);
         });
-         function Save() {
+        function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-             node.BlockModel = BlockModel.BySQLBlock;
-             if (!$("#TB_SQL").val());
-             node.BlockExp = $("#TB_SQL").val();
+            node.BlockModel = BlockModel.BySQLBlock;
+            if (!$("#TB_SQL").val());
+            node.BlockExp = $("#TB_SQL").val();
             node.Update();
             alert("保存完毕");
             window.location.href = window.location.href;

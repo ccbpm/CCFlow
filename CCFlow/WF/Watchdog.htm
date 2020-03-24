@@ -24,8 +24,8 @@
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <!-- 处理多语言 -->
     <script src="Data/lang/load.js" type="text/javascript"></script>
+    <script src="Data/lang/js/zh-cn.js"></script>
     <script src="Data/lang/lang.js" type="text/javascript"></script>
-
     <script language="javascript" type="text/javascript">
 
         //页面启动函数.
@@ -139,7 +139,7 @@
                 return "<font color=red>逾期</font>";
             }
             else {
-                if (passTime >= 0 && passTime < 2 * 24 * 3600 * 1000 && dt.WFState!=3) {
+                if (passTime >= 0 && passTime < 2 * 24 * 3600 * 1000 && dt.WFState != 3) {
                     return "<font color='#ffac38'>预警</font>";
                 } else {
                     return "<font color=green>正常</font>";
@@ -171,7 +171,7 @@
             }
             //当前时间=年份-月份-日 小时：分钟
             var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + date.getHours() + seperator2 + date.getMinutes();
+                + " " + date.getHours() + seperator2 + date.getMinutes();
 
             return cdt;
         }

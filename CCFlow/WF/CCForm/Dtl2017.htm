@@ -1866,6 +1866,8 @@
                 return;
             else
                 OID = $(tr).data().data.OID;
+            if (OID == 0)//数据还未保存
+                OID = rowIndex;
             for (var i = 0; i < mapExtArr.length; i++) {
                 var mapExt = mapExtArr[i];
                 //一起转成entity.

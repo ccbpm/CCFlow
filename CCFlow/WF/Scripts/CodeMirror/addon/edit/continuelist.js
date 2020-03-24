@@ -23,7 +23,7 @@
 
       // If we're not in Markdown mode, fall back to normal newlineAndIndent
       var eolState = cm.getStateAfter(pos.line);
-      var inner = cm.getMode().innerMode(eolState);
+      var inner = CodeMirror.innerMode(cm.getMode(), eolState);
       if (inner.mode.name !== "markdown") {
         cm.execCommand("newlineAndIndent");
         return;
@@ -41,7 +41,9 @@
         return;
       }
       if (emptyListRE.test(line)) {
-        if (!/>\s*$/.test(line)) cm.replaceRange("", {
+        var endOfQuote = inQuote && />\s*$/.test(line)
+        var endOfList = !/>\s*$/.test(line)
+        if (endOfQuote || endOfList) cm.replaceRange("", {
           line: pos.line, ch: 0
         }, {
           line: pos.line, ch: pos.ch + 1

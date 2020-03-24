@@ -62,28 +62,7 @@
             created() {
                 this.delData =  InitData();
 
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-                handler.AddPara("FrmID", frmID);
-                var html = handler.DoMethodReturnString("Fields_Init");
-             //   console.log(html);
-
-                var list = ens.GetEns();
-                var deldate = [];
-                list.data.map(function (item, index) {
-                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
-                        item.contralType = GetFieldType(item);
-
-                        if (item.UIVisable != 0
-                            && item.KeyOfEn != 'Emps'
-                            && item.KeyOfEn != 'FK_NY'
-                            && item.KeyOfEn != 'FK_Dept'
-                             && item.KeyOfEn != 'MyNum'
-                            && item.KeyOfEn != 'Rec') {
-                            deldate.push(item);
-                        }
-                    }
-                });
-                this.delData = deldate;
+                
             },
             methods: {
                 Edit: function (myPK) {
@@ -132,7 +111,7 @@
                 var list = ens.GetEns();
                 var deldate = [];
                 list.data.map(function (item, index) {
-                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 7) {
+                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 6) {
                         item.contralType = GetFieldType(item);
                         deldate.push(item);
                     }

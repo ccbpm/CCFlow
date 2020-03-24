@@ -27,7 +27,17 @@ input[type="button"], input[type="submit"], input[type="file"] {
     border-radius: 3px;
     border: 1px solid #d2cdcd;
 }
+/*±à¼­Æ÷²å¼þ*/
+ .CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+}
 
+.CodeMirror-scroll {
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
 .form-control[disabled],
 .form-control[readonly],
     fieldset[disabled] {

@@ -1158,6 +1158,7 @@ function execSend(toNodeID) {
 }
 
 //发送 退回 移交等执行成功后转到  指定页面
+var interval;
 function OptSuc(msg) {
 
     // window.location.href = "/WF/MyFlowInfo.aspx";
@@ -1176,12 +1177,12 @@ function OptSuc(msg) {
 
     $("#msgModal").modal().show();
 
-    var int = setInterval("clock()", 1000);
+    interval = setInterval("clock()", 1000);
 }
 
 var num = 30;
 function clock() {
-    num >= 0 ? num-- : clearInterval(int);
+    num >= 0 ? num-- : clearInterval(interval);
     $("#btnMsgModalOK").html("确定(" + num + "秒)");
     if (num == 0)
         closeWindow();

@@ -20,6 +20,15 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <base target="_self" />
     <script src="../Admin.js"></script>
+    <!--SQL编辑器-->
+    <link href="../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../LoadSql.js"></script>
     <script type="text/javascript">
         ////全局变量
         //var FK_Flow; 	//流程id
@@ -167,7 +176,7 @@
             <br />
             <br />
         </legend>
-        <input type="text" value="" id="TB_SQL" name="TB_SQL" style="width: 90%;" />
+        <textarea type="text" value="" id="TB_SQL" name="TB_SQL" style="width: 90%;" ></textarea>
         <br />
         例如: SELECT myfield FROM xxxx WHERE OID=@WorkID 返回值是一行，一列的string类型的数据，比如: 2019-09-09
     </fieldset>

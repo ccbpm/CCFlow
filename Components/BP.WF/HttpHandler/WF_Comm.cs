@@ -1458,6 +1458,10 @@ namespace BP.WF.HttpHandler
                             else
                                 qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field+ valIdx + "||'%'");
                             qo.MyParas.Add(field+ valIdx, val);
+
+                            if (valIdx == fieldValues.Length)
+                                qo.addRightBracket();
+
                             continue;
                         }
                         if (valIdx == 1 && idx != 1)
@@ -1474,12 +1478,11 @@ namespace BP.WF.HttpHandler
                             qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field+ valIdx + "||'%'");
                         qo.MyParas.Add(field+ valIdx, val);
 
-                        if (valIdx == fieldValues.Length && idx != 1)
+                        if (valIdx == fieldValues.Length)
                             qo.addRightBracket();
                     }
                 }
-                if (idx != 0)
-                    qo.addRightBracket();
+                
             }
             else
             {
@@ -2361,8 +2364,30 @@ namespace BP.WF.HttpHandler
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
             string name = "数据导出";
+            MapAttrs mapAttrs = new MapAttrs();
+            Attrs attrs = null;
+            MapData md = new MapData();
+            md.No = this.EnsName;
+            int count = md.RetrieveFromDBSources();
+            if (count == 1)
+            {
+                mapAttrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
+                attrs = new Attrs();
+                foreach (MapAttr attr in mapAttrs)
+                {
+                    string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
+                    if (searchVisable == "0")
+                        continue;
+                    if ((count != 0 && DataType.IsNullOrEmpty(searchVisable)) || (count == 0 && attr.UIVisible == false))
+                        continue;
+                    attrs.Add(attr.HisAttr);
+                   
+                }
+                
+            }
+
             string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
-            string filePath = ExportDGToExcel(Search_Data(ens, en), en, name);
+            string filePath = ExportDGToExcel(Search_Data(ens, en), en, name,attrs);
             //DataTableToExcel(Search_Data(ens, en),en, filename, name,
             //                                                  BP.Web.WebUser.Name, true, true, true);
 
@@ -2376,6 +2401,7 @@ namespace BP.WF.HttpHandler
         {
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
+            
             string workId = this.GetRequestVal("WorkId");
             string fid = this.GetRequestVal("FID");
             string name = "从表数据导出";

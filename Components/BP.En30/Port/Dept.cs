@@ -243,7 +243,7 @@ namespace BP.Port
             }
 
             if (SystemConfig.CCBPMRunModel == 0)
-                return this.RetrieveAll();
+                return base.RetrieveAll();
 
             //按照orgNo查询.
            return this.Retrieve("OrgNo", WebUser.OrgNo);
@@ -269,7 +269,7 @@ namespace BP.Port
             }
 
             if (SystemConfig.CCBPMRunModel == 0)
-                return this.RetrieveAllFromDBSource();
+                return base.RetrieveAllFromDBSource();
 
             //按照orgNo查询.
            return this.Retrieve("OrgNo", WebUser.OrgNo);

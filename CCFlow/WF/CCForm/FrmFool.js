@@ -172,15 +172,7 @@ function GenerFoolFrm(mapData, frmData) {
         html += "<input type='hidden' id='imgSrc'/>";
     }
 
-    ////加入隐藏控件.
-    //var mapAttrs = frmData.Sys_MapAttr;
-    //for (var i = 0; i < mapAttrs.length; i++) {
-    //    var attr = mapAttrs[i];
-    //    if (attr["UIVisible"] == 0) {
-    //        var defval = ConvertDefVal(frmData, attr["DefVal"], attr["KeyOfEn"]);
-    //        html += "<input type='hidden' id='TB_" + attr["KeyOfEn"] + "' name='TB_" + attr["KeyOfEn"] + "' value='" + defval + "' />";
-    //    }
-    //}
+
 
     $('#CCForm').html("").append(html);
 
@@ -278,38 +270,14 @@ function Set_Frm_Enable(frmData) {
 //审核组件
 function Ele_FrmCheck(wf_node) {
 
-    //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
-    var sta = wf_node.FWCSta;
-
-    var h = wf_node.FWC_H + 1000;
-
-    var isReadonly = GetQueryString('IsReadonly');
-    if (isReadonly != "1") {
-        isReadonly = "0";
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
+        else
+            pageData.FWCVer = 1;
+        $.getScript('../WorkOpt/WorkCheck.js', function () { });
     }
-    if (sta == 2)//只读
-        isReadonly = "1";
-
-    var src = "";
-
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    else
-        src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["OID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.OID;
-
-
-    src += "&r=q" + paras;
-    var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
-    return eleHtml;
+    return "<div id='WorkCheck'></div>";
 }
 
 //解析表单是三列的情况

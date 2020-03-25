@@ -574,53 +574,21 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
     if (frmNode !=null && node.FormType == 5 && frmNode.IsEnableFWC != 1)
         return $('');
 
+    var currentURL = window.location.href;
 
-    var w = wf_node.FWC_W;
-   
-    var src = "";
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
-            src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
+    var url = "./WorkOpt/";
+    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+        url = '../WorkOpt/';
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
         else
-            src = "./WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    else
-        if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
-            src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-        else
-            src = "./WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    var paras = '';
-
-    var isReadonly = GetQueryString('IsReadonly');
-    if (isReadonly != "1") {
-        isReadonly = "0";
+            pageData.FWCVer = 1;
+        $.getScript(url + 'WorkCheck.js', function () { });
     }
-    if (sta == 2)//只读
-        isReadonly = "1";
 
+    var eleHtml = $("<div id='WorkCheck'></div>");
 
-    paras += "&FID=" + pageData["FID"];
-    paras += "&WorkID=" + pageData["OID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-
-    //  paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
-    {
-        // src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-
-    
-    var eleHtml = $("<div id='WorkCheck" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' ></div>");
-
-    var eleIframe = $("<iframe id='FWC' src = '" + src + "' frameborder=0  style='width:" + w + "px; height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-
-
-    eleHtml.append(eleIframe);
     $(element).after(eleHtml);
     $(element).remove(); //移除SubFlow节点
 

@@ -946,33 +946,16 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var w = wf_node.FWC_W;
     if (sta == 0)
         return $('');
-
-    var src = "";
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "./WorkOpt/WorkCheck.htm?s=2";
-    else
-        src = "./WorkOpt/WorkCheck2019.htm?s=2";
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
-    {
-        src += "&DoType=View";
+    //引入WorkCheck.js
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
+        else
+            pageData.FWCVer = 1;
+        $.getScript('./WorkOpt/WorkCheck.js', function () { });
     }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
 
-    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
-
-    eleHtml = $(eleHtml);
+    eleHtml = $("<div id='WorkCheck'></div>");
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
     return eleHtml;
 }

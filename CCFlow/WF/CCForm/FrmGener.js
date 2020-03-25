@@ -535,6 +535,7 @@ function initPageParam() {
     if (oid == null)
         oid = GetQueryString("OID");
     pageData.OID = oid;
+    pageData.WorkID = oid;
 
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");

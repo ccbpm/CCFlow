@@ -220,41 +220,15 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
     if (w <= 10)
         w = 300;
 
-    var src = "";
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    else
-        src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    var fwcOnload = "";
-    var paras = '';
-
-    var isReadonly = GetQueryString('IsReadonly');
-    if (isReadonly != "1") {
-        isReadonly = "0";
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
+        else
+            pageData.FWCVer = 1;
+        $.getScript('../WorkOpt/WorkCheck.js', function () { });
     }
-    if (sta == 2)//只读
-        isReadonly = "1";
 
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&WorkID=" + pageData["OID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-
-    //  paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
-    {
-        // src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-
-    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
-
-    eleHtml = $(eleHtml);
+    var eleHtml = $("<div id='WorkCheck'></div>");
     eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
     return eleHtml;
 }

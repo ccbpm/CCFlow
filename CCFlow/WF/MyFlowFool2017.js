@@ -125,6 +125,7 @@ function GenerFoolFrm(wn) {
 
             //审核组件..
             if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
+              
 
                 html += "<tr>";
                 html += "  <td colspan='" + tableCol + "'>";
@@ -1628,35 +1629,17 @@ function Ele_ImgAth(frmImageAth) {
 //审核组件
 function Ele_FrmCheck(wf_node) {
 
-    //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
-    var sta = wf_node.FWCSta;
-
-    var h = wf_node.FWC_H + 1300;
-    var src = "";
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "./WorkOpt/WorkCheck.htm?s=2";
-    else
-        src = "./WorkOpt/WorkCheck2019.htm?s=2";
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
-    {
-        src += "&DoType=View";
+    //引入WorkCheck.js
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
+        else
+            pageData.FWCVer = 1;
+        $.getScript('./WorkOpt/WorkCheck.js', function () { });
     }
-    src += "&r=q" + paras;
 
-    if (h == 0)
-        h = 400;
+   return "<div id='WorkCheck'></div>";
 
-    var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "'";
-    eleHtml += " frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
-    return eleHtml;
 }
 
 //子流程

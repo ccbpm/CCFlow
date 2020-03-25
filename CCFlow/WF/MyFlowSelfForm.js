@@ -1034,7 +1034,7 @@ function GenerWorkNode() {
     }
     url += "&WorkID=" + GetPageParas("WorkID") + "&FK_Flow=" + GetPageParas("FK_Flow") + "&FK_Node=" + GetPageParas("FK_Node");
 
-    var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:auto' leftMargin='0' topMargin='0' />";
+    var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:100%' leftMargin='0' topMargin='0' />";
 
     var compoents = workNodeData.WF_FrmNodeComponent;
     //增加审核分组

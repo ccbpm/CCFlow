@@ -117,17 +117,23 @@ function InitPage() {
             html += "<br>";
             html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
             html += "<option value=''>常用短语</option>";
-            for (var i = 0; i < NewDuanYu.length; i++) {
-                if (NewDuanYu[i] == "") {
-                    continue;
+            if (NewDuanYu.length > 0) {
+
+                for (var i = 0; i < NewDuanYu.length; i++) {
+                    if (NewDuanYu[i] == "") {
+                        continue;
+                    }
+                    html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
                 }
-                html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
+            } else {
+
+                html += "<option value='同意'>同意</option>";
+                html += "<option value='同意办理'>同意办理</option>";
+                html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
+                html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
+                html += "<option value='不同意'>不同意</option>";
             }
-            html += "<option value='同意'>同意</option>";
-            html += "<option value='同意办理'>同意办理</option>";
-            html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
-            html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
-            html += "<option value='不同意'>不同意</option>";
+            
             html += "</select><font color=Gray>内容不要超过2000字</font>";
             html += "</div>";
 

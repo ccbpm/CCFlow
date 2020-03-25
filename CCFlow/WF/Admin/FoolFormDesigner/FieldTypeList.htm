@@ -296,7 +296,13 @@
                         }
 
                         function Table(doType) {
-                            window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                            var webUser = new WebUser();
+                            // SaaS模式下进入SaaS下页面
+                            if (webUser.CCBPMRunModel != 0) {
+                                window.location.href = '../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                            } else {
+                                window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                            }
                         }
 
                         function TableGuide() {

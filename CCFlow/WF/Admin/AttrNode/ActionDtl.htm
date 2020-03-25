@@ -4,15 +4,7 @@
     <title>流程事件类</title>
     <meta charset="UTF-8" />
     <title>节点-事件</title>
-    <!--SQL编辑器-->
-    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
-    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
-    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
-    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
-    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
-    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
-    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
-    <script src="../../../LoadSql.js"></script>
+
 
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
@@ -23,9 +15,18 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
+    SQL编辑器
+    <link href="../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../LoadSql.js"></script>
 
     <script type="text/javascript">
+
         //页面启动函数.
         $(function () {
 
@@ -52,7 +53,7 @@
             GenerBindDDL("DDL_Doc", BuessUnits, "No", "Name", "");
 
         });
-
+        
         function GetDoType(doType) {
 
             var cfg = "@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类@7=业务单元";
@@ -86,6 +87,7 @@
                 en.DoDoc = $("#TB_Doc").val();
             }
 
+
             if (en.DoDoc == "") {
                 alert('设置执行内容.');
                 return;
@@ -108,6 +110,15 @@
                 $("#TB_Doc").show();
                 $("#DDL_Doc").hide();
             }
+            //if ($(o).val() == 2) {
+            //    $("textarea").attr("id", "#TB_SQL");
+            //    $("textarea").attr("name", "#TB_SQL");
+
+            //}
+            //else {
+            //    $("textarea").attr("id", "#TB_Doc");
+            //    $("textarea").attr("name", "#TB_Doc");
+            //}
         }
 
         function Back() {
@@ -191,9 +202,9 @@
                 </tr>
             </table>
         </div>
-        
-           
-        
+
+
+
     </form>
 </body>
 </html>

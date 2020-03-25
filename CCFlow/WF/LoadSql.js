@@ -19,5 +19,11 @@
             }
         }
     });
-    
+    editor.on("change", function (editor, change) {//任意键触发autocomplete联想
+
+        if (change.origin == "+input") {
+            setTimeout(function () { editor.execCommand("autocomplete"); }, 20);
+        }
+    });
+
 };

@@ -12,7 +12,7 @@
     <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
     <script src="../../LoadSql.js"></script>
-
+    
     <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -37,12 +37,17 @@
     <script src="../Admin.js"></script>
 
     <script type="text/javascript">
+
+
         //全局变量
         var FK_Flow; 	//流程id
         var _StartLimitRole; //限制规则枚举（JSON)
 
         //页面启动函数.
         $(function () {
+
+
+
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             InitPage();
@@ -462,7 +467,7 @@
                     </select>
                     <br />
                 </td>
-               
+
             </tr>
             <tr>
                 <td colspan="3">
@@ -474,7 +479,7 @@
                             <li>用来限制该流程可以在什么时间段内发起。</li>
                             <li>例如:按照每人每天一次设置时间范围，规则参数：@08:30-09:00@18:00-18:30，解释：该流程只能在08:30-09:00与18:00-18:30两个时间段发起且只能发起一次。</li>
                         </ul>
-                       
+
                     </div>
                     <input type="text" class="input" id="TB_ByTimePara">
                 </td>
@@ -484,7 +489,7 @@
     <fieldset>
         <legend>
             <input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
-            <label  style="font-size:13px;font-weight:bolder;" for="RB_OnlyOneSubFlow">
+            <label style="font-size:13px;font-weight:bolder;" for="RB_OnlyOneSubFlow">
                 为子流程时的规则.
             </label>
         </legend>
@@ -558,12 +563,12 @@
         <input type="text" class="input" id="TB_Alert">
     </fieldset>
 
-        <!--<tr>
-            <td colspan="2" style="text-align: center;">
-                <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
-                <input type="button" id="Button1" value="我需要帮助" onclick="Help()" />
-            </td>
-        </tr>-->
+    <!--<tr>
+        <td colspan="2" style="text-align: center;">
+            <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+            <input type="button" id="Button1" value="我需要帮助" onclick="Help()" />
+        </td>
+    </tr>-->
 
     <div id="Msg">
     </div>

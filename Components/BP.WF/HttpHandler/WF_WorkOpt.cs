@@ -1425,7 +1425,7 @@ namespace BP.WF.HttpHandler
             int noneEmpIdx = 0;
 
             fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
-            ds.Tables.Add(wcDesc.ToDataTableField("wcDesc")); //当前的节点审核组件定义，放入ds.
+            ds.Tables.Add(wcDesc.ToDataTableField("WF_FrmWorkCheck")); //当前的节点审核组件定义，放入ds.
 
             DataTable tkDt = new DataTable("Tracks");
             tkDt.Columns.Add("NodeID", typeof(int));
@@ -1991,7 +1991,7 @@ namespace BP.WF.HttpHandler
             int noneEmpIdx = 0;
 
             fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
-            ds.Tables.Add(wcDesc.ToDataTableField("wcDesc")); //当前的节点审核组件定义，放入ds.
+            ds.Tables.Add(wcDesc.ToDataTableField("WF_FrmWorkCheck")); //当前的节点审核组件定义，放入ds.
 
             DataTable tkDt = new DataTable("Tracks");
             tkDt.Columns.Add("NodeID", typeof(int));
@@ -2512,7 +2512,7 @@ namespace BP.WF.HttpHandler
                 row["FK_MapData"] = athDB.FK_MapData;
                 row["FileName"] = athDB.FileName;
                 row["FileExts"] = athDB.FileExts;
-                row["CanDelete"] = athDB.Rec == WebUser.No;
+                row["CanDelete"] = athDB.Rec == WebUser.No?1:0;
 
                 athDt.Rows.Add(row);
             }

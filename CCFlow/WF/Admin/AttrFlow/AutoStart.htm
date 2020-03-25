@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <title>自动发起</title>
+
+    <link href="../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../LoadSql.js"></script>
     <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -36,7 +45,7 @@
                 document.getElementById("TB_SpecEmp").value = flow.RunObj;
 
             if (flow.FlowRunWay == 2)
-                document.getElementById("TB_DataModel").value = flow.RunObj;
+                document.getElementById("TB_SQL").value = flow.RunObj;
 
             $("#Msg").html("");
         });
@@ -56,7 +65,7 @@
             }
 
             if (flow.FlowRunWay == "2") {
-                flow.RunObj = $("#TB_DataModel").val();
+                flow.RunObj = $("#TB_SQL").val();
             }
             flow.Update();
 
@@ -357,7 +366,7 @@
                     </div>
                     <br />
 
-                    <input type=text style="width:95%" id="TB_DataModel" name="TB_DataModel" />
+                    <textarea type=text style="width:95%" id="TB_SQL" name="TB_SQL" ></textarea>
                 </fieldset>
 
                 <fieldset>

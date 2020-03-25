@@ -23,6 +23,7 @@
 
         if (change.origin == "+input") {
             setTimeout(function () { editor.execCommand("autocomplete"); }, 20);
+
         }
     });
 

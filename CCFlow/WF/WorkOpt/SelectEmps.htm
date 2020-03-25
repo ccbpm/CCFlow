@@ -231,7 +231,12 @@
                     alert("已到第一级机构");
                     return;
                 }
-
+                 var webUser = new WebUser();
+                // SAAS模式下，限制只可以看到OrgNo级别
+                if (webUser.CCBPMRunModel != 0 && pageData.ParentDept == 100) {
+                    alert("已到第一级机构");
+                    return;
+                }
                 //判断最高级别.
                 //var user = new WebUser();
                 //if (user.CustomerNo == 'TianYe') {

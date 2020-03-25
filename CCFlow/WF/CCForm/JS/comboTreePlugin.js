@@ -270,7 +270,8 @@
 
         //点击任意地方隐藏下拉
         $(document).click(function (event) {
-            _this.hideul();
+            if (document.activeElement.id !="fastInput")
+                _this.hideul();
         });
     };
 
@@ -279,6 +280,7 @@
        
 
         if (_this.options.selected.length != 0) {
+            var idx = 0;
             $.each(_this.options.selected, function (i, targetName) {
                 if (targetName != "") {
                     var oliId = "";
@@ -290,6 +292,12 @@
                         }
 
                     }
+
+                    if (oliId == "") {
+                        oliId = idx;
+                        idx++;
+                    }
+                       
 
                     _this.oliIdArray.push(oliId);
                     _this.oliNameArray.push(targetName);
@@ -354,7 +362,7 @@
             '</div>' +
             '<div class="drop-down-wrap" style="position: absolute;background-color: rgb(255, 255, 255);z-index: 2014;width: 400px;box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);">'+
             '<div _id="comboxinputcontainer" class="comboxinputcontainer keyword-search">' +
-            '<input _id="comboxinput" placeholder="输入关键词搜索" type="text">' +
+            '<input _id="comboxinput" id="fastInput" placeholder="输入关键词搜索" type="text">' +
             '<span tag="search" class="search-icons"><i class="fa fa-search"></i></span>' +
             '</div>' +
             '<div _id="comboxulcontainer">' +

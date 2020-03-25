@@ -558,6 +558,17 @@ UE.plugins['enum'] = function () {
 
             }
             this.hide();
+        },
+        _setwidth: function () {
+            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+
+            var patrn = /^(-)?\d+(\.\d+)?$/;
+            if (patrn.exec(w) == null && w != "" && w != null) {
+                alert("不合法的输入");
+            } else {
+                var hh = baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width');
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
+            }
         }
     });
     popup.render();
@@ -573,7 +584,7 @@ UE.plugins['enum'] = function () {
             var html = "";
             if (type == 'EnumSelect')
                 html = popup.formatHtml(
-                    '<nobr>单选下拉菜单: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+                    '<nobr>单选下拉菜单: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             else
                 html = popup.formatHtml(
                     '<nobr>单选框组: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
@@ -763,6 +774,17 @@ UE.plugins['select'] = function () {
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
+        },
+        _setwidth: function () {
+            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+
+            var patrn = /^(-)?\d+(\.\d+)?$/;
+            if (patrn.exec(w) == null && w != "" && w != null) {
+                alert("不合法的输入");
+            } else {
+                var hh = baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width');
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
+            }
         }
     });
     popup.render();
@@ -774,7 +796,7 @@ UE.plugins['select'] = function () {
             leipiPlugins = $($(el).parent()[0]).attr('leipiplugins');
         if (/select|span/ig.test(el.tagName) && leipiPlugins == thePlugins) {
             var html = popup.formatHtml(
-                '<nobr>下拉菜单: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+                '<nobr>下拉菜单: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             if (html) {
                 if (el.tagName == 'SPAN') {
                     var elInput = el.getElementsByTagName("select");

@@ -67,8 +67,11 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 if (selectText != null && selectText != undefined && selectText != "")
                     $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + val + "'>" + selectText + "</option>");
             }
-            if (val != "")
-                $('#DDL_' + mapAttr.KeyOfEn).attr("value", val);
+            if (val != "") {
+                $('#DDL_' + mapAttr.KeyOfEn).val(val);
+                $('#DDL_' + mapAttr.KeyOfEn).attr("value",val);
+            }
+                
             continue;
         }
 
@@ -91,6 +94,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                         val = formatNumber(val, 2, ",");
                 }
                 $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
+                $('#TB_' + mapAttr.KeyOfEn).val(val);
             }
             continue;
         }

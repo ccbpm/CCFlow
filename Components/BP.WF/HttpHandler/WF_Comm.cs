@@ -3455,6 +3455,7 @@ namespace BP.WF.HttpHandler
             }
 
             ht.Add("No", WebUser.No);
+            ht.Add("OrgNo", WebUser.OrgNo);//zsy 2020.3.25 saas模式需要这个参数
             ht.Add("Name", WebUser.Name);
             ht.Add("FK_Dept", WebUser.FK_Dept);
             ht.Add("FK_DeptName", WebUser.FK_DeptName);

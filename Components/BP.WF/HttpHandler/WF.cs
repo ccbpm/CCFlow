@@ -976,6 +976,7 @@ namespace BP.WF.HttpHandler
         public string Runing_Init()
         {
             DataTable dt = null;
+      
             bool isContainFuture = this.GetRequestValBoolen("IsContainFuture");
             dt = BP.WF.Dev2Interface.DB_GenerRuning(isContainFuture);
 
@@ -1432,7 +1433,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string Todolist_Init()
-        {
+        {            
             string fk_node = this.GetRequestVal("FK_Node");
             string showWhat = this.GetRequestVal("ShowWhat");
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat);

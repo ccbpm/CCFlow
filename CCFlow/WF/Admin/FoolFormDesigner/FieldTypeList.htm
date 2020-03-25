@@ -301,7 +301,14 @@
 
                         function TableGuide() {
                             ///WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>
-                            window.location.href = './SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                            var webUser = new WebUser();
+                            // SaaS模式下进入SaaS下页面
+                            if (webUser.CCBPMRunModel != 0) {
+                                window.location.href = '../../../Admin/CCFormDesigner/SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                            } else {
+                                 window.location.href = './SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                            }
+                           
                         }
                         function ImpTableField() {
                             var winWidth = 1050;

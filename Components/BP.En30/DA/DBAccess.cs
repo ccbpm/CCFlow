@@ -2685,8 +2685,12 @@ namespace BP.DA
                     }
                     catch (Exception ex)
                     {
-                        conn.Close();
                         throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    }
+                    finally
+                    {
+                        ada.Dispose();
+                        conn.Close();
                     }
                 }
             }

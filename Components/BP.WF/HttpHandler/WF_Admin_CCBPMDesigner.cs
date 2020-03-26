@@ -13,6 +13,7 @@ using BP.WF;
 using BP.WF.Template;
 using LitJson;
 using BP.WF.XML;
+using BP.WF.Port.Admin2;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
@@ -90,16 +91,9 @@ namespace BP.WF.HttpHandler
 
             if (WebUser.No != "admin")
             {
-                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
-                aemp.No = WebUser.No;
-                if (aemp.RetrieveFromDBSources() == 0)
-                    return "err@登录帐号错误.";
-
-                if (aemp.IsAdmin == false)
-                    return "err@非管理员用户.";
 
                 DataRow rootRow = dt.Select("ParentNo='F0'")[0];
-                DataRow newRootRow = dt.Select("No='F" + aemp.RootOfFlow + "'")[0];
+                DataRow newRootRow = dt.Select("No='F" + WebUser.OrgNo + "'")[0];
 
                 newRootRow["ParentNo"] = "F0";
                 DataTable newDt = dt.Clone();
@@ -169,27 +163,7 @@ namespace BP.WF.HttpHandler
         public string AdminerChang_LoginAs()
         {
             string orgNo = this.GetRequestVal("OrgNo");
-
-            BP.WF.Port.AdminEmp ae = new Port.AdminEmp();
-            ae.No = WebUser.No + "@" + orgNo;
-            if (ae.RetrieveFromDBSources() == 0)
-                return "err@您不是该组织的管理员.";
-
-            BP.WF.Port.AdminEmp ae1 = new Port.AdminEmp();
-            ae1.No = WebUser.No;
-            ae1.RetrieveFromDBSources();
-
-            if (ae1.RootOfDept.Equals(orgNo) == true)
-                return "info@当前已经是该组织的管理员了，您不用切换.";
-
-            ae1.Copy(ae);
-            ae1.No = WebUser.No;
-            ae1.Update();
-
-            //AdminEmp ad = new AdminEmp();
-            //ad.No = userNo;
-            //if (ad.RetrieveFromDBSources() == 0)
-            //    return "err@用户名错误.";
+            WebUser.OrgNo = this.OrgNo;
             return "info@登录成功, 如果系统不能自动刷新，请手工刷新。";
         }
 
@@ -398,13 +372,7 @@ namespace BP.WF.HttpHandler
 
             if (WebUser.No != "admin")
             {
-                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
-                aemp.No = WebUser.No;
-
-                if (aemp.RetrieveFromDBSources() != 0 && aemp.UserType == 1 && !string.IsNullOrWhiteSpace(aemp.RootOfDept))
-                {
-                    newRootId = aemp.RootOfDept;
-                }
+                newRootId = WebUser.OrgNo; 
             }
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
@@ -683,99 +651,57 @@ namespace BP.WF.HttpHandler
         }
         /// <summary>
         /// 提交
+        /// 1.返回url@就需要转向。 
+        /// 2.返回err@提示错误  
+        /// 3.返回其他的就是Json选择组织. 返回的json是OrgNo
         /// </summary>
         /// <returns></returns>
         public string Login_Submit()
         {
-            string[] para = new string[0];
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = this.GetRequestVal("TB_No").Trim();
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
-            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
-            
-
-            if (emp.No != "admin")
-            {
-                //检查是否是管理员？
-                BP.WF.Port.AdminEmp adminEmp = new Port.AdminEmp();
-                adminEmp.No = emp.No;
-                if (adminEmp.RetrieveFromDBSources() == 0)
-                    return "err@您非管理员用户，不能登录.";
-                //return BP.WF.Glo.lang("no_permission_login_1", para);
-
-                if (adminEmp.IsAdmin == false)
-                    return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
-                //return BP.WF.Glo.lang("no_permission_login_2", para);
-
-                if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
-                    return "err@二级管理员用户没有设置流程树的权限..";
-                //return BP.WF.Glo.lang("secondary_user_no_permission_wf_tree", para);
-            }
 
             string pass = this.GetRequestVal("TB_PW").Trim();
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
 
-            if (DBAccess.IsView("Port_Emp")==false)
+            //获得当前管理员管理的组织数量.
+            Orgs orgs = new Orgs();
+            int i = orgs.Retrieve(OrgAttr.Adminer, emp.No);
+            if (i == 0)
+                return "err@非管理员或二级管理员用户，不能登录后台.";
+
+            //执行登录.
+            BP.WF.Dev2Interface.Port_Login(emp.No);
+            if (i > 1)
+                return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
+
+            //只有一个组织的情况.
+            if (DBAccess.IsView("Port_Emp") == false)
             {
                 string sid = BP.DA.DBAccess.GenerGUID();
                 BP.DA.DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
                 WebUser.SID = sid;
                 emp.SID = sid;
+                emp.Update(); //更新到sid里面去.
             }
 
-            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
-            //BP.WF.Port.WFEmp emp = new Port.WFEmp();
-            //emp.No = emp.No;
-
-            //让其登录.
-            BP.WF.Dev2Interface.Port_Login(emp.No);
-            return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
-
-            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
-            //BP.WF.Port.WFEmp emp = new Port.WFEmp();
-            //emp.No = emp.No;
-
-            //让其登录.
-            BP.WF.Dev2Interface.Port_Login(emp.No);
+            //设置他的组织.
+            WebUser.OrgNo = orgs[0].GetValStrByKey("No");
             return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
-        public string Login_SubmitSimple()
+        /// <summary>
+        ///选择一个组织
+        /// </summary>
+        /// <returns></returns>
+        public string Login_SelectOneOrg()
         {
-            string[] para = new string[0];
-            BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = this.GetRequestVal("TB_No").Trim();
-            if (emp.RetrieveFromDBSources() == 0)
-                return "err@用户名或密码错误.";
-            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
+            WebUser.OrgNo = this.OrgNo;
+            return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No;
 
-            if (emp.No != "admin")
-            {
-                //检查是否是管理员？
-                BP.WF.Port.AdminEmp adminEmp = new Port.AdminEmp();
-                adminEmp.No = emp.No;
-                if (adminEmp.RetrieveFromDBSources() == 0)
-                    return "err@您非管理员用户，不能登录.";
-                //return BP.WF.Glo.lang("no_permission_login_1", para);
-
-                if (adminEmp.IsAdmin == false)
-                    return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
-                //return BP.WF.Glo.lang("no_permission_login_2", para);
-
-                if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
-                    return "err@二级管理员用户没有设置流程树的权限..";
-                //return BP.WF.Glo.lang("secondary_user_no_permission_wf_tree", para);
-            }
-
-            string pass = this.GetRequestVal("TB_PW").Trim();
-            if (emp.CheckPass(pass) == false)
-                return "err@用户名或密码错误.";
-            //return BP.WF.Glo.lang("invalid_username_or_pwd", para);
-
-            //让其登录.
-            BP.WF.Dev2Interface.Port_Login(emp.No);
-            return "url@DefaultSimple.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+           // return "登录成功.";
         }
         #endregion 登录窗口.
 
@@ -941,33 +867,6 @@ namespace BP.WF.HttpHandler
             ht.Add("FK_Dept", emp.FK_Dept);
             ht.Add("SID", emp.SID);
 
-
-            if (WebUser.No == "admin")
-            {
-                ht.Add("IsAdmin", "1");
-                ht.Add("RootOfDept", "0");
-                ht.Add("RootOfFlow", "F0");
-                ht.Add("RootOfForm", "");
-            }
-            else
-            {
-                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
-                aemp.No = WebUser.No;
-
-                if (aemp.RetrieveFromDBSources() == 0)
-                {
-                    ht.Add("RootOfDept", "-9999");
-                    ht.Add("RootOfFlow", "-9999");
-                    ht.Add("RootOfForm", "-9999");
-                }
-                else
-                {
-                    ht.Add("RootOfDept", aemp.RootOfDept);
-                    ht.Add("RootOfFlow", "F" + aemp.RootOfFlow);
-                    ht.Add("RootOfForm", aemp.RootOfForm);
-                }
-            }
-
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
@@ -1032,16 +931,9 @@ namespace BP.WF.HttpHandler
 
             if (WebUser.No != "admin")
             {
-                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
-                aemp.No = WebUser.No;
-                if (aemp.RetrieveFromDBSources() == 0)
-                    return "err@登录帐号错误.";
-
-                if (aemp.IsAdmin == false)
-                    return "err@非管理员用户.";
-
+               
                 DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-                DataRow newRootRow = dt.Select("NO='F" + aemp.RootOfFlow + "'")[0];
+                DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo+ "'")[0];
 
                 newRootRow["PARENTNO"] = "F0";
                 DataTable newDt = dt.Clone();
@@ -1179,16 +1071,7 @@ namespace BP.WF.HttpHandler
 
             if (WebUser.No.Equals("admin") == false)
             {
-                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
-                aemp.No = WebUser.No;
-                aemp.RetrieveFromDBSources();
-
-                if (aemp.UserType != 1)
-                    return "err@您[" + WebUser.No + "]已经不是二级管理员了.";
-                if (aemp.RootOfForm == "")
-                    return "err@没有给二级管理员[" + WebUser.No + "]设置表单树的权限...";
-
-                DataRow[] rootRows = dtForm.Select("No='" + aemp.RootOfForm + "'");
+                DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
                 DataRow newRootRow = rootRows[0];
 
                 newRootRow["ParentNo"] = "0";
@@ -1198,7 +1081,6 @@ namespace BP.WF.HttpHandler
                 GenerChildRows(dtForm, newDt, newRootRow);
                 dtForm = newDt;
             }
-
             String str = BP.Tools.Json.ToJson(dtForm);
             return str;
         }
@@ -1211,7 +1093,6 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("PARENTNO", typeof(string));
             dt.Columns.Add("NAME", typeof(string));
             dt.Columns.Add("TTYPE", typeof(string));
-
 
             BP.GPM.Depts depts = new BP.GPM.Depts();
             depts.RetrieveAll();
@@ -1461,7 +1342,7 @@ namespace BP.WF.HttpHandler
 
                 }
                 #endregion 对极简版特殊处理. @liuqiang
-                 
+
 
                 //清空WF_Emp 的StartFlows ,让其重新计算.
                 DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
@@ -1481,8 +1362,8 @@ namespace BP.WF.HttpHandler
             String fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
             FlowSort fsSub = new FlowSort(fk_flowSort); //传入的编号多出F符号，需要替换掉
             fsSub.DoUp();
-		    return "F" + fsSub.No;
-	    }
+            return "F" + fsSub.No;
+        }
         /// <summary>
         /// 下移流程类别
         /// </summary>
@@ -1492,8 +1373,8 @@ namespace BP.WF.HttpHandler
             String fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
             FlowSort fsSub = new FlowSort(fk_flowSort); //传入的编号多出F符号，需要替换掉
             fsSub.DoDown();
-		    return "F" + fsSub.No;
-	    }
+            return "F" + fsSub.No;
+        }
         /// <summary>
         /// 上移流程
         /// </summary>

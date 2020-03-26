@@ -598,7 +598,19 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("OrgNo");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 表单ID
         /// </summary>

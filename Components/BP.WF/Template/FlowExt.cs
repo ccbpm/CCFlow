@@ -414,12 +414,12 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsToParentNextNode, false, "子流程结束时，让父流程自动运行到下一步", true, true);
 
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
-                map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
+                map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 100, 10, true);
 
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
-                map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
-                map.AddTBString(FlowAttr.Tester, null, "发起测试人", true, false, 0, 300, 10, true);
+                map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 50, 10, false);
+                map.AddTBString(FlowAttr.Tester, null, "发起测试人", true, false, 0, 100, 10, true);
 
                 String sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
                 map.AddDDLSQL("NodeAppType", null, "业务类型枚举(可为Null)", sql, true);
@@ -435,11 +435,11 @@ namespace BP.WF.Template
 
                 //批量发起 add 2013-12-27. 
                 map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
-                map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 500, 10, true);
+                map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 100, 10, true);
                 map.SetHelperUrl(FlowAttr.IsBatchStart, "http://ccbpm.mydoc.io/?v=5404&t=17047");
 
                 //add 2013-05-22.
-                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
+                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 100, 10, true);
 
                 //移动到这里 by zhoupeng 2016.04.08.
                 map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？已经取消)", false, true, true);
@@ -460,7 +460,7 @@ namespace BP.WF.Template
 
 
                 //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");
-                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 500, 10, true);
+                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 100, 10, true);
                 map.SetHelperUrl(FlowAttr.FlowNoteExp, "http://ccbpm.mydoc.io/?v=5404&t=17043");
 
                 //add  2013-08-30.
@@ -485,19 +485,15 @@ namespace BP.WF.Template
                 #endregion 表单数据.
 
                 #region 开发者信息.
-
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, true, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, true, 0, 50, 10, false);
-                map.AddTBString(FlowAttr.DesignTime, null, "创建时间", true, true, 0, 50, 20, false);
-                map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
+                map.AddTBDateTime(FlowAttr.DesignTime, null, "创建时间", true, true);
+               // map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
 
                 #region 基本功能.
                 //map.AddRefMethod(rm);
                 RefMethod rm = new RefMethod();
-
-              
-
                 rm = new RefMethod();
                 rm.Title = "自动发起";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/AutoStart.png";

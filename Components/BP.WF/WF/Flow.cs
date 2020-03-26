@@ -4573,7 +4573,7 @@ namespace BP.WF
                 this.FlowEventEntity = BP.WF.Glo.GetFlowEventEntityStringByFlowMark(this.FlowMark);
 
             DBAccess.RunSQL("UPDATE WF_Node SET FlowName='" + this.Name + "' WHERE FK_Flow='" + this.No + "'");
-            DBAccess.RunSQL("UPDATE Sys_MapData SET  Name='" + this.Name + "' WHERE No='" + this.PTable + "'");
+            DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + this.PTable + "'");
             return base.beforeUpdateInsertAction();
         }
         /// <summary>
@@ -4634,7 +4634,6 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.FlowFrmType, 0, "流程表单类型", true, true);
                 map.AddTBString(FlowAttr.FrmUrl, null, "表单Url", true, false, 0, 150, 10, true);
 
-
                 // 草稿规则 "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱"
                 map.AddTBInt(FlowAttr.Draft, 0, "草稿规则", true, false);
 
@@ -4642,15 +4641,15 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.DataStoreModel, 0, "数据存储模式", true, false);
 
                 // add 2013-02-05.
-                map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
+                map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 90, 10, true);
 
                 // add 2013-02-14 
-                map.AddTBString(FlowAttr.FlowMark, null, "流程标记", true, false, 0, 150, 10);
+                map.AddTBString(FlowAttr.FlowMark, null, "流程标记", true, false, 0, 50, 10);
                 map.AddTBString(FlowAttr.FlowEventEntity, null, "FlowEventEntity", true, false, 0, 100, 10, true);
-                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
+                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 120, 10, true);
                 map.AddTBInt(FlowAttr.IsGuestFlow, 0, "是否是客户参与流程？", true, false);
                 map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, true);
-                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注表达式", true, false, 0, 200, 10, true);
+                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注表达式", true, false, 0, 90, 10, true);
 
                 //部门权限控制类型,此属性在报表中控制的.
                 map.AddTBInt(FlowAttr.DRCtrlType, 0, "部门查询权限控制方式", true, false);
@@ -4683,7 +4682,7 @@ namespace BP.WF
 
                 //批量发起 add 2013-12-27. 
                 map.AddTBInt(FlowAttr.IsBatchStart, 0, "是否可以批量发起", true, false);
-                map.AddTBString(FlowAttr.BatchStartFields, null, "批量发起字段(用逗号分开)", true, false, 0, 300, 10, true);
+                map.AddTBString(FlowAttr.BatchStartFields, null, "批量发起字段(用逗号分开)", true, false, 0, 200, 10, true);
 
                 // map.AddTBInt(FlowAttr.IsEnableTaskPool, 0, "是否启用共享任务池", true, false);
                 //map.AddDDLSysEnum(FlowAttr.TimelineRole, (int)TimelineRole.ByNodeSet, "时效性规则",

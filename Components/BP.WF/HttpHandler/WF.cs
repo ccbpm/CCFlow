@@ -325,7 +325,7 @@ namespace BP.WF.HttpHandler
             {
                 at = "Track";
             }
-
+            string sid = this.SID;
             try
             {
                 switch (at)
@@ -352,6 +352,14 @@ namespace BP.WF.HttpHandler
                             cc1.HisSta = CCSta.Read;
                             cc1.Update();
                         }
+                        
+                        if(DataType.IsNullOrEmpty(sid) == false)
+                        {
+                            string[] strss = sid.Split('_');
+                            GenerWorkFlow gwfl = new GenerWorkFlow(Int64.Parse(strss[1]));
+                            return "url@./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + gwfl.FK_Flow + "&FK_Node=" + gwfl.FK_Node + "&WorkID=" + gwfl.WorkID + "&FID=" + gwfl.FID;
+                        }
+                        
                         return "url@./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     case "DelCC": //删除抄送.
                         CCList cc = new CCList();
@@ -442,7 +450,6 @@ namespace BP.WF.HttpHandler
 
                         return "url@" + myurl;
                     case "OF": //通过一个串来打开一个工作.
-                        string sid = this.SID;
                         string[] strs = sid.Split('_');
                         GenerWorkerList wl = new GenerWorkerList();
                         int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, strs[0],

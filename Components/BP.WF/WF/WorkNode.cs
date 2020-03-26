@@ -1859,9 +1859,34 @@ namespace BP.WF
                 if (cclist.Count > 0)
                 {
                     ccMsg1 = "@消息自动抄送给";
+                    PushMsgs pms = new PushMsgs();
+                    pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
+                    PushMsg pushMsg = null;
+                    if (pms.Count > 0)
+                        pushMsg = pms[0] as PushMsg;
+
+                    string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
+                    string mytemp = pushMsg.SMSDoc;
+                    mytemp = mytemp.Replace("{Title}", title);
+                    mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
+                    mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
+                    mytemp = mytemp.Replace("@WorkID", this.WorkID.ToString());
+                    mytemp = mytemp.Replace("@OID", this.WorkID.ToString());
+
+                    /*如果仍然有没有替换下来的变量.*/
+                    if (mytemp.Contains("@") == true)
+                        mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe, null);
+
                     foreach (CCList cc in cclist)
                     {
                         ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
+
+                        if (pushMsg != null)
+                        {
+
+                            BP.WF.Dev2Interface.Port_SendMsg(cc.CCTo, title, mytemp, null, BP.WF.SMSMsgType.CC, node.FK_Flow, node.NodeID, this.WorkID, this.HisWork.FID, pushMsg.SMSPushModel);
+
+                        }
                     }
                 }
             }
@@ -7073,35 +7098,8 @@ namespace BP.WF
                     //执行抄送.
                     if (this.HisNode.IsEndNode == false)
                     {
-                        //执行自动抄送
-                        string ccMsg1 = WorkFlowBuessRole.DoCCAuto(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
-
-                        //按照指定的字段抄送.
-                        string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
-                        //手工抄送
-                        if (this.HisNode.HisCCRole == CCRole.HandCC)
-                        {
-                            //获取抄送人员列表
-                            CCLists cclist = new CCLists(this.HisNode.FK_Flow, this.WorkID, this.HisWork.FID);
-                            if (cclist.Count == 0)
-                                ccMsg1 = "@没有选择抄送人。";
-                            if (cclist.Count > 0)
-                            {
-                                ccMsg1 = "@消息自动抄送给";
-                                foreach (CCList cc in cclist)
-                                {
-                                    ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
-                                }
-                            }
-                        }
-                        string ccMsg = ccMsg1 + ccMsg2;
-
-                        if (DataType.IsNullOrEmpty(ccMsg) == false)
-                        {
-                            this.addMsg("CC", BP.WF.Glo.multilingual("@自动抄送给:{0}.", "WorkNode", "cc", ccMsg));
-
-                            this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, this.HisNode.NodeID, this.HisNode.Name, ccMsg1 + ccMsg2, this.HisNode);
-                        }
+                        CC(this.HisNode);
+                       
                     }
 
                     //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
@@ -7377,34 +7375,8 @@ namespace BP.WF
                 //执行抄送.
                 if (this.HisNode.IsEndNode == false)
                 {
-                    //执行自动抄送
-                    string ccMsg1 = WorkFlowBuessRole.DoCCAuto(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
-                    //按照指定的字段抄送.
-                    string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
-                    //手工抄送
-                    if (this.HisNode.HisCCRole == CCRole.HandCC)
-                    {
-                        //获取抄送人员列表
-                        CCLists cclist = new CCLists(this.HisNode.FK_Flow, this.WorkID, this.HisWork.FID);
-                        if (cclist.Count == 0)
-                            ccMsg1 = "@没有选择抄送人。";
-                        if (cclist.Count > 0)
-                        {
-                            ccMsg1 = "@消息自动抄送给";
-                            foreach (CCList cc in cclist)
-                            {
-                                ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
-                            }
-                        }
-                    }
-                    string ccMsg = ccMsg1 + ccMsg2;
-
-                    if (DataType.IsNullOrEmpty(ccMsg) == false)
-                    {
-                        this.addMsg("CC", BP.WF.Glo.multilingual("@自动抄送给:{0}.", "WorkNode", "cc", ccMsg));
-
-                        this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, this.HisNode.NodeID, this.HisNode.Name, ccMsg1 + ccMsg2, this.HisNode);
-                    }
+                    //执行抄送
+                    CC(this.HisNode);
                 }
 
                 DBAccess.DoTransactionCommit(); //提交事务.

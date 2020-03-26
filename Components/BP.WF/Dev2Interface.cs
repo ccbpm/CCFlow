@@ -3782,18 +3782,24 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="fid">FID</param>
         public static void Port_SendMsg(string userNo, string title, string msgDoc, string msgFlag, string msgType,
-            string flowNo, Int64 nodeID, Int64 workID, Int64 fid)
+            string flowNo, Int64 nodeID, Int64 workID, Int64 fid, string pushModel=null)
         {
+            string url = "";
             if (workID != 0)
             {
-                string url = Glo.HostURL + "WF/Do.htm?SID=" + userNo + "_" + workID + "_" + nodeID;
+                url = Glo.HostURL + "WF/Do.htm?SID=" + userNo + "_" + workID + "_" + nodeID;
                 url = url.Replace("//", "/");
                 url = url.Replace("//", "/");
+                if (msgType == BP.WF.SMSMsgType.DoPress)
+                    url = url + "&DoType=OF";
+                if (msgType == BP.WF.SMSMsgType.CC)
+                    url = url + "&DoType=DoOpenCC";
+
                 msgDoc += " <hr>打开工作: " + url;
             }
 
             string para = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@FK_Node=" + nodeID + "@Sender=" + BP.Web.WebUser.No;
-            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para);
+            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para, pushModel,url);
         }
 
 
@@ -3876,141 +3882,6 @@ namespace BP.WF
         }
 
 
-        /// <summary>
-        /// 发送邮件
-        /// </summary>
-        /// <param name="mailAddress">邮件地址</param>
-        /// <param name="emilTitle">标题</param>
-        /// <param name="emailBody">内容</param>
-        /// <param name="msgType">消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...)</param>
-        /// <param name="msgGroupFlag">分组标记</param>
-        /// <param name="sender">发送人</param>
-        /// <param name="msgPK">消息唯一标记，防止发送重复.</param>
-        //public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
-        //    string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras = null)
-        //{
-        //    if (DataType.IsNullOrEmpty(mailAddress))
-        //        return;
-
-        //    SMS sms = new SMS();
-        //    if (DataType.IsNullOrEmpty(msgPK) == false)
-        //    {
-        //        /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
-        //        if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
-        //        {
-        //            return;
-        //        }
-
-        //        sms.MyPK = msgPK;
-        //    }
-        //    else
-        //    {
-        //        sms.MyPK = DBAccess.GenerGUID();
-        //    }
-
-        //    sms.HisEmailSta = MsgSta.UnRun;
-        //    if (sender == null)
-        //    {
-        //        sms.Sender = WebUser.No;
-        //    }
-        //    else
-        //    {
-        //        sms.Sender = sender;
-        //    }
-
-        //    sms.SendToEmpNo = sendToEmpNo;
-
-        //    //邮件地址.
-        //    sms.Email = mailAddress;
-
-        //    //邮件标题.
-        //    sms.Title = emilTitle;
-        //    sms.DocOfEmail = emailBody;
-
-
-
-
-
-        //    //手机状态禁用.
-        //    sms.HisMobileSta = MsgSta.Disable;
-
-        //    // 其他属性.
-        //    sms.RDT = BP.DA.DataType.CurrentDataTime;
-
-        //    //消息参数.
-        //    sms.AtPara = paras;
-
-        //    sms.MsgFlag = msgGroupFlag; // 消息标志.
-        //    sms.MsgType = msgType;   // 消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...).
-        //    sms.Insert();
-        //}
-        /// <summary>
-        /// 发送短信
-        /// </summary>
-        /// <param name="tel">电话</param>
-        /// <param name="smsDoc">短信内容</param>
-        /// <param name="msgType">消息类型</param>
-        /// <param name="msgGroupFloag">消息分组</param>
-        /// <param name="sender">发送人</param>
-        /// <param name="msgPK">唯一标志,防止发送重复.</param>
-        /// <param name="sendEmpNo">发送给人员.</param>
-        /// <param name="atParas">参数.</param>
-        //public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
-        //    string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null, string title = null, string opnUrl = null, string pushModel = null)
-        //{
-        //    //if (DataType.IsNullOrEmpty(tel))
-        //    //    return;
-
-        //    SMS sms = new SMS();
-        //    if (DataType.IsNullOrEmpty(msgPK) == false)
-        //    {
-        //        /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
-        //        if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
-        //        {
-        //            return;
-        //        }
-
-        //        sms.MyPK = msgPK;
-        //    }
-        //    else
-        //    {
-        //        sms.MyPK = DBAccess.GenerGUID();
-        //    }
-
-        //    sms.HisEmailSta = MsgSta.Disable;
-        //    sms.HisMobileSta = MsgSta.UnRun;
-
-        //    if (sender == null)
-        //    {
-        //        sms.Sender = WebUser.No;
-        //    }
-        //    else
-        //    {
-        //        sms.Sender = sender;
-        //    }
-
-        //    //发送给人员ID , 有可能这个人员空的.
-        //    sms.SendToEmpNo = sendToEmpNo;
-
-        //    sms.Mobile = tel;
-        //    sms.MobileInfo = smsDoc;
-        //    sms.Title = title;
-
-        //    // 其他属性.
-        //    sms.RDT = BP.DA.DataType.CurrentDataTime;
-
-        //    sms.MsgType = msgType; // 消息类型.
-
-        //    sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
-
-        //    sms.AtPara = atParas;
-
-        //    sms.SetPara("OpenUrl", opnUrl);
-        //    sms.SetPara("PushModel", pushModel);
-
-        //    // 先保留本机一份.
-        //    sms.Insert();
-        //}
         /// <summary>
         /// 获取最新的消息
         /// </summary>
@@ -5723,7 +5594,9 @@ namespace BP.WF
             {
                 wls = new GenerWorkerLists(gwf.FID, gwf.FK_Node);
             }
-
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.PressAfter);
+           
             foreach (GenerWorkerList wl in wls)
             {
                 if (wl.IsEnable == false)
@@ -5735,7 +5608,11 @@ namespace BP.WF
                 toEmpName += wl.FK_EmpText + ",";
 
                 // 发消息.
-                BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, mailTitle, msg, null, BP.WF.SMSMsgType.DoPress, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+                foreach(PushMsg push in pms)
+                {
+                    BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, mailTitle, msg, null, BP.WF.SMSMsgType.DoPress, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID,push.SMSPushModel);
+                }
+               
 
                 wl.PressTimes = wl.PressTimes + 1;
                 wl.Update();
@@ -7637,7 +7514,7 @@ namespace BP.WF
             }
 
 
-            SendReturnObjs objs;
+           SendReturnObjs objs;
             //执行流程发送.
             WorkNode wn = new WorkNode(sw, nd);
             wn.Execer = execUserNo;

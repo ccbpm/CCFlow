@@ -1623,20 +1623,31 @@ namespace BP.WF
                 {
                     list.Update();
                 }
+                PushMsgs pms = new PushMsgs();
+                pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
 
-                if (BP.WF.Glo.IsEnableSysMessage == true)
+                if (pms.Count>0)
                 {
+                    PushMsg pushMsg = pms[0] as PushMsg;
                     //     //写入消息提示.
                     //     ccMsg += list.CCTo + "(" + dr[1].ToString() + ");";
-                    //     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
+                     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
                     //     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
                     //     string url = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid;
                     //     string urlWap = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid + "&IsWap=1";
-                    //     string mytemp = mailTemp.Clone() as string;
-                    //     mytemp = string.Format(mytemp, wfemp.Name, WebUser.Name, url, urlWap);
-                    //     string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅",
-                    //this.HisNode.FlowName, this.HisNode.Name, WebUser.Name);
-                    //     BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.Sys.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID);
+
+                    string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
+                    string mytemp = pushMsg.SMSDoc;
+                    mytemp = mytemp.Replace("{Title}", title);
+                    mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
+                    mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
+                    mytemp = mytemp.Replace("@WorkID", workid.ToString());
+                    mytemp = mytemp.Replace("@OID", workid.ToString());
+
+                    /*如果仍然有没有替换下来的变量.*/
+                    if (mytemp.Contains("@") == true)
+                        mytemp = BP.WF.Glo.DealExp(mytemp, rpt, null);
+                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID, pushMsg.SMSPushModel);
                 }
             }
 
@@ -1681,6 +1692,9 @@ namespace BP.WF
             }
             string ccMsg = "@消息自动抄送给";
             string basePath = BP.WF.Glo.HostURL;
+
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
 
             string mailTemp = BP.DA.DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)
@@ -1732,17 +1746,19 @@ namespace BP.WF
                 #endregion 如果要写入抄送
 
                 #region 写入消息机制.
-                if (BP.WF.Glo.IsEnableSysMessage == true)
+                
+
+                if (pms.Count >0)
                 {
                     ccMsg += list.CCTo + "(" + item.Value.ToString() + ");";
                     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
 
                     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
-                    string url = basePath + "WF/Do.htm?DoType=OF&SID=" + sid;
+                    string url = basePath + "WF/Do.htm?DoType=DoOpenCC&SID=" + sid;
                     url = url.Replace("//", "/");
                     url = url.Replace("//", "/");
 
-                    string urlWap = basePath + "WF/Do.htm?DoType=OF&SID=" + sid + "&IsWap=1";
+                    string urlWap = basePath + "WF/Do.htm?DoType=DoOpenCC&SID=" + sid + "&IsWap=1";
                     urlWap = urlWap.Replace("//", "/");
                     urlWap = urlWap.Replace("//", "/");
 
@@ -1751,7 +1767,7 @@ namespace BP.WF
 
                     string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", nd.FlowName, nd.Name, WebUser.Name);
 
-                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID);
+                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID,((PushMsg)pms[0]).SMSPushModel);
                 }
                 #endregion 写入消息机制.
             }

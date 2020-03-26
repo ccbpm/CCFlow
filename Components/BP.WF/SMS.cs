@@ -174,7 +174,7 @@ namespace BP.WF
         /// <param name="msgType">类型</param>
         /// <param name="paras">扩展参数</param>
         public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
-            string msgType, string paras)
+            string msgType, string paras,string pushModel= null,string openUrl= null)
         {
 
             SMS sms = new SMS();
@@ -186,6 +186,7 @@ namespace BP.WF
 
             sms.Title = msgTitle;
             sms.DocOfEmail = msgDoc;
+            sms.MobileInfo = msgDoc;
 
             sms.Sender = BP.Web.WebUser.No;
             sms.RDT = BP.DA.DataType.CurrentDataTime;
@@ -194,6 +195,12 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.'
 
             sms.AtPara = paras;
+
+            if(DataType.IsNullOrEmpty(openUrl) == false)
+                sms.SetPara("OpenUrl", openUrl);
+            if (DataType.IsNullOrEmpty(pushModel) == false)
+                sms.SetPara("PushModel", pushModel);
+
             sms.Insert();
         }
         #endregion 新方法

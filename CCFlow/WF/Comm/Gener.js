@@ -2280,16 +2280,8 @@ var HttpHandler = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
-                    if (confirm('您确定要执行请求的URL吗?') == false) {
-                        ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
-                    } else {
-                        window.open(url);
-                        //if(plant=="CCForm")
-                        //    window.open(basePath + "/Default.aspx");
-                        //else if (plant == "JFlow")
-                        //    window.open(basePath + "/Default.aspx");
-                    }
-                       
+                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
+                   
                    
                 }
             });

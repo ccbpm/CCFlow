@@ -51,6 +51,13 @@
                 $("#NodeOverDue").hide();
                 $("#NodeWarn").hide();
             }
+            if (fk_event == "CCAfter" || fk_event == "PressAfter") {
+                $("#NodeOverDue").hide();
+                $("#NodeWarn").hide();
+                $("#RB_SMS_3").parent().parent().hide();
+                $("#RB_SMS_4").parent().parent().hide();
+                $("#RB_SMS_5").parent().parent().hide();
+            }
             InitPage();
 
         });
@@ -164,6 +171,8 @@
                 "ReturnAfter": "发送给被退回的节点处理人",
                 "UndoneAfter": "撤销工作后通知的节点接受人",
                 "ShitAfter": "发送给被移交的节点接受人",
+                "CCAfter": "发送给被抄送的人",
+                "PressAfter": "发送给被催办的人",
                 "FlowOverAfter": "流程结束通知的所有流程的参与人",
                 "AfterFlowDel": "流程删除后通知所有流程的参与人",
                 "NodeWarning": "发送给当前节点的所有处理人",

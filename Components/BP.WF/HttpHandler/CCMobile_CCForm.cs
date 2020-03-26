@@ -11,6 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using System.Net.Http;
 
 namespace BP.WF.HttpHandler
 {
@@ -465,6 +466,28 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 保存到数据库.
             }
+        }
+		/// <summary>
+        /// 获取百度云token
+        /// </summary>
+        /// <returns></returns>
+        public string getAccessToken()
+        {
+            string ak = Sys.SystemConfig.APIKey;
+            string sk = Sys.SystemConfig.SecretKey;
+
+            //百度云应用获取token
+            String authHost = "https://aip.baidubce.com/oauth/2.0/token";
+            HttpClient client = new HttpClient();
+            List<KeyValuePair<String, String>> paraList = new List<KeyValuePair<string, string>>();
+            paraList.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
+            paraList.Add(new KeyValuePair<string, string>("client_id", ak));
+            paraList.Add(new KeyValuePair<string, string>("client_secret", sk));
+
+            HttpResponseMessage response = client.PostAsync(authHost, new FormUrlEncodedContent(paraList)).Result;
+            String result = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(result);
+            return result;
         }
     }
 }

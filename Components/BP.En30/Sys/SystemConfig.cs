@@ -1002,7 +1002,38 @@ namespace BP.Sys
             }
         }
         #endregion
-
+		#region 百度云配置相关
+        /// <summary>
+        /// 百度云应用ID
+        /// </summary>
+        public static string AppID
+        {
+            get
+            {
+                return AppSettings["AppID"];
+            }
+        }
+        /// <summary>
+        /// 百度云应用AK
+        /// </summary>
+        public static string APIKey
+        {
+            get
+            {
+                return AppSettings["APIKey"];
+            }
+        }
+        /// <summary>
+        /// 百度云应用SK
+        /// </summary>
+        public static string SecretKey
+        {
+            get
+            {
+                return AppSettings["SecretKey"];
+            }
+        }
+        #endregion
         /// <summary>
         ///取得配置 NestedNamesSection 内的相应 key 的内容
         /// </summary>

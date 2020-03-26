@@ -260,7 +260,7 @@ namespace BP.Sys
         {
             get
             {
-                return SystemConfig.GetValByKeyInt("CCBPMRunModel",0);
+                return SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
             }
         }
 
@@ -299,7 +299,7 @@ namespace BP.Sys
                 _CS_AppSettings = value;
             }
         }
-  
+
         /// <summary>
         /// 封装了AppSettings
         /// </summary>
@@ -413,7 +413,7 @@ namespace BP.Sys
                 return PathOfWebApp + "\\WF\\Data\\XML\\";
             }
         }
-      
+
         public static string PathOfCyclostyleFile
         {
             get
@@ -588,7 +588,7 @@ namespace BP.Sys
                 return s;
             }
         }
-       
+
         public static int PageSize
         {
             get
@@ -603,7 +603,7 @@ namespace BP.Sys
                 }
             }
         }
-          
+
         /// <summary>
         /// 日志路径
         /// </summary>
@@ -881,7 +881,7 @@ namespace BP.Sys
                 return AppSettings["OZType"];
             }
         }
-		public static string OZParentNo
+        public static string OZParentNo
         {
             get
             {
@@ -1002,7 +1002,7 @@ namespace BP.Sys
             }
         }
         #endregion
-		#region 百度云配置相关
+        #region 百度云配置相关
         /// <summary>
         /// 百度云应用ID
         /// </summary>
@@ -1345,16 +1345,16 @@ namespace BP.Sys
         {
             get
             {
-               
-                    switch (BP.DA.DBAccess.AppCenterDBType)
-                    {
-                        case DA.DBType.MSSQL:
-                            SqlConnection connMSSQL = new SqlConnection(SystemConfig.AppCenterDSN);
-                            if (connMSSQL.State != ConnectionState.Open)
-                                connMSSQL.Open();
-                            _AppCenterDBDatabase = connMSSQL.Database;
-                            break;
-                        case DA.DBType.Oracle:
+
+                switch (BP.DA.DBAccess.AppCenterDBType)
+                {
+                    case DA.DBType.MSSQL:
+                        SqlConnection connMSSQL = new SqlConnection(SystemConfig.AppCenterDSN);
+                        if (connMSSQL.State != ConnectionState.Open)
+                            connMSSQL.Open();
+                        _AppCenterDBDatabase = connMSSQL.Database;
+                        break;
+                    case DA.DBType.Oracle:
 
                         string[] strs = SystemConfig.AppCenterDSN.Split(';');
                         foreach (string str in strs)
@@ -1368,29 +1368,27 @@ namespace BP.Sys
 
                         }
 
-                            //OracleConnection connOra = new OracleConnection(SystemConfig.AppCenterDSN);
-                            //if (connOra.State != ConnectionState.Open)
-                            //    connOra.Open();
-                            //_AppCenterDBDatabase = connOra.Database;
-                            break;
-                        case DA.DBType.MySQL:
-                            MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
-                            //if (connMySQL.State != ConnectionState.Open)
-                            //    connMySQL.Open();
-                            _AppCenterDBDatabase = connMySQL.Database;
-                            break;
-                            //From Zhou IBM 删除
-                        //case DA.DBType.Informix:
-                        //    IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
-                        //    if (connIFX.State != ConnectionState.Open)
-                        //        connIFX.Open();
-                        //    _AppCenterDBDatabase = connIFX.Database;
-                        //    break;
-                        default:
-                            throw new Exception("@没有判断的数据类型.");
-                            break;
-                    }
-                
+                        //OracleConnection connOra = new OracleConnection(SystemConfig.AppCenterDSN);
+                        //if (connOra.State != ConnectionState.Open)
+                        //    connOra.Open();
+                        //_AppCenterDBDatabase = connOra.Database;
+                        break;
+                    case DA.DBType.MySQL:
+                        MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
+                        _AppCenterDBDatabase = connMySQL.Database;
+                        break;
+                    //From Zhou IBM 删除
+                    //case DA.DBType.Informix:
+                    //    IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
+                    //    if (connIFX.State != ConnectionState.Open)
+                    //        connIFX.Open();
+                    //    _AppCenterDBDatabase = connIFX.Database;
+                    //    break;
+                    default:
+                        throw new Exception("@没有判断的数据类型.");
+                        break;
+                }
+
                 // 返回database.
                 return _AppCenterDBDatabase;
             }

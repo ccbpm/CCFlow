@@ -139,6 +139,7 @@
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web">
@@ -279,7 +280,6 @@
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\Station.cs" />
     <Compile Include="Port\StationType.cs" />
-    <Compile Include="Port\SubInc\AdminEmp.cs" />
     <Compile Include="Port\SubInc\Emp.cs" />
     <Compile Include="Port\SubInc\StationType.cs" />
     <Compile Include="Port\SubInc\Inc.cs" />

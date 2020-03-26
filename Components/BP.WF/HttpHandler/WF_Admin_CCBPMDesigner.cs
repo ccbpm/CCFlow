@@ -587,8 +587,20 @@ namespace BP.WF.HttpHandler
             //获得当前管理员管理的组织数量.
             Orgs orgs = new Orgs();
             int i = orgs.Retrieve(OrgAttr.Adminer, emp.No);
-            if (i == 0)
-                return "err@非管理员或二级管理员用户，不能登录后台.";
+            if (i == 0 && Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            {
+                if (emp.No.Equals("admin") == true)
+                {
+                    BP.WF.Dev2Interface.Port_Login(emp.No);
+                    BP.WF.Port.Admin2.Dept dept = new Port.Admin2.Dept(emp.FK_Dept);
+                    dept.SetOrg("admin");
+                    orgs.Retrieve(OrgAttr.Adminer, emp.No);
+                }
+                else
+                {
+                    return "err@非管理员或二级管理员用户，不能登录后台.";
+                }
+            }
 
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
@@ -606,7 +618,9 @@ namespace BP.WF.HttpHandler
             }
 
             //设置他的组织.
-            WebUser.OrgNo = orgs[0].GetValStrByKey("No");
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                WebUser.OrgNo = orgs[0].GetValStrByKey("No");
+
             return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
         /// <summary>

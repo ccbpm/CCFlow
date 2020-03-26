@@ -10,7 +10,7 @@ namespace BP.WF.XML
     /// <summary>
     /// 管理员
     /// </summary>
-    public class AdminMenu : XmlEn
+    public class Admin2Menu : XmlEn
     {
         #region 属性
         /// <summary>
@@ -89,7 +89,7 @@ namespace BP.WF.XML
         /// <summary>
         /// 节点扩展信息
         /// </summary>
-        public AdminMenu()
+        public Admin2Menu()
         {
         }
         /// <summary>
@@ -103,27 +103,17 @@ namespace BP.WF.XML
             }
         }
         #endregion
-
-        /// <summary>
-        /// 是否可以使用？
-        /// </summary>
-        /// <param name="no">操作员编号</param>
-        /// <returns></returns>
-        public bool IsCanUse(string no)
-        {
-            return true;    
-        }
     }
     /// <summary>
     /// 
     /// </summary>
-    public class AdminMenus : XmlEns
+    public class Admin2Menus : XmlEns
     {
         #region 构造
         /// <summary>
         /// 考核率的数据元素
         /// </summary>
-        public AdminMenus() { }
+        public Admin2Menus() { }
         #endregion
 
         #region 重写基类属性或方法。
@@ -141,7 +131,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return SystemConfig.PathOfWebApp + "\\DataUser\\XML\\AdminMenu.xml";
+                return SystemConfig.PathOfWebApp + "\\DataUser\\XML\\Admin2Menu.xml";
             }
         }
         /// <summary>

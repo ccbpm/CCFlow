@@ -1792,17 +1792,17 @@ namespace BP.WF.HttpHandler
                             foreach (string s in ss)
                             {
                                 dr = dt.NewRow();
-                                dr["Field"] = s[0];
+                                dr["Field"] = ((MapAttr)attrs.GetEntityByKey(s)).Name;
                                 dr["Type"] = item[0];
                                 dt.Rows.Add(dr);
 
-                                oper += item[0] + "(" + ptable+"."+ s[0] + ")" + ",";
+                                oper += item[0] + "(" + ptable+"."+ s + ")" + ",";
                             }
                         }
                         else
                         {
                             dr = dt.NewRow();
-                            dr["Field"] = item[1];
+                            dr["Field"] = ((MapAttr)attrs.GetEntityByKey(item[1])).Name;
                             dr["Type"] = item[0];
                             dt.Rows.Add(dr);
 

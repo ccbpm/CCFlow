@@ -1375,8 +1375,8 @@ namespace BP.Sys
                             break;
                         case DA.DBType.MySQL:
                             MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
-                            if (connMySQL.State != ConnectionState.Open)
-                                connMySQL.Open();
+                            //if (connMySQL.State != ConnectionState.Open)
+                            //    connMySQL.Open();
                             _AppCenterDBDatabase = connMySQL.Database;
                             break;
                             //From Zhou IBM 删除

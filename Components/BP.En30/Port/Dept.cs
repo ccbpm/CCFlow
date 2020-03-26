@@ -228,21 +228,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                this.Clear(); //清除缓存数据.
-                //获得数据.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetDepts();
-                if (dt.Rows.Count == 0)
-                    return 0;
-
-                //设置查询.
-                QueryObject.InitEntitiesByDataTable(this, dt, null);
-                return dt.Rows.Count;
-            }
-
-            if (SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == 0 || WebUser.No=="admin")
                 return base.RetrieveAll();
 
             //按照orgNo查询.

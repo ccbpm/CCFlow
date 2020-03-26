@@ -2085,14 +2085,16 @@ namespace BP.DA
                 cmd.Dispose();
 
                 connOfMySQL.Close();
-                //   connOfMySQL.Dispose();
+
+                // by zhoupeng: 原来的时候是注释的，测试遇到连接超时最大. 2020-03-25
+                connOfMySQL.Dispose();
                 return i;
             }
             catch (System.Exception ex)
             {
                 connOfMySQL.Close();
                 connOfMySQL.Dispose();
-                throw new Exception(ex.Message + "@SQL:" + sql);
+                throw new Exception("err@RunSQL_200705_MySQL:" + ex.Message + "@SQL:" + sql);
             }
         }
         private static int RunSQL_200705_Ora(string sql, Paras paras)
@@ -2640,12 +2642,51 @@ namespace BP.DA
         {
             return RunSQLReturnTable_200705_MySQL(selectSQL, new Paras());
         }
+        private static DataTable RunSQLReturnTable_200705_MySQL(string sql, Paras paras)
+        {
+           
+
+            using (MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN))
+            {
+                using (MySqlDataAdapter ada = new MySqlDataAdapter(sql, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    ada.SelectCommand.CommandType = CommandType.Text;
+
+                    // 加入参数
+                    if (paras != null)
+                    {
+                        foreach (Para para in paras)
+                        {
+                            MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
+                            myParameter.Size = para.Size;
+                            ada.SelectCommand.Parameters.Add(myParameter);
+                        }
+                    }
+
+
+                    try
+                    {
+                        DataTable oratb = new DataTable("otb");
+                        ada.Fill(oratb);
+                        return oratb;
+                    }
+                    catch (Exception ex)
+                    {
+                        conn.Close();
+                        throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    }
+                }
+            }
+        }
         /// <summary>
         /// RunSQLReturnTable_200705_SQL
         /// </summary>
         /// <param name="selectSQL">要执行的sql</param>
         /// <returns>返回table</returns>
-        private static DataTable RunSQLReturnTable_200705_MySQL(string sql, Paras paras)
+        private static DataTable RunSQLReturnTable_200705_MySQL_del(string sql, Paras paras)
         {
             //  string mcs = "Data Source=127.0.0.1;User ID=root;Password=root;DataBase=wk;Charset=gb2312;";
             //  MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN);

@@ -99,28 +99,29 @@ namespace BP.GPM
             }
         }
 	}
-	/// <summary>
+    /// <summary>
     /// 岗位类型
-	/// </summary>
+    /// </summary>
     public class StationTypes : EntitiesNoName
-	{
-		/// <summary>
-		/// 岗位类型s
-		/// </summary>
+    {
+        /// <summary>
+        /// 岗位类型s
+        /// </summary>
         public StationTypes() { }
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
                 return new StationType();
-			}
-		}
+            }
+        }
         public override int RetrieveAll()
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0 
+                || BP.Web.WebUser.No=="admin" )
                 return base.RetrieveAll();
 
             //按照orgNo查询.

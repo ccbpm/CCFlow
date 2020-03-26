@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ï»¿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -8,7 +8,7 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
      <link href="../../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <!-- ¸ÃÎÄ¼þ¿ÉÒÔ±»¼¯³É³§ÉÌ×Ô¼º¶¨Òå·ç¸ñ,¿ÉÒÔ×Ô¼ºÐÞ¸Ä,ÒÔ´ïµ½Á÷³ÌÉè¼ÆÆ÷Óë×Ô¼ºµÄÏµÍ³·ç¸ñÍ³Ò». -->
+    <!-- ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½É³ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Þ¸ï¿½,ï¿½Ô´ïµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½Í³Ò». -->
     <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -21,17 +21,17 @@
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            $("#Msg").html("ÕýÔÚÖ´ÐÐ·½·¨£¬ÇëÉÔºó......");
+            $("#Msg").html("ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½......");
             var myPK = GetQueryString("MyPK");
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
             var func = new Entity("BP.Frm.MethodFunc", myPK);
 
-            //ÒªÖ´ÐÐsql.
+            //ÒªÖ´ï¿½ï¿½sql.
             if (func.MethodDocTypeOfFunc == 0) {
                 var handler = new HttpHandler("BP.Frm.WF_CCBill");
                 handler.AddUrlData();
-                var data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //Ö´ÐÐSQLs
+                var data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //Ö´ï¿½ï¿½SQLs
                 $("#Msg").html(data);
 
 
@@ -41,19 +41,19 @@
             }
 
 
-            //ÒªÖ´ÐÐscript.  wangyanyanÍê³É.
+            //ÒªÖ´ï¿½ï¿½script.  wangyanyanï¿½ï¿½ï¿½.
             if (func.MethodDocTypeOfFunc == 1) {
                 var script = func.DoMethodReturnString("Gener_MethodDoc_JavaScript");
 
-                //»ñµÃµ¥¾ÝµÄÊý¾Ý.
+                //ï¿½ï¿½Ãµï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½.
                 // var geEn = new Entity(func.FrmID, workID);
-                //Ìæ»»scriptµÄ±äÁ¿.
+                //ï¿½æ»»scriptï¿½Ä±ï¿½ï¿½ï¿½.
                 //   alert(script);
-                //                //Opera¡¢FF¡¢ChromeµÈ£º
+                //                //Operaï¿½ï¿½FFï¿½ï¿½Chromeï¿½È£ï¿½
                 //                var script = document.createElement("script");
                 //                script.setAttribute("type", "text/javascript");
                 //                script.onload = function () {
-                //                    alert("¼ÓÔØ³É¹¦À²£¡");
+                //                    alert("ï¿½ï¿½ï¿½Ø³É¹ï¿½ï¿½ï¿½ï¿½ï¿½");
                 //                }
                 //                script.setAttribute("src", scripts[i]); 
                 // script = " var en =new Entity('Dict_XueShengJiBenXinXi',workID);  ";
@@ -62,7 +62,7 @@
 
 
 
-                //Ö´ÐÐÕâ¸öscript.
+                //Ö´ï¿½ï¿½ï¿½ï¿½ï¿½script.
                 try {
 
                     eval(script);
@@ -74,11 +74,11 @@
                     return;
                 }
 
-                //ÌáÊ¾ÐÅÏ¢.
+                //ï¿½ï¿½Ê¾ï¿½ï¿½Ï¢.
                 return;
             }
 
-            //ÒªÖ´ÐÐurl.  wangyanyanÍê³É.
+            //ÒªÖ´ï¿½ï¿½url.  wangyanyanï¿½ï¿½ï¿½.
             if (func.MethodDocTypeOfFunc == 2) {
 
                 var url = func.MethodDoc;
@@ -87,7 +87,7 @@
                 else
                     url += "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
 
-                //Ôö¼ÓÉÏ±íµ¥µÄ²ÎÊý.
+                //ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½.
                 for (var i = 0; i < attrs.length; i++) {
                     var attr = attrs[i];
 
@@ -111,14 +111,14 @@
                     }
                 }
 
-                //Ö´ÐÐurl·µ»ØÊý¾Ý.
+                //Ö´ï¿½ï¿½urlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
                 var data = DBAccess.RunUrlReturnString(url);
 
                 if (func.MsgSuccess == "")
-                    func.MsgSuccess = "Ö´ÐÐ³É¹¦.";
+                    func.MsgSuccess = "Ö´ï¿½Ð³É¹ï¿½.";
 
                 if (func.MsgErr == "")
-                    func.MsgErr = "Ö´ÐÐÊ§°Ü.";
+                    func.MsgErr = "Ö´ï¿½ï¿½Ê§ï¿½ï¿½.";
 
                 if (data.indexOf('err@') == -1) {
                     

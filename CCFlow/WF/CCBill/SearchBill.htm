@@ -74,7 +74,10 @@
             ur.OrderWay = "";
             ur.Update();
             //初始化查询条件
-            Init_ToolBar();
+            if (Init_ToolBar() == false) {
+                $("#toolBar").html(webUser.Name + "没有查询权限");
+                return;
+            }
 
             //显示查询数据
             BindTable();
@@ -101,8 +104,19 @@
 
 
         function Init_ToolBar() {
+            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (powerData.indexOf("err@") != -1) {
+                alert(powerData);
+                return;
+            }
+            powerData = JSON.parse(powerData);
+            if (parseInt(powerData.IsView) == 0)
+                return false;
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+
+            handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             var data = handler.DoMethodReturnString("Search_ToolBar");
             if (data.indexOf('err@') == 0) {
@@ -216,14 +230,7 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
-            handler.AddPara("FrmID", frmID);
-            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
-            if (powerData.indexOf("err@") != -1) {
-                alert(powerData);
-                return;
-            }
-            powerData = JSON.parse(powerData);
+            
 
             //权限判断按钮.
             if (parseInt(powerData.IsInsert) == 1)
@@ -259,6 +266,8 @@
             html += "</table>";
 
             $("#toolBar").append(html);
+
+            return true;
         }
 
         //初始化下拉列表框的OPERATION
@@ -383,6 +392,20 @@
                 $('#dg').bootstrapTable("load", data["DT"]);
                 return;
             }
+
+            //设置查询总数居的合计、平均等信息
+            var heji = data["Search_FieldSet"];
+            var _html = "";
+            if (heji != null && heji != undefined) {
+                $.each(heji, function (i, item) {
+                    if (item.Type == "Sum")
+                        _html += item.Field + "总合计：" + item.Value + " ";
+                    if (item.Type == "Avg")
+                        _html += item.Field + "总平均：" + item.Value + " ";
+                });
+            }
+
+            $("#FieldSet").html("").html(_html);
             return data;
         }
 
@@ -420,6 +443,10 @@
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
             });
+
+            //颜色设置
+            var colorSet = frmBill.ColorSet;
+
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
 
@@ -437,7 +464,9 @@
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
                 var width = attr.Width;
-                var sortable = sortColumns.indexOf(field) != -1 ? true : false;
+                var sortable = true;
+                if (sortColumns != null && sortColumns != "")
+                    sortable = sortColumns.indexOf(field) != -1 ? true : false;
 
                 if (field == "BillState") {
                     columns.push({
@@ -471,10 +500,10 @@
                 if (attr.UIContralType == 1 || attr.UIContralType == 3 || GetPara(attr.AtPara, "MultipleChoiceSmall") == "1") {
                     if (width == null || width == "" || width == undefined)
                         width = 180;
-                    if (attr.LGType == 0)
-                        field = field + "T";
-                    else
-                        field = field + "Text";
+                    //if (attr.LGType == 0)
+                    //    field = field + "T";
+                    //else
+                    //    field = field + "Text";
 
                     columns.push({
                         field: field,
@@ -484,6 +513,16 @@
                         sortable: sortable,
                         cellStyle: {
                             css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
+                        },
+                        formatter: function (value, row, index) {
+                            var val = row[this.field + "Text"];
+                            if (val == undefined || val == null)
+                                val = row[this.field + "T"];
+                           
+                            if (val == undefined || val == null)
+                                return value;
+                            else
+                                return val;
                         }
                     });
                     continue;
@@ -512,7 +551,20 @@
                     title: title,
                     width: attr.Width,
                     fixed: false,
-                    sortable: sortable
+                    sortable: sortable,
+                    formatter: function (value, row, index) {
+                        var fieldColor = [];
+                        if (colorSet.indexOf("@" + this.field + ":") != -1) {
+                            fieldColor = getFieldColor(colorSet, this.field);
+                        }
+                        if (fieldColor.length == 0)
+                            return value;
+                        for (var i = 0; i < fieldColor.length; i++) {
+                            var color = fieldColor[i];
+                            if (color.From <= value && color.To >= value)
+                                return "<div style='width:20px;height:20px;text-align:center;background:" + color.Color + "'>" + value + "</div>";
+                        }
+                    }
 
                 });
             }
@@ -787,6 +839,46 @@
 
         }
 
+
+        /**
+         * 获取字段的设置
+         * @param colorSet  颜色总体设置
+         * @param keyOfEn 字段
+         */
+        function getFieldColor(colorSet, keyOfEn) {
+            var fieldColor = [];
+            var colorSets = colorSet.split('@');
+            for (var i = 0; i < colorSets.length; i++) {
+                if (colorSets[i] == "")
+                    continue;
+                var strs = colorSets[i].split(':');
+                if (strs.length == 0 || strs.length == 1)
+                    continue;
+                if (strs[0] != keyOfEn)
+                    continue;
+                var ss = strs[1].split(';');
+                for (var k = 0; k < ss.length; k++) {
+                    if (ss[k] == "")
+                        continue;
+                    var ts = ss[k].split(',');
+                    if (ts.length < 3) {
+                        alert('字段' + keyOfEn + '范围颜色设置格式错误');
+                        break;
+                    }
+
+                    fieldColor.push({
+                        "From": parseInt(ts[0].replace("From=", "")),
+                        "To": parseInt(ts[1].replace("To=", "")),
+                        "Color": ts[2].replace("Color=", "")
+                    });
+                }
+
+
+
+            }
+            return fieldColor;
+        }
+
         //复制一条数据 //创建新的workid 复制从表、附件
         function CopyBill(workid, frmID) {
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
@@ -826,14 +918,18 @@
                 <table id="dg" class="table table-hover JColResizer" style="word-wrap: break-word; word-break: break-all;">
                 </table>
                 <!-- 显示分页信息 -->
-                <div class="row cs-pagination">
-                    <ul class="pagination" id="page_nav">
-                    </ul>
-                    <ul class="pagination controls" id="page_info">
-                    </ul>
-                    <div style="clear: both;">
+                <div>
+                    <div class="row cs-pagination" style="float:left;width:65%;text-align: left;">
+                        <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="FieldSet"></li></ul>
+                    </div>
+                    <div class="row cs-pagination" style="float:right;width:35%">
+                        <ul class="pagination" id="page_nav"></ul>
+                        <ul class="pagination controls" id="page_info"></ul>
+                        <div style="clear: both;">
+                        </div>
                     </div>
                 </div>
+                
             </div>
         </div>
         <div id="Msg">

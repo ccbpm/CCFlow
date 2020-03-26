@@ -101,6 +101,10 @@
             if (dateMapAttrs != null) {
                 GenerBindDDL("DDL_DTSearchKey", dateMapAttrs, "KeyOfEn", "Name", RptDTSearchKey);
             }
+            var hidenField = mapData.GetPara("HidenField");
+            while (hidenField.indexOf("[%]") != -1)
+                hidenField = hidenField.replace("[%]", "%");
+            $("#TB_HidenField").val(hidenField);
 
         }
 
@@ -114,6 +118,10 @@
             mapData.SetPara("DTSearchWay", document.getElementById("DDL_DTSearchWay").value);
             mapData.SetPara("DTSearchKey", document.getElementById("DDL_DTSearchKey").value);
             mapData.SetPara("DTSearchLabel", $("#DDL_DTSearchKey").find("option:selected").text());
+            var hidenField = $("#TB_HidenField").val();
+
+            hidenField = hidenField.replace(/%/g, '[%]');
+            mapData.SetPara("HidenField", hidenField);
 
             var fields = "";
             var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
@@ -148,54 +156,64 @@
 </head>
 <body>
     <form id="cc">
-    <table style="width: 96%;">
-        <caption>
-            设置查询条件</caption>
-        <tr>
-            <th>
-                关键字查询
-            </th>
-        </tr>
-        <tr>
-            <td>
-                关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br />
-                <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
-                <br />
-                按照选择字段模糊查询,不选择字段按照关键字查询
-                <div id="StringKeys">
-                </div>
-                <br/>
-                关键字搜索提示
-                <input id="TB_Alert" name="TB_Alert" type="text" value="" />,默认为:请输入关键字...
-            </td>
-        </tr>
-        <tr>
-            <th>
-                外键与枚举类型,的查询
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <div id="FKeys">
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                时间段的查询
-            </th>
-        </tr>
-        <tr>
-            <td>
-                对数据按照时间段进行查询，比如：按流程的发起时间，在指定时间段内进行查询。<br>
-                选择方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
-                    <option selected="selected" value="0">不启用</option>
-                    <option value="1">按日期</option>
-                    <option value="2">按日期时间</option>
-                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字段：<select name="DDL_DTSearchKey" id="DDL_DTSearchKey">
-            </td>
-        </tr>
-    </table>
+        <table style="width: 96%;">
+            <caption>
+                设置查询条件
+            </caption>
+            <tr>
+                <th>
+                    关键字查询
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br />
+                    <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
+                    <br />
+                    按照选择字段模糊查询,不选择字段按照关键字查询
+                    <div id="StringKeys">
+                    </div>
+                    <br />
+                    关键字搜索提示
+                    <input id="TB_Alert" name="TB_Alert" type="text" value="" />,默认为:请输入关键字...
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    外键与枚举类型,的查询
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div id="FKeys">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    时间段的查询
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    对数据按照时间段进行查询，比如：按流程的发起时间，在指定时间段内进行查询。<br />
+                    选择方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
+                        <option selected="selected" value="0">不启用</option>
+                        <option value="1">按日期</option>
+                        <option value="2">按日期时间</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字段：<select name="DDL_DTSearchKey" id="DDL_DTSearchKey">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                   增加隐藏查询条件以;符号分割
+                </th>
+            </tr>
+            <tr>
+                <th> <input id="TB_HidenField" name="TB_HidenField" type="text" value="" placeholder="例如:Age,=,18;Sex,=,0" style="width:98%"/></th>
+            </tr>
+        </table>
     <input type="button" value="保存" onclick="Save();" />
     </form>
 </body>

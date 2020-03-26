@@ -174,6 +174,14 @@ namespace BP.Sys
         /// </summary>
         public const string ShitAfter = "ShitAfter";
         /// <summary>
+        /// 节点催办后
+        /// </summary>
+        public const string PressAfter = "PressAfter";
+        /// <summary>
+        /// 节点抄送后
+        /// </summary>
+        public const string CCAfter = "CCAfter";
+        /// <summary>
         /// 当节点加签后
         /// </summary>
         public const string AskerAfter = "AskerAfter";

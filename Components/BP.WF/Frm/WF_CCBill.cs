@@ -712,17 +712,113 @@ namespace BP.Frm
             }
             #endregion 外键或者枚举的查询
 
+            #region 设置隐藏字段的过滤查询
+            FrmBill frmBill = new FrmBill(this.FrmID);
+            string hidenField = frmBill.GetParaString("HidenField");
+           
+            if(DataType.IsNullOrEmpty(hidenField) == false)
+            {
+                hidenField = hidenField.Replace("[%]", "%");
+                foreach (string field in hidenField.Split(';')){
+                    if (field == "")
+                        continue;
+                    if (field.Split(',').Length != 3)
+                        throw new Exception("单据" + frmBill.Name + "的过滤设置规则错误：" + hidenField + ",请联系管理员检查");
+                    string[] str = field.Split(',');
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
+                    qo.addLeftBracket();
+
+                    //获得真实的数据类型.
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        var valType = BP.Sys.Glo.GenerRealType(attrs,
+                            str[0], str[2]);
+                        qo.AddWhere(str[0], str[1], valType);
+                    }
+                    else
+                    {
+                        qo.AddWhere(str[0], str[1], str[2]);
+                    }
+                    qo.addRightBracket();
+                    continue;
+                }
+                
+            }
+
+            #endregion 设置隐藏字段的查询
+
             #endregion 查询语句
 
             if (isFirst == false)
                 qo.addAnd();
-            else
-                isFirst = false;
-
+           
             qo.AddWhere("BillState", "!=", 0);
+
+            //默认查询本部门的单据
+            qo.addAnd();
+            qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+
+
             //获得行数.
             ur.SetPara("RecCount", qo.GetCount());
             ur.Save();
+
+            //获取配置信息
+            string fieldSet = frmBill.FieldSet;
+            string oper = "";
+            if (DataType.IsNullOrEmpty(fieldSet) == false)
+            {
+                string ptable = rpts.GetNewEntity.EnMap.PhysicsTable;
+                dt = new DataTable("Search_FieldSet");
+                dt.Columns.Add("Field");
+                dt.Columns.Add("Type");
+                dt.Columns.Add("Value");
+                DataRow dr;
+                string[] strs = fieldSet.Split('@');
+                foreach (string str in strs)
+                {
+                    string[] item = str.Split('=');
+                    if (item.Length == 2)
+                    {
+                        if (item[1].Contains(",") == true)
+                        {
+                            string[] ss = item[1].Split(',');
+                            foreach (string s in ss)
+                            {
+                                dr = dt.NewRow();
+                                dr["Field"] = attrs.GetAttrByKey(s).Desc;
+                                dr["Type"] = item[0];
+                                dt.Rows.Add(dr);
+
+                                oper += item[0] + "(" + ptable + "." + s + ")" + ",";
+                            }
+                        }
+                        else
+                        {
+                            dr = dt.NewRow();
+                            dr["Field"] = attrs.GetAttrByKey(item[1]).Desc;
+                            dr["Type"] = item[0];
+                            dt.Rows.Add(dr);
+
+                            oper += item[0] + "(" + ptable + "." + item[1] + ")" + ",";
+                        }
+                    }
+                }
+                oper = oper.Substring(0, oper.Length - 1);
+                DataTable dd = qo.GetSumOrAvg(oper);
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow ddr = dt.Rows[i];
+                    ddr["Value"] = dd.Rows[0][i];
+                }
+                ds.Tables.Add(dt);
+            }
+
+
 
             if (DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
                 qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);

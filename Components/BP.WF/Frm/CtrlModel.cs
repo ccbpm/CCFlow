@@ -28,6 +28,7 @@ namespace BP.Frm
         public const string IsEnableAll = "IsEnableAll";
         public const string IsEnableStation = "IsEnableStation";
         public const string IsEnableDept = "IsEnableDept";
+        public const string IsEnableMyDept = "IsEnableMyDept";
         public const string IsEnableUser = "IsEnableUser";
 
         public const string IDOfUsers = "IDOfUsers";
@@ -183,6 +184,7 @@ namespace BP.Frm
                 map.AddTBInt(CtrlModelAttr.IsEnableStation, 0, "按照岗位计算", true, false);
                 map.AddTBInt(CtrlModelAttr.IsEnableDept, 0, "按照绑定的部门计算", true, false);
                 map.AddTBInt(CtrlModelAttr.IsEnableUser, 0, "按照绑定的人员计算", true, false);
+                map.AddTBInt(CtrlModelAttr.IsEnableMyDept, 1, "按照本部门计算", false, false);
                 map.AddTBString(CtrlModelAttr.IDOfUsers, null, "绑定的人员ID", true, false, 0, 1000, 300);
                 map.AddTBString(CtrlModelAttr.IDOfStations, null, "绑定的岗位ID", true, false, 0, 1000, 300);
                 map.AddTBString(CtrlModelAttr.IDOfDepts, null, "绑定的部门ID", true, false, 0, 1000, 300);

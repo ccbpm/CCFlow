@@ -427,7 +427,7 @@ namespace BP.Frm
         }
         #endregion
 
-        protected override void afterInsertUpdateAction()
+        protected override void afterInsert()
         {
             //保存权限表
             CtrlModel ctrl = new CtrlModel();
@@ -465,6 +465,12 @@ namespace BP.Frm
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
             ctrl.Save();
+            base.afterInsert();
+        }
+
+        protected override void afterInsertUpdateAction()
+        {
+            CheckEnityTypeAttrsFor_EntityNoName();
 
             base.afterInsertUpdateAction();
         }
@@ -628,6 +634,44 @@ namespace BP.Frm
                 attr.UIIsEnable = false;
                 attr.UIIsLine = false;
                 attr.Idx = -97;
+                attr.Insert();
+            }
+            if (attrs.Contains(this.No + "_FK_Dept") == false)
+            {
+                /* 创建人部门 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "FK_Dept";
+                attr.Name = "创建人部门"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
+                attr.Insert();
+            }
+            if (attrs.Contains(this.No + "OrgNo") == false)
+            {
+                /* 创建人名称 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "OrgNo";
+                attr.Name = "创建人所在的组织"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
                 attr.Insert();
             }
             #endregion 补充上流程字段。

@@ -35,6 +35,14 @@ namespace BP.Frm
         /// </summary>
         public const string SortColumns = "SortColumns";
         /// <summary>
+        /// 字段颜色设置
+        /// </summary>
+        public const string ColorSet = "ColorSet";
+        /// <summary>
+        /// 字段求和求平均设置
+        /// </summary>
+        public const string FieldSet = "FieldSet";
+        /// <summary>
         /// 关联单据
         /// </summary>
         public const string RefBill = "RefBill";

@@ -170,6 +170,7 @@ namespace BP.Frm
             Hashtable ht = new Hashtable();
             string frmID = this.FrmID;
             CtrlModels ctrlMs = new CtrlModels();
+
             ctrlMs.Retrieve(CtrlModelAttr.FrmID, frmID);
             string userNo = GetRequestVal("UserNo");
             if (DataType.IsNullOrEmpty(userNo) == true)
@@ -210,7 +211,7 @@ namespace BP.Frm
                         if (DBAccess.RunSQLReturnCOUNT(sql) > 1)
                             isTrue = 1;
                     }
-
+                   
                 }
 
                 if (ctrlM.CtrlObj.Equals("BtnNew") == true)

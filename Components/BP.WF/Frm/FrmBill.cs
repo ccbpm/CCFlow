@@ -156,6 +156,18 @@ namespace BP.Frm
                 this.SetValByKey(FrmBillAttr.SortColumns, value);
             }
         }
+
+        public string FieldSet
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmBillAttr.FieldSet);
+            }
+            set
+            {
+                this.SetValByKey(FrmBillAttr.FieldSet, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -215,6 +227,8 @@ namespace BP.Frm
                 map.AddTBString(FrmBillAttr.BillNoFormat, null, "单号规则", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.TitleRole, null, "标题生成规则", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.SortColumns, null, "排序字段", true, false, 0, 100, 20, true);
+                map.AddTBString(FrmBillAttr.ColorSet, null, "颜色设置", true, false, 0, 100, 20, true);
+                map.AddTBString(FrmBillAttr.FieldSet, null, "字段求和求平均设置", true, false, 0, 100, 20, true);
                 #endregion 单据属性.
 
 
@@ -438,14 +452,22 @@ namespace BP.Frm
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.GroupName = "报表定义";
+                //rm.Title = "页面展示设置"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoRpt_Setting";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
+
                 #endregion 报表定义.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-
-        protected override void afterInsertUpdateAction()
+        protected override void afterInsert()
         {
             //保存权限表
             CtrlModel ctrl = new CtrlModel();
@@ -483,6 +505,12 @@ namespace BP.Frm
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
             ctrl.Save();
+            base.afterInsert();
+        }
+
+        protected override void afterInsertUpdateAction()
+        {
+            CheckEnityTypeAttrsFor_Bill();
 
             base.afterInsertUpdateAction();
         }
@@ -491,7 +519,7 @@ namespace BP.Frm
         #region 权限控制.
         public string DoSaveRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
         }
         /// <summary>
         /// 提交权限规则
@@ -499,7 +527,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoSubmitRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSubmit";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSubmit";
         }
 
         /// <summary>
@@ -508,7 +536,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoCreateRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnNew";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnNew";
         }
         /// <summary>
         /// 查询权限
@@ -516,7 +544,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoSearchRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
         }
         /// <summary>
         /// 删除规则.
@@ -524,7 +552,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoDeleteRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
         }
         #endregion 权限控制.
 
@@ -553,6 +581,11 @@ namespace BP.Frm
         public string DoRpt_SearchCond()
         {
             return "../../CCBill/Admin/SearchCond.htm?FrmID=" + this.No;
+        }
+
+        public string DoRpt_Setting()
+        {
+            return "../Sys/SearchSetting.htm?EnsName=" + this.No+"&SettingType=1";
         }
         #endregion 报表定义.
 
@@ -742,6 +775,44 @@ namespace BP.Frm
                 attr.UIIsEnable = false;
                 attr.UIIsLine = false;
                 attr.Idx = -97;
+                attr.Insert();
+            }
+            if (attrs.Contains(this.No + "_FK_Dept") == false)
+            {
+                /* 创建人部门 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "FK_Dept";
+                attr.Name = "创建人部门"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
+                attr.Insert();
+            }
+            if (attrs.Contains(this.No + "OrgNo") == false)
+            {
+                /* 创建人名称 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = this.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = "OrgNo";
+                attr.Name = "创建人所在的组织"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.MinLen = 0;
+                attr.MaxLen = 32;
+                attr.Idx = -1;
                 attr.Insert();
             }
             #endregion 补充上流程字段。

@@ -2070,7 +2070,7 @@ function Save() {
     //保存表单的html信息
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-    handler.AddPara("HtmlCode", formeditor);
+    handler.AddPara("HtmlCode", encodeURIComponent(formeditor));
 
     var data = handler.DoMethodReturnString("SaveForm");
     if (data.indexOf("err@") != -1) {

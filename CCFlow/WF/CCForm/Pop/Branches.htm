@@ -218,9 +218,9 @@
             return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
         }
 
+        var global = window;
         $(function () {
             // global
-            var global = window;
             global.selectedNodes = [];
             global.selectedRows = [];
 
@@ -318,6 +318,7 @@
                     var item = {};
                     item.No = node.id;
                     item.Name = node.text;
+                    SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
                     nodeIds.push(item);
                 });
             } else {
@@ -326,10 +327,24 @@
                     var item = {};
                     item.No = row.No;
                     item.Name = row.Name;
+                    SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
                     nodeIds.push(item);
                 });
             }
             return nodeIds;
+        }
+         //设置值.
+        function SaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
+            var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+            frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
+            frmEleDB.FK_MapData = fk_mapdata;
+            frmEleDB.EleID = keyOfEn;
+            frmEleDB.RefPKVal = oid;
+            frmEleDB.Tag1 = val1;
+            frmEleDB.Tag2 = val2;
+            if (frmEleDB.Update() == 0) {
+                frmEleDB.Insert();
+            }
         }
     </script>
 </head>

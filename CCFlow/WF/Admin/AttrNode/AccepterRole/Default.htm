@@ -16,7 +16,7 @@
             var node = new Entity("BP.WF.Node",nodeID);
           
             var str =nodeID.substr(nodeID.length - 2);
-            if (str == "01") {
+            if (str == "01" && node.DeliveryWay==DeliveryWay.BySelected) {
                 node.DeliveryWay = DeliveryWay.BySelected_1;
             }
 

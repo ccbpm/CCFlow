@@ -257,6 +257,7 @@ namespace BP.GPM
             }
         }
         #endregion
+
         #region 按钮权限控制
         public override UAC HisUAC
         {
@@ -268,6 +269,7 @@ namespace BP.GPM
             }
         }
         #endregion
+
         #region 构造方法
         /// <summary>
         /// 系统
@@ -299,23 +301,25 @@ namespace BP.GPM
                 map.EnDesc = "系统";
                 map.EnType = EnType.Sys;
 
-                map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 150);
-                map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel, "@0=BS系统@1=CS系统");
-                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 300, true);
-                map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), true);
-                map.AddBoolean(AppAttr.IsEnable, true, "是否启用", true, true);
+                map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 100);
+                map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel,
+                    "@0=BS系统@1=CS系统");
+                map.AddTBString(AppAttr.Name, null, "名称", true, false, 0, 3900, 150, true);
+                map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), false);
+                map.AddBoolean(AppAttr.IsEnable, true, "启用?", true, true);
 
-                map.AddTBString(AppAttr.UrlExt, null, "默认连接", true, false, 0, 3900, 300, true);
-                map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 300, true);
-                map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 300);
-                map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 300);
+                map.AddTBString(AppAttr.UrlExt, null, "默认连接", true, false, 0, 3900, 100, true);
+                map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 100, true);
+
+                map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 100);
+                map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 100);
                 map.AddDDLSysEnum(AppAttr.ActionType, 0, "提交类型", true, true, AppAttr.ActionType, "@0=GET@1=POST");
                 map.AddDDLSysEnum(AppAttr.SSOType, 0, "登录方式", true, true, AppAttr.SSOType, "@0=SID验证@1=连接@2=表单提交@3=不传值");
                 map.AddDDLSysEnum(AppAttr.OpenWay, 0, "打开方式", true, true, AppAttr.OpenWay,
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 300, 300);
-                map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 200, true);
+                map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 300, 100);
+                map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 100, true);
                 map.AddTBInt(AppAttr.Idx, 0, "显示顺序", true, false);
                 map.AddMyFile("ICON");
 
@@ -372,7 +376,8 @@ namespace BP.GPM
 
         protected override bool beforeUpdate()
         {
-            CheckIt();
+            //检查表.
+            CheckPTable();
 
             if (DataType.IsNullOrEmpty(this.RefMenuNo) == false)
             {
@@ -388,7 +393,7 @@ namespace BP.GPM
             return base.beforeUpdate();
         }
 
-        public void CheckIt()
+        public void CheckPTable()
         {
             AppSort sort = new AppSort();
             sort.CheckPhysicsTable();
@@ -400,7 +405,10 @@ namespace BP.GPM
 
         protected override bool beforeInsert()
         {
-            CheckIt();
+            CheckPTable();
+
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("err@系统名称不能为空.");
 
             AppSort sort = new AppSort();
             sort.No = this.FK_AppSort;
@@ -412,8 +420,10 @@ namespace BP.GPM
             // 创建子菜单. 系统的根目录. 
             Menu appMenu = menu.DoCreateSubNode() as Menu;
             appMenu.FK_App = this.No;
+
             appMenu.Name = this.Name;
             appMenu.HisMenuType = MenuType.App;
+            
             appMenu.Update();
 
             //设置相关的菜单编号.
@@ -424,6 +434,7 @@ namespace BP.GPM
             dir.FK_App = this.No;
             dir.Name = "流程管理";
             dir.MenuType = MenuType.Dir;
+            dir.MenuCtrlWay = MenuCtrlWay.Anyone;
             dir.Update();
 
             menu = dir.DoCreateSubNode() as Menu;
@@ -432,6 +443,7 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Start.htm";
             menu.ParentNo = dir.No;
+            menu.MenuCtrlWay = MenuCtrlWay.Anyone;
             menu.Update();
 
             menu = dir.DoCreateSubNode() as Menu;
@@ -440,6 +452,7 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Todolist.htm";
             menu.ParentNo = dir.No;
+            menu.MenuCtrlWay = MenuCtrlWay.Anyone;
             menu.Update();
 
             menu = dir.DoCreateSubNode() as Menu;
@@ -447,6 +460,7 @@ namespace BP.GPM
             menu.FK_App = this.No;
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Runing.htm";
+            menu.MenuCtrlWay = MenuCtrlWay.Anyone;
             menu.ParentNo = dir.No;
 
             menu.Update();
@@ -456,6 +470,7 @@ namespace BP.GPM
             Menu dir2 = appMenu.DoCreateSubNode() as Menu;
             dir2.FK_App = this.No;
             dir2.Name = "系统管理";
+            dir2.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             dir2.MenuType = MenuType.Dir;
             dir2.Update();
 
@@ -465,6 +480,7 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Comm/Tree.htm?EnsName=BP.GPM.Depts";
             menu.ParentNo = dir2.No;
+            menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();
 
             menu = dir2.DoCreateSubNode() as Menu;
@@ -473,6 +489,7 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.GPM.Emps";
             menu.ParentNo = dir2.No;
+            menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();
 
             menu = dir2.DoCreateSubNode() as Menu;
@@ -481,6 +498,7 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.GPM.Stations";
             menu.ParentNo = dir2.No;
+            menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();
 
             return base.beforeInsert();

@@ -32,12 +32,13 @@ namespace BP.WF.HttpHandler
         public string RefOneFrmTreeFrms_Init()
         {
             string sql = "";
+            //单机模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 sql += "SELECT  b.NAME AS SortName, a.No, A.Name,";
                 sql += "A.PTable,";
-                sql += "A.OrgNo";
-                sql += "FROM";
+                sql += "A.OrgNo ";
+                sql += "FROM ";
                 sql += "Sys_MapData A, ";
                 sql += "Sys_FormTree B ";
                 sql += " WHERE ";
@@ -46,44 +47,64 @@ namespace BP.WF.HttpHandler
                 sql += "ORDER BY B.IDX,A.IDX";
 
             }
+
+            // 云服务器环境下
             if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                sql += "SELECT  b.NAME AS SortName, a.No, A.Name,";
-                sql += "A.PTable,";
-                sql += "A.OrgNo";
-                sql += "FROM";
+                sql += "SELECT  b.NAME AS SortName, a.No, A.Name, ";
+                sql += "A.PTable, ";
+                sql += "A.OrgNo ";
+                sql += "FROM ";
                 sql += "Sys_MapData A, ";
                 sql += "Sys_FormTree B ";
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.NO ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "'";
+                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
                 sql += "ORDER BY B.IDX,A.IDX";
             }
 
+            //集团模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
-                sql += "SELECT  b.NAME AS SortName, a.No, A.Name,";
-                sql += "A.PTable,";
-                sql += "A.OrgNo";
-                sql += "FROM";
-                sql += "Sys_MapData A, ";
-                sql += "Sys_FormTree B ";
-                sql += " WHERE ";
-                sql += " A.FK_FormTree = B.NO ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "'";
-                sql += "ORDER BY B.IDX,A.IDX";
+                // admin可以设置所有表单
+                if (WebUser.No.Equals("admin") == true)
+                {
+                    sql += "SELECT  b.NAME AS SortName, a.No, A.Name, ";
+                    sql += "A.PTable, ";
+                    sql += "A.OrgNo ";
+                    sql += "FROM ";
+                    sql += "Sys_MapData A, ";
+                    sql += "Sys_FormTree B ";
+                    sql += " WHERE ";
+                    sql += " A.FK_FormTree = B.NO ";
+                    sql += "ORDER BY B.IDX,A.IDX";
+                }
+                else
+                {
+                    sql += "select * from (SELECT  b.NAME AS SortName, a.No, A.Name,";
+                    sql += "A.PTable,";
+                    sql += "A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
+                    sql += "FROM ";
+                    sql += "Sys_MapData A, ";
+                    sql += "Sys_FormTree B ";
+                    sql += " WHERE ";
+                    sql += " A.FK_FormTree = B.NO ";
+                    sql += " AND B.OrgNo = '" + WebUser.OrgNo + "') t1 ";
 
-                sql += " UNION ";
+                    sql += " UNION ";
 
-                sql += "SELECT  b.NAME AS SortName, a.No, A.Name,";
-                sql += "A.PTable,A.OrgNo ";
-                sql += " FROM ";
-                sql += "Sys_MapData A, Sys_FormTree B, WF_FrmOrg C ";
-                sql += " WHERE ";
-                sql += " A.FK_FormTree = B.No ";
-                sql += " AND B.OrgNo = C.OrgNo ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "'";
-                sql += "ORDER BY B.IDX,A.IDX";
+                    sql += "select * from (SELECT  b.NAME AS SortName, a.No, A.Name,";
+                    sql += "A.PTable,A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
+                    sql += " FROM ";
+                    sql += "Sys_MapData A, Sys_FormTree B, WF_FrmOrg C ";
+                    sql += " WHERE ";
+                    sql += " A.FK_FormTree = B.No ";
+                    sql += " AND B.OrgNo = C.OrgNo ";
+                    sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ) t2 ";
+                    sql += "ORDER BY idx1,idx2";
+                }
+
+               
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

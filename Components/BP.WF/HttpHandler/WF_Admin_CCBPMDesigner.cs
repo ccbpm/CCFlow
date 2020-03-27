@@ -624,11 +624,23 @@ namespace BP.WF.HttpHandler
             return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
         /// <summary>
+        ///初始化当前登录人的下的所有组织
+        /// </summary>
+        /// <returns></returns>
+        public string SelectOneOrg_Init()
+        {
+            Orgs orgs = new Orgs();
+            orgs.Retrieve("No", WebUser.No);
+            return orgs.ToJson();
+
+        }
+        /// <summary>
         ///选择一个组织
         /// </summary>
         /// <returns></returns>
         public string Login_SelectOneOrg()
         {
+            string orgno = this.GetRequestVal("OrgNo");
             WebUser.OrgNo = this.OrgNo;
             return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No;
 

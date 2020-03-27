@@ -446,12 +446,15 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
     }
     if (mapAttr.MyDataType == "1") {
+        //字段附件
         if (mapAttr.UIContralType == 6) {
             return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
         }
+        //写字板
         if (mapAttr.UIContralType == 8) {
             return "<img  src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
         }
+        //地图控件
         if (mapAttr.UIContralType == 4) {
             var eleHtml = "<div style='text-align:left;padding-left:0px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
             eleHtml += "<input type='button' name='select' value='选择' />";
@@ -459,6 +462,15 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             eleHtml += "</div>";
             return eleHtml;
         }
+        //身份证
+        if (mapAttr.UIContralType == 13 && mapAttr.KeyOfEn=="IDCardAddress") {
+            var eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
+            eleHtml += "<input type = text style='width:75% !important;display:inline;' class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_"+mapAttr.KeyOfEn+"'/>";
+            eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo()'/>上传身份证</label>";
+            eleHtml += "</div>";
+            return eleHtml;
+        }
+        //评分
         if (mapAttr.UIContralType == 101) {
             var eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
             eleHtml += "<span class='simplestar'>";

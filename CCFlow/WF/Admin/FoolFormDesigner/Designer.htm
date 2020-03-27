@@ -13,6 +13,7 @@
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js"></script>
     <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js"
@@ -31,12 +32,13 @@
             text-align: center;
             width: 90%;*/
             background-color: #f7f6f9;
-            overflow: auto!important;
+            overflow: auto !important;
         }
 
         textarea, input[type=text] {
             width: 100%;
         }
+
         body {
             font-size: .80em;
             font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
@@ -62,75 +64,82 @@
             /*background-color: InfoBackground;*/
             background-color: #f1f1f1;
         }
+
         .cs-btn-group {
             border: 0;
             text-align: left;
         }
-        .cs-btn-group a {
-            margin-left: 6px;
-            padding: 5px 14px;
-            color: #fff;
-            font-size: 13px;
-            line-height: 28px;
-            height: 26px;
-            border: 0 none;
-            border-radius: 3px;
-            background-image: none;
-            box-sizing: border-box;
-        }
-        .cs-btn-group span.l-btn-left.l-btn-left {
-            padding: 0;
-            background-image: none;
-        }
+
+            .cs-btn-group a {
+                margin-left: 6px;
+                padding: 5px 14px;
+                color: #fff;
+                font-size: 13px;
+                line-height: 28px;
+                height: 26px;
+                border: 0 none;
+                border-radius: 3px;
+                background-image: none;
+                box-sizing: border-box;
+            }
+
+            .cs-btn-group span.l-btn-left.l-btn-left {
+                padding: 0;
+                background-image: none;
+            }
 
         .btn-light-green {
             background-color: #50b6ac;
         }
 
-        .btn-light-green:hover {
-            background-color: #50b6ac;
-        }
+            .btn-light-green:hover {
+                background-color: #50b6ac;
+            }
 
         .btn-light-blue {
             background-color: #62cae3;
         }
 
-        .btn-light-blue:hover {
-            background-color: #62cae3;
-        }
+            .btn-light-blue:hover {
+                background-color: #62cae3;
+            }
 
         .btn-light-yellow {
             background-color: #f3ba20;
         }
 
-        .btn-light-yellow:hover {
-            background-color: #f3ba20;
-        }
+            .btn-light-yellow:hover {
+                background-color: #f3ba20;
+            }
 
         .btn-light-red {
             background-color: #f74f52;
         }
 
-        .btn-light-red:hover {
-            background-color: #f74f52;
-        }
+            .btn-light-red:hover {
+                background-color: #f74f52;
+            }
+
         .cs-easyui-layout {
             margin: auto;
             background: #d0d0d0;
             overflow: auto;
         }
+
         .cs-panel-center {
-            position:static; 
-            margin: 42px auto 0!important;
-            width: 950px!important;
+            position: static;
+            margin: 42px auto 0 !important;
+            width: 950px !important;
             /*overflow:auto*/
         }
+
         .cs-panel-body {
             background-color: #fff;
             border: 0;
             border-radius: 4px;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
+
         .cs-panel-north {
             position: fixed;
             left: 0;
@@ -138,68 +147,98 @@
             background-color: #F7F6F9;
             border-bottom: 1px solid #ddd;
         }
-        .cs-panel-north .cs-btn-group {
-            margin: auto;
-            width: 1100px!important;
-            background-color: #F7F6F9;
-        }
+
+            .cs-panel-north .cs-btn-group {
+                margin: auto;
+                width: 1100px !important;
+                background-color: #F7F6F9;
+            }
+
         .cs-table {
             width: 100%;
         }
-        .cs-table td a {
-            padding-right:0;
-            color: #15398b;
-            width: 24px;
-            height: 24px;
-            box-sizing: border-box;
-        }
-        .cs-table td a:hover.l-btn-plain {
-            padding: 0;
-        }
+
+            .cs-table td a {
+                padding-right: 0;
+                color: #15398b;
+                width: 24px;
+                height: 24px;
+                box-sizing: border-box;
+            }
+
+                .cs-table td a:hover.l-btn-plain {
+                    padding: 0;
+                }
+
         a.l-btn span span span.l-btn-empty {
             background-position: center
         }
+
         .cs-table th a {
             height: 30px;
             color: #282828;
             vertical-align: middle;
         }
-        .cs-table th a:hover {
-            padding: 0 5px 0 0;
-            background-color: transparent;
-            border-color: transparent;
-            text-decoration: none;
-        }
-        .cs-table td,.cs-table th {
+
+            .cs-table th a:hover {
+                padding: 0 5px 0 0;
+                background-color: transparent;
+                border-color: transparent;
+                text-decoration: none;
+            }
+
+        .cs-table td, .cs-table th {
             line-height: 30px;
         }
+
         .cs-table td {
             padding: 7px;
         }
+
         .cs-table th {
             padding-left: 20px;
         }
-        .cs-table input, .cs-table select,.cs-table textarea {
-            margin: 0!important;
-            width: 100%!important;
+
+        .cs-table input, .cs-table select, .cs-table textarea {
+            margin: 0 !important;
+            width: 100% !important;
             background-color: #fff;
         }
-        .cs-table input[type="radio"], .cs-table input[type="checkbox"] {
-            position: static;
-            padding-left: 0;
-            width: 16px!important;
-            height: 16px;
-            vertical-align: -4px;
-        }
+
+            .cs-table input[type="radio"], .cs-table input[type="checkbox"] {
+                position: static;
+                padding-left: 0;
+                width: 16px !important;
+                height: 16px;
+                vertical-align: -4px;
+            }
+
         .checkbox, .radio {
-            margin-left: 0!important;
+            margin-left: 0 !important;
         }
-        .checkbox label, .radio label {
-            padding-left: 0;
-        }
+
+            .checkbox label, .radio label {
+                padding-left: 0;
+            }
+
         .cs-order {
             float: right;
             height: 30px;
+        }
+
+        .image-local {
+            width: 116px;
+            font-size: 16px;
+            line-height: 28px;
+            text-align: center;
+            color: #fff;
+            background-color: #0073eb;
+            border: none;
+            display: inline-block;
+            vertical-align: middle;
+            height: 28px;
+            box-sizing: border-box;
+            outline: none;
         }
     </style>
     <script type="text/javascript">
@@ -303,7 +342,7 @@
                 var groupObj = groupFields[k];
                 //附件类的控件.
                 if (groupObj.CtrlType == 'Ath') {
-                     //获取附件的主键
+                    //获取附件的主键
                     var MyPK = groupObj.CtrlID;
                     if (MyPK == "")
                         continue;
@@ -347,7 +386,7 @@
                     continue;
 
                 if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
-                    if (mapAttr.AtPara!=null&& mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                    if (mapAttr.AtPara != null && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
                         if (mapAttr.UIContralType == 1) {
                             /*启用了显示与隐藏.*/
                             var ddl = $("#DDL_" + mapAttr.KeyOfEn);
@@ -592,7 +631,7 @@
                     if (groupEn.CtrlID == "")
                         return "";
                     var athEn = $.grep(data.Sys_FrmAttachment, function (ath) { return ath.MyPK == groupEn.CtrlID });
-                    
+
                     if (athEn.length == 0) {
                         return "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 附件[" + groupEn.CtrlID + "]丢失</td></tr>";
                     }
@@ -623,7 +662,7 @@
                     if (frameEn.length == 0) {
                         return "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 框架[" + groupEn.CtrlID + "]丢失</td></tr>";
                     }
-                  
+
                     var src = frameEn[0].URL;
                     if (src.indexOf('?') == -1)
                         src = frameEn[0].URL + "?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
@@ -709,7 +748,7 @@
                             if (obj.MyPK == groupEn.CtrlID)
                                 return obj;
                         });
-                        if (mapAttr.length !=0) {
+                        if (mapAttr.length != 0) {
                             isShow = false;
                             break;
                         }
@@ -987,14 +1026,14 @@
                 window.location.href = window.location.href;
             });
         }
-        function EditBigText(mypk,frmID) {
+        function EditBigText(mypk, frmID) {
             url = './EditFExtContral/60.BigNoteHtmlText.htm?FrmID=' + frmID + '&MyPK=' + mypk;
-             OpenEasyUiDialog(url, "eudlgframe", "大文本编辑", 800, 500, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", "大文本编辑", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
 
-             });
+            });
 
-            
+
         }
         function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
 
@@ -1003,7 +1042,7 @@
             if (ftype == 1) {
 
 
-                if (uiContralType == 0) {
+                if (uiContralType == 0 || uiContralType==13) {
                     title = '字段String属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }

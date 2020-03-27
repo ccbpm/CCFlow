@@ -114,7 +114,20 @@ table
     font-style: normal;
     color: #333333;
 }
-
+.image-local {
+    width: 116px;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background-color: #0073eb;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    height: 28px;
+    box-sizing: border-box;
+    outline: none;
+}
 th
 {
     border-width: 1px;

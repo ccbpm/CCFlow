@@ -429,6 +429,39 @@
                             window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + en.MyPK;
                         }
 
+                        //身份证
+                        function ExtIDCard() {
+                            var IDCard = [{ No: "IDCardName", Name: "姓名" }, { No: "IDCardNo", Name: '身份证号' }, {No:"IDCardAddress",Name:"地址"}];
+                            var frmID = GetQueryString("FK_MapData");
+                            for (var i = 0; i < IDCard.length; i++) {
+                                var mapAttr = new Entity("BP.Sys.MapAttr");
+                                mapAttr.SetPKVal(frmID + "_" + IDCard[i].No);
+                                if (mapAttr.RetrieveFromDBSources() == 0) {
+                                    mapAttr.FK_MapData = frmID;
+                                    mapAttr.KeyOfEn = IDCard[i].No;
+                                    mapAttr.Name = IDCard[i].Name;
+                                    mapAttr.GroupID = groupID;
+                                    mapAttr.UIContralType = 13; //身份证号.
+                                    mapAttr.MyDataType = 1;
+                                    if (IDCard[i].No =="IDCardAddress")
+                                        mapAttr.ColSpan = 3; //单元格.
+                                    else
+                                        mapAttr.ColSpan = 1;
+                                    mapAttr.TextColSpan = 1;
+                                    mapAttr.LGType = 0; //文本
+                                    mapAttr.UIIsEnable = 0; //不可编辑
+                                    mapAttr.UIIsInput = 1;//必填
+                                    mapAttr.UIWidth = 150;
+                                    mapAttr.UIHeight = 23;
+                                    mapAttr.Insert(); //插入字段.
+                                } else {
+                                    alert("字段" + IDCard[i].No + "已存在，请变更表单中的" + mapAttr.Name + "的编号");
+                                    
+                                }
+                               
+                            }
+                            alert("创建成功");
+                        }
                         //附件.
                         function ExtAth() {
 
@@ -780,6 +813,7 @@
                     <ul>
                         <li><a href="javascript:ExtImg();"><b>装饰类图片</b></a> &nbsp;&nbsp;用于显示icon、头像、作业示意图等.</li>
                         <li><a href="javascript:ExtImgAth();"><b>图片附件</b></a> &nbsp;&nbsp;用于显示头像等图片.</li>
+                        <li><a href="javascript:ExtIDCard();"><b>身份证</b></a> &nbsp;&nbsp;用于扫描身份证获取用户信息.</li>
                         <li><a href="javascript:ExtAth();"><b>多附件</b></a> &nbsp;&nbsp;上传多附件.</li>
                         <li><a href="javascript:ExtLink();"><b>超链接</b></a> &nbsp;&nbsp;用于解析把字段做为超链接展现.</li>
                         <li><a href="javascript:ExtHandWriting();"><b>写字板</b></a> &nbsp;&nbsp;手写签名版，画图等.</li>

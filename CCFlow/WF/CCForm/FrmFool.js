@@ -998,6 +998,15 @@ function InitMapAttrOfCtrl(mapAttr) {
             return eleHtml;
         }
 
+        if (mapAttr.UIContralType == 13 && mapAttr.KeyOfEn == "IDCardAddress" && pageData.IsReadonly!="1") {
+            var eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
+            eleHtml += "<input type = text style='width:75% !important;display:inline;' class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
+            eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo()'/>上传身份证</label>";
+            eleHtml += "</div>";
+            return eleHtml;
+        }
+
+
         //进度条
         if (mapAttr.UIContralType == "50") {
 
@@ -1014,7 +1023,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     //添加文本框 ，日期控件等
     //AppString
-    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
+    if (mapAttr.MyDataType == "1" && (mapAttr.UIContralType == 0 || mapAttr.UIContralType == 13)) {  //不是外键
 
         if (mapAttr.UIHeight <= 40) //普通的文本框.
         {
@@ -1923,7 +1932,7 @@ function GetLab(frmData, attr) {
         forID = "RB_" + attr.KeyOfEn;
     }
     //文本框，下拉框，单选按钮
-    if (contralType == 0 || contralType == 1 || contralType == 2 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 101) {
+    if (contralType == 0 || contralType == 1 || contralType == 2 || contralType == 3 || contralType == 4 || contralType == 8 || contralType == 13|| contralType == 101) {
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }

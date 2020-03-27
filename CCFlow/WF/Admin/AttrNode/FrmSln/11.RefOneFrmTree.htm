@@ -30,7 +30,7 @@
             var ensFrmTree = "BP.Sys.FrmTrees";
 
             var webUser = new WebUser();
-            if (webUser.CCBPMRunModel != 0)
+            if (webUser.CCBPMRunModel == 2)
                 ensFrmTree = "BP.Cloud.FrmTrees";
 
             var frmTrees = new Entities(ensFrmTree);
@@ -93,6 +93,7 @@
         }
 
         function Save() {
+
             var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
 
             if (selectFrm == undefined || selectFrm == null) {
@@ -198,6 +199,12 @@
 
         }
 
+          //节点表单组件属性.
+        function SetFrm() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "11.RefOneFrmTreeFrms.htm?NodeID=" + nodeID;
+            OpenEasyUiDialogExt(url, '选择要绑定的表单', 600, 500, false);
+        }
     </script>
 </head>
 <body>
@@ -208,6 +215,10 @@
         <ul>
             <li>表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()"> </select> </li>
             <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
+
+            <li>已经选择的表单: <div id="MyFrm">xxx </div> </li>
+            <li><a href="javascript:SetFrm();">设置表单</a></li>
+
         </ul>
 
     </fieldset>

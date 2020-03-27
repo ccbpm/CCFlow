@@ -246,6 +246,11 @@ namespace BP.WF
                         titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "T"));
                         titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
                     }
+                    if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
+                    {
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key + "Text"));
+                        titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                    }
                     else
                     {
                         titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));

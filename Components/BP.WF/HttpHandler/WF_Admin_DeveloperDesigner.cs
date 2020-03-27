@@ -69,7 +69,6 @@ namespace BP.WF.HttpHandler
                     md.HisFrmType = FrmType.Develop;
                     md.Update();
                 }
-
                 // HtmlTemplateFile 保存到数据库中
                 BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
 

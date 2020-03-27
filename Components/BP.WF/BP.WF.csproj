@@ -244,6 +244,7 @@
     <Compile Include="HttpHandler\WF_RptSearch.cs" />
     <Compile Include="HttpHandler\DataUser_AppCoder.cs" />
     <Compile Include="HttpHandler\WF_Admin_TestingContainer.cs" />
+    <Compile Include="HttpHandler\WF_Admin_AttrNode_FrmSln.cs" />
     <Compile Include="HttpHandler\WF_Template.cs" />
     <Compile Include="HttpHandler\WF_CCForm.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_DialogCtr.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\MapFrmWord.cs" />
+    <Compile Include="Template\FrmOrg.cs" />
     <Compile Include="Template\NodeExt.cs" />
     <Compile Include="Template\MapFrmFool.cs" />
     <Compile Include="Template\FrmTrack.cs" />

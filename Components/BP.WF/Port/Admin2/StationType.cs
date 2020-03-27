@@ -64,7 +64,7 @@ namespace BP.WF.Port.Admin2
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 50, 2);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 0, 100, 20);
                 map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, true, 0, 60, 250);
-                map.AddTBInt(StationAttr.Idx, 0, "顺序号", true, false);
+                map.AddTBInt(StationAttr.Idx, 0, "顺序", true, false);
 
                 //增加隐藏查询条件.
                 map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);

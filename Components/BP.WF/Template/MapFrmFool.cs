@@ -331,6 +331,21 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
                 rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
                 map.AddRefMethod(rm);
+
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.FrmOrgs(), 
+                    new BP.WF.Port.Admin2.Orgs(),
+                    BP.WF.Template.FrmOrgAttr.FrmID,
+                    BP.WF.Template.FrmOrgAttr.OrgNo, "适用组织");
+
+
+                //rm = new RefMethod();
+                //rm.Title = "绑定组织";
+                //rm.GroupName = "高级功能";
+                //rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
+                //rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                //map.AddRefMethod(rm);
+
                 #endregion
 
                 #region 方法 - 开发接口.

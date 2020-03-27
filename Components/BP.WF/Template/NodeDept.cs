@@ -112,37 +112,6 @@ namespace BP.WF.Template
     public class NodeDepts : EntitiesMM
     {
         /// <summary>
-        /// 他的工作部门
-        /// </summary>
-        public Stations HisStations
-        {
-            get
-            {
-                Stations ens = new Stations();
-                foreach (NodeDept ns in this)
-                {
-                    ens.AddEntity(new Station(ns.FK_Dept));
-                }
-                return ens;
-            }
-        }
-        /// <summary>
-        /// 他的工作节点
-        /// </summary>
-        public Nodes HisNodes
-        {
-            get
-            {
-                Nodes ens = new Nodes();
-                foreach (NodeDept ns in this)
-                {
-                    ens.AddEntity(new Node(ns.FK_Node));
-                }
-                return ens;
-
-            }
-        }
-        /// <summary>
         /// 节点部门
         /// </summary>
         public NodeDepts() { }
@@ -157,16 +126,6 @@ namespace BP.WF.Template
             qo.DoQuery();
         }
         /// <summary>
-        /// 节点部门
-        /// </summary>
-        /// <param name="StationNo">StationNo </param>
-        public NodeDepts(string StationNo)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeDeptAttr.FK_Dept, StationNo);
-            qo.DoQuery();
-        }
-        /// <summary>
         /// 得到它的 Entity 
         /// </summary>
         public override Entity GetNewEntity
@@ -175,63 +134,6 @@ namespace BP.WF.Template
             {
                 return new NodeDept();
             }
-        }
-        /// <summary>
-        /// 取到一个工作部门集合能够访问到的节点s
-        /// </summary>
-        /// <param name="sts">工作部门集合</param>
-        /// <returns></returns>
-        public Nodes GetHisNodes(Stations sts)
-        {
-            Nodes nds = new Nodes();
-            Nodes tmp = new Nodes();
-            foreach (Station st in sts)
-            {
-                tmp = this.GetHisNodes(st.No);
-                foreach (Node nd in tmp)
-                {
-                    if (nds.Contains(nd))
-                        continue;
-                    nds.AddEntity(nd);
-                }
-            }
-            return nds;
-        }
-        /// <summary>
-        /// 工作部门对应的节点
-        /// </summary>
-        /// <param name="stationNo">工作部门编号</param>
-        /// <returns>节点s</returns>
-        public Nodes GetHisNodes(string stationNo)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeDeptAttr.FK_Dept, stationNo);
-            qo.DoQuery();
-
-            Nodes ens = new Nodes();
-            foreach (NodeDept en in this)
-            {
-                ens.AddEntity(new Node(en.FK_Node));
-            }
-            return ens;
-        }
-        /// <summary>
-        /// 转向此节点的集合的Nodes
-        /// </summary>
-        /// <param name="nodeID">此节点的ID</param>
-        /// <returns>转向此节点的集合的Nodes (FromNodes)</returns> 
-        public Stations GetHisStations(int nodeID)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeDeptAttr.FK_Node, nodeID);
-            qo.DoQuery();
-
-            Stations ens = new Stations();
-            foreach (NodeDept en in this)
-            {
-                ens.AddEntity(new Station(en.FK_Dept));
-            }
-            return ens;
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

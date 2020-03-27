@@ -102,37 +102,6 @@ namespace BP.WF.Template
     public class NodeEmps : EntitiesMM
     {
         /// <summary>
-        /// 他的到人员
-        /// </summary>
-        public Emps HisEmps
-        {
-            get
-            {
-                Emps ens = new Emps();
-                foreach (NodeEmp ns in this)
-                {
-                    ens.AddEntity(new Emp(ns.FK_Emp));
-                }
-                return ens;
-            }
-        }
-        /// <summary>
-        /// 他的工作节点
-        /// </summary>
-        public Nodes HisNodes
-        {
-            get
-            {
-                Nodes ens = new Nodes();
-                foreach (NodeEmp ns in this)
-                {
-                    ens.AddEntity(new Node(ns.FK_Node));
-                }
-                return ens;
-
-            }
-        }
-        /// <summary>
         /// 节点人员
         /// </summary>
         public NodeEmps() { }
@@ -165,63 +134,6 @@ namespace BP.WF.Template
             {
                 return new NodeEmp();
             }
-        }
-        /// <summary>
-        /// 取到一个到人员集合能够访问到的节点s
-        /// </summary>
-        /// <param name="sts">到人员集合</param>
-        /// <returns></returns>
-        public Nodes GetHisNodes(Emps sts)
-        {
-            Nodes nds = new Nodes();
-            Nodes tmp = new Nodes();
-            foreach (Emp st in sts)
-            {
-                tmp = this.GetHisNodes(st.No);
-                foreach (Node nd in tmp)
-                {
-                    if (nds.Contains(nd))
-                        continue;
-                    nds.AddEntity(nd);
-                }
-            }
-            return nds;
-        }
-        /// <summary>
-        /// 到人员对应的节点
-        /// </summary>
-        /// <param name="EmpNo">到人员编号</param>
-        /// <returns>节点s</returns>
-        public Nodes GetHisNodes(string EmpNo)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeEmpAttr.FK_Emp, EmpNo);
-            qo.DoQuery();
-
-            Nodes ens = new Nodes();
-            foreach (NodeEmp en in this)
-            {
-                ens.AddEntity(new Node(en.FK_Node));
-            }
-            return ens;
-        }
-        /// <summary>
-        /// 转向此节点的集合的 Nodes
-        /// </summary>
-        /// <param name="nodeID">此节点的ID</param>
-        /// <returns>转向此节点的集合的Nodes (FromNodes)</returns> 
-        public Emps GetHisEmps(int nodeID)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeEmpAttr.FK_Node, nodeID);
-            qo.DoQuery();
-
-            Emps ens = new Emps();
-            foreach (NodeEmp en in this)
-            {
-                ens.AddEntity(new Emp(en.FK_Emp));
-            }
-            return ens;
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

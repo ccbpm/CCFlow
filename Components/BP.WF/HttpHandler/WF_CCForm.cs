@@ -2042,6 +2042,7 @@ namespace BP.WF.HttpHandler
         {
             //从表.
             string fk_mapDtl = this.FK_MapDtl;
+            string refPKVal = this.RefPKVal;
             MapDtl mdtl = new MapDtl(fk_mapDtl);
 
             #region 处理权限方案。
@@ -2080,6 +2081,7 @@ namespace BP.WF.HttpHandler
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
             foreach (BP.En.Attr attr in attrs)
             {
+
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
 
@@ -2131,6 +2133,36 @@ namespace BP.WF.HttpHandler
             {
                 //dtl.OID = DBAccess.GenerOID();
                 dtl.Insert();
+                
+                foreach (BP.En.Attr attr in attrs)
+                {
+                    string Refval = this.RefPKVal + "_" + oid;
+                    FrmEleDBs FrmEleDBs = new FrmEleDBs();
+                    QueryObject qo = new QueryObject(FrmEleDBs);
+                    qo.AddWhere(FrmEleDBAttr.EleID, attr.Key);
+                    qo.addAnd();
+                    qo.AddWhere(FrmEleDBAttr.RefPKVal, Refval);
+                    qo.DoQuery();
+                    if (FrmEleDBs!=null&& FrmEleDBs.Count==0)
+                        continue;
+                    foreach (FrmEleDB FrmEleDB in FrmEleDBs)
+                    {
+                        FrmEleDB athDB_N = new FrmEleDB();
+                        athDB_N.MyPK = attr.Key + "_" + dtl.OID + "_"+FrmEleDB.Tag1;
+                        athDB_N.FK_MapData = FrmEleDB.FK_MapData;
+                        athDB_N.EleID = FrmEleDB.EleID;
+                        athDB_N.RefPKVal = dtl.OID.ToString();
+                        athDB_N.FID = FrmEleDB.FID;
+                        athDB_N.Tag1 = FrmEleDB.Tag1;
+                        athDB_N.Tag2 = FrmEleDB.Tag2;
+                        athDB_N.Tag3 = FrmEleDB.Tag3;
+                        athDB_N.Tag4 = FrmEleDB.Tag4;
+                        athDB_N.Tag5 = FrmEleDB.Tag5;
+                        athDB_N.DirectInsert();
+                        FrmEleDB.Delete();
+                    }
+                 
+                }
             }
             else
             {

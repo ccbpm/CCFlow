@@ -629,22 +629,13 @@ namespace BP.Web
                 if (SystemConfig.CCBPMRunModel == 0)
                     return false; //单机版.
 
-                //SAAS版本.
-                if (SystemConfig.CCBPMRunModel == 2)
+                //SAAS版本. 集团版 @hongyan 需要翻译.
+                if (SystemConfig.CCBPMRunModel == 2 || SystemConfig.CCBPMRunModel == 1)
                 {
-                    string sql = "SELECT NO from Port_Org where adminer='" + WebUser.No + "'";
+                    string sql = "SELECT No FROM Port_Org WHERE Adminer='" + WebUser.No + "' AND No='" + WebUser.OrgNo + "'";
                     if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
                         return false;
                     return true;
-                }
-
-                //集团版.
-                if (SystemConfig.CCBPMRunModel == 1)
-                {
-                    string sql = "SELECT No FROM WF_Emp WHERE UserType=1 AND No='" + WebUser.No + "'";
-                    if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 1)
-                        return true;
-                    return false;
                 }
                 return false;
             }

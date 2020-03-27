@@ -1855,7 +1855,7 @@ namespace BP.En
                 Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
 
             this.afterInsert();
-            this.afterInsertUpdateAction();
+            this.afterInsertUpdateAction(); 
 
             return i;
         }

@@ -107,8 +107,20 @@ namespace BP.WF.Template
             }
         }
 
+        /// <summary>
+        /// 创建的时候，给他增加一个OrgNo。
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeInsert()
+        {
+            //@hongyan   翻译过去.
+            this.OrgNo = BP.Web.WebUser.OrgNo;
+            return base.beforeInsert();
+        }
+
         protected override bool beforeUpdateInsertAction()
         {
+            //更新流程引擎控制表.
             string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
             DBAccess.RunSQL(sql);
 

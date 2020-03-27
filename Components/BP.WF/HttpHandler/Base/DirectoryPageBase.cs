@@ -586,6 +586,19 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 域
+        /// </summary>
+        public string Domain
+        {
+            get
+            {
+                string str = this.GetRequestVal("Domain");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
         /// 相关编号
         /// </summary>
         public string RefNo

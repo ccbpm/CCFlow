@@ -924,7 +924,8 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtSort);
 
             //获得能否发起的流程.
-            DataTable dtStart = Dev2Interface.DB_StarFlows(Web.WebUser.No);
+            //@sly 需要翻译.
+            DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No,this.Domain);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 
@@ -933,8 +934,6 @@ namespace BP.WF.HttpHandler
 
             //把json存入数据表，避免下一次再取.
             BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
-
-           
 
             //返回组合
             return json;

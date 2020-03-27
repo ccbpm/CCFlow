@@ -141,7 +141,7 @@ namespace BP.WF.Port.Admin2
 
                 map.AddTBString(OrgAttr.Adminer, null, "管理员登录帐号", true, true, 0, 60, 200, true);
                 map.AddTBString(OrgAttr.AdminerName, null, "管理员名称", true, true, 0, 60, 200, true);
-                
+
                 RefMethod rm = new RefMethod();
                 rm.Title = "检查正确性";
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
@@ -165,8 +165,6 @@ namespace BP.WF.Port.Admin2
         {
             string err = "";
 
-            if (DataType.IsNullOrEmpty(err) == true)
-                return "系统正确";
 
             #region 组织结构信息检查.
             //检查orgNo的部门是否存在？
@@ -190,19 +188,19 @@ namespace BP.WF.Port.Admin2
             {
                 this.ParentName = deptParent.Name;
                 err += "info@父级部门名称与组织名称已经同步.";
-                
+
             }
             this.Update(); //执行更新.
 
             //设置子集部门，的OrgNo.
-            SetSubDeptOrgNo(this.No);
+            if (DBAccess.IsView("Port_Dept") == false)
+                SetSubDeptOrgNo(this.No);
+
             #endregion 组织结构信息检查.
 
-            #region 检查表单树.
-
-            //设置流程树权限.
+            #region 检查流程树.
             BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
-            fs.No =  this.No;
+            fs.No = this.No;
             if (fs.RetrieveFromDBSources() == 1)
             {
                 fs.OrgNo = this.No;
@@ -215,23 +213,29 @@ namespace BP.WF.Port.Admin2
                 int i = root.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
 
                 //设置流程树权限.
+                fs.No = this.No;
                 fs.Name = this.Name;
                 fs.ParentNo = root.No;
                 fs.OrgNo = this.No;
                 fs.Idx = 999;
                 fs.Insert();
+
+                //创建下一级目录.
+                BP.WF.Template.FlowSort en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
+                en.Name = "公文流程";
+                en.OrgNo = this.No;
+                en.Domain = "GongWen";
+                en.Update();
+
+                en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
+                en.Name = "流程目录2";
+                en.OrgNo = this.No;
+                // en.Domain = "GongWen";
+                en.Update();
             }
+            #endregion 检查流程树.
 
-
-            //创建下一级目录.
-            EntityTree en = fs.DoCreateSubNode();
-            en.Name = "流程目录1";
-            en.Update();
-
-            en = fs.DoCreateSubNode();
-            en.Name = "流程目录2";
-            en.Update();
-
+            #region 检查表单树.
             //表单根目录.
             BP.Sys.FrmTree ftRoot = new Sys.FrmTree();
             ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
@@ -261,12 +265,11 @@ namespace BP.WF.Port.Admin2
             }
             #endregion 检查表单树.
 
-
-
+            if (DataType.IsNullOrEmpty(err) == true)
+                return "系统正确";
 
             //检查表单树.
-
-            return "err@" +err;
+            return "err@" + err;
         }
         /// <summary>
         /// 设置
@@ -303,7 +306,7 @@ namespace BP.WF.Port.Admin2
              * 1. 与org里面的部门是否存在？
              */
 
-         
+
 
             return "";
         }

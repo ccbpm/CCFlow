@@ -839,8 +839,6 @@ namespace BP.WF
                 qo.DoQuery();
                 return fls;
             }
-
-
             throw new Exception("@未判断的类型。");
         }
         /// <summary>
@@ -860,8 +858,13 @@ namespace BP.WF
             string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,A.IsStartInMobile, A.Idx";
             sql += " FROM WF_Flow A, V_FlowStarterBPM B, WF_FlowSort C  ";
             sql += " WHERE A.No=B.FK_Flow AND A.IsCanStart=1 AND A.FK_FlowSort=C.No  AND FK_Emp='" + WebUser.No + "' ";
+
+            //@sly 需要翻译.
             if (DataType.IsNullOrEmpty(domain) == false)
                 sql += " AND C.Domain='" + domain + "'";
+
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                sql += " AND C.OrgNo='" + WebUser.OrgNo + "'";
 
             sql += " ORDER BY C.Idx, A.Idx";
 

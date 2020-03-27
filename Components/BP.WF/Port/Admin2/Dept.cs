@@ -132,8 +132,8 @@ namespace BP.WF.Port.Admin2
             if (org.RetrieveFromDBSources() == 1)
             {
                 /* 已经是独立组织了. */
-                string info = org.DoCheck();
-                return "info@当前部门已经是独立组织了,检查信息如下:"+ info;
+                string info1 = org.DoCheck();
+                return "info@当前部门已经是独立组织了,检查信息如下:"+ info1;
             }
             org.Name = this.Name; //把部门名字改为组织名字.
 
@@ -154,11 +154,45 @@ namespace BP.WF.Port.Admin2
             org.AdminerName = emp.Name;
             org.Insert();
 
+
+            if (DBAccess.IsView("Port_StationType")==false)
+            {
+                BP.WF.Port.Admin2.StationType st = new StationType();
+                st.No = DBAccess.GenerGUID();
+                st.Name = "高层岗";
+                st.OrgNo = this.No;
+                st.DirectInsert();
+
+                BP.WF.Port.Admin2.Station sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+             
+
+
+
+
+                st = new StationType();
+                st.No = DBAccess.GenerGUID();
+                st.Name = "中层岗";
+                st.OrgNo = this.No;
+                st.DirectInsert();
+
+                st = new StationType();
+                st.No = DBAccess.GenerGUID();
+                st.Name = "基层岗";
+                st.OrgNo = this.No;
+                st.DirectInsert();
+            }
+
+
+
             // 返回他的检查信息，这个方法里，已经包含了自动创建独立组织的，表单树，流程树。
             // 自动他创建，岗位类型，岗位信息.
-            return org.DoCheck();
+            string info= org.DoCheck();
 
+            if (info.IndexOf("err@") == 0)
+                return info;
 
+            return "设置成功.";
             
 
             //初始化表单树，流程树.

@@ -16,6 +16,21 @@ namespace BP.WF.Port.Admin2
 	/// </summary>
 	public class StationType :EntityNoName
     {
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(StationAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(StationAttr.OrgNo, value);
+            }
+        }
+         
 		#region 构造方法
 		/// <summary>
 		/// 岗位类型
@@ -46,18 +61,27 @@ namespace BP.WF.Port.Admin2
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
 
-                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 2, 2, 2);
-                map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
-                map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, false, 0, 60, 250);
+                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 50, 2);
+                map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 0, 100, 20);
+                map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, true, 0, 60, 250);
 
                 //增加隐藏查询条件.
-                map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.FK_Dept);
+                map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-	}
+
+        protected override bool beforeInsert()
+        {
+            if (Glo.CCBPMRunModel != CCBPMRunModel.GroupInc)
+                throw new Exception("err@非GroupInc模式，不能插入. ");
+
+            this.OrgNo = BP.Web.WebUser.OrgNo;
+            return base.beforeInsert();
+        }
+    }
 	/// <summary>
     /// 岗位类型
 	/// </summary>
@@ -77,6 +101,14 @@ namespace BP.WF.Port.Admin2
                 return new StationType();
 			}
 		}
+        /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAll()
+        {
+            return this.Retrieve(StationAttr.OrgNo, BP.Web.WebUser.OrgNo, StationAttr.Idx);
+        }
 
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

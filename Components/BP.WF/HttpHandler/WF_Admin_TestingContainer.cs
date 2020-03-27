@@ -169,7 +169,6 @@ namespace BP.WF.HttpHandler
             if (BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";
 
-
             FlowExt fl = new FlowExt(this.FK_Flow);
 
             if (1 == 2 && BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
@@ -191,7 +190,6 @@ namespace BP.WF.HttpHandler
                 return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
             }
             #endregion 测试人员.
-
 
             #region 从配置里获取-测试人员.
             /* 检查是否设置了测试人员，如果设置了就按照测试人员身份进入
@@ -232,56 +230,49 @@ namespace BP.WF.HttpHandler
             #region 从设置里获取-测试人员.
             try
             {
-
+                //@sly 要有同步.
                 switch (nd.HisDeliveryWay)
                 {
                     case DeliveryWay.ByStation:
                     case DeliveryWay.ByStationOnly:
+                        if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                            sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        else
+                            sql = "SELECT Port_Emp.No FROM Port_Emp WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "' LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
 
-                        sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
                     case DeliveryWay.ByDept:
-                        sql = "select No,Name from Port_Emp where FK_Dept in (select FK_Dept from WF_NodeDept where FK_Node='" + nodeid + "') ";
-                        //emps.RetrieveInSQL("");
+                        sql = "SELECT No,Name FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + nodeid;
                         break;
                     case DeliveryWay.ByBindEmp:
-                        sql = "select No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
+                        sql = "SELECT No,Name from Port_Emp WHERE No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
-                        //added by liuxc,2015.6.30.
-                        //区别集成与BPM模式
-                        if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                        {
-                            sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                            sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
-                            sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + nodeid + ")";
-                            sql += ")";
-                            sql += "AND No IN ";
-                            sql += "(";
-                            sql += "SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ";
-                            sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nodeid + ")";
-                            sql += ") ORDER BY No ";
-                        }
-                        else
-                        {
-                            sql = "SELECT pdes.FK_Emp AS No"
-                                  + " FROM   Port_DeptEmpStation pdes"
-                                  + "        INNER JOIN WF_NodeDept wnd"
-                                  + "             ON  wnd.FK_Dept = pdes.FK_Dept"
-                                  + "             AND wnd.FK_Node = " + nodeid
-                                  + "        INNER JOIN WF_NodeStation wns"
-                                  + "             ON  wns.FK_Station = pdes.FK_Station"
-                                  + "             AND wnd.FK_Node =" + nodeid
-                                  + " ORDER BY"
-                                  + "        pdes.FK_Emp";
-                        }
+
+                        sql = "SELECT pdes.FK_Emp AS No"
+                              + " FROM   Port_DeptEmpStation pdes"
+                              + "        INNER JOIN WF_NodeDept wnd"
+                              + "             ON  wnd.FK_Dept = pdes.FK_Dept"
+                              + "             AND wnd.FK_Node = " + nodeid
+                              + "        INNER JOIN WF_NodeStation wns"
+                              + "             ON  wns.FK_Station = pdes.FK_Station"
+                              + "             AND wnd.FK_Node =" + nodeid
+                              + " ORDER BY"
+                              + "        pdes.FK_Emp";
+
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
-                        sql = "SELECT No as FK_Emp FROM Port_Emp ";
+
+                        if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                            sql = "SELECT c.No, c.Name, B.Name as DeptName FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND A.FK_Emp=C.No ";
+                        else
+                            sql = "SELECT c.No, c.Name, B.Name as DeptName FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C.No ";
+
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                        if (dt.Rows.Count > 300)
+
+                        if (dt.Rows.Count > 300 && 1==2)
                         {
                             if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
                                 sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
@@ -323,6 +314,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     emps += "," + myemp + ",";
+
                     BP.Port.Emp emp = new Emp(myemp);
 
                     DataRow drNew = dtMyEmps.NewRow();
@@ -334,13 +326,6 @@ namespace BP.WF.HttpHandler
                     dtMyEmps.Rows.Add(drNew);
                 }
 
-                //检查物理表,避免错误.
-                Nodes nds = new Nodes(this.FK_Flow);
-                foreach (Node mynd in nds)
-                {
-                    mynd.HisWork.CheckPhysicsTable();
-                }
-
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);
                 #endregion 从设置里获取-测试人员.
@@ -348,7 +333,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@<h2>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，<a href='http://bbs.ccflow.org/showtopic-4103.aspx' target=_blank ><font color=red>点击这查看解决办法</font>.</a>。</h2> 系统错误提示:" + ex.Message + "<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看在线帮助文档 <a href='http://ccbpm.mydoc.io' target=_blank>http://ccbpm.mydoc.io</a>  .</h3>";
+                return "err@您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员 系统错误提示:" + ex.Message;
             }
         }
         #endregion

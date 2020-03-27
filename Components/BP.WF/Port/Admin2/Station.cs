@@ -18,12 +18,33 @@ namespace BP.WF.Port.Admin2
         /// 组织编号
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
+
     }
-	/// <summary>
-	/// 岗位
-	/// </summary>
+    /// <summary>
+    /// 岗位
+    /// </summary>
     public class Station : EntityNoName
     {
+        #region 属性.
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(StationAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(StationAttr.OrgNo, value);
+            }
+        }
+        #endregion 属性.
+
+
+
         #region 实现基本的方方法
         /// <summary>
         /// UI界面上的访问控制
@@ -70,10 +91,11 @@ namespace BP.WF.Port.Admin2
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
-                map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, false, 0, 60, 250);
+                map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, true, 0, 60, 100);
+                map.AddTBInt(StationAttr.Idx, 0, "顺序号", true, false);
 
                 //增加隐藏查询条件.
-                map.AddHidden(StationAttr.OrgNo,"=", BP.Web.WebUser.FK_Dept);
+                map.AddHidden(StationAttr.OrgNo,"=", BP.Web.WebUser.OrgNo);
 
                 //查询条件.
                 map.AddSearchAttr(StationAttr.FK_StationType);
@@ -103,6 +125,11 @@ namespace BP.WF.Port.Admin2
 				return new Station();
 			}
 		}
+
+        public override int RetrieveAll()
+        {
+           return  this.Retrieve(StationAttr.OrgNo,  BP.Web.WebUser.OrgNo, StationAttr.Idx);
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

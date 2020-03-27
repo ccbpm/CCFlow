@@ -108,7 +108,11 @@ namespace BP.WF.Port
                 return base.RetrieveAll();
 
             //按照orgNo查询.
-            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere("OrgNo", BP.Web.WebUser.OrgNo);
+            qo.addOr();
+            qo.AddWhere("OrgNo", "");
+            return qo.DoQuery();
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

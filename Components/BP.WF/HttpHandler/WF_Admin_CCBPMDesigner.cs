@@ -289,7 +289,7 @@ namespace BP.WF.HttpHandler
 
             if (WebUser.No != "admin")
             {
-                newRootId = WebUser.OrgNo; 
+                newRootId = WebUser.OrgNo;
             }
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
@@ -607,19 +607,25 @@ namespace BP.WF.HttpHandler
             if (i > 1)
                 return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
 
+            //设置他的组织，信息.
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+            {
+                WebUser.OrgNo = orgs[0].GetValStrByKey("No");
+            }
+
             //只有一个组织的情况.
             if (DBAccess.IsView("Port_Emp") == false)
             {
                 string sid = BP.DA.DBAccess.GenerGUID();
-                BP.DA.DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
-                WebUser.SID = sid;
+                string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'";
+                if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                    sql = "UPDATE Port_Emp SET SID='" + sid + "',OrgNo='" + WebUser.OrgNo + "' WHERE No='" + emp.No + "'";
+                BP.DA.DBAccess.RunSQL(sql);
                 emp.SID = sid;
-                emp.Update(); //更新到sid里面去.
             }
 
-            //设置他的组织.
-            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                WebUser.OrgNo = orgs[0].GetValStrByKey("No");
+            //设置SID.
+            WebUser.SID = emp.SID; //设置SID.
 
             return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
@@ -644,7 +650,7 @@ namespace BP.WF.HttpHandler
             WebUser.OrgNo = this.OrgNo;
             return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No;
 
-           // return "登录成功.";
+            // return "登录成功.";
         }
         #endregion 登录窗口.
 
@@ -824,7 +830,7 @@ namespace BP.WF.HttpHandler
                            union 
                            SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow) A  ORDER BY DTYPE, IDX ";
 
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle 
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle
                 || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
@@ -872,9 +878,9 @@ namespace BP.WF.HttpHandler
 
             if (WebUser.No != "admin")
             {
-               
+
                 DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-                DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo+ "'")[0];
+                DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
 
                 newRootRow["PARENTNO"] = "F0";
                 DataTable newDt = dt.Clone();
@@ -1104,7 +1110,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (Admin2MenuGroup menu in groups)
                 {
-                    
+
                     //是否可以使用？
                     if (menu.IsCanUse(WebUser.No) == false)
                         continue;
@@ -1119,7 +1125,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (Admin2Menu menu in menus)
                 {
-                   newMenus.Add(menu);
+                    newMenus.Add(menu);
                 }
                 //添加默认，无权限
                 if (newMenus.Count == 0)
@@ -1134,7 +1140,8 @@ namespace BP.WF.HttpHandler
                 DataTable dt = newMenus.ToDataTable();
                 treeJson = BP.Tools.Json.ToJson(newMenus.ToDataTable());
             }
-            else { 
+            else
+            {
                 //查询全部.
                 AdminMenuGroups groups = new AdminMenuGroups();
                 groups.RetrieveAll();

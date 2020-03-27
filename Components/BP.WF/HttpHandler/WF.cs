@@ -1442,7 +1442,7 @@ namespace BP.WF.HttpHandler
         {            
             string fk_node = this.GetRequestVal("FK_Node");
             string showWhat = this.GetRequestVal("ShowWhat");
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat);
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat,this.Domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

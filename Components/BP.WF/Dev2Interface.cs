@@ -1261,20 +1261,38 @@ namespace BP.WF
             return null;
             //BP.Web.WebUser.SignInOfGener2017
         }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="fk_node">节点编号</param>
+        ///// <returns>共享工作列表</returns>
+        ///// 
+
+
         /// <summary>
         /// 获取当前人员待处理的工作
         /// </summary>
-        /// <param name="fk_node">节点编号</param>
-        /// <returns>共享工作列表</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0, string showWhat = null)
+        /// <param name="userNo">用户编号</param>
+        /// <param name="fk_node">指定的节点，如果为0就是所有的节点.</param>
+        /// <param name="showWhat">WFState状态，=5退回的，=2是正在运行的.</param>
+        /// <param name="domain">域名</param>
+        /// <returns>返回待办WF_EmpWorks的视图待办.</returns>
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, 
+            int fk_node = 0, string showWhat = null, string domain=null)
         {
+            string doMainSQL = "";
+            if (DataType.IsNullOrEmpty(domain) == false)
+                doMainSQL = " AND Domain='"+domain+"'";
+
             if (DataType.IsNullOrEmpty(userNo) == true)
                 throw new Exception("err@登录信息丢失.");
+
             string wfStateSql = "";
             if (DataType.IsNullOrEmpty(showWhat) == true)
                 wfStateSql = " A.WFState!=" + (int)WFState.Batch;
             else
                 wfStateSql = "  A.WFState=" + showWhat;
+
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string sql;
@@ -1300,11 +1318,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND " + wfStateSql + " ORDER BY  ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND " + wfStateSql + doMainSQL + "  ORDER BY  ADT DESC ";
                         }
                         else
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp  AND " + wfStateSql + " ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp  AND " + wfStateSql + doMainSQL + " ORDER BY ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);
@@ -1314,11 +1332,11 @@ namespace BP.WF
                 {
                     if (BP.WF.Glo.IsEnableTaskPool == true)
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Node=" + dbstr + "FK_Node  AND " + wfStateSql + " ORDER BY  ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Node=" + dbstr + "FK_Node  AND " + wfStateSql + doMainSQL + " ORDER BY  ADT DESC ";
                     }
                     else
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node  AND " + wfStateSql + " ORDER BY  ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node  AND " + wfStateSql + doMainSQL + " ORDER BY  ADT DESC ";
                     }
 
                     ps.Add("FK_Node", fk_node);
@@ -1419,11 +1437,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 "+doMainSQL + " ORDER BY ADT DESC ";
                         }
                         else
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  " + doMainSQL + " ORDER BY ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);
@@ -1432,11 +1450,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND FK_Node" + dbstr + "FK_Node AND TaskSta=0 ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND FK_Node" + dbstr + "FK_Node AND TaskSta=0  " + doMainSQL + "ORDER BY ADT DESC ";
                         }
                         else
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND FK_Node" + dbstr + "FK_Node ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND FK_Node" + dbstr + "FK_Node  " + doMainSQL + " ORDER BY ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);
@@ -1448,11 +1466,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0 ORDER BY ADT DESC ";
+                            sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0  " + doMainSQL + "ORDER BY ADT DESC ";
                         }
                         else
                         {
-                            sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + "  ORDER BY ADT DESC ";
+                            sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + "  " + doMainSQL + " ORDER BY ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);
@@ -1461,11 +1479,11 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            sql = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND FK_Node" + dbstr + "FK_Node AND FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0  ORDER BY ADT DESC ";
+                            sql = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND FK_Node" + dbstr + "FK_Node AND FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0  " + doMainSQL + " ORDER BY ADT DESC ";
                         }
                         else
                         {
-                            sql = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND FK_Node" + dbstr + "FK_Node AND FK_Flow IN " + emp.AuthorFlows + "  ORDER BY ADT DESC ";
+                            sql = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND FK_Node" + dbstr + "FK_Node AND FK_Flow IN " + emp.AuthorFlows + "  " + doMainSQL + " ORDER BY ADT DESC ";
                         }
 
                         ps.Add("FK_Emp", userNo);

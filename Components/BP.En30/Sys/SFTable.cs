@@ -189,10 +189,11 @@ namespace BP.Sys
                             pa[1] = pa[1].Replace("@WebUser.No", BP.Web.WebUser.No);
                         if (pa[1].Contains("@WebUser.Name"))
                             pa[1] = pa[1].Replace("@WebUser.Name", BP.Web.WebUser.Name);
+						if (pa[1].Contains("@WebUser.FK_DeptName"))
+                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                         if (pa[1].Contains("@WebUser.FK_Dept"))
                             pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                        if (pa[1].Contains("@WebUser.FK_DeptName"))
-                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                        
                     }
                     catch
                     { }
@@ -297,6 +298,9 @@ namespace BP.Sys
 
                 if (runObj.Contains("@WebUser.Name"))
                     runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+
+				if (runObj.Contains("@WebUser.FK_DeptName"))
+                    runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
 
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);

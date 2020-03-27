@@ -30,6 +30,9 @@ namespace BP.WF.Port.Admin2
     public class Station : EntityNoName
     {
         #region 属性.
+        /// <summary>
+        /// 组织编号
+        /// </summary>
         public string OrgNo
         {
             get
@@ -39,6 +42,20 @@ namespace BP.WF.Port.Admin2
             set
             {
                 this.SetValByKey(StationAttr.OrgNo, value);
+            }
+        }
+        /// <summary>
+        /// 岗位类型
+        /// </summary>
+        public string FK_StationType
+        {
+            get
+            {
+                return this.GetValStrByKey(StationAttr.FK_StationType);
+            }
+            set
+            {
+                this.SetValByKey(StationAttr.FK_StationType, value);
             }
         }
         #endregion 属性.
@@ -92,7 +109,7 @@ namespace BP.WF.Port.Admin2
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
                 map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, true, 0, 60, 100);
-                map.AddTBInt(StationAttr.Idx, 0, "顺序号", true, false);
+                map.AddTBInt(StationAttr.Idx, 0, "顺序", true, false);
 
                 //增加隐藏查询条件.
                 map.AddHidden(StationAttr.OrgNo,"=", BP.Web.WebUser.OrgNo);

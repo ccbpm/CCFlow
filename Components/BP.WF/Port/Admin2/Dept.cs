@@ -133,14 +133,14 @@ namespace BP.WF.Port.Admin2
             {
                 /* 已经是独立组织了. */
                 string info1 = org.DoCheck();
-                return "info@当前部门已经是独立组织了,检查信息如下:"+ info1;
+                return "info@当前部门已经是独立组织了,检查信息如下:" + info1;
             }
             org.Name = this.Name; //把部门名字改为组织名字.
 
             //设置父级信息.
             BP.Port.Dept parentDept = new BP.Port.Dept();
-           
-            if (this.ParentNo.Equals("0")==true)
+
+            if (this.ParentNo.Equals("0") == true)
                 this.ParentNo = this.No;
 
             parentDept.No = this.ParentNo;
@@ -155,8 +155,9 @@ namespace BP.WF.Port.Admin2
             org.Insert();
 
 
-            if (DBAccess.IsView("Port_StationType")==false)
+            if (DBAccess.IsView("Port_StationType") == false)
             {
+                #region 高层岗位.
                 BP.WF.Port.Admin2.StationType st = new StationType();
                 st.No = DBAccess.GenerGUID();
                 st.Name = "高层岗";
@@ -165,35 +166,85 @@ namespace BP.WF.Port.Admin2
 
                 BP.WF.Port.Admin2.Station sta = new Station();
                 sta.No = DBAccess.GenerGUID();
-             
+                sta.Name = "总经理";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+                #endregion 高层岗位.
 
-
-
-
+                #region 中层岗.
                 st = new StationType();
                 st.No = DBAccess.GenerGUID();
                 st.Name = "中层岗";
                 st.OrgNo = this.No;
                 st.DirectInsert();
 
+                sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+                sta.Name = "财务部经理";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+
+
+                sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+                sta.Name = "研发部经理";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+
+                sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+                sta.Name = "市场部经理";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+                #endregion 中层岗.
+
+                #region 基层岗.
                 st = new StationType();
                 st.No = DBAccess.GenerGUID();
                 st.Name = "基层岗";
                 st.OrgNo = this.No;
                 st.DirectInsert();
+
+                sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+                sta.Name = "会计岗";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+
+                sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+                sta.Name = "销售岗";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+
+                sta = new Station();
+                sta.No = DBAccess.GenerGUID();
+                sta.Name = "程序员岗";
+                sta.OrgNo = this.No;
+                sta.FK_StationType = st.No;
+                sta.DirectInsert();
+
+                #endregion 基层岗.
+
             }
 
 
 
             // 返回他的检查信息，这个方法里，已经包含了自动创建独立组织的，表单树，流程树。
             // 自动他创建，岗位类型，岗位信息.
-            string info= org.DoCheck();
+            string info = org.DoCheck();
 
             if (info.IndexOf("err@") == 0)
                 return info;
 
             return "设置成功.";
-            
+
 
             //初始化表单树，流程树.
             //InitFlowSortTree();

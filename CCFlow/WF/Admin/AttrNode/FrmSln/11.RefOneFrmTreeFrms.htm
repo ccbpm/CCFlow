@@ -93,10 +93,13 @@
             var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a> - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
             $("#Div_RefOneFrmTree").html(html);
             alert("独立表单库表单 - 保存成功.");
-
-           // parent.$("#MyFrm").html(frmNode.FK_Frm + ":" );
-           // $(".panel-tool-close").click();
+            parent.location.reload();
             parent.doCloseDialog.call();
+            
+            
+           // parent.$("#MyFrm").html(frmNode.FK_Frm + ":" +selectName );
+           // $(".panel-tool-close").click();
+            
             return;
         }
 

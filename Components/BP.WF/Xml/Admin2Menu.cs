@@ -99,7 +99,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return new AdminMenus();
+                return new Admin2Menus();
             }
         }
         #endregion
@@ -124,7 +124,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return new AdminMenu();
+                return new Admin2Menu();
             }
         }
         public override string File

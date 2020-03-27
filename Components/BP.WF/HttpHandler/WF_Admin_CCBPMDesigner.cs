@@ -1088,51 +1088,100 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetTreeJson_AdminMenu()
         {
-            //查询全部.
-            AdminMenuGroups groups = new AdminMenuGroups();
-            groups.RetrieveAll();
+            string treeJson = string.Empty;
 
-            AdminMenus menus = new AdminMenus();
-            menus.RetrieveAll();
-
-            // 定义容器.
-            AdminMenus newMenus = new AdminMenus();
-
-            foreach (AdminMenuGroup menu in groups)
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
-                //是否可以使用？
-                if (menu.IsCanUse(WebUser.No) == false)
-                    continue;
+                //查询全部.
+                Admin2MenuGroups groups = new Admin2MenuGroups();
+                groups.RetrieveAll();
 
-                AdminMenu newMenu = new AdminMenu();
-                newMenu.No = menu.No;
-                newMenu.Name = menu.Name;
-                newMenu.GroupNo = "0";
-                newMenu.For = menu.For;
-                newMenu.Url = "";
-                newMenus.Add(newMenu);
-            }
+                Admin2Menus menus = new Admin2Menus();
+                menus.RetrieveAll();
 
-            foreach (AdminMenu menu in menus)
-            {
-                //是否可以使用？
-                if (menu.IsCanUse(WebUser.No) == false)
-                    continue;
+                // 定义容器.
+                Admin2Menus newMenus = new Admin2Menus();
 
-                newMenus.Add(menu);
+                foreach (Admin2MenuGroup menu in groups)
+                {
+                    
+                    //是否可以使用？
+                    if (menu.IsCanUse(WebUser.No) == false)
+                        continue;
+                    Admin2Menu newMenu = new Admin2Menu();
+                    newMenu.No = menu.No;
+                    newMenu.Name = menu.Name;
+                    newMenu.GroupNo = "0";
+                    newMenu.For = menu.For;
+                    newMenu.Url = "";
+                    newMenus.Add(newMenu);
+                }
+
+                foreach (Admin2Menu menu in menus)
+                {
+                   newMenus.Add(menu);
+                }
+                //添加默认，无权限
+                if (newMenus.Count == 0)
+                {
+                    Admin2Menu menu = new Admin2Menu();
+                    menu.No = "1";
+                    menu.GroupNo = "0";
+                    menu.Name = "无权限";
+                    menu.Url = "";
+                    newMenus.Add(menu);
+                }
+                DataTable dt = newMenus.ToDataTable();
+                treeJson = BP.Tools.Json.ToJson(newMenus.ToDataTable());
             }
-            //添加默认，无权限
-            if (newMenus.Count == 0)
-            {
-                AdminMenu menu = new AdminMenu();
-                menu.No = "1";
-                menu.GroupNo = "0";
-                menu.Name = "无权限";
-                menu.Url = "";
-                newMenus.Add(menu);
+            else { 
+                //查询全部.
+                AdminMenuGroups groups = new AdminMenuGroups();
+                groups.RetrieveAll();
+
+                AdminMenus menus = new AdminMenus();
+                menus.RetrieveAll();
+
+                // 定义容器.
+                AdminMenus newMenus = new AdminMenus();
+
+                foreach (AdminMenuGroup menu in groups)
+                {
+                    //是否可以使用？
+                    if (menu.IsCanUse(WebUser.No) == false)
+                        continue;
+
+                    AdminMenu newMenu = new AdminMenu();
+                    newMenu.No = menu.No;
+                    newMenu.Name = menu.Name;
+                    newMenu.GroupNo = "0";
+                    newMenu.For = menu.For;
+                    newMenu.Url = "";
+                    newMenus.Add(newMenu);
+                }
+
+                foreach (AdminMenu menu in menus)
+                {
+                    //是否可以使用？
+                    if (menu.IsCanUse(WebUser.No) == false)
+                        continue;
+
+                    newMenus.Add(menu);
+                }
+                //添加默认，无权限
+                if (newMenus.Count == 0)
+                {
+                    AdminMenu menu = new AdminMenu();
+                    menu.No = "1";
+                    menu.GroupNo = "0";
+                    menu.Name = "无权限";
+                    menu.Url = "";
+                    newMenus.Add(menu);
+                }
+                DataTable dt = newMenus.ToDataTable();
+                treeJson = BP.Tools.Json.ToJson(newMenus.ToDataTable());
             }
-            DataTable dt = newMenus.ToDataTable();
-            return BP.Tools.Json.ToJson(newMenus.ToDataTable());
+            return treeJson;
         }
 
         /// <summary>

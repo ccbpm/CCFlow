@@ -288,7 +288,7 @@
 
                         function Enum(doType) {
                             var webUser = new WebUser();
-                            if (webUser.CCBPMRunModel != 0) {
+                            if (webUser.CCBPMRunModel == 2) {
                                 window.location.href = '../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
                             } else {
                                 window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
@@ -298,7 +298,7 @@
                         function Table(doType) {
                             var webUser = new WebUser();
                             // SaaS模式下进入SaaS下页面
-                            if (webUser.CCBPMRunModel != 0) {
+                            if (webUser.CCBPMRunModel == 2) {
                                 window.location.href = '../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
                             } else {
                                 window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
@@ -309,7 +309,7 @@
                             ///WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>
                             var webUser = new WebUser();
                             // SaaS模式下进入SaaS下页面
-                            if (webUser.CCBPMRunModel != 0) {
+                            if (webUser.CCBPMRunModel == 2) {
                                 window.location.href = '../../../Admin/CCFormDesigner/SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
                             } else {
                                  window.location.href = './SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;

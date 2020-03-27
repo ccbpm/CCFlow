@@ -11,6 +11,7 @@ using BP.DA;
 using BP.En;
 using BP.WF.Template;
 using BP.Frm;
+using System.Text;
 
 namespace BP.WF.HttpHandler
 {
@@ -52,6 +53,7 @@ namespace BP.WF.HttpHandler
             string htmlCode = this.GetRequestVal("HtmlCode");
             if (DataType.IsNullOrEmpty(htmlCode) == false)
             {
+                htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
                 //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
                 string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
                 if (Directory.Exists(filePath) == false)

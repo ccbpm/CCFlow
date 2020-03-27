@@ -108,6 +108,7 @@
                     return;
                 }
             }
+            debugger;
             handler.AddPara("TB_No", userNo);
             handler.AddPara("TB_PW", pass);
 
@@ -130,6 +131,11 @@
             if (data.indexOf('url@') == 0) {
                 var data = data.replace('url@', '');
                 window.location.href = data.replace("Default.htm", systemp + ".htm");
+                return;
+            }
+            //跳转到选择组织的页面
+            if (data.length >1) {
+                WinOpen("SelectOneOrg.html", "self");
                 return;
             }
             alert(data);

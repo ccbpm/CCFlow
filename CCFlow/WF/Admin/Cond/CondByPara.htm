@@ -139,7 +139,7 @@
             window.location.href = url;
         }
 
-/**/</script>
+        /**/</script>
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
@@ -173,7 +173,7 @@
                 </td>
             </tr>
         </table>
-       
+
         <div style="text-align: left">
             <h4>
                 &nbsp; &nbsp; &nbsp; &nbsp;帮助
@@ -189,6 +189,36 @@
                 <li>Name LIKE %li%</li>
                 <li>如果要设置为恒等：1 = 1 设置为恒等，条件始终成立。</li>
             </ul>
+            <fieldset>
+                <legend>发送Demo</legend>
+
+                <ul>
+                    <li> BP.WF.Dev2Interface.Port_Login("zhangsan"); //登录. </li>
+
+                    <li>Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork("001");//创建WorkID.
+                    </li>
+                    <li>
+                        //组织参数, 对方的方向条件是按照参数来设定的.
+                    </li>
+                    <li>
+                        Hashtable ht = new Hashtable();
+                    </li>
+                    <li>
+
+                        ht.Add("QingJiaTianshu", 10);
+                    </li>
+
+                    <li>
+                        //执行发送.
+                    </li>
+
+                    <li>
+                        BP.WF.Dev2Interface.Node_SendWork("001", workid, ht);
+                    </li>
+                </ul>
+
+
+            </fieldset>
         </div>
     </form>
     <center>

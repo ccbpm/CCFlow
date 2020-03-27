@@ -341,7 +341,6 @@ function InitPage() {
         else
             AddUploafFileHtm("uploaddiv");
     }
-
 }
 
 

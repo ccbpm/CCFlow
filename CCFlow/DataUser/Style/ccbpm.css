@@ -45,20 +45,7 @@ input[type="button"], input[type="submit"], input[type="file"] {
 }
 
 
-/*文本框只读风格.*/
- input[type=text]:disabled
-{
-    /**border: 1px solid #DDD;
-    background-color: #F5F5F5;
-    color: #009999;*/
-    width:100%;
-    padding-left:10px;
-     border: none; 
-     background: none; 
-     text-align: left; 
-     color: #666; 
-     cursor: no-drop;
-}
+
 /*文本框只读风格.*/
 textarea[disabled], input[type=text]:disabled
 {
@@ -81,25 +68,44 @@ input[type=checkbox]:disabled
 }
 
 /*文本框只读风格.*/
-select[disabled], input[type=text]:disabled
-{
-   /**border: 1px solid #DDD;
+select[disabled], input[type=text]:disabled, input[type=password]:disabled {
+    /**border: 1px solid #DDD;
     background-color: #F5F5F5;
     color: #009999;*/
-    width:100%;
-    padding-left:10px;
-     border: none; 
-     background: none; 
-     text-align: left; 
-     color: #666; 
-     cursor: no-drop;
-     appearance:none;   
-      -moz-appearance:none;   
-      -webkit-appearance:none;   
+    width: 100%;
+    padding-left: 10px;
+    border: none;
+    background: none;
+    text-align: left !important;
+    color: #666;
+    cursor: no-drop;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
+input[type="password"]::-webkit-input-placeholder {
+    letter-spacing: 0;
+    font-size: 14px;
+}
+
+input[type="password"]:-moz-placeholder {
+    letter-spacing: 0;
+    font-size: 14px;
+}
+
+input[type="password"]::-moz-placeholder {
+    letter-spacing: 0;
+    font-size: 14px;
+}
+
+input[type="password"]:-ms-input-placeholder {
+    letter-spacing: 0;
+    font-size: 14px;
+}
+
+
 /*  table 类型风格 */
-table
-{
+table {
     border: 1px outset #C0C0C0;
     padding: inherit;
     margin: 0;
@@ -239,7 +245,20 @@ caption
     width: 100%;
     font-size: 12px;
 }
-
+.image-local {
+    width: 116px;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background-color: #0073eb;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    height: 28px;
+    box-sizing: border-box;
+    outline: none;
+}
 
 /** 其它  */
 .ToolBar

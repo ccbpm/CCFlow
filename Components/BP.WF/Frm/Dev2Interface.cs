@@ -90,6 +90,7 @@ namespace BP.Frm
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.SetValByKey("Starter", gb.Starter);
             rpt.SetValByKey("StarterName", gb.StarterName);
+            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
             rpt.SetValByKey("RDT", gb.RDT);
             rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", gb.BillNo);
@@ -118,6 +119,7 @@ namespace BP.Frm
             rpt.SetValByKey("BillState", 0);
             rpt.SetValByKey("Starter", WebUser.No);
             rpt.SetValByKey("StarterName", WebUser.Name);
+            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
             rpt.SetValByKey("RDT", DataType.CurrentData);
 
             rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;

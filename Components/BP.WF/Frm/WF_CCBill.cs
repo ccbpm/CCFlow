@@ -758,8 +758,8 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            qo.addAnd();
-            qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+            //qo.addAnd();
+            //qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
 
 
             //获得行数.

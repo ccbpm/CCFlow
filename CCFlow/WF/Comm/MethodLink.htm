@@ -33,7 +33,7 @@
              
              <tr v-show="index ==0 ||(index+1)%4 == 0" v-for="(m,index) in methodLinks">
                  <template v-for="(method,i) in methodLinks" v-if="i>=index&& i<index+3">
-                     <td><a href="#" @click="ShowIt(method.Name)"><span v-html="method.Icon">{{method.Icon}}</span>{{method.Title}}</a><br /><font size=2 color=Green>{{method.Note}}</font><br /></td>
+                     <td><font size=2 color=black>{{method.GroupName}}：</font><a href="#" @click="ShowIt(method.Name)"><span v-html="method.Icon">{{method.Icon}}</span>{{method.Title}}</a><br /><font size=2 color=Green>注：{{method.Note}}</font><br /></td>
                  </template>
              </tr>
             

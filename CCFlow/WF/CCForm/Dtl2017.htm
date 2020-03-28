@@ -1630,6 +1630,7 @@
                 rowData.FK_Node = GetQueryString("FK_Node");
                 rowData.FK_MapData = GetQueryString("FK_MapData");
                 rowData.FID = GetQueryString("FID");
+                rowData.RowIndex = index;//pop用到，传到后台
 
                 var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
 
@@ -1868,7 +1869,7 @@
             else
                 OID =$(tr).data().data.OID;
             if (OID == 0)//数据还未保存
-                OID = WorkId+"_"+"0";
+                OID = WorkId+"_"+rowIndex;
             for (var i = 0; i < mapExtArr.length; i++) {
                 var mapExt = mapExtArr[i];
                 //一起转成entity.

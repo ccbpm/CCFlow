@@ -90,7 +90,6 @@
                     continue;
                 }
 
-
                 html += "<td nowrap style='width: 33%'>";
                 html += "<input id='" + item.FName + "' name='field' type='radio' value='" + item.FName + "'  />";
                 html += "<input id='F" + item.FName + "' name='field' type='hidden' value='" + item.FDesc + "'  />";
@@ -128,9 +127,8 @@
                 alert(data);
                 return;
             }
-            alert(data);
-            window.location.href = "FieldTypeList.htm?DoType=AddF&FK_MapData=" + GetQueryString("FK_MapData");
-
+            //alert(data);
+            window.location.href = "../DevelopDesigner/DialogCtr/FrmTextBox.htm?DoType=AddF&FK_MapData=" + GetQueryString("FK_MapData")+"&fname="+keyOfEn+"&name="+name+"&DataType="+dataType;
 
         }
 

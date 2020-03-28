@@ -56,7 +56,7 @@
             nodeFrmID = node.NodeFrmID;
 
             //表单库的表单.
-           /* if (node.FormType == FormSlnType.RefOneFrmTree) {
+            if (node.FormType == FormSlnType.RefOneFrmTree) {
                 var frmNode = new Entity("BP.WF.Template.FrmNode");
                 frmNode.MyPK = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
                 var i = frmNode.RetrieveFromDBSources();
@@ -65,7 +65,7 @@
                     var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a>  - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
                     $("#Div_RefOneFrmTree").html(html);
                 }
-            }*/
+            }
 
             
             var frm = new Entity("BP.Sys.MapData", nodeFrmID);
@@ -73,8 +73,6 @@
             //设置已经选定的表单库表单
             $("#MyFrm").html(node.NodeFrmID + ":"+frm.Name);
             
-             
-
         });
 
         function EditFrmNode(mypk) {
@@ -101,8 +99,17 @@
         }
 
         function Save() {
-
-            var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
+            //判断是否已经绑定了表单
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entities("BP.WF.Nodes");
+            node.Retrieve("NodeID",nodeID);
+            if (node[0].NodeFrmID == "") {
+                alert('请选择一个表单');
+                return;
+            } else {
+                 alert("保存成功.");
+            }
+           /* var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
 
             if (selectFrm == undefined || selectFrm == null) {
                 alert('请选择一个表单');
@@ -133,7 +140,7 @@
             var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a> - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
             $("#Div_RefOneFrmTree").html(html);
             alert("独立表单库表单 - 保存成功.");
-            return;
+            return;*/
 
             // //更新表单类型.
             // var frmID = "ND" + nodeID;
@@ -142,7 +149,7 @@
             // mapData.FK_FormTree = $("#DDL_FrmTree").val();
             // mapData.Update();
 
-            alert("保存成功.");
+           
         }
 
         ///设置该流程的所有节点都是用该方案。

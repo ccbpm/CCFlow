@@ -80,7 +80,8 @@ namespace BP.WF
                 sb.Append("\t\n</DIV>");
             }
 
-            FrmLines lines = mapData.FrmLines;
+            FrmLines lines = new FrmLines();
+            lines.Retrieve(FrmLineAttr.FK_MapData, mapData.No, FrmLineAttr.Y1);
             foreach (FrmLine line in lines)
             {
                 if (line.X1 == line.X2)
@@ -586,8 +587,6 @@ namespace BP.WF
                 {
                     x = fwc.FWC_X + wtX;
                     sb.Append("<DIV id='DIVWC" + fwc.No + "' style='position:absolute; left:" + x + "px; top:" + fwc.FWC_Y + "px; width:" + fwc.FWC_W + "px; height:" + fwc.FWC_H + "px;text-align: left;' >");
-                    sb.Append("<span>");
-
                     sb.Append("<table   style='border: 1px outset #C0C0C0;padding: inherit; margin: 0;border-collapse:collapse;width:100%;' >");
 
                     #region 生成审核信息.
@@ -626,9 +625,6 @@ namespace BP.WF
 
                             sb.Append("<tr>");
                             sb.Append("<td valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + dr["NDFromT"] + "</td>");
-
-                            sb.Append("<br><br>");
-
                             string msg = dr["Msg"].ToString();
 
                             msg += "<br>";
@@ -641,8 +637,6 @@ namespace BP.WF
                     }
                     sb.Append("</table>");
                     #endregion 生成审核信息.
-
-                    sb.Append("</span>");
                     sb.Append("</DIV>");
                 }
             }

@@ -19,6 +19,7 @@
     <script type="text/javascript">
         var fk_mapData = GetQueryString("FK_MapData");
         var dataType = GetQueryString("DataType");
+        dataType = GetFieldType(dataType);
         $(function () {
 
             var Ele_TBName = document.getElementById("TB_Name");
@@ -79,6 +80,11 @@
                 var name = document.getElementById("TB_Name").value;
                 ParsePinYin(name, false, "TB_KeyOfEn");
             });
+       
+            var fname = GetQueryString("fname");
+            var name = GetQueryString("name");
+            $("#TB_KeyOfEn").val(fname);
+            $("#TB_Name").val(name);
         });
 
         var oNode = null, thePlugins = 'text';
@@ -103,7 +109,7 @@
                 return false;
             }
 
-             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", fk_mapData);
             handler.AddPara("KeyOfEn",KeyOfEn);
             handler.AddPara("name",name);
@@ -146,7 +152,7 @@
         //在这里把返回值获取到，放入到对应的文本框里.
         function SelectOne() {
 
-            var url = "../../FoolFormDesigner/FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            var url = "../../FoolFormDesigner/FieldTypeListChoseOneFieldExt.htm?FK_MapData=" + GetQueryString("FK_MapData");
             window.location.href = url;
         }
 

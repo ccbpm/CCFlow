@@ -49,7 +49,7 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySelected = 4,
         //所有人员都可以发起
         DeliveryWay.BySelected_1 = 41,
-        DeliveryWay.BySelectedOrgs = 42,
+        DeliveryWay.BySelectedOrgs = 22,
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
         // 与上一节点的人员相同

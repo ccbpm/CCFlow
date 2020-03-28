@@ -1626,6 +1626,9 @@ namespace BP.WF.HttpHandler
                 string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
+                if (DataType.IsNullOrEmpty(dtTo) == true)
+                    dtTo = DataType.CurrentData;
+
                 //按日期查询
                 if (map.DTSearchWay == DTSearchWay.ByDate)
                 {
@@ -1633,12 +1636,22 @@ namespace BP.WF.HttpHandler
                         qo.addAnd();
                     else
                         isFirst = false;
-                    qo.addLeftBracket();
-                    dtTo += " 23:59:59";
-                    qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
-                    qo.addAnd();
-                    qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
-                    qo.addRightBracket();
+                    if (DataType.IsNullOrEmpty(dtFrom) == true)
+                    {
+                        qo.addLeftBracket();
+                        qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                        qo.addRightBracket();
+                    }
+                    else
+                    {
+                        qo.addLeftBracket();
+                        dtTo += " 23:59:59";
+                        qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
+                        qo.addAnd();
+                        qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                        qo.addRightBracket();
+                    }
+                   
                 }
 
                 if (map.DTSearchWay == DTSearchWay.ByDateTime)
@@ -1657,12 +1670,21 @@ namespace BP.WF.HttpHandler
                         qo.addAnd();
                     else
                         isFirst = false;
-
-                    qo.addLeftBracket();
-                    qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
-                    qo.addAnd();
-                    qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
-                    qo.addRightBracket();
+                    if (DataType.IsNullOrEmpty(dtFrom) == true)
+                    {
+                        qo.addLeftBracket();
+                        qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                        qo.addRightBracket();
+                    }
+                    else
+                    {
+                        qo.addLeftBracket();
+                        qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
+                        qo.addAnd();
+                        qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                        qo.addRightBracket();
+                    }
+                    
                 }
             }
 
@@ -3782,23 +3804,43 @@ namespace BP.WF.HttpHandler
 
             ht.Add("EnDesc", en.EnDesc); //描述?
             ht.Add("EnName", en.ToString()); //类名?
+       
+            MapData mapData = new MapData();
+            mapData.No = this.EnsName;
+            #region 查询条件
+            //单据，实体单据
+            if (mapData.RetrieveFromDBSources() != 0 && DataType.IsNullOrEmpty(mapData.FK_FormTree) == false)
+            {
+                //查询条件.
+                ht.Add("IsShowSearchKey", mapData.GetParaInt("IsSearchKey"));
+                ht.Add("SearchFields", mapData.GetParaString("RptStringSearchKeys"));
 
+                //按日期查询.
+                ht.Add("DTSearchWay", mapData.GetParaInt("DTSearchWay"));
+                ht.Add("DTSearchLable", mapData.GetParaString("DTSearchLabel"));
+                
+            }
+            else
+            {
+                if (map.IsShowSearchKey == true)
+                    ht.Add("IsShowSearchKey", 1);
+                else
+                    ht.Add("IsShowSearchKey", 0);
+
+                ht.Add("SearchFields", map.SearchFields);
+                ht.Add("SearchFieldsOfNum", map.SearchFieldsOfNum);
+
+                //按日期查询.
+                ht.Add("DTSearchWay", (int)map.DTSearchWay);
+                ht.Add("DTSearchLable", map.DTSearchLable);
+                ht.Add("DTSearchKey", map.DTSearchKey);
+            }
+            #endregion  查询条件
 
             //把map信息放入
             ht.Add("PhysicsTable", map.PhysicsTable);
             ht.Add("CodeStruct", map.CodeStruct);
             ht.Add("CodeLength", map.CodeLength);
-
-            //查询条件.
-            if (map.IsShowSearchKey == true)
-                ht.Add("IsShowSearchKey", 1);
-            else
-                ht.Add("IsShowSearchKey", 0);
-
-            //按日期查询.
-            ht.Add("DTSearchWay", (int)map.DTSearchWay);
-            ht.Add("DTSearchLable", map.DTSearchLable);
-            ht.Add("DTSearchKey", map.DTSearchKey);
 
             return BP.Tools.Json.ToJson(ht);
         }
@@ -4292,7 +4334,21 @@ namespace BP.WF.HttpHandler
             //关键字查询
             string keyWord = searchUr.SearchKey;
             AtPara ap = new AtPara(searchUr.Vals);
-            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+            MapData mapData = new MapData();
+            mapData.No = this.EnsName;
+            bool IsShowSearchKey = en.EnMap.IsShowSearchKey;
+            DTSearchWay dtSearchWay = map.DTSearchWay;
+            string DTSearchKey = map.DTSearchKey;
+
+            //单据，实体单据
+            if (mapData.RetrieveFromDBSources() != 0 && DataType.IsNullOrEmpty(mapData.FK_FormTree) == false)
+            {
+                IsShowSearchKey = mapData.GetParaBoolen("IsSearchKey");
+                dtSearchWay = (DTSearchWay)mapData.GetParaInt("DTSearchWay");
+                DTSearchKey = mapData.GetParaString("DTSearchKey");
+            }
+
+            if (IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
             {
                 string whereLike = "";
                 bool isAddAnd = false;
@@ -4334,22 +4390,32 @@ namespace BP.WF.HttpHandler
 
             //其余查询条件
             //时间
-            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty(searchUr.DTFrom) == false)
+            if (dtSearchWay != DTSearchWay.None )
             {
                 string dtFrom = searchUr.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
                 string dtTo = searchUr.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
-                //按日期查询
-                if (map.DTSearchWay == DTSearchWay.ByDate)
-                {
+                if (DataType.IsNullOrEmpty(dtTo) == true)
+                    dtTo = DataType.CurrentData;
 
+                //按日期查询
+                if (dtSearchWay == DTSearchWay.ByDate)
+                {
                     dtTo += " 23:59:59";
-                    where += " and (" + map.DTSearchKey + " >= '" + dtFrom + "'";
-                    where += " and " + map.DTSearchKey + " <= '" + dtTo + "'";
-                    where += ")";
+                    if (DataType.IsNullOrEmpty(dtFrom) == true)
+                    {
+                        where += " and (" + DTSearchKey + " <= '" + dtTo + "')";
+                    }
+                    else
+                    {
+                        where += " and (" + DTSearchKey + " >= '" + dtFrom + "'";
+                        where += " and " + DTSearchKey + " <= '" + dtTo + "'";
+                        where += ")";
+                    }
+                    
                 }
 
-                if (map.DTSearchWay == DTSearchWay.ByDateTime)
+                if (dtSearchWay == DTSearchWay.ByDateTime)
                 {
                     //取前一天的24：00
                     if (dtFrom.Trim().Length == 10) //2017-09-30
@@ -4361,10 +4427,18 @@ namespace BP.WF.HttpHandler
 
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
+                    if (DataType.IsNullOrEmpty(dtFrom) == true)
+                    {
+                        where += " and (" + DTSearchKey + " <= '" + dtTo + "')";
+                    }
+                    else
+                    {
+                        where += " and (" + DTSearchKey + " >= '" + dtFrom + "'";
+                        where += " and " + DTSearchKey + " <= '" + dtTo + "'";
+                        where += ")";
+                    }
 
-                    where += " and (" + map.DTSearchKey + " >= '" + dtFrom + "'";
-                    where += " and " + map.DTSearchKey + " <= '" + dtTo + "'";
-                    where += ")";
+                    
                 }
             }
             /// #region 获得查询数据.

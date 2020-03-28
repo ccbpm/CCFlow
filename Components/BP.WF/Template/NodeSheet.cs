@@ -100,6 +100,8 @@ namespace BP.WF.Template
                    "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name,
                    EmpAttr.No, defDeptVal);
 
+            
+                 
 
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 

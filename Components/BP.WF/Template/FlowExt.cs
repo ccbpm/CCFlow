@@ -973,6 +973,10 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
+                //绑定组织.
+                map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2.Orgs(), FlowOrgAttr.FlowNo,
+                  FlowOrgAttr.OrgNo, FlowAttr.Name, FlowAttr.No, "可以发起的组织");
+
                 #endregion 实验中的功能
 
                 //rm = new RefMethod();

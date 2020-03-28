@@ -639,16 +639,16 @@ namespace BP.WF.HttpHandler
             float maxEnd = md.MaxEnd;
 
             Int32 iGroupID = 0;
-           
+
             Paras ps = new Paras();
             ps.SQL = "SELECT OID FROM Sys_GroupField WHERE FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID and (CtrlID is null or ctrlid ='') ORDER BY OID DESC ";
             ps.Add("FrmID", this.FK_MapData);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (dt != null && dt.Rows.Count > 0)
             {
-                iGroupID =Int32.Parse(dt.Rows[0][0].ToString());
+                iGroupID = Int32.Parse(dt.Rows[0][0].ToString());
             }
-           
+
 
             foreach (string name in HttpContextHelper.RequestParamKeys)
             {
@@ -672,7 +672,30 @@ namespace BP.WF.HttpHandler
                     ma.Name = ma.KeyOfEn;
 
                 ma.MyDataType = this.GetValIntFromFrmByKey("DDL_DBType_" + columnName);
-                ma.MaxLen = this.GetValIntFromFrmByKey("TB_Len_" + columnName);
+
+                //@hongyan 翻译过去.
+                string len = this.GetValFromFrmByKey("TB_Len_" + columnName);
+                if (len.Equals("null") || DataType.IsNullOrEmpty(len) == true)
+                    len = "20";
+
+                try
+                {
+                    int mylen = int.Parse(len);
+                    if (mylen > 4000)
+                    {
+                        mylen = 0;
+                        //ma.isu = true;
+                    }
+                        
+
+                    ma.MaxLen = mylen;
+                }
+                catch (Exception)
+                {
+                    ma.MaxLen = 0;
+                    //throw new Exception("err@转化为最大长度的时候错误:" + ma.KeyOfEn + " len:" + len);
+                }
+
                 ma.UIBindKey = this.GetValFromFrmByKey("TB_BindKey_" + columnName);
                 ma.LGType = BP.En.FieldTypeS.Normal;
                 ma.GroupID = iGroupID;
@@ -982,7 +1005,7 @@ namespace BP.WF.HttpHandler
                 return "err@该字段[" + keyOfEn + "]已经加入里面了.";
 
             attr.Name = name;
-            attr.MyDataType = dataType ;
+            attr.MyDataType = dataType;
 
             if (BP.DA.DataType.AppBoolean == dataType)
                 attr.UIContralType = UIContralType.CheckBok;
@@ -1060,7 +1083,7 @@ namespace BP.WF.HttpHandler
             attr.MyPK = this.FK_MapData + "_" + newNo;
             attr.GroupID = iGroupID;
             attr.MyDataType = fType;
-            
+
             if (DataType.IsNullOrEmpty(this.GetRequestVal("FK_Flow")) == false)
                 attr.SetPara("FK_Flow", this.GetRequestVal("FK_Flow"));
 
@@ -1070,7 +1093,7 @@ namespace BP.WF.HttpHandler
 
             if (attr.MyDataType == DataType.AppString)
             {
-                
+
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 attr.UIVisible = true;
@@ -2152,7 +2175,7 @@ namespace BP.WF.HttpHandler
             #region 把主从表数据放入里面.
             //.工作数据放里面去, 放进去前执行一次装载前填充事件.
             GEEntity wk = new GEEntity(FrmID);
-            
+
             DataTable mainTable = wk.ToDataTableField("MainTable");
             mainTable.TableName = "MainTable";
             myds.Tables.Add(mainTable);
@@ -2161,7 +2184,7 @@ namespace BP.WF.HttpHandler
 
             #region 增加附件信息.
             BP.Sys.FrmAttachments athDescs = new FrmAttachments();
-            
+
             athDescs.Retrieve(FrmAttachmentAttr.FK_MapData, this.FrmID);
             if (athDescs.Count != 0)
             {

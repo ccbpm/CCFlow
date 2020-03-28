@@ -982,10 +982,8 @@ namespace BP.WF.HttpHandler
         public string Runing_Init()
         {
             DataTable dt = null;
-      
             bool isContainFuture = this.GetRequestValBoolen("IsContainFuture");
-            dt = BP.WF.Dev2Interface.DB_GenerRuning(isContainFuture);
-
+            dt = BP.WF.Dev2Interface.DB_GenerRuning(null,isContainFuture,this.Domain); //获得指定域的在途.
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

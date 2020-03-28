@@ -1277,12 +1277,12 @@ namespace BP.WF
         /// <param name="showWhat">WFState状态，=5退回的，=2是正在运行的.</param>
         /// <param name="domain">域名</param>
         /// <returns>返回待办WF_EmpWorks的视图待办.</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, 
-            int fk_node = 0, string showWhat = null, string domain=null)
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo,
+            int fk_node = 0, string showWhat = null, string domain = null)
         {
             string doMainSQL = "";
             if (DataType.IsNullOrEmpty(domain) == false)
-                doMainSQL = " AND Domain='"+domain+"'";
+                doMainSQL = " AND Domain='" + domain + "'";
 
             if (DataType.IsNullOrEmpty(userNo) == true)
                 throw new Exception("err@登录信息丢失.");
@@ -1437,7 +1437,7 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 "+doMainSQL + " ORDER BY ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 " + doMainSQL + " ORDER BY ADT DESC ";
                         }
                         else
                         {
@@ -3014,17 +3014,23 @@ namespace BP.WF
         /// <param name="fk_flow">流程编号</param>
         /// <param name="isMyStarter">是否仅仅查询我发起的在途流程</param>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false, string domain = null, bool isContainFuture = false)
+        public static DataTable DB_GenerRuning(string userNo, string fk_flow,
+            bool isMyStarter = false, string domain = null, bool isContainFuture = false)
         {
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
+
+            string domainSQL = "";
+            if (domain == null)
+                domainSQL = " AND Domain='" + domain + "' ";
+
 
             //获取用户当前所在的节点
             String currNode = "";
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
-                    currNode = "(SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1)";
+                    currNode = "(SELECT FK_Node FROM (SELECT FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE RowNum=1)";
                     break;
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
@@ -3123,7 +3129,6 @@ namespace BP.WF
             //非授权模式，
             if (WebUser.IsAuthorize == false)
             {
-
                 if (DataType.IsNullOrEmpty(fk_flow))
                 {
                     if (isMyStarter == true)
@@ -3227,7 +3232,6 @@ namespace BP.WF
             }
             return dt;
         }
-
 
         /// <summary>
         /// 在途统计:用于流程查询
@@ -3400,9 +3404,12 @@ namespace BP.WF
         /// 获取未完成的流程(也称为在途流程:我参与的但是此流程未完成)
         /// </summary>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(bool isContainFuture = false)
+        public static DataTable DB_GenerRuning(string userNo = null, bool isContainFuture = false, string domain = null)
         {
-            DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null, false, null, isContainFuture);
+            if (userNo == null)
+                userNo = WebUser.No;
+
+            DataTable dt = DB_GenerRuning(userNo, null, false, null, isContainFuture);
 
             /*暂时屏蔽type的拼接，拼接后转json会报错 于庆海修改*/
             /*dt.Columns.Add("Type");
@@ -3589,7 +3596,7 @@ namespace BP.WF
             BP.Port.Emp myEmp = new BP.Port.Emp();
             int i = myEmp.Retrieve("SID", sid);
             if (i == 0)
-                throw new Exception("err@非法的SID，SID不正确.");
+                throw new Exception("err@非法的SID:"+sid);
 
             WebUser.SignInOfGener(myEmp);
 
@@ -3803,7 +3810,7 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="fid">FID</param>
         public static void Port_SendMsg(string userNo, string title, string msgDoc, string msgFlag, string msgType,
-            string flowNo, Int64 nodeID, Int64 workID, Int64 fid, string pushModel=null)
+            string flowNo, Int64 nodeID, Int64 workID, Int64 fid, string pushModel = null)
         {
             string url = "";
             if (workID != 0)
@@ -3820,7 +3827,7 @@ namespace BP.WF
             }
 
             string para = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@FK_Node=" + nodeID + "@Sender=" + BP.Web.WebUser.No;
-            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para, pushModel,url);
+            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para, pushModel, url);
         }
 
 
@@ -5617,7 +5624,7 @@ namespace BP.WF
             }
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.PressAfter);
-           
+
             foreach (GenerWorkerList wl in wls)
             {
                 if (wl.IsEnable == false)
@@ -5629,11 +5636,11 @@ namespace BP.WF
                 toEmpName += wl.FK_EmpText + ",";
 
                 // 发消息.
-                foreach(PushMsg push in pms)
+                foreach (PushMsg push in pms)
                 {
-                    BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, mailTitle, msg, null, BP.WF.SMSMsgType.DoPress, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID,push.SMSPushModel);
+                    BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, mailTitle, msg, null, BP.WF.SMSMsgType.DoPress, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, push.SMSPushModel);
                 }
-               
+
 
                 wl.PressTimes = wl.PressTimes + 1;
                 wl.Update();
@@ -7535,7 +7542,7 @@ namespace BP.WF
             }
 
 
-           SendReturnObjs objs;
+            SendReturnObjs objs;
             //执行流程发送.
             WorkNode wn = new WorkNode(sw, nd);
             wn.Execer = execUserNo;

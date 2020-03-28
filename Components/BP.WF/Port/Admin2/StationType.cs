@@ -11,10 +11,10 @@ namespace BP.WF.Port.Admin2
     public class StationTypeAttr : EntityNoNameAttr
     {
     }
-	/// <summary>
+    /// <summary>
     ///  岗位类型
-	/// </summary>
-	public class StationType :EntityNoName
+    /// </summary>
+    public class StationType : EntityNoName
     {
         /// <summary>
         /// 组织编号
@@ -30,12 +30,12 @@ namespace BP.WF.Port.Admin2
                 this.SetValByKey(StationAttr.OrgNo, value);
             }
         }
-         
-		#region 构造方法
-		/// <summary>
-		/// 岗位类型
-		/// </summary>
-		public StationType()
+
+        #region 构造方法
+        /// <summary>
+        /// 岗位类型
+        /// </summary>
+        public StationType()
         {
         }
         /// <summary>
@@ -43,11 +43,11 @@ namespace BP.WF.Port.Admin2
         /// </summary>
         /// <param name="_No"></param>
         public StationType(string _No) : base(_No) { }
-		#endregion 
+        #endregion
 
-		/// <summary>
-		/// 岗位类型Map
-		/// </summary>
+        /// <summary>
+        /// 岗位类型Map
+        /// </summary>
         public override Map EnMap
         {
             get
@@ -59,7 +59,7 @@ namespace BP.WF.Port.Admin2
                 map.Java_SetCodeStruct("2");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
 
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 50, 2);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 0, 100, 20);
@@ -83,25 +83,25 @@ namespace BP.WF.Port.Admin2
             return base.beforeInsert();
         }
     }
-	/// <summary>
+    /// <summary>
     /// 岗位类型
-	/// </summary>
+    /// </summary>
     public class StationTypes : EntitiesNoName
-	{
-		/// <summary>
-		/// 岗位类型s
-		/// </summary>
-        public  StationTypes() { }
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
+    {
+        /// <summary>
+        /// 岗位类型s
+        /// </summary>
+        public StationTypes() { }
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
                 return new StationType();
-			}
-		}
+            }
+        }
         /// <summary>
         /// 查询全部
         /// </summary>
@@ -136,5 +136,5 @@ namespace BP.WF.Port.Admin2
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
 
-	}
+    }
 }

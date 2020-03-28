@@ -277,6 +277,7 @@
     <Compile Include="NetPlatformImpl\WF_DynamicWebService.cs" />
     <Compile Include="NetPlatformImpl\WF_File.cs" />
     <Compile Include="OverrideFile.cs" />
+    <Compile Include="Template\FlowOrg.cs" />
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\Station.cs" />
     <Compile Include="Port\StationType.cs" />

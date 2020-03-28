@@ -4,10 +4,10 @@ using BP.DA;
 using BP.En;
 
 namespace BP.WF.Port.Admin2
-{	 
-	/// <summary>
-	/// 岗位属性
-	/// </summary>
+{
+    /// <summary>
+    /// 岗位属性
+    /// </summary>
     public class StationAttr : EntityNoNameAttr
     {
         /// <summary>
@@ -60,8 +60,6 @@ namespace BP.WF.Port.Admin2
         }
         #endregion 属性.
 
-
-
         #region 实现基本的方方法
         /// <summary>
         /// UI界面上的访问控制
@@ -101,18 +99,18 @@ namespace BP.WF.Port.Admin2
 
                 Map map = new Map("Port_Station", "岗位");
                 map.Java_SetEnType(EnType.Admin);
-             
+
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetCodeStruct("4"); // 最大级别是7.
 
-                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
-                map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
+                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 1, 50, 36);
+                map.AddTBString(StationAttr.Name, null, "名称", true, false, 1, 50, 250);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
                 map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, true, 0, 60, 100);
                 map.AddTBInt(StationAttr.Idx, 0, "顺序", true, false);
 
                 //增加隐藏查询条件.
-                map.AddHidden(StationAttr.OrgNo,"=", BP.Web.WebUser.OrgNo);
+                map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
                 //查询条件.
                 map.AddSearchAttr(StationAttr.FK_StationType);
@@ -123,29 +121,29 @@ namespace BP.WF.Port.Admin2
         }
         #endregion
     }
-	 /// <summary>
-	 /// 岗位s
-	 /// </summary>
-	public class Stations : EntitiesNoName
-	{
-		/// <summary>
-		/// 岗位
-		/// </summary>
+    /// <summary>
+    /// 岗位s
+    /// </summary>
+    public class Stations : EntitiesNoName
+    {
+        /// <summary>
+        /// 岗位
+        /// </summary>
         public Stations() { }
-		/// <summary>
-		/// 得到它的 Entity
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new Station();
-			}
-		}
+        /// <summary>
+        /// 得到它的 Entity
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new Station();
+            }
+        }
 
         public override int RetrieveAll()
         {
-           return  this.Retrieve(StationAttr.OrgNo,  BP.Web.WebUser.OrgNo, StationAttr.Idx);
+            return this.Retrieve(StationAttr.OrgNo, BP.Web.WebUser.OrgNo, StationAttr.Idx);
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
@@ -172,5 +170,5 @@ namespace BP.WF.Port.Admin2
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
 
-	}
+    }
 }

@@ -8,12 +8,12 @@ using BP.WF.Port;
 namespace BP.WF.Template
 {
 	/// <summary>
-	/// 表单ID组织属性
+	/// 表单对应组织属性
 	/// </summary>
 	public class FrmOrgAttr
     {
 		/// <summary>
-		/// 表单ID
+		/// 表单
 		/// </summary>
 		public const string FrmID="FrmID";
 		/// <summary>
@@ -22,19 +22,19 @@ namespace BP.WF.Template
 		public const string OrgNo="OrgNo";
 	}
 	/// <summary>
-	/// 表单ID组织
+	/// 表单对应组织
 	/// </summary>
 	public class FrmOrg :EntityMM
 	{
 		#region 基本属性
 		/// <summary>
-		///表单ID
+		///表单
 		/// </summary>
-		public int  FrmID
+		public string FrmID
 		{
 			get
 			{
-				return this.GetValIntByKey(FrmOrgAttr.FrmID);
+				return this.GetValStringByKey(FrmOrgAttr.FrmID);
 			}
 			set
 			{
@@ -42,7 +42,7 @@ namespace BP.WF.Template
 			}
 		}
 		/// <summary>
-		/// 到组织
+		/// 组织
 		/// </summary>
 		public string OrgNo
 		{
@@ -66,7 +66,7 @@ namespace BP.WF.Template
 
 		#region 构造方法
 		/// <summary>
-		/// 表单ID组织
+		/// 表单对应组织
 		/// </summary>
 		public FrmOrg()
         {
@@ -81,10 +81,10 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_FrmOrg", "表单ID组织");
+                Map map = new Map("WF_FrmOrg", "表单对应组织");
                 map.IndexField = FrmOrgAttr.FrmID;
 
-                map.AddTBStringPK(FrmOrgAttr.FrmID,null,"表单ID",true,true,1,100,100);
+                map.AddTBStringPK(FrmOrgAttr.FrmID,null,"表单",true,true,1,100,100);
                 map.AddDDLEntitiesPK(FrmOrgAttr.OrgNo, null, "到组织", new BP.WF.Port.Admin2.Orgs(),
                     true);
 
@@ -95,16 +95,16 @@ namespace BP.WF.Template
 		#endregion
 	}
 	/// <summary>
-	/// 表单ID组织
+	/// 表单对应组织
 	/// </summary>
     public class FrmOrgs : EntitiesMM
     {
         /// <summary>
-        /// 表单ID组织
+        /// 表单对应组织
         /// </summary>
         public FrmOrgs() { }
         /// <summary>
-        /// 表单ID组织
+        /// 表单对应组织
         /// </summary>
         /// <param name="EmpNo">EmpNo </param>
         public FrmOrgs(string orgNo)

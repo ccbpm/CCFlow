@@ -150,8 +150,8 @@ namespace BP.WF.HttpHandler
             //判断是否可以测试该流程？ 
             BP.Port.Emp myEmp = new BP.Port.Emp();
             int i = myEmp.Retrieve("SID", sid);
-            if (i == 0)
-                throw new Exception("err@非法的SID，SID不正确.");
+            if (i == 0 && 1==2)
+                throw new Exception("err@非法的SID:"+sid);
 
             //组织url发起该流程.
             string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&SID=" + sid + "&UserNo=" + userNo;
@@ -227,9 +227,10 @@ namespace BP.WF.HttpHandler
 
             //fl.DoCheck();
 
-            #region 从设置里获取-测试人员.
             try
             {
+                #region 从设置里获取-测试人员.
+
                 //@sly 要有同步.
                 switch (nd.HisDeliveryWay)
                 {
@@ -266,23 +267,45 @@ namespace BP.WF.HttpHandler
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                            sql = "SELECT c.No, c.Name, B.Name as DeptName FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND A.FK_Emp=C.No ";
+                            sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND A.FK_Emp=C.No ";
                         else
-                            sql = "SELECT c.No, c.Name, B.Name as DeptName FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C.No ";
+                            sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C.No ";
 
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                        return BP.Tools.Json.ToJson(dt);
+                        //if (dt.Rows.Count > 300 && 1==2)
+                        //{
+                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
+                        //        sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
 
-                        if (dt.Rows.Count > 300 && 1==2)
+                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+                        //        sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
+
+                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
+                        //        sql = "SELECT  No as FK_Emp FROM Port_Emp   limit 0,300 ";
+                        //}
+                        break;
+                    case DeliveryWay.BySelectedOrgs: //按照设置的组织计算: 20202年3月开始约定此规则.
+
+                        if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                            throw new Exception("err@非集团版本，不能设置启用此模式.");
+                        
+                        sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='"+nd.FK_Flow+"'";
+
+                        if (dt.Rows.Count > 300 && 1 == 2)
                         {
                             if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
-                                sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
+                                sql = "SELECT Top 200 c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'";
 
                             if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
-                                sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
+                                sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "' AND ROWNUM <300 ";
 
                             if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
-                                sql = "SELECT  No as FK_Emp FROM Port_Emp   limit 0,300 ";
+                                sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'    limit 0,200   ";
                         }
+
+                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                        return BP.Tools.Json.ToJson(dt);
                         break;
                     case DeliveryWay.BySQL:
                         if (DataType.IsNullOrEmpty(nd.DeliveryParas))

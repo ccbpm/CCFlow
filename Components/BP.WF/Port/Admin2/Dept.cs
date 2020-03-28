@@ -154,7 +154,7 @@ namespace BP.WF.Port.Admin2
             org.AdminerName = emp.Name;
             org.Insert();
 
-
+            //如果不是视图.
             if (DBAccess.IsView("Port_StationType") == false)
             {
                 #region 高层岗位.
@@ -231,10 +231,7 @@ namespace BP.WF.Port.Admin2
                 sta.DirectInsert();
 
                 #endregion 基层岗.
-
             }
-
-
 
             // 返回他的检查信息，这个方法里，已经包含了自动创建独立组织的，表单树，流程树。
             // 自动他创建，岗位类型，岗位信息.

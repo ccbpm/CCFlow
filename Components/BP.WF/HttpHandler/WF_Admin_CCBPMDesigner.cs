@@ -636,20 +636,22 @@ namespace BP.WF.HttpHandler
         public string SelectOneOrg_Init()
         {
             Orgs orgs = new Orgs();
-            orgs.Retrieve("No", WebUser.No);
+            orgs.Retrieve("Adminer", WebUser.No);
             return orgs.ToJson();
-
         }
         /// <summary>
         ///选择一个组织
         /// </summary>
         /// <returns></returns>
-        public string Login_SelectOneOrg()
+        public string SelectOneOrg_Selected()
         {
             string orgno = this.GetRequestVal("OrgNo");
             WebUser.OrgNo = this.OrgNo;
-            return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No;
 
+            if (DBAccess.IsView("Port_Emp") == false)
+                DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='"+this.OrgNo+"',SID='"+WebUser.SID+"' WHERE No='"+WebUser.No+"'");
+
+            return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No+"&OrgNo="+WebUser.OrgNo;
             // return "登录成功.";
         }
         #endregion 登录窗口.

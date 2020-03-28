@@ -6478,6 +6478,16 @@ namespace BP.WF
             this.JumpToNode = jumpToNode;
             this.JumpToEmp = jumpToEmp;
 
+            #region @gaoxin 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
+            if (this.HisNode.IsSendBackNode==true)
+            {
+                this.JumpToEmp = this.HisGenerWorkFlow.Sender;
+                int nodeID = DBAccess.RunSQLReturnValInt("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Emp='" + this.HisGenerWorkFlow.Sender + "' ORDER BY RDT,FK_Node");
+                this.JumpToNode = new Node(nodeID);
+            }
+            #endregion 为广西计算中心增加自动返回的节点.
+
+
             string sql = null;
             DateTime dt = DateTime.Now;
             this.HisWork.Rec = this.Execer;

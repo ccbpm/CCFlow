@@ -81,7 +81,21 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowHandNum",0);
+                return this.GetParaInt("SubFlowHandNum", 0);
+            }
+        }
+        /// <summary>
+        /// @Gaoxin 是否是发送返回节点？
+        /// </summary>
+        public bool IsSendBackNode
+        {
+            get
+            {
+                return this.GetParaBoolen(NodeAttr.IsSendBackNode, false);
+            }
+            set
+            {
+                this.SetPara(NodeAttr.IsSendBackNode, value);
             }
         }
         /// <summary>
@@ -91,7 +105,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowAutoNum",0);
+                return this.GetParaInt("SubFlowAutoNum", 0);
             }
         }
         /// <summary>
@@ -101,7 +115,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowYanXuNum",0);
+                return this.GetParaInt("SubFlowYanXuNum", 0);
             }
         }
         #endregion
@@ -197,7 +211,7 @@ namespace BP.WF
                     //把所有的节点字段.
                     foreach (DataRow dr in dtNodeIDs.Rows)
                     {
-                        if(frmIDs.Contains("ND"+dr[0].ToString()) == true)
+                        if (frmIDs.Contains("ND" + dr[0].ToString()) == true)
                             continue;
                         frmIDs += "'ND" + dr[0].ToString() + "',";
                     }
@@ -227,7 +241,7 @@ namespace BP.WF
                 wk.NodeID = this.NodeID;
                 wk.SQLCash = null;
 
-                BP.DA.Cash.SQL_Cash.Remove( "ND"+this.NodeID);
+                BP.DA.Cash.SQL_Cash.Remove("ND" + this.NodeID);
                 return wk;
                 //this.SetRefObject("HisWork", obj);
 
@@ -292,37 +306,37 @@ namespace BP.WF
                 PushMsgs obj = this.GetRefObject("PushMsg") as PushMsgs;
                 if (obj == null)
                 {
-                     obj = new PushMsgs(this.NodeID);
+                    obj = new PushMsgs(this.NodeID);
 
                     //检查是否有默认的发送？如果没有就增加上他。
-                     bool isHaveSend = false;
-                     bool isHaveReturn = false;
-                     foreach (PushMsg item in obj)
-                     {
-                         if (item.FK_Event == EventListOfNode.SendSuccess)
-                             isHaveSend = true;
+                    bool isHaveSend = false;
+                    bool isHaveReturn = false;
+                    foreach (PushMsg item in obj)
+                    {
+                        if (item.FK_Event == EventListOfNode.SendSuccess)
+                            isHaveSend = true;
 
-                         if (item.FK_Event == EventListOfNode.ReturnAfter)
-                             isHaveReturn = true;
-                     }
+                        if (item.FK_Event == EventListOfNode.ReturnAfter)
+                            isHaveReturn = true;
+                    }
 
-                     if (isHaveSend == false)
-                     {
-                         PushMsg pm = new PushMsg();
-                         pm.FK_Event = EventListOfNode.SendSuccess;
-                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
-                         pm.SMSPushModel = "Email";
-                         obj.AddEntity(pm);
-                     }
+                    if (isHaveSend == false)
+                    {
+                        PushMsg pm = new PushMsg();
+                        pm.FK_Event = EventListOfNode.SendSuccess;
+                        pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
+                        pm.SMSPushModel = "Email";
+                        obj.AddEntity(pm);
+                    }
 
-                     if (isHaveReturn == false)
-                     {
-                         PushMsg pm = new PushMsg();
-                         pm.FK_Event = EventListOfNode.ReturnAfter;
-                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
-                         pm.SMSPushModel = "Email";
-                         obj.AddEntity(pm);
-                     }
+                    if (isHaveReturn == false)
+                    {
+                        PushMsg pm = new PushMsg();
+                        pm.FK_Event = EventListOfNode.ReturnAfter;
+                        pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
+                        pm.SMSPushModel = "Email";
+                        obj.AddEntity(pm);
+                    }
 
                     this.SetRefObject("PushMsg", obj);
                 }
@@ -607,7 +621,7 @@ namespace BP.WF
                 {
                     nd.DirectUpdate();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception("err@" + ex.Message + " node=" + nd.Name);
                 }
@@ -672,7 +686,7 @@ namespace BP.WF
                                 sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
 
                             BP.DA.DBAccess.RunSQL(sql);
-                            
+
                         }
 
                     }
@@ -697,7 +711,7 @@ namespace BP.WF
 
             //更新版本号.
             Flow.UpdateVer(this.FK_Flow);
-             
+
 
             #region 更新流程判断条件的标记。
             DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + this.FK_Flow + "'");
@@ -746,15 +760,15 @@ namespace BP.WF
             }
             //创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
-            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, "ND"+this.NodeID + "_FrmWorkCheck");
+            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, "ND" + this.NodeID + "_FrmWorkCheck");
             //不包含审核组件
-            if (isHave == false && this.FWCAth ==FWCAth.MinAth)
+            if (isHave == false && this.FWCAth == FWCAth.MinAth)
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
                 workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
                 workCheckAth.FK_MapData = "ND" + this.NodeID.ToString();
-                workCheckAth.NoOfObj =  "FrmWorkCheck";
+                workCheckAth.NoOfObj = "FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.
@@ -1099,7 +1113,7 @@ namespace BP.WF
                 this.SetPara("TimeLimitMM", value);
             }
         }
-       
+
         /// <summary>
         /// 逾期提醒规则
         /// </summary>
@@ -1159,7 +1173,7 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.WarningDay, value);
             }
         }
-        
+
         /// <summary>
         /// 预警 - 提醒规则
         /// </summary>
@@ -1504,10 +1518,10 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStrByKey(NodeAttr.NodeFrmID);
-                if (DataType.IsNullOrEmpty(str)==true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     return "ND" + this.NodeID;
 
-                if (this.HisFormType == NodeFormType.FoolTruck 
+                if (this.HisFormType == NodeFormType.FoolTruck
                     || this.HisFormType == NodeFormType.SheetTree)
                     return "ND" + this.NodeID;
 
@@ -1523,7 +1537,7 @@ namespace BP.WF
                     sql += " WHERE A.NDFrom=B.NodeID AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
                     sql += "  AND (FormType=0 OR FormType=1) ";
 
-                  
+
 
                     sql += "  AND (A.WorkID=" + this.WorkID + ") ";
 
@@ -1583,7 +1597,7 @@ namespace BP.WF
             }
         }
 
-        
+
         /// <summary>
         /// PDF打印规则
         /// </summary>
@@ -1682,7 +1696,7 @@ namespace BP.WF
                 SetValByKey(NodeAttr.PTable, value);
             }
         }
-       
+
         /// <summary>
         /// Doc
         /// </summary> 
@@ -1941,7 +1955,7 @@ namespace BP.WF
             }
             set
             {
-                this.SetValByKey(NodeAttr.WhenNoWorker,value);
+                this.SetValByKey(NodeAttr.WhenNoWorker, value);
             }
         }
         /// <summary>
@@ -1993,7 +2007,7 @@ namespace BP.WF
         {
             get
             {
-//#warning 2012-01-24修订,没有自动计算出来属性。
+                //#warning 2012-01-24修订,没有自动计算出来属性。
                 switch (this.HisRunModel)
                 {
                     case RunModel.Ordinary:
@@ -2062,6 +2076,10 @@ namespace BP.WF
         {
             get
             {
+                //@sly 翻译.
+                if (this.IsSendBackNode == true)
+                    return false;
+
                 if (this.HisNodePosType == NodePosType.End)
                     return true;
                 else
@@ -2261,7 +2279,7 @@ namespace BP.WF
                 return (ThreadKillRole)this.GetValIntByKey(NodeAttr.ThreadKillRole);
             }
         }
-        
+
         /// <summary>
         /// 完成通过率
         /// </summary>
@@ -2269,7 +2287,7 @@ namespace BP.WF
         {
             get
             {
-                var val= this.GetValDecimalByKey(NodeAttr.PassRate);
+                var val = this.GetValDecimalByKey(NodeAttr.PassRate);
                 if (val == 0)
                     return 100;
                 return val;
@@ -2304,8 +2322,8 @@ namespace BP.WF
             }
         }
 
-        
-      
+
+
         /// <summary>
         /// 是否可以移交
         /// </summary>
@@ -2323,7 +2341,7 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsHandOver, value);
             }
         }
-       
+
         /// <summary>
         /// 是否可以退回？
         /// </summary>
@@ -2644,7 +2662,7 @@ namespace BP.WF
         {
             get
             {
-               return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
+                return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
             }
         }
         public float FWC_H
@@ -2711,13 +2729,13 @@ namespace BP.WF
 
                 #region 考核属性.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddTBInt(BtnAttr.CHRole, 0, "时限规则",true,false);
+                map.AddTBInt(BtnAttr.CHRole, 0, "时限规则", true, false);
 
                 map.AddTBString(BtnAttr.HelpLab, "帮助提示", "帮助", true, false, 0, 50, 10);
                 map.AddTBInt(BtnAttr.HelpRole, 0, "帮助提示规则", true, false);
 
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
-              //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
+                                                                             //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
@@ -2751,14 +2769,14 @@ namespace BP.WF
                 map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);
 
                 map.AddTBInt(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true);
-                map.AddTBString(BtnAttr.ReturnField, null, "退回信息填写字段", true, false, 0, 50, 10, true); 
+                map.AddTBString(BtnAttr.ReturnField, null, "退回信息填写字段", true, false, 0, 50, 10, true);
 
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "访问规则", true, true);
                 map.AddTBInt(NodeAttr.IsExpSender, 1, "本节点接收人不允许包含上一步发送人", true, true);
 
                 map.AddTBInt(NodeAttr.CancelRole, 0, "撤销规则", true, true);
                 map.AddTBInt(NodeAttr.CancelDisWhenRead, 0, "对方已读不能撤销", true, true);
-         
+
                 map.AddTBInt(NodeAttr.WhenNoWorker, 0, "未找到处理人时", true, true);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.NodeFrmID, null, "节点表单ID", true, false, 0, 50, 10);
@@ -2910,7 +2928,7 @@ namespace BP.WF
                 }
             }
             //判断是否可以被删除. 
-             num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID);
+            num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID);
             if (num != 0)
                 throw new Exception("@该节点[" + this.NodeID + "," + this.Name + "]有待办工作存在，您不能删除它.");
 
@@ -2930,7 +2948,7 @@ namespace BP.WF
             //删除框架
             BP.Sys.MapFrames frams = new BP.Sys.MapFrames(md.No);
             frams.Delete();
-       
+
             // 删除扩展
             BP.Sys.MapExts exts = new BP.Sys.MapExts(md.No);
             exts.Delete();
@@ -3284,7 +3302,7 @@ namespace BP.WF
             }
 
 
-            if (fl.IsMD5  && attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.MD5, MapAttrAttr.FK_MapData, md.No) == false)
+            if (fl.IsMD5 && attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.MD5, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 /* 如果是MD5加密流程. */
                 attr = new BP.Sys.MapAttr();
@@ -3395,7 +3413,7 @@ namespace BP.WF
             md.Name = this.Name;
 
             if (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FoolTruck)
-                 md.HisFrmType = FrmType.FoolForm;
+                md.HisFrmType = FrmType.FoolForm;
 
             if (this.HisFormType == NodeFormType.FreeForm)
                 md.HisFrmType = FrmType.FreeFrm;
@@ -3634,7 +3652,7 @@ namespace BP.WF
             this.AddEntities(nds);
             return this.Count;
         }
-       
+
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

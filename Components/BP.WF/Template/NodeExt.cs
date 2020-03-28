@@ -14,8 +14,6 @@ namespace BP.WF.Template
     /// </summary>
     public class NodeExt : Entity
     {
-
-
         #region 常量
         /// <summary>
         /// CCFlow流程引擎
@@ -249,6 +247,16 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否是返回节点?
+        /// </summary>
+        public bool IsSendBackNode
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsSendBackNode);
+            }
+        }
+        /// <summary>
         /// 主键
         /// </summary>
         public override string PK
@@ -335,7 +343,6 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt,
                     "@0=操作员执行@1=机器执行@2=混合执行");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
-
 
                 map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "已读回执", true, true, NodeAttr.ReadReceipts,
                 "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
@@ -430,6 +437,9 @@ namespace BP.WF.Template
 
                 map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
                 map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
+
+                //@sly 为广西计算中心加.
+                map.AddBoolean(NodeAttr.IsSendBackNode, false, "是否是发送返回节点(发送当前节点,自动发送给该节点的发送人,发送节点.)?", true, true, true);
                 #endregion 分合流子线程属性
 
                 #region 自动跳转规则
@@ -713,7 +723,6 @@ namespace BP.WF.Template
 
 
                 #endregion 基础功能.
-
 
                 #region 字段相关功能（不显示在菜单里）
                 rm = new RefMethod();
@@ -1363,6 +1372,15 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.HungEnable, false);
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
+
+            //是否是发送返回节点？ @sly 翻译过去.
+            nd.IsSendBackNode = this.IsSendBackNode;
+            if (nd.IsSendBackNode==true)
+            {
+                //强制设置按照连接线控制.
+                nd.CondModel = CondModel.ByLineCond;
+            }
+
 
             if (nd.HisRunModel == RunModel.HL || nd.HisRunModel == RunModel.FHL)
             {

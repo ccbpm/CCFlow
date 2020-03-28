@@ -1245,7 +1245,6 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion
 
-
                 #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();
                 bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);

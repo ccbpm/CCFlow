@@ -391,6 +391,10 @@ namespace BP.WF.Template
         /// 该节点是否是游离状态
         /// </summary>
         public const string IsYouLiTai = "IsYouLiTai";
+        /// <summary>
+        /// 是否是自动审批返回节点
+        /// </summary>
+        public const string IsSendBackNode = "IsSendBackNode";
         #endregion
 
         #region 父子流程

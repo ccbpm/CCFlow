@@ -3,7 +3,7 @@
     jQuery.getScript(basePath + "/WF/Admin/Admin.js")
         .done(function () {
             /* 耶，没有问题，这里可以干点什么 */
-             //alert('ok');
+            //alert('ok');
         })
         .fail(function () {
             /* 靠，马上执行挽救操作 */
@@ -37,7 +37,6 @@
 var optionKey = 0;
 function InitBar(optionKey) {
 
-
     var nodeID = GetQueryString("FK_Node");
     var str = nodeID.substr(nodeID.length - 2);
     var isSatrtNode = false;
@@ -45,7 +44,10 @@ function InitBar(optionKey) {
         isSatrtNode = true;
 
     // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
+
     var html = "<div style='padding:5px' >接受人规则: ";
+    if (isSatrtNode == true)
+        html = "<div style='padding:5px' >发起人范围限定规则: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
@@ -108,6 +110,7 @@ function InitBar(optionKey) {
     if (isSatrtNode == true) {
 
         html += "<option value=" + DeliveryWay.BySelected_1 + ">&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
+        html += "<option value=" + DeliveryWay.BySelectedOrgs + ">&nbsp;&nbsp;&nbsp;&nbsp;指定的组织可以发起(对集团版有效).</option>";
 
     } else {
         html += "<option value=" + DeliveryWay.BySelected + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人</option>";
@@ -175,7 +178,7 @@ function OpenDot2DotStations() {
     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
     url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
     url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500,function () {
+    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
         Baseinfo.stas = getStas();
     });
 
@@ -190,7 +193,7 @@ function getStas() {
         return obj.FK_Node != undefined
     });
     return ens;
-   
+
 }
 /*
  * 获取节点绑定的部门

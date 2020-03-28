@@ -43,6 +43,7 @@
             if (data.length == 0) {
                 var html2 = "没有可供选择的表单。";
                 $("#info").html(html2);
+                return;
             }
             for (var i = 0; i < data.length; i++) {
                 var en = data[i];
@@ -62,6 +63,9 @@
         });
 
         function Save(selectFrm) {
+
+            if (window.confirm('您确定要绑定:' + selectFrm + "吗？") == false)
+                return;
 
             //选择的表单.
             if (selectFrm == undefined || selectFrm == null) {
@@ -83,6 +87,8 @@
 
             //节点表单属性
             var frmNode = new Entity("BP.WF.Template.FrmNode");
+            frmNode.Delete("FK_Node", node.NodeID); //删除已经存在的表单.
+
             frmNode.MyPK = selectFrm + "_" + node.NodeID + "_" + node.FK_Flow;
             var i = frmNode.RetrieveFromDBSources();
             frmNode.FK_Node = node.NodeID;
@@ -95,11 +101,10 @@
             alert("独立表单库表单 - 保存成功.");
             parent.location.reload();
             parent.doCloseDialog.call();
-            
-            
-           // parent.$("#MyFrm").html(frmNode.FK_Frm + ":" +selectName );
-           // $(".panel-tool-close").click();
-            
+
+            // parent.$("#MyFrm").html(frmNode.FK_Frm + ":" +selectName );
+            // $(".panel-tool-close").click();
+
             return;
         }
 

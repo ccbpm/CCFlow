@@ -75,7 +75,7 @@ namespace BP.WF
             {
                 System.Drawing.Color col = System.Drawing.ColorTranslator.FromHtml(lab.FontColor);
                 x = lab.X + wtX;
-                sb.Append("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + lab.Y + "px;text-align:left;' >");
+                sb.Append("\t\n<DIV name=u2 style='position:absolute;left:" + x + "px;top:" + lab.Y + "px;text-align:left;' >");
                 sb.Append("\t\n<span style='color:" + lab.FontColorHtml + ";font-family: " + lab.FontName + ";font-size: " + lab.FontSize + "px;' >" + lab.TextHtml + "</span>");
                 sb.Append("\t\n</DIV>");
             }
@@ -91,12 +91,12 @@ namespace BP.WF
                     if (line.Y1 < line.Y2)
                     {
                         x = line.X1 + wtX;
-                        sb.Append("\t\n<img id='" + line.MyPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y1 + "px; width:" + line.BorderWidth + "px; height:" + h + "px;background-color:" + line.BorderColorHtml + "\" />");
+                        sb.Append("\t\n<img id='" + line.MyPK + "' name='YLine' style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y1 + "px; width:" + line.BorderWidth + "px; height:" + h + "px;background-color:" + line.BorderColorHtml + "\" />");
                     }
                     else
                     {
                         x = line.X2 + wtX;
-                        sb.Append("\t\n<img id='" + line.MyPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y2 + "px; width:" + line.BorderWidth + "px; height:" + h + "px;background-color:" + line.BorderColorHtml + "\" />");
+                        sb.Append("\t\n<img id='" + line.MyPK + "' name='YLine'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y2 + "px; width:" + line.BorderWidth + "px; height:" + h + "px;background-color:" + line.BorderColorHtml + "\" />");
                     }
                 }
                 else
@@ -107,12 +107,12 @@ namespace BP.WF
                     if (line.X1 < line.X2)
                     {
                         x = line.X1 + wtX;
-                        sb.Append("\t\n<img id='" + line.MyPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y1 + "px; width:" + w + "px; height:" + line.BorderWidth + "px;background-color:" + line.BorderColorHtml + "\" />");
+                        sb.Append("\t\n<img id='" + line.MyPK + "' name='line'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y1 + "px; width:" + w + "px; height:" + line.BorderWidth + "px;background-color:" + line.BorderColorHtml + "\" />");
                     }
                     else
                     {
                         x = line.X2 + wtX;
-                        sb.Append("\t\n<img id='" + line.MyPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y2 + "px; width:" + w + "px; height:" + line.BorderWidth + "px;background-color:" + line.BorderColorHtml + "\" />");
+                        sb.Append("\t\n<img id='" + line.MyPK + "' name='line'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y2 + "px; width:" + w + "px; height:" + line.BorderWidth + "px;background-color:" + line.BorderColorHtml + "\" />");
                     }
                 }
             }
@@ -131,7 +131,7 @@ namespace BP.WF
                     }
                 }
                 x = link.X + wtX;
-                sb.Append("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + link.Y + "px;text-align:left;' >");
+                sb.Append("\t\n<DIV name=u2 style='position:absolute;left:" + x + "px;top:" + link.Y + "px;text-align:left;' >");
                 sb.Append("\t\n<span style='color:" + link.FontColorHtml + ";font-family: " + link.FontName + ";font-size: " + link.FontSize + "px;' > <a href=\"" + url + "\" target='" + link.Target + "'> " + link.Text + "</a></span>");
                 sb.Append("\t\n</DIV>");
             }
@@ -373,6 +373,25 @@ namespace BP.WF
                 sb.Append("\t\n</DIV>");
             }
             #endregion 输出竖线与标签
+            #region  输出 rb.
+            BP.Sys.FrmRBs myrbs = mapData.FrmRBs;
+            MapAttr attrRB = new MapAttr();
+            foreach (BP.Sys.FrmRB rb in myrbs)
+            {
+                x = rb.X + wtX;
+                sb.Append("<DIV id='F" + rb.MyPK + "' style='position:absolute; left:" + x + "px; top:" + rb.Y + "px; height:16px;text-align: left;word-break: keep-all;' >");
+                sb.Append("<span style='word-break: keep-all;font-size:12px;'>");
+
+                if (rb.IntKey == en.GetValIntByKey(rb.KeyOfEn))
+                    sb.Append("<b>" + rb.Lab + "</b>");
+                else
+                    sb.Append(rb.Lab);
+
+                sb.Append("</span>");
+                sb.Append("</DIV>");
+            }
+            #endregion  输出 rb.
+
 
             #region 输出数据控件.
             int fSize = 0;
@@ -473,24 +492,7 @@ namespace BP.WF
                 sb.Append("</DIV>");
             }
 
-            #region  输出 rb.
-            BP.Sys.FrmRBs myrbs = mapData.FrmRBs;
-            MapAttr attrRB = new MapAttr();
-            foreach (BP.Sys.FrmRB rb in myrbs)
-            {
-                x = rb.X + wtX;
-                sb.Append("<DIV id='F" + rb.MyPK + "' style='position:absolute; left:" + x + "px; top:" + rb.Y + "px; height:16px;text-align: left;word-break: keep-all;' >");
-                sb.Append("<span style='word-break: keep-all;font-size:12px;'>");
-
-                if (rb.IntKey == en.GetValIntByKey(rb.KeyOfEn))
-                    sb.Append("<b>" + rb.Lab + "</b>");
-                else
-                    sb.Append(rb.Lab);
-
-                sb.Append("</span>");
-                sb.Append("</DIV>");
-            }
-            #endregion  输出 rb.
+            
 
             #endregion 输出数据控件.
 

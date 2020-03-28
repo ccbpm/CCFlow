@@ -194,6 +194,20 @@ namespace BP.WF.Template
             }
             #endregion 按节点绑定的人员处理.
 
+            #region 按照部门负责人计算. @gaoxin 翻译过去.
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDeptLeader)
+            {
+                ps = new Paras();
+                ps.Add("No", BP.Web.WebUser.FK_Dept);
+                ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + dbStr + "No";
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门("+WebUser.FK_Dept+","+BP.Web.WebUser.FK_DeptName+")没有维护负责人 . ");
+                return dt;
+            }
+            #endregion .按照部门负责人计算
+
+
             #region 按照选择的人员处理。
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected || town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedForPrj
                 || town.HisNode.HisDeliveryWay == DeliveryWay.ByFEE)

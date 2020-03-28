@@ -5119,6 +5119,7 @@ namespace BP.WF
                         }
 
                         break;
+                   
                     case DeliveryWay.ByBindEmp:
                         ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
                         ps.Add("FK_Emp", userNo);

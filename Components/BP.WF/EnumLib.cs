@@ -995,6 +995,10 @@ namespace BP.WF
         /// </summary>
         BySelectedOrgs = 22,
         /// <summary>
+        /// 按照部门领导计算
+        /// </summary>
+        ByDeptLeader = 23,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

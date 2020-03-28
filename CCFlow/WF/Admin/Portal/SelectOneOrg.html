@@ -17,15 +17,17 @@
         $(function () {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnString("SelectOneOrg_Init");
-            datas = JSON.parse(data);           
+            datas = JSON.parse(data);
 
             //$("#cc").html("<img src='/Admin/Portal/Img/loading_small.gif' /><font color=blue>ccbpm 正在登录请您稍后.</font>");
             var webUser = new WebUser();
 
-            var html = "您好：" + webUser.Name + ", 请选择您要进入的的企业登录.";
+            var html = "您好：" + webUser.Name + ", 请选择您要进入的的企业登录." + datas.length;
             $("#title").html(html);
 
             //求出他管多少企业.
+            //var ens = new Entities("BP.WF.Port.Admin2.Orgs");
+            //ens.Retrieve("Adminer", webUser.No);
 
 
             var html = "<ul>";
@@ -48,11 +50,9 @@
                 alert(data);
                 return;
             }
-             var url = data;
-            if (url.indexOf("url") == 0) {
-                var a = url.substring(3);
-                window.location.href = a;
-            }
+
+            data = data.substring(4);
+            window.location.href = data;
             return;
         }
     </script>

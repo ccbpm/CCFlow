@@ -133,9 +133,11 @@
                 window.location.href = data.replace("Default.htm", systemp + ".htm");
                 return;
             }
+
             //跳转到选择组织的页面
-            if (data.length >1) {
-                WinOpen("SelectOneOrg.html", "self");
+            if (data.length > 1) {
+                window.location.href = "SelectOneOrg.html";
+                //WinOpen("SelectOneOrg.html", "self");
                 return;
             }
             alert(data);

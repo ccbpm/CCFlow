@@ -2042,7 +2042,7 @@ namespace BP.WF.HttpHandler
         {
             //从表.
             string fk_mapDtl = this.FK_MapDtl;
-            string refPKVal = this.RefPKVal;
+            string RowIndex = this.GetRequestVal("RowIndex");
             MapDtl mdtl = new MapDtl(fk_mapDtl);
 
             #region 处理权限方案。
@@ -2133,10 +2133,10 @@ namespace BP.WF.HttpHandler
             {
                 //dtl.OID = DBAccess.GenerOID();
                 dtl.Insert();
-                
+                //dtl生成oid后，将pop弹出的FrmEleDB表中的数据用oid替换掉
                 foreach (BP.En.Attr attr in attrs)
                 {
-                    string Refval = this.RefPKVal + "_" + oid;
+                    string Refval = this.RefPKVal + "_" + RowIndex;
                     FrmEleDBs FrmEleDBs = new FrmEleDBs();
                     QueryObject qo = new QueryObject(FrmEleDBs);
                     qo.AddWhere(FrmEleDBAttr.EleID, attr.Key);
@@ -2254,8 +2254,25 @@ namespace BP.WF.HttpHandler
                     febd.DoIt(FrmEventListDtl.DtlRowDelAfter, febd.HisEn, dtl, null);
                 }
             }
+
             #endregion 从表 删除 后处理事件.
 
+            //如果有pop，删除相关存储
+            FrmEleDBs FrmEleDBs = new FrmEleDBs();
+            QueryObject qo = new QueryObject(FrmEleDBs);
+            qo.AddWhere(FrmEleDBAttr.FK_MapData, this.FK_MapDtl);
+            qo.addAnd();
+            qo.AddWhere(FrmEleDBAttr.RefPKVal, dtl.OID);
+            qo.DoQuery();
+            if (FrmEleDBs != null && FrmEleDBs.Count > 0)
+            {
+
+                foreach (FrmEleDB FrmEleDB in FrmEleDBs)
+                {
+
+                    FrmEleDB.Delete();
+                }
+            }
             //如果可以上传附件这删除相应的附件信息
             FrmAttachmentDBs dbs = new FrmAttachmentDBs();
             dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);

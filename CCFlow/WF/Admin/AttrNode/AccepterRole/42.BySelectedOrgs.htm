@@ -44,7 +44,7 @@
                 <ul>
                     <li v-show="orgs.length===0">未设置</li>
                     <template v-for="org in orgs">
-                        <li v-if="org.OrgNoText!=undefined">{{orgs.OrgNoText}}</li>
+                        <li v-if="org.OrgNoText!=undefined">{{org.OrgNoText}}</li>
                     </template>
                 </ul>
 
@@ -62,7 +62,6 @@
         var Baseinfo = new Vue({
             el: '#App',
             data: {
-           
                 orgs: [],
                 webuser: null,
                 deliverWay: DeliveryWay.BySelectedOrgs
@@ -77,7 +76,6 @@
                     //url += '&NodeID=001&PKVal=001';
                     
                     OpenEasyUiDialogExtCloseFunc(url, '绑定组织', 600, 500, function () {
-                        
                         Baseinfo.orgs = getOrgs();
                         
                     });

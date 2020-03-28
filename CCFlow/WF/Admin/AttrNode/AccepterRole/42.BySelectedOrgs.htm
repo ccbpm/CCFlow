@@ -40,11 +40,11 @@
 
         <fieldset>
             <legend>已经选择的组织</legend>
-            <div id="org">
+            <div id="Org">
                 <ul>
-                    <li v-show="orgs.length===0">未设置</li>
-                    <template v-for="org in orgs">
-                        <li v-if="org.OrgNoText!=undefined">{{org.OrgNoText}}</li>
+                    <li v-show="Orgs.length===0">未设置</li>
+                    <template v-for="Org in Orgs">
+                        <li v-if="Org.OrgNoText!=undefined">{{Org.OrgNoText}}</li>
                     </template>
                 </ul>
 
@@ -62,7 +62,7 @@
         var Baseinfo = new Vue({
             el: '#App',
             data: {
-                orgs: [],
+                Orgs: [],
                 webuser: null,
                 deliverWay: DeliveryWay.BySelectedOrgs
             },
@@ -76,14 +76,14 @@
                     //url += '&NodeID=001&PKVal=001';
                     
                     OpenEasyUiDialogExtCloseFunc(url, '绑定组织', 600, 500, function () {
-                        Baseinfo.orgs = getOrgs();
+                        Baseinfo.Orgs = getOrgs();
                         
                     });
                 }
             },
             created() {
                 InitBar(this.deliverWay);
-                this.orgs = getOrgs();
+                this.Orgs = getOrgs();
 
             }
         });

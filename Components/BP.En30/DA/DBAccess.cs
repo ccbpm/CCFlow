@@ -124,7 +124,11 @@ namespace BP.DA
                     }
                     throw new Exception("@缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //修复for：jlow  oracle 异常： ORA-01745: 无效的主机/绑定变量名 edited by qin 16.7.1
@@ -169,7 +173,11 @@ namespace BP.DA
 
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //add by zhoupeng
@@ -219,10 +227,12 @@ namespace BP.DA
                         return;
                     }
                     throw new Exception("@NpgsqlDbType缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
-
-                    //  throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //added by liuxc,2016-12-7，增加对mysql大数据longblob字段存储逻辑
@@ -263,7 +273,11 @@ namespace BP.DA
 
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
         }
         /// <summary>
@@ -351,6 +365,7 @@ namespace BP.DA
                 fs = fi.OpenWrite();
                 fs.Write(byteFile, 0, byteFile.Length);
                 fs.Close();
+                fs.Dispose();
             }
         }
         /// <summary>
@@ -425,6 +440,16 @@ namespace BP.DA
                 try
                 {
                     dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = (byte[])dr[0];
+                    }
+                    return byteFile;
                 }
                 catch (Exception)
                 {
@@ -437,18 +462,12 @@ namespace BP.DA
                     return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
                     //throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                if (dr.Read())
+                finally
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
-
-                    byteFile = (byte[])dr[0];
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
-                return byteFile;
-
-
             }
 
             //增加对oracle数据库的逻辑 qin
@@ -471,6 +490,16 @@ namespace BP.DA
                 try
                 {
                     dr = cm.ExecuteReader();
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = (byte[])dr[0];
+                    }
+
+                    return byteFile;
                 }
                 catch (Exception ex)
                 {
@@ -482,24 +511,12 @@ namespace BP.DA
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                //@sly 这里出现ttc错误.
-                try
+                finally
                 {
-                    if (dr.Read())
-                    {
-                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                            return null;
-
-                        byteFile = (byte[])dr[0];
-                    }
-                }catch(Exception ex)
-                {
-                    return null;
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
-
-                return byteFile;
             }
 
             //added by liuxc,2016-12-7,增加对mysql数据库的逻辑
@@ -522,6 +539,18 @@ namespace BP.DA
                 try
                 {
                     dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = dr[0] as byte[];
+                        //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    }
+
+                    return byteFile;
                 }
                 catch (Exception ex)
                 {
@@ -533,18 +562,12 @@ namespace BP.DA
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                if (dr.Read())
+                finally
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
-
-                    byteFile = dr[0] as byte[];
-                    //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
-
-                return byteFile;
             }
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -565,6 +588,18 @@ namespace BP.DA
                 try
                 {
                     dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = dr[0] as byte[];
+                        //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    }
+
+                    return byteFile;
                 }
                 catch (Exception ex)
                 {
@@ -576,20 +611,13 @@ namespace BP.DA
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                if (dr.Read())
+                finally
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
-
-                    byteFile = dr[0] as byte[];
-                    //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
-
-                return byteFile;
             }
-
 
             //最后仍然没有找到.
             throw new Exception("@获取文件，从数据库里面，没有判断的数据库类型.");
@@ -1223,19 +1251,9 @@ namespace BP.DA
         /// <returns>返回运行结果</returns>
         public static int RunSQL(string sql, SqlConnection conn, CommandType sqlType, string dsn)
         {
-            conn.Close();
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-            //如果是锁定状态，就等待
-            //while (lock_SQL_RunSQL)
-            //    ;
-            // 开始执行.
-            //lock_SQL_RunSQL = true; //锁定
-            string step = "1";
+            SqlCommand cmd = new SqlCommand();
             try
             {
-
                 if (conn == null)
                     conn = new SqlConnection(dsn);
 
@@ -1244,42 +1262,22 @@ namespace BP.DA
                     conn.ConnectionString = dsn;
                     conn.Open();
                 }
-
-                step = "2";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd = new SqlCommand(sql, conn);
                 cmd.CommandType = sqlType;
-                step = "3";
 
-                step = "4";
-                int i = 0;
-                try
-                {
-                    i = cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    step = "5";
-                    //lock_SQL_RunSQL = false;
-                    cmd.Dispose();
-                    step = "6";
-                    throw new Exception("RunSQL step=" + step + ex.Message + " SQL=" + sql);
-                }
-                step = "7";
-                cmd.Dispose();
-                // lock_SQL_RunSQL = false;
-                return i;
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                step = "8";
-                // lock_SQL_RunSQL = false;
-                throw new Exception("RunSQL2 step=" + step + ex.Message + " 设置连接时间=" + conn.ConnectionTimeout);
+                BP.DA.Log.DebugWriteInfo(ex.Message);
+                throw new Exception("RunSQL2 step=" + ex.Message + " 设置连接时间=" + conn.ConnectionTimeout);
             }
             finally
             {
-                step = "9";
-                //lock_SQL_RunSQL = false;
-                conn.Close();
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         #endregion
@@ -1291,15 +1289,7 @@ namespace BP.DA
         }
         public static int RunSQL(string sql, OracleConnection conn, CommandType sqlType, string dsn)
         {
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-            //如果是锁定状态，就等待
-            // while (lock_SQL_RunSQL)
-            //  ;
-            // 开始执行.
-            // lock_SQL_RunSQL = true; //锁定
-            string step = "1";
+            OracleCommand cmd = new OracleCommand();
             try
             {
                 if (conn == null)
@@ -1311,72 +1301,24 @@ namespace BP.DA
                     conn.Open();
                 }
 
-                step = "2";
-                OracleCommand cmd = new OracleCommand(sql, conn);
+                cmd = new OracleCommand(sql, conn);
                 cmd.CommandType = sqlType;
-                step = "3";
-                int i = 0;
-                try
-                {
-                    i = cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    step = "5";
-                    // lock_SQL_RunSQL = false;
-                    cmd.Dispose();
-                    step = "6";
-                    throw new Exception("RunSQL step=" + step + ex.Message + " SQL=" + sql);
-                }
-                step = "7";
-                cmd.Dispose();
 
-
-                //lock_SQL_RunSQL = false;
-                return i;
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                step = "8";
-                // lock_SQL_RunSQL = false;
-                throw new Exception("RunSQL2 step=" + step + ex.Message);
+                BP.DA.Log.DebugWriteInfo(ex.Message);
+                throw new Exception("RunSQL2" + ex.Message);
             }
             finally
             {
-                step = "9";
-                // lock_SQL_RunSQL = false;
-                conn.Close();
-            }
+                if (cmd != null)
+                    cmd.Dispose();
 
-            /*
-            Debug.WriteLine( sql );
-            try
-            {
-                OracleCommand cmd = new OracleCommand( sql ,conn);
-                cmd.CommandType = sqlType;
-                foreach(object par in pars)
-                {
-                    cmd.Parameters.Add( "par",par);
-                }
-                if (conn.State != System.Data.ConnectionState.Open)
-                {
-                    conn.Open();
-                }
-				
-                int i= cmd.ExecuteNonQuery();				 
-                cmd.Dispose();
-                return i;				 
+                if (conn != null)
+                    conn.Dispose();
             }
-            catch(System.Exception ex)
-            {
-                throw new Exception(ex.Message + sql );
-            }
-            finally
-            {
-                conn.Close();
-
-            }
-            */
         }
         #endregion
 
@@ -1447,7 +1389,8 @@ namespace BP.DA
             try
             {
                 DBAccess.RunSQL(sql);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
             }
         }
@@ -1594,8 +1537,9 @@ namespace BP.DA
                 return RunSQL(sql, (SqlConnection)oconn, sqlType, dsn);
             else if (oconn is OracleConnection)
                 return RunSQL(sql, (OracleConnection)oconn, sqlType, dsn);
-            else
-                throw new Exception("获取数据库连接[GetAppCenterDBConn]失败！");
+
+            oconn.Dispose();
+            throw new Exception("获取数据库连接[GetAppCenterDBConn]失败！");
         }
         public static DataTable ReadProText(string proName)
         {
@@ -1851,12 +1795,9 @@ namespace BP.DA
                 if (paras == null)
                     paras = new Paras();
                 paras.SQL = sql;
-                // BP.DA.Log.DebugWriteInfo(paras.SQLNoPara+" ; ");
             }
 
-            //Npgsql.NpgsqlConnection conn =   new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
-            Npgsql.NpgsqlConnection conn = DBAccess.connOfPGSQL; // new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
-
+            Npgsql.NpgsqlConnection conn = DBAccess.connOfPGSQL;
             if (conn.State != System.Data.ConnectionState.Open)
             {
                 conn.ConnectionString = SystemConfig.AppCenterDSN;
@@ -1882,9 +1823,6 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                cmd.Dispose();
-                conn.Close();
-
                 paras.SQL = sql;
                 string msg = "";
                 if (paras.Count == 0)
@@ -1897,8 +1835,10 @@ namespace BP.DA
             }
             finally
             {
-                cmd.Dispose();
-                conn.Close();
+                if (cmd != null)
+                    conn.Dispose();
+                if (cmd != null)
+                    conn.Dispose();
             }
         }
         /// <summary>
@@ -1931,15 +1871,10 @@ namespace BP.DA
                 }
 
                 int i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                conn.Close();
                 return i;
             }
             catch (System.Exception ex)
             {
-                cmd.Dispose();
-                conn.Close();
-
                 paras.SQL = sql;
                 string msg = "";
                 if (paras.Count == 0)
@@ -1952,8 +1887,10 @@ namespace BP.DA
             }
             finally
             {
-                cmd.Dispose();
-                conn.Close();
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
         private static int RunSQL_200705_SQL(string sql, Paras paras)
@@ -1975,15 +1912,11 @@ namespace BP.DA
                     cmd.Parameters.Add(oraP);
                 }
                 int i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                conn.Close();
+
                 return i;
             }
             catch (System.Exception ex)
             {
-                cmd.Dispose();
-                conn.Close();
-
                 paras.SQL = sql;
                 string msg = "";
                 if (paras.Count == 0)
@@ -1996,8 +1929,10 @@ namespace BP.DA
             }
             finally
             {
-                cmd.Dispose();
-                conn.Close();
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
         /// <summary>
@@ -2058,7 +1993,6 @@ namespace BP.DA
         /// <returns></returns>
         private static int RunSQL_200705_MySQL(string sql, Paras paras)
         {
-
             MySqlConnection connOfMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
             if (connOfMySQL.State != System.Data.ConnectionState.Open)
             {
@@ -2066,7 +2000,6 @@ namespace BP.DA
                 connOfMySQL.Open();
             }
 
-            int i = 0;
             try
             {
                 MySqlCommand cmd = new MySqlCommand(sql, connOfMySQL);
@@ -2080,21 +2013,18 @@ namespace BP.DA
                         cmd.Parameters.Add(oraP);
                     }
                 }
-
-                i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-
-                connOfMySQL.Close();
-
-                // by zhoupeng: 原来的时候是注释的，测试遇到连接超时最大. 2020-03-25
-                connOfMySQL.Dispose();
-                return i;
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                connOfMySQL.Close();
-                connOfMySQL.Dispose();
                 throw new Exception("err@RunSQL_200705_MySQL:" + ex.Message + "@SQL:" + sql);
+            }
+            finally
+            {
+                if (connOfMySQL != null)
+                    connOfMySQL.Dispose();
+                if (connOfMySQL != null)
+                    connOfMySQL.Close();
             }
         }
         private static int RunSQL_200705_Ora(string sql, Paras paras)
@@ -2103,18 +2033,19 @@ namespace BP.DA
                 sql = "begin " + sql + " end;";
 
             OracleConnection conn = new OracleConnection(SystemConfig.AppCenterDSN);
+
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.ConnectionString = SystemConfig.AppCenterDSN;
+                conn.Open();
+            }
+
+            OracleCommand cmd = new OracleCommand(sql, conn);
+            cmd.CommandType = CommandType.Text;
+            cmd.BindByName = true;
+
             try
             {
-                if (conn.State != System.Data.ConnectionState.Open)
-                {
-                    conn.ConnectionString = SystemConfig.AppCenterDSN;
-                    conn.Open();
-                }
-
-                OracleCommand cmd = new OracleCommand(sql, conn);
-                cmd.CommandType = CommandType.Text;
-                cmd.BindByName = true;
-
                 foreach (Para para in paras)
                 {
                     OracleParameter oraP = new OracleParameter(para.ParaName, para.DATypeOfOra);
@@ -2131,19 +2062,13 @@ namespace BP.DA
                         oraP.Value = para.val;
 
                     oraP.DbType = para.DAType;
-
                     cmd.Parameters.Add(oraP);
                 }
-                int i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                conn.Close(); //把它关闭.
-                return i;
+
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                conn.Close(); //把它关闭.
-
-
                 if (paras != null)
                 {
                     foreach (Para item in paras)
@@ -2180,7 +2105,11 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
 
@@ -2251,12 +2180,6 @@ namespace BP.DA
         private static bool lock_msSQL_ReturnTable = false;
         public static DataTable RunSQLReturnTable(string oraSQL, OracleConnection conn, CommandType sqlType, string dsn)
         {
-
-#if DEBUG
-            //Debug.WriteLine( oraSQL );
-#endif
-
-
             try
             {
                 if (conn == null)
@@ -2289,7 +2212,8 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
 
@@ -2303,23 +2227,18 @@ namespace BP.DA
         /// <returns></returns>
         public static DataTable RunSQLReturnTable(string msSQL, SqlConnection conn, string connStr, CommandType sqlType, Paras paras)
         {
-            string msg = "step1";
-
             if (conn.State == ConnectionState.Closed)
             {
                 conn.ConnectionString = connStr;
                 conn.Open();
             }
 
-#if DEBUG
-            Debug.WriteLine(msSQL);
-#endif
-
             while (lock_msSQL_ReturnTable)
-                ;
+            { 
+            }
 
             SqlDataAdapter msAda = new SqlDataAdapter(msSQL, conn);
-            msg = "error 2";
+
             msAda.SelectCommand.CommandType = sqlType;
             if (paras != null)
             {
@@ -2335,36 +2254,22 @@ namespace BP.DA
             lock_msSQL_ReturnTable = true; //锁定
             try
             {
-                msg = "error 3";
-                try
-                {
-                    msg = "4";
-                    msAda.Fill(mstb);
-                }
-                catch (Exception ex)
-                {
-                    msg = "5";
-                    lock_msSQL_ReturnTable = false;
-                    conn.Close();
-                    throw new Exception(ex.Message + " msg=" + msg + " Run@DBAccess");
-                }
-                msg = "10";
-                msAda.Dispose();
-                msg = "11";
-                //				if (SystemConfig.IsBSsystem==false )
-                //				{
-                //					msg="13";
-                //					sqlconn.Close();
-                //				}
-                msg = "14";
+                msAda.Fill(mstb);
+
                 lock_msSQL_ReturnTable = false;// 返回前一定要开锁
-                conn.Close();
             }
             catch (System.Exception ex)
             {
                 lock_msSQL_ReturnTable = false;
-                conn.Close();
-                throw new Exception("[RunSQLReturnTable on SqlConnection 1] step = " + msg + "<BR>" + ex.Message + " sql=" + msSQL);
+                BP.DA.Log.DebugWriteError(ex.Message);
+                throw new Exception("[RunSQLReturnTable on SqlConnection 1]" + "<BR>" + ex.Message + " sql=" + msSQL);
+            }
+            finally
+            {
+                if (msAda != null)
+                    msAda.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
             return mstb;
         }
@@ -2399,12 +2304,11 @@ namespace BP.DA
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
                 ada.Dispose();
-                conn.Close();
+
                 return oratb;
             }
             catch (System.Exception ex)
             {
-                conn.Close();
                 string msg = "@运行查询在(RunSQLReturnTable_20191231_DM with paras)出错 sql=" + selectSQL + " @异常信息：" + ex.Message;
                 msg += "@Para Num= " + paras.Count;
                 foreach (Para pa in paras)
@@ -2416,7 +2320,8 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
         }
         private static DataTable RunSQLReturnTable_200705_Ora(string selectSQL, Paras paras)
@@ -2445,12 +2350,11 @@ namespace BP.DA
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
                 ada.Dispose();
-                conn.Close();
+
                 return oratb;
             }
             catch (System.Exception ex)
             {
-                conn.Close();
                 string msg = "@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql=" + selectSQL + " @异常信息：" + ex.Message;
                 msg += "@Para Num= " + paras.Count;
                 foreach (Para pa in paras)
@@ -2462,7 +2366,8 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
         }
         private static DataTable RunSQLReturnTable_200705_SQL(string selectSQL)
@@ -2478,6 +2383,7 @@ namespace BP.DA
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
                 ada.Dispose();
+
                 return oratb;
             }
             catch (System.Exception ex)
@@ -2486,6 +2392,11 @@ namespace BP.DA
                 string msg = "@运行查询在(RunSQLReturnTable_200705_SQL)出错 sql=" + selectSQL + " @异常信息：" + msgErr;
                 Log.DebugWriteError(msg);
                 throw new Exception(msg);
+            }
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
             }
         }
 
@@ -2513,15 +2424,20 @@ namespace BP.DA
             {
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
-                ada.Dispose();
-                conn.Close();
+
                 return oratb;
             }
             catch (Exception ex)
             {
-                ada.Dispose();
-                conn.Close();
+                Log.DebugWriteError(ex.Message);
                 throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
+            finally
+            {
+                if (ada != null)
+                    ada.Dispose();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         /// <summary>
@@ -2557,18 +2473,20 @@ namespace BP.DA
             {
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
-                ada.Dispose();
-
-                if (isCloseConn == true)
-                    conn.Close();
 
                 return oratb;
             }
             catch (Exception ex)
             {
-                ada.Dispose();
-                conn.Close();
+                Log.DebugWriteError(ex.Message);
                 throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
+            finally
+            {
+                if (ada != null)
+                    ada.Dispose();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         private static string DealInformixSQL(string sql)
@@ -2644,7 +2562,7 @@ namespace BP.DA
         }
         private static DataTable RunSQLReturnTable_200705_MySQL(string sql, Paras paras)
         {
-           
+
 
             using (MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN))
             {
@@ -3211,11 +3129,6 @@ namespace BP.DA
         public static object RunSQLReturnVal(string sql, SqlConnection conn, CommandType sqlType, string dsn, params object[] pars)
         {
             //return DBAccess.RunSQLReturnTable(sql,conn,dsn,sqlType,null).Rows[0][0];
-
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-
             object val = null;
             SqlCommand cmd = null;
 
@@ -3239,15 +3152,16 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                //return DBAccess.re
-
-                cmd.Cancel();
-                conn.Close();
-                cmd.Dispose();
-                conn.Dispose();
                 throw new Exception(ex.Message + " [RunSQLReturnVal on SqlConnection] " + sql);
             }
-            //conn.Close();
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
+            }
+
             return val;
         }
         #endregion
@@ -3793,13 +3707,18 @@ namespace BP.DA
                     conn.Open();
                 DataTable dt = new DataTable("tb");
                 ada.Fill(dt);
-                // peng add 
+
                 ada.Dispose();
                 return dt;
             }
             catch (System.Exception ex)
             {
                 throw new Exception(ex.Message + sql);
+            }
+            finally
+            {
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         #endregion
@@ -3830,10 +3749,9 @@ namespace BP.DA
         }
         public static int RunSQL(string sql, OdbcConnection conn, CommandType sqlType, params object[] pars)
         {
-            Debug.WriteLine(sql);
+            OdbcCommand cmd = new OdbcCommand(sql, conn);
             try
             {
-                OdbcCommand cmd = new OdbcCommand(sql, conn);
                 cmd.CommandType = sqlType;
                 foreach (object par in pars)
                 {
@@ -3848,6 +3766,13 @@ namespace BP.DA
             catch (System.Exception ex)
             {
                 throw new Exception(ex.Message + sql);
+            }
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
 
@@ -3908,14 +3833,19 @@ namespace BP.DA
                     cmd.Parameters.AddWithValue("par", par);
                 }
                 tmp.Open();
+
                 val = cmd.ExecuteScalar();
             }
             catch (System.Exception ex)
             {
-                tmp.Close();
                 throw new Exception(ex.Message + sql);
             }
-            tmp.Close();
+            finally
+            {
+                if (tmp != null)
+                    tmp.Close();
+            }
+
             return val;
         }
         #endregion 执行SQL ，返回首行首列

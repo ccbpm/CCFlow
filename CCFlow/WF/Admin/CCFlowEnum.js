@@ -50,6 +50,8 @@ if (typeof DeliveryWay == "undefined") {
         //所有人员都可以发起
         DeliveryWay.BySelected_1 = 41,
         DeliveryWay.BySelectedOrgs = 22,
+        //按照部门领导计算
+        DeliveryWay.ByDeptLeader = 23,
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
         // 与上一节点的人员相同

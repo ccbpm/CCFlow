@@ -72,6 +72,8 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.BySetDeptAsSubthread + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定部门计算，该部门一人处理标识该工作结束(子线程)</option>";
 
         html += "<option value=" + DeliveryWay.FindSpecDeptEmps + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门范围内的岗位集合里面的人员.</option>";
+        html += "<option value=" + DeliveryWay.ByDeptLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门的领导(负责人).</option>";
+
         // 与按照岗位智能计算不同的是，仅仅找本部门的人员.
     }
 
@@ -310,6 +312,9 @@ function changeOption() {
             break;
         case DeliveryWay.BySelectedForPrj:
             roleName = "21.BySelectedForPrj.htm";
+            break;
+        case DeliveryWay.ByDeptLeader:
+            roleName = "22.ByDeptLeader.htm";
             break;
         case DeliveryWay.BySelectedOrgs:
             roleName = "42.BySelectedOrgs.htm";

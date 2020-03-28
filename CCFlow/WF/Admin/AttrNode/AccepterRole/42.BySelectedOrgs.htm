@@ -18,7 +18,17 @@
 <body>
     <div id="App">
         <div id="bar"> </div>
-        <div id="OrgModel">
+        <div id="AdminModel">
+            <fieldset>
+                <legend>设置</legend>
+                <ul>
+                    <li><a href="#" @click="OpenNew()"> 设置/更改组织</a></li>
+                    <!-- <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>-->
+                    <li>该组织下所有的人员都可以处理该节点的工作。</li>
+                </ul>
+            </fieldset>
+        </div>
+        <!--<div id="OrgModel">
             <fieldset v-show="orgModel===1">
                 <legend>设置（组织管理员）</legend>
                 <ul>
@@ -26,15 +36,15 @@
                     <li><a href="#" @click="SetOrgDepts()">设置本组织部门</a> </li>
                 </ul>
             </fieldset>
-        </div>
+        </div>-->
 
         <fieldset>
-            <legend>已经选择的部门</legend>
-            <div id="dept">
+            <legend>已经选择的组织</legend>
+            <div id="org">
                 <ul>
-                    <li v-show="depts.length===0">未设置</li>
-                    <template v-for="dept in depts">
-                        <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                    <li v-show="orgs.length===0">未设置</li>
+                    <template v-for="org in orgs">
+                        <li v-if="org.OrgNoText!=undefined">{{orgs.OrgNoText}}</li>
                     </template>
                 </ul>
 
@@ -44,7 +54,7 @@
         <fieldset>
             <legend id="help">帮助</legend>
             <ul>
-                <li>节点绑定部门就是该节点下绑定部门里面的所有人员都可以接受该工作.</li>
+                <li>节点绑定组织就是该组织里面的所有人员都可以接受该工作.</li>
             </ul>
         </fieldset>
     </div>
@@ -52,9 +62,8 @@
         var Baseinfo = new Vue({
             el: '#App',
             data: {
-                adminModel: 1,
-                orgModel: 0,
-                depts: [],
+           
+                orgs: [],
                 webuser: null,
                 deliverWay: DeliveryWay.BySelectedOrgs
             },
@@ -62,39 +71,24 @@
                 OpenNew: function () {
 
                     var nodeID = GetQueryString("FK_Node");
-                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
-
-                    url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
-
-                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 600, 500, function () {
-                        Baseinfo.depts = getDepts();
+                    //var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowExt&Dot2DotEnsName=BP.WF.Template.FlowOrgs&AttrOfOneInMM=FlowNo&AttrOfMInMM=OrgNo&EnsOfM=BP.WF.Port.Admin2.Orgs&DefaultGroupAttrKey=";
+                    url += '&No=' + nodeID + '&PKVal=' + nodeID;
+                    //url += '&NodeID=001&PKVal=001';
+                    
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定组织', 600, 500, function () {
+                        alert(getOrgs());
+                        Baseinfo.orgs = getOrgs();
+                        
                     });
-                },
-                SetGroupDepts: function () {
-                    OpenNodDeptGroup(this.webuser.GroupNo);
-
-                },
-                SetOrgDepts: function () {
-                    OpenNodDeptGroup(this.webuser.FK_Dept);
                 }
             },
             created() {
                 InitBar(this.deliverWay);
-                this.depts = getDepts();
-
-                //根据用户的信息，判断是否启用那个设置工具。
-                this.webuser = new WebUser();
-                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
-                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+                this.orgs = getOrgs();
 
             }
         });
-        function OpenNodDeptGroup(orgNo) {
-            var url = "NodeDeptGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-            OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
-                Baseinfo.depts = getDepts();
-            });
-        }
 
         //保存
         function Save() {

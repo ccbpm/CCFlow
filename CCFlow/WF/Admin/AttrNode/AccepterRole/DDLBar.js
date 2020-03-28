@@ -208,6 +208,18 @@ function getDepts() {
 
 }
 /*
+ * 获取节点绑定的组织
+ */
+function getOrgs() {
+    var ens = new Entities("BP.WF.Template.FlowOrgs");
+    ens.Retrieve("FlowNo", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FlowNo != undefined
+    });
+    return ens;
+
+}
+/*
  * 获取节点绑定的人员
  */
 function getEmps() {
@@ -298,6 +310,9 @@ function changeOption() {
             break;
         case DeliveryWay.BySelectedForPrj:
             roleName = "21.BySelectedForPrj.htm";
+            break;
+        case DeliveryWay.BySelectedOrgs:
+            roleName = "42.BySelectedOrgs.htm";
             break;
         case DeliveryWay.ByCCFlowBPM:
             roleName = "100.ByCCFlowBPM.htm";

@@ -1166,6 +1166,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = new DataTable();
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("GroupName", typeof(string));
             dt.Columns.Add("Icon", typeof(string));
             dt.Columns.Add("Note", typeof(string));
 
@@ -1179,6 +1180,7 @@ namespace BP.WF.HttpHandler
                  dr = dt.NewRow();
                 dr["Name"] = en.ToString();
                 dr["Title"] = en.Title;
+                dr["GroupName"] = en.GroupName;
                 dr["Icon"] = en.Icon;
                 dr["Note"] = en.Help;
                 dt.Rows.Add(dr);

@@ -1094,10 +1094,15 @@ namespace BP.WF.HttpHandler
             if (attr.MyDataType == DataType.AppString)
             {
 
+                UIContralType uiContralType = (UIContralType)this.GetRequestValInt("UIContralType");
+               
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                if (uiContralType == UIContralType.SignCheck)
+                    attr.UIIsEnable = false;
+                else
+                    attr.UIIsEnable = true;
                 attr.ColSpan = 1;
                 attr.MinLen = 0;
                 attr.MaxLen = 50;

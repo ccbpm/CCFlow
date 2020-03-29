@@ -110,6 +110,14 @@ namespace BP.En
 		/// 图片附件
 		/// </summary>
 		FrmImgAth = 12,
+		/// <summary>
+		/// 身份证号
+		/// </summary>
+		IDCard=13,
+		/// <summary>
+		/// 签批组件
+		/// </summary>
+		SignCheck = 14,
         /// <summary>
         /// 流程进度图
         /// </summary>

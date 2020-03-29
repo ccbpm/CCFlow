@@ -117,6 +117,10 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         _Html += "&nbsp;&nbsp;<span class='score-tips' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + num + "  分</strong></span>";
         _Html += "</span></span>";
     }
+    if (dataType == "SignCheck")
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%'/>";
+
+
     editor.execCommand('insertHtml', _Html);
 }
 
@@ -177,6 +181,9 @@ function GetDataType(mapAttr) {
             return "Map";
         if (mapAttr.UIContralType == 101)//评分
             return "Score";
+
+        if (mapAttr.UIContralType == 14)//签批组件
+            return "SignCheck";
     }
 
 }

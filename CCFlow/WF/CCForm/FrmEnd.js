@@ -14,7 +14,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         }
     }
 
- 
+    var isFistQuestWorkCheck = true; //是否是第一次请求审核组件信息
+    var checkData;
     //为控件赋值.
     for (var i = 0; i < mapAttrs.length; i++) {
 
@@ -123,7 +124,41 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 });
             }
         }
+
+       
+
+        if (mapAttr.UIContralType == 14) {//签批组件
+            if (mapAttr.UIIsEnable == true && pageData.IsReadonly != "1") {
+                $("#TB_" + mapAttr.KeyOfEn).val(pageData.FK_Node);
+                $("#TB_" + mapAttr.KeyOfEn).hide();
+            }
+            //获取审核组件信息
+            if (isFistQuestWorkCheck == true) {
+                $.getScript('./WorkOpt/WorkCheck.js', function () { });
+                isFistQuestWorkCheck = false;
+                checkData = WorkCheck_Init();
+            }
+            var node = frmData.WF_Node == undefined ? null : frmData.WF_Node[0];
+            if (node!=null && node.FWCVer == 0 || node.FWCVer == "" || node.FWCVer == undefined)
+                pageData.FWCVer = 0;
+            else
+                pageData.FWCVer = 1;
+
+            var _Html = "<div>" + GetWorkCheck_Node(checkData, $("#TB_" + mapAttr.KeyOfEn).val()) + "</div>";
+            $("#TB_" + mapAttr.KeyOfEn).after(_Html);
+        }
+
     }
+
+    //增加审核组件附件上传的功能
+    if ($("#uploaddiv").length > 0) {
+        var explorer = window.navigator.userAgent;
+        if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
+            AddUploadify("uploaddiv", $("#uploaddiv").attr("data-info"));
+        else
+            AddUploafFileHtm("uploaddiv", $("#uploaddiv").attr("data-info"));
+    }
+
 
 
     //设置为只读的字段.
@@ -170,8 +205,6 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
         
     }
-
-
 }
 
 //傻瓜表单/累加表单初始化联动

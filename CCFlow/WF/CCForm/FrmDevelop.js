@@ -36,7 +36,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
     $("#CCForm").html(htmlContent);
 
     //解析表单中的数据
-
+   
     //1.加载隐藏字段，
     var mapAttrs = frmData.Sys_MapAttr;
     var html = "";
@@ -61,6 +61,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 dateFmt = "MM-dd";
             }
             $('#TB_' + mapAttr.KeyOfEn).attr("onfocus", "WdatePicker({ dateFmt:'" + dateFmt + "' })");
+            continue;
 
         }
         if (mapAttr.MyDataType == 7 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {
@@ -78,7 +79,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
             
             $('#TB_' + mapAttr.KeyOfEn).attr("onfocus", "WdatePicker({ dateFmt:'" + dateFmt + "' })");
            
-
+            continue;
         }
 
         //外部数据源、外键的选择列表
@@ -87,13 +88,14 @@ function GenerDevelopFrm(wn,fk_mapData) {
             var _html = InitDDLOperation(frmData, mapAttr, null);
             $("#DDL_" + mapAttr.KeyOfEn).empty();
             $("#DDL_" + mapAttr.KeyOfEn).append(_html);
-
+            continue;
         }
       
 
         //为复选框高级设置绑定事件
         if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
             $("#CB_" + mapAttr.KeyOfEn).attr("onchange", "clickEnable(this, \"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
+            continue;
         }
           //为单选按钮高级设置绑定事件
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
@@ -108,6 +110,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                    
                 }
             }
+            continue;
         } 
 
         if (mapAttr.MyDataType == 1) {
@@ -129,12 +132,14 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 
                 element.after(eleHtml);
                 element.remove(); //移除Imge节点
+                continue;
             }
             if (mapAttr.UIContralType == 4)//地图
             {
                 var obj = $("#TB_" + mapAttr.KeyOfEn);
                 //获取兄弟节点
                 $(obj.prev()).attr("onclick", "figure_Template_Map('" + mapAttr.KeyOfEn + "','" + mapAttr.UIIsEnable + "')");
+                continue;
             }
             if (mapAttr.UIContralType == 101)//评分
             {
@@ -147,7 +152,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                             $(this).attr("src", $(this).attr("src").replace("../../", "./"));
                     });
                 });
-
+                continue;
             }
         }
     }

@@ -225,10 +225,9 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
             pageData.FWCVer = 0;
         else
             pageData.FWCVer = 1;
-        $.getScript('../WorkOpt/WorkCheck.js', function () { });
     }
 
-    var eleHtml = $("<div id='WorkCheck'></div>");
+    var eleHtml = $("<div id='WorkCheck'>" + WorkCheck_InitPage() +"</div>");
     eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
     return eleHtml;
 }

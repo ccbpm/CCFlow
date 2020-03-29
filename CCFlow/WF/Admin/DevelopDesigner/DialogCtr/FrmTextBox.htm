@@ -27,7 +27,7 @@
 
             PageTransfer_value = dataType; //取出页面传至
             //给单选赋值
-            if (PageTransfer_value == "Text" || PageTransfer_value=="Textarea") {
+            if (PageTransfer_value == "Text" || PageTransfer_value == "Textarea" || PageTransfer_value =="SignCheck") {
                 $("#RB_String").attr("checked", true);
             }
 
@@ -114,7 +114,9 @@
             handler.AddPara("KeyOfEn",KeyOfEn);
             handler.AddPara("name",name);
             handler.AddPara("FType", FieldType);
-            handler.AddPara("IsSupperText",dataType=="Textarea"?1:0 )
+            handler.AddPara("IsSupperText", dataType == "Textarea" ? 1 : 0)
+            if (dataType == "SignCheck")
+                handler.AddPara("UIContralType", 14);
             var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
             if (data.indexOf("err@") != -1) {
                  $.messager.alert('错误', data.replace('err@',''), 'error');
@@ -123,14 +125,16 @@
 
             //插入到html 到编辑器.
             if (dataType!="Textarea") {
-                dataType = GetFieldType(FieldType);
+                dataType = GetFieldType(FieldType, dataType);
             }
             InsertHtmlToEditor(dataType,KeyOfEn,name);
            
         };
         //类型转换
-        function GetFieldType(FieldType) {
+        function GetFieldType(FieldType, dataType) {
             if (FieldType == "1") {
+                if (dataType == "SignCheck")
+                    return "SignCheck";
                 return"Text";
             } else if (FieldType == "2") {
                 return "Int";

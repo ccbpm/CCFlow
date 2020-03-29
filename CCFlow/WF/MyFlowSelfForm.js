@@ -18,6 +18,7 @@ function SaveSelfFrom() {
     }
 
     //执行保存.
+    //frm.contentWindow.postMessage({ Save:"Save" }, "*");（跨域执行的方法）
     return frm.contentWindow.Save();
 }
 
@@ -1090,6 +1091,16 @@ function GenerWorkNode() {
 
     showTbNoticeInfo();
 
+
+    //增加审核组件附件上传的功能
+    if ($("#uploaddiv").length > 0) {
+        var explorer = window.navigator.userAgent;
+        if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
+            AddUploadify("uploaddiv", $("#uploaddiv").attr("data-info"));
+        else
+            AddUploafFileHtm("uploaddiv", $("#uploaddiv").attr("data-info"));
+    }
+
 }
 
 function Ele_FrmCheck(wf_node) {
@@ -1099,10 +1110,10 @@ function Ele_FrmCheck(wf_node) {
             pageData.FWCVer = 0;
         else
             pageData.FWCVer = 1;
-        $.getScript('./WorkOpt/WorkCheck.js', function () { });
+        
     }
 
-    return "<div id='WorkCheck'></div>";
+    return "<div id='WorkCheck'>" + WorkCheck_InitPage() +"</div>";
 
 }
 

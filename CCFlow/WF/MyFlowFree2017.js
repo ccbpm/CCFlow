@@ -952,10 +952,9 @@ function figure_Template_FigureFrmCheck(wf_node) {
             pageData.FWCVer = 0;
         else
             pageData.FWCVer = 1;
-        $.getScript('./WorkOpt/WorkCheck.js', function () { });
     }
 
-    eleHtml = $("<div id='WorkCheck'></div>");
+    eleHtml = $("<div id='WorkCheck'>" + WorkCheck_InitPage()+"</div>");
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
     return eleHtml;
 }

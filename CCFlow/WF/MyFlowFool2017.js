@@ -1644,10 +1644,10 @@ function Ele_FrmCheck(wf_node) {
             pageData.FWCVer = 0;
         else
             pageData.FWCVer = 1;
-        $.getScript('./WorkOpt/WorkCheck.js', function () { });
+      
     }
 
-   return "<div id='WorkCheck'></div>";
+    return "<div id='WorkCheck'>" + WorkCheck_InitPage()+"</div>";
 
 }
 

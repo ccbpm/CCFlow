@@ -1750,10 +1750,13 @@ function GenerWorkNode() {
     //原有的
 
     //textarea的高度自适应的设置
-    var textareas = $("textarea");
-    $.each(textareas, function (idex, item) {
-        autoTextarea(item);
-    });
+    if (node.FormType != 1) {
+        var textareas = $("textarea");
+        $.each(textareas, function (idex, item) {
+            autoTextarea(item);
+        });
+    }
+    
 
     //为 DISABLED 的 TEXTAREA 加TITLE 
     var disabledTextAreas = $('#divCCForm textarea:disabled');

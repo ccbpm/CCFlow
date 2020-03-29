@@ -162,7 +162,7 @@ UE.plugins['text'] = function () {
         evt = evt || window.event;
         var el = evt.target || evt.srcElement;
         var leipiPlugins = el.getAttribute('leipiplugins');
-        if (/input/ig.test(el.tagName) && leipiPlugins == thePlugins) {
+        if (/input|div/ig.test(el.tagName) && leipiPlugins == thePlugins) {
             var html = popup.formatHtml(
                 '<nobr>文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             if (html) {
@@ -215,6 +215,13 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
         CCForm_ShowDialog(url, '字段String属性');
         return;
     }
+
+    if (shap == 'SignCheck') {
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
+        CCForm_ShowDialog(url, '字段签批组件的属性');
+        return;
+    }
+
 
     if (shap == 'Textarea') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;

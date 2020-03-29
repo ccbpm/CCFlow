@@ -169,6 +169,8 @@
                     return "地图";
                 if (mapAttr.UIContralType == 101)//评分
                     return "评分";
+                if (mapAttr.UIContralType == 14)//评分
+                    return "签批组件";
             }
             return "其他类型";
         }
@@ -232,6 +234,11 @@
                 if (uiContralType == 101) {
                     title = '评分控件';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 14) {
+                    title = '字段S签批组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
             }

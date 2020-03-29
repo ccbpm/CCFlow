@@ -7,22 +7,8 @@ var isCanSend = true; //是否可以发送？
 var isChange = false;
 
 //审核组件页面初始化
-$(function () {
-    var data;
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-    handler.AddJson(pageData);
-    if (pageData.FWCVer == 0)
-        data = handler.DoMethodReturnString("WorkCheck_Init");
-    else 
-        data = handler.DoMethodReturnString("WorkCheck_Init2019");  //显示反复节点审核的信息
-
-    if (data.indexOf('err@') != -1) {
-        alert(data);
-        console.log(data);
-        return;
-    }
-    //审核组件的数据集合
-    var checkData = JSON.parse(data);
+function WorkCheck_InitPage(){
+    var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息
     var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
@@ -43,270 +29,12 @@ $(function () {
         _Html += '</tr>';
     }
 
-    $.each(tracks, function () {
-
-        //解析节点上传的附件
-        var subaths = GetSubAths(this.NodeID, aths);
-
-        //仅显示自己的审核意见
-        if (frmWorkCheck.FWCMsgShow == "1" && this.NodeID == pageData.FK_Node && this.IsDoc == false) {
-            return true;
-        }
-
-        //var fwcs = new Entities("BP.WF.Template.FrmWorkChecks");
-        //fwcs.Retrieve("NodeID", this.NodeID);
-
-        // if (fwcs[0].FWCSta == 2)
-        //   return true;
-
-        _Html += "<tr>";
-
-        //显示审核节点的信息/有可能是会签节点
-        var tdWidth = pageData.IsMobile == null || pageData.IsMobile == "0" ? "120px" : "20%;";
-        _Html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
-        var nodeName = this.NodeName;
-        nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
-        _Html += nodeName;
-        _Html += "</td>";
-
-
-        //可编辑的审核意见
-        if (this.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly== false)) {
-
-            _Html += "<td>";
-
-            //是否启用附件上传
-            if (frmWorkCheck.FWCAth == 1) {
-                _Html += "<div style='float:right' id='uploaddiv' onmouseover='UploadFileChange(this)'></div>";
-            }
-
-            _Html += "<div style='float:left;width:100%;'>";
-            var msg = this.Msg;
-            if (msg == null || msg == undefined || msg == "")
-                msg = "同意";
-            else
-                msg = msg.replace(/<BR>/g, '\t\n');
-
-            _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
-            _Html += msg;
-            _Html += "</textarea>";
-
-
-
-            //1.获取自定义常用短语
-            var DuanYu = frmWorkCheck.FWCNewDuanYu;
-            if (DuanYu != null && DuanYu != undefined && DuanYu!="") {
-
-                var NewDuanYu = DuanYu.split("@");
-            } else {
-                var NewDuanYu = "";
-            }
-            //2.加入常用短语.
-            _Html += "<br>";
-            _Html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
-            _Html += "<option value=''>常用短语</option>";
-            if (NewDuanYu.length > 0) {
-                for (var i = 0; i < NewDuanYu.length; i++) {
-                    if (NewDuanYu[i] == "") {
-                        continue;
-                    }
-                    _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
-                }
-            } else {
-
-                _Html += "<option value='同意'>同意</option>";
-                _Html += "<option value='同意办理'>同意办理</option>";
-                _Html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
-                _Html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
-                _Html += "<option value='不同意'>不同意</option>";
-            }
-            _Html += "</select><font color=Gray>内容不要超过2000字</font>";
-            _Html += "</div>";
-            _Html += "</td>";
-
-            //3.加入立场判断
-            if (frmWorkCheck.FWCView != null && frmWorkCheck.FWCView != "" && frmWorkCheck.FWCView != undefined) {
-                var fwcView = "";
-                if (this.Tag.indexOf("@FWCView") != -1) {
-                    var arr = this.Tag.split("@");
-                    for (var i = 0; i < arr.length; i++) {
-                        if (arr[i].indexOf("FWCView") == -1)
-                            continue;
-                        else {
-                            fwcView = arr[i].replace("FWCView=", "");
-                            break;
-                        }
-                    }
-                }
-
-                var str = frmWorkCheck.FWCView.split(",");
-                _Html += "<br>";
-                _Html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                var idx = 0;
-                for (var i = 0; i < str.length; i++) {
-                    if (str[i] == "")
-                        continue;
-                    var check = "";
-                    if (fwcView != "" && idx == parseInt(fwcView))
-                        check = "checked = checked";
-                    else if (fwcView == "" && idx == 0)
-                        check = "checked = checked";
-                    _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
-                    idx++;
-                }
-            }
-        }//只读的审核意见
-        else {
-
-            _Html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
-            //显示退回原因
-            var returnMsg = this.ActionType == 2 ? "退回原因：" : "";
-            if (pageData.FWCVer == 1) {
-                var val = this.Msg.split("WorkCheck@");
-                if (val.length == 2)
-                    this.Msg = val[1];
-            }
-            _Html += '<font color=green>' + returnMsg + this.Msg + '</font>';
-            //加入立场判断
-            if (this.FWCView != null && this.FWCView != "" && this.FWCView != undefined) {
-                var fwcView = "";
-                if (this.Tag.indexOf("@FWCView") != -1) {
-                    var arr = this.Tag.split("@");
-                    for (var i = 0; i < arr.length; i++) {
-                        if (arr[i].indexOf("FWCView") == -1)
-                            continue;
-                        else {
-                            fwcView = arr[i].replace("FWCView=", "");
-                            break;
-                        }
-                    }
-                }
-
-                var str = this.FWCView.split(",");
-                _Html += "<br>";
-                _Html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                var idx = 0;
-                for (var i = 0; i < str.length; i++) {
-                    if (str[i] == "")
-                        continue;
-                    var check = "";
-                    if (fwcView != "" && idx == parseInt(fwcView))
-                        check = "checked = checked";
-                    else if (fwcView == "" && idx == 0)
-                        check = "checked = checked";
-                    _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "' disabled/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
-                    idx++;
-                }
-            }
-
-
-            _Html += '</td>';
-        }
-
-        _Html += '</tr>';
-
-        //附件
-        if (subaths.length > 0) {
-            var tdid = this.IsDoc ? ("id='aths_" + this.NodeID + "'") : "";
-
-            _Html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
-            _Html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
-            _Html += "<b>附件：</b>&nbsp;" + subaths;
-            _Html += "</td>";
-            _Html += "</tr>";
-        }
-
-        //输出签名,没有签名的要求.
-        if (SignType == null || SignType == undefined) {
-
-            var rdt = this.RDT.substring(0, 16);
-
-            if (rdt == "") {
-                var dt = new Date();
-                rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
-            }
-
-            //签名，日期.
-            _Html += "<tr>";
-            _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
-
-            if (frmWorkCheck.SigantureEnabel == "0")
-                _Html += this.EmpFromT;
-            else
-                _Html += GetUserSiganture(this.EmpFrom, this.EmpFromT);
-
-            _Html += "</div>";
-
-
-            _Html += "<div style='float:right'> ";
-            _Html += "<font color='Gray'>日期:</font>" + rdt;
-            _Html += "</div>";
-            _Html += "</td>";
-
-            _Html += "</tr>";
-
-        } else {
-
-            for (var idx = 0; idx < SignType.length; idx++) {
-
-                var st = SignType[idx];
-                if (st.No != this.EmpFrom)
-                    continue;
-
-                var rdt = this.RDT.substring(0, 16);
-
-
-                if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
-
-                    _Html += "<tr>";
-                    _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                        +this.EmpFromT + '</div>'
-                        + "<div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                    _Html += "</tr>";
-                    break;
-                }
-
-                if (st.SignType == 1) {
-                    _Html += "<tr>";
-                    _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                        + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
-                        + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                    _Html += "</tr>";
-                    break;
-                }
-
-                if (st.SignType == 2) {
-
-                    _Html += "<tr>";
-                    _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                        + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
-                        + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                    _Html += "</tr>";
-                    //  alert('电子签名的逻辑尚未编写.');
-                    break;
-                }
-
-                //如果是图片密码签名.
-                if (st.SignType == 3) {
-
-                    isCanSend = false; //设置不可以发送.
-                    _Html += "<tr>";
-                    _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
-
-                    _Html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
-
-                    _Html += "</div>";
-
-                    _Html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
-                    _Html += "</tr>";
-                    break;
-                }
-            }
-        }
-
-
+    $.each(tracks, function (idx,item) {
+        _Html += WorkCheck_Parse(item, aths, frmWorkCheck, SignType);
     });
     _Html += "</table>";
+
+    return _Html;
     $("#WorkCheck").append(_Html);
 
     // $(window.parent.document).find("#FWC").css('height', $("#tbTracks").height() + 5);
@@ -328,7 +56,310 @@ $(function () {
     }
    
 
-});
+}
+
+function WorkCheck_Init() {
+    var data;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+    handler.AddJson(pageData);
+    if (pageData.FWCVer == 0)
+        data = handler.DoMethodReturnString("WorkCheck_Init");
+    else
+        data = handler.DoMethodReturnString("WorkCheck_Init2019");  //显示反复节点审核的信息
+
+    if (data.indexOf('err@') != -1) {
+        alert(data);
+        console.log(data);
+        return;
+    }
+    //审核组件的数据集合
+    return JSON.parse(data);
+
+}
+
+function GetWorkCheck_Node(checkData, FK_Node) {
+    //当前节点审核组件信息
+    var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
+
+    var tracks = checkData.Tracks;
+    var aths = checkData.Aths;
+    var SignType = checkData.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
+    if (tracks.length == 0)
+        return "";
+    var _Html = '<table style="width:100%">';
+
+    for (var i = 0; i < tracks.length; i++) {
+        var track = tracks[i];
+        if (track.NodeID != FK_Node)
+            continue;
+        _Html += WorkCheck_Parse(track, aths,frmWorkCheck, SignType);
+    } 
+    _Html += "</table>";
+    return _Html;
+
+}
+function WorkCheck_Parse(track, aths, frmWorkCheck, SignType) {
+    var _Html = "";
+    //解析节点上传的附件
+    var subaths = GetSubAths(track.NodeID, aths);
+
+    //仅显示自己的审核意见
+    if (frmWorkCheck.FWCMsgShow == "1" && track.NodeID == pageData.FK_Node && track.IsDoc == false) {
+        return true;
+    }
+
+    //var fwcs = new Entities("BP.WF.Template.FrmWorkChecks");
+    //fwcs.Retrieve("NodeID", this.NodeID);
+
+    // if (fwcs[0].FWCSta == 2)
+    //   return true;
+
+    _Html += "<tr>";
+
+    //显示审核节点的信息/有可能是会签节点
+    var tdWidth = pageData.IsMobile == null || pageData.IsMobile == "0" ? "120px" : "20%;";
+    _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
+    var nodeName = track.NodeName;
+    nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
+    _Html += nodeName;
+    _Html += "</td>";
+
+
+    //可编辑的审核意见
+    if (track.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly == false)) {
+
+        _Html += "<td>";
+
+        //是否启用附件上传
+        if (frmWorkCheck.FWCAth == 1) {
+            _Html += "<div style='float:right' id='uploaddiv' data-info='" + frmWorkCheck.FWCShowModel+"' onmouseover='UploadFileChange(this)'></div>";
+        }
+
+        _Html += "<div style='float:left;width:100%;'>";
+        var msg = track.Msg;
+        if (msg == null || msg == undefined || msg == "")
+            msg = "同意";
+        else
+            msg = msg.replace(/<BR>/g, '\t\n');
+
+        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
+        _Html += msg;
+        _Html += "</textarea>";
+
+
+
+        //1.获取自定义常用短语
+        var DuanYu = frmWorkCheck.FWCNewDuanYu;
+        if (DuanYu != null && DuanYu != undefined && DuanYu != "") {
+
+            var NewDuanYu = DuanYu.split("@");
+        } else {
+            var NewDuanYu = "";
+        }
+        //2.加入常用短语.
+        _Html += "<br>";
+        _Html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
+        _Html += "<option value=''>常用短语</option>";
+        if (NewDuanYu.length > 0) {
+            for (var i = 0; i < NewDuanYu.length; i++) {
+                if (NewDuanYu[i] == "") {
+                    continue;
+                }
+                _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
+            }
+        } else {
+
+            _Html += "<option value='同意'>同意</option>";
+            _Html += "<option value='同意办理'>同意办理</option>";
+            _Html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
+            _Html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
+            _Html += "<option value='不同意'>不同意</option>";
+        }
+        _Html += "</select><font color=Gray>内容不要超过2000字</font>";
+        _Html += "</div>";
+        _Html += "</td>";
+
+        //3.加入立场判断
+        if (frmWorkCheck.FWCView != null && frmWorkCheck.FWCView != "" && frmWorkCheck.FWCView != undefined) {
+            var fwcView = "";
+            if (track.Tag.indexOf("@FWCView") != -1) {
+                var arr = track.Tag.split("@");
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].indexOf("FWCView") == -1)
+                        continue;
+                    else {
+                        fwcView = arr[i].replace("FWCView=", "");
+                        break;
+                    }
+                }
+            }
+
+            var str = frmWorkCheck.FWCView.split(",");
+            _Html += "<br>";
+            _Html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            var idx = 0;
+            for (var i = 0; i < str.length; i++) {
+                if (str[i] == "")
+                    continue;
+                var check = "";
+                if (fwcView != "" && idx == parseInt(fwcView))
+                    check = "checked = checked";
+                else if (fwcView == "" && idx == 0)
+                    check = "checked = checked";
+                _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
+                idx++;
+            }
+        }
+    }//只读的审核意见
+    else {
+
+        _Html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
+        //显示退回原因
+        var returnMsg = track.ActionType == 2 ? "退回原因：" : "";
+        if (pageData.FWCVer == 1) {
+            var val = track.Msg.split("WorkCheck@");
+            if (val.length == 2)
+                track.Msg = val[1];
+        }
+        _Html += '<font color=green>' + returnMsg + track.Msg + '</font>';
+        //加入立场判断
+        if (track.FWCView != null && track.FWCView != "" && track.FWCView != undefined) {
+            var fwcView = "";
+            if (track.Tag.indexOf("@FWCView") != -1) {
+                var arr = track.Tag.split("@");
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].indexOf("FWCView") == -1)
+                        continue;
+                    else {
+                        fwcView = arr[i].replace("FWCView=", "");
+                        break;
+                    }
+                }
+            }
+
+            var str = track.FWCView.split(",");
+            _Html += "<br>";
+            _Html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            var idx = 0;
+            for (var i = 0; i < str.length; i++) {
+                if (str[i] == "")
+                    continue;
+                var check = "";
+                if (fwcView != "" && idx == parseInt(fwcView))
+                    check = "checked = checked";
+                else if (fwcView == "" && idx == 0)
+                    check = "checked = checked";
+                _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "' disabled/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
+                idx++;
+            }
+        }
+
+
+        _Html += '</td>';
+    }
+
+    _Html += '</tr>';
+
+    //附件
+    if (subaths.length > 0) {
+        var tdid = track.IsDoc ? ("id='aths_" + track.NodeID + "'") : "";
+
+        _Html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
+        _Html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
+        _Html += "<b>附件：</b>&nbsp;" + subaths;
+        _Html += "</td>";
+        _Html += "</tr>";
+    }
+
+    //输出签名,没有签名的要求.
+    if (SignType == null || SignType == undefined) {
+
+        var rdt = track.RDT.substring(0, 16);
+
+        if (rdt == "") {
+            var dt = new Date();
+            rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
+        }
+
+        //签名，日期.
+        _Html += "<tr>";
+        _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+
+        if (frmWorkCheck.SigantureEnabel == "0")
+            _Html += track.EmpFromT;
+        else
+            _Html += GetUserSiganture(track.EmpFrom, track.EmpFromT);
+
+        _Html += "</div>";
+
+
+        _Html += "<div style='float:right'> ";
+        _Html += "<font color='Gray'>日期:</font>" + rdt;
+        _Html += "</div>";
+        _Html += "</td>";
+
+        _Html += "</tr>";
+
+    } else {
+
+        for (var idx = 0; idx < SignType.length; idx++) {
+
+            var st = SignType[idx];
+            if (st.No != track.EmpFrom)
+                continue;
+
+            var rdt = track.RDT.substring(0, 16);
+
+
+            if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
+
+                _Html += "<tr>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                    + track.EmpFromT + '</div>'
+                    + "<div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "</tr>";
+                break;
+            }
+
+            if (st.SignType == 1) {
+                _Html += "<tr>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                    + GetUserSiganture(track.EmpFrom, track.EmpFromT) + '</div>'
+                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "</tr>";
+                break;
+            }
+
+            if (st.SignType == 2) {
+
+                _Html += "<tr>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                    + GetUserSiganture(track.EmpFrom, track.EmpFromT) + '</div>'
+                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "</tr>";
+                //  alert('电子签名的逻辑尚未编写.');
+                break;
+            }
+
+            //如果是图片密码签名.
+            if (st.SignType == 3) {
+
+                isCanSend = false; //设置不可以发送.
+                _Html += "<tr>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+
+                _Html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
+
+                _Html += "</div>";
+
+                _Html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "</tr>";
+                break;
+            }
+        }
+    }
+    return _Html;
+}
 
 function SetDocVal() {
 

@@ -7,9 +7,9 @@ using BP.Port;
 namespace BP.Demo.BPFramework
 {
     /// <summary>
-    /// 学生 属性
+    /// 固定资产 属性
     /// </summary>
-    public class StudentAttr : EntityNoNameAttr
+    public class GDZCAttr : EntityNoNameAttr
     {
         #region 基本属性
         /// <summary>
@@ -31,7 +31,7 @@ namespace BP.Demo.BPFramework
         /// <summary>
         /// 年龄
         /// </summary>
-        public const string Age = "Age";
+        public const string jinE = "jinE";
         /// <summary>
         /// 邮件
         /// </summary>
@@ -84,9 +84,9 @@ namespace BP.Demo.BPFramework
         public const string FK_City = "FK_City";
     }
     /// <summary>
-    /// 学生
+    /// 固定资产
     /// </summary>
-    public class Student : BP.En.EntityNoName
+    public class GDZC : BP.En.EntityNoName
     {
         #region 属性
         /// <summary>
@@ -96,25 +96,25 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.PWD);
+                return this.GetValStringByKey(GDZCAttr.PWD);
             }
             set
             {
-                this.SetValByKey(StudentAttr.PWD, value);
+                this.SetValByKey(GDZCAttr.PWD, value);
             }
         }
         /// <summary>
         /// 年龄
         /// </summary>
-        public int Age
+        public int jinE
         {
             get
             {
-                return this.GetValIntByKey(StudentAttr.Age);
+                return this.GetValIntByKey(GDZCAttr.jinE);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Age, value);
+                this.SetValByKey(GDZCAttr.jinE, value);
             }
         }
         /// <summary>
@@ -124,11 +124,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.Addr);
+                return this.GetValStringByKey(GDZCAttr.Addr);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Addr, value);
+                this.SetValByKey(GDZCAttr.Addr, value);
             }
         }
         /// <summary>
@@ -138,11 +138,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValIntByKey(StudentAttr.XB);
+                return this.GetValIntByKey(GDZCAttr.XB);
             }
             set
             {
-                this.SetValByKey(StudentAttr.XB, value);
+                this.SetValByKey(GDZCAttr.XB, value);
             }
         }
         /// <summary>
@@ -152,7 +152,7 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValRefTextByKey(StudentAttr.XB);
+                return this.GetValRefTextByKey(GDZCAttr.XB);
             }
         }
         /// <summary>
@@ -162,11 +162,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.FK_BanJi);
+                return this.GetValStringByKey(GDZCAttr.FK_BanJi);
             }
             set
             {
-                this.SetValByKey(StudentAttr.FK_BanJi, value);
+                this.SetValByKey(GDZCAttr.FK_BanJi, value);
             }
         }
         /// <summary>
@@ -176,7 +176,7 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValRefTextByKey(StudentAttr.FK_BanJi);
+                return this.GetValRefTextByKey(GDZCAttr.FK_BanJi);
             }
         }
         /// <summary>
@@ -186,11 +186,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.Email);
+                return this.GetValStringByKey(GDZCAttr.Email);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Email, value);
+                this.SetValByKey(GDZCAttr.Email, value);
             }
         }
         /// <summary>
@@ -200,11 +200,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.Tel);
+                return this.GetValStringByKey(GDZCAttr.Tel);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Tel, value);
+                this.SetValByKey(GDZCAttr.Tel, value);
             }
         }
         /// <summary>
@@ -214,11 +214,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.RegDate);
+                return this.GetValStringByKey(GDZCAttr.RegDate);
             }
             set
             {
-                this.SetValByKey(StudentAttr.RegDate, value);
+                this.SetValByKey(GDZCAttr.RegDate, value);
             }
         }
         #endregion
@@ -251,16 +251,16 @@ namespace BP.Demo.BPFramework
             }
         }
         /// <summary>
-        /// 学生
+        /// 固定资产
         /// </summary>
-        public Student()
+        public GDZC()
         {
         }
         /// <summary>
-        /// 学生
+        /// 固定资产
         /// </summary>
         /// <param name="no"></param>
-        public Student(string no)
+        public GDZC(string no)
             : base(no)
         {
         }
@@ -277,7 +277,7 @@ namespace BP.Demo.BPFramework
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_Student", "学生");
+                Map map = new Map("Demo_GDZC", "固定资产");
 
                 //基础信息.
                 map.IsAllowRepeatName = true; //是否允许名称重复.
@@ -285,130 +285,91 @@ namespace BP.Demo.BPFramework
                 map.Java_SetCodeStruct("4"); // 4位数的编号，从 0001 开始，到 9999.
 
                 #region 字段映射 - 普通字段.
-                map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 90); // 如果设置自动编号字段必须是只读的.
-                map.AddTBString(StudentAttr.Name, null, "名称", true, false, 0, 200, 70);
-                //map.AddTBStringDoc(StudentAttr.PWD, null, "密码", true, false);
-                map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 50);
+                map.AddTBStringPK(GDZCAttr.No, null, "固定资产编号", true, true, 4, 4, 90); // 如果设置自动编号字段必须是只读的.
+                map.AddTBString(GDZCAttr.Name, null, "名称", true, false, 0, 200, 70);
 
-                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, false);
-                map.AddTBInt(StudentAttr.Age, 18, "年龄", true, false);
+                map.AddTBString(GDZCAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
+                map.AddTBInt(GDZCAttr.jinE, 18, "金额", true, false);
+                map.AddTBInt("Yuanzhi", 18, "原值", true, false);
 
-                map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
-                map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
-                map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
-
-                //map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
-                //map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
-                //map.AddDDLEntities(StudentAttr.FK_City, null, "城市",new BP.CN.Citys(),true);
-
-                //枚举字段
-                map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
-
-                //外键字段.
-                //map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
-               // map.AddTBString(StudentAttr.FK_BanJi, null, "班级", true, false, 0, 200, 100, true);
-
-                //增加checkbox属性.
-                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true, true);
-                map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true, true);
-                map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
-                map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
-
-                map.AddTBStringDoc(ResumeAttr.BeiZhu, null, "备注", true, false);
-
-                //枚举字段 - 整治面貌.
-                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
-                    "@0=少先队员@1=团员@2=党员");
-
-                map.AddTBAtParas(2000);
 
                 #endregion 字段映射 - 普通字段.
 
-                map.AddMyFile("简历");//上传单附件
+                map.AddMyFile("照片");
+                //map.AddMyFileS("简历");
 
-                #region 设置查询条件。
+                //#region 设置查询条件.
+                ////string类型，多关键字查询条件.
+                //map.SearchFields = "@地址=" + GDZCAttr.Addr;
+                //map.SearchFields += "@电话=" + GDZCAttr.Tel;
 
-                //String字段类型的模糊查询：定义方式map.SearchFields,其赋值格式是@名称=字段英文名
-                //如果不设置该字段则进行关键字查询即所有string字段的模糊查询
-               // map.SearchFields = "@名称=Name@地址=Addr@电话=Tel";
-                //数值型字段查询：定义方式map.SearchFieldsOfNum，其赋值格式是@名称=字段英文名
-                //查询方式是从Age1到Age2阶段查询：
-                //①如果Age1有值，Age2无值，则查询大于等于Age1的结果集
-                //②如果Age1无值，Age2有值，则查询小于等于Age2的结果集
-                //③如果Age1有值，Age2有值，则查询大于等于Age1小于等于Age2的结果集
-              
-                map.SearchFieldsOfNum = "@年龄=Age";
-                map.DTSearchKey = "RegDate";
-                map.DTSearchLable = "注册日期";
-                map.DTSearchWay = Sys.DTSearchWay.ByDate; 
+                ////数值类型，范围查询条件.
+                //map.SearchFieldsOfNum = "@年龄=" + GDZCAttr.jinE;
 
+                ////设置日期查询条件.
+                //map.DTSearchKey = GDZCAttr.RegDate;
+                //map.DTSearchLable = "注册日期";
+                //map.DTSearchWay = Sys.DTSearchWay.ByDate; 
 
+                ////外键与枚举。
+                //map.AddSearchAttr(GDZCAttr.XB,1001); //宽度大于1000就是换行.
+                //map.AddSearchAttr(GDZCAttr.FK_BanJi);
 
-                //设置Search.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
-                map.AddSearchAttr(StudentAttr.XB);
-                map.AddSearchAttr(StudentAttr.ZZMM);
-
-                // map.AddSearchAttr(StudentAttr.FK_BanJi);
-
-                //隐藏条件的查询
-                // map.AddHidden(StudentAttr.ZZMM, " = ", "1");
+                ////隐藏的查询条件.
+                ////map.AddHidden("XB", " = ", "0");
+                //#endregion 设置查询条件.
 
 
-                #endregion 设置查询条件
+                //#region 与其他实体的映射.
+                ////多对多的映射.
+                //map.AttrsOfOneVSM.Add(new GDZCKeMus(), new KeMus(), GDZCKeMuAttr.FK_GDZC,
+                //  GDZCKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "选修的科目");
 
-                //多对多的映射.
-                map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
-                  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "选修的科目");
+                ////明细表映射.
+                //map.AddDtl(new Resumes(), ResumeAttr.RefPK);
+                //#endregion 与其他实体的映射.
 
-                //明细表映射.
-                map.AddDtl(new Resumes(), ResumeAttr.RefPK);
+               // #region 方法映射.
 
-                //带有参数的方法.
-                RefMethod rm = new RefMethod();
-                rm.Title = "缴纳班费";
-                rm.HisAttrs.AddTBDecimal("JinE", 100, "缴纳金额", true, false);
-                rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
-                rm.GroupName = "功能执行测试";
-                //  rm.IsCanBatch = false; //是否可以批处理？
-                map.AddRefMethod(rm);
+               // //带有参数的方法.
+               // RefMethod rm = new RefMethod();
+               // rm.Title = "缴纳班费";
+               // rm.HisAttrs.AddTBDecimal("JinE", 100, "缴纳金额", true, false);
+               // rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
+               //// rm.HisAttrs.AddTBString("Nowete", null, "22备注", true, false, 0, 100, 100);
+               // rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
+               // rm.GroupName = "功能执行测试";
+               // //  rm.IsCanBatch = false; //是否可以批处理？
+               // map.AddRefMethod(rm);
 
-                //不带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "注销学籍";
-                rm.Warning = "您确定要注销吗？";
-                rm.ClassMethodName = this.ToString() + ".DoZhuXiao";
-                rm.IsForEns = true;
-                rm.IsCanBatch = true; //是否可以批处理？
-                map.AddRefMethod(rm);
+               // //不带有参数的方法.
+               // rm = new RefMethod();
+               // rm.Title = "注销学籍";
+               // rm.Warning = "您确定要注销吗？";
+               // rm.ClassMethodName = this.ToString() + ".DoZhuXiao";
+               // rm.IsForEns = true;
+               // rm.IsCanBatch = true; //是否可以批处理？
+               // map.AddRefMethod(rm);
 
-                //不带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "发起xx流程";
-                rm.ClassMethodName = this.ToString() + ".DoStartFlow";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.IsCanBatch = false; //是否可以批处理？
-                map.AddRefMethod(rm);
+               // //不带有参数的方法.
+               // rm = new RefMethod();
+               // rm.Title = "发起xx流程";
+               // rm.ClassMethodName = this.ToString() + ".DoStartFlow";
+               // rm.RefMethodType = RefMethodType.LinkeWinOpen;
+               // rm.IsCanBatch = false; //是否可以批处理？
+               // map.AddRefMethod(rm);
 
-
-                //不带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "打印学生证";
-                rm.ClassMethodName = this.ToString() + ".DoPrintStuLicence";
-                rm.IsCanBatch = true; //是否可以批处理？
-                map.AddRefMethod(rm);
-
-                //不带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "单独打开页面演示";
-                rm.ClassMethodName = this.ToString() + ".DoOpenit";
-                rm.IsCanBatch = true; //是否可以批处理？
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+               // //不带有参数的方法.
+               // rm = new RefMethod();
+               // rm.Title = "打印固定资产证";
+               // rm.ClassMethodName = this.ToString() + ".DoPrintStuLicence";
+               // rm.IsCanBatch = true; //是否可以批处理？
+               // map.AddRefMethod(rm);
+               // #endregion 方法映射.
 
                 ////不带有参数的方法.
                 //rm = new RefMethod();
-                //rm.Title = "批量打印学生证";
+                //rm.Title = "批量打印固定资产证";
                 //rm.ClassMethodName = this.ToString() + ".EnsMothed";
                 ////rm.IsForEns = true; //是否可以批处理？
                 //rm.RefMethodType = RefMethodType.FuncBacthEntities; //是否可以批处理？
@@ -417,11 +378,6 @@ namespace BP.Demo.BPFramework
                 this._enMap = map;
                 return this._enMap;
             }
-        }
-        public string DoOpenit()
-        {
-            return "/WebForm1.aspx?No="+this.No;
-
         }
         /// <summary>
         /// 重写基类的方法.
@@ -435,9 +391,6 @@ namespace BP.Demo.BPFramework
         }
         protected override bool beforeUpdateInsertAction()
         {
-            if (this.Email.Length == 0)
-                throw new Exception("@email 不能为空.");
-
             return base.beforeUpdateInsertAction();
         }
 
@@ -449,7 +402,7 @@ namespace BP.Demo.BPFramework
 
             BP.Pub.RTFEngine en = new Pub.RTFEngine();
 
-            Student stu = new Student(this.No);
+            GDZC stu = new GDZC(this.No);
 
             en.HisGEEntity = stu; //当前的实体.
 
@@ -462,7 +415,7 @@ namespace BP.Demo.BPFramework
             string billFileName = this.No + "StuTest.doc";
 
             //要生成的数据.
-            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName, false);
+            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\GDZCDemo.rtf", saveTo, billFileName, false);
 
             string url = "/DataUser/Temp/" + billFileName;
 
@@ -480,8 +433,6 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
-
-
             return "学号:" + this.No + ",姓名:" + this.Name + ",缴纳了:" + jine + "元,说明:" + note;
         }
         /// <summary>
@@ -491,11 +442,6 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoZhuXiao()
         {
-        //    DBAccess.RunSQL("DELETE RR");
-
-      //   DataTable DT=    DBAccess.RunSQLReturnTable("elect * from ");
-
-
             return "学号:" + this.No + ",姓名:" + this.Name + ",已经注销.";
         }
         /// <summary>
@@ -511,20 +457,21 @@ namespace BP.Demo.BPFramework
 
         protected override bool beforeDelete()
         {
+
             return base.beforeDelete();
         }
 
     }
     /// <summary>
-    /// 学生s
+    /// 固定资产s
     /// </summary>
-    public class Students : BP.En.EntitiesNoName
+    public class GDZCs : BP.En.EntitiesNoName
     {
         #region 方法
         /// <summary>
-        /// 学生s
+        /// 固定资产s
         /// </summary>
-        public Students() { }
+        public GDZCs() { }
         #endregion
 
         #region 重写基类方法
@@ -535,7 +482,7 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return new Student();
+                return new GDZC();
             }
         }
         #endregion 重写基类方法

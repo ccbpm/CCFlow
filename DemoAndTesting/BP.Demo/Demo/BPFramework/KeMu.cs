@@ -69,9 +69,12 @@ namespace BP.Demo.BPFramework
 				#region ×Ö¶Î 
                 map.AddTBStringPK(KeMuAttr.No, null, "±àºÅ", true, true, 3, 3, 3);
 				map.AddTBString(KeMuAttr.Name,null,"Ãû³Æ",true,false,0,50,200);
-				#endregion
 
-				this._enMap=map;
+                map.AddTBString("BZ", null, "±¸×¢", true, false, 0, 50, 200);
+
+                #endregion
+
+                this._enMap=map;
 				return this._enMap;
 			}
 		}

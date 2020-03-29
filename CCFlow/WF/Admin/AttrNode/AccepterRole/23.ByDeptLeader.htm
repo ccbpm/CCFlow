@@ -19,7 +19,7 @@
     <script type="text/javascript">
 
         $(function () {
-            InitBar(DeliveryWay.ByFEE);
+            InitBar(DeliveryWay.ByDeptLeader);
 
         });
         function Save() {
@@ -32,14 +32,12 @@
 </head>
 <body>
     <div id="App">
-        <div id="bar"> </div>
-        <fieldset>
-            <legend>说明</legend>
-            <div style="float: right">
-                请编写事件代码
-            </div>
+        <div id="bar" > </div>
+        <fieldset >
+            <legend id="help" >帮助说明</legend>
             <ul>
-                <li>用流程事件，通过调用设置接受的接口，来设置当前节点的接收人，实现的把接受人信息写入接收人列表里。</li>
+                <li> 上一个节点发送人所在部门的部门负责人，处理该工作。 </li>
+                <li> 部门负责人信息，存储到表Port_Dept 字段：Leader 中.  </li>
             </ul>
         </fieldset>
     </div>
@@ -47,7 +45,7 @@
         var Baseinfo = new Vue({
             el: '#App',
             data: {
-                deliverWay: DeliveryWay.ByFEE,
+                deliverWay: DeliveryWay.ByDeptLeader,
                 nodeId: GetQueryString("FK_Node")
             },
             created() {

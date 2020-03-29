@@ -22,20 +22,18 @@
     <div id="App">
         <div id="bar"> </div>
         <div class="cs-content-box">
-            <div id="NodeSelect" style="margin-top:10px;margin-bottom:10px;background-color:#ffffff">
+            <div id="NodeSelect" style="width:500px;margin-top:10px;margin-bottom:10px;background-color:#ffffff">
                 <table style='width:90%;'>
                     <caption>请选择要指定的节点</caption>
                     <tr>
                         <th>#</th>
                         <th>名称</th>
-                        <th>节点ID</th>
                         <th>步骤</th>
                     </tr>
                     <tr v-for="(node,index) in nodes" >
                         <td class=Idx>{{index}}</td>
                         <td v-if="selectNodes.indexOf(node.NodeID)!=-1"><input type='checkbox' name='RB_NodeNo' :value='node.NodeID' checked='checked' /><label>名称:{{node.Name}}</label></td>
-                        <td v-else=v-else><input type='checkbox' name='RB_NodeNo' :value="node.NodeID" /><label>名称:{{node.Name}}</label></td>
-                        <td>{{node.NodeID}}</td>
+                        <td v-else=v-else><label><input type='checkbox' name='RB_NodeNo' :value="node.NodeID" />节点ID:{{node.NodeID}}   -  名称:{{node.Name}}</label></td>
                         <td>{{node.Step}}</td>
                     </tr>
                     

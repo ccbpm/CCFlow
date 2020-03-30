@@ -923,7 +923,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtSort);
 
             //获得能否发起的流程.
-            //@sly 需要翻译.
             DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No, this.Domain);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);

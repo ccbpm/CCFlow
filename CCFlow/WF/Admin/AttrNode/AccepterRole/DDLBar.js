@@ -38,6 +38,7 @@ var optionKey = 0;
 function InitBar(optionKey) {
 
     var nodeID = GetQueryString("FK_Node");
+   
     var str = nodeID.substr(nodeID.length - 2);
     var isSatrtNode = false;
     if (str == "01")
@@ -210,11 +211,24 @@ function getDepts() {
 
 }
 /*
- * 获取节点绑定的组织
+ * 获取节点绑定部门的负责人@lz
+ */
+function getDeptLeader() {
+    var ens = getDepts();
+    var depts = new Entities("BP.WF.Port.Depts");
+    
+    for (var i = 0; i < ens.length; i++) {
+        var en = ens[i];
+        depts.Retrieve("No", en.FK_Dept);
+    }
+    return depts;
+}
+/*
+ * 获取节点绑定的组织@lz
  */
 function getOrgs() {
     var ens = new Entities("BP.WF.Template.FlowOrgs");
-    ens.Retrieve("FlowNo", GetQueryString("FK_Node"));
+    ens.Retrieve("FlowNo", GetQueryString("FK_Flow"));
     ens = $.grep(ens, function (obj, i) {
         return obj.FlowNo != undefined
     });
@@ -235,6 +249,8 @@ function getEmps() {
 }
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");
+    var en = new Entity("BP.WF.Template.NodeExt", nodeID);
+    var flowNo = en.FK_Flow;
     var obj = document.getElementById("changBar");
     var sele = obj.options;
     var index = obj.selectedIndex;
@@ -329,7 +345,7 @@ function changeOption() {
 
     // alert(roleName);
 
-    window.location.href = roleName + "?FK_Node=" + nodeID;
+    window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo;
 }
 function SaveAndClose() {
     Save();

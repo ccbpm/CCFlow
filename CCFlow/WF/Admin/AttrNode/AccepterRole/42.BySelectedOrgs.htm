@@ -69,10 +69,11 @@
             methods: {
                 OpenNew: function () {
 
-                    var nodeID = GetQueryString("FK_Node");
+                    var FlowNo = GetQueryString("FK_Flow");
                     //var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
                     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowExt&Dot2DotEnsName=BP.WF.Template.FlowOrgs&AttrOfOneInMM=FlowNo&AttrOfMInMM=OrgNo&EnsOfM=BP.WF.Port.Admin2.Orgs&DefaultGroupAttrKey=";
-                    url += '&No=' + nodeID + '&PKVal=' + nodeID;
+                                     
+                    url += '&No=' + FlowNo + '&PKVal=' + FlowNo;
                     //url += '&NodeID=001&PKVal=001';
                     
                     OpenEasyUiDialogExtCloseFunc(url, '绑定组织', 600, 500, function () {

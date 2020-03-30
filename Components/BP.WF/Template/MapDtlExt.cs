@@ -1449,7 +1449,7 @@ namespace BP.WF.Template
             {
                 mapExt = new MapExt();
                 mapExt = ext;
-                mapExt.MyPK = ext.MyPK + "_" + this.FK_Node;
+                mapExt.MyPK = ext.ExtType + "_" + this.No+"_"+ ext.AttrOfOper;
                 mapExt.FK_MapData = this.No;
                 mapExt.Insert();
             }

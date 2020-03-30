@@ -527,13 +527,11 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 设置签批组件
         /// </summary>
-        /// <returns></returns>
+        /// <returns>执行结果</returns>
         public string DoSetCheck()
         {
-
-            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口,并关闭当前的设计器，重新登录.";
+            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口,并关闭当前的设计器,重新登录.";
         }
-
         /// <summary>
         /// 批处理
         /// </summary>

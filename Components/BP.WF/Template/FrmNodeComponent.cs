@@ -147,7 +147,10 @@ namespace BP.WF.Template
             }
         }
 
-        protected override bool beforeUpdate()
+        /// <summary>
+        /// 初始化GroupField
+        /// </summary>
+        public void InitGroupField()
         {
             GroupField gf = new GroupField();
 
@@ -262,6 +265,13 @@ namespace BP.WF.Template
                 }
             }
             #endregion 流转自定义组件.
+
+        }
+
+        protected override bool beforeUpdate()
+        {
+
+            this.InitGroupField();
 
             return base.beforeUpdate();
         }

@@ -678,15 +678,15 @@ namespace BP.WF
                         if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
                         {
                             string sql = "";
+                            sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
+
                             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                                 sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
-                            else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+
+                            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                                 sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
-                            else
-                                sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
 
                             BP.DA.DBAccess.RunSQL(sql);
-
                         }
 
                     }
@@ -711,7 +711,6 @@ namespace BP.WF
 
             //更新版本号.
             Flow.UpdateVer(this.FK_Flow);
-
 
             #region 更新流程判断条件的标记。
             DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + this.FK_Flow + "'");
@@ -760,7 +759,8 @@ namespace BP.WF
             }
             //创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
-            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, "ND" + this.NodeID + "_FrmWorkCheck");
+            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK,
+                "ND" + this.NodeID + "_FrmWorkCheck");
             //不包含审核组件
             if (isHave == false && this.FWCAth == FWCAth.MinAth)
             {

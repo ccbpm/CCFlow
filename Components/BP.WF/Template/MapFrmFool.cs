@@ -504,9 +504,8 @@ namespace BP.WF.Template
 
             //处理失去分组的字段. 
             string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE FrmID='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
-            MapAttrs attrs = new MapAttrs();
-            attrs.RetrieveInSQL(sql);
-            if (attrs.Count != 0)
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count != 0)
             {
                 GroupField gf = null;
                 GroupFields gfs = new GroupFields(this.No);
@@ -524,10 +523,10 @@ namespace BP.WF.Template
                     gf.Insert();
                 }
 
-                //设置GID.
-                foreach (MapAttr attr in attrs)
+                //设置 GroupID
+                foreach (DataRow dr in dt.Rows)
                 {
-                    attr.Update(MapAttrAttr.GroupID, gf.OID);
+                    DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID="+gf.OID +" WHERE MyPK='"+dr[0].ToString()+"'");
                 }
             }
 
@@ -593,8 +592,10 @@ namespace BP.WF.Template
 
             if (this.IsNodeFrm == true)
             {
-                FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
-                conn.Update();
+                //@sly 提高执行效率.
+                // FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
+                //  conn.InitGroupField();
+                //conn.Update();
             }
 
 
@@ -604,7 +605,7 @@ namespace BP.WF.Template
             else
                 sql = "SELECT * FROM (SELECT FrmID,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY FrmID,CtrlID,CtrlType ) AS A WHERE A.Num > 1";
 
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
                 string enName = dr[0].ToString();
@@ -622,8 +623,6 @@ namespace BP.WF.Template
                     break;
                 }
             }
-
-
 
             if (str == "")
                 return "检查成功.";

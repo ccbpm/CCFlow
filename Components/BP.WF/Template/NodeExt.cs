@@ -438,7 +438,7 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
                 map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
 
-                //@sly 为广西计算中心加.
+                //为广西计算中心加.
                 map.AddBoolean(NodeAttr.IsSendBackNode, false, "是否是发送返回节点(发送当前节点,自动发送给该节点的发送人,发送节点.)?", true, true, true);
                 #endregion 分合流子线程属性
 
@@ -1373,7 +1373,7 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
 
-            //是否是发送返回节点？ @sly 翻译过去.
+            //是否是发送返回节点？
             nd.IsSendBackNode = this.IsSendBackNode;
             if (nd.IsSendBackNode==true)
             {

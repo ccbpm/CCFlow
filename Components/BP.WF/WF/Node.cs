@@ -85,7 +85,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// @Gaoxin 是否是发送返回节点？
+        /// 是否是发送返回节点？
         /// </summary>
         public bool IsSendBackNode
         {

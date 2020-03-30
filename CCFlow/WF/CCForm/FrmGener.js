@@ -477,6 +477,11 @@ function Save(scope) {
         }
     });
 
+    //审核组件
+    if ($("#WorkCheck").length == 1) {
+        //保存审核信息
+        SaveWorkCheck();
+    }
 
     //必填项和正则表达式检查
     var formCheckResult = true;

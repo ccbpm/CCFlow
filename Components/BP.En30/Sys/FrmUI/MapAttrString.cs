@@ -347,6 +347,14 @@ namespace BP.Sys.FrmUI
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
+                //sly 翻译过去。
+                rm = new RefMethod();
+                rm.Title = "设置为签批组件";
+                rm.ClassMethodName = this.ToString() + ".DoSetCheck()";
+                rm.Warning = "您确定要设置为签批组件吗？";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
 
                 #endregion 执行的方法.
 
@@ -516,6 +524,16 @@ namespace BP.Sys.FrmUI
         #endregion 方法执行 Pop填充自动完成.
 
         #region 方法执行.
+        /// <summary>
+        /// 设置签批组件
+        /// </summary>
+        /// <returns></returns>
+        public string DoSetCheck()
+        {
+
+            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口.";
+        }
+
         /// <summary>
         /// 批处理
         /// </summary>

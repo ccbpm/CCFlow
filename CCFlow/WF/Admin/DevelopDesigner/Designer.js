@@ -405,7 +405,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
     if (h==null || h == undefined)
         h = 460;
 
-    if (shap == "Text") {
+    if (shap == "Text" || shap =="Textarea") {
         OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
 
             var  mapAttr = new Entity("BP.Sys.MapAttr", MyPK);

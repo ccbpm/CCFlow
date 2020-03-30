@@ -1008,7 +1008,7 @@ function Help() {
 
 //节点属性
 function NodeAttr(nodeID) {
-
+    
     //var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     var baseurl = "";
     if (ccbpmRunModel == 2) {
@@ -1020,12 +1020,20 @@ function NodeAttr(nodeID) {
     //var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     var html = "";
-
-    //var html = "<a href=\"javascript:OpenEasyUiDialogExt('" + url + "','';\" >主页</a> - ";
-    if (ccbpmRunModel == 2) {
-        window.parent.addTab(nodeID, "节点属性", url);
-    } else {
-        window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+    if (top == self) {
+        if (ccbpmRunModel == 2) {
+            window.WinOpenFull(url,nodeID+"节点属性");
+        } else {
+            window.WinOpenFull(url, nodeID + "节点属性");
+        }
+    }
+    else {
+        //var html = "<a href=\"javascript:OpenEasyUiDialogExt('" + url + "','';\" >主页</a> - ";
+        if (ccbpmRunModel == 2) {
+            window.parent.addTab(nodeID, "节点属性", url);
+        } else {
+            window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+        }
     }
     //OpenEasyUiDialogExt(url, html+"属性", 900, 500, false);
 }

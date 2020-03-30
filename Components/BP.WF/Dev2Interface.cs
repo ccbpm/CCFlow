@@ -848,7 +848,6 @@ namespace BP.WF
         }
         public static DataTable DB_GenerCanStartFlowsOfDataTable(string userNo, string domain = null)
         {
-            //@sly 需要翻译.
             string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,A.IsStartInMobile, A.Idx";
             sql += " FROM WF_Flow A, V_FlowStarterBPM B, WF_FlowSort C  ";
             sql += " WHERE A.No=B.FK_Flow AND A.IsCanStart=1 AND A.FK_FlowSort=C.No  AND B.FK_Emp='" + WebUser.No + "' ";
@@ -8453,7 +8452,6 @@ namespace BP.WF
             Flow fl = new Flow(fk_flow);
             //string sql = "UPDATE "+fl.PTable+" SET WFStarter=1, FlowStater='"+WebUser.No+"' WHERE OID="+workID;
 
-            //@sly .
             string sql = "UPDATE " + fl.PTable + " SET  FlowStarter='" + WebUser.No + "',WFState=1 WHERE OID=" + workID;
             DBAccess.RunSQL(sql);
         }
@@ -8812,8 +8810,6 @@ namespace BP.WF
                         gwf.RDT = DataType.CurrentDataTime;
                         gwf.Insert();
 
-                        //@sly 这里在代码移动到下面了.
-
                     }
                     else
                     {
@@ -8824,7 +8820,7 @@ namespace BP.WF
                         }
                     }
 
-                    // 产生工作列表. @sly
+                    // 产生工作列表.
                     GenerWorkerList gwl = new GenerWorkerList();
                     gwl.WorkID = workID;
                     gwl.FK_Emp = WebUser.No;

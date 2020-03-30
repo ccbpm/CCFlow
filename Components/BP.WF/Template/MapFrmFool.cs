@@ -605,7 +605,7 @@ namespace BP.WF.Template
 
             if (this.IsNodeFrm == true)
             {
-                //@sly 提高执行效率.
+                //提高执行效率.
                 // FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
                 //  conn.InitGroupField();
                 //conn.Update();

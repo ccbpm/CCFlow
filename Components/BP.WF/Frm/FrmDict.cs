@@ -727,7 +727,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoSaveRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
         }
         /// <summary>
         /// 提交权限规则
@@ -735,7 +735,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoSubmitRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSubmit";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSubmit";
         }
 
         /// <summary>
@@ -744,7 +744,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoCreateRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnNew";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnNew";
         }
         /// <summary>
         /// 删除权限规则
@@ -752,7 +752,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoDeleteRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
         }
 
         /// <summary>
@@ -761,7 +761,7 @@ namespace BP.Frm
         /// <returns></returns>
         public string DoSearchRole()
         {
-            return "../../CCBill/Admin/CreateRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
+            return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
         }
        
         #endregion 权限控制.

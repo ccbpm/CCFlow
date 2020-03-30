@@ -3599,16 +3599,18 @@ namespace BP.WF
         /// 登录
         /// </summary>
         /// <param name="userNo">人员编号</param>
-        /// <param name="userName">名称</param>
-        /// <param name="fk_dept">所在部门</param>
-        /// <param name="deptName">部门名称</param>
+        /// <param name="sid">sid</param>
         /// <returns></returns>
-        public static void Port_Login(string userNo)
+        public static void Port_Login(string userNo, string sid=null)
         {
             /* 仅仅传递了人员编号，就按照人员来取.*/
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = userNo;
             emp.RetrieveFromDBSources();
+            if (sid != null)
+                if (emp.SID.Equals(sid) == false)
+                    throw new Exception("err@SID错误.");
+
             WebUser.SignInOfGener(emp);
         }
         /// <summary>

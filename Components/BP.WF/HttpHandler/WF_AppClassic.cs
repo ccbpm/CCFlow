@@ -63,11 +63,11 @@ namespace BP.WF.HttpHandler
         public string LanXin_Login()
         {
             string code = GetRequestVal("code");
-            
-            if(DataType.IsNullOrEmpty(WebUser.Token) == false)
+
+            if (DataType.IsNullOrEmpty(WebUser.Token) == false)
             {
                 //刷新token
-                string urlr = "http://xjtyjt.e.lanxin.cn:11180//sns/oauth2/refresh_token?refresh_token="+WebUser.Token+"&appid=100243&grant_type=refresh_token";
+                string urlr = "http://xjtyjt.e.lanxin.cn:11180//sns/oauth2/refresh_token?refresh_token=" + WebUser.Token + "&appid=100243&grant_type=refresh_token";
                 string resultr = HttpPostConnect(urlr, "");
                 JsonData jdr = JsonMapper.ToObject(resultr);
                 resultr = jdr["errcode"].ToString();
@@ -75,7 +75,7 @@ namespace BP.WF.HttpHandler
                 {
                     WebUser.Token = jdr["access_token"].ToString();
                 }
-                 return WebUser.No;
+                return WebUser.No;
             }
 
 
@@ -113,7 +113,7 @@ namespace BP.WF.HttpHandler
                 return "err@用户信息不正确，请联系管理员";
 
             BP.WF.Dev2Interface.Port_Login(userNo);
-            WebUser.Token = access_token;            
+            WebUser.Token = access_token;
             result = jd["errcode"].ToString();
             return userNo;
         }
@@ -323,7 +323,7 @@ namespace BP.WF.HttpHandler
             }
         }
 
-       
+
         /// <summary>
         /// 执行登录
         /// </summary>
@@ -331,11 +331,22 @@ namespace BP.WF.HttpHandler
         public string Login_Init()
         {
             string doType = GetRequestVal("LoginType");
-            if(DataType.IsNullOrEmpty(doType) == false && doType.Equals("Out") == true)
+            if (DataType.IsNullOrEmpty(doType) == false && doType.Equals("Out") == true)
             {
                 //清空cookie
                 WebUser.Exit();
             }
+
+
+            if (this.DoWhat != null && this.DoWhat.Equals("Login") == true)
+            {
+                //调用登录方法.
+                BP.WF.Dev2Interface.Port_Login(this.UserNo, this.SID);
+                return "url@Home.htm?UserNo=" + this.UserNo;
+                //this.Login_Submit();
+                //return;
+            }
+
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);

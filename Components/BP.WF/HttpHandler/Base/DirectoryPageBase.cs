@@ -358,7 +358,26 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-
+        public string UserNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("UserNo");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        public string DoWhat
+        {
+            get
+            {
+                string str = this.GetRequestVal("DoWhat");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 执行类型
         /// </summary>

@@ -109,7 +109,6 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-
                 #region 基本信息.
 
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);

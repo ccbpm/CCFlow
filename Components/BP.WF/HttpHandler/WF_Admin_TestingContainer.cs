@@ -231,7 +231,6 @@ namespace BP.WF.HttpHandler
             {
                 #region 从设置里获取-测试人员.
 
-                //@sly 要有同步.
                 switch (nd.HisDeliveryWay)
                 {
                     case DeliveryWay.ByStation:

@@ -77,9 +77,12 @@ function WorkCheck_Init() {
 
 }
 
-function GetWorkCheck_Node(checkData, FK_Node) {
+function GetWorkCheck_Node(checkData,keyOfEn) {
     //当前节点审核组件信息
     var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
+    if (frmWorkCheck.CheckField == keyOfEn && pageData.IsReadonly != "1") {
+        $("#TB_" + keyOfEn).val(pageData.FK_Node);
+    }
 
     var tracks = checkData.Tracks;
     var aths = checkData.Aths;
@@ -90,7 +93,7 @@ function GetWorkCheck_Node(checkData, FK_Node) {
 
     for (var i = 0; i < tracks.length; i++) {
         var track = tracks[i];
-        if (track.NodeID != FK_Node)
+        if (track.NodeID != $("#TB_" + keyOfEn).val())
             continue;
         _Html += WorkCheck_Parse(track, aths,frmWorkCheck, SignType);
     } 

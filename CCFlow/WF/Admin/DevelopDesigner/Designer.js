@@ -201,23 +201,23 @@ UE.plugins['edit'] = function () {
                     alert('字段没有获取到，请联系管理员');
                     return false;
                 }
-                showFigurePropertyWin(datatype, keyOfEn, pageParam.fk_mapdata);
+                showFigurePropertyWin(datatype, keyOfEn, pageParam.fk_mapdata, obj);
 
             }
         }
     };
 }
 
-function showFigurePropertyWin(shap, mypk, fk_mapdata) {
+function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 
     if (shap == 'Text') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段String属性');
+        CCForm_ShowDialog(url, '字段String属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'SignCheck') {
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&PKVal=' + fk_mapdata + '_' + mypk;
         CCForm_ShowDialog(url, '字段签批组件的属性');
         return;
     }
@@ -397,20 +397,30 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata) {
 
 
 //打开窗体
-function CCForm_ShowDialog(url, title, w, h) {
+function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
 
-    if (w == undefined)
+    if (w==null || w== undefined)
         w = 760;
 
-    if (h == undefined)
+    if (h==null || h == undefined)
         h = 460;
 
-    if (plant == 'JFlow') {
-        url = url.replace('.aspx', '.jsp');
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false);
+    if (shap == "Text") {
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
+
+            var  mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
+            if (mapAttr.UIContralType == 14) {
+                //修改显示的样式
+                UE.dom.domUtils.setAttributes(anchorEl, {
+                    "data-type": "SignCheck"
+                });
+            }
+        });
     } else {
         OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false);
+
     }
+   
 }
 
 

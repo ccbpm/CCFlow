@@ -128,10 +128,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
        
 
         if (mapAttr.UIContralType == 14) {//签批组件
-            if (mapAttr.UIIsEnable == true && pageData.IsReadonly != "1") {
-                $("#TB_" + mapAttr.KeyOfEn).val(pageData.FK_Node);
-                $("#TB_" + mapAttr.KeyOfEn).hide();
-            }
+            $("#TB_" + mapAttr.KeyOfEn).hide();
             //获取审核组件信息
             if (isFistQuestWorkCheck == true) {
                 $.getScript('./WorkOpt/WorkCheck.js', function () { });
@@ -144,7 +141,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             else
                 pageData.FWCVer = 1;
 
-            var _Html = "<div>" + GetWorkCheck_Node(checkData, $("#TB_" + mapAttr.KeyOfEn).val()) + "</div>";
+            var _Html = "<div>" + GetWorkCheck_Node(checkData,mapAttr.KeyOfEn) + "</div>";
             $("#TB_" + mapAttr.KeyOfEn).after(_Html);
         }
 

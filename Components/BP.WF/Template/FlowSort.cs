@@ -124,7 +124,6 @@ namespace BP.WF.Template
             string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
             DBAccess.RunSQL(sql);
 
-            //@sly
             sql = "UPDATE WF_Emp SET StartFlows='' ";
             DBAccess.RunSQL(sql);
 

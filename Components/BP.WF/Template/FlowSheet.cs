@@ -351,12 +351,11 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
                 #endregion 基本属性。
 
-
                 //查询条件.
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
                 //   map.AddSearchAttr(FlowAttr.TimelineRole);
 
-                //绑定组织.
+                //绑定组织. @sly
                 map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2.Orgs(),
                     FlowOrgAttr.FlowNo,
                   FlowOrgAttr.OrgNo, FlowAttr.Name, FlowAttr.No, "可以发起的组织");

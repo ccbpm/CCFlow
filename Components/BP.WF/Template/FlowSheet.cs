@@ -308,7 +308,6 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
 
-
              
 
                 map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据加密流程(MD5数据加密防篡改)", true, true, true);
@@ -316,6 +315,7 @@ namespace BP.WF.Template
                 
                 map.AddBoolean(FlowAttr.IsFullSA, false, "是否自动计算未来的处理人？", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsFullSA, "http://ccbpm.mydoc.io/?v=5404&t=17034");
+
 
 
                 map.AddBoolean(FlowAttr.IsGuestFlow, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
@@ -351,293 +351,16 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
                 #endregion 基本属性。
 
-                #region 启动方式
-                map.AddDDLSysEnum(FlowAttr.FlowRunWay, (int)FlowRunWay.HandWork, "启动方式",
-                    true, true, FlowAttr.FlowRunWay, "@0=手工启动@1=指定人员定时启动@2=定时访问数据集自动启动@3=触发式启动");
-
-                map.SetHelperUrl(FlowAttr.FlowRunWay, "http://ccbpm.mydoc.io/?v=5404&t=17088");
-                // map.AddTBString(FlowAttr.RunObj, null, "运行内容", true, false, 0, 100, 10, true);
-                map.AddTBStringDoc(FlowAttr.RunObj, null, "运行内容", true, false, true);
-                #endregion 启动方式
-
-                #region 流程启动限制
-                string role = "@0=不限制";
-                role += "@1=每人每天一次";
-                role += "@2=每人每周一次";
-                role += "@3=每人每月一次";
-                role += "@4=每人每季一次";
-                role += "@5=每人每年一次";
-                role += "@6=发起的列不能重复,(多个列可以用逗号分开)";
-                role += "@7=设置的SQL数据源为空,或者返回结果为零时可以启动.";
-                role += "@8=设置的SQL数据源为空,或者返回结果为零时不可以启动.";
-                map.AddDDLSysEnum(FlowAttr.StartLimitRole, (int)StartLimitRole.None, "启动限制规则", true, true, FlowAttr.StartLimitRole, role, true);
-                map.AddTBString(FlowAttr.StartLimitPara, null, "规则参数", true, false, 0, 500, 10, true);
-                map.AddTBStringDoc(FlowAttr.StartLimitAlert, null, "限制提示", true, false, true);
-                map.SetHelperUrl(FlowAttr.StartLimitRole, "http://ccbpm.mydoc.io/?v=5404&t=17872");
-                //   map.AddTBString(FlowAttr.StartLimitAlert, null, "限制提示", true, false, 0, 500, 10, true);
-                //    map.AddDDLSysEnum(FlowAttr.StartLimitWhen, (int)StartLimitWhen.StartFlow, "提示时间", true, true, FlowAttr.StartLimitWhen, "@0=启动流程时@1=发送前提示", false);
-                #endregion 流程启动限制
-
-                #region 发起前导航。
-                //map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow,
-                //    "流程数据存储模式", true, true, FlowAttr.DataStoreModel,
-                //   "@0=数据轨迹模式@1=数据合并模式");
-
-                //发起前设置规则.
-                map.AddDDLSysEnum(FlowAttr.StartGuideWay, 0, "前置导航方式", true, true,
-                    FlowAttr.StartGuideWay,
-                    "@0=无@1=按系统的URL-(父子流程)单条模式@2=按系统的URL-(子父流程)多条模式@3=按系统的URL-(实体记录,未完成)单条模式@4=按系统的URL-(实体记录,未完成)多条模式@5=从开始节点Copy数据@10=按自定义的Url@11=按用户输入参数", true);
-                map.SetHelperUrl(FlowAttr.StartGuideWay, "http://ccbpm.mydoc.io/?v=5404&t=17883");
-
-                map.AddTBString(FlowAttr.StartGuidePara1, null, "参数1", true, false,0,500,20,true);
-                map.AddTBString(FlowAttr.StartGuidePara2, null, "参数2", true, false, 0, 500, 20, true);
-                map.AddTBString(FlowAttr.StartGuidePara3, null, "参数3", true, false, 0, 500, 20, true);
-                
-                map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？", true, true, true);
-                //     map.AddBoolean(FlowAttr.IsImpHistory, false, "是否启用导入历史数据按钮？", true, true, true);
-                map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);
-
-                #endregion 发起前导航。
-
-                #region 延续流程。
-                // add 2013-03-24.
-                map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", false, false, 0, 32, 10);
-                map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", false, false, 0, 100, 10);
-                #endregion 延续流程。
-
-                #region 数据同步方案
-                //数据同步方式.
-                map.AddDDLSysEnum(FlowAttr.DTSWay, (int)FlowDTSWay.None, "同步方式", true, true,
-                    FlowAttr.DTSWay, "@0=不同步@1=同步");
-                map.SetHelperUrl(FlowAttr.DTSWay, "http://ccbpm.mydoc.io/?v=5404&t=17893");
-
-                map.AddDDLEntities(FlowAttr.DTSDBSrc, "", "数据库", new BP.Sys.SFDBSrcs(), true);
-
-                map.AddTBString(FlowAttr.DTSBTable, null, "业务表名", true, false, 0, 50, 50, false);
-
-                map.AddTBString(FlowAttr.DTSBTablePK, null, "业务表主键", true, false, 0, 50, 50, false);
-                map.SetHelperAlert(FlowAttr.DTSBTablePK, "如果同步方式设置了按照业务表主键字段计算,那么需要在流程的节点表单里设置一个同名同类型的字段，系统将会按照这个主键进行数据同步。");
-
-                map.AddTBString(FlowAttr.DTSFields, null, "要同步的字段s,中间用逗号分开.", false, false, 0, 200, 100, false);
-
-                map.AddDDLSysEnum(FlowAttr.DTSTime, (int)FlowDTSTime.AllNodeSend, "执行同步时间点", true, true,
-                   FlowAttr.DTSTime, "@0=所有的节点发送后@1=指定的节点发送后@2=当流程结束时");
-                map.SetHelperUrl(FlowAttr.DTSTime, "http://ccbpm.mydoc.io/?v=5404&t=17894");
-
-                map.AddTBString(FlowAttr.DTSSpecNodes, null, "指定的节点ID", true, false, 0, 50, 50, false);
-                map.SetHelperAlert(FlowAttr.DTSSpecNodes, "如果执行同步时间点选择了按指定的节点发送后,多个节点用逗号分开.比如: 101,102,103");
-
-
-                map.AddDDLSysEnum(FlowAttr.DTSField, (int)DTSField.SameNames, "要同步的字段计算方式", true, true,
-                 FlowAttr.DTSField, "@0=字段名相同@1=按设置的字段匹配");
-                map.SetHelperUrl(FlowAttr.DTSField, "http://ccbpm.mydoc.io/?v=5404&t=17895");
-
-                map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
-                map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");
-
-                #endregion 数据同步方案
-
-                #region 权限控制.
-                map.AddBoolean(FlowAttr.PStarter, true, "发起人可看(必选)", true, false,true);
-                map.AddBoolean(FlowAttr.PWorker, true, "参与人可看(必选)", true, false, true);
-                map.AddBoolean(FlowAttr.PCCer, true, "被抄送人可看(必选)", true, false, true);
-
-                map.AddBoolean(FlowAttr.PMyDept, true, "本部门人可看", true, true, true);
-                map.AddBoolean(FlowAttr.PPMyDept, true, "直属上级部门可看(比如:我是)", true, true, true);
-
-                map.AddBoolean(FlowAttr.PPDept, true, "上级部门可看", true, true, true);
-                map.AddBoolean(FlowAttr.PSameDept, true, "平级部门可看", true, true, true);
-
-                map.AddBoolean(FlowAttr.PSpecDept, true, "指定部门可看", true, true, false);
-                map.AddTBString(FlowAttr.PSpecDept + "Ext", null, "部门编号", true, false, 0, 200, 100, false);
-
-
-                map.AddBoolean(FlowAttr.PSpecSta, true, "指定的岗位可看", true, true, false);
-                map.AddTBString(FlowAttr.PSpecSta + "Ext", null, "岗位编号", true, false, 0, 200, 100, false);
-
-                map.AddBoolean(FlowAttr.PSpecGroup, true, "指定的权限组可看", true, true, false);
-                map.AddTBString(FlowAttr.PSpecGroup + "Ext", null, "权限组", true, false, 0, 200, 100, false);
-
-                map.AddBoolean(FlowAttr.PSpecEmp, true, "指定的人员可看", true, true, false);
-                map.AddTBString(FlowAttr.PSpecEmp + "Ext", null, "指定的人员编号", true, false, 0, 200, 100, false);
-
-                #endregion 权限控制.
-
 
                 //查询条件.
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
-             //   map.AddSearchAttr(FlowAttr.TimelineRole);
+                //   map.AddSearchAttr(FlowAttr.TimelineRole);
 
+                //绑定组织.
+                map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2.Orgs(),
+                    FlowOrgAttr.FlowNo,
+                  FlowOrgAttr.OrgNo, FlowAttr.Name, FlowAttr.No, "可以发起的组织");
 
-                //map.AddRefMethod(rm);
-                RefMethod rm = new RefMethod();
-                rm = new RefMethod();
-                rm.Title = "调试运行"; // "设计检查报告";
-                //rm.ToolTip = "检查流程设计的问题。";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
-                rm.ClassMethodName = this.ToString() + ".DoRunIt";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "检查报告"; // "设计检查报告";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
-                rm.ClassMethodName = this.ToString() + ".DoCheck";
-               // rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
- 
-
-                rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.Title = "删除全部流程数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
-                rm.Warning = "您确定要执行删除流程数据吗? \t\n该流程的数据删除后，就不能恢复，请注意删除的内容。";// "您确定要执行删除流程数据吗？";
-                rm.ClassMethodName = this.ToString() + ".DoDelData";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.Title = "按照工作ID删除单个流程"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
-                rm.ClassMethodName = this.ToString() + ".DoDelDataOne";
-                rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
-                rm.HisAttrs.AddTBString("beizhu", null, "删除备注", true, false, 0, 100, 100);
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.Title = "重新生成报表数据"; // "删除数据";
-                rm.Warning = "您确定要执行吗? 注意:此方法耗费资源。";// "您确定要执行删除流程数据吗？";
-                rm.ClassMethodName = this.ToString() + ".DoReloadRptData";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "设置自动发起数据源";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
-                rm.ClassMethodName = this.ToString() + ".DoSetStartFlowDataSources()";
-                //设置相关字段.
-                // rm.RefAttrKey = FlowAttr.RunObj;
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "手工启动定时任务";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.Warning = "您确定要执行吗? 注意:对于数据量交大的数据因为web上执行时间的限时问题，会造成执行失败。";// "您确定要执行删除流程数据吗？";
-                rm.ClassMethodName = this.ToString() + ".DoAutoStartIt()";
-                //设置相关字段.
-                rm.RefAttrKey = FlowAttr.FlowRunWay;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "流程监控";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger()";
-                map.AddRefMethod(rm);
-
-             
-
-                rm = new RefMethod();
-                rm.Title = "重新生成FlowEmps字段";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoGenerFlowEmps()";
-                rm.RefAttrLinkLabel = "补充修复emps字段，包括wf_generworkflow,NDxxxRpt字段.";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Target = "_blank";
-                rm.Warning = "您确定要重新生成s吗？";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "重新生成流程标题";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoGenerTitle()";
-                //设置相关字段.
-                //rm.RefAttrKey = FlowAttr.TitleRole;
-                rm.RefAttrLinkLabel = "重新生成流程标题";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Target = "_blank";
-                rm.Warning = "您确定要根据新的规则重新产生标题吗？";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "回滚流程";
-                rm.Icon = "../../WF/Img/Btn/Back.png";
-                rm.ClassMethodName = this.ToString() + ".DoRebackFlowData()";
-                // rm.Warning = "您确定要回滚它吗？";
-                rm.HisAttrs.AddTBInt("workid", 0, "请输入要会滚WorkID", true, false);
-                rm.HisAttrs.AddTBInt("nodeid", 0, "回滚到的节点ID", true, false);
-                rm.HisAttrs.AddTBString("note", null, "回滚原因", true, false, 0, 600, 200);
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "流程事件&消息"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoAction";
-                rm.Icon = "../../WF/Img/Event.png";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                //rm = new RefMethod();
-                //rm.Title = "独立表单树";
-                //rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
-                //map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "批量发起规则";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoBatchStartFields()";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "流程轨迹表单";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoBindFlowSheet()";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "数据源管理(如果新增数据源后需要关闭重新打开)"; // "抄送规则";
-                rm.ClassMethodName = this.ToString() + ".DoDBSrc";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                //设置相关字段.
-                rm.RefAttrKey = FlowAttr.DTSDBSrc;
-                rm.RefAttrLinkLabel = "数据源管理";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "业务表字段同步配置"; // "抄送规则";
-                rm.ClassMethodName = this.ToString() + ".DoBTable";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                //设置相关字段.
-                rm.RefAttrKey = FlowAttr.DTSField;
-                rm.RefAttrLinkLabel = "业务表字段同步配置";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                
-
-                rm = new RefMethod();
-                rm.Title = "执行流程数据表与业务表数据手工同步"; // "抄送规则";
-                rm.ClassMethodName = this.ToString() + ".DoBTableDTS";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.Warning = "您确定要执行吗？如果执行了可能会对业务表数据造成错误。";
-                //设置相关字段.
-                rm.RefAttrKey = FlowAttr.DTSSpecNodes;
-                rm.RefAttrLinkLabel = "业务表字段同步配置";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Target = "_blank";
-                //  map.AddRefMethod(rm);
-               
 
                 this._enMap = map;
                 return this._enMap;

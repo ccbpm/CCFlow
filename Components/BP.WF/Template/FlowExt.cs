@@ -972,11 +972,6 @@ namespace BP.WF.Template
                 rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
-
-                //绑定组织.
-                map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2.Orgs(), FlowOrgAttr.FlowNo,
-                  FlowOrgAttr.OrgNo, FlowAttr.Name, FlowAttr.No, "可以发起的组织");
-
                 #endregion 实验中的功能
 
                 //rm = new RefMethod();

@@ -2858,7 +2858,7 @@ namespace BP.Sys
             this.Ver = DataType.CurrentDataTimess;
 
             //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
-            this.OrgNo = BP.Web.WebUser.FK_Dept;
+            this.OrgNo = BP.Web.WebUser.OrgNo;
 
             #region  检查是否有ca认证设置.
             bool isHaveCA = false;

@@ -200,14 +200,7 @@ namespace BP.WF.Template
                 #region 方法 - 基本功能.
 
                 RefMethod rm = new RefMethod();
-                rm = new RefMethod();
-                rm.Title = "启动傻瓜表单设计器";
-                rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
-                rm.Icon = "../../WF/Img/FileType/xlsx.gif";
-                rm.Visable = true;
-                rm.Target = "_blank";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+                
 
                 rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
@@ -227,12 +220,7 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "批量设置验证规则";
-                rm.Icon = "../../WF/Img/RegularExpression.png";
-                rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+               
 
                 rm = new RefMethod();
                 rm.Title = "批量修改字段"; // "设计表单";
@@ -250,14 +238,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "JS编程"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoInitScript";
-                rm.Icon = "../../WF/Img/Script.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                
 
                 rm = new RefMethod();
                 rm.Title = "表单body属性"; // "设计表单";
@@ -324,6 +305,27 @@ namespace BP.WF.Template
                 #endregion 方法 - 基本功能.
 
                 #region 高级功能.
+
+                rm = new RefMethod();
+                rm.Title = "启动傻瓜表单设计器";
+                rm.GroupName = "高级功能";
+                rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
+                rm.Icon = "../../WF/Img/FileType/xlsx.gif";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "JS编程"; // "设计表单";
+                rm.GroupName = "高级功能";
+                rm.ClassMethodName = this.ToString() + ".DoInitScript";
+                rm.Icon = "../../WF/Img/Script.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 //@李国文.
                 rm = new RefMethod();
                 rm.Title = "改变表单类型";
@@ -369,6 +371,17 @@ namespace BP.WF.Template
                 rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
                 #endregion 方法 - 开发接口.
+
+
+                #region 实验中的功能
+                rm = new RefMethod();
+                rm.Title = "批量设置验证规则";
+                rm.GroupName = "实验中的功能";
+                rm.Icon = "../../WF/Img/RegularExpression.png";
+                rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion 实验中的功能
 
                 this._enMap = map;
                 return this._enMap;

@@ -349,7 +349,7 @@ namespace BP.Sys.FrmUI
 
                 //sly 翻译过去。
                 rm = new RefMethod();
-                rm.Title = "设置为签批组件";
+                rm.Title = "转化为签批组件";
                 rm.ClassMethodName = this.ToString() + ".DoSetCheck()";
                 rm.Warning = "您确定要设置为签批组件吗？";
                 rm.GroupName = "高级设置";
@@ -531,7 +531,7 @@ namespace BP.Sys.FrmUI
         public string DoSetCheck()
         {
 
-            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口.";
+            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口,并关闭当前的设计器，重新登录.";
         }
 
         /// <summary>

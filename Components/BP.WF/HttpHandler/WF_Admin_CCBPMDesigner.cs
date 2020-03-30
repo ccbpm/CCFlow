@@ -800,23 +800,25 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
-            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort
-                           union 
-                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow) A  ORDER BY DTYPE, IDX ";
+            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort where OrgNo ='" + WebUser.OrgNo + "' or No = 1 " +
+                           "union " +
+                           "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX ";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle
                 || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
-                        union 
-                        SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow) A  ORDER BY DTYPE, IDX";
+                sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
+                        "where OrgNo ='" + WebUser.OrgNo + "' or No = 1 union " +
+                        "SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX";
             }
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                sql = @"SELECT * FROM (SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
-                           union 
-                           SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow) A  ORDER BY DTYPE, IDX";
+                sql = @"SELECT * FROM (SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
+                     "where OrgNo ='" + WebUser.OrgNo + "' or No = 1 " +
+                     "union " +
+                     "SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow " +
+                     "where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -850,18 +852,17 @@ namespace BP.WF.HttpHandler
             }
 
 
-            if (WebUser.No != "admin")
-            {
+           /* if (WebUser.No != "admin")
+            {*/
+            DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
+            DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
 
-                DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-                DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
-
-                newRootRow["PARENTNO"] = "F0";
-                DataTable newDt = dt.Clone();
-                newDt.Rows.Add(newRootRow.ItemArray);
-                GenerChildRows(dt, newDt, newRootRow);
-                dt = newDt;
-            }
+            newRootRow["PARENTNO"] = "F0";
+            DataTable newDt = dt.Clone();
+            newDt.Rows.Add(newRootRow.ItemArray);
+            GenerChildRows(dt, newDt, newRootRow);
+            dt = newDt;
+           // }
 
             string str = BP.Tools.Json.ToJson(dt);
             return str;
@@ -934,13 +935,13 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree ORDER BY Idx ASC ; ";
-                sqls += "SELECT No \"No\", FK_FormTree as \"ParentNo\", Name \"Name\",Idx \"Idx\", 0 \"IsParent\", 'FORM' \"TType\" FROM Sys_MapData  WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree where OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
+                sqls += "SELECT No \"No\", FK_FormTree as \"ParentNo\", Name \"Name\",Idx \"Idx\", 0 \"IsParent\", 'FORM' \"TType\" FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
             else
             {
-                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree ORDER BY Idx ASC ; ";
-                sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree where OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
+                sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
@@ -990,18 +991,18 @@ namespace BP.WF.HttpHandler
                 dtForm.Rows.Add(row.ItemArray);
             }
 
-            if (WebUser.No.Equals("admin") == false)
-            {
-                DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
-                DataRow newRootRow = rootRows[0];
+           /* if (WebUser.No.Equals("admin") == false)
+            {*/
+            DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
+            DataRow newRootRow = rootRows[0];
 
-                newRootRow["ParentNo"] = "0";
-                DataTable newDt = dtForm.Clone();
-                newDt.Rows.Add(newRootRow.ItemArray);
+            newRootRow["ParentNo"] = "0";
+            DataTable newDt = dtForm.Clone();
+            newDt.Rows.Add(newRootRow.ItemArray);
 
-                GenerChildRows(dtForm, newDt, newRootRow);
-                dtForm = newDt;
-            }
+            GenerChildRows(dtForm, newDt, newRootRow);
+            dtForm = newDt;
+            //}
             String str = BP.Tools.Json.ToJson(dtForm);
             return str;
         }

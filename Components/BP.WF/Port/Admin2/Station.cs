@@ -109,7 +109,7 @@ namespace BP.WF.Port.Admin2
                 map.AddTBString(StationAttr.OrgNo, null, "OrgNo", true, true, 0, 60, 100);
                 map.AddTBInt(StationAttr.Idx, 0, "顺序", true, false);
 
-                //增加隐藏查询条件.
+                //增加隐藏查询条件.  
                 map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
                 //查询条件.

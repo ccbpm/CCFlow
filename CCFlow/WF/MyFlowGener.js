@@ -1657,6 +1657,7 @@ function GenerWorkNode() {
     }
 
     if (node.FormType == 0 || node.FormType == 10) {
+        $("#glyphicon").show();//显示换肤按钮
         GenerFoolFrm(flowData); //傻瓜表单.
     }
 

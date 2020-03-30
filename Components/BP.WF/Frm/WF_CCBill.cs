@@ -758,8 +758,11 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            //qo.addAnd();
-            //qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+            if(WebUser.No.Equals("admin") == false)
+            {
+                qo.addAnd();
+                qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+            }
 
 
             //获得行数.
@@ -992,6 +995,7 @@ namespace BP.Frm
 
             #region 关键字字段.
             string keyWord = ur.SearchKey;
+            bool isFirst = true; //是否第一次拼接SQL
 
             if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
             {
@@ -1014,7 +1018,6 @@ namespace BP.Frm
                             enumKey = "," + attr.Key + "Text,";
                             break;
                         case FieldType.FK:
-
                             continue;
                         default:
                             break;
@@ -1036,6 +1039,7 @@ namespace BP.Frm
                     i++;
                     if (i == 1)
                     {
+                        isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
@@ -1054,12 +1058,56 @@ namespace BP.Frm
                 }
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
-
             }
-            else
+            else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false)
             {
-                qo.AddHD();
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFields = md.GetParaString("RptStringSearchKeys").Split('*');
+                foreach (String str in searchFields)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    //字段名
+                    string[] items = str.Split(',');
+                    if (items.Length == 2 && DataType.IsNullOrEmpty(items[0]) == true)
+                        continue;
+                    field = items[0];
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    idx++;
+                    if (idx == 1)
+                    {
+                        isFirst = false;
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        else
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.MyParas.Add(field, fieldValue);
+                        continue;
+                    }
+                    qo.addAnd();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    else
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                    qo.MyParas.Add(field, fieldValue);
+
+
+                }
+                if (idx != 0)
+                    qo.addRightBracket();
             }
+
             #endregion 关键字段查询
 
             #region 时间段的查询
@@ -1071,7 +1119,10 @@ namespace BP.Frm
                 //按日期查询
                 if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDate)
                 {
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     dtTo += " 23:59:59";
                     qo.SQL = md.GetParaString("DTSearchKey") + " >= '" + dtFrom + "'";
@@ -1093,7 +1144,10 @@ namespace BP.Frm
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
 
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
                     qo.addLeftBracket();
                     qo.SQL = md.GetParaString("DTSearchKey") + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -1112,14 +1166,19 @@ namespace BP.Frm
                 var val = ap.GetValStrByKey(str);
                 if (val.Equals("all"))
                     continue;
-                qo.addAnd();
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
+
                 qo.addLeftBracket();
 
-                //获得真实的数据类型.
+
                 if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
+
                 }
                 else
                 {
@@ -1129,6 +1188,59 @@ namespace BP.Frm
                 qo.addRightBracket();
             }
             #endregion 外键或者枚举的查询
+
+            #region 设置隐藏字段的过滤查询
+            FrmBill frmBill = new FrmBill(this.FrmID);
+            string hidenField = frmBill.GetParaString("HidenField");
+
+            if (DataType.IsNullOrEmpty(hidenField) == false)
+            {
+                hidenField = hidenField.Replace("[%]", "%");
+                foreach (string field in hidenField.Split(';'))
+                {
+                    if (field == "")
+                        continue;
+                    if (field.Split(',').Length != 3)
+                        throw new Exception("单据" + frmBill.Name + "的过滤设置规则错误：" + hidenField + ",请联系管理员检查");
+                    string[] str = field.Split(',');
+                    if (isFirst == false)
+                        qo.addAnd();
+                    else
+                        isFirst = false;
+                    qo.addLeftBracket();
+
+                    //获得真实的数据类型.
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        var valType = BP.Sys.Glo.GenerRealType(attrs,
+                            str[0], str[2]);
+                        qo.AddWhere(str[0], str[1], valType);
+                    }
+                    else
+                    {
+                        qo.AddWhere(str[0], str[1], str[2]);
+                    }
+                    qo.addRightBracket();
+                    continue;
+                }
+
+            }
+
+            #endregion 设置隐藏字段的查询
+
+           
+
+            if (isFirst == false)
+                qo.addAnd();
+
+            qo.AddWhere("BillState", "!=", 0);
+
+            //默认查询本部门的单据
+            if (WebUser.No.Equals("admin") == false)
+            {
+                qo.addAnd();
+                qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+            }
 
             #endregion 查询语句
             qo.addOrderBy("OID");

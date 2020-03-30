@@ -761,7 +761,7 @@ namespace BP.WF
 
                 string UIIsEnable = dr["UIIsEnable"].ToString();
                 // 检查是否有下拉框自动填充。
-                string keyOfEn = dr["KeyOfEn"].ToString(); //@sly.
+                string keyOfEn = dr["KeyOfEn"].ToString();
 
                 #region 处理下拉框数据范围. for 小杨.
                 me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,

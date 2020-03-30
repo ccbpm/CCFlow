@@ -29,6 +29,9 @@
             -moz-appearance: none;
             appearance: none; /*去掉下拉箭头*/
         }
+        label{
+            font-weight:normal;
+        }
     </style>
     <script language="javascript" type="text/javascript">
 
@@ -249,14 +252,7 @@
                 });
 
 
-                $('#p').panel({
-                    width: '100%',
-                    style: 'padding:5px;',
-                    title: mapdata[0].Name + '[' + mapdata[0].No + ']字段排序',
-                    iconCls: 'icon-tip',
-                    fit: true
-
-                });
+               
                 //1.1 在面板里添加表格
                 var htmlstr = ""
                 htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%'>";
@@ -271,7 +267,7 @@
                     tr += "<td colspan='6' class='GroupTitle' nowrap >";
 
                     //分组的下移、上移按钮
-                    var btnDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                    var btnDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移-</span></span></a>";
                     var btnUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
                     if (dtGroups[i].CtrlType != "Ath") {
                         if (dtGroups.length == 1) {
@@ -396,7 +392,7 @@
 
                         //字段的上移与下移的按钮
                         var attrDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
-                        var attrUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+                        var attrUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移&nbsp&nbsp</span></span></a>";
                         if (attrIdx == 1) {//如果是第一个，只显示下移
                             tda += attrDown;
                         }
@@ -440,7 +436,7 @@
                         //TODO 拼接html
                         tr += "<tr>";
                         tr += "<td style='text-align:center' >" + (j + 1) + "</td>"; //序号
-                        tr += "<td  nowrap='nowrap' ><a href=\"javascript:ShowEditWindow('" + rows_Attrs[j].Name + "','../FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&FK_MapData=" + FK_MapData + "&MyPK=" + rows_Attrs[j].MyPK + "&FType=1&GroupField=0')\">" + rows_Attrs[j].KeyOfEn + "</a></td>";
+                        tr += "<td  nowrap='nowrap' >" + rows_Attrs[j].KeyOfEn + "</a></td>";
                         tr += "<td  nowrap='nowrap' >" + rows_Attrs[j].Name + "</td>"; //名称
                         tr += "<td >";
                         tr += ddl.replace("#DDLID#", rows_Attrs[j].KeyOfEn); //分组字段
@@ -496,7 +492,7 @@
                         tr = "";
                         tr += "<tr>";
                         tr += "<td style='text-align:center'>" + (j + 1) + "</td>";
-                        tr += "<td nowrap=''><a href=\"javascript:ShowEditWindow('" + dtNoGroupAttrs[j].Name + "','../FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&amp;FK_MapData=" + FK_MapData + "&amp;MyPK=" + dtNoGroupAttrs[j].MyPK + "&amp;FType=1&amp;GroupField=0')\">" + dtNoGroupAttrs[j].KeyOfEn + "</a></td>";
+                        tr += "<td nowrap=''>" + dtNoGroupAttrs[j].KeyOfEn + "</a></td>";
                         tr += "<td nowrap=''>" + dtNoGroupAttrs[j].Name + "</td>";
                         tr += "<td>";
                         tr += ddl.replace("#DDLID#", dtNoGroupAttrs[j].KeyOfEn);
@@ -571,7 +567,7 @@
 </head>
 <body class="easyui-layout">
     <form id="form1">
-        <div id="layoutDiv" data-options="region:'center',title:'字段排序',border:false" style="padding:6px;">
+        
             <div id="p" style="padding:5px">
             </div>
 
@@ -582,7 +578,7 @@
 
             <div id="btns" class="dialog-button">
                 <a onclick="BtnCopy()" class="easyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-                    <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span></span>
+                    <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span>
                 </a>
                 <a onclick="$('#nodes').dialog('close');" class="eeasyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
                     <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span>
@@ -590,7 +586,7 @@
             </div>
 
 
-        </div>
+        
     </form>
 </body>
 </html>

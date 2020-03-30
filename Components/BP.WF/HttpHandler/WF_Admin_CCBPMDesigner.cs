@@ -292,30 +292,30 @@ namespace BP.WF.HttpHandler
                 newRootId = WebUser.OrgNo;
             }
 
-            
-                BP.GPM.Dept dept = new BP.GPM.Dept();
 
-                if (!string.IsNullOrWhiteSpace(newRootId))
-                {
-                    if (dept.Retrieve(BP.GPM.DeptAttr.No, newRootId) == 0)
-                    {
-                        dept.No = "-1";
-                        dept.Name = "无部门";
-                        dept.ParentNo = "";
-                    }
-                }
-                else
-                {
-                    if (dept.Retrieve(BP.GPM.DeptAttr.ParentNo, parentrootid) == 0)
-                    {
-                        dept.No = "-1";
-                        dept.Name = "无部门";
-                        dept.ParentNo = "";
-                    }
-                }
+            BP.GPM.Dept dept = new BP.GPM.Dept();
 
-                dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
-             
+            if (!string.IsNullOrWhiteSpace(newRootId))
+            {
+                if (dept.Retrieve(BP.GPM.DeptAttr.No, newRootId) == 0)
+                {
+                    dept.No = "-1";
+                    dept.Name = "无部门";
+                    dept.ParentNo = "";
+                }
+            }
+            else
+            {
+                if (dept.Retrieve(BP.GPM.DeptAttr.ParentNo, parentrootid) == 0)
+                {
+                    dept.No = "-1";
+                    dept.Name = "无部门";
+                    dept.ParentNo = "";
+                }
+            }
+
+            dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -411,8 +411,8 @@ namespace BP.WF.HttpHandler
                     return "url@../DBInstall.htm";
 
                 Hashtable ht = new Hashtable();
-              
-                    ht.Add("OSModel", "1");
+
+                ht.Add("OSModel", "1");
 
                 //把系统信息加入里面去.
                 ht.Add("SysNo", SystemConfig.SysNo);
@@ -556,11 +556,33 @@ namespace BP.WF.HttpHandler
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
 
+            //如果是单机版本，仅仅admin登录.
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                if (WebUser.No.Equals("admin") == false)
+                    return "err@非admin不能登录.";
+
+                //只有一个组织的情况.
+                if (DBAccess.IsView("Port_Emp") == false)
+                {
+                    string sid = BP.DA.DBAccess.GenerGUID();
+                    string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'";
+                    BP.DA.DBAccess.RunSQL(sql);
+                    emp.SID = sid;
+                }
+
+                //设置SID.
+                WebUser.SID = emp.SID; //设置SID.
+
+                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+            }
+
             //获得当前管理员管理的组织数量.
             Orgs orgs = new Orgs();
-            int i = orgs.Retrieve(OrgAttr.Adminer, emp.No);
-            if (i == 0 && Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            orgs.Retrieve(OrgAttr.Adminer, emp.No);
+            if (orgs.Count == 0)
             {
+                //当前登录人员没有组织.
                 if (emp.No.Equals("admin") == true)
                 {
                     BP.WF.Dev2Interface.Port_Login(emp.No);
@@ -576,22 +598,19 @@ namespace BP.WF.HttpHandler
 
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
-            if (i > 1)
+
+            //判断是否是多个组织的情况.
+            if (orgs.Count > 1)
                 return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
 
             //设置他的组织，信息.
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-            {
-                WebUser.OrgNo = orgs[0].GetValStrByKey("No");
-            }
+            WebUser.OrgNo = orgs[0].GetValStrByKey("No");
 
             //只有一个组织的情况.
             if (DBAccess.IsView("Port_Emp") == false)
             {
                 string sid = BP.DA.DBAccess.GenerGUID();
-                string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'";
-                if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                    sql = "UPDATE Port_Emp SET SID='" + sid + "',OrgNo='" + WebUser.OrgNo + "' WHERE No='" + emp.No + "'";
+                string sql = "UPDATE Port_Emp SET SID='" + sid + "',OrgNo='" + WebUser.OrgNo + "' WHERE No='" + emp.No + "'";
                 BP.DA.DBAccess.RunSQL(sql);
                 emp.SID = sid;
             }
@@ -621,9 +640,9 @@ namespace BP.WF.HttpHandler
             WebUser.OrgNo = this.OrgNo;
 
             if (DBAccess.IsView("Port_Emp") == false)
-                DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='"+this.OrgNo+"',SID='"+WebUser.SID+"' WHERE No='"+WebUser.No+"'");
+                DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + this.OrgNo + "',SID='" + WebUser.SID + "' WHERE No='" + WebUser.No + "'");
 
-            return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No+"&OrgNo="+WebUser.OrgNo;
+            return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No + "&OrgNo=" + WebUser.OrgNo;
             // return "登录成功.";
         }
         #endregion 登录窗口.
@@ -852,8 +871,8 @@ namespace BP.WF.HttpHandler
             }
 
 
-           /* if (WebUser.No != "admin")
-            {*/
+            /* if (WebUser.No != "admin")
+             {*/
             DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
             DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
 
@@ -862,7 +881,7 @@ namespace BP.WF.HttpHandler
             newDt.Rows.Add(newRootRow.ItemArray);
             GenerChildRows(dt, newDt, newRootRow);
             dt = newDt;
-           // }
+            // }
 
             string str = BP.Tools.Json.ToJson(dt);
             return str;
@@ -991,8 +1010,8 @@ namespace BP.WF.HttpHandler
                 dtForm.Rows.Add(row.ItemArray);
             }
 
-           /* if (WebUser.No.Equals("admin") == false)
-            {*/
+            /* if (WebUser.No.Equals("admin") == false)
+             {*/
             DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
             DataRow newRootRow = rootRows[0];
 

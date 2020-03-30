@@ -171,7 +171,7 @@ namespace BP.WF.HttpHandler
 
             FlowExt fl = new FlowExt(this.FK_Flow);
 
-            if (1 == 2 && BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
+            if (1 == 2 && BP.Web.WebUser.No.Equals("admin") && fl.Tester.Length <= 1)
             {
                 string msg = "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
                 msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";
@@ -273,18 +273,6 @@ namespace BP.WF.HttpHandler
 
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                         return BP.Tools.Json.ToJson(dt);
-                        //if (dt.Rows.Count > 300 && 1==2)
-                        //{
-                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
-                        //        sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
-
-                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
-                        //        sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
-
-                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
-                        //        sql = "SELECT  No as FK_Emp FROM Port_Emp   limit 0,300 ";
-                        //}
-                        break;
                     case DeliveryWay.BySelectedOrgs: //按照设置的组织计算: 20202年3月开始约定此规则.
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)

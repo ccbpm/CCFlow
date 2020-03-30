@@ -1779,8 +1779,8 @@ function Ele_Attachment(flowData, gf, node, ath) {
         url += "&IsStartNode=" + 1; //是否是开始节点
 
     var isReadonly = false;
-    if (gf.FrmID.indexOf(nodeID) == -1)
-        isReadonly = true;
+    //if (gf.FrmID.indexOf(nodeID) == -1)
+    //    isReadonly = true;
 
     if (isReadonly == false) {
         var strRD = GetQueryString("IsReadonly");

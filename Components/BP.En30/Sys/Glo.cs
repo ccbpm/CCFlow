@@ -15,6 +15,18 @@ namespace BP.Sys
     public class Glo
     {
         /// <summary>
+        /// 更新SID Or OrgNo 的SQL
+        /// 用于集成所用
+        /// 更新被集成的用户的user表
+        /// </summary>
+        public static string UpdateSIDAndOrgNoSQL
+        {
+            get
+            {
+                return SystemConfig.GetValByKey("UpdateSIDAndOrgNoSQL", null);
+            }
+        }
+        /// <summary>
         /// 获得真实的数据类型
         /// </summary>
         /// <param name="attrs">属性集合</param>

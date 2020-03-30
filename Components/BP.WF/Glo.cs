@@ -4827,6 +4827,8 @@ namespace BP.WF
                 return Glo.IntallPath + "\\Data\\Node\\";
             }
         }
+      
+        
         public static void ClearDBData()
         {
             string sql = "DELETE FROM WF_GenerWorkFlow WHERE fk_flow not in (select no from wf_flow )";

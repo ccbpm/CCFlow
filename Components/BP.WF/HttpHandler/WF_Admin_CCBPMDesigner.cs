@@ -372,7 +372,6 @@ namespace BP.WF.HttpHandler
                 {
                     if (inemps.Contains(de.FK_Emp))
                         continue;
-
                     inemps.Add(de.FK_Emp);
                 }
             }
@@ -596,27 +595,21 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            //设置他的组织，信息.
+            WebUser.No = emp.No; //登录帐号.
+            WebUser.OrgNo = orgs[0].GetValStrByKey("No");
+            WebUser.SID = DBAccess.GenerGUID(); //设置SID.
+            WebUser.FK_Dept = WebUser.OrgNo; //FK_Dept.
+
+            //执行更新到用户表信息.
+            WebUser.UpdateSIDAndOrgNoSQL();
+
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
 
             //判断是否是多个组织的情况.
             if (orgs.Count > 1)
                 return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
-
-            //设置他的组织，信息.
-            WebUser.OrgNo = orgs[0].GetValStrByKey("No");
-
-            //只有一个组织的情况.
-            if (DBAccess.IsView("Port_Emp") == false)
-            {
-                string sid = BP.DA.DBAccess.GenerGUID();
-                string sql = "UPDATE Port_Emp SET SID='" + sid + "',OrgNo='" + WebUser.OrgNo + "' WHERE No='" + emp.No + "'";
-                BP.DA.DBAccess.RunSQL(sql);
-                emp.SID = sid;
-            }
-
-            //设置SID.
-            WebUser.SID = emp.SID; //设置SID.
 
             return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
@@ -636,11 +629,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SelectOneOrg_Selected()
         {
-            string orgno = this.GetRequestVal("OrgNo");
             WebUser.OrgNo = this.OrgNo;
+            WebUser.FK_Dept = this.OrgNo;
 
-            if (DBAccess.IsView("Port_Emp") == false)
-                DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + this.OrgNo + "',SID='" + WebUser.SID + "' WHERE No='" + WebUser.No + "'");
+            //执行更新到用户表信息.
+            WebUser.UpdateSIDAndOrgNoSQL();
 
             return "url@Default.htm?SID=" + WebUser.SID + "&UserNo=" + WebUser.No + "&OrgNo=" + WebUser.OrgNo;
             // return "登录成功.";
@@ -819,6 +812,10 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc
+                || Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+                return GetFlowTreeTable_GroupInc();
+
             string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort where OrgNo ='" + WebUser.OrgNo + "' or No = 1 " +
                            "union " +
                            "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX ";
@@ -881,7 +878,76 @@ namespace BP.WF.HttpHandler
             newDt.Rows.Add(newRootRow.ItemArray);
             GenerChildRows(dt, newDt, newRootRow);
             dt = newDt;
-            // }
+
+            string str = BP.Tools.Json.ToJson(dt);
+            return str;
+        }
+        public string GetFlowTreeTable_GroupInc()
+        {
+            string sql = "SELECT * FROM ( ";
+
+            sql += "  SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort WHERE OrgNo ='" + WebUser.OrgNo + "' OR No=1 ";
+            sql += "  UNION ";
+            sql += "  SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow WHERE OrgNo ='" + WebUser.OrgNo + "' ";
+            sql += " ) A ";
+            sql += "  ORDER BY DTYPE, IDX ";
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle
+                || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
+                        " WHERE OrgNo ='" + WebUser.OrgNo + "' or No = 1 union " +
+                        "SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow WHERE OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX";
+            }
+
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = @"SELECT * FROM (SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
+                     " WHERE OrgNo ='" + WebUser.OrgNo + "' or No = 1 " +
+                     "union " +
+                     "SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow " +
+                     " WHERE OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX";
+            }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["no"].ColumnName = "NO";
+                dt.Columns["name"].ColumnName = "NAME";
+                dt.Columns["parentno"].ColumnName = "PARENTNO";
+                dt.Columns["idx"].ColumnName = "IDX";
+                dt.Columns["isparent"].ColumnName = "ISPARENT";
+                dt.Columns["ttype"].ColumnName = "TTYPE";
+                dt.Columns["dtype"].ColumnName = "DTYPE";
+            }
+
+            //判断是否为空，如果为空，则创建一个流程根结点，added by liuxc,2016-01-24
+            if (dt.Rows.Count == 0)
+            {
+                FlowSort fs = new FlowSort();
+                fs.No = "99";
+                fs.ParentNo = "0";
+                fs.Name = "流程树";
+                fs.Insert();
+
+                dt.Rows.Add("F99", "F0", "流程树", 0, 1, "FLOWTYPE", -1);
+            }
+            else
+            {
+                DataRow[] drs = dt.Select("NAME='流程树'");
+                if (drs.Length > 0 && !Equals(drs[0]["PARENTNO"], "F0"))
+                    drs[0]["PARENTNO"] = "F0";
+            }
+
+
+            DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
+            DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
+
+            newRootRow["PARENTNO"] = "F0";
+            DataTable newDt = dt.Clone();
+            newDt.Rows.Add(newRootRow.ItemArray);
+            GenerChildRows(dt, newDt, newRootRow);
+            dt = newDt;
 
             string str = BP.Tools.Json.ToJson(dt);
             return str;

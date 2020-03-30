@@ -123,69 +123,36 @@ namespace BP.Web
             }
 
             #region 解决部门的问题.
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
+            if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
             {
-                if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
+                string sql = "";
+
+                sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
+
+                string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                if (DataType.IsNullOrEmpty(deptNo) == true)
                 {
-                    string sql = "";
-
-                    sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
-
-                    string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                    sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
+                    deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
                     if (DataType.IsNullOrEmpty(deptNo) == true)
-                    {
-                        sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
-                        deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
-                        if (DataType.IsNullOrEmpty(deptNo) == true)
-                            throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
-                    }
-                    else
-                    {
-                        //调用接口更改所在的部门.
-                        WebUser.ChangeMainDept(em.No, deptNo);
-                    }
+                        throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
                 }
-
-                BP.Port.Dept dept = new Dept();
-                dept.No = em.FK_Dept;
-                if (dept.RetrieveFromDBSources() == 0)
-                    throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{" + em.FK_Dept + "}不存在.");
+                else
+                {
+                    //调用接口更改所在的部门.
+                    WebUser.ChangeMainDept(em.No, deptNo);
+                }
             }
 
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var ws = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = ws.GetEmpHisDepts(em.No);
-                string strs = BP.DA.DBAccess.GenerWhereInPKsString(dt);
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET Depts=" + SystemConfig.AppCenterDBVarStr + "Depts WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("Depts", strs);
-                ps.Add("No", em.No);
-                BP.DA.DBAccess.RunSQL(ps);
+            BP.Port.Dept dept = new Dept();
+            dept.No = em.FK_Dept;
+            if (dept.RetrieveFromDBSources() == 0)
+                throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{" + em.FK_Dept + "}不存在.");
 
-                dt = ws.GetEmpHisStations(em.No);
-                strs = BP.DA.DBAccess.GenerWhereInPKsString(dt);
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET Stas=" + SystemConfig.AppCenterDBVarStr + "Stas WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("Stas", strs);
-                ps.Add("No", em.No);
-                BP.DA.DBAccess.RunSQL(ps);
-            }
             #endregion 解决部门的问题.
 
             WebUser.FK_Dept = em.FK_Dept;
             WebUser.FK_DeptName = em.FK_DeptText;
-            if (IsRecSID)
-            {
-                //判断是否视图，如果为视图则不进行修改 
-                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
-                {
-                    /*如果记录sid*/
-                    string sid = DBAccess.GenerGUID(); // = DateTime.Now.ToString("MMddHHmmss");
-                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + WebUser.No + "'");
-                    WebUser.SID = sid;
-                }
-            }
 
             WebUser.SysLang = lang;
             if (BP.Sys.SystemConfig.IsBSsystem)
@@ -280,9 +247,9 @@ namespace BP.Web
             if (IsBSMode == true
                 && HttpContextHelper.Current != null
                 && HttpContextHelper.Current.Session != null)
-                HttpContextHelper.SessionSet(key,val);
+                HttpContextHelper.SessionSet(key, val);
             else
-                BP.Port.Current.SetSession(key,val);
+                BP.Port.Current.SetSession(key, val);
         }
         /// <summary>
         /// 退回
@@ -449,7 +416,7 @@ namespace BP.Web
 
                     string sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
                     string dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
-                    if (dept == null )
+                    if (dept == null)
                     {
                         sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
                         dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
@@ -531,8 +498,7 @@ namespace BP.Web
         /// <returns></returns>
         public static bool CheckSID(string userNo, string sid)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-                return true;
+
 
             Paras paras = new Paras();
             paras.SQL = "SELECT SID FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
@@ -573,12 +539,12 @@ namespace BP.Web
             {
                 string val = HttpContextHelper.RequestCookieGet(valKey, "CCS");
 
-				if (isChinese)
-					val = HttpUtility.UrlDecode(val);
-					 
+                if (isChinese)
+                    val = HttpUtility.UrlDecode(val);
 
 
-				if (DataType.IsNullOrEmpty(val))
+
+                if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
                 return val;
             }
@@ -611,8 +577,8 @@ namespace BP.Web
             foreach (string key in ap.HisHT.Keys)
                 cookieValues.Add(key, ap.GetValStrByKey(key));
 
-            HttpContextHelper.ResponseCookieAdd(cookieValues, 
-                DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute), 
+            HttpContextHelper.ResponseCookieAdd(cookieValues,
+                DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute),
                 "CCS");
         }
 
@@ -672,6 +638,29 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("Name", value);
+            }
+        }
+        /// <summary>
+        /// 更新当前管理员的组织SID信息.
+        /// </summary>
+        public static void UpdateSIDAndOrgNoSQL()
+        {
+            if (DBAccess.IsView("Port_Emp") == false)
+            {
+                string sql = "UPDATE Port_Emp SET SID='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.OrgNo + "' WHERE No='" + WebUser.No + "'";
+                BP.DA.DBAccess.RunSQL(sql);
+            }
+            else
+            {
+                string sql = Glo.UpdateSIDAndOrgNoSQL;
+                if (DataType.IsNullOrEmpty(sql) == true)
+                    throw new Exception("err@系统管理员缺少全局配置变量 UpdateSIDAndOrgNoSQL ");
+
+                sql = sql.Replace("@FK_Dept", WebUser.FK_Dept);
+                sql = sql.Replace("@OrgNo", WebUser.OrgNo);
+                sql = sql.Replace("@SID", WebUser.SID);
+                sql = sql.Replace("@No", WebUser.No);
+                DBAccess.RunSQL(sql);
             }
         }
         /// <summary>

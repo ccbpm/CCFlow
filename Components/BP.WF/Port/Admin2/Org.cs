@@ -204,7 +204,7 @@ namespace BP.WF.Port.Admin2
             if (fs.RetrieveFromDBSources() == 1)
             {
                 fs.OrgNo = this.No;
-                fs.Update();
+                fs.DirectUpdate();
             }
             else
             {
@@ -218,30 +218,29 @@ namespace BP.WF.Port.Admin2
                 fs.ParentNo = root.No;
                 fs.OrgNo = this.No;
                 fs.Idx = 999;
-                fs.Insert();
+                fs.DirectInsert();
 
                 //创建下一级目录.
                 BP.WF.Template.FlowSort en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
                 en.Name = "公文类";
                 en.OrgNo = this.No;
                 en.Domain = "GongWen";
-                en.Update();
+                en.DirectUpdate();
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
                 en.Name = "办公类";
                 en.OrgNo = this.No;
-                en.Update();
+                en.DirectUpdate();
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
                 en.Name = "财务类";
                 en.OrgNo = this.No;
-                en.Update();
+                en.DirectUpdate();
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
                 en.Name = "人力资源类";
                 en.OrgNo = this.No;
-                en.Update();
-
+                en.DirectUpdate();
             }
             #endregion 检查流程树.
 
@@ -259,11 +258,20 @@ namespace BP.WF.Port.Admin2
                 ft.ParentNo = ftRoot.No;
                 ft.OrgNo = this.No;
                 ft.Idx = 999;
-                ft.Insert();
+                ft.DirectInsert();
 
                 //创建两个目录.
-                ft.DoCreateSubNode();
-                ft.DoCreateSubNode();
+                BP.Sys.FrmTree mySubFT = ft.DoCreateSubNode() as BP.Sys.FrmTree;
+                mySubFT.Name = "表单目录1";
+                mySubFT.OrgNo = this.No;
+                mySubFT.DirectUpdate();
+
+
+                mySubFT = ft.DoCreateSubNode() as BP.Sys.FrmTree;
+                mySubFT.Name = "表单目录2";
+                mySubFT.OrgNo = this.No;
+                mySubFT.DirectUpdate();
+
             }
             else
             {
@@ -271,7 +279,7 @@ namespace BP.WF.Port.Admin2
                 ft.ParentNo = ftRoot.No;
                 ft.OrgNo = this.No;
                 ft.Idx = 999;
-                ft.Update();
+                ft.DirectUpdate();
             }
             #endregion 检查表单树.
 

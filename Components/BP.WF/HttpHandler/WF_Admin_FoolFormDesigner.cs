@@ -1098,11 +1098,17 @@ namespace BP.WF.HttpHandler
                
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
                 if (uiContralType == UIContralType.SignCheck)
+                {
                     attr.UIIsEnable = false;
+                    attr.UIVisible = false;
+                }
                 else
+                {
+                    attr.UIVisible = true;
                     attr.UIIsEnable = true;
+                }
+                   
                 attr.ColSpan = 1;
                 attr.MinLen = 0;
                 attr.MaxLen = 50;

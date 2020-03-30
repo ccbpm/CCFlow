@@ -93,6 +93,34 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
             }
         }
+        /// <summary>
+        /// 是否可见
+        /// </summary>
+        public bool UIVisible
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapAttrAttr.UIVisible);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIVisible, value);
+            }
+        }
+        /// <summary>
+        /// 是否可编辑
+        /// </summary>
+        public bool UIIsEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapAttrAttr.UIIsEnable);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIIsEnable, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -530,6 +558,10 @@ namespace BP.Sys.FrmUI
         /// <returns>执行结果</returns>
         public string DoSetCheck()
         {
+            this.UIContralType = UIContralType.SignCheck;
+            this.UIIsEnable = false;
+            this.UIVisible = false;
+            this.Update();
             return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口,并关闭当前的设计器,重新登录.";
         }
         /// <summary>

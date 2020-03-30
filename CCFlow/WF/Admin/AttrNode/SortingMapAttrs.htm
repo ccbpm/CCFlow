@@ -267,8 +267,8 @@
                     tr += "<td colspan='6' class='GroupTitle' nowrap >";
 
                     //分组的下移、上移按钮
-                    var btnDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移-</span></span></a>";
-                    var btnUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
+                    var btnDown = "<a style='float:right' onclick=btnDown('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                    var btnUp = "<a style='float:right' onclick=btnUp('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
                     if (dtGroups[i].CtrlType != "Ath") {
                         if (dtGroups.length == 1) {
                         }

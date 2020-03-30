@@ -6327,6 +6327,8 @@ namespace BP.WF
                 Flow fl = new Flow(this.No);
                 fl.DoDelData();
                 fl.DoDelete();
+                //@sly
+                fl.OrgNo = WebUser.OrgNo; //隶属组织 
                 this.Save();
                 #endregion 删除有可能存在的历史数据.
 
@@ -6343,11 +6345,27 @@ namespace BP.WF
                 nd.NodePosType = NodePosType.Start;
                 nd.ICON = "前台";
 
-
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+
+                //如果是集团模式.    //@sly
+                if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                {
+                    if (DataType.IsNullOrEmpty(WebUser.OrgNo) == true)
+                        throw new Exception("err@登录信息丢失了组织信息,请重新登录.");
+
+                    nd.HisDeliveryWay = DeliveryWay.BySelectedOrgs;
+
+                    //把本组织加入进去.
+                    FlowOrg fo = new FlowOrg();
+                    fo.Delete(FlowOrgAttr.FlowNo, nd.FK_Flow);
+                    fo.FlowNo = nd.FK_Flow;
+                    fo.OrgNo = WebUser.OrgNo;
+                    fo.Insert();
+                }
+
                 nd.Insert();
                 nd.CreateMap();
 

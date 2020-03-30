@@ -31,7 +31,8 @@ namespace BP.WF.Template
             FlowExt flowExt = new FlowExt(flowNo);
             flowExt.DesignerNo = BP.Web.WebUser.No;
             flowExt.DesignerName = BP.Web.WebUser.Name;
-            flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");         
+
             flowExt.DirectSave();
 
             //如果为CCFlow模式则不进行写入Json串
@@ -48,6 +49,7 @@ namespace BP.WF.Template
             // @liuqiang  增加方向.
             Node nd = new Node(drToNode.Node);
             nd.HisToNDs = drToNode.ToNode.ToString();
+
             nd.Update();
 
             //执行一次流程检查, 为了节省效率，把检查去掉了.

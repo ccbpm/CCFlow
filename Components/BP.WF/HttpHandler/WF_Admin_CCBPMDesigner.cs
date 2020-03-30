@@ -1309,7 +1309,6 @@ namespace BP.WF.HttpHandler
                     fn.FrmSln = FrmSln.Default;
                     fn.Insert();
 
-
                 }
                 #endregion 对极简版特殊处理. @liuqiang
 

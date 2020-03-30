@@ -967,8 +967,8 @@ function FlowRun2020() {
 
     var url = baseurl + "TestingContainer/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH&SID="+SID;
 
-    //WinOpen(url);
-    window.parent.addTab(flowNo + "_YXLH", "运行流程2020" + flowNo, url);
+    WinOpenFull(url);
+    //window.parent.addTab(flowNo + "_YXLH", "运行流程2020" + flowNo, url);
 }
 
 //运行流程

@@ -21,11 +21,12 @@
         <div id="bar"> </div>
         <fieldset>
             <legend>请按照约定的格式设置从人员发送到人员的路由路径.</legend>
+            <br />
             <textarea id="RB_ByFromEmpToEmp" style="width:100%;height:50px" v-model="byFromEmpToEmp"></textarea>
         </fieldset>
 
         <fieldset>
-            <legend>说明</legend>
+            <legend id="help">说明</legend>
             <ul>
                 <li>格式为 @zhangsan,lisi@wangwu,zhaoliu      从如果是张三发送的就发送到李四身上. 多个人员对用@分开. </li>
                 <li>如果没有找到，就按照默认值寻找: @Defualt,zhangsan  着一样配置表示，没有找到人就按照默认值投递.</li>

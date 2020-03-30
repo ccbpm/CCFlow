@@ -74,7 +74,8 @@ function DFoolFrm() {
     var nodeID = GetQueryString("FK_Node");
     var node = new Entity("BP.WF.Node", nodeID);
     var url = '../../FoolFormDesigner/Designer.htm?FK_Flow=' + node.FK_Flow + '&FK_Node=' + nodeID + "&FK_MapData=ND" + nodeID;
-    window.open(url);
+    //window.open(url);
+    WinOpenFull(url);
     //OpenEasyUiDialogExt(url, '傻瓜表单设计器', 800, 500, false);
 }
 

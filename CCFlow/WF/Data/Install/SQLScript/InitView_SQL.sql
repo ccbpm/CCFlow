@@ -90,11 +90,11 @@ B.Rec as Sender,
   
   
 
-/****** 对象:  View V_FlowStarter 脚本日期:  2015-04-10 ******/;
+/****** 对象:  View V_FlowStarter 脚本日期:  2015-04-10  这个好像不用了. ******/;
 /*  V_FlowStarter 
 -- 按绑定岗位.
 -- 按绑定部门的人员.
--- 按绑定人员的人员.
+-- 按绑定人员的人员. 
   */;
 CREATE VIEW V_FlowStarter (FK_Flow,FlowName,FK_Emp)
 AS
@@ -124,31 +124,37 @@ SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeSta
 -- 按绑定人员的人员.
   */;
 
-CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp)
-AS
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
+CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)
+AS --按照绑定的岗位计算
+SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
  WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
 AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14)
-  UNION 
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c 
+  UNION  --按绑定的部门
+SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c 
  WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )
 AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1
-  UNION 
-SELECT A.FK_Flow, a.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
+  UNION  --按本节点绑定的人员
+SELECT A.FK_Flow, a.FlowName, B.FK_Emp, '' as OrgNo FROM WF_Node A, WF_NodeEmp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
 AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3
-  UNION 
-SELECT A.FK_Flow, a.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
+  UNION --所有人都可以发起.
+SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp, B.OrgNo FROM WF_Node A, Port_Emp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4
-  UNION  
-SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
+  UNION  -- 按岗位与部门交集计算
+SELECT A.FK_Flow, a.FlowName, E.FK_Emp,E.OrgNo FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
  WHERE a.NodePosType=0 
  AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
  AND  A.NodeID=B.FK_Node 
  AND A.NodeID=C.FK_Node 
  AND B.FK_Dept=E.FK_Dept 
- AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
- 
+ AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9
+ UNION --按照设置的组织计算
+ SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, WF_FlowOrg B, Port_Emp C
+ WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo
+ AND  A.DeliveryWay=22;
+
+  
+  
 
 /****** 考核:  View V_TOTALCH    脚本日期:  2015-09-10 ******/;
 /*  V_TOTALCH */;

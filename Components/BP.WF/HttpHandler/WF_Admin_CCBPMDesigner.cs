@@ -292,33 +292,7 @@ namespace BP.WF.HttpHandler
                 newRootId = WebUser.OrgNo;
             }
 
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-            {
-                BP.WF.Port.Dept dept = new BP.WF.Port.Dept();
-
-                if (!string.IsNullOrWhiteSpace(newRootId))
-                {
-                    if (dept.Retrieve(BP.WF.Port.DeptAttr.No, newRootId) == 0)
-                    {
-                        dept.No = "-1";
-                        dept.Name = "无部门";
-                        dept.ParentNo = "";
-                    }
-                }
-                else
-                {
-                    if (dept.Retrieve(BP.WF.Port.DeptAttr.ParentNo, parentrootid) == 0)
-                    {
-                        dept.No = "-1";
-                        dept.Name = "无部门";
-                        dept.ParentNo = "";
-                    }
-                }
-
-                dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
-            }
-            else
-            {
+            
                 BP.GPM.Dept dept = new BP.GPM.Dept();
 
                 if (!string.IsNullOrWhiteSpace(newRootId))
@@ -341,7 +315,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
-            }
+             
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -437,9 +411,7 @@ namespace BP.WF.HttpHandler
                     return "url@../DBInstall.htm";
 
                 Hashtable ht = new Hashtable();
-                if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                    ht.Add("OSModel", "0");
-                else
+              
                     ht.Add("OSModel", "1");
 
                 //把系统信息加入里面去.

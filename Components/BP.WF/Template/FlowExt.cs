@@ -1815,11 +1815,6 @@ namespace BP.WF.Template
             // fl.No = this.No;
             // fl.RetrieveFromDBSources();
             //fl.Update();
-
-            if (BP.WF.Glo.OSModel == OSModel.OneMore)
-            {
-                // DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
-            }
         }
         protected override bool beforeUpdate()
         {

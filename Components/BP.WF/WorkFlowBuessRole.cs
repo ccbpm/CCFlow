@@ -1136,9 +1136,7 @@ namespace BP.WF
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。*/
                         sql = "SELECT NO FROM Port_Emp WHERE NO IN ";
                         
-                        if (Glo.OSModel== OSModel.OneOne)
-                           sql += "(SELECT No FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
-                        else
+                      
                             sql += "(SELECT No FROM Port_Emp WHERE FK_Dept IN ";
 
 
@@ -1354,22 +1352,12 @@ namespace BP.WF
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。 */
 
-                        if (Glo.OSModel == OSModel.OneMore)
-                        {
+                     
                             sql = "SELECT No FROM Port_Emp WHERE NO IN "
                           + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
                           + " AND  NO IN "
                           + "(SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
                             sql += " ORDER BY No ";
-                        }
-                        else
-                        {
-                            sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                        + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
-                        + " AND  NO IN "
-                        + "(SELECT No FK_Emp FROM Port_Emp WHERE FK_Dept =" + dbStr + "FK_Dept)";
-                            sql += " ORDER BY No ";
-                        }
 
 
                         ps = new Paras();

@@ -2598,30 +2598,6 @@ namespace BP.WF
                 throw new Exception("@没有找到部门树为0个根节点, 有可能是因为您在集成cc的时候，没有遵守cc的规则，部门树的根节点必须是ParentNo=0。");
             }
 
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-            {
-                try
-                {
-                    BP.Port.Dept dept = new BP.Port.Dept();
-                    dept.Retrieve(BP.Port.DeptAttr.ParentNo, "0");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@cc的运行模式为OneOne @检查部门的时候错误:有可能是因为您在集成cc的时候，没有遵守cc的规则,Port_Dept列不符合要求，请仔细对比集成手册. 技术信息:" + ex.Message);
-                }
-            }
-
-            if (BP.WF.Glo.OSModel == OSModel.OneMore)
-            {
-                try
-                {
-                    //  BP.GPM.Depts rootDepts = new BP.GPM.Depts("0");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@cc的运行模式为OneMore @检查部门的时候错误:有可能是因为您在集成cc的时候，没有遵守cc的规则,Port_Dept列不符合要求，请仔细对比集成手册. 技术信息:" + ex.Message);
-                }
-            }
             return true;
         }
 
@@ -5160,22 +5136,6 @@ namespace BP.WF
                     return false;
 
                 return true;
-            }
-        }
-        /// <summary>
-        /// 运行模式
-        /// </summary>
-        public static OSModel OSModel
-        {
-            get
-            {
-                return OSModel.OneMore;
-
-                var model = BP.Sys.SystemConfig.GetValByKeyInt("OSModel", -1);
-                return OSModel.OneMore;
-
-                // OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 0);
-                // return os;
             }
         }
         /// <summary>

@@ -147,21 +147,7 @@ namespace BP.WF.HttpHandler
                         break;
                     case DeliveryWay.ByDeptAndStation:
                         //added by liuxc,2015.6.30.
-                        //区别集成与BPM模式
-                        if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                        {
-                            sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                            sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
-                            sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + nodeid + ")";
-                            sql += ")";
-                            sql += "AND No IN ";
-                            sql += "(";
-                            sql += "SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ";
-                            sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nodeid + ")";
-                            sql += ") ORDER BY No ";
-                        }
-                        else
-                        {
+                       
                             sql = "SELECT pdes.FK_Emp AS No"
                                   + " FROM   Port_DeptEmpStation pdes"
                                   + "        INNER JOIN WF_NodeDept wnd"
@@ -172,7 +158,6 @@ namespace BP.WF.HttpHandler
                                   + "             AND wnd.FK_Node =" + nodeid
                                   + " ORDER BY"
                                   + "        pdes.FK_Emp";
-                        }
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
                         sql = "SELECT No as FK_Emp FROM Port_Emp ";
@@ -288,7 +273,7 @@ namespace BP.WF.HttpHandler
 
 
                 Hashtable ht = new Hashtable();
-                ht.Add("OSModel", (int)BP.WF.Glo.OSModel); //组织结构类型.
+                ht.Add("OSModel", 1); //组织结构类型.
                 ht.Add("DBType", SystemConfig.AppCenterDBType.ToString()); //数据库类型.
                 ht.Add("Ver", BP.WF.Glo.Ver); //版本号.
 

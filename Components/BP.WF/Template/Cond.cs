@@ -706,8 +706,7 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     string strs1 = "";
-                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
-                    {
+                 
                         BP.GPM.DeptEmpStations sts = new BP.GPM.DeptEmpStations();
                         sts.Retrieve("FK_Emp", this.SpecOper);
                         foreach (BP.GPM.DeptEmpStation st in sts)
@@ -719,7 +718,7 @@ namespace BP.WF.Template
                             }
                             strs1 += st.FK_Station + "-" + st.FK_StationT;
                         }
-                    }
+                   
 
                     this.MsgOfCond = "@以岗位判断方向，条件为false：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + strs1;
                     return false;

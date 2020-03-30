@@ -889,11 +889,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Start_Init()
         {
-            //通用的处理器.
+            //为天业集团特殊处理.
             if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
-            {
                 return Start_InitTianYe();
-            }
+
             string json = "";
 
             BP.WF.Port.WFEmp em = new WFEmp();
@@ -907,7 +906,7 @@ namespace BP.WF.HttpHandler
                 em.Name = Web.WebUser.Name;
                 em.Insert();
             }
-           
+
             json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
@@ -925,7 +924,7 @@ namespace BP.WF.HttpHandler
 
             //获得能否发起的流程.
             //@sly 需要翻译.
-            DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No,this.Domain);
+            DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No, this.Domain);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 
@@ -933,7 +932,8 @@ namespace BP.WF.HttpHandler
             json = BP.Tools.Json.DataSetToJson(ds, false);
 
             //把json存入数据表，避免下一次再取.
-            BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
+            if (dtStart.Rows.Count > 0)
+                BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
 
             //返回组合
             return json;

@@ -78,9 +78,6 @@ namespace BP.WF.Template
             if (this.CCIsDepts == true)
             {
                 /*如果抄送到部门. */
-                if (Glo.OSModel == BP.Sys.OSModel.OneOne)
-                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B WHERE  A.FK_Dept=B.FK_Dept AND B.FK_Node=" + this.NodeID;
-                else
                     sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B  WHERE  B.FK_Dept=A.FK_Dept AND B.FK_Node=" + this.NodeID;
 
                 mydt = DBAccess.RunSQLReturnTable(sql);

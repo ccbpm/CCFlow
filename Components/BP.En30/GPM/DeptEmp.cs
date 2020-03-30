@@ -19,6 +19,10 @@ namespace BP.GPM
         /// 人员
         /// </summary>
         public const string FK_Emp = "FK_Emp";
+        /// <summary>
+        /// 组织编码
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion
     }
     /// <summary>
@@ -110,7 +114,7 @@ namespace BP.GPM
                 map.AddMyPK();
                 map.AddTBString(DeptEmpAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
                 map.AddDDLEntities(DeptEmpAttr.FK_Emp, null, "操作员", new BP.Port.Emps(), false);
-
+                map.AddTBString(DeptEmpAttr.OrgNo, null, "组织编码", false, false, 0, 50, 50);
 
                 this._enMap = map;
                 return this._enMap;

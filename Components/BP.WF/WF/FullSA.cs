@@ -113,14 +113,9 @@ namespace BP.WF
                         if (item.HisFlow.HisFlowAppType == FlowAppType.Normal)
                         {
                             ps = new Paras();
-                            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                            {
-                                ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
-                            }
-                            else if (BP.WF.Glo.OSModel == OSModel.OneMore)
-                            {
+                           
                                 ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
-                            }
+                             
 
                             ps.Add("FK_Node", item.NodeID);
                             dt = DBAccess.RunSQLReturnTable(ps);
@@ -247,26 +242,7 @@ namespace BP.WF
 
                     //added by liuxc,2015.6.30.
                     //区别集成与BPM模式
-                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                    {
-                        sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                        sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
-                        sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
-                        sql += ")";
-                        sql += "AND No IN ";
-                        sql += "(";
-                        sql += "SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ";
-                        sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node1 )";
-                        sql += ") ORDER BY No ";
-
-                        Paras ps = new Paras();
-                        ps.Add("FK_Node1", item.NodeID);
-                        ps.Add("FK_Node2", item.NodeID);
-                        ps.SQL = sql;
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                    }
-                    else
-                    {
+                    
                         sql = "SELECT pdes.FK_Emp AS No"
                               + " FROM   Port_DeptEmpStation pdes"
                               + "        INNER JOIN WF_NodeDept wnd"
@@ -279,7 +255,7 @@ namespace BP.WF
                               + "        pdes.FK_Emp";
 
                         dt = DBAccess.RunSQLReturnTable(sql);
-                    }
+                     
 
                     foreach (DataRow dr in dt.Rows)
                     {

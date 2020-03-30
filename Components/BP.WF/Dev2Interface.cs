@@ -814,14 +814,7 @@ namespace BP.WF
             {
                 string sql = "";
                 // 采用新算法.
-                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                {
-                    sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";
-                }
-                else
-                {
-                    sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
-                }
+                sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
 
                 Flows fls = new Flows();
                 BP.En.QueryObject qo = new BP.En.QueryObject(fls);
@@ -855,16 +848,16 @@ namespace BP.WF
         }
         public static DataTable DB_GenerCanStartFlowsOfDataTable(string userNo, string domain = null)
         {
+            //@sly 需要翻译.
             string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,A.IsStartInMobile, A.Idx";
             sql += " FROM WF_Flow A, V_FlowStarterBPM B, WF_FlowSort C  ";
-            sql += " WHERE A.No=B.FK_Flow AND A.IsCanStart=1 AND A.FK_FlowSort=C.No  AND FK_Emp='" + WebUser.No + "' ";
+            sql += " WHERE A.No=B.FK_Flow AND A.IsCanStart=1 AND A.FK_FlowSort=C.No  AND B.FK_Emp='" + WebUser.No + "' ";
 
-            //@sly 需要翻译.
             if (DataType.IsNullOrEmpty(domain) == false)
                 sql += " AND C.Domain='" + domain + "'";
 
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                sql += " AND C.OrgNo='" + WebUser.OrgNo + "'";
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                sql += " AND ( C.OrgNo='" + WebUser.OrgNo + "' OR B.OrgNo='') ";
 
             sql += " ORDER BY C.Idx, A.Idx";
 
@@ -879,7 +872,6 @@ namespace BP.WF
                 dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
                 dt.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
                 dt.Columns["IDX"].ColumnName = "Idx";
-
             }
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -3596,7 +3588,7 @@ namespace BP.WF
             BP.Port.Emp myEmp = new BP.Port.Emp();
             int i = myEmp.Retrieve("SID", sid);
             if (i == 0)
-                throw new Exception("err@非法的SID:"+sid);
+                throw new Exception("err@非法的SID:" + sid);
 
             WebUser.SignInOfGener(myEmp);
 
@@ -5119,7 +5111,7 @@ namespace BP.WF
                         }
 
                         break;
-                   
+
                     case DeliveryWay.ByBindEmp:
                         ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
                         ps.Add("FK_Emp", userNo);
@@ -10603,22 +10595,13 @@ namespace BP.WF
             }
             // 优先解决本部门的问题。
             string sql = "";
-            if (BP.WF.Glo.OSModel == OSModel.OneMore)
-            {
-                sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
-                sql += "SELECT FK_EMP FROM Port_DeptEmpStation WHERE FK_STATION ";
-                sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
-                sql += ") AND a.No IN (SELECT No FROM Port_Emp WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
-                sql += " ORDER BY B.Idx,B.No,A.Idx,A.No ";
-            }
-            else
-            {
-                sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
-                sql += "SELECT FK_EMP FROM " + BP.WF.Glo.EmpStation + " WHERE FK_STATION ";
-                sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
-                sql += ") AND a.No IN (SELECT No FROM Port_Emp WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
-                sql += " ORDER BY A.FK_DEPT,A.No ";
-            }
+
+            sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
+            sql += "SELECT FK_EMP FROM Port_DeptEmpStation WHERE FK_STATION ";
+            sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
+            sql += ") AND a.No IN (SELECT No FROM Port_Emp WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
+            sql += " ORDER BY B.Idx,B.No,A.Idx,A.No ";
+
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count != 0)
@@ -10668,7 +10651,7 @@ namespace BP.WF
         private static DataSet WorkOpt_Accepter_ByDept(int nodeID)
         {
             DataSet ds = new DataSet();
-            string orderByIdx = BP.WF.Glo.OSModel == OSModel.OneMore ? "Idx," : "";
+            string orderByIdx = "Idx,";
             string sqlGroup = "SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node='" + nodeID + "') ORDER BY " + orderByIdx + "No";
             string sqlDB = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node='" + nodeID + "') ORDER BY " + orderByIdx + "No";
 
@@ -10688,7 +10671,7 @@ namespace BP.WF
         /// </summary>
         private static DataSet WorkOpt_Accepter_ByEmp(int nodeID)
         {
-            string orderByIdx = BP.WF.Glo.OSModel == OSModel.OneMore ? "Idx," : "";
+            string orderByIdx = "Idx,";
             string sqlGroup = "SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM Port_Emp WHERE No in(SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node='" + nodeID + "')) ORDER BY " + orderByIdx + "No";
             string sqlDB = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE No in (SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node='" + nodeID + "') ORDER BY " + orderByIdx + "No";
 

@@ -1706,7 +1706,7 @@ namespace BP.WF.HttpHandler
                     QueryObject obj_Ath = new QueryObject(athDBs);
                     obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
                     obj_Ath.addAnd();
-                    obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString()); //@sly
+                    obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
                     obj_Ath.addAnd();
                     obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
                     obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);

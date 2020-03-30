@@ -6468,7 +6468,7 @@ namespace BP.WF
         protected override bool beforeInsert()
         {
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                this.OrgNo = WebUser.FK_Dept;
+                this.OrgNo = WebUser.OrgNo;
 
             return base.beforeInsert();
         }

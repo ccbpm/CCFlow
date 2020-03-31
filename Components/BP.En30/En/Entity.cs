@@ -279,7 +279,6 @@ namespace BP.En
                 }
                 else
                 {
-                    //@sly 
                     var obj = this.GetValByKey(attr.Key);
                     if (obj == null && attr.IsNum)
                     {
@@ -1227,7 +1226,7 @@ namespace BP.En
                 throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
             }
 
-            string msg = ""; //@sly 这里需要翻译到java.
+            string msg = ""; 
             switch (this.PK)
             {
                 case "OID":

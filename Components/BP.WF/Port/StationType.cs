@@ -81,7 +81,7 @@ namespace BP.WF.Port
             if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
                 return base.RetrieveAll();
 
-            //按照orgNo查询. @sly
+            //按照orgNo查询.
             QueryObject qo = new QueryObject(this);
             qo.AddWhere("OrgNo", BP.Web.WebUser.OrgNo);
             qo.addOr();

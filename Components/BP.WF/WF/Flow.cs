@@ -755,7 +755,7 @@ namespace BP.WF
                     {
                         wk.DirectInsert();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         wk.CheckPhysicsTable();
                         //    wk.DirectInsert();
@@ -954,17 +954,18 @@ namespace BP.WF
                 PFIDStr = "0";
             }
 
-            if (paras.ContainsKey("PWorkID") == true && paras.ContainsKey("PNodeID") == true 
-                && Int64.Parse(paras["PWorkID"].ToString())!= 0
-                && Int32.Parse(paras["PNodeID"].ToString())!=0)
+            if (paras.ContainsKey("PWorkID") == true && paras.ContainsKey("PNodeID") == true
+                && Int64.Parse(paras["PWorkID"].ToString()) != 0
+                && Int32.Parse(paras["PNodeID"].ToString()) != 0)
             {
                 if (paras["PFlowNo"] == null)
                 {
                     Int32 nodeId = Int32.Parse(paras["PNodeID"].ToString());
                     Node node = new Node(nodeId);
-                    PFlowNo = node.FK_Flow; 
-                        
-                }else
+                    PFlowNo = node.FK_Flow;
+
+                }
+                else
                     PFlowNo = paras["PFlowNo"].ToString();
 
                 PNodeIDStr = paras["PNodeID"].ToString();
@@ -2315,7 +2316,7 @@ namespace BP.WF
                         string attrKey = "";
                         foreach (Attr attr in wk.EnMap.Attrs)
                         {
-                            if (attr.UIVisible == true && attr.UIIsDoc && attr.UIIsReadonly == false &&(attr.Key.Contains("Check") || attr.Key.Contains("Note")))
+                            if (attr.UIVisible == true && attr.UIIsDoc && attr.UIIsReadonly == false && (attr.Key.Contains("Check") || attr.Key.Contains("Note")))
                                 attrKey = attr.Desc + ":@" + attr.Key;
                         }
                         if (attrKey == "")
@@ -2587,11 +2588,12 @@ namespace BP.WF
             try
             {
                 ds = GetFlow(path);
-            }catch(Exception e)
-            {
-                throw new Exception("err@流程模板导出失败："+e.Message);
             }
-            
+            catch (Exception e)
+            {
+                throw new Exception("err@流程模板导出失败：" + e.Message);
+            }
+
             if (ds != null)
             {
                 string name = this.Name;
@@ -3813,7 +3815,7 @@ namespace BP.WF
             }
 
 
-         
+
 
             if (attrs.Contains(md.No + "_" + GERptAttr.AtPara) == false)
             {
@@ -4002,7 +4004,7 @@ namespace BP.WF
 
                 int i = 100;
 
-              //  throw new Exception("ss@xxx");
+                //  throw new Exception("ss@xxx");
             }
 
             FrmEvents fes = currNode.FrmEvents;
@@ -4046,7 +4048,7 @@ namespace BP.WF
 
             //执行消息的发送.
             PushMsgs pms = currNode.HisPushMsgs;
-            if(doType == EventListOfNode.UndoneAfter)
+            if (doType == EventListOfNode.UndoneAfter)
             {
                 AtPara ap = new AtPara(atPara);
                 if (toNodeID == 0)
@@ -4722,7 +4724,7 @@ namespace BP.WF
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
-              
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -4936,7 +4938,7 @@ namespace BP.WF
                 fl.SetValByKey(dc.ColumnName, val);
             }
             fl.FK_FlowSort = fk_flowSort;
-            if(DBAccess.IsExitsObject(fl.PTable) == true)
+            if (DBAccess.IsExitsObject(fl.PTable) == true)
             {
                 fl.PTable = null;
             }
@@ -6086,7 +6088,7 @@ namespace BP.WF
                             }
                             string sql = "select * from Sys_GroupField where CtrlID = '" + gf.CtrlID + "' AND FrmID='" + gf.FrmID + "'";
                             int count = DBAccess.RunSQLReturnCOUNT(sql);
-                            if (count >0)
+                            if (count > 0)
                             {
                                 DBAccess.RunSQL("delete from Sys_GroupField where CtrlID = '" + gf.CtrlID + "' AND FrmID='" + gf.FrmID + "'");
                             }
@@ -6327,8 +6329,10 @@ namespace BP.WF
                 Flow fl = new Flow(this.No);
                 fl.DoDelData();
                 fl.DoDelete();
-                
-                fl.OrgNo = WebUser.OrgNo; //隶属组织 
+
+                //sly
+                if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                    fl.OrgNo = WebUser.OrgNo; //隶属组织 
                 this.Save();
                 #endregion 删除有可能存在的历史数据.
 

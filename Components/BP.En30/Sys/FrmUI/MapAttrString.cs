@@ -562,7 +562,7 @@ namespace BP.Sys.FrmUI
             this.UIIsEnable = false;
             this.UIVisible = false;
             this.Update();
-            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口,重新登录.";
+            return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口.";
         }
         /// <summary>
         /// 批处理

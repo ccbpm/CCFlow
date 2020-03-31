@@ -184,6 +184,7 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
 
                 #endregion 傻瓜表单
+
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "字段重命名";
@@ -193,11 +194,38 @@ namespace BP.Sys.FrmUI
                 rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
                 map.AddRefMethod(rm);
 
+                //sly 翻译过去。
+                rm = new RefMethod();
+                rm.Title = "转化为文本框组件";
+                rm.ClassMethodName = this.ToString() + ".DoSetTextBox()";
+                rm.Warning = "您确定要转化为文本框组件吗？";
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
 
         }
+
+        /// <summary>
+        /// 设置签批组件
+        /// </summary>
+        /// <returns>执行结果</returns>
+        public string DoSetTextBox()
+        {
+            this.UIContralType = UIContralType.TB;
+            this.Update();
+
+            MapAttrString en = new MapAttrString(this.MyPK);
+            en.UIContralType = UIContralType.TB;
+            en.UIIsEnable = true;
+            en.UIVisible = true;
+            en.Update();
+
+            return "设置成功,当前签批组件已经是文本框了,请关闭掉当前的窗口.";
+        }
+
         /// <summary>
         /// 字段分组查询语句
         /// </summary>
@@ -245,8 +273,6 @@ namespace BP.Sys.FrmUI
         }
 
         #endregion
-
-      
 
         public string DoRenameField(string newField)
         {

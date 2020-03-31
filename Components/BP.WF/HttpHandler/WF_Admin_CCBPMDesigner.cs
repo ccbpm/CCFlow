@@ -558,7 +558,7 @@ namespace BP.WF.HttpHandler
             //如果是单机版本，仅仅admin登录.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                if (WebUser.No.Equals("admin") == false)
+                if (emp.No.Equals("admin") == false)
                     return "err@非admin不能登录.";
 
                 //只有一个组织的情况.

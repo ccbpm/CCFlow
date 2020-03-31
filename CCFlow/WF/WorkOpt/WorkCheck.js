@@ -520,11 +520,11 @@ function AddUploadify(divid, fwcShowModel) {
         $("#" + divid).append(html);
         var url = "";
         if (plant == 'CCFlow')
-            url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=ND' + nodeid + '_FrmWorkCheck&DoType=MoreAttach&EnsName=' + (enName ? enName : '') + '&FK_Flow=' + fk_flow + '&PKVal=' + workid + "&FK_Node=" + GetQueryString("FK_Node");
+            url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=ND' + pageData.FK_Node + '_FrmWorkCheck&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + workid + "&FK_Node=" + GetQueryString("FK_Node");
         else {
             var currentPath = window.document.location.href;
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-            url = path + "WF/Ath/AttachmentUpload.do?FK_FrmAttachment=ND" + nodeid + "_FrmWorkCheck&FK_Flow=" + fk_flow + "&PKVal=" + workid+"&FK_Node="+GetQueryString("FK_Node");
+            url = path + "WF/Ath/AttachmentUpload.do?FK_FrmAttachment=ND" + pageData.FK_Node + "_FrmWorkCheck&FK_Flow=" + pageData.FK_Flow + "&PKVal=" + pageData.WorkID+"&FK_Node="+GetQueryString("FK_Node");
         }
 
 
@@ -596,7 +596,7 @@ function UploadChange(fwcShowModel) {
         else {
             var currentPath = window.document.location.href;
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-            Url = path + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + AttachPK + "&PKVal=" + workid + "&AttachPK=" + AttachPK + "&parasData=" + parasData;
+            Url = path + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + AttachPK + "&PKVal=" + pageData.WorkID  + "&AttachPK=" + AttachPK + "&parasData=" + parasData;
         }
 
         Url += "&FID=" + GetQueryString("FID");

@@ -87,7 +87,7 @@
                 window.location.href = "Login.htm";
                 return;
             }
-            alert(webUser.CCBPMRunModel);
+           
             $("#UserName").append(webUser.Name);
             //if (webUser.CCBPMRunModel == 1) {
             //    alert(WebUser.OrgNo)
@@ -130,8 +130,8 @@
                     <img style="margin-bottom:10px" align="middle" src='../../AppClassic/Img/ico-user.png' />
                     <span id="UserName" href="#"></span>
                     <ul style="list-style:none;" class="drop-down-content">
-                        <li><a id="OrgNo" href="#">组织编号：</a></li>
-                        <li><a id="OrgName" href="#">组织名称：</a></li>
+                        <!--<li><a id="OrgNo" href="#">组织编号：</a></li>
+                        <li><a id="OrgName" href="#">组织名称：</a></li>-->
                         <li><a href="#" onclick="Login2App()">登录前台</a></li>
                         <li><a href="#" onclick="addTab('', '修改密码', '/WF/Setting/ChangePassword.htm', '')">修改密码</a></li>
                         <li><a href="#" onclick="LoginOut()">退出登录</a></li>

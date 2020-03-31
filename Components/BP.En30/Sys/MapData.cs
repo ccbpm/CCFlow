@@ -70,7 +70,7 @@ namespace BP.Sys
         /// <summary>
         /// Excel表单
         /// </summary>
-        ExcelFrm=5,
+        ExcelFrm = 5,
         /// <summary>
         /// VSTOExccel模式.
         /// </summary>
@@ -2089,7 +2089,7 @@ namespace BP.Sys
 
             // 定义在最后执行的sql.
             string endDoSQL = "";
-           
+
             //检查是否存在OID字段.
             MapData mdOld = new MapData();
             mdOld.No = fk_mapdata;
@@ -2122,7 +2122,7 @@ namespace BP.Sys
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
 
 
-           
+
 
             #region 表单元素
             foreach (DataTable dt in ds.Tables)
@@ -2210,7 +2210,7 @@ namespace BP.Sys
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\"+md.No+".htm";
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -2462,7 +2462,7 @@ namespace BP.Sys
                             {
                                 en.DirectInsert();
                                 //判断该字段是否是大文本 例如注释、说明
-                                if(en.UIContralType == UIContralType.BigText)
+                                if (en.UIContralType == UIContralType.BigText)
                                 {
                                     //判断原文件是否存在
                                     string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + oldMapID + ".htm";
@@ -2471,10 +2471,10 @@ namespace BP.Sys
                                     {
                                         string newFile = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + fk_mapdata + ".htm";
                                         if (System.IO.File.Exists(newFile) == true)
-                                             System.IO.File.Delete(newFile);
+                                            System.IO.File.Delete(newFile);
                                         System.IO.File.Copy(file, newFile);
                                     }
-                                       
+
                                 }
                             }
                             catch
@@ -2858,7 +2858,8 @@ namespace BP.Sys
             this.Ver = DataType.CurrentDataTimess;
 
             //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
-            this.OrgNo = BP.Web.WebUser.OrgNo;
+            if (SystemConfig.CCBPMRunModel != 0)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
 
             #region  检查是否有ca认证设置.
             bool isHaveCA = false;

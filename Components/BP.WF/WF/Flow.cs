@@ -6377,11 +6377,8 @@ namespace BP.WF
                 string sql = "UPDATE WF_Node SET DelEnable=1 WHERE NodeID=" + nd.NodeID;
                 BP.DA.DBAccess.RunSQL(sql);
 
-
-
                 //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
                 CreatePushMsg(nd);
-
 
                 //通用的人员选择器.
                 BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);

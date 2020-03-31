@@ -5168,6 +5168,11 @@ namespace BP.WF
                     case DeliveryWay.BySelected:
                         num = 1;
                         break;
+                    case DeliveryWay.BySelectedOrgs: //按照绑定的组织计算. @sly
+                        ps.SQL = "SELECT COUNT(*) AS Num FROM WF_FlowOrg WHERE OrgNo=" + dbstr + "OrgNo ";
+                        ps.Add("OrgNo", WebUser.OrgNo);
+                        num = DBAccess.RunSQLReturnValInt(ps);
+                        break;
                     default:
                         throw new Exception("@开始节点不允许设置此访问规则：" + nd.HisDeliveryWay);
                 }

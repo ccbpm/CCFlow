@@ -1018,12 +1018,94 @@ namespace BP.WF.HttpHandler
             }
             #endregion 检查数据是否符合规范.
 
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                return GetFormTreeTable_GroupInc();
+
             //组织数据源.
             string sqls = "";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree where OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
+                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree ORDER BY Idx ASC ; ";
+                sqls += "SELECT No \"No\", FK_FormTree as \"ParentNo\", Name \"Name\",Idx \"Idx\", 0 \"IsParent\", 'FORM' \"TType\" FROM Sys_MapData  WHERE  AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+            }
+            else
+            {
+                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree    ORDER BY Idx ASC ; ";
+                sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE   AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+            }
+
+            DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
+
+
+            //获得表单数据.
+            DataTable dtSort = ds.Tables[0]; //类别表.
+            DataTable dtForm = ds.Tables[1].Clone(); //表单表,这个是最终返回的数据.
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dtForm.Columns["no"].ColumnName = "No";
+                dtForm.Columns["name"].ColumnName = "Name";
+                dtForm.Columns["parentno"].ColumnName = "ParentNo";
+                dtForm.Columns["idx"].ColumnName = "Idx";
+                dtForm.Columns["isparent"].ColumnName = "IsParent";
+                dtForm.Columns["ttype"].ColumnName = "TType";
+            }
+
+            //增加顶级目录.
+            DataRow[] rowsOfSort = dtSort.Select("ParentNo='0'");
+            DataRow drFormRoot = dtForm.NewRow();
+            drFormRoot[0] = rowsOfSort[0]["No"];
+            drFormRoot[1] = "0";
+            drFormRoot[2] = rowsOfSort[0]["Name"];
+            drFormRoot[3] = rowsOfSort[0]["Idx"];
+            drFormRoot[4] = rowsOfSort[0]["IsParent"];
+            drFormRoot[5] = rowsOfSort[0]["TType"];
+            dtForm.Rows.Add(drFormRoot); //增加顶级类别..
+
+            //把类别数据组装到form数据里.
+            foreach (DataRow dr in dtSort.Rows)
+            {
+                DataRow drForm = dtForm.NewRow();
+                drForm[0] = dr["No"];
+                drForm[1] = dr["ParentNo"];
+                drForm[2] = dr["Name"];
+                drForm[3] = dr["Idx"];
+                drForm[4] = dr["IsParent"];
+                drForm[5] = dr["TType"];
+                dtForm.Rows.Add(drForm); //类别.
+            }
+
+            foreach (DataRow row in ds.Tables[1].Rows)
+            {
+                dtForm.Rows.Add(row.ItemArray);
+            }
+
+            /* if (WebUser.No.Equals("admin") == false)
+             {*/
+            DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
+            DataRow newRootRow = rootRows[0];
+
+            newRootRow["ParentNo"] = "0";
+            DataTable newDt = dtForm.Clone();
+            newDt.Rows.Add(newRootRow.ItemArray);
+
+            GenerChildRows(dtForm, newDt, newRootRow);
+            dtForm = newDt;
+            //}
+            String str = BP.Tools.Json.ToJson(dtForm);
+            return str;
+
+
+        }
+        public string GetFormTreeTable_GroupInc()
+        {
+            //组织数据源.
+            string sqls = "";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
                 sqls += "SELECT No \"No\", FK_FormTree as \"ParentNo\", Name \"Name\",Idx \"Idx\", 0 \"IsParent\", 'FORM' \"TType\" FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
             else
@@ -1033,7 +1115,6 @@ namespace BP.WF.HttpHandler
             }
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
-
 
 
             //获得表单数据.

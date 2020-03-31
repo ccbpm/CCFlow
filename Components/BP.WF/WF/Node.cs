@@ -555,7 +555,7 @@ namespace BP.WF
 
             if (SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
-                // 删除必要的数据. @sly 
+                // 删除必要的数据. 
                 //   DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No from Port_Emp)");
                 //   DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
                 //  DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
@@ -2076,7 +2076,6 @@ namespace BP.WF
         {
             get
             {
-                //@sly 翻译.
                 if (this.IsSendBackNode == true)
                     return false;
 

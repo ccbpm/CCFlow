@@ -643,7 +643,7 @@ namespace BP.WF
             }
 		}
         /// <summary>
-        /// 计划开始时间 @sly 
+        /// 计划开始时间
         /// SDTOfFlow 就是计划完成日期.
         /// </summary>
         public string RDTOfSetting

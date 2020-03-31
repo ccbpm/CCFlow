@@ -6354,7 +6354,7 @@ namespace BP.WF
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
 
-                //如果是集团模式.    //@sly
+                //如果是集团模式.   
                 if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 {
                     if (DataType.IsNullOrEmpty(WebUser.OrgNo) == true)

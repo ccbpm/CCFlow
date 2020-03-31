@@ -23,6 +23,7 @@
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt2019.js"
             defer="defer"></script>
     <script src="Designer.js" type="text/javascript" defer="defer"></script>
+    <script src="../../WorkOpt/WorkCheck.js"></script>
     <base target="_self" />
     <style type="text/css">
         body {
@@ -638,7 +639,7 @@
                     if (athEn[0].IsVisable == "0")
                         return "";
 
-                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + athEn[0].MyPK + "&IsReadonly=1";
+                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageData.fk_mapdata + "&FK_FrmAttachment=" + athEn[0].MyPK + "&IsReadonly=1";
 
                     var frameUrl = "<iframe ID='F" + athEn[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                     return "<tr><td colspan=" + tableCol + " id='TD" + athEn[0].MyPK + "' style='width:" + athEn[0].H + "px;'>" + frameUrl + "</td></tr>";
@@ -665,9 +666,9 @@
 
                     var src = frameEn[0].URL;
                     if (src.indexOf('?') == -1)
-                        src = frameEn[0].URL + "?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
+                        src = frameEn[0].URL + "?PKVal=0&FK_MapData=" + pageData.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
                     else
-                        src = frameEn[0].URL + "&PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
+                        src = frameEn[0].URL + "&PKVal=0&FK_MapData=" + pageData.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
 
                     var frameUrl = "<iframe ID='F" + frameEn[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + frameEn[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                     return "<tr><td colspan=" + tableCol + " id='TD" + frameEn[0].MyPK + "' style='width:" + frameEn[0].H + "px;'>" + frameUrl + "</td></tr>";
@@ -675,19 +676,19 @@
                     break;
                 case "FWC":
 
-                    var nodeID = pageParam.fk_mapdata.replace('ND', '');
+                    var nodeID = pageData.fk_mapdata.replace('ND', '');
                     var wf_node = data.WF_Node[0];
                     var fk_flow = GetQueryString("FK_Flow");
-                    var src = "../../WorkOpt/WorkCheck.htm?WorkID=0&FK_Flow=" + fk_flow + "&FK_Node=" + nodeID + "&FK_MapData=" + pageParam.fk_mapdata;
+                    ////var src = "../../WorkOpt/WorkCheck.htm?WorkID=0&FK_Flow=" + fk_flow + "&FK_Node=" + nodeID + "&FK_MapData=" + pageData.fk_mapdata;
 
-                    var h = wf_node.FWC_H;
-                    var w = wf_node.FWC_W;
+                    //var h = wf_node.FWC_H;
+                    //var w = wf_node.FWC_W;
 
-                    if (h == 0)
-                        h = 400;
+                    //if (h == 0)
+                    //    h = 400;
 
-                    var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;' leftMargin='0' topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " style='width:100%;height:" + h + "px;' id='FWC' >" + frameUrl + "</td></tr>";
+                    //var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;' leftMargin='0' topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
+                    return "<tr><td colspan=" + tableCol + " style='width:100%;' id='FWC' >" + WorkCheck_InitPage() + "</td></tr>";
                 case "Dtl":
 
                     var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });
@@ -696,7 +697,7 @@
                     // alert(dtl.H);
 
                     if (dtl.length == 1) {
-                        var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageParam.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
+                        var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageData.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
                         var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=" + tableCol + " id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
                     } else {
@@ -842,8 +843,10 @@
     </script>
     <script language="javascript" type="text/javascript">
 
-        var pageParam = {};
-        pageParam.fk_mapdata = GetQueryString("FK_MapData")
+        var pageData = {};
+        pageData.fk_mapdata = GetQueryString("FK_MapData");
+        pageData.FK_Flow = GetQueryString("FK_Flow");
+        pageData.FK_Node = GetQueryString("FK_Node");
 
         function ReLoad(data) {
             window.location.href = window.location.href;
@@ -864,7 +867,7 @@
             window.location.href = window.location.href;
         }
         function BatchAddF() {
-            var url = 'FieldTypeListBatch.htm?DoType=BatchAddF&FK_MapData=' + pageParam.fk_mapdata;
+            var url = 'FieldTypeListBatch.htm?DoType=BatchAddF&FK_MapData=' + pageData.fk_mapdata;
 
             var h = 800;
             var w = 1000;
@@ -878,7 +881,7 @@
         }
         function AddF() {
             //var url = 'Do.htm?DoType=AddF&MyPK=' + mypk;
-            var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + pageParam.fk_mapdata;
+            var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + pageData.fk_mapdata;
 
             var h = 500;
             var w = 600;
@@ -895,7 +898,7 @@
             if (mypk == null || mypk == "undefined")
                 mypk = GetQueryString("FK_Node");
 
-            var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + groupID;
+            var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + pageData.fk_mapdata + '&GroupField=' + groupID;
 
             OpenEasyUiDialog(url, "eudlgframe", '增加字段', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1010,7 +1013,7 @@
         }
         function ExpImp() {
 
-            var url = './ImpExp/Imp.htm?FK_MapData=' + pageParam.fk_mapdata + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            var url = './ImpExp/Imp.htm?FK_MapData=' + pageData.fk_mapdata + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
 
             OpenEasyUiDialog(url, "eudlgframe", '导入导出', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1037,12 +1040,12 @@
         }
         function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
 
-            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + gf;
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageData.fk_mapdata + '&GroupField=' + gf;
             var title = '';
             if (ftype == 1) {
 
 
-                if (uiContralType == 0 || uiContralType==13) {
+                if (uiContralType == 0 || uiContralType == 13) {
                     title = '字段String属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }
@@ -1382,7 +1385,7 @@
         //新增从表.
         function NewMapDtl() {
 
-            var val = prompt('请输入从表ID，要求表单唯一。', pageParam.fk_mapdata + 'Dtl1');
+            var val = prompt('请输入从表ID，要求表单唯一。', pageData.fk_mapdata + 'Dtl1');
 
             if (val == null) {
                 return;
@@ -1396,11 +1399,11 @@
 
             if (val == '') {
                 alert('请输入从表ID不能为空，请重新输入！');
-                NewMapDtl(pageParam.fk_mapdata);
+                NewMapDtl(pageData.fk_mapdata);
                 return;
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-            handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+            handler.AddPara("FK_MapData", pageData.fk_mapdata);
             handler.AddPara("DtlNo", val);
             handler.AddPara("FK_Node", 0); //从表为原始属性的时候FK_Node=0,设置从表权限的时候FK_Node为该节点的值
 
@@ -1411,7 +1414,7 @@
                 return;
             }
 
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageParam.fk_mapdata + '&No=' + data;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageData.fk_mapdata + '&No=' + data;
             OpenEasyUiDialog(url, "eudlgframe", '从表属性', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -1422,7 +1425,7 @@
 
         ///编辑从表.
         function EditDtl(mypk) {
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageParam.fk_mapdata + '&No=' + mypk;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageData.fk_mapdata + '&No=' + mypk;
 
             OpenEasyUiDialog(url, "eudlgframe", '从表', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1430,14 +1433,14 @@
         }
 
         function EditM2M(dtlKey) {
-            var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + pageParam.fk_mapdata + '&NoOfObj=' + dtlKey;
+            var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + pageData.fk_mapdata + '&NoOfObj=' + dtlKey;
             // OpenEasyUiDialog(url, 'dtl', '属性', 800, 500, "icon-edit");
         }
 
 
         /// 多选.
         function MapM2M() {
-            var url = 'MapM2M.htm?DoType=List&FK_MapData=' + pageParam.fk_mapdata;
+            var url = 'MapM2M.htm?DoType=List&FK_MapData=' + pageData.fk_mapdata;
 
             OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1445,7 +1448,7 @@
         }
 
         function MapM2MM() {
-            var url = 'MapM2MM.htm?FK_MapData=' + pageParam.fk_mapdata;
+            var url = 'MapM2MM.htm?FK_MapData=' + pageData.fk_mapdata;
 
             OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1454,7 +1457,7 @@
 
         //修改附件.
         function EditAth(ath) {
-            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + ath;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageData.fk_mapdata + '&MyPK=' + ath;
 
             OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1490,7 +1493,7 @@
                 return;
             }
 
-            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + data;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageData.fk_mapdata + '&MyPK=' + data;
             OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -1512,7 +1515,7 @@
 
             if (val == '') {
                 alert('框架ID不能为空，请重新输入！');
-                NewFrame(pageParam.fk_mapdata);
+                NewFrame(pageData.fk_mapdata);
                 return;
             }
 
@@ -1532,7 +1535,7 @@
             en.Y = 100;
             en.Insert();
 
-            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + en.MyPK;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageData.fk_mapdata + '&MyPK=' + en.MyPK;
             OpenEasyUiDialog(url, "eudlgframe", '框架', 900, 400, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -1540,14 +1543,14 @@
         }
 
         function EditFrame(myPK) {
-            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + myPK;
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + pageData.fk_mapdata + '&MyPK=' + myPK;
             OpenEasyUiDialog(url, "eudlgframe", '框架', 900, 400, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
 
         function MapFrame() {
-            var url = 'MapFrame.htm?FK_MapData=' + pageParam.fk_mapdata;
+            var url = 'MapFrame.htm?FK_MapData=' + pageData.fk_mapdata;
 
             OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1555,7 +1558,7 @@
         }
 
         function HidAttr() {
-            var url = 'HidAttr.htm?FK_MapData=' + pageParam.fk_mapdata;
+            var url = 'HidAttr.htm?FK_MapData=' + pageData.fk_mapdata;
 
             OpenEasyUiDialog(url, "eudlgframe", '隐藏字段', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1565,7 +1568,7 @@
             // window.location.href = window.location.href;
         }
         function EnableAthM() {
-            var url = '../CCForm/Ath.htm?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + pageParam.fk_mapdata + '&FK_FrmAttachment=' + pageParam.fk_mapdata + '_AthMDtl';
+            var url = '../CCForm/Ath.htm?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + pageData.fk_mapdata + '&FK_FrmAttachment=' + pageData.fk_mapdata + '_AthMDtl';
 
             OpenEasyUiDialog(url, "eudlgframe", '多附件', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1573,7 +1576,7 @@
 
         }
         function Sln() {
-            var url = 'Sln.htm?IsBTitle=1&PKVal=0&Ath=AthM&FK_MapData=' + pageParam.fk_mapdata + '&FK_FrmAttachment=' + pageParam.fk_mapdata + '_AthM';
+            var url = 'Sln.htm?IsBTitle=1&PKVal=0&Ath=AthM&FK_MapData=' + pageData.fk_mapdata + '&FK_FrmAttachment=' + pageData.fk_mapdata + '_AthM';
             WinOpen(url);
             //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         }

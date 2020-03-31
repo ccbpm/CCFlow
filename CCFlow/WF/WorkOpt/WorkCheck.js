@@ -30,7 +30,7 @@ function WorkCheck_InitPage(){
     }
 
     $.each(tracks, function (idx,item) {
-        _Html += WorkCheck_Parse(item, aths, frmWorkCheck, SignType);
+        _Html += WorkCheck_Parse(item, aths, frmWorkCheck, SignType,1);
     });
     _Html += "</table>";
 
@@ -95,13 +95,13 @@ function GetWorkCheck_Node(checkData,keyOfEn) {
         var track = tracks[i];
         if (track.NodeID != $("#TB_" + keyOfEn).val())
             continue;
-        _Html += WorkCheck_Parse(track, aths,frmWorkCheck, SignType);
+        _Html += WorkCheck_Parse(track, aths,frmWorkCheck, SignType,0);
     } 
     _Html += "</table>";
     return _Html;
 
 }
-function WorkCheck_Parse(track, aths, frmWorkCheck, SignType) {
+function WorkCheck_Parse(track, aths, frmWorkCheck, SignType,showNodeName) {
     var _Html = "";
     //解析节点上传的附件
     var subaths = GetSubAths(track.NodeID, aths);
@@ -118,14 +118,16 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType) {
     //   return true;
 
     _Html += "<tr>";
-
-    //显示审核节点的信息/有可能是会签节点
-    var tdWidth = pageData.IsMobile == null || pageData.IsMobile == "0" ? "120px" : "20%;";
-    _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
-    var nodeName = track.NodeName;
-    nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
-    _Html += nodeName;
-    _Html += "</td>";
+    if (showNodeName == 1) {
+        //显示审核节点的信息/有可能是会签节点
+        var tdWidth = pageData.IsMobile == null || pageData.IsMobile == "0" ? "120px" : "20%;";
+        _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
+        var nodeName = track.NodeName;
+        nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
+        _Html += nodeName;
+        _Html += "</td>";
+    }
+    
 
 
     //可编辑的审核意见

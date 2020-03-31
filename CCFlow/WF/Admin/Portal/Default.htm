@@ -89,19 +89,19 @@
             }
             alert(webUser.CCBPMRunModel);
             $("#UserName").append(webUser.Name);
-            if (webUser.CCBPMRunModel == 1) {
-                alert(WebUser.OrgNo)
-                $("#OrgNo").append(GetQueryString("OrgNo"));
+            //if (webUser.CCBPMRunModel == 1) {
+            //    alert(WebUser.OrgNo)
+            //    $("#OrgNo").append(GetQueryString("OrgNo"));
                 
-                var en = new Entity("BP.WF.Port.Admin2.Org",GetQueryString("OrgNo"));
+            //    var en = new Entity("BP.WF.Port.Admin2.Org",GetQueryString("OrgNo"));
                 
-                alert(en.Name);
-                $("#OrgName").append(en.Name);
-            }
-            else {
-                $("#OrgNo").hide();
-                $("#OrgName").hide();
-            }
+            //    alert(en.Name);
+            //    $("#OrgName").append(en.Name);
+            //}
+            //else {
+            //    $("#OrgNo").hide();
+            //    $("#OrgName").hide();
+            //}
             return;
         });
     </script>
@@ -125,14 +125,13 @@
         <div id="tabs" class="easyui-tabs cs-header" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
             
             <ul id="rightUL" class="nav">
-                <!--<label id="OrgNo" href="#">组织编号：</label>
-                <label id="OrgName" href="#">组织名称：</label>-->
+                
                 <li class="drop-down user-menu mr5">
-
                     <img style="margin-bottom:10px" align="middle" src='../../AppClassic/Img/ico-user.png' />
                     <span id="UserName" href="#"></span>
                     <ul style="list-style:none;" class="drop-down-content">
-
+                        <li><a id="OrgNo" href="#">组织编号：</a></li>
+                        <li><a id="OrgName" href="#">组织名称：</a></li>
                         <li><a href="#" onclick="Login2App()">登录前台</a></li>
                         <li><a href="#" onclick="addTab('', '修改密码', '/WF/Setting/ChangePassword.htm', '')">修改密码</a></li>
                         <li><a href="#" onclick="LoginOut()">退出登录</a></li>

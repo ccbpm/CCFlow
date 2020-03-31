@@ -6327,7 +6327,7 @@ namespace BP.WF
                 Flow fl = new Flow(this.No);
                 fl.DoDelData();
                 fl.DoDelete();
-                //@sly
+                
                 fl.OrgNo = WebUser.OrgNo; //隶属组织 
                 this.Save();
                 #endregion 删除有可能存在的历史数据.

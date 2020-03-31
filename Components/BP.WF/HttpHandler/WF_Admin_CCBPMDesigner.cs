@@ -819,25 +819,25 @@ namespace BP.WF.HttpHandler
                 || Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
                 return GetFlowTreeTable_GroupInc();
 
-            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort where OrgNo ='" + WebUser.OrgNo + "' or No = 1 " +
+            string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort  " +
                            "union " +
-                           "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX ";
+                           "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX ";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle
                 || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
-                        "where OrgNo ='" + WebUser.OrgNo + "' or No = 1 union " +
-                        "SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX";
+                        "  union " +
+                        "SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX";
             }
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = @"SELECT * FROM (SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
-                     "where OrgNo ='" + WebUser.OrgNo + "' or No = 1 " +
+                     "  " +
                      "union " +
                      "SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow " +
-                     "where OrgNo ='" + WebUser.OrgNo + "') A  ORDER BY DTYPE, IDX";
+                     " ) A  ORDER BY DTYPE, IDX";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

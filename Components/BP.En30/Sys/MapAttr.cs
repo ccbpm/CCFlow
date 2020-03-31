@@ -1520,7 +1520,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true,false);
 
 
-                //显示的分组. @sly.
+                //显示的分组.
                 map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);
 
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);

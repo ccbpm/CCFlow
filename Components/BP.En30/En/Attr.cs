@@ -1412,7 +1412,6 @@ namespace BP.En
         #region DDLSQL
         public void AddDDLSQL(string key, object defaultVal, string desc, string sql, bool uiIsEnable = true)
         {
-            //@sly
             if (defaultVal == null)
                 defaultVal = "";
 

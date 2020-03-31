@@ -440,7 +440,7 @@
             var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
 
             var url = "../ImpTableField.htm?FK_MapData=" + frmID + "&reset=true";
-            window.location.href = url;
+            window.open(url);
             return;
 
             window.open(url, "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left=" + iLeft + ",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");

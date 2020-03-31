@@ -39,7 +39,6 @@ namespace BP.DA
                     ht = new Hashtable();
                     hts.Add(enName, ht);
                 }
-                //@sly
                 if (ht.ContainsKey(pkVal) == true)
                     ht[pkVal] = row;
                 else

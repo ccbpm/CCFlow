@@ -1884,7 +1884,7 @@ namespace BP.WF
                         if (pushMsg != null)
                         {
 
-                            BP.WF.Dev2Interface.Port_SendMsg(cc.CCTo, title, mytemp, null, BP.WF.SMSMsgType.CC, node.FK_Flow, node.NodeID, this.WorkID, this.HisWork.FID, pushMsg.SMSPushModel);
+                           BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListOfNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel);
 
                         }
                     }

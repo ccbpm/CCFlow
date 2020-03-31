@@ -561,6 +561,9 @@ namespace BP.WF.HttpHandler
                 if (emp.No.Equals("admin") == false)
                     return "err@非admin不能登录.";
 
+                //让其登录.
+                BP.WF.Dev2Interface.Port_Login(emp.No);
+
                 //只有一个组织的情况.
                 if (DBAccess.IsView("Port_Emp") == false)
                 {

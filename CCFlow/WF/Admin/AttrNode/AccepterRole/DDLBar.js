@@ -35,10 +35,12 @@
 
 //});
 var optionKey = 0;
+var flowNo = null;
 function InitBar(optionKey) {
 
     var nodeID = GetQueryString("FK_Node");
-
+    var en = new Entity("BP.WF.Template.NodeSimple", nodeID);
+    flowNo = en.FK_Flow;
     var str = nodeID.substr(nodeID.length - 2);
     var isSatrtNode = false;
     if (str == "01")
@@ -254,7 +256,7 @@ function getEmps() {
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");
     var en = new Entity("BP.WF.Template.NodeSimple", nodeID);
-    var flowNo = en.FK_Flow;
+    flowNo = en.FK_Flow;
     var obj = document.getElementById("changBar");
     var sele = obj.options;
     var index = obj.selectedIndex;

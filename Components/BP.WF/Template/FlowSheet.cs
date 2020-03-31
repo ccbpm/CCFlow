@@ -355,7 +355,7 @@ namespace BP.WF.Template
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
                 //   map.AddSearchAttr(FlowAttr.TimelineRole);
 
-                //绑定组织. @sly
+                //绑定组织.
                 map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2.Orgs(),
                     FlowOrgAttr.FlowNo,
                   FlowOrgAttr.OrgNo, FlowAttr.Name, FlowAttr.No, "可以发起的组织");

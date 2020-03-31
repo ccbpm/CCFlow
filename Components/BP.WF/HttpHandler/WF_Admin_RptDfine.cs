@@ -331,7 +331,7 @@ namespace BP.WF.HttpHandler
 
             //查询出来枚举与外键类型的字段集合.
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo,"Idx");
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
             #region 检查是否有日期字段.
@@ -394,7 +394,7 @@ namespace BP.WF.HttpHandler
                 md.RptIsSearchKey = false;
             else
                 md.RptIsSearchKey = true;
-
+            md.SetPara("RptStringSearchKeys", this.GetRequestVal("RptStringSearchKeys"));
             //查询方式.
             int DTSearchWay = this.GetRequestValInt("DTSearchWay");
             md.RptDTSearchWay = (DTSearchWay)DTSearchWay;

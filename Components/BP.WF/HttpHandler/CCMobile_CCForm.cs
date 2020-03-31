@@ -495,15 +495,6 @@ namespace BP.WF.HttpHandler
             return result;
         }
 
-        public static String getFileBase64(String fileName)
-        {
-            FileStream filestream = new FileStream(fileName, FileMode.Open);
-            byte[] arr = new byte[filestream.Length];
-            filestream.Read(arr, 0, (int)filestream.Length);
-            string baser64 = Convert.ToBase64String(arr);
-            filestream.Close();
-            return baser64;
-        }
 
         public string GetIDCardInfo()
         {

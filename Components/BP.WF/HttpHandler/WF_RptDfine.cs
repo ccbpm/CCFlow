@@ -266,6 +266,7 @@ namespace BP.WF.HttpHandler
             md.SetPara("RptDTSearchWay", (int)md.RptDTSearchWay);
             md.SetPara("RptDTSearchKey", md.RptDTSearchKey);
             md.SetPara("RptIsSearchKey", md.RptIsSearchKey);
+            md.SetPara("RptStringSearchKeys", md.GetParaString("RptStringSearchKeys"));
 
             md.SetPara("T_SearchKey", ur.SearchKey);
 
@@ -1707,13 +1708,9 @@ namespace BP.WF.HttpHandler
             if (md.RptIsSearchKey)
                 searchKey = ur.SearchKey;
 
-            if (string.IsNullOrWhiteSpace(searchKey))
-            {
-                qo.addLeftBracket();
-                qo.AddWhere("abc", "all");
-                qo.addRightBracket();
-            }
-            else
+
+            bool isFirst = true;
+            if (md.RptIsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
             {
                 int i = 0;
 
@@ -1742,6 +1739,7 @@ namespace BP.WF.HttpHandler
 
                     if (i == 1)
                     {
+                        isFirst = false;
                         qo.addLeftBracket();
                         if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
                             qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
@@ -1761,6 +1759,54 @@ namespace BP.WF.HttpHandler
                 qo.MyParas.Add("SKey", searchKey);
                 qo.addRightBracket();
             }
+            else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false)
+            {
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFields = md.GetParaString("RptStringSearchKeys").Split('*');
+                foreach (String str in searchFields)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    //字段名
+                    string[] items = str.Split(',');
+                    if (items.Length == 2 && DataType.IsNullOrEmpty(items[0]) == true)
+                        continue;
+                    field = items[0];
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    idx++;
+                    if (idx == 1)
+                    {
+                        isFirst = false;
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        else
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.MyParas.Add(field, fieldValue);
+                        continue;
+                    }
+                    qo.addAnd();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    else
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                    qo.MyParas.Add(field, fieldValue);
+
+
+                }
+                if (idx != 0)
+                    qo.addRightBracket();
+            }
             #endregion
 
             #region Url传参条件
@@ -1768,8 +1814,10 @@ namespace BP.WF.HttpHandler
             {
                 if (DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(attr.Key)))
                     continue;
-
-                qo.addAnd();
+                if(isFirst == false)
+                    qo.addAnd();
+                if (isFirst == true)
+                    isFirst = false;
                 qo.addLeftBracket();
 
                 val = HttpContextHelper.RequestParams(attr.Key);
@@ -1892,7 +1940,11 @@ namespace BP.WF.HttpHandler
                                 instr = instr.Substring(2);
                                 instr = instr.Substring(0, instr.Length - 2);
 
-                                qo.addAnd();
+                                if (isFirst == false)
+                                    qo.addAnd();
+                                if (isFirst == true)
+                                    isFirst = false;
+
                                 qo.addLeftBracket();
                                 qo.AddWhereIn(attr.Key, "(" + instr + ")");
                                 qo.addRightBracket();
@@ -1900,7 +1952,11 @@ namespace BP.WF.HttpHandler
                             }
                         }
 
-                        qo.addAnd();
+                        if (isFirst == false)
+                            qo.addAnd();
+                        if (isFirst == true)
+                            isFirst = false;
+
                         qo.addLeftBracket();
 
                         if (attr.UIBindKey == "BP.Port.Depts" || attr.UIBindKey == "BP.Port.Units")  //判断特殊情况。
@@ -1954,7 +2010,11 @@ namespace BP.WF.HttpHandler
 
                 if (md.RptDTSearchWay == DTSearchWay.ByDate)
                 {
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    if (isFirst == true)
+                        isFirst = false;
+
                     qo.addLeftBracket();
                     qo.SQL = dtKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
@@ -1964,7 +2024,11 @@ namespace BP.WF.HttpHandler
 
                 if (md.RptDTSearchWay == DTSearchWay.ByDateTime)
                 {
-                    qo.addAnd();
+                    if (isFirst == false)
+                        qo.addAnd();
+                    if (isFirst == true)
+                        isFirst = false;
+
                     qo.addLeftBracket();
                     qo.SQL = dtKey + " >= '" + dtFrom + " 00:00'";
                     qo.addAnd();

@@ -2170,7 +2170,7 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// @sly 翻译到java.
+        ///
         /// </summary>
         /// <returns></returns>
         public string FrmView_Init()

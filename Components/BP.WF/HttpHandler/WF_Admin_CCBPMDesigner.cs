@@ -874,7 +874,7 @@ namespace BP.WF.HttpHandler
             /* if (WebUser.No != "admin")
              {*/
             DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-            DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
+            DataRow newRootRow = dt.Rows[0];
 
             newRootRow["PARENTNO"] = "F0";
             DataTable newDt = dt.Clone();

@@ -17,6 +17,12 @@ function SaveSelfFrom() {
         alert('系统错误,没有找到SelfForm的ID.');
     }
 
+    //审核组件
+    if ($("#WorkCheck_Doc").length == 1) {
+        //保存审核信息
+        SaveWorkCheck();
+    }
+
     //执行保存.
     //frm.contentWindow.postMessage({ Save:"Save" }, "*");（跨域执行的方法）
     return frm.contentWindow.Save();

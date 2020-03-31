@@ -478,7 +478,7 @@ function Save(scope) {
     });
 
     //审核组件
-    if ($("#WorkCheck").length == 1) {
+    if ($("#WorkCheck_Doc").length == 1) {
         //保存审核信息
         SaveWorkCheck();
     }

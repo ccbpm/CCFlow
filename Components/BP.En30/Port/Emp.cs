@@ -129,17 +129,7 @@ namespace BP.Port
             //if (gePass == pass && DataType.IsNullOrEmpty(gePass) == false)
             //    return true;
 
-            if (SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                //如果是使用webservices校验.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                int i = v.CheckUserNoPassWord(this.No, pass);
-                if (i == 1)
-                    return true;
-                return false;
-            }
-            else
-            {
+          
                 //启用加密
                 if (SystemConfig.IsEnablePasswordEncryption == true)
                     pass = BP.Tools.Cryptography.EncryptString(pass);
@@ -148,7 +138,7 @@ namespace BP.Port
                 if (this.Pass == pass)
                     return true;
 
-            }
+             
             return false;
         }
 
@@ -207,28 +197,9 @@ namespace BP.Port
                 throw new Exception("@要查询的操作员编号为空。");
 
             this.No = no.Trim();
-            try
-            {
+           
                 this.Retrieve();
-            }
-            catch (Exception ex)
-            {
-                if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
-                {
-                    //登陆帐号查询不到用户，使用职工编号查询。
-                    QueryObject obj = new QueryObject(this);
-                    obj.AddWhere(EmpAttr.No, no);
-                    int i = obj.DoQuery();
-                    if (i == 0)
-                        i = this.RetrieveFromDBSources();
-                    if (i == 0)
-                        throw new Exception("@用户或者密码错误：[" + no + "]，或者帐号被停用。@技术信息(从内存中查询出现错误)：ex1=" + ex.Message);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
+            
         }
         /// <summary>
         /// 重写基类方法
@@ -299,19 +270,8 @@ namespace BP.Port
         /// <returns></returns>
         public override int Retrieve()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetEmp(this.No);
-                if (dt.Rows.Count == 0)
-                    throw new Exception("@编号为(" + this.No + ")的人员不存在。");
-                this.Row.LoadDataTable(dt, dt.Rows[0]);
-                return 1;
-            }
-            else
-            {
+            
                 return base.Retrieve();
-            }
         }
         /// <summary>
         /// 查询.
@@ -319,19 +279,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveFromDBSources()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetEmp(this.No);
-                if (dt.Rows.Count == 0)
-                    return 0;
-                this.Row.LoadDataTable(dt, dt.Rows[0]);
-                return 1;
-            }
-            else
-            {
+            
                 return base.RetrieveFromDBSources();
-            }
+             
         }
         #endregion
 
@@ -388,20 +338,9 @@ namespace BP.Port
         /// </summary>
         public Emps(string deptNo)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                this.Clear(); //清除缓存数据.
-                //获得数据.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetEmpsByDeptNo(deptNo);
-                if (dt.Rows.Count != 0)
-                    //设置查询.
-                    QueryObject.InitEntitiesByDataTable(this, dt, null);
-            }
-            else
-            {
+          
                 this.Retrieve(EmpAttr.FK_Dept, deptNo);
-            }
+             
         }
         #endregion 构造方法
 
@@ -420,23 +359,9 @@ namespace BP.Port
             //if (BP.Web.WebUser.No != "admin")
             //    throw new Exception("@您没有查询的权限.");
 
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                this.Clear(); //清除缓存数据.
-                //获得数据.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetEmps();
-                if (dt.Rows.Count == 0)
-                    return 0;
-
-                //设置查询.
-                QueryObject.InitEntitiesByDataTable(this, dt, null);
-                return dt.Rows.Count;
-            }
-            else
-            {
+            
                 return base.RetrieveAll();
-            }
+             
         }
         /// <summary>
         /// 重写重数据源查询全部适应从WS取数据需要
@@ -444,23 +369,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAllFromDBSource()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                this.Clear(); //清除缓存数据.
-                //获得数据.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetEmps();
-                if (dt.Rows.Count == 0)
-                    return 0;
-
-                //设置查询.
-                QueryObject.InitEntitiesByDataTable(this, dt, null);
-                return dt.Rows.Count;
-            }
-            else
-            {
+            
                 return base.RetrieveAllFromDBSource();
-            }
+             
         }
         #endregion 重写查询.
 

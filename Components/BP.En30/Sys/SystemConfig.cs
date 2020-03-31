@@ -39,20 +39,6 @@ using BP.Web;
 namespace BP.Sys
 {
     /// <summary>
-    /// 组织解构数据来源
-    /// </summary>
-    public enum OSDBSrc
-    {
-        /// <summary>
-        /// 数据库.
-        /// </summary>
-        Database,
-        /// <summary>
-        /// WebServices
-        /// </summary>
-        WebServices
-    }
-    /// <summary>
     /// 组织结构类型
     /// </summary>
     public enum OSModel
@@ -184,17 +170,6 @@ namespace BP.Sys
             }
         }
         #endregion
-
-        #region 组织结构的配置.
-        public static OSDBSrc OSDBSrc
-        {
-            get
-            {
-                return (OSDBSrc)SystemConfig.GetValByKeyInt("OSDBSrc", 0);
-            }
-        }
-        #endregion
-
         /// <summary>
         /// 运行的平台为转换java平台使用.
         /// </summary>

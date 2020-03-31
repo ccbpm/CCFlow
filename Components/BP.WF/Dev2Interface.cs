@@ -810,29 +810,27 @@ namespace BP.WF
         /// <returns>BP.WF.Flows 可发起的流程对象集合,如何使用该方法形成发起工作列表,请参考:\WF\UC\Start.ascx</returns>
         public static Flows DB_GenerCanStartFlowsOfEntities(string userNo)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
-            {
-                string sql = "";
-                // 采用新算法.
-                sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
 
-                Flows fls = new Flows();
-                BP.En.QueryObject qo = new BP.En.QueryObject(fls);
-                qo.AddWhereInSQL("No", sql);
+            string sql = "";
+            // 采用新算法.
+            sql = "SELECT FK_Flow FROM V_FlowStarterBPM WHERE FK_Emp='" + userNo + "'";
+
+            Flows fls = new Flows();
+            BP.En.QueryObject qo = new BP.En.QueryObject(fls);
+            qo.AddWhereInSQL("No", sql);
+            qo.addAnd();
+            qo.AddWhere(FlowAttr.IsCanStart, true);
+            if (WebUser.IsAuthorize)
+            {
+                /*如果是授权状态*/
                 qo.addAnd();
-                qo.AddWhere(FlowAttr.IsCanStart, true);
-                if (WebUser.IsAuthorize)
-                {
-                    /*如果是授权状态*/
-                    qo.addAnd();
-                    WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
-                    qo.AddWhereIn("No", wfEmp.AuthorFlows);
-                }
-                qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
-                qo.DoQuery();
-                return fls;
+                WF.Port.WFEmp wfEmp = new Port.WFEmp(userNo);
+                qo.AddWhereIn("No", wfEmp.AuthorFlows);
             }
-            throw new Exception("@未判断的类型。");
+            qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
+            qo.DoQuery();
+            return fls;
+
         }
         /// <summary>
         /// 获得指定人的流程发起列表
@@ -3600,7 +3598,7 @@ namespace BP.WF
         /// <param name="userNo">人员编号</param>
         /// <param name="sid">sid</param>
         /// <returns></returns>
-        public static void Port_Login(string userNo, string sid=null)
+        public static void Port_Login(string userNo, string sid = null)
         {
             /* 仅仅传递了人员编号，就按照人员来取.*/
             BP.Port.Emp emp = new BP.Port.Emp();
@@ -5084,99 +5082,63 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = SystemConfig.AppCenterDBVarStr;
             int num = 0;
-            if (SystemConfig.OSDBSrc == OSDBSrc.Database)
+
+            switch (nd.HisDeliveryWay)
             {
-                switch (nd.HisDeliveryWay)
-                {
-                    case DeliveryWay.ByStation:
-                    case DeliveryWay.ByStationOnly:
-                        ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeStation A, " + BP.WF.Glo.EmpStation + " B WHERE A.FK_Station= B.FK_Station AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                case DeliveryWay.ByStation:
+                case DeliveryWay.ByStationOnly:
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeStation A, " + BP.WF.Glo.EmpStation + " B WHERE A.FK_Station= B.FK_Station AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("FK_Emp", userNo);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
+                case DeliveryWay.ByDept:
+
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("FK_Emp", userNo);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+
+                    if (num == 0)
+                    {
+                        ps.Clear();
+                        ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_Emp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.No=" + dbstr + "FK_Emp";
                         ps.Add("FK_Node", nd.NodeID);
                         ps.Add("FK_Emp", userNo);
                         num = DBAccess.RunSQLReturnValInt(ps);
-                        break;
-                    case DeliveryWay.ByDept:
+                    }
 
-                        ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
-                        ps.Add("FK_Node", nd.NodeID);
-                        ps.Add("FK_Emp", userNo);
-                        num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
 
-                        if (num == 0)
-                        {
-                            ps.Clear();
-                            ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_Emp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.No=" + dbstr + "FK_Emp";
-                            ps.Add("FK_Node", nd.NodeID);
-                            ps.Add("FK_Emp", userNo);
-                            num = DBAccess.RunSQLReturnValInt(ps);
-                        }
-
-                        break;
-
-                    case DeliveryWay.ByBindEmp:
-                        ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
-                        ps.Add("FK_Emp", userNo);
-                        ps.Add("FK_Node", nd.NodeID);
-                        num = DBAccess.RunSQLReturnValInt(ps);
-                        break;
-                    case DeliveryWay.ByDeptAndStation:
+                case DeliveryWay.ByBindEmp:
+                    ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
+                    ps.Add("FK_Emp", userNo);
+                    ps.Add("FK_Node", nd.NodeID);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
+                case DeliveryWay.ByDeptAndStation:
 
 
-                        string sql = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B, WF_NodeStation C, " + Glo.EmpStation + " D";
-                        sql += " WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp=" + dbstr + "FK_Emp";
-                        ps.SQL = sql;
-                        ps.Add("FK_Node", nd.NodeID);
-                        ps.Add("FK_Emp", userNo);
-                        num = DBAccess.RunSQLReturnValInt(ps);
-
-                        break;
-                    case DeliveryWay.BySelected:
-                        num = 1;
-                        break;
-                    default:
-                        throw new Exception("@开始节点不允许设置此访问规则：" + nd.HisDeliveryWay);
-                }
+                    string sql = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B, WF_NodeStation C, " + Glo.EmpStation + " D";
+                    sql += " WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp=" + dbstr + "FK_Emp";
+                    ps.SQL = sql;
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("FK_Emp", userNo);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
+                case DeliveryWay.BySelected:
+                    num = 1;
+                    break;
+                case DeliveryWay.BySelectedOrgs: //按照绑定的组织计算. @sly
+                    ps.SQL = "SELECT COUNT(*) AS Num FROM WF_FlowOrg WHERE OrgNo=" + dbstr + "OrgNo ";
+                    ps.Add("OrgNo", WebUser.OrgNo);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
+                default:
+                    throw new Exception("@开始节点不允许设置此访问规则：" + nd.HisDeliveryWay);
             }
-            else
-            {
-                switch (nd.HisDeliveryWay)
-                {
-                    case DeliveryWay.ByStation:
-                        //var obj = BP.DA.DataType.GetPortalInterfaceSoapClientInstance();
-                        //DataTable mydt = obj.GetEmpHisStations(BP.Web.WebUser.No);
-                        //string mystas = BP.DA.DBAccess.GenerWhereInPKsString(mydt);
-                        //ps.SQL = "SELECT COUNT(FK_Node) AS Num FROM WF_NodeStation WHERE FK_Node=" + dbstr + "FK_Node AND FK_Station IN(" + mystas + ")";
-                        //ps.Add("FK_Node", nd.NodeID);
-                        //num = DBAccess.RunSQLReturnValInt(ps);
-                        break;
-                    case DeliveryWay.ByDept:
-                        //var objMy = BP.DA.DataType.GetPortalInterfaceSoapClientInstance();
-                        //DataTable mydtDept = objMy.GetEmpHisDepts(BP.Web.WebUser.No);
-                        //string dtps = BP.DA.DBAccess.GenerWhereInPKsString(mydtDept);
 
-                        //ps.SQL = "SELECT COUNT(FK_Node) as Num FROM WF_NodeDept WHERE FK_Dept IN (" + dtps + ") B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node";
-                        //ps.Add("FK_Node", nd.NodeID);
-                        //num = DBAccess.RunSQLReturnValInt(ps);
-                        throw new Exception("@目前取消支持.");
-                        break;
-                    case DeliveryWay.ByBindEmp:
-                        ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
-                        ps.Add("FK_Emp", userNo);
-                        ps.Add("FK_Node", nd.NodeID);
-                        num = DBAccess.RunSQLReturnValInt(ps);
-                        break;
-                    case DeliveryWay.BySelected:
-                        num = 1;
-                        break;
-                    case DeliveryWay.BySelectedOrgs: //按照绑定的组织计算. @sly
-                        ps.SQL = "SELECT COUNT(*) AS Num FROM WF_FlowOrg WHERE OrgNo=" + dbstr + "OrgNo ";
-                        ps.Add("OrgNo", WebUser.OrgNo);
-                        num = DBAccess.RunSQLReturnValInt(ps);
-                        break;
-                    default:
-                        throw new Exception("@开始节点不允许设置此访问规则：" + nd.HisDeliveryWay);
-                }
-            }
+
             if (num == 0)
                 return false;
 

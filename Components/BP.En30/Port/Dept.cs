@@ -140,19 +140,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int Retrieve()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetDept(this.No);
-                if (dt.Rows.Count == 0)
-                    throw new Exception("@编号为(" + this.No + ")的部门不存在。");
-                this.Row.LoadDataTable(dt, dt.Rows[0]);
-                return 1;
-            }
-            else
-            {
+            
                 return base.Retrieve();
-            }
+             
         }
         /// <summary>
         /// 查询.
@@ -160,19 +150,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveFromDBSources()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetDept(this.No);
-                if (dt.Rows.Count == 0)
-                    return 0;
-                this.Row.LoadDataTable(dt, dt.Rows[0]);
-                return 1;
-            }
-            else
-            {
+           
                 return base.RetrieveFromDBSources();
-            }
+             
         }
         #endregion
 
@@ -205,19 +185,9 @@ namespace BP.Port
         /// <param name="parentNo">父部门No</param>
         public Depts(string parentNo)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                this.Clear(); //清除缓存数据.
-                //获得数据.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetDeptsByParentNo(parentNo);
-                //设置查询.
-                QueryObject.InitEntitiesByDataTable(this, dt, null);
-            }
-            else
-            {
+           
                 this.Retrieve(DeptAttr.ParentNo, parentNo);
-            }
+             
         }
         #endregion 初始化实体.
 
@@ -240,19 +210,6 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAllFromDBSource()
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                this.Clear(); //清除缓存数据.
-                //获得数据.
-                var v = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = v.GetDepts();
-                if (dt.Rows.Count == 0)
-                    return 0;
-
-                //设置查询.
-                QueryObject.InitEntitiesByDataTable(this, dt, null);
-                return dt.Rows.Count;
-            }
 
             if (SystemConfig.CCBPMRunModel == 0)
                 return base.RetrieveAllFromDBSource();

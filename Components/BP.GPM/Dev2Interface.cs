@@ -31,16 +31,13 @@ namespace BP.GPM
         /// <param name="SID">安全ID,请参考流程设计器操作手册</param>
         public static void Port_Login(string userNo, string sid)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
-            {
-                string sql = "SELECT SID FROM Port_Emp WHERE No='" + userNo + "'";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
-                    throw new Exception("用户不存在或者SID错误。");
+            string sql = "SELECT SID FROM Port_Emp WHERE No='" + userNo + "'";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+                throw new Exception("用户不存在或者SID错误。");
 
-                if (dt.Rows[0]["SID"].ToString() != sid)
-                    throw new Exception("用户不存在或者SID错误。");
-            }
+            if (dt.Rows[0]["SID"].ToString() != sid)
+                throw new Exception("用户不存在或者SID错误。");
 
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             WebUser.SignInOfGener(emp);

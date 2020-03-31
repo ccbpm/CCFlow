@@ -553,19 +553,16 @@ namespace BP.WF
             sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
             BP.DA.DBAccess.RunSQLs(sqls);
 
-            if (SystemConfig.OSDBSrc == OSDBSrc.Database)
-            {
-                // 删除必要的数据. 
-                //   DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No from Port_Emp)");
-                //   DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
-                //  DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
-            }
+            // 删除垃圾数据. 
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
+            DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
+
+            //DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
 
             Nodes nds = new Nodes();
             nds.Retrieve(NodeAttr.FK_Flow, fl.No);
 
             //FlowSort fs = new FlowSort(fl.FK_FlowSort);
-
             if (nds.Count == 0)
                 return "流程[" + fl.No + fl.Name + "]中没有节点数据，您需要注册一下这个流程。";
 

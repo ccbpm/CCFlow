@@ -80,7 +80,7 @@ namespace BP.WF
                     {
                         titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
                     }
-                    
+
                 }
             }
             titleRole = titleRole.Replace('~', '-');
@@ -149,11 +149,11 @@ namespace BP.WF
                         //  wk.DirectUpdate();
                         // wk.RetrieveFromDBSources();
                     }
-                   
-                     titleRole = titleRole.Replace("@" + attr.Key, temp);
-                   
-                        
-                   
+
+                    titleRole = titleRole.Replace("@" + attr.Key, temp);
+
+
+
                 }
 
                 //在考虑其它的字段替换.
@@ -256,7 +256,7 @@ namespace BP.WF
                         titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
                     }
 
-                   
+
                 }
             }
             titleRole = titleRole.Replace('~', '-');
@@ -288,7 +288,7 @@ namespace BP.WF
                     if (en.RetrieveFromDBSources() == 0)
                         continue;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     continue;
                 }
@@ -322,7 +322,7 @@ namespace BP.WF
                         titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
                     }
 
-                   
+
                 }
 
                 //如果全部已经替换完成.
@@ -426,7 +426,7 @@ namespace BP.WF
                 }
 
                 //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
-                sql = "SELECT BillNo FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") 
+                sql = "SELECT BillNo FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]")
                     + "'" + (flowPTable.ToLower() == "wf_generworkflow" ? (" AND WorkID <> " + workid) : (" AND OID <> " + workid))
                     + " ORDER BY BillNo DESC";
 
@@ -594,7 +594,7 @@ namespace BP.WF
 
                 if (dcs.Count == 0)
                 {
-                   // throw new Exception("@流程设计错误：从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
+                    // throw new Exception("@流程设计错误：从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
                     continue;
                 }
 
@@ -1135,9 +1135,9 @@ namespace BP.WF
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。*/
                         sql = "SELECT NO FROM Port_Emp WHERE NO IN ";
-                        
-                      
-                            sql += "(SELECT No FROM Port_Emp WHERE FK_Dept IN ";
+
+
+                        sql += "(SELECT No FROM Port_Emp WHERE FK_Dept IN ";
 
 
                         sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
@@ -1185,13 +1185,13 @@ namespace BP.WF
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
                 /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
-                
+
                 ps = new Paras();
                 sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
                 ps.Add("FK_Emp", WebUser.No);
                 dt = DBAccess.RunSQLReturnTable(ps);
 
-              
+
 
                 if (dt.Rows.Count > 0)
                     return dt;
@@ -1318,22 +1318,13 @@ namespace BP.WF
                 /* 没有查询到的情况下, 先按照本部门计算。*/
                 if (flowAppType == FlowAppType.Normal)
                 {
-                    if (BP.Sys.SystemConfig.OSDBSrc == Sys.OSDBSrc.Database)
-                    {
-                            sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B  WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
-                        ps = new Paras();
-                        ps.SQL = sql;
-                        ps.Add("FK_Node", toNode.NodeID);
-                        ps.Add("FK_Dept", empDept);
-                    }
 
-                    if (BP.Sys.SystemConfig.OSDBSrc == Sys.OSDBSrc.WebServices)
-                    {
-                        DataTable dtStas = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + toNode.NodeID);
-                        string stas = DBAccess.GenerWhereInPKsString(dtStas);
-                        var ws = DataType.GetPortalInterfaceSoapClientInstance();
-                        return ws.GenerEmpsBySpecDeptAndStats(empDept, stas);
-                    }
+                    sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B  WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
+                    ps = new Paras();
+                    ps.SQL = sql;
+                    ps.Add("FK_Node", toNode.NodeID);
+                    ps.Add("FK_Dept", empDept);
+
                 }
 
                 if (flowAppType == FlowAppType.PRJ)
@@ -1352,12 +1343,11 @@ namespace BP.WF
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。 */
 
-                     
-                            sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                          + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
-                          + " AND  NO IN "
-                          + "(SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
-                            sql += " ORDER BY No ";
+                        sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                      + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
+                      + " AND  NO IN "
+                      + "(SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
+                        sql += " ORDER BY No ";
 
 
                         ps = new Paras();
@@ -1482,7 +1472,7 @@ namespace BP.WF
             string sql;
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
-                sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
+            sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
             Paras ps = new Paras();
             ps.SQL = sql;
             ps.Add("FK_Node", toNode.NodeID);
@@ -1538,8 +1528,8 @@ namespace BP.WF
         public static string DoCCAuto(Node node, GERpt rpt, Int64 workid, Int64 fid)
         {
 
-                if (node.HisCCRole == CCRole.AutoCC
-              || node.HisCCRole == CCRole.HandAndAuto)
+            if (node.HisCCRole == CCRole.AutoCC
+          || node.HisCCRole == CCRole.HandAndAuto)
             {
 
             }
@@ -1548,7 +1538,7 @@ namespace BP.WF
                 return "";
             }
 
-            CC ccEn = new CC(node.NodeID); 
+            CC ccEn = new CC(node.NodeID);
 
             /*如果是自动抄送*/
 
@@ -1578,7 +1568,7 @@ namespace BP.WF
                 //抄送信息.
                 ccMsg += "(" + toUserNo + " - " + toUserName + ");";
                 CCList list = new CCList();
-                list.MyPK =  workid + "_" + node.NodeID  + "_" + dr[0].ToString();
+                list.MyPK = workid + "_" + node.NodeID + "_" + dr[0].ToString();
                 list.FK_Flow = node.FK_Flow;
                 list.FlowName = node.FlowName;
                 list.FK_Node = node.NodeID;
@@ -1593,7 +1583,7 @@ namespace BP.WF
                 list.FID = fid;
 
                 // if (this.HisNode.CCWriteTo == CCWriteTo.Todolist)
-                list.InEmpWorks =node.CCWriteTo == CCWriteTo.CCList ? false : true;    //added by liuxc,2015.7.6
+                list.InEmpWorks = node.CCWriteTo == CCWriteTo.CCList ? false : true;    //added by liuxc,2015.7.6
 
                 //写入待办和写入待办与抄送列表,状态不同
                 if (node.CCWriteTo == CCWriteTo.All || node.CCWriteTo == CCWriteTo.Todolist)
@@ -1619,12 +1609,12 @@ namespace BP.WF
                 PushMsgs pms = new PushMsgs();
                 pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
 
-                if (pms.Count>0)
+                if (pms.Count > 0)
                 {
                     PushMsg pushMsg = pms[0] as PushMsg;
                     //     //写入消息提示.
                     //     ccMsg += list.CCTo + "(" + dr[1].ToString() + ");";
-                     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
+                    BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
                     //     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
                     //     string url = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid;
                     //     string urlWap = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid + "&IsWap=1";
@@ -1739,9 +1729,9 @@ namespace BP.WF
                 #endregion 如果要写入抄送
 
                 #region 写入消息机制.
-                
 
-                if (pms.Count >0)
+
+                if (pms.Count > 0)
                 {
                     ccMsg += list.CCTo + "(" + item.Value.ToString() + ");";
                     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
@@ -1760,7 +1750,7 @@ namespace BP.WF
 
                     string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", nd.FlowName, nd.Name, WebUser.Name);
 
-                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID,((PushMsg)pms[0]).SMSPushModel);
+                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID, ((PushMsg)pms[0]).SMSPushModel);
                 }
                 #endregion 写入消息机制.
             }

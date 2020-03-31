@@ -904,22 +904,13 @@ namespace BP.WF.Template
                 /* 没有查询到的情况下, 先按照本部门计算。*/
                 if (flowAppType == FlowAppType.Normal)
                 {
-                    if (BP.Sys.SystemConfig.OSDBSrc == Sys.OSDBSrc.Database)
-                    {
+                    
                         sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B         WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
                         ps = new Paras();
                         ps.SQL = sql;
                         ps.Add("FK_Node", town.HisNode.NodeID);
                         ps.Add("FK_Dept", empDept);
-                    }
-
-                    if (BP.Sys.SystemConfig.OSDBSrc == Sys.OSDBSrc.WebServices)
-                    {
-                        DataTable dtStas = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + town.HisNode.NodeID);
-                        string stas = DBAccess.GenerWhereInPKsString(dtStas);
-                        var ws = DataType.GetPortalInterfaceSoapClientInstance();
-                        return ws.GenerEmpsBySpecDeptAndStats(empDept, stas);
-                    }
+                      
                 }
 
                 if (flowAppType == FlowAppType.PRJ)

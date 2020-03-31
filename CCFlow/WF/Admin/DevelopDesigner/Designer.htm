@@ -385,20 +385,20 @@
     window.onload = function () {
 
         //先判断DataUser/CCForm/HtmlTemplateFile/FK_MapData.htm是否存在
-        var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + pageParam.fk_mapdata + ".htm?r="+Math.random() ;
-        var htmlobj = $.ajax({ url: filename, async: false });
+        //var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + pageParam.fk_mapdata + ".htm?r="+Math.random() ;
+        //var htmlobj = $.ajax({ url: filename, async: false });
         var htmlContent = "";
-        if (htmlobj.status == 404) {
+        //if (htmlobj.status == 404) {
             //数据库中查找
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
             handler.AddPara("FK_MapData", pageParam.fk_mapdata);
             htmlContent = handler.DoMethodReturnString("Designer_Init");
-        } else {
-            htmlContent = htmlobj.responseText;
-            if (htmlContent == null && htmlContent == "" && htmlContent == undefined) {
-                htmlContent = "";
-            }
-        }
+        //} else {
+        //    htmlContent = htmlobj.responseText;
+       //     if (htmlContent == null && htmlContent == "" && htmlContent == undefined) {
+      //          htmlContent = "";
+        //    }
+        //}
         leipiEditor.ready(function () {//编辑器初始化完成再赋值
             leipiEditor.setHeight(document.body.clientHeight - 160);
             leipiEditor.setContent(htmlContent, false);;  //赋值给UEditor

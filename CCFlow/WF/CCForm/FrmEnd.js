@@ -130,13 +130,14 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 14) {//签批组件
             $("#TB_" + mapAttr.KeyOfEn).hide();
             //获取审核组件信息
-            if (isFistQuestWorkCheck == true) {
+            var node = frmData.WF_Node == undefined ? null : frmData.WF_Node[0];
+            if (isFistQuestWorkCheck == true && node!=null) {
                 $.getScript('./WorkOpt/WorkCheck.js', function () { });
                 isFistQuestWorkCheck = false;
                 checkData = WorkCheck_Init();
             }
-            var node = frmData.WF_Node == undefined ? null : frmData.WF_Node[0];
-            if (node!=null && node.FWCVer == 0 || node.FWCVer == "" || node.FWCVer == undefined)
+           
+            if (node!=null && (node.FWCVer == 0 || node.FWCVer == "" || node.FWCVer == undefined))
                 pageData.FWCVer = 0;
             else
                 pageData.FWCVer = 1;

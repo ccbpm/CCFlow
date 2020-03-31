@@ -41,6 +41,8 @@
             var jsData = JSON.parse(data);
 
             var md = jsData["Main"][0]; //主表数据.
+            md = new Entity("BP.Sys.MapData", md);
+
             var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
             var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
             //关键字查询.
@@ -48,26 +50,35 @@
 
              document.getElementById("CB_NextLeavel").checked = (md.AtPara.indexOf("@IsSearchNextLeavel=1@") != -1);
 
-            var js = md.AtPara.split("@");
-            var RptSearchKeys = null;
-            var RptDTSearchWay = null;
-            var RptDTSearchKey = null;
-            for (var i = 0; i < js.length; i++) {
-                if (js[i].indexOf("RptSearchKeys") != -1)
-                    RptSearchKeys = js[i].replace("RptSearchKeys=", "")
-                if (js[i].indexOf("RptDTSearchWay") != -1)
-                    RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
-                if (js[i].indexOf("RptDTSearchKey") != -1)
-                    RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
-            }
+            var RptStringSearchKeys = md.GetPara("RptStringSearchKeys");
+            var RptSearchKeys = md.GetPara("RptSearchKeys");
+            var RptDTSearchWay = md.GetPara("RptDTSearchWay");
+            var RptDTSearchKey = md.GetPara("RptDTSearchKey");
+           
             //绑定外键字段.
+            var count = 0;
             for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
-                var attr = Sys_MapAttr[i],
-                            flag = false;
+                var attr = Sys_MapAttr[i], flag = false;
+                //文本字段
+                if (attr.MyDataType == 1 && attr.UIContralType == 0) {
+                    count++;
+                    flag = false;
+                    if (RptStringSearchKeys) {
+                        flag = (RptStringSearchKeys.indexOf("*" + attr.KeyOfEn + ",") != -1);
+                    }
 
+                    $("#StringKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "'  data-name='" + attr.Name + "'/><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label>&nbsp;&nbsp;&nbsp;");
+                    if (count == 3) {
+                        $("#StringKeys").append("<br/>");
+                        count = 0;
+                    }
+
+                    continue;
+                }
                 if (attr.UIContralType != 1) {
                     continue;
                 }
+                flag == false;
                 if (RptSearchKeys) {
                     flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
                 }
@@ -111,7 +122,18 @@
             handler.AddPara("DTSearchWay", DTSearchWay); //日期查询方式?
             handler.AddPara("DTSearchKey", DTSearchKey); //日期字段
 
-            handler.AddPara("IsSearchNextLeavel",document.getElementById("CB_NextLeavel").checked ? 1 : 0)
+            handler.AddPara("IsSearchNextLeavel", document.getElementById("CB_NextLeavel").checked ? 1 : 0);
+
+            fields = "";
+            oChecks = document.getElementById("StringKeys").getElementsByTagName("input");
+            for (var i = 0, len = oChecks.length; i < len; i++) {
+                var item = oChecks[i];
+                if (item.checked) {
+                    fields += "*" + item.id + "," + item.getAttribute("data-name");
+                }
+            }
+            handler.AddPara("RptStringSearchKeys", fields + "*");
+
 
             var data = handler.DoMethodReturnString("S5SearchCond_Save");
             alert(data);
@@ -151,10 +173,12 @@
             </div>
 
             <div style='width: 100%'>
-                <div class='easyui-panel' title='是否增加关键字查询' data-options="iconCls:'icon-tip',fit:true"
+                <div class='easyui-panel' title='是否增加关键字查询' data-options="iconCls:'icon-tip',fit:false"
                      style='height: auto; padding: 10px'>
                     关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br />
-                    <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
+                    <input id="CB_Key" type="radio" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label><br />
+                    特定字段的查询：选择特定字段，在报表中根据like模糊查询<br />
+                    <div id="StringKeys"> </div>
                 </div>
             </div>
             <br />

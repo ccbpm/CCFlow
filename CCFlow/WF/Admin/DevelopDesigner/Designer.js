@@ -218,14 +218,14 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 
     if (shap == 'SignCheck') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段签批组件的属性');
+        CCForm_ShowDialog(url, '字段签批组件的属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
 
     if (shap == 'Textarea') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段大文本属性');
+        CCForm_ShowDialog(url, '字段大文本属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
@@ -412,11 +412,33 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
             if (mapAttr.UIContralType == 14) {
                 //修改显示的样式
                 UE.dom.domUtils.setAttributes(anchorEl, {
-                    "data-type": "SignCheck"
+                    "data-type": "SignCheck",
+                    "leipiplugins":'text'
                 });
             }
         });
-    } else {
+    } else if (shap == "SignCheck") {
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
+
+            var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
+            if (mapAttr.UIContralType == 0) {
+                var attributes;
+                if (mapAttr.UIHeight  <= 23 ) {
+                    attributes = { "data-type": "Text" };
+                } else {
+                    attributes = {
+                        "data-type": "Textarea",
+                        "leipiplugins": 'textarea'
+                    };
+                    UE.dom.domUtils.setStyle(anchorEl, 'width', '528px');
+                    UE.dom.domUtils.setStyle(anchorEl, 'height', '59px');
+                }
+                //修改显示的样式
+                UE.dom.domUtils.setAttributes(anchorEl, attributes);
+            }
+        });
+
+    }else {
         OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false);
 
     }
@@ -663,7 +685,7 @@ UE.plugins['textarea'] = function () {
         content: '',
         className: 'edui-bubble',
         _edittext: function () {
-            me.execCommand("edit", "Textarea", this.anchorEl);
+            me.execCommand("edit", this.anchorEl.getAttribute("data-type"), this.anchorEl);
             this.hide();
         },
         _delete: function () {

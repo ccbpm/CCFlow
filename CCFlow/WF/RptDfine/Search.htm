@@ -76,6 +76,7 @@
         var FilterCtrls = new Array();
         var fk_flow = GetQueryString("FK_Flow");
         var searchType = GetQueryString("SearchType");
+        var fields = []; //字符型字段查询的集合
         var md;
         var refidx = 0;
 
@@ -394,13 +395,34 @@
 
             html += "<tr>";
 
-            if (mapBase.RptIsSearchKey == "1") {
+            var rptStringSearchKeys = mapBase.RptStringSearchKeys;
+            if (rptStringSearchKeys == null || rptStringSearchKeys == undefined || rptStringSearchKeys == "") {
+                if (mapBase.RptIsSearchKey == "1") {
 
-                html += "<td ><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>";
-                html += "<td ><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='' class='form-control' /></td>";
-                FilterCtrls.push({ type: "text", id: "TB_Key" });
-                //$("#tb_main").prepend("<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>");
-                //$("#tb_key").textbox().textbox("setText", md.T_SearchKey);
+                    html += "<td ><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>";
+                    html += "<td ><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey +"' class='form-control' /></td>";
+                    FilterCtrls.push({ type: "text", id: "TB_Key" });
+                }
+            }else{
+                 var strs = rptStringSearchKeys.split("*");
+                var fieldV=""
+                $.each(strs, function (i, str) {
+                    if (str != "") {
+                        var item = str.split(",");
+                        fieldV = ur.GetPara(item[0]);
+                        if (fieldV == null || fieldV == undefined)
+                            fieldV = "";
+                        if (item.length == 2) {
+                            
+                            fields.push(item[0]);
+                             html +="<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+item[0]+"'>" + item[1] + ":&nbsp;&nbsp</label></td>"
+                             html += "<td align='left'><input style='width:100%;' type=text id='TB_"+item[0]+"'  name='TB_"+item[0]+"' value='" + fieldV + "' class='form-control' /></td>";
+                           
+                            FilterCtrls.push({ type: "text", id: "TB_" + item[0] });
+                            
+                        }
+                    }
+                });
             }
 
             if (mapBase.RptDTSearchWay && mapBase.RptDTSearchWay != 0) {
@@ -651,16 +673,35 @@
             var val;
             var dtFrom = "";
             var dtTo = "";
-
-            if ($("#TB_Key").length > 0) {
+            ur = new Entity("BP.Sys.UserRegedit", webUser.No + rptNo + "_SearchAttrs");
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length == 0) {
+                ur.SearchKey = $("#TB_Key").val();
                 key = $("#TB_Key").val();
+            } 
+            else
+                ur.SearchKey = "";
+            //增加字段查询
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var strs = $("input[name='TB_" + field + "']");
+                if (strs.length == 1) {
+                    ur.SetPara(field, $("#TB_" + field).val());
+                } else {
+                    if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
+                        ur.SetPara(field, "");
+                    else
+                        ur.SetPara(field, $("#TB_" + field + "_0").val() + "," + $("#TB_" + field + "_1").val());
+                }
             }
+
 
             if ($("#TB_DTFrom").length > 0) {
                 dtFrom = $("#TB_DTFrom").val();
                 dtTo = $("#TB_DTTo").val();
+                ur.DTFrom = $("#TB_DTFrom").val();
+                ur.DTTo = $("#TB_DTTo").val();
             }
-
+            ur.Update();
             $.each(FilterCtrls, function () {
                 switch (this.type) {
                     case "date":

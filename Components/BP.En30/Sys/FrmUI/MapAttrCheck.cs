@@ -201,13 +201,10 @@ namespace BP.Sys.FrmUI
                 rm.Warning = "您确定要转化为文本框组件吗？";
                 map.AddRefMethod(rm);
 
-
                 this._enMap = map;
                 return this._enMap;
             }
-
         }
-
         /// <summary>
         /// 设置签批组件
         /// </summary>

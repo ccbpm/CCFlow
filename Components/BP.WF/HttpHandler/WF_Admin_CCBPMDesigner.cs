@@ -1018,12 +1018,12 @@ namespace BP.WF.HttpHandler
             }
             #endregion 检查数据是否符合规范.
 
+            //如果是集团版
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 return GetFormTreeTable_GroupInc();
 
             //组织数据源.
             string sqls = "";
-
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree ORDER BY Idx ASC ; ";
@@ -1080,23 +1080,9 @@ namespace BP.WF.HttpHandler
             {
                 dtForm.Rows.Add(row.ItemArray);
             }
-
-            /* if (WebUser.No.Equals("admin") == false)
-             {*/
-            DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
-            DataRow newRootRow = rootRows[0];
-
-            newRootRow["ParentNo"] = "0";
-            DataTable newDt = dtForm.Clone();
-            newDt.Rows.Add(newRootRow.ItemArray);
-
-            GenerChildRows(dtForm, newDt, newRootRow);
-            dtForm = newDt;
-            //}
+  
             String str = BP.Tools.Json.ToJson(dtForm);
             return str;
-
-
         }
         public string GetFormTreeTable_GroupInc()
         {

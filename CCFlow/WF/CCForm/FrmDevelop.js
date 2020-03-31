@@ -589,10 +589,9 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
             pageData.FWCVer = 0;
         else
             pageData.FWCVer = 1;
-        $.getScript(url + 'WorkCheck.js', function () { });
     }
 
-    var eleHtml = $("<div id='WorkCheck'></div>");
+    var eleHtml = $("<div id='WorkCheck'>" + WorkCheck_InitPage()+"</div>");
 
     $(element).after(eleHtml);
     $(element).remove(); //移除SubFlow节点

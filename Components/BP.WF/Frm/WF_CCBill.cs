@@ -1217,17 +1217,22 @@ namespace BP.Frm
                     else
                         isFirst = false;
                     qo.addLeftBracket();
+                    string val = str[2].Replace("WebUser.No", WebUser.No);
+                    val = val.Replace("WebUser.Name", WebUser.Name);
+                    val = val.Replace("WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                    val = val.Replace("WebUser.FK_DeptName", WebUser.FK_DeptName);
+                    val = val.Replace("WebUser.FK_Dept", WebUser.FK_Dept);
 
                     //获得真实的数据类型.
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         var valType = BP.Sys.Glo.GenerRealType(attrs,
-                            str[0], str[2]);
+                            str[0], val);
                         qo.AddWhere(str[0], str[1], valType);
                     }
                     else
                     {
-                        qo.AddWhere(str[0], str[1], str[2]);
+                        qo.AddWhere(str[0], str[1], val);
                     }
                     qo.addRightBracket();
                     continue;

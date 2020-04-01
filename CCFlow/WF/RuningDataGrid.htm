@@ -493,7 +493,7 @@
         }
 		//撤销抄送
         function UnSendCC(fk_flow, workid, fid, unSendToNode) {
-			var url = "CCList.htm?WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FK_Node=" + unSendToNode + "&FID=" + fid;
+			var url = "./WorkOpt/CCListUnSend.htm?WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FK_Node=" + unSendToNode + "&FID=" + fid;
             var W = document.body.clientWidth - 300;
             var H = document.body.clientHeight - 140;
             OpenBootStrapModal(url,"CC", "抄送信息", W, H);

@@ -77,6 +77,9 @@
             width:90% !important;
             border:none !important;
         }
+        .headTiele label{
+           color:red;
+        }
     </style>
     <script>
          //页面启动函数.
@@ -89,19 +92,18 @@
             }
            
             $("#UserName").append(webUser.Name);
-            //if (webUser.CCBPMRunModel == 1) {
-            //    alert(WebUser.OrgNo)
-            //    $("#OrgNo").append(GetQueryString("OrgNo"));
+            if (webUser.CCBPMRunModel == 1) {
                 
-            //    var en = new Entity("BP.WF.Port.Admin2.Org",GetQueryString("OrgNo"));
+                $("#OrgNo").append(GetQueryString("OrgNo"));
                 
-            //    alert(en.Name);
-            //    $("#OrgName").append(en.Name);
-            //}
-            //else {
-            //    $("#OrgNo").hide();
-            //    $("#OrgName").hide();
-            //}
+                var en = new Entity("BP.WF.Port.Admin2.Org",GetQueryString("OrgNo"));
+ 
+                $("#OrgName").append(en.Name);
+            }
+            else {
+                $("#OrgNo").hide();
+                $("#OrgName").hide();
+            }
             return;
         });
     </script>
@@ -121,18 +123,21 @@
         </div>
     </div>
     <div data-options="region:'center',border:true" collapsible="true">
-
+        <div id="headTiele" style="position:absolute;z-index:10;left:30%">
+            <label style="font-weight:bolder;font-size:14px;" id="OrgNo">组织编号：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label style="font-weight:bolder;font-size:14px;" id="OrgName">组织名称：</label>
+        </div>
         <div id="tabs" class="easyui-tabs cs-header" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
-            
+
             <ul id="rightUL" class="nav">
-                
+
                 <li class="drop-down user-menu mr5">
                     <img style="margin-bottom:10px" align="middle" src='../../AppClassic/Img/ico-user.png' />
                     <span id="UserName" href="#"></span>
                     <ul style="list-style:none;" class="drop-down-content">
                         <!--<li><a id="OrgNo" href="#">组织编号：</a></li>
-                        <li><a id="OrgName" href="#">组织名称：</a></li>-->
-                        <li><a href="#" onclick="Login2App()">登录前台</a></li>
+                    <li><a id="OrgName" href="#">组织名称：</a></li>-->
+                        <li><a href="/WF/Admin/Portal/SelectOneOrg.html">切换组织</a></li>
                         <li><a href="#" onclick="addTab('', '修改密码', '/WF/Setting/ChangePassword.htm', '')">修改密码</a></li>
                         <li><a href="#" onclick="LoginOut()">退出登录</a></li>
                         <li><a target="_blank" href="http://ccflow.org">关于</a></li>
@@ -146,14 +151,14 @@
 
         <div id="tab-tools" style="height: 32px!important;">
             <!--<a href="#" class="easyui-linkbutton" id="Login2App" data-options="plain:true" onclick="Login2App()">
-                <img alt='使用普通用户,登录前台demo系统' class="ico" src='../../AppClassic/Img/ico-user.png' />登录前台
-            </a>
+            <img alt='使用普通用户,登录前台demo系统' class="ico" src='../../AppClassic/Img/ico-user.png' />登录前台
+        </a>
 
-            <a href="#" class="easyui-linkbutton" data-options="plain:true"
-               onclick="LoginOut()">
-                <img alt='退出ccbpm流程设计器' class="ico" src='../../AppClassic/Img/ico-exit.png' />退出
-            </a>-->
-            
+        <a href="#" class="easyui-linkbutton" data-options="plain:true"
+           onclick="LoginOut()">
+            <img alt='退出ccbpm流程设计器' class="ico" src='../../AppClassic/Img/ico-exit.png' />退出
+        </a>-->
+
 
         </div>
     </div>

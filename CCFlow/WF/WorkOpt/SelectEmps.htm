@@ -110,6 +110,7 @@
                     var deptNode = {
                         "text": dept.Name,
                         "id": dept.No,
+                        "state": { disabled: true },
                         "children": true,
                         "data": dept
                     };
@@ -121,6 +122,7 @@
                                 var childDeptNode = {
                                     "text": childDept.Name,
                                     "id": childDept.No,
+                                    "state": {disabled:true},
                                     "children": true,
                                     "data": childDept
                                 };
@@ -203,7 +205,12 @@
                         }
                     }
                 },
-                "plugins": plugins
+                "plugins": plugins,
+                "checkbox": {
+                    "keep_selected_style": false,//是否默认选中
+                    "three_state": false,//父子级别级联选择
+                    "tie_selection": true
+                },
             }).on('changed.jstree', function (node, cb) {
                 GetSelectedEmpsReturnVal();
             }).bind("loaded.jstree", function (event, data) {
@@ -287,15 +294,35 @@
                 returnVal[property] = returnVal[property].join(",");
             }
         }
+
+        function Search() {
+            var keyVal = $("#TB_Key").val();
+            if (keyVal == "")
+                return;
+            //根据输入的部门编号或者名称获取部门信息
+            var ens = new Entities("BP.Port.Depts");
+            ens.RetrieveCond("No,Name", "like", '%'+keyVal+'%');
+           
+            //查询到的部门节点就展开
+            var $jstree = $('#OrgJSTree').jstree(true);
+            for (var i = 0; i < ens.length; i++) {
+                $jstree.open_node($jstree.get_node(ens[i].No));
+                
+            }
+
+        }
     </script>
 </head>
 <body>
+    <label>关键字</label>
+    <!--<input style='width:180px;display:inline' type=text id='TB_Key' name='TB_Key' class='form-control' placeholder="输入部门编号或者名称" />-->
+    <input type="button" onclick="Search()" value="查询" />
     <input type="button" onclick="Close()" value="取消" /><input type="button" value="上一级"
-        id="toPrevDept" />
+                                                               id="toPrevDept" />
     <input type="button" onclick="SelectEmps()" value="确定" />
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
     <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
-        value="确定" />
+                                                               value="确定" />
 </body>
 </html>

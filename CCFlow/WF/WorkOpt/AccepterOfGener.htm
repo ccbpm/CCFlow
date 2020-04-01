@@ -58,6 +58,7 @@
     </style>
     <script type="text/javascript">
         var param = {};
+        var isSigleSelect = false;
         $(function () {
 
             var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
@@ -67,6 +68,20 @@
                 $("#Btn_Send").hide(); //如果是ToNodes.htm调用的就隐藏发送.
 
             $("#HelpInfo").toggle(); //没有起作用。
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData(); //参数:ToNode,FK_Flow,FK_Node,WorkID
+            var data = handler.DoMethodReturnString("AccepterOfGener_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.parent.close();
+                return;
+            }
+            //获得结果集.该结果集有如下数据: SELECT * FROM WF_SelectAccper
+            var sas = JSON.parse(data);
+
+            BindTable(sas);  //开始渲染列表.
+
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="SelectEmpsModal">' +
@@ -100,34 +115,22 @@
                 dept = "0";
             }
 
-
-            var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
+            var IsSelectMore = isSigleSelect == false ? 1 : 0;
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&IsSelectMore=" + IsSelectMore + "&s=" + Math.random();
 
             //为天业集团做的特殊判断.
             url = url.replace('=101&', '=10102&');
-            //url = url.replace('=101&', '=10102&');
 
             $('#iframeSelectEmpsForm').attr('src', url);
 
-            $('#Btn_SelectEmps').bind('click', function () { $('#SelectEmpsModal').modal().show(); });
-            //$("section").show();
+            $('#Btn_SelectEmps').bind('click', function () {
+
+                $('#SelectEmpsModal').modal().show();
+            });
             $(".Msg").hide();
 
-            //$("#HelpInfo").hide();
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData(); //参数:ToNode,FK_Flow,FK_Node,WorkID
-            var data = handler.DoMethodReturnString("AccepterOfGener_Init");
-            // alert(data);
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                window.parent.close();
-                return;
-            }
-            //获得结果集.该结果集有如下数据: SELECT * FROM WF_SelectAccper
-            var sas = JSON.parse(data);
-
-            BindTable(sas);  //开始渲染列表.
+            
             var int = setInterval("clock()", 1000);
 
         });
@@ -138,8 +141,10 @@
             var isDel = true;
             var toNodeID = GetQueryString("ToNode");
             var sa = new Entity("BP.WF.Template.Selector", toNodeID);
-            if (sa.IsSimpleSelector == 1) //是否单项选择.
+            if (sa.IsSimpleSelector == 1) { //是否单项选择.
                 isDel = false; //如果是单项选择，就可以有移除按钮.
+                isSigleSelect = true;
+            }
 
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];

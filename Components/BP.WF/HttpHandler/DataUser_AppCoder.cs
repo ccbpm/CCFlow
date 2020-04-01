@@ -26,25 +26,7 @@ namespace BP.WF.HttpHandler
         {
         }
 
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
-        {
-            switch (this.DoType)
-            {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
-            }
-
-            //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
-        }
-        #endregion 执行父类的重写方法.
+        
 
         #region 欢迎页面初始化.
         /// <summary>
@@ -53,20 +35,28 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowDesignerWelcome_Init()
         {
+            string whereStr = "";
+            string whereStrPuls = "";
+            if(Glo.CCBPMRunModel==CCBPMRunModel.GroupInc)
+            {
+                whereStr += " WHERE OrgNo = '"+WebUser.OrgNo+"'";
+                whereStrPuls += " AND OrgNo = '"+WebUser.OrgNo+"'";
+            }
+
             Hashtable ht = new Hashtable();
-            ht.Add("FlowNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow")); //流程数
-            ht.Add("NodeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node")); //节点数据
+            ht.Add("FlowNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow "+ whereStr)); //流程数
+            ht.Add("NodeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node " + whereStr)); //节点数据
             //表单数.
-            ht.Add("FromNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM Sys_MapData  WHERE FK_FormTree !='' AND FK_FormTree IS NOT NULL ")); //表单数
+            ht.Add("FromNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM Sys_MapData  WHERE FK_FormTree !=''"+ whereStrPuls + " AND FK_FormTree IS NOT NULL "  )); //表单数
 
             //所有的实例数量.
-            ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 ")); //实例数.
+            ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 " + whereStrPuls)); //实例数.
 
             //所有的待办数量.
-            ht.Add("TodolistNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=2 "));
+            ht.Add("TodolistNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=2 " + whereStrPuls));
 
             //退回数.
-            ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 "));
+            ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 " + whereStrPuls));
 
             //说有逾期的数量. 应该根据 WF_GenerWorkerList的 SDT 字段来求.
             if (SystemConfig.AppCenterDBType == DBType.MySQL)

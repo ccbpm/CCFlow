@@ -31,6 +31,18 @@ namespace BP.WF.Port.Admin2
             }
         }
 
+        //public override UAC HisUAC
+        //{
+
+        //    get
+        //    {
+        //        return null;
+
+        //    }
+
+        //}
+
+
         #region 构造方法
         /// <summary>
         /// 岗位类型

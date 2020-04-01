@@ -85,6 +85,10 @@ namespace BP.WF.Template
         /// 是否加入待办列表
         /// </summary>
 	    public const string InEmpWorks = "InEmpWorks";
+        /// <summary>
+        /// domain
+        /// </summary>
+        public const string Domain = "Domain";
         #endregion
     }
     public enum CCSta
@@ -94,11 +98,11 @@ namespace BP.WF.Template
         /// </summary>
         UnRead,
         /// <summary>
-        /// 已读取
+        /// 已读
         /// </summary>
         Read,
         /// <summary>
-        /// 已经回复
+        /// 已回复
         /// </summary>
         CheckOver,
         /// <summary>
@@ -148,6 +152,23 @@ namespace BP.WF.Template
                 return uac;
             }
         }
+        /// <summary>
+        /// 域
+        /// </summary>
+        public string Domain
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.Domain);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.Domain, value);
+            }
+        }
+        /// <summary>
+        /// 抄送给
+        /// </summary>
         public string CCTo
         {
             get
@@ -474,7 +495,10 @@ namespace BP.WF.Template
                 map.AddTBInt(CCListAttr.PWorkID, 0, "父流程WorkID", true, true);
                 //added by liuxc,2015.7.6，标识是否在待办列表里显示
                 map.AddBoolean(CCListAttr.InEmpWorks, false, "是否加入待办列表", true, true);
-                 
+
+                //addmy zhoupeng  @sly
+                map.AddTBString(CCListAttr.Domain, null, "Domain", true, true, 0, 50, 10, true);
+
                 this._enMap = map;
                 return this._enMap;
             }

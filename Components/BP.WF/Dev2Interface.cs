@@ -685,22 +685,26 @@ namespace BP.WF
         /// 获取指定人员的抄送列表
         /// 说明:可以根据这个列表生成指定用户的抄送数据.
         /// </summary>
-        /// <param name="FK_Emp">人员编号,如果是null,则返回所有的.</param>
+        /// <param name="domain">域.</param>
         /// <returns>返回该人员的所有抄送列表,结构同表WF_CCList.</returns>
-        public static DataTable DB_CCList(string FK_Emp)
+        public static DataTable DB_CCList(string domain = null)
         {
             Paras ps = new Paras();
-            if (FK_Emp == null)
+            if (domain == null)
             {
-                ps.SQL = "SELECT * FROM WF_CCList WHERE 1=1";
+                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo AND B.WorkID=A.WorkID ";
+                ps.Add("CCTo", WebUser.No);
             }
             else
             {
-                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.WorkID=A.WorkID";
-                ps.Add("FK_Emp", FK_Emp);
+                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo AND B.WorkID=A.WorkID AND B.Domain=" + SystemConfig.AppCenterDBVarStr + "Domain ";
+                ps.Add("CCTo", WebUser.No);
+                ps.Add("Domain", domain);
             }
+
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["MYPK"].ColumnName = "MyPK";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -715,23 +719,27 @@ namespace BP.WF
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
             }
-
             return dt;
         }
-        public static DataTable DB_CCList(string FK_Emp, CCSta sta)
+        public static DataTable DB_CCList(CCSta sta, string domain = null)
         {
+            string dbStr = SystemConfig.AppCenterDBVarStr;
+
             Paras ps = new Paras();
-            if (FK_Emp == null)
+            if (domain == null)
             {
-                ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + SystemConfig.AppCenterDBVarStr + "Sta";
+                ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo ";
                 ps.Add("Sta", (int)sta);
+                ps.Add("CCTo", WebUser.No);
             }
             else
             {
-                ps.SQL = "SELECT * FROM WF_CCList WHERE CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND Sta=" + SystemConfig.AppCenterDBVarStr + "Sta";
-                ps.Add("FK_Emp", FK_Emp);
+                ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo AND Domain=" + dbStr + "Domain";
                 ps.Add("Sta", (int)sta);
+                ps.Add("CCTo", WebUser.No);
+                ps.Add("Domain", domain);
             }
+
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -747,7 +755,8 @@ namespace BP.WF
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
             }
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                || SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 dt.Columns["mypk"].ColumnName = "MyPK";
                 dt.Columns["title"].ColumnName = "Title";
@@ -770,34 +779,34 @@ namespace BP.WF
         /// <returns>返回该人员的未读的抄送列表</returns>
         public static DataTable DB_CCList_UnRead(string FK_Emp)
         {
-            return DB_CCList(FK_Emp, CCSta.UnRead);
+            return DB_CCList( CCSta.UnRead);
         }
         /// <summary>
         /// 获取指定人员的抄送列表(已读)
         /// </summary>
         /// <param name="FK_Emp">人员编号</param>
         /// <returns>返回该人员的已读的抄送列表</returns>
-        public static DataTable DB_CCList_Read(string FK_Emp)
+        public static DataTable DB_CCList_Read(string domain=null)
         {
-            return DB_CCList(FK_Emp, CCSta.Read);
+            return DB_CCList(CCSta.Read, domain);
         }
         /// <summary>
         /// 获取指定人员的抄送列表(已删除)
         /// </summary>
         /// <param name="FK_Emp">人员编号</param>
         /// <returns>返回该人员的已删除的抄送列表</returns>
-        public static DataTable DB_CCList_Delete(string FK_Emp)
+        public static DataTable DB_CCList_Delete(string domain)
         {
-            return DB_CCList(FK_Emp, CCSta.Del);
+            return DB_CCList(CCSta.Del,domain);
         }
         /// <summary>
         /// 获取指定人员的抄送列表(已回复)
         /// </summary>
         /// <param name="FK_Emp">人员编号</param>
         /// <returns>返回该人员的已删除的抄送列表</returns>
-        public static DataTable DB_CCList_CheckOver(string FK_Emp)
+        public static DataTable DB_CCList_CheckOver(string domain)
         {
-            return DB_CCList(FK_Emp, CCSta.CheckOver);
+            return DB_CCList(CCSta.CheckOver, domain);
         }
         #endregion
 
@@ -3579,7 +3588,9 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(sid))
                 throw new Exception("err@SID不能为空.");
 
-            if (sid.Contains(" "))
+            sid = sid.Trim();
+
+            if (DataType.IsNullOrEmpty(sid) == true)
                 throw new Exception("err@非法的SID.");
 
             BP.Port.Emp myEmp = new BP.Port.Emp();
@@ -3588,10 +3599,8 @@ namespace BP.WF
                 throw new Exception("err@非法的SID:" + sid);
 
             WebUser.SignInOfGener(myEmp);
-
             return;
         }
-
         /// <summary>
         /// 登录
         /// </summary>

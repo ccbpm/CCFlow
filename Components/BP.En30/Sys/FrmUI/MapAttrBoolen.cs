@@ -120,6 +120,7 @@ namespace BP.Sys.FrmUI
                 //数据类型.
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 4, "数据类型", true, false);
 
+
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
 
                 map.AddTBString(MapAttrAttr.DefVal, "0", "默认值(是否选中？0=否,1=是)", true, false, 0, 200, 20);

@@ -1534,8 +1534,6 @@ namespace BP.WF
                     sql += " WHERE A.NDFrom=B.NodeID AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
                     sql += "  AND (FormType=0 OR FormType=1) ";
 
-
-
                     sql += "  AND (A.WorkID=" + this.WorkID + ") ";
 
                     sql += " ORDER BY A.RDT ";

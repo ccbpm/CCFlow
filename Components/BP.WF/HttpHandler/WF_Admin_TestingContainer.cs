@@ -150,8 +150,8 @@ namespace BP.WF.HttpHandler
             //判断是否可以测试该流程？ 
             BP.Port.Emp myEmp = new BP.Port.Emp();
             int i = myEmp.Retrieve("SID", sid);
-            if (i == 0 && 1==2)
-                throw new Exception("err@非法的SID:"+sid);
+            if (i == 0 && 1 == 2)
+                throw new Exception("err@非法的SID:" + sid);
 
             //组织url发起该流程.
             string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&SID=" + sid + "&UserNo=" + userNo;
@@ -276,20 +276,23 @@ namespace BP.WF.HttpHandler
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                             throw new Exception("err@非集团版本，不能设置启用此模式.");
-                        
-                        sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='"+nd.FK_Flow+"'";
 
-                        if (dt.Rows.Count > 300 && 1 == 2)
-                        {
-                            if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
-                                sql = "SELECT Top 200 c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'";
+                        sql = "SELECT B.No, B.Name, d.Name as FK_DeptText FROM Port_DeptEmp A, Port_Emp B,";
+                        sql += " WF_FlowOrg C,port_dept D WHERE A.FK_Emp = B.No AND A.OrgNo = C.OrgNo AND A.FK_Dept = D.No AND C.FlowNo = '" + this.FK_Flow + "'";
 
-                            if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
-                                sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "' AND ROWNUM <300 ";
+                        // sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  ";
+                        // sql += "WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + this.FK_Flow + "'";
+                        //if (dt.Rows.Count > 300 && 1 == 2)
+                        //{
+                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
+                        //        sql = "SELECT Top 200 c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'";
 
-                            if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
-                                sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'    limit 0,200   ";
-                        }
+                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+                        //        sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "' AND ROWNUM <300 ";
+
+                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
+                        //        sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'    limit 0,200   ";
+                        //}
 
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                         return BP.Tools.Json.ToJson(dt);

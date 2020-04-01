@@ -127,8 +127,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
-               
-
                 map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
                 map.SetHelperAlert(MapAttrAttr.MaxLen, "定义该字段的字节长度.");

@@ -736,7 +736,7 @@ namespace BP.Frm
                     val = val.Replace("WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
                     val = val.Replace("WebUser.FK_DeptName", WebUser.FK_DeptName);
                     val = val.Replace("WebUser.FK_Dept", WebUser.FK_Dept);
-                    val = val.Replace("WebUser.OrgNo", WebUser.OrgNo);
+                    //val = val.Replace("WebUser.OrgNo", WebUser.OrgNo);
 
                     //获得真实的数据类型.
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)

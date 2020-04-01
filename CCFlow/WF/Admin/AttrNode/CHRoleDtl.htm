@@ -79,20 +79,39 @@
             node.CopyForm(); //复制表单数据.
 
             var CHWayOfTimeRole = $('input:radio[name="RB_CHWayOfTimeRole"]:checked').val();
+            if (CHWayOfTimeRole == 0) {
+                var TimeLimit = $("#TB_TimeLimit").val();
+                var TimeLimitHH = $("#TBPara_TimeLimitHH").val();
+                if (isNaN(TimeLimit) || (TimeLimit % 1 !== 0)) {
+                    alert("天数请输入整数！");
+                    return;
+                }
+                if (isNaN(TimeLimitHH) || (TimeLimitHH % 1 !== 0)) {
+                    alert("小时请输入整数！");
+                    return;
+                }
+            }
             node.SetPara("CHWayOfTimeRole", CHWayOfTimeRole); //时间点考核方式
 
             var CHWayOfTimeRoleField = $("#DDL_Fields").val();
+
             node.SetPara("CHWayOfTimeRoleField", CHWayOfTimeRoleField); //按表单字段的字段
 
             //节假日计算方式.
             node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
 
             node.Update();
+            window.location.href = window.location.href;
 
-            Back();
         }
         function Back() {
             window.location.href = "CHRole.htm?FK_Node=" + GetQueryString("FK_Node"); 
+        }
+        function testInt(obj) {
+            //var value = $("#TBPara_TimeLimitHH").val();
+            if (isNaN(obj.value)||(obj.value % 1 !==0)) {
+                alert("请输入整数！");
+            };
         }
     </script>
 </head>
@@ -115,10 +134,10 @@
                                 限期完成时限：
                             </td>
                             <td>
-                                <input type="number" id="TB_TimeLimit" name="TB_TimeLimit" style="width: 60px;" min="0" />天,
+                                <input type="text" id="TB_TimeLimit" name="TB_TimeLimit" style="width: 60px;" min="0" onblur="testInt(this)"/>天,
                             </td>
                             <td>
-                                <input type="number" id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width: 60px;" min="0" />小时,
+                                <input type="text" id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width: 60px;" min="0" onblur="testInt(this)"/>小时,
                             </td>
                             <!--<td style="color: Gray">
                                 <input type="text" id="TBPara_TimeLimitMM" name="TBPara_TimeLimitMM" style="width: 30px;" />分钟
@@ -178,7 +197,7 @@
                     </ul>
                 </fieldset>-->
                
-                <input type="button" value="保存并返回" onclick="Save()" />
+                <input type="button" value="保存" onclick="Save()" />
                 <input type="button" value="返回" onclick="Back()" />
 
             </td>

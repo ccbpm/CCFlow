@@ -1014,7 +1014,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (mapAttr.UIContralType == 13 && mapAttr.KeyOfEn == "IDCardAddress") {
             var eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
             eleHtml += "<input type = text style='width:75% !important;display:inline;' class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
-            eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo(this)'/>上传身份证</label>";
+            eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo(event)'/>上传身份证</label>";
             eleHtml += "</div>";
             return eleHtml;
         }

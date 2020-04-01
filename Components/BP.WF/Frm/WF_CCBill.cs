@@ -731,16 +731,23 @@ namespace BP.Frm
                         isFirst = false;
                     qo.addLeftBracket();
 
+                    string val = str[2].Replace("WebUser.No", WebUser.No);
+                    val = val.Replace("WebUser.Name", WebUser.Name);
+                    val = val.Replace("WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                    val = val.Replace("WebUser.FK_DeptName", WebUser.FK_DeptName);
+                    val = val.Replace("WebUser.FK_Dept", WebUser.FK_Dept);
+                    val = val.Replace("WebUser.OrgNo", WebUser.OrgNo);
+
                     //获得真实的数据类型.
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         var valType = BP.Sys.Glo.GenerRealType(attrs,
                             str[0], str[2]);
-                        qo.AddWhere(str[0], str[1], valType);
+                        qo.AddWhere(str[0], str[1], val);
                     }
                     else
                     {
-                        qo.AddWhere(str[0], str[1], str[2]);
+                        qo.AddWhere(str[0], str[1], val);
                     }
                     qo.addRightBracket();
                     continue;
@@ -783,6 +790,8 @@ namespace BP.Frm
                 string[] strs = fieldSet.Split('@');
                 foreach (string str in strs)
                 {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
                     string[] item = str.Split('=');
                     if (item.Length == 2)
                     {

@@ -37,7 +37,7 @@
     <script type="text/javascript">
 
         var webUser = null;
-        var frmBill = null;
+        var frmDict = null;
         var frmID;
         var fields = []; //字符型字段查询的集合
         var ur;//当前用户的查询信息
@@ -63,8 +63,8 @@
 
             pageIdx = GetQueryString("PageIdx");//当前页
 
-            frmBill = new Entity("BP.Frm.FrmBill", frmID);
-            document.title = frmBill.Name;
+            frmDict = new Entity("BP.Frm.FrmDict", frmID);
+            document.title = frmDict.Name;
 
             //当前用户查询信息.
             ur = new Entity("BP.Sys.UserRegedit");
@@ -382,6 +382,19 @@
                 $('#dg').bootstrapTable("load", data["DT"]);
                 return;
             }
+            //设置查询总数居的合计、平均等信息
+            var heji = data["Search_FieldSet"];
+            var _html = "";
+            if (heji != null && heji != undefined) {
+                $.each(heji, function (i, item) {
+                    if (item.Type == "Sum")
+                        _html += item.Field + "总合计：" + item.Value + " ";
+                    if (item.Type == "Avg")
+                        _html += item.Field + "总平均：" + item.Value + " ";
+                });
+            }
+
+            $("#FieldSet").html("").html(_html);
             return data;
         }
 
@@ -404,6 +417,9 @@
             }
 
             var keyOfEn = "";
+            var sortColumns = frmDict.SortColumns; //排序字段
+            //颜色设置
+            var colorSet = frmDict.ColorSet;
 
             var columns = new Array();
             columns.push({
@@ -440,6 +456,9 @@
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
                 var width = attr.Width;
+                var sortable = true;
+                if (sortColumns != null && sortColumns != "")
+                    sortable = sortColumns.indexOf(field) != -1 ? true : false;
 
                 if (field == "BillState") {
                     columns.push({
@@ -447,6 +466,7 @@
                         title: title,
                         width: attr.Width,
                         fixed: false,
+                        sortable: sortable,
                         formatter: function (value, row, index) {
                             return GetBillState(value);
                         }
@@ -460,6 +480,7 @@
                         title: title,
                         width: attr.Width,
                         fixed: false,
+                        sortable: sortable,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
                             return "<a href=\"javascript:OpenIt('" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "','" + row.BillState + "',)\"><img src=" + icon + " border=0 width='14px;' />" + value + "</a>";
@@ -471,18 +492,25 @@
                 if (attr.UIContralType == 1 || attr.UIContralType == 3) {
                     if (width == null || width == "" || width == undefined)
                         width = 180;
-                    if (attr.LGType == 0)
-                        field = field + "T";
-                    else
-                        field = field + "Text";
-
+                  
                     columns.push({
                         field: field,
                         title: title,
                         fixed: false,
                         width: width,
+                        sortable: sortable,
                         cellStyle: {
                             css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
+                        },
+                        formatter: function (value, row, index) {
+                            var val = row[this.field + "Text"];
+                            if (val == undefined || val == null)
+                                val = row[this.field + "T"];
+
+                            if (val == undefined || val == null)
+                                return value;
+                            else
+                                return val;
                         }
                     });
                     continue;
@@ -493,6 +521,7 @@
                         title: title,
                         width: attr.Width,
                         fixed: false,
+                        sortable: sortable,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
                             if (value == "1") return "是";
@@ -508,7 +537,21 @@
                     field: field,
                     title: title,
                     width: attr.Width,
-                    fixed: false
+                    fixed: false,
+                    sortable: sortable,
+                    formatter: function (value, row, index) {
+                        var fieldColor = [];
+                        if (colorSet.indexOf("@" + this.field + ":") != -1) {
+                            fieldColor = getFieldColor(colorSet, this.field);
+                        }
+                        if (fieldColor.length == 0)
+                            return value;
+                        for (var i = 0; i < fieldColor.length; i++) {
+                            var color = fieldColor[i];
+                            if (color.From <= value && color.To >= value)
+                                return "<div style='width:20px;height:20px;text-align:center;background:" + color.Color + "'>" + value + "</div>";
+                        }
+                    }
 
                 });
             }
@@ -567,7 +610,7 @@
 
         //分页功能
         function Paginator(pageCount, currentPage) {
-            var selects = "<Select id='DDL_PageSize' onchange='changePageSie()' style='min-width: 10px !important; width: 40px;' class='form-control'><option value=5>5</option><option value=10>10</option><option value=15>15</option><option value=20>20</option><option value=25>25</option></Select>";
+            var selects = "<Select id='DDL_PageSize' onchange='changePageSie()' style='min-width: 40px !important; width: 50px;' class='form-control'><option value=5>5</option><option value=10>10</option><option value=15>15</option><option value=20>20</option><option value=25>25</option></Select>";
             var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
             var options = {
                 bootstrapMajorVersion: 3, //版本
@@ -747,7 +790,7 @@
         function OpenIt(workid, frmID, nodeID, emps, userNo, BillState) {
 
             //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
-            var rowOpenModel = parseInt(frmBill.RowOpenModel);
+            var rowOpenModel = parseInt(frmDict.RowOpenModel);
 
             var url = "";
             url = "MyDict.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
@@ -759,12 +802,12 @@
                 var W = document.body.clientWidth - 40;
                 var H = document.body.clientHeight - 40;
 
-                OpenBootStrapModal(url, "eudlgframe", frmBill.Name, W, H, "icon-property", null, null, null, null, null, "black");
+                OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, null, null, "black");
             }
             if (rowOpenModel == 3) {
                 var W = document.body.clientWidth - 40;
                 var H = document.body.clientHeight - 40;
-                OpenBootStrapModal(url, "eudlgframe", frmBill.Name, W, H, "icon-property", null, null, null, function () {
+                OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, function () {
                     window.location.href = window.location.href;
                 }, null, "black");
             }
@@ -774,6 +817,44 @@
 
         }
 
+        /**
+        * 获取字段的设置
+        * @param colorSet  颜色总体设置
+        * @param keyOfEn 字段
+        */
+        function getFieldColor(colorSet, keyOfEn) {
+            var fieldColor = [];
+            var colorSets = colorSet.split('@');
+            for (var i = 0; i < colorSets.length; i++) {
+                if (colorSets[i] == "")
+                    continue;
+                var strs = colorSets[i].split(':');
+                if (strs.length == 0 || strs.length == 1)
+                    continue;
+                if (strs[0] != keyOfEn)
+                    continue;
+                var ss = strs[1].split(';');
+                for (var k = 0; k < ss.length; k++) {
+                    if (ss[k] == "")
+                        continue;
+                    var ts = ss[k].split(',');
+                    if (ts.length < 3) {
+                        alert('字段' + keyOfEn + '范围颜色设置格式错误');
+                        break;
+                    }
+
+                    fieldColor.push({
+                        "From": parseInt(ts[0].replace("From=", "")),
+                        "To": parseInt(ts[1].replace("To=", "")),
+                        "Color": ts[2].replace("Color=", "")
+                    });
+                }
+
+
+
+            }
+            return fieldColor;
+        }
 
 
         ///导入.
@@ -818,10 +899,15 @@
             <div class="row cs-shadow-box">
                 <table id="dg" class="table table-hover JColResizer" style="word-wrap: break-word; word-break: break-all;"></table>
                 <!-- 显示分页信息 -->
-                <div class="row cs-pagination">
-                    <ul class="pagination" id="page_nav"></ul>
-                    <ul class="pagination controls" id="page_info"></ul>
-                    <div style="clear: both;">
+                <div>
+                    <div class="row cs-pagination" style="float:left;width:40%;text-align: left;">
+                        <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="FieldSet"></li></ul>
+                    </div>
+                    <div class="row cs-pagination" style="float:right;width:60%">
+                        <ul class="pagination" id="page_nav"></ul>
+                        <ul class="pagination controls" id="page_info"></ul>
+                        <div style="clear: both;">
+                        </div>
                     </div>
                 </div>
             </div>

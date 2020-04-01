@@ -25,28 +25,12 @@ namespace BP.WF.HttpHandler
         {
         }
 
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
+        #region  界面 .
+        public string AccepterRole_ClearStartFlowsCash()
         {
-            switch (this.DoType)
-            {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
-            }
-
-            //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
+            return null;
         }
-        #endregion 执行父类的重写方法.
-
-        #region xxx 界面 .
-        #endregion xxx 界面方法.
+        #endregion 界面方法.
 
     }
 }

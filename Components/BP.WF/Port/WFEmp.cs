@@ -430,6 +430,9 @@ namespace BP.WF.Port
 
                 //map.AddTBStringDoc(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true);
 
+                //隶属组织.
+                map.AddTBString("OrgNo", null, "OrgNo", true, true, 0, 100, 20);
+
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 
                 map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);

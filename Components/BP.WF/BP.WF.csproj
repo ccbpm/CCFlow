@@ -246,6 +246,7 @@
     <Compile Include="HttpHandler\DataUser_AppCoder.cs" />
     <Compile Include="HttpHandler\WF_Admin_TestingContainer.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode_FrmSln.cs" />
+    <Compile Include="HttpHandler\WF_Admin_AttrNode_AccepterRole.cs" />
     <Compile Include="HttpHandler\WF_Template.cs" />
     <Compile Include="HttpHandler\WF_CCForm.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_DialogCtr.cs" />

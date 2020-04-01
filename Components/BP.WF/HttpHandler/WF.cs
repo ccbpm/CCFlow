@@ -914,9 +914,8 @@ namespace BP.WF.HttpHandler
             //定义容器.
             DataSet ds = new DataSet();
 
-
             //获得能否发起的流程.
-            DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No, this.Domain);
+            DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 
@@ -925,7 +924,6 @@ namespace BP.WF.HttpHandler
             dtSort.Columns.Add("No", typeof(string));
             dtSort.Columns.Add("Name", typeof(string));
             dtSort.Columns.Add("Domain", typeof(string));
-
 
             string nos = "";
             foreach (DataRow dr in dtStart.Rows)
@@ -950,8 +948,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtSort);
             #endregion 动态构造 流程类别.
 
-
-
             //返回组合
             json = BP.Tools.Json.DataSetToJson(ds, false);
 
@@ -960,7 +956,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
 
             //测试: 写入到本机.
-            //DataType.WriteFile("c:\\start.txt", json);
+           // DataType.WriteFile("c:\\start.txt", json);
 
             //返回组合
             return json;

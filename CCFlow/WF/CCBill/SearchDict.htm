@@ -349,12 +349,18 @@
         }
 
 
-        function SearchData() {
+        function SearchData(orderBy, orderWay) {
             //创建处理器.
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData()
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("PageSize", pageSize);
+
+            if (orderBy != null && orderBy != undefined)
+                ur.OrderBy = orderBy;
+            if (orderWay != null && orderWay != undefined)
+                ur.OrderWay = orderWay;
+            ur.Update();
 
             //查询集合
             var data = handler.DoMethodReturnString("Search_Init");
@@ -567,9 +573,14 @@
                 checkOnSelect: false,
                 selectOnCheck: false,
                 maintainSelected: true,
-                sidePagination: "server",
+                sidePagination: "client",
                 pageNumber: 1,
                 strictSearch: true,
+                onSort: function (name, order) {
+                    pageIdx = 1;
+                    SearchData(name, order);
+                    Paginator(pages, 1)
+                },
                 //得到查询的参数
                 queryParams: function (params) {
                     //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的

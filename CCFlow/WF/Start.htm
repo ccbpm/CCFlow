@@ -223,8 +223,7 @@
             var dtSort = data["Sort"]; //类别.
             var dtStart = data["Start"]; //发起的流程.
 
-
-            var domain = GetQueryString("Domain");
+           // var domain = GetQueryString("Domain");
 
             var myNum = 0;
             var is1 = false;
@@ -235,12 +234,11 @@
                 var sortName = dtSort[i].Name;
                 var sort = dtSort[i];
 
-                if (domain == '' || domain == null) {
-
-                } else {
-                    if (sort.Domain != domain)
-                        continue;
-                }
+                //if (domain == '' || domain == null) {
+                //} else {
+                //    if (sort.Domain != domain)
+                //        continue;
+                //}
 
 
                 //检查该类别下是否有流程，没有流程就continue ;.

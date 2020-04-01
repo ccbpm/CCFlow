@@ -678,7 +678,7 @@
         }
         //分页功能
         function Paginator(pageCount, currentPage) {
-            var selects = "<Select id='DDL_PageSize' onchange='changePageSie()' style='min-width: 10px !important; width: 40px;' class='form-control'><option value=5>5</option><option value=10>10</option><option value=15>15</option><option value=20>20</option><option value=25>25</option></Select>";
+            var selects = "<Select id='DDL_PageSize' onchange='changePageSie()' style='min-width: 40px !important; width: 50px;' class='form-control'><option value=5>5</option><option value=10>10</option><option value=15>15</option><option value=20>20</option><option value=25>25</option></Select>";
             var pageCount = pageCount; //取到pageCount的值(把返回数据转成object类型)
             var options = {
                 bootstrapMajorVersion: 3, //版本
@@ -960,7 +960,7 @@
                     <div class="row cs-pagination" style="float:left;width:65%;text-align: left;">
                         <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="FieldSet"></li></ul>
                     </div>
-                    <div class="row cs-pagination" style="float:right;width:35%">
+                    <div class="row cs-pagination" style="float:right;width:70%">
                         <ul class="pagination" id="page_nav"></ul>
                         <ul class="pagination controls" id="page_info"></ul>
                         <div style="clear: both;">

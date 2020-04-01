@@ -1029,17 +1029,17 @@ var autoTextarea = function (elem, extra, maxHeight) {
 };
 
 //身份证信息
-function GetIDCardInfo(obj) {
+function GetIDCardInfo(event) {
     var hander = new HttpHandler("BP.WF.HttpHandler.CCMobile_CCForm");
     var data = hander.DoMethodReturnJSON("getAccessToken");
 
     var imageBase = "";
     var reader = new FileReader();
-    reader.readAsDataURL(obj.files[0]);
+    reader.readAsDataURL(event.files[0]);
     reader.onload = function (e) {
         imageBase = e.target.result.replace("data:image/png;base64,", "");
-        //imageBase = e.target.result.replace("data:image/jpeg;base64,","");
-        $("#showImg").prop("src", "data:image/png;base64," + imageBase);
+        imageBase = imageBase.replace("data:image/jpeg;base64,","");
+        //$("#showImg").prop("src", "data:image/png;base64," + imageBase);
         $.ajax({
             header: {
                 "Content-Type": "application/x-www-form-urlencoded"

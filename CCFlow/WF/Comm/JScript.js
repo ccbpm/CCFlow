@@ -1029,13 +1029,13 @@ var autoTextarea = function (elem, extra, maxHeight) {
 };
 
 //身份证信息
-function GetIDCardInfo() {
+function GetIDCardInfo(obj) {
     var hander = new HttpHandler("BP.WF.HttpHandler.CCMobile_CCForm");
     var data = hander.DoMethodReturnJSON("getAccessToken");
 
     var imageBase = "";
     var reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    reader.readAsDataURL(obj.files[0]);
     reader.onload = function (e) {
         imageBase = e.target.result.replace("data:image/png;base64,", "");
         //imageBase = e.target.result.replace("data:image/jpeg;base64,","");

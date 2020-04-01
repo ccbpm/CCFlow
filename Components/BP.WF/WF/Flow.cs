@@ -6179,6 +6179,13 @@ namespace BP.WF
             }
             #endregion
 
+            //处理OrgNo 的导入问题.
+            if (Glo.CCBPMRunModel != CCBPMRunModel.GroupInc)
+            {
+                fl.OrgNo = BP.Web.WebUser.OrgNo;
+                fl.DirectUpdate();
+            }
+
 
             if (infoErr == "")
             {

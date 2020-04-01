@@ -960,7 +960,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
 
             //测试: 写入到本机.
-            DataType.WriteFile("c:\\start.txt", json);
+            //DataType.WriteFile("c:\\start.txt", json);
 
             //返回组合
             return json;

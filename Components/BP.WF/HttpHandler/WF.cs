@@ -352,14 +352,14 @@ namespace BP.WF.HttpHandler
                             cc1.HisSta = CCSta.Read;
                             cc1.Update();
                         }
-                        
-                        if(DataType.IsNullOrEmpty(sid) == false)
+
+                        if (DataType.IsNullOrEmpty(sid) == false)
                         {
                             string[] strss = sid.Split('_');
                             GenerWorkFlow gwfl = new GenerWorkFlow(Int64.Parse(strss[1]));
                             return "url@./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + gwfl.FK_Flow + "&FK_Node=" + gwfl.FK_Node + "&WorkID=" + gwfl.WorkID + "&FID=" + gwfl.FID;
                         }
-                        
+
                         return "url@./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     case "DelCC": //删除抄送.
                         CCList cc = new CCList();
@@ -464,7 +464,7 @@ namespace BP.WF.HttpHandler
                         GenerWorkFlow gwf = new GenerWorkFlow(wl.WorkID);
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
                         Web.WebUser.SignInOfGener(empOF);
-                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID+"&PWorkID="+gwf.PWorkID;
+                        string u = "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID + "&PWorkID=" + gwf.PWorkID;
 
                         return "url@" + u;
                     case "ExitAuth":
@@ -914,18 +914,43 @@ namespace BP.WF.HttpHandler
             //定义容器.
             DataSet ds = new DataSet();
 
-            //流程类别.
-            FlowSorts fss = new FlowSorts();
-            fss.RetrieveAll();
-
-            DataTable dtSort = fss.ToDataTableField("Sort");
-            dtSort.TableName = "Sort";
-            ds.Tables.Add(dtSort);
 
             //获得能否发起的流程.
             DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No, this.Domain);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
+
+            #region 动态构造 流程类别. @sly.
+            DataTable dtSort = new DataTable("Sort");
+            dtSort.Columns.Add("No", typeof(string));
+            dtSort.Columns.Add("Name", typeof(string));
+            dtSort.Columns.Add("Domain", typeof(string));
+
+
+            string nos = "";
+            foreach (DataRow dr in dtStart.Rows)
+            {
+                string no = dr["FK_FlowSort"].ToString();
+                if (nos.Contains(no) == true)
+                    continue;
+
+                string name = dr["FK_FlowSortText"].ToString();
+                string domain = dr["Domain"].ToString();
+
+                nos += "," + no; 
+
+                DataRow mydr = dtSort.NewRow();
+                mydr[0] = no;
+                mydr[1] = name;
+                mydr[2] = domain;
+                dtSort.Rows.Add(mydr);
+            }
+
+            dtSort.TableName = "Sort";
+            ds.Tables.Add(dtSort);
+            #endregion 动态构造 流程类别.
+
+
 
             //返回组合
             json = BP.Tools.Json.DataSetToJson(ds, false);
@@ -933,6 +958,9 @@ namespace BP.WF.HttpHandler
             //把json存入数据表，避免下一次再取.
             if (dtStart.Rows.Count > 0)
                 BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
+
+            //测试: 写入到本机.
+            DataType.WriteFile("c:\\start.txt", json);
 
             //返回组合
             return json;
@@ -982,7 +1010,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             bool isContainFuture = this.GetRequestValBoolen("IsContainFuture");
-            dt = BP.WF.Dev2Interface.DB_GenerRuning(null,isContainFuture,this.Domain); //获得指定域的在途.
+            dt = BP.WF.Dev2Interface.DB_GenerRuning(null, isContainFuture, this.Domain); //获得指定域的在途.
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -1111,7 +1139,7 @@ namespace BP.WF.HttpHandler
         {
             string checkboxs = GetRequestVal("CCPKs");
             CCLists ccs = new CCLists();
-            ccs.RetrieveIn("MyPK", "'"+checkboxs.Replace(",","','")+"'");
+            ccs.RetrieveIn("MyPK", "'" + checkboxs.Replace(",", "','") + "'");
             ccs.Delete();
             return "撤销抄送成功";
 
@@ -1409,7 +1437,7 @@ namespace BP.WF.HttpHandler
             sql += " AND A.FK_Node=C.NodeID ";
             sql += " AND C.TodolistModel= 4";
 
-            Paras ps = new Paras(); 
+            Paras ps = new Paras();
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -1436,10 +1464,10 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string Todolist_Init()
-        {            
+        {
             string fk_node = this.GetRequestVal("FK_Node");
             string showWhat = this.GetRequestVal("ShowWhat");
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat,this.Domain);
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat, this.Domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -1511,7 +1539,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
 
-        
+
         #endregion 获得列表.
 
 
@@ -2077,7 +2105,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
-        
+
         /// <summary>
         /// 初始化
         /// </summary>

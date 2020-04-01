@@ -855,7 +855,8 @@ namespace BP.WF
         }
         public static DataTable DB_GenerCanStartFlowsOfDataTable(string userNo, string domain = null)
         {
-            string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,A.IsStartInMobile, A.Idx";
+            //@sly. 有点变化.
+            string sql = "SELECT A.No,A.Name,a.IsBatchStart,a.FK_FlowSort,C.Name AS FK_FlowSortText,C.Domain,A.IsStartInMobile, A.Idx";
             sql += " FROM WF_Flow A, V_FlowStarterBPM B, WF_FlowSort C  ";
             sql += " WHERE A.No=B.FK_Flow AND A.IsCanStart=1 AND A.FK_FlowSort=C.No  AND B.FK_Emp='" + WebUser.No + "' ";
 
@@ -863,7 +864,7 @@ namespace BP.WF
                 sql += " AND C.Domain='" + domain + "'";
 
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                sql += " AND ( C.OrgNo='" + WebUser.OrgNo + "' OR B.OrgNo='') ";
+                sql += " AND ( C.OrgNo='" + WebUser.OrgNo + "' ) ";
 
             sql += " ORDER BY C.Idx, A.Idx";
 

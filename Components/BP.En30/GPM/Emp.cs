@@ -417,6 +417,7 @@ namespace BP.GPM
             //修改Port_Emp中的缓存
             BP.Port.Emp emp = new BP.Port.Emp(this.No);
             emp.FK_Dept=this.FK_Dept;
+            emp.Pass = this.Pass;
             emp.Update();
 
             base.afterInsertUpdateAction();
@@ -496,9 +497,6 @@ namespace BP.GPM
         {
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
-
-            if(SystemConfig.IsEnablePasswordEncryption == true)
-                pass1 = BP.Tools.Cryptography.EncryptString(pass1);
 
             this.Pass = pass1;
 

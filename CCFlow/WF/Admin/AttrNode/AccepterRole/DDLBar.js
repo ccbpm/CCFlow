@@ -139,15 +139,31 @@ function SaveRole() {
     $("#Btn_Save").val("正在保存请稍后.");
 
     try {
+
         Save();
+
     } catch (e) {
         alert(e);
         return;
     }
 
+    AccepterRole_ClearStartFlowsCash();
+
     $("#Btn_Save").val("保存成功");
     setTimeout(function () { $("#Btn_Save").val("保存"); }, 1000);
 }
+//清除缓存，本组织的.
+function AccepterRole_ClearStartFlowsCash()
+{
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+    var data = handler.DoMethodReturnString("AccepterRole_ClearStartFlowsCash");
+}
+//清除缓存，所有本组织的.
+function AccepterRole_ClearAllOrgStartFlowsCash() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+    var data = handler.DoMethodReturnString("AccepterRole_ClearAllOrgStartFlowsCash");
+}
+
 function OldVer() {
 
     var nodeID = GetQueryString("FK_Node");

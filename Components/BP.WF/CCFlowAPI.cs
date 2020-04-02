@@ -49,7 +49,7 @@ namespace BP.WF
                 wk.OID = workID;
 
                 wk.RetrieveFromDBSources();
-                wk.ResetDefaultVal();
+                wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,

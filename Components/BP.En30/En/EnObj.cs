@@ -275,7 +275,7 @@ namespace BP.En
         /// <summary>
         /// 重新设置默信息. @yuanlina 这里有问题，需要重构到jflow上去.
         /// </summary>
-        public void ResetDefaultVal()
+        public void ResetDefaultVal(string fk_mapdata = null, string fk_flow = null, int fk_node = 0)
         {
 
             ResetDefaultValRowValues();
@@ -286,7 +286,32 @@ namespace BP.En
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
+                DataTable dt = null;
+                int i = 0;
+                if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
+                {
+                    string sql2 = "SELECT * FROM Sys_FrmSln where FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = '" + fk_node + "' AND KeyOfEn = '" + attr.Key + "'";
+                    dt = DBAccess.RunSQLReturnTable(sql2);
+                    i = dt.Rows.Count;
+                }
+
                 string v = attr.DefaultValOfReal as string;
+                if (i == 1)
+                {
+                    v = dt.Rows[0]["DefVal"].ToString();
+                    if (DataType.IsNullOrEmpty(v))
+                    {
+                        v = attr.DefaultValOfReal;
+                    }
+                    else
+                    {
+                        if (v.Contains("@") == false)
+                        {
+                            this.SetValByKey(attr.Key, v);
+                            continue;
+                        }
+                    }
+                }
                 if (v == null || v.Contains("@") == false)
                     continue;
 

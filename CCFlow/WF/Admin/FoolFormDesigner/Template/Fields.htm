@@ -81,9 +81,21 @@
             var name = window.prompt('请输入要增加的字段名称', en.Name);
             if (name == undefined || name == null)
                 return;
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", GetQueryString("FK_MapData"), "Name", name);
+            if (mapAttrs.length >= 1) {
+                alert('名称：[' + name + "]已经存在.");
+                return;
+            }
+
             var field = window.prompt('字段名', keyOfEn);
             if (field == undefined || field == null)
                 return;
+
+           
+
+
 
             en.KeyOfEn = field;
             en.Name = name;
@@ -97,6 +109,7 @@
             //增加新字段.
             en.FK_MapData = GetQueryString("FK_MapData");
             en.KeyOfEn = field;
+            en.Idx = 0;
             en.Insert();
             alert('字段插入成功' + en.MyPK);
 

@@ -716,7 +716,7 @@ namespace BP.Frm
             FrmBill frmBill = new FrmBill(this.FrmID);
             string hidenField = frmBill.GetParaString("HidenField");
            
-            if(DataType.IsNullOrEmpty(hidenField) == false)
+            if(WebUser.No.Equals("admin") == false&&DataType.IsNullOrEmpty(hidenField) == false)
             {
                 hidenField = hidenField.Replace("[%]", "%");
                 foreach (string field in hidenField.Split(';')){
@@ -765,7 +765,7 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            if(WebUser.No.Equals("admin") == false)
+            if(WebUser.No.Equals("admin") == false&& DataType.IsNullOrEmpty(hidenField) == true)
             {
                 qo.addAnd();
                 qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);

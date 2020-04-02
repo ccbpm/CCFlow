@@ -139,19 +139,20 @@
             var jsonchildTree = [];
             if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
                 //如果parentNo不为0，则增加parentNo的部门数据
-                var PDept;
-                $.each(jsonArray, function (i, item) {
-                    if (item.No == parentNo) {
-                        PDept = item;
-                        return;
-                    }
-                });
-                if (PDept != null && PDept!=undefined)
-                jsonTree.push({
-                    "id": parentNo,
-                    "text": PDept.Name,
-                    "nodes": []
-                });
+                if (parentNo != 0) {
+                    $.each(jsonArray, function (i, item) {
+                        if (item.No == parentNo) {
+                            jsonTree.push({
+                                "id": parentNo,
+                                "text": item.Name,
+                                "nodes": []
+                            });
+                            return;
+                        }
+                    });    
+                }
+                
+                
                 $.each(jsonArray, function (i, o) {
                     if (o.ParentNo == parentNo) {
                         jsonchildTree.push(o);
@@ -231,6 +232,12 @@
             var rootNo = mapExt.Doc;
             if (rootNo == "@WebUser.FK_Dept") {
                 rootNo = webUser.FK_Dept;
+            }
+            if (rootNo == "@WebUser.OrgNo") {
+                rootNo = webUser.OrgNo;
+            }
+            if (rootNo == null || rootNo == undefined ) {
+                rootNo="0"
             }
 
             // global

@@ -62,6 +62,19 @@
 
             var jsonTree = [];
             if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
+                //如果parentNo不为0，则增加parentNo的部门数据
+                if (parentNo != 0) {
+                    $.each(jsonArray, function (i, item) {
+                        if (item.No == parentNo) {
+                            jsonTree.push({
+                                "id": parentNo,
+                                "text": item.Name,
+                                "nodes": []
+                            });
+                            return;
+                        }
+                    });
+                }
                 $.each(jsonArray, function (i, o) {
                     if (o.ParentNo == parentNo) {
                         var checked = false;
@@ -241,9 +254,13 @@
             if (rootNo == "@WebUser.FK_Dept") {
                 rootNo = webUser.FK_Dept;
             }
-            if (rootNo == "")
-                rootNo = "0";
-
+            if (rootNo == "@WebUser.OrgNo") {
+                rootNo = webUser.OrgNo;
+            }
+            if (rootNo == null || rootNo == undefined) {
+                rootNo = "0"
+            }
+            
             //设置变量.
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
@@ -262,8 +279,14 @@
                     var val = key.split('=')[1];
                     treeUrl = treeUrl.replace("@" + attrKeyOfEn, val);
                     treeTag1 = treeTag1.replace("@" + attrKeyOfEn, val);
+                    rootNo = rootNo.replace("@" + attrKeyOfEn, val);
                 }
             }
+
+            if (rootNo == "")
+                rootNo = "0";
+
+
             if (treeUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源不能为空。');
                 return;

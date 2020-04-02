@@ -138,6 +138,20 @@
             var jsonTree = [];
             var jsonchildTree = [];
             if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
+                //如果parentNo不为0，则增加parentNo的部门数据
+                var PDept;
+                $.each(jsonArray, function (i, item) {
+                    if (item.No == parentNo) {
+                        PDept = item;
+                        return;
+                    }
+                });
+                if (PDept != null && PDept!=undefined)
+                jsonTree.push({
+                    "id": parentNo,
+                    "text": PDept.Name,
+                    "nodes": []
+                });
                 $.each(jsonArray, function (i, o) {
                     if (o.ParentNo == parentNo) {
                         jsonchildTree.push(o);
@@ -431,8 +445,8 @@
         }
     </script>
 </head>
-	<body>
-        <div class="container-fluid">
+	<body style="overflow-y:hidden">
+        <div class="container-fluid" style="overflow:hidden">
 	        <div class="row">
 		        <div class="col-md-12">
 					<div class="row">
@@ -448,8 +462,8 @@
 		        </div>
 	        </div>
 	        <div class="row row-margin-top">
-		        <div class="col-md-4 col-sm-4">
-                    <div id="tree"></div>
+		        <div class="col-md-4 col-sm-4" style="height:500px">
+                    <div id="tree" style="overflow-y:auto;height:100%"></div>
 		        </div>
 		        <div class="col-md-8 col-sm-8">
 					<div class="row">

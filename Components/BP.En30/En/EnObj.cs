@@ -19,7 +19,7 @@ namespace BP.En
         /// </summary>
         public void LoadRightFromCCGPM(Entity en)
         {
-            string sql = "SELECT Tag1  FROM V_GPM_EmpMenu WHERE  FK_Emp='"+BP.Web.WebUser.No+"'  AND Url LIKE '%" + en.ToString()+ "%'  ";
+            string sql = "SELECT Tag1  FROM V_GPM_EmpMenu WHERE  FK_Emp='" + BP.Web.WebUser.No + "'  AND Url LIKE '%" + en.ToString() + "%'  ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
@@ -64,8 +64,8 @@ namespace BP.En
             ps.Add("st", fk_station);
 
             bool bl;
-           
-                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
+
+            bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
 
             if (bl)
                 this.OpenAll();
@@ -84,7 +84,7 @@ namespace BP.En
         }
         public UAC OpenForAppAdmin()
         {
-            if (BP.Web.WebUser.No != null 
+            if (BP.Web.WebUser.No != null
                 && BP.Web.WebUser.No.Contains("admin") == true)
             {
                 this.OpenAll();
@@ -225,9 +225,9 @@ namespace BP.En
 
             foreach (Attr attr in this._enMap.Attrs)
             {
-                string key=attr.Key;
+                string key = attr.Key;
 
-                string v = this.GetValStringByKey(key,null);  // this._row[key] as string;
+                string v = this.GetValStringByKey(key, null);  // this._row[key] as string;
 
                 if (v == null || v.IndexOf('@') == -1)
                     continue;
@@ -269,7 +269,7 @@ namespace BP.En
                         this.SetValByKey(attr.Key, DataType.CurrentDataTime);
                     continue;
                 }
-               
+
             }
         }
         /// <summary>
@@ -277,7 +277,7 @@ namespace BP.En
         /// </summary>
         public void ResetDefaultVal()
         {
-           
+
             ResetDefaultValRowValues();
 
             Attrs attrs = this.EnMap.Attrs;
@@ -286,8 +286,8 @@ namespace BP.En
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
-               string v = attr.DefaultValOfReal as string;
-                if ( v==null || v.Contains("@")==false)
+                string v = attr.DefaultValOfReal as string;
+                if (v == null || v.Contains("@") == false)
                     continue;
 
                 string myval = this.GetValStrByKey(attr.Key);
@@ -297,6 +297,7 @@ namespace BP.En
                 switch (v)
                 {
                     case "@WebUser.No":
+                    case "@CurrWorker":
                         if (attr.UIIsReadonly == true)
                         {
                             this.SetValByKey(attr.Key, Web.WebUser.No);
@@ -350,6 +351,28 @@ namespace BP.En
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                        }
+                        continue;
+                    case "@WebUser.OrgNo": //@sly
+                        if (attr.UIIsReadonly == true)
+                        {
+                            this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
+                        }
+                        else
+                        {
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
+                        }
+                        continue;
+                    case "@WebUser.OrgName": //@sly
+                        if (attr.UIIsReadonly == true)
+                        {
+                            this.SetValByKey(attr.Key, Web.WebUser.OrgName);
+                        }
+                        else
+                        {
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, Web.WebUser.OrgName);
                         }
                         continue;
                     case "@RDT":
@@ -406,13 +429,10 @@ namespace BP.En
                             //执行SQL获取默认值
                             string sql = gloVar.Val;
                             sql = DealExp(sql, null, null);
-                            try{
-                                string val = DBAccess.RunSQLReturnString(sql);
-                                this.SetValByKey(attr.Key, val);
-                            }catch(Exception ex){
-                                this.SetValByKey(attr.Key, ex.Message+sql);
-                            }
                             
+                            //这里有异常就要跑出来 @sly.
+                            string val = DBAccess.RunSQLReturnString(sql);
+                            this.SetValByKey(attr.Key, val);
                         }
                         continue;
                 }
@@ -524,7 +544,7 @@ namespace BP.En
                 }
             }
 
-           
+
 
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
@@ -631,7 +651,7 @@ namespace BP.En
                 Map mp = (Map)value;
                 if (SystemConfig.IsDebug)
                 {
-                    
+
                 }
 
                 if (mp == null || mp.DepositaryOfMap == Depositary.None)
@@ -829,8 +849,8 @@ namespace BP.En
         /// <returns></returns>
         public string GetValStrByKey(string key)
         {
-            if(this.Row.GetValByKey(key)!=null)
-            return this.Row.GetValByKey(key).ToString();
+            if (this.Row.GetValByKey(key) != null)
+                return this.Row.GetValByKey(key).ToString();
             return "";
         }
         public string GetValStrByKey(string key, string isNullAs)
@@ -1010,7 +1030,7 @@ namespace BP.En
                         return int.Parse(attr.DefaultVal.ToString());
                 }
 
-                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "],错误信息:"+ex.Message);
+                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "],错误信息:" + ex.Message);
             }
         }
         /// <summary>
@@ -1024,7 +1044,7 @@ namespace BP.En
             if (DataType.IsNullOrEmpty(s))
                 s = this.EnMap.GetAttrByKey(key).DefaultVal.ToString();
 
-            if (int.Parse(s) < 0 || int.Parse(s)==0)
+            if (int.Parse(s) < 0 || int.Parse(s) == 0)
                 return false;
 
             if (s == "1")
@@ -1032,7 +1052,7 @@ namespace BP.En
 
             if (s.ToUpper().Equals("FALSE"))
                 return false;
-            if (s.ToUpper().Equals("TRUE") )
+            if (s.ToUpper().Equals("TRUE"))
                 return true;
 
             if (DataType.IsNullOrEmpty(s))
@@ -1074,7 +1094,7 @@ namespace BP.En
         public float GetValFloatByKey(string key, int blNum)
         {
             string val = this.Row.GetValByKey(key).ToString();
-            if (DataType.IsNullOrEmpty(val))                
+            if (DataType.IsNullOrEmpty(val))
                 return float.Parse(blNum.ToString("0.00"));
 
             return float.Parse(float.Parse(val).ToString("0.00"));
@@ -1210,10 +1230,10 @@ namespace BP.En
                         continue;
 
                     //日期类型.  @杜. 这里需要翻译.
-                    if (attr.Key.Equals("RDT") || attr.Key.Equals("Rec") )
+                    if (attr.Key.Equals("RDT") || attr.Key.Equals("Rec"))
                         continue;
 
-                    if (attr.DefaultValOfReal!=null && attr.DefaultValOfReal.Contains("@") == true)
+                    if (attr.DefaultValOfReal != null && attr.DefaultValOfReal.Contains("@") == true)
                         continue;
 
                     //if (attr.IsFK && DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
@@ -1390,7 +1410,7 @@ namespace BP.En
         {
             get
             {
-                if (this.GetType().BaseType.FullName.Equals("BP.En.EntityTree") ==true)
+                if (this.GetType().BaseType.FullName.Equals("BP.En.EntityTree") == true)
                     return true;
                 return false;
             }

@@ -697,7 +697,7 @@ namespace BP.Web
                     if (WebUser.No == null)
                         throw new Exception("@err-006 OrgName 登录信息丢失，或者在 CCBPMRunModel=0 的模式下不能读取该节点.");
 
-                    string val = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Org WHERE No='" + WebUser.OrgNo + "'");
+                    val = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Org WHERE No='" + WebUser.OrgNo + "'");
                     SetSessionByKey("OrgName", val);
                     return val;
                 }

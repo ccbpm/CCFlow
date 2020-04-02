@@ -48,6 +48,13 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("Default_Init");
+            if (workID.indexOf('err@') == 0)
+            {
+                alert(workID);
+             //   $("#info").html(workID);
+                return;
+            }
+
             var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + adminerSID;
 
             //负责人：@qfl
@@ -84,4 +91,5 @@
             <frame name="left" id="left" src="Left.html" />
             <frame name="right" id="right" src="Welcome.html" />
         </frameset>
+
 </html>

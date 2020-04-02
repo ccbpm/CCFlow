@@ -1045,7 +1045,7 @@
             if (ftype == 1) {
 
 
-                if (uiContralType == 0 || uiContralType == 13) {
+                if (uiContralType == 0 ) {
                     title = '字段String属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }
@@ -1086,6 +1086,12 @@
                     title = '图片附件';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&PKVal=' + mypk + '&s=' + Math.random();
                 }
+
+                if (uiContralType == 13) {
+                    title = '证件字段属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCard&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
                 if (uiContralType == 8) {
                     title = '书写签字版';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&PKVal=' + mypk + '&s=' + Math.random();

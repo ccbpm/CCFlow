@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>字段模版</title>
+    <link rel="stylesheet" type="text/css" href="../../../Scripts/easyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../../Scripts/easyUI/themes/icon.css" />
+    <script type="text/javascript" src="../../../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/jquery/jquery.easyui.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../js/ueditor/dialogs/internal.js"></script>
+    <script src="Public.js"></script>
+    <script language="javascript" type="text/javascript">
+
+        var fk_mapdata = GetQueryString("FK_MapData");
+        var groupID = GetQueryString("GroupField");
+        if (groupID == null)
+            groupID = 0;
+
+        var fType = GetQueryString("Type");
+
+        //页面启动函数.
+        $(function () {
+
+            var fk_mapData = GetQueryString("FK_MapData");
+            if (fk_mapData == null || fk_mapData == "") {
+                alert("参数FK_MapData为空.");
+                return;
+            }
+
+            var ens = new Entities("BP.Sys.MapDataTemplates");
+            ens.Retrieve("IsTemplate", 1);
+
+            if (ens.length == 0) {
+                $("#info").html("系统没有模版，<a href='javascript:CreateFrm()' >点击这里创建模版？</a>");
+                return;
+            }
+
+            var html = "";
+            html += "<ul>";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                var list = "<ul>";
+                //查询模板字段
+                var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                mapAttrs.Retrieve("FK_MapData", en.No);
+                //查询模板字段扩展
+                var mapExts = new Entities("BP.Sys.MapExts");
+                mapExts.Retrieve("FK_MapData", en.No);
+                for (var j = 0; j < mapAttrs.length; j++) {
+                    var mapAttr = mapAttrs[j];
+                    list += "<li><a href=\"javascript:AddMapAttr('" + mapAttr.KeyOfEn + "','" + mapAttr.FK_MapData + "')\" >" + mapAttr.KeyOfEn + "-" + mapAttr.Name;
+                    for (var i = 0; i < mapExts.length; i++) {
+                        if (mapAttr.KeyOfEn == mapExts[i].AttrOfOper) {
+                            list += "-" + mapExts[i].ExtType;
+                        }
+                    }
+                    list += "</a></li>";
+                }
+
+                list += "</ul>";
+
+                var edit = "<a href='../Designer.htm?FK_MapData=" + en.No + "' target=_blank>编辑模版</a>";
+
+                html += "<li>" + en.Name + " - " + edit + list + "</li>";
+            }
+            html += "</ul>";
+
+            $("#info").html(html);
+
+        });
+
+        //把这个字段增加到里面去.
+        function AddMapAttr(keyOfEn, fk_mapdata) {
+
+            //首先判断该字段是否存在？如果存在就让其修改名称.
+            var mypkOfMapAttr = fk_mapdata + "_" + keyOfEn;
+            var mapAttr = new Entity("BP.Sys.MapAttr", mypkOfMapAttr);
+
+            var name = window.prompt('请输入要增加的字段名称', mapAttr.Name);
+            if (name == undefined || name == null)
+                return;
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", GetQueryString("FK_MapData"), "Name", name);
+            if (mapAttrs.length >= 1) {
+                alert('名称：[' + name + "]已经存在.");
+                return;
+            }
+
+            var field = window.prompt('字段名', keyOfEn);
+            if (field == undefined || field == null)
+                return;
+
+
+
+
+
+            mapAttr.KeyOfEn = field;
+            mapAttr.Name = name;
+            mapAttr.MyPK = GetQueryString("FK_MapData") + "_" + field;
+            mapAttr.SetPKVal(mapAttr.MyPK);
+            if (mapAttr.IsExits() == true) {
+                alert('字段:' + field + "已经存在.");
+                return;
+            }
+
+            //增加新字段.
+            mapAttr.FK_MapData = GetQueryString("FK_MapData");
+            mapAttr.KeyOfEn = field;
+            mapAttr.Idx = 0;
+            mapAttr.Insert();
+            alert('字段插入成功' + mapAttr.MyPK);
+            var MapExts = new Entities("BP.Sys.MapExts");
+            MapExts.Retrieve("FK_MapData", fk_mapdata);
+            for (var i = 0; i < MapExts.length; i++) {
+                var mapExt = MapExts[i];
+                var en = new Entity("BP.Sys.MapExt", mapExt);
+                en.FK_MapData = GetQueryString("FK_MapData");
+                en.MyPK = mapExt.MyPK;
+                en.MyPK = en.MyPK.replace(fk_mapdata, GetQueryString("FK_MapData"));
+                en.MyPK = en.MyPK.replace(keyOfEn, field); //替换字段.
+                en.AttrOfOper = field;
+                en.SetPKVal(en.MyPK);
+                en.Insert();
+            }
+            InsertHtmlToEditor(GetDataType(mapAttr), field, name);
+            dialog.close();
+           
+        }
+
+        //类型转换
+        function GetFieldType(FieldType, dataType) {
+            if (FieldType == "1") {
+                if (dataType == "SignCheck")
+                    return "SignCheck";
+                return "Text";
+            } else if (FieldType == "2") {
+                return "Int";
+            } else if (FieldType == "3") {
+                return "Float";
+            } else if (FieldType == "4") {
+                return "CheckBox";
+            } else if (FieldType == "5") {
+                return "Double";
+            } else if (FieldType == "6") {
+                return "Date";
+            } else if (FieldType == "7") {
+                return "DateTime";
+            } else if (FieldType == "8") {
+                return "Money";
+            } else if (FieldType == "14") {
+                return "SignCheck";
+            }
+
+        }
+
+
+        //创建模版.
+        function CreateFrm() {
+
+            var en = new Entity("BP.Sys.MapDataTemplate");
+
+            var name = window.prompt('请输入模版的名称', '我的字段模版');
+            if (name == undefined || name == "")
+                return;
+
+            var ens = new Entities("BP.Sys.MapDataTemplates");
+            ens.Retrieve("IsTemplate", 1);
+
+            en.No = "Temp" + ens.length;
+            en.Name = name;
+            en.IsTemplate = 1;
+            en.Insert();
+
+            var url = "../Designer.htm?FK_MapData=" + en.No;
+            window.open(url);
+        }
+
+        //字段分组.
+        function Group() {
+
+            var url = "FieldsGroup.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
+
+        function Fields() {
+
+            var url = "Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+
+        }
+    </script>
+    <!--<base target="_self" /> -->
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div style="padding-left:30px">
+        <h3><a href="javascript:Fields();">字段模版</a> -字段群模版</h3>
+        <div id="info">
+        </div>
+    </div>
+    
+
+    
+</body>
+</html>

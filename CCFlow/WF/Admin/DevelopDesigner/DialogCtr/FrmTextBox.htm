@@ -164,55 +164,67 @@
             window.location.href = url;
         }
 
+        function ToTemplate() {
+            var url = "./Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
+
 </script>
 </head>
 <body>
     <form id="from1" action="">
-    <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 95%;margin:5px;">
-        <tr>
-            <th> 字段中文名称 </th>
-            <th> 字段类型 </th>
-        </tr>
-        <tr>
-            <td>
-                <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
-            </td>
-            <td rowspan="4">
-                <input id="RB_String" type="radio" name="Field_Type" value="1" checked="checked" /><label for="RB_String">文字类型(地址、电话、公司名称)</label><br />
-                <input id="RB_Int" type="radio" name="Field_Type" value="2" /><label for="RB_Int">整数类型(年龄、个数)</label><br />
-                <input id="RB_Float" type="radio" name="Field_Type" value="3" /><label for="RB_Float">浮点类型(身高、体重、长度)</label><br />
-                <input id="RB_Money" type="radio" name="Field_Type" value="8" /><label for="RB_Money">金额类型(应付、应收、单价)</label><br />
-                <input id="RB_Date" type="radio" name="Field_Type" value="6" /><label for="RB_Date">日期类型(出生日期、还款日期)</label><br />
-                <input id="RB_DateTime" type="radio" name="Field_Type" value="7" /><label for="RB_DateTime">日期时间类型(发生时间、出发时间)</label><br />
-                <input id="RB_Boolen" type="radio" name="Field_Type" value="4" /><label for="RB_Boolen">Boolen型(是否同意、是否结算)</label><br />
-                <input id="RB_SignCheck" type="radio" name="Field_Type" value="14" /><label for="RB_SignCheck">签批组件</label><br />
-            </td>
-        </tr>
-        <tr>
-            <td>英文字段<font color=gray>(必须以下划线字母开头) </font></td>
-        </tr>
-        <tr>
-            <td>
-                <input id="TB_KeyOfEn" class="easyui-textbox" style="width: 200px" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input id="RB_qp" type="radio" name="RB_qpjp" checked="checked" value="ziduanquanpin" /><label
-                    for="RB_qp">字段全拼</label>
-                <input id="RB_jp" type="radio" name="RB_qpjp" value="ziduanjianpin" /><label for="RB_jp">字段简拼</label>
+        <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 95%;margin:5px;">
+            <tr>
+                <th colspan="2">
+                    <div style="float: left">
+                        字段中文名称
+                    </div>
+                    <div style="float: right" id="Temp0">
+                        <!--<a href="javascript:HidAttr();">隐藏字段</a>|-->
+                        <a href="javascript:ToTemplate();">常用字段模版</a>
+                    </div>
+                </th>
+            </tr>
+          
+            <tr>
+                <td>
+                    <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
+                </td>
+                <td rowspan="4">
+                    <input id="RB_String" type="radio" name="Field_Type" value="1" checked="checked" /><label for="RB_String">文字类型(地址、电话、公司名称)</label><br />
+                    <input id="RB_Int" type="radio" name="Field_Type" value="2" /><label for="RB_Int">整数类型(年龄、个数)</label><br />
+                    <input id="RB_Float" type="radio" name="Field_Type" value="3" /><label for="RB_Float">浮点类型(身高、体重、长度)</label><br />
+                    <input id="RB_Money" type="radio" name="Field_Type" value="8" /><label for="RB_Money">金额类型(应付、应收、单价)</label><br />
+                    <input id="RB_Date" type="radio" name="Field_Type" value="6" /><label for="RB_Date">日期类型(出生日期、还款日期)</label><br />
+                    <input id="RB_DateTime" type="radio" name="Field_Type" value="7" /><label for="RB_DateTime">日期时间类型(发生时间、出发时间)</label><br />
+                    <input id="RB_Boolen" type="radio" name="Field_Type" value="4" /><label for="RB_Boolen">Boolen型(是否同意、是否结算)</label><br />
+                    <input id="RB_SignCheck" type="radio" name="Field_Type" value="14" /><label for="RB_SignCheck">签批组件</label><br />
+                </td>
+            </tr>
+            <tr>
+                <td>英文字段<font color=gray>(必须以下划线字母开头) </font></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="TB_KeyOfEn" class="easyui-textbox" style="width: 200px" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="RB_qp" type="radio" name="RB_qpjp" checked="checked" value="ziduanquanpin" /><label for="RB_qp">字段全拼</label>
+                    <input id="RB_jp" type="radio" name="RB_qpjp" value="ziduanjianpin" /><label for="RB_jp">字段简拼</label>
 
-                <a href="#"  onclick="SelectOne();" title="从数据表里选择字段"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">选择字段</a>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input id="CB_scbq" type="checkbox" checked="checked" /><label for="CB_scbq">是否根据名称生成标签</label>
-                <input id="CB_sfyczd" type="checkbox" /><label for="CB_sfyczd">是否隐藏字段</label>
+                    <a href="#" onclick="SelectOne();" title="从数据表里选择字段" class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">选择字段</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input id="CB_scbq" type="checkbox" checked="checked" /><label for="CB_scbq">是否根据名称生成标签</label>
+                    <input id="CB_sfyczd" type="checkbox" /><label for="CB_sfyczd">是否隐藏字段</label>
 
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
     </form>
 </body>
 </html>

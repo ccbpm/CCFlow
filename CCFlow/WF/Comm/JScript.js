@@ -1053,7 +1053,37 @@ function GetIDCardInfo(event) {
                 $("#TB_IDCardName").html(data.words_result.姓名.words);
                 $("#TB_IDCardNo").html(data.words_result.公民身份号码.words);
                 $("#TB_IDCardAddress").html(data.words_result.住址.words);
-                //data.words_result.出生.words   data.words_result.性别.words  data.words_result.民族.words
+                var mianData;
+                if (flowData != null && flowData != undefined)
+                    mianData = flowData;
+                if ((mianData == null || mianData == undefined) && (frmData != null && frmData != undefined))
+                    mianData = frmData;
+
+                if (mianData != null && mianData != undefined) {
+                    var mapExts = mianData.Sys_MapExt;
+                    var mapAttrs = mianData.Sys_MapAttr;
+                    for (var i = 0; i < mapExts.length; i++) {
+                        var mapExt = mapExts[i];
+                        var mapAttr = null;
+                        for (var j = 0; j < mapAttrs.length; j++) {
+                            if (mapAttrs[j].FK_MapData == mapExt.FK_MapData && mapAttrs[j].KeyOfEn == mapExt.AttrOfOper) {
+                                mapAttr = mapAttrs[j];
+                                break;
+                            }
+                        }
+                        if (mapAttr == null)
+                            continue;
+                        if (mapAttr.UIContralType != 13)
+                            continue;
+
+                        var DDLFull =GetPara(mapAttr.AtPara,"IsFullData");
+                        if (DDLFull != undefined && DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
+                            FullIt($("#TB_" + mapExt.AttrOfOper).val(), mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+                    }
+                }
+                   
+                
             }
 
         },

@@ -28,9 +28,13 @@ namespace BP.GPM
         /// </summary>
         public const string Url = "Url";
         /// <summary>
-        /// 连接
+        /// 连接（pc）
         /// </summary>
         public const string UrlExt = "UrlExt";
+        /// <summary>
+        /// 连接（移动端）
+        /// </summary>
+        public const string MobileUrlExt = "MobileUrlExt";
         /// <summary>
         /// 控制内容
         /// </summary>
@@ -253,6 +257,17 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.UrlExt, value);
             }
         }
+        public string MobileUrlExt
+        {
+            get
+            {
+                return this.GetValStringByKey(MenuAttr.MobileUrlExt);
+            }
+            set
+            {
+                this.SetValByKey(MenuAttr.MobileUrlExt, value);
+            }
+        }
         public bool IsCheck = false;
         /// <summary>
         /// 标记
@@ -343,7 +358,8 @@ namespace BP.GPM
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 //map.AddTBString(MenuAttr.Url, null, "连接", false, false, 0, 3900, 200, true);
-                map.AddTBString(MenuAttr.UrlExt, null, "连接", true, false, 0, 3900, 200, true);
+                map.AddTBString(MenuAttr.UrlExt, null, "PC端连接", true, false, 0, 3900, 200, true);
+                map.AddTBString(MenuAttr.MobileUrlExt, null, "移动端连接", true, false, 0, 3900, 200, true);
 
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);

@@ -1293,7 +1293,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //执行事件, 不应该加.
-                if (1 == 1)
+                if (1 == 2)
                     md.DoEvent(FrmEventList.SaveBefore, en, null);
                 #endregion 执行装载填充.与相关的事件.
 

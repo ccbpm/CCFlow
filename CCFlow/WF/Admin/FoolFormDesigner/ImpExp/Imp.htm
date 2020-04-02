@@ -40,6 +40,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../../Scripts/download.js"></script>
     <script type="text/javascript" language="javascript">
 
         closeWhileEscUp();
@@ -688,7 +689,26 @@
             alert(data);
 
         }
+        //导出表单模板
+        function Down() {
 
+            //var frmID = GetQueryString("FK_MapData");
+            var md = new Entity("BP.Sys.MapData", frmID);
+
+            //创建处理类.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("DownFormTemplete"); //执行方法，返回执行结果.
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            download(data, md.Name + ".xml", "xml");
+            return;
+        }
 
     </script>
 </head>
@@ -710,6 +730,17 @@
                         <br />
                         <input type="file" id="localXmlFile" name="localXmlFile" />
                         <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
+                    </fieldset>
+                </div>
+            </div>
+            <div title="导出表单模板" style="">
+                <div style="text-align: left; padding: 15px;">
+                    <fieldset>
+                        <legend>下载到本机 </legend>
+                        <ul>
+                            <li id="downli">驰骋工作流引擎已经为您生成了表单模版文件，<a href="javascript:Down();">请点击这里下载到本机</a></li>
+                            <li>该xml格式的表单模版文件可以通过，软盘交换到其它ccbpm系统中去。</li>
+                        </ul>
                     </fieldset>
                 </div>
             </div>
@@ -756,9 +787,9 @@
                         <input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
                     </fieldset>
                     <!--<div id="divSrcImp" data-options="region:'center',title:'导入字段生成表单',fit:true" style="padding: 5px;">
-                        <div id="srclayout">
-                        </div>
-                    </div>-->
+                <div id="srclayout">
+                </div>
+            </div>-->
                 </div>
                 <input type="hidden" id="hid_FK_SFDBSrc" name="hid_FK_SFDBSrc" value=" " />
                 <input type="hidden" id="hid_STable" name="hid_STable" value=" " />

@@ -248,6 +248,7 @@
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />

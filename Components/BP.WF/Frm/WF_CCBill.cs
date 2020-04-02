@@ -233,8 +233,12 @@ namespace BP.Frm
         {
             //  throw new Exception("dddssds");
             //执行保存.
+            MapData md = new MapData(this.FrmID);
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+
+            //执行保存前事件
+            md.DoEvent(FrmEventList.SaveBefore, rpt, null);
 
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
@@ -247,6 +251,9 @@ namespace BP.Frm
             rpt.Update();
 
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+
+            //执行保存后事件
+            md.DoEvent(FrmEventList.SaveAfter, rpt, null);
             return str;
         }
 
@@ -258,8 +265,12 @@ namespace BP.Frm
         {
             //  throw new Exception("dddssds");
             //执行保存.
+            MapData md = new MapData(this.FrmID);
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+
+            //执行保存前事件
+            md.DoEvent(FrmEventList.SaveBefore, rpt, null);
 
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
@@ -272,6 +283,9 @@ namespace BP.Frm
             rpt.Update();
 
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+
+            //执行保存后事件
+            md.DoEvent(FrmEventList.SaveAfter, rpt, null);
             return str;
         }
 

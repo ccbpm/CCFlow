@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .row-margin-top {
+            margin-top: 20px;
+        }
+
+        .search-margin {
+            margin-top: 15px;
+        }
+    </style>
+    <script type="text/javascript">
+        var rootNo = "0";
+        var frmID = GetQueryString("FK_Frm");
+        var stationID = GetQueryString("FK_Station");
+        $(function () {
+
+            //global
+            var global = window;
+            global.selectedNodes = [];
+            global.selectedRows = [];
+
+
+            var tip = "请输入关键字"; //mapExt.GetPara("SearchTip");
+            $("#TB_Key").attr("placeholder", tip); //设置查询提示.
+
+            var statDepts = new Entities("BP.Frm.FrmStationDepts");
+            statDepts.Retrieve("FK_Frm", frmID, "FK_Station", stationID);
+            //选择的数据.
+            $.each(statDepts, function (i, statDept) {
+                if(statDept.FK_Dept!="")
+                global.selectedNodes.push({ "No": statDept.FK_Dept, "Name": statDept.FK_DeptText });
+            });
+
+
+            // search
+            $("#TB_Key").on("keyup", function () {
+
+                var keyWord = $(this).val();
+                if (keyWord == "") {
+                    $('#viewGrid_Panel').hide();
+                    $('#tree_Panel').show();
+                    return;
+                }
+                loadViewGrid(keyWord);
+
+            });
+
+
+            $('#viewGrid_Panel').hide();
+            $('#tree_Panel').show();
+
+            loadTree(rootNo, global);
+
+        });
+
+        //树形结构转换
+        var treeJson = [];
+        function createJsonToTree(jsonArray, parentNo) {
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+                    var selectedNodes = window.selectedNodes;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return data.No == obj.No;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
+                    }
+                    treeJson.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(treeJson);
+            return treeJson;
+        }
+
+        function creatTreeChildern(jsonArray, parentNo) {
+            var childList = []
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+                    var selectedNodes = window.selectedNodes;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return data.No == obj.No;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
+                    }
+                    childList.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+
+            return childList;
+        }
+
+
+        function loadTree(rootNo, global) {
+
+
+            var ens = new Entities("BP.GPM.Depts"); //BP.Port.Depts
+            ens.RetrieveAll();
+            var jsonTree = createJsonToTree(ens, rootNo);
+            $('#tree').treeview({
+                data: jsonTree,         // 数据源
+                showCheckbox: true,   //是否显示复选框
+                highlightSelected: false,    //是否高亮选中
+                nodeIcon: 'glyphicon',
+                emptyIcon: '',    //没有子节点的节点图标
+                multiSelect: false,    //多选
+                onNodeChecked: function (event, node) {
+                    var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+                    if (selectNodes.length > 0) { //子节点不为空，则选中所有子节点
+                        $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
+                        saveCheckNodes(selectNodes, 1);
+                    }
+                    var en = new Entity("BP.Frm.FrmStationDept");
+                    en.FK_Frm = frmID;
+                    en.FK_Station = stationID;
+                    en.FK_Dept= node.id;
+                    en.Save();
+
+                   
+
+                },
+                onNodeUnchecked: function (event, node) {
+
+                    var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
+                    if (selectNodes.length > 0) { //子节点不为空，则取消选中所有子节点
+                        $('#tree').treeview('uncheckNode', [selectNodes, { silent: true }]);
+                        deleteCheckNodes(selectNodes, 1);
+                    }
+
+                    var en = new Entity("BP.Frm.FrmStationDept");
+                    en.FK_Frm = frmID;
+                    en.FK_Station = stationID;
+                    en.FK_Dept = node.id;
+                    en.Delete();
+                },
+                onNodeSelected: function (event, node) {
+
+                    var tree = $('#tree');
+                    if (node.state.expanded) {
+                        //处于展开状态则折叠
+                        tree.treeview('collapseNode', node.nodeId);
+                    } else {
+                        //展开
+                        tree.treeview('expandNode', node.nodeId);
+                    }
+                }
+            });
+        }
+
+        //查询列表
+        function loadViewGrid(gridUrl) {
+
+            var global = window;
+            var columns = mapExt.Tag;
+            var searchTableColumns = [{
+                field: "_checkbox",
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.checked) {
+                        return {
+                            "checked": true,
+                            "disabled": row.disabled
+                        }
+                    }
+                }
+            }];
+
+            //显示列的中文名称.
+            if (typeof columns == "string") {
+                $.each(columns.split(","), function (i, o) {
+                    var exp = o.split("=");
+                    var field;
+                    var title;
+                    if (exp.length == 1) {
+                        field = title = exp[0];
+                    } else if (exp.length == 2) {
+                        field = exp[0];
+                        title = exp[1];
+                    }
+                    if (!isLegalName(field)) {
+                        return true;
+                    }
+                    searchTableColumns.push({
+                        field: field,
+                        title: title
+                    });
+                });
+            } else {
+                // by default
+                searchTableColumns.push({
+                    field: 'No',
+                    title: '编号'
+                });
+                searchTableColumns.push({
+                    field: 'Name',
+                    title: '名称'
+                });
+            }
+            // grid
+            $('#viewGrid').bootstrapTable({
+                cache: false,
+                minimumCountColumns: 2,
+                clickToSelect: true,
+                sortable: false,
+                maintainSelected: true,
+                singleSelect: !mapExt.ShowCheckBox,
+                uniqueId: "No",
+                columns: searchTableColumns
+            });
+
+            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
+            if ($.isArray(json)) {
+                $('#tree_Panel').hide();
+                $('#viewGrid_Panel').show();
+                var selectedRows = window.selectedNodes;
+                if ($.isArray(selectedRows)) {
+                    $.each(json, function (i, o) {
+                        var sel = $.grep(selectedRows, function (obj) {
+                            return o.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            o.checked = true;
+                            //多选时才需要禁用已选
+                            if (mapExt.ShowCheckBox == true) {
+                                o.disabled = true;
+                            }
+                        }
+                    });
+                }
+                $('#viewGrid').bootstrapTable("load", json);
+            }
+        }
+
+        function isLegalName(name) {
+
+            if (name == false) {
+                return false;
+            }
+            return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+        }
+
+
+
+
+        function getChildNodeIdArr(node, checked) {
+            var ts = [];
+            if (node.nodes) {
+                for (x in node.nodes) {
+                    ts.push(node.nodes[x].nodeId);
+                    if (node.nodes[x].nodes) {
+                        var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                        for (j in getNodeDieDai) {
+                            ts.push(getNodeDieDai[j]);
+                        }
+                    }
+                }
+            }
+            return ts;
+        }
+
+        function setParentNodeCheck(node) {
+            var parentNode = $("#tree").treeview("getNode", node.parentId);
+            if (parentNode.nodes) {
+                var checkedCount = 0;
+                for (x in parentNode.nodes) {
+                    if (parentNode.nodes[x].state.checked) {
+                        checkedCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (checkedCount === parentNode.nodes.length) {
+                    var en = new Entity("BP.Frm.FrmStationDept");
+                    en.FK_Frm = frmID;
+                    en.FK_Station = stationID;
+                    en.FK_Dept = parentNode.nodeId;
+                    en.Save();
+
+                    $("#tree").treeview("checkNode", parentNode.nodeId);
+                    setParentNodeCheck(parentNode);
+                }
+            }
+        }
+
+        var en = null;
+        function saveCheckNodes(selectNodes, flag) {
+            for (var i = 0; i < selectNodes.length; i++) {
+                en = new Entity("BP.Frm.FrmStationDept");
+                en.FK_Frm = frmID;
+                en.FK_Station = stationID;
+                if (flag == 0)
+                    en.FK_Dept = selectNodes[i].id;
+                else
+                    en.FK_Dept = $('#tree').treeview('getNode', selectNodes[i]).id;
+                en.Save();
+            }
+        }
+        function deleteCheckNodes(selectNodes, flag) {
+            for (var i = 0; i < selectNodes.length; i++) {
+                en = new Entity("BP.Frm.FrmStationDept");
+                var deptId;
+                if (flag == 0)
+                    deptId = selectNodes[i].id;
+                else
+                    deptId = $('#tree').treeview('getNode', selectNodes[i]).id;
+
+                en.FK_Frm = frmID;
+                en.FK_Station = stationID;
+                en.FK_Dept = deptId;
+                en.Delete();
+
+                
+            }
+        }
+        function CheckAll() {
+            $('#tree').treeview('checkAll', { silent: true });
+            var selectNodes = $('#tree').treeview('getChecked');
+            if (selectNodes) { //子节点不为空，则选中所有子节点
+                saveCheckNodes(selectNodes, 0);
+            }
+
+        }
+        function UnCheckAll() {
+            $('#tree').treeview('uncheckAll', { silent: true });
+            var selectNodes = $('#tree').treeview('getUnselected');
+
+            if (selectNodes) { //子节点不为空，则取消选中所有子节点
+                deleteCheckNodes(selectNodes, 0);
+            }
+
+        }
+
+
+        function Close() {
+            alert("尚未实现.");
+        }
+
+        /**/</script>
+</head>
+<body>
+    <div class="row row-margin-top" style="width:96%;">
+        <div id="tree"></div>
+    </div>
+
+    <input type="button" value="全选" id="Cancel" onclick="CheckAll()" />
+    <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()" />
+
+    <!--</div>-->
+</body>
+</html>

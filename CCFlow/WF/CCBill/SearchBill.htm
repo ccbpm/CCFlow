@@ -201,9 +201,8 @@
                 }
             }
 
-            //格式为: @WFSta=0@FK_Dept=02
-            var json = AtParaToJson(ur.Vals);
-
+           
+            //增加外键
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 var W = attr.Width;
@@ -221,6 +220,7 @@
                     count = 0;
                 }
             }
+            
 
             //增加按钮.
             html += '<td align="left" colspan=2 style="padding-top:4px"><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
@@ -271,6 +271,19 @@
 
             $("#toolBar").append(html);
 
+            //为查询外键赋值.
+            //格式为: @WFSta=0@FK_Dept=02
+            var json = AtParaToJson(ur.Vals);
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var selectVal = json[attr.Field];
+
+                if ((selectVal == undefined || selectVal == "") && attr.Field!="FK_Dept")
+                    $("#DDL_" + attr.Field).val("all");
+                else
+                    $("#DDL_" + attr.Field).val(selectVal);
+            }
+
             return true;
         }
 
@@ -278,7 +291,8 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = "";
-            operations += "<option value='all' >全部</option>";
+            if (mapAttr.Field!="FK_Dept")
+                operations += "<option value='all' >全部</option>";
 
             var ens = frmData[mapAttr.Field];
             if (ens == null) {
@@ -351,9 +365,9 @@
             if (url.indexOf("PageIdx") != -1)
                 url = replaceParamVal(url, "PageIdx", 1);
 
-            BindTable();
-
-            window.location.href = url;
+            SearchData();
+            pageIdx = 1;
+            Paginator(pages, pageIdx);
         }
 
 
@@ -368,7 +382,13 @@
                 ur.OrderBy = orderBy;
             if (orderWay != null && orderWay != undefined)
                 ur.OrderWay = orderWay;
+
+            if ($("#DDL_FK_Dept").length == 1) {
+                ur.Vals = ur.Vals + "@FK_Dept=" + $("#DDL_FK_Dept").val();
+            }
             ur.Update();
+
+           
 
             //查询集合
             var data = handler.DoMethodReturnString("Search_Init");

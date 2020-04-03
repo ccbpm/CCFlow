@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>数据查询权限</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/PinYin.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js"></script>
+
+    <base target="_self" />
+
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+            var frmID = GetQueryString("FrmID");
+            var en = new Entity("BP.Frm.FrmBill", frmID);
+            GenerFullAllCtrlsVal(en);
+            if (en.GetPara("SearchDataRole") == 3)
+                showStas();
+
+        });
+
+        function Save() {
+            //创建实体.
+            var frmID = GetQueryString("FrmID");
+            var en = new Entity("BP.Frm.FrmBill", frmID);
+            en.SetPara("SearchDataRole", $("input[type=radio]:checked").val())
+            en.SetPKVal(frmID);
+            en.Update();
+            window.location.href = window.location.href;
+        }
+
+        function OpenStation() {
+            var frmID = GetQueryString("FrmID");
+            var url = "../Opt/FrmStationGroup.htm?FK_Frm=" + frmID;
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 120;
+            OpenEasyUiDialogExtCloseFunc(url, '设置岗位', W, H, function () {
+                //显示选择的岗位信息
+                showStas();
+            });
+        }
+
+        function SetDeptByStation(stationID) {
+            var frmID = GetQueryString("FrmID");
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 120;
+            var url = "../Opt/FrmDeptGroup.htm?FK_Frm=" + frmID + "&FK_Station=" + stationID;
+            OpenEasyUiDialogExtCloseFunc(url, '设置部门', W, H, function () {
+                //显示选择的岗位信息
+                showStas();
+            });
+        }
+
+        function showStas() {
+            //获取设置的岗位
+            var staDepts = new Entities("BP.Frm.FrmStationDepts");
+            staDepts.Retrieve("FK_Frm", GetQueryString("FrmID"));
+            var _Html = "";
+            for (var i = 0; i < staDepts.length; i++) {
+                var staDept = staDepts[i];
+                if (staDept.FK_Dept == null || staDept.FK_Dept == undefined || staDept.FK_Dept =="") {
+                    _Html += "<tr style='background-color: #f9f9f9;font-weight: bold;'><td colspan=8><span style='margin-right:20px'>" + staDept.FK_StationText + "</span><a href='javaScript:void(0)' onclick='SetDeptByStation(\"" + staDept.FK_Station + "\")'>设置岗位关联的部门</a></td></tr>";
+                    var count = 0;
+                    for (var idx = 0; idx < staDepts.length; idx++) {
+                        if (staDepts[idx].FK_Station != staDept.FK_Station || staDepts[idx].FK_Dept=="")
+                            continue;
+                        if (count == 0)
+                            _Html += "<tr>";
+                        _Html += "<td>" + staDepts[idx].FK_DeptText + "</td>";
+                        count++;
+                        if (count == 8) {
+                            _Html += "</tr><tr>;"
+                            count = 0;
+                        }
+                          
+                    }
+                    _Html += "</tr>";
+                    continue;
+                }
+            }
+
+            $("#stationDept").html(_Html);
+        }
+    </script>
+</head>
+<body onkeypress="Esc();" style="font-size: smaller">
+    <table id="Table1" style="width: 100%">
+        <caption>
+            数据查询权限
+        </caption>
+        <!-- 规则1 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="radio" value="0"   id="RBPara_SearchDataRole_0" name="RBPara_SearchDataRole" />
+                    只可以查询自己创建的数据</label>
+            </th>
+        </tr>
+        <tr>
+            <td >
+                <ul>
+                    <li>只能查看自己创建的数据。</li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则1 -->
+
+        <!-- 规则2 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="radio" value="1" checked="true" id="RBPara_SearchDataRole_1" name="RBPara_SearchDataRole" />
+                    可以查询本部门创建的数据</label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>可以查询本部门所有同事创建的数据包含兼职部门的数据</li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则2 -->
+
+    
+       <!-- 规则3 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="radio" value="2" id="RBPara_SearchDataRole_2" name="RBPara_SearchDataRole" />
+                    可以查询本部门与本部门一下的数据</label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>查询本部门及本部门以下所有子级的部门包含兼职部门的数据.</li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则3 -->
+
+        <!-- 规则4 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="radio" value="3" id="RBPara_SearchDataRole_3" name="RBPara_SearchDataRole" />
+                    按照岗位设置可以查询的部门集合计算</label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>选择岗位，然后设置岗位关联可以查询的部门.</li>
+                    <li><a href="javaScript:void(0)" onclick="OpenStation()">设置岗位</a></li>
+                </ul>
+                <table id="stationDept" style="width:90%">
+                </table>
+            </td>
+        </tr>
+        <!-- end规则4 -->
+    </table>
+
+                <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+                <input type="button" id="Btn_Help" value="我需要帮助" onclick="Help()" />
+</body>
+</html>

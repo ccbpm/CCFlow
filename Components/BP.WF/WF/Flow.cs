@@ -6175,7 +6175,7 @@ namespace BP.WF
             }
             #endregion
 
-            //处理OrgNo 的导入问题. @sly.
+            //处理OrgNo 的导入问题.
             if (Glo.CCBPMRunModel != CCBPMRunModel.GroupInc)
             {
                 fl.RetrieveFromDBSources();

@@ -919,7 +919,7 @@ namespace BP.WF.HttpHandler
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 
-            #region 动态构造 流程类别. @sly.
+            #region 动态构造 流程类别.
             DataTable dtSort = new DataTable("Sort");
             dtSort.Columns.Add("No", typeof(string));
             dtSort.Columns.Add("Name", typeof(string));

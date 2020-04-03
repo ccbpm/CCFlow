@@ -21,6 +21,26 @@ namespace BP.Frm
         FrmDict = 2,
         EntityTree = 3
     }
+
+    public enum SearchDataRole
+    {
+        /// <summary>
+        /// 只查询自己创建的
+        /// </summary>
+        ByOnlySelf = 0,
+        /// <summary>
+        /// 查询本部门创建的包含兼职部门
+        /// </summary>
+        ByDept = 1,
+        /// <summary>
+        /// 查询本部门（包含兼职部门）及子级部门
+        /// </summary>
+        ByDeptAndSSubLevel = 2,
+        /// <summary>
+        /// 根据岗位设定的部门的集合
+        /// </summary>
+        ByStationDept = 3
+    }
     /// <summary>
     /// 实体表单 - Attr
     /// </summary>
@@ -425,6 +445,14 @@ namespace BP.Frm
                 rm.RefAttrKey = FrmBillAttr.BtnSearchLabel;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "数据查询权限规则";
+                rm.ClassMethodName = this.ToString() + ".DoSearchDataRole()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "权限规则";
+                map.AddRefMethod(rm);
+
                 #endregion
 
 
@@ -553,6 +581,15 @@ namespace BP.Frm
         public string DoDeleteRole()
         {
             return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
+        }
+
+        /// <summary>
+        /// 数据查询权限规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearchDataRole()
+        {
+            return "../../CCBill/Admin/SearchDataRole.htm?s=34&FrmID=" + this.No;
         }
         #endregion 权限控制.
 

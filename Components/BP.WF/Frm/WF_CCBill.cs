@@ -389,12 +389,12 @@ namespace BP.Frm
             MapAttrs attrs = new MapAttrs(this.FrmID);
 
             #region //增加枚举/外键字段信息
-
             dt.Columns.Add("Field", typeof(string));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("Width", typeof(int));
             dt.TableName = "Attrs";
-
+            dt.PrimaryKey = new DataColumn[] { dt.Columns["Field"] };
+            ds.Tables.Add(dt);
             string[] ctrls = md.RptSearchKeys.Split('*');
             DataTable dtNoName = null;
 
@@ -416,8 +416,13 @@ namespace BP.Frm
                 dr["Width"] = mapattr.UIWidth;
                 dt.Rows.Add(dr);
 
+               
                 Attr attr = mapattr.HisAttr;
+
                 if (mapattr == null)
+                    continue;
+
+                if (attr.Key.Equals("FK_Dept"))
                     continue;
 
                 if (attr.IsEnum == true)
@@ -471,12 +476,102 @@ namespace BP.Frm
 
             }
 
-            ds.Tables.Add(dt);
 
+
+
+            //数据查询权限除只查看自己创建的数据外增加部门的查询条件
+            SearchDataRole searchDataRole = (SearchDataRole)md.GetParaInt("SearchDataRole");
+            if (searchDataRole != SearchDataRole.ByOnlySelf)
+            {
+                //增加部门的查询条件
+                if(dt.Rows.Contains("FK_Dept") == false)
+                {
+                    dr = dt.NewRow();
+                    dr["Field"] = "FK_Dept";
+                    dr["Name"] ="部门";
+                    dr["Width"] = 120;
+                    dt.Rows.Add(dr);
+                }
+
+                DataTable dd = GetDeptDataTable(searchDataRole,md);
+                dd.TableName = "FK_Dept";
+                ds.Tables.Add(dd);
+
+            }
+           
             return BP.Tools.Json.ToJson(ds);
 
         }
         #endregion 查询条件
+
+        private DataTable GetDeptDataTable(SearchDataRole searchDataRole,MapData md)
+        {
+            //增加部门的外键
+            DataTable dt = new DataTable();
+            string sql = "";
+            if (searchDataRole == SearchDataRole.ByDept)
+            {
+                sql = "SELECT D.No,D.Name From Port_Dept D,Port_DeptEmp E WHERE D.No=E.FK_Dept AND E.FK_Emp='" + WebUser.No + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+            }
+            if (searchDataRole == SearchDataRole.ByDeptAndSSubLevel)
+            {
+                dt = GetDeptAndSubLevel();
+            }
+            if (searchDataRole == SearchDataRole.ByStationDept)
+            {
+                sql = "SELECT D.No,D.Name From Port_Dept D WHERE D.No IN(SELECT F.FK_Dept FROM Frm_StationDept F,Port_DeptEmpStation P Where F.FK_Station = P.FK_Station AND F.FK_Frm='" + md.No + "' AND P.FK_Emp='" + WebUser.No + "')";
+                dt = DBAccess.RunSQLReturnTable(sql);
+            }
+            foreach (DataColumn col in dt.Columns)
+            {
+                string colName = col.ColumnName.ToLower();
+                switch (colName)
+                {
+                    case "no":
+                        col.ColumnName = "No";
+                        break;
+                    case "name":
+                        col.ColumnName = "Name";
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+            return dt;
+        }
+
+        private DataTable GetDeptAndSubLevel()
+        {
+            //获取本部门和兼职部门
+            string sql = "SELECT D.No,D.Name From Port_Dept D,Port_DeptEmp E WHERE D.No=E.FK_Dept AND E.FK_Emp='" + WebUser.No + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.PrimaryKey = new DataColumn[] { dt.Columns["No"] };
+            DataTable dd = dt.Copy();
+            foreach(DataRow dr in dd.Rows)
+            {
+                GetSubLevelDeptByParentNo(dt, dr[0].ToString());
+            }
+            return dt;
+        }
+
+        private void GetSubLevelDeptByParentNo( DataTable dt,string parentNo)
+        {
+            string sql = "SELECT No,Name FROM Port_Dept Where ParentNo='" + parentNo + "'";
+            DataTable dd = DBAccess.RunSQLReturnTable(sql);
+            
+            foreach (DataRow dr in dd.Rows)
+            {
+                if (dt.Rows.Contains(dr[0].ToString()) == true)
+                    continue;
+                dt.Rows.Add(dr.ItemArray);
+               
+                GetSubLevelDeptByParentNo(dt, dr[0].ToString());
+
+            }
+        }
 
 
         public string Search_Init()
@@ -779,10 +874,10 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            if(WebUser.No.Equals("admin") == false&& DataType.IsNullOrEmpty(hidenField) == true)
+            if((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf)
             {
                 qo.addAnd();
-                qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+                qo.AddWhere("Starter", "=", WebUser.No);
             }
 
 

@@ -73,7 +73,7 @@ namespace BP.DA
 
         #region 文件存储数据库处理.
         /// <summary>
-        /// 保存文件到数据库 @shilianyu
+        /// 保存文件到数据库 
         /// </summary>
         /// <param name="bytes">数据流</param>
         /// <param name="tableName">表名称</param>

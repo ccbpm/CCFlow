@@ -551,7 +551,12 @@ namespace BP.WF.HttpHandler
 
 
             md.SetPara("T_total", qo.GetCount());
-            qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx);
+            if (DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
+                qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx, ur.OrderBy, ur.OrderWay);
+            else
+                qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx);
+
+
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 

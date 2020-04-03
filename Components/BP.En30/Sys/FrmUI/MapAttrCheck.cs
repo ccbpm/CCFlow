@@ -192,7 +192,6 @@ namespace BP.Sys.FrmUI
                 rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
                 map.AddRefMethod(rm);
 
-                //sly 翻译过去。
                 rm = new RefMethod();
                 rm.Title = "转化为文本框组件";
                 rm.ClassMethodName = this.ToString() + ".DoSetTextBox()";

@@ -378,7 +378,7 @@ namespace BP.En
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         }
                         continue;
-                    case "@WebUser.OrgNo": //@sly
+                    case "@WebUser.OrgNo":
                         if (attr.UIIsReadonly == true)
                         {
                             this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
@@ -389,7 +389,7 @@ namespace BP.En
                                 this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
                         }
                         continue;
-                    case "@WebUser.OrgName": //@sly
+                    case "@WebUser.OrgName":
                         if (attr.UIIsReadonly == true)
                         {
                             this.SetValByKey(attr.Key, Web.WebUser.OrgName);
@@ -455,7 +455,7 @@ namespace BP.En
                             string sql = gloVar.Val;
                             sql = DealExp(sql, null, null);
                             
-                            //这里有异常就要跑出来 @sly.
+                            //这里有异常就要跑出来
                             string val = DBAccess.RunSQLReturnString(sql);
                             this.SetValByKey(attr.Key, val);
                         }

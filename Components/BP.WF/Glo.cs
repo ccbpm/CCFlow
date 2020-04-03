@@ -956,7 +956,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20200401;
+        public static int Ver = 20200405;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -980,6 +980,7 @@ namespace BP.WF
             if (DBAccess.IsExitsTableCol("Sys_GroupField","EnName")==true)
                 DBAccess.RunSQL("UPDATE Sys_GroupField SET FrmID=enName WHERE FrmID is null");
 
+
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
 
@@ -988,6 +989,72 @@ namespace BP.WF
             int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
             if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
                 return null; //不需要升级.
+
+
+            #region 升级优化集团版的应用. 2020.04.03 @sly.
+            BP.GPM.DeptEmpStation des = new BP.GPM.DeptEmpStation();
+            des.CheckPhysicsTable();
+
+            BP.GPM.DeptEmp de = new BP.GPM.DeptEmp();
+            de.CheckPhysicsTable();
+
+
+            BP.GPM.Emp emp1 = new BP.GPM.Emp();
+            emp1.CheckPhysicsTable();
+
+            BP.WF.Port.Admin2.Org org = new BP.WF.Port.Admin2.Org();
+            org.CheckPhysicsTable();
+
+            BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
+            fs.CheckPhysicsTable();
+
+            if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
+                DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
+
+            string v_FlowStarterBPM = " ";
+
+            v_FlowStarterBPM += "CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)";
+            v_FlowStarterBPM += " AS ";
+
+            //--按照绑定的岗位计算
+            v_FlowStarterBPM += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c  ";
+            v_FlowStarterBPM += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  ";
+            v_FlowStarterBPM += " AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14) ";
+
+            v_FlowStarterBPM += " UNION ";
+
+            //--按绑定的部门
+            v_FlowStarterBPM += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c  ";
+            v_FlowStarterBPM += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) ";
+            v_FlowStarterBPM += " AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 ";
+
+
+            v_FlowStarterBPM += " UNION ";
+            //--按本节点绑定的人员
+            v_FlowStarterBPM += " SELECT A.FK_Flow, a.FlowName, B.FK_Emp, '' as OrgNo FROM WF_Node A, WF_NodeEmp B  ";
+            v_FlowStarterBPM += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  ";
+            v_FlowStarterBPM += " AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3 ";
+
+            v_FlowStarterBPM += " UNION ";
+            //--所有人都可以发起.
+            v_FlowStarterBPM += " SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp, B.OrgNo FROM WF_Node A, Port_Emp B  ";
+            v_FlowStarterBPM += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 ";
+            v_FlowStarterBPM += " UNION ";
+
+            //-- 按岗位与部门交集计算
+            v_FlowStarterBPM += " SELECT A.FK_Flow, a.FlowName, E.FK_Emp,E.OrgNo FROM WF_Node A, WF_NodeDept ";
+            v_FlowStarterBPM += " B, WF_NodeStation C,  Port_DeptEmpStation E ";
+            v_FlowStarterBPM += " WHERE a.NodePosType=0  AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  AND  A.NodeID=B.FK_Node  ";
+            v_FlowStarterBPM += " AND A.NodeID=C.FK_Node  AND B.FK_Dept=E.FK_Dept  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ";
+
+            v_FlowStarterBPM += " UNION ";
+            //--按照设置的组织计算
+            v_FlowStarterBPM += " SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, WF_FlowOrg B, Port_Emp C ";
+            v_FlowStarterBPM += " WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo ";
+            v_FlowStarterBPM += " AND  A.DeliveryWay=22 ";
+            DBAccess.RunSQL(v_FlowStarterBPM); //创建视图.
+            #endregion 升级优化集团版的应用
+
 
             //检查子流程表.
             if (BP.DA.DBAccess.IsExitsObject("WF_NodeSubFlow") == true)
@@ -999,6 +1066,8 @@ namespace BP.WF
                     sub.CheckPhysicsTable();
                 }
             }
+
+            
 
             //检查表.
             BP.Sys.GloVar gv = new GloVar();
@@ -1017,7 +1086,6 @@ namespace BP.WF
 
             BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
             sb.CheckPhysicsTable();
-
 
             BP.WF.Template.PushMsg pm = new PushMsg();
             pm.CheckPhysicsTable();
@@ -1081,7 +1149,6 @@ namespace BP.WF
 
             if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false)
             {
-
                 BP.WF.Auth Auth = new Auth();
                 Auth.CheckPhysicsTable();
 

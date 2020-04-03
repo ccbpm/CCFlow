@@ -46,6 +46,10 @@ namespace BP.GPM
         /// 签字类型
         /// </summary>
         public const string SignType = "SignType";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 操作员 的摘要说明。
@@ -283,6 +287,9 @@ namespace BP.GPM
                 // 0=不签名 1=图片签名, 2=电子签名.
                 map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
                     "@0=不签名@1=图片签名@2=电子签名");
+
+                map.AddTBString(EmpAttr.OrgNo, null, "拼音", true, false, 0, 500, 132, true);
+
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段

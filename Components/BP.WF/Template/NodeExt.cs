@@ -1373,13 +1373,24 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
 
-            //是否是发送返回节点？
+            //是否是发送返回节点？ @sly
             nd.IsSendBackNode = this.IsSendBackNode;
             if (nd.IsSendBackNode==true)
             {
                 //强制设置按照连接线控制.
                 nd.CondModel = CondModel.ByLineCond;
+                nd.DirectUpdate();
             }
+
+
+            #region 如果有跳转，
+            //if (this.AutoJumpRole0 == true || this.AutoJumpRole0
+            //    || this.AutoJumpRole1 || this.AutoJumpRole2 == true || this.WhenNoWorker == true)
+            //{
+            //    /* 凡是到达当前节点的节点，都不能设置为让用户来选择. */
+
+            //}
+            #endregion 如果有跳转
 
 
             if (nd.HisRunModel == RunModel.HL || nd.HisRunModel == RunModel.FHL)
@@ -1437,7 +1448,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion 处理节点数据.
-
 
             #region 创建审核组件附件
             if (this.FWCAth == FWCAth.MinAth)

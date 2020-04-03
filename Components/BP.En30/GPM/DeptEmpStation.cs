@@ -125,7 +125,6 @@ namespace BP.GPM
 
                 map.AddTBStringPK("MyPK", null, "主键MyPK", false, true, 1, 150, 10);
 
-
                 map.AddTBString(DeptEmpStationAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpStationAttr.FK_Station, null, "岗位", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpStationAttr.FK_Emp, null, "操作员", false, false, 1, 50, 1);

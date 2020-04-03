@@ -2115,7 +2115,6 @@ namespace BP.WF
             }
             #endregion 如果使用户选择的.
 
-
             Nodes toNodes = this.HisNode.HisToNodes;
             // 如果只有一个转向节点, 就不用判断条件了,直接转向他.
             if (toNodes.Count == 1)
@@ -2191,8 +2190,6 @@ namespace BP.WF
                 //throw new Exception(string.Format("@定义节点的方向条件错误:没有给从{0}节点到其它节点,定义转向条件或者您定义的所有转向条件都不成立.",
                 //    this.HisNode.NodeID + this.HisNode.Name));
             }
-
-
 
             return myNodes;
         }
@@ -6478,7 +6475,7 @@ namespace BP.WF
             this.JumpToNode = jumpToNode;
             this.JumpToEmp = jumpToEmp;
 
-            #region @gaoxin 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
+            #region @sly 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
             if (this.HisNode.IsSendBackNode==true)
             {
                 this.JumpToEmp = this.HisGenerWorkFlow.Sender;

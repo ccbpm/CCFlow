@@ -2241,7 +2241,7 @@ namespace BP.WF
                     }
                     #endregion 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
 
-                    //@李国文. 如果是子线城，子线程的表单必须是轨迹模式。
+                    //如果是子线城，子线程的表单必须是轨迹模式。
                     if (nd.HisRunModel == RunModel.SubThread)
                     {
                         MapData md = new MapData("ND" + nd.NodeID);
@@ -2406,13 +2406,11 @@ namespace BP.WF
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.No);
 
-                //生成 V001 视图. del by stone 2016.03.27.
-
 
                 //清空WF_Emp中的StartFlows 的内容
                 try
                 {
-                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                   DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
                 }
                 catch (Exception e)
                 {
@@ -2428,9 +2426,7 @@ namespace BP.WF
                             sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
 
                         BP.DA.DBAccess.RunSQL(sql);
-
                     }
-
                 }
                 return msg;
             }

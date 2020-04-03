@@ -991,7 +991,7 @@ namespace BP.WF
                 return null; //不需要升级.
 
 
-            #region 升级优化集团版的应用. 2020.04.03 @sly.
+            #region 升级优化集团版的应用. 2020.04.03
             BP.GPM.DeptEmpStation des = new BP.GPM.DeptEmpStation();
             des.CheckPhysicsTable();
 

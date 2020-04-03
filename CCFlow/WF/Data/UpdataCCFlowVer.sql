@@ -53,7 +53,7 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日','当前日�
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
+--INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
  
 -- 升级数据源 2016.
 UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';

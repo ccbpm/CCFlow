@@ -444,7 +444,11 @@ function AfterBindEn_DealMapExt(frmData) {
         //    //mapExt.Delete();
         //    continue;
         //}
-       
+
+        //证件类扩展
+        if (mapAttr.UIContralType == 13)
+            continue;
+
 
         //处理Pop弹出框
         var PopModel = mapAttr.GetPara("PopModel");

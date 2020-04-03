@@ -1373,7 +1373,7 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
 
-            //是否是发送返回节点？ @sly
+            //是否是发送返回节点？
             nd.IsSendBackNode = this.IsSendBackNode;
             if (nd.IsSendBackNode==true)
             {

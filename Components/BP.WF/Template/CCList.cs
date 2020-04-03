@@ -496,7 +496,7 @@ namespace BP.WF.Template
                 //added by liuxc,2015.7.6，标识是否在待办列表里显示
                 map.AddBoolean(CCListAttr.InEmpWorks, false, "是否加入待办列表", true, true);
 
-                //addmy zhoupeng  @sly
+                //addmy zhoupeng 
                 map.AddTBString(CCListAttr.Domain, null, "Domain", true, true, 0, 50, 10, true);
 
                 this._enMap = map;

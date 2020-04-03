@@ -125,7 +125,7 @@
                     enable: true,
                     idKey: "id",
                     pIdKey: "pid",
-                    rootPId: ""
+                    rootPId: WebUser.FK_Dept
                 }
             },
             callback: {
@@ -175,8 +175,8 @@
                         var height = options.event.clientY;
                         var height1 = $(document.body).height();
                         var DValue = height1 - height;
-                        if (DValue<260) {
-                            height = options.event.clientY - 260;
+                        if (DValue<230) {
+                            height = options.event.clientY - 230;
                         }
                         $currMenu.css({
                             top: height + "px",
@@ -333,6 +333,7 @@
             var ens = handler.DoMethodReturnJSON("Organization_Init");
 
             var jsonTree = createJsonToTree(ens);
+            //var jsonTree = findChildren(ens, webUser.FK_Dept);
             zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
             fillter(zTreeObj); //设置展开前三级
             //绑定帮助信息.
@@ -366,22 +367,54 @@
         //转换ztree需要的数据格式
         var treeJson = [];
         function createJsonToTree(jsonArray) {
+            if (webUser.No == "admin") {
 
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (data.No == "" || data.No == undefined)
-                    continue;
-                treeJson.push({
-                    "id": data.No,
-                    "pid": data.ParentNo,
-                    "name": data.Name,
-                    "idx": data.Idx
+                for (var i = 0; i < jsonArray.length; i++) {
+                    var data = jsonArray[i];
+                    if (data.No == "" || data.No == undefined)
+                        continue;
+                    treeJson.push({
+                        "id": data.No,
+                        "pid": data.ParentNo,
+                        "name": data.Name,
+                        "idx": data.Idx
 
+                    });
+                }
+            } else {
+                //添加本部门的一条数据
+                $.each(jsonArray, function (i, o) {
+                    if (o.No == webUser.FK_Dept) {
+                        treeJson.push({
+                            "id": o.No,
+                            "pid": o.ParentNo,
+                            "name": o.Name,
+                            "idx": o.Idx
+
+                        });
+                        return;
+                    }
                 });
+                //循环加入本部门的所有下级部门
+                findChildren(jsonArray, webUser.FK_Dept);
             }
             return treeJson;
         }
+        function findChildren(jsonArray, parentNo) {
+           
+            $.each(jsonArray, function (i, o) {
+                if (o.ParentNo == parentNo) {
+                    treeJson.push({
+                        "id": o.No,
+                        "pid": o.ParentNo,
+                        "name": o.Name,
+                        "idx": o.Idx
 
+                    });
+                    findChildren(jsonArray, o.No);
+                }
+            });
+        }
 
         //绑定人员.
         function BindEmps() {

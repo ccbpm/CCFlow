@@ -93,10 +93,15 @@ namespace BP.WF.HttpHandler
         {
         
             BP.GPM.Depts depts = new GPM.Depts();
-            if (WebUser.No.Equals("admin") == false )
+            //QueryObject qo = new QueryObject(depts);
+            //qo.addOrderBy(GPM.DeptAttr.Idx);
+            //qo.DoQuery();
+            if (WebUser.No.Equals("admin") == false)
             {
-                depts.Retrieve("ParentNo",WebUser.FK_Dept);
-                depts.AddEntity(new Dept(WebUser.FK_Dept));
+                QueryObject qo = new QueryObject(depts);
+                qo.addOrderBy(GPM.DeptAttr.Idx);
+                qo.DoQuery();
+
                 return depts.ToJson();
             }
 

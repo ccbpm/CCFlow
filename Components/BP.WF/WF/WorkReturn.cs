@@ -74,7 +74,7 @@ namespace BP.WF
             this.HisNode = new Node(currNodeID);
 
 
-            //如果退回的节点为0,就求出可以退回的唯一节点. @shilianyu 同步到jflow上。
+            //如果退回的节点为0,就求出可以退回的唯一节点. 
             if (returnToNodeID == 0)
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(currNodeID, workID, fid);

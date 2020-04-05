@@ -152,7 +152,7 @@ namespace BP.WF.HttpHandler
                             continue;
                         string[] strs = item.Split(',');
                         sBuilder.Append("DELETE FROM WF_Direction where MyPK='" + strs[0] + "';");
-                        sBuilder.Append("INSERT INTO WF_Direction(MyPK,FK_Flow,Node,ToNode,IsCanBack) values ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
+                        sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode,IsCanBack) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
                     }
 
                     DBAccess.RunSQLs(sBuilder.ToString());
@@ -170,6 +170,18 @@ namespace BP.WF.HttpHandler
 
                     string sqls = sBuilder.ToString();
                     DBAccess.RunSQLs(sqls);
+
+                    //更新节点HisToNDs，不然就需要检查一遍. @sly
+                    BP.WF.Nodes nds = new Nodes(this.FK_Flow);
+                    foreach (Node item in nds)
+                    {
+                        string strs = "";
+                        Directions mydirs = new Directions(item.NodeID);
+                        foreach (Direction dir in mydirs)
+                            strs += "@" + dir.ToNode;
+                        item.HisToNDs = strs;
+                        item.Update();
+                    }
 
                     return "保存成功.";
                 }

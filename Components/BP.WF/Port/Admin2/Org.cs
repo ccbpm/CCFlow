@@ -148,6 +148,13 @@ namespace BP.WF.Port.Admin2
                 //rm.HisAttrs.AddTBString("No", null, "子公司管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Warning = "修改管理员";
+                rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
+                rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
+
+
                 //rm = new RefMethod();
                 //rm.Title = "设置二级管理员";
                 //rm.Warning = "设置为子公司后，系统就会在流程树上分配一个目录节点.";
@@ -160,6 +167,23 @@ namespace BP.WF.Port.Admin2
             }
         }
         #endregion
+
+        public string ChangeAdminer(string adminer)
+        {
+            if (WebUser.No.Equals("admin") == false)
+                return "err@非admin管理员，您无法执行该操作.";
+
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = adminer;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@管理员编号错误.";
+
+            this.Adminer = emp.No;
+            this.AdminerName = emp.Name;
+            this.Update();
+
+            return "修改成功,请关闭当前记录重新打开.";
+        }
 
         public string DoCheck()
         {

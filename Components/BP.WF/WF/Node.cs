@@ -1728,6 +1728,9 @@ namespace BP.WF
                 return strs.Length - 1;
             }
         }
+        /// <summary>
+        /// 到达的节点
+        /// </summary>
         public string HisToNDs
         {
             get
@@ -1739,6 +1742,9 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.HisToNDs, value);
             }
         }
+        /// <summary>
+        /// 部门Strs
+        /// </summary>
         public string HisDeptStrs
         {
             get

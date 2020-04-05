@@ -2172,7 +2172,6 @@ namespace BP.WF
             FrmRB rb = new FrmRB();
             rb.CheckPhysicsTable();
 
-
             BP.Port.Emp portEmp = new BP.Port.Emp();
             portEmp.CheckPhysicsTable();
 
@@ -2391,7 +2390,6 @@ namespace BP.WF
             if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
                 DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
 
-
             if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
                 DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
 
@@ -2435,6 +2433,7 @@ namespace BP.WF
                 fs.ParentNo = "0";
                 fs.Name = "流程树";
                 fs.DirectInsert();
+
             }
             #endregion 初始化数据
 
@@ -2537,6 +2536,13 @@ namespace BP.WF
                 s1.Name = "日常办公类";
                 s1.Update();
 
+                //加载一个模版,不然用户不知道如何新建流程. @sly.
+                Flow.DoLoadFlowTemplate(s1.No, SystemConfig.PathOfData + "\\Install\\QingJiaFlowDemoInit.xml",
+                    ImpFlowTempleteModel.AsTempleteFlowNo);
+                Flow fl = new Flow("001");
+                fl.DoCheck(); //做一下检查.
+
+
                 s1 = (FlowSort)fs.DoCreateSubNode();
                 s1.Name = "财务类";
                 s1.Update();
@@ -2619,6 +2625,8 @@ namespace BP.WF
                 }
             }
             #endregion 如果是第一次运行，就执行检查。
+
+
 
 
 

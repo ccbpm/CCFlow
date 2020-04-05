@@ -4942,76 +4942,75 @@ namespace BP.WF
             #endregion 处理流程表数据
 
             #region 处理OID 插入重复的问题 Sys_GroupField, Sys_MapAttr.
+            //@sly这个 region的代码发生了变化，忘记了变化那里了，你看看吧.
             DataTable mydtGF = ds.Tables["Sys_GroupField"];
             DataTable myDTAttr = ds.Tables["Sys_MapAttr"];
             DataTable myDTAth = ds.Tables["Sys_FrmAttachment"];
             DataTable myDTDtl = ds.Tables["Sys_MapDtl"];
             DataTable myDFrm = ds.Tables["Sys_MapFrame"];
-            if (mydtGF != null)
+
+            //throw new Exception("@" + fl.No + fl.Name + ", 缺少：Sys_GroupField");
+            foreach (DataRow dr in mydtGF.Rows)
             {
-                //throw new Exception("@" + fl.No + fl.Name + ", 缺少：Sys_GroupField");
-                foreach (DataRow dr in mydtGF.Rows)
+                Sys.GroupField gf = new Sys.GroupField();
+                foreach (DataColumn dc in mydtGF.Columns)
                 {
-                    Sys.GroupField gf = new Sys.GroupField();
-                    foreach (DataColumn dc in mydtGF.Columns)
+                    string val = dr[dc.ColumnName] as string;
+                    gf.SetValByKey(dc.ColumnName, val);
+                }
+                int oldID = gf.OID;
+                gf.OID = DBAccess.GenerOID();
+                dr["OID"] = gf.OID; //给他一个新的OID.
+
+                // 属性。
+                if (myDTAttr != null && myDTAttr.Columns.Contains("GroupID"))
+                {
+                    foreach (DataRow dr1 in myDTAttr.Rows)
                     {
-                        string val = dr[dc.ColumnName] as string;
-                        gf.SetValByKey(dc.ColumnName, val);
+                        if (dr1["GroupID"] == null)
+                            dr1["GroupID"] = 0;
+
+                        if (dr1["GroupID"].ToString().Equals(oldID.ToString()))
+                            dr1["GroupID"] = gf.OID;
                     }
-                    int oldID = gf.OID;
-                    gf.OID = DBAccess.GenerOID();
-                    dr["OID"] = gf.OID;
+                }
 
-                    // 属性。
-                    if (myDTAttr != null && myDTAttr.Columns.Contains("GroupID"))
+                // 附件。
+                if (myDTAth != null && myDTAth.Columns.Contains("GroupID"))
+                {
+                    foreach (DataRow dr1 in myDTAth.Rows)
                     {
-                        foreach (DataRow dr1 in myDTAttr.Rows)
-                        {
-                            if (dr1["GroupID"] == null)
-                                dr1["GroupID"] = 0;
+                        if (dr1["GroupID"] == null)
+                            dr1["GroupID"] = 0;
 
-                            if (dr1["GroupID"].ToString() == oldID.ToString())
-                                dr1["GroupID"] = gf.OID;
-                        }
+                        if (dr1["GroupID"].ToString().Equals(oldID.ToString()))
+                            dr1["GroupID"] = gf.OID;
                     }
+                }
 
-                    if (myDTAth != null && myDTAth.Columns.Contains("GroupID"))
+                if (myDTDtl != null && myDTDtl.Columns.Contains("GroupID"))
+                {
+                    // 从表。
+                    foreach (DataRow dr1 in myDTDtl.Rows)
                     {
-                        // 附件。
-                        foreach (DataRow dr1 in myDTAth.Rows)
-                        {
-                            if (dr1["GroupID"] == null)
-                                dr1["GroupID"] = 0;
+                        if (dr1["GroupID"] == null)
+                            dr1["GroupID"] = 0;
 
-                            if (dr1["GroupID"].ToString() == oldID.ToString())
-                                dr1["GroupID"] = gf.OID;
-                        }
+                        if (dr1["GroupID"].ToString().Equals(oldID.ToString()))
+                            dr1["GroupID"] = gf.OID;
                     }
+                }
 
-                    if (myDTDtl != null && myDTDtl.Columns.Contains("GroupID"))
+                // frm.
+                if (myDFrm != null && myDFrm.Columns.Contains("GroupID"))
+                {
+                    foreach (DataRow dr1 in myDFrm.Rows)
                     {
-                        // 从表。
-                        foreach (DataRow dr1 in myDTDtl.Rows)
-                        {
-                            if (dr1["GroupID"] == null)
-                                dr1["GroupID"] = 0;
+                        if (dr1["GroupID"] == null)
+                            dr1["GroupID"] = 0;
 
-                            if (dr1["GroupID"].ToString() == oldID.ToString())
-                                dr1["GroupID"] = gf.OID;
-                        }
-                    }
-
-                    if (myDFrm != null && myDFrm.Columns.Contains("GroupID"))
-                    {
-                        // frm.
-                        foreach (DataRow dr1 in myDFrm.Rows)
-                        {
-                            if (dr1["GroupID"] == null)
-                                dr1["GroupID"] = 0;
-
-                            if (dr1["GroupID"].ToString() == oldID.ToString())
-                                dr1["GroupID"] = gf.OID;
-                        }
+                        if (dr1["GroupID"].ToString().Equals(oldID.ToString()))
+                            dr1["GroupID"] = gf.OID;
                     }
                 }
             }
@@ -6060,7 +6059,7 @@ namespace BP.WF
                             ne.Insert();
                         }
                         break;
-                    case "Sys_GroupField": // 
+                    case "Sys_GroupField": //  @sly 这里需要对比一下翻译.
                         foreach (DataRow dr in dt.Rows)
                         {
                             Sys.GroupField gf = new Sys.GroupField();
@@ -6082,6 +6081,9 @@ namespace BP.WF
                                 }
                                 gf.SetValByKey(dc.ColumnName, val);
                             }
+                            gf.InsertAsOID( gf.OID);
+
+                            /*
                             string sql = "select * from Sys_GroupField where CtrlID = '" + gf.CtrlID + "' AND FrmID='" + gf.FrmID + "'";
                             int count = DBAccess.RunSQLReturnCOUNT(sql);
                             if (count > 0)
@@ -6090,7 +6092,7 @@ namespace BP.WF
                             }
                             int oid = DBAccess.GenerOID();
                             DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID='" + oid + "' WHERE FK_MapData='" + gf.FrmID + "' AND GroupID='" + gf.OID + "'");
-                            gf.InsertAsOID(oid);
+                            gf.InsertAsOID(oid); */
                         }
                         break;
                     case "WF_CCEmp": // 抄送.

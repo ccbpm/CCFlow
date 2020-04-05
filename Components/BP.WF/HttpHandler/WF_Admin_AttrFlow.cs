@@ -577,6 +577,7 @@ namespace BP.WF.HttpHandler
 
             //执行导入
             BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
+            flow.DoCheck(); //@sly 要执行一次检查.
 
             Hashtable ht = new Hashtable();
             ht.Add("FK_Flow", flow.No);

@@ -140,10 +140,13 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 isFistQuestWorkCheck = false;
                 checkData = WorkCheck_Init();
             }
-           
-           
-
-            var _Html = "<div>" + GetWorkCheck_Node(checkData,mapAttr.KeyOfEn) + "</div>";
+            var checkField=""
+            if (frmData.FrmNode != null && frmData.FrmNode != undefined) {
+                checkField = frmData.FrmNode[0].CheckField;
+            } else {
+                checkField = checkData.WF_FrmWorkCheck[0].CheckField;
+            }
+            var _Html = "<div>" + GetWorkCheck_Node(checkData, mapAttr.KeyOfEn, checkField) + "</div>";
             $("#TB_" + mapAttr.KeyOfEn).after(_Html);
         }
 

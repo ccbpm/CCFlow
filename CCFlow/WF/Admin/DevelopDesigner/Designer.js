@@ -537,6 +537,8 @@ UE.plugins['enum'] = function () {
         execCommand: function (method, dataType) {
             var W = document.body.clientWidth - 160;
             var H = document.body.clientHeight - 220;
+            if (dataType == null || dataType == undefined)
+                dataType = "Select";
             var dialog = new UE.ui.Dialog({
                 iframeUrl: './DialogCtr/FrmEnumeration.htm?FK_MapData=' + pageParam.fk_mapdata + "&DataType=" + dataType,
                 name: thePlugins,

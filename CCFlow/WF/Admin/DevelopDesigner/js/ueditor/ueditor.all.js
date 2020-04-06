@@ -21860,7 +21860,7 @@ UE.plugins['contextmenu'] = function () {
     var lang = me.getLang( "contextMenu" ),
             menu,
             items = me.options.contextMenu || [
-                {label:lang['selectall'], cmdName:'selectall'},
+                /*{label:lang['selectall'], cmdName:'selectall'},
                 {
                     label:lang.cleardoc,
                     cmdName:'cleardoc',
@@ -21870,6 +21870,10 @@ UE.plugins['contextmenu'] = function () {
                         }
                     }
                 },
+                '-',*/
+                { label: lang['text'], cmdName: 'text' },
+                { label: lang['enum'], cmdName: 'enum' },
+                { label: lang['select'], cmdName: 'select' },
                 '-',
                 {
                     label:lang.unlink,
@@ -22190,7 +22194,7 @@ UE.plugins['contextmenu'] = function () {
                 {
                     label:lang.insertparagraphafter,
                     cmdName:'insertparagraph'
-                },
+                }/*,
                 {
                     label:lang['copy'],
                     cmdName:'copy'
@@ -22198,7 +22202,7 @@ UE.plugins['contextmenu'] = function () {
                 {
                     label:lang['paste'],
                     cmdName:'paste'
-                }
+                }*/
             ];
     if ( !items.length ) {
         return;

@@ -36,7 +36,7 @@
             OpenEasyUiDialogExt(url, '节点表单组件', 1000, 600, false);
         }
         function Save() {
-
+            $("#Btn_Save").val("正在保存...");
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
@@ -55,7 +55,7 @@
             //mapData.FrmType = FormSlnType.SDKForm;
             //mapData.Update();
 
-            alert("保存成功.");
+            $("#Btn_Save").val("保存成功.");
         }
 
         

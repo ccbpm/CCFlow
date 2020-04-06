@@ -38,7 +38,7 @@
 
 
         function Save() {
-
+            $("#Btn_Save").val("正在保存...");
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
@@ -46,7 +46,7 @@
             node.FormUrl = document.getElementById("TB_CustomURL").value;
             node.Update();
 
-            alert("保存成功.");
+            $("#Btn_Save").val("保存成功.");
             return;
 
             ////更新表单类型.

@@ -61,6 +61,7 @@
         }
 
         function Save() {
+            $("#Btn_Save").val("正在保存...");
             //节点
             nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
@@ -88,7 +89,7 @@
             //mapData.FrmType = FormSlnType.WebOffice;
             //mapData.Update();
 
-            alert("保存成功.");
+            $("#Btn_Save").val("保存成功.");
         }
 
     </script>

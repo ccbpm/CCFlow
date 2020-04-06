@@ -187,7 +187,7 @@
         }
 
         function Save() {
-
+            $("#Btn_Save").val("正在保存...");
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormSlnType.FoolTruck;
@@ -205,7 +205,7 @@
             var flow = new Entity("BP.WF.Flow", node.FK_Flow);
             flow.DoMethodReturnString("DoCheck");
 
-            alert("保存成功.");
+           $("#Btn_Save").val("保存成功.");
         }
 
 

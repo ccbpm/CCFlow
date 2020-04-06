@@ -79,7 +79,7 @@
         }
 
         function Save() {
-
+            $("#Btn_Save").val("正在保存...");
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
@@ -113,8 +113,8 @@
 
             //设置显示的主表单,在完成的流程轨迹里可以看到该表单.
             SetNDxxRpt_FrmType(node.FK_Flow, 1);
-
-            alert("保存成功.");
+            $("#Btn_Save").val("保存成功");
+            
         }
 
         //节点表单组件属性.
